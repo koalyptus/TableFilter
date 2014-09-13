@@ -25,7 +25,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 --------------------------------------------------------------------------
     - Special credit to:
-    Cedric Wartel, cnx.claude@free.fr, Florent Hirchy, Váry Péter,
+    Cedric Wartel, cnx.claude@free.fr, Florent Hirchy, Vï¿½ry Pï¿½ter,
     Anthony Maes, Nuovella Williams, Fuggerbit, Venkata Seshagiri Rao
     Raya, Piepiax, Manuel Kern, Baladhandayutham for active contribution
     and/or inspiration
@@ -279,7 +279,7 @@ var TF = (function() {
             this.eqOperator =           f.equal_operator!=undefined ? f.equal_operator : '=';
             this.stOperator =           f.start_with_operator!=undefined ? f.start_with_operator : '{';
             this.enOperator =           f.end_with_operator!=undefined ? f.end_with_operator : '}';
-            this.curExp =               f.cur_exp!=undefined ? f.cur_exp : '^[¥£€$]';
+            this.curExp =               f.cur_exp!=undefined ? f.cur_exp : '^[ï¿½ï¿½ï¿½$]';
             this.separator =            f.separator!=undefined ? f.separator : ',';
 
             /*** rows counter ***/
@@ -2442,7 +2442,7 @@ var TF = (function() {
                                 && ((activeFlt==undefined || activeFlt==colIndex)  || (activeFlt!=colIndex && this.validRowsIndex.tf_Has(k) ))) )))
                         {
                             var cell_data = this.GetCellData(j, cell[j]);
-                            var cell_string = cell_data.tf_MatchCase(this.matchCase);//Váry Péter's patch
+                            var cell_string = cell_data.tf_MatchCase(this.matchCase);//Vï¿½ry Pï¿½ter's patch
                             // checks if celldata is already in array
                             if(!optArray.tf_Has(cell_string,this.matchCase)) optArray.push(cell_data);
 
@@ -2685,7 +2685,7 @@ var TF = (function() {
                             (this.paging && ((activeFlt==undefined || activeFlt==colIndex ) ||(activeFlt!=colIndex && this.validRowsIndex.tf_Has(k))) ))))
                         {
                             var cell_data = this.GetCellData(j, cells[j]);
-                            var cell_string = cell_data.tf_MatchCase(this.matchCase);//Váry Péter's patch
+                            var cell_string = cell_data.tf_MatchCase(this.matchCase);//Vï¿½ry Pï¿½ter's patch
                             // checks if celldata is already in array
                             if(!optArray.tf_Has(cell_string,this.matchCase)) optArray.push(cell_data);
 
@@ -5147,7 +5147,7 @@ var TF = (function() {
             var regexp;
             var modifier = (this.matchCase) ? 'g' : 'gi';
             var exactMatch = (forceMatch==undefined) ? this.exactMatch : forceMatch;
-            if(exactMatch || (fltType!=this.fltTypeInp && fltType!=undefined))//Váry Péter's patch
+            if(exactMatch || (fltType!=this.fltTypeInp && fltType!=undefined))//Vï¿½ry Pï¿½ter's patch
                 regexp = new RegExp('(^\\s*)'+tf_RegexpEscape(arg)+'(\\s*$)', modifier);
             else
                 regexp = new RegExp(tf_RegexpEscape(arg), modifier);
@@ -5381,8 +5381,8 @@ function tf_RegexpEscape(s)
     - Many thanks to Cedric Wartel for this fn
 =====================================================*/
 {
-    // traite les caractères spéciaux [\^$.|?*+()
-    //remplace le carctère c par \c
+    // traite les caractï¿½res spï¿½ciaux [\^$.|?*+()
+    //remplace le carctï¿½re c par \c
     function escape(e)
     {
         a = new RegExp('\\'+e,'g');
