@@ -56,31 +56,32 @@ var TF = (function() {
 
         if(this.tbl !== null && this.tbl.nodeName.tf_LCase() === 'table' &&
             this.GetRowsNb() > 0){
-            if(arguments.length>1)
-            {
+            if(arguments.length>1){
                 for(var i=0; i<arguments.length; i++)
                 {
-                    var argtype = typeof arguments[i];
+                    var arg = arguments[i];
+                    var argtype = typeof arg;
                     switch(argtype.tf_LCase())
                     {
                         case 'number':
-                            this.startRow = arguments[i];
+                            this.startRow = arg;
                         break;
                         case 'object':
-                            this.fObj = arguments[i];
+                            this.fObj = arg;
                         break;
-                    }//switch
-                }//for
-            }//if
+                    }
+                }
+            }
 
             var f = !this.fObj ? {} : this.fObj;
 
             //Start row et cols nb
-            this.refRow = this.startRow==undefined ? 2 : (this.startRow+1);
+            this.refRow = this.startRow===undefined ? 2 : (this.startRow+1);
             try{ this.nbCells = this.GetCellsNb(this.refRow) }
             catch(e){ this.nbCells = this.GetCellsNb(0) }
-
-            this.basePath =             f.base_path!=undefined ? f.base_path : 'TableFilter/'; //default script base path
+			
+            //default script base path
+            this.basePath =             f.base_path!=undefined ? f.base_path : 'TableFilter/';
 
             /*** filter types ***/
             this.fltTypeInp =           'input';
@@ -104,13 +105,16 @@ var TF = (function() {
             this.fltGrid =              f.grid==false ? false : true; //enables/disables filter grid
 
             /*** Grid layout ***/
-            this.gridLayout =           f.grid_layout ? true : false; //enables/disables grid layout (fixed headers)
-            this.hasGridWidthsRow =     false; //flag indicating if the grid has an additional row for column widths (IE<=7)
+            //enables/disables grid layout (fixed headers)
+            this.gridLayout =           f.grid_layout ? true : false;
+            //flag indicating if the grid has an additional row for column widths (IE<=7)
+            this.hasGridWidthsRow =     false;
             this.gridColElms =          [];
             this.sourceTblHtml =        null;
             if(this.gridLayout){
-                if(this.tbl.outerHTML==undefined) tf_SetOuterHtml();  //Firefox does not support outerHTML property...
-                this.sourceTblHtml =        this.tbl.outerHTML; //original table html
+                //Firefox does not support outerHTML property...
+                if(this.tbl.outerHTML==undefined) tf_SetOuterHtml();
+                this.sourceTblHtml =    this.tbl.outerHTML;
             }
             /*** ***/
             this.filtersRowIndex =      f.filters_row_index!=undefined ? f.filters_row_index : 0;
@@ -119,8 +123,11 @@ var TF = (function() {
                 if(this.headersRow>1) this.filtersRowIndex = this.headersRow+1;
                 else{ this.filtersRowIndex = 1; this.headersRow = 0; }
             }
-            this.fltCellTag =           f.filters_cell_tag!=undefined //defines tag of the cells containing filters (td/th)
+            
+            //defines tag of the cells containing filters (td/th)
+            this.fltCellTag =           f.filters_cell_tag!=undefined 
                                             ? (f.filters_cell_tag!='th' ? 'td' : 'th') : 'td';
+            
             this.fltIds =               []; //stores filters ids
             this.fltElms =              []; //stores filters DOM elements
             this.searchArgs =           null; //stores filters values
@@ -133,21 +140,29 @@ var TF = (function() {
             this.rDiv =                 null; //div for reset button and results per page select
             this.mDiv =                 null; //div for paging elements
             this.contDiv =              null; //table container div for fixed headers (IE only)
-            this.infDivCssClass =       f.inf_div_css_class!=undefined  //defines css class for div containing
-                                            ? f.inf_div_css_class : 'inf';              //paging elements, rows counter etc.
-            this.lDivCssClass =         f.left_div_css_class!=undefined //defines css class for left div
+            
+            //defines css class for div containing paging elements, rows counter etc.
+            this.infDivCssClass =       f.inf_div_css_class!=undefined 
+                                            ? f.inf_div_css_class : 'inf';
+            //defines css class for left div
+            this.lDivCssClass =         f.left_div_css_class!=undefined
                                             ? f.left_div_css_class : 'ldiv';
-            this.rDivCssClass =         f.right_div_css_class!=undefined //defines css class for right div
+            //defines css class for right div
+            this.rDivCssClass =         f.right_div_css_class!=undefined
                                             ? f.right_div_css_class : 'rdiv';
-            this.mDivCssClass =         f.middle_div_css_class!=undefined //defines css class for mid div
+            //defines css class for mid div
+            this.mDivCssClass =         f.middle_div_css_class!=undefined
                                             ? f.middle_div_css_class : 'mdiv';
+            //table container div css class
             this.contDivCssClass =      f.content_div_css_class!=undefined
-                                            ? f.content_div_css_class : 'cont'; //table container div css class
+                                            ? f.content_div_css_class : 'cont'; 
 
             /*** filters' grid appearance ***/
-            this.stylesheet =           f.stylesheet!=undefined ? f.stylesheet : this.basePath+'filtergrid.css'; //stylesheet file
+            //stylesheet file
+            this.stylesheet =           f.stylesheet!=undefined ? f.stylesheet : this.basePath+'filtergrid.css';
             this.stylesheetId =         this.id + '_style';
-            this.fltsRowCssClass =      f.flts_row_css_class!=undefined //defines css class for filters row
+            //defines css class for filters row
+            this.fltsRowCssClass =      f.flts_row_css_class!=undefined 
                                             ? f.flts_row_css_class : 'fltrow';
             this.enableIcons =          f.enable_icons!=undefined ? f.enable_icons : true; //enables/disables icons (paging, reset button)
             this.alternateBgs =         f.alternate_rows ? true : false; //enables/disbles rows alternating bg colors
