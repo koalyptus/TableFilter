@@ -122,7 +122,10 @@ var TF = (function() {
             if(this.gridLayout){
                 if(this.headersRow>1){ 
                     this.filtersRowIndex = this.headersRow+1;
-                } else { this.filtersRowIndex = 1; this.headersRow = 0; }
+                } else { 
+                    this.filtersRowIndex = 1; 
+                    this.headersRow = 0; 
+                }
             }
             
             //defines tag of the cells containing filters (td/th)
