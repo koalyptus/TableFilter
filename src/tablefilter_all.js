@@ -93,7 +93,7 @@ var TF = (function() {
 
             for(var i=0; i<this.nbCells; i++){
                 if(this['col'+i]==undefined)
-                    this['col'+i] = (f['col_'+i]==undefined)
+                    this['col'+i] = (f['col_'+i]===undefined)
                         ? this.fltTypeInp : f['col_'+i].tf_LCase();
                 this.fltCol.push(this['col'+i]);
             }
@@ -118,10 +118,11 @@ var TF = (function() {
             }
             /*** ***/
             this.filtersRowIndex =      f.filters_row_index!=undefined ? f.filters_row_index : 0;
-            this.headersRow =           f.headers_row_index!=undefined ? f.headers_row_index : (this.filtersRowIndex==0 ? 1 : 0);
+            this.headersRow =           f.headers_row_index!=undefined ? f.headers_row_index : (this.filtersRowIndex==0 ? 1 : 0);            
             if(this.gridLayout){
-                if(this.headersRow>1) this.filtersRowIndex = this.headersRow+1;
-                else{ this.filtersRowIndex = 1; this.headersRow = 0; }
+                if(this.headersRow>1){ 
+                    this.filtersRowIndex = this.headersRow+1;
+                } else { this.filtersRowIndex = 1; this.headersRow = 0; }
             }
             
             //defines tag of the cells containing filters (td/th)
