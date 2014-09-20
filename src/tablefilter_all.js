@@ -3,7 +3,7 @@
     - By Max Guglielmi (tablefilter.free.fr)
     - Licensed under the MIT License
 --------------------------------------------------------------------------
-Copyright (c) 2009-2012 Max Guglielmi
+Copyright (c) 2009-2014 Max Guglielmi
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -54,873 +54,863 @@ var TF = (function() {
         this.hasGrid = false;
         this.enableModules = false;
 
-        if(this.tbl !== null && this.tbl.nodeName.tf_LCase() === 'table' &&
-            this.GetRowsNb() > 0){
-            if(arguments.length>1){
-                for(var i=0; i<arguments.length; i++)
-                {
-                    var arg = arguments[i];
-                    var argtype = typeof arg;
-                    switch(argtype.tf_LCase())
-                    {
-                        case 'number':
-                            this.startRow = arg;
-                        break;
-                        case 'object':
-                            this.fObj = arg;
-                        break;
-                    }
+        if(!this.tbl || this.tbl.nodeName.tf_LCase() !== 'table' ||
+            this.GetRowsNb() === 0){
+            throw new Error(
+                'Could not instantiate TF object: table not found.');
+        }
+
+        if(arguments.length>1){
+            for(var i=0; i<arguments.length; i++){
+                var arg = arguments[i];
+                var argtype = typeof arg;
+                switch(argtype.tf_LCase()){
+                    case 'number':
+                        this.startRow = arg;
+                    break;
+                    case 'object':
+                        this.fObj = arg;
+                    break;
                 }
             }
+        }
 
-            var f = !this.fObj ? {} : this.fObj;
+        var f = !this.fObj ? {} : this.fObj;
 
-            //Start row et cols nb
-            this.refRow = this.startRow===undefined ? 2 : (this.startRow+1);
-            try{ this.nbCells = this.GetCellsNb(this.refRow); }
-            catch(e){ this.nbCells = this.GetCellsNb(0); }
+        //Start row et cols nb
+        this.refRow = this.startRow===undefined ? 2 : (this.startRow+1);
+        try{ this.nbCells = this.GetCellsNb(this.refRow); }
+        catch(e){ this.nbCells = this.GetCellsNb(0); }
 
-            //default script base path
-            this.basePath = f.base_path!==undefined ? f.base_path : 'TableFilter/';
+        //default script base path
+        this.basePath = f.base_path!==undefined ? f.base_path : 'TableFilter/';
 
-            /*** filter types ***/
-            this.fltTypeInp =           'input';
-            this.fltTypeSlc =           'select';
-            this.fltTypeMulti =         'multiple';
-            this.fltTypeCheckList =     'checklist';
-            this.fltTypeNone =          'none';
-            this.fltCol =               []; //filter type of each column
+        /*** filter types ***/
+        this.fltTypeInp =           'input';
+        this.fltTypeSlc =           'select';
+        this.fltTypeMulti =         'multiple';
+        this.fltTypeCheckList =     'checklist';
+        this.fltTypeNone =          'none';
+        this.fltCol =               []; //filter type of each column
 
-            for(var j=0; j<this.nbCells; j++){
-                var col = this['col'+j],
-                    cfgCol = f['col_'+j];
-                if(col === undefined) {
-                    col = cfgCol === undefined ?
-                        this.fltTypeInp : cfgCol.tf_LCase();
-                }
-                this.fltCol.push(col);
+        for(var j=0; j<this.nbCells; j++){
+            var col = this['col'+j],
+                cfgCol = f['col_'+j];
+            if(col === undefined) {
+                col = cfgCol === undefined ?
+                    this.fltTypeInp : cfgCol.tf_LCase();
             }
+            this.fltCol.push(col);
+        }
 
-            /*** Developer's additional methods ***/
-            this.publicMethods = f.public_methods!==undefined ?
-                f.public_methods : false;
+        /*** Developer's additional methods ***/
+        this.publicMethods = f.public_methods!==undefined ?
+            f.public_methods : false;
 
-            /*** filters' grid properties ***/
+        /*** filters' grid properties ***/
 
-            //enables/disables filter grid
-            this.fltGrid = f.grid===false ? false : true;
+        //enables/disables filter grid
+        this.fltGrid = f.grid===false ? false : true;
 
-            /*** Grid layout ***/
-            //enables/disables grid layout (fixed headers)
-            this.gridLayout = f.grid_layout ? true : false;
+        /*** Grid layout ***/
+        //enables/disables grid layout (fixed headers)
+        this.gridLayout = f.grid_layout ? true : false;
 
-            //flag indicating if the grid has an additional row for column
-            //widths (IE<=7)
-            this.hasGridWidthsRow = false;
-            this.gridColElms = [];
-            this.sourceTblHtml = null;
-            if(this.gridLayout){
-                //Firefox does not support outerHTML property...
-                if(this.tbl.outerHTML===undefined){ tf_SetOuterHtml(); }
-                this.sourceTblHtml = this.tbl.outerHTML;
+        //flag indicating if the grid has an additional row for column
+        //widths (IE<=7)
+        this.hasGridWidthsRow = false;
+        this.gridColElms = [];
+        this.sourceTblHtml = null;
+        if(this.gridLayout){
+            //Firefox does not support outerHTML property...
+            if(this.tbl.outerHTML===undefined){ tf_SetOuterHtml(); }
+            this.sourceTblHtml = this.tbl.outerHTML;
+        }
+        /*** ***/
+
+        this.filtersRowIndex = f.filters_row_index || 0;
+        this.headersRow = f.headers_row_index ||
+            (this.filtersRowIndex===0 ? 1 : 0);
+
+        if(this.gridLayout){
+            if(this.headersRow > 1){
+                this.filtersRowIndex = this.headersRow+1;
+            } else {
+                this.filtersRowIndex = 1;
+                this.headersRow = 0;
             }
-            /*** ***/
+        }
 
-            this.filtersRowIndex = f.filters_row_index || 0;
-            this.headersRow = f.headers_row_index ||
-                                (this.filtersRowIndex===0 ? 1 : 0);
+        //defines tag of the cells containing filters (td/th)
+        this.fltCellTag = f.filters_cell_tag!=='th' ||
+            f.filters_cell_tag!=='td' ? 'td' : f.filters_cell_tag;
 
-            if(this.gridLayout){
-                if(this.headersRow > 1){
-                    this.filtersRowIndex = this.headersRow+1;
-                } else {
-                    this.filtersRowIndex = 1;
-                    this.headersRow = 0;
-                }
-            }
+        //stores filters ids
+        this.fltIds = [];
+        //stores filters DOM elements
+        this.fltElms = [];
+        //stores filters values
+        this.searchArgs = null;
+        //stores table data
+        this.tblData = [];
+        //stores valid rows indexes (rows visible upon filtering)
+        this.validRowsIndex = null;
+        //stores filters row element
+        this.fltGridEl = null;
+        //is first load boolean
+        this.isFirstLoad = true;
+        //container div for paging elements, reset btn etc.
+        this.infDiv = null;
+        //div for rows counter
+        this.lDiv = null;
+        //div for reset button and results per page select
+        this.rDiv = null;
+        //div for paging elements
+        this.mDiv = null;
+        //table container div for fixed headers (IE only)
+        this.contDiv = null;
 
-            //defines tag of the cells containing filters (td/th)
-            this.fltCellTag = f.filters_cell_tag!=='th' ||
-                f.filters_cell_tag!=='td' ? 'td' : f.filters_cell_tag;
+        //defines css class for div containing paging elements, rows counter etc.
+        this.infDivCssClass = f.inf_div_css_class || 'inf';
+        //defines css class for left div
+        this.lDivCssClass = f.left_div_css_class || 'ldiv';
+        //defines css class for right div
+        this.rDivCssClass =  f.right_div_css_class || 'rdiv';
+        //defines css class for mid div
+        this.mDivCssClass = f.middle_div_css_class || 'mdiv';
+        //table container div css class
+        this.contDivCssClass = f.content_div_css_class || 'cont';
 
-            this.fltIds =               []; //stores filters ids
-            this.fltElms =              []; //stores filters DOM elements
-            this.searchArgs =           null; //stores filters values
-            this.tblData =              []; //stores table data
-            this.validRowsIndex =       null; //stores valid rows indexes (rows visible upon filtering)
-            this.fltGridEl =            null; //stores filters row element
-            this.isFirstLoad =          true; //is first load boolean
-            this.infDiv =               null; //container div for paging elements, reset btn etc.
-            this.lDiv =                 null; //div for rows counter
-            this.rDiv =                 null; //div for reset button and results per page select
-            this.mDiv =                 null; //div for paging elements
-            this.contDiv =              null; //table container div for fixed headers (IE only)
+        /*** filters' grid appearance ***/
+        //stylesheet file
+        this.stylesheet = f.stylesheet || this.basePath+'filtergrid.css';
+        this.stylesheetId = this.id + '_style';
+        //defines css class for filters row
+        this.fltsRowCssClass = f.flts_row_css_class || 'fltrow';
+         //enables/disables icons (paging, reset button)
+        this.enableIcons = f.enable_icons===false ? false : true;
+        //enables/disbles rows alternating bg colors
+        this.alternateBgs = f.alternate_rows===true ? true : false;
+        //defines widths of columns
+        this.hasColWidth = f.col_width===true ? true : false;
+        this.colWidth = this.hasColWidth ? f.col_width : null;
+        //enables/disables fixed headers
+        this.fixedHeaders = f.fixed_headers===true ? true : false;
+        //tbody height if fixed headers enabled
+        this.tBodyH = !isNaN(f.tbody_height) ? f.tbody_height : 200;
+        //defines css class for filters
+        this.fltCssClass = f.flt_css_class || 'flt';
+        //defines css class for multiple selects filters
+        this.fltMultiCssClass = f.flt_multi_css_class || 'flt_multi';
+        //defines css class for filters
+        this.fltSmallCssClass = f.flt_small_css_class || 'flt_s';
+        //defines css class for single-filter
+        this.singleFltCssClass = f.single_flt_css_class || 'single_flt';
+        this.isStartBgAlternate =   true;
+        //defines css class for even rows
+        this.rowBgEvenCssClass = f.even_row_css_class || 'even';
+        //defines css class for odd rows
+        this.rowBgOddCssClass = f.odd_row_css_class || 'odd';
 
-            //defines css class for div containing paging elements, rows counter etc.
-            this.infDivCssClass = f.inf_div_css_class || 'inf';
-            //defines css class for left div
-            this.lDivCssClass = f.left_div_css_class || 'ldiv';
-            //defines css class for right div
-            this.rDivCssClass =  f.right_div_css_class || 'rdiv';
-            //defines css class for mid div
-            this.mDivCssClass = f.middle_div_css_class || 'mdiv';
-            //table container div css class
-            this.contDivCssClass = f.content_div_css_class || 'cont';
+        /*** filters' grid behaviours ***/
+        //enables/disables enter key
+        this.enterKey = f.enter_key===false ? false : true;
+        //enables/disables alternative fn call
+        this.isModFilterFn = f.mod_filter_fn===true ? true : false;
+        // used by tf_DetectKey fn
+        this.modFilterFn = this.isModFilterFn ? f.mod_filter_fn : null;
+        //calls function before filtering starts
+        this.onBeforeFilter = tf_IsFn(f.on_before_filter) ?
+            f.on_before_filter : null;
+        //calls function after filtering
+        this.onAfterFilter = tf_IsFn(f.on_after_filter) ?
+            f.on_after_filter : null;
+        //enables/disables case sensitivity
+        this.matchCase = f.match_case===true ? true : false;
+        //enables/disbles exact match for search
+        this.exactMatch = f.exact_match===true ? true : false;
+        //refreshes drop-down lists upon validation
+        this.refreshFilters = f.refresh_filters===true ? true : false;
+        //wheter excluded options are disabled
+        this.disableExcludedOptions = f.disable_excluded_options===true ?
+            true : false;
+        //stores active filter element
+        this.activeFlt = null;
+        //id of active filter
+        this.activeFilterId = null;
+        //enables/disbles column operation(sum,mean)
+        this.hasColOperation = f.col_operation===true ? true : false;
+        this.colOperation = null;
+        //enables always visible rows
+        this.hasVisibleRows = f.rows_always_visible===true ? true : false;
+        //array containing always visible rows
+        this.visibleRows = this.hasVisibleRows ? f.rows_always_visible : [];
+        //defines search type: include or exclude
+        this.searchType = f.search_type || 'include';
+        //enables/disables external filters generation
+        this.isExternalFlt = f.external_flt_grid===true ? true : false;
+        //array containing ids of external elements containing filters
+        this.externalFltTgtIds = f.external_flt_grid_ids || null;
+        //stores filters elements if isExternalFlt is true
+        this.externalFltEls = [];
+        //delays any filtering process if loader true
+        this.execDelay = !isNaN(f.exec_delay) ? parseInt(f.exec_delay,10) : 100;
+        //enables/disables status messages
+        this.status = f.status===true ? true : false;
+        //calls function when filters grid loaded
+        this.onFiltersLoaded = tf_IsFn(f.on_filters_loaded) ?
+            f.on_filters_loaded : null;
+        //enables/disables single filter search
+        this.singleSearchFlt = f.single_search_filter===true ? true : false;
+        //calls function after row is validated
+        this.onRowValidated = tf_IsFn(f.on_row_validated) ?
+            f.on_row_validated : null;
+        //array defining columns for customCellData event
+        this.customCellDataCols = f.custom_cell_data_cols ?
+            f.custom_cell_data_cols : [];
+        //calls custom function for retrieving cell data
+        this.customCellData = tf_IsFn(f.custom_cell_data) ?
+            f.custom_cell_data : null;
+        //input watermark text array
+        this.inpWatermark = f.input_watermark || '';
+        //defines css class for input watermark
+        this.inpWatermarkCssClass = f.input_watermark_css_class ||
+            'fltWatermark';
+        this.isInpWatermarkArray = tf_IsArray(f.input_watermark);
+        //id of toolbar container element
+        this.toolBarTgtId = f.toolbar_target_id || null;
+        //enables/disables help div
+        this.helpInstructions = f.help_instructions || null;
+        //popup filters
+        this.popUpFilters = f.popup_filters===true ? true : false;
+        //active columns color
+        this.markActiveColumns = f.mark_active_columns===true ? true : false;
+        //defines css class for active column header
+        this.activeColumnsCssClass = f.active_columns_css_class ||
+            'activeHeader';
+        //calls function before active column header is marked
+        this.onBeforeActiveColumn = tf_IsFn(f.on_before_active_column) ?
+            f.on_before_active_column : null;
+        //calls function after active column header is marked
+        this.onAfterActiveColumn = tf_IsFn(f.on_after_active_column) ?
+            f.on_after_active_column : null;
 
-            /*** filters' grid appearance ***/
-            //stylesheet file
-            this.stylesheet = f.stylesheet || this.basePath+'filtergrid.css';
-            this.stylesheetId = this.id + '_style';
-            //defines css class for filters row
-            this.fltsRowCssClass = f.flts_row_css_class || 'fltrow';
-             //enables/disables icons (paging, reset button)
-            this.enableIcons = f.enable_icons===false ? false : true;
-            //enables/disbles rows alternating bg colors
-            this.alternateBgs = f.alternate_rows===true ? true : false;
-            //defines widths of columns
-            this.hasColWidth = f.col_width===true ? true : false;
-            this.colWidth = this.hasColWidth ? f.col_width : null;
-            //enables/disables fixed headers
-            this.fixedHeaders = f.fixed_headers===true ? true : false;
-            //tbody height if fixed headers enabled
-            this.tBodyH = !isNaN(f.tbody_height) ? f.tbody_height : 200;
-            //defines css class for filters
-            this.fltCssClass = f.flt_css_class || 'flt';
-            //defines css class for multiple selects filters
-            this.fltMultiCssClass = f.flt_multi_css_class || 'flt_multi';
-            //defines css class for filters
-            this.fltSmallCssClass = f.flt_small_css_class || 'flt_s';
-            //defines css class for single-filter
-            this.singleFltCssClass = f.single_flt_css_class || 'single_flt';
-            this.isStartBgAlternate =   true;
-            //defines css class for even rows
-            this.rowBgEvenCssClass = f.even_row_css_class || 'even';
-            //defines css class for odd rows
-            this.rowBgOddCssClass = f.odd_row_css_class || 'odd';
+        /*** select filter's customisation and behaviours ***/
+        //defines 1st option text
+        this.displayAllText = f.display_all_text || '';
+        this.enableSlcResetFilter = f.enable_slc_reset_filter===false ?
+            false : true;
+        //enables/disables empty option in combo-box filters
+        this.enableEmptyOption = f.enable_empty_option===true ? true : false;
+        //defines empty option text
+        this.emptyText = f.empty_text || '(Empty)';
+        //enables/disables non empty option in combo-box filters
+        this.enableNonEmptyOption = f.enable_non_empty_option===true ?
+            true : false;
+        //defines empty option text
+        this.nonEmptyText = f.non_empty_text || '(Non empty)';
+        //enables/disables onChange event on combo-box
+        this.onSlcChange = f.on_change===false ? false : true;
+        //enables/disables select options sorting
+        this.sortSlc = f.sort_select===false ? false : true;
+        //enables/disables ascending numeric options sorting
+        this.isSortNumAsc = f.sort_num_asc===true ? true : false;
+        this.sortNumAsc = this.isSortNumAsc ? f.sort_num_asc : null;
+        //enables/disables descending numeric options sorting
+        this.isSortNumDesc = f.sort_num_desc===true ? true : false;
+        this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : null;
+        //sets select filling method: 'innerHTML' or 'createElement'
+        this.slcFillingMethod = f.slc_filling_method || 'createElement';
+        //enabled selects are populated on demand
+        this.fillSlcOnDemand = f.fill_slc_on_demand===true ? true : false;
+        //IE only, tooltip text appearing on select before it is populated
+        this.activateSlcTooltip =  f.activate_slc_tooltip ||
+            'Click to activate';
+        //tooltip text appearing on multiple select
+        this.multipleSlcTooltip = f.multiple_slc_tooltip ||
+            'Use Ctrl key for multiple selections';
+        this.hasCustomSlcOptions = tf_IsObj(f.custom_slc_options) ?
+            true : false;
+        this.customSlcOptions = tf_isArray(f.custom_slc_options) ?
+            f.custom_slc_options : null;
+        //calls function before col operation
+        this.onBeforeOperation = tf_IsFn(f.on_before_operation) ?
+            f.on_before_operation : null;
+        //calls function after col operation
+        this.onAfterOperation = tf_IsFn(f.on_after_operation) ?
+            f.on_after_operation : null;
 
-            /*** filters' grid behaviours ***/
-            //enables/disables enter key
-            this.enterKey = f.enter_key===false ? false : true;
-            //enables/disables alternative fn call
-            this.isModFilterFn = f.mod_filter_fn===true ? true : false;
-            // used by tf_DetectKey fn
-            this.modFilterFn = this.isModFilterFn ? f.mod_filter_fn : null;
-            //calls function before filtering starts
-            this.onBeforeFilter = tf_IsFn(f.on_before_filter) ?
-                f.on_before_filter : null;
-            //calls function after filtering
-            this.onAfterFilter = tf_IsFn(f.on_after_filter) ?
-                f.on_after_filter : null;
-            //enables/disables case sensitivity
-            this.matchCase = f.match_case===true ? true : false;
-            //enables/disbles exact match for search
-            this.exactMatch = f.exact_match===true ? true : false;
-            //refreshes drop-down lists upon validation
-            this.refreshFilters = f.refresh_filters===true ? true : false;
-            //wheter excluded options are disabled
-            this.disableExcludedOptions = f.disable_excluded_options===true ?
-                true : false;
+        /*** checklist customisation and behaviours ***/
+        this.checkListDiv = []; //checklist container div
+        //defines css class for div containing checklist filter
+        this.checkListDivCssClass = f.div_checklist_css_class ||
+            'div_checklist';
+        //defines css class for checklist filters
+        this.checkListCssClass = f.checklist_css_class || 'flt_checklist';
+        //defines css class for checklist item (li)
+        this.checkListItemCssClass = f.checklist_item_css_class ||
+            'flt_checklist_item';
+        //defines css class for selected checklist item (li)
+        this.checkListSlcItemCssClass = f.checklist_selected_item_css_class ||
+            'flt_checklist_slc_item';
+        //Load on demand text
+        this.activateCheckListTxt = f.activate_checklist_text ||
+            'Click to load filter data';
+        //defines css class for checklist filters
+        this.checkListItemDisabledCssClass =
+            f.checklist_item_disabled_css_class ||
+            'flt_checklist_item_disabled';
+        this.enableCheckListResetFilter =
+            f.enable_checklist_reset_filter===false ? false : true;
 
-            this.activeFlt =            null; //stores active filter element
-            this.activeFilterId =       null; //id of active filter
-            //enables/disbles column operation(sum,mean)
-            this.hasColOperation = f.col_operation===true ? true : false;
-            this.colOperation =         null;
-            //enables always visible rows
-            this.hasVisibleRows = f.rows_always_visible===true ? true : false;
-            //array containing always visible rows
-            this.visibleRows = this.hasVisibleRows ? f.rows_always_visible : [];
-            //defines search type: include or exclude
-            this.searchType = f.search_type || 'include';
-            //enables/disables external filters generation
-            this.isExternalFlt = f.external_flt_grid===true ? true : false;
-            //array containing ids of external elements containing filters
-            this.externalFltTgtIds = f.external_flt_grid_ids || null;
-            //stores filters elements if isExternalFlt is true
-            this.externalFltEls = [];
-            //delays any filtering process if loader true
-            this.execDelay = !isNaN(f.exec_delay) ?
-                parseInt(f.exec_delay, 10) : 100;
-            //enables/disables status messages
-            this.status = f.status===true ? true : false;
-            //calls function when filters grid loaded
-            this.onFiltersLoaded = tf_IsFn(f.on_filters_loaded) ?
-                f.on_filters_loaded : null;
-            //enables/disables single filter search
-            this.singleSearchFlt = f.single_search_filter===true ? true : false;
-            //calls function after row is validated
-            this.onRowValidated = tf_IsFn(f.on_row_validated) ?
-                f.on_row_validated : null;
-            //array defining columns for customCellData event
-            this.customCellDataCols = f.custom_cell_data_cols ?
-                f.custom_cell_data_cols : [];
-            //calls custom function for retrieving cell data
-            this.customCellData = tf_IsFn(f.custom_cell_data) ?
-                f.custom_cell_data : null;
-            //input watermark text array
-            this.inpWatermark = f.input_watermark || '';
-            //defines css class for input watermark
-            this.inpWatermarkCssClass = f.input_watermark_css_class ||
-                'fltWatermark';
-            this.isInpWatermarkArray =  tf_IsArray(f.input_watermark);
-            //id of toolbar container element
-            this.toolBarTgtId = f.toolbar_target_id || null;
-            //enables/disables help div
-            this.helpInstructions = f.help_instructions || null;
-            //popup filters
-            this.popUpFilters = f.popup_filters===true ? true : false;
-            //active columns color
-            this.markActiveColumns = f.mark_active_columns===true ?
-                true : false;
-            //defines css class for active column header
-            this.activeColumnsCssClass = f.active_columns_css_class ||
-                'activeHeader';
-            //calls function before active column header is marked
-            this.onBeforeActiveColumn = tf_IsFn(f.on_before_active_column) ?
-                f.on_before_active_column : null;
-            //calls function after active column header is marked
-            this.onAfterActiveColumn = tf_IsFn(f.on_after_active_column) ?
-                f.on_after_active_column : null;
+        /*** Filter operators ***/
+        this.rgxOperator = f.regexp_operator || 'rgx:';
+        this.emOperator = f.empty_operator || '[empty]';
+        this.nmOperator = f.nonempty_operator || '[nonempty]';
+        this.orOperator = f.or_operator || '||';
+        this.anOperator = f.and_operator || '&&';
+        this.grOperator = f.greater_operator || '>';
+        this.lwOperator = f.lower_operator || '<';
+        this.leOperator = f.lower_equal_operator || '<=';
+        this.geOperator = f.greater_equal_operator || '>=';
+        this.dfOperator = f.different_operator || '!';
+        this.lkOperator = f.like_operator || '*';
+        this.eqOperator = f.equal_operator || '=';
+        this.stOperator = f.start_with_operator || '{';
+        this.enOperator = f.end_with_operator || '}';
+        this.curExp = f.cur_exp || '^[¥£€$]';
+        this.separator = f.separator || ',';
 
-            /*** select filter's customisation and behaviours ***/
-            //defines 1st option text
-            this.displayAllText = f.display_all_text || '';
-            this.enableSlcResetFilter = f.enable_slc_reset_filter===false ?
-                false : true;
-            //enables/disables empty option in combo-box filters
-            this.enableEmptyOption = f.enable_empty_option===true ?
-                true : false;
-            //defines empty option text
-            this.emptyText = f.empty_text || '(Empty)';
-            //enables/disables non empty option in combo-box filters
-            this.enableNonEmptyOption = f.enable_non_empty_option===true ?
-                true : false;
-            //defines empty option text
-            this.nonEmptyText = f.non_empty_text || '(Non empty)';
-            //enables/disables onChange event on combo-box
-            this.onSlcChange = f.on_change===false ? false : true;
-            //enables/disables select options sorting
-            this.sortSlc = f.sort_select===false ? false : true;
-            //enables/disables ascending numeric options sorting
-            this.isSortNumAsc = f.sort_num_asc===true ? true : false;
-            this.sortNumAsc = this.isSortNumAsc ? f.sort_num_asc : null;
-            //enables/disables descending numeric options sorting
-            this.isSortNumDesc = f.sort_num_desc===true ? true : false;
-            this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : null;
-            //sets select filling method: 'innerHTML' or 'createElement'
-            this.slcFillingMethod = f.slc_filling_method || 'createElement';
-            //enabled selects are populated on demand
-            this.fillSlcOnDemand = f.fill_slc_on_demand===true ? true : false;
-            //IE only, tooltip text appearing on select before it is populated
-            this.activateSlcTooltip =  f.activate_slc_tooltip ||
-                'Click to activate';
-            //tooltip text appearing on multiple select
-            this.multipleSlcTooltip = f.multiple_slc_tooltip ||
-                'Use Ctrl key for multiple selections';
-            this.hasCustomSlcOptions = tf_IsObj(f.custom_slc_options) ?
-                true : false;
-            this.customSlcOptions = tf_isArray(f.custom_slc_options) ?
-                f.custom_slc_options : null;
-            //calls function before col operation
-            this.onBeforeOperation = tf_IsFn(f.on_before_operation) ?
-                f.on_before_operation : null;
-            //calls function after col operation
-            this.onAfterOperation = tf_IsFn(f.on_after_operation) ?
-                f.on_after_operation : null;
+        /*** rows counter ***/
+        //show/hides rows counter
+        this.rowsCounter = f.rows_counter===true ? true : false;
 
-            /*** checklist customisation and behaviours ***/
-            this.checkListDiv = []; //checklist container div
-            //defines css class for div containing checklist filter
-            this.checkListDivCssClass = f.div_checklist_css_class ||
-                'div_checklist';
-            //defines css class for checklist filters
-            this.checkListCssClass = f.checklist_css_class || 'flt_checklist';
-            //defines css class for checklist item (li)
-            this.checkListItemCssClass = f.checklist_item_css_class ||
-                'flt_checklist_item';
-            //defines css class for selected checklist item (li)
-            this.checkListSlcItemCssClass =
-                f.checklist_selected_item_css_class || 'flt_checklist_slc_item';
-            //Load on demand text
-            this.activateCheckListTxt = f.activate_checklist_text ||
-                'Click to load filter data';
-            //defines css class for checklist filters
-            this.checkListItemDisabledCssClass =
-                f.checklist_item_disabled_css_class ||
-                'flt_checklist_item_disabled';
-            this.enableCheckListResetFilter =
-                f.enable_checklist_reset_filter===false ? false : true;
+        /*** status bar ***/
+        //show/hides status bar
+        this.statusBar = f.status_bar===true ? true : false;
 
-            /*** Filter operators ***/
-            this.rgxOperator = f.regexp_operator || 'rgx:';
-            this.emOperator = f.empty_operator || '[empty]';
-            this.nmOperator = f.nonempty_operator || '[nonempty]';
-            this.orOperator = f.or_operator || '||';
-            this.anOperator = f.and_operator || '&&';
-            this.grOperator = f.greater_operator || '>';
-            this.lwOperator = f.lower_operator || '<';
-            this.leOperator = f.lower_equal_operator || '<=';
-            this.geOperator = f.greater_equal_operator || '>=';
-            this.dfOperator = f.different_operator || '!';
-            this.lkOperator = f.like_operator || '*';
-            this.eqOperator = f.equal_operator || '=';
-            this.stOperator = f.start_with_operator || '{';
-            this.enOperator = f.end_with_operator || '}';
-            this.curExp = f.cur_exp || '^[¥£€$]';
-            this.separator = f.separator || ',';
+        /*** loader ***/
+        //enables/disables loader/spinner indicator
+        this.loader = f.loader===true ? true : false;
 
-            /*** rows counter ***/
-            //show/hides rows counter
-            this.rowsCounter = f.rows_counter===true ? true : false;
+        /*** validation - reset buttons/links ***/
+        //show/hides filter's validation button
+        this.displayBtn = f.btn===true ? true : false;
+        //defines validation button text
+        this.btnText = f.btn_text || (!this.enableIcons ? 'Go' : '');
+        //defines css class for validation button
+        this.btnCssClass = f.btn_css_class ||
+            (!this.enableIcons ? 'btnflt' : 'btnflt_icon');
+        //show/hides reset link
+        this.btnReset = f.btn_reset===true ? true : false;
+        //defines css class for reset button
+        this.btnResetCssClass = f.btn_reset_css_class || 'reset';
+        //callback function before filters are cleared
+        this.onBeforeReset = tf_IsFn(f.on_before_reset) ?
+            f.on_before_reset : null;
+        //callback function after filters are cleared
+        this.onAfterReset = tf_IsFn(f.on_after_reset) ? f.on_after_reset : null;
 
-            /*** status bar ***/
-            //show/hides status bar
-            this.statusBar = f.status_bar===true ? true : false;
+        /*** paging ***/
+        //enables/disables table paging
+        this.paging = f.paging===true ? true : false;
+        //enables/disables results per page drop-down
+        this.hasResultsPerPage = f.results_per_page===true ? true : false;
+        //css class for paging buttons (previous,next,etc.)
+        this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';
+        //stores paging select element
+        this.pagingSlc = null;
+        //stores results per page text and values
+        this.resultsPerPage = null;
+        //results per page select element
+        this.resultsPerPageSlc = null;
+        //indicates if paging elements were previously removed
+        this.isPagingRemoved = false;
+        this.nbVisibleRows = 0; //nb visible rows
+        this.nbHiddenRows = 0; //nb hidden rows
+        this.startPagingRow = 0; //1st row index of current page
+        this.nbPages = 0; //total nb of pages
+        this.currentPageNb = 1; //current page nb
 
-            /*** loader ***/
-            //enables/disables loader/spinner indicator
-            this.loader = f.loader===true ? true : false;
+        /*** webfx sort adapter ***/
+        //enables/disables default table sorting
+        this.sort = f.sort===true ? true : false;
+        //indicates if sort is set (used in tfAdapter.sortabletable.js)
+        this.isSortEnabled = false;
+        //indicates if tables was sorted
+        this.sorted = false;
+        this.sortConfig = f.sort_config || {};
+        this.sortConfig.name = this.sortConfig['name']!==undefined ?
+            f.sort_config.name : 'sortabletable';
+        this.sortConfig.src = this.sortConfig['src']!==undefined ?
+            f.sort_config.src : this.basePath+'sortabletable.js';
+        this.sortConfig.adapterSrc =
+            this.sortConfig['adapter_src']!==undefined ?
+            f.sort_config.adapter_src :
+            this.basePath+'tfAdapter.sortabletable.js';
+        this.sortConfig.initialize =
+            this.sortConfig['initialize']!==undefined ?
+                f.sort_config.initialize :
+                function(o){
+                    if(o.SetSortTable){ o.SetSortTable(); }
+                };
+        this.sortConfig.sortTypes =
+            tf_isArray(this.sortConfig['sort_types']) ?
+            f.sort_config.sort_types : [];
+        this.sortConfig.sortCol = this.sortConfig['sort_col']!==undefined ?
+            f.sort_config.sort_col : null;
+        this.sortConfig.asyncSort =
+            this.sortConfig['async_sort']===true ? true : false;
+        this.sortConfig.triggerIds =
+            tf_isArray(this.sortConfig['sort_trigger_ids']) ?
+            f.sort_config.sort_trigger_ids : [];
 
-            /*** validation - reset buttons/links ***/
-            //show/hides filter's validation button
-            this.displayBtn = f.btn===true ? true : false;
-            //defines validation button text
-            this.btnText = f.btn_text || (!this.enableIcons ? 'Go' : '');
-            //defines css class for validation button
-            this.btnCssClass = f.btn_css_class ||
-                (!this.enableIcons ? 'btnflt' : 'btnflt_icon');
-            //show/hides reset link
-            this.btnReset = f.btn_reset===true ? true : false;
-            //defines css class for reset button
-            this.btnResetCssClass = f.btn_reset_css_class || 'reset';
-            //callback function before filters are cleared
-            this.onBeforeReset = tf_IsFn(f.on_before_reset) ?
-                f.on_before_reset : null;
-            //callback function after filters are cleared
-            this.onAfterReset = tf_IsFn(f.on_after_reset) ?
-                f.on_after_reset : null;
+        /*** ezEditTable extension ***/
+        //enables/disables table selection feature
+        this.selectable = f.selectable===true ? true : false;
+        //enables/disables editable table feature
+        this.editable = f.editable===true ? true : false;
+        this.ezEditTableConfig = f.ezEditTable_config || {};
+        this.ezEditTableConfig.name =
+            this.ezEditTableConfig['name']!==undefined ?
+            f.ezEditTable_config.name : 'ezedittable';
+        this.ezEditTableConfig.src = this.ezEditTableConfig['src']!==undefined ?
+            f.ezEditTable_config.src :
+            this.basePath+'ezEditTable/ezEditTable.js';
+        //ezEditTable stylesheet not imported by default as filtergrid.css
+        //applies
+        this.ezEditTableConfig.loadStylesheet =
+            this.ezEditTableConfig['loadStylesheet']===true ? true : false;
+        this.ezEditTableConfig.stylesheet =
+            this.ezEditTableConfig['stylesheet'] ||
+            this.basePath+'ezEditTable/ezEditTable.css';
+        this.ezEditTableConfig.stylesheetName =
+            this.ezEditTableConfig['stylesheetName']!==undefined ?
+            f.ezEditTable_config.stylesheetName : 'ezEditTableCss';
+        this.ezEditTableConfig.err = 'Failed to instantiate EditTable ' +
+            'object.\n"ezEditTable" module may not be available.';
 
-            /*** paging ***/
-            //enables/disables table paging
-            this.paging = f.paging===true ? true : false;
-            //enables/disables results per page drop-down
-            this.hasResultsPerPage = f.results_per_page===true ? true : false;
-            //css class for paging buttons (previous,next,etc.)
-            this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';
-            //stores paging select element
-            this.pagingSlc =            null;
-            //stores results per page text and values
-            this.resultsPerPage =       null;
-            //results per page select element
-            this.resultsPerPageSlc =    null;
-            //indicates if paging elements were previously removed
-            this.isPagingRemoved =      false;
-            this.nbVisibleRows  =       0; //nb visible rows
-            this.nbHiddenRows =         0; //nb hidden rows
-            this.startPagingRow =       0; //1st row index of current page
-            this.nbPages =              0; //total nb of pages
-            this.currentPageNb =        1; //current page nb
+        /*** onkeyup event ***/
+        //enables/disables onkeyup event, table is filtered when user stops
+        //typing
+        this.onKeyUp = f.on_keyup===true ? true : false;
+        //onkeyup delay timer (msecs)
+        this.onKeyUpDelay = !isNaN(f.on_keyup_delay) ?
+            f.on_keyup_delay : 900;
+        this.isUserTyping = null; //typing indicator
+        this.onKeyUpTimer = undefined;
 
-            /*** webfx sort adapter ***/
-            //enables/disables default table sorting
-            this.sort = f.sort===true ? true : false;
-            //indicates if sort is set (used in tfAdapter.sortabletable.js)
-            this.isSortEnabled = false;
-            //indicates if tables was sorted
-            this.sorted = false;
-            this.sortConfig = f.sort_config || {};
-            this.sortConfig.name = this.sortConfig['name']!==undefined ?
-                f.sort_config.name : 'sortabletable';
-            this.sortConfig.src = this.sortConfig['src']!==undefined ?
-                f.sort_config.src : this.basePath+'sortabletable.js';
-            this.sortConfig.adapterSrc =
-                this.sortConfig['adapter_src']!==undefined ?
-                f.sort_config.adapter_src :
-                this.basePath+'tfAdapter.sortabletable.js';
-            this.sortConfig.initialize =
-                this.sortConfig['initialize']!==undefined ?
-                    f.sort_config.initialize :
-                    function(o){
-                        if(o.SetSortTable){ o.SetSortTable(); }
-                    };
-            this.sortConfig.sortTypes =
-                tf_isArray(this.sortConfig['sort_types']) ?
-                f.sort_config.sort_types : [];
-            this.sortConfig.sortCol = this.sortConfig['sort_col']!==undefined ?
-                f.sort_config.sort_col : null;
-            this.sortConfig.asyncSort =
-                this.sortConfig['async_sort']===true ? true : false;
-            this.sortConfig.triggerIds =
-                tf_isArray(this.sortConfig['sort_trigger_ids']) ?
-                f.sort_config.sort_trigger_ids : [];
+        /*** keyword highlighting ***/
+        //enables/disables keyword highlighting
+        this.highlightKeywords = f.highlight_keywords===true ? true : false;
+        //defines css class for highlighting
+        this.highlightCssClass = f.highlight_css_class || 'keyword';
+        this.highlightedNodes = [];
 
-            /*** ezEditTable extension ***/
-            //enables/disables table selection feature
-            this.selectable = f.selectable===true ? true : false;
-            //enables/disables editable table feature
-            this.editable = f.editable===true ? true : false;
-            this.ezEditTableConfig = f.ezEditTable_config || {};
-            this.ezEditTableConfig.name =
-                this.ezEditTableConfig['name']!==undefined ?
-                f.ezEditTable_config.name : 'ezedittable';
-            this.ezEditTableConfig.src =
-                this.ezEditTableConfig['src']!==undefined ?
-                f.ezEditTable_config.src :
-                this.basePath+'ezEditTable/ezEditTable.js';
-            //ezEditTable stylesheet not imported by default as filtergrid.css
-            //applies
-            this.ezEditTableConfig.loadStylesheet =
-                this.ezEditTableConfig['loadStylesheet']===true ? true : false;
-            this.ezEditTableConfig.stylesheet =
-                this.ezEditTableConfig['stylesheet'] ||
-                this.basePath+'ezEditTable/ezEditTable.css';
-            this.ezEditTableConfig.stylesheetName =
-                this.ezEditTableConfig['stylesheetName']!==undefined ?
-                f.ezEditTable_config.stylesheetName : 'ezEditTableCss';
-            this.ezEditTableConfig.err = 'Failed to instantiate EditTable ' +
-                'object.\n"ezEditTable" module may not be available.';
+        /*** data types ***/
+        //defines default date type (european DMY)
+        this.defaultDateType = f.default_date_type || 'DMY';
+        //defines default thousands separator
+        //US = ',' EU = '.'
+        this.thousandsSeparator = f.thousands_separator || ',';
+        //defines default decimal separator
+        //US & javascript = '.' EU = ','
+        this.decimalSeparator = f.decimal_separator || '.';
+        //enables number format per column
+        this.hasColNbFormat = f.col_number_format===true ? true : false;
+        //array containing columns nb formats
+        this.colNbFormat = tf_isArray(this.hasColNbFormat) ?
+            f.col_number_format : null;
+        //enables date type per column
+        this.hasColDateType = f.col_date_type===true ? true : false;
+        //array containing columns date type
+        this.colDateType = tf_isArray(this.hasColDateType) ?
+            f.col_date_type : null;
 
-            /*** onkeyup event ***/
-            //enables/disables onkeyup event, table is filtered when user stops
-            //typing
-            this.onKeyUp = f.on_keyup===true ? true : false;
-            //onkeyup delay timer (msecs)
-            this.onKeyUpDelay = !isNaN(f.on_keyup_delay) ?
-                f.on_keyup_delay : 900;
-            this.isUserTyping = null; //typing indicator
-            this.onKeyUpTimer = undefined;
+        /*** status messages ***/
+        //filtering
+        this.msgFilter = f.msg_filter || 'Filtering data...';
+        //populating drop-downs
+        this.msgPopulate = f.msg_populate || 'Populating filter...';
+        //populating drop-downs
+        this.msgPopulateCheckList = f.msg_populate_checklist ||
+            'Populating list...';
+        //changing paging page
+        this.msgChangePage = f.msg_change_page || 'Collecting paging data...';
+        //clearing filters
+        this.msgClear = f.msg_clear || 'Clearing filters...';
+        //changing nb results/page
+        this.msgChangeResults = f.msg_change_results ||
+            'Changing results per page...';
+        //re-setting grid values
+        this.msgResetValues = f.msg_reset_grid_values ||
+            'Re-setting filters values...';
+        //re-setting page
+        this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
+        //re-setting page length
+        this.msgResetPageLength = f.msg_reset_page_length ||
+            'Re-setting page length...';
+        //table sorting
+        this.msgSort = f.msg_sort || 'Sorting data...';
+        //extensions loading
+        this.msgLoadExtensions = f.msg_load_extensions ||
+            'Loading extensions...';
+        //themes loading
+        this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
 
-            /*** keyword highlighting ***/
-            //enables/disables keyword highlighting
-            this.highlightKeywords = f.highlight_keywords===true ? true : false;
-            //defines css class for highlighting
-            this.highlightCssClass = f.highlight_css_class || 'keyword';
-            this.highlightedNodes = [];
+        /*** ids prefixes ***/
+        //css class name added to table
+        this.prfxTf = 'TF';
+        //filters (inputs - selects)
+        this.prfxFlt = 'flt';
+        //validation button
+        this.prfxValButton = 'btn';
+        //container div for paging elements, rows counter etc.
+        this.prfxInfDiv = 'inf_';
+        //left div
+        this.prfxLDiv = 'ldiv_';
+        //right div
+        this.prfxRDiv = 'rdiv_';
+        //middle div
+        this.prfxMDiv = 'mdiv_';
+        //table container if fixed headers enabled
+        this.prfxContentDiv = 'cont_';
+        //checklist filter container div
+        this.prfxCheckListDiv = 'chkdiv_';
+        //pages select
+        this.prfxSlcPages = 'slcPages_';
+        //results per page select
+        this.prfxSlcResults = 'slcResults_';
+        //label preciding results per page select
+        this.prfxSlcResultsTxt = 'slcResultsTxt_';
+        //span containing next page button
+        this.prfxBtnNextSpan = 'btnNextSpan_';
+        //span containing previous page button
+        this.prfxBtnPrevSpan = 'btnPrevSpan_';
+        //span containing last page button
+        this.prfxBtnLastSpan = 'btnLastSpan_';
+        //span containing first page button
+        this.prfxBtnFirstSpan = 'btnFirstSpan_';
+        //next button
+        this.prfxBtnNext = 'btnNext_';
+        //previous button
+        this.prfxBtnPrev = 'btnPrev_';
+        //last button
+        this.prfxBtnLast = 'btnLast_';
+        //first button
+        this.prfxBtnFirst = 'btnFirst_';
+        //span for tot nb pages
+        this.prfxPgSpan = 'pgspan_';
+        //span preceding pages select (contains 'Page')
+        this.prfxPgBeforeSpan = 'pgbeforespan_';
+        //span following pages select (contains ' of ')
+        this.prfxPgAfterSpan = 'pgafterspan_';
+        //rows counter div
+        this.prfxCounter = 'counter_';
+        //nb displayed rows label
+        this.prfxTotRows = 'totrows_span_';
+        //label preceding nb rows label
+        this.prfxTotRowsTxt = 'totRowsTextSpan_';
+        //span containing reset button
+        this.prfxResetSpan = 'resetspan_';
+        //loader div
+        this.prfxLoader = 'load_';
+        //status bar div
+        this.prfxStatus = 'status_';
+        //status bar label
+        this.prfxStatusSpan = 'statusSpan_';
+        //text preceding status bar label
+        this.prfxStatusTxt = 'statusText_';
+        //filter values cookie
+        this.prfxCookieFltsValues = 'tf_flts_';
+        //page nb cookie
+        this.prfxCookiePageNb = 'tf_pgnb_';
+        //page length cookie
+        this.prfxCookiePageLen = 'tf_pglen_';
+        //div containing grid elements if grid_layout true
+        this.prfxMainTblCont = 'gridCont_';
+        //div containing table if grid_layout true
+        this.prfxTblCont = 'tblCont_';
+        //div containing headers table if grid_layout true
+        this.prfxHeadTblCont = 'tblHeadCont_';
+        //headers' table if grid_layout true
+        this.prfxHeadTbl = 'tblHead_';
+        //id of td containing the filter if grid_layout true
+        this.prfxGridFltTd = '_td_';
+        //id of th containing column header if grid_layout true
+        this.prfxGridTh = 'tblHeadTh_';
+        //id prefix for help elements
+        this.prfxHelpSpan = 'helpSpan_';
+        //id prefix for help elements
+        this.prfxHelpDiv = 'helpDiv_';
+        //id prefix for pop-up filter span
+        this.prfxPopUpSpan = 'popUpSpan_';
+        //id prefix for pop-up div containing filter
+        this.prfxPopUpDiv = 'popUpDiv_';
 
-            /*** data types ***/
-            //defines default date type (european DMY)
-            this.defaultDateType = f.default_date_type || 'DMY';
-            //defines default thousands separator
-            //US = ',' EU = '.'
-            this.thousandsSeparator = f.thousands_separator || ',';
-            //defines default decimal separator
-            //US & javascript = '.' EU = ','
-            this.decimalSeparator = f.decimal_separator || '.';
-            //enables number format per column
-            this.hasColNbFormat = f.col_number_format===true ? true : false;
-            //array containing columns nb formats
-            this.colNbFormat = tf_isArray(this.hasColNbFormat) ?
-                f.col_number_format : null;
-            //enables date type per column
-            this.hasColDateType = f.col_date_type===true ? true : false;
-            //array containing columns date type
-            this.colDateType = tf_isArray(this.hasColDateType) ?
-                f.col_date_type : null;
+        /*** cookies ***/
+        this.hasStoredValues = false;
+        //remembers filters values on page load
+        this.rememberGridValues = f.remember_grid_values===true ?
+            true : false;
+        //cookie storing filter values
+        this.fltsValuesCookie = this.prfxCookieFltsValues + this.id;
+        //remembers page nb on page load
+        this.rememberPageNb = this.paging && f.remember_page_number ?
+            true : false;
+        //cookie storing page nb
+        this.pgNbCookie = this.prfxCookiePageNb + this.id;
+        //remembers page length on page load
+        this.rememberPageLen = this.paging && f.remember_page_length ?
+            true : false;
+        //cookie storing page length
+        this.pgLenCookie = this.prfxCookiePageLen + this.id;
+        //cookie duration
+        this.cookieDuration = !isNaN(f.set_cookie_duration) ?
+            parseInt(f.set_cookie_duration, 10) :100000;
 
-            /*** status messages ***/
-            //filtering
-            this.msgFilter = f.msg_filter || 'Filtering data...';
-            //populating drop-downs
-            this.msgPopulate = f.msg_populate || 'Populating filter...';
-            //populating drop-downs
-            this.msgPopulateCheckList = f.msg_populate_checklist ||
-                'Populating list...';
-            //changing paging page
-            this.msgChangePage = f.msg_change_page ||
-                'Collecting paging data...';
-            //clearing filters
-            this.msgClear = f.msg_clear || 'Clearing filters...';
-            //changing nb results/page
-            this.msgChangeResults = f.msg_change_results ||
-                'Changing results per page...';
-            //re-setting grid values
-            this.msgResetValues = f.msg_reset_grid_values ||
-                'Re-setting filters values...';
-            //re-setting page
-            this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
-            //re-setting page length
-            this.msgResetPageLength = f.msg_reset_page_length ||
-                'Re-setting page length...';
-            //table sorting
-            this.msgSort = f.msg_sort || 'Sorting data...';
-            //extensions loading
-            this.msgLoadExtensions = f.msg_load_extensions ||
-                'Loading extensions...';
-            //themes loading
-            this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
+        /*** extensions ***/
+        //imports external script
+        this.hasExtensions = f.extensions===true ? true : false;
+        this.extensions = this.hasExtensions ? f.extensions : null;
 
-            /*** ids prefixes ***/
-            //css class name added to table
-            this.prfxTf =               'TF';
-            //filters (inputs - selects)
-            this.prfxFlt =              'flt';
-            //validation button
-            this.prfxValButton =        'btn';
-            //container div for paging elements, rows counter etc.
-            this.prfxInfDiv =           'inf_';
-            //left div
-            this.prfxLDiv =             'ldiv_';
-            //right div
-            this.prfxRDiv =             'rdiv_';
-            //middle div
-            this.prfxMDiv =             'mdiv_';
-            //table container if fixed headers enabled
-            this.prfxContentDiv =       'cont_';
-            //checklist filter container div
-            this.prfxCheckListDiv =     'chkdiv_';
-            //pages select
-            this.prfxSlcPages =         'slcPages_';
-            //results per page select
-            this.prfxSlcResults =       'slcResults_';
-            //label preciding results per page select
-            this.prfxSlcResultsTxt =    'slcResultsTxt_';
-            //span containing next page button
-            this.prfxBtnNextSpan =      'btnNextSpan_';
-            //span containing previous page button
-            this.prfxBtnPrevSpan =      'btnPrevSpan_';
-            //span containing last page button
-            this.prfxBtnLastSpan =      'btnLastSpan_';
-            //span containing first page button
-            this.prfxBtnFirstSpan =     'btnFirstSpan_';
-            //next button
-            this.prfxBtnNext =          'btnNext_';
-            //previous button
-            this.prfxBtnPrev =          'btnPrev_';
-            //last button
-            this.prfxBtnLast =          'btnLast_';
-            //first button
-            this.prfxBtnFirst =         'btnFirst_';
-            //span for tot nb pages
-            this.prfxPgSpan =           'pgspan_';
-            //span preceding pages select (contains 'Page')
-            this.prfxPgBeforeSpan =     'pgbeforespan_';
-            //span following pages select (contains ' of ')
-            this.prfxPgAfterSpan =      'pgafterspan_';
-            //rows counter div
-            this.prfxCounter =          'counter_';
-            //nb displayed rows label
-            this.prfxTotRows =          'totrows_span_';
-            //label preceding nb rows label
-            this.prfxTotRowsTxt =       'totRowsTextSpan_';
-            //span containing reset button
-            this.prfxResetSpan =        'resetspan_';
-            //loader div
-            this.prfxLoader =           'load_';
-            //status bar div
-            this.prfxStatus =           'status_';
-            //status bar label
-            this.prfxStatusSpan =       'statusSpan_';
-            //text preceding status bar label
-            this.prfxStatusTxt =        'statusText_';
-            //filter values cookie
-            this.prfxCookieFltsValues = 'tf_flts_';
-            //page nb cookie
-            this.prfxCookiePageNb =     'tf_pgnb_';
-            //page length cookie
-            this.prfxCookiePageLen =    'tf_pglen_';
-            //div containing grid elements if grid_layout true
-            this.prfxMainTblCont =      'gridCont_';
-            //div containing table if grid_layout true
-            this.prfxTblCont =          'tblCont_';
-            //div containing headers table if grid_layout true
-            this.prfxHeadTblCont =      'tblHeadCont_';
-            //headers' table if grid_layout true
-            this.prfxHeadTbl =          'tblHead_';
-            //id of td containing the filter if grid_layout true
-            this.prfxGridFltTd =        '_td_';
-            //id of th containing column header if grid_layout true
-            this.prfxGridTh =           'tblHeadTh_';
-            //id prefix for help elements
-            this.prfxHelpSpan =         'helpSpan_';
-            //id prefix for help elements
-            this.prfxHelpDiv =          'helpDiv_';
-            //id prefix for pop-up filter span
-            this.prfxPopUpSpan =        'popUpSpan_';
-            //id prefix for pop-up div containing filter
-            this.prfxPopUpDiv =         'popUpDiv_';
+        /*** themes ***/
+        this.enableDefaultTheme = f.enable_default_theme===true ?
+            true : false;
+        //imports themes
+        this.hasThemes = (f.enable_default_theme ||
+            (f.themes && tf_IsObj(f.themes))) ? true : false;
+        this.themes = this.hasThemes ? f.themes : null;
+        //themes path
+        this.themesPath = f.themes_path || this.basePath+'TF_Themes/';
 
-            /*** cookies ***/
-            this.hasStoredValues = false;
-            //remembers filters values on page load
-            this.rememberGridValues = f.remember_grid_values===true ?
-                true : false;
-            //cookie storing filter values
-            this.fltsValuesCookie = this.prfxCookieFltsValues + this.id;
-            //remembers page nb on page load
-            this.rememberPageNb = this.paging && f.remember_page_number ?
-                true : false;
-            //cookie storing page nb
-            this.pgNbCookie = this.prfxCookiePageNb + this.id;
-            //remembers page length on page load
-            this.rememberPageLen = this.paging && f.remember_page_length ?
-                true : false;
-            //cookie storing page length
-            this.pgLenCookie = this.prfxCookiePageLen + this.id;
-            //cookie duration
-            this.cookieDuration = !isNaN(f.set_cookie_duration) ?
-                parseInt(f.set_cookie_duration, 10) :100000;
+        /***(deprecated: backward compatibility) ***/
+        //imports external script
+        this.hasBindScript = f.bind_script===true ? true : false;
+        this.bindScript = (this.hasBindScript) ? f.bind_script : null;
 
-            /*** extensions ***/
-            //imports external script
-            this.hasExtensions = f.extensions===true ? true : false;
-            this.extensions = this.hasExtensions ? f.extensions : null;
-
-            /*** themes ***/
-            this.enableDefaultTheme = f.enable_default_theme===true ?
-                true : false;
-            //imports themes
-            this.hasThemes = (f.enable_default_theme ||
-                (f.themes && tf_IsObj(f.themes))) ? true : false;
-            this.themes = this.hasThemes ? f.themes : null;
-            //themes path
-            this.themesPath = f.themes_path || this.basePath+'TF_Themes/';
-
-            /***(deprecated: backward compatibility) ***/
-            //imports external script
-            this.hasBindScript = f.bind_script===true ? true : false;
-            this.bindScript = (this.hasBindScript) ? f.bind_script : null;
-
-            /*** TF events ***/
-            var o = this;
-            this.Evt = {
-                name: {
-                    filter: 'Filter',
-                    populateselect: 'Populate',
-                    populatechecklist: 'PopulateCheckList',
-                    changepage: 'ChangePage',
-                    clear: 'Clear',
-                    changeresultsperpage: 'ChangeResults',
-                    resetvalues: 'ResetValues',
-                    resetpage: 'ResetPage',
-                    resetpagelength: 'ResetPageLength',
-                    sort: 'Sort',
-                    loadextensions: 'LoadExtensions',
-                    loadthemes: 'LoadThemes'
-                },
-                _DetectKey: function(e)
-                /*====================================================
-                    - common fn that detects return key for a given
-                    element (onkeypress for inputs)
-                =====================================================*/
+        /*** TF events ***/
+        var o = this;
+        this.Evt = {
+            name: {
+                filter: 'Filter',
+                populateselect: 'Populate',
+                populatechecklist: 'PopulateCheckList',
+                changepage: 'ChangePage',
+                clear: 'Clear',
+                changeresultsperpage: 'ChangeResults',
+                resetvalues: 'ResetValues',
+                resetpage: 'ResetPage',
+                resetpagelength: 'ResetPageLength',
+                sort: 'Sort',
+                loadextensions: 'LoadExtensions',
+                loadthemes: 'LoadThemes'
+            },
+            /*====================================================
+                - Detects <enter> key for a given element
+            =====================================================*/
+            _DetectKey: function(e) {
+                if(!o.enterKey) return;
+                var evt = e || window.event;
+                if(evt)
                 {
-                    if(!o.enterKey) return;
-                    var evt = e || window.event;
-                    if(evt)
-                    {
-                        var key=(evt.charCode)?evt.charCode:
-                            ((evt.keyCode)?evt.keyCode:((evt.which)?evt.which:0));
-                        if(key=='13')
-                        {
-                            o._Filter();
-                            tf_CancelEvent(evt);
-                            tf_StopEvent(evt);
-                        } else {
-                            o.isUserTyping = true;
-                            window.clearInterval(o.onKeyUpTimer);
-                            o.onKeyUpTimer = undefined;
-                        }
-                    }//if evt
-                },
-                _OnKeyUp: function(e)
-                /*====================================================
-                    - onkeyup event for text filters
-                    (onKeyUp property)
-                =====================================================*/
-                {
-                    if(!o.onKeyUp) return;
-                    var evt = e || window.event;
                     var key=(evt.charCode)?evt.charCode:
-                            ((evt.keyCode)?evt.keyCode:((evt.which)?evt.which:0));
-                    o.isUserTyping = false;
-
-                    if(key!=13 && key!=9 && key!=27 && key!=38 && key!=40)
+                        ((evt.keyCode)?evt.keyCode:((evt.which)?evt.which:0));
+                    if(key=='13')
                     {
-                        function filter()
-                        {
-                            window.clearInterval(o.onKeyUpTimer);
-                            o.onKeyUpTimer = undefined;
-                            if(!o.isUserTyping)
-                            {
-                                o.Filter();
-                                o.isUserTyping = null;
-                            }
-                        }
-                        if(o.onKeyUpTimer==undefined)
-                            o.onKeyUpTimer = window.setInterval(filter, o.onKeyUpDelay);
+                        o._Filter();
+                        tf_CancelEvent(evt);
+                        tf_StopEvent(evt);
                     } else {
+                        o.isUserTyping = true;
                         window.clearInterval(o.onKeyUpTimer);
                         o.onKeyUpTimer = undefined;
                     }
-                },
-                _OnKeyDown: function(e)
-                /*====================================================
-                    - onkeydown event for input filters
-                    (onKeyUp property)
-                =====================================================*/
-                {
-                    if(!o.onKeyUp) return;
-                    o.isUserTyping = true;
-                },
-                _OnInpBlur: function(e)
-                /*====================================================
-                    - onblur event for input filters (onKeyUp property)
-                =====================================================*/
-                {
-                    if(o.onKeyUp){
-                        o.isUserTyping = false;
-                        window.clearInterval(o.onKeyUpTimer);
-                    }
-                    //Watermark
-                    if(this.value == '' && o.inpWatermark != ''){
-                        this.value = (o.isInpWatermarkArray)
-                            ? o.inpWatermark[this.getAttribute('ct')]  : o.inpWatermark;
-                        tf_AddClass(this, o.inpWatermarkCssClass);
-                    }
-                    if(o.ezEditTable){
-                      if(o.editable) o.ezEditTable.Editable.Set();
-                      if(o.selectable) o.ezEditTable.Selection.Set();
-                    }
-                },
-                _OnInpFocus: function(e)
-                /*====================================================
-                    - onfocus event for input filters
-                =====================================================*/
-                {
-                    var evt = e || window.event;
-                    o.activeFilterId = this.getAttribute('id');
-                    o.activeFlt = tf_Id(o.activeFilterId);
-                    //Watermark
-                    if(!o.isInpWatermarkArray){
-                        if(this.value == o.inpWatermark && o.inpWatermark != ''){
-                            this.value = '';
-                            tf_RemoveClass(this, o.inpWatermarkCssClass);
-                        }
-                    } else {
-                        var inpWatermark = o.inpWatermark[this.getAttribute('ct')];
-                        if(this.value == inpWatermark && inpWatermark != ''){
-                            this.value = '';
-                            tf_RemoveClass(this, o.inpWatermarkCssClass);
-                        }
-                    }
-                    if(o.popUpFilters){
-                        tf_CancelEvent(evt);
-                        tf_StopEvent(evt);
-                    }
-                    if(o.ezEditTable){
-                        if(o.editable) o.ezEditTable.Editable.Remove();
-                        if(o.selectable) o.ezEditTable.Selection.Remove();
-                    }
-                },
-                _OnSlcFocus: function(e)
-                /*====================================================
-                    - onfocus event for select filters
-                =====================================================*/
-                {
-                    var evt = e || window.event;
-                    o.activeFilterId = this.getAttribute('id');
-                    o.activeFlt = tf_Id(o.activeFilterId);
-                    if(o.fillSlcOnDemand && this.getAttribute('filled') == '0')
-                    {// select is populated when element has focus
-                        var ct = this.getAttribute('ct');
-                        o.PopulateSelect(ct);
-                        if(!tf_isIE) this.setAttribute('filled','1');
-                    }
-                    if(o.popUpFilters){
-                        tf_CancelEvent(evt);
-                        tf_StopEvent(evt);
-                    }
-                },
-                _OnSlcChange: function(e)
-                /*====================================================
-                    - onchange event for select filters
-                =====================================================*/
-                {
-                    //Checks filter is a checklist and caller is not null
-                    if(o.activeFlt && o.activeFlt.getAttribute('colIndex') &&
-                        o['col'+o.activeFlt.getAttribute('colIndex')]==o.fltTypeCheckList &&
-                        !o.Evt._OnSlcChange.caller) return;
-                    var evt = e || window.event;
-                    if(o.popUpFilters) tf_StopEvent(evt);
-                    if(o.onSlcChange) o.Filter();
-                },
-                _OnSlcBlur: function(e)
-                /*====================================================
-                    - onblur event for select filters
-                =====================================================*/
-                {},
-                _OnCheckListChange: function(e)
-                /*====================================================
-                    - onchange event for checklist filters
-                =====================================================*/
-                {
-                    //Checks caller is not null
-                    if(!o.Evt._OnCheckListChange.caller) return;
-                    o.Evt._OnSlcChange(e);
-                },
-                _OnCheckListClick: function()
-                /*====================================================
-                    - onclick event for checklist filters
-                =====================================================*/
-                {
-                    if(o.fillSlcOnDemand && this.getAttribute('filled') == '0')
-                    {
-                        var ct = this.getAttribute('ct');
-                        o.PopulateCheckList(ct);
-                        o.checkListDiv[ct].onclick = null;
-                        o.checkListDiv[ct].title = '';
-                    }
-                },
-                _OnCheckListFocus: function(e)
-                /*====================================================
-                    - onclick event for checklist filter container
-                =====================================================*/
-                {
-                    o.activeFilterId = this.firstChild.getAttribute('id');
-                    o.activeFlt = tf_Id(o.activeFilterId);
-                },
-                _OnCheckListBlur: function(e){},
-                _OnBtnClick: function()
-                /*====================================================
-                    - onclick event for validation button
-                    (btn property)
-                =====================================================*/
-                {
-                    o.Filter();
-                },
-                _OnSlcPagesChangeEvt: null, //used by sort adapter
-                _EnableSlc: function()
-                /*====================================================
-                    - onclick event slc parent node (enables filters)
-                    IE only
-                =====================================================*/
-                {
-                    this.firstChild.disabled = false;
-                    this.firstChild.focus();
-                    this.onclick = null;
-                },
-                _Clear: function()
-                /*====================================================
-                    - clears filters
-                =====================================================*/
-                {
-                    o.ClearFilters();
-                },
-                _OnHelpBtnClick: function()
-                /*====================================================
-                    - Help button onclick event
-                =====================================================*/
-                {
-                    o._ToggleHelp();
-                },
-                _Paging: { //used by sort adapter
-                    nextEvt: null,
-                    prevEvt: null,
-                    lastEvt: null,
-                    firstEvt: null
-                }
-            };
+                }//if evt
+            },
+            /*====================================================
+                - onkeyup event for text filters
+            =====================================================*/
+            _OnKeyUp: function(e) {
+                if(!o.onKeyUp) return;
+                var evt = e || window.event;
+                var key=(evt.charCode)?evt.charCode:
+                        ((evt.keyCode)?evt.keyCode:((evt.which)?evt.which:0));
+                o.isUserTyping = false;
 
-        }//if tbl!=null
+                if(key!=13 && key!=9 && key!=27 && key!=38 && key!=40) {
+                    function filter() {
+                        window.clearInterval(o.onKeyUpTimer);
+                        o.onKeyUpTimer = undefined;
+                        if(!o.isUserTyping)
+                        {
+                            o.Filter();
+                            o.isUserTyping = null;
+                        }
+                    }
+                    if(o.onKeyUpTimer===undefined)
+                        o.onKeyUpTimer = window.setInterval(filter, o.onKeyUpDelay);
+                } else {
+                    window.clearInterval(o.onKeyUpTimer);
+                    o.onKeyUpTimer = undefined;
+                }
+            },
+            /*====================================================
+                - onkeydown event for input filters
+            =====================================================*/
+            _OnKeyDown: function(e) {
+                if(!o.onKeyUp) { return; }
+                o.isUserTyping = true;
+            },
+            /*====================================================
+                - onblur event for input filters
+            =====================================================*/
+            _OnInpBlur: function(e) {
+                if(o.onKeyUp){
+                    o.isUserTyping = false;
+                    window.clearInterval(o.onKeyUpTimer);
+                }
+                //Watermark
+                if(this.value === '' && o.inpWatermark !== ''){
+                    this.value = (o.isInpWatermarkArray) ?
+                        o.inpWatermark[this.getAttribute('ct')] :
+                        o.inpWatermark;
+                    tf_AddClass(this, o.inpWatermarkCssClass);
+                }
+                if(o.ezEditTable){
+                  if(o.editable) o.ezEditTable.Editable.Set();
+                  if(o.selectable) o.ezEditTable.Selection.Set();
+                }
+            },
+            /*====================================================
+                - onfocus event for input filters
+            =====================================================*/
+            _OnInpFocus: function(e) {
+                var evt = e || window.event;
+                o.activeFilterId = this.getAttribute('id');
+                o.activeFlt = tf_Id(o.activeFilterId);
+                //Watermark
+                if(!o.isInpWatermarkArray){
+                    if(this.value === o.inpWatermark &&
+                        o.inpWatermark !== ''){
+                        this.value = '';
+                        tf_RemoveClass(this, o.inpWatermarkCssClass);
+                    }
+                } else {
+                    var inpWatermark = o.inpWatermark[this.getAttribute('ct')];
+                    if(this.value === inpWatermark && inpWatermark !== ''){
+                        this.value = '';
+                        tf_RemoveClass(this, o.inpWatermarkCssClass);
+                    }
+                }
+                if(o.popUpFilters){
+                    tf_CancelEvent(evt);
+                    tf_StopEvent(evt);
+                }
+                if(o.ezEditTable){
+                    if(o.editable) o.ezEditTable.Editable.Remove();
+                    if(o.selectable) o.ezEditTable.Selection.Remove();
+                }
+            },
+            /*====================================================
+                - onfocus event for select filters
+            =====================================================*/
+            _OnSlcFocus: function(e) {
+                var evt = e || window.event;
+                o.activeFilterId = this.getAttribute('id');
+                o.activeFlt = tf_Id(o.activeFilterId);
+                if(o.fillSlcOnDemand && this.getAttribute('filled') === '0')
+                {// select is populated when element has focus
+                    var ct = this.getAttribute('ct');
+                    o.PopulateSelect(ct);
+                    if(!tf_isIE){ this.setAttribute('filled','1'); }
+                }
+                if(o.popUpFilters){
+                    tf_CancelEvent(evt);
+                    tf_StopEvent(evt);
+                }
+            },
+            /*====================================================
+                - onchange event for select filters
+            =====================================================*/
+            _OnSlcChange: function(e) {
+                var colIndex = o.activeFlt.getAttribute('colIndex');
+                //Checks filter is a checklist and caller is not null
+                if(o.activeFlt && colIndex &&
+                    o['col'+colIndex]===o.fltTypeCheckList &&
+                    !o.Evt._OnSlcChange.caller){ return; }
+                var evt = e || window.event;
+                if(o.popUpFilters){ tf_StopEvent(evt); }
+                if(o.onSlcChange){ o.Filter(); }
+            },
+            /*====================================================
+                - onblur event for select filters
+            =====================================================*/
+            _OnSlcBlur: function(e) {},
+            /*====================================================
+                - onchange event for checklist filters
+            =====================================================*/
+            _OnCheckListChange: function(e) {
+                //Checks caller is not null
+                if(!o.Evt._OnCheckListChange.caller){ return; }
+                o.Evt._OnSlcChange(e);
+            },
+            /*====================================================
+                - onclick event for checklist filters
+            =====================================================*/
+            _OnCheckListClick: function() {
+                if(o.fillSlcOnDemand && this.getAttribute('filled') === '0')
+                {
+                    var ct = this.getAttribute('ct');
+                    o.PopulateCheckList(ct);
+                    o.checkListDiv[ct].onclick = null;
+                    o.checkListDiv[ct].title = '';
+                }
+            },
+            /*====================================================
+                - onclick event for checklist filter container
+            =====================================================*/
+            _OnCheckListFocus: function(e) {
+                o.activeFilterId = this.firstChild.getAttribute('id');
+                o.activeFlt = tf_Id(o.activeFilterId);
+            },
+            _OnCheckListBlur: function(e){},
+            /*====================================================
+                - onclick event for validation button
+                (btn property)
+            =====================================================*/
+            _OnBtnClick: function() {
+                o.Filter();
+            },
+            _OnSlcPagesChangeEvt: null, //used by sort adapter
+            /*====================================================
+                - onclick event slc parent node (enables filters)
+                IE only
+            =====================================================*/
+            _EnableSlc: function() {
+                this.firstChild.disabled = false;
+                this.firstChild.focus();
+                this.onclick = null;
+            },
+            /*====================================================
+                - clears filters
+            =====================================================*/
+            _Clear: function() {
+                o.ClearFilters();
+            },
+            /*====================================================
+                - Help button onclick event
+            =====================================================*/
+            _OnHelpBtnClick: function() {
+                o._ToggleHelp();
+            },
+            _Paging: { //used by sort adapter
+                nextEvt: null,
+                prevEvt: null,
+                lastEvt: null,
+                firstEvt: null
+            }
+        };
     }
 
     TF.prototype = {
@@ -5582,7 +5572,7 @@ function tf_IsArray(obj){
     - checks if passed param is an array
     - returns a boolean
 =====================================================*/
-    return obj.constructor == Array;
+    return (obj && obj.constructor == Array);
 }
 
 function tf_Id(id)
