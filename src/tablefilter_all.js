@@ -1372,7 +1372,9 @@ TF.prototype = {
     },
 
     ImportModule: function(module){
-        if(!module.path || !module.name) return;
+        if(!module.path || !module.name){
+            return;
+        }
         this.IncludeFile(module.name, module.path, module.init);
     },
 
@@ -1382,11 +1384,10 @@ TF.prototype = {
             var o = this;
             this.Ext = {
                 list: {},
-                add: function(extName, extDesc, extPath, extCallBack)
-                {
-                    var file = extPath.split('/')[extPath.split('/').length-1];
-                    var re = new RegExp(file);
-                    var path = extPath.replace(re,'');
+                add: function(extName, extDesc, extPath, extCallBack){
+                    var file = extPath.split('/')[extPath.split('/').length-1],
+                        re = new RegExp(file),
+                        path = extPath.replace(re,'');
                     o.Ext.list[extName] = {
                         name: extName,
                         description: extDesc,
@@ -1400,49 +1401,53 @@ TF.prototype = {
         this.EvtManager(this.Evt.name.loadextensions);
     },
 
-    _LoadExtensions : function()
     /*====================================================
         - loads TF extensions
     =====================================================*/
-    {
-        if(!this.hasExtensions) return;
-        if(tf_IsArray(this.extensions.name) && tf_IsArray(this.extensions.src)){
-            var ext = this.extensions;
-            for(var e=0; e<ext.name.length; e++){
-                var extPath = ext.src[e];
-                var extName = ext.name[e];
-                var extInit = (ext.initialize && ext.initialize[e]) ? ext.initialize[e] : null;
-                var extDesc = (ext.description && ext.description[e] ) ? ext.description[e] : null;
+    _LoadExtensions : function(){
+        if(!this.hasExtensions || !tf_IsArray(this.extensions.name) ||
+            !tf_IsArray(this.extensions.src)){
+            return;
+        }
+        var ext = this.extensions;
+        for(var e=0; e<ext.name.length; e++){
+            var extPath = ext.src[e],
+                extName = ext.name[e],
+                extInit = (ext.initialize && ext.initialize[e]) ?
+                    ext.initialize[e] : null,
+                extDesc = (ext.description && ext.description[e] ) ?
+                    ext.description[e] : null;
 
-                //Registers extension
-                this.Ext.add(extName, extDesc, extPath, extInit);
-                if(tf_IsImported(extPath)) extInit.call(null,this);
-                else this.IncludeFile(extName, extPath, extInit);
+            //Registers extension
+            this.Ext.add(extName, extDesc, extPath, extInit);
+            if(tf_IsImported(extPath)){
+                extInit.call(null,this);
+            } else {
+                this.IncludeFile(extName, extPath, extInit);
             }
         }
     },
 
-    LoadThemes: function()
-    {
+    LoadThemes: function(){
         this.EvtManager(this.Evt.name.loadthemes);
     },
 
-    _LoadThemes: function()
     /*====================================================
         - loads TF themes
     =====================================================*/
-    {
-        if(!this.hasThemes) return;
+    _LoadThemes: function(){
+        if(!this.hasThemes){
+            return;
+        }
         if(!this.Thm){
             /*** TF themes ***/
             var o = this;
             this.Thm = {
                 list: {},
-                add: function(thmName, thmDesc, thmPath, thmCallBack)
-                {
-                    var file = thmPath.split('/')[thmPath.split('/').length-1];
-                    var re = new RegExp(file);
-                    var path = thmPath.replace(re,'');
+                add: function(thmName, thmDesc, thmPath, thmCallBack){
+                    var file = thmPath.split('/')[thmPath.split('/').length-1],
+                        re = new RegExp(file),
+                        path = thmPath.replace(re,'');
                     o.Thm.list[thmName] = {
                         name: thmName,
                         description: thmDesc,
@@ -1454,41 +1459,53 @@ TF.prototype = {
             };
         }
 
-        if(this.enableDefaultTheme){//Default theme config
+        //Default theme config
+        if(this.enableDefaultTheme){
             this.themes = {
                 name:['DefaultTheme'],
                 src:[this.themesPath+'Default/TF_Default.css'],
                 description:['Default Theme']
             };
-            this.Thm.add('DefaultTheme', this.themesPath+'Default/TF_Default.css', 'Default Theme');
+            this.Thm.add('DefaultTheme',
+                this.themesPath+'Default/TF_Default.css', 'Default Theme');
         }
         if(tf_IsArray(this.themes.name) && tf_IsArray(this.themes.src)){
             var thm = this.themes;
             for(var i=0; i<thm.name.length; i++){
-                var thmPath = thm.src[i];
-                var thmName = thm.name[i];
-                var thmInit = (thm.initialize && thm.initialize[i]) ? thm.initialize[i] : null;
-                var thmDesc = (thm.description && thm.description[i] ) ? thm.description[i] : null;
+                var thmPath = thm.src[i],
+                    thmName = thm.name[i],
+                    thmInit = (thm.initialize && thm.initialize[i]) ?
+                        thm.initialize[i] : null,
+                    thmDesc = (thm.description && thm.description[i]) ?
+                        thm.description[i] : null;
 
                 //Registers theme
                 this.Thm.add(thmName, thmDesc, thmPath, thmInit);
 
-                if(!tf_IsImported(thmPath,'link'))
+                if(!tf_IsImported(thmPath,'link')){
                     this.IncludeFile(thmName, thmPath, null, 'link');
-                if(tf_IsFn(thmInit)) thmInit.call(null,this);
+                }
+                if(tf_IsFn(thmInit)){
+                    thmInit.call(null,this);
+                }
             }
         }
 
         //Some elements need to be overriden for theme
         //Reset button
         this.btnResetText = null;
-        this.btnResetHtml = '<input type="button" value="" class="'+this.btnResetCssClass+'" title="Clear filters" />';
+        this.btnResetHtml = '<input type="button" value="" class="' +
+            this.btnResetCssClass+'" title="Clear filters" />';
 
         //Paging buttons
-        this.btnPrevPageHtml = '<input type="button" value="" class="'+this.btnPageCssClass+' previousPage" title="Previous page" />';
-        this.btnNextPageHtml = '<input type="button" value="" class="'+this.btnPageCssClass+' nextPage" title="Next page" />';
-        this.btnFirstPageHtml = '<input type="button" value="" class="'+this.btnPageCssClass+' firstPage" title="First page" />';
-        this.btnLastPageHtml = '<input type="button" value="" class="'+this.btnPageCssClass+' lastPage" title="Last page" />';
+        this.btnPrevPageHtml = '<input type="button" value="" class="' +
+            this.btnPageCssClass+' previousPage" title="Previous page" />';
+        this.btnNextPageHtml = '<input type="button" value="" class="' +
+            this.btnPageCssClass+' nextPage" title="Next page" />';
+        this.btnFirstPageHtml = '<input type="button" value="" class="' +
+            this.btnPageCssClass+' firstPage" title="First page" />';
+        this.btnLastPageHtml = '<input type="button" value="" class="' +
+            this.btnPageCssClass+' lastPage" title="Last page" />';
 
         //Loader
         this.loader = true;
@@ -1496,57 +1513,89 @@ TF.prototype = {
         this.loaderText = null;
     },
 
-    RemoveGrid: function()
     /*====================================================
         - removes a filter grid
     =====================================================*/
-    {
-        if(this.fltGrid && this.hasGrid)
-        {
+    RemoveGrid: function(){
+        if(this.fltGrid && this.hasGrid){
             var rows = this.tbl.rows;
-            if(this.paging) this.RemovePaging();
-            if(this.statusBar) this.RemoveStatusBar();
-            if(this.rowsCounter) this.RemoveRowsCounter();
-            if(this.btnReset) this.RemoveResetBtn();
-            if(this.helpInstructions || this.helpInstructions==null) this.RemoveHelpInstructions();
-            if(this.paging) this.RemoveResultsPerPage();
-            if(this.isExternalFlt && !this.popUpFilters) this.RemoveExternalFlts();
-            if(this.fixedHeaders) this.RemoveFixedHeaders();
-            if(this.infDiv) this.RemoveTopDiv();
-            if(this.highlightKeywords) this.UnhighlightAll();
-            if(this.sort) this.RemoveSort();
-            if(this.loader) this.RemoveLoader();
-            if(this.popUpFilters) this.RemovePopupFilters();
-            if(this.markActiveColumns) this.ClearActiveColumns();
-            if(this.editable || this.selectable) this.RemoveEditable();
-
-            for(var j=this.refRow; j<this.nbRows; j++)
-            {//this loop shows all rows and removes validRow attribute
+            if(this.paging){
+                this.RemovePaging();
+            }
+            if(this.statusBar){
+                this.RemoveStatusBar();
+            }
+            if(this.rowsCounter){
+                this.RemoveRowsCounter();
+            }
+            if(this.btnReset){
+                this.RemoveResetBtn();
+            }
+            if(this.helpInstructions || !this.helpInstructions){
+                this.RemoveHelpInstructions();
+            }
+            if(this.paging){
+                this.RemoveResultsPerPage();
+            }
+            if(this.isExternalFlt && !this.popUpFilters){
+                this.RemoveExternalFlts();
+            }
+            if(this.fixedHeaders){
+                this.RemoveFixedHeaders();
+            }
+            if(this.infDiv){
+                this.RemoveTopDiv();
+            }
+            if(this.highlightKeywords){
+                this.UnhighlightAll();
+            }
+            if(this.sort){
+                this.RemoveSort();
+            }
+            if(this.loader){
+                this.RemoveLoader();
+            }
+            if(this.popUpFilters){
+                this.RemovePopupFilters();
+            }
+            if(this.markActiveColumns){
+                this.ClearActiveColumns();
+            }
+            if(this.editable || this.selectable){
+                this.RemoveEditable();
+            }
+            //this loop shows all rows and removes validRow attribute
+            for(var j=this.refRow; j<this.nbRows; j++){
                 rows[j].style.display = '';
-                try
-                {
-                    if(rows[j].hasAttribute('validRow'))
+                try{
+                    if(rows[j].hasAttribute('validRow')){
                         rows[j].removeAttribute('validRow');
-                } //ie<=6 doesn't support hasAttribute method
-                catch(e){
-                    for(var x = 0; x < rows[j].attributes.length; x++)
-                    {
-                        if(rows[j].attributes[x].nodeName.tf_LCase()=='validrow')
-                            rows[j].removeAttribute('validRow');
-                    }//for x
-                }//catch(e)
+                    }
+                } catch(e) {
+                    //ie<=6 doesn't support hasAttribute method
+                    var row = rows[j];
+                    var attribs = row.attributes;
+                    for(var x = 0; x < attribs.length; x++){
+                        if(attribs.nodeName.tf_LCase()==='validrow'){
+                            row.removeAttribute('validRow');
+                        }
+                    }
+                }
 
-                //removes alterning colors
-                if(this.alternateBgs) this.RemoveRowBg(j);
+                //removes alternating colors
+                if(this.alternateBgs){
+                    this.RemoveRowBg(j);
+                }
 
             }//for j
 
-            if(this.fltGrid && !this.gridLayout)
-            {
+            if(this.fltGrid && !this.gridLayout){
                 this.fltGridEl = rows[this.filtersRowIndex];
                 this.tbl.deleteRow(this.filtersRowIndex);
             }
-            if(this.gridLayout) this.RemoveGridLayout();
+            if(this.gridLayout){
+                this.RemoveGridLayout();
+            }
             tf_RemoveClass(this.tbl, this.prfxTf);
             this.activeFlt = null;
             this.isStartBgAlternate = true;
@@ -1555,497 +1604,664 @@ TF.prototype = {
         }//if this.fltGrid
     },
 
-    SetTopDiv: function()
     /*====================================================
         - Generates div above table where paging,
         reset button, rows counter label etc. are placed
     =====================================================*/
-    {
-        if(this.infDiv!=null) return;
+    SetTopDiv: function(){
+        if(this.infDiv!==null){
+            return;
+        }
 
         /*** container div ***/
-        var infdiv = tf_CreateElm('div',['id',this.prfxInfDiv+this.id]);
-        infdiv.className = this.infDivCssClass;// setAttribute method doesn't seem to work on ie<=6
+        var infdiv = tf_CreateElm('div', ['id',this.prfxInfDiv+this.id]);
+        infdiv.className = this.infDivCssClass;
 
-        if(this.toolBarTgtId) //custom container
+        //custom container
+        if(this.toolBarTgtId){
             tf_Id(this.toolBarTgtId).appendChild(infdiv);
-        else if(this.fixedHeaders && this.contDiv) //fixed headers
+        }
+        //fixed headers
+        else if(this.fixedHeaders && this.contDiv){
             this.contDiv.parentNode.insertBefore(infdiv, this.contDiv);
-        else if(this.gridLayout){ //grid-layout
+        }
+        //grid-layout
+        else if(this.gridLayout){
             this.tblMainCont.appendChild(infdiv);
             infdiv.className = this.gridInfDivCssClass;
         }
-        else //default location: above table
+        //default location: just above the table
+        else{
             this.tbl.parentNode.insertBefore(infdiv, this.tbl);
+        }
         this.infDiv = tf_Id(this.prfxInfDiv+this.id);
 
         /*** left div containing rows # displayer ***/
-        var ldiv = tf_CreateElm('div',['id',this.prfxLDiv+this.id]);
-        ldiv.className = this.lDivCssClass;/*'ldiv'*/;
+        var ldiv = tf_CreateElm('div', ['id',this.prfxLDiv+this.id]);
+        ldiv.className = this.lDivCssClass;
         infdiv.appendChild(ldiv);
         this.lDiv = tf_Id(this.prfxLDiv+this.id);
 
         /***    right div containing reset button
                 + nb results per page select    ***/
-        var rdiv = tf_CreateElm('div',['id',this.prfxRDiv+this.id]);
-        rdiv.className = this.rDivCssClass/*'rdiv'*/;
+        var rdiv = tf_CreateElm('div', ['id',this.prfxRDiv+this.id]);
+        rdiv.className = this.rDivCssClass;
         infdiv.appendChild(rdiv);
         this.rDiv = tf_Id(this.prfxRDiv+this.id);
 
         /*** mid div containing paging elements ***/
-        var mdiv = tf_CreateElm('div',['id',this.prfxMDiv+this.id]);
-        mdiv.className = this.mDivCssClass/*'mdiv'*/;
+        var mdiv = tf_CreateElm('div', ['id',this.prfxMDiv+this.id]);
+        mdiv.className = this.mDivCssClass;
         infdiv.appendChild(mdiv);
         this.mDiv = tf_Id(this.prfxMDiv+this.id);
 
-        if(this.helpInstructions==null) this.SetHelpInstructions();
+        if(!this.helpInstructions){
+            this.SetHelpInstructions();
+        }
     },
 
-    RemoveTopDiv: function()
     /*====================================================
         - Removes div above table where paging,
         reset button, rows counter label etc. are placed
     =====================================================*/
-    {
-        if(this.infDiv==null) return;
+    RemoveTopDiv: function(){
+        if(!this.infDiv){
+            return;
+        }
         this.infDiv.parentNode.removeChild(this.infDiv);
         this.infDiv = null;
     },
 
-    RemoveExternalFlts: function()
     /*====================================================
         - removes external filters
     =====================================================*/
-    {
-        if(!this.isExternalFlt && !this.externalFltTgtIds) return;
-        for(var ct=0; ct<this.externalFltTgtIds.length; ct++)
-            if(tf_Id(this.externalFltTgtIds[ct]))
-                tf_Id(this.externalFltTgtIds[ct]).innerHTML = '';
+    RemoveExternalFlts: function(){
+        if(!this.isExternalFlt && !this.externalFltTgtIds){
+            return;
+        }
+        for(var ct=0; ct<this.externalFltTgtIds.length; ct++){
+            var externalFltTgtId = this.externalFltTgtIds[ct],
+                externalFlt = tf_Id(externalFltTgtId);
+            if(externalFlt){
+                externalFlt.innerHTML = '';
+            }
+        }
     },
 
-    SetLoader: function()
     /*====================================================
         - generates loader div
     =====================================================*/
-    {
-        if( this.loaderDiv!=null ) return;
+    SetLoader: function(){
+        if(this.loaderDiv){
+            return;
+        }
         var f = this.fObj;
-        this.loaderTgtId =          f.loader_target_id!=undefined //id of container element
-                                        ? f.loader_target_id : null;
-        this.loaderDiv =            null; //div containing loader
-        this.loaderText =           f.loader_text!=undefined ? f.loader_text : 'Loading...'; //defines loader text
-        this.loaderHtml =           f.loader_html!=undefined ? f.loader_html : null; //defines loader innerHtml
-        this.loaderCssClass =       f.loader_css_class!=undefined //defines css class for loader div
-                                        ? f.loader_css_class : 'loader';
-        this.loaderCloseDelay =     200; //delay for hiding loader
-        this.onShowLoader =         tf_IsFn(f.on_show_loader) //calls function before loader is displayed
-                                        ? f.on_show_loader : null;
-        this.onHideLoader =         tf_IsFn(f.on_hide_loader) //calls function after loader is closed
-                                        ? f.on_hide_loader : null;
+        //id of container element
+        this.loaderTgtId = f.loader_target_id || null;
+        //div containing loader
+        this.loaderDiv = null;
+        //defines loader text
+        this.loaderText = f.loader_text || 'Loading...';
+        //defines loader innerHtml
+        this.loaderHtml = f.loader_html || null;
+        //defines css class for loader div
+        this.loaderCssClass = f.loader_css_class || 'loader';
+        //delay for hiding loader
+        this.loaderCloseDelay = 200;
+        //callback function before loader is displayed
+        this.onShowLoader = tf_IsFn(f.on_show_loader) ? f.on_show_loader : null;
+        //callback function after loader is closed
+        this.onHideLoader = tf_IsFn(f.on_hide_loader) ? f.on_hide_loader : null;
+
         var containerDiv = tf_CreateElm( 'div',['id',this.prfxLoader+this.id] );
         containerDiv.className = this.loaderCssClass;// for ie<=6
-        //containerDiv.style.display = 'none';
-        var targetEl = (this.loaderTgtId==null)
-            ? (this.gridLayout ? this.tblCont : this.tbl.parentNode) : tf_Id( this.loaderTgtId );
-        if(this.loaderTgtId==null) targetEl.insertBefore(containerDiv, this.tbl);
-        else targetEl.appendChild( containerDiv );
+
+        var targetEl = (!this.loaderTgtId) ?
+            (this.gridLayout ? this.tblCont : this.tbl.parentNode) :
+            tf_Id(this.loaderTgtId);
+        if(!this.loaderTgtId){
+            targetEl.insertBefore(containerDiv, this.tbl);
+        } else {
+            targetEl.appendChild(containerDiv);
+        }
         this.loaderDiv = tf_Id(this.prfxLoader+this.id);
-        if(this.loaderHtml==null)
-            this.loaderDiv.appendChild( tf_CreateText(this.loaderText) );
-        else this.loaderDiv.innerHTML = this.loaderHtml;
+        if(!this.loaderHtml){
+            this.loaderDiv.appendChild(tf_CreateText(this.loaderText));
+        } else {
+            this.loaderDiv.innerHTML = this.loaderHtml;
+        }
     },
 
-    RemoveLoader: function()
     /*====================================================
         - removes loader div
     =====================================================*/
-    {
-        if( this.loaderDiv==null ) return;
-        var targetEl = (this.loaderTgtId==null)
-            ? (this.gridLayout ? this.tblCont : this.tbl.parentNode) : tf_Id( this.loaderTgtId );
+    RemoveLoader: function(){
+        if(!this.loaderDiv){
+            return;
+        }
+        var targetEl = (!this.loaderTgtId) ?
+            (this.gridLayout ? this.tblCont : this.tbl.parentNode) :
+            tf_Id(this.loaderTgtId);
         targetEl.removeChild(this.loaderDiv);
         this.loaderDiv = null;
     },
 
-    ShowLoader: function(p)
     /*====================================================
         - displays/hides loader div
     =====================================================*/
-    {
-        if(!this.loader || !this.loaderDiv) return;
-        if(this.loaderDiv.style.display==p) return;
+    ShowLoader: function(p){
+        if(!this.loader || !this.loaderDiv || this.loaderDiv.style.display===p){
+            return;
+        }
         var o = this;
 
         function displayLoader(){
-            if(!o.loaderDiv) return;
-            if(o.onShowLoader && p!='none')
+            if(!o.loaderDiv){
+                return;
+            }
+            if(o.onShowLoader && p!=='none'){
                 o.onShowLoader.call(null,o);
+            }
             o.loaderDiv.style.display = p;
-            if(o.onHideLoader && p=='none')
+            if(o.onHideLoader && p==='none'){
                 o.onHideLoader.call(null,o);
-        }
-
-        var t = (p=='none') ? this.loaderCloseDelay : 1;
-        window.setTimeout(displayLoader,t);
-    },
-
-    SetSort: function()
-    /*====================================================
-        - Sets sorting feature by loading
-        WebFX Sortable Table 1.12 by Erik Arvidsson
-        and TF adapter by Max Guglielmi
-    =====================================================*/
-    {
-        var fn = this.Evt._EnableSort;
-        if(!tf_IsFn(fn)){
-            var o = this;
-            this.Evt._EnableSort = function()
-            /*====================================================
-                - enables table sorting
-            =====================================================*/
-            {
-                if(o.isSortEnabled && !o.gridLayout) return; //gridLayout needs sort to be re-enabled
-                if(tf_IsImported(o.sortConfig.adapterSrc))
-                    o.sortConfig.initialize.call(null,o);
-                else
-                    o.IncludeFile(
-                        o.sortConfig.name+'_adapter',
-                        o.sortConfig.adapterSrc,
-                        function(){ o.sortConfig.initialize.call(null,o); }
-                    );
             }
         }
 
-        if(tf_IsImported(this.sortConfig.src))
-            this.Evt._EnableSort();
-        else
-            this.IncludeFile(
-                this.sortConfig.name,
-                this.sortConfig.src,
-                this.Evt._EnableSort
-            );
+        var t = p==='none' ? this.loaderCloseDelay : 1;
+        window.setTimeout(displayLoader,t);
     },
 
-    RemoveSort: function()
+    /*====================================================
+        - Sets sorting feature by loading
+        WebFX Sortable Table 1.12 plugin by Erik Arvidsson
+        and TF adapter by Max Guglielmi
+    =====================================================*/
+    SetSort: function(){
+        var fn = this.Evt._EnableSort,
+            sortConfig = this.sortConfig;
+
+        if(!tf_IsFn(fn)){
+            var o = this;
+            /*====================================================
+                - enables table sorting
+            =====================================================*/
+            this.Evt._EnableSort = function(){
+                //gridLayout needs sort to be re-enabled
+                if(o.isSortEnabled && !o.gridLayout){
+                    return;
+                }
+                if(tf_IsImported(sortConfig.adapterSrc)){
+                    sortConfig.initialize.call(null,o);
+                } else {
+                    o.IncludeFile(
+                        sortConfig.name+'_adapter',
+                        sortConfig.adapterSrc,
+                        function(){ sortConfig.initialize.call(null,o); }
+                    );
+                }
+            };
+        }
+
+        if(tf_IsImported(this.sortConfig.src)){
+            this.Evt._EnableSort();
+        } else {
+            this.IncludeFile(
+                sortConfig.name, sortConfig.src,this.Evt._EnableSort);
+        }
+    },
+
     /*====================================================
         - removes sorting feature
     =====================================================*/
-    {
-        if(!this.sort) return;
+    RemoveSort: function(){
         this.sort = false;
-        //this.isSortEnabled = false;
     },
 
-    Sort: function()
-    {
+    Sort: function(){
         this.EvtManager(this.Evt.name.sort);
     },
 
-    SetEditable: function()
     /*====================================================
         - Sets selection or edition features by loading
         ezEditTable script by Max Guglielmi
     =====================================================*/
-    {
-        if(tf_IsImported(this.ezEditTableConfig.src)){
+    SetEditable: function(){
+        var ezEditConfig = this.ezEditTableConfig;
+        if(tf_IsImported(ezEditConfig.src)){
             this._EnableEditable();
         } else {
             this.IncludeFile(
-                this.ezEditTableConfig.name,
-                this.ezEditTableConfig.src,
+                ezEditConfig.name,
+                ezEditConfig.src,
                 this._EnableEditable
             );
         }
-        if(this.ezEditTableConfig.loadStylesheet && !tf_IsImported(this.ezEditTableConfig.stylesheet, 'link')){
+        if(ezEditConfig.loadStylesheet &&
+            !tf_IsImported(ezEditConfig.stylesheet, 'link')){
             this.IncludeFile(
-                this.ezEditTableConfig.stylesheetName,
-                this.ezEditTableConfig.stylesheet,
-                null, 'link'
+                ezEditConfig.stylesheetName,
+                ezEditConfig.stylesheet, null, 'link'
             );
         }
     },
 
-    RemoveEditable: function()
     /*====================================================
         - Removes selection or edition features
     =====================================================*/
-    {
-        if(this.ezEditTable){
+    RemoveEditable: function(){
+        var ezEditTable = this.ezEditTable;
+        if(ezEditTable){
             if(this.selectable){
-                this.ezEditTable.Selection.ClearSelections();
-                this.ezEditTable.Selection.Remove();
+                ezEditTable.Selection.ClearSelections();
+                ezEditTable.Selection.Remove();
             }
-            if(this.editable) this.ezEditTable.Editable.Remove();
+            if(this.editable){
+                ezEditTable.Editable.Remove();
+            }
         }
     },
 
-    ResetEditable: function()
     /*====================================================
         - Resets selection or edition features after
         removal
     =====================================================*/
-    {
-        if(this.ezEditTable){
-            if(this.selectable) this.ezEditTable.Selection.Set();
-            if(this.editable) this.ezEditTable.Editable.Set();
+    ResetEditable: function(){
+        var ezEditTable = this.ezEditTable;
+        if(ezEditTable){
+            if(this.selectable){
+                ezEditTable.Selection.Set();
+            }
+            if(this.editable){
+                ezEditTable.Editable.Set();
+            }
         }
     },
 
-    _EnableEditable: function(o)
-    {
-        if(!o) o = this;
+    _EnableEditable: function(o){
+        if(!o){
+            o = this;
+        }
+
         //start row for EditTable constructor needs to be calculated
-        var startRow;
-        var thead = tf_Tag(o.tbl,'thead');
-        //if thead exists and startRow not specified, startRow is calculated automatically by EditTable
-        if(thead.length > 0 && !o.ezEditTableConfig.startRow) startRow = undefined;
+        var startRow,
+            ezEditConfig = o.ezEditTableConfig,
+            thead = tf_Tag(o.tbl,'thead');
+
+        //if thead exists and startRow not specified, startRow is calculated
+        //automatically by EditTable
+        if(thead.length > 0 && !ezEditConfig.startRow){
+            startRow = undefined;
+        }
         //otherwise startRow config property if any or TableFilter refRow
-        else startRow = o.ezEditTableConfig.startRow || o.refRow;
+        else{
+            startRow = ezEditConfig.startRow || o.refRow;
+        }
 
-        o.ezEditTableConfig.scroll_into_view = o.ezEditTableConfig.scroll_into_view!=undefined ? o.ezEditTableConfig.scroll_into_view : true;
-        o.ezEditTableConfig.base_path = o.ezEditTableConfig.base_path!=undefined ? o.ezEditTableConfig.base_path : o.basePath + 'ezEditTable/';
-        o.ezEditTableConfig.editable = o.editable = o.fObj.editable;
-        o.ezEditTableConfig.selection = o.selectable = o.fObj.selectable;
+        ezEditConfig.scroll_into_view = ezEditConfig.scroll_into_view===false ?
+            false : true;
+        ezEditConfig.base_path = ezEditConfig.base_path  ||
+            o.basePath + 'ezEditTable/';
+        ezEditConfig.editable = o.editable = o.fObj.editable;
+        ezEditConfig.selection = o.selectable = o.fObj.selectable;
 
-        if(o.selectable)
-            o.ezEditTableConfig.default_selection = o.ezEditTableConfig.default_selection!=undefined ? o.ezEditTableConfig.default_selection : 'row';
+        if(o.selectable){
+            ezEditConfig.default_selection =
+                ezEditConfig.default_selection || 'row';
+        }
         //CSS Styles
-        o.ezEditTableConfig.active_cell_css = o.ezEditTableConfig.active_cell_css!=undefined ? o.ezEditTableConfig.active_cell_css : 'ezETSelectedCell';
+        ezEditConfig.active_cell_css = ezEditConfig.active_cell_css ||
+            'ezETSelectedCell';
 
         o._lastValidRowIndex = 0;
         o._lastRowIndex = 0;
 
         if(o.selectable){
-            //Row navigation needs to be calculated according to TableFilter's validRowsIndex array
-            function onAfterSelection(et, selecteElm, e){
-                if(!o.validRowsIndex) return; //table is not filtered
-                var row = et.defaultSelection != 'row' ? selecteElm.parentNode : selecteElm;
-                var cell = selecteElm.nodeName=='TD' ? selecteElm : null; //cell for default_selection = 'both' or 'cell'
-                var keyCode = e != undefined ? et.Event.GetKey(e) : 0;
-                var isRowValid = o.validRowsIndex.tf_Has(row.rowIndex);
-                var nextRowIndex;
-                var d = (keyCode == 34 || keyCode == 33 ? (o.pagingLength || et.nbRowsPerPage) : 1); //pgup/pgdown keys
+            //Row navigation needs to be calculated according to TableFilter's
+            //validRowsIndex array
+            var onAfterSelection = function(et, selectedElm, e){
+                //table is not filtered
+                if(!o.validRowsIndex){
+                    return;
+                }
+                var validIndexes = o.validRowsIndex,
+                    validIdxLen = validIndexes.length,
+                    row = et.defaultSelection !== 'row' ?
+                        selectedElm.parentNode : selectedElm,
+                    //cell for default_selection = 'both' or 'cell'
+                    cell = selectedElm.nodeName==='TD' ? selectedElm : null,
+                    keyCode = e !== undefined ? et.Event.GetKey(e) : 0,
+                    isRowValid = validIndexes.tf_Has(row.rowIndex),
+                    nextRowIndex,
+                    //pgup/pgdown keys
+                    d = (keyCode === 34 || keyCode === 33 ?
+                        (o.pagingLength || et.nbRowsPerPage) : 1);
 
-                //If next row is not valid, next valid filtered row needs to be calculated
+                //If next row is not valid, next valid filtered row needs to be
+                //calculated
                 if(!isRowValid){
                     //Selection direction up/down
                     if(row.rowIndex>o._lastRowIndex){
-                        if(row.rowIndex >= o.validRowsIndex[o.validRowsIndex.length-1]) //last row
-                            nextRowIndex = o.validRowsIndex[o.validRowsIndex.length-1];
-                        else{
+                        //last row
+                        if(row.rowIndex >= validIndexes[validIdxLen-1]){
+                            nextRowIndex = validIndexes[validIdxLen-1];
+                        } else {
                             var calcRowIndex = (o._lastValidRowIndex + d);
-                            if(calcRowIndex > (o.validRowsIndex.length-1))
-                                nextRowIndex = o.validRowsIndex[o.validRowsIndex.length-1];
-                            else nextRowIndex = o.validRowsIndex[calcRowIndex];
+                            if(calcRowIndex > (validIdxLen-1)){
+                                nextRowIndex = validIndexes[validIdxLen-1];
+                            } else {
+                                nextRowIndex = validIndexes[calcRowIndex];
+                            }
                         }
                     } else{
-                        if(row.rowIndex <= o.validRowsIndex[0]) nextRowIndex = o.validRowsIndex[0];//first row
-                        else{
-                            var v = o.validRowsIndex[o._lastValidRowIndex - d];
-                            nextRowIndex = v ? v : o.validRowsIndex[0];
+                        //first row
+                        if(row.rowIndex <= validIndexes[0]){
+                            nextRowIndex = validIndexes[0];
+                        } else {
+                            var v = validIndexes[o._lastValidRowIndex - d];
+                            nextRowIndex = v ? v : validIndexes[0];
                         }
                     }
                     o._lastRowIndex = row.rowIndex;
                     DoSelection(nextRowIndex);
-                } else{
-                    //If filtered row is valid, special calculation for pgup/pgdown keys
-                    if(keyCode!=34 && keyCode!=33){
-                        o._lastValidRowIndex = o.validRowsIndex.tf_IndexByValue(row.rowIndex);
+                } else {
+                    //If filtered row is valid, special calculation for
+                    //pgup/pgdown keys
+                    if(keyCode!==34 && keyCode!==33){
+                        o._lastValidRowIndex = validIndexes.tf_IndexByValue(
+                            row.rowIndex);
                         o._lastRowIndex = row.rowIndex;
                     } else {
-                        if(keyCode == 34){ //pgdown
-                            if((o._lastValidRowIndex + d) <= (o.validRowsIndex.length-1)) //last row
-                                nextRowIndex = o.validRowsIndex[o._lastValidRowIndex + d];
-                            else nextRowIndex = o.validRowsIndex[o.validRowsIndex.length-1];
+                        if(keyCode === 34){ //pgdown
+                            //last row
+                            if((o._lastValidRowIndex + d) <= (validIdxLen-1)){
+                                nextRowIndex = validIndexes[
+                                o._lastValidRowIndex + d];
+                            } else {
+                                nextRowIndex = [validIdxLen-1];
+                            }
                         } else { //pgup
-                            if((o._lastValidRowIndex - d) <= (o.validRowsIndex[0])) //first row
-                                nextRowIndex = o.validRowsIndex[0];
-                            else nextRowIndex = o.validRowsIndex[o._lastValidRowIndex - d];
+                            //first row
+                            if((o._lastValidRowIndex - d) <= validIndexes[0]){
+                                nextRowIndex = validIndexes[0];
+                            } else {
+                                nextRowIndex = validIndexes[
+                                    o._lastValidRowIndex - d];
+                            }
                         }
                         o._lastRowIndex = nextRowIndex;
-                        o._lastValidRowIndex = o.validRowsIndex.tf_IndexByValue(nextRowIndex);
+                        o._lastValidRowIndex = validIndexes.tf_IndexByValue(
+                            nextRowIndex);
                         DoSelection(nextRowIndex);
                     }
                 }
 
                 //Next valid filtered row needs to be selected
-                function DoSelection(nextRowIndex){
-                    if(et.defaultSelection == 'row'){
+                var DoSelection = function(nextRowIndex){
+                    if(et.defaultSelection === 'row'){
                         et.Selection.SelectRowByIndex(nextRowIndex);
                     } else {
                         et.ClearSelections();
-                        var cellIndex = selecteElm.cellIndex;
-                        var row = o.tbl.rows[nextRowIndex];
-                        if(et.defaultSelection == 'both') et.Selection.SelectRowByIndex(nextRowIndex);
-                        if(row) et.Selection.SelectCell(row.cells[cellIndex]);
+                        var cellIndex = selectedElm.cellIndex,
+                            row = o.tbl.rows[nextRowIndex];
+                        if(et.defaultSelection === 'both'){
+                            et.Selection.SelectRowByIndex(nextRowIndex);
+                        }
+                        if(row){
+                            et.Selection.SelectCell(row.cells[cellIndex]);
+                        }
                     }
                     //Table is filtered
-                    if(o.validRowsIndex.length != o.GetRowsNb()){
-                        var row = o.tbl.rows[nextRowIndex];
-                        if(row) row.scrollIntoView(false);
+                    if(o.validRowsIndex.length !== o.GetRowsNb()){
+                        var r = o.tbl.rows[nextRowIndex];
+                        if(r){
+                            r.scrollIntoView(false);
+                        }
                         if(cell){
-                            if(cell.cellIndex==(o.GetCellsNb()-1) && o.gridLayout) o.tblCont.scrollLeft = 100000000;
-                            else if(cell.cellIndex==0 && o.gridLayout) o.tblCont.scrollLeft = 0;
-                            else cell.scrollIntoView(false);
+                            if(cell.cellIndex===(o.GetCellsNb()-1) &&
+                                o.gridLayout){
+                                o.tblCont.scrollLeft = 100000000;
+                            }
+                            else if(cell.cellIndex===0 && o.gridLayout){
+                                o.tblCont.scrollLeft = 0;
+                            } else {
+                                cell.scrollIntoView(false);
+                            }
+                        }
+                    }
+                };
+            };
+
+            //Page navigation has to be enforced whenever selected row is out of
+            //the current page range
+            var onBeforeSelection = function(et, selectedElm, e){
+                var row = et.defaultSelection !== 'row' ?
+                    selectedElm.parentNode : selectedElm;
+                if(o.paging){
+                    if(o.nbPages>1){
+                        //page length is re-assigned in case it has changed
+                        et.nbRowsPerPage = o.pagingLength;
+                        var validIndexes = o.validRowsIndex,
+                            validIdxLen = validIndexes.length,
+                            pagingEndRow = parseInt(o.startPagingRow,10) +
+                            parseInt(o.pagingLength,10);
+                        var rowIndex = row.rowIndex;
+                        if((rowIndex === validIndexes[validIdxLen-1]) &&
+                            o.currentPageNb!=o.nbPages){
+                            o.SetPage('last');
+                        }
+                        else if((rowIndex == validIndexes[0]) &&
+                            o.currentPageNb!==1){
+                            o.SetPage('first');
+                        }
+                        else if(rowIndex > validIndexes[pagingEndRow-1] &&
+                            rowIndex < validIndexes[validIdxLen-1]){
+                            o.SetPage('next');
+                        }
+                        else if(rowIndex < validIndexes[o.startPagingRow] &&
+                            rowIndex > validIndexes[0]){
+                            o.SetPage('previous');
                         }
                     }
                 }
-            }
-
-            //Page navigation has to be enforced whenever selected row is out of the current page range
-            function onBeforeSelection(et, selecteElm, e){
-                var row = et.defaultSelection != 'row' ? selecteElm.parentNode : selecteElm;
-                if(o.paging){
-                    if(o.nbPages>1){
-                        et.nbRowsPerPage = o.pagingLength; //page length is re-assigned in case it has changed
-                        var pagingEndRow = parseInt(o.startPagingRow) + parseInt(o.pagingLength);
-                        var rowIndex = row.rowIndex;
-                        if((rowIndex == o.validRowsIndex[o.validRowsIndex.length-1]) && o.currentPageNb!=o.nbPages) o.SetPage('last');
-                        else if((rowIndex == o.validRowsIndex[0]) && o.currentPageNb!=1) o.SetPage('first');
-                        else if(rowIndex > o.validRowsIndex[pagingEndRow-1] && rowIndex < o.validRowsIndex[o.validRowsIndex.length-1]) o.SetPage('next');
-                        else if(rowIndex < o.validRowsIndex[o.startPagingRow] && rowIndex > o.validRowsIndex[0]) o.SetPage('previous');
-                    }
-                }
-            }
+            };
 
             //Selected row needs to be visible when paging is activated
             if(o.paging){
                 o.onAfterChangePage = function(tf, i){
-                    var row = tf.ezEditTable.Selection.GetActiveRow();
-                    if(row) row.scrollIntoView(false);
-                    var cell = tf.ezEditTable.Selection.GetActiveCell();
-                    if(cell) cell.scrollIntoView(false);
-                }
+                    var et = tf.ezEditTable;
+                    var row = et.Selection.GetActiveRow();
+                    if(row){
+                        row.scrollIntoView(false);
+                    }
+                    var cell = et.Selection.GetActiveCell();
+                    if(cell){
+                        cell.scrollIntoView(false);
+                    }
+                };
             }
 
-            //Rows navigation when rows are filtered is performed with the EditTable row selection callback events
-            if(o.ezEditTableConfig.default_selection=='row'){
-                var fnB = o.ezEditTableConfig.on_before_selected_row;
-                o.ezEditTableConfig.on_before_selected_row = function(){
+            //Rows navigation when rows are filtered is performed with the
+            //EditTable row selection callback events
+            if(ezEditConfig.default_selection==='row'){
+                var fnB = ezEditConfig.on_before_selected_row;
+                ezEditConfig.on_before_selected_row = function(){
                     onBeforeSelection(arguments[0], arguments[1], arguments[2]);
-                    if(fnB) fnB.call(null, arguments[0], arguments[1], arguments[2]);
+                    if(fnB){
+                        fnB.call(
+                            null, arguments[0], arguments[1], arguments[2]);
+                    }
                 };
-                var fnA = o.ezEditTableConfig.on_after_selected_row;
-                o.ezEditTableConfig.on_after_selected_row = function(){
+                var fnA = ezEditConfig.on_after_selected_row;
+                ezEditConfig.on_after_selected_row = function(){
                     onAfterSelection(arguments[0], arguments[1], arguments[2]);
-                    if(fnA) fnA.call(null, arguments[0], arguments[1], arguments[2]);
+                    if(fnA){
+                        fnA.call(
+                            null, arguments[0], arguments[1], arguments[2]);
+                    }
                 };
             } else {
-                var fnB = o.ezEditTableConfig.on_before_selected_cell;
-                o.ezEditTableConfig.on_before_selected_cell = function(){
+                var fnD = ezEditConfig.on_before_selected_cell;
+                ezEditConfig.on_before_selected_cell = function(){
                     onBeforeSelection(arguments[0], arguments[1], arguments[2]);
-                    if(fnB) fnB.call(null, arguments[0], arguments[1], arguments[2]);
+                    if(fnD){
+                        fnD.call(
+                            null, arguments[0], arguments[1], arguments[2]);
+                    }
                 };
-                var fnA = o.ezEditTableConfig.on_after_selected_cell;
-                o.ezEditTableConfig.on_after_selected_cell = function(){
+                var fnC = ezEditConfig.on_after_selected_cell;
+                ezEditConfig.on_after_selected_cell = function(){
                     onAfterSelection(arguments[0], arguments[1], arguments[2]);
-                    if(fnA) fnA.call(null, arguments[0], arguments[1], arguments[2]);
+                    if(fnC){
+                        fnC.call(
+                            null, arguments[0], arguments[1], arguments[2]);
+                    }
                 };
             }
         }
         if(o.editable){
             //Added or removed rows, TF rows number needs to be re-calculated
-            var fnC = o.ezEditTableConfig.on_added_dom_row;
-            o.ezEditTableConfig.on_added_dom_row = function(){
+            var fnE = ezEditConfig.on_added_dom_row;
+            ezEditConfig.on_added_dom_row = function(){
                 o.nbFilterableRows++;
                 if(!o.paging){ o.RefreshNbRows(); }
                 else {
-                    o.nbRows++; o.nbVisibleRows++; o.nbFilterableRows++;
-                    o.paging=false; o.RemovePaging(); o.AddPaging(false);
+                    o.nbRows++;
+                    o.nbVisibleRows++;
+                    o.nbFilterableRows++;
+                    o.paging=false;
+                    o.RemovePaging();
+                    o.AddPaging(false);
                 }
-                if(o.alternateBgs) o.SetAlternateRows();
-                if(fnC) fnC.call(null, arguments[0], arguments[1], arguments[2]);
+                if(o.alternateBgs){
+                    o.SetAlternateRows();
+                }
+                if(fnE){
+                    fnE.call(null, arguments[0], arguments[1], arguments[2]);
+                }
             };
-            if(o.ezEditTableConfig.actions && o.ezEditTableConfig.actions['delete']){
-                var fnD = o.ezEditTableConfig.actions['delete'].on_after_submit;
-                o.ezEditTableConfig.actions['delete'].on_after_submit = function(){
+            if(ezEditConfig.actions && ezEditConfig.actions['delete']){
+                var fnF = ezEditConfig.actions['delete'].on_after_submit;
+                ezEditConfig.actions['delete'].on_after_submit = function(){
                     o.nbFilterableRows--;
                     if(!o.paging){ o.RefreshNbRows(); }
                     else {
-                        o.nbRows--; o.nbVisibleRows--; o.nbFilterableRows--;
-                        o.paging=false; o.RemovePaging(); o.AddPaging(false);
+                        o.nbRows--;
+                        o.nbVisibleRows--;
+                        o.nbFilterableRows--;
+                        o.paging=false;
+                        o.RemovePaging();
+                        o.AddPaging(false);
                     }
-                    if(o.alternateBgs) o.SetAlternateRows();
-                    if(fnD) fnD.call(null, arguments[0], arguments[1]);
-                }
+                    if(o.alternateBgs){
+                        o.SetAlternateRows();
+                    }
+                    if(fnF){
+                        fnF.call(null, arguments[0], arguments[1]);
+                    }
+                };
             }
         }
 
         try{
-            o.ezEditTable = new EditTable(o.id, o.ezEditTableConfig, startRow);
+            o.ezEditTable = new EditTable(o.id, ezEditConfig, startRow);
             o.ezEditTable.Init();
-        } catch(e) { alert(o.ezEditTableConfig.err); }
+        } catch(e) { console.log(ezEditConfig.err); }
     },
 
-    SetPaging: function()
     /*====================================================
         - Generates paging elements:
             - pages drop-down list
             - previous, next, first, last buttons
     =====================================================*/
-    {
-        if(!this.hasGrid && !this.isFirstLoad) return;
-        if(!this.paging || (!this.isPagingRemoved && !this.isFirstLoad)) return;
+    SetPaging: function(){
+        if(!this.hasGrid && !this.isFirstLoad || !this.paging ||
+            (!this.isPagingRemoved && !this.isFirstLoad)){
+            return;
+        }
+
         var f = this.fObj;
-        this.pagingTgtId =          f.paging_target_id!=undefined //id of container element
-                                        ? f.paging_target_id : null;
-        this.pagingLength =         f.paging_length!=undefined ? f.paging_length : 10; //defines table paging length
-        this.resultsPerPageTgtId =  f.results_per_page_target_id!=undefined //id of container element
-                                        ? f.results_per_page_target_id : null;
-        this.pgSlcCssClass =        f.paging_slc_css_class!=undefined
-                                        ? f.paging_slc_css_class :'pgSlc'; //css class for paging select element
-        this.pgInpCssClass =        f.paging_inp_css_class!=undefined
-                                        ? f.paging_inp_css_class :'pgNbInp'; //css class for paging input element
-        this.resultsSlcCssClass =   f.results_slc_css_class!=undefined
-                                        ? f.results_slc_css_class :'rspg'; //defines css class for results per page select
-        this.resultsSpanCssClass =  f.results_span_css_class!=undefined
-                                        ? f.results_span_css_class :'rspgSpan'; //css class for label preceding results per page select
-        this.nbVisibleRows  =       0; //nb visible rows
-        this.nbHiddenRows =         0; //nb hidden rows
-        this.startPagingRow =       0; //1st row index of current page
-        this.nbPages =              0; //total nb of pages
-        this.btnNextPageText =      f.btn_next_page_text!=undefined
-                                        ? f.btn_next_page_text : '>'; //defines next page button text
-        this.btnPrevPageText =      f.btn_prev_page_text!=undefined
-                                        ? f.btn_prev_page_text : '<'; //defines previous page button text
-        this.btnLastPageText =      f.btn_last_page_text!=undefined
-                                        ? f.btn_last_page_text : '>|'; //defines last page button text
-        this.btnFirstPageText =     f.btn_first_page_text!=undefined
-                                        ? f.btn_first_page_text : '|<' ; //defines first page button text
-        this.btnNextPageHtml =      f.btn_next_page_html!=undefined //defines next page button html
-                                        ? f.btn_next_page_html : (!this.enableIcons ? null :
-                                        '<input type="button" value="" class="'+this.btnPageCssClass+' nextPage" title="Next page" />');
-        this.btnPrevPageHtml =      f.btn_prev_page_html!=undefined //defines previous page button html
-                                        ? f.btn_prev_page_html : (!this.enableIcons ? null :
-                                        '<input type="button" value="" class="'+this.btnPageCssClass+' previousPage" title="Previous page" />');
-        this.btnFirstPageHtml =     f.btn_first_page_html!=undefined //defines last page button html
-                                        ? f.btn_first_page_html : (!this.enableIcons ? null :
-                                        '<input type="button" value="" class="'+this.btnPageCssClass+' firstPage" title="First page" />');
-        this.btnLastPageHtml =      f.btn_last_page_html!=undefined //defines previous page button html
-                                        ? f.btn_last_page_html : (!this.enableIcons ? null :
-                                        '<input type="button" value="" class="'+this.btnPageCssClass+' lastPage" title="Last page" />');
-        this.pageText =             f.page_text!=undefined ? f.page_text : ' Page '; //defines text preceeding page selector drop-down
-        this.ofText =               f.of_text!=undefined ? f.of_text : ' of '; //defines text after page selector drop-down
-        this.nbPgSpanCssClass =     f.nb_pages_css_class!=undefined ? f.nb_pages_css_class :'nbpg'; //css class for span containing tot nb of pages
-        this.hasPagingBtns =        f.paging_btns==false ? false : true; //enables/disables paging buttons
-        this.pagingBtnEvents =      null; //stores paging buttons events
-        this.pageSelectorType =     f.page_selector_type!=undefined
-                                        ? f.page_selector_type : this.fltTypeSlc; //defines previous page button html
-        this.onBeforeChangePage =   tf_IsFn(f.on_before_change_page) ? f.on_before_change_page : null; //calls function before page is changed
-        this.onAfterChangePage =    tf_IsFn(f.on_after_change_page) ? f.on_after_change_page : null; //calls function before page is changed
+        //id of container element
+        this.pagingTgtId = f.paging_target_id || null;
+        //defines table paging length
+        this.pagingLength = !isNaN(f.paging_length) ? f.paging_length : 10;
+        //id of container element
+        this.resultsPerPageTgtId = f.results_per_page_target_id || null;
+        //css class for paging select element
+        this.pgSlcCssClass = f.paging_slc_css_class || 'pgSlc';
+        //css class for paging input element
+        this.pgInpCssClass = f.paging_inp_css_class || 'pgNbInp';
+        //defines css class for results per page select
+        this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';
+        //css class for label preceding results per page select
+        this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';
+        //nb visible rows
+        this.nbVisibleRows = 0;
+        //nb hidden rows
+        this.nbHiddenRows = 0;
+        //1st row index of current page
+        this.startPagingRow = 0;
+        //total nb of pages
+        this.nbPages = 0;
+        //defines next page button text
+        this.btnNextPageText = f.btn_next_page_text || '>';
+        //defines previous page button text
+        this.btnPrevPageText = f.btn_prev_page_text || '<';
+        //defines last page button text
+        this.btnLastPageText = f.btn_last_page_text || '>|';
+        //defines first page button text
+        this.btnFirstPageText = f.btn_first_page_text || '|<';
+        //defines next page button html
+        this.btnNextPageHtml = f.btn_next_page_html ||
+            (!this.enableIcons ? null :
+            '<input type="button" value="" class="'+this.btnPageCssClass +
+            ' nextPage" title="Next page" />');
+        //defines previous page button html
+        this.btnPrevPageHtml = f.btn_prev_page_html ||
+            (!this.enableIcons ? null :
+            '<input type="button" value="" class="'+this.btnPageCssClass +
+            ' previousPage" title="Previous page" />');
+        //defines last page button html
+        this.btnFirstPageHtml = f.btn_first_page_html ||
+            (!this.enableIcons ? null :
+            '<input type="button" value="" class="'+this.btnPageCssClass +
+            ' firstPage" title="First page" />');
+        //defines previous page button html
+        this.btnLastPageHtml = f.btn_last_page_html ||
+            (!this.enableIcons ? null :
+            '<input type="button" value="" class="'+this.btnPageCssClass +
+            ' lastPage" title="Last page" />');
+        //defines text preceeding page selector drop-down
+        this.pageText = f.page_text || ' Page ';
+        //defines text after page selector drop-down
+        this.ofText = f.of_text || ' of ';
+        //css class for span containing tot nb of pages
+        this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';
+        //enables/disables paging buttons
+        this.hasPagingBtns = f.paging_btns===false ? false : true;
+        //stores paging buttons events
+        this.pagingBtnEvents = null;
+        //defines previous page button html
+        this.pageSelectorType = f.page_selector_type || this.fltTypeSlc;
+        //calls function before page is changed
+        this.onBeforeChangePage = tf_IsFn(f.on_before_change_page) ?
+            f.on_before_change_page : null;
+        //calls function before page is changed
+        this.onAfterChangePage = tf_IsFn(f.on_after_change_page) ?
+            f.on_after_change_page : null;
         var start_row = this.refRow;
         var nrows = this.nbRows;
-        this.nbPages = Math.ceil( (nrows-start_row)/this.pagingLength );//calculates page nb
+        //calculates page nb
+        this.nbPages = Math.ceil((nrows-start_row)/this.pagingLength);
 
         //Paging elements events
-        if(!this.Evt._Paging.next)
-        {
+        if(!this.Evt._Paging.next){
             var o = this;
             this.Evt._Paging = {// paging buttons events
                 slcIndex: function(){
-                    return (o.pageSelectorType==o.fltTypeSlc)
-                        ? o.pagingSlc.options.selectedIndex
-                        : parseInt(o.pagingSlc.value)-1;
+                    return (o.pageSelectorType==o.fltTypeSlc) ?
+                        o.pagingSlc.options.selectedIndex :
+                        parseInt(o.pagingSlc.value,10)-1;
                 },
                 nbOpts: function(){
                     return (o.pageSelectorType==o.fltTypeSlc)
@@ -2090,7 +2306,7 @@ TF.prototype = {
                 prevEvt: null,
                 lastEvt: null,
                 firstEvt: null
-            }
+            };
         }
 
         if(!this.Evt._OnSlcPagesChange)
