@@ -1,4 +1,4 @@
-/*------------------------------------------------------------------------
+------------------------------------------------------------------------
     - HTML Table Filter Generator v2.5
     - By Max Guglielmi (tablefilter.free.fr)
     - Licensed under the MIT License
@@ -2259,25 +2259,30 @@ TF.prototype = {
             var o = this;
             this.Evt._Paging = {// paging buttons events
                 slcIndex: function(){
-                    return (o.pageSelectorType==o.fltTypeSlc) ?
+                    return (o.pageSelectorType===o.fltTypeSlc) ?
                         o.pagingSlc.options.selectedIndex :
                         parseInt(o.pagingSlc.value,10)-1;
                 },
                 nbOpts: function(){
-                    return (o.pageSelectorType==o.fltTypeSlc)
-                    ? parseInt(o.pagingSlc.options.length)-1
-                    : (o.nbPages-1);
+                    return (o.pageSelectorType===o.fltTypeSlc) ?
+                        parseInt(o.pagingSlc.options.length,10)-1 :
+                        (o.nbPages-1);
                 },
                 next: function(){
-                    if(o.Evt._Paging.nextEvt) o.Evt._Paging.nextEvt();
-                    var nextIndex = (o.Evt._Paging.slcIndex()<o.Evt._Paging.nbOpts())
-                        ? o.Evt._Paging.slcIndex()+1 : 0;
+                    if(o.Evt._Paging.nextEvt){
+                        o.Evt._Paging.nextEvt();
+                    }
+                    var nextIndex =
+                        o.Evt._Paging.slcIndex()<o.Evt._Paging.nbOpts() ?
+                        o.Evt._Paging.slcIndex()+1 : 0;
                     o.ChangePage(nextIndex);
                 },
                 prev: function(){
-                    if(o.Evt._Paging.prevEvt) o.Evt._Paging.prevEvt();
-                    var prevIndex = o.Evt._Paging.slcIndex()>0
-                        ? o.Evt._Paging.slcIndex()-1 : o.Evt._Paging.nbOpts();
+                    if(o.Evt._Paging.prevEvt){
+                        o.Evt._Paging.prevEvt();
+                    }
+                    var prevIndex = o.Evt._Paging.slcIndex()>0 ?
+                        o.Evt._Paging.slcIndex()-1 : o.Evt._Paging.nbOpts();
                     o.ChangePage(prevIndex);
                 },
                 last: function(){
@@ -2285,22 +2290,25 @@ TF.prototype = {
                     o.ChangePage(o.Evt._Paging.nbOpts());
                 },
                 first: function(){
-                    if(o.Evt._Paging.firstEvt)  o.Evt._Paging.firstEvt();
+                    if(o.Evt._Paging.firstEvt){
+                        o.Evt._Paging.firstEvt();
+                    }
                     o.ChangePage(0);
                 },
-                _detectKey: function(e)
-                {
-                    var evt=(e)?e:(window.event)?window.event:null;
-                    if(evt)
-                    {
-                        var key=(evt.charCode)?evt.charCode:
-                            ((evt.keyCode)?evt.keyCode:((evt.which)?evt.which:0));
-                        if(key=='13'){
-                            if(o.sorted){ o.Filter(); o.ChangePage(o.Evt._Paging.slcIndex()); }
-                            else o.ChangePage();
+                _detectKey: function(e){
+                    var evt = e || window.event;
+                    if(evt){
+                        var key = o.Evt.getKeyCode(e);
+                        if(key===13){
+                            if(o.sorted){
+                                o.Filter();
+                                o.ChangePage(o.Evt._Paging.slcIndex());
+                            } else{
+                                o.ChangePage();
+                            }
                             this.blur();
                         }
-                    }//if evt
+                    }
                 },
                 nextEvt: null,
                 prevEvt: null,
@@ -2309,33 +2317,33 @@ TF.prototype = {
             };
         }
 
-        if(!this.Evt._OnSlcPagesChange)
-        {
-            this.Evt._OnSlcPagesChange = function()
-            /*====================================================
-                - onchange event for paging select
-            =====================================================*/
-            {
-                if(o.Evt._Paging._OnSlcPagesChangeEvt)
+        /*====================================================
+            - onchange event for paging select
+        =====================================================*/
+        if(!this.Evt._OnSlcPagesChange){
+            this.Evt._OnSlcPagesChange = function(){
+                if(o.Evt._Paging._OnSlcPagesChangeEvt){
                     o.Evt._Paging._OnSlcPagesChangeEvt();
+                }
                 o.ChangePage();
                 this.blur();
                 //ie only: blur is not enough...
-                if(this.parentNode && tf_isIE)
+                if(this.parentNode && tf_isIE){
                     this.parentNode.focus();
-            }
+                }
+            };
         }
 
         // Paging drop-down list selector
-        if(this.pageSelectorType == this.fltTypeSlc)
-        {
-            var slcPages = tf_CreateElm( this.fltTypeSlc, ['id',this.prfxSlcPages+this.id] );
+        if(this.pageSelectorType === this.fltTypeSlc){
+            var slcPages = tf_CreateElm(
+                this.fltTypeSlc, ['id',this.prfxSlcPages+this.id]);
             slcPages.className = this.pgSlcCssClass;
             slcPages.onchange = this.Evt._OnSlcPagesChange;
         }
+
         // Paging input selector
-        if(this.pageSelectorType == this.fltTypeInp)
-        {
+        if(this.pageSelectorType === this.fltTypeInp){
             var slcPages = tf_CreateElm(
                 this.fltTypeInp,
                 ['id',this.prfxSlcPages+this.id],
@@ -2345,18 +2353,25 @@ TF.prototype = {
             slcPages.onkeypress = this.Evt._Paging._detectKey;
         }
 
-        var btnNextSpan, btnPrevSpan, btnLastSpan, btnFirstSpan;// btns containers
-        btnNextSpan = tf_CreateElm('span',['id',this.prfxBtnNextSpan+this.id]);
-        btnPrevSpan = tf_CreateElm('span',['id',this.prfxBtnPrevSpan+this.id]);
-        btnLastSpan = tf_CreateElm('span',['id',this.prfxBtnLastSpan+this.id]);
-        btnFirstSpan = tf_CreateElm('span',['id',this.prfxBtnFirstSpan+this.id]);
+        // btns containers
+        var btnNextSpan = tf_CreateElm(
+            'span',['id',this.prfxBtnNextSpan+this.id]);
+        var btnPrevSpan = tf_CreateElm(
+            'span',['id',this.prfxBtnPrevSpan+this.id]);
+        var btnLastSpan = tf_CreateElm(
+            'span',['id',this.prfxBtnLastSpan+this.id]);
+        var btnFirstSpan = tf_CreateElm(
+            'span',['id',this.prfxBtnFirstSpan+this.id]);
 
-        if(this.hasPagingBtns)
-        {
-            if(this.btnNextPageHtml==null)
-            {// Next button
-                var btn_next = tf_CreateElm( this.fltTypeInp,['id',this.prfxBtnNext+this.id],
-                    ['type','button'],['value',this.btnNextPageText],['title','Next'] );
+        if(this.hasPagingBtns){
+            // Next button
+            if(!this.btnNextPageHtml){
+                var btn_next = tf_CreateElm(
+                    this.fltTypeInp,['id',this.prfxBtnNext+this.id],
+                    ['type','button'],
+                    ['value',this.btnNextPageText],
+                    ['title','Next']
+                );
                 btn_next.className = this.btnPageCssClass;
                 btn_next.onclick = this.Evt._Paging.next;
                 btnNextSpan.appendChild(btn_next);
@@ -2364,11 +2379,15 @@ TF.prototype = {
                 btnNextSpan.innerHTML = this.btnNextPageHtml;
                 btnNextSpan.onclick = this.Evt._Paging.next;
             }
-
-            if(this.btnPrevPageHtml==null)
-            {// Previous button
-                var btn_prev = tf_CreateElm( this.fltTypeInp,['id',this.prfxBtnPrev+this.id],
-                    ['type','button'],['value',this.btnPrevPageText],['title','Previous'] );
+            // Previous button
+            if(!this.btnPrevPageHtml){
+                var btn_prev = tf_CreateElm(
+                    this.fltTypeInp,
+                    ['id',this.prfxBtnPrev+this.id],
+                    ['type','button'],
+                    ['value',this.btnPrevPageText],
+                    ['title','Previous']
+                );
                 btn_prev.className = this.btnPageCssClass;
                 btn_prev.onclick = this.Evt._Paging.prev;
                 btnPrevSpan.appendChild(btn_prev);
@@ -2376,11 +2395,15 @@ TF.prototype = {
                 btnPrevSpan.innerHTML = this.btnPrevPageHtml;
                 btnPrevSpan.onclick = this.Evt._Paging.prev;
             }
-
-            if(this.btnLastPageHtml==null)
-            {// Last button
-                var btn_last = tf_CreateElm( this.fltTypeInp,['id',this.prfxBtnLast+this.id],
-                    ['type','button'],['value',this.btnLastPageText],['title','Last'] );
+            // Last button
+            if(!this.btnLastPageHtml){
+                var btn_last = tf_CreateElm(
+                    this.fltTypeInp,
+                    ['id',this.prfxBtnLast+this.id],
+                    ['type','button'],
+                    ['value',this.btnLastPageText],
+                    ['title','Last']
+                );
                 btn_last.className = this.btnPageCssClass;
                 btn_last.onclick = this.Evt._Paging.last;
                 btnLastSpan.appendChild(btn_last);
@@ -2388,11 +2411,15 @@ TF.prototype = {
                 btnLastSpan.innerHTML = this.btnLastPageHtml;
                 btnLastSpan.onclick = this.Evt._Paging.last;
             }
-
-            if(this.btnFirstPageHtml==null)
-            {// First button
-                var btn_first = tf_CreateElm( this.fltTypeInp,['id',this.prfxBtnFirst+this.id],
-                    ['type','button'],['value',this.btnFirstPageText],['title','First'] );
+            // First button
+            if(!this.btnFirstPageHtml){
+                var btn_first = tf_CreateElm(
+                    this.fltTypeInp,
+                    ['id',this.prfxBtnFirst+this.id],
+                    ['type','button'],
+                    ['value',this.btnFirstPageText],
+                    ['title','First']
+                );
                 btn_first.className = this.btnPageCssClass;
                 btn_first.onclick = this.Evt._Paging.first;
                 btnFirstSpan.appendChild(btn_first);
@@ -2400,27 +2427,35 @@ TF.prototype = {
                 btnFirstSpan.innerHTML = this.btnFirstPageHtml;
                 btnFirstSpan.onclick = this.Evt._Paging.first;
             }
-        }//if this.hasPagingBtns
+        }
 
         // paging elements (buttons+drop-down list) are added to defined element
-        if(this.pagingTgtId==null) this.SetTopDiv();
-        var targetEl = ( this.pagingTgtId==null ) ? this.mDiv : tf_Id( this.pagingTgtId );
+        if(!this.pagingTgtId){
+            this.SetTopDiv();
+        }
+        var targetEl = !this.pagingTgtId ? this.mDiv : tf_Id(this.pagingTgtId);
 
-        /***    if paging previously removed this prevents IE memory leak with removeChild
-                used in RemovePaging method. For more info refer to
-                http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2840253&SiteID=1  ***/
-        if ( targetEl.innerHTML!='' ) targetEl.innerHTML = '';
+        /***
+        if paging previously removed this prevents IE memory leak with
+        removeChild used in RemovePaging method. For more info refer to
+        http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2840253&SiteID=1
+        ***/
+        if (targetEl.innerHTML!==''){
+            targetEl.innerHTML = '';
+        }
         /*** ***/
 
         targetEl.appendChild(btnFirstSpan);
         targetEl.appendChild(btnPrevSpan);
 
-        var pgBeforeSpan = tf_CreateElm( 'span',['id',this.prfxPgBeforeSpan+this.id] );
+        var pgBeforeSpan = tf_CreateElm(
+            'span',['id',this.prfxPgBeforeSpan+this.id] );
         pgBeforeSpan.appendChild( tf_CreateText(this.pageText) );
         pgBeforeSpan.className = this.nbPgSpanCssClass;
         targetEl.appendChild(pgBeforeSpan);
         targetEl.appendChild(slcPages);
-        var pgAfterSpan = tf_CreateElm( 'span',['id',this.prfxPgAfterSpan+this.id] );
+        var pgAfterSpan = tf_CreateElm(
+            'span',['id',this.prfxPgAfterSpan+this.id]);
         pgAfterSpan.appendChild( tf_CreateText(this.ofText) );
         pgAfterSpan.className = this.nbPgSpanCssClass;
         targetEl.appendChild(pgAfterSpan)
@@ -2430,14 +2465,14 @@ TF.prototype = {
         targetEl.appendChild(pgspan);
         targetEl.appendChild(btnNextSpan);
         targetEl.appendChild(btnLastSpan);
-        this.pagingSlc = tf_Id(this.prfxSlcPages+this.id); //to be easily re-used
+        this.pagingSlc = tf_Id(this.prfxSlcPages+this.id);
 
         // if this.rememberGridValues==true this.SetPagingInfo() is called
         // in ResetGridValues() method
-        if( !this.rememberGridValues || this.isPagingRemoved )
+        if(!this.rememberGridValues || this.isPagingRemoved){
             this.SetPagingInfo();
-        if( !this.fltGrid )
-        {
+        }
+        if(!this.fltGrid){
             this.ValidateAllRows();
             this.SetPagingInfo(this.validRowsIndex);
         }
@@ -6469,4 +6504,4 @@ function tf_hasClass(elm,cl){ return tf_HasClass(elm,cl); }
 function tf_isValidDate(dateStr,format){ return tf_IsValidDate(dateStr,format); }
 function tf_formatDate(dateStr,format){ return tf_FormatDate(dateStr,format); }
 function tf_removeNbFormat(data,format){ return tf_RemoveNbFormat(data,format); }
-/* --- */
+/* ---
