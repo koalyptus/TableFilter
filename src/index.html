@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="filtergrid.css">
+    <title>HTML Table Filter Generator</title>
 </head>
 <body>
     <table id="demo" cellpadding="0" cellspacing="0">
@@ -68,8 +68,9 @@
     <script type="text/javascript" src="tablefilter_all.js"></script>
     <script>
         var tf = setFilterGrid("demo", {
-            base_path: '',
-            enable_default_theme: true
+            base_path: './',
+            enable_default_theme: true,
+            paging: true
         });
     </script>
 </body>

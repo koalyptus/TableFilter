@@ -2731,71 +2731,90 @@ TF.prototype = {
         slcR.onchange = this.Evt._OnSlcResultsChange;
     },
 
-    RemoveResultsPerPage: function()
     /*====================================================
         - Removes results per page select + label
     =====================================================*/
-    {
-        if(!this.hasGrid) return;
-        if( this.resultsPerPageSlc==null || this.resultsPerPage==null ) return;
-        var slcR, slcRSpan;
-        slcR = this.resultsPerPageSlc;
-        slcRSpan = tf_Id( this.prfxSlcResultsTxt+this.id );
-        if( slcR!=null )
+    RemoveResultsPerPage: function(){
+        if(!this.hasGrid || !this.resultsPerPageSlc || !this.resultsPerPage){
+            return;
+        }
+        var slcR = this.resultsPerPageSlc,
+            slcRSpan = tf_Id(this.prfxSlcResultsTxt+this.id);
+        if(slcR){
             slcR.parentNode.removeChild( slcR );
-        if( slcRSpan!=null )
+        }
+        if(slcRSpan){
             slcRSpan.parentNode.removeChild( slcRSpan );
+        }
         this.resultsPerPageSlc = null;
     },
 
-    SetHelpInstructions: function()
     /*====================================================
         - Generates help instructions
     =====================================================*/
-    {
-        if( this.helpInstrBtnEl!=null ) return;
+    SetHelpInstructions: function(){
+        if(this.helpInstrBtnEl){
+            return;
+        }
         var f = this.fObj;
-        this.helpInstrTgtId =       f.help_instructions_target_id!=undefined //id of custom container element for instructions
-                                        ? f.help_instructions_target_id : null;
-        this.helpInstrContTgtId =   f.help_instructions_container_target_id!=undefined //id of custom container element for instructions
-                                        ? f.help_instructions_container_target_id : null;
-        this.helpInstrText =        f.help_instructions_text //defines help text
-                                        ? f.help_instructions_text : 'Use the filters above each column to filter and limit table data. ' +
-                                        'Avanced searches can be performed by using the following operators: <br />' +
-                                        '<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, <b>||</b>, ' +
-                                        '<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, <b>rgx:</b><br/> These operators are described here:<br/>' +
-                                        '<a href="http://tablefilter.free.fr/#operators" target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
-        this.helpInstrHtml =        f.help_instructions_html!=undefined
-                                        ? f.help_instructions_html : null; //defines help innerHtml
-        this.helpInstrBtnText =     f.help_instructions_btn_text!=undefined
-                                        ? f.help_instructions_btn_text : '?'; //defines reset button text
-        this.helpInstrBtnHtml =     f.help_instructions_btn_html!=undefined
-                                        ? f.help_instructions_btn_html : null; //defines reset button innerHtml
-        this.helpInstrBtnCssClass = f.help_instructions_btn_css_class!=undefined //defines css class for help button
-                                        ? f.help_instructions_btn_css_class : 'helpBtn';
-        this.helpInstrContCssClass = f.help_instructions_container_css_class!=undefined //defines css class for help container
-                                        ? f.help_instructions_container_css_class : 'helpCont';
-        this.helpInstrBtnEl =       null; //help button element
-        this.helpInstrContEl =      null; //help content div
-        this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>HTML Table Filter Generator v. '+ this.version +'</h4>' +
-                                    '<a href="http://tablefilter.free.fr" target="_blank">http://tablefilter.free.fr</a><br/>' +
-                                    '<span>&copy;2009-'+ this.year +' Max Guglielmi.</span><div align="center" style="margin-top:8px;">' +
-                                    '<a href="javascript:;" onclick="window[\'tf_'+ this.id +'\']._ToggleHelp();">Close</a></div></div>';
+        //id of custom container element for instructions
+        this.helpInstrTgtId = f.help_instructions_target_id || null;
+        //id of custom container element for instructions
+        this.helpInstrContTgtId = f.help_instructions_container_target_id ||
+            null;
+        //defines help text
+        this.helpInstrText = f.help_instructions_text  ?
+            f.help_instructions_text :
+            'Use the filters above each column to filter and limit table ' +
+            'data. Avanced searches can be performed by using the following ' +
+            'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
+            '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
+            '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
+            '<b>rgx:</b><br/> These operators are described here:<br/>' +
+            '<a href="http://tablefilter.free.fr/#operators" ' +
+            'target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
+        //defines help innerHtml
+        this.helpInstrHtml = f.help_instructions_html || null;
+        //defines reset button text
+        this.helpInstrBtnText = f.help_instructions_btn_text || '?';
+        //defines reset button innerHtml
+        this.helpInstrBtnHtml = f.help_instructions_btn_html || null;
+        //defines css class for help button
+        this.helpInstrBtnCssClass = f.help_instructions_btn_css_class ||
+            'helpBtn';
+        //defines css class for help container
+        this.helpInstrContCssClass = f.help_instructions_container_css_class ||
+            'helpCont';
+        //help button element
+        this.helpInstrBtnEl = null;
+         //help content div
+        this.helpInstrContEl = null;
+        this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>HTML Table ' +
+            'Filter Generator v. '+ this.version +'</h4>' +
+            '<a href="http://tablefilter.free.fr" target="_blank">' +
+            'http://tablefilter.free.fr</a><br/>' +
+            '<span>&copy;2009-'+ this.year +' Max Guglielmi.</span>' +
+            '<div align="center" style="margin-top:8px;">' +
+            '<a href="javascript:;" onclick="window[\'tf_'+ this.id +
+            '\']._ToggleHelp();">Close</a></div></div>';
 
         var helpspan = tf_CreateElm('span',['id',this.prfxHelpSpan+this.id]);
         var helpdiv = tf_CreateElm('div',['id',this.prfxHelpDiv+this.id]);
 
         //help button is added to defined element
-        if(this.helpInstrTgtId==null) this.SetTopDiv();
-        var targetEl = ( this.helpInstrTgtId==null ) ? this.rDiv : tf_Id( this.helpInstrTgtId );
+        if(!this.helpInstrTgtId){
+            this.SetTopDiv();
+        }
+        var targetEl = !this.helpInstrTgtId ?
+            this.rDiv : tf_Id(this.helpInstrTgtId);
         targetEl.appendChild(helpspan);
 
-        var divContainer = ( this.helpInstrContTgtId==null ) ? helpspan : tf_Id( this.helpInstrContTgtId );
+        var divContainer = !this.helpInstrContTgtId ?
+            helpspan : tf_Id( this.helpInstrContTgtId );
 
-        if(this.helpInstrBtnHtml == null)
-        {
+        if(!this.helpInstrBtnHtml){
             divContainer.appendChild(helpdiv);
-            var helplink = tf_CreateElm( 'a', ['href','javascript:void(0);'] );
+            var helplink = tf_CreateElm( 'a', ['href','javascript:void(0);']);
             helplink.className = this.helpInstrBtnCssClass;
             helplink.appendChild(tf_CreateText(this.helpInstrBtnText));
             helpspan.appendChild(helplink);
@@ -2807,9 +2826,7 @@ TF.prototype = {
             divContainer.appendChild(helpdiv);
         }
 
-        if(this.helpInstrHtml == null)
-        {
-            //helpdiv.appendChild(tf_CreateText(this.helpInstrText));
+        if(!this.helpInstrHtml){
             helpdiv.innerHTML = this.helpInstrText;
             helpdiv.className = this.helpInstrContCssClass;
             helpdiv.ondblclick = this.Evt._OnHelpBtnClick;
@@ -2826,139 +2843,154 @@ TF.prototype = {
         this.helpInstrBtnEl = helpspan;
     },
 
-    RemoveHelpInstructions: function()
     /*====================================================
         - Removes help instructions
     =====================================================*/
-    {
-        if(this.helpInstrBtnEl==null) return;
+    RemoveHelpInstructions: function() {
+        if(!this.helpInstrBtnEl){
+            return;
+        }
         this.helpInstrBtnEl.parentNode.removeChild(this.helpInstrBtnEl);
         this.helpInstrBtnEl = null;
-        if(this.helpInstrContEl==null) return;
+        if(!this.helpInstrContEl){
+            return;
+        }
         this.helpInstrContEl.parentNode.removeChild(this.helpInstrContEl);
         this.helpInstrContEl = null;
     },
 
-    _ToggleHelp: function()
     /*====================================================
         - Toggles help div
     =====================================================*/
-    {
-        if(!this.helpInstrContEl) return;
-        var divDisplay = this.helpInstrContEl.style.display;
-        if(divDisplay == '' || divDisplay == 'none'){
-            this.helpInstrContEl.style.display = 'block';
-            var btnLeft = tf_ObjPosition(this.helpInstrBtnEl, [this.helpInstrBtnEl.nodeName])[0];
-            if(!this.helpInstrContTgtId)
-                this.helpInstrContEl.style.left = (btnLeft - this.helpInstrContEl.clientWidth + 25) + 'px';
+    _ToggleHelp: function(){
+        if(!this.helpInstrContEl){
+            return;
         }
-        else this.helpInstrContEl.style.display = 'none';
+        var divDisplay = this.helpInstrContEl.style.display;
+        if(divDisplay==='' || divDisplay==='none'){
+            this.helpInstrContEl.style.display = 'block';
+            var btnLeft = tf_ObjPosition(
+                this.helpInstrBtnEl, [this.helpInstrBtnEl.nodeName])[0];
+            if(!this.helpInstrContTgtId){
+                this.helpInstrContEl.style.left =
+                    (btnLeft - this.helpInstrContEl.clientWidth + 25) + 'px';
+            }
+        } else {
+            this.helpInstrContEl.style.display = 'none';
+        }
     },
 
-    ChangePage: function( index )
-    {
+    ChangePage: function(index){
         this.EvtManager(this.Evt.name.changepage,{ pgIndex:index });
     },
-    _ChangePage: function( index )
     /*====================================================
         - Changes page
         - Param:
             - index: option index of paging select
             (numeric value)
     =====================================================*/
-    {
-        if( !this.paging ) return;
-        if( index==undefined )
-            index = (this.pageSelectorType==this.fltTypeSlc) ?
+    _ChangePage: function(index){
+        if(!this.paging){
+            return;
+        }
+        if(!index){
+            index = this.pageSelectorType===this.fltTypeSlc ?
                 this.pagingSlc.options.selectedIndex : (this.pagingSlc.value-1);
-        if( index>=0 && index<=(this.nbPages-1) )
-        {
-            if(this.onBeforeChangePage) this.onBeforeChangePage.call(null, this, index);
+        }
+        if( index>=0 && index<=(this.nbPages-1) ){
+            if(this.onBeforeChangePage){
+                this.onBeforeChangePage.call(null, this, index);
+            }
             this.currentPageNb = parseInt(index)+1;
-            if(this.pageSelectorType==this.fltTypeSlc)
+            if(this.pageSelectorType===this.fltTypeSlc){
                 this.pagingSlc.options[index].selected = true;
-            else
+            } else {
                 this.pagingSlc.value = this.currentPageNb;
+            }
 
-            if( this.rememberPageNb ) this.RememberPageNb( this.pgNbCookie );
-            this.startPagingRow = (this.pageSelectorType==this.fltTypeSlc)
-                ? this.pagingSlc.value : (index*this.pagingLength);
+            if(this.rememberPageNb){
+                this.RememberPageNb(this.pgNbCookie);
+            }
+            this.startPagingRow = (this.pageSelectorType===this.fltTypeSlc) ?
+                this.pagingSlc.value : (index*this.pagingLength);
             this.GroupByPage();
-            if(this.onAfterChangePage) this.onAfterChangePage.call(null, this, index);
+            if(this.onAfterChangePage){
+                this.onAfterChangePage.call(null, this, index);
+            }
         }
     },
 
-    ChangeResultsPerPage: function()
-    {
+    ChangeResultsPerPage: function(){
         this.EvtManager(this.Evt.name.changeresultsperpage);
     },
-    _ChangeResultsPerPage: function()
     /*====================================================
         - calculates rows to be displayed in a page
         - method called by nb results per page select
     =====================================================*/
-    {
-        if( !this.paging ) return;
+    _ChangeResultsPerPage: function(){
+        if(!this.paging){
+            return;
+        }
         var slcR = this.resultsPerPageSlc;
-        var slcPagesSelIndex = (this.pageSelectorType==this.fltTypeSlc)
-            ? this.pagingSlc.selectedIndex : parseInt(this.pagingSlc.value-1);
-        this.pagingLength = parseInt(slcR.options[slcR.selectedIndex].value);
+        var slcPagesSelIndex = (this.pageSelectorType==this.fltTypeSlc) ?
+                this.pagingSlc.selectedIndex :
+                parseInt(this.pagingSlc.value-1,10);
+        this.pagingLength = parseInt(slcR.options[slcR.selectedIndex].value,10);
         this.startPagingRow = this.pagingLength*slcPagesSelIndex;
 
-        if( !isNaN(this.pagingLength) )
-        {
-            if( this.startPagingRow>=this.nbFilterableRows )
+        if(!isNaN(this.pagingLength)){
+            if(this.startPagingRow>=this.nbFilterableRows){
                 this.startPagingRow = (this.nbFilterableRows-this.pagingLength);
+            }
             this.SetPagingInfo();
 
-            if(this.pageSelectorType==this.fltTypeSlc)
-            {
-                var slcIndex = (this.pagingSlc.options.length-1<=slcPagesSelIndex )
-                                ? (this.pagingSlc.options.length-1) : slcPagesSelIndex;
+            if(this.pageSelectorType===this.fltTypeSlc){
+                var slcIndex =
+                    (this.pagingSlc.options.length-1<=slcPagesSelIndex ) ?
+                    (this.pagingSlc.options.length-1) : slcPagesSelIndex;
                 this.pagingSlc.options[slcIndex].selected = true;
             }
-            if( this.rememberPageLen ) this.RememberPageLength( this.pgLenCookie );
-        }//if isNaN
+            if(this.rememberPageLen){
+                this.RememberPageLength( this.pgLenCookie );
+            }
+        }
     },
 
-    ResetPage: function( name )
-    {
+    ResetPage: function(name){
         this.EvtManager(this.Evt.name.resetpage);
     },
-    _ResetPage: function( name )
     /*==============================================
         - re-sets page nb at page re-load
         - Params:
             - name: cookie name (string)
     ===============================================*/
-    {
-        var pgnb = tf_ReadCookie(name); //reads the cookie
-        if( pgnb!='' )
+    _ResetPage: function(name){
+        var pgnb = tf_ReadCookie(name);
+        if(pgnb!==''){
             this.ChangePage((pgnb-1));
+        }
     },
 
-    ResetPageLength: function( name )
-    {
+    ResetPageLength: function(name){
         this.EvtManager(this.Evt.name.resetpagelength);
     },
-    _ResetPageLength: function( name )
     /*==============================================
         - re-sets page length at page re-load
         - Params:
             - name: cookie name (string)
     ===============================================*/
-    {
-        if(!this.paging) return;
-        var pglenIndex = tf_ReadCookie(name); //reads the cookie
+    _ResetPageLength: function(name){
+        if(!this.paging){
+            return;
+        }
+        var pglenIndex = tf_ReadCookie(name);
 
-        if( pglenIndex!='' )
-        {
+        if(pglenIndex!==''){
             this.resultsPerPageSlc.options[pglenIndex].selected = true;
             this.ChangeResultsPerPage();
         }
     },
 
-    AddPaging: function(filterTable)
     /*====================================================
         - Adds paging feature if filter grid bar is
         already set
@@ -2966,40 +2998,50 @@ TF.prototype = {
             - execFilter: if true table is filtered
             (boolean)
     =====================================================*/
-    {
-        if( !this.hasGrid || this.paging ) return;
+    AddPaging: function(filterTable){
+        if(!this.hasGrid || this.paging){
+            return;
+        }
         this.paging = true;
         this.isPagingRemoved = true;
         this.SetPaging();
         this.ResetValues();
-        if(filterTable) this.Filter();
+        if(filterTable){
+            this.Filter();
+        }
     },
 
-    PopulateSelect: function(colIndex,isExternal,extSlcId)
-    {
+    PopulateSelect: function(colIndex,isExternal,extSlcId){
         this.EvtManager(
             this.Evt.name.populateselect,
             { slcIndex:colIndex, slcExternal:isExternal, slcId:extSlcId }
         );
     },
 
-    _PopulateSelect: function(colIndex,isRefreshed,isExternal,extSlcId)
     /*====================================================
         - populates drop-down filters
     =====================================================*/
-    {
-        isExternal = (isExternal==undefined) ? false : isExternal;
+    _PopulateSelect: function(colIndex,isRefreshed,isExternal,extSlcId) {
+        isExternal = isExternal===undefined ? false : isExternal;
         var slcId = this.fltIds[colIndex];
-        if( tf_Id(slcId)==null && !isExternal ) return;
-        if( tf_Id(extSlcId)==null && isExternal ) return;
-        var slc = (!isExternal) ? tf_Id(slcId) : tf_Id(extSlcId);
-        var o = this, row = this.tbl.rows;
-        var fillMethod = this.slcFillingMethod.tf_LCase();
-        var optArray = [], slcInnerHtml = '', opt0;
-        var isCustomSlc = (this.hasCustomSlcOptions  //custom select test
-                            && this.customSlcOptions.cols.tf_Has(colIndex));
-        var optTxt = []; //custom selects text
-        var activeFlt;
+        if((!tf_Id(slcId) && !isExternal) ||
+            (!tf_Id(extSlcId) && isExternal)){
+            return;
+        }
+        var slc = !isExternal ? tf_Id(slcId) : tf_Id(extSlcId),
+            o = this,
+            row = this.tbl.rows,
+            matchCase = this.matchCase,
+            fillMethod = this.slcFillingMethod.tf_LCase(),
+            optArray = [],
+            slcInnerHtml = '',
+            opt0,
+            //custom select test
+            isCustomSlc = (this.hasCustomSlcOptions &&
+                this.customSlcOptions.cols.tf_Has(colIndex));
+        //custom selects text
+        var optTxt = [],
+            activeFlt;
         if(isRefreshed && this.activeFilterId){
             activeFlt = this.activeFilterId.split('_')[0];
             activeFlt = activeFlt.split(this.prfxFlt)[1];
@@ -3007,46 +3049,70 @@ TF.prototype = {
 
         /*** remember grid values ***/
         var flts_values = [], fltArr = [];
-        if(this.rememberGridValues)
-        {
-            flts_values = tf_CookieValueArray(this.fltsValuesCookie, this.separator);
-            if(flts_values != undefined && flts_values.toString().tf_Trim() != ''){
-                if(this.hasCustomSlcOptions && this.customSlcOptions.cols.tf_Has(colIndex)){
+        if(this.rememberGridValues){
+            flts_values = tf_CookieValueArray(
+                this.fltsValuesCookie, this.separator);
+            if(flts_values && flts_values.toString().tf_Trim()!==''){
+                if(isCustomSlc){
                     fltArr.push(flts_values[colIndex]);
-                } else { fltArr = flts_values[colIndex].split(' '+o.orOperator+' '); }
+                } else {
+                    fltArr = flts_values[colIndex].split(' '+o.orOperator+' ');
+                }
             }
         }
 
-        var excludedOpts = null, filteredDataCol = null;
-        if(isRefreshed && this.disableExcludedOptions){ excludedOpts = []; filteredDataCol = []; }
+        var excludedOpts = null,
+            filteredDataCol = null;
+        if(isRefreshed && this.disableExcludedOptions){
+            excludedOpts = [];
+            filteredDataCol = [];
+        }
 
-        for(var k=this.refRow; k<this.nbRows; k++)
-        {
-            // always visible rows don't need to appear on selects as always valid
-            if( this.hasVisibleRows && this.visibleRows.tf_Has(k) && !this.paging )
+        for(var k=this.refRow; k<this.nbRows; k++){
+            // always visible rows don't need to appear on selects as always
+            // valid
+            if(this.hasVisibleRows && this.visibleRows.tf_Has(k) &&
+                !this.paging){
                 continue;
+            }
 
-            var cell = row[k].cells;
-            var nchilds = cell.length;
+            var cell = row[k].cells,
+                nchilds = cell.length;
 
-            if(nchilds == this.nbCells && !isCustomSlc)
-            {// checks if row has exact cell #
-                for(var j=0; j<nchilds; j++)// this loop retrieves cell data
-                {
-                    if((colIndex==j && (!isRefreshed || (isRefreshed && this.disableExcludedOptions))) ||
-                        (colIndex==j && isRefreshed && ((row[k].style.display == '' && !this.paging) ||
-                        ( this.paging && (!this.validRowsIndex || (this.validRowsIndex && this.validRowsIndex.tf_Has(k)))
-                            && ((activeFlt==undefined || activeFlt==colIndex)  || (activeFlt!=colIndex && this.validRowsIndex.tf_Has(k) ))) )))
-                    {
-                        var cell_data = this.GetCellData(j, cell[j]);
-                        var cell_string = cell_data.tf_MatchCase(this.matchCase);//V�ry P�ter's patch
+            // checks if row has exact cell #
+            if(nchilds === this.nbCells && !isCustomSlc){
+                // this loop retrieves cell data
+                for(var j=0; j<nchilds; j++){
+                    if((colIndex===j &&
+                        (!isRefreshed ||
+                            (isRefreshed && this.disableExcludedOptions))) ||
+                        (colIndex==j && isRefreshed &&
+                            ((row[k].style.display == '' && !this.paging) ||
+                        (this.paging && (!this.validRowsIndex ||
+                            (this.validRowsIndex &&
+                                this.validRowsIndex.tf_Has(k))) &&
+                            ((activeFlt==undefined || activeFlt==colIndex)  ||
+                                (activeFlt!=colIndex &&
+                                    this.validRowsIndex.tf_Has(k) ))) ))){
+                        var cell_data = this.GetCellData(j, cell[j]),
+                            //V�ry P�ter's patch
+                            cell_string = cell_data.tf_MatchCase(matchCase);
+
                         // checks if celldata is already in array
-                        if(!optArray.tf_Has(cell_string,this.matchCase)) optArray.push(cell_data);
+                        if(!optArray.tf_Has(cell_string, matchCase)){
+                            optArray.push(cell_data);
+                        }
 
                         if(isRefreshed && this.disableExcludedOptions){
-                            if(!filteredDataCol[j]) filteredDataCol[j] = this.GetFilteredDataCol(j);
-                            if(!filteredDataCol[j].tf_Has(cell_string,this.matchCase)
-                                && !excludedOpts.tf_Has(cell_string,this.matchCase) && !this.isFirstLoad) excludedOpts.push(cell_data);
+                            var filteredCol = filteredDataCol[j];
+                            if(!filteredCol){
+                                filteredCol = this.GetFilteredDataCol(j);
+                            }
+                            if(!filteredCol.tf_Has(cell_string, matchCase) &&
+                                !excludedOpts.tf_Has(cell_string, matchCase) &&
+                                !this.isFirstLoad){
+                                excludedOpts.push(cell_data);
+                            }
                         }
                     }//if colIndex==j
                 }//for j
@@ -3054,52 +3120,74 @@ TF.prototype = {
         }//for k
 
         //Retrieves custom values
-        if(isCustomSlc)
-        {
+        if(isCustomSlc){
             var customValues = this.__getCustomValues(colIndex);
             optArray = customValues[0];
             optTxt = customValues[1];
         }
 
         if(this.sortSlc && !isCustomSlc){
-            if (!this.matchCase){
+            if (!matchCase){
                 optArray.sort(tf_IgnoreCaseSort);
                 if(excludedOpts) excludedOpts.sort(tf_IgnoreCaseSort);
-            } else { optArray.sort(); if(excludedOpts){ excludedOpts.sort(); } }
+            } else {
+                optArray.sort();
+                if(excludedOpts){ excludedOpts.sort(); }
+            }
         }
 
-        if(this.sortNumAsc && this.sortNumAsc.tf_Has(colIndex))
-        {//asc sort
+        //asc sort
+        if(this.sortNumAsc && this.sortNumAsc.tf_Has(colIndex)){
             try{
                 optArray.sort( tf_NumSortAsc );
-                if(excludedOpts) excludedOpts.sort( tf_NumSortAsc );
-                if(isCustomSlc) optTxt.sort( tf_NumSortAsc );
+                if(excludedOpts){
+                    excludedOpts.sort( tf_NumSortAsc );
+                }
+                if(isCustomSlc){
+                    optTxt.sort( tf_NumSortAsc );
+                }
             } catch(e) {
-                optArray.sort(); if(excludedOpts){ excludedOpts.sort(); }
-                if(isCustomSlc) optTxt.sort();
+                optArray.sort();
+                if(excludedOpts){
+                    excludedOpts.sort();
+                }
+                if(isCustomSlc){
+                    optTxt.sort();
+                }
             }//in case there are alphanumeric values
         }
-        if(this.sortNumDesc && this.sortNumDesc.tf_Has(colIndex))
-        {//desc sort
+        //desc sort
+        if(this.sortNumDesc && this.sortNumDesc.tf_Has(colIndex)){
             try{
                 optArray.sort( tf_NumSortDesc );
-                if(excludedOpts) excludedOpts.sort( tf_NumSortDesc );
-                if(isCustomSlc) optTxt.sort( tf_NumSortDesc );
+                if(excludedOpts){
+                    excludedOpts.sort( tf_NumSortDesc );
+                }
+                if(isCustomSlc){
+                    optTxt.sort( tf_NumSortDesc );
+                }
             } catch(e) {
-                optArray.sort(); if(excludedOpts){ excludedOpts.sort(); }
-                if(isCustomSlc) optTxt.sort();
+                optArray.sort();
+                if(excludedOpts){ excludedOpts.sort(); }
+                if(isCustomSlc){
+                    optTxt.sort();
+                }
             }//in case there are alphanumeric values
         }
 
         AddOpts();//populates drop-down
 
-        function AddOpt0()
-        {// adds 1st option
-            if( fillMethod == 'innerhtml' )
-                slcInnerHtml += '<option value="">'+o.displayAllText+'</option>';
+        // adds 1st option
+        function AddOpt0(){
+            if(fillMethod === 'innerhtml'){
+                slcInnerHtml +='<option value="">'+o.displayAllText+'</option>';
+            }
             else {
-                var opt0 = tf_CreateOpt((!o.enableSlcResetFilter ? '' : o.displayAllText),'');
-                if(!o.enableSlcResetFilter) opt0.style.display = 'none';
+                var opt0 = tf_CreateOpt(
+                    (!o.enableSlcResetFilter ? '' : o.displayAllText),'');
+                if(!o.enableSlcResetFilter){
+                    opt0.style.display = 'none';
+                }
                 slc.appendChild(opt0);
                 if(o.enableEmptyOption){
                     var opt1 = tf_CreateOpt(o.emptyText,o.emOperator);
@@ -3112,58 +3200,73 @@ TF.prototype = {
             }
         }
 
-        function AddOpts()
-        {// populates select
+        // populates select
+        function AddOpts(){
             var slcValue = slc.value;
             slc.innerHTML = '';
             AddOpt0();
 
-            for(var y=0; y<optArray.length; y++)
-            {
-                if(optArray[y]=='') continue;
+            for(var y=0; y<optArray.length; y++){
+                if(optArray[y]===''){
+                    continue;
+                }
                 var val = optArray[y]; //option value
-                var lbl = (isCustomSlc) ? optTxt[y] : optArray[y]; //option text
+                var lbl = isCustomSlc ? optTxt[y] : val; //option text
                 var isDisabled = false;
                 if(isRefreshed && o.disableExcludedOptions &&
-                    excludedOpts.tf_Has(val.tf_MatchCase(o.matchCase), o.matchCase))
+                    excludedOpts.tf_Has(
+                        val.tf_MatchCase(o.matchCase), o.matchCase)){
                     isDisabled = true;
+                }
 
-                if( fillMethod == 'innerhtml' )
-                {
+                if(fillMethod === 'innerhtml'){
                     var slcAttr = '';
-                    if( o.fillSlcOnDemand && slcValue==optArray[y] )
+                    if(o.fillSlcOnDemand && slcValue==optArray[y]){
                         slcAttr = 'selected="selected"';
-                    slcInnerHtml += '<option value="'+val+'" '
-                                        +slcAttr+ (isDisabled ? 'disabled="disabled"' : '')+'>'+lbl+'</option>';
+                    }
+                    slcInnerHtml += '<option value="'+val+'" ' + slcAttr +
+                        (isDisabled ? 'disabled="disabled"' : '')+ '>' +
+                        lbl+'</option>';
                 } else {
                     var opt;
                     //fill select on demand
-                    if(o.fillSlcOnDemand && slcValue==optArray[y] && o['col'+colIndex]==o.fltTypeSlc)
-                        opt = tf_CreateOpt( lbl, val, true );
-                    else{
-                        if( o['col'+colIndex]!=o.fltTypeMulti )
-                            opt = tf_CreateOpt( lbl, val,
-                                                (flts_values[colIndex]!=' ' && val==flts_values[colIndex])
-                                                ? true : false  );
-                        else
-                        {
-                            opt = tf_CreateOpt( lbl, val,
-                                                (fltArr.tf_Has(optArray[y].tf_MatchCase(o.matchCase),o.matchCase)
-                                                    || fltArr.toString().indexOf(val)!= -1)
-                                                ? true : false  );
+                    if(o.fillSlcOnDemand && slcValue==optArray[y] &&
+                        o['col'+colIndex]===o.fltTypeSlc){
+                        opt = tf_CreateOpt(lbl, val, true);
+                    } else {
+                        if(o['col'+colIndex]!=o.fltTypeMulti){
+                            opt = tf_CreateOpt(
+                                lbl,
+                                val,
+                                (flts_values[colIndex]!==' ' &&
+                                    val==flts_values[colIndex]) ? true : false
+                            );
+                        } else {
+                            opt = tf_CreateOpt(
+                                lbl,
+                                val,
+                                (fltArr.tf_Has(
+                                    optArray[y].tf_MatchCase(
+                                        o.matchCase),o.matchCase) ||
+                                  fltArr.toString().indexOf(val)!== -1) ?
+                                    true : false
+                            );
                         }
                     }
-                    if(isDisabled) opt.disabled = true;
+                    if(isDisabled){
+                        opt.disabled = true;
+                    }
                     slc.appendChild(opt);
                 }
             }// for y
 
-            if( fillMethod == 'innerhtml' ) slc.innerHTML += slcInnerHtml;
+            if(fillMethod === 'innerhtml'){
+                slc.innerHTML += slcInnerHtml;
+            }
             slc.setAttribute('filled','1');
         }// fn AddOpt
     },
 
-    __deferMultipleSelection: function(slc,index,filter)
     /*====================================================
         - IE bug: it seems there is no way to make
         multiple selections programatically, only last
@@ -3172,29 +3275,27 @@ TF.prototype = {
         - Work-around: defer selection with a setTimeout
         If you find a more elegant solution to
         this let me know ;-)
-        - For the moment only this solution seems
-        to work!
+        - For the moment only this solution seems to work!
         - Params:
             - slc = select object (select obj)
             - index to be selected (integer)
             - execute filtering (boolean)
     =====================================================*/
-    {
-        if(slc.nodeName.tf_LCase() != 'select') return;
-        var doFilter = (filter==undefined) ? false : filter;
+    __deferMultipleSelection: function(slc,index,filter){
+        if(slc.nodeName.tf_LCase() !== 'select'){
+            return;
+        }
+        var doFilter = filter===undefined ? false : filter;
         var o = this;
-        window.setTimeout(
-            function(){
-                slc.options[0].selected = false;
+        window.setTimeout(function(){
+            slc.options[0].selected = false;
 
-                if(slc.options[index].value=='')
-                    slc.options[index].selected = false;
-                else
-                slc.options[index].selected = true;
-                if(doFilter) o.Filter();
-            },
-            .1
-        );
+            if(slc.options[index].value=='')
+                slc.options[index].selected = false;
+            else
+            slc.options[index].selected = true;
+            if(doFilter) o.Filter();
+        }, 0.1);
     },
 
     __getCustomValues: function(colIndex)
