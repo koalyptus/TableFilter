@@ -3761,47 +3761,63 @@ TF.prototype = {
         this.btnResetEl = null;
     },
 
-    SetStatusBar: function()
     /*====================================================
         - Generates status bar label
     =====================================================*/
-    {
-        if(!this.hasGrid && !this.isFirstLoad) return;
+    SetStatusBar: function(){
+        if(!this.hasGrid && !this.isFirstLoad){
+            return;
+        }
         var f = this.fObj;
-        this.statusBarTgtId =       f.status_bar_target_id!=undefined //id of custom container element
-                                        ? f.status_bar_target_id : null;
-        this.statusBarDiv =         null; //element containing status bar label
-        this.statusBarSpan =        null; //status bar
-        this.statusBarSpanText =    null; //status bar label
-        this.statusBarText =        f.status_bar_text!=undefined
-                                        ? f.status_bar_text : ''; //defines status bar text
-        this.statusBarCssClass =    f.status_bar_css_class!=undefined //defines css class status bar
-                                        ? f.status_bar_css_class : 'status';
-        this.statusBarCloseDelay =  250; //delay for status bar clearing
-        var statusDiv = tf_CreateElm( 'div',['id',this.prfxStatus+this.id] ); //status bar container
+        //id of custom container element
+        this.statusBarTgtId = f.status_bar_target_id || null;
+        //element containing status bar label
+        this.statusBarDiv = null;
+        //status bar
+        this.statusBarSpan = null;
+        //status bar label
+        this.statusBarSpanText = null;
+        //defines status bar text
+        this.statusBarText = f.status_bar_text || '';
+        //defines css class status bar
+        this.statusBarCssClass = f.status_bar_css_class || 'status';
+        //delay for status bar clearing
+        this.statusBarCloseDelay =  250;
+        //status bar container
+        var statusDiv = tf_CreateElm('div', ['id',this.prfxStatus+this.id]);
         statusDiv.className = this.statusBarCssClass;
-        var statusSpan = tf_CreateElm( 'span',['id',this.prfxStatusSpan+this.id] ); //status bar label
-        var statusSpanText = tf_CreateElm( 'span',['id',this.prfxStatusTxt+this.id] );//preceding text
-        statusSpanText.appendChild( tf_CreateText(this.statusBarText) );
-        this.onBeforeShowMsg = tf_IsFn(f.on_before_show_msg) ? f.on_before_show_msg : null; //calls function before message is displayed
-        this.onAfterShowMsg = tf_IsFn(f.on_after_show_msg) ? f.on_after_show_msg : null; //calls function after message is displayed
-
+        //status bar label
+        var statusSpan = tf_CreateElm(
+                'span', ['id',this.prfxStatusSpan+this.id]);
+        //preceding text
+        var statusSpanText = tf_CreateElm(
+                'span', ['id',this.prfxStatusTxt+this.id]);
+        statusSpanText.appendChild(tf_CreateText(this.statusBarText));
+        //calls function before message is displayed
+        this.onBeforeShowMsg = tf_IsFn(f.on_before_show_msg) ?
+            f.on_before_show_msg : null;
+        //calls function after message is displayed
+        this.onAfterShowMsg = tf_IsFn(f.on_after_show_msg) ?
+            f.on_after_show_msg : null;
 
         // target element container
-        if(this.statusBarTgtId==null) this.SetTopDiv();
-        var targetEl = ( this.statusBarTgtId==null ) ? this.lDiv : tf_Id( this.statusBarTgtId );
+        if(!this.statusBarTgtId){
+            this.SetTopDiv();
+        }
+        var targetEl = (!this.statusBarTgtId) ?
+            this.lDiv : tf_Id(this.statusBarTgtId);
 
-        if(this.statusBarDiv && tf_isIE)
+        if(this.statusBarDiv && tf_isIE){
             this.statusBarDiv.outerHTML = '';
+        }
 
-        if( this.statusBarTgtId==null )
-        {//default container: 'lDiv'
+        //default container: 'lDiv'
+        if(!this.statusBarTgtId){
             statusDiv.appendChild(statusSpanText);
             statusDiv.appendChild(statusSpan);
             targetEl.appendChild(statusDiv);
-        }
-        else
-        {// custom container, no need to append statusDiv
+        } else {
+            // custom container, no need to append statusDiv
             targetEl.appendChild(statusSpanText);
             targetEl.appendChild(statusSpan);
         }
@@ -3811,101 +3827,114 @@ TF.prototype = {
         this.statusBarSpanText = tf_Id( this.prfxStatusTxt+this.id );
     },
 
-    RemoveStatusBar: function()
     /*====================================================
         - Removes status bar div
     =====================================================*/
-    {
-        if(!this.hasGrid) return;
-        if(this.statusBarDiv)
-        {
-            this.statusBarDiv.innerHTML = '';
-            this.statusBarDiv.parentNode.removeChild(
-                this.statusBarDiv
-            );
-            this.statusBarSpan = null;
-            this.statusBarSpanText = null;
-            this.statusBarDiv = null;
+    RemoveStatusBar: function(){
+        if(!this.hasGrid && !this.statusBarDiv){
+            return;
         }
+
+        this.statusBarDiv.innerHTML = '';
+        this.statusBarDiv.parentNode.removeChild(this.statusBarDiv);
+        this.statusBarSpan = null;
+        this.statusBarSpanText = null;
+        this.statusBarDiv = null;
     },
 
-    StatusMsg: function(t)
     /*====================================================
         - sets status messages
     =====================================================*/
-    {
-        if(t==undefined) this.StatusMsg('');
-        if(this.status) this.WinStatusMsg(t);
-        if(this.statusBar) this.StatusBarMsg(t);
+    StatusMsg: function(t){
+        if(!t){
+            this.StatusMsg('');
+        }
+        if(this.status){ this.WinStatusMsg(t); }
+        if(this.statusBar){ this.StatusBarMsg(t); }
     },
 
-    WinStatusMsg: function(t)
     /*====================================================
         - sets window status messages
     =====================================================*/
-    {
-        if(!this.status) return;
+    WinStatusMsg: function(t){
+        if(!this.status){
+            return;
+        }
         if(this.onBeforeShowMsg){ this.onBeforeShowMsg.call(null, this, t); }
         window.status = t;
         if(this.onAfterShowMsg){ this.onAfterShowMsg.call(null, this, t); }
     },
 
-    StatusBarMsg: function(t)
     /*====================================================
         - sets status bar messages
     =====================================================*/
-    {
-        if(!this.statusBar || !this.statusBarSpan) return;
+    StatusBarMsg: function(t){
+        if(!this.statusBar || !this.statusBarSpan){
+            return;
+        }
         if(this.onBeforeShowMsg){ this.onBeforeShowMsg.call(null, this, t); }
         var o = this;
         function setMsg(){
             o.statusBarSpan.innerHTML = t;
             if(o.onAfterShowMsg){ o.onAfterShowMsg.call(null, o, t); }
         }
-        var d = (t=='') ? (this.statusBarCloseDelay) : 1;
-        window.setTimeout(setMsg,d);
+        var d = t==='' ? this.statusBarCloseDelay : 1;
+        window.setTimeout(setMsg, d);
     },
 
-    SetRowsCounter: function()
     /*====================================================
         - Generates rows counter label
     =====================================================*/
-    {
-        if(!this.hasGrid && !this.isFirstLoad) return;
-        if( this.rowsCounterSpan!=null ) return;
+    SetRowsCounter: function(){
+        if((!this.hasGrid && !this.isFirstLoad) || this.rowsCounterSpan){
+            return;
+        }
         var f = this.fObj;
-        this.rowsCounterTgtId =     f.rows_counter_target_id!=undefined //id of custom container element
-                                    ? f.rows_counter_target_id : null;
-        this.rowsCounterDiv =       null; //element containing tot nb rows
-        this.rowsCounterSpan =      null; //element containing tot nb rows label
-        this.rowsCounterText =      f.rows_counter_text!=undefined ? f.rows_counter_text : 'Rows: '; //defines rows counter text
-        this.fromToTextSeparator =  f.from_to_text_separator!=undefined ? f.from_to_text_separator : '-';
-        this.overText =             f.over_text!=undefined ? f.over_text : ' / ';
-        this.totRowsCssClass =      f.tot_rows_css_class!=undefined ? f.tot_rows_css_class : 'tot'; //defines css class rows counter
-        this.onBeforeRefreshCounter = tf_IsFn(f.on_before_refresh_counter) ? f.on_before_refresh_counter : null; //callback raised before counter is refreshed
-        this.onAfterRefreshCounter = tf_IsFn(f.on_after_refresh_counter) ? f.on_after_refresh_counter : null; //callback raised after counter is refreshed
-        var countDiv = tf_CreateElm( 'div',['id',this.prfxCounter+this.id] ); //rows counter container
+        //id of custom container element
+        this.rowsCounterTgtId = f.rows_counter_target_id || null;
+        //element containing tot nb rows
+        this.rowsCounterDiv = null;
+        //element containing tot nb rows label
+        this.rowsCounterSpan = null;
+        //defines rows counter text
+        this.rowsCounterText = f.rows_counter_text || 'Rows: ';
+        this.fromToTextSeparator = f.from_to_text_separator || '-';
+        this.overText = f.over_text || ' / ';
+        //defines css class rows counter
+        this.totRowsCssClass = f.tot_rows_css_class || 'tot';
+        //callback raised before counter is refreshed
+        this.onBeforeRefreshCounter = tf_IsFn(f.on_before_refresh_counter) ?
+            f.on_before_refresh_counter : null;
+        //callback raised after counter is refreshed
+        this.onAfterRefreshCounter = tf_IsFn(f.on_after_refresh_counter) ?
+            f.on_after_refresh_counter : null;
+        //rows counter container
+        var countDiv = tf_CreateElm('div', ['id',this.prfxCounter+this.id]);
         countDiv.className = this.totRowsCssClass;
-        var countSpan = tf_CreateElm( 'span',['id',this.prfxTotRows+this.id] ); //rows counter label
-        var countText = tf_CreateElm( 'span',['id',this.prfxTotRowsTxt+this.id] );
-        countText.appendChild( tf_CreateText(this.rowsCounterText) );
+        //rows counter label
+        var countSpan = tf_CreateElm('span',['id',this.prfxTotRows+this.id]);
+        var countText = tf_CreateElm('span',['id',this.prfxTotRowsTxt+this.id]);
+        countText.appendChild(tf_CreateText(this.rowsCounterText));
 
         // counter is added to defined element
-        if(this.rowsCounterTgtId==null) this.SetTopDiv();
-        var targetEl = ( this.rowsCounterTgtId==null ) ? this.lDiv : tf_Id( this.rowsCounterTgtId );
+        if(!this.rowsCounterTgtId){
+            this.SetTopDiv();
+        }
+        var targetEl = !this.rowsCounterTgtId ?
+                this.lDiv : tf_Id( this.rowsCounterTgtId );
 
         //IE only: clears all for sure
-        if(this.rowsCounterDiv && tf_isIE)
+        if(this.rowsCounterDiv && tf_isIE){
             this.rowsCounterDiv.outerHTML = '';
-
-        if( this.rowsCounterTgtId==null )
-        {//default container: 'lDiv'
+        }
+        //default container: 'lDiv'
+        if(!this.rowsCounterTgtId){
             countDiv.appendChild(countText);
             countDiv.appendChild(countSpan);
             targetEl.appendChild(countDiv);
         }
-        else
-        {// custom container, no need to append statusDiv
+        else{
+            //custom container, no need to append statusDiv
             targetEl.appendChild(countText);
             targetEl.appendChild(countSpan);
         }
@@ -3915,22 +3944,24 @@ TF.prototype = {
         this.RefreshNbRows();
     },
 
-    RemoveRowsCounter: function()
     /*====================================================
         - Removes rows counter label
     =====================================================*/
-    {
-        if(!this.hasGrid) return;
-        if( this.rowsCounterSpan==null ) return;
+    RemoveRowsCounter: function(){
+        if(!this.hasGrid){
+            return;
+        }
+        if(!this.rowsCounterSpan){
+            return;
+        }
 
-        if(this.rowsCounterTgtId==null && this.rowsCounterDiv)
-        {
+        if(!this.rowsCounterTgtId && this.rowsCounterDiv){
             //IE only: clears all for sure
-            if(tf_isIE) this.rowsCounterDiv.outerHTML = '';
-            else
-                this.rowsCounterDiv.parentNode.removeChild(
-                    this.rowsCounterDiv
-                );
+            if(tf_isIE){
+                this.rowsCounterDiv.outerHTML = '';
+            } else {
+                this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
+            }
         } else {
             tf_Id( this.rowsCounterTgtId ).innerHTML = '';
         }
@@ -3938,85 +3969,117 @@ TF.prototype = {
         this.rowsCounterDiv = null;
     },
 
-    RefreshNbRows: function(p)
     /*====================================================
         - Shows total number of filtered rows
     =====================================================*/
-    {
-        if(this.rowsCounterSpan == null) return;
-        if(this.onBeforeRefreshCounter) this.onBeforeRefreshCounter.call(null, this, this.rowsCounterSpan);
+    RefreshNbRows: function(p){
+        if(!this.rowsCounterSpan){
+            return;
+        }
+        if(this.onBeforeRefreshCounter){
+            this.onBeforeRefreshCounter.call(null, this, this.rowsCounterSpan);
+        }
         var totTxt;
-        if(!this.paging)
-        {
-            if(p!=undefined && p!='') totTxt=p;
-            else totTxt = (this.nbFilterableRows - this.nbHiddenRows - (this.hasVisibleRows ? this.visibleRows.length : 0) );
+        if(!this.paging){
+            if(p && p!==''){
+                totTxt=p;
+            } else{
+                totTxt = this.nbFilterableRows - this.nbHiddenRows -
+                    (this.hasVisibleRows ? this.visibleRows.length : 0);
+            }
         } else {
-            var paging_start_row = parseInt(this.startPagingRow)+((this.nbVisibleRows>0) ? 1 : 0);//paging start row
-            var paging_end_row = (paging_start_row+this.pagingLength)-1 <= this.nbVisibleRows
-                ? (paging_start_row+this.pagingLength)-1 : this.nbVisibleRows;
-            totTxt = paging_start_row+ this.fromToTextSeparator +paging_end_row+ this.overText +this.nbVisibleRows;
+            //paging start row
+            var paging_start_row = parseInt(this.startPagingRow,10) +
+                    ((this.nbVisibleRows>0) ? 1 : 0);
+            var paging_end_row = (paging_start_row+this.pagingLength)-1 <=
+                    this.nbVisibleRows ? paging_start_row+this.pagingLength-1 :
+                    this.nbVisibleRows;
+            totTxt = paging_start_row + this.fromToTextSeparator +
+                paging_end_row + this.overText + this.nbVisibleRows;
         }
         this.rowsCounterSpan.innerHTML = totTxt;
-        if(this.onAfterRefreshCounter) this.onAfterRefreshCounter.call(null, this, this.rowsCounterSpan, totTxt);
+        if(this.onAfterRefreshCounter){
+            this.onAfterRefreshCounter.call(
+                null, this, this.rowsCounterSpan, totTxt);
+        }
     },
 
-    SetWatermark: function(set)
     /*====================================================
         - inserts or removes input watermark
         - Params:
             - set: if true inserts watermark (boolean)
     =====================================================*/
-    {
-        if( !this.fltGrid ) return;
-        if(this.inpWatermark!=''){ //Not necessary if empty
-            var set = (set || set==undefined) ? true : false;
-            for(var i=0; i<this.fltIds.length; i++){
-                if(this['col'+i]!=this.fltTypeInp) continue; //only input type filters
-                var inpWatermark = (!this.isInpWatermarkArray ? this.inpWatermark : this.inpWatermark[i]);
-                if(this.GetFilterValue(i) == (set ? '' : inpWatermark)){
-                    this.SetFilterValue(i,(!set ? '' : inpWatermark));
-                    tf_AddClass(this.GetFilterElement(i), this.inpWatermarkCssClass);
-                }
+    SetWatermark: function(set){
+        if(!this.fltGrid && this.inpWatermark===''){
+            return;
+        }
+
+        set = set===undefined ? true : set;
+        for(var i=0; i<this.fltIds.length; i++){
+            //only input type filters
+            if(this['col'+i]!==this.fltTypeInp){
+                continue;
+            }
+            var inpWatermark = !this.isInpWatermarkArray ?
+                    this.inpWatermark : this.inpWatermark[i];
+            if(this.GetFilterValue(i)===(set ? '' : inpWatermark)){
+                this.SetFilterValue(i, (!set ? '' : inpWatermark));
+                tf_AddClass(
+                    this.GetFilterElement(i), this.inpWatermarkCssClass);
             }
         }
     },
 
-    SetGridLayout: function()
     /*====================================================
         - generates a grid with fixed headers
     =====================================================*/
-    {
-        if(!this.gridLayout) return;
+    SetGridLayout: function(){
+        if(!this.gridLayout){
+            return;
+        }
         var f = this.fObj;
-        this.gridWidth =            f.grid_width!=undefined ? f.grid_width : null; //defines grid width
-        this.gridHeight =           f.grid_height!=undefined ? f.grid_height : null; //defines grid height
-        this.gridMainContCssClass = f.grid_cont_css_class!=undefined //defines css class for main container
-                                        ? f.grid_cont_css_class : 'grd_Cont';
-        this.gridContCssClass =     f.grid_tbl_cont_css_class!=undefined //defines css class for div containing table
-                                        ? f.grid_tbl_cont_css_class : 'grd_tblCont';
-        this.gridHeadContCssClass = f.grid_tblHead_cont_css_class!=undefined //defines css class for div containing headers' table
-                                        ? f.grid_tblHead_cont_css_class : 'grd_headTblCont';
-        this.gridInfDivCssClass =   f.grid_inf_grid_css_class!=undefined //defines css class for div containing rows counter, paging etc.
-                                        ? f.grid_inf_grid_css_class : 'grd_inf';
-        this.gridHeadRowIndex =     f.grid_headers_row_index!=undefined //defines which row contains column headers
-                                        ? f.grid_headers_row_index : 0;
-        this.gridHeadRows =         f.grid_headers_rows!=undefined //array of headers row indexes to be placed in header table
-                                        ? f.grid_headers_rows : [0];
-        this.gridEnableFilters =    f.grid_enable_default_filters!=undefined
-                                        ? f.grid_enable_default_filters : true; //generate filters in table headers
-        this.gridDefaultColWidth =  f.grid_default_col_width!=undefined
-                                        ? f.grid_default_col_width : '100px'; //default col width
-        this.gridEnableColResizer = f.grid_enable_cols_resizer!=undefined
-                                        ? f.grid_enable_cols_resizer : true; //enables/disables columns resizer
-        this.gridColResizerPath =   f.grid_cont_col_resizer_path!=undefined //defines col resizer script path
-                                        ? f.grid_cont_col_resizer_path : this.basePath+'TFExt_ColsResizer/TFExt_ColsResizer.js';
-        if(!this.hasColWidth){// in case column widths are not set default width 100px
+        //defines grid width
+        this.gridWidth = f.grid_width || null;
+        //defines grid height
+        this.gridHeight = f.grid_height || null;
+        //defines css class for main container
+        this.gridMainContCssClass = f.grid_cont_css_class || 'grd_Cont';
+        //defines css class for div containing table
+        this.gridContCssClass = f.grid_tbl_cont_css_class || 'grd_tblCont';
+        //defines css class for div containing headers' table
+        this.gridHeadContCssClass = f.grid_tblHead_cont_css_class ||
+            'grd_headTblCont';
+        //defines css class for div containing rows counter, paging etc.
+        this.gridInfDivCssClass = f.grid_inf_grid_css_class || 'grd_inf';
+        //defines which row contains column headers
+        this.gridHeadRowIndex = f.grid_headers_row_index || 0;
+        //array of headers row indexes to be placed in header table
+        this.gridHeadRows = f.grid_headers_rows || [0];
+        //generate filters in table headers
+        this.gridEnableFilters = f.grid_enable_default_filters!==undefined ?
+            f.grid_enable_default_filters : true;
+        //default col width
+        this.gridDefaultColWidth = f.grid_default_col_width || '100px';
+        //enables/disables columns resizer
+        this.gridEnableColResizer = f.grid_enable_cols_resizer!==undefined ?
+            f.grid_enable_cols_resizer : true;
+        //defines col resizer script path
+        this.gridColResizerPath = f.grid_cont_col_resizer_path ||
+            this.basePath+'TFExt_ColsResizer/TFExt_ColsResizer.js';
+
+        // in case column widths are not set default width 100px
+        if(!this.hasColWidth){
             this.colWidth = [];
             for(var k=0; k<this.nbCells; k++){
-                var colW, cell = this.tbl.rows[this.gridHeadRowIndex].cells[k];
-                if(cell.width!='') colW = cell.width;
-                else if(cell.style.width!='') colW = parseInt(cell.style.width);
-                else colW = this.gridDefaultColWidth;
+                var colW,
+                    cell = this.tbl.rows[this.gridHeadRowIndex].cells[k];
+                if(cell.width!==''){
+                    colW = cell.width;
+                } else if(cell.style.width!==''){
+                    colW = parseInt(cell.style.width);
+                } else {
+                    colW = this.gridDefaultColWidth;
+                }
                 this.colWidth[k] = colW;
             }
             this.hasColWidth = true;
@@ -4024,37 +4087,53 @@ TF.prototype = {
         this.SetColWidths(this.gridHeadRowIndex);
 
         var tblW;//initial table width
-        if(this.tbl.width!='') tblW = this.tbl.width;
-        else if(this.tbl.style.width!='') tblW = parseInt(this.tbl.style.width);
-        else tblW = this.tbl.clientWidth;
+        if(this.tbl.width!==''){
+            tblW = this.tbl.width;
+        }
+        else if(this.tbl.style.width!==''){
+            tblW = parseInt(this.tbl.style.width);
+        } else {
+            tblW = this.tbl.clientWidth;
+        }
 
         //Main container: it will contain all the elements
-        this.tblMainCont = tf_CreateElm('div',['id', this.prfxMainTblCont + this.id]);
+        this.tblMainCont = tf_CreateElm(
+            'div',['id', this.prfxMainTblCont + this.id]);
         this.tblMainCont.className = this.gridMainContCssClass;
-        if(this.gridWidth) this.tblMainCont.style.width = this.gridWidth;
+        if(this.gridWidth){
+            this.tblMainCont.style.width = this.gridWidth;
+        }
         this.tbl.parentNode.insertBefore(this.tblMainCont, this.tbl);
 
         //Table container: div wrapping content table
         this.tblCont = tf_CreateElm('div',['id', this.prfxTblCont + this.id]);
         this.tblCont.className = this.gridContCssClass;
-        if(this.gridWidth) this.tblCont.style.width = this.gridWidth;
-        if(this.gridHeight) this.tblCont.style.height = this.gridHeight;
+        if(this.gridWidth){
+            this.tblCont.style.width = this.gridWidth;
+        }
+        if(this.gridHeight){
+            this.tblCont.style.height = this.gridHeight;
+        }
         this.tbl.parentNode.insertBefore(this.tblCont, this.tbl);
         var t = this.tbl.parentNode.removeChild(this.tbl);
         this.tblCont.appendChild(t);
 
         //In case table width is expressed in %
-        if(this.tbl.style.width == '')
-            this.tbl.style.width = (this.__containsStr('%',tblW)
-                                    ? this.tbl.clientWidth : tblW) + 'px';
+        if(this.tbl.style.width === ''){
+            this.tbl.style.width = (this.__containsStr('%', tblW) ?
+                this.tbl.clientWidth : tblW) + 'px';
+        }
 
         var d = this.tblCont.parentNode.removeChild(this.tblCont);
         this.tblMainCont.appendChild(d);
 
         //Headers table container: div wrapping headers table
-        this.headTblCont = tf_CreateElm('div',['id', this.prfxHeadTblCont + this.id]);
+        this.headTblCont = tf_CreateElm(
+            'div',['id', this.prfxHeadTblCont + this.id]);
         this.headTblCont.className = this.gridHeadContCssClass;
-        if(this.gridWidth) this.headTblCont.style.width = this.gridWidth;
+        if(this.gridWidth){
+            this.headTblCont.style.width = this.gridWidth;
+        }
 
         //Headers table
         this.headTbl = tf_CreateElm('table',['id', this.prfxHeadTbl + this.id]);
@@ -4065,11 +4144,11 @@ TF.prototype = {
         var hRow = this.tbl.rows[this.gridHeadRowIndex];
         var sortTriggers = [];
         for(var n=0; n<this.nbCells; n++){
-            var cell = hRow.cells[n];
-            var thId = cell.getAttribute('id');
-            if(!thId || thId==''){
-                thId = this.prfxGridTh+n+'_'+this.id
-                cell.setAttribute('id', thId);
+            var c = hRow.cells[n];
+            var thId = c.getAttribute('id');
+            if(!thId || thId===''){
+                thId = this.prfxGridTh+n+'_'+this.id;
+                c.setAttribute('id', thId);
             }
             sortTriggers.push(thId);
         }
@@ -4078,30 +4157,33 @@ TF.prototype = {
         var filtersRow = tf_CreateElm('tr');
         if(this.gridEnableFilters && this.fltGrid){
             this.externalFltTgtIds = [];
-            for(var j=0; j<this.nbCells; j++)
-            {
+            for(var j=0; j<this.nbCells; j++){
                 var fltTdId = this.prfxFlt+j+ this.prfxGridFltTd +this.id;
-                var c = tf_CreateElm(this.fltCellTag, ['id', fltTdId]);
-                filtersRow.appendChild(c);
+                var cl = tf_CreateElm(this.fltCellTag, ['id', fltTdId]);
+                filtersRow.appendChild(cl);
                 this.externalFltTgtIds[j] = fltTdId;
             }
         }
         //Headers row are moved from content table to headers table
-        for(var i=0; i<this.gridHeadRows.length; i++)
-        {
+        for(var i=0; i<this.gridHeadRows.length; i++){
             var headRow = this.tbl.rows[this.gridHeadRows[0]];
             tH.appendChild(headRow);
         }
         this.headTbl.appendChild(tH);
-        if(this.filtersRowIndex == 0) tH.insertBefore(filtersRow,hRow);
-        else tH.appendChild(filtersRow);
+        if(this.filtersRowIndex === 0){
+            tH.insertBefore(filtersRow,hRow);
+        } else {
+            tH.appendChild(filtersRow);
+        }
 
         this.headTblCont.appendChild(this.headTbl);
         this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);
 
         //THead needs to be removed in content table for sort feature
         var thead = tf_Tag(this.tbl,'thead');
-        if( thead.length>0 ) this.tbl.removeChild(thead[0]);
+        if(thead.length>0){
+            this.tbl.removeChild(thead[0]);
+        }
 
         //Headers table style
         this.headTbl.style.width = this.tbl.style.width;
@@ -4117,7 +4199,9 @@ TF.prototype = {
         this.SetColWidths();
 
         this.tbl.style.width = '';
-        if(tf_isIE || tf_isIE7) this.headTbl.style.width = '';
+        if(tf_isIE || tf_isIE7){
+            this.headTbl.style.width = '';
+        }
 
         //scroll synchronisation
         var o = this; //TF object
@@ -4127,24 +4211,22 @@ TF.prototype = {
             //New pointerX calc taking into account scrollLeft
             if(!o.isPointerXOverwritten){
                 try{
-                    TF.Evt.pointerX = function(e)
-                    {
+                    TF.Evt.pointerX = function(e){
                         e = e || window.event;
-                        var scrollLeft = tf_StandardBody().scrollLeft + _o.scrollLeft;
-                        return (e.pageX + _o.scrollLeft) || (e.clientX + scrollLeft);
-                    }
+                        var scrollLeft = tf_StandardBody().scrollLeft +
+                                _o.scrollLeft;
+                        return (e.pageX + _o.scrollLeft) ||
+                            (e.clientX + scrollLeft);
+                    };
                     o.isPointerXOverwritten = true;
-                } catch(ee) {
+                } catch(err) {
                     o.isPointerXOverwritten = false;
                 }
             }
-        }
-
-        /*** Default behaviours activation ***/
-        var f = this.fObj==undefined ? {} : this.fObj;
+        };
 
         //Sort is enabled if not specified in config object
-        if(f.sort != false){
+        if(f.sort !== false){
             this.sort = true;
             this.sortConfig.asyncSort = true;
             this.sortConfig.triggerIds = sortTriggers;
@@ -4156,15 +4238,18 @@ TF.prototype = {
                     name:['ColumnsResizer_'+this.id],
                     src:[this.gridColResizerPath],
                     description:['Columns Resizing'],
-                    initialize:[function(o){o.SetColsResizer('ColumnsResizer_'+o.id);}]
-                }
+                    initialize:[function(o){
+                        o.SetColsResizer('ColumnsResizer_'+o.id);}]
+                };
                 this.hasExtensions = true;
             } else {
-                if(!this.__containsStr('colsresizer',this.extensions.src.toString().tf_LCase())){
+                if(!this.__containsStr(
+                    'colsresizer', this.extensions.src.toString().tf_LCase())){
                     this.extensions.name.push('ColumnsResizer_'+this.id);
                     this.extensions.src.push(this.gridColResizerPath);
                     this.extensions.description.push('Columns Resizing');
-                    this.extensions.initialize.push(function(o){o.SetColsResizer('ColumnsResizer_'+o.id);});
+                    this.extensions.initialize.push(function(o){
+                        o.SetColsResizer('ColumnsResizer_'+o.id);});
                 }
             }
         }
@@ -4176,42 +4261,50 @@ TF.prototype = {
         f.col_enable_text_ellipsis = false;
 
         //Cols generation for all browsers excepted IE<=7
-        o.tblHasColTag = (tf_Tag(o.tbl,'col').length > 0) ? true : false;
+        o.tblHasColTag = tf_Tag(o.tbl,'col').length > 0 ? true : false;
         if(!tf_isIE && !tf_isIE7){
-            //Col elements are enough to keep column widths after sorting and filtering
-            function createColTags(o)
-            {
-                if(!o) return;
-                for(var k=(o.nbCells-1); k>=0; k--)
-                {
+            //Col elements are enough to keep column widths after sorting and
+            //filtering
+            function createColTags(o){
+                if(!o){
+                    return;
+                }
+                for(var k=(o.nbCells-1); k>=0; k--){
                     var col = tf_CreateElm( 'col', ['id', o.id+'_col_'+k]);
-                    o.tbl.firstChild.parentNode.insertBefore(col,o.tbl.firstChild);
+                    o.tbl.firstChild.parentNode.insertBefore(
+                        col,o.tbl.firstChild);
                     col.style.width = o.colWidth[k];
                     o.gridColElms[k] = col;
                 }
                 o.tblHasColTag = true;
             }
-            if(!o.tblHasColTag) createColTags(o);
-            else{
+            if(!o.tblHasColTag){
+                createColTags(o);
+            } else {
                 var cols = tf_Tag(o.tbl,'col');
-                for(var i=0; i<o.nbCells; i++){
-                    cols[i].setAttribute('id', o.id+'_col_'+i);
-                    cols[i].style.width = o.colWidth[i];
-                    o.gridColElms.push(cols[i]);
+                for(var ii=0; ii<o.nbCells; ii++){
+                    cols[ii].setAttribute('id', o.id+'_col_'+ii);
+                    cols[ii].style.width = o.colWidth[ii];
+                    o.gridColElms.push(cols[ii]);
                 }
             }
         }
 
-        //IE <= 7 needs an additional row for widths as col element width is not enough...
+        //IE <= 7 needs an additional row for widths as col element width is
+        //not enough...
         if(tf_isIE || tf_isIE7){
-            var tbody = tf_Tag(o.tbl,'tbody'), r;
-            if( tbody.length>0 ) r = tbody[0].insertRow(0);
-            else r = o.tbl.insertRow(0);
+            var tbody = tf_Tag(o.tbl,'tbody'),
+                r;
+            if( tbody.length>0 ){
+                r = tbody[0].insertRow(0);
+            } else{
+                r = o.tbl.insertRow(0);
+            }
             r.style.height = '0px';
-            for(var i=0; i<o.nbCells; i++){
-                var col = tf_CreateElm('td', ['id', o.id+'_col_'+i]);
-                col.style.width = o.colWidth[i];
-                o.tbl.rows[1].cells[i].style.width = '';
+            for(var x=0; x<o.nbCells; x++){
+                var col = tf_CreateElm('td', ['id', o.id+'_col_'+x]);
+                col.style.width = o.colWidth[x];
+                o.tbl.rows[1].cells[x].style.width = '';
                 r.appendChild(col);
                 o.gridColElms.push(col);
             }
@@ -4220,27 +4313,37 @@ TF.prototype = {
             o.leadColWidthsRow = o.tbl.rows[0];
             o.leadColWidthsRow.setAttribute('validRow','false');
 
-            var beforeSortFn = tf_IsFn(f.on_before_sort) ? f.on_before_sort : null;
+            var beforeSortFn = tf_IsFn(f.on_before_sort) ?
+                f.on_before_sort : null;
             f.on_before_sort = function(o,colIndex){
                 o.leadColWidthsRow.setAttribute('validRow','false');
-                if(beforeSortFn!=null) beforeSortFn.call(null,o,colIndex);
-            }
+                if(beforeSortFn){
+                    beforeSortFn.call(null,o,colIndex);
+                }
+            };
 
             var afterSortFn = tf_IsFn(f.on_after_sort) ? f.on_after_sort : null;
             f.on_after_sort = function(o,colIndex){
-                if(o.leadColWidthsRow.rowIndex != 0){
+                if(o.leadColWidthsRow.rowIndex !== 0){
                     var r = o.leadColWidthsRow;
-                    if( tbody.length>0 )
+                    if(tbody.length>0){
                         tbody[0].moveRow(o.leadColWidthsRow.rowIndex, 0);
-                    else o.tbl.moveRow(o.leadColWidthsRow.rowIndex, 0);
+                    } else {
+                        o.tbl.moveRow(o.leadColWidthsRow.rowIndex, 0);
+                    }
                 }
-                if(afterSortFn!=null) afterSortFn.call(null,o,colIndex);
-            }
+                if(afterSortFn){
+                    afterSortFn.call(null,o,colIndex);
+                }
+            };
         }
 
-        var afterColResizedFn = tf_IsFn(f.on_after_col_resized) ? f.on_after_col_resized : null;
+        var afterColResizedFn = tf_IsFn(f.on_after_col_resized) ?
+            f.on_after_col_resized : null;
         f.on_after_col_resized = function(o,colIndex){
-            if(colIndex==undefined) return;
+            if(!colIndex){
+                return;
+            }
             var w = o.crWColsRow.cells[colIndex].style.width;
             var col = o.gridColElms[colIndex];
             col.style.width = w;
@@ -4248,26 +4351,32 @@ TF.prototype = {
             var thCW = o.crWColsRow.cells[colIndex].clientWidth;
             var tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
 
-            if(tf_isIE || tf_isIE7)
+            if(tf_isIE || tf_isIE7){
                 o.tbl.style.width = o.headTbl.clientWidth+'px';
+            }
 
-            if(thCW != tdCW && !tf_isIE && !tf_isIE7)
+            if(thCW != tdCW && !tf_isIE && !tf_isIE7){
                 o.headTbl.style.width = o.tbl.clientWidth+'px';
+            }
 
-            if(afterColResizedFn!=null) afterColResizedFn.call(null,o,colIndex);
-        }
+            if(afterColResizedFn){
+                afterColResizedFn.call(null,o,colIndex);
+            }
+        };
 
-        if(this.tbl.clientWidth != this.headTbl.clientWidth)
+        if(this.tbl.clientWidth !== this.headTbl.clientWidth){
             this.tbl.style.width = this.headTbl.clientWidth+'px';
+        }
 
     },
 
-    RemoveGridLayout: function()
     /*====================================================
         - removes the grid layout
     =====================================================*/
-    {
-        if(!this.gridLayout) return;
+    RemoveGridLayout: function(){
+        if(!this.gridLayout){
+            return;
+        }
         var t = this.tbl.parentNode.removeChild(this.tbl);
         this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);
         this.tblMainCont.parentNode.removeChild( this.tblMainCont );
@@ -4281,34 +4390,45 @@ TF.prototype = {
         this.tbl = tf_Id(this.id); //needed to keep reference
     },
 
-    SetPopupFilterIcons: function()
     /*====================================================
         - generates popup filters div
     =====================================================*/
-    {
-        if(!this.popUpFilters) return;
-        this.isExternalFlt = true; //external filters behaviour is enabled
+    SetPopupFilterIcons: function(){
+        if(!this.popUpFilters){
+            return;
+        }
+        //external filters behaviour is enabled
+        this.isExternalFlt = true;
         var f = this.fObj;
-        this.popUpImgFlt =          f.popup_filters_image!=undefined //filter icon path
-                                        ? f.popup_filters_image : this.themesPath+'icn_filter.gif';
-        this.popUpImgFltActive =    f.popup_filters_image_active!=undefined //active filter icon path
-                                        ? f.popup_filters_image_active : this.themesPath+'icn_filterActive.gif';
-        this.popUpImgFltHtml =      f.popup_filters_image_html!=undefined
-                                        ? f.popup_filters_image_html : '<img src="'+ this.popUpImgFlt +'" alt="Column filter" />';
-        this.popUpDivCssClass =     f.popup_div_css_class!=undefined //defines css class for popup div containing filter
-                                        ? f.popup_div_css_class : 'popUpFilter';
-        this.onBeforePopUpOpen =    tf_IsFn(f.on_before_popup_filter_open) //callback function before popup filtes is opened
-                                        ? f.on_before_popup_filter_open : null;
-        this.onAfterPopUpOpen =     tf_IsFn(f.on_after_popup_filter_open) //callback function after popup filtes is opened
-                                        ? f.on_after_popup_filter_open : null;
-        this.onBeforePopUpClose =   tf_IsFn(f.on_before_popup_filter_close) //callback function before popup filtes is closed
-                                        ? f.on_before_popup_filter_close : null;
-        this.onAfterPopUpClose =    tf_IsFn(f.on_after_popup_filter_close) //callback function after popup filtes is closed
-                                        ? f.on_after_popup_filter_close : null;
+        //filter icon path
+        this.popUpImgFlt = f.popup_filters_image ||
+            this.themesPath+'icn_filter.gif';
+        //active filter icon path
+        this.popUpImgFltActive = f.popup_filters_image_active ||
+            this.themesPath+'icn_filterActive.gif';
+        this.popUpImgFltHtml = f.popup_filters_image_html ||
+            '<img src="'+ this.popUpImgFlt +'" alt="Column filter" />';
+        //defines css class for popup div containing filter
+        this.popUpDivCssClass = f.popup_div_css_class || 'popUpFilter';
+        //callback function before popup filtes is opened
+        this.onBeforePopUpOpen = tf_IsFn(f.on_before_popup_filter_open) ?
+            f.on_before_popup_filter_open : null;
+        //callback function after popup filtes is opened
+        this.onAfterPopUpOpen = tf_IsFn(f.on_after_popup_filter_open) ?
+            f.on_after_popup_filter_open : null;
+        //callback function before popup filtes is closed
+        this.onBeforePopUpClose = tf_IsFn(f.on_before_popup_filter_close) ?
+            f.on_before_popup_filter_close : null;
+        //callback function after popup filtes is closed
+        this.onAfterPopUpClose = tf_IsFn(f.on_after_popup_filter_close) ?
+            f.on_after_popup_filter_close : null;
         this.externalFltTgtIds = [];
-        this.popUpFltSpans = []; //stores filters spans
-        this.popUpFltImgs = []; //stores filters icons
-        this.popUpFltElms = !this.popUpFltElmCache ? [] : this.popUpFltElmCache; //stores filters containers
+        //stores filters spans
+        this.popUpFltSpans = [];
+        //stores filters icons
+        this.popUpFltImgs = [];
+        //stores filters containers
+        this.popUpFltElms = this.popUpFltElmCache || [];
         this.popUpFltAdjustToContainer = true;
 
         var o = this;
