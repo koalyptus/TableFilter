@@ -706,8 +706,8 @@ function TF(id) {
             loadextensions: 'LoadExtensions',
             loadthemes: 'LoadThemes'
         },
-        getKeyCode: function(e){
-            return e.charCode ? evt.charCode :
+        getKeyCode: function(evt){
+            return evt.charCode ? evt.charCode :
                 (evt.keyCode ? evt.keyCode: (evt.which ? evt.which : 0));
         },
         /*====================================================
@@ -3282,7 +3282,7 @@ TF.prototype = {
             - execute filtering (boolean)
     =====================================================*/
     __deferMultipleSelection: function(slc,index,filter){
-        if(slc.nodeName.tf_LCase() !== 'select'){
+        if(slc.nodeName.tf_LCase()!=='select'){
             return;
         }
         var doFilter = filter===undefined ? false : filter;
@@ -3290,7 +3290,7 @@ TF.prototype = {
         window.setTimeout(function(){
             slc.options[0].selected = false;
 
-            if(slc.options[index].value=='')
+            if(slc.options[index].value==='')
                 slc.options[index].selected = false;
             else
             slc.options[index].selected = true;
@@ -3298,99 +3298,127 @@ TF.prototype = {
         }, 0.1);
     },
 
-    __getCustomValues: function(colIndex)
     /*====================================================
         - Returns an array [[values],[texts]] with
         custom values for a given filter
         - Param: column index (integer)
     =====================================================*/
-    {
-        if(colIndex==undefined) return;
-        var isCustomSlc = (this.hasCustomSlcOptions  //custom select test
-                            && this.customSlcOptions.cols.tf_Has(colIndex));
-        if(!isCustomSlc) return;
+    __getCustomValues: function(colIndex){
+        if(!colIndex){
+            return;
+        }
+        //custom select test
+        var isCustomSlc = this.hasCustomSlcOptions &&
+                this.customSlcOptions.cols.tf_Has(colIndex);
+        if(!isCustomSlc){
+            return;
+        }
         var optTxt = [], optArray = [];
         var index = this.customSlcOptions.cols.tf_IndexByValue(colIndex);
         var slcValues = this.customSlcOptions.values[index];
         var slcTexts = this.customSlcOptions.texts[index];
         var slcSort = this.customSlcOptions.sorts[index];
-        for(var r=0; r<slcValues.length; r++)
-        {
+        for(var r=0; r<slcValues.length; r++){
             optArray.push(slcValues[r]);
-            if(slcTexts[r]!=undefined)
+            if(slcTexts[r]){
                 optTxt.push(slcTexts[r]);
-            else
+            } else {
                 optTxt.push(slcValues[r]);
+            }
         }
-        if(slcSort)
-        {
+        if(slcSort){
             optArray.sort();
             optTxt.sort();
         }
         return [optArray,optTxt];
     },
 
-    PopulateCheckList: function(colIndex, isExternal, extFltId)
-    {
+    PopulateCheckList: function(colIndex, isExternal, extFltId){
         this.EvtManager(
             this.Evt.name.populatechecklist,
             { slcIndex:colIndex, slcExternal:isExternal, slcId:extFltId }
         );
     },
 
-    _PopulateCheckList: function(colIndex, isExternal, extFltId)
     /*====================================================
         - populates checklist filters
     =====================================================*/
-    {
-        isExternal = (isExternal==undefined) ? false : isExternal;
+    _PopulateCheckList: function(colIndex, isExternal, extFltId){
+        isExternal = !isExternal ? false : isExternal;
         var divFltId = this.prfxCheckListDiv+colIndex+'_'+this.id;
-        if( tf_Id(divFltId)==null && !isExternal ) return;
-        if( tf_Id(extFltId)==null && isExternal ) return;
-        var flt = (!isExternal) ? this.checkListDiv[colIndex] : tf_Id(extFltId);
-        var ul = tf_CreateElm('ul',['id',this.fltIds[colIndex]],['colIndex',colIndex]);
+        if(!tf_Id(divFltId) && !isExternal){
+            return;
+        }
+        if(!tf_Id(extFltId) && isExternal){
+            return;
+        }
+        var flt = !isExternal ? this.checkListDiv[colIndex] : tf_Id(extFltId);
+        var ul = tf_CreateElm('ul',
+                ['id',this.fltIds[colIndex]], ['colIndex',colIndex]);
         ul.className = this.checkListCssClass;
         ul.onchange = this.Evt._OnCheckListChange;
         var o = this, row = this.tbl.rows;
         var optArray = [];
-        var isCustomSlc = (this.hasCustomSlcOptions  //custom select test
-                            && this.customSlcOptions.cols.tf_Has(colIndex));
-        var optTxt = []; //custom selects text
-        var activeFlt;
+        //custom select test
+        var isCustomSlc = (this.hasCustomSlcOptions &&
+                this.customSlcOptions.cols.tf_Has(colIndex));
+        //custom selects text
+        var optTxt = [],
+            activeFlt;
         if(this.refreshFilters && this.activeFilterId){
             activeFlt = this.activeFilterId.split('_')[0];
             activeFlt = activeFlt.split(this.prfxFlt)[1];
         }
 
-        var excludedOpts = null, filteredDataCol = null;
-        if(this.refreshFilters && this.disableExcludedOptions){ excludedOpts = []; filteredDataCol = []; }
+        var excludedOpts,
+            filteredDataCol;
+        if(this.refreshFilters && this.disableExcludedOptions){
+            excludedOpts = [];
+            filteredDataCol = [];
+        }
 
-        for(var k=this.refRow; k<this.nbRows; k++)
-        {
-            // always visible rows don't need to appear on selects as always valid
-            if( this.hasVisibleRows && this.visibleRows.tf_Has(k) && !this.paging )
+        for(var k=this.refRow; k<this.nbRows; k++){
+            // always visible rows don't need to appear on selects as always
+            // valid
+            if(this.hasVisibleRows && this.visibleRows.tf_Has(k) &&
+                !this.paging){
                 continue;
+            }
 
             var cells = row[k].cells;
             var ncells = cells.length;
 
-            if(ncells == this.nbCells && !isCustomSlc)
-            {// checks if row has exact cell #
-                for(var j=0; j<ncells; j++)
-                {// this loop retrieves cell data
-                    if((colIndex==j && (!this.refreshFilters || (this.refreshFilters && this.disableExcludedOptions))) ||
-                        (colIndex==j && this.refreshFilters && ((row[k].style.display == '' && !this.paging) ||
-                        (this.paging && ((activeFlt==undefined || activeFlt==colIndex ) ||(activeFlt!=colIndex && this.validRowsIndex.tf_Has(k))) ))))
-                    {
+            // checks if row has exact cell #
+            if(ncells == this.nbCells && !isCustomSlc){
+                // this loop retrieves cell data
+                for(var j=0; j<ncells; j++){
+                    if((colIndex===j && (!this.refreshFilters ||
+                        (this.refreshFilters && this.disableExcludedOptions)))||
+                        (colIndex===j && this.refreshFilters &&
+                        ((row[k].style.display === '' && !this.paging) ||
+                        (this.paging && ((!activeFlt || activeFlt===colIndex )||
+                        (activeFlt!=colIndex &&
+                            this.validRowsIndex.tf_Has(k))) )))){
                         var cell_data = this.GetCellData(j, cells[j]);
-                        var cell_string = cell_data.tf_MatchCase(this.matchCase);//V�ry P�ter's patch
+                        //V�ry P�ter's patch
+                        var cell_string =
+                                cell_data.tf_MatchCase(this.matchCase);
                         // checks if celldata is already in array
-                        if(!optArray.tf_Has(cell_string,this.matchCase)) optArray.push(cell_data);
-
+                        if(!optArray.tf_Has(cell_string,this.matchCase)){
+                            optArray.push(cell_data);
+                        }
+                        var filteredCol = filteredDataCol[j];
                         if(this.refreshFilters && this.disableExcludedOptions){
-                            if(!filteredDataCol[j]) filteredDataCol[j] = this.GetFilteredDataCol(j);
-                            if(!filteredDataCol[j].tf_Has(cell_string,this.matchCase)
-                                && !excludedOpts.tf_Has(cell_string,this.matchCase) && !this.isFirstLoad) excludedOpts.push(cell_data);
+                            if(!filteredCol){
+                                filteredDataCol[j] = this.GetFilteredDataCol(j);
+                            }
+                            if(!filteredCol.tf_Has(
+                                    cell_string,this.matchCase) &&
+                                !excludedOpts.tf_Has(
+                                    cell_string,this.matchCase) &&
+                                !this.isFirstLoad){
+                                excludedOpts.push(cell_data);
+                            }
                         }
                     }
                 }
@@ -3398,8 +3426,7 @@ TF.prototype = {
         }
 
         //Retrieves custom values
-        if(isCustomSlc)
-        {
+        if(isCustomSlc){
             var customValues = this.__getCustomValues(colIndex);
             optArray = customValues[0];
             optTxt = customValues[1];
@@ -3408,68 +3435,101 @@ TF.prototype = {
         if(this.sortSlc && !isCustomSlc){
             if (!this.matchCase){
                 optArray.sort(tf_IgnoreCaseSort);
-                if(excludedOpts) excludedOpts.sort(tf_IgnoreCaseSort);
-            } else { optArray.sort(); if(excludedOpts){ excludedOpts.sort(); }  }
+                if(excludedOpts){
+                    excludedOpts.sort(tf_IgnoreCaseSort);
+                }
+            } else {
+                optArray.sort();
+                if(excludedOpts){ excludedOpts.sort(); }
+            }
         }
-
-        if(this.sortNumAsc && this.sortNumAsc.tf_Has(colIndex))
-        {//asc sort
+        //asc sort
+        if(this.sortNumAsc && this.sortNumAsc.tf_Has(colIndex)){
             try{
                 optArray.sort( tf_NumSortAsc );
-                if(excludedOpts) excludedOpts.sort( tf_NumSortAsc );
-                if(isCustomSlc) optTxt.sort( tf_NumSortAsc );
+                if(excludedOpts){
+                    excludedOpts.sort( tf_NumSortAsc );
+                }
+                if(isCustomSlc){
+                    optTxt.sort( tf_NumSortAsc );
+                }
             } catch(e) {
                 optArray.sort(); if(excludedOpts){ excludedOpts.sort(); }
-                if(isCustomSlc) optTxt.sort();
+                if(isCustomSlc){
+                    optTxt.sort();
+                }
             }//in case there are alphanumeric values
         }
-        if(this.sortNumDesc && this.sortNumDesc.tf_Has(colIndex))
-        {//desc sort
+        //desc sort
+        if(this.sortNumDesc && this.sortNumDesc.tf_Has(colIndex)){
             try{
                 optArray.sort( tf_NumSortDesc );
-                if(excludedOpts) excludedOpts.sort( tf_NumSortDesc );
-                if(isCustomSlc) optTxt.sort( tf_NumSortDesc );
+                if(excludedOpts){
+                    excludedOpts.sort( tf_NumSortDesc );
+                }
+                if(isCustomSlc){
+                    optTxt.sort( tf_NumSortDesc );
+                }
             } catch(e) {
                 optArray.sort(); if(excludedOpts){ excludedOpts.sort(); }
-                if(isCustomSlc) optTxt.sort();
+                if(isCustomSlc){
+                    optTxt.sort();
+                }
             }//in case there are alphanumeric values
         }
 
         AddChecks(this.separator);
 
-        function AddTChecks()
-        {// adds 1st option
+        // adds 1st option
+        function AddTChecks(){
             var chkCt = 1;
-            var li0 = tf_CreateCheckItem(o.fltIds[colIndex]+'_0', '', o.displayAllText);
+            var li0 = tf_CreateCheckItem(
+                        o.fltIds[colIndex]+'_0', '', o.displayAllText);
             li0.className = o.checkListItemCssClass;
             ul.appendChild(li0);
-            li0.check.onclick = function(e){ o.__setCheckListValues(this); ul.onchange.call(null, e); };
-            if(!o.enableCheckListResetFilter) li0.style.display = 'none';
-
-            if(tf_isIE)
-            {//IE: label looses check capability
+            li0.check.onclick = function(e){
+                o.__setCheckListValues(this);
+                ul.onchange.call(null, e);
+            };
+            if(!o.enableCheckListResetFilter){
+                li0.style.display = 'none';
+            }
+            //IE: label looses check capability
+            if(tf_isIE){
                 li0.label.onclick = function(){ li0.check.click(); };
             }
 
             if(o.enableEmptyOption){
-                var li1 = tf_CreateCheckItem(o.fltIds[colIndex]+'_1', o.emOperator, o.emptyText);
+                var li1 = tf_CreateCheckItem(
+                        o.fltIds[colIndex]+'_1', o.emOperator, o.emptyText);
                 li1.className = o.checkListItemCssClass;
                 ul.appendChild(li1);
-                li1.check.onclick = function(e){ o.__setCheckListValues(this); ul.onchange.call(null, e); };
-                if(tf_isIE)
-                {//IE: label looses check capability
+                li1.check.onclick = function(e){
+                    o.__setCheckListValues(this);
+                    ul.onchange.call(null, e);
+                };
+                //IE: label looses check capability
+                if(tf_isIE){
                     li1.label.onclick = function(){ li1.check.click(); };
                 }
                 chkCt++;
             }
 
             if(o.enableNonEmptyOption){
-                var li2 = tf_CreateCheckItem(o.fltIds[colIndex]+'_2', o.nmOperator, o.nonEmptyText);
+                var li2 = tf_CreateCheckItem(
+                    o.fltIds[colIndex]+'_2',
+                    o.nmOperator,
+                    o.nonEmptyText
+                );
                 li2.className = o.checkListItemCssClass;
                 ul.appendChild(li2);
-                li2.check.onclick = function(e){ o.__setCheckListValues(this); ul.onchange.call(null, e); };
+                li2.check.onclick = function(e){
+                    o.__setCheckListValues(this);
+                    ul.onchange.call(null, e);
+                };
+                //IE: label looses check capability
                 if(tf_isIE)
-                {//IE: label looses check capability
+                {
                     li2.label.onclick = function(){ li2.check.click(); };
                 }
                 chkCt++;
@@ -3477,108 +3537,123 @@ TF.prototype = {
             return chkCt;
         }
 
-        function AddChecks(separator)
-        {
+        function AddChecks(separator){
             var chkCt = AddTChecks();
 
             var flts_values = [], fltArr = []; //remember grid values
-            var tmpVal = tf_CookieValueByIndex(o.fltsValuesCookie, colIndex, separator);
-            if(tmpVal != undefined && tmpVal.tf_Trim().length > 0){
-                if(o.hasCustomSlcOptions && o.customSlcOptions.cols.tf_Has(colIndex)){
+            var tmpVal = tf_CookieValueByIndex(
+                            o.fltsValuesCookie, colIndex, separator);
+            if(tmpVal && tmpVal.tf_Trim().length > 0){
+                if(o.hasCustomSlcOptions &&
+                    o.customSlcOptions.cols.tf_Has(colIndex)){
                     fltArr.push(tmpVal);
-                } else { fltArr = tmpVal.split(' '+o.orOperator+' '); }
+                } else {
+                    fltArr = tmpVal.split(' '+o.orOperator+' ');
+                }
             }
 
-            for(var y=0; y<optArray.length; y++)
-            {
+            for(var y=0; y<optArray.length; y++){
                 var val = optArray[y]; //item value
-                var lbl = (isCustomSlc) ? optTxt[y] : val; //item text
-                var li = tf_CreateCheckItem(o.fltIds[colIndex]+'_'+(y+chkCt), val, lbl);
+                var lbl = isCustomSlc ? optTxt[y] : val; //item text
+                var li = tf_CreateCheckItem(
+                            o.fltIds[colIndex]+'_'+(y+chkCt), val, lbl);
                 li.className = o.checkListItemCssClass;
                 if(o.refreshFilters && o.disableExcludedOptions &&
-                    excludedOpts.tf_Has(val.tf_MatchCase(o.matchCase), o.matchCase)){
+                    excludedOpts.tf_Has(
+                            val.tf_MatchCase(o.matchCase), o.matchCase)){
                         tf_AddClass(li, o.checkListItemDisabledCssClass);
                         li.check.disabled = true;
                         li.disabled = true;
-                } else
-                    li.check.onclick = function(e){ o.__setCheckListValues(this); ul.onchange.call(null, e); };
+                } else{
+                    li.check.onclick = function(e){
+                        o.__setCheckListValues(this);
+                        ul.onchange.call(null, e);
+                    };
+                }
                 ul.appendChild(li);
 
-                if(val=='') li.style.display = 'none'; //item is hidden
+                if(val===''){
+                    //item is hidden
+                    li.style.display = 'none';
+                }
 
                 /*** remember grid values ***/
-                if(o.rememberGridValues)
-                {
-                    if((o.hasCustomSlcOptions && o.customSlcOptions.cols.tf_Has(colIndex)
-                        && fltArr.toString().indexOf(val)!= -1)
-                        || fltArr.tf_Has(val.tf_MatchCase(o.matchCase),o.matchCase))
-                    {
+                if(o.rememberGridValues){
+                    if((o.hasCustomSlcOptions &&
+                        o.customSlcOptions.cols.tf_Has(colIndex) &&
+                        fltArr.toString().indexOf(val)!= -1) ||
+                        fltArr.tf_Has(
+                            val.tf_MatchCase(o.matchCase),o.matchCase)){
                         li.check.checked = true;
                         o.__setCheckListValues(li.check);
                     }
                 }
-
-                if(tf_isIE)
-                {//IE: label looses check capability
+                //IE: label looses check capability
+                if(tf_isIE){
                     li.label.onclick = function(){ this.firstChild.click(); };
                 }
             }
         }
 
-        if(this.fillSlcOnDemand) flt.innerHTML = '';
+        if(this.fillSlcOnDemand){
+            flt.innerHTML = '';
+        }
         flt.appendChild(ul);
         flt.setAttribute('filled','1');
 
         /*** remember grid values IE only, items remain un-checked ***/
-        if(o.rememberGridValues && tf_isIE)
-        {
+        if(o.rememberGridValues && tf_isIE){
             var slcIndexes = ul.getAttribute('indexes');
-            if(slcIndexes != null)
-            {
+            if(slcIndexes){
                 var indSplit = slcIndexes.split(',');//items indexes
-                for(var n=0; n<indSplit.length; n++)
-                {
-                    var cChk = tf_Id(this.fltIds[colIndex]+'_'+indSplit[n]); //checked item
-                    if(cChk) cChk.checked = true;
+                for(var n=0; n<indSplit.length; n++){
+                    //checked item
+                    var cChk = tf_Id(this.fltIds[colIndex]+'_'+indSplit[n]);
+                    if(cChk){
+                        cChk.checked = true;
+                    }
                 }
             }
         }
     },
 
-    __setCheckListValues: function(o)
     /*====================================================
         - Sets checked items information of a checklist
     =====================================================*/
-    {
-        if(o==null) return;
+    __setCheckListValues: function(o){
+        if(!o){
+            return;
+        }
         var chkValue = o.value; //checked item value
-        var chkIndex = parseInt(o.id.split('_')[2]);
+        var chkIndex = parseInt(o.id.split('_')[2], 10);
         var filterTag = 'ul', itemTag = 'li';
         var n = o;
 
         //ul tag search
-        while(n.nodeName.tf_LCase() != filterTag)
+        while(n.nodeName.tf_LCase()!==filterTag){
             n = n.parentNode;
+        }
 
-        if(n.nodeName.tf_LCase() != filterTag) return;
+        if(n.nodeName.tf_LCase()!==filterTag){
+            return;
+        }
 
         var li = n.childNodes[chkIndex];
         var colIndex = n.getAttribute('colIndex');
         var fltValue = n.getAttribute('value'); //filter value (ul tag)
         var fltIndexes = n.getAttribute('indexes'); //selected items (ul tag)
 
-        if(o.checked)
-        {
-            if(chkValue=='')
-            {//show all item
-                if((fltIndexes!=null && fltIndexes!=''))
-                {
-                    var indSplit = fltIndexes.split(this.separator);//items indexes
-                    for(var u=0; u<indSplit.length; u++)
-                    {//checked items loop
-                        var cChk = tf_Id(this.fltIds[colIndex]+'_'+indSplit[u]); //checked item
-                        if(cChk)
-                        {
+        if(o.checked){
+            //show all item
+            if(chkValue===''){
+                if((fltIndexes && fltIndexes!=='')){
+                    //items indexes
+                    var indSplit = fltIndexes.split(this.separator);
+                    //checked items loop
+                    for(var u=0; u<indSplit.length; u++){
+                        //checked item
+                        var cChk = tf_Id(this.fltIds[colIndex]+'_'+indSplit[u]);
+                        if(cChk){
                             cChk.checked = false;
                             tf_RemoveClass(
                                 n.childNodes[indSplit[u]],
@@ -3592,62 +3667,74 @@ TF.prototype = {
 
             } else {
                 fltValue = (fltValue) ? fltValue : '';
-                chkValue = (fltValue+' '+chkValue +' '+this.orOperator).tf_Trim();
+                chkValue = (fltValue+' '+chkValue+' '+this.orOperator)
+                            .tf_Trim();
                 chkIndex = fltIndexes + chkIndex + this.separator;
                 n.setAttribute('value', chkValue );
                 n.setAttribute('indexes', chkIndex);
                 //1st option unchecked
-                if(tf_Id(this.fltIds[colIndex]+'_0'))
+                if(tf_Id(this.fltIds[colIndex]+'_0')){
                     tf_Id(this.fltIds[colIndex]+'_0').checked = false;
+                }
             }
 
-            if(li.nodeName.tf_LCase() == itemTag)
-            {
+            if(li.nodeName.tf_LCase() === itemTag){
                 tf_RemoveClass(n.childNodes[0],this.checkListSlcItemCssClass);
                 tf_AddClass(li,this.checkListSlcItemCssClass);
             }
         } else { //removes values and indexes
-            if(chkValue!='')
-            {
-                var replaceValue = new RegExp(tf_RegexpEscape(chkValue+' '+this.orOperator));
+            if(chkValue!==''){
+                var replaceValue = new RegExp(
+                        tf_RegexpEscape(chkValue+' '+this.orOperator));
                 fltValue = fltValue.replace(replaceValue,'');
                 n.setAttribute('value', fltValue.tf_Trim());
 
-                var replaceIndex = new RegExp(tf_RegexpEscape(chkIndex + this.separator));
+                var replaceIndex = new RegExp(
+                        tf_RegexpEscape(chkIndex + this.separator));
                 fltIndexes = fltIndexes.replace(replaceIndex,'');
                 n.setAttribute('indexes', fltIndexes);
             }
-            if(li.nodeName.tf_LCase() == itemTag)
+            if(li.nodeName.tf_LCase()===itemTag){
                 tf_RemoveClass(li,this.checkListSlcItemCssClass);
+            }
         }
     },
 
-    SetResetBtn: function()
     /*====================================================
         - Generates reset button
     =====================================================*/
-    {
-        if(!this.hasGrid && !this.isFirstLoad) return;
-        if( this.btnResetEl!=null ) return;
-        var f = this.fObj;
-        this.btnResetTgtId =        f.btn_reset_target_id!=undefined //id of container element
-                                        ? f.btn_reset_target_id : null;
-        this.btnResetEl =           null; //reset button element
-        this.btnResetText =         f.btn_reset_text!=undefined ? f.btn_reset_text : 'Reset'; //defines reset text
-        this.btnResetTooltip =      f.btn_reset_tooltip!=undefined ? f.btn_reset_tooltip : 'Clear filters'; //defines reset button tooltip
-        this.btnResetHtml =         f.btn_reset_html!=undefined ? f.btn_reset_html : (!this.enableIcons ? null : //defines reset button innerHtml
-                                    '<input type="button" value="" class="'+this.btnResetCssClass+'" title="'+this.btnResetTooltip+'" />');
+    SetResetBtn: function(){
+        if(!this.hasGrid && !this.isFirstLoad && this.btnResetEl){
+            return;
+        }
 
-        var resetspan = tf_CreateElm('span',['id',this.prfxResetSpan+this.id]);
+        var f = this.fObj;
+        //id of container element
+        this.btnResetTgtId = f.btn_reset_target_id || null;
+        //reset button element
+        this.btnResetEl = null;
+        //defines reset text
+        this.btnResetText = f.btn_reset_text || 'Reset';
+        //defines reset button tooltip
+        this.btnResetTooltip = f.btn_reset_tooltip || 'Clear filters';
+        //defines reset button innerHtml
+        this.btnResetHtml = f.btn_reset_html ||
+            (!this.enableIcons ? null :
+            '<input type="button" value="" class="'+this.btnResetCssClass+'" ' +
+            'title="'+this.btnResetTooltip+'" />');
+
+        var resetspan = tf_CreateElm('span', ['id',this.prfxResetSpan+this.id]);
 
         // reset button is added to defined element
-        if(this.btnResetTgtId==null) this.SetTopDiv();
-        var targetEl = ( this.btnResetTgtId==null ) ? this.rDiv : tf_Id( this.btnResetTgtId );
+        if(!this.btnResetTgtId){
+            this.SetTopDiv();
+        }
+        var targetEl = !this.btnResetTgtId ? this.rDiv :
+                tf_Id( this.btnResetTgtId );
         targetEl.appendChild(resetspan);
 
-        if(this.btnResetHtml==null)
-        {
-            var fltreset = tf_CreateElm( 'a', ['href','javascript:void(0);'] );
+        if(!this.btnResetHtml){
+            var fltreset = tf_CreateElm('a', ['href', 'javascript:void(0);']);
             fltreset.className = this.btnResetCssClass;
             fltreset.appendChild(tf_CreateText(this.btnResetText));
             resetspan.appendChild(fltreset);
@@ -3660,16 +3747,17 @@ TF.prototype = {
         this.btnResetEl = tf_Id(this.prfxResetSpan+this.id).firstChild;
     },
 
-    RemoveResetBtn: function()
     /*====================================================
         - Removes reset button
     =====================================================*/
-    {
-        if(!this.hasGrid) return;
-        if( this.btnResetEl==null ) return;
+    RemoveResetBtn: function(){
+        if(!this.hasGrid || !this.btnResetEl){
+            return;
+        }
         var resetspan = tf_Id(this.prfxResetSpan+this.id);
-        if( resetspan!=null )
+        if(resetspan){
             resetspan.parentNode.removeChild( resetspan );
+        }
         this.btnResetEl = null;
     },
 
