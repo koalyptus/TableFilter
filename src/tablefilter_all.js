@@ -4431,53 +4431,61 @@ TF.prototype = {
         this.popUpFltElms = this.popUpFltElmCache || [];
         this.popUpFltAdjustToContainer = true;
 
+        function onClick(e){
+            var evt = e || window.event,
+                colIndex = parseInt(this.getAttribute('ci'));
+
+            o.CloseAllPopupFilters(colIndex);
+            o.TogglePopupFilter(colIndex);
+
+            if(o.popUpFltAdjustToContainer){
+                var popUpDiv = o.popUpFltElms[colIndex],
+                    header = o.GetHeaderElement(colIndex),
+                    headerWidth = header.clientWidth * 0.95;
+                if(!tf_isNotIE){
+                    var headerLeft = tf_ObjPosition(
+                            header, [header.nodeName])[0];
+                    popUpDiv.style.left = (headerLeft) + 'px';
+                }
+                popUpDiv.style.width = parseInt(headerWidth)  + 'px';
+            }
+            tf_CancelEvent(evt);
+            tf_StopEvent(evt);
+        }
+
         var o = this;
         for(var i=0; i<this.nbCells; i++){
-            if(this['col'+i] == this.fltTypeNone) continue;
-            var popUpSpan = tf_CreateElm('span', ['id', this.prfxPopUpSpan+this.id+'_'+i], ['ci',i]);
+            if(this['col'+i] == this.fltTypeNone){
+                continue;
+            }
+            var popUpSpan = tf_CreateElm(
+                    'span', ['id', this.prfxPopUpSpan+this.id+'_'+i], ['ci',i]);
             popUpSpan.innerHTML = this.popUpImgFltHtml;
             var header = this.GetHeaderElement(i);
             header.appendChild(popUpSpan);
-            popUpSpan.onclick = function(e){
-                var evt = e || window.event;
-                var colIndex = parseInt(this.getAttribute('ci'));
-                o.CloseAllPopupFilters(colIndex);
-                o.TogglePopupFilter(colIndex);
-
-                if(o.popUpFltAdjustToContainer){
-                    var popUpDiv = o.popUpFltElms[colIndex];
-                    var header = o.GetHeaderElement(colIndex);
-                    var headerWidth = header.clientWidth * .95;
-                    if(!tf_isNotIE){
-                        var headerLeft = tf_ObjPosition(header, [header.nodeName])[0];
-                        popUpDiv.style.left = (headerLeft) + 'px';
-                    }
-                    popUpDiv.style.width = parseInt(headerWidth)  + 'px';
-                }
-                tf_CancelEvent(evt);
-                tf_StopEvent(evt);
-            };
+            popUpSpan.onclick = onClick;
             this.popUpFltSpans[i] = popUpSpan;
             this.popUpFltImgs[i] = popUpSpan.firstChild;
         }
     },
 
-    SetPopupFilters: function()
     /*====================================================
         - generates all popup filters div
     =====================================================*/
-    {
-        for(var i=0; i<this.popUpFltElmCache.length; i++)
+    SetPopupFilters: function(){
+        for(var i=0; i<this.popUpFltElmCache.length; i++){
             this.SetPopupFilter(i, this.popUpFltElmCache[i]);
+        }
     },
 
-    SetPopupFilter: function(colIndex, div)
     /*====================================================
         - generates a popup filters div for specifies
         column
     =====================================================*/
-    {
-        var popUpDiv = !div ? tf_CreateElm('div', ['id', this.prfxPopUpDiv+this.id+'_'+colIndex]) : div;
+    SetPopupFilter: function(colIndex, div){
+        var popUpDiv = !div ?
+            tf_CreateElm('div',['id',this.prfxPopUpDiv+this.id+'_'+colIndex]) :
+            div;
         popUpDiv.className = this.popUpDivCssClass;
         this.externalFltTgtIds.push(this.prfxPopUpDiv+this.id+'_'+colIndex);
         var header = this.GetHeaderElement(colIndex);
@@ -4486,77 +4494,94 @@ TF.prototype = {
         this.popUpFltElms[colIndex] = popUpDiv;
     },
 
-    TogglePopupFilter: function(colIndex)
     /*====================================================
         - toggles popup filters div
     =====================================================*/
-    {
+    TogglePopupFilter: function(colIndex){
         var popUpFltElm = this.popUpFltElms[colIndex];
-        if(popUpFltElm.style.display == 'none' || popUpFltElm.style.display == ''){
-            if(this.onBeforePopUpOpen!=null) this.onBeforePopUpOpen.call(null,this, this.popUpFltElms[colIndex],colIndex);
+        if(popUpFltElm.style.display === 'none' ||
+            popUpFltElm.style.display === ''){
+            if(this.onBeforePopUpOpen){
+                this.onBeforePopUpOpen.call(
+                    null,this, this.popUpFltElms[colIndex],colIndex);
+            }
             popUpFltElm.style.display = 'block';
-            if(this['col'+colIndex] == this.fltTypeInp) this.GetFilterElement(colIndex).focus();
-            if(this.onAfterPopUpOpen!=null) this.onAfterPopUpOpen.call(null,this, this.popUpFltElms[colIndex],colIndex);
+            if(this['col'+colIndex] === this.fltTypeInp){
+                this.GetFilterElement(colIndex).focus();
+            }
+            if(this.onAfterPopUpOpen){
+                this.onAfterPopUpOpen.call(
+                    null,this, this.popUpFltElms[colIndex],colIndex);
+            }
         } else {
-            if(this.onBeforePopUpClose!=null) this.onBeforePopUpClose.call(null,this, this.popUpFltElms[colIndex],colIndex);
+            if(this.onBeforePopUpClose){
+                this.onBeforePopUpClose.call(
+                    null,this, this.popUpFltElms[colIndex],colIndex);
+            }
             popUpFltElm.style.display = 'none';
-            if(this.onAfterPopUpClose!=null) this.onAfterPopUpClose.call(null,this, this.popUpFltElms[colIndex],colIndex);
+            if(this.onAfterPopUpClose){
+                this.onAfterPopUpClose.call(
+                    null,this, this.popUpFltElms[colIndex],colIndex);
+            }
         }
     },
 
-    CloseAllPopupFilters: function(exceptColIndex)
     /*====================================================
         - closes all popup filters
     =====================================================*/
-    {
+    CloseAllPopupFilters: function(exceptColIndex){
         for(var i=0; i<this.popUpFltElms.length; i++){
-            if(i == exceptColIndex) continue;
+            if(i === exceptColIndex){
+                continue;
+            }
             var popUpFltElm = this.popUpFltElms[i];
-            if(popUpFltElm) popUpFltElm.style.display = 'none';
+            if(popUpFltElm){
+                popUpFltElm.style.display = 'none';
+            }
         }
     },
-
-    RemovePopupFilters: function()
     /*====================================================
         - removes popup filters div
     =====================================================*/
-    {
+    RemovePopupFilters: function(){
         this.popUpFltElmCache = [];
         for(var i=0; i<this.popUpFltElms.length; i++){
-            var popUpFltElm = this.popUpFltElms[i];
-            var popUpFltSpan = this.popUpFltSpans[i];
+            var popUpFltElm = this.popUpFltElms[i],
+                popUpFltSpan = this.popUpFltSpans[i];
             if(popUpFltElm){
                 popUpFltElm.parentNode.removeChild(popUpFltElm);
                 this.popUpFltElmCache[i] = popUpFltElm;
             }
             popUpFltElm = null;
-            if(popUpFltSpan) popUpFltSpan.parentNode.removeChild(popUpFltSpan);
+            if(popUpFltSpan){
+                popUpFltSpan.parentNode.removeChild(popUpFltSpan);
+            }
             popUpFltSpan = null;
         }
     },
 
-    SetPopupFilterIcon: function(colIndex, active)
     /*====================================================
         - sets inactive or active filter icon
     =====================================================*/
-    {
-        var activeImg = active==undefined ? true : active;
-        if(this.popUpFltImgs[colIndex])
-            this.popUpFltImgs[colIndex].src = (active) ? this.popUpImgFltActive : this.popUpImgFlt;
+    SetPopupFilterIcon: function(colIndex, active){
+        var activeImg = active===undefined ? true : active;
+        if(this.popUpFltImgs[colIndex]){
+            this.popUpFltImgs[colIndex].src = active ?
+                this.popUpImgFltActive : this.popUpImgFlt;
+        }
     },
 
-    SetAllPopupFiltersIcon: function(active)
     /*====================================================
         - sets inactive or active filter icon for all
         filters
     =====================================================*/
-    {
-        var activeImg = active==undefined ? false : active;
-        for(var i=0; i<this.popUpFltImgs.length; i++)
+    SetAllPopupFiltersIcon: function(active){
+        var activeImg = active===undefined ? false : active;
+        for(var i=0; i<this.popUpFltImgs.length; i++){
             this.SetPopupFilterIcon(i, false);
+        }
     },
 
-    RememberFiltersValue: function( name )
     /*==============================================
         - stores filters' values in a cookie
         when Filter() method is called
@@ -4564,58 +4589,58 @@ TF.prototype = {
             - name: cookie name (string)
         - credits to Florent Hirchy
     ===============================================*/
-    {
+    RememberFiltersValue: function(name){
         var flt_values = [];
-        for(var i=0; i<this.fltIds.length; i++)
-        {//creates an array with filters' values
-            value = this.GetFilterValue(i);
-            if (value == '') value = ' ';
+        //store filters' values
+        for(var i=0; i<this.fltIds.length; i++){
+            var value = this.GetFilterValue(i);
+            if (value === ''){
+                value = ' ';
+            }
             flt_values.push(value);
         }
-        flt_values.push(this.fltIds.length); //adds array size
+        //adds array size
+        flt_values.push(this.fltIds.length);
+        //writes cookie
         tf_WriteCookie(
             name,
             flt_values.join(this.separator),
             this.cookieDuration
-        ); //writes cookie
+        );
     },
 
-    RememberPageNb: function( name )
     /*==============================================
         - stores page number value in a cookie
         when ChangePage method is called
         - Params:
             - name: cookie name (string)
     ===============================================*/
-    {
+    RememberPageNb: function(name){
         tf_WriteCookie(
             name,
             this.currentPageNb,
             this.cookieDuration
-        ); //writes cookie
+        );
     },
 
-    RememberPageLength: function( name )
     /*==============================================
         - stores page length value in a cookie
         when ChangePageLength method is called
         - Params:
             - name: cookie name (string)
     ===============================================*/
-    {
+    RememberPageLength: function(name){
         tf_WriteCookie(
             name,
             this.resultsPerPageSlc.selectedIndex,
             this.cookieDuration
-        ); //writes cookie
+        );
     },
 
-    ResetValues: function()
-    {
+    ResetValues: function(){
         this.EvtManager(this.Evt.name.resetvalues);
     },
 
-    _ResetValues: function()
     /*==============================================
         - re-sets grid values when page is
         re-loaded. It invokes ResetGridValues,
@@ -4623,14 +4648,19 @@ TF.prototype = {
         - Params:
             - name: cookie name (string)
     ===============================================*/
-    {
-        if(this.rememberGridValues && this.fillSlcOnDemand) //only fillSlcOnDemand
+    _ResetValues: function(){
+        //only fillSlcOnDemand
+        if(this.rememberGridValues && this.fillSlcOnDemand){
             this.ResetGridValues(this.fltsValuesCookie);
-        if(this.rememberPageLen) this.ResetPageLength( this.pgLenCookie );
-        if(this.rememberPageNb) this.ResetPage( this.pgNbCookie );
+        }
+        if(this.rememberPageLen){
+            this.ResetPageLength(this.pgLenCookie);
+        }
+        if(this.rememberPageNb){
+            this.ResetPage(this.pgNbCookie);
+        }
     },
 
-    ResetGridValues: function( name )
     /*==============================================
         - re-sets filters' values when page is
         re-loaded if load on demand is enabled
@@ -4638,36 +4668,42 @@ TF.prototype = {
             - name: cookie name (string)
         - credits to Florent Hirchy
     ===============================================*/
-    {
-        if(!this.fillSlcOnDemand) return;
-        var flts = tf_ReadCookie(name); //reads the cookie
-        var reg = new RegExp(this.separator,'g');
-        var flts_values = flts.split(reg); //creates an array with filters' values
-        var slcFltsIndex = this.GetFiltersByType(this.fltTypeSlc, true);
-        var multiFltsIndex = this.GetFiltersByType(this.fltTypeMulti, true);
+    ResetGridValues: function(name){
+        if(!this.fillSlcOnDemand){
+            return;
+        }
+        var flts = tf_ReadCookie(name),
+            reg = new RegExp(this.separator,'g'),
+            //creates an array with filters' values
+            flts_values = flts.split(reg),
+            slcFltsIndex = this.GetFiltersByType(this.fltTypeSlc, true),
+            multiFltsIndex = this.GetFiltersByType(this.fltTypeMulti, true);
 
-        if(flts_values[(flts_values.length-1)] == this.fltIds.length)
-        {//if the number of columns is the same as before page reload
-            for(var i=0; i<(flts_values.length - 1); i++)
-            {
-                if (flts_values[i]==' ') continue;
-                if(this['col'+i]==this.fltTypeSlc || this['col'+i]==this.fltTypeMulti)
-                {// if fillSlcOnDemand, drop-down needs to contain stored value(s) for filtering
+        //if the number of columns is the same as before page reload
+        if(flts_values[(flts_values.length-1)] === this.fltIds.length){
+            for(var i=0; i<(flts_values.length - 1); i++){
+                if (flts_values[i]===' '){
+                    continue;
+                }
+                // if fillSlcOnDemand, drop-down needs to contain stored
+                // value(s) for filtering
+                if(this['col'+i]===this.fltTypeSlc ||
+                    this['col'+i]===this.fltTypeMulti){
                     var slc = tf_Id( this.fltIds[i] );
                     slc.options[0].selected = false;
 
-                    if( slcFltsIndex.tf_Has(i) )
-                    {//selects
-                        var opt = tf_CreateOpt(flts_values[i],flts_values[i],true);
+                    //selects
+                    if(slcFltsIndex.tf_Has(i)){
+                        var opt = tf_CreateOpt(
+                                flts_values[i],flts_values[i],true);
                         slc.appendChild(opt);
                         this.hasStoredValues = true;
                     }
-                    if(multiFltsIndex.tf_Has(i))
-                    {//multiple select
+                    //multiple select
+                    if(multiFltsIndex.tf_Has(i)){
                         var s = flts_values[i].split(' '+this.orOperator+' ');
-                        for(j=0; j<s.length; j++)
-                        {
-                            if(s[j]=='') continue;
+                        for(j=0; j<s.length; j++){
+                            if(s[j]==='') continue;
                             var opt = tf_CreateOpt(s[j],s[j],true);
                             slc.appendChild(opt);
                             this.hasStoredValues = true;
