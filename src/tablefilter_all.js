@@ -4682,9 +4682,10 @@ TF.prototype = {
         //if the number of columns is the same as before page reload
         if(flts_values[(flts_values.length-1)] === this.fltIds.length){
             for(var i=0; i<(flts_values.length - 1); i++){
-                if (flts_values[i]===' '){
+                if(flts_values[i]===' '){
                     continue;
                 }
+                var s, opt;
                 // if fillSlcOnDemand, drop-down needs to contain stored
                 // value(s) for filtering
                 if(this['col'+i]===this.fltTypeSlc ||
@@ -4694,48 +4695,52 @@ TF.prototype = {
 
                     //selects
                     if(slcFltsIndex.tf_Has(i)){
-                        var opt = tf_CreateOpt(
-                                flts_values[i],flts_values[i],true);
+                        opt = tf_CreateOpt(flts_values[i],flts_values[i],true);
                         slc.appendChild(opt);
                         this.hasStoredValues = true;
                     }
                     //multiple select
                     if(multiFltsIndex.tf_Has(i)){
-                        var s = flts_values[i].split(' '+this.orOperator+' ');
+                        s = flts_values[i].split(' '+this.orOperator+' ');
                         for(j=0; j<s.length; j++){
-                            if(s[j]==='') continue;
-                            var opt = tf_CreateOpt(s[j],s[j],true);
+                            if(s[j]===''){
+                                continue;
+                            }
+                            opt = tf_CreateOpt(s[j],s[j],true);
                             slc.appendChild(opt);
                             this.hasStoredValues = true;
 
-                            if(tf_isIE)
-                            {// IE multiple selection work-around
+                            // IE multiple selection work-around
+                            if(tf_isIE){
                                 this.__deferMultipleSelection(slc,j,false);
                                 hasStoredValues = false;
                             }
                         }
                     }// if multiFltsIndex
                 }
-                else if(this['col'+i]==this.fltTypeCheckList)
-                {
+                else if(this['col'+i]==this.fltTypeCheckList){
                     var divChk = this.checkListDiv[i];
                     divChk.title = divChk.innerHTML;
                     divChk.innerHTML = '';
 
-                    var ul = tf_CreateElm('ul',['id',this.fltIds[i]],['colIndex',i]);
+                    var ul = tf_CreateElm(
+                        'ul',['id',this.fltIds[i]],['colIndex',i]);
                     ul.className = this.checkListCssClass;
 
-                    var li0 = tf_CreateCheckItem(this.fltIds[i]+'_0', '', this.displayAllText);
+                    var li0 = tf_CreateCheckItem(
+                        this.fltIds[i]+'_0', '', this.displayAllText);
                     li0.className = this.checkListItemCssClass;
                     ul.appendChild(li0);
 
                     divChk.appendChild(ul);
 
-                    var s = flts_values[i].split(' '+this.orOperator+' ');
-                    for(j=0; j<s.length; j++)
-                    {
-                        if(s[j]=='') continue;
-                        var li = tf_CreateCheckItem(this.fltIds[i]+'_'+(j+1), s[j], s[j]);
+                    flts_values[i].split(' '+this.orOperator+' ');
+                    for(j=0; j<s.length; j++){
+                        if(s[j]===''){
+                            continue;
+                        }
+                        var li = tf_CreateCheckItem(
+                            this.fltIds[i]+'_'+(j+1), s[j], s[j]);
                         li.className = this.checkListItemCssClass;
                         ul.appendChild(li);
                         li.check.checked = true;
@@ -4749,7 +4754,6 @@ TF.prototype = {
         }//end if
     },
 
-    SetRowBg: function(rIndex,index)
     /*====================================================
         - sets row background color
         - Params:
@@ -4757,10 +4761,12 @@ TF.prototype = {
             - index: valid row collection index needed to
             calculate bg color
     =====================================================*/
-    {
-        if(!this.alternateBgs || isNaN(rIndex)) return;
+    SetRowBg: function(rIndex,index){
+        if(!this.alternateBgs || isNaN(rIndex)){
+            return;
+        }
         var rows = this.tbl.rows;
-        var i = (index==undefined) ? rIndex : index;
+        var i = !index ? rIndex : index;
         this.RemoveRowBg(rIndex);
         tf_AddClass(
             rows[rIndex],
@@ -4768,64 +4774,75 @@ TF.prototype = {
         );
     },
 
-    RemoveRowBg: function(index)
     /*====================================================
         - removes row background color
         - Params:
             - index: row index (numeric value)
     =====================================================*/
-    {
-        if(isNaN(index)) return;
+    RemoveRowBg: function(index){
+        if(isNaN(index)){
+            return;
+        }
         var rows = this.tbl.rows;
         tf_RemoveClass(rows[index],this.rowBgOddCssClass);
         tf_RemoveClass(rows[index],this.rowBgEvenCssClass);
     },
 
-    SetAlternateRows: function()
     /*====================================================
         - alternates row colors for better readability
     =====================================================*/
-    {
-        if( !this.hasGrid && !this.isFirstLoad ) return;
+    SetAlternateRows: function(){
+        if(!this.hasGrid && !this.isFirstLoad){
+            return;
+        }
         var rows = this.tbl.rows;
-        var noValidRowsIndex = this.validRowsIndex==null;
-        var beginIndex = (noValidRowsIndex) ? this.refRow : 0; //1st index
-        var indexLen = (noValidRowsIndex) // nb indexes
-            ? (this.nbFilterableRows+beginIndex) : this.validRowsIndex.length;
+        var noValidRowsIndex = this.validRowsIndex===null;
+        //1st index
+        var beginIndex = noValidRowsIndex ? this.refRow : 0;
+        // nb indexes
+        var indexLen = noValidRowsIndex ? (this.nbFilterableRows+beginIndex) :
+            this.validRowsIndex.length;
 
         var idx = 0;
-        for(var j=beginIndex; j<indexLen; j++)//alternates bg color
-        {
+        //alternates bg color
+        for(var j=beginIndex; j<indexLen; j++){
             var rIndex = (noValidRowsIndex) ? j : this.validRowsIndex[j];
             this.SetRowBg(rIndex,idx);
             idx++;
         }
     },
 
-    RemoveAlternateRows: function()
     /*====================================================
         - removes alternate row colors
     =====================================================*/
-    {
-        if(!this.hasGrid) return;
+    RemoveAlternateRows: function(){
+        if(!this.hasGrid){
+            return;
+        }
         var row = this.tbl.rows;
-        for(var i=this.refRow; i<this.nbRows; i++)
+        for(var i=this.refRow; i<this.nbRows; i++){
             this.RemoveRowBg(i);
+        }
         this.isStartBgAlternate = true;
     },
 
-    SetFixedHeaders: function()
     /*====================================================
         - CSS solution making headers fixed
     =====================================================*/
-    {
-        if((!this.hasGrid && !this.isFirstLoad) || !this.fixedHeaders) return;
-        if(this.contDiv) return;
+    SetFixedHeaders: function(){
+        if((!this.hasGrid && !this.isFirstLoad) || !this.fixedHeaders){
+            return;
+        }
+        if(this.contDiv){
+            return;
+        }
         var thead = tf_Tag(this.tbl,'thead');
-        if( thead.length==0 ) return;
+        if(thead.length===0){
+            return;
+        }
         var tbody = tf_Tag(this.tbl,'tbody');
-        if( tbody[0].clientHeight!=0 )
-        {//firefox returns tbody height
+        //firefox returns tbody height
+        if(tbody[0].clientHeight!==0){
             //previous values
             this.prevTBodyH = tbody[0].clientHeight;
             this.prevTBodyOverflow = tbody[0].style.overflow;
@@ -4836,7 +4853,8 @@ TF.prototype = {
             tbody[0].style.overflowX = 'hidden';
         } else { //IE returns 0
             // cont div is added to emulate fixed headers behaviour
-            var contDiv = tf_CreateElm( 'div',['id',this.prfxContentDiv+this.id] );
+            var contDiv = tf_CreateElm(
+                'div',['id',this.prfxContentDiv+this.id]);
             contDiv.className = this.contDivCssClass;
             this.tbl.parentNode.insertBefore(contDiv, this.tbl);
             contDiv.appendChild(this.tbl);
@@ -4846,25 +4864,31 @@ TF.prototype = {
 
             var theadH = 0;
             var theadTr = tf_Tag(thead[0],'tr');
-            for(var i=0; i<theadTr.length; i++)
-            {//css below emulates fixed headers on IE<=6
+            //css below emulates fixed headers on IE<=6
+            for(var i=0; i<theadTr.length; i++){
                 theadTr[i].style.cssText += 'position:relative; ' +
-                                            'top:expression(offsetParent.scrollTop);';
+                    'top:expression(offsetParent.scrollTop);';
                 theadH += parseInt(theadTr[i].clientHeight);
             }
 
             this.contDiv.style.height = (this.tBodyH+theadH)+'px';
 
             var tfoot = tf_Tag(this.tbl,'tfoot');
-            if( tfoot.length==0 ) return;
+            if(tfoot.length===0){
+                return;
+            }
 
             var tfootTr = tf_Tag(tfoot[0],'tr');
 
-            for(var j=0; j<tfootTr.length; j++)//css below emulates fixed footer on IE<=6
-                tfootTr[j].style.cssText += 'position:relative; overflow-x: hidden; ' +
-                                            'top: expression(parentNode.parentNode.offsetHeight >= ' +
-                                            'offsetParent.offsetHeight ? 0 - parentNode.parentNode.offsetHeight + '+
-                                            'offsetParent.offsetHeight + offsetParent.scrollTop : 0);';
+            //css below emulates fixed footer on IE<=6
+            for(var j=0; j<tfootTr.length; j++){
+                tfootTr[j].style.cssText +=
+                    'position:relative; overflow-x: hidden; ' +
+                    'top: expression(parentNode.parentNode.offsetHeight >= ' +
+                    'offsetParent.offsetHeight ? ' +
+                    '0 - parentNode.parentNode.offsetHeight + '+
+                    'offsetParent.offsetHeight + offsetParent.scrollTop : 0);';
+            }
         }
     },
 
@@ -4873,40 +4897,46 @@ TF.prototype = {
     =====================================================*/
     RemoveFixedHeaders: function(){
         if(!this.hasGrid || !this.fixedHeaders ) return;
-        if( this.contDiv )//IE additional div
-        {
+
+        if(this.contDiv){
             this.contDiv.parentNode.insertBefore(this.tbl, this.contDiv);
             this.contDiv.parentNode.removeChild( this.contDiv );
             this.contDiv = null;
             var thead = tf_Tag(this.tbl,'thead');
-            if( thead.length==0 ) return;
+            if(thead.length===0){
+                return;
+            }
             var theadTr = tf_Tag(thead[0],'tr');
-            if( theadTr.length==0 ) return;
-            for(var i=0; i<theadTr.length; i++)
+            if(theadTr.length===0){
+                return;
+            }
+            for(var i=0; i<theadTr.length; i++){
                 theadTr[i].style.cssText = '';
+            }
             var tfoot = tf_Tag(this.tbl,'tfoot');
-            if( tfoot.length==0 ) return;
+            if(tfoot.length===0){
+                return;
+            }
             var tfootTr = tf_Tag(tfoot[0],'tr');
-            for(var j=0; j<tfootTr.length; j++)
-            {
+            for(var j=0; j<tfootTr.length; j++){
                 tfootTr[j].style.position = 'relative';
                 tfootTr[j].style.top = '';
                 tfootTr[j].style.overeflowX = '';
             }
         } else {
             var tbody = tf_Tag(this.tbl,'tbody');
-            if( tbody.length==0 ) return;
+            if(tbody.length===0){
+                return;
+            }
             tbody[0].style.height = this.prevTBodyH+'px';
             tbody[0].style.overflow = this.prevTBodyOverflow;
             tbody[0].style.overflowX = this.prevTBodyOverflowX;
         }
     },
 
-    Filter: function()
-    {
+    Filter: function(){
         this.EvtManager(this.Evt.name.filter);
     },
-    _Filter: function()
     /*====================================================
         - Filtering fn
         - retrieves data from each td in every single tr
@@ -4915,131 +4945,161 @@ TF.prototype = {
         - tr is hidden if all search strings are not
         found
     =====================================================*/
-    {
-        if(!this.fltGrid || (!this.hasGrid && !this.isFirstLoad)) return;
-        //invokes eventual onbefore method
-        if(this.onBeforeFilter) this.onBeforeFilter.call(null,this);
+    _Filter: function(){
+        if(!this.fltGrid || (!this.hasGrid && !this.isFirstLoad)){
+            return;
+        }
+        //invokes onbefore callback
+        if(this.onBeforeFilter){
+            this.onBeforeFilter.call(null, this);
+        }
 
-        if(this.inpWatermark != '') this.SetWatermark(false);
+        if(this.inpWatermark !== ''){
+            this.SetWatermark(false);
+        }
 
-        var row = this.tbl.rows;
-        f = this.fObj!=undefined ? this.fObj : [];
-        var hiddenrows = 0;
+        var row = this.tbl.rows,
+            f = this.fObj || {},
+            hiddenrows = 0;
         this.validRowsIndex = [];
         var o = this;
 
         // removes keyword highlighting
-        if(this.highlightKeywords) this.UnhighlightAll();
+        if(this.highlightKeywords){
+            this.UnhighlightAll();
+        }
         //removes popup filters active icons
-        if(this.popUpFilters) this.SetAllPopupFiltersIcon();
+        if(this.popUpFilters){
+            this.SetAllPopupFiltersIcon();
+        }
         //removes active column header class
-        if(this.markActiveColumns) this.ClearActiveColumns();
+        if(this.markActiveColumns){
+            this.ClearActiveColumns();
+        }
         // search args re-init
         this.searchArgs = this.GetFiltersValue();
 
         var num_cell_data, nbFormat;
-        var re_le = new RegExp(this.leOperator), re_ge = new RegExp(this.geOperator);
-        var re_l = new RegExp(this.lwOperator), re_g = new RegExp(this.grOperator);
-        var re_d = new RegExp(this.dfOperator), re_lk = new RegExp(tf_RegexpEscape(this.lkOperator));
-        var re_eq = new RegExp(this.eqOperator), re_st = new RegExp(this.stOperator);
-        var re_en = new RegExp(this.enOperator), re_an = new RegExp(this.anOperator);
-        var re_cr = new RegExp(this.curExp), re_em = this.emOperator;
-        var re_nm = this.nmOperator, re_re = new RegExp(tf_RegexpEscape(this.rgxOperator));
+        var re_le = new RegExp(this.leOperator),
+            re_ge = new RegExp(this.geOperator),
+            re_l = new RegExp(this.lwOperator),
+            re_g = new RegExp(this.grOperator),
+            re_d = new RegExp(this.dfOperator),
+            re_lk = new RegExp(tf_RegexpEscape(this.lkOperator)),
+            re_eq = new RegExp(this.eqOperator),
+            re_st = new RegExp(this.stOperator),
+            re_en = new RegExp(this.enOperator),
+            re_an = new RegExp(this.anOperator),
+            re_cr = new RegExp(this.curExp),
+            re_em = this.emOperator,
+            re_nm = this.nmOperator,
+            re_re = new RegExp(tf_RegexpEscape(this.rgxOperator));
 
-        function highlight(str,ok,cell){//keyword highlighting
+        //keyword highlighting
+        function highlight(str, ok, cell){
             if(o.highlightKeywords && ok){
                 str = str.replace(re_lk,'');
                 str = str.replace(re_eq,'');
                 str = str.replace(re_st,'');
                 str = str.replace(re_en,'');
                 var w = str;
-                if(re_le.test(str) || re_ge.test(str) || re_l.test(str) || re_g.test(str) || re_d.test(str))
+                if(re_le.test(str) || re_ge.test(str) || re_l.test(str) ||
+                    re_g.test(str) || re_d.test(str)){
                     w = tf_GetNodeText(cell);
-                if(w!='')
+                }
+                if(w!==''){
                     tf_HighlightWord(cell,w,o.highlightCssClass,o);
+                }
             }
         }
 
         //looks for search argument in current row
-        function hasArg(sA,cell_data,j)
-        {
+        function hasArg(sA, cell_data, j){
             var occurence;
             //Search arg operator tests
-            var hasLO = re_l.test(sA), hasLE = re_le.test(sA);
-            var hasGR = re_g.test(sA), hasGE = re_ge.test(sA);
-            var hasDF = re_d.test(sA), hasEQ = re_eq.test(sA);
-            var hasLK = re_lk.test(sA), hasAN = re_an.test(sA);
-            var hasST = re_st.test(sA), hasEN = re_en.test(sA);
-            var hasEM = (re_em == sA), hasNM = (re_nm == sA);
-            var hasRE = re_re.test(sA);
+            var hasLO = re_l.test(sA),
+                hasLE = re_le.test(sA),
+                hasGR = re_g.test(sA),
+                hasGE = re_ge.test(sA),
+                hasDF = re_d.test(sA),
+                hasEQ = re_eq.test(sA),
+                hasLK = re_lk.test(sA),
+                hasAN = re_an.test(sA),
+                hasST = re_st.test(sA),
+                hasEN = re_en.test(sA),
+                hasEM = (re_em === sA),
+                hasNM = (re_nm === sA),
+                hasRE = re_re.test(sA);
 
             //Search arg dates tests
-            var isLDate = (hasLO && tf_IsValidDate(sA.replace(re_l,''),dtType));
-            var isLEDate = (hasLE && tf_IsValidDate(sA.replace(re_le,''),dtType));
-            var isGDate = (hasGR && tf_IsValidDate(sA.replace(re_g,''),dtType));
-            var isGEDate = (hasGE && tf_IsValidDate(sA.replace(re_ge,''),dtType));
-            var isDFDate = (hasDF && tf_IsValidDate(sA.replace(re_d,''),dtType));
-            var isEQDate = (hasEQ && tf_IsValidDate(sA.replace(re_eq,''),dtType));
+            var isLDate = hasLO && tf_IsValidDate(sA.replace(re_l,''),dtType);
+            var isLEDate = hasLE && tf_IsValidDate(sA.replace(re_le,''),dtType);
+            var isGDate = hasGR && tf_IsValidDate(sA.replace(re_g,''),dtType);
+            var isGEDate = hasGE && tf_IsValidDate(sA.replace(re_ge,''),dtType);
+            var isDFDate = hasDF && tf_IsValidDate(sA.replace(re_d,''),dtType);
+            var isEQDate = hasEQ && tf_IsValidDate(sA.replace(re_eq,''),dtType);
 
-            if(tf_IsValidDate(cell_data,dtType))
-            {//dates
-                var dte1 = tf_FormatDate(cell_data,dtType);
-                if(isLDate)
-                {// lower date
-                    var dte2 = tf_FormatDate(sA.replace(re_l,''),dtType);
-                    occurence = (dte1 < dte2);
+            var dte1, dte2;
+            //dates
+            if(tf_IsValidDate(cell_data,dtType)){
+                dte1 = tf_FormatDate(cell_data,dtType);
+                // lower date
+                if(isLDate){
+                    dte2 = tf_FormatDate(sA.replace(re_l,''),dtType);
+                    occurence = dte1 < dte2;
                 }
-                else if(isLEDate)
-                {// lower equal date
-                    var dte2 = tf_FormatDate(sA.replace(re_le,''),dtType);
-                    occurence = (dte1 <= dte2);
+                // lower equal date
+                else if(isLEDate){
+                    dte2 = tf_FormatDate(sA.replace(re_le,''),dtType);
+                    occurence = dte1 <= dte2;
                 }
-                else if(isGEDate)
-                {// greater equal date
-                    var dte2 = tf_FormatDate(sA.replace(re_ge,''),dtType);
-                    occurence = (dte1 >= dte2);
+                // greater equal date
+                else if(isGEDate){
+                    dte2 = tf_FormatDate(sA.replace(re_ge,''),dtType);
+                    occurence = dte1 >= dte2;
                 }
-                else if(isGDate)
-                {// greater date
-                    var dte2 = tf_FormatDate(sA.replace(re_g,''),dtType);
-                    occurence = (dte1 > dte2);
+                // greater date
+                else if(isGDate){
+                    dte2 = tf_FormatDate(sA.replace(re_g,''),dtType);
+                    occurence = dte1 > dte2;
                 }
-                else if(isDFDate)
-                {// different date
-                    var dte2 = tf_FormatDate(sA.replace(re_d,''),dtType);
-                    occurence = (dte1.toString() != dte2.toString());
+                // different date
+                else if(isDFDate){
+                    dte2 = tf_FormatDate(sA.replace(re_d,''),dtType);
+                    occurence = dte1.toString() != dte2.toString();
                 }
-                else if(isEQDate)
-                {// equal date
-                    var dte2 = tf_FormatDate(sA.replace(re_eq,''),dtType);
-                    occurence = (dte1.toString() == dte2.toString());
+                // equal date
+                else if(isEQDate){
+                    dte2 = tf_FormatDate(sA.replace(re_eq,''),dtType);
+                    occurence = dte1.toString() == dte2.toString();
                 }
-                else if(re_lk.test(sA)) // searched keyword with * operator doesn't have to be a date
-                {// like date
-                    occurence = o.__containsStr(sA.replace(re_lk,''),cell_data,null,false);
+                // searched keyword with * operator doesn't have to be a date
+                else if(re_lk.test(sA)){// like date
+                    occurence = o.__containsStr(
+                        sA.replace(re_lk,''),cell_data,null,false);
                 }
-                else if(tf_IsValidDate(sA,dtType))
-                {
-                    var dte2 = tf_FormatDate(sA,dtType);
-                    occurence = (dte1.toString() == dte2.toString());
+                else if(tf_IsValidDate(sA,dtType)){
+                    dte2 = tf_FormatDate(sA,dtType);
+                    occurence = dte1.toString() == dte2.toString();
                 }
-                else if(hasEM) //empty
-                    occurence = (cell_data.tf_Trim()=='' ? true : false);
-
-                else if(hasNM) //non-empty
-                    occurence = (cell_data.tf_Trim()!='' ? true : false);
+                //empty
+                else if(hasEM){
+                    occurence = (cell_data.tf_Trim()==='' ? true : false);
+                }
+                //non-empty
+                else if(hasNM){
+                    occurence = (cell_data.tf_Trim()!=='' ? true : false);
+                }
             }
 
-            else
-            {
+            else{
                 //first numbers need to be formated
-                if(o.hasColNbFormat && o.colNbFormat[j]!=null)
-                {
-                    num_cell_data = tf_RemoveNbFormat(cell_data,o.colNbFormat[j]);
+                if(o.hasColNbFormat && o.colNbFormat[j]){
+                    num_cell_data = tf_RemoveNbFormat(
+                        cell_data,o.colNbFormat[j]);
                     nbFormat = o.colNbFormat[j];
                 } else {
-                    if(o.thousandsSeparator==',' && o.decimalSeparator=='.')
-                    {
+                    if(o.thousandsSeparator===',' && o.decimalSeparator==='.'){
                         num_cell_data = tf_RemoveNbFormat(cell_data,'us');
                         nbFormat = 'us';
                     } else {
@@ -5048,175 +5108,260 @@ TF.prototype = {
                     }
                 }
 
-                // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},rgx:)
-                if(hasLE) //lower equal
-                    occurence = num_cell_data <= tf_RemoveNbFormat(sA.replace(re_le,''),nbFormat);
-
-                else if(hasGE) //greater equal
-                    occurence = num_cell_data >= tf_RemoveNbFormat(sA.replace(re_ge,''),nbFormat);
-
-                else if(hasLO) //lower
-                    occurence = num_cell_data < tf_RemoveNbFormat(sA.replace(re_l,''),nbFormat);
-
-                else if(hasGR) //greater
-                    occurence = num_cell_data > tf_RemoveNbFormat(sA.replace(re_g,''),nbFormat);
-
-                else if(hasDF) //different
-                    occurence = o.__containsStr(sA.replace(re_d,''),cell_data) ? false : true;
-
-                else if(hasLK) //like
-                    occurence = o.__containsStr(sA.replace(re_lk,''),cell_data,null,false);
-
-                else if(hasEQ) //equal
-                    occurence = o.__containsStr(sA.replace(re_eq,''),cell_data,null,true);
-
-                else if(hasST) //starts with
-                    occurence = cell_data.indexOf(sA.replace(re_st,''))==0 ? true : false;
-
-                else if(hasEN) //ends with
-                {
-                    var searchArg = sA.replace(re_en,'');
-                    occurence = cell_data.lastIndexOf(searchArg,cell_data.length-1)==(cell_data.length-1)-(searchArg.length-1)
-                        && cell_data.lastIndexOf(searchArg,cell_data.length-1) > -1
-                        ? true : false;
+                // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
+                // rgx:)
+                // lower equal
+                if(hasLE){
+                    occurence = num_cell_data <= tf_RemoveNbFormat(
+                        sA.replace(re_le,''),nbFormat);
                 }
-
-                else if(hasEM) //empty
-                    occurence = (cell_data.tf_Trim()=='' ? true : false);
-
-                else if(hasNM) //non-empty
-                    occurence = (cell_data.tf_Trim()!='' ? true : false);
-
-                else if(hasRE){ //regexp
-                    try{ //in case regexp fires an exception
-                        var searchArg = sA.replace(re_re,''); //operator is removed
-                        var rgx = new RegExp(searchArg);
+                //greater equal
+                else if(hasGE){
+                    occurence = num_cell_data >= tf_RemoveNbFormat(
+                        sA.replace(re_ge,''),nbFormat);
+                }
+                //lower
+                else if(hasLO){
+                    occurence = num_cell_data < tf_RemoveNbFormat(
+                        sA.replace(re_l,''),nbFormat);
+                }
+                //greater
+                else if(hasGR){
+                    occurence = num_cell_data > tf_RemoveNbFormat(
+                        sA.replace(re_g,''),nbFormat);
+                }
+                //different
+                else if(hasDF){
+                    occurence = o.__containsStr(
+                        sA.replace(re_d,''),cell_data) ? false : true;
+                }
+                //like
+                else if(hasLK){
+                    occurence = o.__containsStr(
+                        sA.replace(re_lk,''),cell_data,null,false);
+                }
+                //equal
+                else if(hasEQ){
+                    occurence = o.__containsStr(
+                        sA.replace(re_eq,''),cell_data,null,true);
+                }
+                //starts with
+                else if(hasST){
+                    occurence = cell_data.indexOf(sA.replace(re_st,''))===0 ?
+                        true : false;
+                }
+                //ends with
+                else if(hasEN){
+                    var searchArg = sA.replace(re_en,'');
+                    occurence =
+                        cell_data.lastIndexOf(searchArg,cell_data.length-1) ===
+                        (cell_data.length-1)-(searchArg.length-1) &&
+                        cell_data.lastIndexOf(
+                            searchArg,cell_data.length-1) > -1 ? true : false;
+                }
+                //empty
+                else if(hasEM){
+                    occurence = (cell_data.tf_Trim()==='' ? true : false);
+                }
+                //non-empty
+                else if(hasNM){
+                    occurence = (cell_data.tf_Trim()!=='' ? true : false);
+                }
+                //regexp
+                else if(hasRE){
+                    //in case regexp fires an exception
+                    try{
+                        //operator is removed
+                        var srchArg = sA.replace(re_re,'');
+                        var rgx = new RegExp(srchArg);
                         occurence = rgx.test(cell_data);
                     } catch(e) { occurence = false; }
                 }
-
-                else
-                    occurence = o.__containsStr(sA,cell_data,(f['col_'+j]==undefined) ? this.fltTypeInp : f['col_'+j]);
+                else{
+                    var fCol = f['col_'+j];
+                    occurence = o.__containsStr(
+                        sA, cell_data, !fCol ? this.fltTypeInp : fCol);
+                }
 
             }//else
             return occurence;
         }//fn
 
-        for(var k=this.refRow; k<this.nbRows; k++)
-        {
+        for(var k=this.refRow; k<this.nbRows; k++){
             /*** if table already filtered some rows are not visible ***/
-            if(row[k].style.display == 'none') row[k].style.display = '';
+            if(row[k].style.display === 'none'){
+                row[k].style.display = '';
+            }
 
-            var cell = row[k].cells;
-            var nchilds = cell.length;
+            var cell = row[k].cells,
+                nchilds = cell.length;
 
             // checks if row has exact cell #
-            if(nchilds != this.nbCells) continue;
+            if(nchilds !== this.nbCells){
+                continue;
+            }
 
-            var occurence = [];
-            var isRowValid = (this.searchType=='include') ? true : false;
-            var singleFltRowValid = false; //only for single filter search
+            var occurence = [],
+                isRowValid = this.searchType==='include' ? true : false,
+                //only for single filter search
+                singleFltRowValid = false;
 
-            for(var j=0; j<nchilds; j++)
-            {// this loop retrieves cell data
-                var sA = this.searchArgs[(this.singleSearchFlt) ? 0 : j]; //searched keyword
-                var dtType = (this.hasColDateType) ? this.colDateType[j] : this.defaultDateType;
-                if(sA=='') continue;
+            // this loop retrieves cell data
+            for(var j=0; j<nchilds; j++){
+                //searched keyword
+                var sA = this.searchArgs[this.singleSearchFlt ? 0 : j],
+                    dtType = this.hasColDateType ?
+                        this.colDateType[j] : this.defaultDateType;
+                if(sA===''){
+                    continue;
+                }
 
-                var cell_data = this.GetCellData(j, cell[j]).tf_MatchCase(this.matchCase);
+                var cell_data = this.GetCellData(j, cell[j])
+                                    .tf_MatchCase(this.matchCase);
 
-                var sAOrSplit = sA.split(this.orOperator);//multiple search parameter operator ||
-                var hasMultiOrSA = (sAOrSplit.length>1) ? true : false;//multiple search || parameter boolean
-                var sAAndSplit = sA.split(this.anOperator);//multiple search parameter operator &&
-                var hasMultiAndSA = (sAAndSplit.length>1) ? true : false;//multiple search && parameter boolean
+                //multiple search parameter operator ||
+                var sAOrSplit = sA.split(this.orOperator),
+                //multiple search || parameter boolean
+                hasMultiOrSA = (sAOrSplit.length>1) ? true : false,
+                //multiple search parameter operator &&
+                sAAndSplit = sA.split(this.anOperator),
+                //multiple search && parameter boolean
+                hasMultiAndSA = sAAndSplit.length>1 ? true : false;
 
-                if(hasMultiOrSA || hasMultiAndSA)
-                {//multiple sarch parameters
-                    var cS, occur = false;
-                    var s = (hasMultiOrSA) ? sAOrSplit : sAAndSplit;
-                    for(var w=0; w<s.length; w++)
-                    {
+                //multiple sarch parameters
+                if(hasMultiOrSA || hasMultiAndSA){
+                    var cS,
+                        occur = false,
+                        s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
+                    for(var w=0; w<s.length; w++){
                         cS = s[w].tf_Trim();
                         occur = hasArg(cS,cell_data,j);
                         highlight(cS,occur,cell[j]);
-                        if(hasMultiOrSA && occur) break;
-                        if(hasMultiAndSA && !occur) break;
+                        if(hasMultiOrSA && occur){
+                            break;
+                        }
+                        if(hasMultiAndSA && !occur){
+                            break;
+                        }
                     }
                     occurence[j] = occur;
                 }
-                else {//single search parameter
+                //single search parameter
+                else {
                     occurence[j] = hasArg(sA.tf_Trim(),cell_data,j);
                     highlight(sA,occurence[j],cell[j]);
                 }//else single param
 
-                if(!occurence[j]) isRowValid = (this.searchType=='include') ? false : true;
-                if(this.singleSearchFlt && occurence[j]) singleFltRowValid = true;
-                if(this.popUpFilters) this.SetPopupFilterIcon(j, true);
+                if(!occurence[j]){
+                    isRowValid = this.searchType==='include' ? false : true;
+                }
+                if(this.singleSearchFlt && occurence[j]){
+                    singleFltRowValid = true;
+                }
+                if(this.popUpFilters){
+                    this.SetPopupFilterIcon(j, true);
+                }
                 if(this.markActiveColumns){
-                    if(k == this.refRow){
-                        if(this.onBeforeActiveColumn) this.onBeforeActiveColumn.call(null, this, j);
-                        tf_AddClass(this.GetHeaderElement(j), this.activeColumnsCssClass);
-                        if(this.onAfterActiveColumn) this.onAfterActiveColumn.call(null, this, j);
+                    if(k === this.refRow){
+                        if(this.onBeforeActiveColumn){
+                            this.onBeforeActiveColumn.call(null, this, j);
+                        }
+                        tf_AddClass(
+                            this.GetHeaderElement(j),
+                            this.activeColumnsCssClass);
+                        if(this.onAfterActiveColumn){
+                            this.onAfterActiveColumn.call(null, this, j);
+                        }
                     }
                 }
             }//for j
 
-            if(this.singleSearchFlt && singleFltRowValid) isRowValid = true;
+            if(this.singleSearchFlt && singleFltRowValid){
+                isRowValid = true;
+            }
 
-            if(!isRowValid)
-            {
+            if(!isRowValid){
                 this.SetRowValidation(k,false);
                 // always visible rows need to be counted as valid
-                if(this.hasVisibleRows && this.visibleRows.tf_Has(k) && !this.paging)
+                if(this.hasVisibleRows && this.visibleRows.tf_Has(k) &&
+                    !this.paging){
                     this.validRowsIndex.push(k);
-                else
+                } else {
                     hiddenrows++;
+                }
             } else {
                 this.SetRowValidation(k,true);
                 this.validRowsIndex.push(k);
-                if(this.alternateBgs) this.SetRowBg(k,this.validRowsIndex.length);
-                if(this.onRowValidated) this.onRowValidated.call(null,this,k);
+                if(this.alternateBgs){
+                    this.SetRowBg(k,this.validRowsIndex.length);
+                }
+                if(this.onRowValidated){
+                    this.onRowValidated.call(null,this,k);
+                }
             }
         }// for k
 
         this.nbVisibleRows = this.validRowsIndex.length;
         this.nbHiddenRows = hiddenrows;
         this.isStartBgAlternate = false;
-        if(this.rememberGridValues) this.RememberFiltersValue(this.fltsValuesCookie);
-        if(!this.paging) this.ApplyGridProps();//applies filter props after filtering process
-        if(this.paging){
+        if(this.rememberGridValues){
+            this.RememberFiltersValue(this.fltsValuesCookie);
+        }
+        //applies filter props after filtering process
+        if(!this.paging){
+            this.ApplyGridProps();
+        } else {
             this.startPagingRow = 0;
             this.currentPageNb = 1;
             this.SetPagingInfo(this.validRowsIndex);
         }//starts paging process
-        //invokes eventual onafter function
-        if(this.onAfterFilter) this.onAfterFilter.call(null,this);
+        //invokes onafter callback
+        if(this.onAfterFilter){
+            this.onAfterFilter.call(null,this);
+        }
     },
 
-    ApplyGridProps: function()
     /*====================================================
         - checks methods that should be called
         after filtering and/or paging process
     =====================================================*/
-    {
-        if(this.activeFlt && this.activeFlt.nodeName.tf_LCase()==this.fltTypeSlc && !this.popUpFilters)
-        {// blurs active filter (IE)
+    ApplyGridProps: function(){
+        // blurs active filter (IE)
+        if(this.activeFlt &&
+            this.activeFlt.nodeName.tf_LCase()===this.fltTypeSlc &&
+            !this.popUpFilters){
             this.activeFlt.blur();
-            if(this.activeFlt.parentNode) this.activeFlt.parentNode.focus();
+            if(this.activeFlt.parentNode){
+                this.activeFlt.parentNode.focus();
+            }
         }
 
-        if(this.visibleRows) this.SetVisibleRows();//shows rows always visible
-        if(this.colOperation) this.SetColOperation();//makes operation on a col
-        if(this.refreshFilters) this.RefreshFiltersGrid();//re-populates drop-down filters
-        var nr = (!this.paging && this.hasVisibleRows)
-                    ? (this.nbVisibleRows - this.visibleRows.length) : this.nbVisibleRows;
-        if(this.rowsCounter) this.RefreshNbRows(nr);//refreshes rows counter
+        //shows rows always visible
+        if(this.visibleRows)
+            this.SetVisibleRows();
+        //makes operation on a col
+        if(this.colOperation){
+            this.SetColOperation();
+        }
+        //re-populates drop-down filters
+        if(this.refreshFilters){
+            this.RefreshFiltersGrid();
+        }
+        var nr = !this.paging && this.hasVisibleRows ?
+            this.nbVisibleRows - this.visibleRows.length : this.nbVisibleRows;
+        //refreshes rows counter
+        if(this.rowsCounter){
+            this.RefreshNbRows(nr);
+        }
 
-        if(this.inpWatermark != '') this.SetWatermark(true);
-        if(this.popUpFilters) this.CloseAllPopupFilters();
+        if(this.inpWatermark !== ''){
+            this.SetWatermark(true);
+        }
+        if(this.popUpFilters){
+            this.CloseAllPopupFilters();
+        }
     },
 
-    GetColValues: function(colindex,num,exclude)
     /*====================================================
         - returns an array containing cell values of
         a column
@@ -5227,103 +5372,115 @@ TF.prototype = {
             - array containing rows index to be excluded
             from returned values
     =====================================================*/
-    {
-        if(!this.fltGrid) return;
-        var row = this.tbl.rows;
-        var colValues = [];
+    GetColValues: function(colindex, num, exclude){
+        if(!this.fltGrid){
+            return;
+        }
+        var row = this.tbl.rows,
+            colValues = [];
 
-        for(var i=this.refRow; i<this.nbRows; i++)//iterates rows
-        {
+        for(var i=this.refRow; i<this.nbRows; i++){
             var isExludedRow = false;
-            if(exclude!=undefined && tf_IsObj(exclude))
-            { // checks if current row index appears in exclude array
+            // checks if current row index appears in exclude array
+            if(exclude && tf_IsObj(exclude)){
                 isExludedRow = exclude.tf_Has(i); //boolean
             }
-            var cell = row[i].cells;
-            var nchilds = cell.length;
+            var cell = row[i].cells,
+                nchilds = cell.length;
 
-            if(nchilds == this.nbCells && !isExludedRow)
-            {// checks if row has exact cell # and is not excluded
-                for(var j=0; j<nchilds; j++)// this loop retrieves cell data
-                {
-                    if(j==colindex && row[i].style.display=='')
-                    {
-                        var cell_data = this.GetCellData(j, cell[j]).tf_LCase();
-                        var nbFormat = this.colNbFormat ? this.colNbFormat[colindex] : null;
-                        (num) ? colValues.push(tf_RemoveNbFormat(cell_data,nbFormat))
-                                : colValues.push(cell_data);
-                    }//if j==k
-                }//for j
-            }//if nchilds == this.nbCells
+            // checks if row has exact cell # and is not excluded
+            if(nchilds == this.nbCells && !isExludedRow){
+                // this loop retrieves cell data
+                for(var j=0; j<nchilds; j++){
+                    if(j===colindex && row[i].style.display===''){
+                        var cell_data = this.GetCellData(j, cell[j]).tf_LCase(),
+                            nbFormat = this.colNbFormat ?
+                                this.colNbFormat[colindex] : null,
+                            data = num ?
+                                tf_RemoveNbFormat(cell_data,nbFormat) :
+                                cell_data;
+                        colValues.push(data);
+                    }
+                }
+            }
         }//for i
         return colValues;
     },
 
-    GetFilterValue: function(index)
     /*====================================================
         - Returns value of a specified filter
         - Params:
             - index: filter column index (numeric value)
     =====================================================*/
-    {
-        if(!this.fltGrid) return;
-        var fltValue;
-        var flt = this.GetFilterElement(index);
-        if(flt==null) return fltValue='';
-
-        if(this['col'+index]!=this.fltTypeMulti &&
-            this['col'+index]!=this.fltTypeCheckList)
+    GetFilterValue: function(index){
+        if(!this.fltGrid){
+            return;
+        }
+        var fltValue,
+            flt = this.GetFilterElement(index);
+        if(!flt){
+            return '';
+        }
+        var fltColType = this['col'+index];
+        if(fltColType !== this.fltTypeMulti &&
+            fltColType !== this.fltTypeCheckList){
             fltValue = flt.value;
-        else if(this['col'+index] == this.fltTypeMulti)
-        {//mutiple select
+        }
+        //mutiple select
+        else if(fltColType === this.fltTypeMulti){
             fltValue = '';
-            for(var j=0; j<flt.options.length; j++)
-                if(flt.options[j].selected)
+            for(var j=0; j<flt.options.length; j++){
+                if(flt.options[j].selected){
                     fltValue = fltValue.concat(
-                                flt.options[j].value+' ' +
-                                this.orOperator + ' '
-                                );
+                        flt.options[j].value+' ' +
+                        this.orOperator + ' '
+                    );
+                }
+            }
             //removes last operator ||
             fltValue = fltValue.substr(0,fltValue.length-4);
         }
-        else if(this['col'+index]==this.fltTypeCheckList)
-        {//checklist
-            if(flt.getAttribute('value')!=null)
-            {
+        //checklist
+        else if(fltColType === this.fltTypeCheckList){
+            if(flt.getAttribute('value') !== null){
                 fltValue = flt.getAttribute('value');
                 //removes last operator ||
                 fltValue = fltValue.substr(0,fltValue.length-3);
-            } else fltValue = '';
+            } else{
+                fltValue = '';
+            }
         }
         return fltValue;
     },
 
-    GetFiltersValue: function()
     /*====================================================
         - Returns the value of every single filter
     =====================================================*/
-    {
-        if(!this.fltGrid) return;
+    GetFiltersValue: function(){
+        if(!this.fltGrid){
+            return;
+        }
         var searchArgs = [];
-        for(var i=0; i<this.fltIds.length; i++)
+        for(var i=0; i<this.fltIds.length; i++){
             searchArgs.push(
                 this.GetFilterValue(i).tf_MatchCase(this.matchCase).tf_Trim()
             );
+        }
         return searchArgs;
     },
 
-    GetFilterId: function(index)
     /*====================================================
         - Returns filter id of a specified column
         - Params:
             - index: column index (numeric value)
     =====================================================*/
-    {
-        if(!this.fltGrid) return;
+    GetFilterId: function(index){
+        if(!this.fltGrid){
+            return;
+        }
         return this.fltIds[i];
     },
 
-    GetFiltersByType: function(type,bool)
     /*====================================================
         - returns an array containing ids of filters of a
         specified type (inputs or selects)
@@ -5334,14 +5491,14 @@ TF.prototype = {
             - optional boolean: if set true method
             returns column indexes otherwise filters ids
     =====================================================*/
-    {
-        if(!this.fltGrid) return;
+    GetFiltersByType: function(type, bool){
+        if(!this.fltGrid){
+            return;
+        }
         var arr = [];
-        for(var i=0; i<this.fltIds.length; i++)
-        {
+        for(var i=0; i<this.fltIds.length; i++){
             var fltType = this['col'+i];
-            if(fltType == type.tf_LCase())
-            {
+            if(fltType === type.tf_LCase()){
                 var a = (bool) ? i : this.fltIds[i];
                 arr.push(a);
             }
@@ -5349,28 +5506,27 @@ TF.prototype = {
         return arr;
     },
 
-    GetFilterElement: function(index)
     /*====================================================
         - returns filter DOM element for a given column
         index
     =====================================================*/
-    {
-        if(!this.fltGrid) return null;
+    GetFilterElement: function(index){
+        if(!this.fltGrid){
+            return null;
+        }
         return tf_Id(this.fltIds[index]);
     },
 
-    GetCellsNb: function(rowIndex)
     /*====================================================
         - returns number of cells in a row
         - if rowIndex param is passed returns number of
         cells of specified row (number)
     =====================================================*/
-    {
-        var tr = (rowIndex == undefined) ? this.tbl.rows[0] : this.tbl.rows[rowIndex];
+    GetCellsNb: function(rowIndex){
+        var tr = !rowIndex ? this.tbl.rows[0] : this.tbl.rows[rowIndex];
         return tr.cells.length;
     },
 
-    GetRowsNb: function(includeHeaders)
     /*====================================================
         - returns total nb of filterable rows starting
         from reference row if defined
@@ -5378,89 +5534,84 @@ TF.prototype = {
             - includeHeaders: if true header rows are
             included in calculation(= table rows number)
     =====================================================*/
-    {
-        var s = this.refRow==undefined ? 0 : this.refRow;
-        var ntrs = this.tbl.rows.length;
+    GetRowsNb: function(includeHeaders){
+        var s = !this.refRow ? 0 : this.refRow,
+            ntrs = this.tbl.rows.length;
         if(includeHeaders){ s = 0; }
-        return parseInt(ntrs-s);
+        return parseInt(ntrs-s, 10);
     },
 
-    GetCellData: function(i, cell)
     /*====================================================
         - returns text content of a given cell
         - Params:
             - i: index of the column (number)
             - cell: td DOM object
     =====================================================*/
-    {
-        if(i==undefined || cell==null) return "";
+    GetCellData: function(i, cell){
+        if(i===undefined || !cell){
+            return '';
+        }
         //First checks for customCellData event
-        if(this.customCellData && this.customCellDataCols.tf_Has(i))
+        if(this.customCellData && this.customCellDataCols.tf_Has(i)){
             return this.customCellData.call(null,this,cell,i);
-        else
+        } else {
             return tf_GetNodeText(cell);
+        }
     },
 
-    GetTableData: function()
     /*====================================================
         - returns an array containing table data:
         [rowindex,[value1,value2,value3...]]
     =====================================================*/
-    {
+    GetTableData: function(){
         var row = this.tbl.rows;
-        for(var k=this.refRow; k<this.nbRows; k++)
-        {
-            var rowData, cellData;
-            rowData = [k,[]];
+        for(var k=this.refRow; k<this.nbRows; k++){
+            var rowData = [k,[]];
             var cells = row[k].cells;
-            for(var j=0; j<cells.length; j++)
-            {// this loop retrieves cell data
+            // this loop retrieves cell data
+            for(var j=0; j<cells.length; j++){
                 var cell_data = this.GetCellData(j, cells[j]);
                 rowData[1].push(cell_data);
             }
-            this.tblData.push(rowData)
+            this.tblData.push(rowData);
         }
         return this.tblData;
     },
 
-    GetFilteredData: function(includeHeaders)
     /*====================================================
         - returns an array containing filtered data:
         [rowindex,[value1,value2,value3...]]
     =====================================================*/
-    {
-        if(!this.validRowsIndex) return [];
-        var row = this.tbl.rows;
-        var filteredData = [];
+    GetFilteredData: function(includeHeaders){
+        if(!this.validRowsIndex){
+            return [];
+        }
+        var row = this.tbl.rows,
+            filteredData = [];
         if(includeHeaders){
-            var table = (this.gridLayout) ? this.headTbl : this.tbl;
-            var r = table.rows[this.headersRow];
-            var rowData = [r.rowIndex,[]];
-            for(var j=0; j<this.nbCells; j++)
-            {
+            var table = this.gridLayout ? this.headTbl : this.tbl,
+                r = table.rows[this.headersRow],
+                rowData = [r.rowIndex,[]];
+            for(var j=0; j<this.nbCells; j++){
                 var headerText = this.GetCellData(j, r.cells[j]);
                 rowData[1].push(headerText);
             }
             filteredData.push(rowData);
         }
-        //for(var i=0; i<this.validRowsIndex.length; i++)
+
         var validRows = this.GetValidRowsIndex(true);
-        for(var i=0; i<validRows.length; i++)
-        {
-            var rowData, cellData;
-            rowData = [this.validRowsIndex[i],[]];
-            var cells = row[this.validRowsIndex[i]].cells;
-            for(var j=0; j<cells.length; j++)
-            {
-                var cell_data = this.GetCellData(j, cells[j]);
-                rowData[1].push(cell_data);
+        for(var i=0; i<validRows.length; i++){
+            var rData = [this.validRowsIndex[i],[]],
+                cells = row[this.validRowsIndex[i]].cells;
+            for(var k=0; k<cells.length; k++){
+                var cell_data = this.GetCellData(k, cells[k]);
+                rData[1].push(cell_data);
             }
-            filteredData.push(rowData);
+            filteredData.push(rData);
         }
         return filteredData;
     },
 
-    GetFilteredDataCol: function(colIndex)
     /*====================================================
         - returns an array containing filtered data of a
         specified column.
@@ -5469,27 +5620,30 @@ TF.prototype = {
         - returned array:
         [value1,value2,value3...]
     =====================================================*/
-    {
-        if(colIndex==undefined) return [];
-        var data =  this.GetFilteredData();
-        var colData = [];
-        for(var i=0; i<data.length; i++)
-        {
-            var r = data[i];
-            var d = r[1]; //cols values of current row
-            var c = d[colIndex]; //data of searched column
+    GetFilteredDataCol: function(colIndex){
+        if(colIndex===undefined){
+            return [];
+        }
+        var data =  this.GetFilteredData(),
+            colData = [];
+        for(var i=0; i<data.length; i++){
+            var r = data[i],
+                //cols values of current row
+                d = r[1],
+                //data of searched column
+                c = d[colIndex];
             colData.push(c);
         }
         return colData;
     },
 
-    GetRowDisplay: function(row)
-    {
-        if(!this.fltGrid && !tf_IsObj(row)) return;
+    GetRowDisplay: function(row){
+        if(!this.fltGrid && !tf_IsObj(row)){
+            return;
+        }
         return row.style.display;
     },
 
-    SetRowValidation: function(rowIndex,isValid)
     /*====================================================
         - Validates/unvalidates row by setting 'validRow'
         attribute and shows/hides row
@@ -5497,37 +5651,41 @@ TF.prototype = {
             - rowIndex: index of the row (number)
             - isValid: boolean
     =====================================================*/
-    {
+    SetRowValidation: function(rowIndex, isValid){
         var row = this.tbl.rows[rowIndex];
-        if(!row || (typeof isValid).tf_LCase()!='boolean') return;
+        if(!row || (typeof isValid).tf_LCase()!=='boolean'){
+            return;
+        }
 
         // always visible rows are valid
-        if(this.hasVisibleRows && this.visibleRows.tf_Has(rowIndex) && !this.paging)
+        if(this.hasVisibleRows && this.visibleRows.tf_Has(rowIndex) &&
+            !this.paging){
             isValid = true;
+        }
 
-        var displayFlag = (isValid) ? '' : 'none';
-        var validFlag = (isValid) ? 'true' : 'false';
+        var displayFlag = isValid ? '' : 'none',
+            validFlag = isValid ? 'true' : 'false';
         row.style.display = displayFlag;
 
-        if(this.paging)
+        if(this.paging){
             row.setAttribute('validRow',validFlag);
+        }
     },
 
-    ValidateAllRows: function()
     /*====================================================
         - Validates all filterable rows
     =====================================================*/
-    {
-        if(!this.hasGrid) return;
+    ValidateAllRows: function(){
+        if(!this.hasGrid){
+            return;
+        }
         this.validRowsIndex = [];
-        for(var k=this.refRow; k<this.nbFilterableRows; k++)
-        {
-            this.SetRowValidation(k,true);
+        for(var k=this.refRow; k<this.nbFilterableRows; k++){
+            this.SetRowValidation(k, true);
             this.validRowsIndex.push(k);
         }
     },
 
-    SetFilterValue: function(index,searcharg,doFilter)
     /*====================================================
         - Inserts value in a specified filter
         - Params:
@@ -5537,56 +5695,62 @@ TF.prototype = {
             selects: executes filtering when multiple
             select populated... IE only!
     =====================================================*/
-    {
-        if((!this.fltGrid && !this.isFirstLoad) || this.GetFilterElement(index)==null) return;
-        var slc = this.GetFilterElement(index);
-        var execFilter = (doFilter==undefined) ? true : doFilter;
-        searcharg = (searcharg==undefined) ? '' : searcharg;
-
-        if(this['col'+index]!=this.fltTypeMulti &&
-            this['col'+index]!=this.fltTypeCheckList){
-            slc.value = searcharg;
-            if(this['col'+index]==this.fltTypeInp && this.inpWatermark!='')
-                tf_RemoveClass(slc, this.inpWatermarkCssClass);
+    SetFilterValue: function(index, searcharg, doFilter){
+        if((!this.fltGrid && !this.isFirstLoad) ||
+            !this.GetFilterElement(index)){
+            return;
         }
+        var slc = this.GetFilterElement(index),
+            execFilter = doFilter===undefined ? true : doFilter,
+            fltColType = this['col'+index];
+        searcharg = searcharg===undefined ? '' : searcharg;
 
-        else if(this['col'+index] == this.fltTypeMulti)
-        {//multiple selects
-            var s = searcharg.split(' '+this.orOperator+' ');
-            var ct = 0; //keywords counter
-            for(var j=0; j<slc.options.length; j++)
-            {
-                if(s=='') slc.options[j].selected = false;
-                if(slc.options[j].value=='') slc.options[j].selected = false;
-                if(slc.options[j].value!='' && s.tf_Has(slc.options[j].value,true))
-                {
-                    if(tf_isIE)
-                    {// IE multiple selection work-around
+        if(fltColType !== this.fltTypeMulti &&
+            fltColType != this.fltTypeCheckList){
+            slc.value = searcharg;
+            if(fltColType===this.fltTypeInp && this.inpWatermark!==''){
+                tf_RemoveClass(slc, this.inpWatermarkCssClass);
+            }
+        }
+        //multiple selects
+        else if(fltColType === this.fltTypeMulti){
+            var s = searcharg.split(' '+this.orOperator+' '),
+                ct = 0; //keywords counter
+            for(var j=0; j<slc.options.length; j++){
+                if(s===''){
+                    slc.options[j].selected = false;
+                }
+                if(slc.options[j].value===''){
+                    slc.options[j].selected = false;
+                }
+                if(slc.options[j].value!=='' &&
+                    s.tf_Has(slc.options[j].value,true)){
+                    // IE multiple selection work-around
+                    if(tf_isIE){
                         //when last value reached filtering can be executed
-                        var filter = (ct==(s.length-1) && execFilter) ? true : false;
+                        var filter = ct==(s.length-1) && execFilter ?
+                            true : false;
                         this.__deferMultipleSelection(slc,j,filter);
                         ct++;
                     }
-                    else
+                    else{
                         slc.options[j].selected = true;
+                    }
                 }//if
             }//for j
         }
-
-        else if(this['col'+index]==this.fltTypeCheckList)
-        {//checklist
+        //checklist
+        else if(fltColType === this.fltTypeCheckList){
             searcharg = searcharg.tf_MatchCase(this.matchCase);
-            var s = searcharg.split(' '+this.orOperator+' ');
-            var fltValue = slc.setAttribute('value','');
-            var fltIndex = slc.setAttribute('indexes','');
-            for(var k=0; k<tf_Tag(slc,'li').length; k++)
-            {
-                var li = tf_Tag(slc,'li')[k];
-                var lbl = tf_Tag(li,'label')[0];
-                var chk = tf_Tag(li,'input')[0];
-                var lblTxt = tf_GetNodeText(lbl).tf_MatchCase(this.matchCase);
-                if(lblTxt!='' && s.tf_Has(lblTxt,true))
-                {
+            var sarg = searcharg.split(' '+this.orOperator+' '),
+                fltValue = slc.setAttribute('value',''),
+                fltIndex = slc.setAttribute('indexes','');
+            for(var k=0; k<tf_Tag(slc,'li').length; k++){
+                var li = tf_Tag(slc,'li')[k],
+                    lbl = tf_Tag(li,'label')[0],
+                    chk = tf_Tag(li,'input')[0],
+                    lblTxt = tf_GetNodeText(lbl).tf_MatchCase(this.matchCase);
+                if(lblTxt!=='' && sarg.tf_Has(lblTxt,true)){
                     chk.checked = true;
                     this.__setCheckListValues(chk);
                 }
@@ -5598,55 +5762,64 @@ TF.prototype = {
         }
     },
 
-    SetColWidths: function(rowIndex)
     /*====================================================
         - sets coluun widths in pixels
     =====================================================*/
-    {
-        if(!this.fltGrid || !this.hasColWidth) return;
+    SetColWidths: function(rowIndex){
+        if(!this.fltGrid || !this.hasColWidth){
+            return;
+        }
         var o = this, rIndex;
-        if(rowIndex==undefined) rIndex = this.tbl.rows[0].style.display!='none' ? 0 : 1;
-        else rIndex = rowIndex;
+        if(rowIndex===undefined){
+            rIndex = this.tbl.rows[0].style.display!='none' ? 0 : 1;
+        } else{
+            rIndex = rowIndex;
+        }
         setWidths(this.tbl.rows[rIndex]);
 
-        function setWidths(row)
-        {
-            if(!o && (o.nbCells!=o.colWidth.length)) return;
-            if(o.nbCells==row.cells.length)
-                for(var k=0; k<o.nbCells; k++)
+        function setWidths(row){
+            if(!o && (o.nbCells!=o.colWidth.length)){
+                return;
+            }
+            if(o.nbCells==row.cells.length){
+                for(var k=0; k<o.nbCells; k++){
                     row.cells[k].style.width = o.colWidth[k];
+                }
+            }
         }
     },
 
-    SetVisibleRows: function()
     /*====================================================
         - makes a row always visible
         - Note this works only if paging is false
     =====================================================*/
-    {
-        if(this.hasGrid && this.hasVisibleRows && !this.paging)
-        {
-            for(var i=0; i<this.visibleRows.length; i++)
-            {
-                if(this.visibleRows[i]<=this.nbRows)//row index cannot be > nrows
+    SetVisibleRows: function(){
+        if(this.hasGrid && this.hasVisibleRows && !this.paging){
+            for(var i=0; i<this.visibleRows.length; i++){
+                //row index cannot be > nrows
+                if(this.visibleRows[i] <= this.nbRows){
                     this.SetRowValidation(this.visibleRows[i],true);
-            }//for i
-        }//if hasGrid
+                }
+            }
+        }
     },
 
-    ClearFilters: function()
-    {
+    ClearFilters: function(){
         this.EvtManager(this.Evt.name.clear);
     },
-    _ClearFilters: function()
     /*====================================================
         - clears grid filters
     =====================================================*/
-    {
-        if(!this.fltGrid) return;
-        if(this.onBeforeReset){ this.onBeforeReset.call(null, this, this.GetFiltersValue()); }
-        for(var i=0; i<this.fltIds.length; i++)
+    _ClearFilters: function(){
+        if(!this.fltGrid){
+            return;
+        }
+        if(this.onBeforeReset){
+            this.onBeforeReset.call(null, this, this.GetFiltersValue());
+        }
+        for(var i=0; i<this.fltIds.length; i++){
             this.SetFilterValue(i,'');
+        }
         if(this.refreshFilters){
             this.activeFilterId = '';
             this.RefreshFiltersGrid();
@@ -5656,83 +5829,95 @@ TF.prototype = {
         if(this.onAfterReset){ this.onAfterReset.call(null, this); }
     },
 
-    ClearActiveColumns: function()
     /*====================================================
         - clears active columns header class name
     =====================================================*/
-    {
-        for(var i=0; i<this.fltIds.length; i++)
-            tf_RemoveClass(this.GetHeaderElement(i), this.activeColumnsCssClass);
+    ClearActiveColumns: function(){
+        for(var i=0; i<this.fltIds.length; i++){
+            tf_RemoveClass(
+                this.GetHeaderElement(i), this.activeColumnsCssClass);
+        }
     },
 
-    RefreshGrid: function(config)
     /*====================================================
         - Re-generates filters grid
     =====================================================*/
-    {
+    RefreshGrid: function(config){
         var configObj = !config ? this.fObj : config;
         var hasSort = this.sort;
-        if(hasSort) this.sort = false; //sort property is set to false in order to avoid sort object re-instanciation
+        //sort property is set to false in order to avoid sort object
+        //re-instanciation
+        if(hasSort){
+            this.sort = false;
+        }
         this.nbRows = this.GetRowsNb(); //in case table is refreshed
         this.RemoveGrid();
         window['tf_'+this.id] = new TF(this.id, this.startRow, configObj);
         this.isFirstLoad = true;
         this.fltIds = [];
         this._AddGrid();
+        //New tbody content needs to be referenced in sortabletable script with
+        //setTBody() method
         if(hasSort){
-            //New tbody content needs to be referenced in sortabletable script with setTBody() method
             //this.st =  SortableTable object
-            this.st.setTBody(this.tbl.tBodies[0]); //Note this is a method of the Sortable Table 1.12 script (Erik Arvidsson)
-            this.sort = true; //finally sort property is enabled again
+            //Note this is a method of the Sortable Table 1.12 script
+            //(Erik Arvidsson)
+            this.st.setTBody(this.tbl.tBodies[0]);
+            //finally sort property is enabled again
+            this.sort = true;
         }
     },
 
-    RefreshFiltersGrid: function()
     /*====================================================
         - retrieves select, multiple and checklist filters
         - calls method repopulating filters
     =====================================================*/
-    {
-        var slcA1 = this.GetFiltersByType( this.fltTypeSlc,true );
-        var slcA2 = this.GetFiltersByType( this.fltTypeMulti,true );
-        var slcA3 = this.GetFiltersByType( this.fltTypeCheckList,true );
-        var slcIndex = slcA1.concat(slcA2);
+    RefreshFiltersGrid: function(){
+        var slcA1 = this.GetFiltersByType(this.fltTypeSlc, true),
+            slcA2 = this.GetFiltersByType(this.fltTypeMulti, true),
+            slcA3 = this.GetFiltersByType(this.fltTypeCheckList, true),
+            slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
 
-        if( this.activeFilterId!=null )//for paging
-        {
+        if(this.activeFilterId){
             var activeFlt = this.activeFilterId.split('_')[0];
             activeFlt = activeFlt.split(this.prfxFlt)[1];
             var slcSelectedValue;
-            for(var i=0; i<slcIndex.length; i++)
-            {
+            for(var i=0; i<slcIndex.length; i++){
                 var curSlc = tf_Id(this.fltIds[slcIndex[i]]);
-                slcSelectedValue = this.GetFilterValue( slcIndex[i] );
-                if(activeFlt!=slcIndex[i] || (this.paging && slcA1.tf_Has(slcIndex[i]) && activeFlt==slcIndex[i] ) ||
-                    ( !this.paging && (slcA3.tf_Has(slcIndex[i]) || slcA2.tf_Has(slcIndex[i]) )) ||
-                    slcSelectedValue==this.displayAllText )
-                {
-                    if(slcA3.tf_Has(slcIndex[i]))
-                        this.checkListDiv[slcIndex[i]].innerHTML = '';
-                    else curSlc.innerHTML = '';
+                slcSelectedValue = this.GetFilterValue(slcIndex[i]);
+                if(activeFlt!==slcIndex[i] ||
+                    (this.paging && slcA1.tf_Has(slcIndex[i]) &&
+                        activeFlt === slcIndex[i] ) ||
+                    (!this.paging && (slcA3.tf_Has(slcIndex[i]) ||
+                        slcA2.tf_Has(slcIndex[i]))) ||
+                    slcSelectedValue === this.displayAllText ){
 
-                    if(this.fillSlcOnDemand) { //1st option needs to be inserted
-                        var opt0 = tf_CreateOpt(this.displayAllText,'');
-                        if(curSlc) curSlc.appendChild( opt0 );
+                    if(slcA3.tf_Has(slcIndex[i])){
+                        this.checkListDiv[slcIndex[i]].innerHTML = '';
+                    } else {
+                        curSlc.innerHTML = '';
                     }
 
-                    if(slcA3.tf_Has(slcIndex[i]))
+                    //1st option needs to be inserted
+                    if(this.fillSlcOnDemand) {
+                        var opt0 = tf_CreateOpt(this.displayAllText,'');
+                        if(curSlc){
+                            curSlc.appendChild(opt0);
+                        }
+                    }
+
+                    if(slcA3.tf_Has(slcIndex[i])){
                         this._PopulateCheckList(slcIndex[i]);
-                    else
+                    } else {
                         this._PopulateSelect(slcIndex[i],true);
+                    }
 
                     this.SetFilterValue(slcIndex[i],slcSelectedValue);
                 }
             }// for i
         }
     },
-
-    SetColOperation: function()
     /*====================================================
         - Calculates values of a column
         - params are stored in 'colOperation' table's
@@ -5750,83 +5935,100 @@ TF.prototype = {
             - colOperation['tot_row_index'] defines in
             which row results are displayed (integers array)
 
-        - changes made by nuovella:
+        - changes made by Nuovella:
         (1) optimized the routine (now it will only
         process each column once),
         (2) added calculations for the median, lower and
         upper quartile.
     =====================================================*/
-    {
-        if( !this.isFirstLoad && !this.hasGrid ) return;
+    SetColOperation: function(){
+        if(!this.isFirstLoad && !this.hasGrid){
+            return;
+        }
 
-        if(this.onBeforeOperation) this.onBeforeOperation.call(null,this);
+        if(this.onBeforeOperation){
+            this.onBeforeOperation.call(null,this);
+        }
 
-        var labelId = this.colOperation['id'];
-        var colIndex = this.colOperation['col'];
-        var operation = this.colOperation['operation'];
-        var outputType = this.colOperation['write_method'];
-        var totRowIndex = this.colOperation['tot_row_index'];
-        var excludeRow = this.colOperation['exclude_row'];
-        var decimalPrecision = this.colOperation['decimal_precision']!=undefined
-                                ? this.colOperation['decimal_precision'] : 2;
+        var colOperation = this.colOperation,
+            labelId = colOperation.id,
+            colIndex = colOperation.col,
+            operation = colOperation.operation,
+            outputType = colOperation.write_method,
+            totRowIndex = colOperation.tot_row_index,
+            excludeRow = colOperation.exclude_row,
+            decimalPrecision = colOperation.decimal_precision !== undefined ?
+                colOperation.decimal_precision : 2;
 
         //nuovella: determine unique list of columns to operate on
-        var ucolIndex =[];
-        var ucolMax=0;
+        var ucolIndex = [],
+            ucolMax = 0;
+        ucolIndex[ucolMax] = colIndex[0];
 
-        ucolIndex[ucolMax]=colIndex[0];
-
-        for(var i=1; i<colIndex.length; i++)
-        {
-            saved=0;
-            //see if colIndex[i] is already in the list of unique indexes
-            for(var j=0; j<=ucolMax; j++ )
-            {
-                if (ucolIndex[j]==colIndex[i])
-                    saved=1;
+        for(var ii=1; ii<colIndex.length; ii++){
+            var saved = 0;
+            //see if colIndex[ii] is already in the list of unique indexes
+            for(var jj=0; jj<=ucolMax; jj++){
+                if(ucolIndex[jj] === colIndex[ii]){
+                    saved = 1;
+                }
             }
-            if (saved==0)
-            {//if not saved then, save the index;
+            //if not saved then, save the index;
+            if (saved === 0){
                 ucolMax++;
-                ucolIndex[ucolMax]=colIndex[i];
+                ucolIndex[ucolMax] = colIndex[ii];
             }
-        }// for i
+        }
 
-        if( (typeof labelId).tf_LCase()=='object'
-            && (typeof colIndex).tf_LCase()=='object'
-            && (typeof operation).tf_LCase()=='object' )
-        {
-            var row = this.tbl.rows;
-            var colvalues = [];
+        if((typeof labelId).tf_LCase()=='object' &&
+            (typeof colIndex).tf_LCase()=='object' &&
+            (typeof operation).tf_LCase()=='object'){
+            var row = this.tbl.rows,
+                colvalues = [];
 
-            for(var ucol=0; ucol<=ucolMax; ucol++)
-            {
+            for(var ucol=0; ucol<=ucolMax; ucol++){
                 //this retrieves col values
-                //use ucolIndex because we only want to pass through this loop once for each column
-                //get the values in this unique column
-                colvalues.push( this.GetColValues(ucolIndex[ucol],true,excludeRow) );
+                //use ucolIndex because we only want to pass through this loop
+                //once for each column get the values in this unique column
+                colvalues.push(
+                    this.GetColValues(ucolIndex[ucol],true,excludeRow));
 
-               //next: calculate all operations for this column
-               var result, nbvalues=0,  temp;
-               var meanValue=0, sumValue=0, minValue=null, maxValue=null, q1Value=null, medValue=null, q3Value=null;
-               var meanFlag=0, sumFlag=0, minFlag=0, maxFlag=0, q1Flag=0, medFlag=0, q3Flag=0;
-               var theList=[];
-               var opsThisCol=[], decThisCol=[], labThisCol=[], oTypeThisCol=[];
-               var mThisCol=-1;
+                //next: calculate all operations for this column
+                var result,
+                    nbvalues=0,
+                    temp,
+                    meanValue=0,
+                    sumValue=0,
+                    minValue=null,
+                    maxValue=null,
+                    q1Value=null,
+                    medValue=null,
+                    q3Value=null,
+                    meanFlag=0,
+                    sumFlag=0,
+                    minFlag=0,
+                    maxFlag=0,
+                    q1Flag=0,
+                    medFlag=0,
+                    q3Flag=0,
+                    theList=[],
+                    opsThisCol=[],
+                    decThisCol=[],
+                    labThisCol=[],
+                    oTypeThisCol=[],
+                    mThisCol=-1;
 
-                for(var i=0; i<colIndex.length; i++)
-                {
-                     if (colIndex[i]==ucolIndex[ucol])
-                     {
+                for(var i=0; i<colIndex.length; i++){
+                     if(colIndex[i] === ucolIndex[ucol]){
                         mThisCol++;
                         opsThisCol[mThisCol]=operation[i].tf_LCase();
                         decThisCol[mThisCol]=decimalPrecision[i];
                         labThisCol[mThisCol]=labelId[i];
-                        oTypeThisCol = (outputType != undefined && (typeof outputType).tf_LCase()=='object')
-                                            ? outputType[i] : null;
+                        oTypeThisCol = outputType !== undefined &&
+                            (typeof outputType).tf_LCase()==='object' ?
+                            outputType[i] : null;
 
-                        switch( opsThisCol[mThisCol] )
-                        {
+                        switch(opsThisCol[mThisCol]){
                             case 'mean':
                                 meanFlag=1;
                             break;
@@ -5852,16 +6054,13 @@ TF.prototype = {
                     }
                 }
 
-                for(var j=0; j<colvalues[ucol].length; j++ )
-                {
-                    if ((q1Flag==1)||(q3Flag==1) || (medFlag==1))
-                    {//sort the list for calculation of median and quartiles
-                        if (j<colvalues[ucol].length -1)
-                        {
+                for(var j=0; j<colvalues[ucol].length; j++){
+                    //sort the list for calculation of median and quartiles
+                    if((q1Flag==1)||(q3Flag==1) || (medFlag==1)){
+                        if (j<colvalues[ucol].length -1){
                             for(k=j+1;k<colvalues[ucol].length; k++) {
-
-                                if( eval(colvalues[ucol][k]) < eval(colvalues[ucol][j]))
-                                {
+                                if(eval(colvalues[ucol][k]) <
+                                    eval(colvalues[ucol][j])){
                                     temp = colvalues[ucol][j];
                                     colvalues[ucol][j] = colvalues[ucol][k];
                                     colvalues[ucol][k] = temp;
@@ -5870,63 +6069,68 @@ TF.prototype = {
                         }
                     }
                     var cvalue = parseFloat(colvalues[ucol][j]);
-                    theList[j]=parseFloat( cvalue );
+                    theList[j] = parseFloat(cvalue);
 
-                    if( !isNaN(cvalue) )
-                    {
+                    if(!isNaN(cvalue)){
                         nbvalues++;
-                        if ((sumFlag==1)|| (meanFlag==1)) sumValue += parseFloat( cvalue );
-                        if (minFlag==1)
-                        {
-                            if (minValue==null)
-                            {
-                                minValue = parseFloat( cvalue );
-                            }
-                            else minValue= parseFloat( cvalue )<minValue? parseFloat( cvalue ): minValue;
+                        if(sumFlag===1 || meanFlag===1){
+                            sumValue += parseFloat( cvalue );
                         }
-                        if (maxFlag==1) {
-                            if (maxValue==null)
-                            {maxValue = parseFloat( cvalue );}
-                        else {maxValue= parseFloat( cvalue )>maxValue? parseFloat( cvalue ): maxValue;}
+                        if(minFlag===1){
+                            if(minValue===null){
+                                minValue = parseFloat( cvalue );
+                            } else{
+                                minValue = parseFloat( cvalue ) < minValue ?
+                                    parseFloat( cvalue ): minValue;
+                            }
+                        }
+                        if(maxFlag===1){
+                            if (maxValue===null){
+                                maxValue = parseFloat( cvalue );
+                            } else {
+                                maxValue = parseFloat( cvalue ) > maxValue ?
+                                    parseFloat( cvalue ): maxValue;
+                            }
                         }
                     }
                 }//for j
-                if (meanFlag==1) meanValue = sumValue/nbvalues;
-                if (medFlag==1)
-                {
-                        var aux = 0;
-                        if(nbvalues%2 == 1)
-                        {
-                            aux = Math.floor(nbvalues/2);
-                            medValue = theList[aux];
-                        }
-                    else medValue = (theList[nbvalues/2]+theList[((nbvalues/2)-1)])/2;
+                if(meanFlag===1){
+                    meanValue = sumValue/nbvalues;
                 }
-                if (q1Flag==1)
-                {
-                    var posa=0.0;
+                if(medFlag===1){
+                    var aux = 0;
+                    if(nbvalues%2 === 1){
+                        aux = Math.floor(nbvalues/2);
+                        medValue = theList[aux];
+                    } else{
+                        medValue =
+                            (theList[nbvalues/2] + theList[((nbvalues/2)-1)])/2;
+                    }
+                }
+                var posa;
+                if(q1Flag===1){
+                    posa=0.0;
                     posa = Math.floor(nbvalues/4);
-                    if (4*posa == nbvalues) {q1Value = (theList[posa-1] + theList[posa])/2;}
-                    else {q1Value = theList[posa];}
+                    if(4*posa == nbvalues){
+                        q1Value = (theList[posa-1] + theList[posa])/2;
+                    } else {
+                        q1Value = theList[posa];
+                    }
                 }
-                if (q3Flag==1)
-                {
-                    var posa=0.0;
+                if (q3Flag===1){
+                    posa=0.0;
                     var posb=0.0;
                     posa = Math.floor(nbvalues/4);
-                    if (4*posa == nbvalues)
-                    {
+                    if (4*posa === nbvalues){
                         posb = 3*posa;
                         q3Value = (theList[posb] + theList[posb-1])/2;
-                    }
-                    else
+                    } else {
                         q3Value = theList[nbvalues-posa-1];
+                    }
                 }
 
-                for(var i=0; i<=mThisCol; i++ )
-                {
-                   switch( opsThisCol[i] )
-                   {
+                for(var i=0; i<=mThisCol; i++){
+                    switch( opsThisCol[i] ){
                         case 'mean':
                             result=meanValue;
                         break;
@@ -5948,61 +6152,67 @@ TF.prototype = {
                         case 'q3':
                             result=q3Value;
                         break;
-                  }
-
-                var precision = decThisCol[i]!=undefined && !isNaN( decThisCol[i] )
-                                    ? decThisCol[i] : 2;
-
-                if(oTypeThisCol!=null && result)
-                {//if outputType is defined
-                    result = result.toFixed( precision );
-                    if( tf_Id( labThisCol[i] )!=undefined )
-                    {
-                        switch( oTypeThisCol.tf_LCase() )
-                        {
-                            case 'innerhtml':
-                                if (isNaN(result) || !isFinite(result) || (nbvalues==0))
-                                    tf_Id( labThisCol[i] ).innerHTML = '.';
-                                else
-                                    tf_Id( labThisCol[i] ).innerHTML = result;
-                            break;
-                            case 'setvalue':
-                                tf_Id( labThisCol[i] ).value = result;
-                            break;
-                            case 'createtextnode':
-                                var oldnode = tf_Id( labThisCol[i] ).firstChild;
-                                var txtnode = tf_CreateText( result );
-                                tf_Id( labThisCol[i] ).replaceChild( txtnode,oldnode );
-                            break;
-                        }//switch
                     }
-                } else {
-                    try
-                    {
-                        if (isNaN(result) || !isFinite(result) || (nbvalues==0))
-                            tf_Id( labThisCol[i] ).innerHTML = '.';
-                        else
-                             tf_Id( labThisCol[i] ).innerHTML = result.toFixed( precision );
-                    } catch(e){ }//catch
-                }//else
-             }//for i
-            //eventual row(s) with result are always visible
-            if(totRowIndex!=undefined && row[totRowIndex[ucol]])
-                row[totRowIndex[ucol]].style.display = '';
+
+                    var precision = decThisCol[i] && !isNaN( decThisCol[i] ) ?
+                        decThisCol[i] : 2;
+                    //if outputType is defined
+                    if(oTypeThisCol && result){
+                        result = result.toFixed( precision );
+                        if(tf_Id(labThisCol[i])){
+                            switch( oTypeThisCol.tf_LCase() ){
+                                case 'innerhtml':
+                                    if (isNaN(result) || !isFinite(result) ||
+                                        nbvalues===0){
+                                        tf_Id(labThisCol[i]).innerHTML = '.';
+                                    } else{
+                                        tf_Id(labThisCol[i]).innerHTML = result;
+                                    }
+                                break;
+                                case 'setvalue':
+                                    tf_Id( labThisCol[i] ).value = result;
+                                break;
+                                case 'createtextnode':
+                                    var oldnode = tf_Id(labThisCol[i])
+                                        .firstChild;
+                                    var txtnode = tf_CreateText(result);
+                                    tf_Id(labThisCol[i])
+                                        .replaceChild(txtnode, oldnode);
+                                break;
+                            }//switch
+                        }
+                    } else {
+                        try{
+                            if(isNaN(result) || !isFinite(result) ||
+                                nbvalues===0){
+                                tf_Id(labThisCol[i]).innerHTML = '.';
+                            } else {
+                                tf_Id(labThisCol[i]).innerHTML = result.toFixed(
+                                    precision);
+                            }
+                        } catch(e) {}//catch
+                    }//else
+                }//for i
+                //eventual row(s) with result are always visible
+                if(totRowIndex && row[totRowIndex[ucol]]){
+                    row[totRowIndex[ucol]].style.display = '';
+                }
             }//for ucol
         }//if typeof
 
-        if(this.onAfterOperation) this.onAfterOperation.call(null,this);
+        if(this.onAfterOperation){
+            this.onAfterOperation.call(null,this);
+        }
     },
 
-    UnhighlightAll: function()
     /*====================================================
         - removes keyword highlighting
     =====================================================*/
-    {
-        if( this.highlightKeywords && this.searchArgs!=null ){
+    UnhighlightAll: function(){
+        if( this.highlightKeywords && this.searchArgs){
             for(var y=0; y<this.searchArgs.length; y++){
-                tf_UnhighlightWord(this, this.searchArgs[y], this.highlightCssClass);
+                tf_UnhighlightWord(
+                    this, this.searchArgs[y], this.highlightCssClass);
             }
             this.highlightedNodes = [];
         }
@@ -6012,13 +6222,14 @@ TF.prototype = {
         - Private methods
     =====================================================*/
 
-    __resetGrid: function()
     /*====================================================
         - Only used by AddGrid() method
         - Resets filtering grid bar if previously removed
     =====================================================*/
-    {
-        if(this.isFirstLoad) return;
+    __resetGrid: function(){
+        if(this.isFirstLoad){
+            return;
+        }
 
         // grid was removed, grid row element is stored in fltGridEl property
         if(!this.gridLayout){
@@ -6028,48 +6239,65 @@ TF.prototype = {
             );
         }
 
-        if(this.isExternalFlt)
-        {// filters are appended in external placeholders elements
-            for(var ct=0; ct<this.externalFltTgtIds.length; ct++)
-                if(tf_Id(this.externalFltTgtIds[ct])){
-                    tf_Id(this.externalFltTgtIds[ct]).appendChild(this.externalFltEls[ct]);
-
+        // filters are appended in external placeholders elements
+        if(this.isExternalFlt){
+            for(var ct=0; ct<this.externalFltTgtIds.length; ct++){
+                var extFlt = tf_Id(this.externalFltTgtIds[ct]);
+                if(extFlt){
+                    extFlt.appendChild(this.externalFltEls[ct]);
+                    var colFltType = this['col'+ct];
                     //IE special treatment for gridLayout, appended filters are empty
-                    if(this.gridLayout && this.externalFltEls[ct].innerHTML=='' && this['col'+ct] != this.fltTypeInp){
-                        if(this['col'+ct] == this.fltTypeSlc || this['col'+ct] == this.fltTypeMulti)
+                    if(this.gridLayout &&
+                        this.externalFltEls[ct].innerHTML === '' &&
+                        colFltType !== this.fltTypeInp){
+                        if(colFltType === this.fltTypeSlc ||
+                            colFltType === this.fltTypeMulti){
                             this.PopulateSelect(ct);
-                        if(this['col'+ct] == this.fltTypeCheckList) this.PopulateCheckList(ct);
+                        }
+                        if(colFltType === this.fltTypeCheckList){
+                            this.PopulateCheckList(ct);
+                        }
                     }
                 }
+            }
         }
 
         this.nbFilterableRows = this.GetRowsNb();
         this.nbVisibleRows = this.nbFilterableRows;
         this.nbRows = this.tbl.rows.length;
-        if(this.isSortEnabled) this.sort = true;
+        if(this.isSortEnabled){
+            this.sort = true;
+        }
 
-        if(this.tbl.rows[this.filtersRowIndex].innerHTML=='')
+        if(this.tbl.rows[this.filtersRowIndex].innerHTML === ''){
             refreshFilters(this);
-        else
-            if(this.popUpFilters){ this.headersRow++; this.SetPopupFilters(); }
+        } else {
+            if(this.popUpFilters){
+                this.headersRow++;
+                this.SetPopupFilters();
+            }
+        }
 
-        /***    ie bug work-around, filters need to be re-generated
-                since row is empty; insertBefore method doesn't seem to work properly
+        /***    ie bug work-around, filters need to be re-generated since row
+                is empty; insertBefore method doesn't seem to work properly
                 with previously generated DOM nodes modified by innerHTML   ***/
         function refreshFilters(o){
             o.tbl.deleteRow(o.filtersRowIndex);
             o.RemoveGrid();
             o.fltIds = [];
             o.isFirstLoad = true;
-            if(o.popUpFilters) o.RemovePopupFilters();
+            if(o.popUpFilters){
+                o.RemovePopupFilters();
+            }
             o._AddGrid();
         }
 
-        if(!this.gridLayout) tf_AddClass(this.tbl, this.prfxTf);
+        if(!this.gridLayout){
+            tf_AddClass(this.tbl, this.prfxTf);
+        }
         this.hasGrid = true;
     },
 
-    __containsStr: function(arg,data,fltType,forceMatch)
     /*==============================================
         - Checks if data contains searched arg,
         returns a boolean
@@ -6082,166 +6310,187 @@ TF.prototype = {
             - forceMatch: boolean forcing exact
             match (optional)
     ===============================================*/
-    {
+    __containsStr: function(arg, data, fltType, forceMatch){
         // Improved by Cedric Wartel (cwl)
-        // automatic exact match for selects and special characters are now filtered
-        var regexp;
-        var modifier = (this.matchCase) ? 'g' : 'gi';
-        var exactMatch = (forceMatch==undefined) ? this.exactMatch : forceMatch;
-        if(exactMatch || (fltType!=this.fltTypeInp && fltType!=undefined))//V�ry P�ter's patch
-            regexp = new RegExp('(^\\s*)'+tf_RegexpEscape(arg)+'(\\s*$)', modifier);
-        else
+        // automatic exact match for selects and special characters are now
+        // filtered
+        var regexp,
+            modifier = (this.matchCase) ? 'g' : 'gi',
+            exactMatch = !forceMatch ? this.exactMatch : forceMatch;
+        if(exactMatch || (fltType!==this.fltTypeInp && fltType)){
+            regexp = new RegExp(
+                '(^\\s*)'+ tf_RegexpEscape(arg) +'(\\s*$)', modifier);
+        } else{
             regexp = new RegExp(tf_RegexpEscape(arg), modifier);
+        }
         return regexp.test(data);
     },
 
-    IncludeFile: function(fileId, filePath, callback, type)
-    {
-        var ftype = (type==undefined) ? 'script' : type;
-        var isImported = tf_IsImported(filePath, ftype);
-        if(isImported) return;
-        var o = this, isLoaded = false, file;
-        var head = tf_Tag(document,'head')[0];
-
-        if(ftype.tf_LCase() == 'link')
-            file = tf_CreateElm(
-                        'link', ['id',fileId], ['type','text/css'],
-                        ['rel','stylesheet'], ['href',filePath]
-                    );
-        else
-            file = tf_CreateElm(
-                        'script', ['id',fileId],
-                        ['type','text/javascript'], ['src',filePath]
-                    );
-
-        file.onload = file.onreadystatechange = function()
-        {//Browser <> IE onload event works only for scripts, not for stylesheets
-            if(!isLoaded &&
-                (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete'))
-            {
-                isLoaded = true;
-                if(typeof callback === 'function'){ callback.call(null,o); }
-            }
+    IncludeFile: function(fileId, filePath, callback, type){
+        var ftype = !type ? 'script' : type,
+            isImported = tf_IsImported(filePath, ftype);
+        if(isImported){
+            return;
         }
+        var o = this,
+            isLoaded = false,
+            file,
+            head = tf_Tag(document,'head')[0];
+
+        if(ftype.tf_LCase() === 'link'){
+            file = tf_CreateElm(
+                'link',
+                ['id', fileId], ['type', 'text/css'],
+                ['rel', 'stylesheet'], ['href', filePath]
+            );
+        } else {
+            file = tf_CreateElm(
+                'script', ['id', fileId],
+                ['type', 'text/javascript'], ['src', filePath]
+            );
+        }
+
+        //Browser <> IE onload event works only for scripts, not for stylesheets
+        file.onload = file.onreadystatechange = function(){
+            if(!isLoaded &&
+                (!this.readyState || this.readyState === 'loaded' ||
+                    this.readyState === 'complete')){
+                isLoaded = true;
+                if(typeof callback === 'function'){
+                    callback.call(null, o);
+                }
+            }
+        };
         file.onerror = function(){
             throw new Error('TF script could not load:\n' + this.src);
-        }
+        };
         head.appendChild(file);
     },
 
-    HasGrid: function()
     /*====================================================
         - checks if table has a filter grid
         - returns a boolean
     =====================================================*/
-    {
+    HasGrid: function(){
         return this.hasGrid;
     },
 
-    GetFiltersId: function()
     /*====================================================
         - returns an array containing filters ids
         - Note that hidden filters are also returned
     =====================================================*/
-    {
-        if( !this.hasGrid ) return;
+    GetFiltersId: function(){
+        if(!this.hasGrid){
+            return;
+        }
         return this.fltIds;
     },
 
-    GetValidRowsIndex: function(reCalc)
     /*====================================================
         - returns an array containing valid rows indexes
         (valid rows upon filtering)
     =====================================================*/
-    {
-        if( !this.hasGrid ) return;
-        if(!reCalc){ return this.validRowsIndex; }
+    GetValidRowsIndex: function(reCalc){
+        if(!this.hasGrid){
+            return;
+        }
+        if(!reCalc){
+            return this.validRowsIndex;
+        }
+
         this.validRowsIndex = [];
         for(var k=this.refRow; k<this.GetRowsNb(true); k++){
             var r = this.tbl.rows[k];
             if(!this.paging){
-                if(this.GetRowDisplay(r) != 'none')
+                if(this.GetRowDisplay(r) !== 'none'){
                     this.validRowsIndex.push(r.rowIndex);
+                }
             } else {
-                if(r.getAttribute('validRow') == 'true' || r.getAttribute('validRow') == null)
+                if(r.getAttribute('validRow') === 'true' ||
+                    r.getAttribute('validRow') === null){
                     this.validRowsIndex.push(r.rowIndex);
+                }
             }
         }
         return this.validRowsIndex;
     },
 
-    GetFiltersRowIndex: function()
     /*====================================================
         - Returns the index of the row containing the
         filters
     =====================================================*/
-    {
-        if( !this.hasGrid ) return;
+    GetFiltersRowIndex: function(){
+        if(!this.hasGrid){
+            return;
+        }
         return this.filtersRowIndex;
     },
 
-    GetHeadersRowIndex: function()
     /*====================================================
         - Returns the index of the headers row
     =====================================================*/
-    {
-        if( !this.hasGrid ) return;
+    GetHeadersRowIndex: function(){
+        if(!this.hasGrid){
+            return;
+        }
         return this.headersRow;
     },
 
-    GetStartRowIndex: function()
     /*====================================================
         - Returns the index of the row from which will
         start the filtering process (1st filterable row)
     =====================================================*/
-    {
-        if( !this.hasGrid ) return;
+    GetStartRowIndex: function(){
+        if(!this.hasGrid){
+            return;
+        }
         return this.refRow;
     },
 
-    GetLastRowIndex: function()
     /*====================================================
         - Returns the index of the last row
     =====================================================*/
-    {
-        if( !this.hasGrid ) return;
+    GetLastRowIndex: function(){
+        if(!this.hasGrid){
+            return;
+        }
         return (this.nbRows-1);
     },
 
-    GetHeaderElement: function(colIndex)
     /*====================================================
         - returns a header DOM element for a given column
         index
     =====================================================*/
-    {
-        var table = (this.gridLayout) ? this.headTbl : this.tbl;
+    GetHeaderElement: function(colIndex){
+        var table = this.gridLayout ? this.headTbl : this.tbl;
         var header, tHead = tf_Tag(this.tbl,'thead');
-        for(var i=0; i<this.nbCells; i++)
-        {
-            if(i != colIndex) continue;
-            if(tHead.length == 0)
+        for(var i=0; i<this.nbCells; i++){
+            if(i !== colIndex){
+                continue;
+            }
+            if(tHead.length === 0){
                 header = table.rows[this.headersRow].cells[i];
-            if(tHead.length == 1)
+            }
+            if(tHead.length === 1){
                 header = tHead[0].rows[this.headersRow].cells[i];
+            }
             break;
         }
         return header;
     },
 
-    GetConfigObject: function()
     /*====================================================
         - returns the original configuration object
     =====================================================*/
-    {
+    GetConfigObject: function(){
         return this.fObj;
     },
 
-    GetFilterableRowsNb: function()
     /*====================================================
         - returns the total number of rows that can be
         filtered
     =====================================================*/
-    {
+    GetFilterableRowsNb: function(){
         return this.GetRowsNb(false);
     }
 };
@@ -6252,88 +6501,83 @@ TF.prototype = {
     - General TF utility fns below
 =====================================================*/
 
-function tf_GetNodeText(n)
 /*====================================================
     - returns text + text of child nodes of a node
 =====================================================*/
-{
-    var s = n.textContent || n.innerText || n.innerHTML.replace(/\<[^<>]+>/g, '');
-    s = s.replace(/^\s+/, '').replace(/\s+$/, '')/*.tf_Trim()*/;
+function tf_GetNodeText(n){
+    var s = n.textContent || n.innerText ||
+            n.innerHTML.replace(/\<[^<>]+>/g, '');
+    s = s.replace(/^\s+/, '').replace(/\s+$/, '');
     return s.tf_Trim();
 }
 
-function tf_IsObj(v)
 /*====================================================
     - checks if var exists and is an object
     - returns a boolean
 =====================================================*/
-{
+function tf_IsObj(v){
     var isO = false;
-    if((typeof v).tf_LCase()=='string'){
-        if(window[v] && (typeof window[v]).tf_LCase()=='object')
+    if(typeof v === 'string'){
+        if(window[v] && typeof window[v] === 'object'){
             isO = true;
+        }
     } else {
-        if(v && (typeof v).tf_LCase()=='object')
+        if(v && typeof v === 'object'){
             isO = true;
+        }
     }
     return isO;
 }
 
-function tf_IsFn(fn)
 /*====================================================
     - checks if passed param is a function
     - returns a boolean
 =====================================================*/
-{
+function tf_IsFn(fn){
     return (fn && fn.constructor == Function);
 }
 
-function tf_IsArray(obj){
 /*====================================================
     - checks if passed param is an array
     - returns a boolean
 =====================================================*/
+function tf_IsArray(obj){
     return (obj && obj.constructor == Array);
 }
 
-function tf_Id(id)
 /*====================================================
     - this is just a getElementById shortcut
 =====================================================*/
-{
+function tf_Id(id){
     return document.getElementById(id);
 }
 
-function tf_Tag(o,tagname)
 /*====================================================
     - this is just a getElementsByTagName shortcut
 =====================================================*/
-{
+function tf_Tag(o,tagname){
     return o.getElementsByTagName(tagname);
 }
 
-function tf_RegexpEscape(s)
 /*====================================================
     - escapes special characters [\^$.|?*+()
     for regexp
     - Many thanks to Cedric Wartel for this fn
 =====================================================*/
-{
-    // traite les caract�res sp�ciaux [\^$.|?*+()
-    //remplace le carct�re c par \c
-    function escape(e)
-    {
-        a = new RegExp('\\'+e,'g');
+function tf_RegexpEscape(s){
+
+    function escape(e){
+        var a = new RegExp('\\'+e,'g');
         s = s.replace(a,'\\'+e);
     }
 
-    chars = new Array('\\','[','^','$','.','|','?','*','+','(',')');
-    //for(e in chars) escape(chars[e]); // compatibility issue with prototype
-    for(var e=0; e<chars.length; e++) escape(chars[e]);
+    var chars = ['\\','[','^','$','.','|','?','*','+','(',')'];
+    for(var e=0; e<chars.length; e++){
+        escape(chars[e]);
+    }
     return s;
 }
 
-function tf_CreateElm(tag)
 /*====================================================
     - creates an html element with its attributes
     - accepts the following params:
@@ -6342,53 +6586,48 @@ function tf_CreateElm(tag)
         - an undetermined # of arrays containing the
         couple 'attribute name','value' ['id','myId']
 =====================================================*/
-{
-    if(tag==undefined || tag==null || tag=='') return;
+function tf_CreateElm(tag){
+    if(!tag || tag===''){
+        return;
+    }
     var el = document.createElement(tag);
-    if(arguments.length>1)
-    {
-        for(var i=0; i<arguments.length; i++)
-        {
+    if(arguments.length>1){
+        for(var i=0; i<arguments.length; i++){
             var argtype = typeof arguments[i];
-            switch(argtype.tf_LCase())
-            {
+            switch(argtype.tf_LCase()){
                 case 'object':
-                    if(arguments[i].length==2)
-                    {
+                    if(arguments[i].length === 2){
                         el.setAttribute(arguments[i][0],arguments[i][1]);
-                    }//if array length==2
+                    }
                 break;
-            }//switch
-        }//for i
+            }
+        }
     }//if args
     return el;
 }
 
-function tf_CreateText(node)
 /*====================================================
     - this is just a document.createTextNode shortcut
 =====================================================*/
-{
+function tf_CreateText(node){
     return document.createTextNode(node);
 }
 
-function tf_CreateOpt(text,value,isSel)
 /*====================================================
     - creates an option element and returns it:
         - text: displayed text (string)
         - value: option value (string)
         - isSel: is selected option (boolean)
 =====================================================*/
-{
-    var isSelected = isSel ? true : false;
-    var opt = (isSelected)
-        ? tf_CreateElm('option',['value',value],['selected','true'])
-        : tf_CreateElm('option',['value',value]);
+function tf_CreateOpt(text,value,isSel){
+    var isSelected = isSel ? true : false,
+        opt = isSelected ?
+            tf_CreateElm('option', ['value',value], ['selected','true']) :
+            tf_CreateElm('option', ['value',value]);
     opt.appendChild(tf_CreateText(text));
     return opt;
 }
 
-function tf_CreateCheckItem(chkIndex, chkValue, labelText)
 /*====================================================
     - creates an checklist item and returns it
     - accepts the following params:
@@ -6396,16 +6635,16 @@ function tf_CreateCheckItem(chkIndex, chkValue, labelText)
         - chkValue: check item value (string)
         - labelText: check item label text (string)
 =====================================================*/
-{
-    if(chkIndex==undefined || chkValue==undefined || labelText==undefined )
+function tf_CreateCheckItem(chkIndex, chkValue, labelText){
+    if(!chkIndex || !chkValue || !labelText){
         return;
-    var li = tf_CreateElm('li');
-    var label = tf_CreateElm('label',['for',chkIndex]);
-    var check = tf_CreateElm( 'input',
-                    ['id',chkIndex],
-                    ['name',chkIndex],
-                    ['type','checkbox'],
-                    ['value',chkValue] );
+    }
+    var li = tf_CreateElm('li'),
+        label = tf_CreateElm('label', ['for',chkIndex]),
+        check = tf_CreateElm('input',
+            ['id',chkIndex], ['name',chkIndex],
+            ['type','checkbox'], ['value',chkValue]
+        );
     label.appendChild(check);
     label.appendChild(tf_CreateText(labelText));
     li.appendChild(label);
@@ -6414,22 +6653,28 @@ function tf_CreateCheckItem(chkIndex, chkValue, labelText)
     return li;
 }
 
-function tf_AddEvent(obj,event_name,func_name,use_capture){
-    if(obj.attachEvent)
+function tf_AddEvent(obj, event_name, func_name, use_capture){
+    if(obj.attachEvent){
         obj.attachEvent('on'+event_name, func_name);
-    else if(obj.addEventListener)
-        obj.addEventListener(event_name,func_name,(use_capture==undefined ? false : use_capture));
-    else
+    }
+    else if(obj.addEventListener){
+        obj.addEventListener(event_name, func_name,
+            (use_capture===undefined ? false : use_capture));
+    } else{
         obj['on'+event_name] = func_name;
+    }
 }
 
-function tf_RemoveEvent(obj,event_name,func_name,use_capture){
-    if(obj.detachEvent)
+function tf_RemoveEvent(obj, event_name, func_name, use_capture){
+    if(obj.detachEvent){
         obj.detachEvent('on'+event_name,func_name);
-    else if(obj.removeEventListener)
-        obj.removeEventListener(event_name,func_name,(use_capture==undefined ? false : use_capture));
-    else
+    }
+    else if(obj.removeEventListener){
+        obj.removeEventListener(event_name, func_name,
+            (use_capture===undefined ? false : use_capture));
+    } else {
         obj['on'+event_name] = null;
+    }
 }
 
 function tf_StopEvent(e){
@@ -6456,7 +6701,7 @@ function tf_ObjPosition(obj, tag){
         do {
             l += obj.offsetLeft;
             t += obj.offsetTop;
-        } while (obj = obj.offsetParent);
+        } while (obj == obj.offsetParent);
     }
     return [l,t];
 }
@@ -6472,74 +6717,96 @@ function tf_IgnoreCaseSort(a, b){
 }
 
 String.prototype.tf_MatchCase = function (mc){
-    if(!mc) return this.tf_LCase();
-    else return this.toString();
-}
+    if(!mc){
+        return this.tf_LCase();
+    } else {
+        return this.toString();
+    }
+};
 
-String.prototype.tf_Trim = function()
-{//optimised by Anthony Maes
+//optimised by Anthony Maes
+String.prototype.tf_Trim = function(){
     return this.replace(/(^[\s\xA0]*)|([\s\xA0]*$)/g,'');
-}
+};
 
 String.prototype.tf_LCase = function(){
     return this.toLowerCase();
-}
+};
 
 String.prototype.tf_UCase = function(){
     return this.toUpperCase();
-}
+};
 
-Array.prototype.tf_Has = function(s,mc){
-    //return this.indexOf(s) >= 0;
-    var sCase = (mc==undefined) ? false : mc;
-    for (i=0; i<this.length; i++)
-        if(this[i].toString().tf_MatchCase(sCase)==s) return true;
+Array.prototype.tf_Has = function(s, mc){
+    var sCase = mc===undefined ? false : mc;
+    for (i=0; i<this.length; i++){
+        if(this[i].toString().tf_MatchCase(sCase)===s){
+            return true;
+        }
+    }
     return false;
-}
+};
 
 Array.prototype.tf_IndexByValue = function(s,mc){
-    var sCase = (mc==undefined) ? false : mc;
-    for (i=0; i<this.length; i++)
-        if(this[i].toString().tf_MatchCase(sCase)==s) return i;
+    var sCase = mc===undefined ? false : mc;
+    for (i=0; i<this.length; i++){
+        if(this[i].toString().tf_MatchCase(sCase)===s){
+            return i;
+        }
+    }
     return (-1);
-}
+};
 
 // Is this IE 6? the ultimate browser sniffer ;-)
 //window['tf_isIE'] = (window.innerHeight) ? false : true;
-window['tf_isIE'] = (window.innerHeight) ? false : /msie|MSIE 6/.test(navigator.userAgent) ? true : false;
-window['tf_isIE7'] = (window.innerHeight) ? false : /msie|MSIE 7/.test(navigator.userAgent) ? true : false;
+window['tf_isIE'] = window.innerHeight ? false :
+                    /msie|MSIE 6/.test(navigator.userAgent) ? true : false;
+window['tf_isIE7'] = window.innerHeight ? false :
+                    /msie|MSIE 7/.test(navigator.userAgent) ? true : false;
 
 function tf_HasClass(elm,cl){
-    if(!elm) return false;
+    if(!elm){
+        return false;
+    }
     return elm.className.match(new RegExp('(\\s|^)'+cl+'(\\s|$)'));
 }
 
 function tf_AddClass(elm,cl){
-    if(!elm) return;
-    if(!tf_HasClass(elm,cl))
+    if(!elm){
+        return;
+    }
+    if(!tf_HasClass(elm,cl)){
         elm.className += ' '+cl;
+    }
 }
 
 function tf_RemoveClass(elm,cl){
-    if(!elm) return;
-    if(!tf_HasClass(elm,cl)) return;
+    if(!elm){
+        return;
+    }
+    if(!tf_HasClass(elm,cl)){
+        return;
+    }
     var reg = new RegExp('(\\s|^)'+cl+'(\\s|$)');
     elm.className = elm.className.replace(reg,'');
 }
 
 function tf_IsValidDate(dateStr, format){
-    if(format == null) { format = 'DMY'; }
+    if(!format) { format = 'DMY'; }
     format = format.toUpperCase();
     if(format.length != 3) {
-        if(format=='DDMMMYYYY'){
+        if(format==='DDMMMYYYY'){
             var d = tf_FormatDate(dateStr, format);
             dateStr = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
             format = 'DMY';
         }
     }
-    if((format.indexOf('M') == -1) || (format.indexOf('D') == -1) ||
-        (format.indexOf('Y') == -1)) { format = 'DMY'; }
-    if(format.substring(0, 1) == 'Y') { // If the year is first
+    if((format.indexOf('M') === -1) || (format.indexOf('D') === -1) ||
+        (format.indexOf('Y') === -1)){
+        format = 'DMY';
+    }
+    // If the year is first
+    if(format.substring(0, 1) == 'Y') {
           var reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
           var reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
     } else if(format.substring(1, 2) == 'Y') { // If the year is second
