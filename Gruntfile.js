@@ -10,16 +10,11 @@ module.exports = function (grunt) {
 
         // A list of files, which will be syntax-checked by JSHint
         jshint: {
-            src: ['Gruntfile.js'/*, '<%= source_folder %>tablefilter_all.js'*/],
+            src: ['Gruntfile.js', '<%= source_folder %>tablefilter_all.js'],
             options: {
-                // '-W069': true,           // ['xxx'] is better written in dot notation
-                // '-W099': true,           // Mixed spaces and tabs
-                // '-W004': true,           // 'i' is already defined
-                // '-W014': true,           // Bad line breaking before '&&'
-                // '-W083': true,           // Don't make functions within a loop
-                // '-W086': true,           // Expected a 'break' statement before 'default'
-                // '-W049': true,           // Unexpected escaped character '<' in regular expression
-                // '-W100': true,       // This character may get silently deleted by one or more browsers
+                '-W069': true,  // ['xxx'] is better written in dot notation
+                '-W107': true,  // Script URL
+                '-W061': true,  // Eval can be harmful
                 '-W041': true
             }
         },

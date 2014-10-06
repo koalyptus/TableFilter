@@ -39,6 +39,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 function TF(id) {
     if(arguments.length === 0){ return; }
+
     this.id = id;
     this.version = '2.5';
     this.year = new Date().getFullYear();
@@ -916,7 +917,6 @@ function TF(id) {
 }
 
 TF.prototype = {
-
     AddGrid: function(){ this._AddGrid();},
     Init: function(){ this.AddGrid(); },
     Initialize: function(){ this.AddGrid(); },
@@ -2460,7 +2460,7 @@ TF.prototype = {
             'span',['id',this.prfxPgAfterSpan+this.id]);
         pgAfterSpan.appendChild( tf_CreateText(this.ofText) );
         pgAfterSpan.className = this.nbPgSpanCssClass;
-        targetEl.appendChild(pgAfterSpan)
+        targetEl.appendChild(pgAfterSpan);
         var pgspan = tf_CreateElm( 'span',['id',this.prfxPgSpan+this.id] );
         pgspan.className = this.nbPgSpanCssClass;
         pgspan.appendChild( tf_CreateText(' '+this.nbPages+' ') );
@@ -2814,7 +2814,7 @@ TF.prototype = {
 
         if(!this.helpInstrBtnHtml){
             divContainer.appendChild(helpdiv);
-            var helplink = tf_CreateElm( 'a', ['href','javascript:void(0);']);
+            var helplink = tf_CreateElm('a', ['href', 'javascript:void(0);']);
             helplink.className = this.helpInstrBtnCssClass;
             helplink.appendChild(tf_CreateText(this.helpInstrBtnText));
             helpspan.appendChild(helplink);
@@ -2901,7 +2901,7 @@ TF.prototype = {
             if(this.onBeforeChangePage){
                 this.onBeforeChangePage.call(null, this, index);
             }
-            this.currentPageNb = parseInt(index)+1;
+            this.currentPageNb = parseInt(index, 10)+1;
             if(this.pageSelectorType===this.fltTypeSlc){
                 this.pagingSlc.options[index].selected = true;
             } else {
@@ -3095,7 +3095,7 @@ TF.prototype = {
                                 (activeFlt!=colIndex &&
                                     this.validRowsIndex.tf_Has(k) ))) ))){
                         var cell_data = this.GetCellData(j, cell[j]),
-                            //V�ry P�ter's patch
+                            //Vary Peter's patch
                             cell_string = cell_data.tf_MatchCase(matchCase);
 
                         // checks if celldata is already in array
@@ -3400,7 +3400,7 @@ TF.prototype = {
                         (activeFlt!=colIndex &&
                             this.validRowsIndex.tf_Has(k))) )))){
                         var cell_data = this.GetCellData(j, cells[j]);
-                        //V�ry P�ter's patch
+                        //Vary Peter's patch
                         var cell_string =
                                 cell_data.tf_MatchCase(this.matchCase);
                         // checks if celldata is already in array
@@ -3552,6 +3552,11 @@ TF.prototype = {
                 }
             }
 
+            function optionClick(evt){
+                o.__setCheckListValues(this);
+                ul.onchange.call(null, evt);
+            }
+
             for(var y=0; y<optArray.length; y++){
                 var val = optArray[y]; //item value
                 var lbl = isCustomSlc ? optTxt[y] : val; //item text
@@ -3565,10 +3570,7 @@ TF.prototype = {
                         li.check.disabled = true;
                         li.disabled = true;
                 } else{
-                    li.check.onclick = function(e){
-                        o.__setCheckListValues(this);
-                        ul.onchange.call(null, e);
-                    };
+                    li.check.onclick = optionClick;
                 }
                 ul.appendChild(li);
 
@@ -3590,8 +3592,11 @@ TF.prototype = {
                 }
                 //IE: label looses check capability
                 if(tf_isIE){
-                    li.label.onclick = function(){ this.firstChild.click(); };
+                    li.label.onclick = labelClick;
                 }
+            }
+            function labelClick(){
+                this.firstChild.click();
             }
         }
 
@@ -4076,7 +4081,7 @@ TF.prototype = {
                 if(cell.width!==''){
                     colW = cell.width;
                 } else if(cell.style.width!==''){
-                    colW = parseInt(cell.style.width);
+                    colW = parseInt(cell.style.width, 10);
                 } else {
                     colW = this.gridDefaultColWidth;
                 }
@@ -4091,7 +4096,7 @@ TF.prototype = {
             tblW = this.tbl.width;
         }
         else if(this.tbl.style.width!==''){
-            tblW = parseInt(this.tbl.style.width);
+            tblW = parseInt(this.tbl.style.width, 10);
         } else {
             tblW = this.tbl.clientWidth;
         }
@@ -4265,7 +4270,7 @@ TF.prototype = {
         if(!tf_isIE && !tf_isIE7){
             //Col elements are enough to keep column widths after sorting and
             //filtering
-            function createColTags(o){
+            var createColTags = function(o){
                 if(!o){
                     return;
                 }
@@ -4277,7 +4282,7 @@ TF.prototype = {
                     o.gridColElms[k] = col;
                 }
                 o.tblHasColTag = true;
-            }
+            };
             if(!o.tblHasColTag){
                 createColTags(o);
             } else {
@@ -4433,7 +4438,7 @@ TF.prototype = {
 
         function onClick(e){
             var evt = e || window.event,
-                colIndex = parseInt(this.getAttribute('ci'));
+                colIndex = parseInt(this.getAttribute('ci'), 10);
 
             o.CloseAllPopupFilters(colIndex);
             o.TogglePopupFilter(colIndex);
@@ -4447,7 +4452,7 @@ TF.prototype = {
                             header, [header.nodeName])[0];
                     popUpDiv.style.left = (headerLeft) + 'px';
                 }
-                popUpDiv.style.width = parseInt(headerWidth)  + 'px';
+                popUpDiv.style.width = parseInt(headerWidth, 10)  + 'px';
             }
             tf_CancelEvent(evt);
             tf_StopEvent(evt);
@@ -4868,7 +4873,7 @@ TF.prototype = {
             for(var i=0; i<theadTr.length; i++){
                 theadTr[i].style.cssText += 'position:relative; ' +
                     'top:expression(offsetParent.scrollTop);';
-                theadH += parseInt(theadTr[i].clientHeight);
+                theadH += parseInt(theadTr[i].clientHeight, 10);
             }
 
             this.contDiv.style.height = (this.tBodyH+theadH)+'px';
@@ -6018,15 +6023,15 @@ TF.prototype = {
                     oTypeThisCol=[],
                     mThisCol=-1;
 
-                for(var i=0; i<colIndex.length; i++){
-                     if(colIndex[i] === ucolIndex[ucol]){
+                for(var k=0; k<colIndex.length; k++){
+                     if(colIndex[k] === ucolIndex[ucol]){
                         mThisCol++;
-                        opsThisCol[mThisCol]=operation[i].tf_LCase();
-                        decThisCol[mThisCol]=decimalPrecision[i];
-                        labThisCol[mThisCol]=labelId[i];
+                        opsThisCol[mThisCol]=operation[k].tf_LCase();
+                        decThisCol[mThisCol]=decimalPrecision[k];
+                        labThisCol[mThisCol]=labelId[k];
                         oTypeThisCol = outputType !== undefined &&
                             (typeof outputType).tf_LCase()==='object' ?
-                            outputType[i] : null;
+                            outputType[k] : null;
 
                         switch(opsThisCol[mThisCol]){
                             case 'mean':
@@ -6506,7 +6511,7 @@ TF.prototype = {
 =====================================================*/
 function tf_GetNodeText(n){
     var s = n.textContent || n.innerText ||
-            n.innerHTML.replace(/\<[^<>]+>/g, '');
+            n.innerHTML.replace(/<[^<>]+>/g, '');
     s = s.replace(/^\s+/, '').replace(/\s+$/, '');
     return s.tf_Trim();
 }
@@ -6792,7 +6797,9 @@ function tf_RemoveClass(elm,cl){
 }
 
 function tf_IsValidDate(dateStr, format){
-    if(!format) { format = 'DMY'; }
+    if(!format) {
+        format = 'DMY';
+    }
     format = format.toUpperCase();
     if(format.length != 3) {
         if(format==='DDMMMYYYY'){
@@ -6805,67 +6812,117 @@ function tf_IsValidDate(dateStr, format){
         (format.indexOf('Y') === -1)){
         format = 'DMY';
     }
+    var reg1, reg2;
     // If the year is first
     if(format.substring(0, 1) == 'Y') {
-          var reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
-          var reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+          reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+          reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
     } else if(format.substring(1, 2) == 'Y') { // If the year is second
-          var reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/;
-          var reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/;
+          reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/;
+          reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/;
     } else { // The year must be third
-          var reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
-          var reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
+          reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
+          reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
     }
-    // If it doesn't conform to the right format (with either a 2 digit year or 4 digit year), fail
-    if((reg1.test(dateStr) == false) && (reg2.test(dateStr) == false)) { return false; }
-    var parts = dateStr.split(RegExp.$1); // Split into 3 parts based on what the divider was
+    // If it doesn't conform to the right format (with either a 2 digit year or
+    // 4 digit year), fail
+    if(reg1.test(dateStr) === false && reg2.test(dateStr) === false) {
+        return false;
+    }
+    // Split into 3 parts based on what the divider was
+    var parts = dateStr.split(RegExp.$1);
+    var mm, dd, yy;
     // Check to see if the 3 parts end up making a valid date
-    if(format.substring(0, 1) == 'M') { var mm = parts[0]; } else
-        if(format.substring(1, 2) == 'M') { var mm = parts[1]; } else { var mm = parts[2]; }
-    if(format.substring(0, 1) == 'D') { var dd = parts[0]; } else
-        if(format.substring(1, 2) == 'D') { var dd = parts[1]; } else { var dd = parts[2]; }
-    if(format.substring(0, 1) == 'Y') { var yy = parts[0]; } else
-        if(format.substring(1, 2) == 'Y') { var yy = parts[1]; } else { var yy = parts[2]; }
-    if(parseFloat(yy) <= 50) { yy = (parseFloat(yy) + 2000).toString(); }
-    if(parseFloat(yy) <= 99) { yy = (parseFloat(yy) + 1900).toString(); }
-    var dt = new Date(parseFloat(yy), parseFloat(mm)-1, parseFloat(dd), 0, 0, 0, 0);
-    if(parseFloat(dd) != dt.getDate()) { return false; }
-    if(parseFloat(mm)-1 != dt.getMonth()) { return false; }
+    if(format.substring(0, 1) === 'M'){
+        mm = parts[0];
+    } else if(format.substring(1, 2) === 'M'){
+        mm = parts[1];
+    } else {
+        mm = parts[2];
+    }
+    if(format.substring(0, 1) === 'D'){
+        dd = parts[0];
+    } else if(format.substring(1, 2) === 'D'){
+        dd = parts[1];
+    } else {
+        dd = parts[2];
+    }
+    if(format.substring(0, 1) === 'Y'){
+        yy = parts[0];
+    } else if(format.substring(1, 2) === 'Y'){
+        yy = parts[1];
+    } else {
+        yy = parts[2];
+    }
+    if(parseFloat(yy) <= 50){
+        yy = (parseFloat(yy) + 2000).toString();
+    }
+    if(parseFloat(yy) <= 99){
+        yy = (parseFloat(yy) + 1900).toString();
+    }
+    var dt = new Date(
+        parseFloat(yy), parseFloat(mm)-1, parseFloat(dd), 0, 0, 0, 0);
+    if(parseFloat(dd) != dt.getDate()){
+        return false;
+    }
+    if(parseFloat(mm)-1 != dt.getMonth()){
+        return false;
+    }
     return true;
 }
 
 function tf_FormatDate(dateStr, format){
-    if(format === null){ format = 'DMY'; }
-    if(!dateStr || dateStr === ''){ return new Date(1001, 0, 1); }
+    if(!format){
+        format = 'DMY';
+    }
+    if(!dateStr || dateStr === ''){
+        return new Date(1001, 0, 1);
+    }
     var oDate, parts;
 
     function y2kDate(yr){
-        if(yr == undefined) return 0;
-        if(yr.length>2) return yr;
+        if(yr === undefined){
+            return 0;
+        }
+        if(yr.length>2){
+            return yr;
+        }
         var y;
-        if(yr <= 99 && yr>50) //>50 belong to 1900
+        //>50 belong to 1900
+        if(yr <= 99 && yr>50){
             y = '19' + yr;
-        if(yr<50 || yr =='00') //<50 belong to 2000
+        }
+        //<50 belong to 2000
+        if(yr<50 || yr === '00'){
             y = '20' + yr;
+        }
         return y;
     }
 
     function mmm2mm(mmm){
-        if(mmm == undefined){ return 0; }
+        if(mmm === undefined){
+            return 0;
+        }
         var mondigit;
-        var MONTH_NAMES = new Array(
-            'january','february','march','april','may','june','july','august','september','october','november','december',
-            'jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'
-        );
-        for (var m_i=0; m_i < MONTH_NAMES.length; m_i++){
+        var MONTH_NAMES = [
+            'january','february','march','april','may','june','july','august',
+            'september','october','november','december',
+            'jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov',
+            'dec'
+        ];
+        for(var m_i=0; m_i < MONTH_NAMES.length; m_i++){
                 var month_name = MONTH_NAMES[m_i];
                 if (mmm.toLowerCase() === month_name){
                     mondigit = m_i+1;
                     break;
                 }
         }
-        if ((mondigit > 11) || (mondigit < 23)){ mondigit = mondigit - 12; }
-        if ((mondigit < 1) || (mondigit > 12)){ return 0; }
+        if(mondigit > 11 || mondigit < 23){
+            mondigit = mondigit - 12;
+        }
+        if(mondigit < 1 || mondigit > 12){
+            return 0;
+        }
         return mondigit;
     }
 
@@ -6875,11 +6932,13 @@ function tf_FormatDate(dateStr, format){
             oDate = new Date(y2kDate(parts[2]),mmm2mm(parts[1])-1,parts[0]);
         break;
         case 'DMY':
-            parts = dateStr.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
+            parts = dateStr.replace(
+                /^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
             oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
         break;
         case 'MDY':
-            parts = dateStr.replace(/^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
+            parts = dateStr.replace(
+                /^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
             oDate = new Date(y2kDate(parts[2]),parts[0]-1,parts[1]);
         break;
         case 'YMD':
@@ -6894,27 +6953,32 @@ function tf_FormatDate(dateStr, format){
     return oDate;
 }
 
-function tf_RemoveNbFormat(data,format){
-    if(data==null) return;
-    if(format==null) format = 'us';
+function tf_RemoveNbFormat(data, format){
+    if(!data){
+        return;
+    }
+    if(format){
+        format = 'us';
+    }
     var n = data;
-    if(format.tf_LCase()=='us')
+    if(format.tf_LCase()==='us'){
         n =+ n.replace(/[^\d\.-]/g,'');
-    else
+    } else {
         n =+ n.replace(/[^\d\,-]/g,'').replace(',','.');
+    }
     return n;
 }
 
-function tf_IsImported(filePath,type){
-    var isImported = false;
-    var importType = (type==undefined) ? 'script' : type;
-    var attr = importType == 'script' ? 'src' : 'href';
-    var files = tf_Tag(document,importType);
-    for (var i=0; i<files.length; i++)
-    {
-        if(files[i][attr] == undefined) continue;
-        if(files[i][attr].match(filePath))
-        {
+function tf_IsImported(filePath, type){
+    var isImported = false,
+        importType = !type ? 'script' : type,
+        attr = importType == 'script' ? 'src' : 'href',
+        files = tf_Tag(document,importType);
+    for (var i=0; i<files.length; i++){
+        if(files[i][attr] === undefined){
+            continue;
+        }
+        if(files[i][attr].match(filePath)){
             isImported = true;
             break;
         }
@@ -6924,22 +6988,26 @@ function tf_IsImported(filePath,type){
 
 function tf_IsStylesheetImported(stylesheet){
     var isImported = false;
-    if(!document.styleSheets) return isImported;
-    var s = document.styleSheets;
-    var regexp = new RegExp(stylesheet);
+    if(!document.styleSheets){
+        return isImported;
+    }
+    var s = document.styleSheets,
+        regexp = new RegExp(stylesheet);
     for(var i=0; i<s.length; i++){
-        if(s[i].imports){ //IE
+        if(s[i].imports){//IE
             var imp = s[i].imports;
             for(var j=0; j<imp.length; j++){
-                if(imp[j].href.tf_LCase() == stylesheet.tf_LCase()){
-                    isImported = true; break;
+                if(imp[j].href.tf_LCase() === stylesheet.tf_LCase()){
+                    isImported = true;
+                    break;
                 }
             }
         } else {
-            var r =  (s[i].cssRules ? s[i].cssRules : s[i].rules);
-            for(var j=0; j<r.length; j++){
-                if(regexp.test(r[j].cssText)){
-                    isImported = true; break;
+            var r = s[i].cssRules ? s[i].cssRules : s[i].rules;
+            for(var k=0; k<r.length; k++){
+                if(regexp.test(r[k].cssText)){
+                    isImported = true;
+                    break;
                 }
             }
         }
@@ -6949,8 +7017,7 @@ function tf_IsStylesheetImported(stylesheet){
 
 function tf_WriteCookie(name, value, hours){
     var expire = '';
-    if(hours != null)
-    {
+    if(hours){
         expire = new Date((new Date()).getTime() + hours * 3600000);
         expire = '; expires=' + expire.toGMTString();
     }
@@ -6958,32 +7025,40 @@ function tf_WriteCookie(name, value, hours){
 }
 
 function tf_ReadCookie(name){
-    var cookieValue = '';
-    var search = name + '=';
-    if(document.cookie.length > 0)
-    {
-        offset = document.cookie.indexOf(search);
-        if(offset != -1)
-        {
+    var cookieValue = '',
+        search = name + '=';
+    if(document.cookie.length > 0){
+        var cookie = document.cookie,
+            offset = cookie.indexOf(search);
+        if(offset !== -1){
             offset += search.length;
-            end = document.cookie.indexOf(';', offset);
-            if(end == -1) end = document.cookie.length;
-            cookieValue = unescape(document.cookie.substring(offset, end))
+            end = cookie.indexOf(';', offset);
+            if(end === -1){
+                end = cookie.length;
+            }
+            cookieValue = unescape(cookie.substring(offset, end));
         }
     }
     return cookieValue;
 }
 
 function tf_CookieValueArray(name, separator){
-    if(separator==undefined) separator = ',';
-    var val = tf_ReadCookie(name); //reads the cookie
-    var arr = val.split(separator); //creates an array with filters' values
+    if(!separator){
+        separator = ',';
+    }
+    //reads the cookie
+    var val = tf_ReadCookie(name);
+    //creates an array with filters' values
+    var arr = val.split(separator);
     return arr;
 }
 
 function tf_CookieValueByIndex(name, index, separator){
-    if(separator==undefined) separator = ',';
-    var val = tf_CookieValueArray(name, separator); //reads the cookie
+    if(!separator){
+        separator = ',';
+    }
+    //reads the cookie
+    var val = tf_CookieValueArray(name, separator);
     return val[index];
 }
 
@@ -6991,7 +7066,6 @@ function tf_RemoveCookie(name){
     tf_WriteCookie(name,'',-1);
 }
 
-function tf_HighlightWord( node,word,cssClass,o )
 /*====================================================
     - highlights keyword found in passed node
     - accepts the following params:
@@ -6999,31 +7073,31 @@ function tf_HighlightWord( node,word,cssClass,o )
         - word to search
         - css class name for highlighting
 =====================================================*/
-{
+function tf_HighlightWord(node, word, cssClass, o){
     // Iterate into this nodes childNodes
-    if(node.hasChildNodes)
-        for( var i=0; i<node.childNodes.length; i++ )
+    if(node.hasChildNodes){
+        for(var i=0; i<node.childNodes.length; i++){
             tf_HighlightWord(node.childNodes[i],word,cssClass,o);
+        }
+    }
 
     // And do this node itself
-    if(node.nodeType == 3)
-    { // text node
+    // text node
+    if(node.nodeType === 3){
         var tempNodeVal = node.nodeValue.tf_LCase();
         var tempWordVal = word.tf_LCase();
-        if(tempNodeVal.indexOf(tempWordVal) != -1)
-        {
+        if(tempNodeVal.indexOf(tempWordVal) != -1){
             var pn = node.parentNode;
-            if(pn && pn.className != cssClass)
-            {
+            if(pn && pn.className != cssClass){
                 // word has not already been highlighted!
-                var nv = node.nodeValue;
-                var ni = tempNodeVal.indexOf(tempWordVal);
-                // Create a load of replacement nodes
-                var before = tf_CreateText(nv.substr(0,ni));
-                var docWordVal = nv.substr(ni,word.length);
-                var after = tf_CreateText(nv.substr(ni+word.length));
-                var hiwordtext = tf_CreateText(docWordVal);
-                var hiword = tf_CreateElm('span');
+                var nv = node.nodeValue,
+                    ni = tempNodeVal.indexOf(tempWordVal),
+                    // Create a load of replacement nodes
+                    before = tf_CreateText(nv.substr(0,ni)),
+                    docWordVal = nv.substr(ni,word.length),
+                    after = tf_CreateText(nv.substr(ni+word.length)),
+                    hiwordtext = tf_CreateText(docWordVal),
+                    hiword = tf_CreateElm('span');
                 hiword.className = cssClass;
                 hiword.appendChild(hiwordtext);
                 pn.insertBefore(before,node);
@@ -7033,10 +7107,9 @@ function tf_HighlightWord( node,word,cssClass,o )
                 o.highlightedNodes.push(hiword.firstChild);
             }
         }
-    }// if node.nodeType == 3
+    }
 }
 
-function tf_UnhighlightWord( o,word,cssClass )
 /*====================================================
     - removes highlights found in passed node
     - accepts the following params:
@@ -7044,20 +7117,23 @@ function tf_UnhighlightWord( o,word,cssClass )
         - word to search
         - css class name for highlighting
 =====================================================*/
-{
+function tf_UnhighlightWord(o, word, cssClass){
     var arrRemove = [];
     for(var i=0; i<o.highlightedNodes.length; i++){
         var n = o.highlightedNodes[i];
-        if(!n){ continue; }
-        var tempNodeVal = n.nodeValue.tf_LCase();
-        var tempWordVal = word.tf_LCase();
-        if(tempNodeVal.indexOf(tempWordVal) != -1){
+        if(!n){
+            continue;
+        }
+        var tempNodeVal = n.nodeValue.tf_LCase(),
+            tempWordVal = word.tf_LCase();
+        if(tempNodeVal.indexOf(tempWordVal) !== -1){
             var pn = n.parentNode;
             if(pn && pn.className == cssClass){
-                var prevSib = pn.previousSibling;
-                var nextSib = pn.nextSibling;
+                var prevSib = pn.previousSibling,
+                    nextSib = pn.nextSibling;
                 if(!prevSib || !nextSib){ continue; }
-                nextSib.nodeValue = prevSib.nodeValue + n.nodeValue + nextSib.nodeValue;
+                nextSib.nodeValue = prevSib.nodeValue + n.nodeValue +
+                    nextSib.nodeValue;
                 prevSib.nodeValue = '';
                 n.nodeValue = '';
                 arrRemove.push(i);
@@ -7071,10 +7147,10 @@ function tf_UnhighlightWord( o,word,cssClass )
 
 //Firefox does not support outerHTML property
 function tf_SetOuterHtml(){
-    if(document.body.__defineGetter__) {
+    if(document.body.__defineGetter__){
         if(HTMLElement) {
             var element = HTMLElement.prototype;
-            if(element.__defineGetter__) {
+            if(element.__defineGetter__){
                 element.__defineGetter__("outerHTML",
                     function(){
                         var parent = this.parentNode;
@@ -7086,17 +7162,17 @@ function tf_SetOuterHtml(){
                     }
                 );
             }
+            if(element.__defineSetter__) {
+                HTMLElement.prototype.__defineSetter__(
+                    "outerHTML", function(sHTML){
+                   var r = this.ownerDocument.createRange();
+                   r.setStartBefore(this);
+                   var df = r.createContextualFragment(sHTML);
+                   this.parentNode.replaceChild(df, this);
+                   return sHTML;
+                });
+            }
         }
-    }
-
-    if(element.__defineSetter__) {
-        HTMLElement.prototype.__defineSetter__("outerHTML", function(sHTML) {
-           var r = this.ownerDocument.createRange();
-           r.setStartBefore(this);
-           var df = r.createContextualFragment(sHTML);
-           this.parentNode.replaceChild(df, this);
-           return sHTML;
-        });
     }
 }
 /* --- */
@@ -7112,10 +7188,13 @@ function tf_SetOuterHtml(){
     - Returns TF object
 =====================================================*/
 function setFilterGrid(id){
-    if(arguments.length === 0){ return; }
-    window['tf_'+id] = new TF(arguments[0], arguments[1], arguments[2]);
-    window['tf_'+id].AddGrid();
-    return window['tf_'+id];
+    if(arguments.length === 0){
+        return;
+    }
+    var tf = new TF(arguments[0], arguments[1], arguments[2]);
+    tf.AddGrid();
+    window['tf_'+id] = tf;
+    return tf;
 }
 
 /*===BEGIN removable section===========================
@@ -7125,7 +7204,10 @@ function setFilterGrid(id){
     section
 /*=====================================================*/
 window['tf_isNotIE'] = !(/msie|MSIE/.test(navigator.userAgent));
-tf_AddEvent(window, (tf_isNotIE || (typeof window.addEventListener == 'function') ? 'DOMContentLoaded' : 'load'), initFilterGrid);
+tf_AddEvent(window,
+    (tf_isNotIE || (typeof window.addEventListener === 'function') ?
+        'DOMContentLoaded' : 'load'),
+    initFilterGrid);
 
 function initFilterGrid(){
     if(!document.getElementsByTagName){ return; }
