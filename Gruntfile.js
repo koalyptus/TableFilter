@@ -4,25 +4,40 @@ module.exports = function (grunt) {
 
         pkg: grunt.file.readJSON('package.json'),
 
-        version: 'v1.0',
+        version: '<%= pkg.version %>',
         dist_folder: 'dist/',
         source_folder: 'src/',
 
+        meta: {
+            src: [
+                '<%= source_folder %>string.js',
+                '<%= source_folder %>dom.js',
+                '<%= source_folder %>event.js',
+                '<%= source_folder %>tablefilter_all.js'
+            ]
+        },
+
         // A list of files, which will be syntax-checked by JSHint
         jshint: {
-            src: ['Gruntfile.js', '<%= source_folder %>tablefilter_all.js'],
+            src: ['Gruntfile.js', 'src/*.js'],
             options: {
                 '-W069': true,  // ['xxx'] is better written in dot notation
                 '-W107': true,  // Script URL
                 '-W061': true,  // Eval can be harmful
-                '-W041': true
+                '-W041': true,
+                // options here to override JSHint defaults
+                globals: {
+                    console: true/*,
+                    module: true,
+                    document: true*/
+                }
             }
         },
 
         concat: {
             js: {
                 files: [{
-                    src: ['<%= source_folder %>tablefilter_all.js'],
+                    src: ['<%= meta.src %>'],
                     dest: '<%= dist_folder %>tablefilter_all.js'
                 }]
             },
@@ -39,7 +54,7 @@ module.exports = function (grunt) {
 
             options: {
                 banner: '/*------------------------------------------------------------------------ \n' +
-                        '\t- TableFilter <%= version %> by Max Guglielmi \n' +
+                        '\t- TableFilter v<%= version %> by Max Guglielmi \n' +
                         '\t- build date: <%= grunt.template.today() %> \n' +
                         '\t- http://tablefilter.free.fr \n' +
                         '\t- Copyright (c) 2014, Licensed under the MIT License \n' +
@@ -70,9 +85,9 @@ module.exports = function (grunt) {
         copy: {
             main: {
                 files: [
-                    { src: ['<%= source_folder %>tablefilter_all.js'], dest: '<%= dist_folder %>tablefilter_all-uncompressed.js' },
-                    { src: ['<%= source_folder %>tablefilter.js'], dest: '<%= dist_folder %>tablefilter-uncompressed.js' },
-                    { src: ['<%= source_folder %>filtergrid.css'], dest: '<%= dist_folder %>filtergrid-uncompressed.css' },
+                    //{ src: ['<%= source_folder %>tablefilter_all.js'], dest: '<%= dist_folder %>tablefilter_all-uncompressed.js' },
+                    //{ src: ['<%= source_folder %>tablefilter.js'], dest: '<%= dist_folder %>tablefilter-uncompressed.js' },
+                    //{ src: ['<%= source_folder %>filtergrid.css'], dest: '<%= dist_folder %>filtergrid-uncompressed.css' },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]

@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+ /*------------------------------------------------------------------------
     - HTML Table Filter Generator v2.5
     - By Max Guglielmi (tablefilter.free.fr)
     - Licensed under the MIT License
@@ -54,7 +54,7 @@ function TF(id) {
     this.hasGrid = false;
     this.enableModules = false;
 
-    if(!this.tbl || this.tbl.nodeName.tf_LCase() !== 'table' ||
+    if(!this.tbl || TF.Str.lower(this.tbl.nodeName) !== 'table' ||
         this.GetRowsNb() === 0){
         throw new Error(
             'Could not instantiate TF object: table not found.');
@@ -64,7 +64,7 @@ function TF(id) {
         for(var i=0; i<arguments.length; i++){
             var arg = arguments[i];
             var argtype = typeof arg;
-            switch(argtype.tf_LCase()){
+            switch(TF.Str.lower(argtype)){
                 case 'number':
                     this.startRow = arg;
                 break;
@@ -99,7 +99,7 @@ function TF(id) {
             cfgCol = f['col_'+j];
         if(col === undefined) {
             col = cfgCol === undefined ?
-                this.fltTypeInp : cfgCol.tf_LCase();
+                this.fltTypeInp : TF.Str.lower(cfgCol);
         }
         this.fltCol.push(col);
     }
@@ -721,8 +721,8 @@ function TF(id) {
                 var key = o.Evt.getKeyCode(evt);
                 if(key===13){
                     o._Filter();
-                    tf_CancelEvent(evt);
-                    tf_StopEvent(evt);
+                    TF.Event.cancel(evt);
+                    TF.Event.stop(evt);
                 } else {
                     o.isUserTyping = true;
                     window.clearInterval(o.onKeyUpTimer);
@@ -778,7 +778,7 @@ function TF(id) {
                 this.value = (o.isInpWatermarkArray) ?
                     o.inpWatermark[this.getAttribute('ct')] :
                     o.inpWatermark;
-                tf_AddClass(this, o.inpWatermarkCssClass);
+                TF.Dom.addClass(this, o.inpWatermarkCssClass);
             }
             if(o.ezEditTable){
               if(o.editable) o.ezEditTable.Editable.Set();
@@ -797,18 +797,18 @@ function TF(id) {
                 if(this.value === o.inpWatermark &&
                     o.inpWatermark !== ''){
                     this.value = '';
-                    tf_RemoveClass(this, o.inpWatermarkCssClass);
+                    TF.Dom.removeClass(this, o.inpWatermarkCssClass);
                 }
             } else {
                 var inpWatermark = o.inpWatermark[this.getAttribute('ct')];
                 if(this.value === inpWatermark && inpWatermark !== ''){
                     this.value = '';
-                    tf_RemoveClass(this, o.inpWatermarkCssClass);
+                    TF.Dom.removeClass(this, o.inpWatermarkCssClass);
                 }
             }
             if(o.popUpFilters){
-                tf_CancelEvent(evt);
-                tf_StopEvent(evt);
+                TF.Event.cancel(evt);
+                TF.Event.stop(evt);
             }
             if(o.ezEditTable){
                 if(o.editable) o.ezEditTable.Editable.Remove();
@@ -829,8 +829,8 @@ function TF(id) {
                 if(!tf_isIE){ this.setAttribute('filled','1'); }
             }
             if(o.popUpFilters){
-                tf_CancelEvent(evt);
-                tf_StopEvent(evt);
+                TF.Event.cancel(evt);
+                TF.Event.stop(evt);
             }
         },
         /*====================================================
@@ -843,7 +843,7 @@ function TF(id) {
                 o['col'+colIndex]===o.fltTypeCheckList &&
                 !o.Evt._OnSlcChange.caller){ return; }
             var evt = e || window.event;
-            if(o.popUpFilters){ tf_StopEvent(evt); }
+            if(o.popUpFilters){ TF.Event.stop(evt); }
             if(o.onSlcChange){ o.Filter(); }
         },
         /*====================================================
@@ -1021,7 +1021,7 @@ TF.prototype = {
                 this.nbRows = this.tbl.rows.length;
 
                 for(var i=0; i<n; i++){// this loop adds filters
-                    var fltcell = tf_CreateElm(this.fltCellTag),
+                    var fltcell = TF.Dom.create(this.fltCellTag),
                         col = this['col'+i],
                         externalFltTgtId =
                             this.isExternalFlt && this.externalFltTgtIds ?
@@ -1042,7 +1042,7 @@ TF.prototype = {
 
                     if(col===undefined){
                         col = f['col_'+i]===undefined ?
-                            this.fltTypeInp : f['col_'+i].tf_LCase();
+                            this.fltTypeInp : TF.Str.lower(f['col_'+i]);
                     }
 
                     //only 1 input for single search
@@ -1054,7 +1054,7 @@ TF.prototype = {
                     //selects
                     if(col===this.fltTypeSlc ||
                         col===this.fltTypeMulti){
-                        var slc = tf_CreateElm(this.fltTypeSlc,
+                        var slc = TF.Dom.create(this.fltTypeSlc,
                             ['id',this.prfxFlt+i+'_'+this.id],
                             ['ct',i], ['filled','0']);
 
@@ -1062,7 +1062,7 @@ TF.prototype = {
                             slc.multiple = this.fltTypeMulti;
                             slc.title = this.multipleSlcTooltip;
                         }
-                        slc.className = (col.tf_LCase()===this.fltTypeSlc) ?
+                        slc.className = TF.Str.lower(col)===this.fltTypeSlc ?
                             inpclass : this.fltMultiCssClass;// for ie<=6
 
                         //filter is appended in desired element
@@ -1109,7 +1109,7 @@ TF.prototype = {
                     }
                     // checklist
                     else if(col===this.fltTypeCheckList){
-                        var divCont = tf_CreateElm('div',
+                        var divCont = TF.Dom.create('div',
                             ['id',this.prfxCheckListDiv+i+'_'+this.id],
                             ['ct',i],['filled','0']);
                         divCont.className = this.checkListDivCssClass;
@@ -1133,14 +1133,14 @@ TF.prototype = {
                         if(this.fillSlcOnDemand){
                             divCont.onclick = this.Evt._OnCheckListClick;
                             divCont.appendChild(
-                                tf_CreateText(this.activateCheckListTxt));
+                                TF.Dom.text(this.activateCheckListTxt));
                         }
                     }
 
                     else{
                         //show/hide input
                         var inptype = col===this.fltTypeInp ? 'text' : 'hidden';
-                        var inp = tf_CreateElm(this.fltTypeInp,
+                        var inp = TF.Dom.create(this.fltTypeInp,
                             ['id',this.prfxFlt+i+'_'+this.id],
                             ['type',inptype],['ct',i]);
                         if(inptype!='hidden'){
@@ -1150,7 +1150,7 @@ TF.prototype = {
                         inp.className = inpclass;// for ie<=6
                         if(this.inpWatermark!==''){
                             //watermark css class
-                            tf_AddClass(inp, this.inpWatermarkCssClass);
+                            TF.Dom.addClass(inp, this.inpWatermarkCssClass);
                         }
                         inp.onfocus = this.Evt._OnInpFocus;
 
@@ -1182,7 +1182,7 @@ TF.prototype = {
                     }
                     // this adds submit button
                     if(i==n-1 && this.displayBtn){
-                        var btn = tf_CreateElm(this.fltTypeInp,
+                        var btn = TF.Dom.create(this.fltTypeInp,
                             ['id',this.prfxValButton+i+'_'+this.id],
                             ['type','button'], ['value',this.btnText]);
                         btn.className = this.btnCssClass;
@@ -1267,7 +1267,7 @@ TF.prototype = {
 
         //TF css class is added to table
         if(!this.gridLayout){
-            tf_AddClass(this.tbl, this.prfxTf);
+            TF.Dom.addClass(this.tbl, this.prfxTf);
         }
 
         if(this.loader){
@@ -1576,7 +1576,7 @@ TF.prototype = {
                     var row = rows[j];
                     var attribs = row.attributes;
                     for(var x = 0; x < attribs.length; x++){
-                        if(attribs.nodeName.tf_LCase()==='validrow'){
+                        if(TF.Str.lower(attribs.nodeName)==='validrow'){
                             row.removeAttribute('validRow');
                         }
                     }
@@ -1596,7 +1596,7 @@ TF.prototype = {
             if(this.gridLayout){
                 this.RemoveGridLayout();
             }
-            tf_RemoveClass(this.tbl, this.prfxTf);
+            TF.Dom.removeClass(this.tbl, this.prfxTf);
             this.activeFlt = null;
             this.isStartBgAlternate = true;
             this.hasGrid = false;
@@ -1614,7 +1614,7 @@ TF.prototype = {
         }
 
         /*** container div ***/
-        var infdiv = tf_CreateElm('div', ['id',this.prfxInfDiv+this.id]);
+        var infdiv = TF.Dom.create('div', ['id',this.prfxInfDiv+this.id]);
         infdiv.className = this.infDivCssClass;
 
         //custom container
@@ -1637,20 +1637,20 @@ TF.prototype = {
         this.infDiv = tf_Id(this.prfxInfDiv+this.id);
 
         /*** left div containing rows # displayer ***/
-        var ldiv = tf_CreateElm('div', ['id',this.prfxLDiv+this.id]);
+        var ldiv = TF.Dom.create('div', ['id',this.prfxLDiv+this.id]);
         ldiv.className = this.lDivCssClass;
         infdiv.appendChild(ldiv);
         this.lDiv = tf_Id(this.prfxLDiv+this.id);
 
         /***    right div containing reset button
                 + nb results per page select    ***/
-        var rdiv = tf_CreateElm('div', ['id',this.prfxRDiv+this.id]);
+        var rdiv = TF.Dom.create('div', ['id',this.prfxRDiv+this.id]);
         rdiv.className = this.rDivCssClass;
         infdiv.appendChild(rdiv);
         this.rDiv = tf_Id(this.prfxRDiv+this.id);
 
         /*** mid div containing paging elements ***/
-        var mdiv = tf_CreateElm('div', ['id',this.prfxMDiv+this.id]);
+        var mdiv = TF.Dom.create('div', ['id',this.prfxMDiv+this.id]);
         mdiv.className = this.mDivCssClass;
         infdiv.appendChild(mdiv);
         this.mDiv = tf_Id(this.prfxMDiv+this.id);
@@ -1713,7 +1713,7 @@ TF.prototype = {
         //callback function after loader is closed
         this.onHideLoader = tf_IsFn(f.on_hide_loader) ? f.on_hide_loader : null;
 
-        var containerDiv = tf_CreateElm( 'div',['id',this.prfxLoader+this.id] );
+        var containerDiv = TF.Dom.create( 'div',['id',this.prfxLoader+this.id] );
         containerDiv.className = this.loaderCssClass;// for ie<=6
 
         var targetEl = (!this.loaderTgtId) ?
@@ -1726,7 +1726,7 @@ TF.prototype = {
         }
         this.loaderDiv = tf_Id(this.prfxLoader+this.id);
         if(!this.loaderHtml){
-            this.loaderDiv.appendChild(tf_CreateText(this.loaderText));
+            this.loaderDiv.appendChild(TF.Dom.text(this.loaderText));
         } else {
             this.loaderDiv.innerHTML = this.loaderHtml;
         }
@@ -2338,7 +2338,7 @@ TF.prototype = {
 
         // Paging drop-down list selector
         if(this.pageSelectorType === this.fltTypeSlc){
-            slcPages = tf_CreateElm(
+            slcPages = TF.Dom.create(
                 this.fltTypeSlc, ['id',this.prfxSlcPages+this.id]);
             slcPages.className = this.pgSlcCssClass;
             slcPages.onchange = this.Evt._OnSlcPagesChange;
@@ -2346,7 +2346,7 @@ TF.prototype = {
 
         // Paging input selector
         if(this.pageSelectorType === this.fltTypeInp){
-            slcPages = tf_CreateElm(
+            slcPages = TF.Dom.create(
                 this.fltTypeInp,
                 ['id',this.prfxSlcPages+this.id],
                 ['value',this.currentPageNb]
@@ -2356,19 +2356,19 @@ TF.prototype = {
         }
 
         // btns containers
-        var btnNextSpan = tf_CreateElm(
+        var btnNextSpan = TF.Dom.create(
             'span',['id',this.prfxBtnNextSpan+this.id]);
-        var btnPrevSpan = tf_CreateElm(
+        var btnPrevSpan = TF.Dom.create(
             'span',['id',this.prfxBtnPrevSpan+this.id]);
-        var btnLastSpan = tf_CreateElm(
+        var btnLastSpan = TF.Dom.create(
             'span',['id',this.prfxBtnLastSpan+this.id]);
-        var btnFirstSpan = tf_CreateElm(
+        var btnFirstSpan = TF.Dom.create(
             'span',['id',this.prfxBtnFirstSpan+this.id]);
 
         if(this.hasPagingBtns){
             // Next button
             if(!this.btnNextPageHtml){
-                var btn_next = tf_CreateElm(
+                var btn_next = TF.Dom.create(
                     this.fltTypeInp,['id',this.prfxBtnNext+this.id],
                     ['type','button'],
                     ['value',this.btnNextPageText],
@@ -2383,7 +2383,7 @@ TF.prototype = {
             }
             // Previous button
             if(!this.btnPrevPageHtml){
-                var btn_prev = tf_CreateElm(
+                var btn_prev = TF.Dom.create(
                     this.fltTypeInp,
                     ['id',this.prfxBtnPrev+this.id],
                     ['type','button'],
@@ -2399,7 +2399,7 @@ TF.prototype = {
             }
             // Last button
             if(!this.btnLastPageHtml){
-                var btn_last = tf_CreateElm(
+                var btn_last = TF.Dom.create(
                     this.fltTypeInp,
                     ['id',this.prfxBtnLast+this.id],
                     ['type','button'],
@@ -2415,7 +2415,7 @@ TF.prototype = {
             }
             // First button
             if(!this.btnFirstPageHtml){
-                var btn_first = tf_CreateElm(
+                var btn_first = TF.Dom.create(
                     this.fltTypeInp,
                     ['id',this.prfxBtnFirst+this.id],
                     ['type','button'],
@@ -2450,20 +2450,20 @@ TF.prototype = {
         targetEl.appendChild(btnFirstSpan);
         targetEl.appendChild(btnPrevSpan);
 
-        var pgBeforeSpan = tf_CreateElm(
+        var pgBeforeSpan = TF.Dom.create(
             'span',['id',this.prfxPgBeforeSpan+this.id] );
-        pgBeforeSpan.appendChild( tf_CreateText(this.pageText) );
+        pgBeforeSpan.appendChild( TF.Dom.text(this.pageText) );
         pgBeforeSpan.className = this.nbPgSpanCssClass;
         targetEl.appendChild(pgBeforeSpan);
         targetEl.appendChild(slcPages);
-        var pgAfterSpan = tf_CreateElm(
+        var pgAfterSpan = TF.Dom.create(
             'span',['id',this.prfxPgAfterSpan+this.id]);
-        pgAfterSpan.appendChild( tf_CreateText(this.ofText) );
+        pgAfterSpan.appendChild( TF.Dom.text(this.ofText) );
         pgAfterSpan.className = this.nbPgSpanCssClass;
         targetEl.appendChild(pgAfterSpan);
-        var pgspan = tf_CreateElm( 'span',['id',this.prfxPgSpan+this.id] );
+        var pgspan = TF.Dom.create( 'span',['id',this.prfxPgSpan+this.id] );
         pgspan.className = this.nbPgSpanCssClass;
-        pgspan.appendChild( tf_CreateText(' '+this.nbPages+' ') );
+        pgspan.appendChild( TF.Dom.text(' '+this.nbPages+' ') );
         targetEl.appendChild(pgspan);
         targetEl.appendChild(btnNextSpan);
         targetEl.appendChild(btnLastSpan);
@@ -2653,7 +2653,7 @@ TF.prototype = {
         var btnEvt = this.pagingBtnEvents,
             cmdtype = typeof cmd;
         if(cmdtype==='string'){
-            switch(cmd.tf_LCase()){
+            switch(TF.Str.lower(cmd)){
                 case 'next':
                     btnEvt.next();
                 break;
@@ -2703,12 +2703,12 @@ TF.prototype = {
             };
         }
 
-        var slcR = tf_CreateElm(
+        var slcR = TF.Dom.create(
             this.fltTypeSlc, ['id',this.prfxSlcResults+this.id]);
         slcR.className = this.resultsSlcCssClass;
         var slcRText = this.resultsPerPage[0],
             slcROpts = this.resultsPerPage[1];
-        var slcRSpan = tf_CreateElm(
+        var slcRSpan = TF.Dom.create(
             'span',['id',this.prfxSlcResultsTxt+this.id]);
         slcRSpan.className = this.resultsSpanCssClass;
 
@@ -2716,8 +2716,9 @@ TF.prototype = {
         if(!this.resultsPerPageTgtId){
             this.SetTopDiv();
         }
-        var targetEl = ( this.resultsPerPageTgtId==null ) ? this.rDiv : tf_Id( this.resultsPerPageTgtId );
-        slcRSpan.appendChild(tf_CreateText(slcRText));
+        var targetEl = !this.resultsPerPageTgtId ?
+            this.rDiv : tf_Id( this.resultsPerPageTgtId );
+        slcRSpan.appendChild(TF.Dom.text(slcRText));
         targetEl.appendChild(slcRSpan);
         targetEl.appendChild(slcR);
 
@@ -2798,8 +2799,8 @@ TF.prototype = {
             '<a href="javascript:;" onclick="window[\'tf_'+ this.id +
             '\']._ToggleHelp();">Close</a></div></div>';
 
-        var helpspan = tf_CreateElm('span',['id',this.prfxHelpSpan+this.id]);
-        var helpdiv = tf_CreateElm('div',['id',this.prfxHelpDiv+this.id]);
+        var helpspan = TF.Dom.create('span',['id',this.prfxHelpSpan+this.id]);
+        var helpdiv = TF.Dom.create('div',['id',this.prfxHelpDiv+this.id]);
 
         //help button is added to defined element
         if(!this.helpInstrTgtId){
@@ -2814,9 +2815,9 @@ TF.prototype = {
 
         if(!this.helpInstrBtnHtml){
             divContainer.appendChild(helpdiv);
-            var helplink = tf_CreateElm('a', ['href', 'javascript:void(0);']);
+            var helplink = TF.Dom.create('a', ['href', 'javascript:void(0);']);
             helplink.className = this.helpInstrBtnCssClass;
-            helplink.appendChild(tf_CreateText(this.helpInstrBtnText));
+            helplink.appendChild(TF.Dom.text(this.helpInstrBtnText));
             helpspan.appendChild(helplink);
             helplink.onclick = this.Evt._OnHelpBtnClick;
         } else {
@@ -2869,8 +2870,7 @@ TF.prototype = {
         var divDisplay = this.helpInstrContEl.style.display;
         if(divDisplay==='' || divDisplay==='none'){
             this.helpInstrContEl.style.display = 'block';
-            var btnLeft = tf_ObjPosition(
-                this.helpInstrBtnEl, [this.helpInstrBtnEl.nodeName])[0];
+            var btnLeft = TF.Dom.position(this.helpInstrBtnEl).left;
             if(!this.helpInstrContTgtId){
                 this.helpInstrContEl.style.left =
                     (btnLeft - this.helpInstrContEl.clientWidth + 25) + 'px';
@@ -3032,7 +3032,7 @@ TF.prototype = {
             o = this,
             row = this.tbl.rows,
             matchCase = this.matchCase,
-            fillMethod = this.slcFillingMethod.tf_LCase(),
+            fillMethod = TF.Str.lower(this.slcFillingMethod),
             optArray = [],
             slcInnerHtml = '',
             opt0,
@@ -3052,7 +3052,7 @@ TF.prototype = {
         if(this.rememberGridValues){
             flts_values = tf_CookieValueArray(
                 this.fltsValuesCookie, this.separator);
-            if(flts_values && flts_values.toString().tf_Trim()!==''){
+            if(flts_values && !TF.Str.isEmpty(flts_values.toString())){
                 if(isCustomSlc){
                     fltArr.push(flts_values[colIndex]);
                 } else {
@@ -3282,7 +3282,7 @@ TF.prototype = {
             - execute filtering (boolean)
     =====================================================*/
     __deferMultipleSelection: function(slc,index,filter){
-        if(slc.nodeName.tf_LCase()!=='select'){
+        if(TF.Str.lower(slc.nodeName)!=='select'){
             return;
         }
         var doFilter = filter===undefined ? false : filter;
@@ -3353,7 +3353,7 @@ TF.prototype = {
             return;
         }
         var flt = !isExternal ? this.checkListDiv[colIndex] : tf_Id(extFltId);
-        var ul = tf_CreateElm('ul',
+        var ul = TF.Dom.create('ul',
                 ['id',this.fltIds[colIndex]], ['colIndex',colIndex]);
         ul.className = this.checkListCssClass;
         ul.onchange = this.Evt._OnCheckListChange;
@@ -3543,7 +3543,7 @@ TF.prototype = {
             var flts_values = [], fltArr = []; //remember grid values
             var tmpVal = tf_CookieValueByIndex(
                             o.fltsValuesCookie, colIndex, separator);
-            if(tmpVal && tmpVal.tf_Trim().length > 0){
+            if(tmpVal && TF.Str.trim(tmpVal).length > 0){
                 if(o.hasCustomSlcOptions &&
                     o.customSlcOptions.cols.tf_Has(colIndex)){
                     fltArr.push(tmpVal);
@@ -3566,7 +3566,7 @@ TF.prototype = {
                 if(o.refreshFilters && o.disableExcludedOptions &&
                     excludedOpts.tf_Has(
                             val.tf_MatchCase(o.matchCase), o.matchCase)){
-                        tf_AddClass(li, o.checkListItemDisabledCssClass);
+                        TF.Dom.addClass(li, o.checkListItemDisabledCssClass);
                         li.check.disabled = true;
                         li.disabled = true;
                 } else{
@@ -3635,13 +3635,13 @@ TF.prototype = {
         var n = o;
 
         //ul tag search
-        while(n.nodeName.tf_LCase()!==filterTag){
+        while(TF.Str.lower(n.nodeName)!==filterTag){
             n = n.parentNode;
         }
 
-        if(n.nodeName.tf_LCase()!==filterTag){
-            return;
-        }
+        // if(n.nodeName.tf_LCase()!==filterTag){
+        //     return;
+        // }
 
         var li = n.childNodes[chkIndex];
         var colIndex = n.getAttribute('colIndex');
@@ -3660,7 +3660,7 @@ TF.prototype = {
                         var cChk = tf_Id(this.fltIds[colIndex]+'_'+indSplit[u]);
                         if(cChk){
                             cChk.checked = false;
-                            tf_RemoveClass(
+                            TF.Dom.removeClass(
                                 n.childNodes[indSplit[u]],
                                 this.checkListSlcItemCssClass
                             );
@@ -3672,8 +3672,8 @@ TF.prototype = {
 
             } else {
                 fltValue = (fltValue) ? fltValue : '';
-                chkValue = (fltValue+' '+chkValue+' '+this.orOperator)
-                            .tf_Trim();
+                chkValue = TF.Str.trim(
+                    fltValue+' '+chkValue+' '+this.orOperator);
                 chkIndex = fltIndexes + chkIndex + this.separator;
                 n.setAttribute('value', chkValue );
                 n.setAttribute('indexes', chkIndex);
@@ -3683,24 +3683,25 @@ TF.prototype = {
                 }
             }
 
-            if(li.nodeName.tf_LCase() === itemTag){
-                tf_RemoveClass(n.childNodes[0],this.checkListSlcItemCssClass);
-                tf_AddClass(li,this.checkListSlcItemCssClass);
+            if(TF.Str.lower(li.nodeName) === itemTag){
+                TF.Dom.removeClass(
+                    n.childNodes[0],this.checkListSlcItemCssClass);
+                TF.Dom.addClass(li,this.checkListSlcItemCssClass);
             }
         } else { //removes values and indexes
             if(chkValue!==''){
                 var replaceValue = new RegExp(
-                        tf_RegexpEscape(chkValue+' '+this.orOperator));
+                        TF.Str.rgxEsc(chkValue+' '+this.orOperator));
                 fltValue = fltValue.replace(replaceValue,'');
-                n.setAttribute('value', fltValue.tf_Trim());
+                n.setAttribute('value', TF.Str.trim(fltValue));
 
                 var replaceIndex = new RegExp(
-                        tf_RegexpEscape(chkIndex + this.separator));
+                        TF.Str.rgxEsc(chkIndex + this.separator));
                 fltIndexes = fltIndexes.replace(replaceIndex,'');
                 n.setAttribute('indexes', fltIndexes);
             }
-            if(li.nodeName.tf_LCase()===itemTag){
-                tf_RemoveClass(li,this.checkListSlcItemCssClass);
+            if(TF.Str.lower(li.nodeName)===itemTag){
+                TF.Dom.removeClass(li,this.checkListSlcItemCssClass);
             }
         }
     },
@@ -3728,7 +3729,7 @@ TF.prototype = {
             '<input type="button" value="" class="'+this.btnResetCssClass+'" ' +
             'title="'+this.btnResetTooltip+'" />');
 
-        var resetspan = tf_CreateElm('span', ['id',this.prfxResetSpan+this.id]);
+        var resetspan = TF.Dom.create('span', ['id',this.prfxResetSpan+this.id]);
 
         // reset button is added to defined element
         if(!this.btnResetTgtId){
@@ -3739,9 +3740,9 @@ TF.prototype = {
         targetEl.appendChild(resetspan);
 
         if(!this.btnResetHtml){
-            var fltreset = tf_CreateElm('a', ['href', 'javascript:void(0);']);
+            var fltreset = TF.Dom.create('a', ['href', 'javascript:void(0);']);
             fltreset.className = this.btnResetCssClass;
-            fltreset.appendChild(tf_CreateText(this.btnResetText));
+            fltreset.appendChild(TF.Dom.text(this.btnResetText));
             resetspan.appendChild(fltreset);
             fltreset.onclick = this.Evt._Clear;
         } else {
@@ -3789,15 +3790,15 @@ TF.prototype = {
         //delay for status bar clearing
         this.statusBarCloseDelay =  250;
         //status bar container
-        var statusDiv = tf_CreateElm('div', ['id',this.prfxStatus+this.id]);
+        var statusDiv = TF.Dom.create('div', ['id',this.prfxStatus+this.id]);
         statusDiv.className = this.statusBarCssClass;
         //status bar label
-        var statusSpan = tf_CreateElm(
+        var statusSpan = TF.Dom.create(
                 'span', ['id',this.prfxStatusSpan+this.id]);
         //preceding text
-        var statusSpanText = tf_CreateElm(
+        var statusSpanText = TF.Dom.create(
                 'span', ['id',this.prfxStatusTxt+this.id]);
-        statusSpanText.appendChild(tf_CreateText(this.statusBarText));
+        statusSpanText.appendChild(TF.Dom.text(this.statusBarText));
         //calls function before message is displayed
         this.onBeforeShowMsg = tf_IsFn(f.on_before_show_msg) ?
             f.on_before_show_msg : null;
@@ -3914,12 +3915,12 @@ TF.prototype = {
         this.onAfterRefreshCounter = tf_IsFn(f.on_after_refresh_counter) ?
             f.on_after_refresh_counter : null;
         //rows counter container
-        var countDiv = tf_CreateElm('div', ['id',this.prfxCounter+this.id]);
+        var countDiv = TF.Dom.create('div', ['id',this.prfxCounter+this.id]);
         countDiv.className = this.totRowsCssClass;
         //rows counter label
-        var countSpan = tf_CreateElm('span',['id',this.prfxTotRows+this.id]);
-        var countText = tf_CreateElm('span',['id',this.prfxTotRowsTxt+this.id]);
-        countText.appendChild(tf_CreateText(this.rowsCounterText));
+        var countSpan = TF.Dom.create('span',['id',this.prfxTotRows+this.id]);
+        var countText = TF.Dom.create('span',['id',this.prfxTotRowsTxt+this.id]);
+        countText.appendChild(TF.Dom.text(this.rowsCounterText));
 
         // counter is added to defined element
         if(!this.rowsCounterTgtId){
@@ -4029,7 +4030,7 @@ TF.prototype = {
                     this.inpWatermark : this.inpWatermark[i];
             if(this.GetFilterValue(i)===(set ? '' : inpWatermark)){
                 this.SetFilterValue(i, (!set ? '' : inpWatermark));
-                tf_AddClass(
+                TF.Dom.addClass(
                     this.GetFilterElement(i), this.inpWatermarkCssClass);
             }
         }
@@ -4102,7 +4103,7 @@ TF.prototype = {
         }
 
         //Main container: it will contain all the elements
-        this.tblMainCont = tf_CreateElm(
+        this.tblMainCont = TF.Dom.create(
             'div',['id', this.prfxMainTblCont + this.id]);
         this.tblMainCont.className = this.gridMainContCssClass;
         if(this.gridWidth){
@@ -4111,7 +4112,7 @@ TF.prototype = {
         this.tbl.parentNode.insertBefore(this.tblMainCont, this.tbl);
 
         //Table container: div wrapping content table
-        this.tblCont = tf_CreateElm('div',['id', this.prfxTblCont + this.id]);
+        this.tblCont = TF.Dom.create('div',['id', this.prfxTblCont + this.id]);
         this.tblCont.className = this.gridContCssClass;
         if(this.gridWidth){
             this.tblCont.style.width = this.gridWidth;
@@ -4133,7 +4134,7 @@ TF.prototype = {
         this.tblMainCont.appendChild(d);
 
         //Headers table container: div wrapping headers table
-        this.headTblCont = tf_CreateElm(
+        this.headTblCont = TF.Dom.create(
             'div',['id', this.prfxHeadTblCont + this.id]);
         this.headTblCont.className = this.gridHeadContCssClass;
         if(this.gridWidth){
@@ -4141,8 +4142,8 @@ TF.prototype = {
         }
 
         //Headers table
-        this.headTbl = tf_CreateElm('table',['id', this.prfxHeadTbl + this.id]);
-        var tH = tf_CreateElm('tHead'); //IE<7 needs it
+        this.headTbl = TF.Dom.create('table',['id', this.prfxHeadTbl + this.id]);
+        var tH = TF.Dom.create('tHead'); //IE<7 needs it
 
         //1st row should be headers row, ids are added if not set
         //Those ids are used by the sort feature
@@ -4159,12 +4160,12 @@ TF.prototype = {
         }
 
         //Filters row is created
-        var filtersRow = tf_CreateElm('tr');
+        var filtersRow = TF.Dom.create('tr');
         if(this.gridEnableFilters && this.fltGrid){
             this.externalFltTgtIds = [];
             for(var j=0; j<this.nbCells; j++){
                 var fltTdId = this.prfxFlt+j+ this.prfxGridFltTd +this.id;
-                var cl = tf_CreateElm(this.fltCellTag, ['id', fltTdId]);
+                var cl = TF.Dom.create(this.fltCellTag, ['id', fltTdId]);
                 filtersRow.appendChild(cl);
                 this.externalFltTgtIds[j] = fltTdId;
             }
@@ -4249,7 +4250,8 @@ TF.prototype = {
                 this.hasExtensions = true;
             } else {
                 if(!this.__containsStr(
-                    'colsresizer', this.extensions.src.toString().tf_LCase())){
+                    'colsresizer',
+                    TF.Str.lower(this.extensions.src.toString())) ){
                     this.extensions.name.push('ColumnsResizer_'+this.id);
                     this.extensions.src.push(this.gridColResizerPath);
                     this.extensions.description.push('Columns Resizing');
@@ -4275,7 +4277,7 @@ TF.prototype = {
                     return;
                 }
                 for(var k=(o.nbCells-1); k>=0; k--){
-                    var col = tf_CreateElm( 'col', ['id', o.id+'_col_'+k]);
+                    var col = TF.Dom.create( 'col', ['id', o.id+'_col_'+k]);
                     o.tbl.firstChild.parentNode.insertBefore(
                         col,o.tbl.firstChild);
                     col.style.width = o.colWidth[k];
@@ -4307,7 +4309,7 @@ TF.prototype = {
             }
             r.style.height = '0px';
             for(var x=0; x<o.nbCells; x++){
-                var col = tf_CreateElm('td', ['id', o.id+'_col_'+x]);
+                var col = TF.Dom.create('td', ['id', o.id+'_col_'+x]);
                 col.style.width = o.colWidth[x];
                 o.tbl.rows[1].cells[x].style.width = '';
                 r.appendChild(col);
@@ -4448,14 +4450,13 @@ TF.prototype = {
                     header = o.GetHeaderElement(colIndex),
                     headerWidth = header.clientWidth * 0.95;
                 if(!tf_isNotIE){
-                    var headerLeft = tf_ObjPosition(
-                            header, [header.nodeName])[0];
+                    var headerLeft = TF.Dom.position(header).left;
                     popUpDiv.style.left = (headerLeft) + 'px';
                 }
                 popUpDiv.style.width = parseInt(headerWidth, 10)  + 'px';
             }
-            tf_CancelEvent(evt);
-            tf_StopEvent(evt);
+            TF.Event.cancel(evt);
+            TF.Event.stop(evt);
         }
 
         var o = this;
@@ -4463,7 +4464,7 @@ TF.prototype = {
             if(this['col'+i] == this.fltTypeNone){
                 continue;
             }
-            var popUpSpan = tf_CreateElm(
+            var popUpSpan = TF.Dom.create(
                     'span', ['id', this.prfxPopUpSpan+this.id+'_'+i], ['ci',i]);
             popUpSpan.innerHTML = this.popUpImgFltHtml;
             var header = this.GetHeaderElement(i);
@@ -4489,13 +4490,13 @@ TF.prototype = {
     =====================================================*/
     SetPopupFilter: function(colIndex, div){
         var popUpDiv = !div ?
-            tf_CreateElm('div',['id',this.prfxPopUpDiv+this.id+'_'+colIndex]) :
+            TF.Dom.create('div',['id',this.prfxPopUpDiv+this.id+'_'+colIndex]) :
             div;
         popUpDiv.className = this.popUpDivCssClass;
         this.externalFltTgtIds.push(this.prfxPopUpDiv+this.id+'_'+colIndex);
         var header = this.GetHeaderElement(colIndex);
         header.insertBefore(popUpDiv, header.firstChild);
-        popUpDiv.onclick = function(e){ tf_StopEvent(e || window.event); };
+        popUpDiv.onclick = function(e){ TF.Event.stop(e || window.event); };
         this.popUpFltElms[colIndex] = popUpDiv;
     },
 
@@ -4728,7 +4729,7 @@ TF.prototype = {
                     divChk.title = divChk.innerHTML;
                     divChk.innerHTML = '';
 
-                    var ul = tf_CreateElm(
+                    var ul = TF.Dom.create(
                         'ul',['id',this.fltIds[i]],['colIndex',i]);
                     ul.className = this.checkListCssClass;
 
@@ -4773,7 +4774,7 @@ TF.prototype = {
         var rows = this.tbl.rows;
         var i = !index ? rIndex : index;
         this.RemoveRowBg(rIndex);
-        tf_AddClass(
+        TF.Dom.addClass(
             rows[rIndex],
             (i%2) ? this.rowBgEvenCssClass : this.rowBgOddCssClass
         );
@@ -4789,8 +4790,8 @@ TF.prototype = {
             return;
         }
         var rows = this.tbl.rows;
-        tf_RemoveClass(rows[index],this.rowBgOddCssClass);
-        tf_RemoveClass(rows[index],this.rowBgEvenCssClass);
+        TF.Dom.removeClass(rows[index],this.rowBgOddCssClass);
+        TF.Dom.removeClass(rows[index],this.rowBgEvenCssClass);
     },
 
     /*====================================================
@@ -4858,7 +4859,7 @@ TF.prototype = {
             tbody[0].style.overflowX = 'hidden';
         } else { //IE returns 0
             // cont div is added to emulate fixed headers behaviour
-            var contDiv = tf_CreateElm(
+            var contDiv = TF.Dom.create(
                 'div',['id',this.prfxContentDiv+this.id]);
             contDiv.className = this.contDivCssClass;
             this.tbl.parentNode.insertBefore(contDiv, this.tbl);
@@ -4990,7 +4991,7 @@ TF.prototype = {
             re_l = new RegExp(this.lwOperator),
             re_g = new RegExp(this.grOperator),
             re_d = new RegExp(this.dfOperator),
-            re_lk = new RegExp(tf_RegexpEscape(this.lkOperator)),
+            re_lk = new RegExp(TF.Str.rgxEsc(this.lkOperator)),
             re_eq = new RegExp(this.eqOperator),
             re_st = new RegExp(this.stOperator),
             re_en = new RegExp(this.enOperator),
@@ -4998,7 +4999,7 @@ TF.prototype = {
             re_cr = new RegExp(this.curExp),
             re_em = this.emOperator,
             re_nm = this.nmOperator,
-            re_re = new RegExp(tf_RegexpEscape(this.rgxOperator));
+            re_re = new RegExp(TF.Str.rgxEsc(this.rgxOperator));
 
         //keyword highlighting
         function highlight(str, ok, cell){
@@ -5010,7 +5011,7 @@ TF.prototype = {
                 var w = str;
                 if(re_le.test(str) || re_ge.test(str) || re_l.test(str) ||
                     re_g.test(str) || re_d.test(str)){
-                    w = tf_GetNodeText(cell);
+                    w = TF.Dom.getText(cell);
                 }
                 if(w!==''){
                     tf_HighlightWord(cell,w,o.highlightCssClass,o);
@@ -5089,11 +5090,11 @@ TF.prototype = {
                 }
                 //empty
                 else if(hasEM){
-                    occurence = (cell_data.tf_Trim()==='' ? true : false);
+                    occurence = TF.Str.isEmpty(cell_data);
                 }
                 //non-empty
                 else if(hasNM){
-                    occurence = (cell_data.tf_Trim()!=='' ? true : false);
+                    occurence = !TF.Str.isEmpty(cell_data);
                 }
             }
 
@@ -5166,11 +5167,11 @@ TF.prototype = {
                 }
                 //empty
                 else if(hasEM){
-                    occurence = (cell_data.tf_Trim()==='' ? true : false);
+                    occurence = TF.Str.isEmpty(cell_data);
                 }
                 //non-empty
                 else if(hasNM){
-                    occurence = (cell_data.tf_Trim()!=='' ? true : false);
+                    occurence = !TF.Str.isEmpty(cell_data);
                 }
                 //regexp
                 else if(hasRE){
@@ -5239,7 +5240,7 @@ TF.prototype = {
                         occur = false,
                         s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
                     for(var w=0; w<s.length; w++){
-                        cS = s[w].tf_Trim();
+                        cS = TF.Str.trim(s[w]);
                         occur = hasArg(cS,cell_data,j);
                         highlight(cS,occur,cell[j]);
                         if(hasMultiOrSA && occur){
@@ -5253,7 +5254,7 @@ TF.prototype = {
                 }
                 //single search parameter
                 else {
-                    occurence[j] = hasArg(sA.tf_Trim(),cell_data,j);
+                    occurence[j] = hasArg(TF.Str.trim(sA), cell_data, j);
                     highlight(sA,occurence[j],cell[j]);
                 }//else single param
 
@@ -5271,7 +5272,7 @@ TF.prototype = {
                         if(this.onBeforeActiveColumn){
                             this.onBeforeActiveColumn.call(null, this, j);
                         }
-                        tf_AddClass(
+                        TF.Dom.addClass(
                             this.GetHeaderElement(j),
                             this.activeColumnsCssClass);
                         if(this.onAfterActiveColumn){
@@ -5333,7 +5334,7 @@ TF.prototype = {
     ApplyGridProps: function(){
         // blurs active filter (IE)
         if(this.activeFlt &&
-            this.activeFlt.nodeName.tf_LCase()===this.fltTypeSlc &&
+            TF.Str.lower(this.activeFlt.nodeName)===this.fltTypeSlc &&
             !this.popUpFilters){
             this.activeFlt.blur();
             if(this.activeFlt.parentNode){
@@ -5398,7 +5399,8 @@ TF.prototype = {
                 // this loop retrieves cell data
                 for(var j=0; j<nchilds; j++){
                     if(j===colindex && row[i].style.display===''){
-                        var cell_data = this.GetCellData(j, cell[j]).tf_LCase(),
+                        var cell_data = TF.Str.lower(
+                                this.GetCellData(j, cell[j])),
                             nbFormat = this.colNbFormat ?
                                 this.colNbFormat[colindex] : null,
                             data = num ?
@@ -5468,7 +5470,7 @@ TF.prototype = {
         var searchArgs = [];
         for(var i=0; i<this.fltIds.length; i++){
             searchArgs.push(
-                this.GetFilterValue(i).tf_MatchCase(this.matchCase).tf_Trim()
+                TF.Str.trim(this.GetFilterValue(i).tf_MatchCase(this.matchCase))
             );
         }
         return searchArgs;
@@ -5503,7 +5505,7 @@ TF.prototype = {
         var arr = [];
         for(var i=0; i<this.fltIds.length; i++){
             var fltType = this['col'+i];
-            if(fltType === type.tf_LCase()){
+            if(fltType === TF.Str.lower(type)){
                 var a = (bool) ? i : this.fltIds[i];
                 arr.push(a);
             }
@@ -5560,7 +5562,7 @@ TF.prototype = {
         if(this.customCellData && this.customCellDataCols.tf_Has(i)){
             return this.customCellData.call(null,this,cell,i);
         } else {
-            return tf_GetNodeText(cell);
+            return TF.Dom.getText(cell);
         }
     },
 
@@ -5658,7 +5660,7 @@ TF.prototype = {
     =====================================================*/
     SetRowValidation: function(rowIndex, isValid){
         var row = this.tbl.rows[rowIndex];
-        if(!row || (typeof isValid).tf_LCase()!=='boolean'){
+        if(!row || TF.Str.lower(typeof isValid)!=='boolean'){
             return;
         }
 
@@ -5714,7 +5716,7 @@ TF.prototype = {
             fltColType != this.fltTypeCheckList){
             slc.value = searcharg;
             if(fltColType===this.fltTypeInp && this.inpWatermark!==''){
-                tf_RemoveClass(slc, this.inpWatermarkCssClass);
+                TF.Dom.removeClass(slc, this.inpWatermarkCssClass);
             }
         }
         //multiple selects
@@ -5754,7 +5756,7 @@ TF.prototype = {
                 var li = tf_Tag(slc,'li')[k],
                     lbl = tf_Tag(li,'label')[0],
                     chk = tf_Tag(li,'input')[0],
-                    lblTxt = tf_GetNodeText(lbl).tf_MatchCase(this.matchCase);
+                    lblTxt = TF.Dom.getText(lbl).tf_MatchCase(this.matchCase);
                 if(lblTxt!=='' && sarg.tf_Has(lblTxt,true)){
                     chk.checked = true;
                     this.__setCheckListValues(chk);
@@ -5839,7 +5841,7 @@ TF.prototype = {
     =====================================================*/
     ClearActiveColumns: function(){
         for(var i=0; i<this.fltIds.length; i++){
-            tf_RemoveClass(
+            TF.Dom.removeClass(
                 this.GetHeaderElement(i), this.activeColumnsCssClass);
         }
     },
@@ -5985,9 +5987,9 @@ TF.prototype = {
             }
         }
 
-        if((typeof labelId).tf_LCase()=='object' &&
-            (typeof colIndex).tf_LCase()=='object' &&
-            (typeof operation).tf_LCase()=='object'){
+        if(TF.Str.lower(typeof labelId)=='object' &&
+            TF.Str.lower(typeof colIndex)=='object' &&
+            TF.Str.lower(typeof operation)=='object'){
             var row = this.tbl.rows,
                 colvalues = [];
 
@@ -6026,11 +6028,11 @@ TF.prototype = {
                 for(var k=0; k<colIndex.length; k++){
                      if(colIndex[k] === ucolIndex[ucol]){
                         mThisCol++;
-                        opsThisCol[mThisCol]=operation[k].tf_LCase();
+                        opsThisCol[mThisCol]=TF.Str.lower(operation[k]);
                         decThisCol[mThisCol]=decimalPrecision[k];
                         labThisCol[mThisCol]=labelId[k];
                         oTypeThisCol = outputType !== undefined &&
-                            (typeof outputType).tf_LCase()==='object' ?
+                            TF.Str.lower(typeof outputType)==='object' ?
                             outputType[k] : null;
 
                         switch(opsThisCol[mThisCol]){
@@ -6165,7 +6167,7 @@ TF.prototype = {
                     if(oTypeThisCol && result){
                         result = result.toFixed( precision );
                         if(tf_Id(labThisCol[i])){
-                            switch( oTypeThisCol.tf_LCase() ){
+                            switch( TF.Str.lower(oTypeThisCol) ){
                                 case 'innerhtml':
                                     if (isNaN(result) || !isFinite(result) ||
                                         nbvalues===0){
@@ -6180,7 +6182,7 @@ TF.prototype = {
                                 case 'createtextnode':
                                     var oldnode = tf_Id(labThisCol[i])
                                         .firstChild;
-                                    var txtnode = tf_CreateText(result);
+                                    var txtnode = TF.Dom.text(result);
                                     tf_Id(labThisCol[i])
                                         .replaceChild(txtnode, oldnode);
                                 break;
@@ -6298,7 +6300,7 @@ TF.prototype = {
         }
 
         if(!this.gridLayout){
-            tf_AddClass(this.tbl, this.prfxTf);
+            TF.Dom.addClass(this.tbl, this.prfxTf);
         }
         this.hasGrid = true;
     },
@@ -6324,9 +6326,9 @@ TF.prototype = {
             exactMatch = !forceMatch ? this.exactMatch : forceMatch;
         if(exactMatch || (fltType!==this.fltTypeInp && fltType)){
             regexp = new RegExp(
-                '(^\\s*)'+ tf_RegexpEscape(arg) +'(\\s*$)', modifier);
+                '(^\\s*)'+ TF.Str.rgxEsc(arg) +'(\\s*$)', modifier);
         } else{
-            regexp = new RegExp(tf_RegexpEscape(arg), modifier);
+            regexp = new RegExp(TF.Str.rgxEsc(arg), modifier);
         }
         return regexp.test(data);
     },
@@ -6342,14 +6344,14 @@ TF.prototype = {
             file,
             head = tf_Tag(document,'head')[0];
 
-        if(ftype.tf_LCase() === 'link'){
-            file = tf_CreateElm(
+        if(TF.Str.lower(ftype) === 'link'){
+            file = TF.Dom.create(
                 'link',
                 ['id', fileId], ['type', 'text/css'],
                 ['rel', 'stylesheet'], ['href', filePath]
             );
         } else {
-            file = tf_CreateElm(
+            file = TF.Dom.create(
                 'script', ['id', fileId],
                 ['type', 'text/javascript'], ['src', filePath]
             );
@@ -6500,21 +6502,9 @@ TF.prototype = {
     }
 };
 
-/* --- */
-
 /*====================================================
     - General TF utility fns below
 =====================================================*/
-
-/*====================================================
-    - returns text + text of child nodes of a node
-=====================================================*/
-function tf_GetNodeText(n){
-    var s = n.textContent || n.innerText ||
-            n.innerHTML.replace(/<[^<>]+>/g, '');
-    s = s.replace(/^\s+/, '').replace(/\s+$/, '');
-    return s.tf_Trim();
-}
 
 /*====================================================
     - checks if var exists and is an object
@@ -6569,54 +6559,19 @@ function tf_Tag(o,tagname){
     for regexp
     - Many thanks to Cedric Wartel for this fn
 =====================================================*/
-function tf_RegexpEscape(s){
+// function tf_RegexpEscape(s){
 
-    function escape(e){
-        var a = new RegExp('\\'+e,'g');
-        s = s.replace(a,'\\'+e);
-    }
+//     function escape(e){
+//         var a = new RegExp('\\'+e,'g');
+//         s = s.replace(a,'\\'+e);
+//     }
 
-    var chars = ['\\','[','^','$','.','|','?','*','+','(',')'];
-    for(var e=0; e<chars.length; e++){
-        escape(chars[e]);
-    }
-    return s;
-}
-
-/*====================================================
-    - creates an html element with its attributes
-    - accepts the following params:
-        - a string defining the html tag
-        to create
-        - an undetermined # of arrays containing the
-        couple 'attribute name','value' ['id','myId']
-=====================================================*/
-function tf_CreateElm(tag){
-    if(!tag || tag===''){
-        return;
-    }
-    var el = document.createElement(tag);
-    if(arguments.length>1){
-        for(var i=0; i<arguments.length; i++){
-            var argtype = typeof arguments[i];
-            switch(argtype.tf_LCase()){
-                case 'object':
-                    if(arguments[i].length === 2){
-                        el.setAttribute(arguments[i][0],arguments[i][1]);
-                    }
-                break;
-            }
-        }
-    }//if args
-    return el;
-}
-
-/*====================================================
-    - this is just a document.createTextNode shortcut
-=====================================================*/
-function tf_CreateText(node){
-    return document.createTextNode(node);
-}
+//     var chars = ['\\','[','^','$','.','|','?','*','+','(',')'];
+//     for(var e=0; e<chars.length; e++){
+//         escape(chars[e]);
+//     }
+//     return s;
+// }
 
 /*====================================================
     - creates an option element and returns it:
@@ -6627,9 +6582,9 @@ function tf_CreateText(node){
 function tf_CreateOpt(text,value,isSel){
     var isSelected = isSel ? true : false,
         opt = isSelected ?
-            tf_CreateElm('option', ['value',value], ['selected','true']) :
-            tf_CreateElm('option', ['value',value]);
-    opt.appendChild(tf_CreateText(text));
+            TF.Dom.create('option', ['value',value], ['selected','true']) :
+            TF.Dom.create('option', ['value',value]);
+    opt.appendChild(TF.Dom.text(text));
     return opt;
 }
 
@@ -6644,71 +6599,18 @@ function tf_CreateCheckItem(chkIndex, chkValue, labelText){
     if(!chkIndex || !chkValue || !labelText){
         return;
     }
-    var li = tf_CreateElm('li'),
-        label = tf_CreateElm('label', ['for',chkIndex]),
-        check = tf_CreateElm('input',
+    var li = TF.Dom.create('li'),
+        label = TF.Dom.create('label', ['for',chkIndex]),
+        check = TF.Dom.create('input',
             ['id',chkIndex], ['name',chkIndex],
             ['type','checkbox'], ['value',chkValue]
         );
     label.appendChild(check);
-    label.appendChild(tf_CreateText(labelText));
+    label.appendChild(TF.Dom.text(labelText));
     li.appendChild(label);
     li.label = label;
     li.check = check;
     return li;
-}
-
-function tf_AddEvent(obj, event_name, func_name, use_capture){
-    if(obj.attachEvent){
-        obj.attachEvent('on'+event_name, func_name);
-    }
-    else if(obj.addEventListener){
-        obj.addEventListener(event_name, func_name,
-            (use_capture===undefined ? false : use_capture));
-    } else{
-        obj['on'+event_name] = func_name;
-    }
-}
-
-function tf_RemoveEvent(obj, event_name, func_name, use_capture){
-    if(obj.detachEvent){
-        obj.detachEvent('on'+event_name,func_name);
-    }
-    else if(obj.removeEventListener){
-        obj.removeEventListener(event_name, func_name,
-            (use_capture===undefined ? false : use_capture));
-    } else {
-        obj['on'+event_name] = null;
-    }
-}
-
-function tf_StopEvent(e){
-    if(!e) e = window.event;
-    if(e.stopPropagation) {
-        e.stopPropagation();
-    } else {
-        e.cancelBubble = true;
-    }
-}
-
-function tf_CancelEvent(e){
-    if(!e) e = window.event;
-    if(e.preventDefault) {
-        e.preventDefault();
-    } else {
-        e.returnValue = false;
-    }
-}
-
-function tf_ObjPosition(obj, tag){
-    var l = 0, t = 0;
-    if (obj && obj.offsetParent && tag.tf_Has(obj.nodeName.tf_LCase())) {
-        do {
-            l += obj.offsetLeft;
-            t += obj.offsetTop;
-        } while (obj == obj.offsetParent);
-    }
-    return [l,t];
 }
 
 function tf_NumSortAsc(a, b){ return (a-b); }
@@ -6716,31 +6618,31 @@ function tf_NumSortAsc(a, b){ return (a-b); }
 function tf_NumSortDesc(a, b){ return (b-a); }
 
 function tf_IgnoreCaseSort(a, b){
-    var x = a.tf_LCase();
-    var y = b.tf_LCase();
+    var x = TF.Str.lower(a);
+    var y = TF.Str.lower(b);
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 
 String.prototype.tf_MatchCase = function (mc){
     if(!mc){
-        return this.tf_LCase();
+        return TF.Str.lower(this);
     } else {
         return this.toString();
     }
 };
 
 //optimised by Anthony Maes
-String.prototype.tf_Trim = function(){
-    return this.replace(/(^[\s\xA0]*)|([\s\xA0]*$)/g,'');
-};
+// String.prototype.tf_Trim = function(){
+//     return this.replace(/(^[\s\xA0]*)|([\s\xA0]*$)/g,'');
+// };
 
-String.prototype.tf_LCase = function(){
-    return this.toLowerCase();
-};
+// String.prototype.tf_LCase = function(){
+//     return this.toLowerCase();
+// };
 
-String.prototype.tf_UCase = function(){
-    return this.toUpperCase();
-};
+// String.prototype.tf_UCase = function(){
+//     return this.toUpperCase();
+// };
 
 Array.prototype.tf_Has = function(s, mc){
     var sCase = mc===undefined ? false : mc;
@@ -6768,33 +6670,6 @@ window['tf_isIE'] = window.innerHeight ? false :
                     /msie|MSIE 6/.test(navigator.userAgent) ? true : false;
 window['tf_isIE7'] = window.innerHeight ? false :
                     /msie|MSIE 7/.test(navigator.userAgent) ? true : false;
-
-function tf_HasClass(elm,cl){
-    if(!elm){
-        return false;
-    }
-    return elm.className.match(new RegExp('(\\s|^)'+cl+'(\\s|$)'));
-}
-
-function tf_AddClass(elm,cl){
-    if(!elm){
-        return;
-    }
-    if(!tf_HasClass(elm,cl)){
-        elm.className += ' '+cl;
-    }
-}
-
-function tf_RemoveClass(elm,cl){
-    if(!elm){
-        return;
-    }
-    if(!tf_HasClass(elm,cl)){
-        return;
-    }
-    var reg = new RegExp('(\\s|^)'+cl+'(\\s|$)');
-    elm.className = elm.className.replace(reg,'');
-}
 
 function tf_IsValidDate(dateStr, format){
     if(!format) {
@@ -6961,7 +6836,7 @@ function tf_RemoveNbFormat(data, format){
         format = 'us';
     }
     var n = data;
-    if(format.tf_LCase()==='us'){
+    if(TF.Str.lower(format)==='us'){
         n =+ n.replace(/[^\d\.-]/g,'');
     } else {
         n =+ n.replace(/[^\d\,-]/g,'').replace(',','.');
@@ -6997,7 +6872,7 @@ function tf_IsStylesheetImported(stylesheet){
         if(s[i].imports){//IE
             var imp = s[i].imports;
             for(var j=0; j<imp.length; j++){
-                if(imp[j].href.tf_LCase() === stylesheet.tf_LCase()){
+                if(TF.Str.lower(imp[j].href) === TF.Str.lower(stylesheet)){
                     isImported = true;
                     break;
                 }
@@ -7084,8 +6959,8 @@ function tf_HighlightWord(node, word, cssClass, o){
     // And do this node itself
     // text node
     if(node.nodeType === 3){
-        var tempNodeVal = node.nodeValue.tf_LCase();
-        var tempWordVal = word.tf_LCase();
+        var tempNodeVal = TF.Str.lower(node.nodeValue);
+        var tempWordVal = TF.Str.lower(word.tf_LCase);
         if(tempNodeVal.indexOf(tempWordVal) != -1){
             var pn = node.parentNode;
             if(pn && pn.className != cssClass){
@@ -7093,11 +6968,11 @@ function tf_HighlightWord(node, word, cssClass, o){
                 var nv = node.nodeValue,
                     ni = tempNodeVal.indexOf(tempWordVal),
                     // Create a load of replacement nodes
-                    before = tf_CreateText(nv.substr(0,ni)),
+                    before = TF.Dom.text(nv.substr(0,ni)),
                     docWordVal = nv.substr(ni,word.length),
-                    after = tf_CreateText(nv.substr(ni+word.length)),
-                    hiwordtext = tf_CreateText(docWordVal),
-                    hiword = tf_CreateElm('span');
+                    after = TF.Dom.text(nv.substr(ni+word.length)),
+                    hiwordtext = TF.Dom.text(docWordVal),
+                    hiword = TF.Dom.create('span');
                 hiword.className = cssClass;
                 hiword.appendChild(hiwordtext);
                 pn.insertBefore(before,node);
@@ -7124,8 +6999,8 @@ function tf_UnhighlightWord(o, word, cssClass){
         if(!n){
             continue;
         }
-        var tempNodeVal = n.nodeValue.tf_LCase(),
-            tempWordVal = word.tf_LCase();
+        var tempNodeVal = TF.Str.lower(n.nodeValue),
+            tempWordVal = TF.Str.lower(word);
         if(tempNodeVal.indexOf(tempWordVal) !== -1){
             var pn = n.parentNode;
             if(pn && pn.className == cssClass){
@@ -7154,7 +7029,7 @@ function tf_SetOuterHtml(){
                 element.__defineGetter__("outerHTML",
                     function(){
                         var parent = this.parentNode;
-                        var el = tf_CreateElm(parent.tagName);
+                        var el = TF.Dom.create(parent.tagName);
                         el.appendChild(this);
                         var shtml = el.innerHTML;
                         parent.appendChild(this);
@@ -7204,7 +7079,7 @@ function setFilterGrid(id){
     section
 /*=====================================================*/
 window['tf_isNotIE'] = !(/msie|MSIE/.test(navigator.userAgent));
-tf_AddEvent(window,
+TF.Event.add(window,
     (tf_isNotIE || (typeof window.addEventListener === 'function') ?
         'DOMContentLoaded' : 'load'),
     initFilterGrid);
@@ -7214,7 +7089,7 @@ function initFilterGrid(){
     var tbls = tf_Tag(document,'table'), config;
     for (var i=0; i<tbls.length; i++){
         var cTbl = tbls[i], cTblId = cTbl.getAttribute('id');
-        if(tf_HasClass(cTbl,'filterable') && cTblId){
+        if(TF.Dom.hasClass(cTbl,'filterable') && cTblId){
             if(tf_IsObj(cTblId+'_config')){
                 config = window[cTblId+'_config'];
             } else { config = undefined; }
@@ -7230,17 +7105,16 @@ function initFilterGrid(){
 =====================================================*/
 function grabEBI(id){ return tf_Id(id); }
 function grabTag(obj,tagname){ return tf_Tag(obj,tagname); }
-function tf_GetCellText(n){ return tf_GetNodeText(n); }
+function tf_GetCellText(n){ return TF.Dom.getText(n); }
 function tf_isObject(varname){ return tf_IsObj(varname); }
 function tf_isObj(v){ return tf_IsObj(v); }
 function tf_isFn(fn){ return tf_IsFn(fn); }
 function tf_isArray(obj){ return tf_IsArray(obj); }
-function tf_addEvent(obj,event_name,func_name){ return tf_AddEvent(obj,event_name,func_name); }
-function tf_removeEvent(obj,event_name,func_name){ return tf_RemoveEvent(obj,event_name,func_name); }
-function tf_addClass(elm,cl){ tf_AddClass(elm,cl); }
-function tf_removeClass(elm,cl){ return tf_RemoveClass(elm,cl); }
-function tf_hasClass(elm,cl){ return tf_HasClass(elm,cl); }
+function tf_addEvent(obj,event_name,func_name){ return TF.Event.add(obj,event_name,func_name); }
+function tf_removeEvent(obj,event_name,func_name){ return TF.Event.remove(obj,event_name,func_name); }
+function tf_addClass(elm,cl){ TF.Dom.addClass(elm,cl); }
+function tf_removeClass(elm,cl){ return TF.Dom.removeClass(elm,cl); }
+function tf_hasClass(elm,cl){ return TF.Dom.hasClass(elm,cl); }
 function tf_isValidDate(dateStr,format){ return tf_IsValidDate(dateStr,format); }
 function tf_formatDate(dateStr,format){ return tf_FormatDate(dateStr,format); }
 function tf_removeNbFormat(data,format){ return tf_RemoveNbFormat(data,format); }
-/* --- */
