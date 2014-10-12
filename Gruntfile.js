@@ -13,6 +13,8 @@ module.exports = function (grunt) {
                 '<%= source_folder %>string.js',
                 '<%= source_folder %>dom.js',
                 '<%= source_folder %>event.js',
+                '<%= source_folder %>types.js',
+                '<%= source_folder %>cookie.js',
                 '<%= source_folder %>tablefilter_all.js'
             ]
         },
@@ -105,5 +107,5 @@ module.exports = function (grunt) {
     // This is the default task being executed if Grunt
     // is called without any further parameter.
     grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'cssmin', 'copy']);
-
+    grunt.registerTask('dev', ['jshint', 'concat', 'cssmin', 'copy']);
 };

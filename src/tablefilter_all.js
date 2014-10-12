@@ -221,10 +221,10 @@ function TF(id) {
     // used by tf_DetectKey fn
     this.modFilterFn = this.isModFilterFn ? f.mod_filter_fn : null;
     //calls function before filtering starts
-    this.onBeforeFilter = tf_IsFn(f.on_before_filter) ?
+    this.onBeforeFilter = TF.Types.isFn(f.on_before_filter) ?
         f.on_before_filter : null;
     //calls function after filtering
-    this.onAfterFilter = tf_IsFn(f.on_after_filter) ?
+    this.onAfterFilter = TF.Types.isFn(f.on_after_filter) ?
         f.on_after_filter : null;
     //enables/disables case sensitivity
     this.matchCase = f.match_case===true ? true : false;
@@ -259,25 +259,25 @@ function TF(id) {
     //enables/disables status messages
     this.status = f.status===true ? true : false;
     //calls function when filters grid loaded
-    this.onFiltersLoaded = tf_IsFn(f.on_filters_loaded) ?
+    this.onFiltersLoaded = TF.Types.isFn(f.on_filters_loaded) ?
         f.on_filters_loaded : null;
     //enables/disables single filter search
     this.singleSearchFlt = f.single_search_filter===true ? true : false;
     //calls function after row is validated
-    this.onRowValidated = tf_IsFn(f.on_row_validated) ?
+    this.onRowValidated = TF.Types.isFn(f.on_row_validated) ?
         f.on_row_validated : null;
     //array defining columns for customCellData event
     this.customCellDataCols = f.custom_cell_data_cols ?
         f.custom_cell_data_cols : [];
     //calls custom function for retrieving cell data
-    this.customCellData = tf_IsFn(f.custom_cell_data) ?
+    this.customCellData = TF.Types.isFn(f.custom_cell_data) ?
         f.custom_cell_data : null;
     //input watermark text array
     this.inpWatermark = f.input_watermark || '';
     //defines css class for input watermark
     this.inpWatermarkCssClass = f.input_watermark_css_class ||
         'fltWatermark';
-    this.isInpWatermarkArray = tf_IsArray(f.input_watermark);
+    this.isInpWatermarkArray = TF.Types.isArray(f.input_watermark);
     //id of toolbar container element
     this.toolBarTgtId = f.toolbar_target_id || null;
     //enables/disables help div
@@ -290,10 +290,10 @@ function TF(id) {
     this.activeColumnsCssClass = f.active_columns_css_class ||
         'activeHeader';
     //calls function before active column header is marked
-    this.onBeforeActiveColumn = tf_IsFn(f.on_before_active_column) ?
+    this.onBeforeActiveColumn = TF.Types.isFn(f.on_before_active_column) ?
         f.on_before_active_column : null;
     //calls function after active column header is marked
-    this.onAfterActiveColumn = tf_IsFn(f.on_after_active_column) ?
+    this.onAfterActiveColumn = TF.Types.isFn(f.on_after_active_column) ?
         f.on_after_active_column : null;
 
     /*** select filter's customisation and behaviours ***/
@@ -330,15 +330,15 @@ function TF(id) {
     //tooltip text appearing on multiple select
     this.multipleSlcTooltip = f.multiple_slc_tooltip ||
         'Use Ctrl key for multiple selections';
-    this.hasCustomSlcOptions = tf_IsObj(f.custom_slc_options) ?
+    this.hasCustomSlcOptions = TF.Types.isObj(f.custom_slc_options) ?
         true : false;
     this.customSlcOptions = tf_isArray(f.custom_slc_options) ?
         f.custom_slc_options : null;
     //calls function before col operation
-    this.onBeforeOperation = tf_IsFn(f.on_before_operation) ?
+    this.onBeforeOperation = TF.Types.isFn(f.on_before_operation) ?
         f.on_before_operation : null;
     //calls function after col operation
-    this.onAfterOperation = tf_IsFn(f.on_after_operation) ?
+    this.onAfterOperation = TF.Types.isFn(f.on_after_operation) ?
         f.on_after_operation : null;
 
     /*** checklist customisation and behaviours ***/
@@ -407,10 +407,11 @@ function TF(id) {
     //defines css class for reset button
     this.btnResetCssClass = f.btn_reset_css_class || 'reset';
     //callback function before filters are cleared
-    this.onBeforeReset = tf_IsFn(f.on_before_reset) ?
+    this.onBeforeReset = TF.Types.isFn(f.on_before_reset) ?
         f.on_before_reset : null;
     //callback function after filters are cleared
-    this.onAfterReset = tf_IsFn(f.on_after_reset) ? f.on_after_reset : null;
+    this.onAfterReset = TF.Types.isFn(f.on_after_reset) ?
+        f.on_after_reset : null;
 
     /*** paging ***/
     //enables/disables table paging
@@ -680,7 +681,7 @@ function TF(id) {
         true : false;
     //imports themes
     this.hasThemes = (f.enable_default_theme ||
-        (f.themes && tf_IsObj(f.themes))) ? true : false;
+        (f.themes && TF.Types.isObj(f.themes))) ? true : false;
     this.themes = this.hasThemes ? f.themes : null;
     //themes path
     this.themesPath = f.themes_path || this.basePath+'TF_Themes/';
@@ -1171,7 +1172,7 @@ TF.prototype = {
 
                         if(this.rememberGridValues){
                             //reads the cookie
-                            var flts = tf_ReadCookie(this.fltsValuesCookie);
+                            var flts = TF.Cookie.read(this.fltsValuesCookie);
                             var reg = new RegExp(this.separator,'g');
                             //creates an array with filters' values
                             var flts_values = flts.split(reg);
@@ -1405,8 +1406,8 @@ TF.prototype = {
         - loads TF extensions
     =====================================================*/
     _LoadExtensions : function(){
-        if(!this.hasExtensions || !tf_IsArray(this.extensions.name) ||
-            !tf_IsArray(this.extensions.src)){
+        if(!this.hasExtensions || !TF.Types.isArray(this.extensions.name) ||
+            !TF.Types.isArray(this.extensions.src)){
             return;
         }
         var ext = this.extensions;
@@ -1469,7 +1470,8 @@ TF.prototype = {
             this.Thm.add('DefaultTheme',
                 this.themesPath+'Default/TF_Default.css', 'Default Theme');
         }
-        if(tf_IsArray(this.themes.name) && tf_IsArray(this.themes.src)){
+        if(TF.Types.isArray(this.themes.name) &&
+            TF.Types.isArray(this.themes.src)){
             var thm = this.themes;
             for(var i=0; i<thm.name.length; i++){
                 var thmPath = thm.src[i],
@@ -1485,7 +1487,7 @@ TF.prototype = {
                 if(!tf_IsImported(thmPath,'link')){
                     this.IncludeFile(thmName, thmPath, null, 'link');
                 }
-                if(tf_IsFn(thmInit)){
+                if(TF.Types.isFn(thmInit)){
                     thmInit.call(null,this);
                 }
             }
@@ -1709,11 +1711,13 @@ TF.prototype = {
         //delay for hiding loader
         this.loaderCloseDelay = 200;
         //callback function before loader is displayed
-        this.onShowLoader = tf_IsFn(f.on_show_loader) ? f.on_show_loader : null;
+        this.onShowLoader = TF.Types.isFn(f.on_show_loader) ?
+            f.on_show_loader : null;
         //callback function after loader is closed
-        this.onHideLoader = tf_IsFn(f.on_hide_loader) ? f.on_hide_loader : null;
+        this.onHideLoader = TF.Types.isFn(f.on_hide_loader) ?
+            f.on_hide_loader : null;
 
-        var containerDiv = TF.Dom.create( 'div',['id',this.prfxLoader+this.id] );
+        var containerDiv = TF.Dom.create('div',['id',this.prfxLoader+this.id]);
         containerDiv.className = this.loaderCssClass;// for ie<=6
 
         var targetEl = (!this.loaderTgtId) ?
@@ -1781,7 +1785,7 @@ TF.prototype = {
         var fn = this.Evt._EnableSort,
             sortConfig = this.sortConfig;
 
-        if(!tf_IsFn(fn)){
+        if(!TF.Types.isFn(fn)){
             var o = this;
             /*====================================================
                 - enables table sorting
@@ -2244,10 +2248,10 @@ TF.prototype = {
         //defines previous page button html
         this.pageSelectorType = f.page_selector_type || this.fltTypeSlc;
         //calls function before page is changed
-        this.onBeforeChangePage = tf_IsFn(f.on_before_change_page) ?
+        this.onBeforeChangePage = TF.Types.isFn(f.on_before_change_page) ?
             f.on_before_change_page : null;
         //calls function before page is changed
-        this.onAfterChangePage = tf_IsFn(f.on_after_change_page) ?
+        this.onAfterChangePage = TF.Types.isFn(f.on_after_change_page) ?
             f.on_after_change_page : null;
         var start_row = this.refRow;
         var nrows = this.nbRows;
@@ -2965,7 +2969,7 @@ TF.prototype = {
             - name: cookie name (string)
     ===============================================*/
     _ResetPage: function(name){
-        var pgnb = tf_ReadCookie(name);
+        var pgnb = TF.Cookie.read(name);
         if(pgnb!==''){
             this.ChangePage((pgnb-1));
         }
@@ -2983,7 +2987,7 @@ TF.prototype = {
         if(!this.paging){
             return;
         }
-        var pglenIndex = tf_ReadCookie(name);
+        var pglenIndex = TF.Cookie.read(name);
 
         if(pglenIndex!==''){
             this.resultsPerPageSlc.options[pglenIndex].selected = true;
@@ -3050,7 +3054,7 @@ TF.prototype = {
         /*** remember grid values ***/
         var flts_values = [], fltArr = [];
         if(this.rememberGridValues){
-            flts_values = tf_CookieValueArray(
+            flts_values = TF.Cookie.valueToArray(
                 this.fltsValuesCookie, this.separator);
             if(flts_values && !TF.Str.isEmpty(flts_values.toString())){
                 if(isCustomSlc){
@@ -3087,16 +3091,16 @@ TF.prototype = {
                         (!isRefreshed ||
                             (isRefreshed && this.disableExcludedOptions))) ||
                         (colIndex==j && isRefreshed &&
-                            ((row[k].style.display == '' && !this.paging) ||
+                            ((row[k].style.display === '' && !this.paging) ||
                         (this.paging && (!this.validRowsIndex ||
                             (this.validRowsIndex &&
                                 this.validRowsIndex.tf_Has(k))) &&
-                            ((activeFlt==undefined || activeFlt==colIndex)  ||
+                            ((activeFlt===undefined || activeFlt==colIndex)  ||
                                 (activeFlt!=colIndex &&
                                     this.validRowsIndex.tf_Has(k) ))) ))){
                         var cell_data = this.GetCellData(j, cell[j]),
                             //Vary Peter's patch
-                            cell_string = cell_data.tf_MatchCase(matchCase);
+                            cell_string = TF.Str.matchCase(cell_data,matchCase);
 
                         // checks if celldata is already in array
                         if(!optArray.tf_Has(cell_string, matchCase)){
@@ -3215,7 +3219,7 @@ TF.prototype = {
                 var isDisabled = false;
                 if(isRefreshed && o.disableExcludedOptions &&
                     excludedOpts.tf_Has(
-                        val.tf_MatchCase(o.matchCase), o.matchCase)){
+                        TF.Str.matchCase(val, o.matchCase), o.matchCase)){
                     isDisabled = true;
                 }
 
@@ -3246,8 +3250,8 @@ TF.prototype = {
                                 lbl,
                                 val,
                                 (fltArr.tf_Has(
-                                    optArray[y].tf_MatchCase(
-                                        o.matchCase),o.matchCase) ||
+                                    TF.Str.matchCase(optArray[y],o.matchCase),
+                                    o.matchCase) ||
                                   fltArr.toString().indexOf(val)!== -1) ?
                                     true : false
                             );
@@ -3402,9 +3406,9 @@ TF.prototype = {
                         var cell_data = this.GetCellData(j, cells[j]);
                         //Vary Peter's patch
                         var cell_string =
-                                cell_data.tf_MatchCase(this.matchCase);
+                                TF.Str.matchCase(cell_data, this.matchCase);
                         // checks if celldata is already in array
-                        if(!optArray.tf_Has(cell_string,this.matchCase)){
+                        if(!optArray.tf_Has(cell_string, this.matchCase)){
                             optArray.push(cell_data);
                         }
                         var filteredCol = filteredDataCol[j];
@@ -3541,7 +3545,7 @@ TF.prototype = {
             var chkCt = AddTChecks();
 
             var flts_values = [], fltArr = []; //remember grid values
-            var tmpVal = tf_CookieValueByIndex(
+            var tmpVal = TF.Cookie.getValueByIndex(
                             o.fltsValuesCookie, colIndex, separator);
             if(tmpVal && TF.Str.trim(tmpVal).length > 0){
                 if(o.hasCustomSlcOptions &&
@@ -3565,7 +3569,7 @@ TF.prototype = {
                 li.className = o.checkListItemCssClass;
                 if(o.refreshFilters && o.disableExcludedOptions &&
                     excludedOpts.tf_Has(
-                            val.tf_MatchCase(o.matchCase), o.matchCase)){
+                            TF.Str.matchCase(val, o.matchCase), o.matchCase)){
                         TF.Dom.addClass(li, o.checkListItemDisabledCssClass);
                         li.check.disabled = true;
                         li.disabled = true;
@@ -3585,7 +3589,7 @@ TF.prototype = {
                         o.customSlcOptions.cols.tf_Has(colIndex) &&
                         fltArr.toString().indexOf(val)!= -1) ||
                         fltArr.tf_Has(
-                            val.tf_MatchCase(o.matchCase),o.matchCase)){
+                            TF.Str.matchCase(val, o.matchCase), o.matchCase)){
                         li.check.checked = true;
                         o.__setCheckListValues(li.check);
                     }
@@ -3638,10 +3642,6 @@ TF.prototype = {
         while(TF.Str.lower(n.nodeName)!==filterTag){
             n = n.parentNode;
         }
-
-        // if(n.nodeName.tf_LCase()!==filterTag){
-        //     return;
-        // }
 
         var li = n.childNodes[chkIndex];
         var colIndex = n.getAttribute('colIndex');
@@ -3800,10 +3800,10 @@ TF.prototype = {
                 'span', ['id',this.prfxStatusTxt+this.id]);
         statusSpanText.appendChild(TF.Dom.text(this.statusBarText));
         //calls function before message is displayed
-        this.onBeforeShowMsg = tf_IsFn(f.on_before_show_msg) ?
+        this.onBeforeShowMsg = TF.Types.isFn(f.on_before_show_msg) ?
             f.on_before_show_msg : null;
         //calls function after message is displayed
-        this.onAfterShowMsg = tf_IsFn(f.on_after_show_msg) ?
+        this.onAfterShowMsg = TF.Types.isFn(f.on_after_show_msg) ?
             f.on_after_show_msg : null;
 
         // target element container
@@ -3909,10 +3909,11 @@ TF.prototype = {
         //defines css class rows counter
         this.totRowsCssClass = f.tot_rows_css_class || 'tot';
         //callback raised before counter is refreshed
-        this.onBeforeRefreshCounter = tf_IsFn(f.on_before_refresh_counter) ?
-            f.on_before_refresh_counter : null;
+        this.onBeforeRefreshCounter =
+            TF.Types.isFn(f.on_before_refresh_counter) ?
+                f.on_before_refresh_counter : null;
         //callback raised after counter is refreshed
-        this.onAfterRefreshCounter = tf_IsFn(f.on_after_refresh_counter) ?
+        this.onAfterRefreshCounter = TF.Types.isFn(f.on_after_refresh_counter) ?
             f.on_after_refresh_counter : null;
         //rows counter container
         var countDiv = TF.Dom.create('div', ['id',this.prfxCounter+this.id]);
@@ -4320,7 +4321,7 @@ TF.prototype = {
             o.leadColWidthsRow = o.tbl.rows[0];
             o.leadColWidthsRow.setAttribute('validRow','false');
 
-            var beforeSortFn = tf_IsFn(f.on_before_sort) ?
+            var beforeSortFn = TF.Types.isFn(f.on_before_sort) ?
                 f.on_before_sort : null;
             f.on_before_sort = function(o,colIndex){
                 o.leadColWidthsRow.setAttribute('validRow','false');
@@ -4329,7 +4330,8 @@ TF.prototype = {
                 }
             };
 
-            var afterSortFn = tf_IsFn(f.on_after_sort) ? f.on_after_sort : null;
+            var afterSortFn = TF.Types.isFn(f.on_after_sort) ?
+                f.on_after_sort : null;
             f.on_after_sort = function(o,colIndex){
                 if(o.leadColWidthsRow.rowIndex !== 0){
                     var r = o.leadColWidthsRow;
@@ -4345,7 +4347,7 @@ TF.prototype = {
             };
         }
 
-        var afterColResizedFn = tf_IsFn(f.on_after_col_resized) ?
+        var afterColResizedFn = TF.Types.isFn(f.on_after_col_resized) ?
             f.on_after_col_resized : null;
         f.on_after_col_resized = function(o,colIndex){
             if(!colIndex){
@@ -4418,16 +4420,17 @@ TF.prototype = {
         //defines css class for popup div containing filter
         this.popUpDivCssClass = f.popup_div_css_class || 'popUpFilter';
         //callback function before popup filtes is opened
-        this.onBeforePopUpOpen = tf_IsFn(f.on_before_popup_filter_open) ?
+        this.onBeforePopUpOpen = TF.Types.isFn(f.on_before_popup_filter_open) ?
             f.on_before_popup_filter_open : null;
         //callback function after popup filtes is opened
-        this.onAfterPopUpOpen = tf_IsFn(f.on_after_popup_filter_open) ?
+        this.onAfterPopUpOpen = TF.Types.isFn(f.on_after_popup_filter_open) ?
             f.on_after_popup_filter_open : null;
         //callback function before popup filtes is closed
-        this.onBeforePopUpClose = tf_IsFn(f.on_before_popup_filter_close) ?
+        this.onBeforePopUpClose =
+            TF.Types.isFn(f.on_before_popup_filter_close) ?
             f.on_before_popup_filter_close : null;
         //callback function after popup filtes is closed
-        this.onAfterPopUpClose = tf_IsFn(f.on_after_popup_filter_close) ?
+        this.onAfterPopUpClose = TF.Types.isFn(f.on_after_popup_filter_close) ?
             f.on_after_popup_filter_close : null;
         this.externalFltTgtIds = [];
         //stores filters spans
@@ -4608,7 +4611,7 @@ TF.prototype = {
         //adds array size
         flt_values.push(this.fltIds.length);
         //writes cookie
-        tf_WriteCookie(
+        TF.Cookie.write(
             name,
             flt_values.join(this.separator),
             this.cookieDuration
@@ -4622,7 +4625,7 @@ TF.prototype = {
             - name: cookie name (string)
     ===============================================*/
     RememberPageNb: function(name){
-        tf_WriteCookie(
+        TF.Cookie.write(
             name,
             this.currentPageNb,
             this.cookieDuration
@@ -4636,7 +4639,7 @@ TF.prototype = {
             - name: cookie name (string)
     ===============================================*/
     RememberPageLength: function(name){
-        tf_WriteCookie(
+        TF.Cookie.write(
             name,
             this.resultsPerPageSlc.selectedIndex,
             this.cookieDuration
@@ -4678,7 +4681,7 @@ TF.prototype = {
         if(!this.fillSlcOnDemand){
             return;
         }
-        var flts = tf_ReadCookie(name),
+        var flts = TF.Cookie.read(name),
             reg = new RegExp(this.separator,'g'),
             //creates an array with filters' values
             flts_values = flts.split(reg),
@@ -5014,7 +5017,7 @@ TF.prototype = {
                     w = TF.Dom.getText(cell);
                 }
                 if(w!==''){
-                    tf_HighlightWord(cell,w,o.highlightCssClass,o);
+                    o.HighlightWord(cell,w,o.highlightCssClass);
                 }
             }
         }
@@ -5222,8 +5225,8 @@ TF.prototype = {
                     continue;
                 }
 
-                var cell_data = this.GetCellData(j, cell[j])
-                                    .tf_MatchCase(this.matchCase);
+                var cell_data = TF.Str.matchCase(
+                    this.GetCellData(j, cell[j]), this.matchCase);
 
                 //multiple search parameter operator ||
                 var sAOrSplit = sA.split(this.orOperator),
@@ -5388,7 +5391,7 @@ TF.prototype = {
         for(var i=this.refRow; i<this.nbRows; i++){
             var isExludedRow = false;
             // checks if current row index appears in exclude array
-            if(exclude && tf_IsObj(exclude)){
+            if(exclude && TF.Types.isObj(exclude)){
                 isExludedRow = exclude.tf_Has(i); //boolean
             }
             var cell = row[i].cells,
@@ -5470,7 +5473,8 @@ TF.prototype = {
         var searchArgs = [];
         for(var i=0; i<this.fltIds.length; i++){
             searchArgs.push(
-                TF.Str.trim(this.GetFilterValue(i).tf_MatchCase(this.matchCase))
+                TF.Str.trim(
+                    TF.Str.matchCase(this.GetFilterValue(i), this.matchCase))
             );
         }
         return searchArgs;
@@ -5645,7 +5649,7 @@ TF.prototype = {
     },
 
     GetRowDisplay: function(row){
-        if(!this.fltGrid && !tf_IsObj(row)){
+        if(!this.fltGrid && !TF.Types.isObj(row)){
             return;
         }
         return row.style.display;
@@ -5748,7 +5752,7 @@ TF.prototype = {
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
-            searcharg = searcharg.tf_MatchCase(this.matchCase);
+            searcharg = TF.Str.matchCase(searcharg, this.matchCase);
             var sarg = searcharg.split(' '+this.orOperator+' '),
                 fltValue = slc.setAttribute('value',''),
                 fltIndex = slc.setAttribute('indexes','');
@@ -5756,7 +5760,8 @@ TF.prototype = {
                 var li = tf_Tag(slc,'li')[k],
                     lbl = tf_Tag(li,'label')[0],
                     chk = tf_Tag(li,'input')[0],
-                    lblTxt = TF.Dom.getText(lbl).tf_MatchCase(this.matchCase);
+                    lblTxt = TF.Str.matchCase(
+                        TF.Dom.getText(lbl), this.matchCase);
                 if(lblTxt!=='' && sarg.tf_Has(lblTxt,true)){
                     chk.checked = true;
                     this.__setCheckListValues(chk);
@@ -5831,8 +5836,8 @@ TF.prototype = {
             this.activeFilterId = '';
             this.RefreshFiltersGrid();
         }
-        if(this.rememberPageLen){ tf_RemoveCookie(this.pgLenCookie); }
-        if(this.rememberPageNb){ tf_RemoveCookie(this.pgNbCookie); }
+        if(this.rememberPageLen){ TF.Cookie.remove(this.pgLenCookie); }
+        if(this.rememberPageNb){ TF.Cookie.remove(this.pgNbCookie); }
         if(this.onAfterReset){ this.onAfterReset.call(null, this); }
     },
 
@@ -6218,10 +6223,89 @@ TF.prototype = {
     UnhighlightAll: function(){
         if( this.highlightKeywords && this.searchArgs){
             for(var y=0; y<this.searchArgs.length; y++){
-                tf_UnhighlightWord(
-                    this, this.searchArgs[y], this.highlightCssClass);
+                this.UnhighlightWord(
+                    this.searchArgs[y], this.highlightCssClass);
             }
             this.highlightedNodes = [];
+        }
+    },
+
+    /*====================================================
+        - highlights keyword found in passed node
+        - accepts the following params:
+            - node
+            - word to search
+            - css class name for highlighting
+    =====================================================*/
+    HighlightWord: function(node, word, cssClass){
+        // Iterate into this nodes childNodes
+        if(node.hasChildNodes){
+            for(var i=0; i<node.childNodes.length; i++){
+                this.HighlightWord(node.childNodes[i], word, cssClass);
+            }
+        }
+
+        // And do this node itself
+        // text node
+        if(node.nodeType === 3){
+            var tempNodeVal = TF.Str.lower(node.nodeValue);
+            var tempWordVal = TF.Str.lower(word);
+            if(tempNodeVal.indexOf(tempWordVal) != -1){
+                var pn = node.parentNode;
+                if(pn && pn.className != cssClass){
+                    // word has not already been highlighted!
+                    var nv = node.nodeValue,
+                        ni = tempNodeVal.indexOf(tempWordVal),
+                        // Create a load of replacement nodes
+                        before = TF.Dom.text(nv.substr(0,ni)),
+                        docWordVal = nv.substr(ni,word.length),
+                        after = TF.Dom.text(nv.substr(ni+word.length)),
+                        hiwordtext = TF.Dom.text(docWordVal),
+                        hiword = TF.Dom.create('span');
+                    hiword.className = cssClass;
+                    hiword.appendChild(hiwordtext);
+                    pn.insertBefore(before,node);
+                    pn.insertBefore(hiword,node);
+                    pn.insertBefore(after,node);
+                    pn.removeChild(node);
+                    this.highlightedNodes.push(hiword.firstChild);
+                }
+            }
+        }
+    },
+
+    /*====================================================
+        - removes highlights found in passed node
+        - accepts the following params:
+            - node
+            - word to search
+            - css class name for highlighting
+    =====================================================*/
+    UnhighlightWord: function(word, cssClass){
+        var arrRemove = [];
+        for(var i=0; i<this.highlightedNodes.length; i++){
+            var n = this.highlightedNodes[i];
+            if(!n){
+                continue;
+            }
+            var tempNodeVal = TF.Str.lower(n.nodeValue),
+                tempWordVal = TF.Str.lower(word);
+            if(tempNodeVal.indexOf(tempWordVal) !== -1){
+                var pn = n.parentNode;
+                if(pn && pn.className === cssClass){
+                    var prevSib = pn.previousSibling,
+                        nextSib = pn.nextSibling;
+                    if(!prevSib || !nextSib){ continue; }
+                    nextSib.nodeValue = prevSib.nodeValue + n.nodeValue +
+                        nextSib.nodeValue;
+                    prevSib.nodeValue = '';
+                    n.nodeValue = '';
+                    arrRemove.push(i);
+                }
+            }
+        }
+        for(var k=0; k<arrRemove.length; k++){
+            this.highlightedNodes.splice(arrRemove[k], 1);
         }
     },
 
@@ -6253,7 +6337,8 @@ TF.prototype = {
                 if(extFlt){
                     extFlt.appendChild(this.externalFltEls[ct]);
                     var colFltType = this['col'+ct];
-                    //IE special treatment for gridLayout, appended filters are empty
+                    //IE special treatment for gridLayout, appended filters are
+                    //empty
                     if(this.gridLayout &&
                         this.externalFltEls[ct].innerHTML === '' &&
                         colFltType !== this.fltTypeInp){
@@ -6503,44 +6588,6 @@ TF.prototype = {
 };
 
 /*====================================================
-    - General TF utility fns below
-=====================================================*/
-
-/*====================================================
-    - checks if var exists and is an object
-    - returns a boolean
-=====================================================*/
-function tf_IsObj(v){
-    var isO = false;
-    if(typeof v === 'string'){
-        if(window[v] && typeof window[v] === 'object'){
-            isO = true;
-        }
-    } else {
-        if(v && typeof v === 'object'){
-            isO = true;
-        }
-    }
-    return isO;
-}
-
-/*====================================================
-    - checks if passed param is a function
-    - returns a boolean
-=====================================================*/
-function tf_IsFn(fn){
-    return (fn && fn.constructor == Function);
-}
-
-/*====================================================
-    - checks if passed param is an array
-    - returns a boolean
-=====================================================*/
-function tf_IsArray(obj){
-    return (obj && obj.constructor == Array);
-}
-
-/*====================================================
     - this is just a getElementById shortcut
 =====================================================*/
 function tf_Id(id){
@@ -6553,25 +6600,6 @@ function tf_Id(id){
 function tf_Tag(o,tagname){
     return o.getElementsByTagName(tagname);
 }
-
-/*====================================================
-    - escapes special characters [\^$.|?*+()
-    for regexp
-    - Many thanks to Cedric Wartel for this fn
-=====================================================*/
-// function tf_RegexpEscape(s){
-
-//     function escape(e){
-//         var a = new RegExp('\\'+e,'g');
-//         s = s.replace(a,'\\'+e);
-//     }
-
-//     var chars = ['\\','[','^','$','.','|','?','*','+','(',')'];
-//     for(var e=0; e<chars.length; e++){
-//         escape(chars[e]);
-//     }
-//     return s;
-// }
 
 /*====================================================
     - creates an option element and returns it:
@@ -6623,31 +6651,10 @@ function tf_IgnoreCaseSort(a, b){
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 
-String.prototype.tf_MatchCase = function (mc){
-    if(!mc){
-        return TF.Str.lower(this);
-    } else {
-        return this.toString();
-    }
-};
-
-//optimised by Anthony Maes
-// String.prototype.tf_Trim = function(){
-//     return this.replace(/(^[\s\xA0]*)|([\s\xA0]*$)/g,'');
-// };
-
-// String.prototype.tf_LCase = function(){
-//     return this.toLowerCase();
-// };
-
-// String.prototype.tf_UCase = function(){
-//     return this.toUpperCase();
-// };
-
 Array.prototype.tf_Has = function(s, mc){
     var sCase = mc===undefined ? false : mc;
     for (i=0; i<this.length; i++){
-        if(this[i].toString().tf_MatchCase(sCase)===s){
+        if(TF.Str.matchCase(this[i].toString(), sCase) === s){
             return true;
         }
     }
@@ -6657,11 +6664,11 @@ Array.prototype.tf_Has = function(s, mc){
 Array.prototype.tf_IndexByValue = function(s,mc){
     var sCase = mc===undefined ? false : mc;
     for (i=0; i<this.length; i++){
-        if(this[i].toString().tf_MatchCase(sCase)===s){
+        if(TF.Str.matchCase(this[i].toString(), sCase) === s){
             return i;
         }
     }
-    return (-1);
+    return -1;
 };
 
 // Is this IE 6? the ultimate browser sniffer ;-)
@@ -6890,136 +6897,6 @@ function tf_IsStylesheetImported(stylesheet){
     return isImported;
 }
 
-function tf_WriteCookie(name, value, hours){
-    var expire = '';
-    if(hours){
-        expire = new Date((new Date()).getTime() + hours * 3600000);
-        expire = '; expires=' + expire.toGMTString();
-    }
-    document.cookie = name + '=' + escape(value) + expire;
-}
-
-function tf_ReadCookie(name){
-    var cookieValue = '',
-        search = name + '=';
-    if(document.cookie.length > 0){
-        var cookie = document.cookie,
-            offset = cookie.indexOf(search);
-        if(offset !== -1){
-            offset += search.length;
-            end = cookie.indexOf(';', offset);
-            if(end === -1){
-                end = cookie.length;
-            }
-            cookieValue = unescape(cookie.substring(offset, end));
-        }
-    }
-    return cookieValue;
-}
-
-function tf_CookieValueArray(name, separator){
-    if(!separator){
-        separator = ',';
-    }
-    //reads the cookie
-    var val = tf_ReadCookie(name);
-    //creates an array with filters' values
-    var arr = val.split(separator);
-    return arr;
-}
-
-function tf_CookieValueByIndex(name, index, separator){
-    if(!separator){
-        separator = ',';
-    }
-    //reads the cookie
-    var val = tf_CookieValueArray(name, separator);
-    return val[index];
-}
-
-function tf_RemoveCookie(name){
-    tf_WriteCookie(name,'',-1);
-}
-
-/*====================================================
-    - highlights keyword found in passed node
-    - accepts the following params:
-        - node
-        - word to search
-        - css class name for highlighting
-=====================================================*/
-function tf_HighlightWord(node, word, cssClass, o){
-    // Iterate into this nodes childNodes
-    if(node.hasChildNodes){
-        for(var i=0; i<node.childNodes.length; i++){
-            tf_HighlightWord(node.childNodes[i],word,cssClass,o);
-        }
-    }
-
-    // And do this node itself
-    // text node
-    if(node.nodeType === 3){
-        var tempNodeVal = TF.Str.lower(node.nodeValue);
-        var tempWordVal = TF.Str.lower(word.tf_LCase);
-        if(tempNodeVal.indexOf(tempWordVal) != -1){
-            var pn = node.parentNode;
-            if(pn && pn.className != cssClass){
-                // word has not already been highlighted!
-                var nv = node.nodeValue,
-                    ni = tempNodeVal.indexOf(tempWordVal),
-                    // Create a load of replacement nodes
-                    before = TF.Dom.text(nv.substr(0,ni)),
-                    docWordVal = nv.substr(ni,word.length),
-                    after = TF.Dom.text(nv.substr(ni+word.length)),
-                    hiwordtext = TF.Dom.text(docWordVal),
-                    hiword = TF.Dom.create('span');
-                hiword.className = cssClass;
-                hiword.appendChild(hiwordtext);
-                pn.insertBefore(before,node);
-                pn.insertBefore(hiword,node);
-                pn.insertBefore(after,node);
-                pn.removeChild(node);
-                o.highlightedNodes.push(hiword.firstChild);
-            }
-        }
-    }
-}
-
-/*====================================================
-    - removes highlights found in passed node
-    - accepts the following params:
-        - node
-        - word to search
-        - css class name for highlighting
-=====================================================*/
-function tf_UnhighlightWord(o, word, cssClass){
-    var arrRemove = [];
-    for(var i=0; i<o.highlightedNodes.length; i++){
-        var n = o.highlightedNodes[i];
-        if(!n){
-            continue;
-        }
-        var tempNodeVal = TF.Str.lower(n.nodeValue),
-            tempWordVal = TF.Str.lower(word);
-        if(tempNodeVal.indexOf(tempWordVal) !== -1){
-            var pn = n.parentNode;
-            if(pn && pn.className == cssClass){
-                var prevSib = pn.previousSibling,
-                    nextSib = pn.nextSibling;
-                if(!prevSib || !nextSib){ continue; }
-                nextSib.nodeValue = prevSib.nodeValue + n.nodeValue +
-                    nextSib.nodeValue;
-                prevSib.nodeValue = '';
-                n.nodeValue = '';
-                arrRemove.push(i);
-            }
-        }
-    }
-    for(var k=0; k<arrRemove.length; k++){
-        o.highlightedNodes.splice(arrRemove[k], 1);
-    }
-}
-
 //Firefox does not support outerHTML property
 function tf_SetOuterHtml(){
     if(document.body.__defineGetter__){
@@ -7090,7 +6967,7 @@ function initFilterGrid(){
     for (var i=0; i<tbls.length; i++){
         var cTbl = tbls[i], cTblId = cTbl.getAttribute('id');
         if(TF.Dom.hasClass(cTbl,'filterable') && cTblId){
-            if(tf_IsObj(cTblId+'_config')){
+            if(TF.Types.isObj(cTblId+'_config')){
                 config = window[cTblId+'_config'];
             } else { config = undefined; }
             window[cTblId+'_isUnob'] = true;
@@ -7106,10 +6983,10 @@ function initFilterGrid(){
 function grabEBI(id){ return tf_Id(id); }
 function grabTag(obj,tagname){ return tf_Tag(obj,tagname); }
 function tf_GetCellText(n){ return TF.Dom.getText(n); }
-function tf_isObject(varname){ return tf_IsObj(varname); }
-function tf_isObj(v){ return tf_IsObj(v); }
-function tf_isFn(fn){ return tf_IsFn(fn); }
-function tf_isArray(obj){ return tf_IsArray(obj); }
+function tf_isObject(varname){ return TF.Types.isObj(varname); }
+function tf_isObj(v){ return TF.Types.isObj(v); }
+function tf_isFn(fn){ return TF.Types.isFn(fn); }
+function tf_isArray(obj){ return TF.Types.isArray(obj); }
 function tf_addEvent(obj,event_name,func_name){ return TF.Event.add(obj,event_name,func_name); }
 function tf_removeEvent(obj,event_name,func_name){ return TF.Event.remove(obj,event_name,func_name); }
 function tf_addClass(elm,cl){ TF.Dom.addClass(elm,cl); }
