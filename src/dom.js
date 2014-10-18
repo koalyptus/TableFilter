@@ -106,9 +106,49 @@
         ele.className = ele.className.replace(reg, '');
     };
 
+    /**
+     * Creates and returns an option element
+     * @param  {String}  text  option text
+     * @param  {String}  value option value
+     * @param  {Boolean} isSel whether option is selected
+     * @return {Object}        option element
+     */
+    TF.Dom.createOpt = function(text, value, isSel){
+        var isSelected = isSel ? true : false,
+            opt = isSelected ?
+                this.create('option', ['value',value], ['selected','true']) :
+                this.create('option', ['value',value]);
+        opt.appendChild(this.text(text));
+        return opt;
+    };
+
+    /**
+     * Creates and returns a checklist item
+     * @param  {Number} chkIndex  index of check item
+     * @param  {String} chkValue  check item value
+     * @param  {String} labelText check item label text
+     * @return {Object}           li DOM element
+     */
+    TF.Dom.createCheckItem = function(chkIndex, chkValue, labelText){
+        var li = this.create('li'),
+            label = this.create('label', ['for', chkIndex]),
+            check = this.create('input',
+                ['id', chkIndex],
+                ['name', chkIndex],
+                ['type', 'checkbox'],
+                ['value', chkValue]
+            );
+        label.appendChild(check);
+        label.appendChild(this.text(labelText));
+        li.appendChild(label);
+        li.label = label;
+        li.check = check;
+        return li;
+    };
+
     // HTML5 classList API
     function supportsClassList(){
         return document.documentElement.classList;
     }
 
-})(this, this.TF || {});
+})(this, this.TF);

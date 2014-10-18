@@ -58,4 +58,4 @@
         return val[index];
     };
 
-})(this, this.TF || {});
+})(this, this.TF);

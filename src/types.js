@@ -44,4 +44,4 @@
         return (obj && obj.constructor == Array);
     };
 
-})(this, this.TF || {});
+})(this, this.TF);

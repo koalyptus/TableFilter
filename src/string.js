@@ -16,7 +16,10 @@
     };
 
     TF.Str.trim = function(text){
-        return text.replace(/(^[\s\xA0]*)|([\s\xA0]*$)/g,'');
+        if (text.trim){
+            return text.trim();
+        }
+        return text.replace(/^\s*|\s*$/g, '');
     };
 
     TF.Str.isEmpty = function(text){
@@ -43,4 +46,4 @@
         return text;
     };
 
-})(this, this.TF || {});
+})(this, this.TF);

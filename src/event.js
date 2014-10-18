@@ -53,4 +53,4 @@
         }
     };
 
-})(this, this.TF || {});
+})(this, this.TF);
