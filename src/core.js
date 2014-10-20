@@ -349,7 +349,7 @@ function TableFilter(id) {
         'Use Ctrl key for multiple selections';
     this.hasCustomSlcOptions = types.isObj(f.custom_slc_options) ?
         true : false;
-    this.customSlcOptions = tf_isArray(f.custom_slc_options) ?
+    this.customSlcOptions = types.isArray(f.custom_slc_options) ?
         f.custom_slc_options : null;
     //calls function before col operation
     this.onBeforeOperation = types.isFn(f.on_before_operation) ?
@@ -474,14 +474,14 @@ function TableFilter(id) {
                 if(o.SetSortTable){ o.SetSortTable(); }
             };
     this.sortConfig.sortTypes =
-        tf_isArray(this.sortConfig['sort_types']) ?
+        types.isArray(this.sortConfig['sort_types']) ?
         f.sort_config.sort_types : [];
     this.sortConfig.sortCol = this.sortConfig['sort_col']!==undefined ?
         f.sort_config.sort_col : null;
     this.sortConfig.asyncSort =
         this.sortConfig['async_sort']===true ? true : false;
     this.sortConfig.triggerIds =
-        tf_isArray(this.sortConfig['sort_trigger_ids']) ?
+        types.isArray(this.sortConfig['sort_trigger_ids']) ?
         f.sort_config.sort_trigger_ids : [];
 
     /*** ezEditTable extension ***/
@@ -538,12 +538,12 @@ function TableFilter(id) {
     //enables number format per column
     this.hasColNbFormat = f.col_number_format===true ? true : false;
     //array containing columns nb formats
-    this.colNbFormat = tf_isArray(this.hasColNbFormat) ?
+    this.colNbFormat = types.isArray(this.hasColNbFormat) ?
         f.col_number_format : null;
     //enables date type per column
     this.hasColDateType = f.col_date_type===true ? true : false;
     //array containing columns date type
-    this.colDateType = tf_isArray(this.hasColDateType) ?
+    this.colDateType = types.isArray(this.hasColDateType) ?
         f.col_date_type : null;
 
     /*** status messages ***/
