@@ -1,0 +1,27 @@
+{
+  "name": "TableFilter",
+  "version": "3.0.0",
+  "homepage": "https://github.com/koalyptus/TableFilter",
+  "authors": [
+    "M"
+  ],
+  "description": "Filter HTML tables data easily",
+  "main": "dist/tablefilter_all.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "html",
+    "table",
+    "filter"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
