@@ -16,6 +16,7 @@ module.exports = function (grunt) {
                 '<%= source_folder %>types.js',
                 '<%= source_folder %>cookie.js',
                 '<%= source_folder %>array.js',
+                '<%= source_folder %>date.js',
                 '<%= source_folder %>core.js'
             ]
         },

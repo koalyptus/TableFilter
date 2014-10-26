@@ -3,10 +3,10 @@
   "version": "3.0.0",
   "homepage": "https://github.com/koalyptus/TableFilter",
   "authors": [
-    "M"
+    "Max Guglielmi"
   ],
   "description": "Filter HTML tables data easily",
-  "main": "dist/tablefilter_all.js",
+  "main": ["dist/tablefilter_all.js", "dist/filtergrid.css"],
   "moduleType": [
     "globals"
   ],

@@ -47,6 +47,7 @@
     };
 
 })(this, this.TF);
+
 /**
  * DOM utilities
  */
@@ -65,7 +66,7 @@
         var s = node.textContent || node.innerText ||
                 node.innerHTML.replace(/<[^<>]+>/g, '');
         s = s.replace(/^\s+/, '').replace(/\s+$/, '');
-        return s/*.tf_Trim()*/;
+        return s;
     };
 
     /**
@@ -258,6 +259,7 @@
     };
 
 })(this, this.TF);
+
 /**
  * Types utilities
  */
@@ -305,6 +307,7 @@
     };
 
 })(this, this.TF);
+
 /**
  * Cookie utilities
  */
@@ -366,6 +369,7 @@
     };
 
 })(this, this.TF);
+
 /**
  * Array utilities
  */
@@ -397,6 +401,176 @@
     };
 
 })(this, this.TF);
+
+/**
+ * Date utilities
+ */
+
+(function(global, TF){
+    'use strict';
+
+    TF.Date = {
+        isValid: function(dateStr, format){
+            if(!format) {
+                format = 'DMY';
+            }
+            format = format.toUpperCase();
+            if(format.length != 3) {
+                if(format==='DDMMMYYYY'){
+                    var d = this.format(dateStr, format);
+                    dateStr = d.getDate() +'/'+ (d.getMonth()+1) +'/'+
+                        d.getFullYear();
+                    format = 'DMY';
+                }
+            }
+            if((format.indexOf('M') === -1) || (format.indexOf('D') === -1) ||
+                (format.indexOf('Y') === -1)){
+                format = 'DMY';
+            }
+            var reg1, reg2;
+            // If the year is first
+            if(format.substring(0, 1) == 'Y') {
+                  reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+                  reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+            } else if(format.substring(1, 2) == 'Y') { // If the year is second
+                  reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/;
+                  reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/;
+            } else { // The year must be third
+                  reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
+                  reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
+            }
+            // If it doesn't conform to the right format (with either a 2 digit year or
+            // 4 digit year), fail
+            if(reg1.test(dateStr) === false && reg2.test(dateStr) === false) {
+                return false;
+            }
+            // Split into 3 parts based on what the divider was
+            var parts = dateStr.split(RegExp.$1);
+            var mm, dd, yy;
+            // Check to see if the 3 parts end up making a valid date
+            if(format.substring(0, 1) === 'M'){
+                mm = parts[0];
+            } else if(format.substring(1, 2) === 'M'){
+                mm = parts[1];
+            } else {
+                mm = parts[2];
+            }
+            if(format.substring(0, 1) === 'D'){
+                dd = parts[0];
+            } else if(format.substring(1, 2) === 'D'){
+                dd = parts[1];
+            } else {
+                dd = parts[2];
+            }
+            if(format.substring(0, 1) === 'Y'){
+                yy = parts[0];
+            } else if(format.substring(1, 2) === 'Y'){
+                yy = parts[1];
+            } else {
+                yy = parts[2];
+            }
+            if(parseInt(yy, 10) <= 50){
+                yy = (parseInt(yy, 10) + 2000).toString();
+            }
+            if(parseInt(yy, 10) <= 99){
+                yy = (parseInt(yy, 10) + 1900).toString();
+            }
+            var dt = new Date(
+                parseInt(yy, 10), parseInt(mm, 10)-1, parseInt(dd, 10),
+                0, 0, 0, 0);
+            if(parseInt(dd, 10) != dt.getDate()){
+                return false;
+            }
+            if(parseInt(mm, 10)-1 != dt.getMonth()){
+                return false;
+            }
+            return true;
+        },
+        format: function(dateStr, format){
+            if(!format){
+                format = 'DMY';
+            }
+            if(!dateStr || dateStr === ''){
+                return new Date(1001, 0, 1);
+            }
+            var oDate, parts;
+
+            function y2kDate(yr){
+                if(yr === undefined){
+                    return 0;
+                }
+                if(yr.length>2){
+                    return yr;
+                }
+                var y;
+                //>50 belong to 1900
+                if(yr <= 99 && yr>50){
+                    y = '19' + yr;
+                }
+                //<50 belong to 2000
+                if(yr<50 || yr === '00'){
+                    y = '20' + yr;
+                }
+                return y;
+            }
+
+            function mmm2mm(mmm){
+                if(mmm === undefined){
+                    return 0;
+                }
+                var mondigit;
+                var MONTH_NAMES = [
+                    'january','february','march','april','may','june','july',
+                    'august','september','october','november','december',
+                    'jan','feb','mar','apr','may','jun','jul','aug','sep','oct',
+                    'nov','dec'
+                ];
+                for(var m_i=0; m_i < MONTH_NAMES.length; m_i++){
+                        var month_name = MONTH_NAMES[m_i];
+                        if (mmm.toLowerCase() === month_name){
+                            mondigit = m_i+1;
+                            break;
+                        }
+                }
+                if(mondigit > 11 || mondigit < 23){
+                    mondigit = mondigit - 12;
+                }
+                if(mondigit < 1 || mondigit > 12){
+                    return 0;
+                }
+                return mondigit;
+            }
+
+            switch(format.toUpperCase()){
+                case 'DDMMMYYYY':
+                    parts = dateStr.replace(/[- \/.]/g,' ').split(' ');
+                    oDate = new Date(y2kDate(parts[2]),mmm2mm(parts[1])-1,parts[0]);
+                break;
+                case 'DMY':
+                    parts = dateStr.replace(
+                        /^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
+                    oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
+                break;
+                case 'MDY':
+                    parts = dateStr.replace(
+                        /^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
+                    oDate = new Date(y2kDate(parts[2]),parts[0]-1,parts[1]);
+                break;
+                case 'YMD':
+                    parts = dateStr.replace(/^((\d\d)?\d\d)([- \/.])(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])$/,'$1 $4 $6').split(' ');
+                    oDate = new Date(y2kDate(parts[0]),parts[1]-1,parts[2]);
+                break;
+                default: //in case format is not correct
+                    parts = dateStr.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
+                    oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
+                break;
+            }
+            return oDate;
+        }
+    };
+
+})(this, this.TF);
+
  /*------------------------------------------------------------------------
     - HTML Table Filter Generator v2.5
     - By Max Guglielmi (tablefilter.free.fr)
@@ -448,6 +622,8 @@ var global = this,
     cookie = TF.Cookie,
     types = TF.Types,
     array = TF.Array,
+    isValidDate = TF.Date.isValid,
+    formatDate = TF.Date.format,
     doc = global.document;
 
 /**
@@ -460,7 +636,7 @@ function TableFilter(id) {
     if(arguments.length === 0){ return; }
 
     this.id = id;
-    this.version = '2.5';
+    this.version = '3.0';
     this.year = new Date().getFullYear();
     this.tbl = TF.id(id);
     this.startRow = null;
@@ -1233,11 +1409,11 @@ function TableFilter(id) {
             var _evt = e || global.event;
             o.activeFilterId = this.getAttribute('id');
             o.activeFlt = TF.id(o.activeFilterId);
-            if(o.fillSlcOnDemand && this.getAttribute('filled') === '0')
-            {// select is populated when element has focus
+            // select is populated when element has focus
+            if(o.fillSlcOnDemand && this.getAttribute('filled') === '0'){
                 var ct = this.getAttribute('ct');
                 o.PopulateSelect(ct);
-                if(!tf_isIE){ this.setAttribute('filled','1'); }
+                if(!TF.isIE){ this.setAttribute('filled','1'); }
             }
             if(o.popUpFilters){
                 evt.cancel(_evt);
@@ -1365,7 +1541,7 @@ TableFilter.prototype = {
             this.isExternalFlt = true;
             this.SetGridLayout();
             //Once grid generated 1st filterable row is 0 again
-            this.refRow = (tf_isIE || tf_isIE7) ? (this.refRow+1) : 0;
+            this.refRow = TF.isIE ? (this.refRow+1) : 0;
         }
 
         if(this.loader){ this.SetLoader(); }
@@ -1508,7 +1684,7 @@ TableFilter.prototype = {
                             select is disabled and by clicking on element
                             (parent td), users enable drop-down and select is
                             populated at same time.  */
-                        if(this.fillSlcOnDemand && tf_isIE){
+                        if(this.fillSlcOnDemand && TF.isIE){
                             slc.disabled = true;
                             slc.title = this.activateSlcTooltip;
                             slc.parentNode.onclick = this.Evt._EnableSlc;
@@ -2729,7 +2905,7 @@ TableFilter.prototype = {
                 o.ChangePage();
                 this.blur();
                 //ie only: blur is not enough...
-                if(this.parentNode && tf_isIE){
+                if(this.parentNode && TF.isIE){
                     this.parentNode.focus();
                 }
             };
@@ -3098,7 +3274,7 @@ TableFilter.prototype = {
                 o.ChangeResultsPerPage();
                 this.blur();
                 //ie only: blur is not enough...
-                if(this.parentNode && tf_isIE){
+                if(this.parentNode && TF.isIE){
                     this.parentNode.focus();
                 }
             };
@@ -3896,7 +4072,7 @@ TableFilter.prototype = {
                 li0.style.display = 'none';
             }
             //IE: label looses check capability
-            if(tf_isIE){
+            if(TF.isIE){
                 li0.label.onclick = function(){ li0.check.click(); };
             }
 
@@ -3910,7 +4086,7 @@ TableFilter.prototype = {
                     ul.onchange.call(null, e);
                 };
                 //IE: label looses check capability
-                if(tf_isIE){
+                if(TF.isIE){
                     li1.label.onclick = function(){ li1.check.click(); };
                 }
                 chkCt++;
@@ -3929,7 +4105,7 @@ TableFilter.prototype = {
                     ul.onchange.call(null, e);
                 };
                 //IE: label looses check capability
-                if(tf_isIE)
+                if(TF.isIE)
                 {
                     li2.label.onclick = function(){ li2.check.click(); };
                 }
@@ -3992,7 +4168,7 @@ TableFilter.prototype = {
                     }
                 }
                 //IE: label looses check capability
-                if(tf_isIE){
+                if(TF.isIE){
                     li.label.onclick = labelClick;
                 }
             }
@@ -4008,7 +4184,7 @@ TableFilter.prototype = {
         flt.setAttribute('filled','1');
 
         /*** remember grid values IE only, items remain un-checked ***/
-        if(o.rememberGridValues && tf_isIE){
+        if(o.rememberGridValues && TF.isIE){
             var slcIndexes = ul.getAttribute('indexes');
             if(slcIndexes){
                 var indSplit = slcIndexes.split(',');//items indexes
@@ -4210,7 +4386,7 @@ TableFilter.prototype = {
         var targetEl = (!this.statusBarTgtId) ?
             this.lDiv : TF.id(this.statusBarTgtId);
 
-        if(this.statusBarDiv && tf_isIE){
+        if(this.statusBarDiv && TF.isIE){
             this.statusBarDiv.outerHTML = '';
         }
 
@@ -4328,7 +4504,7 @@ TableFilter.prototype = {
                 this.lDiv : TF.id( this.rowsCounterTgtId );
 
         //IE only: clears all for sure
-        if(this.rowsCounterDiv && tf_isIE){
+        if(this.rowsCounterDiv && TF.isIE){
             this.rowsCounterDiv.outerHTML = '';
         }
         //default container: 'lDiv'
@@ -4361,7 +4537,7 @@ TableFilter.prototype = {
 
         if(!this.rowsCounterTgtId && this.rowsCounterDiv){
             //IE only: clears all for sure
-            if(tf_isIE){
+            if(TF.isIE){
                 this.rowsCounterDiv.outerHTML = '';
             } else {
                 this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
@@ -4603,7 +4779,7 @@ TableFilter.prototype = {
         this.SetColWidths();
 
         this.tbl.style.width = '';
-        if(tf_isIE || tf_isIE7){
+        if(TF.isIE){
             this.headTbl.style.width = '';
         }
 
@@ -4667,7 +4843,7 @@ TableFilter.prototype = {
 
         //Cols generation for all browsers excepted IE<=7
         o.tblHasColTag = TF.tag(o.tbl,'col').length > 0 ? true : false;
-        if(!tf_isIE && !tf_isIE7){
+        if(!TF.isIE){
             //Col elements are enough to keep column widths after sorting and
             //filtering
             var createColTags = function(o){
@@ -4697,7 +4873,7 @@ TableFilter.prototype = {
 
         //IE <= 7 needs an additional row for widths as col element width is
         //not enough...
-        if(tf_isIE || tf_isIE7){
+        if(TF.isIE){
             var tbody = TF.tag(o.tbl,'tbody'),
                 r;
             if( tbody.length>0 ){
@@ -4757,11 +4933,11 @@ TableFilter.prototype = {
             var thCW = o.crWColsRow.cells[colIndex].clientWidth;
             var tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
 
-            if(tf_isIE || tf_isIE7){
+            if(TF.isIE){
                 o.tbl.style.width = o.headTbl.clientWidth+'px';
             }
 
-            if(thCW != tdCW && !tf_isIE && !tf_isIE7){
+            if(thCW != tdCW && !TF.isIE){
                 o.headTbl.style.width = o.tbl.clientWidth+'px';
             }
 
@@ -4849,7 +5025,7 @@ TableFilter.prototype = {
                 var popUpDiv = o.popUpFltElms[colIndex],
                     header = o.GetHeaderElement(colIndex),
                     headerWidth = header.clientWidth * 0.95;
-                if(!tf_isNotIE){
+                if(TF.isIE){
                     var headerLeft = dom.position(header).left;
                     popUpDiv.style.left = (headerLeft) + 'px';
                 }
@@ -5117,7 +5293,7 @@ TableFilter.prototype = {
                             this.hasStoredValues = true;
 
                             // IE multiple selection work-around
-                            if(tf_isIE){
+                            if(TF.isIE){
                                 this.__deferMultipleSelection(slc,j,false);
                                 hasStoredValues = false;
                             }
@@ -5438,45 +5614,45 @@ TableFilter.prototype = {
                 hasRE = re_re.test(sA);
 
             //Search arg dates tests
-            var isLDate = hasLO && tf_IsValidDate(sA.replace(re_l,''),dtType);
-            var isLEDate = hasLE && tf_IsValidDate(sA.replace(re_le,''),dtType);
-            var isGDate = hasGR && tf_IsValidDate(sA.replace(re_g,''),dtType);
-            var isGEDate = hasGE && tf_IsValidDate(sA.replace(re_ge,''),dtType);
-            var isDFDate = hasDF && tf_IsValidDate(sA.replace(re_d,''),dtType);
-            var isEQDate = hasEQ && tf_IsValidDate(sA.replace(re_eq,''),dtType);
+            var isLDate = hasLO && isValidDate(sA.replace(re_l,''),dtType);
+            var isLEDate = hasLE && isValidDate(sA.replace(re_le,''),dtType);
+            var isGDate = hasGR && isValidDate(sA.replace(re_g,''),dtType);
+            var isGEDate = hasGE && isValidDate(sA.replace(re_ge,''),dtType);
+            var isDFDate = hasDF && isValidDate(sA.replace(re_d,''),dtType);
+            var isEQDate = hasEQ && isValidDate(sA.replace(re_eq,''),dtType);
 
             var dte1, dte2;
             //dates
-            if(tf_IsValidDate(cell_data,dtType)){
-                dte1 = tf_FormatDate(cell_data,dtType);
+            if(isValidDate(cell_data,dtType)){
+                dte1 = formatDate(cell_data,dtType);
                 // lower date
                 if(isLDate){
-                    dte2 = tf_FormatDate(sA.replace(re_l,''),dtType);
+                    dte2 = formatDate(sA.replace(re_l,''),dtType);
                     occurence = dte1 < dte2;
                 }
                 // lower equal date
                 else if(isLEDate){
-                    dte2 = tf_FormatDate(sA.replace(re_le,''),dtType);
+                    dte2 = formatDate(sA.replace(re_le,''),dtType);
                     occurence = dte1 <= dte2;
                 }
                 // greater equal date
                 else if(isGEDate){
-                    dte2 = tf_FormatDate(sA.replace(re_ge,''),dtType);
+                    dte2 = formatDate(sA.replace(re_ge,''),dtType);
                     occurence = dte1 >= dte2;
                 }
                 // greater date
                 else if(isGDate){
-                    dte2 = tf_FormatDate(sA.replace(re_g,''),dtType);
+                    dte2 = formatDate(sA.replace(re_g,''),dtType);
                     occurence = dte1 > dte2;
                 }
                 // different date
                 else if(isDFDate){
-                    dte2 = tf_FormatDate(sA.replace(re_d,''),dtType);
+                    dte2 = formatDate(sA.replace(re_d,''),dtType);
                     occurence = dte1.toString() != dte2.toString();
                 }
                 // equal date
                 else if(isEQDate){
-                    dte2 = tf_FormatDate(sA.replace(re_eq,''),dtType);
+                    dte2 = formatDate(sA.replace(re_eq,''),dtType);
                     occurence = dte1.toString() == dte2.toString();
                 }
                 // searched keyword with * operator doesn't have to be a date
@@ -5484,8 +5660,8 @@ TableFilter.prototype = {
                     occurence = o.__containsStr(
                         sA.replace(re_lk,''),cell_data,null,false);
                 }
-                else if(tf_IsValidDate(sA,dtType)){
-                    dte2 = tf_FormatDate(sA,dtType);
+                else if(isValidDate(sA,dtType)){
+                    dte2 = formatDate(sA,dtType);
                     occurence = dte1.toString() == dte2.toString();
                 }
                 //empty
@@ -6134,7 +6310,7 @@ TableFilter.prototype = {
                 if(slc.options[j].value!=='' &&
                     array.has(s, slc.options[j].value, true)){
                     // IE multiple selection work-around
-                    if(tf_isIE){
+                    if(TF.isIE){
                         //when last value reached filtering can be executed
                         var filter = ct==(s.length-1) && execFilter ?
                             true : false;
@@ -7102,6 +7278,8 @@ TF.tag = function(o, tagname){
     return o.getElementsByTagName(tagname);
 };
 
+TF.isIE = /msie|MSIE/.test(navigator.userAgent);
+
 /*====================================================
     - this is just a getElementById shortcut
 =====================================================*/
@@ -7118,167 +7296,168 @@ TF.tag = function(o, tagname){
 
 // Is this IE 6? the ultimate browser sniffer ;-)
 //window['tf_isIE'] = (window.innerHeight) ? false : true;
-window['tf_isIE'] = window.innerHeight ? false :
-                    /msie|MSIE 6/.test(navigator.userAgent) ? true : false;
-window['tf_isIE7'] = window.innerHeight ? false :
-                    /msie|MSIE 7/.test(navigator.userAgent) ? true : false;
+// window['tf_isIE'] = window.innerHeight ? false :
+//                     /msie|MSIE 6/.test(navigator.userAgent) ? true : false;
+// window['tf_isIE7'] = window.innerHeight ? false :
+//                     /msie|MSIE 7/.test(navigator.userAgent) ? true : false;
+// window['tf_isNotIE'] = !(/msie|MSIE/.test(navigator.userAgent));
 
-function tf_IsValidDate(dateStr, format){
-    if(!format) {
-        format = 'DMY';
-    }
-    format = format.toUpperCase();
-    if(format.length != 3) {
-        if(format==='DDMMMYYYY'){
-            var d = tf_FormatDate(dateStr, format);
-            dateStr = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
-            format = 'DMY';
-        }
-    }
-    if((format.indexOf('M') === -1) || (format.indexOf('D') === -1) ||
-        (format.indexOf('Y') === -1)){
-        format = 'DMY';
-    }
-    var reg1, reg2;
-    // If the year is first
-    if(format.substring(0, 1) == 'Y') {
-          reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
-          reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
-    } else if(format.substring(1, 2) == 'Y') { // If the year is second
-          reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/;
-          reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/;
-    } else { // The year must be third
-          reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
-          reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
-    }
-    // If it doesn't conform to the right format (with either a 2 digit year or
-    // 4 digit year), fail
-    if(reg1.test(dateStr) === false && reg2.test(dateStr) === false) {
-        return false;
-    }
-    // Split into 3 parts based on what the divider was
-    var parts = dateStr.split(RegExp.$1);
-    var mm, dd, yy;
-    // Check to see if the 3 parts end up making a valid date
-    if(format.substring(0, 1) === 'M'){
-        mm = parts[0];
-    } else if(format.substring(1, 2) === 'M'){
-        mm = parts[1];
-    } else {
-        mm = parts[2];
-    }
-    if(format.substring(0, 1) === 'D'){
-        dd = parts[0];
-    } else if(format.substring(1, 2) === 'D'){
-        dd = parts[1];
-    } else {
-        dd = parts[2];
-    }
-    if(format.substring(0, 1) === 'Y'){
-        yy = parts[0];
-    } else if(format.substring(1, 2) === 'Y'){
-        yy = parts[1];
-    } else {
-        yy = parts[2];
-    }
-    if(parseFloat(yy) <= 50){
-        yy = (parseFloat(yy) + 2000).toString();
-    }
-    if(parseFloat(yy) <= 99){
-        yy = (parseFloat(yy) + 1900).toString();
-    }
-    var dt = new Date(
-        parseFloat(yy), parseFloat(mm)-1, parseFloat(dd), 0, 0, 0, 0);
-    if(parseFloat(dd) != dt.getDate()){
-        return false;
-    }
-    if(parseFloat(mm)-1 != dt.getMonth()){
-        return false;
-    }
-    return true;
-}
+// function tf_IsValidDate(dateStr, format){
+//     if(!format) {
+//         format = 'DMY';
+//     }
+//     format = format.toUpperCase();
+//     if(format.length != 3) {
+//         if(format==='DDMMMYYYY'){
+//             var d = tf_FormatDate(dateStr, format);
+//             dateStr = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+//             format = 'DMY';
+//         }
+//     }
+//     if((format.indexOf('M') === -1) || (format.indexOf('D') === -1) ||
+//         (format.indexOf('Y') === -1)){
+//         format = 'DMY';
+//     }
+//     var reg1, reg2;
+//     // If the year is first
+//     if(format.substring(0, 1) == 'Y') {
+//           reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+//           reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+//     } else if(format.substring(1, 2) == 'Y') { // If the year is second
+//           reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/;
+//           reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/;
+//     } else { // The year must be third
+//           reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
+//           reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
+//     }
+//     // If it doesn't conform to the right format (with either a 2 digit year or
+//     // 4 digit year), fail
+//     if(reg1.test(dateStr) === false && reg2.test(dateStr) === false) {
+//         return false;
+//     }
+//     // Split into 3 parts based on what the divider was
+//     var parts = dateStr.split(RegExp.$1);
+//     var mm, dd, yy;
+//     // Check to see if the 3 parts end up making a valid date
+//     if(format.substring(0, 1) === 'M'){
+//         mm = parts[0];
+//     } else if(format.substring(1, 2) === 'M'){
+//         mm = parts[1];
+//     } else {
+//         mm = parts[2];
+//     }
+//     if(format.substring(0, 1) === 'D'){
+//         dd = parts[0];
+//     } else if(format.substring(1, 2) === 'D'){
+//         dd = parts[1];
+//     } else {
+//         dd = parts[2];
+//     }
+//     if(format.substring(0, 1) === 'Y'){
+//         yy = parts[0];
+//     } else if(format.substring(1, 2) === 'Y'){
+//         yy = parts[1];
+//     } else {
+//         yy = parts[2];
+//     }
+//     if(parseFloat(yy) <= 50){
+//         yy = (parseFloat(yy) + 2000).toString();
+//     }
+//     if(parseFloat(yy) <= 99){
+//         yy = (parseFloat(yy) + 1900).toString();
+//     }
+//     var dt = new Date(
+//         parseFloat(yy), parseFloat(mm)-1, parseFloat(dd), 0, 0, 0, 0);
+//     if(parseFloat(dd) != dt.getDate()){
+//         return false;
+//     }
+//     if(parseFloat(mm)-1 != dt.getMonth()){
+//         return false;
+//     }
+//     return true;
+// }
 
-function tf_FormatDate(dateStr, format){
-    if(!format){
-        format = 'DMY';
-    }
-    if(!dateStr || dateStr === ''){
-        return new Date(1001, 0, 1);
-    }
-    var oDate, parts;
+// function tf_FormatDate(dateStr, format){
+//     if(!format){
+//         format = 'DMY';
+//     }
+//     if(!dateStr || dateStr === ''){
+//         return new Date(1001, 0, 1);
+//     }
+//     var oDate, parts;
 
-    function y2kDate(yr){
-        if(yr === undefined){
-            return 0;
-        }
-        if(yr.length>2){
-            return yr;
-        }
-        var y;
-        //>50 belong to 1900
-        if(yr <= 99 && yr>50){
-            y = '19' + yr;
-        }
-        //<50 belong to 2000
-        if(yr<50 || yr === '00'){
-            y = '20' + yr;
-        }
-        return y;
-    }
+//     function y2kDate(yr){
+//         if(yr === undefined){
+//             return 0;
+//         }
+//         if(yr.length>2){
+//             return yr;
+//         }
+//         var y;
+//         //>50 belong to 1900
+//         if(yr <= 99 && yr>50){
+//             y = '19' + yr;
+//         }
+//         //<50 belong to 2000
+//         if(yr<50 || yr === '00'){
+//             y = '20' + yr;
+//         }
+//         return y;
+//     }
 
-    function mmm2mm(mmm){
-        if(mmm === undefined){
-            return 0;
-        }
-        var mondigit;
-        var MONTH_NAMES = [
-            'january','february','march','april','may','june','july','august',
-            'september','october','november','december',
-            'jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov',
-            'dec'
-        ];
-        for(var m_i=0; m_i < MONTH_NAMES.length; m_i++){
-                var month_name = MONTH_NAMES[m_i];
-                if (mmm.toLowerCase() === month_name){
-                    mondigit = m_i+1;
-                    break;
-                }
-        }
-        if(mondigit > 11 || mondigit < 23){
-            mondigit = mondigit - 12;
-        }
-        if(mondigit < 1 || mondigit > 12){
-            return 0;
-        }
-        return mondigit;
-    }
+//     function mmm2mm(mmm){
+//         if(mmm === undefined){
+//             return 0;
+//         }
+//         var mondigit;
+//         var MONTH_NAMES = [
+//             'january','february','march','april','may','june','july','august',
+//             'september','october','november','december',
+//             'jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov',
+//             'dec'
+//         ];
+//         for(var m_i=0; m_i < MONTH_NAMES.length; m_i++){
+//                 var month_name = MONTH_NAMES[m_i];
+//                 if (mmm.toLowerCase() === month_name){
+//                     mondigit = m_i+1;
+//                     break;
+//                 }
+//         }
+//         if(mondigit > 11 || mondigit < 23){
+//             mondigit = mondigit - 12;
+//         }
+//         if(mondigit < 1 || mondigit > 12){
+//             return 0;
+//         }
+//         return mondigit;
+//     }
 
-    switch(format.toUpperCase()){
-        case 'DDMMMYYYY':
-            parts = dateStr.replace(/[- \/.]/g,' ').split(' ');
-            oDate = new Date(y2kDate(parts[2]),mmm2mm(parts[1])-1,parts[0]);
-        break;
-        case 'DMY':
-            parts = dateStr.replace(
-                /^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
-            oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
-        break;
-        case 'MDY':
-            parts = dateStr.replace(
-                /^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
-            oDate = new Date(y2kDate(parts[2]),parts[0]-1,parts[1]);
-        break;
-        case 'YMD':
-            parts = dateStr.replace(/^((\d\d)?\d\d)([- \/.])(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])$/,'$1 $4 $6').split(' ');
-            oDate = new Date(y2kDate(parts[0]),parts[1]-1,parts[2]);
-        break;
-        default: //in case format is not correct
-            parts = dateStr.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
-            oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
-        break;
-    }
-    return oDate;
-}
+//     switch(format.toUpperCase()){
+//         case 'DDMMMYYYY':
+//             parts = dateStr.replace(/[- \/.]/g,' ').split(' ');
+//             oDate = new Date(y2kDate(parts[2]),mmm2mm(parts[1])-1,parts[0]);
+//         break;
+//         case 'DMY':
+//             parts = dateStr.replace(
+//                 /^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
+//             oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
+//         break;
+//         case 'MDY':
+//             parts = dateStr.replace(
+//                 /^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
+//             oDate = new Date(y2kDate(parts[2]),parts[0]-1,parts[1]);
+//         break;
+//         case 'YMD':
+//             parts = dateStr.replace(/^((\d\d)?\d\d)([- \/.])(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])$/,'$1 $4 $6').split(' ');
+//             oDate = new Date(y2kDate(parts[0]),parts[1]-1,parts[2]);
+//         break;
+//         default: //in case format is not correct
+//             parts = dateStr.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
+//             oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
+//         break;
+//     }
+//     return oDate;
+// }
 
 /* --- */
 
@@ -7308,24 +7487,24 @@ function setFilterGrid(id){
     - If you don't use it you can remove safely this
     section
 /*=====================================================*/
-window['tf_isNotIE'] = !(/msie|MSIE/.test(navigator.userAgent));
+// window['tf_isNotIE'] = !(/msie|MSIE/.test(navigator.userAgent));
 // TF.Event.add(window,
 //     (tf_isNotIE || (typeof window.addEventListener === 'function') ?
 //         'DOMContentLoaded' : 'load'),
 //     initFilterGrid);
 
-function initFilterGrid(){
-    if(!document.getElementsByTagName){ return; }
-    var tbls = TF.tag(document,'table'), config;
-    for (var i=0; i<tbls.length; i++){
-        var cTbl = tbls[i], cTblId = cTbl.getAttribute('id');
-        if(TF.Dom.hasClass(cTbl,'filterable') && cTblId){
-            if(TF.Types.isObj(cTblId+'_config')){
-                config = window[cTblId+'_config'];
-            } else { config = undefined; }
-            window[cTblId+'_isUnob'] = true;
-            setFilterGrid(cTblId,config);
-        }
-    }// for i
-}
+// function initFilterGrid(){
+//     if(!document.getElementsByTagName){ return; }
+//     var tbls = TF.tag(document,'table'), config;
+//     for (var i=0; i<tbls.length; i++){
+//         var cTbl = tbls[i], cTblId = cTbl.getAttribute('id');
+//         if(TF.Dom.hasClass(cTbl,'filterable') && cTblId){
+//             if(TF.Types.isObj(cTblId+'_config')){
+//                 config = window[cTblId+'_config'];
+//             } else { config = undefined; }
+//             window[cTblId+'_isUnob'] = true;
+//             setFilterGrid(cTblId,config);
+//         }
+//     }// for i
+// }
 /*===END removable section===========================*/

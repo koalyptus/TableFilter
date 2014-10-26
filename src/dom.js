@@ -16,7 +16,7 @@
         var s = node.textContent || node.innerText ||
                 node.innerHTML.replace(/<[^<>]+>/g, '');
         s = s.replace(/^\s+/, '').replace(/\s+$/, '');
-        return s/*.tf_Trim()*/;
+        return s;
     };
 
     /**
