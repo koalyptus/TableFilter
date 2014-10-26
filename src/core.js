@@ -30,27 +30,19 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     Raya, Piepiax, Manuel Kern, Baladhandayutham for active contribution
     and/or inspiration
 ------------------------------------------------------------------------ */
-
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(factory);
-    } else if (typeof exports === 'object') {
-        module.exports = factory;
-    } else {
-        root.TableFilter = factory();
-    }
-})(this, function() {
+define(function (require) {
 
 var global = this,
     TF = global.TF,
-    evt = TF.Event,
-    dom = TF.Dom,
-    str = TF.Str,
-    cookie = TF.Cookie,
-    types = TF.Types,
-    array = TF.Array,
-    isValidDate = TF.Date.isValid,
-    formatDate = TF.Date.format,
+    evt = require('event'),
+    dom = require('dom'),
+    str = require('string'),
+    cookie = require('cookie'),
+    types = require('types'),
+    array = require('array'),
+    isValidDate = require('date').isValid,
+    formatDate = require('date').format,
+    loader = require('modules/loader'),
     doc = global.document;
 
 /**
@@ -930,16 +922,11 @@ function TableFilter(id) {
 }
 
 TableFilter.prototype = {
-    AddGrid: function(){ this._AddGrid(); },
-    Init: function(){ this.AddGrid(); },
-    Initialize: function(){ this.AddGrid(); },
-    init: function(){ this.AddGrid(); },
-    initialize: function(){ this.AddGrid(); },
     /*====================================================
         - adds row with filtering grid bar and sets grid
         behaviours and layout
     =====================================================*/
-    _AddGrid: function(){
+    init: function(){
         if(this.hasGrid) return;
         if(this.gridLayout){
             this.refRow = this.startRow===null ? 0 : this.startRow;
@@ -6717,15 +6704,15 @@ TF.isIE = /msie|MSIE/.test(navigator.userAgent);
             object (literal object)
     - Returns TF object
 =====================================================*/
-function setFilterGrid(id){
-    if(arguments.length === 0){
-        return;
-    }
-    var tf = new TableFilter(arguments[0], arguments[1], arguments[2]);
-    tf.init();
-    window['tf_'+id] = tf;
-    return tf;
-}
+// function setFilterGrid(id){
+//     if(arguments.length === 0){
+//         return;
+//     }
+//     var tf = new TableFilter(arguments[0], arguments[1], arguments[2]);
+//     tf.init();
+//     window['tf_'+id] = tf;
+//     return tf;
+// }
 
 /*===BEGIN removable section===========================
     - Unobtrusive grid bar generation using

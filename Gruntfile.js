@@ -8,18 +8,18 @@ module.exports = function (grunt) {
         dist_folder: 'dist/',
         source_folder: 'src/',
 
-        meta: {
-            src: [
-                '<%= source_folder %>string.js',
-                '<%= source_folder %>dom.js',
-                '<%= source_folder %>event.js',
-                '<%= source_folder %>types.js',
-                '<%= source_folder %>cookie.js',
-                '<%= source_folder %>array.js',
-                '<%= source_folder %>date.js',
-                '<%= source_folder %>core.js'
-            ]
-        },
+        // meta: {
+        //     src: [
+        //         //'<%= source_folder %>string.js',
+        //         // '<%= source_folder %>dom.js',
+        //         // '<%= source_folder %>event.js',
+        //         // '<%= source_folder %>types.js',
+        //         // '<%= source_folder %>cookie.js',
+        //         //'<%= source_folder %>array.js',
+        //         // '<%= source_folder %>date.js',
+        //         // '<%= source_folder %>core.js'
+        //     ]
+        // },
 
         // A list of files, which will be syntax-checked by JSHint
         jshint: {
@@ -38,11 +38,21 @@ module.exports = function (grunt) {
             }
         },
 
+        watch: {
+            files: [
+                'src/**/*.js',
+                'src/**/*.css',
+                'src/**/*.html'
+            ],
+            tasks: ['dev']
+        },
+
         concat: {
             js: {
                 files: [{
-                    src: ['<%= meta.src %>'],
-                    dest: '<%= dist_folder %>tablefilter_all.js'
+                    //src: ['<%= meta.src %>'],
+                    src: ['<%= source_folder %>core.js'],
+                    dest: '<%= dist_folder %>core.js'
                 }]
             },
             css: {
@@ -91,7 +101,18 @@ module.exports = function (grunt) {
                 files: [
                     //{ src: ['<%= source_folder %>tablefilter_all.js'], dest: '<%= dist_folder %>tablefilter_all-uncompressed.js' },
                     //{ src: ['<%= source_folder %>tablefilter.js'], dest: '<%= dist_folder %>tablefilter-uncompressed.js' },
-                    //{ src: ['<%= source_folder %>filtergrid.css'], dest: '<%= dist_folder %>filtergrid-uncompressed.css' },
+                    // { src: ['<%= source_folder %>filtergrid.css'], dest: '<%= dist_folder %>filtergrid-uncompressed.css' },
+                    { src: ['<%= source_folder %>tf-main.js'], dest: '<%= dist_folder %>tf-main.js' },
+                    { src: ['<%= source_folder %>string.js'], dest: '<%= dist_folder %>string.js' },
+                    { src: ['<%= source_folder %>array.js'], dest: '<%= dist_folder %>array.js' },
+                    { src: ['<%= source_folder %>cookie.js'], dest: '<%= dist_folder %>cookie.js' },
+                    { src: ['<%= source_folder %>date.js'], dest: '<%= dist_folder %>date.js' },
+                    { src: ['<%= source_folder %>dom.js'], dest: '<%= dist_folder %>dom.js' },
+                    { src: ['<%= source_folder %>event.js'], dest: '<%= dist_folder %>event.js' },
+                    { src: ['<%= source_folder %>types.js'], dest: '<%= dist_folder %>types.js' },
+                    { src: ['**'], cwd: '<%= source_folder %>modules/', dest: '<%= dist_folder %>modules/', expand: true },
+                    // { src: ['<%= source_folder %>/*.js'], dest: '<%= dist_folder %>', flatten: true, expand: false },
+                    { src: ['libs/requirejs/require.js'], dest: '<%= dist_folder %>/libs/require.js' },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
@@ -105,6 +126,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // This is the default task being executed if Grunt
     // is called without any further parameter.

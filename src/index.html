@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>HTML Table Filter Generator</title>
+    <script data-main="../dist/tf-main" src="../dist/libs/require.js"></script>
 </head>
 <body>
     <table id="demo" cellpadding="0" cellspacing="0">
@@ -65,21 +66,20 @@
         </tbody>
     </table>
 
-    <script type="text/javascript" src="../dist/tablefilter_all.js"></script>
     <script>
-        var tf = setFilterGrid("demo", {
-            col_0: 'select',
-            col_3: 'checklist',
-            base_path: './',
-            enable_default_theme: true,
-            paging: false,
-            alternate_rows: true,
-            highlight_keywords: true,
-            match_case: false,
-            remember_grid_values: true,
-            btn_reset: true,
-            grid_layout: false
-        });
+        // var tf = setFilterGrid("demo", {
+        //     col_0: 'select',
+        //     col_3: 'checklist',
+        //     base_path: './',
+        //     enable_default_theme: true,
+        //     paging: false,
+        //     alternate_rows: true,
+        //     highlight_keywords: true,
+        //     match_case: false,
+        //     remember_grid_values: true,
+        //     btn_reset: true,
+        //     grid_layout: false
+        // });
     </script>
 </body>
 </html>
