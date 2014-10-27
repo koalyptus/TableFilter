@@ -958,7 +958,12 @@ TableFilter.prototype = {
             this.refRow = TF.isIE ? (this.refRow+1) : 0;
         }
 
-        if(this.loader){ this.SetLoader(); }
+        if(this.loader){
+            //this.SetLoader();
+            var Loader = require('modules/loader');
+            this.loaderComponent = new Loader(this);
+            console.log(this.loaderComponent);
+        }
 
         if(this.popUpFilters){
             if(!this.isFirstLoad && !this.gridLayout){
@@ -1259,7 +1264,8 @@ TableFilter.prototype = {
         }
 
         if(this.loader){
-            this.ShowLoader('none');
+            //this.ShowLoader('none');
+            this.loaderComponent.show('none');
         }
 
         /* Loads extensions */
@@ -1344,13 +1350,15 @@ TableFilter.prototype = {
                 o.StatusMsg('');
             }
             if(o.loader){
-                o.ShowLoader('none');
+                //o.ShowLoader('none');
+                o.loaderComponent.show('none');
             }
         }
 
         if(this.loader || this.status || this.statusBar) {
             try{
-                this.ShowLoader('');
+                //this.ShowLoader('');
+                this.loaderComponent.show('');
                 this.StatusMsg(o['msg'+evt]);
             } catch(e){}
             global.setTimeout(efx,this.execDelay);
@@ -1542,7 +1550,8 @@ TableFilter.prototype = {
                 this.RemoveSort();
             }
             if(this.loader){
-                this.RemoveLoader();
+                // this.RemoveLoader();
+                this.loaderComponent.remove();
             }
             if(this.popUpFilters){
                 this.RemovePopupFilters();
@@ -1680,88 +1689,88 @@ TableFilter.prototype = {
     /*====================================================
         - generates loader div
     =====================================================*/
-    SetLoader: function(){
-        if(this.loaderDiv){
-            return;
-        }
-        var f = this.fObj;
-        //id of container element
-        this.loaderTgtId = f.loader_target_id || null;
-        //div containing loader
-        this.loaderDiv = null;
-        //defines loader text
-        this.loaderText = f.loader_text || 'Loading...';
-        //defines loader innerHtml
-        this.loaderHtml = f.loader_html || null;
-        //defines css class for loader div
-        this.loaderCssClass = f.loader_css_class || 'loader';
-        //delay for hiding loader
-        this.loaderCloseDelay = 200;
-        //callback function before loader is displayed
-        this.onShowLoader = types.isFn(f.on_show_loader) ?
-            f.on_show_loader : null;
-        //callback function after loader is closed
-        this.onHideLoader = types.isFn(f.on_hide_loader) ?
-            f.on_hide_loader : null;
+    // SetLoader: function(){
+    //     if(this.loaderDiv){
+    //         return;
+    //     }
+    //     var f = this.fObj;
+    //     //id of container element
+    //     this.loaderTgtId = f.loader_target_id || null;
+    //     //div containing loader
+    //     this.loaderDiv = null;
+    //     //defines loader text
+    //     this.loaderText = f.loader_text || 'Loading...';
+    //     //defines loader innerHtml
+    //     this.loaderHtml = f.loader_html || null;
+    //     //defines css class for loader div
+    //     this.loaderCssClass = f.loader_css_class || 'loader';
+    //     //delay for hiding loader
+    //     this.loaderCloseDelay = 200;
+    //     //callback function before loader is displayed
+    //     this.onShowLoader = types.isFn(f.on_show_loader) ?
+    //         f.on_show_loader : null;
+    //     //callback function after loader is closed
+    //     this.onHideLoader = types.isFn(f.on_hide_loader) ?
+    //         f.on_hide_loader : null;
 
-        var containerDiv = dom.create('div',['id',this.prfxLoader+this.id]);
-        containerDiv.className = this.loaderCssClass;// for ie<=6
+    //     var containerDiv = dom.create('div',['id',this.prfxLoader+this.id]);
+    //     containerDiv.className = this.loaderCssClass;// for ie<=6
 
-        var targetEl = (!this.loaderTgtId) ?
-            (this.gridLayout ? this.tblCont : this.tbl.parentNode) :
-            TF.id(this.loaderTgtId);
-        if(!this.loaderTgtId){
-            targetEl.insertBefore(containerDiv, this.tbl);
-        } else {
-            targetEl.appendChild(containerDiv);
-        }
-        this.loaderDiv = TF.id(this.prfxLoader+this.id);
-        if(!this.loaderHtml){
-            this.loaderDiv.appendChild(dom.text(this.loaderText));
-        } else {
-            this.loaderDiv.innerHTML = this.loaderHtml;
-        }
-    },
+    //     var targetEl = (!this.loaderTgtId) ?
+    //         (this.gridLayout ? this.tblCont : this.tbl.parentNode) :
+    //         TF.id(this.loaderTgtId);
+    //     if(!this.loaderTgtId){
+    //         targetEl.insertBefore(containerDiv, this.tbl);
+    //     } else {
+    //         targetEl.appendChild(containerDiv);
+    //     }
+    //     this.loaderDiv = TF.id(this.prfxLoader+this.id);
+    //     if(!this.loaderHtml){
+    //         this.loaderDiv.appendChild(dom.text(this.loaderText));
+    //     } else {
+    //         this.loaderDiv.innerHTML = this.loaderHtml;
+    //     }
+    // },
 
     /*====================================================
         - removes loader div
     =====================================================*/
-    RemoveLoader: function(){
-        if(!this.loaderDiv){
-            return;
-        }
-        var targetEl = (!this.loaderTgtId) ?
-            (this.gridLayout ? this.tblCont : this.tbl.parentNode) :
-            TF.id(this.loaderTgtId);
-        targetEl.removeChild(this.loaderDiv);
-        this.loaderDiv = null;
-    },
+    // RemoveLoader: function(){
+    //     if(!this.loaderDiv){
+    //         return;
+    //     }
+    //     var targetEl = (!this.loaderTgtId) ?
+    //         (this.gridLayout ? this.tblCont : this.tbl.parentNode) :
+    //         TF.id(this.loaderTgtId);
+    //     targetEl.removeChild(this.loaderDiv);
+    //     this.loaderDiv = null;
+    // },
 
     /*====================================================
         - displays/hides loader div
     =====================================================*/
-    ShowLoader: function(p){
-        if(!this.loader || !this.loaderDiv || this.loaderDiv.style.display===p){
-            return;
-        }
-        var o = this;
+    // ShowLoader: function(p){
+    //     if(!this.loader || !this.loaderDiv || this.loaderDiv.style.display===p){
+    //         return;
+    //     }
+    //     var o = this;
 
-        function displayLoader(){
-            if(!o.loaderDiv){
-                return;
-            }
-            if(o.onShowLoader && p!=='none'){
-                o.onShowLoader.call(null,o);
-            }
-            o.loaderDiv.style.display = p;
-            if(o.onHideLoader && p==='none'){
-                o.onHideLoader.call(null,o);
-            }
-        }
+    //     function displayLoader(){
+    //         if(!o.loaderDiv){
+    //             return;
+    //         }
+    //         if(o.onShowLoader && p!=='none'){
+    //             o.onShowLoader.call(null,o);
+    //         }
+    //         o.loaderDiv.style.display = p;
+    //         if(o.onHideLoader && p==='none'){
+    //             o.onHideLoader.call(null,o);
+    //         }
+    //     }
 
-        var t = p==='none' ? this.loaderCloseDelay : 1;
-        global.setTimeout(displayLoader,t);
-    },
+    //     var t = p==='none' ? this.loaderCloseDelay : 1;
+    //     global.setTimeout(displayLoader,t);
+    // },
 
     /*====================================================
         - Sets sorting feature by loading
