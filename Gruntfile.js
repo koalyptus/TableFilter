@@ -117,6 +117,23 @@ module.exports = function (grunt) {
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
             }
+        },
+
+        requirejs: {
+            compile: {
+                options: {
+                    baseUrl: 'src/',
+                    'paths': {
+                        'tf': '.'
+                    },
+                    include: ['../libs/almond/almond','core'],
+                    out: 'dist/tf.js',
+                    wrap: {
+                        startFile: "parts/start.frag",
+                        endFile: "parts/end.frag"
+                    }
+                }
+            }
         }
     });
 
@@ -127,9 +144,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     // This is the default task being executed if Grunt
     // is called without any further parameter.
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'cssmin', 'copy']);
+    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'cssmin', 'copy', 'requirejs']);
     grunt.registerTask('dev', ['jshint', 'concat', 'cssmin', 'copy']);
 };

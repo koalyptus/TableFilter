@@ -32,7 +32,7 @@ console.log(arguments);
         var containerDiv = dom.create('div',['id', tf.prfxLoader+tf.id]);
         containerDiv.className = tf.loaderCssClass;
 
-        var targetEl = (!tf.loaderTgtId) ?
+        var targetEl = !tf.loaderTgtId ?
             (tf.gridLayout ? tf.tblCont : tf.tbl.parentNode) :
             TF.id(tf.loaderTgtId);
         if(!tf.loaderTgtId){
