@@ -6,8 +6,12 @@
     "Max Guglielmi"
   ],
   "description": "Filter HTML tables data easily",
-  "main": ["dist/tablefilter_all.js", "dist/filtergrid.css"],
+  "main": [
+    "dist/tablefilter_all.js",
+    "dist/filtergrid.css"
+  ],
   "moduleType": [
+    "amd",
     "globals"
   ],
   "keywords": [
@@ -22,9 +26,11 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "libs"
   ],
   "dependencies": {
+    "almond": "~0.3.0",
     "requirejs": null
   }
 }

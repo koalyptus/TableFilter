@@ -1,6 +1,5 @@
 define(['../dom', '../types'], function (dom, types) {
     'use strict';
-console.log(arguments);
 
     var global = window;
 
@@ -34,13 +33,13 @@ console.log(arguments);
 
         var targetEl = !tf.loaderTgtId ?
             (tf.gridLayout ? tf.tblCont : tf.tbl.parentNode) :
-            TF.id(tf.loaderTgtId);
+            dom.id(tf.loaderTgtId);
         if(!tf.loaderTgtId){
             targetEl.insertBefore(containerDiv, tf.tbl);
         } else {
             targetEl.appendChild(containerDiv);
         }
-        tf.loaderDiv = TF.id(tf.prfxLoader+tf.id);
+        tf.loaderDiv = dom.id(tf.prfxLoader+tf.id);
         if(!tf.loaderHtml){
             tf.loaderDiv.appendChild(dom.text(tf.loaderText));
         } else {
@@ -78,7 +77,7 @@ console.log(arguments);
         }
         var targetEl = !this.tf.loaderTgtId ?
             (this.tf.gridLayout ? this.tf.tblCont : this.tf.tbl.parentNode) :
-            TF.id(this.tf.loaderTgtId);
+            dom.id(this.tf.loaderTgtId);
         targetEl.removeChild(this.tf.loaderDiv);
         this.tf.loaderDiv = null;
     };

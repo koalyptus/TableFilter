@@ -146,6 +146,14 @@ define(function (require) {
         return li;
     };
 
+    Dom.id = function(id){
+        return document.getElementById(id);
+    };
+
+    Dom.tag = function(o, tagname){
+        return o.getElementsByTagName(tagname);
+    };
+
     // HTML5 classList API
     function supportsClassList(){
         return document.documentElement.classList;

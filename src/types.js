@@ -7,6 +7,8 @@ define(function () {
 
     var Types = {};
 
+    var UNDEFINED = void 0;
+
     /**
      * Checks if var exists and is an object
      * @param  {String or Object}  v
@@ -42,6 +44,15 @@ define(function () {
      */
     Types.isArray = function(obj){
         return (obj && obj.constructor == Array);
+    };
+
+    /**
+     * Determines if passed param is undefined
+     * @param  {Any}  o
+     * @return {Boolean}
+     */
+    Types.isUndef = function(o){
+        return  o === UNDEFINED;
     };
 
     return Types;
