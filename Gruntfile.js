@@ -34,6 +34,10 @@ module.exports = function (grunt) {
             tasks: ['dev']
         },
 
+        qunit: {
+            files: ['test/**/*.html']
+        },
+
         requirejs: {
             compile: {
                 options: {
@@ -134,10 +138,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     // This is the default task being executed if Grunt
     // is called without any further parameter.
-    grunt.registerTask('default', ['jshint', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy']);
+    grunt.registerTask('default', ['jshint', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
     grunt.registerTask('dev', ['jshint', 'concat', 'cssmin', 'copy']);
+    grunt.registerTask('test', ['qunit']);
 };

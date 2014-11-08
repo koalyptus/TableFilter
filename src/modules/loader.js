@@ -3,6 +3,10 @@ define(['../dom', '../types'], function (dom, types) {
 
     var global = window;
 
+    /**
+     * Loading message/spinner
+     * @param {Object} tf TableFilter instance
+     */
     function Loader(tf){
 
         // Original configuration
