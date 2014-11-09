@@ -198,10 +198,10 @@ function TableFilter(id) {
     //defines css class for single-filter
     this.singleFltCssClass = f.single_flt_css_class || 'single_flt';
     this.isStartBgAlternate =   true;
-    //defines css class for even rows
-    this.rowBgEvenCssClass = f.even_row_css_class || 'even';
-    //defines css class for odd rows
-    this.rowBgOddCssClass = f.odd_row_css_class || 'odd';
+    // //defines css class for even rows
+    // this.rowBgEvenCssClass = f.even_row_css_class || 'even';
+    // //defines css class for odd rows
+    // this.rowBgOddCssClass = f.odd_row_css_class || 'odd';
 
     /*** filters' grid behaviours ***/
     //enables/disables enter key
@@ -677,7 +677,10 @@ function TableFilter(id) {
     this.themesPath = f.themes_path || this.basePath+'TF_Themes/';
 
     // Components
-    this.loaderCpt = null;
+    this.Cpt = {
+        loader: null,
+        alternateRows: null
+    };
 
     /*** TF events ***/
     var o = this;
@@ -942,7 +945,7 @@ TableFilter.prototype = {
 
         if(this.loader){
             var Loader = require('modules/loader');
-            this.loaderCpt = new Loader(this);
+            this.Cpt.loader = new Loader(this);
         }
 
         if(this.popUpFilters){
@@ -1217,7 +1220,9 @@ TableFilter.prototype = {
         }
         if(this.alternateBgs && this.isStartBgAlternate){
             //1st time only if no paging and rememberGridValues
-            this.SetAlternateRows();
+            var AlternateRows = require('modules/alternateRows');
+            this.Cpt.alternateRows = new AlternateRows(this);
+            this.Cpt.alternateRows.set();
         }
         if(this.hasColOperation && this.fltGrid){
             this.colOperation = f.col_operation;
@@ -1244,7 +1249,7 @@ TableFilter.prototype = {
         }
 
         if(this.loader){
-            this.loaderCpt.show('none');
+            this.Cpt.loader.show('none');
         }
 
         /* Loads extensions */
@@ -1329,13 +1334,13 @@ TableFilter.prototype = {
                 o.StatusMsg('');
             }
             if(o.loader){
-                o.loaderCpt.show('none');
+                o.Cpt.loader.show('none');
             }
         }
 
         if(this.loader || this.status || this.statusBar) {
             try{
-                this.loaderCpt.show('');
+                this.Cpt.loader.show('');
                 this.StatusMsg(o['msg'+evt]);
             } catch(e){}
             global.setTimeout(efx, this.execDelay);
@@ -1527,7 +1532,7 @@ TableFilter.prototype = {
                 this.RemoveSort();
             }
             if(this.loader){
-                this.loaderCpt.remove();
+                this.Cpt.loader.remove();
             }
             if(this.popUpFilters){
                 this.RemovePopupFilters();
@@ -1558,7 +1563,7 @@ TableFilter.prototype = {
 
                 //removes alternating colors
                 if(this.alternateBgs){
-                    this.RemoveRowBg(j);
+                    this.Cpt.alternateRows.removeRowBg(j);
                 }
 
             }//for j
@@ -2024,7 +2029,7 @@ TableFilter.prototype = {
                     o.AddPaging(false);
                 }
                 if(o.alternateBgs){
-                    o.SetAlternateRows();
+                    o.Cpt.alternateRows.set();
                 }
                 if(fnE){
                     fnE.call(null, arguments[0], arguments[1], arguments[2]);
@@ -2044,7 +2049,7 @@ TableFilter.prototype = {
                         o.AddPaging(false);
                     }
                     if(o.alternateBgs){
-                        o.SetAlternateRows();
+                        o.Cpt.alternateRows.set();
                     }
                     if(fnF){
                         fnF.call(null, arguments[0], arguments[1]);
@@ -2514,12 +2519,12 @@ TableFilter.prototype = {
                     r.style.display = '';
                 }
                 if(this.alternateBgs){
-                    this.SetRowBg(this.validRowsIndex[h], h);
+                    this.Cpt.alternateRows(this.validRowsIndex[h], h);
                 }
             } else {
                 r.style.display = 'none';
                 if(this.alternateBgs){
-                    this.RemoveRowBg(this.validRowsIndex[h]);
+                    this.Cpt.alternateRows.removeRowBg(this.validRowsIndex[h]);
                 }
             }
         }
@@ -4651,78 +4656,6 @@ TableFilter.prototype = {
     },
 
     /*====================================================
-        - sets row background color
-        - Params:
-            - rIndex: row index (numeric value)
-            - index: valid row collection index needed to
-            calculate bg color
-    =====================================================*/
-    SetRowBg: function(rIndex,index){
-        if(!this.alternateBgs || isNaN(rIndex)){
-            return;
-        }
-        var rows = this.tbl.rows;
-        var i = !index ? rIndex : index;
-        this.RemoveRowBg(rIndex);
-        dom.addClass(
-            rows[rIndex],
-            (i%2) ? this.rowBgEvenCssClass : this.rowBgOddCssClass
-        );
-    },
-
-    /*====================================================
-        - removes row background color
-        - Params:
-            - index: row index (numeric value)
-    =====================================================*/
-    RemoveRowBg: function(index){
-        if(isNaN(index)){
-            return;
-        }
-        var rows = this.tbl.rows;
-        dom.removeClass(rows[index],this.rowBgOddCssClass);
-        dom.removeClass(rows[index],this.rowBgEvenCssClass);
-    },
-
-    /*====================================================
-        - alternates row colors for better readability
-    =====================================================*/
-    SetAlternateRows: function(){
-        if(!this.hasGrid && !this.isFirstLoad){
-            return;
-        }
-        var rows = this.tbl.rows;
-        var noValidRowsIndex = this.validRowsIndex===null;
-        //1st index
-        var beginIndex = noValidRowsIndex ? this.refRow : 0;
-        // nb indexes
-        var indexLen = noValidRowsIndex ? (this.nbFilterableRows+beginIndex) :
-            this.validRowsIndex.length;
-
-        var idx = 0;
-        //alternates bg color
-        for(var j=beginIndex; j<indexLen; j++){
-            var rIndex = (noValidRowsIndex) ? j : this.validRowsIndex[j];
-            this.SetRowBg(rIndex,idx);
-            idx++;
-        }
-    },
-
-    /*====================================================
-        - removes alternate row colors
-    =====================================================*/
-    RemoveAlternateRows: function(){
-        if(!this.hasGrid){
-            return;
-        }
-        var row = this.tbl.rows;
-        for(var i=this.refRow; i<this.nbRows; i++){
-            this.RemoveRowBg(i);
-        }
-        this.isStartBgAlternate = true;
-    },
-
-    /*====================================================
         - CSS solution making headers fixed
     =====================================================*/
     SetFixedHeaders: function(){
@@ -5189,7 +5122,8 @@ TableFilter.prototype = {
                 this.SetRowValidation(k,true);
                 this.validRowsIndex.push(k);
                 if(this.alternateBgs){
-                    this.SetRowBg(k,this.validRowsIndex.length);
+                    this.Cpt.alternateRows.setRowBg(
+                        k, this.validRowsIndex.length);
                 }
                 if(this.onRowValidated){
                     this.onRowValidated.call(null,this,k);

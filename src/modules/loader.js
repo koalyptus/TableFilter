@@ -9,7 +9,7 @@ define(['../dom', '../types'], function (dom, types) {
      */
     function Loader(tf){
 
-        // Original configuration
+        // TableFilter configuration
         var f = tf.fObj;
         //id of container element
         tf.loaderTgtId = f.loader_target_id || null;
@@ -32,7 +32,7 @@ define(['../dom', '../types'], function (dom, types) {
 
         this.tf = tf;
 
-        var containerDiv = dom.create('div',['id', tf.prfxLoader+tf.id]);
+        var containerDiv = dom.create('div', ['id', tf.prfxLoader+tf.id]);
         containerDiv.className = tf.loaderCssClass;
 
         var targetEl = !tf.loaderTgtId ?
