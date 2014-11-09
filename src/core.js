@@ -941,7 +941,6 @@ TableFilter.prototype = {
         }
 
         if(this.loader){
-            //this.SetLoader();
             var Loader = require('modules/loader');
             this.loaderCpt = new Loader(this);
         }
@@ -1245,7 +1244,6 @@ TableFilter.prototype = {
         }
 
         if(this.loader){
-            //this.ShowLoader('none');
             this.loaderCpt.show('none');
         }
 
@@ -1331,18 +1329,16 @@ TableFilter.prototype = {
                 o.StatusMsg('');
             }
             if(o.loader){
-                //o.ShowLoader('none');
                 o.loaderCpt.show('none');
             }
         }
 
         if(this.loader || this.status || this.statusBar) {
             try{
-                //this.ShowLoader('');
                 this.loaderCpt.show('');
                 this.StatusMsg(o['msg'+evt]);
             } catch(e){}
-            global.setTimeout(efx,this.execDelay);
+            global.setTimeout(efx, this.execDelay);
         } else {
             efx();
         }
@@ -1531,7 +1527,6 @@ TableFilter.prototype = {
                 this.RemoveSort();
             }
             if(this.loader){
-                // this.RemoveLoader();
                 this.loaderCpt.remove();
             }
             if(this.popUpFilters){

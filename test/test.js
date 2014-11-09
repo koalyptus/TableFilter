@@ -1,9 +1,11 @@
-(function(TableFilter){
+requirejs(['test-config', '../src/core'], function(config, TableFilter){
+
+    QUnit.start();
 
     var tf = new TableFilter('demo');
     tf.init();
 
-    module("Sanity check tests");
+    module("Sanity checks");
     test("TableFilter object", function() {
         equal(tf.id, 'demo', 'id check');
         equal(tf.filtersRowIndex, 0, 'Filters row index');
@@ -16,4 +18,4 @@
         equal(tf.GetFilterElement(0).nodeName, 'INPUT', 'Filter DOM element');
     });
 
-})(TableFilter);
+});
