@@ -11,7 +11,7 @@ define(function (require) {
         has: function(arr, val, caseSensitive){
             var sCase = caseSensitive===undefined ? false : caseSensitive;
             for (var i=0; i<arr.length; i++){
-                if(str.matchCase(arr[i].toString(), sCase) === val){
+                if(str.matchCase(arr[i].toString(), sCase) == val){
                     return true;
                 }
             }
@@ -20,7 +20,7 @@ define(function (require) {
         indexByValue: function(arr, val, caseSensitive){
             var sCase = caseSensitive===undefined ? false : caseSensitive;
             for (var i=0; i<arr.length; i++){
-                if(str.matchCase(arr[i].toString(), sCase) === val){
+                if(str.matchCase(arr[i].toString(), sCase) == val){
                     return i;
                 }
             }

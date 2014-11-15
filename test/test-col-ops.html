@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>TableFilter alternate rows tests</title>
+        <title>TableFilter column operations tests</title>
         <link rel="stylesheet" href="libs/qunit/qunit.css">
         <link rel="stylesheet" href="../dist/filtergrid.css">
         <script src="libs/qunit/qunit.js"></script>
@@ -14,13 +14,22 @@
     </head>
     <body>
         <table id="demo" cellpadding="0" cellspacing="0">
+            <tfoot>
+                <tr>
+                    <td>Tot:</td>
+                    <td></td>
+                    <td id="sum1"></td>
+                    <td id="sum2"></td>
+                    <td></td>
+                </tr>
+            </tfoot>
             <tbody>
                 <tr>
                     <th>From</th>
                     <th>Destination</th>
                     <th>Road Distance (km)</th>
                     <th>By Air (hrs)</th>
-                    <th>By Rail (hrs)</th>
+                    <th width="15%">By Rail (hrs)</th>
                 </tr>
                 <tr>
                     <td><strong>Sydney</strong></td>
@@ -74,7 +83,7 @@
             </tbody>
         </table>
 
-        <script data-main="test-alternate-rows" src="../libs/requirejs/require.js"></script>
+        <script data-main="test-col-ops" src="../libs/requirejs/require.js"></script>
 
         <div id="qunit"></div>
         <div id="qunit-fixture"></div>

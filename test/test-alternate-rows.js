@@ -10,8 +10,8 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     });
     tf.init();
 
-    module("Sanity checks");
-    test("AlternateRows component", function() {
+    module('Sanity checks');
+    test('AlternateRows component', function() {
         deepEqual(tf.Cpt.alternateRows instanceof AlternateRows, true, 'AlternateRows constructor');
         notEqual(tf.Cpt.alternateRows, null, 'AlternateRows instanciated');
     });
