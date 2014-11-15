@@ -1,0 +1,25 @@
+{
+  // ["xxx"] is better written in dot notation
+  "-W069": true,
+  // Script URL
+  "-W107": true,
+  // Eval can be harmful
+  "-W061": true,
+  "-W041": true,
+  "curly": true,
+  //"eqeqeq": true,
+  "es3": true,
+  "esnext": true,
+
+  //"maxlen" : 80,
+  "globals": {
+    "module": true,
+    "require": true,
+    "define": true,
+    "window": true,
+    "document": true,
+    "escape": true,
+    "unescape": true,
+    "navigator": true
+  }
+}

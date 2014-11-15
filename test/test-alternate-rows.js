@@ -3,7 +3,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     QUnit.start();
 
     var dom = require('dom'),
-        AlternateRows = require('modules/alternateRows');
+        AlternateRows = require('modules/alternateRows').AlternateRows;
 
     var tf = new TableFilter('demo', {
         alternate_rows: true

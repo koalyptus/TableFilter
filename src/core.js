@@ -723,7 +723,9 @@ function TableFilter(id) {
             - onkeyup event for text filters
         =====================================================*/
         _OnKeyUp: function(e) {
-            if(!o.onKeyUp) return;
+            if(!o.onKeyUp){
+                return;
+            }
             var _evt = e || global.event;
             var key = o.Evt.getKeyCode(_evt);
             o.isUserTyping = false;
@@ -769,8 +771,12 @@ function TableFilter(id) {
                 dom.addClass(this, o.inpWatermarkCssClass);
             }
             if(o.ezEditTable){
-              if(o.editable) o.ezEditTable.Editable.Set();
-              if(o.selectable) o.ezEditTable.Selection.Set();
+                if(o.editable){
+                    o.ezEditTable.Editable.Set();
+                }
+                if(o.selectable){
+                    o.ezEditTable.Selection.Set();
+                }
             }
         },
         /*====================================================
@@ -799,8 +805,12 @@ function TableFilter(id) {
                 evt.stop(_evt);
             }
             if(o.ezEditTable){
-                if(o.editable) o.ezEditTable.Editable.Remove();
-                if(o.selectable) o.ezEditTable.Selection.Remove();
+                if(o.editable){
+                    o.ezEditTable.Editable.Remove();
+                }
+                if(o.selectable){
+                    o.ezEditTable.Selection.Remove();
+                }
             }
         },
         /*====================================================
@@ -909,7 +919,9 @@ TableFilter.prototype = {
         behaviours and layout
     =====================================================*/
     init: function(){
-        if(this.hasGrid) return;
+        if(this.hasGrid){
+            return;
+        }
         if(this.gridLayout){
             this.refRow = this.startRow===null ? 0 : this.startRow;
         }
@@ -941,7 +953,7 @@ TableFilter.prototype = {
         }
 
         if(this.loader){
-            var Loader = require('modules/loader');
+            var Loader = require('modules/loader').Loader;
             this.Cpt.loader = new Loader(this);
         }
 
@@ -1217,12 +1229,12 @@ TableFilter.prototype = {
         }
         if(this.alternateBgs && this.isStartBgAlternate){
             //1st time only if no paging and rememberGridValues
-            var AlternateRows = require('modules/alternateRows');
+            var AlternateRows = require('modules/alternateRows').AlternateRows;
             this.Cpt.alternateRows = new AlternateRows(this);
             this.Cpt.alternateRows.set();
         }
         if(this.hasColOperation){
-            var ColOps = require('modules/colOps');
+            var ColOps = require('modules/colOps').ColOps;
             this.Cpt.colOps = new ColOps(this);
             this.Cpt.colOps.set();
         }
@@ -2179,7 +2191,9 @@ TableFilter.prototype = {
                     o.ChangePage(prevIndex);
                 },
                 last: function(){
-                    if(o.Evt._Paging.lastEvt) o.Evt._Paging.lastEvt();
+                    if(o.Evt._Paging.lastEvt){
+                        o.Evt._Paging.lastEvt();
+                    }
                     o.ChangePage(o.Evt._Paging.nbOpts());
                 },
                 first: function(){
@@ -2725,7 +2739,9 @@ TableFilter.prototype = {
             helpdiv.className = this.helpInstrContCssClass;
             helpdiv.ondblclick = this.Evt._OnHelpBtnClick;
         } else {
-            if(this.helpInstrContTgtId) divContainer.appendChild(helpdiv);
+            if(this.helpInstrContTgtId){
+                divContainer.appendChild(helpdiv);
+            }
             helpdiv.innerHTML = this.helpInstrHtml;
             if(!this.helpInstrContTgtId){
                 helpdiv.className = this.helpInstrContCssClass;
@@ -3023,7 +3039,9 @@ TableFilter.prototype = {
         if(this.sortSlc && !isCustomSlc){
             if (!matchCase){
                 optArray.sort(ignoreCaseSort);
-                if(excludedOpts) excludedOpts.sort(ignoreCaseSort);
+                if(excludedOpts){
+                    excludedOpts.sort(ignoreCaseSort);
+                }
             } else {
                 optArray.sort();
                 if(excludedOpts){ excludedOpts.sort(); }
@@ -3184,11 +3202,15 @@ TableFilter.prototype = {
         global.setTimeout(function(){
             slc.options[0].selected = false;
 
-            if(slc.options[index].value==='')
+            if(slc.options[index].value===''){
                 slc.options[index].selected = false;
-            else
-            slc.options[index].selected = true;
-            if(doFilter) o.Filter();
+            }
+            else{
+                slc.options[index].selected = true;
+                if(doFilter){
+                    o.Filter();
+                }
+            }
         }, 0.1);
     },
 
@@ -4649,7 +4671,9 @@ TableFilter.prototype = {
                 }
             }//end for
 
-            if(!this.hasStoredValues && this.paging) this.SetPagingInfo();
+            if(!this.hasStoredValues && this.paging){
+                this.SetPagingInfo();
+            }
         }//end if
     },
 
@@ -4723,7 +4747,9 @@ TableFilter.prototype = {
         - Removes fixed headers
     =====================================================*/
     RemoveFixedHeaders: function(){
-        if(!this.hasGrid || !this.fixedHeaders ) return;
+        if(!this.hasGrid || !this.fixedHeaders ){
+            return;
+        }
 
         if(this.contDiv){
             this.contDiv.parentNode.insertBefore(this.tbl, this.contDiv);

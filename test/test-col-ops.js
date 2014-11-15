@@ -3,7 +3,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     QUnit.start();
 
     var dom = require('dom'),
-        ColOps = require('modules/colOps');
+        ColOps = require('modules/colOps').ColOps;
 
     var table = document.getElementById('demo');
     var totRowIndex = table.getElementsByTagName('tr').length;

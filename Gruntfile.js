@@ -12,16 +12,7 @@ module.exports = function (grunt) {
         jshint: {
             src: ['Gruntfile.js', 'src/*.js'],
             options: {
-                '-W069': true,  // ['xxx'] is better written in dot notation
-                '-W107': true,  // Script URL
-                '-W061': true,  // Eval can be harmful
-                '-W041': true,
-                // options here to override JSHint defaults
-                globals: {
-                    console: true/*,
-                    module: true,
-                    document: true*/
-                }
+                jshintrc: '.jshintrc'
             }
         },
 
@@ -45,7 +36,7 @@ module.exports = function (grunt) {
                     'paths': {
                         'tf': '.'
                     },
-                    include: ['../libs/almond/almond','core'],
+                    include: ['../libs/almond/almond', 'core'],
                     out: 'dist/tablefilter.js',
                     wrap: {
                         startFile: "src/start.frag",
@@ -127,8 +118,27 @@ module.exports = function (grunt) {
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
             }
-        }
+        },
 
+        '6to5': {
+            options: {
+                sourceMap: true,
+                modules: 'amd'
+            },
+            // dist: {
+            //     files: {
+            //         'es6/modules/*.js': '<%= source_folder %>modules/'
+            //     }
+            // }
+            build:{
+                files: [{
+                    expand: true,
+                    cwd: '<%= source_folder %>es6-modules',
+                    src: ['**/*.js'],
+                    dest: '<%= source_folder %>modules'
+                }]
+            }
+        }
     });
 
     // Load the plugins that provide the tasks we specified in package.json.
@@ -140,10 +150,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-6to5');
 
     // This is the default task being executed if Grunt
     // is called without any further parameter.
     grunt.registerTask('default', ['jshint', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
-    grunt.registerTask('dev', ['jshint', 'concat', 'cssmin', 'copy']);
+    grunt.registerTask('dev', ['jshint', '6to5', 'concat', 'cssmin', 'copy']);
+    grunt.registerTask('toes5', ['6to5']);
     grunt.registerTask('test', ['qunit']);
 };
