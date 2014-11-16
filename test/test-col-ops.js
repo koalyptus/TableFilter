@@ -2,7 +2,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
 
     QUnit.start();
 
-    var dom = require('dom'),
+    var dom = require('dom').Dom,
         ColOps = require('modules/colOps').ColOps;
 
     var table = document.getElementById('demo');

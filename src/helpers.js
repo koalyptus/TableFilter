@@ -1,15 +1,15 @@
-/**
- * Misc helpers
- */
+define(["exports"], function (exports) {
+  "use strict";
 
-define(function (require) {
-    'use strict';
+  /**
+   * Misc helpers
+   */
 
-    var Helpers = {
-        isIE: function(){
-            return (/msie|MSIE/).test(navigator.userAgent);
-        }
-    };
+  var Helpers = {
+    isIE: function () {
+      return (/msie|MSIE/).test(navigator.userAgent);
+    }
+  };
 
-    return Helpers;
+  exports.Helpers = Helpers;
 });

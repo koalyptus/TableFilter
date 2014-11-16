@@ -6,8 +6,8 @@ define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
     if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
   };
 
-  var dom = _dom;
-  var types = _types;
+  var Dom = _dom.Dom;
+  var Types = _types.Types;
 
 
   var global = window;
@@ -29,24 +29,24 @@ define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
       //delay for hiding loader
       tf.loaderCloseDelay = 200;
       //callback function before loader is displayed
-      tf.onShowLoader = types.isFn(f.on_show_loader) ? f.on_show_loader : null;
+      tf.onShowLoader = Types.isFn(f.on_show_loader) ? f.on_show_loader : null;
       //callback function after loader is closed
-      tf.onHideLoader = types.isFn(f.on_hide_loader) ? f.on_hide_loader : null;
+      tf.onHideLoader = Types.isFn(f.on_hide_loader) ? f.on_hide_loader : null;
 
       this.tf = tf;
 
-      var containerDiv = dom.create("div", ["id", tf.prfxLoader + tf.id]);
+      var containerDiv = Dom.create("div", ["id", tf.prfxLoader + tf.id]);
       containerDiv.className = tf.loaderCssClass;
 
-      var targetEl = !tf.loaderTgtId ? (tf.gridLayout ? tf.tblCont : tf.tbl.parentNode) : dom.id(tf.loaderTgtId);
+      var targetEl = !tf.loaderTgtId ? (tf.gridLayout ? tf.tblCont : tf.tbl.parentNode) : Dom.id(tf.loaderTgtId);
       if (!tf.loaderTgtId) {
         targetEl.insertBefore(containerDiv, tf.tbl);
       } else {
         targetEl.appendChild(containerDiv);
       }
-      tf.loaderDiv = dom.id(tf.prfxLoader + tf.id);
+      tf.loaderDiv = Dom.id(tf.prfxLoader + tf.id);
       if (!tf.loaderHtml) {
-        tf.loaderDiv.appendChild(dom.text(tf.loaderText));
+        tf.loaderDiv.appendChild(Dom.text(tf.loaderText));
       } else {
         tf.loaderDiv.innerHTML = tf.loaderHtml;
       }
@@ -84,7 +84,7 @@ define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
           if (!this.tf.loaderDiv) {
             return;
           }
-          var targetEl = !this.tf.loaderTgtId ? (this.tf.gridLayout ? this.tf.tblCont : this.tf.tbl.parentNode) : dom.id(this.tf.loaderTgtId);
+          var targetEl = !this.tf.loaderTgtId ? (this.tf.gridLayout ? this.tf.tblCont : this.tf.tbl.parentNode) : Dom.id(this.tf.loaderTgtId);
           targetEl.removeChild(this.tf.loaderDiv);
           this.tf.loaderDiv = null;
         }

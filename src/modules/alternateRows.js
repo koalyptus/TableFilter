@@ -6,7 +6,7 @@ define(["exports", "../dom"], function (exports, _dom) {
     if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
   };
 
-  var dom = _dom;
+  var Dom = _dom.Dom;
   var AlternateRows = (function () {
     var AlternateRows = function AlternateRows(tf) {
       var f = tf.fObj;
@@ -19,7 +19,7 @@ define(["exports", "../dom"], function (exports, _dom) {
     };
 
     _classProps(AlternateRows, null, {
-      set: {
+      init: {
         writable: true,
         value: function () {
           if (!this.tf.hasGrid && !this.tf.isFirstLoad) {
@@ -50,7 +50,7 @@ define(["exports", "../dom"], function (exports, _dom) {
           var rows = this.tf.tbl.rows;
           var i = !idx ? rowIdx : idx;
           this.removeRowBg(rowIdx);
-          dom.addClass(rows[rowIdx], (i % 2) ? this.evenCss : this.oddCss);
+          Dom.addClass(rows[rowIdx], (i % 2) ? this.evenCss : this.oddCss);
         }
       },
       removeRowBg: {
@@ -60,8 +60,8 @@ define(["exports", "../dom"], function (exports, _dom) {
             return;
           }
           var rows = this.tf.tbl.rows;
-          dom.removeClass(rows[idx], this.oddCss);
-          dom.removeClass(rows[idx], this.evenCss);
+          Dom.removeClass(rows[idx], this.oddCss);
+          Dom.removeClass(rows[idx], this.evenCss);
         }
       },
       remove: {

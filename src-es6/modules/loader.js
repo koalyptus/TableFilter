@@ -1,6 +1,6 @@
 
-import * as dom from '../dom';
-import * as types from '../types';
+import {Dom} from '../dom';
+import {Types} from '../types';
 
 var global = window;
 
@@ -27,28 +27,28 @@ export class Loader{
         //delay for hiding loader
         tf.loaderCloseDelay = 200;
         //callback function before loader is displayed
-        tf.onShowLoader = types.isFn(f.on_show_loader) ?
+        tf.onShowLoader = Types.isFn(f.on_show_loader) ?
             f.on_show_loader : null;
         //callback function after loader is closed
-        tf.onHideLoader = types.isFn(f.on_hide_loader) ?
+        tf.onHideLoader = Types.isFn(f.on_hide_loader) ?
             f.on_hide_loader : null;
 
         this.tf = tf;
 
-        var containerDiv = dom.create('div', ['id', tf.prfxLoader+tf.id]);
+        var containerDiv = Dom.create('div', ['id', tf.prfxLoader+tf.id]);
         containerDiv.className = tf.loaderCssClass;
 
         var targetEl = !tf.loaderTgtId ?
             (tf.gridLayout ? tf.tblCont : tf.tbl.parentNode) :
-            dom.id(tf.loaderTgtId);
+            Dom.id(tf.loaderTgtId);
         if(!tf.loaderTgtId){
             targetEl.insertBefore(containerDiv, tf.tbl);
         } else {
             targetEl.appendChild(containerDiv);
         }
-        tf.loaderDiv = dom.id(tf.prfxLoader+tf.id);
+        tf.loaderDiv = Dom.id(tf.prfxLoader+tf.id);
         if(!tf.loaderHtml){
-            tf.loaderDiv.appendChild(dom.text(tf.loaderText));
+            tf.loaderDiv.appendChild(Dom.text(tf.loaderText));
         } else {
             tf.loaderDiv.innerHTML = tf.loaderHtml;
         }
@@ -84,7 +84,7 @@ export class Loader{
         }
         var targetEl = !this.tf.loaderTgtId ?
             (this.tf.gridLayout ? this.tf.tblCont : this.tf.tbl.parentNode):
-            dom.id(this.tf.loaderTgtId);
+            Dom.id(this.tf.loaderTgtId);
         targetEl.removeChild(this.tf.loaderDiv);
         this.tf.loaderDiv = null;
     }

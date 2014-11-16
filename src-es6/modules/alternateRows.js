@@ -1,4 +1,4 @@
-import * as dom from '../dom';
+import {Dom} from '../dom';
 
 export class AlternateRows{
 
@@ -19,7 +19,7 @@ export class AlternateRows{
     /**
      * Sets alternating rows color
      */
-    set() {
+    init() {
         if(!this.tf.hasGrid && !this.tf.isFirstLoad){
             return;
         }
@@ -54,7 +54,7 @@ export class AlternateRows{
         var rows = this.tf.tbl.rows;
         var i = !idx ? rowIdx : idx;
         this.removeRowBg(rowIdx);
-        dom.addClass(
+        Dom.addClass(
             rows[rowIdx],
             (i%2) ? this.evenCss : this.oddCss
         );
@@ -69,8 +69,8 @@ export class AlternateRows{
             return;
         }
         var rows = this.tf.tbl.rows;
-        dom.removeClass(rows[idx], this.oddCss);
-        dom.removeClass(rows[idx], this.evenCss);
+        Dom.removeClass(rows[idx], this.oddCss);
+        Dom.removeClass(rows[idx], this.evenCss);
     }
 
     /**

@@ -1,5 +1,5 @@
-import * as dom from '../dom';
-import * as str from '../string';
+import {Dom} from '../dom';
+import {Str} from '../string';
 
 export class ColOps{
 
@@ -30,7 +30,7 @@ export class ColOps{
      * (1) optimized the routine (now it will only process each column once),
      * (2) added calculations for the median, lower and upper quartile.
      */
-    set() {
+    calc() {
         if(!this.tf.isFirstLoad && !this.tf.hasGrid){
             return;
         }
@@ -69,9 +69,9 @@ export class ColOps{
             }
         }
 
-        if(str.lower(typeof labelId)=='object' &&
-            str.lower(typeof colIndex)=='object' &&
-            str.lower(typeof operation)=='object'){
+        if(Str.lower(typeof labelId)=='object' &&
+            Str.lower(typeof colIndex)=='object' &&
+            Str.lower(typeof operation)=='object'){
             var row = this.tf.tbl.rows,
                 colvalues = [];
 
@@ -110,11 +110,11 @@ export class ColOps{
                 for(var k=0; k<colIndex.length; k++){
                      if(colIndex[k] === ucolIndex[ucol]){
                         mThisCol++;
-                        opsThisCol[mThisCol]=str.lower(operation[k]);
+                        opsThisCol[mThisCol]=Str.lower(operation[k]);
                         decThisCol[mThisCol]=decimalPrecision[k];
                         labThisCol[mThisCol]=labelId[k];
                         oTypeThisCol = outputType !== undefined &&
-                            str.lower(typeof outputType)==='object' ?
+                            Str.lower(typeof outputType)==='object' ?
                             outputType[k] : null;
 
                         switch(opsThisCol[mThisCol]){
@@ -249,24 +249,24 @@ export class ColOps{
                     if(oTypeThisCol && result){
                         result = result.toFixed( precision );
 
-                        if(dom.id(labThisCol[i])){
-                            switch( str.lower(oTypeThisCol) ){
+                        if(Dom.id(labThisCol[i])){
+                            switch( Str.lower(oTypeThisCol) ){
                                 case 'innerhtml':
                                     if (isNaN(result) || !isFinite(result) ||
                                         nbvalues===0){
-                                        dom.id(labThisCol[i]).innerHTML = '.';
+                                        Dom.id(labThisCol[i]).innerHTML = '.';
                                     } else{
-                                        dom.id(labThisCol[i]).innerHTML = result;
+                                        Dom.id(labThisCol[i]).innerHTML = result;
                                     }
                                 break;
                                 case 'setvalue':
-                                    dom.id( labThisCol[i] ).value = result;
+                                    Dom.id( labThisCol[i] ).value = result;
                                 break;
                                 case 'createtextnode':
-                                    var oldnode = dom.id(labThisCol[i])
+                                    var oldnode = Dom.id(labThisCol[i])
                                         .firstChild;
-                                    var txtnode = dom.text(result);
-                                    dom.id(labThisCol[i])
+                                    var txtnode = Dom.text(result);
+                                    Dom.id(labThisCol[i])
                                         .replaceChild(txtnode, oldnode);
                                 break;
                             }//switch
@@ -275,9 +275,9 @@ export class ColOps{
                         try{
                             if(isNaN(result) || !isFinite(result) ||
                                 nbvalues===0){
-                                dom.id(labThisCol[i]).innerHTML = '.';
+                                Dom.id(labThisCol[i]).innerHTML = '.';
                             } else {
-                                dom.id(labThisCol[i]).innerHTML =
+                                Dom.id(labThisCol[i]).innerHTML =
                                     result.toFixed(precision);
                             }
                         } catch(e) {}//catch

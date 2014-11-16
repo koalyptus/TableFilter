@@ -12,16 +12,16 @@
 define(function (require) {
 
 var global = this,
-    TF = global.TF,
     evt = require('event'),
-    dom = require('dom'),
-    str = require('string'),
-    cookie = require('cookie'),
-    types = require('types'),
-    array = require('array'),
-    hlp = require('helpers'),
-    isValidDate = require('date').isValid,
-    formatDate = require('date').format,
+    dom = require('dom').Dom,
+    str = require('string').Str,
+    cookie = require('cookie').Cookie,
+    types = require('types').Types,
+    array = require('array').Arr,
+    hlp = require('helpers').Helpers,
+    dateHelper = require('date').DateHelper,
+    isValidDate = dateHelper.isValid,
+    formatDate = dateHelper.format,
     doc = global.document;
 
 /**
@@ -676,7 +676,8 @@ function TableFilter(id) {
     this.Cpt = {
         loader: null,
         alternateRows: null,
-        colOps: null
+        colOps: null,
+        rowsCounter: null
     };
 
     /*** TF events ***/
@@ -1204,7 +1205,9 @@ TableFilter.prototype = {
 
         /* Filter behaviours */
         if(this.rowsCounter){
-            this.SetRowsCounter();
+            var RowsCounter = require('modules/rowsCounter').RowsCounter;
+            this.Cpt.rowsCounter = new RowsCounter(this);
+            this.Cpt.rowsCounter.init();
         }
         if(this.statusBar){
             this.SetStatusBar();
@@ -1231,12 +1234,12 @@ TableFilter.prototype = {
             //1st time only if no paging and rememberGridValues
             var AlternateRows = require('modules/alternateRows').AlternateRows;
             this.Cpt.alternateRows = new AlternateRows(this);
-            this.Cpt.alternateRows.set();
+            this.Cpt.alternateRows.init();
         }
         if(this.hasColOperation){
             var ColOps = require('modules/colOps').ColOps;
             this.Cpt.colOps = new ColOps(this);
-            this.Cpt.colOps.set();
+            this.Cpt.colOps.calc();
         }
         if(this.sort || this.gridLayout){
             this.SetSort();
@@ -1515,7 +1518,7 @@ TableFilter.prototype = {
                 this.RemoveStatusBar();
             }
             if(this.rowsCounter){
-                this.RemoveRowsCounter();
+                this.Cpt.rowsCounter.destroy();
             }
             if(this.btnReset){
                 this.RemoveResetBtn();
@@ -2029,8 +2032,9 @@ TableFilter.prototype = {
             var fnE = ezEditConfig.on_added_dom_row;
             ezEditConfig.on_added_dom_row = function(){
                 o.nbFilterableRows++;
-                if(!o.paging){ o.RefreshNbRows(); }
-                else {
+                if(!o.paging){
+                    o.Cpt.rowsCounter.refresh();
+                } else {
                     o.nbRows++;
                     o.nbVisibleRows++;
                     o.nbFilterableRows++;
@@ -2039,7 +2043,7 @@ TableFilter.prototype = {
                     o.AddPaging(false);
                 }
                 if(o.alternateBgs){
-                    o.Cpt.alternateRows.set();
+                    o.Cpt.alternateRows.init();
                 }
                 if(fnE){
                     fnE.call(null, arguments[0], arguments[1], arguments[2]);
@@ -2049,8 +2053,9 @@ TableFilter.prototype = {
                 var fnF = ezEditConfig.actions['delete'].on_after_submit;
                 ezEditConfig.actions['delete'].on_after_submit = function(){
                     o.nbFilterableRows--;
-                    if(!o.paging){ o.RefreshNbRows(); }
-                    else {
+                    if(!o.paging){
+                        o.Cpt.rowsCounter.refresh();
+                    } else {
                         o.nbRows--;
                         o.nbVisibleRows--;
                         o.nbFilterableRows--;
@@ -2059,7 +2064,7 @@ TableFilter.prototype = {
                         o.AddPaging(false);
                     }
                     if(o.alternateBgs){
-                        o.Cpt.alternateRows.set();
+                        o.Cpt.alternateRows.init();
                     }
                     if(fnF){
                         fnF.call(null, arguments[0], arguments[1]);
@@ -2531,7 +2536,7 @@ TableFilter.prototype = {
                     r.style.display = '';
                 }
                 if(this.alternateBgs){
-                    this.Cpt.alternateRows(this.validRowsIndex[h], h);
+                    this.Cpt.alternateRows.setRowBg(this.validRowsIndex[h], h);
                 }
             } else {
                 r.style.display = 'none';
@@ -3801,129 +3806,6 @@ TableFilter.prototype = {
     },
 
     /*====================================================
-        - Generates rows counter label
-    =====================================================*/
-    SetRowsCounter: function(){
-        if((!this.hasGrid && !this.isFirstLoad) || this.rowsCounterSpan){
-            return;
-        }
-        var f = this.fObj;
-        //id of custom container element
-        this.rowsCounterTgtId = f.rows_counter_target_id || null;
-        //element containing tot nb rows
-        this.rowsCounterDiv = null;
-        //element containing tot nb rows label
-        this.rowsCounterSpan = null;
-        //defines rows counter text
-        this.rowsCounterText = f.rows_counter_text || 'Rows: ';
-        this.fromToTextSeparator = f.from_to_text_separator || '-';
-        this.overText = f.over_text || ' / ';
-        //defines css class rows counter
-        this.totRowsCssClass = f.tot_rows_css_class || 'tot';
-        //callback raised before counter is refreshed
-        this.onBeforeRefreshCounter =
-            types.isFn(f.on_before_refresh_counter) ?
-                f.on_before_refresh_counter : null;
-        //callback raised after counter is refreshed
-        this.onAfterRefreshCounter = types.isFn(f.on_after_refresh_counter) ?
-            f.on_after_refresh_counter : null;
-        //rows counter container
-        var countDiv = dom.create('div', ['id',this.prfxCounter+this.id]);
-        countDiv.className = this.totRowsCssClass;
-        //rows counter label
-        var countSpan = dom.create('span',['id',this.prfxTotRows+this.id]);
-        var countText = dom.create('span',['id',this.prfxTotRowsTxt+this.id]);
-        countText.appendChild(dom.text(this.rowsCounterText));
-
-        // counter is added to defined element
-        if(!this.rowsCounterTgtId){
-            this.SetTopDiv();
-        }
-        var targetEl = !this.rowsCounterTgtId ?
-                this.lDiv : dom.id( this.rowsCounterTgtId );
-
-        //IE only: clears all for sure
-        if(this.rowsCounterDiv && hlp.isIE()){
-            this.rowsCounterDiv.outerHTML = '';
-        }
-        //default container: 'lDiv'
-        if(!this.rowsCounterTgtId){
-            countDiv.appendChild(countText);
-            countDiv.appendChild(countSpan);
-            targetEl.appendChild(countDiv);
-        }
-        else{
-            //custom container, no need to append statusDiv
-            targetEl.appendChild(countText);
-            targetEl.appendChild(countSpan);
-        }
-        this.rowsCounterDiv = dom.id( this.prfxCounter+this.id );
-        this.rowsCounterSpan = dom.id( this.prfxTotRows+this.id );
-
-        this.RefreshNbRows();
-    },
-
-    /*====================================================
-        - Removes rows counter label
-    =====================================================*/
-    RemoveRowsCounter: function(){
-        if(!this.hasGrid){
-            return;
-        }
-        if(!this.rowsCounterSpan){
-            return;
-        }
-
-        if(!this.rowsCounterTgtId && this.rowsCounterDiv){
-            //IE only: clears all for sure
-            if(hlp.isIE()){
-                this.rowsCounterDiv.outerHTML = '';
-            } else {
-                this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
-            }
-        } else {
-            dom.id( this.rowsCounterTgtId ).innerHTML = '';
-        }
-        this.rowsCounterSpan = null;
-        this.rowsCounterDiv = null;
-    },
-
-    /*====================================================
-        - Shows total number of filtered rows
-    =====================================================*/
-    RefreshNbRows: function(p){
-        if(!this.rowsCounterSpan){
-            return;
-        }
-        if(this.onBeforeRefreshCounter){
-            this.onBeforeRefreshCounter.call(null, this, this.rowsCounterSpan);
-        }
-        var totTxt;
-        if(!this.paging){
-            if(p && p!==''){
-                totTxt=p;
-            } else{
-                totTxt = this.nbFilterableRows - this.nbHiddenRows -
-                    (this.hasVisibleRows ? this.visibleRows.length : 0);
-            }
-        } else {
-            //paging start row
-            var paging_start_row = parseInt(this.startPagingRow,10) +
-                    ((this.nbVisibleRows>0) ? 1 : 0);
-            var paging_end_row = (paging_start_row+this.pagingLength)-1 <=
-                    this.nbVisibleRows ? paging_start_row+this.pagingLength-1 :
-                    this.nbVisibleRows;
-            totTxt = paging_start_row + this.fromToTextSeparator +
-                paging_end_row + this.overText + this.nbVisibleRows;
-        }
-        this.rowsCounterSpan.innerHTML = totTxt;
-        if(this.onAfterRefreshCounter){
-            this.onAfterRefreshCounter.call(
-                null, this, this.rowsCounterSpan, totTxt);
-        }
-    },
-
-    /*====================================================
         - inserts or removes input watermark
         - Params:
             - set: if true inserts watermark (boolean)
@@ -4130,7 +4012,7 @@ TableFilter.prototype = {
             //New pointerX calc taking into account scrollLeft
             if(!o.isPointerXOverwritten){
                 try{
-                    TF.Evt.pointerX = function(e){
+                    o.Evt.pointerX = function(e){
                         e = e || global.event;
                         var scrollLeft = tf_StandardBody().scrollLeft +
                                 _o.scrollLeft;
@@ -5196,7 +5078,7 @@ TableFilter.prototype = {
         }
         //makes operation on a col
         if(this.hasColOperation){
-            this.Cpt.colOps.set();
+            this.Cpt.colOps.calc();
         }
         //re-populates drop-down filters
         if(this.refreshFilters){
@@ -5206,7 +5088,7 @@ TableFilter.prototype = {
             this.nbVisibleRows - this.visibleRows.length : this.nbVisibleRows;
         //refreshes rows counter
         if(this.rowsCounter){
-            this.RefreshNbRows(nr);
+            this.Cpt.rowsCounter.refresh(nr);
         }
 
         if(this.inpWatermark !== ''){

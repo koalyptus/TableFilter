@@ -18,6 +18,7 @@ module.exports = function (grunt) {
 
         watch: {
             files: [
+                'src-es6/**/*.js',
                 'src/**/*.js',
                 'src/**/*.css',
                 'src/**/*.html'
@@ -100,20 +101,6 @@ module.exports = function (grunt) {
         copy: {
             main: {
                 files: [
-                    //{ src: ['<%= source_folder %>tablefilter_all.js'], dest: '<%= dist_folder %>tablefilter_all-uncompressed.js' },
-                    //{ src: ['<%= source_folder %>tablefilter.js'], dest: '<%= dist_folder %>tablefilter-uncompressed.js' },
-                    // { src: ['<%= source_folder %>filtergrid.css'], dest: '<%= dist_folder %>filtergrid-uncompressed.css' },
-                    // { src: ['<%= source_folder %>tf-main.js'], dest: '<%= dist_folder %>tf-main.js' },
-                    // { src: ['<%= source_folder %>string.js'], dest: '<%= dist_folder %>string.js' },
-                    // { src: ['<%= source_folder %>array.js'], dest: '<%= dist_folder %>array.js' },
-                    // { src: ['<%= source_folder %>cookie.js'], dest: '<%= dist_folder %>cookie.js' },
-                    // { src: ['<%= source_folder %>date.js'], dest: '<%= dist_folder %>date.js' },
-                    // { src: ['<%= source_folder %>dom.js'], dest: '<%= dist_folder %>dom.js' },
-                    // { src: ['<%= source_folder %>event.js'], dest: '<%= dist_folder %>event.js' },
-                    // { src: ['<%= source_folder %>types.js'], dest: '<%= dist_folder %>types.js' },
-                    // { src: ['**'], cwd: '<%= source_folder %>modules/', dest: '<%= dist_folder %>modules/', expand: true },
-                    // { src: ['<%= source_folder %>/*.js'], dest: '<%= dist_folder %>', flatten: true, expand: false },
-                    // { src: ['libs/requirejs/require.js'], dest: '<%= dist_folder %>/libs/require.js' },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
@@ -133,9 +120,9 @@ module.exports = function (grunt) {
             build:{
                 files: [{
                     expand: true,
-                    cwd: '<%= source_folder %>es6-modules',
+                    cwd: 'src-es6',
                     src: ['**/*.js'],
-                    dest: '<%= source_folder %>modules'
+                    dest: '<%= source_folder %>'
                 }]
             }
         }
@@ -154,7 +141,7 @@ module.exports = function (grunt) {
 
     // This is the default task being executed if Grunt
     // is called without any further parameter.
-    grunt.registerTask('default', ['jshint', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
+    grunt.registerTask('default', ['jshint', '6to5', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
     grunt.registerTask('dev', ['jshint', '6to5', 'concat', 'cssmin', 'copy']);
     grunt.registerTask('toes5', ['6to5']);
     grunt.registerTask('test', ['qunit']);
