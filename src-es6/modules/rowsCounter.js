@@ -3,6 +3,7 @@ import {Types} from '../types';
 import {Helpers} from '../helpers';
 
 export class RowsCounter{
+
     /**
      * Rows counter
      * @param {Object} tf TableFilter instance
@@ -24,9 +25,8 @@ export class RowsCounter{
         //defines css class rows counter
         this.totRowsCssClass = f.tot_rows_css_class || 'tot';
         //callback raised before counter is refreshed
-        this.onBeforeRefreshCounter =
-            Types.isFn(f.on_before_refresh_counter) ?
-                f.on_before_refresh_counter : null;
+        this.onBeforeRefreshCounter = Types.isFn(f.on_before_refresh_counter) ?
+            f.on_before_refresh_counter : null;
         //callback raised after counter is refreshed
         this.onAfterRefreshCounter = Types.isFn(f.on_after_refresh_counter) ?
             f.on_after_refresh_counter : null;

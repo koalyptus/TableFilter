@@ -835,7 +835,8 @@ function TableFilter(id) {
         /*====================================================
             - onchange event for select filters
         =====================================================*/
-        _OnSlcChange: function(e) {
+        _OnSlcChange: function(e) {console.log(o, o.activeFlt);
+            if(!o.activeFlt){ return; }
             var colIndex = o.activeFlt.getAttribute('colIndex');
             //Checks filter is a checklist and caller is not null
             if(o.activeFlt && colIndex &&
@@ -1096,14 +1097,14 @@ TableFilter.prototype = {
                             select is disabled and by clicking on element
                             (parent td), users enable drop-down and select is
                             populated at same time.  */
-                        if(this.fillSlcOnDemand && hlp.isIE()){
-                            slc.disabled = true;
-                            slc.title = this.activateSlcTooltip;
-                            slc.parentNode.onclick = this.Evt._EnableSlc;
-                            if(col===this.fltTypeMulti){
-                                this.__deferMultipleSelection(slc,0);
-                            }
-                        }
+                        // if(this.fillSlcOnDemand && hlp.isIE()){
+                        //     slc.disabled = true;
+                        //     slc.title = this.activateSlcTooltip;
+                        //     slc.parentNode.onclick = this.Evt._EnableSlc;
+                        //     if(col===this.fltTypeMulti){
+                        //         this.__deferMultipleSelection(slc,0);
+                        //     }
+                        // }
                     }
                     // checklist
                     else if(col===this.fltTypeCheckList){
@@ -3415,9 +3416,9 @@ TableFilter.prototype = {
                 li0.style.display = 'none';
             }
             //IE: label looses check capability
-            if(hlp.isIE()){
-                li0.label.onclick = function(){ li0.check.click(); };
-            }
+            // if(hlp.isIE()){
+            //     li0.label.onclick = function(){ li0.check.click(); };
+            // }
 
             if(o.enableEmptyOption){
                 var li1 = dom.createCheckItem(
@@ -3429,9 +3430,9 @@ TableFilter.prototype = {
                     ul.onchange.call(null, e);
                 };
                 //IE: label looses check capability
-                if(hlp.isIE()){
-                    li1.label.onclick = function(){ li1.check.click(); };
-                }
+                // if(hlp.isIE()){
+                //     li1.label.onclick = function(){ li1.check.click(); };
+                // }
                 chkCt++;
             }
 
@@ -3448,10 +3449,10 @@ TableFilter.prototype = {
                     ul.onchange.call(null, e);
                 };
                 //IE: label looses check capability
-                if(hlp.isIE())
-                {
-                    li2.label.onclick = function(){ li2.check.click(); };
-                }
+                // if(hlp.isIE())
+                // {
+                //     li2.label.onclick = function(){ li2.check.click(); };
+                // }
                 chkCt++;
             }
             return chkCt;
@@ -3511,9 +3512,9 @@ TableFilter.prototype = {
                     }
                 }
                 //IE: label looses check capability
-                if(hlp.isIE()){
-                    li.label.onclick = labelClick;
-                }
+                // if(hlp.isIE()){
+                //     li.label.onclick = labelClick;
+                // }
             }
             function labelClick(){
                 this.firstChild.click();
@@ -3527,19 +3528,19 @@ TableFilter.prototype = {
         flt.setAttribute('filled','1');
 
         /*** remember grid values IE only, items remain un-checked ***/
-        if(o.rememberGridValues && hlp.isIE()){
-            var slcIndexes = ul.getAttribute('indexes');
-            if(slcIndexes){
-                var indSplit = slcIndexes.split(',');//items indexes
-                for(var n=0; n<indSplit.length; n++){
-                    //checked item
-                    var cChk = dom.id(this.fltIds[colIndex]+'_'+indSplit[n]);
-                    if(cChk){
-                        cChk.checked = true;
-                    }
-                }
-            }
-        }
+        // if(o.rememberGridValues && hlp.isIE()){
+        //     var slcIndexes = ul.getAttribute('indexes');
+        //     if(slcIndexes){
+        //         var indSplit = slcIndexes.split(',');//items indexes
+        //         for(var n=0; n<indSplit.length; n++){
+        //             //checked item
+        //             var cChk = dom.id(this.fltIds[colIndex]+'_'+indSplit[n]);
+        //             if(cChk){
+        //                 cChk.checked = true;
+        //             }
+        //         }
+        //     }
+        // }
     },
 
     /*====================================================
