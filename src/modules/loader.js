@@ -38,7 +38,7 @@ define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
       var containerDiv = Dom.create("div", ["id", tf.prfxLoader + tf.id]);
       containerDiv.className = this.loaderCssClass;
 
-      var targetEl = !this.loaderTgtId ? (tf.gridLayout ? tf.tblCont : tf.tbl.parentNode) : Dom.id(this.loaderTgtId);
+      var targetEl = !this.loaderTgtId ? tf.tbl.parentNode : Dom.id(this.loaderTgtId);
       if (!this.loaderTgtId) {
         targetEl.insertBefore(containerDiv, tf.tbl);
       } else {

@@ -112,7 +112,7 @@ module.exports = function (grunt) {
                 sourceMap: true,
                 modules: 'amd'
             },
-            build:{
+            build: {
                 files: [{
                     expand: true,
                     cwd: 'src-es6',

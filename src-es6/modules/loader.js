@@ -39,8 +39,7 @@ export class Loader{
         containerDiv.className = this.loaderCssClass;
 
         var targetEl = !this.loaderTgtId ?
-            (tf.gridLayout ? tf.tblCont : tf.tbl.parentNode) :
-            Dom.id(this.loaderTgtId);
+            tf.tbl.parentNode : Dom.id(this.loaderTgtId);
         if(!this.loaderTgtId){
             targetEl.insertBefore(containerDiv, tf.tbl);
         } else {

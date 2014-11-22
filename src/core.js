@@ -677,7 +677,8 @@ function TableFilter(id) {
         loader: null,
         alternateRows: null,
         colOps: null,
-        rowsCounter: null
+        rowsCounter: null,
+        GridLayout: null
     };
 
     /*** TF events ***/
@@ -835,7 +836,7 @@ function TableFilter(id) {
         /*====================================================
             - onchange event for select filters
         =====================================================*/
-        _OnSlcChange: function(e) {console.log(o, o.activeFlt);
+        _OnSlcChange: function(e) {
             if(!o.activeFlt){ return; }
             var colIndex = o.activeFlt.getAttribute('colIndex');
             //Checks filter is a checklist and caller is not null
@@ -948,10 +949,13 @@ TableFilter.prototype = {
         if(this.hasThemes){ this._LoadThemes(); }
 
         if(this.gridLayout){
-            this.isExternalFlt = true;
-            this.SetGridLayout();
+            // this.isExternalFlt = true;
+            //this.SetGridLayout();
             //Once grid generated 1st filterable row is 0 again
-            this.refRow = hlp.isIE() ? (this.refRow+1) : 0;
+            //this.refRow = hlp.isIE() ? (this.refRow+1) : 0;
+            var GridLayout = require('modules/gridLayout').GridLayout;
+            this.Cpt.gridLayout = new GridLayout(this);
+            this.Cpt.gridLayout.init();
         }
 
         if(this.loader){
@@ -1370,55 +1374,55 @@ TableFilter.prototype = {
         this.IncludeFile(module.name, module.path, module.init);
     },
 
-    // LoadExtensions : function(){
-    //     if(!this.Ext){
-    //         /*** TF extensions ***/
-    //         var o = this;
-    //         this.Ext = {
-    //             list: {},
-    //             add: function(extName, extDesc, extPath, extCallBack){
-    //                 var file = extPath.split('/')[extPath.split('/').length-1],
-    //                     re = new RegExp(file),
-    //                     path = extPath.replace(re,'');
-    //                 o.Ext.list[extName] = {
-    //                     name: extName,
-    //                     description: extDesc,
-    //                     file: file,
-    //                     path: path,
-    //                     callback: extCallBack
-    //                 };
-    //             }
-    //         };
-    //     }
-    //     this.EvtManager(this.Evt.name.loadextensions);
-    // },
+    LoadExtensions : function(){
+        if(!this.Ext){
+            /*** TF extensions ***/
+            var o = this;
+            this.Ext = {
+                list: {},
+                add: function(extName, extDesc, extPath, extCallBack){
+                    var file = extPath.split('/')[extPath.split('/').length-1],
+                        re = new RegExp(file),
+                        path = extPath.replace(re,'');
+                    o.Ext.list[extName] = {
+                        name: extName,
+                        description: extDesc,
+                        file: file,
+                        path: path,
+                        callback: extCallBack
+                    };
+                }
+            };
+        }
+        this.EvtManager(this.Evt.name.loadextensions);
+    },
 
     /*====================================================
         - loads TF extensions
     =====================================================*/
-    // _LoadExtensions : function(){
-    //     if(!this.hasExtensions || !types.isArray(this.extensions.name) ||
-    //         !types.isArray(this.extensions.src)){
-    //         return;
-    //     }
-    //     var ext = this.extensions;
-    //     for(var e=0; e<ext.name.length; e++){
-    //         var extPath = ext.src[e],
-    //             extName = ext.name[e],
-    //             extInit = (ext.initialize && ext.initialize[e]) ?
-    //                 ext.initialize[e] : null,
-    //             extDesc = (ext.description && ext.description[e] ) ?
-    //                 ext.description[e] : null;
+    _LoadExtensions : function(){
+        if(!this.hasExtensions || !types.isArray(this.extensions.name) ||
+            !types.isArray(this.extensions.src)){
+            return;
+        }
+        var ext = this.extensions;
+        for(var e=0; e<ext.name.length; e++){
+            var extPath = ext.src[e],
+                extName = ext.name[e],
+                extInit = (ext.initialize && ext.initialize[e]) ?
+                    ext.initialize[e] : null,
+                extDesc = (ext.description && ext.description[e] ) ?
+                    ext.description[e] : null;
 
-    //         //Registers extension
-    //         this.Ext.add(extName, extDesc, extPath, extInit);
-    //         if(isImported(extPath)){
-    //             extInit.call(null,this);
-    //         } else {
-    //             this.IncludeFile(extName, extPath, extInit);
-    //         }
-    //     }
-    // },
+            //Registers extension
+            this.Ext.add(extName, extDesc, extPath, extInit);
+            if(isImported(extPath)){
+                extInit.call(null,this);
+            } else {
+                this.IncludeFile(extName, extPath, extInit);
+            }
+        }
+    },
 
     LoadThemes: function(){
         this.EvtManager(this.Evt.name.loadthemes);
@@ -1587,7 +1591,8 @@ TableFilter.prototype = {
                 this.tbl.deleteRow(this.filtersRowIndex);
             }
             if(this.gridLayout){
-                this.RemoveGridLayout();
+                // this.RemoveGridLayout();
+                this.Cpt.gridLayout.destroy();
             }
             dom.removeClass(this.tbl, this.prfxTf);
             this.activeFlt = null;
@@ -1620,7 +1625,7 @@ TableFilter.prototype = {
         // }
         //grid-layout
         else if(this.gridLayout){
-            this.tblMainCont.appendChild(infdiv);
+            this.Cpt.gridLayout.tblMainCont.appendChild(infdiv);
             infdiv.className = this.gridInfDivCssClass;
         }
         //default location: just above the table
@@ -3835,364 +3840,364 @@ TableFilter.prototype = {
     /*====================================================
         - generates a grid with fixed headers
     =====================================================*/
-    SetGridLayout: function(){
-        if(!this.gridLayout){
-            return;
-        }
-        var f = this.fObj;
-        //defines grid width
-        this.gridWidth = f.grid_width || null;
-        //defines grid height
-        this.gridHeight = f.grid_height || null;
-        //defines css class for main container
-        this.gridMainContCssClass = f.grid_cont_css_class || 'grd_Cont';
-        //defines css class for div containing table
-        this.gridContCssClass = f.grid_tbl_cont_css_class || 'grd_tblCont';
-        //defines css class for div containing headers' table
-        this.gridHeadContCssClass = f.grid_tblHead_cont_css_class ||
-            'grd_headTblCont';
-        //defines css class for div containing rows counter, paging etc.
-        this.gridInfDivCssClass = f.grid_inf_grid_css_class || 'grd_inf';
-        //defines which row contains column headers
-        this.gridHeadRowIndex = f.grid_headers_row_index || 0;
-        //array of headers row indexes to be placed in header table
-        this.gridHeadRows = f.grid_headers_rows || [0];
-        //generate filters in table headers
-        this.gridEnableFilters = f.grid_enable_default_filters!==undefined ?
-            f.grid_enable_default_filters : true;
-        //default col width
-        this.gridDefaultColWidth = f.grid_default_col_width || '100px';
-        //enables/disables columns resizer
-        this.gridEnableColResizer = f.grid_enable_cols_resizer!==undefined ?
-            f.grid_enable_cols_resizer : true;
-        //defines col resizer script path
-        this.gridColResizerPath = f.grid_cont_col_resizer_path ||
-            this.basePath+'TFExt_ColsResizer/TFExt_ColsResizer.js';
+    // SetGridLayout: function(){
+    //     if(!this.gridLayout){
+    //         return;
+    //     }
+    //     var f = this.fObj;
+    //     //defines grid width
+    //     this.gridWidth = f.grid_width || null;
+    //     //defines grid height
+    //     this.gridHeight = f.grid_height || null;
+    //     //defines css class for main container
+    //     this.gridMainContCssClass = f.grid_cont_css_class || 'grd_Cont';
+    //     //defines css class for div containing table
+    //     this.gridContCssClass = f.grid_tbl_cont_css_class || 'grd_tblCont';
+    //     //defines css class for div containing headers' table
+    //     this.gridHeadContCssClass = f.grid_tblHead_cont_css_class ||
+    //         'grd_headTblCont';
+    //     //defines css class for div containing rows counter, paging etc.
+    //     this.gridInfDivCssClass = f.grid_inf_grid_css_class || 'grd_inf';
+    //     //defines which row contains column headers
+    //     this.gridHeadRowIndex = f.grid_headers_row_index || 0;
+    //     //array of headers row indexes to be placed in header table
+    //     this.gridHeadRows = f.grid_headers_rows || [0];
+    //     //generate filters in table headers
+    //     this.gridEnableFilters = f.grid_enable_default_filters!==undefined ?
+    //         f.grid_enable_default_filters : true;
+    //     //default col width
+    //     this.gridDefaultColWidth = f.grid_default_col_width || '100px';
+    //     //enables/disables columns resizer
+    //     this.gridEnableColResizer = f.grid_enable_cols_resizer!==undefined ?
+    //         f.grid_enable_cols_resizer : true;
+    //     //defines col resizer script path
+    //     this.gridColResizerPath = f.grid_cont_col_resizer_path ||
+    //         this.basePath+'TFExt_ColsResizer/TFExt_ColsResizer.js';
 
-        // in case column widths are not set default width 100px
-        if(!this.hasColWidth){
-            this.colWidth = [];
-            for(var k=0; k<this.nbCells; k++){
-                var colW,
-                    cell = this.tbl.rows[this.gridHeadRowIndex].cells[k];
-                if(cell.width!==''){
-                    colW = cell.width;
-                } else if(cell.style.width!==''){
-                    colW = parseInt(cell.style.width, 10);
-                } else {
-                    colW = this.gridDefaultColWidth;
-                }
-                this.colWidth[k] = colW;
-            }
-            this.hasColWidth = true;
-        }
-        this.SetColWidths(this.gridHeadRowIndex);
+    //     // in case column widths are not set default width 100px
+    //     if(!this.hasColWidth){
+    //         this.colWidth = [];
+    //         for(var k=0; k<this.nbCells; k++){
+    //             var colW,
+    //                 cell = this.tbl.rows[this.gridHeadRowIndex].cells[k];
+    //             if(cell.width!==''){
+    //                 colW = cell.width;
+    //             } else if(cell.style.width!==''){
+    //                 colW = parseInt(cell.style.width, 10);
+    //             } else {
+    //                 colW = this.gridDefaultColWidth;
+    //             }
+    //             this.colWidth[k] = colW;
+    //         }
+    //         this.hasColWidth = true;
+    //     }
+    //     this.SetColWidths(this.gridHeadRowIndex);
 
-        var tblW;//initial table width
-        if(this.tbl.width!==''){
-            tblW = this.tbl.width;
-        }
-        else if(this.tbl.style.width!==''){
-            tblW = parseInt(this.tbl.style.width, 10);
-        } else {
-            tblW = this.tbl.clientWidth;
-        }
+    //     var tblW;//initial table width
+    //     if(this.tbl.width!==''){
+    //         tblW = this.tbl.width;
+    //     }
+    //     else if(this.tbl.style.width!==''){
+    //         tblW = parseInt(this.tbl.style.width, 10);
+    //     } else {
+    //         tblW = this.tbl.clientWidth;
+    //     }
 
-        //Main container: it will contain all the elements
-        this.tblMainCont = dom.create(
-            'div',['id', this.prfxMainTblCont + this.id]);
-        this.tblMainCont.className = this.gridMainContCssClass;
-        if(this.gridWidth){
-            this.tblMainCont.style.width = this.gridWidth;
-        }
-        this.tbl.parentNode.insertBefore(this.tblMainCont, this.tbl);
+    //     //Main container: it will contain all the elements
+    //     this.tblMainCont = dom.create(
+    //         'div',['id', this.prfxMainTblCont + this.id]);
+    //     this.tblMainCont.className = this.gridMainContCssClass;
+    //     if(this.gridWidth){
+    //         this.tblMainCont.style.width = this.gridWidth;
+    //     }
+    //     this.tbl.parentNode.insertBefore(this.tblMainCont, this.tbl);
 
-        //Table container: div wrapping content table
-        this.tblCont = dom.create('div',['id', this.prfxTblCont + this.id]);
-        this.tblCont.className = this.gridContCssClass;
-        if(this.gridWidth){
-            this.tblCont.style.width = this.gridWidth;
-        }
-        if(this.gridHeight){
-            this.tblCont.style.height = this.gridHeight;
-        }
-        this.tbl.parentNode.insertBefore(this.tblCont, this.tbl);
-        var t = this.tbl.parentNode.removeChild(this.tbl);
-        this.tblCont.appendChild(t);
+    //     //Table container: div wrapping content table
+    //     this.tblCont = dom.create('div',['id', this.prfxTblCont + this.id]);
+    //     this.tblCont.className = this.gridContCssClass;
+    //     if(this.gridWidth){
+    //         this.tblCont.style.width = this.gridWidth;
+    //     }
+    //     if(this.gridHeight){
+    //         this.tblCont.style.height = this.gridHeight;
+    //     }
+    //     this.tbl.parentNode.insertBefore(this.tblCont, this.tbl);
+    //     var t = this.tbl.parentNode.removeChild(this.tbl);
+    //     this.tblCont.appendChild(t);
 
-        //In case table width is expressed in %
-        if(this.tbl.style.width === ''){
-            this.tbl.style.width = (this.__containsStr('%', tblW) ?
-                this.tbl.clientWidth : tblW) + 'px';
-        }
+    //     //In case table width is expressed in %
+    //     if(this.tbl.style.width === ''){
+    //         this.tbl.style.width = (this.__containsStr('%', tblW) ?
+    //             this.tbl.clientWidth : tblW) + 'px';
+    //     }
 
-        var d = this.tblCont.parentNode.removeChild(this.tblCont);
-        this.tblMainCont.appendChild(d);
+    //     var d = this.tblCont.parentNode.removeChild(this.tblCont);
+    //     this.tblMainCont.appendChild(d);
 
-        //Headers table container: div wrapping headers table
-        this.headTblCont = dom.create(
-            'div',['id', this.prfxHeadTblCont + this.id]);
-        this.headTblCont.className = this.gridHeadContCssClass;
-        if(this.gridWidth){
-            this.headTblCont.style.width = this.gridWidth;
-        }
+    //     //Headers table container: div wrapping headers table
+    //     this.headTblCont = dom.create(
+    //         'div',['id', this.prfxHeadTblCont + this.id]);
+    //     this.headTblCont.className = this.gridHeadContCssClass;
+    //     if(this.gridWidth){
+    //         this.headTblCont.style.width = this.gridWidth;
+    //     }
 
-        //Headers table
-        this.headTbl = dom.create('table',['id', this.prfxHeadTbl + this.id]);
-        var tH = dom.create('tHead'); //IE<7 needs it
+    //     //Headers table
+    //     this.headTbl = dom.create('table',['id', this.prfxHeadTbl + this.id]);
+    //     var tH = dom.create('tHead'); //IE<7 needs it
 
-        //1st row should be headers row, ids are added if not set
-        //Those ids are used by the sort feature
-        var hRow = this.tbl.rows[this.gridHeadRowIndex];
-        var sortTriggers = [];
-        for(var n=0; n<this.nbCells; n++){
-            var c = hRow.cells[n];
-            var thId = c.getAttribute('id');
-            if(!thId || thId===''){
-                thId = this.prfxGridTh+n+'_'+this.id;
-                c.setAttribute('id', thId);
-            }
-            sortTriggers.push(thId);
-        }
+    //     //1st row should be headers row, ids are added if not set
+    //     //Those ids are used by the sort feature
+    //     var hRow = this.tbl.rows[this.gridHeadRowIndex];
+    //     var sortTriggers = [];
+    //     for(var n=0; n<this.nbCells; n++){
+    //         var c = hRow.cells[n];
+    //         var thId = c.getAttribute('id');
+    //         if(!thId || thId===''){
+    //             thId = this.prfxGridTh+n+'_'+this.id;
+    //             c.setAttribute('id', thId);
+    //         }
+    //         sortTriggers.push(thId);
+    //     }
 
-        //Filters row is created
-        var filtersRow = dom.create('tr');
-        if(this.gridEnableFilters && this.fltGrid){
-            this.externalFltTgtIds = [];
-            for(var j=0; j<this.nbCells; j++){
-                var fltTdId = this.prfxFlt+j+ this.prfxGridFltTd +this.id;
-                var cl = dom.create(this.fltCellTag, ['id', fltTdId]);
-                filtersRow.appendChild(cl);
-                this.externalFltTgtIds[j] = fltTdId;
-            }
-        }
-        //Headers row are moved from content table to headers table
-        for(var i=0; i<this.gridHeadRows.length; i++){
-            var headRow = this.tbl.rows[this.gridHeadRows[0]];
-            tH.appendChild(headRow);
-        }
-        this.headTbl.appendChild(tH);
-        if(this.filtersRowIndex === 0){
-            tH.insertBefore(filtersRow,hRow);
-        } else {
-            tH.appendChild(filtersRow);
-        }
+    //     //Filters row is created
+    //     var filtersRow = dom.create('tr');
+    //     if(this.gridEnableFilters && this.fltGrid){
+    //         this.externalFltTgtIds = [];
+    //         for(var j=0; j<this.nbCells; j++){
+    //             var fltTdId = this.prfxFlt+j+ this.prfxGridFltTd +this.id;
+    //             var cl = dom.create(this.fltCellTag, ['id', fltTdId]);
+    //             filtersRow.appendChild(cl);
+    //             this.externalFltTgtIds[j] = fltTdId;
+    //         }
+    //     }
+    //     //Headers row are moved from content table to headers table
+    //     for(var i=0; i<this.gridHeadRows.length; i++){
+    //         var headRow = this.tbl.rows[this.gridHeadRows[0]];
+    //         tH.appendChild(headRow);
+    //     }
+    //     this.headTbl.appendChild(tH);
+    //     if(this.filtersRowIndex === 0){
+    //         tH.insertBefore(filtersRow,hRow);
+    //     } else {
+    //         tH.appendChild(filtersRow);
+    //     }
 
-        this.headTblCont.appendChild(this.headTbl);
-        this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);
+    //     this.headTblCont.appendChild(this.headTbl);
+    //     this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);
 
-        //THead needs to be removed in content table for sort feature
-        var thead = dom.tag(this.tbl,'thead');
-        if(thead.length>0){
-            this.tbl.removeChild(thead[0]);
-        }
+    //     //THead needs to be removed in content table for sort feature
+    //     var thead = dom.tag(this.tbl,'thead');
+    //     if(thead.length>0){
+    //         this.tbl.removeChild(thead[0]);
+    //     }
 
-        //Headers table style
-        this.headTbl.style.width = this.tbl.style.width;
-        this.headTbl.style.tableLayout = 'fixed';
-        this.tbl.style.tableLayout = 'fixed';
-        this.headTbl.cellPadding = this.tbl.cellPadding;
-        this.headTbl.cellSpacing = this.tbl.cellSpacing;
+    //     //Headers table style
+    //     this.headTbl.style.width = this.tbl.style.width;
+    //     this.headTbl.style.tableLayout = 'fixed';
+    //     this.tbl.style.tableLayout = 'fixed';
+    //     this.headTbl.cellPadding = this.tbl.cellPadding;
+    //     this.headTbl.cellSpacing = this.tbl.cellSpacing;
 
-        //Headers container width
-        this.headTblCont.style.width = this.tblCont.clientWidth+'px';
+    //     //Headers container width
+    //     this.headTblCont.style.width = this.tblCont.clientWidth+'px';
 
-        //content table without headers needs col widths to be reset
-        this.SetColWidths();
+    //     //content table without headers needs col widths to be reset
+    //     this.SetColWidths();
 
-        this.tbl.style.width = '';
-        if(hlp.isIE()){
-            this.headTbl.style.width = '';
-        }
+    //     this.tbl.style.width = '';
+    //     if(hlp.isIE()){
+    //         this.headTbl.style.width = '';
+    //     }
 
-        //scroll synchronisation
-        var o = this; //TF object
-        this.tblCont.onscroll = function(){
-            o.headTblCont.scrollLeft = this.scrollLeft;
-            var _o = this; //this = scroll element
-            //New pointerX calc taking into account scrollLeft
-            if(!o.isPointerXOverwritten){
-                try{
-                    o.Evt.pointerX = function(e){
-                        e = e || global.event;
-                        var scrollLeft = tf_StandardBody().scrollLeft +
-                                _o.scrollLeft;
-                        return (e.pageX + _o.scrollLeft) ||
-                            (e.clientX + scrollLeft);
-                    };
-                    o.isPointerXOverwritten = true;
-                } catch(err) {
-                    o.isPointerXOverwritten = false;
-                }
-            }
-        };
+    //     //scroll synchronisation
+    //     var o = this; //TF object
+    //     this.tblCont.onscroll = function(){
+    //         o.headTblCont.scrollLeft = this.scrollLeft;
+    //         var _o = this; //this = scroll element
+    //         //New pointerX calc taking into account scrollLeft
+    //         if(!o.isPointerXOverwritten){
+    //             try{
+    //                 o.Evt.pointerX = function(e){
+    //                     e = e || global.event;
+    //                     var scrollLeft = tf_StandardBody().scrollLeft +
+    //                             _o.scrollLeft;
+    //                     return (e.pageX + _o.scrollLeft) ||
+    //                         (e.clientX + scrollLeft);
+    //                 };
+    //                 o.isPointerXOverwritten = true;
+    //             } catch(err) {
+    //                 o.isPointerXOverwritten = false;
+    //             }
+    //         }
+    //     };
 
-        //Sort is enabled if not specified in config object
-        if(f.sort !== false){
-            this.sort = true;
-            this.sortConfig.asyncSort = true;
-            this.sortConfig.triggerIds = sortTriggers;
-        }
+    //     //Sort is enabled if not specified in config object
+    //     if(f.sort !== false){
+    //         this.sort = true;
+    //         this.sortConfig.asyncSort = true;
+    //         this.sortConfig.triggerIds = sortTriggers;
+    //     }
 
-        if(this.gridEnableColResizer){
-            if(!this.hasExtensions){
-                this.extensions = {
-                    name:['ColumnsResizer_'+this.id],
-                    src:[this.gridColResizerPath],
-                    description:['Columns Resizing'],
-                    initialize:[function(o){
-                        o.SetColsResizer('ColumnsResizer_'+o.id);}]
-                };
-                this.hasExtensions = true;
-            } else {
-                if(!this.__containsStr(
-                    'colsresizer',
-                    str.lower(this.extensions.src.toString())) ){
-                    this.extensions.name.push('ColumnsResizer_'+this.id);
-                    this.extensions.src.push(this.gridColResizerPath);
-                    this.extensions.description.push('Columns Resizing');
-                    this.extensions.initialize.push(function(o){
-                        o.SetColsResizer('ColumnsResizer_'+o.id);});
-                }
-            }
-        }
+    //     if(this.gridEnableColResizer){
+    //         if(!this.hasExtensions){
+    //             this.extensions = {
+    //                 name:['ColumnsResizer_'+this.id],
+    //                 src:[this.gridColResizerPath],
+    //                 description:['Columns Resizing'],
+    //                 initialize:[function(o){
+    //                     o.SetColsResizer('ColumnsResizer_'+o.id);}]
+    //             };
+    //             this.hasExtensions = true;
+    //         } else {
+    //             if(!this.__containsStr(
+    //                 'colsresizer',
+    //                 str.lower(this.extensions.src.toString())) ){
+    //                 this.extensions.name.push('ColumnsResizer_'+this.id);
+    //                 this.extensions.src.push(this.gridColResizerPath);
+    //                 this.extensions.description.push('Columns Resizing');
+    //                 this.extensions.initialize.push(function(o){
+    //                     o.SetColsResizer('ColumnsResizer_'+o.id);});
+    //             }
+    //         }
+    //     }
 
-        //Default columns resizer properties for grid layout
-        f.col_resizer_cols_headers_table = this.headTbl.getAttribute('id');
-        f.col_resizer_cols_headers_index = this.gridHeadRowIndex;
-        f.col_resizer_width_adjustment = 0;
-        f.col_enable_text_ellipsis = false;
+    //     //Default columns resizer properties for grid layout
+    //     f.col_resizer_cols_headers_table = this.headTbl.getAttribute('id');
+    //     f.col_resizer_cols_headers_index = this.gridHeadRowIndex;
+    //     f.col_resizer_width_adjustment = 0;
+    //     f.col_enable_text_ellipsis = false;
 
-        //Cols generation for all browsers excepted IE<=7
-        o.tblHasColTag = dom.tag(o.tbl,'col').length > 0 ? true : false;
-        if(!hlp.isIE()){
-            //Col elements are enough to keep column widths after sorting and
-            //filtering
-            var createColTags = function(o){
-                if(!o){
-                    return;
-                }
-                for(var k=(o.nbCells-1); k>=0; k--){
-                    var col = dom.create( 'col', ['id', o.id+'_col_'+k]);
-                    o.tbl.firstChild.parentNode.insertBefore(
-                        col,o.tbl.firstChild);
-                    col.style.width = o.colWidth[k];
-                    o.gridColElms[k] = col;
-                }
-                o.tblHasColTag = true;
-            };
-            if(!o.tblHasColTag){
-                createColTags(o);
-            } else {
-                var cols = dom.tag(o.tbl,'col');
-                for(var ii=0; ii<o.nbCells; ii++){
-                    cols[ii].setAttribute('id', o.id+'_col_'+ii);
-                    cols[ii].style.width = o.colWidth[ii];
-                    o.gridColElms.push(cols[ii]);
-                }
-            }
-        }
+    //     //Cols generation for all browsers excepted IE<=7
+    //     o.tblHasColTag = dom.tag(o.tbl,'col').length > 0 ? true : false;
+    //     if(!hlp.isIE()){
+    //         //Col elements are enough to keep column widths after sorting and
+    //         //filtering
+    //         var createColTags = function(o){
+    //             if(!o){
+    //                 return;
+    //             }
+    //             for(var k=(o.nbCells-1); k>=0; k--){
+    //                 var col = dom.create( 'col', ['id', o.id+'_col_'+k]);
+    //                 o.tbl.firstChild.parentNode.insertBefore(
+    //                     col,o.tbl.firstChild);
+    //                 col.style.width = o.colWidth[k];
+    //                 o.gridColElms[k] = col;
+    //             }
+    //             o.tblHasColTag = true;
+    //         };
+    //         if(!o.tblHasColTag){
+    //             createColTags(o);
+    //         } else {
+    //             var cols = dom.tag(o.tbl,'col');
+    //             for(var ii=0; ii<o.nbCells; ii++){
+    //                 cols[ii].setAttribute('id', o.id+'_col_'+ii);
+    //                 cols[ii].style.width = o.colWidth[ii];
+    //                 o.gridColElms.push(cols[ii]);
+    //             }
+    //         }
+    //     }
 
-        //IE <= 7 needs an additional row for widths as col element width is
-        //not enough...
-        if(hlp.isIE()){
-            var tbody = dom.tag(o.tbl,'tbody'),
-                r;
-            if( tbody.length>0 ){
-                r = tbody[0].insertRow(0);
-            } else{
-                r = o.tbl.insertRow(0);
-            }
-            r.style.height = '0px';
-            for(var x=0; x<o.nbCells; x++){
-                var col = dom.create('td', ['id', o.id+'_col_'+x]);
-                col.style.width = o.colWidth[x];
-                o.tbl.rows[1].cells[x].style.width = '';
-                r.appendChild(col);
-                o.gridColElms.push(col);
-            }
-            this.hasGridWidthsRow = true;
-            //Data table row with widths expressed
-            o.leadColWidthsRow = o.tbl.rows[0];
-            o.leadColWidthsRow.setAttribute('validRow','false');
+    //     //IE <= 7 needs an additional row for widths as col element width is
+    //     //not enough...
+    //     if(hlp.isIE()){
+    //         var tbody = dom.tag(o.tbl,'tbody'),
+    //             r;
+    //         if( tbody.length>0 ){
+    //             r = tbody[0].insertRow(0);
+    //         } else{
+    //             r = o.tbl.insertRow(0);
+    //         }
+    //         r.style.height = '0px';
+    //         for(var x=0; x<o.nbCells; x++){
+    //             var col = dom.create('td', ['id', o.id+'_col_'+x]);
+    //             col.style.width = o.colWidth[x];
+    //             o.tbl.rows[1].cells[x].style.width = '';
+    //             r.appendChild(col);
+    //             o.gridColElms.push(col);
+    //         }
+    //         this.hasGridWidthsRow = true;
+    //         //Data table row with widths expressed
+    //         o.leadColWidthsRow = o.tbl.rows[0];
+    //         o.leadColWidthsRow.setAttribute('validRow','false');
 
-            var beforeSortFn = types.isFn(f.on_before_sort) ?
-                f.on_before_sort : null;
-            f.on_before_sort = function(o,colIndex){
-                o.leadColWidthsRow.setAttribute('validRow','false');
-                if(beforeSortFn){
-                    beforeSortFn.call(null,o,colIndex);
-                }
-            };
+    //         var beforeSortFn = types.isFn(f.on_before_sort) ?
+    //             f.on_before_sort : null;
+    //         f.on_before_sort = function(o,colIndex){
+    //             o.leadColWidthsRow.setAttribute('validRow','false');
+    //             if(beforeSortFn){
+    //                 beforeSortFn.call(null,o,colIndex);
+    //             }
+    //         };
 
-            var afterSortFn = types.isFn(f.on_after_sort) ?
-                f.on_after_sort : null;
-            f.on_after_sort = function(o,colIndex){
-                if(o.leadColWidthsRow.rowIndex !== 0){
-                    var r = o.leadColWidthsRow;
-                    if(tbody.length>0){
-                        tbody[0].moveRow(o.leadColWidthsRow.rowIndex, 0);
-                    } else {
-                        o.tbl.moveRow(o.leadColWidthsRow.rowIndex, 0);
-                    }
-                }
-                if(afterSortFn){
-                    afterSortFn.call(null,o,colIndex);
-                }
-            };
-        }
+    //         var afterSortFn = types.isFn(f.on_after_sort) ?
+    //             f.on_after_sort : null;
+    //         f.on_after_sort = function(o,colIndex){
+    //             if(o.leadColWidthsRow.rowIndex !== 0){
+    //                 var r = o.leadColWidthsRow;
+    //                 if(tbody.length>0){
+    //                     tbody[0].moveRow(o.leadColWidthsRow.rowIndex, 0);
+    //                 } else {
+    //                     o.tbl.moveRow(o.leadColWidthsRow.rowIndex, 0);
+    //                 }
+    //             }
+    //             if(afterSortFn){
+    //                 afterSortFn.call(null,o,colIndex);
+    //             }
+    //         };
+    //     }
 
-        var afterColResizedFn = types.isFn(f.on_after_col_resized) ?
-            f.on_after_col_resized : null;
-        f.on_after_col_resized = function(o,colIndex){
-            if(!colIndex){
-                return;
-            }
-            var w = o.crWColsRow.cells[colIndex].style.width;
-            var col = o.gridColElms[colIndex];
-            col.style.width = w;
+    //     var afterColResizedFn = types.isFn(f.on_after_col_resized) ?
+    //         f.on_after_col_resized : null;
+    //     f.on_after_col_resized = function(o,colIndex){
+    //         if(!colIndex){
+    //             return;
+    //         }
+    //         var w = o.crWColsRow.cells[colIndex].style.width;
+    //         var col = o.gridColElms[colIndex];
+    //         col.style.width = w;
 
-            var thCW = o.crWColsRow.cells[colIndex].clientWidth;
-            var tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
+    //         var thCW = o.crWColsRow.cells[colIndex].clientWidth;
+    //         var tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
 
-            if(hlp.isIE()){
-                o.tbl.style.width = o.headTbl.clientWidth+'px';
-            }
+    //         if(hlp.isIE()){
+    //             o.tbl.style.width = o.headTbl.clientWidth+'px';
+    //         }
 
-            if(thCW != tdCW && !hlp.isIE()){
-                o.headTbl.style.width = o.tbl.clientWidth+'px';
-            }
+    //         if(thCW != tdCW && !hlp.isIE()){
+    //             o.headTbl.style.width = o.tbl.clientWidth+'px';
+    //         }
 
-            if(afterColResizedFn){
-                afterColResizedFn.call(null,o,colIndex);
-            }
-        };
+    //         if(afterColResizedFn){
+    //             afterColResizedFn.call(null,o,colIndex);
+    //         }
+    //     };
 
-        if(this.tbl.clientWidth !== this.headTbl.clientWidth){
-            this.tbl.style.width = this.headTbl.clientWidth+'px';
-        }
+    //     if(this.tbl.clientWidth !== this.headTbl.clientWidth){
+    //         this.tbl.style.width = this.headTbl.clientWidth+'px';
+    //     }
 
-    },
+    // },
 
     /*====================================================
         - removes the grid layout
     =====================================================*/
-    RemoveGridLayout: function(){
-        if(!this.gridLayout){
-            return;
-        }
-        var t = this.tbl.parentNode.removeChild(this.tbl);
-        this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);
-        this.tblMainCont.parentNode.removeChild( this.tblMainCont );
+    // RemoveGridLayout: function(){
+    //     if(!this.gridLayout){
+    //         return;
+    //     }
+    //     var t = this.tbl.parentNode.removeChild(this.tbl);
+    //     this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);
+    //     this.tblMainCont.parentNode.removeChild( this.tblMainCont );
 
-        this.tblMainCont = null;
-        this.headTblCont = null;
-        this.headTbl = null;
-        this.tblCont = null;
+    //     this.tblMainCont = null;
+    //     this.headTblCont = null;
+    //     this.headTbl = null;
+    //     this.tblCont = null;
 
-        this.tbl.outerHTML = this.sourceTblHtml;
-        this.tbl = dom.id(this.id); //needed to keep reference
-    },
+    //     this.tbl.outerHTML = this.sourceTblHtml;
+    //     this.tbl = dom.id(this.id); //needed to keep reference
+    // },
 
     /*====================================================
         - generates popup filters div
