@@ -1,0 +1,3 @@
+
+- Initialise TableFilter object with a table DOM element
+- Use DOM event listeners for DOM events

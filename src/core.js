@@ -12,7 +12,7 @@
 define(function (require) {
 
 var global = this,
-    evt = require('event'),
+    evt = require('event').Event,
     dom = require('dom').Dom,
     str = require('string').Str,
     cookie = require('cookie').Cookie,
@@ -1003,9 +1003,9 @@ TableFilter.prototype = {
                     if(this.popUpFilters){
                         this.headersRow++;
                     }
-                    if(this.fixedHeaders){
-                        this.SetFixedHeaders();
-                    }
+                    // if(this.fixedHeaders){
+                    //     this.SetFixedHeaders();
+                    // }
 
                     fltrow.className = this.fltsRowCssClass;
                     //Disable for grid_layout
@@ -1213,9 +1213,9 @@ TableFilter.prototype = {
         if(this.statusBar){
             this.SetStatusBar();
         }
-        if(this.fixedHeaders && !this.isFirstLoad){
-            this.SetFixedHeaders();
-        }
+        // if(this.fixedHeaders && !this.isFirstLoad){
+        //     this.SetFixedHeaders();
+        // }
         if(this.paging){
             this.SetPaging();
         }
@@ -1370,55 +1370,55 @@ TableFilter.prototype = {
         this.IncludeFile(module.name, module.path, module.init);
     },
 
-    LoadExtensions : function(){
-        if(!this.Ext){
-            /*** TF extensions ***/
-            var o = this;
-            this.Ext = {
-                list: {},
-                add: function(extName, extDesc, extPath, extCallBack){
-                    var file = extPath.split('/')[extPath.split('/').length-1],
-                        re = new RegExp(file),
-                        path = extPath.replace(re,'');
-                    o.Ext.list[extName] = {
-                        name: extName,
-                        description: extDesc,
-                        file: file,
-                        path: path,
-                        callback: extCallBack
-                    };
-                }
-            };
-        }
-        this.EvtManager(this.Evt.name.loadextensions);
-    },
+    // LoadExtensions : function(){
+    //     if(!this.Ext){
+    //         /*** TF extensions ***/
+    //         var o = this;
+    //         this.Ext = {
+    //             list: {},
+    //             add: function(extName, extDesc, extPath, extCallBack){
+    //                 var file = extPath.split('/')[extPath.split('/').length-1],
+    //                     re = new RegExp(file),
+    //                     path = extPath.replace(re,'');
+    //                 o.Ext.list[extName] = {
+    //                     name: extName,
+    //                     description: extDesc,
+    //                     file: file,
+    //                     path: path,
+    //                     callback: extCallBack
+    //                 };
+    //             }
+    //         };
+    //     }
+    //     this.EvtManager(this.Evt.name.loadextensions);
+    // },
 
     /*====================================================
         - loads TF extensions
     =====================================================*/
-    _LoadExtensions : function(){
-        if(!this.hasExtensions || !types.isArray(this.extensions.name) ||
-            !types.isArray(this.extensions.src)){
-            return;
-        }
-        var ext = this.extensions;
-        for(var e=0; e<ext.name.length; e++){
-            var extPath = ext.src[e],
-                extName = ext.name[e],
-                extInit = (ext.initialize && ext.initialize[e]) ?
-                    ext.initialize[e] : null,
-                extDesc = (ext.description && ext.description[e] ) ?
-                    ext.description[e] : null;
+    // _LoadExtensions : function(){
+    //     if(!this.hasExtensions || !types.isArray(this.extensions.name) ||
+    //         !types.isArray(this.extensions.src)){
+    //         return;
+    //     }
+    //     var ext = this.extensions;
+    //     for(var e=0; e<ext.name.length; e++){
+    //         var extPath = ext.src[e],
+    //             extName = ext.name[e],
+    //             extInit = (ext.initialize && ext.initialize[e]) ?
+    //                 ext.initialize[e] : null,
+    //             extDesc = (ext.description && ext.description[e] ) ?
+    //                 ext.description[e] : null;
 
-            //Registers extension
-            this.Ext.add(extName, extDesc, extPath, extInit);
-            if(isImported(extPath)){
-                extInit.call(null,this);
-            } else {
-                this.IncludeFile(extName, extPath, extInit);
-            }
-        }
-    },
+    //         //Registers extension
+    //         this.Ext.add(extName, extDesc, extPath, extInit);
+    //         if(isImported(extPath)){
+    //             extInit.call(null,this);
+    //         } else {
+    //             this.IncludeFile(extName, extPath, extInit);
+    //         }
+    //     }
+    // },
 
     LoadThemes: function(){
         this.EvtManager(this.Evt.name.loadthemes);
@@ -1533,9 +1533,9 @@ TableFilter.prototype = {
             if(this.isExternalFlt && !this.popUpFilters){
                 this.RemoveExternalFlts();
             }
-            if(this.fixedHeaders){
-                this.RemoveFixedHeaders();
-            }
+            // if(this.fixedHeaders){
+            //     this.RemoveFixedHeaders();
+            // }
             if(this.infDiv){
                 this.RemoveTopDiv();
             }
@@ -1615,9 +1615,9 @@ TableFilter.prototype = {
             dom.id(this.toolBarTgtId).appendChild(infdiv);
         }
         //fixed headers
-        else if(this.fixedHeaders && this.contDiv){
-            this.contDiv.parentNode.insertBefore(infdiv, this.contDiv);
-        }
+        // else if(this.fixedHeaders && this.contDiv){
+        //     this.contDiv.parentNode.insertBefore(infdiv, this.contDiv);
+        // }
         //grid-layout
         else if(this.gridLayout){
             this.tblMainCont.appendChild(infdiv);
@@ -4563,112 +4563,112 @@ TableFilter.prototype = {
     /*====================================================
         - CSS solution making headers fixed
     =====================================================*/
-    SetFixedHeaders: function(){
-        if((!this.hasGrid && !this.isFirstLoad) || !this.fixedHeaders){
-            return;
-        }
-        if(this.contDiv){
-            return;
-        }
-        var thead = dom.tag(this.tbl,'thead');
-        if(thead.length===0){
-            return;
-        }
-        var tbody = dom.tag(this.tbl,'tbody');
-        //firefox returns tbody height
-        if(tbody[0].clientHeight!==0){
-            //previous values
-            this.prevTBodyH = tbody[0].clientHeight;
-            this.prevTBodyOverflow = tbody[0].style.overflow;
-            this.prevTBodyOverflowX = tbody[0].style.overflowX;
+    // SetFixedHeaders: function(){
+    //     if((!this.hasGrid && !this.isFirstLoad) || !this.fixedHeaders){
+    //         return;
+    //     }
+    //     if(this.contDiv){
+    //         return;
+    //     }
+    //     var thead = dom.tag(this.tbl,'thead');
+    //     if(thead.length===0){
+    //         return;
+    //     }
+    //     var tbody = dom.tag(this.tbl,'tbody');
+    //     //firefox returns tbody height
+    //     if(tbody[0].clientHeight!==0){
+    //         //previous values
+    //         this.prevTBodyH = tbody[0].clientHeight;
+    //         this.prevTBodyOverflow = tbody[0].style.overflow;
+    //         this.prevTBodyOverflowX = tbody[0].style.overflowX;
 
-            tbody[0].style.height = this.tBodyH+'px';
-            tbody[0].style.overflow = 'auto';
-            tbody[0].style.overflowX = 'hidden';
-        } else { //IE returns 0
-            // cont div is added to emulate fixed headers behaviour
-            var contDiv = dom.create(
-                'div',['id',this.prfxContentDiv+this.id]);
-            contDiv.className = this.contDivCssClass;
-            this.tbl.parentNode.insertBefore(contDiv, this.tbl);
-            contDiv.appendChild(this.tbl);
-            this.contDiv = dom.id(this.prfxContentDiv+this.id);
-            //prevents headers moving during window scroll (IE)
-            this.contDiv.style.position = 'relative';
+    //         tbody[0].style.height = this.tBodyH+'px';
+    //         tbody[0].style.overflow = 'auto';
+    //         tbody[0].style.overflowX = 'hidden';
+    //     } else { //IE returns 0
+    //         // cont div is added to emulate fixed headers behaviour
+    //         var contDiv = dom.create(
+    //             'div',['id',this.prfxContentDiv+this.id]);
+    //         contDiv.className = this.contDivCssClass;
+    //         this.tbl.parentNode.insertBefore(contDiv, this.tbl);
+    //         contDiv.appendChild(this.tbl);
+    //         this.contDiv = dom.id(this.prfxContentDiv+this.id);
+    //         //prevents headers moving during window scroll (IE)
+    //         this.contDiv.style.position = 'relative';
 
-            var theadH = 0;
-            var theadTr = dom.tag(thead[0],'tr');
-            //css below emulates fixed headers on IE<=6
-            for(var i=0; i<theadTr.length; i++){
-                theadTr[i].style.cssText += 'position:relative; ' +
-                    'top:expression(offsetParent.scrollTop);';
-                theadH += parseInt(theadTr[i].clientHeight, 10);
-            }
+    //         var theadH = 0;
+    //         var theadTr = dom.tag(thead[0],'tr');
+    //         //css below emulates fixed headers on IE<=6
+    //         for(var i=0; i<theadTr.length; i++){
+    //             theadTr[i].style.cssText += 'position:relative; ' +
+    //                 'top:expression(offsetParent.scrollTop);';
+    //             theadH += parseInt(theadTr[i].clientHeight, 10);
+    //         }
 
-            this.contDiv.style.height = (this.tBodyH+theadH)+'px';
+    //         this.contDiv.style.height = (this.tBodyH+theadH)+'px';
 
-            var tfoot = dom.tag(this.tbl,'tfoot');
-            if(tfoot.length===0){
-                return;
-            }
+    //         var tfoot = dom.tag(this.tbl,'tfoot');
+    //         if(tfoot.length===0){
+    //             return;
+    //         }
 
-            var tfootTr = dom.tag(tfoot[0],'tr');
+    //         var tfootTr = dom.tag(tfoot[0],'tr');
 
-            //css below emulates fixed footer on IE<=6
-            for(var j=0; j<tfootTr.length; j++){
-                tfootTr[j].style.cssText +=
-                    'position:relative; overflow-x: hidden; ' +
-                    'top: expression(parentNode.parentNode.offsetHeight >= ' +
-                    'offsetParent.offsetHeight ? ' +
-                    '0 - parentNode.parentNode.offsetHeight + '+
-                    'offsetParent.offsetHeight + offsetParent.scrollTop : 0);';
-            }
-        }
-    },
+    //         //css below emulates fixed footer on IE<=6
+    //         for(var j=0; j<tfootTr.length; j++){
+    //             tfootTr[j].style.cssText +=
+    //                 'position:relative; overflow-x: hidden; ' +
+    //                 'top: expression(parentNode.parentNode.offsetHeight >= ' +
+    //                 'offsetParent.offsetHeight ? ' +
+    //                 '0 - parentNode.parentNode.offsetHeight + '+
+    //                 'offsetParent.offsetHeight + offsetParent.scrollTop : 0);';
+    //         }
+    //     }
+    // },
 
     /*====================================================
         - Removes fixed headers
     =====================================================*/
-    RemoveFixedHeaders: function(){
-        if(!this.hasGrid || !this.fixedHeaders ){
-            return;
-        }
+    // RemoveFixedHeaders: function(){
+    //     if(!this.hasGrid || !this.fixedHeaders ){
+    //         return;
+    //     }
 
-        if(this.contDiv){
-            this.contDiv.parentNode.insertBefore(this.tbl, this.contDiv);
-            this.contDiv.parentNode.removeChild( this.contDiv );
-            this.contDiv = null;
-            var thead = dom.tag(this.tbl,'thead');
-            if(thead.length===0){
-                return;
-            }
-            var theadTr = dom.tag(thead[0],'tr');
-            if(theadTr.length===0){
-                return;
-            }
-            for(var i=0; i<theadTr.length; i++){
-                theadTr[i].style.cssText = '';
-            }
-            var tfoot = dom.tag(this.tbl,'tfoot');
-            if(tfoot.length===0){
-                return;
-            }
-            var tfootTr = dom.tag(tfoot[0],'tr');
-            for(var j=0; j<tfootTr.length; j++){
-                tfootTr[j].style.position = 'relative';
-                tfootTr[j].style.top = '';
-                tfootTr[j].style.overeflowX = '';
-            }
-        } else {
-            var tbody = dom.tag(this.tbl,'tbody');
-            if(tbody.length===0){
-                return;
-            }
-            tbody[0].style.height = this.prevTBodyH+'px';
-            tbody[0].style.overflow = this.prevTBodyOverflow;
-            tbody[0].style.overflowX = this.prevTBodyOverflowX;
-        }
-    },
+    //     if(this.contDiv){
+    //         this.contDiv.parentNode.insertBefore(this.tbl, this.contDiv);
+    //         this.contDiv.parentNode.removeChild( this.contDiv );
+    //         this.contDiv = null;
+    //         var thead = dom.tag(this.tbl,'thead');
+    //         if(thead.length===0){
+    //             return;
+    //         }
+    //         var theadTr = dom.tag(thead[0],'tr');
+    //         if(theadTr.length===0){
+    //             return;
+    //         }
+    //         for(var i=0; i<theadTr.length; i++){
+    //             theadTr[i].style.cssText = '';
+    //         }
+    //         var tfoot = dom.tag(this.tbl,'tfoot');
+    //         if(tfoot.length===0){
+    //             return;
+    //         }
+    //         var tfootTr = dom.tag(tfoot[0],'tr');
+    //         for(var j=0; j<tfootTr.length; j++){
+    //             tfootTr[j].style.position = 'relative';
+    //             tfootTr[j].style.top = '';
+    //             tfootTr[j].style.overeflowX = '';
+    //         }
+    //     } else {
+    //         var tbody = dom.tag(this.tbl,'tbody');
+    //         if(tbody.length===0){
+    //             return;
+    //         }
+    //         tbody[0].style.height = this.prevTBodyH+'px';
+    //         tbody[0].style.overflow = this.prevTBodyOverflow;
+    //         tbody[0].style.overflowX = this.prevTBodyOverflowX;
+    //     }
+    // },
 
     Filter: function(){
         this.EvtManager(this.Evt.name.filter);

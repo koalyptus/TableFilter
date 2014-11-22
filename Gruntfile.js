@@ -112,11 +112,6 @@ module.exports = function (grunt) {
                 sourceMap: true,
                 modules: 'amd'
             },
-            // dist: {
-            //     files: {
-            //         'es6/modules/*.js': '<%= source_folder %>modules/'
-            //     }
-            // }
             build:{
                 files: [{
                     expand: true,
