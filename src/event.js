@@ -7,10 +7,10 @@ define(["exports"], function (exports) {
 
   var Event = {
     add: function (obj, type, func, capture) {
-      if (obj.attachEvent) {
+      if (obj.addEventListener) {
+        obj.addEventListener(type, func, capture);
+      } else if (obj.attachEvent) {
         obj.attachEvent("on" + type, func);
-      } else if (obj.addEventListener) {
-        obj.addEventListener(type, func, (capture === undefined ? false : capture));
       } else {
         obj["on" + type] = func;
       }
@@ -19,7 +19,7 @@ define(["exports"], function (exports) {
       if (obj.detachEvent) {
         obj.detachEvent("on" + type, func);
       } else if (obj.removeEventListener) {
-        obj.removeEventListener(type, func, (capture === undefined ? false : capture));
+        obj.removeEventListener(type, func, capture);
       } else {
         obj["on" + type] = null;
       }

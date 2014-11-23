@@ -5,6 +5,10 @@ import {Event} from '../event';
 
 export class GridLayout{
 
+    /**
+     * Grid layout, table with fixed headers
+     * @param {Object} tf TableFilter instance
+     */
     constructor(tf) {
         var f = tf.fObj;
 
@@ -37,13 +41,22 @@ export class GridLayout{
         this.gridColResizerPath = f.grid_cont_col_resizer_path ||
             this.basePath+'TFExt_ColsResizer/TFExt_ColsResizer.js';
 
+        this.gridColElms = [];
+
         this.tf = tf;
     }
 
+    /**
+     * Generates a grid with fixed headers
+     */
     init(){
         var tf = this.tf;
         var f = tf.fObj;
         var tbl = tf.tbl;
+
+        if(!tf.gridLayout){
+            return;
+        }
 
         tf.isExternalFlt = true;
 
@@ -171,21 +184,21 @@ export class GridLayout{
         this.headTbl.cellPadding = tbl.cellPadding;
         this.headTbl.cellSpacing = tbl.cellSpacing;
 
-        //Headers container width
-        this.headTblCont.style.width = this.tblCont.clientWidth+'px';
-
         //content table without headers needs col widths to be reset
         tf.SetColWidths();
 
+        //Headers container width
+        this.headTblCont.style.width = this.tblCont.clientWidth+'px';
+
         tbl.style.width = '';
-        if(Helpers.isIE()){
-            this.headTbl.style.width = '';
-        }
+        // if(Helpers.isIE()){
+        //     this.headTbl.style.width = '';
+        // }
 
         //scroll synchronisation
-        var o = this; //TF object
+        var o = this;
 
-        Event.add(this.tblCont, 'scroll', function(){
+        Event.add(this.tblCont, 'scroll', function(evt){
             //this = scroll element
             var scrollLeft = this.scrollLeft;
             o.headTblCont.scrollLeft = scrollLeft;
@@ -244,17 +257,18 @@ export class GridLayout{
 
         //Cols generation for all browsers excepted IE<=7
         o.tblHasColTag = Dom.tag(tbl, 'col').length > 0 ? true : false;
-        if(!Helpers.isIE()){
+
+        // if(!Helpers.isIE()){
             //Col elements are enough to keep column widths after sorting and
             //filtering
             var createColTags = function(o){
                 if(!o){
                     return;
                 }
-                for(var k=(o.nbCells-1); k>=0; k--){
-                    var col = Dom.create( 'col', ['id', o.id+'_col_'+k]);
+                for(var k=(tf.nbCells-1); k>=0; k--){
+                    var col = Dom.create('col', ['id', tf.id+'_col_'+k]);
                     tbl.firstChild.parentNode.insertBefore(col, tbl.firstChild);
-                    col.style.width = o.colWidth[k];
+                    col.style.width = tf.colWidth[k];
                     o.gridColElms[k] = col;
                 }
                 o.tblHasColTag = true;
@@ -262,63 +276,63 @@ export class GridLayout{
             if(!o.tblHasColTag){
                 createColTags(o);
             } else {
-                var cols = Dom.tag(tbl,'col');
-                for(var ii=0; ii<o.nbCells; ii++){
-                    cols[ii].setAttribute('id', o.id+'_col_'+ii);
-                    cols[ii].style.width = o.colWidth[ii];
+                var cols = Dom.tag(tbl, 'col');
+                for(var ii=0; ii<tf.nbCells; ii++){
+                    cols[ii].setAttribute('id', tf.id+'_col_'+ii);
+                    cols[ii].style.width = tf.colWidth[ii];
                     o.gridColElms.push(cols[ii]);
                 }
             }
-        }
+        // }
 
         //IE <= 7 needs an additional row for widths as col element width is
         //not enough...
-        if(Helpers.isIE()){
-            var tbody = Dom.tag(tbl,'tbody'),
-                r;
-            if( tbody.length>0 ){
-                r = tbody[0].insertRow(0);
-            } else{
-                r = tbl.insertRow(0);
-            }
-            r.style.height = '0px';
-            for(var x=0; x<o.nbCells; x++){
-                var col = Dom.create('td', ['id', o.id+'_col_'+x]);
-                col.style.width = o.colWidth[x];
-                tbl.rows[1].cells[x].style.width = '';
-                r.appendChild(col);
-                o.gridColElms.push(col);
-            }
-            this.hasGridWidthsRow = true;
-            //Data table row with widths expressed
-            o.leadColWidthsRow = tbl.rows[0];
-            o.leadColWidthsRow.setAttribute('validRow', 'false');
+        // if(Helpers.isIE()){
+        //     var tbody = Dom.tag(tbl,'tbody'),
+        //         r;
+        //     if( tbody.length>0 ){
+        //         r = tbody[0].insertRow(0);
+        //     } else{
+        //         r = tbl.insertRow(0);
+        //     }
+        //     r.style.height = '0px';
+        //     for(var x=0; x<o.nbCells; x++){
+        //         var col = Dom.create('td', ['id', o.id+'_col_'+x]);
+        //         col.style.width = o.colWidth[x];
+        //         tbl.rows[1].cells[x].style.width = '';
+        //         r.appendChild(col);
+        //         o.gridColElms.push(col);
+        //     }
+        //     tf.hasGridWidthsRow = true;
+        //     //Data table row with widths expressed
+        //     o.leadColWidthsRow = tbl.rows[0];
+        //     o.leadColWidthsRow.setAttribute('validRow', 'false');
 
-            var beforeSortFn = Types.isFn(f.on_before_sort) ?
-                f.on_before_sort : null;
-            f.on_before_sort = function(o, colIndex){
-                o.leadColWidthsRow.setAttribute('validRow', 'false');
-                if(beforeSortFn){
-                    beforeSortFn.call(null, o, colIndex);
-                }
-            };
+        //     var beforeSortFn = Types.isFn(f.on_before_sort) ?
+        //         f.on_before_sort : null;
+        //     f.on_before_sort = function(o, colIndex){
+        //         o.leadColWidthsRow.setAttribute('validRow', 'false');
+        //         if(beforeSortFn){
+        //             beforeSortFn.call(null, o, colIndex);
+        //         }
+        //     };
 
-            var afterSortFn = Types.isFn(f.on_after_sort) ?
-                f.on_after_sort : null;
-            f.on_after_sort = function(o,colIndex){
-                if(o.leadColWidthsRow.rowIndex !== 0){
-                    var r = o.leadColWidthsRow;
-                    if(tbody.length>0){
-                        tbody[0].moveRow(o.leadColWidthsRow.rowIndex, 0);
-                    } else {
-                        tbl.moveRow(o.leadColWidthsRow.rowIndex, 0);
-                    }
-                }
-                if(afterSortFn){
-                    afterSortFn.call(null, o, colIndex);
-                }
-            };
-        }
+        //     var afterSortFn = Types.isFn(f.on_after_sort) ?
+        //         f.on_after_sort : null;
+        //     f.on_after_sort = function(o,colIndex){
+        //         if(o.leadColWidthsRow.rowIndex !== 0){
+        //             var r = o.leadColWidthsRow;
+        //             if(tbody.length>0){
+        //                 tbody[0].moveRow(o.leadColWidthsRow.rowIndex, 0);
+        //             } else {
+        //                 tbl.moveRow(o.leadColWidthsRow.rowIndex, 0);
+        //             }
+        //         }
+        //         if(afterSortFn){
+        //             afterSortFn.call(null, o, colIndex);
+        //         }
+        //     };
+        // }
 
         var afterColResizedFn = Types.isFn(f.on_after_col_resized) ?
             f.on_after_col_resized : null;
@@ -333,11 +347,11 @@ export class GridLayout{
             var thCW = o.crWColsRow.cells[colIndex].clientWidth;
             var tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
 
-            if(Helpers.isIE()){
-                tbl.style.width = o.headTbl.clientWidth+'px';
-            }
+            // if(Helpers.isIE()){
+            //     tbl.style.width = o.headTbl.clientWidth+'px';
+            // }
 
-            if(thCW != tdCW && !Helpers.isIE()){
+            if(thCW != tdCW /*&& !Helpers.isIE()*/){
                 o.headTbl.style.width = tbl.clientWidth+'px';
             }
 
@@ -351,9 +365,12 @@ export class GridLayout{
         }
 
         // Re-adjust reference row
-        tf.refRow = Helpers.isIE() ? (tf.refRow+1) : 0;
+        //tf.refRow = Helpers.isIE() ? (tf.refRow+1) : 0;
     }
 
+    /**
+     * Removes the grid layout
+     */
     destroy(){
         var tf = this.tf;
         var tbl = tf.tbl;

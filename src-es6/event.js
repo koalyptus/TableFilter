@@ -4,13 +4,12 @@
 
 var Event = {
     add: function(obj, type, func, capture){
-        if(obj.attachEvent){
-            obj.attachEvent('on'+type, func);
+        if(obj.addEventListener){
+            obj.addEventListener(type, func, capture);
         }
-        else if(obj.addEventListener){
-            obj.addEventListener(type, func,
-                (capture===undefined ? false : capture));
-        } else{
+        else if(obj.attachEvent){
+            obj.attachEvent('on'+type, func);
+        } else {
             obj['on'+type] = func;
         }
     },
@@ -19,8 +18,7 @@ var Event = {
             obj.detachEvent('on'+type,func);
         }
         else if(obj.removeEventListener){
-            obj.removeEventListener(type, func,
-                (capture===undefined ? false : capture));
+            obj.removeEventListener(type, func, capture);
         } else {
             obj['on'+type] = null;
         }
