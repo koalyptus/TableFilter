@@ -2,8 +2,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
 
     QUnit.start();
 
-    var dom = require('dom'),
-        RowsCounter = require('modules/rowsCounter').RowsCounter;
+    var RowsCounter = require('modules/rowsCounter').RowsCounter;
 
     var tf = new TableFilter('demo', {
         rows_counter: true
@@ -12,7 +11,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
 
     module('Sanity checks');
     test('RowsCounter component', function() {
-        deepEqual(tf.Cpt.rowsCounter instanceof RowsCounter, true, 'RowsCounter constructor');
+        deepEqual(tf.Cpt.rowsCounter instanceof RowsCounter, true, 'RowsCounter type');
         notEqual(tf.Cpt.rowsCounter, null, 'RowsCounter instanciated');
         equal(tf.Cpt.rowsCounter.rowsCounterSpan.innerHTML, 7, 'Counter value');
     });

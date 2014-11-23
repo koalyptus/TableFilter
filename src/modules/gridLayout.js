@@ -35,7 +35,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
       //default col width
       this.gridDefaultColWidth = f.grid_default_col_width || "100px";
       //enables/disables columns resizer
-      this.gridEnableColResizer = f.grid_enable_cols_resizer !== undefined ? f.grid_enable_cols_resizer : true;
+      this.gridEnableColResizer = f.grid_enable_cols_resizer !== undefined ? f.grid_enable_cols_resizer : false;
       //defines col resizer script path
       this.gridColResizerPath = f.grid_cont_col_resizer_path || this.basePath + "TFExt_ColsResizer/TFExt_ColsResizer.js";
 
@@ -52,7 +52,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
 
           tf.isExternalFlt = true;
 
-          // in case column widths are not set default width 100px
+          // default width of 100px if column widths not set
           if (!tf.hasColWidth) {
             tf.colWidth = [];
             for (var k = 0; k < tf.nbCells; k++) {
@@ -85,7 +85,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
           if (this.gridWidth) {
             this.tblMainCont.style.width = this.gridWidth;
           }
-          tbl.parentNode.insertBefore(this.tblMainCont, tf.tbl);
+          tbl.parentNode.insertBefore(this.tblMainCont, tbl);
 
           //Table container: div wrapping content table
           this.tblCont = Dom.create("div", ["id", tf.prfxTblCont + tf.id]);
@@ -96,8 +96,8 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
           if (this.gridHeight) {
             this.tblCont.style.height = this.gridHeight;
           }
-          tbl.parentNode.insertBefore(this.tblCont, tf.tbl);
-          var t = tbl.parentNode.removeChild(tf.tbl);
+          tbl.parentNode.insertBefore(this.tblCont, tbl);
+          var t = tbl.parentNode.removeChild(tbl);
           this.tblCont.appendChild(t);
 
           //In case table width is expressed in %
@@ -160,7 +160,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
           this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);
 
           //THead needs to be removed in content table for sort feature
-          var thead = Dom.tag(tf.tbl, "thead");
+          var thead = Dom.tag(tbl, "thead");
           if (thead.length > 0) {
             tbl.removeChild(thead[0]);
           }
@@ -187,15 +187,16 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
           var o = this; //TF object
 
           Event.add(this.tblCont, "scroll", function () {
-            o.headTblCont.scrollLeft = this.scrollLeft;
-            var _o = this; //this = scroll element
+            //this = scroll element
+            var scrollLeft = this.scrollLeft;
+            o.headTblCont.scrollLeft = scrollLeft;
             //New pointerX calc taking into account scrollLeft
             if (!o.isPointerXOverwritten) {
               try {
-                o.Evt.pointerX = function (e) {
-                  e = e || global.event;
-                  var scrollLeft = tf_StandardBody().scrollLeft + _o.scrollLeft;
-                  return (e.pageX + _o.scrollLeft) || (e.clientX + scrollLeft);
+                o.Evt.pointerX = function (evt) {
+                  var e = evt || global.event;
+                  var bdScrollLeft = tf_StandardBody().scrollLeft + scrollLeft;
+                  return (e.pageX + scrollLeft) || (e.clientX + bdScrollLeft);
                 };
                 o.isPointerXOverwritten = true;
               } catch (err) {
@@ -344,6 +345,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
             tbl.style.width = this.headTbl.clientWidth + "px";
           }
 
+          // Re-adjust reference row
           tf.refRow = Helpers.isIE() ? (tf.refRow + 1) : 0;
         }
       },
@@ -366,7 +368,8 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
           this.tblCont = null;
 
           tbl.outerHTML = tf.sourceTblHtml;
-          tbl = Dom.id(tf.id); //needed to keep reference
+          //needed to keep reference of table element
+          tbl = Dom.id(tf.id);
         }
       }
     });

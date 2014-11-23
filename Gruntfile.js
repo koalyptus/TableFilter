@@ -10,7 +10,11 @@ module.exports = function (grunt) {
 
         // A list of files, which will be syntax-checked by JSHint
         jshint: {
-            src: ['Gruntfile.js', 'src/*.js'],
+            src: [
+                'Gruntfile.js',
+                '<%= source_folder %>*.js',
+                '!<%= source_folder %>sortabletable.js'
+            ],
             options: {
                 jshintrc: '.jshintrc'
             }
@@ -19,9 +23,9 @@ module.exports = function (grunt) {
         watch: {
             files: [
                 'src-es6/**/*.js',
-                'src/**/*.js',
-                'src/**/*.css',
-                'src/**/*.html'
+                '<%= source_folder %>**/*.js',
+                '<%= source_folder %>**/*.css',
+                '<%= source_folder %>**/*.html'
             ],
             tasks: ['dev']
         },
@@ -33,15 +37,20 @@ module.exports = function (grunt) {
         requirejs: {
             compile: {
                 options: {
-                    baseUrl: 'src/',
+                    baseUrl: '<%= source_folder %>',
                     'paths': {
                         'tf': '.'
                     },
                     include: ['../libs/almond/almond', 'core'],
-                    out: 'dist/tablefilter.js',
+                    out: '<%= dist_folder %>tablefilter.js',
                     wrap: {
                         startFile: "src/start.frag",
                         endFile: "src/end.frag"
+                    },
+                    shim: {
+                        'SortableTable': {
+                            exports: 'SortableTable'
+                        }
                     }/*,
                     optimize: 'uglify2',
                     preserveLicenseComments: false,
@@ -101,6 +110,7 @@ module.exports = function (grunt) {
         copy: {
             main: {
                 files: [
+                    { src: 'libs/sortabletable.js', dest: '<%= source_folder %>/sortabletable.js' },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
