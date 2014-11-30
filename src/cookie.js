@@ -8,6 +8,7 @@ define(["exports"], function (exports) {
   var Cookie = {};
 
   Cookie.write = function (name, value, hours) {
+    console.log(arguments);
     var expire = "";
     if (hours) {
       expire = new Date((new Date()).getTime() + hours * 3600000);

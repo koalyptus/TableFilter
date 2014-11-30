@@ -673,7 +673,8 @@ function TableFilter(id) {
         alternateRows: null,
         colOps: null,
         rowsCounter: null,
-        GridLayout: null
+        GridLayout: null,
+        Store: null
     };
 
     /*** TF events ***/
@@ -4675,7 +4676,12 @@ TableFilter.prototype = {
         this.nbHiddenRows = hiddenrows;
         this.isStartBgAlternate = false;
         if(this.rememberGridValues){
-            this.RememberFiltersValue(this.fltsValuesCookie);
+            // this.RememberFiltersValue(this.fltsValuesCookie);
+            if(!this.Cpt.Store){
+                var Store = require('modules/store').Store;
+                this.Cpt.Store = new Store(this);
+                this.Cpt.Store.saveFilterValues(this.fltsValuesCookie);
+            }
         }
         //applies filter props after filtering process
         if(!this.paging){
