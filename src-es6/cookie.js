@@ -5,7 +5,6 @@
 var Cookie = {};
 
 Cookie.write = function(name, value, hours){
-    console.log(arguments);
     var expire = '';
     if(hours){
         expire = new Date((new Date()).getTime() + hours * 3600000);
@@ -33,7 +32,7 @@ Cookie.read = function(name){
 };
 
 Cookie.remove = function(name){
-    this.write(name,'',-1);
+    this.write(name, '', -1);
 };
 
 Cookie.valueToArray = function(name, separator){

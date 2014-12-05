@@ -21,19 +21,53 @@ define(["exports", "../cookie"], function (exports, _cookie) {
         writable: true,
         value: function (name) {
           var tf = this.tf;
-          var flt_values = [];
+          var fltValues = [];
           //store filters' values
           for (var i = 0; i < tf.fltIds.length; i++) {
             var value = tf.GetFilterValue(i);
             if (value === "") {
               value = " ";
             }
-            flt_values.push(value);
+            fltValues.push(value);
           }
           //adds array size
-          flt_values.push(tf.fltIds.length);
+          fltValues.push(tf.fltIds.length);
+
           //writes cookie
-          Cookie.write(name, flt_values.join(tf.separator), this.duration);
+          Cookie.write(name, fltValues.join(tf.separator), this.duration);
+        }
+      },
+      getFilterValues: {
+        writable: true,
+        value: function (name) {
+          var flts = Cookie.read(name);
+          var rgx = new RegExp(this.tf.separator, "g");
+          // filters' values array
+          return flts.split(rgx);
+        }
+      },
+      savePageNb: {
+        writable: true,
+        value: function (name) {
+          Cookie.write(name, this.tf.currentPageNb, this.duration);
+        }
+      },
+      getPageNb: {
+        writable: true,
+        value: function (name) {
+          return Cookie.read(name);
+        }
+      },
+      savePageLength: {
+        writable: true,
+        value: function (name) {
+          Cookie.write(name, this.tf.resultsPerPageSlc.selectedIndex, this.duration);
+        }
+      },
+      getPageLength: {
+        writable: true,
+        value: function (name) {
+          return Cookie.read(name);
         }
       }
     });

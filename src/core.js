@@ -398,7 +398,7 @@ function TableFilter(id) {
     //enables/disables table paging
     this.paging = f.paging===true ? true : false;
     //enables/disables results per page drop-down
-    this.hasResultsPerPage = f.results_per_page===true ? true : false;
+    this.hasResultsPerPage = types.isArray(f.results_per_page) ? true : false;
     //css class for paging buttons (previous,next,etc.)
     this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';
     //stores paging select element
@@ -649,8 +649,8 @@ function TableFilter(id) {
     //cookie storing page length
     this.pgLenCookie = this.prfxCookiePageLen + this.id;
     //cookie duration
-    this.cookieDuration = !isNaN(f.set_cookie_duration) ?
-        parseInt(f.set_cookie_duration, 10) :100000;
+    // this.cookieDuration = !isNaN(f.set_cookie_duration) ?
+    //     parseInt(f.set_cookie_duration, 10) :100000;
 
     /*** extensions ***/
     //imports external script
@@ -944,6 +944,12 @@ TableFilter.prototype = {
         //loads theme
         if(this.hasThemes){ this._LoadThemes(); }
 
+        if(this.rememberGridValues || this.rememberPageNb ||
+            this.rememberPageLen){
+            var Store = require('modules/store').Store;
+            this.Cpt.Store = new Store(this);
+        }
+
         if(this.gridLayout){
             var GridLayout = require('modules/gridLayout').GridLayout;
             this.Cpt.gridLayout = new GridLayout(this);
@@ -1165,11 +1171,8 @@ TableFilter.prototype = {
                         inp.onblur = this.Evt._OnInpBlur;
 
                         if(this.rememberGridValues){
-                            //reads the cookie
-                            var flts = cookie.read(this.fltsValuesCookie);
-                            var reg = new RegExp(this.separator,'g');
-                            //creates an array with filters' values
-                            var flts_values = flts.split(reg);
+                            var flts_values = this.Cpt.Store.getFilterValues(
+                                this.fltsValuesCookie);
                             if(flts_values[i]!=' '){
                                 this.SetFilterValue(i,flts_values[i],false);
                             }
@@ -2820,7 +2823,7 @@ TableFilter.prototype = {
             }
 
             if(this.rememberPageNb){
-                this.RememberPageNb(this.pgNbCookie);
+                this.Cpt.Store.savePageNb(this.pgNbCookie);
             }
             this.startPagingRow = (this.pageSelectorType===this.fltTypeSlc) ?
                 this.pagingSlc.value : (index*this.pagingLength);
@@ -2862,7 +2865,7 @@ TableFilter.prototype = {
                 this.pagingSlc.options[slcIndex].selected = true;
             }
             if(this.rememberPageLen){
-                this.RememberPageLength( this.pgLenCookie );
+                this.Cpt.Store.savePageLength(this.pgLenCookie);
             }
         }
     },
@@ -2876,7 +2879,7 @@ TableFilter.prototype = {
             - name: cookie name (string)
     ===============================================*/
     _ResetPage: function(name){
-        var pgnb = cookie.read(name);
+        var pgnb = this.Cpt.Store.getPageNb(name);
         if(pgnb!==''){
             this.ChangePage((pgnb-1));
         }
@@ -2894,7 +2897,7 @@ TableFilter.prototype = {
         if(!this.paging){
             return;
         }
-        var pglenIndex = cookie.read(name);
+        var pglenIndex = this.Cpt.Store.getPageLength(name);
 
         if(pglenIndex!==''){
             this.resultsPerPageSlc.options[pglenIndex].selected = true;
@@ -2961,8 +2964,9 @@ TableFilter.prototype = {
         /*** remember grid values ***/
         var flts_values = [], fltArr = [];
         if(this.rememberGridValues){
-            flts_values = cookie.valueToArray(
-                this.fltsValuesCookie, this.separator);
+            // flts_values = cookie.valueToArray(
+            //     this.fltsValuesCookie, this.separator);
+            flts_values = this.Cpt.Store.getFilterValues(this.fltsValuesCookie);
             if(flts_values && !str.isEmpty(flts_values.toString())){
                 if(isCustomSlc){
                     fltArr.push(flts_values[colIndex]);
@@ -4020,61 +4024,6 @@ TableFilter.prototype = {
         }
     },
 
-    /*==============================================
-        - stores filters' values in a cookie
-        when Filter() method is called
-        - Params:
-            - name: cookie name (string)
-        - credits to Florent Hirchy
-    ===============================================*/
-    RememberFiltersValue: function(name){
-        var flt_values = [];
-        //store filters' values
-        for(var i=0; i<this.fltIds.length; i++){
-            var value = this.GetFilterValue(i);
-            if (value === ''){
-                value = ' ';
-            }
-            flt_values.push(value);
-        }
-        //adds array size
-        flt_values.push(this.fltIds.length);
-        //writes cookie
-        cookie.write(
-            name,
-            flt_values.join(this.separator),
-            this.cookieDuration
-        );
-    },
-
-    /*==============================================
-        - stores page number value in a cookie
-        when ChangePage method is called
-        - Params:
-            - name: cookie name (string)
-    ===============================================*/
-    RememberPageNb: function(name){
-        cookie.write(
-            name,
-            this.currentPageNb,
-            this.cookieDuration
-        );
-    },
-
-    /*==============================================
-        - stores page length value in a cookie
-        when ChangePageLength method is called
-        - Params:
-            - name: cookie name (string)
-    ===============================================*/
-    RememberPageLength: function(name){
-        cookie.write(
-            name,
-            this.resultsPerPageSlc.selectedIndex,
-            this.cookieDuration
-        );
-    },
-
     ResetValues: function(){
         this.EvtManager(this.Evt.name.resetvalues);
     },
@@ -4110,10 +4059,7 @@ TableFilter.prototype = {
         if(!this.fillSlcOnDemand){
             return;
         }
-        var flts = cookie.read(name),
-            reg = new RegExp(this.separator,'g'),
-            //creates an array with filters' values
-            flts_values = flts.split(reg),
+        var flts_values = this.Cpt.Store.getFilterValues(name),
             slcFltsIndex = this.GetFiltersByType(this.fltTypeSlc, true),
             multiFltsIndex = this.GetFiltersByType(this.fltTypeMulti, true);
 
@@ -4675,13 +4621,10 @@ TableFilter.prototype = {
         this.nbVisibleRows = this.validRowsIndex.length;
         this.nbHiddenRows = hiddenrows;
         this.isStartBgAlternate = false;
+
         if(this.rememberGridValues){
             // this.RememberFiltersValue(this.fltsValuesCookie);
-            if(!this.Cpt.Store){
-                var Store = require('modules/store').Store;
-                this.Cpt.Store = new Store(this);
-                this.Cpt.Store.saveFilterValues(this.fltsValuesCookie);
-            }
+            this.Cpt.Store.saveFilterValues(this.fltsValuesCookie);
         }
         //applies filter props after filtering process
         if(!this.paging){

@@ -1,3 +1,4 @@
 
 - Initialise TableFilter object with a table DOM element
 - Use DOM event listeners for DOM events
+- Implement persistence using localStorage or cookie
