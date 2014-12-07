@@ -2848,7 +2848,7 @@ TableFilter.prototype = {
         var slcR = this.resultsPerPageSlc;
         var slcPagesSelIndex = (this.pageSelectorType==this.fltTypeSlc) ?
                 this.pagingSlc.selectedIndex :
-                parseInt(this.pagingSlc.value-1,10);
+                parseInt(this.pagingSlc.value-1, 10);
         this.pagingLength = parseInt(slcR.options[slcR.selectedIndex].value,10);
         this.startPagingRow = this.pagingLength*slcPagesSelIndex;
 
