@@ -23,9 +23,9 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
 
     module('Sanity checks');
     test('Store module', function() {
-        deepEqual(tf.Cpt.Store instanceof Store, true, 'Store type');
-        notEqual(tf.Cpt.Store, null, 'Store instanciated');
-        deepEqual(tf.Cpt.Store.duration, 100000, 'Store duration');
+        deepEqual(tf.Cpt.store instanceof Store, true, 'Store type');
+        notEqual(tf.Cpt.store, null, 'Store instanciated');
+        deepEqual(tf.Cpt.store.duration, 100000, 'Store duration');
     });
 
     module('Check page number persistence');
@@ -34,7 +34,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
         tf._Filter();
         tf._ChangePage(1);
         var cookieName = tf.pgNbCookie;
-        deepEqual(tf.Cpt.Store.getPageNb(cookieName), '2', 'Page number value');
+        deepEqual(tf.Cpt.store.getPageNb(cookieName), '2', 'Page number value');
         tf._ClearFilters();
         tf._Filter();
     });
@@ -44,7 +44,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
         tf.resultsPerPageSlc.options[2].selected = true;
         tf._ChangeResultsPerPage();
         var cookieName = tf.pgLenCookie;
-        deepEqual(tf.Cpt.Store.getPageLength(cookieName), '2', 'Page length value');
+        deepEqual(tf.Cpt.store.getPageLength(cookieName), '2', 'Page length value');
         tf._ClearFilters();
         tf._Filter();
     });
@@ -55,8 +55,8 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
         tf.SetFilterValue(3, '1.5');
         tf._Filter();
         var cookieName = tf.fltsValuesCookie;
-        deepEqual(tf.Cpt.Store.getFilterValues(cookieName)[0], 'Sydney', 'Filter 0 value');
-        deepEqual(tf.Cpt.Store.getFilterValues(cookieName)[3], '1.5', 'Filter 3 value');
+        deepEqual(tf.Cpt.store.getFilterValues(cookieName)[0], 'Sydney', 'Filter 0 value');
+        deepEqual(tf.Cpt.store.getFilterValues(cookieName)[3], '1.5', 'Filter 3 value');
         tf._ClearFilters();
         tf._Filter();
     });

@@ -486,9 +486,9 @@ function TableFilter(id) {
     /*** keyword highlighting ***/
     //enables/disables keyword highlighting
     this.highlightKeywords = f.highlight_keywords===true ? true : false;
-    //defines css class for highlighting
-    this.highlightCssClass = f.highlight_css_class || 'keyword';
-    this.highlightedNodes = [];
+    // //defines css class for highlighting
+    // this.highlightCssClass = f.highlight_css_class || 'keyword';
+    // this.highlightedNodes = [];
 
     /*** data types ***/
     //defines default date type (european DMY)
@@ -648,9 +648,6 @@ function TableFilter(id) {
         true : false;
     //cookie storing page length
     this.pgLenCookie = this.prfxCookiePageLen + this.id;
-    //cookie duration
-    // this.cookieDuration = !isNaN(f.set_cookie_duration) ?
-    //     parseInt(f.set_cookie_duration, 10) :100000;
 
     /*** extensions ***/
     //imports external script
@@ -673,8 +670,9 @@ function TableFilter(id) {
         alternateRows: null,
         colOps: null,
         rowsCounter: null,
-        GridLayout: null,
-        Store: null
+        gridLayout: null,
+        store: null,
+        highlightKeywords: null
     };
 
     /*** TF events ***/
@@ -947,7 +945,7 @@ TableFilter.prototype = {
         if(this.rememberGridValues || this.rememberPageNb ||
             this.rememberPageLen){
             var Store = require('modules/store').Store;
-            this.Cpt.Store = new Store(this);
+            this.Cpt.store = new Store(this);
         }
 
         if(this.gridLayout){
@@ -959,6 +957,12 @@ TableFilter.prototype = {
         if(this.loader){
             var Loader = require('modules/loader').Loader;
             this.Cpt.loader = new Loader(this);
+        }
+
+        if(this.highlightKeywords){
+            var Highlight =
+                require('modules/highlightKeywords').HighlightKeyword;
+            this.Cpt.highlightKeyword = new Highlight(this);
         }
 
         if(this.popUpFilters){
@@ -1171,7 +1175,7 @@ TableFilter.prototype = {
                         inp.onblur = this.Evt._OnInpBlur;
 
                         if(this.rememberGridValues){
-                            var flts_values = this.Cpt.Store.getFilterValues(
+                            var flts_values = this.Cpt.store.getFilterValues(
                                 this.fltsValuesCookie);
                             if(flts_values[i]!=' '){
                                 this.SetFilterValue(i,flts_values[i],false);
@@ -1539,7 +1543,8 @@ TableFilter.prototype = {
                 this.RemoveTopDiv();
             }
             if(this.highlightKeywords){
-                this.UnhighlightAll();
+                // this.UnhighlightAll();
+                this.Cpt.highlightKeyword.unhighlightAll();
             }
             if(this.sort){
                 this.RemoveSort();
@@ -2823,7 +2828,7 @@ TableFilter.prototype = {
             }
 
             if(this.rememberPageNb){
-                this.Cpt.Store.savePageNb(this.pgNbCookie);
+                this.Cpt.store.savePageNb(this.pgNbCookie);
             }
             this.startPagingRow = (this.pageSelectorType===this.fltTypeSlc) ?
                 this.pagingSlc.value : (index*this.pagingLength);
@@ -2865,7 +2870,7 @@ TableFilter.prototype = {
                 this.pagingSlc.options[slcIndex].selected = true;
             }
             if(this.rememberPageLen){
-                this.Cpt.Store.savePageLength(this.pgLenCookie);
+                this.Cpt.store.savePageLength(this.pgLenCookie);
             }
         }
     },
@@ -2879,7 +2884,7 @@ TableFilter.prototype = {
             - name: cookie name (string)
     ===============================================*/
     _ResetPage: function(name){
-        var pgnb = this.Cpt.Store.getPageNb(name);
+        var pgnb = this.Cpt.store.getPageNb(name);
         if(pgnb!==''){
             this.ChangePage((pgnb-1));
         }
@@ -2897,7 +2902,7 @@ TableFilter.prototype = {
         if(!this.paging){
             return;
         }
-        var pglenIndex = this.Cpt.Store.getPageLength(name);
+        var pglenIndex = this.Cpt.store.getPageLength(name);
 
         if(pglenIndex!==''){
             this.resultsPerPageSlc.options[pglenIndex].selected = true;
@@ -2966,7 +2971,7 @@ TableFilter.prototype = {
         if(this.rememberGridValues){
             // flts_values = cookie.valueToArray(
             //     this.fltsValuesCookie, this.separator);
-            flts_values = this.Cpt.Store.getFilterValues(this.fltsValuesCookie);
+            flts_values = this.Cpt.store.getFilterValues(this.fltsValuesCookie);
             if(flts_values && !str.isEmpty(flts_values.toString())){
                 if(isCustomSlc){
                     fltArr.push(flts_values[colIndex]);
@@ -4059,7 +4064,7 @@ TableFilter.prototype = {
         if(!this.fillSlcOnDemand){
             return;
         }
-        var flts_values = this.Cpt.Store.getFilterValues(name),
+        var flts_values = this.Cpt.store.getFilterValues(name),
             slcFltsIndex = this.GetFiltersByType(this.fltTypeSlc, true),
             multiFltsIndex = this.GetFiltersByType(this.fltTypeMulti, true);
 
@@ -4282,7 +4287,8 @@ TableFilter.prototype = {
 
         // removes keyword highlighting
         if(this.highlightKeywords){
-            this.UnhighlightAll();
+            // this.UnhighlightAll();
+            this.Cpt.highlightKeyword.unhighlightAll();
         }
         //removes popup filters active icons
         if(this.popUpFilters){
@@ -4324,7 +4330,8 @@ TableFilter.prototype = {
                     w = dom.getText(cell);
                 }
                 if(w!==''){
-                    o.HighlightWord(cell,w,o.highlightCssClass);
+                    o.Cpt.highlightKeyword.highlight(
+                        cell, w, o.Cpt.highlightKeyword.highlightCssClass);
                 }
             }
         }
@@ -4624,7 +4631,7 @@ TableFilter.prototype = {
 
         if(this.rememberGridValues){
             // this.RememberFiltersValue(this.fltsValuesCookie);
-            this.Cpt.Store.saveFilterValues(this.fltsValuesCookie);
+            this.Cpt.store.saveFilterValues(this.fltsValuesCookie);
         }
         //applies filter props after filtering process
         if(!this.paging){
@@ -5239,98 +5246,6 @@ TableFilter.prototype = {
                     this.SetFilterValue(slcIndex[i],slcSelectedValue);
                 }
             }// for i
-        }
-    },
-
-    /*====================================================
-        - removes keyword highlighting
-    =====================================================*/
-    UnhighlightAll: function(){
-        if( this.highlightKeywords && this.searchArgs){
-            for(var y=0; y<this.searchArgs.length; y++){
-                this.UnhighlightWord(
-                    this.searchArgs[y], this.highlightCssClass);
-            }
-            this.highlightedNodes = [];
-        }
-    },
-
-    /*====================================================
-        - highlights keyword found in passed node
-        - accepts the following params:
-            - node
-            - word to search
-            - css class name for highlighting
-    =====================================================*/
-    HighlightWord: function(node, word, cssClass){
-        // Iterate into this nodes childNodes
-        if(node.hasChildNodes){
-            for(var i=0; i<node.childNodes.length; i++){
-                this.HighlightWord(node.childNodes[i], word, cssClass);
-            }
-        }
-
-        // And do this node itself
-        // text node
-        if(node.nodeType === 3){
-            var tempNodeVal = str.lower(node.nodeValue);
-            var tempWordVal = str.lower(word);
-            if(tempNodeVal.indexOf(tempWordVal) != -1){
-                var pn = node.parentNode;
-                if(pn && pn.className != cssClass){
-                    // word has not already been highlighted!
-                    var nv = node.nodeValue,
-                        ni = tempNodeVal.indexOf(tempWordVal),
-                        // Create a load of replacement nodes
-                        before = dom.text(nv.substr(0,ni)),
-                        docWordVal = nv.substr(ni,word.length),
-                        after = dom.text(nv.substr(ni+word.length)),
-                        hiwordtext = dom.text(docWordVal),
-                        hiword = dom.create('span');
-                    hiword.className = cssClass;
-                    hiword.appendChild(hiwordtext);
-                    pn.insertBefore(before,node);
-                    pn.insertBefore(hiword,node);
-                    pn.insertBefore(after,node);
-                    pn.removeChild(node);
-                    this.highlightedNodes.push(hiword.firstChild);
-                }
-            }
-        }
-    },
-
-    /*====================================================
-        - removes highlights found in passed node
-        - accepts the following params:
-            - node
-            - word to search
-            - css class name for highlighting
-    =====================================================*/
-    UnhighlightWord: function(word, cssClass){
-        var arrRemove = [];
-        for(var i=0; i<this.highlightedNodes.length; i++){
-            var n = this.highlightedNodes[i];
-            if(!n){
-                continue;
-            }
-            var tempNodeVal = str.lower(n.nodeValue),
-                tempWordVal = str.lower(word);
-            if(tempNodeVal.indexOf(tempWordVal) !== -1){
-                var pn = n.parentNode;
-                if(pn && pn.className === cssClass){
-                    var prevSib = pn.previousSibling,
-                        nextSib = pn.nextSibling;
-                    if(!prevSib || !nextSib){ continue; }
-                    nextSib.nodeValue = prevSib.nodeValue + n.nodeValue +
-                        nextSib.nodeValue;
-                    prevSib.nodeValue = '';
-                    n.nodeValue = '';
-                    arrRemove.push(i);
-                }
-            }
-        }
-        for(var k=0; k<arrRemove.length; k++){
-            this.highlightedNodes.splice(arrRemove[k], 1);
         }
     },
 

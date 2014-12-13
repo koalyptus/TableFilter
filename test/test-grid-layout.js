@@ -9,22 +9,23 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     });
     tf.init();
 
+    var gridLayout = tf.Cpt.gridLayout;
     module('Sanity checks');
     test('GridLayout component', function() {
-        deepEqual(tf.Cpt.gridLayout instanceof GridLayout, true, 'GridLayout type');
-        notEqual(tf.Cpt.gridLayout, null, 'GridLayout instanciated');
-        notEqual(tf.Cpt.gridLayout.tblMainCont, null, 'GridLayout main container element');
-        notEqual(tf.Cpt.gridLayout.tblCont, null, 'GridLayout main HTML table container element');
-        notEqual(tf.Cpt.gridLayout.headTblCont, null, 'GridLayout headers container element');
-        notEqual(tf.Cpt.gridLayout.headTbl, null, 'GridLayout headers HTML table');
+        deepEqual(gridLayout instanceof GridLayout, true, 'GridLayout type');
+        notEqual(gridLayout, null, 'GridLayout instanciated');
+        notEqual(gridLayout.tblMainCont, null, 'GridLayout main container element');
+        notEqual(gridLayout.tblCont, null, 'GridLayout main HTML table container element');
+        notEqual(gridLayout.headTblCont, null, 'GridLayout headers container element');
+        notEqual(gridLayout.headTbl, null, 'GridLayout headers HTML table');
     });
 
     test('Destroy GridLayout component', function() {
-        tf.Cpt.gridLayout.destroy();
-        deepEqual(tf.Cpt.gridLayout.tblMainCont, null, 'Main container element removed');
-        deepEqual(tf.Cpt.gridLayout.tblCont, null, 'Main HTML table container element removed');
-        deepEqual(tf.Cpt.gridLayout.headTblCont, null, 'Headers container element removed');
-        deepEqual(tf.Cpt.gridLayout.headTbl, null, 'Headers HTML table element removed');
+        gridLayout.destroy();
+        deepEqual(gridLayout.tblMainCont, null, 'Main container element removed');
+        deepEqual(gridLayout.tblCont, null, 'Main HTML table container element removed');
+        deepEqual(gridLayout.headTblCont, null, 'Headers container element removed');
+        deepEqual(gridLayout.headTbl, null, 'Headers HTML table element removed');
     });
 
 });
