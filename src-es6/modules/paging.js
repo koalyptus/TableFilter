@@ -153,7 +153,7 @@ export class Paging{
         this.tf = tf;
     }
     
-    buildUI{
+    buildUI(){
         
         var slcPages;
         var tf = this.tf;
