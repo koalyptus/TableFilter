@@ -672,7 +672,8 @@ function TableFilter(id) {
         rowsCounter: null,
         gridLayout: null,
         store: null,
-        highlightKeywords: null
+        highlightKeywords: null,
+        paging: null
     };
 
     /*** TF events ***/
@@ -682,12 +683,12 @@ function TableFilter(id) {
             filter: 'Filter',
             populateselect: 'Populate',
             populatechecklist: 'PopulateCheckList',
-            changepage: 'ChangePage',
+            changepage: 'changePage',
             clear: 'Clear',
-            changeresultsperpage: 'ChangeResults',
+            changeresultsperpage: 'changeResults',
             resetvalues: 'ResetValues',
-            resetpage: 'ResetPage',
-            resetpagelength: 'ResetPageLength',
+            resetpage: 'resetPage',
+            resetpagelength: 'resetPageLength',
             sort: 'Sort',
             loadextensions: 'LoadExtensions',
             loadthemes: 'LoadThemes'
@@ -1220,10 +1221,14 @@ TableFilter.prototype = {
         //     this.SetFixedHeaders();
         // }
         if(this.paging){
-            this.SetPaging();
+            //this.SetPaging();
+            var Paging = require('modules/paging').Paging;
+            this.Cpt.paging = new Paging(this);
+            this.Cpt.paging.init();
         }
         if(this.hasResultsPerPage && this.paging){
-            this.SetResultsPerPage();
+            // this.SetResultsPerPage();
+            this.Cpt.paging.setResultsPerPage();
         }
         if(this.btnReset){
             this.SetResetBtn();
@@ -1234,7 +1239,7 @@ TableFilter.prototype = {
         if(this.hasColWidth && !this.gridLayout){
             this.SetColWidths();
         }
-        if(this.alternateBgs && this.isStartBgAlternate){
+        if(this.alternateBgs /*&& this.isStartBgAlternate*/){
             //1st time only if no paging and rememberGridValues
             var AlternateRows = require('modules/alternateRows').AlternateRows;
             this.Cpt.alternateRows = new AlternateRows(this);
@@ -1306,33 +1311,37 @@ TableFilter.prototype = {
                 break;
                 case o.Evt.name.populateselect:
                     if(o.refreshFilters){
-                        o._PopulateSelect(slcIndex,true);
+                        o._PopulateSelect(slcIndex, true);
                     } else {
-                        o._PopulateSelect(slcIndex,false,slcExternal,slcId);
+                        o._PopulateSelect(slcIndex, false, slcExternal, slcId);
                     }
                 break;
                 case o.Evt.name.populatechecklist:
-                    o._PopulateCheckList(slcIndex,slcExternal,slcId);
+                    o._PopulateCheckList(slcIndex, slcExternal, slcId);
                 break;
                 case o.Evt.name.changepage:
-                    o._ChangePage(pgIndex);
+                    // o._ChangePage(pgIndex);
+                    o.Cpt.paging._changePage(pgIndex);
                 break;
                 case o.Evt.name.clear:
                     o._ClearFilters();
                     o._Filter();
                 break;
                 case o.Evt.name.changeresultsperpage:
-                    o._ChangeResultsPerPage();
+                    // o._ChangeResultsPerPage();
+                    o.Cpt.paging._changeResultsPerPage();
                 break;
                 case o.Evt.name.resetvalues:
                     o._ResetValues();
                     o._Filter();
                 break;
                 case o.Evt.name.resetpage:
-                    o._ResetPage(o.pgNbCookie);
+                    // o._ResetPage(o.pgNbCookie);
+                    o.Cpt.paging._resetPage(o.pgNbCookie);
                 break;
                 case o.Evt.name.resetpagelength:
-                    o._ResetPageLength(o.pgLenCookie);
+                    // o._ResetPageLength(o.pgLenCookie);
+                    o.Cpt.paging._resetPageLength(o.pgLenCookie);
                 break;
                 case o.Evt.name.sort:
                     void(0);
@@ -1516,7 +1525,8 @@ TableFilter.prototype = {
         if(this.fltGrid && this.hasGrid){
             var rows = this.tbl.rows;
             if(this.paging){
-                this.RemovePaging();
+                // this.RemovePaging();
+                this.Cpt.paging.destroy();
             }
             if(this.statusBar){
                 this.RemoveStatusBar();
@@ -1531,7 +1541,8 @@ TableFilter.prototype = {
                 this.RemoveHelpInstructions();
             }
             if(this.paging){
-                this.RemoveResultsPerPage();
+                // this.RemoveResultsPerPage();
+                this.Cpt.paging.removeResultsPerPage();
             }
             if(this.isExternalFlt && !this.popUpFilters){
                 this.RemoveExternalFlts();
@@ -1956,24 +1967,28 @@ TableFilter.prototype = {
                         et.nbRowsPerPage = o.pagingLength;
                         var validIndexes = o.validRowsIndex,
                             validIdxLen = validIndexes.length,
-                            pagingEndRow = parseInt(o.startPagingRow,10) +
-                            parseInt(o.pagingLength,10);
+                            pagingEndRow = parseInt(o.startPagingRow, 10) +
+                            parseInt(o.pagingLength, 10);
                         var rowIndex = row.rowIndex;
                         if((rowIndex === validIndexes[validIdxLen-1]) &&
                             o.currentPageNb!=o.nbPages){
-                            o.SetPage('last');
+                            // o.SetPage('last');
+                            o.Cpt.paging.setPage('last');
                         }
                         else if((rowIndex == validIndexes[0]) &&
                             o.currentPageNb!==1){
-                            o.SetPage('first');
+                            // o.SetPage('first');
+                            o.Cpt.paging.setPage('first');
                         }
                         else if(rowIndex > validIndexes[pagingEndRow-1] &&
                             rowIndex < validIndexes[validIdxLen-1]){
-                            o.SetPage('next');
+                            // o.SetPage('next');
+                            o.Cpt.paging.setPage('next');
                         }
                         else if(rowIndex < validIndexes[o.startPagingRow] &&
                             rowIndex > validIndexes[0]){
-                            o.SetPage('previous');
+                            // o.SetPage('previous');
+                            o.Cpt.paging.setPage('previous');
                         }
                     }
                 }
@@ -2044,8 +2059,10 @@ TableFilter.prototype = {
                     o.nbVisibleRows++;
                     o.nbFilterableRows++;
                     o.paging=false;
-                    o.RemovePaging();
-                    o.AddPaging(false);
+                    // o.RemovePaging();
+                    o.Cpt.paging.destroy();
+                    // o.AddPaging(false);
+                    o.Cpt.paging.addPaging();
                 }
                 if(o.alternateBgs){
                     o.Cpt.alternateRows.init();
@@ -2065,8 +2082,10 @@ TableFilter.prototype = {
                         o.nbVisibleRows--;
                         o.nbFilterableRows--;
                         o.paging=false;
-                        o.RemovePaging();
-                        o.AddPaging(false);
+                        // o.RemovePaging();
+                        o.Cpt.paging.destroy();
+                        // o.AddPaging(false);
+                        o.Cpt.paging.addPaging(false);
                     }
                     if(o.alternateBgs){
                         o.Cpt.alternateRows.init();
@@ -2089,473 +2108,473 @@ TableFilter.prototype = {
             - pages drop-down list
             - previous, next, first, last buttons
     =====================================================*/
-    SetPaging: function(){
-        if(!this.hasGrid && !this.isFirstLoad || !this.paging ||
-            (!this.isPagingRemoved && !this.isFirstLoad)){
-            return;
-        }
+    // SetPaging: function(){
+    //     if(!this.hasGrid && !this.isFirstLoad || !this.paging ||
+    //         (!this.isPagingRemoved && !this.isFirstLoad)){
+    //         return;
+    //     }
 
-        var f = this.fObj;
-        //id of container element
-        this.pagingTgtId = f.paging_target_id || null;
-        //defines table paging length
-        this.pagingLength = !isNaN(f.paging_length) ? f.paging_length : 10;
-        //id of container element
-        this.resultsPerPageTgtId = f.results_per_page_target_id || null;
-        //css class for paging select element
-        this.pgSlcCssClass = f.paging_slc_css_class || 'pgSlc';
-        //css class for paging input element
-        this.pgInpCssClass = f.paging_inp_css_class || 'pgNbInp';
-        //defines css class for results per page select
-        this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';
-        //css class for label preceding results per page select
-        this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';
-        //nb visible rows
-        this.nbVisibleRows = 0;
-        //nb hidden rows
-        this.nbHiddenRows = 0;
-        //1st row index of current page
-        this.startPagingRow = 0;
-        //total nb of pages
-        this.nbPages = 0;
-        //defines next page button text
-        this.btnNextPageText = f.btn_next_page_text || '>';
-        //defines previous page button text
-        this.btnPrevPageText = f.btn_prev_page_text || '<';
-        //defines last page button text
-        this.btnLastPageText = f.btn_last_page_text || '>|';
-        //defines first page button text
-        this.btnFirstPageText = f.btn_first_page_text || '|<';
-        //defines next page button html
-        this.btnNextPageHtml = f.btn_next_page_html ||
-            (!this.enableIcons ? null :
-            '<input type="button" value="" class="'+this.btnPageCssClass +
-            ' nextPage" title="Next page" />');
-        //defines previous page button html
-        this.btnPrevPageHtml = f.btn_prev_page_html ||
-            (!this.enableIcons ? null :
-            '<input type="button" value="" class="'+this.btnPageCssClass +
-            ' previousPage" title="Previous page" />');
-        //defines last page button html
-        this.btnFirstPageHtml = f.btn_first_page_html ||
-            (!this.enableIcons ? null :
-            '<input type="button" value="" class="'+this.btnPageCssClass +
-            ' firstPage" title="First page" />');
-        //defines previous page button html
-        this.btnLastPageHtml = f.btn_last_page_html ||
-            (!this.enableIcons ? null :
-            '<input type="button" value="" class="'+this.btnPageCssClass +
-            ' lastPage" title="Last page" />');
-        //defines text preceeding page selector drop-down
-        this.pageText = f.page_text || ' Page ';
-        //defines text after page selector drop-down
-        this.ofText = f.of_text || ' of ';
-        //css class for span containing tot nb of pages
-        this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';
-        //enables/disables paging buttons
-        this.hasPagingBtns = f.paging_btns===false ? false : true;
-        //stores paging buttons events
-        this.pagingBtnEvents = null;
-        //defines previous page button html
-        this.pageSelectorType = f.page_selector_type || this.fltTypeSlc;
-        //calls function before page is changed
-        this.onBeforeChangePage = types.isFn(f.on_before_change_page) ?
-            f.on_before_change_page : null;
-        //calls function before page is changed
-        this.onAfterChangePage = types.isFn(f.on_after_change_page) ?
-            f.on_after_change_page : null;
-        var start_row = this.refRow;
-        var nrows = this.nbRows;
-        //calculates page nb
-        this.nbPages = Math.ceil((nrows-start_row)/this.pagingLength);
+    //     var f = this.fObj;
+    //     //id of container element
+    //     this.pagingTgtId = f.paging_target_id || null;
+    //     //defines table paging length
+    //     this.pagingLength = !isNaN(f.paging_length) ? f.paging_length : 10;
+    //     //id of container element
+    //     this.resultsPerPageTgtId = f.results_per_page_target_id || null;
+    //     //css class for paging select element
+    //     this.pgSlcCssClass = f.paging_slc_css_class || 'pgSlc';
+    //     //css class for paging input element
+    //     this.pgInpCssClass = f.paging_inp_css_class || 'pgNbInp';
+    //     //defines css class for results per page select
+    //     this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';
+    //     //css class for label preceding results per page select
+    //     this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';
+    //     //nb visible rows
+    //     this.nbVisibleRows = 0;
+    //     //nb hidden rows
+    //     this.nbHiddenRows = 0;
+    //     //1st row index of current page
+    //     this.startPagingRow = 0;
+    //     //total nb of pages
+    //     this.nbPages = 0;
+    //     //defines next page button text
+    //     this.btnNextPageText = f.btn_next_page_text || '>';
+    //     //defines previous page button text
+    //     this.btnPrevPageText = f.btn_prev_page_text || '<';
+    //     //defines last page button text
+    //     this.btnLastPageText = f.btn_last_page_text || '>|';
+    //     //defines first page button text
+    //     this.btnFirstPageText = f.btn_first_page_text || '|<';
+    //     //defines next page button html
+    //     this.btnNextPageHtml = f.btn_next_page_html ||
+    //         (!this.enableIcons ? null :
+    //         '<input type="button" value="" class="'+this.btnPageCssClass +
+    //         ' nextPage" title="Next page" />');
+    //     //defines previous page button html
+    //     this.btnPrevPageHtml = f.btn_prev_page_html ||
+    //         (!this.enableIcons ? null :
+    //         '<input type="button" value="" class="'+this.btnPageCssClass +
+    //         ' previousPage" title="Previous page" />');
+    //     //defines last page button html
+    //     this.btnFirstPageHtml = f.btn_first_page_html ||
+    //         (!this.enableIcons ? null :
+    //         '<input type="button" value="" class="'+this.btnPageCssClass +
+    //         ' firstPage" title="First page" />');
+    //     //defines previous page button html
+    //     this.btnLastPageHtml = f.btn_last_page_html ||
+    //         (!this.enableIcons ? null :
+    //         '<input type="button" value="" class="'+this.btnPageCssClass +
+    //         ' lastPage" title="Last page" />');
+    //     //defines text preceeding page selector drop-down
+    //     this.pageText = f.page_text || ' Page ';
+    //     //defines text after page selector drop-down
+    //     this.ofText = f.of_text || ' of ';
+    //     //css class for span containing tot nb of pages
+    //     this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';
+    //     //enables/disables paging buttons
+    //     this.hasPagingBtns = f.paging_btns===false ? false : true;
+    //     //stores paging buttons events
+    //     this.pagingBtnEvents = null;
+    //     //defines previous page button html
+    //     this.pageSelectorType = f.page_selector_type || this.fltTypeSlc;
+    //     //calls function before page is changed
+    //     this.onBeforeChangePage = types.isFn(f.on_before_change_page) ?
+    //         f.on_before_change_page : null;
+    //     //calls function before page is changed
+    //     this.onAfterChangePage = types.isFn(f.on_after_change_page) ?
+    //         f.on_after_change_page : null;
+    //     var start_row = this.refRow;
+    //     var nrows = this.nbRows;
+    //     //calculates page nb
+    //     this.nbPages = Math.ceil((nrows-start_row)/this.pagingLength);
 
-        //Paging elements events
-        if(!this.Evt._Paging.next){
-            var o = this;
-            this.Evt._Paging = {// paging buttons events
-                slcIndex: function(){
-                    return (o.pageSelectorType===o.fltTypeSlc) ?
-                        o.pagingSlc.options.selectedIndex :
-                        parseInt(o.pagingSlc.value,10)-1;
-                },
-                nbOpts: function(){
-                    return (o.pageSelectorType===o.fltTypeSlc) ?
-                        parseInt(o.pagingSlc.options.length,10)-1 :
-                        (o.nbPages-1);
-                },
-                next: function(){
-                    if(o.Evt._Paging.nextEvt){
-                        o.Evt._Paging.nextEvt();
-                    }
-                    var nextIndex =
-                        o.Evt._Paging.slcIndex()<o.Evt._Paging.nbOpts() ?
-                        o.Evt._Paging.slcIndex()+1 : 0;
-                    o.ChangePage(nextIndex);
-                },
-                prev: function(){
-                    if(o.Evt._Paging.prevEvt){
-                        o.Evt._Paging.prevEvt();
-                    }
-                    var prevIndex = o.Evt._Paging.slcIndex()>0 ?
-                        o.Evt._Paging.slcIndex()-1 : o.Evt._Paging.nbOpts();
-                    o.ChangePage(prevIndex);
-                },
-                last: function(){
-                    if(o.Evt._Paging.lastEvt){
-                        o.Evt._Paging.lastEvt();
-                    }
-                    o.ChangePage(o.Evt._Paging.nbOpts());
-                },
-                first: function(){
-                    if(o.Evt._Paging.firstEvt){
-                        o.Evt._Paging.firstEvt();
-                    }
-                    o.ChangePage(0);
-                },
-                _detectKey: function(e){
-                    var evt = e || global.event;
-                    if(evt){
-                        var key = o.Evt.getKeyCode(e);
-                        if(key===13){
-                            if(o.sorted){
-                                o.Filter();
-                                o.ChangePage(o.Evt._Paging.slcIndex());
-                            } else{
-                                o.ChangePage();
-                            }
-                            this.blur();
-                        }
-                    }
-                },
-                nextEvt: null,
-                prevEvt: null,
-                lastEvt: null,
-                firstEvt: null
-            };
-        }
+    //     //Paging elements events
+    //     if(!this.Evt._Paging.next){
+    //         var o = this;
+    //         this.Evt._Paging = {// paging buttons events
+    //             slcIndex: function(){
+    //                 return (o.pageSelectorType===o.fltTypeSlc) ?
+    //                     o.pagingSlc.options.selectedIndex :
+    //                     parseInt(o.pagingSlc.value,10)-1;
+    //             },
+    //             nbOpts: function(){
+    //                 return (o.pageSelectorType===o.fltTypeSlc) ?
+    //                     parseInt(o.pagingSlc.options.length,10)-1 :
+    //                     (o.nbPages-1);
+    //             },
+    //             next: function(){
+    //                 if(o.Evt._Paging.nextEvt){
+    //                     o.Evt._Paging.nextEvt();
+    //                 }
+    //                 var nextIndex =
+    //                     o.Evt._Paging.slcIndex()<o.Evt._Paging.nbOpts() ?
+    //                     o.Evt._Paging.slcIndex()+1 : 0;
+    //                 o.ChangePage(nextIndex);
+    //             },
+    //             prev: function(){
+    //                 if(o.Evt._Paging.prevEvt){
+    //                     o.Evt._Paging.prevEvt();
+    //                 }
+    //                 var prevIndex = o.Evt._Paging.slcIndex()>0 ?
+    //                     o.Evt._Paging.slcIndex()-1 : o.Evt._Paging.nbOpts();
+    //                 o.ChangePage(prevIndex);
+    //             },
+    //             last: function(){
+    //                 if(o.Evt._Paging.lastEvt){
+    //                     o.Evt._Paging.lastEvt();
+    //                 }
+    //                 o.ChangePage(o.Evt._Paging.nbOpts());
+    //             },
+    //             first: function(){
+    //                 if(o.Evt._Paging.firstEvt){
+    //                     o.Evt._Paging.firstEvt();
+    //                 }
+    //                 o.ChangePage(0);
+    //             },
+    //             _detectKey: function(e){
+    //                 var evt = e || global.event;
+    //                 if(evt){
+    //                     var key = o.Evt.getKeyCode(e);
+    //                     if(key===13){
+    //                         if(o.sorted){
+    //                             o.Filter();
+    //                             o.ChangePage(o.Evt._Paging.slcIndex());
+    //                         } else{
+    //                             o.ChangePage();
+    //                         }
+    //                         this.blur();
+    //                     }
+    //                 }
+    //             },
+    //             nextEvt: null,
+    //             prevEvt: null,
+    //             lastEvt: null,
+    //             firstEvt: null
+    //         };
+    //     }
 
-        /*====================================================
-            - onchange event for paging select
-        =====================================================*/
-        if(!this.Evt._OnSlcPagesChange){
-            this.Evt._OnSlcPagesChange = function(){
-                if(o.Evt._Paging._OnSlcPagesChangeEvt){
-                    o.Evt._Paging._OnSlcPagesChangeEvt();
-                }
-                o.ChangePage();
-                this.blur();
-                //ie only: blur is not enough...
-                if(this.parentNode && hlp.isIE()){
-                    this.parentNode.focus();
-                }
-            };
-        }
+    //     ====================================================
+    //         - onchange event for paging select
+    //     =====================================================
+    //     if(!this.Evt._OnSlcPagesChange){
+    //         this.Evt._OnSlcPagesChange = function(){
+    //             if(o.Evt._Paging._OnSlcPagesChangeEvt){
+    //                 o.Evt._Paging._OnSlcPagesChangeEvt();
+    //             }
+    //             o.ChangePage();
+    //             this.blur();
+    //             //ie only: blur is not enough...
+    //             if(this.parentNode && hlp.isIE()){
+    //                 this.parentNode.focus();
+    //             }
+    //         };
+    //     }
 
-        var slcPages;
+    //     var slcPages;
 
-        // Paging drop-down list selector
-        if(this.pageSelectorType === this.fltTypeSlc){
-            slcPages = dom.create(
-                this.fltTypeSlc, ['id',this.prfxSlcPages+this.id]);
-            slcPages.className = this.pgSlcCssClass;
-            slcPages.onchange = this.Evt._OnSlcPagesChange;
-        }
+    //     // Paging drop-down list selector
+    //     if(this.pageSelectorType === this.fltTypeSlc){
+    //         slcPages = dom.create(
+    //             this.fltTypeSlc, ['id',this.prfxSlcPages+this.id]);
+    //         slcPages.className = this.pgSlcCssClass;
+    //         slcPages.onchange = this.Evt._OnSlcPagesChange;
+    //     }
 
-        // Paging input selector
-        if(this.pageSelectorType === this.fltTypeInp){
-            slcPages = dom.create(
-                this.fltTypeInp,
-                ['id',this.prfxSlcPages+this.id],
-                ['value',this.currentPageNb]
-            );
-            slcPages.className = this.pgInpCssClass;
-            slcPages.onkeypress = this.Evt._Paging._detectKey;
-        }
+    //     // Paging input selector
+    //     if(this.pageSelectorType === this.fltTypeInp){
+    //         slcPages = dom.create(
+    //             this.fltTypeInp,
+    //             ['id',this.prfxSlcPages+this.id],
+    //             ['value',this.currentPageNb]
+    //         );
+    //         slcPages.className = this.pgInpCssClass;
+    //         slcPages.onkeypress = this.Evt._Paging._detectKey;
+    //     }
 
-        // btns containers
-        var btnNextSpan = dom.create(
-            'span',['id',this.prfxBtnNextSpan+this.id]);
-        var btnPrevSpan = dom.create(
-            'span',['id',this.prfxBtnPrevSpan+this.id]);
-        var btnLastSpan = dom.create(
-            'span',['id',this.prfxBtnLastSpan+this.id]);
-        var btnFirstSpan = dom.create(
-            'span',['id',this.prfxBtnFirstSpan+this.id]);
+    //     // btns containers
+    //     var btnNextSpan = dom.create(
+    //         'span',['id',this.prfxBtnNextSpan+this.id]);
+    //     var btnPrevSpan = dom.create(
+    //         'span',['id',this.prfxBtnPrevSpan+this.id]);
+    //     var btnLastSpan = dom.create(
+    //         'span',['id',this.prfxBtnLastSpan+this.id]);
+    //     var btnFirstSpan = dom.create(
+    //         'span',['id',this.prfxBtnFirstSpan+this.id]);
 
-        if(this.hasPagingBtns){
-            // Next button
-            if(!this.btnNextPageHtml){
-                var btn_next = dom.create(
-                    this.fltTypeInp,['id',this.prfxBtnNext+this.id],
-                    ['type','button'],
-                    ['value',this.btnNextPageText],
-                    ['title','Next']
-                );
-                btn_next.className = this.btnPageCssClass;
-                btn_next.onclick = this.Evt._Paging.next;
-                btnNextSpan.appendChild(btn_next);
-            } else {
-                btnNextSpan.innerHTML = this.btnNextPageHtml;
-                btnNextSpan.onclick = this.Evt._Paging.next;
-            }
-            // Previous button
-            if(!this.btnPrevPageHtml){
-                var btn_prev = dom.create(
-                    this.fltTypeInp,
-                    ['id',this.prfxBtnPrev+this.id],
-                    ['type','button'],
-                    ['value',this.btnPrevPageText],
-                    ['title','Previous']
-                );
-                btn_prev.className = this.btnPageCssClass;
-                btn_prev.onclick = this.Evt._Paging.prev;
-                btnPrevSpan.appendChild(btn_prev);
-            } else {
-                btnPrevSpan.innerHTML = this.btnPrevPageHtml;
-                btnPrevSpan.onclick = this.Evt._Paging.prev;
-            }
-            // Last button
-            if(!this.btnLastPageHtml){
-                var btn_last = dom.create(
-                    this.fltTypeInp,
-                    ['id',this.prfxBtnLast+this.id],
-                    ['type','button'],
-                    ['value',this.btnLastPageText],
-                    ['title','Last']
-                );
-                btn_last.className = this.btnPageCssClass;
-                btn_last.onclick = this.Evt._Paging.last;
-                btnLastSpan.appendChild(btn_last);
-            } else {
-                btnLastSpan.innerHTML = this.btnLastPageHtml;
-                btnLastSpan.onclick = this.Evt._Paging.last;
-            }
-            // First button
-            if(!this.btnFirstPageHtml){
-                var btn_first = dom.create(
-                    this.fltTypeInp,
-                    ['id',this.prfxBtnFirst+this.id],
-                    ['type','button'],
-                    ['value',this.btnFirstPageText],
-                    ['title','First']
-                );
-                btn_first.className = this.btnPageCssClass;
-                btn_first.onclick = this.Evt._Paging.first;
-                btnFirstSpan.appendChild(btn_first);
-            } else {
-                btnFirstSpan.innerHTML = this.btnFirstPageHtml;
-                btnFirstSpan.onclick = this.Evt._Paging.first;
-            }
-        }
+    //     if(this.hasPagingBtns){
+    //         // Next button
+    //         if(!this.btnNextPageHtml){
+    //             var btn_next = dom.create(
+    //                 this.fltTypeInp,['id',this.prfxBtnNext+this.id],
+    //                 ['type','button'],
+    //                 ['value',this.btnNextPageText],
+    //                 ['title','Next']
+    //             );
+    //             btn_next.className = this.btnPageCssClass;
+    //             btn_next.onclick = this.Evt._Paging.next;
+    //             btnNextSpan.appendChild(btn_next);
+    //         } else {
+    //             btnNextSpan.innerHTML = this.btnNextPageHtml;
+    //             btnNextSpan.onclick = this.Evt._Paging.next;
+    //         }
+    //         // Previous button
+    //         if(!this.btnPrevPageHtml){
+    //             var btn_prev = dom.create(
+    //                 this.fltTypeInp,
+    //                 ['id',this.prfxBtnPrev+this.id],
+    //                 ['type','button'],
+    //                 ['value',this.btnPrevPageText],
+    //                 ['title','Previous']
+    //             );
+    //             btn_prev.className = this.btnPageCssClass;
+    //             btn_prev.onclick = this.Evt._Paging.prev;
+    //             btnPrevSpan.appendChild(btn_prev);
+    //         } else {
+    //             btnPrevSpan.innerHTML = this.btnPrevPageHtml;
+    //             btnPrevSpan.onclick = this.Evt._Paging.prev;
+    //         }
+    //         // Last button
+    //         if(!this.btnLastPageHtml){
+    //             var btn_last = dom.create(
+    //                 this.fltTypeInp,
+    //                 ['id',this.prfxBtnLast+this.id],
+    //                 ['type','button'],
+    //                 ['value',this.btnLastPageText],
+    //                 ['title','Last']
+    //             );
+    //             btn_last.className = this.btnPageCssClass;
+    //             btn_last.onclick = this.Evt._Paging.last;
+    //             btnLastSpan.appendChild(btn_last);
+    //         } else {
+    //             btnLastSpan.innerHTML = this.btnLastPageHtml;
+    //             btnLastSpan.onclick = this.Evt._Paging.last;
+    //         }
+    //         // First button
+    //         if(!this.btnFirstPageHtml){
+    //             var btn_first = dom.create(
+    //                 this.fltTypeInp,
+    //                 ['id',this.prfxBtnFirst+this.id],
+    //                 ['type','button'],
+    //                 ['value',this.btnFirstPageText],
+    //                 ['title','First']
+    //             );
+    //             btn_first.className = this.btnPageCssClass;
+    //             btn_first.onclick = this.Evt._Paging.first;
+    //             btnFirstSpan.appendChild(btn_first);
+    //         } else {
+    //             btnFirstSpan.innerHTML = this.btnFirstPageHtml;
+    //             btnFirstSpan.onclick = this.Evt._Paging.first;
+    //         }
+    //     }
 
-        // paging elements (buttons+drop-down list) are added to defined element
-        if(!this.pagingTgtId){
-            this.SetTopDiv();
-        }
-        var targetEl = !this.pagingTgtId ? this.mDiv : dom.id(this.pagingTgtId);
+    //     // paging elements (buttons+drop-down list) are added to defined element
+    //     if(!this.pagingTgtId){
+    //         this.SetTopDiv();
+    //     }
+    //     var targetEl = !this.pagingTgtId ? this.mDiv : dom.id(this.pagingTgtId);
 
-        /***
-        if paging previously removed this prevents IE memory leak with
-        removeChild used in RemovePaging method. For more info refer to
-        http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2840253&SiteID=1
-        ***/
-        if (targetEl.innerHTML!==''){
-            targetEl.innerHTML = '';
-        }
-        /*** ***/
+    //     /***
+    //     if paging previously removed this prevents IE memory leak with
+    //     removeChild used in RemovePaging method. For more info refer to
+    //     http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2840253&SiteID=1
+    //     ***/
+    //     if (targetEl.innerHTML!==''){
+    //         targetEl.innerHTML = '';
+    //     }
+    //     /*** ***/
 
-        targetEl.appendChild(btnFirstSpan);
-        targetEl.appendChild(btnPrevSpan);
+    //     targetEl.appendChild(btnFirstSpan);
+    //     targetEl.appendChild(btnPrevSpan);
 
-        var pgBeforeSpan = dom.create(
-            'span',['id',this.prfxPgBeforeSpan+this.id] );
-        pgBeforeSpan.appendChild( dom.text(this.pageText) );
-        pgBeforeSpan.className = this.nbPgSpanCssClass;
-        targetEl.appendChild(pgBeforeSpan);
-        targetEl.appendChild(slcPages);
-        var pgAfterSpan = dom.create(
-            'span',['id',this.prfxPgAfterSpan+this.id]);
-        pgAfterSpan.appendChild( dom.text(this.ofText) );
-        pgAfterSpan.className = this.nbPgSpanCssClass;
-        targetEl.appendChild(pgAfterSpan);
-        var pgspan = dom.create( 'span',['id',this.prfxPgSpan+this.id] );
-        pgspan.className = this.nbPgSpanCssClass;
-        pgspan.appendChild( dom.text(' '+this.nbPages+' ') );
-        targetEl.appendChild(pgspan);
-        targetEl.appendChild(btnNextSpan);
-        targetEl.appendChild(btnLastSpan);
-        this.pagingSlc = dom.id(this.prfxSlcPages+this.id);
+    //     var pgBeforeSpan = dom.create(
+    //         'span',['id',this.prfxPgBeforeSpan+this.id] );
+    //     pgBeforeSpan.appendChild( dom.text(this.pageText) );
+    //     pgBeforeSpan.className = this.nbPgSpanCssClass;
+    //     targetEl.appendChild(pgBeforeSpan);
+    //     targetEl.appendChild(slcPages);
+    //     var pgAfterSpan = dom.create(
+    //         'span',['id',this.prfxPgAfterSpan+this.id]);
+    //     pgAfterSpan.appendChild( dom.text(this.ofText) );
+    //     pgAfterSpan.className = this.nbPgSpanCssClass;
+    //     targetEl.appendChild(pgAfterSpan);
+    //     var pgspan = dom.create( 'span',['id',this.prfxPgSpan+this.id] );
+    //     pgspan.className = this.nbPgSpanCssClass;
+    //     pgspan.appendChild( dom.text(' '+this.nbPages+' ') );
+    //     targetEl.appendChild(pgspan);
+    //     targetEl.appendChild(btnNextSpan);
+    //     targetEl.appendChild(btnLastSpan);
+    //     this.pagingSlc = dom.id(this.prfxSlcPages+this.id);
 
-        // if this.rememberGridValues==true this.SetPagingInfo() is called
-        // in ResetGridValues() method
-        if(!this.rememberGridValues || this.isPagingRemoved){
-            this.SetPagingInfo();
-        }
-        if(!this.fltGrid){
-            this.ValidateAllRows();
-            this.SetPagingInfo(this.validRowsIndex);
-        }
+    //     // if this.rememberGridValues==true this.SetPagingInfo() is called
+    //     // in ResetGridValues() method
+    //     if(!this.rememberGridValues || this.isPagingRemoved){
+    //         this.SetPagingInfo();
+    //     }
+    //     if(!this.fltGrid){
+    //         this.ValidateAllRows();
+    //         this.SetPagingInfo(this.validRowsIndex);
+    //     }
 
-        this.pagingBtnEvents = this.Evt._Paging;
-        this.isPagingRemoved = false;
-    },
+    //     this.pagingBtnEvents = this.Evt._Paging;
+    //     this.isPagingRemoved = false;
+    // },
 
     /*====================================================
         - Removes paging elements
     =====================================================*/
-    RemovePaging: function(){
-        if(!this.hasGrid || !this.pagingSlc){
-            return;
-        }
+    // RemovePaging: function(){
+    //     if(!this.hasGrid || !this.pagingSlc){
+    //         return;
+    //     }
 
-        // btns containers
-        var btnNextSpan, btnPrevSpan, btnLastSpan, btnFirstSpan;
-        var pgBeforeSpan, pgAfterSpan, pgspan;
-        btnNextSpan = dom.id(this.prfxBtnNextSpan+this.id);
-        btnPrevSpan = dom.id(this.prfxBtnPrevSpan+this.id);
-        btnLastSpan = dom.id(this.prfxBtnLastSpan+this.id);
-        btnFirstSpan = dom.id(this.prfxBtnFirstSpan+this.id);
-        //span containing 'Page' text
-        pgBeforeSpan = dom.id(this.prfxPgBeforeSpan+this.id);
-        //span containing 'of' text
-        pgAfterSpan = dom.id(this.prfxPgAfterSpan+this.id);
-        //span containing nb of pages
-        pgspan = dom.id(this.prfxPgSpan+this.id);
+    //     // btns containers
+    //     var btnNextSpan, btnPrevSpan, btnLastSpan, btnFirstSpan;
+    //     var pgBeforeSpan, pgAfterSpan, pgspan;
+    //     btnNextSpan = dom.id(this.prfxBtnNextSpan+this.id);
+    //     btnPrevSpan = dom.id(this.prfxBtnPrevSpan+this.id);
+    //     btnLastSpan = dom.id(this.prfxBtnLastSpan+this.id);
+    //     btnFirstSpan = dom.id(this.prfxBtnFirstSpan+this.id);
+    //     //span containing 'Page' text
+    //     pgBeforeSpan = dom.id(this.prfxPgBeforeSpan+this.id);
+    //     //span containing 'of' text
+    //     pgAfterSpan = dom.id(this.prfxPgAfterSpan+this.id);
+    //     //span containing nb of pages
+    //     pgspan = dom.id(this.prfxPgSpan+this.id);
 
-        this.pagingSlc.parentNode.removeChild(this.pagingSlc);
+    //     this.pagingSlc.parentNode.removeChild(this.pagingSlc);
 
-        if(btnNextSpan){
-            btnNextSpan.parentNode.removeChild( btnNextSpan );
-        }
+    //     if(btnNextSpan){
+    //         btnNextSpan.parentNode.removeChild( btnNextSpan );
+    //     }
 
-        if(btnPrevSpan){
-            btnPrevSpan.parentNode.removeChild( btnPrevSpan );
-        }
+    //     if(btnPrevSpan){
+    //         btnPrevSpan.parentNode.removeChild( btnPrevSpan );
+    //     }
 
-        if(btnLastSpan){
-            btnLastSpan.parentNode.removeChild( btnLastSpan );
-        }
+    //     if(btnLastSpan){
+    //         btnLastSpan.parentNode.removeChild( btnLastSpan );
+    //     }
 
-        if(btnFirstSpan){
-            btnFirstSpan.parentNode.removeChild( btnFirstSpan );
-        }
+    //     if(btnFirstSpan){
+    //         btnFirstSpan.parentNode.removeChild( btnFirstSpan );
+    //     }
 
-        if(pgBeforeSpan){
-            pgBeforeSpan.parentNode.removeChild( pgBeforeSpan );
-        }
+    //     if(pgBeforeSpan){
+    //         pgBeforeSpan.parentNode.removeChild( pgBeforeSpan );
+    //     }
 
-        if(pgAfterSpan){
-            pgAfterSpan.parentNode.removeChild( pgAfterSpan );
-        }
+    //     if(pgAfterSpan){
+    //         pgAfterSpan.parentNode.removeChild( pgAfterSpan );
+    //     }
 
-        if(pgspan){
-            pgspan.parentNode.removeChild( pgspan );
-        }
+    //     if(pgspan){
+    //         pgspan.parentNode.removeChild( pgspan );
+    //     }
 
-        this.pagingBtnEvents = null;
-        this.pagingSlc = null;
-        this.isPagingRemoved = true;
-    },
+    //     this.pagingBtnEvents = null;
+    //     this.pagingSlc = null;
+    //     this.isPagingRemoved = true;
+    // },
 
     /*====================================================
         - calculates page # according to valid rows
         - refreshes paging select according to page #
         - Calls GroupByPage method
     =====================================================*/
-    SetPagingInfo: function(validRows){
-        var rows = this.tbl.rows;
-        var mdiv = !this.pagingTgtId ? this.mDiv : dom.id(this.pagingTgtId);
-        var pgspan = dom.id(this.prfxPgSpan+this.id);
-        //stores valid rows indexes
-        if(validRows && validRows.length>0){
-            this.validRowsIndex = validRows;
-        } else {
-            //re-sets valid rows indexes array
-            this.validRowsIndex = [];
+    // SetPagingInfo: function(validRows){
+    //     var rows = this.tbl.rows;
+    //     var mdiv = !this.pagingTgtId ? this.mDiv : dom.id(this.pagingTgtId);
+    //     var pgspan = dom.id(this.prfxPgSpan+this.id);
+    //     //stores valid rows indexes
+    //     if(validRows && validRows.length>0){
+    //         this.validRowsIndex = validRows;
+    //     } else {
+    //         //re-sets valid rows indexes array
+    //         this.validRowsIndex = [];
 
-            //counts rows to be grouped
-            for(var j=this.refRow; j<this.nbRows; j++){
-                var row = rows[j];
-                if(!row){
-                    continue;
-                }
-                var isRowValid = row.getAttribute('validRow');
-                if(isRowValid==='true' || !isRowValid){
-                    this.validRowsIndex.push(j);
-                }
-            }
-        }
+    //         //counts rows to be grouped
+    //         for(var j=this.refRow; j<this.nbRows; j++){
+    //             var row = rows[j];
+    //             if(!row){
+    //                 continue;
+    //             }
+    //             var isRowValid = row.getAttribute('validRow');
+    //             if(isRowValid==='true' || !isRowValid){
+    //                 this.validRowsIndex.push(j);
+    //             }
+    //         }
+    //     }
 
-        //calculate nb of pages
-        this.nbPages = Math.ceil(this.validRowsIndex.length/this.pagingLength);
-        //refresh page nb span
-        pgspan.innerHTML = this.nbPages;
-        //select clearing shortcut
-        if(this.pageSelectorType===this.fltTypeSlc){
-            this.pagingSlc.innerHTML = '';
-        }
+    //     //calculate nb of pages
+    //     this.nbPages = Math.ceil(this.validRowsIndex.length/this.pagingLength);
+    //     //refresh page nb span
+    //     pgspan.innerHTML = this.nbPages;
+    //     //select clearing shortcut
+    //     if(this.pageSelectorType===this.fltTypeSlc){
+    //         this.pagingSlc.innerHTML = '';
+    //     }
 
-        if(this.nbPages>0){
-            mdiv.style.visibility = 'visible';
-            if(this.pageSelectorType===this.fltTypeSlc){
-                for(var z=0; z<this.nbPages; z++){
-                    var currOpt = new Option(
-                        (z+1),
-                        z*this.pagingLength,
-                        false,
-                        false
-                    );
-                    this.pagingSlc.options[z] = currOpt;
-                }
-            } else{
-                //input type
-                this.pagingSlc.value = this.currentPageNb;
-            }
+    //     if(this.nbPages>0){
+    //         mdiv.style.visibility = 'visible';
+    //         if(this.pageSelectorType===this.fltTypeSlc){
+    //             for(var z=0; z<this.nbPages; z++){
+    //                 var currOpt = new Option(
+    //                     (z+1),
+    //                     z*this.pagingLength,
+    //                     false,
+    //                     false
+    //                 );
+    //                 this.pagingSlc.options[z] = currOpt;
+    //             }
+    //         } else{
+    //             //input type
+    //             this.pagingSlc.value = this.currentPageNb;
+    //         }
 
-        } else {
-            /*** if no results paging select and buttons are hidden ***/
-            mdiv.style.visibility = 'hidden';
-        }
-        this.GroupByPage(this.validRowsIndex);
-    },
+    //     } else {
+    //         /*** if no results paging select and buttons are hidden ***/
+    //         mdiv.style.visibility = 'hidden';
+    //     }
+    //     this.GroupByPage(this.validRowsIndex);
+    // },
 
     /*====================================================
         - Displays current page rows
     =====================================================*/
-    GroupByPage: function(validRows){
-        var rows = this.tbl.rows;
-        var paging_end_row = parseInt(this.startPagingRow, 10) +
-            parseInt(this.pagingLength, 10);
+    // GroupByPage: function(validRows){
+    //     var rows = this.tbl.rows;
+    //     var paging_end_row = parseInt(this.startPagingRow, 10) +
+    //         parseInt(this.pagingLength, 10);
 
-        //store valid rows indexes
-        if(validRows){
-            this.validRowsIndex = validRows;
-        }
+    //     //store valid rows indexes
+    //     if(validRows){
+    //         this.validRowsIndex = validRows;
+    //     }
 
-        //this loop shows valid rows of current page
-        for(var h=0; h<this.validRowsIndex.length; h++){
-            var r = rows[ this.validRowsIndex[h] ];
-            if(h>=this.startPagingRow && h<paging_end_row){
-                if(r.getAttribute('validRow')==='true' ||
-                    !r.getAttribute('validRow')){
-                    r.style.display = '';
-                }
-                if(this.alternateBgs){
-                    this.Cpt.alternateRows.setRowBg(this.validRowsIndex[h], h);
-                }
-            } else {
-                r.style.display = 'none';
-                if(this.alternateBgs){
-                    this.Cpt.alternateRows.removeRowBg(this.validRowsIndex[h]);
-                }
-            }
-        }
+    //     //this loop shows valid rows of current page
+    //     for(var h=0; h<this.validRowsIndex.length; h++){
+    //         var r = rows[ this.validRowsIndex[h] ];
+    //         if(h>=this.startPagingRow && h<paging_end_row){
+    //             if(r.getAttribute('validRow')==='true' ||
+    //                 !r.getAttribute('validRow')){
+    //                 r.style.display = '';
+    //             }
+    //             if(this.alternateBgs){
+    //                 this.Cpt.alternateRows.setRowBg(this.validRowsIndex[h], h);
+    //             }
+    //         } else {
+    //             r.style.display = 'none';
+    //             if(this.alternateBgs){
+    //                 this.Cpt.alternateRows.removeRowBg(this.validRowsIndex[h]);
+    //             }
+    //         }
+    //     }
 
-        this.nbVisibleRows = this.validRowsIndex.length;
-        this.isStartBgAlternate = false;
-        //re-applies filter behaviours after filtering process
-        this.ApplyGridProps();
-    },
+    //     this.nbVisibleRows = this.validRowsIndex.length;
+    //     this.isStartBgAlternate = false;
+    //     //re-applies filter behaviours after filtering process
+    //     this.ApplyGridProps();
+    // },
 
     /*====================================================
         - If paging set true shows page according to
@@ -2563,109 +2582,109 @@ TableFilter.prototype = {
             - strings: 'next','previous','last','first' or
             - number: page number
     =====================================================*/
-    SetPage: function(cmd){
-        if(!this.hasGrid || !this.paging){
-            return;
-        }
-        var btnEvt = this.pagingBtnEvents,
-            cmdtype = typeof cmd;
-        if(cmdtype==='string'){
-            switch(str.lower(cmd)){
-                case 'next':
-                    btnEvt.next();
-                break;
-                case 'previous':
-                    btnEvt.prev();
-                break;
-                case 'last':
-                    btnEvt.last();
-                break;
-                case 'first':
-                    btnEvt.first();
-                break;
-                default:
-                    btnEvt.next();
-                break;
-            }
-        }
-        if(cmdtype==='number'){
-            this.ChangePage(cmd-1);
-        }
-    },
+    // SetPage: function(cmd){
+    //     if(!this.hasGrid || !this.paging){
+    //         return;
+    //     }
+    //     var btnEvt = this.pagingBtnEvents,
+    //         cmdtype = typeof cmd;
+    //     if(cmdtype==='string'){
+    //         switch(str.lower(cmd)){
+    //             case 'next':
+    //                 btnEvt.next();
+    //             break;
+    //             case 'previous':
+    //                 btnEvt.prev();
+    //             break;
+    //             case 'last':
+    //                 btnEvt.last();
+    //             break;
+    //             case 'first':
+    //                 btnEvt.first();
+    //             break;
+    //             default:
+    //                 btnEvt.next();
+    //             break;
+    //         }
+    //     }
+    //     if(cmdtype==='number'){
+    //         this.ChangePage(cmd-1);
+    //     }
+    // },
 
     /*====================================================
         - Generates results per page select + label
     =====================================================*/
-    SetResultsPerPage: function(){
-        if(!this.hasGrid && !this.isFirstLoad){
-            return;
-        }
-        if(this.resultsPerPageSlc || !this.resultsPerPage){
-            return;
-        }
+    // SetResultsPerPage: function(){
+    //     if(!this.hasGrid && !this.isFirstLoad){
+    //         return;
+    //     }
+    //     if(this.resultsPerPageSlc || !this.resultsPerPage){
+    //         return;
+    //     }
 
-        //Change nb results per page event
-        if(!this.Evt._OnSlcResultsChange){
-            var o = this;
-            /*====================================================
-                - onchange event for results per page select
-            =====================================================*/
-            this.Evt._OnSlcResultsChange = function(){
-                o.ChangeResultsPerPage();
-                this.blur();
-                //ie only: blur is not enough...
-                if(this.parentNode && hlp.isIE()){
-                    this.parentNode.focus();
-                }
-            };
-        }
+    //     //Change nb results per page event
+    //     if(!this.Evt._OnSlcResultsChange){
+    //         var o = this;
+    //         /*====================================================
+    //             - onchange event for results per page select
+    //         =====================================================*/
+    //         this.Evt._OnSlcResultsChange = function(){
+    //             o.ChangeResultsPerPage();
+    //             this.blur();
+    //             //ie only: blur is not enough...
+    //             if(this.parentNode && hlp.isIE()){
+    //                 this.parentNode.focus();
+    //             }
+    //         };
+    //     }
 
-        var slcR = dom.create(
-            this.fltTypeSlc, ['id',this.prfxSlcResults+this.id]);
-        slcR.className = this.resultsSlcCssClass;
-        var slcRText = this.resultsPerPage[0],
-            slcROpts = this.resultsPerPage[1];
-        var slcRSpan = dom.create(
-            'span',['id',this.prfxSlcResultsTxt+this.id]);
-        slcRSpan.className = this.resultsSpanCssClass;
+    //     var slcR = dom.create(
+    //         this.fltTypeSlc, ['id',this.prfxSlcResults+this.id]);
+    //     slcR.className = this.resultsSlcCssClass;
+    //     var slcRText = this.resultsPerPage[0],
+    //         slcROpts = this.resultsPerPage[1];
+    //     var slcRSpan = dom.create(
+    //         'span',['id',this.prfxSlcResultsTxt+this.id]);
+    //     slcRSpan.className = this.resultsSpanCssClass;
 
-        // results per page select is added to external element
-        if(!this.resultsPerPageTgtId){
-            this.SetTopDiv();
-        }
-        var targetEl = !this.resultsPerPageTgtId ?
-            this.rDiv : dom.id( this.resultsPerPageTgtId );
-        slcRSpan.appendChild(dom.text(slcRText));
-        targetEl.appendChild(slcRSpan);
-        targetEl.appendChild(slcR);
+    //     // results per page select is added to external element
+    //     if(!this.resultsPerPageTgtId){
+    //         this.SetTopDiv();
+    //     }
+    //     var targetEl = !this.resultsPerPageTgtId ?
+    //         this.rDiv : dom.id( this.resultsPerPageTgtId );
+    //     slcRSpan.appendChild(dom.text(slcRText));
+    //     targetEl.appendChild(slcRSpan);
+    //     targetEl.appendChild(slcR);
 
-        this.resultsPerPageSlc = dom.id(this.prfxSlcResults+this.id);
+    //     this.resultsPerPageSlc = dom.id(this.prfxSlcResults+this.id);
 
-        for(var r=0; r<slcROpts.length; r++)
-        {
-            var currOpt = new Option(slcROpts[r],slcROpts[r],false,false);
-            this.resultsPerPageSlc.options[r] = currOpt;
-        }
-        slcR.onchange = this.Evt._OnSlcResultsChange;
-    },
+    //     for(var r=0; r<slcROpts.length; r++)
+    //     {
+    //         var currOpt = new Option(slcROpts[r],slcROpts[r],false,false);
+    //         this.resultsPerPageSlc.options[r] = currOpt;
+    //     }
+    //     slcR.onchange = this.Evt._OnSlcResultsChange;
+    // },
 
     /*====================================================
         - Removes results per page select + label
     =====================================================*/
-    RemoveResultsPerPage: function(){
-        if(!this.hasGrid || !this.resultsPerPageSlc || !this.resultsPerPage){
-            return;
-        }
-        var slcR = this.resultsPerPageSlc,
-            slcRSpan = dom.id(this.prfxSlcResultsTxt+this.id);
-        if(slcR){
-            slcR.parentNode.removeChild( slcR );
-        }
-        if(slcRSpan){
-            slcRSpan.parentNode.removeChild( slcRSpan );
-        }
-        this.resultsPerPageSlc = null;
-    },
+    // RemoveResultsPerPage: function(){
+    //     if(!this.hasGrid || !this.resultsPerPageSlc || !this.resultsPerPage){
+    //         return;
+    //     }
+    //     var slcR = this.resultsPerPageSlc,
+    //         slcRSpan = dom.id(this.prfxSlcResultsTxt+this.id);
+    //     if(slcR){
+    //         slcR.parentNode.removeChild( slcR );
+    //     }
+    //     if(slcRSpan){
+    //         slcRSpan.parentNode.removeChild( slcRSpan );
+    //     }
+    //     this.resultsPerPageSlc = null;
+    // },
 
     /*====================================================
         - Generates help instructions
@@ -2799,116 +2818,116 @@ TableFilter.prototype = {
         }
     },
 
-    ChangePage: function(index){
-        this.EvtManager(this.Evt.name.changepage,{ pgIndex:index });
-    },
+    // ChangePage: function(index){
+    //     this.EvtManager(this.Evt.name.changepage,{ pgIndex:index });
+    // },
     /*====================================================
         - Changes page
         - Param:
             - index: option index of paging select
             (numeric value)
     =====================================================*/
-    _ChangePage: function(index){
-        if(!this.paging){
-            return;
-        }
-        if(!index){
-            index = this.pageSelectorType===this.fltTypeSlc ?
-                this.pagingSlc.options.selectedIndex : (this.pagingSlc.value-1);
-        }
-        if( index>=0 && index<=(this.nbPages-1) ){
-            if(this.onBeforeChangePage){
-                this.onBeforeChangePage.call(null, this, index);
-            }
-            this.currentPageNb = parseInt(index, 10)+1;
-            if(this.pageSelectorType===this.fltTypeSlc){
-                this.pagingSlc.options[index].selected = true;
-            } else {
-                this.pagingSlc.value = this.currentPageNb;
-            }
+    // _ChangePage: function(index){
+    //     if(!this.paging){
+    //         return;
+    //     }
+    //     if(!index){
+    //         index = this.pageSelectorType===this.fltTypeSlc ?
+    //             this.pagingSlc.options.selectedIndex : (this.pagingSlc.value-1);
+    //     }
+    //     if( index>=0 && index<=(this.nbPages-1) ){
+    //         if(this.onBeforeChangePage){
+    //             this.onBeforeChangePage.call(null, this, index);
+    //         }
+    //         this.currentPageNb = parseInt(index, 10)+1;
+    //         if(this.pageSelectorType===this.fltTypeSlc){
+    //             this.pagingSlc.options[index].selected = true;
+    //         } else {
+    //             this.pagingSlc.value = this.currentPageNb;
+    //         }
 
-            if(this.rememberPageNb){
-                this.Cpt.store.savePageNb(this.pgNbCookie);
-            }
-            this.startPagingRow = (this.pageSelectorType===this.fltTypeSlc) ?
-                this.pagingSlc.value : (index*this.pagingLength);
-            this.GroupByPage();
-            if(this.onAfterChangePage){
-                this.onAfterChangePage.call(null, this, index);
-            }
-        }
-    },
+    //         if(this.rememberPageNb){
+    //             this.Cpt.store.savePageNb(this.pgNbCookie);
+    //         }
+    //         this.startPagingRow = (this.pageSelectorType===this.fltTypeSlc) ?
+    //             this.pagingSlc.value : (index*this.pagingLength);
+    //         this.GroupByPage();
+    //         if(this.onAfterChangePage){
+    //             this.onAfterChangePage.call(null, this, index);
+    //         }
+    //     }
+    // },
 
-    ChangeResultsPerPage: function(){
-        this.EvtManager(this.Evt.name.changeresultsperpage);
-    },
+    // ChangeResultsPerPage: function(){
+    //     this.EvtManager(this.Evt.name.changeresultsperpage);
+    // },
     /*====================================================
         - calculates rows to be displayed in a page
         - method called by nb results per page select
     =====================================================*/
-    _ChangeResultsPerPage: function(){
-        if(!this.paging){
-            return;
-        }
-        var slcR = this.resultsPerPageSlc;
-        var slcPagesSelIndex = (this.pageSelectorType==this.fltTypeSlc) ?
-                this.pagingSlc.selectedIndex :
-                parseInt(this.pagingSlc.value-1, 10);
-        this.pagingLength = parseInt(slcR.options[slcR.selectedIndex].value,10);
-        this.startPagingRow = this.pagingLength*slcPagesSelIndex;
+    // _ChangeResultsPerPage: function(){
+    //     if(!this.paging){
+    //         return;
+    //     }
+    //     var slcR = this.resultsPerPageSlc;
+    //     var slcPagesSelIndex = (this.pageSelectorType==this.fltTypeSlc) ?
+    //             this.pagingSlc.selectedIndex :
+    //             parseInt(this.pagingSlc.value-1, 10);
+    //     this.pagingLength = parseInt(slcR.options[slcR.selectedIndex].value,10);
+    //     this.startPagingRow = this.pagingLength*slcPagesSelIndex;
 
-        if(!isNaN(this.pagingLength)){
-            if(this.startPagingRow>=this.nbFilterableRows){
-                this.startPagingRow = (this.nbFilterableRows-this.pagingLength);
-            }
-            this.SetPagingInfo();
+    //     if(!isNaN(this.pagingLength)){
+    //         if(this.startPagingRow>=this.nbFilterableRows){
+    //             this.startPagingRow = (this.nbFilterableRows-this.pagingLength);
+    //         }
+    //         this.SetPagingInfo();
 
-            if(this.pageSelectorType===this.fltTypeSlc){
-                var slcIndex =
-                    (this.pagingSlc.options.length-1<=slcPagesSelIndex ) ?
-                    (this.pagingSlc.options.length-1) : slcPagesSelIndex;
-                this.pagingSlc.options[slcIndex].selected = true;
-            }
-            if(this.rememberPageLen){
-                this.Cpt.store.savePageLength(this.pgLenCookie);
-            }
-        }
-    },
+    //         if(this.pageSelectorType===this.fltTypeSlc){
+    //             var slcIndex =
+    //                 (this.pagingSlc.options.length-1<=slcPagesSelIndex ) ?
+    //                 (this.pagingSlc.options.length-1) : slcPagesSelIndex;
+    //             this.pagingSlc.options[slcIndex].selected = true;
+    //         }
+    //         if(this.rememberPageLen){
+    //             this.Cpt.store.savePageLength(this.pgLenCookie);
+    //         }
+    //     }
+    // },
 
-    ResetPage: function(name){
-        this.EvtManager(this.Evt.name.resetpage);
-    },
+    // ResetPage: function(name){
+    //     this.EvtManager(this.Evt.name.resetpage);
+    // },
     /*==============================================
         - re-sets page nb at page re-load
         - Params:
             - name: cookie name (string)
     ===============================================*/
-    _ResetPage: function(name){
-        var pgnb = this.Cpt.store.getPageNb(name);
-        if(pgnb!==''){
-            this.ChangePage((pgnb-1));
-        }
-    },
+    // _ResetPage: function(name){
+    //     var pgnb = this.Cpt.store.getPageNb(name);
+    //     if(pgnb!==''){
+    //         this.ChangePage((pgnb-1));
+    //     }
+    // },
 
-    ResetPageLength: function(name){
-        this.EvtManager(this.Evt.name.resetpagelength);
-    },
+    // ResetPageLength: function(name){
+    //     this.EvtManager(this.Evt.name.resetpagelength);
+    // },
     /*==============================================
         - re-sets page length at page re-load
         - Params:
             - name: cookie name (string)
     ===============================================*/
-    _ResetPageLength: function(name){
-        if(!this.paging){
-            return;
-        }
-        var pglenIndex = this.Cpt.store.getPageLength(name);
+    // _ResetPageLength: function(name){
+    //     if(!this.paging){
+    //         return;
+    //     }
+    //     var pglenIndex = this.Cpt.store.getPageLength(name);
 
-        if(pglenIndex!==''){
-            this.resultsPerPageSlc.options[pglenIndex].selected = true;
-            this.ChangeResultsPerPage();
-        }
-    },
+    //     if(pglenIndex!==''){
+    //         this.resultsPerPageSlc.options[pglenIndex].selected = true;
+    //         this.ChangeResultsPerPage();
+    //     }
+    // },
 
     /*====================================================
         - Adds paging feature if filter grid bar is
@@ -2917,18 +2936,18 @@ TableFilter.prototype = {
             - execFilter: if true table is filtered
             (boolean)
     =====================================================*/
-    AddPaging: function(filterTable){
-        if(!this.hasGrid || this.paging){
-            return;
-        }
-        this.paging = true;
-        this.isPagingRemoved = true;
-        this.SetPaging();
-        this.ResetValues();
-        if(filterTable){
-            this.Filter();
-        }
-    },
+    // AddPaging: function(filterTable){
+    //     if(!this.hasGrid || this.paging){
+    //         return;
+    //     }
+    //     this.paging = true;
+    //     this.isPagingRemoved = true;
+    //     this.SetPaging();
+    //     this.ResetValues();
+    //     if(filterTable){
+    //         this.Filter();
+    //     }
+    // },
 
     PopulateSelect: function(colIndex,isExternal,extSlcId){
         this.EvtManager(
@@ -4046,10 +4065,12 @@ TableFilter.prototype = {
             this.ResetGridValues(this.fltsValuesCookie);
         }
         if(this.rememberPageLen){
-            this.ResetPageLength(this.pgLenCookie);
+            // this.ResetPageLength(this.pgLenCookie);
+            this.Cpt.paging.resetPageLength(this.pgLenCookie);
         }
         if(this.rememberPageNb){
-            this.ResetPage(this.pgNbCookie);
+            // this.ResetPage(this.pgNbCookie);
+            this.Cpt.paging.resetPage(this.pgNbCookie);
         }
     },
 
@@ -4140,7 +4161,8 @@ TableFilter.prototype = {
             }//end for
 
             if(!this.hasStoredValues && this.paging){
-                this.SetPagingInfo();
+                // this.SetPagingInfo();
+                this.Cpt.paging.setPagingInfo();
             }
         }//end if
     },
@@ -4639,7 +4661,8 @@ TableFilter.prototype = {
         } else {
             this.startPagingRow = 0;
             this.currentPageNb = 1;
-            this.SetPagingInfo(this.validRowsIndex);
+            //this.SetPagingInfo(this.validRowsIndex);
+            this.Cpt.paging.setPagingInfo(this.validRowsIndex);
         }//starts paging process
         //invokes onafter callback
         if(this.onAfterFilter){

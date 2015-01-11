@@ -1,6 +1,11 @@
 define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
   "use strict";
 
+  var _classProps = function (child, staticProps, instanceProps) {
+    if (staticProps) Object.defineProperties(child, staticProps);
+    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+  };
+
   var Dom = _dom.Dom;
   var Types = _types.Types;
 
@@ -47,37 +52,44 @@ define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
       }
     };
 
-    Loader.prototype.show = function (p) {
-      var _this = this;
-      if (!this.tf.loader || !this.loaderDiv || this.loaderDiv.style.display === p) {
-        return;
+    _classProps(Loader, null, {
+      show: {
+        writable: true,
+        value: function (p) {
+          var _this = this;
+          if (!this.tf.loader || !this.loaderDiv || this.loaderDiv.style.display === p) {
+            return;
+          }
+
+          var displayLoader = function () {
+            if (!_this.loaderDiv) {
+              return;
+            }
+            if (_this.onShowLoader && p !== "none") {
+              _this.onShowLoader.call(null, _this);
+            }
+            _this.loaderDiv.style.display = p;
+            if (_this.onHideLoader && p === "none") {
+              _this.onHideLoader.call(null, _this);
+            }
+          };
+
+          var t = p === "none" ? this.loaderCloseDelay : 1;
+          global.setTimeout(displayLoader, t);
+        }
+      },
+      remove: {
+        writable: true,
+        value: function () {
+          if (!this.loaderDiv) {
+            return;
+          }
+          var targetEl = !this.loaderTgtId ? (this.tf.gridLayout ? this.tf.tblCont : this.tf.tbl.parentNode) : Dom.id(this.loaderTgtId);
+          targetEl.removeChild(this.loaderDiv);
+          this.loaderDiv = null;
+        }
       }
-
-      var displayLoader = function () {
-        if (!_this.loaderDiv) {
-          return;
-        }
-        if (_this.onShowLoader && p !== "none") {
-          _this.onShowLoader.call(null, _this);
-        }
-        _this.loaderDiv.style.display = p;
-        if (_this.onHideLoader && p === "none") {
-          _this.onHideLoader.call(null, _this);
-        }
-      };
-
-      var t = p === "none" ? this.loaderCloseDelay : 1;
-      global.setTimeout(displayLoader, t);
-    };
-
-    Loader.prototype.remove = function () {
-      if (!this.loaderDiv) {
-        return;
-      }
-      var targetEl = !this.loaderTgtId ? (this.tf.gridLayout ? this.tf.tblCont : this.tf.tbl.parentNode) : Dom.id(this.loaderTgtId);
-      targetEl.removeChild(this.loaderDiv);
-      this.loaderDiv = null;
-    };
+    });
 
     return Loader;
   })();

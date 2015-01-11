@@ -1,17 +1,16 @@
 define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom, _types, _helpers) {
   "use strict";
 
+  var _classProps = function (child, staticProps, instanceProps) {
+    if (staticProps) Object.defineProperties(child, staticProps);
+    if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+  };
+
   var Dom = _dom.Dom;
   var Types = _types.Types;
   var Helpers = _helpers.Helpers;
   var RowsCounter = (function () {
-    var RowsCounter =
-
-    /**
-     * Rows counter
-     * @param {Object} tf TableFilter instance
-     */
-    function RowsCounter(tf) {
+    var RowsCounter = function RowsCounter(tf) {
       // TableFilter configuration
       var f = tf.fObj;
 
@@ -35,99 +34,108 @@ define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom,
       this.tf = tf;
     };
 
-    RowsCounter.prototype.init = function () {
-      var tf = this.tf;
+    _classProps(RowsCounter, null, {
+      init: {
+        writable: true,
+        value: function () {
+          var tf = this.tf;
 
-      if ((!tf.hasGrid && !tf.isFirstLoad) || this.rowsCounterSpan) {
-        return;
-      }
+          if ((!tf.hasGrid && !tf.isFirstLoad) || this.rowsCounterSpan) {
+            return;
+          }
 
-      //rows counter container
-      var countDiv = Dom.create("div", ["id", tf.prfxCounter + tf.id]);
-      countDiv.className = this.totRowsCssClass;
-      //rows counter label
-      var countSpan = Dom.create("span", ["id", tf.prfxTotRows + tf.id]);
-      var countText = Dom.create("span", ["id", tf.prfxTotRowsTxt + tf.id]);
-      countText.appendChild(Dom.text(this.rowsCounterText));
+          //rows counter container
+          var countDiv = Dom.create("div", ["id", tf.prfxCounter + tf.id]);
+          countDiv.className = this.totRowsCssClass;
+          //rows counter label
+          var countSpan = Dom.create("span", ["id", tf.prfxTotRows + tf.id]);
+          var countText = Dom.create("span", ["id", tf.prfxTotRowsTxt + tf.id]);
+          countText.appendChild(Dom.text(this.rowsCounterText));
 
-      // counter is added to defined element
-      if (!this.rowsCounterTgtId) {
-        tf.SetTopDiv();
-      }
-      var targetEl = !this.rowsCounterTgtId ? tf.lDiv : Dom.id(this.rowsCounterTgtId);
+          // counter is added to defined element
+          if (!this.rowsCounterTgtId) {
+            tf.SetTopDiv();
+          }
+          var targetEl = !this.rowsCounterTgtId ? tf.lDiv : Dom.id(this.rowsCounterTgtId);
 
-      //IE only: clears all for sure
-      if (this.rowsCounterDiv && Helpers.isIE()) {
-        this.rowsCounterDiv.outerHTML = "";
-      }
-      //default container: 'lDiv'
-      if (!this.rowsCounterTgtId) {
-        countDiv.appendChild(countText);
-        countDiv.appendChild(countSpan);
-        targetEl.appendChild(countDiv);
-      } else {
-        //custom container, no need to append statusDiv
-        targetEl.appendChild(countText);
-        targetEl.appendChild(countSpan);
-      }
-      this.rowsCounterDiv = countDiv;
-      this.rowsCounterSpan = countSpan;
+          //IE only: clears all for sure
+          if (this.rowsCounterDiv && Helpers.isIE()) {
+            this.rowsCounterDiv.outerHTML = "";
+          }
+          //default container: 'lDiv'
+          if (!this.rowsCounterTgtId) {
+            countDiv.appendChild(countText);
+            countDiv.appendChild(countSpan);
+            targetEl.appendChild(countDiv);
+          } else {
+            //custom container, no need to append statusDiv
+            targetEl.appendChild(countText);
+            targetEl.appendChild(countSpan);
+          }
+          this.rowsCounterDiv = countDiv;
+          this.rowsCounterSpan = countSpan;
 
-      this.refresh();
-    };
-
-    RowsCounter.prototype.refresh = function (p) {
-      if (!this.rowsCounterSpan) {
-        return;
-      }
-
-      var tf = this.tf;
-
-      if (this.onBeforeRefreshCounter) {
-        this.onBeforeRefreshCounter.call(null, tf, this.rowsCounterSpan);
-      }
-
-      var totTxt;
-      if (!tf.paging) {
-        if (p && p !== "") {
-          totTxt = p;
-        } else {
-          totTxt = tf.nbFilterableRows - tf.nbHiddenRows - (tf.hasVisibleRows ? tf.visibleRows.length : 0);
+          this.refresh();
         }
-      } else {
-        //paging start row
-        var paging_start_row = parseInt(tf.startPagingRow, 10) + ((tf.nbVisibleRows > 0) ? 1 : 0);
-        var paging_end_row = (paging_start_row + tf.pagingLength) - 1 <= tf.nbVisibleRows ? paging_start_row + tf.pagingLength - 1 : tf.nbVisibleRows;
-        totTxt = paging_start_row + this.fromToTextSeparator + paging_end_row + this.overText + tf.nbVisibleRows;
-      }
-      this.rowsCounterSpan.innerHTML = totTxt;
-      if (this.onAfterRefreshCounter) {
-        this.onAfterRefreshCounter.call(null, tf, this.rowsCounterSpan, totTxt);
-      }
-    };
+      },
+      refresh: {
+        writable: true,
+        value: function (p) {
+          if (!this.rowsCounterSpan) {
+            return;
+          }
 
-    RowsCounter.prototype.destroy = function () {
-      var tf = this.tf;
-      if (!tf.hasGrid) {
-        return;
-      }
-      if (!this.rowsCounterSpan) {
-        return;
-      }
+          var tf = this.tf;
 
-      if (!this.rowsCounterTgtId && this.rowsCounterDiv) {
-        //IE only: clears all for sure
-        if (Helpers.isIE()) {
-          this.rowsCounterDiv.outerHTML = "";
-        } else {
-          this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
+          if (this.onBeforeRefreshCounter) {
+            this.onBeforeRefreshCounter.call(null, tf, this.rowsCounterSpan);
+          }
+
+          var totTxt;
+          if (!tf.paging) {
+            if (p && p !== "") {
+              totTxt = p;
+            } else {
+              totTxt = tf.nbFilterableRows - tf.nbHiddenRows - (tf.hasVisibleRows ? tf.visibleRows.length : 0);
+            }
+          } else {
+            //paging start row
+            var paging_start_row = parseInt(tf.startPagingRow, 10) + ((tf.nbVisibleRows > 0) ? 1 : 0);
+            var paging_end_row = (paging_start_row + tf.pagingLength) - 1 <= tf.nbVisibleRows ? paging_start_row + tf.pagingLength - 1 : tf.nbVisibleRows;
+            totTxt = paging_start_row + this.fromToTextSeparator + paging_end_row + this.overText + tf.nbVisibleRows;
+          }
+          this.rowsCounterSpan.innerHTML = totTxt;
+          if (this.onAfterRefreshCounter) {
+            this.onAfterRefreshCounter.call(null, tf, this.rowsCounterSpan, totTxt);
+          }
         }
-      } else {
-        Dom.id(this.rowsCounterTgtId).innerHTML = "";
+      },
+      destroy: {
+        writable: true,
+        value: function () {
+          var tf = this.tf;
+          if (!tf.hasGrid) {
+            return;
+          }
+          if (!this.rowsCounterSpan) {
+            return;
+          }
+
+          if (!this.rowsCounterTgtId && this.rowsCounterDiv) {
+            //IE only: clears all for sure
+            if (Helpers.isIE()) {
+              this.rowsCounterDiv.outerHTML = "";
+            } else {
+              this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
+            }
+          } else {
+            Dom.id(this.rowsCounterTgtId).innerHTML = "";
+          }
+          this.rowsCounterSpan = null;
+          this.rowsCounterDiv = null;
+        }
       }
-      this.rowsCounterSpan = null;
-      this.rowsCounterDiv = null;
-    };
+    });
 
     return RowsCounter;
   })();
