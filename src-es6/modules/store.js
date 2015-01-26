@@ -60,7 +60,7 @@ export class Store{
     savePageNb(name){
         Cookie.write(
             name,
-            this.tf.currentPageNb,
+            this.tf.Cpt.paging.currentPageNb,
             this.duration
         );
     }
@@ -81,7 +81,7 @@ export class Store{
     savePageLength(name){
         Cookie.write(
             name,
-            this.tf.resultsPerPageSlc.selectedIndex,
+            this.tf.Cpt.paging.resultsPerPageSlc.selectedIndex,
             this.duration
         );
     }

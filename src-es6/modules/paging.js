@@ -2,6 +2,7 @@ import {Dom} from '../dom';
 import {Types} from '../types';
 import {Str} from '../string';
 import {Helpers} from '../helpers';
+import {Event} from '../event';
 
 export class Paging{
 
@@ -10,9 +11,15 @@ export class Paging{
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
-        // TableFilter configuration
+        // Configuration object
         var f = tf.fObj;
 
+        //css class for paging buttons (previous,next,etc.)
+        this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';
+        //stores paging select element
+        this.pagingSlc = null;
+        //results per page select element
+        this.resultsPerPageSlc = null;
         //id of container element
         this.pagingTgtId = f.paging_target_id || null;
         //defines table paging length
@@ -23,18 +30,20 @@ export class Paging{
         this.pgSlcCssClass = f.paging_slc_css_class || 'pgSlc';
         //css class for paging input element
         this.pgInpCssClass = f.paging_inp_css_class || 'pgNbInp';
+        //stores results per page text and values
+        this.resultsPerPage = f.results_per_page || null;
+        //enables/disables results per page drop-down
+        this.hasResultsPerPage = Types.isArray(this.resultsPerPage);
         //defines css class for results per page select
         this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';
         //css class for label preceding results per page select
         this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';
-        //nb visible rows
-        this.nbVisibleRows = 0;
-        //nb hidden rows
-        this.nbHiddenRows = 0;
         //1st row index of current page
         this.startPagingRow = 0;
         //total nb of pages
         this.nbPages = 0;
+        //current page nb
+        this.currentPageNb = 1;
         //defines next page button text
         this.btnNextPageText = f.btn_next_page_text || '>';
         //defines previous page button text
@@ -45,22 +54,22 @@ export class Paging{
         this.btnFirstPageText = f.btn_first_page_text || '|<';
         //defines next page button html
         this.btnNextPageHtml = f.btn_next_page_html ||
-            (!this.enableIcons ? null :
+            (!tf.enableIcons ? null :
             '<input type="button" value="" class="'+this.btnPageCssClass +
             ' nextPage" title="Next page" />');
         //defines previous page button html
         this.btnPrevPageHtml = f.btn_prev_page_html ||
-            (!this.enableIcons ? null :
+            (!tf.enableIcons ? null :
             '<input type="button" value="" class="'+this.btnPageCssClass +
             ' previousPage" title="Previous page" />');
         //defines last page button html
         this.btnFirstPageHtml = f.btn_first_page_html ||
-            (!this.enableIcons ? null :
+            (!tf.enableIcons ? null :
             '<input type="button" value="" class="'+this.btnPageCssClass +
             ' firstPage" title="First page" />');
         //defines previous page button html
         this.btnLastPageHtml = f.btn_last_page_html ||
-            (!this.enableIcons ? null :
+            (!tf.enableIcons ? null :
             '<input type="button" value="" class="'+this.btnPageCssClass +
             ' lastPage" title="Last page" />');
         //defines text preceeding page selector drop-down
@@ -71,8 +80,6 @@ export class Paging{
         this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';
         //enables/disables paging buttons
         this.hasPagingBtns = f.paging_btns===false ? false : true;
-        //stores paging buttons events
-        this.pagingBtnEvents = null;
         //defines previous page button html
         this.pageSelectorType = f.page_selector_type || tf.fltTypeSlc;
         //calls function before page is changed
@@ -86,88 +93,94 @@ export class Paging{
         //calculates page nb
         this.nbPages = Math.ceil((nrows-start_row)/this.pagingLength);
 
-        var evt = tf.Evt;
         //Paging elements events
-        if(!evt._Paging.next){
-            var o = this;
-            evt._Paging = {// paging buttons events
-                slcIndex: function(){
-                    return (o.pageSelectorType===tf.fltTypeSlc) ?
-                        o.pagingSlc.options.selectedIndex :
-                        parseInt(o.pagingSlc.value, 10)-1;
-                },
-                nbOpts: function(){
-                    return (o.pageSelectorType===tf.fltTypeSlc) ?
-                        parseInt(o.pagingSlc.options.length, 10)-1 :
-                        (o.nbPages-1);
-                },
-                next: function(){
-                    if(evt._Paging.nextEvt){
-                        evt._Paging.nextEvt();
+        var o = this;
+        // Paging DOM events
+        this.evt = {
+            slcIndex(){
+                return (o.pageSelectorType===tf.fltTypeSlc) ?
+                    o.pagingSlc.options.selectedIndex :
+                    parseInt(o.pagingSlc.value, 10)-1;
+            },
+            nbOpts(){
+                return (o.pageSelectorType===tf.fltTypeSlc) ?
+                    parseInt(o.pagingSlc.options.length, 10)-1 :
+                    (o.nbPages-1);
+            },
+            next(){
+                var nextIndex = o.evt.slcIndex() < o.evt.nbOpts() ?
+                    o.evt.slcIndex()+1 : 0;
+                o.changePage(nextIndex);
+            },
+            prev(){
+                var prevIndex = o.evt.slcIndex()>0 ?
+                    o.evt.slcIndex()-1 : o.evt.nbOpts();
+                o.changePage(prevIndex);
+            },
+            last(){
+                o.changePage(o.evt.nbOpts());
+            },
+            first(){
+                o.changePage(0);
+            },
+            _detectKey(e){
+                var key = tf.Evt.getKeyCode(e);
+                if(key===13){
+                    if(tf.sorted){
+                        tf.Filter();
+                        o.changePage(o.evt.slcIndex());
+                    } else{
+                        o.changePage();
                     }
-                    var nextIndex =
-                        evt._Paging.slcIndex() < evt._Paging.nbOpts() ?
-                        evt._Paging.slcIndex()+1 : 0;
-                    o.changePage(nextIndex);
-                },
-                prev: function(){
-                    if(evt._Paging.prevEvt){
-                        evt._Paging.prevEvt();
-                    }
-                    var prevIndex = evt._Paging.slcIndex()>0 ?
-                        evt._Paging.slcIndex()-1 : evt._Paging.nbOpts();
-                    o.changePage(prevIndex);
-                },
-                last: function(){
-                    if(evt._Paging.lastEvt){
-                        evt._Paging.lastEvt();
-                    }
-                    o.changePage(evt._Paging.nbOpts());
-                },
-                first: function(){
-                    if(evt._Paging.firstEvt){
-                        evt._Paging.firstEvt();
-                    }
-                    o.changePage(0);
-                },
-                _detectKey: function(e){
-                    var evt = e || global.event;
-                    if(evt){
-                        var key = evt.getKeyCode(e);
-                        if(key===13){
-                            if(tf.sorted){
-                                tf.Filter();
-                                o.changePage(evt._Paging.slcIndex());
-                            } else{
-                                o.changePage();
-                            }
-                            this.blur();
-                        }
-                    }
-                },
-                nextEvt: null,
-                prevEvt: null,
-                lastEvt: null,
-                firstEvt: null
-            };
-        }
+                    this.blur();
+                }
+            },
+            slcPagesChange: null,
+            nextEvt: null,
+            prevEvt: null,
+            lastEvt: null,
+            firstEvt: null
+        };
 
         this.tf = tf;
     }
 
+    /**
+     * Initialize DOM elements
+     */
     init(){
         var slcPages;
         var tf = this.tf;
-        var evt = tf.Evt;
+        var evt = this.evt;
+
+        // Check resultsPerPage is in expected format and initialise the
+        // results per page component
+        if(this.hasResultsPerPage){
+            if(this.resultsPerPage.length<2){
+                this.hasResultsPerPage = false;
+            } else {
+                this.pagingLength = this.resultsPerPage[1][0];
+                this.setResultsPerPage();
+            }
+        }
+
+        /*====================================================
+            - onchange event for paging select
+        =====================================================*/
+        evt.slcPagesChange = (event) => {
+            // if(evt._Paging._OnSlcPagesChangeEvt){
+            //     evt._Paging._OnSlcPagesChangeEvt();
+            // }
+            this.changePage();
+            event.target.blur();
+        };
 
         // Paging drop-down list selector
         if(this.pageSelectorType === tf.fltTypeSlc){
             slcPages = Dom.create(
                 tf.fltTypeSlc, ['id', tf.prfxSlcPages+tf.id]);
             slcPages.className = this.pgSlcCssClass;
-            console.log(evt);
-            slcPages.onchange = evt._OnSlcPagesChange;
-            //slcPages.onchange = function(){ alert('hello'); }
+            Event.add(slcPages, 'change', evt.slcPagesChange);
         }
 
         // Paging input selector
@@ -175,10 +188,10 @@ export class Paging{
             slcPages = Dom.create(
                 tf.fltTypeInp,
                 ['id', tf.prfxSlcPages+tf.id],
-                ['value', tf.currentPageNb]
+                ['value', this.currentPageNb]
             );
             slcPages.className = this.pgInpCssClass;
-            slcPages.onkeypress = evt._Paging._detectKey;
+            Event.add(slcPages, 'keypress', evt._detectKey);
         }
 
         // btns containers
@@ -202,11 +215,11 @@ export class Paging{
                     ['title', 'Next']
                 );
                 btn_next.className = this.btnPageCssClass;
-                btn_next.onclick = evt._Paging.next;
+                Event.add(btn_next, 'click', evt.next);
                 btnNextSpan.appendChild(btn_next);
             } else {
                 btnNextSpan.innerHTML = this.btnNextPageHtml;
-                btnNextSpan.onclick = evt._Paging.next;
+                Event.add(btnNextSpan, 'click', evt.next);
             }
             // Previous button
             if(!this.btnPrevPageHtml){
@@ -218,11 +231,11 @@ export class Paging{
                     ['title','Previous']
                 );
                 btn_prev.className = this.btnPageCssClass;
-                btn_prev.onclick = evt._Paging.prev;
+                Event.add(btn_prev, 'click', evt.prev);
                 btnPrevSpan.appendChild(btn_prev);
             } else {
                 btnPrevSpan.innerHTML = this.btnPrevPageHtml;
-                btnPrevSpan.onclick = evt._Paging.prev;
+                Event.add(btnPrevSpan, 'click', evt.prev);
             }
             // Last button
             if(!this.btnLastPageHtml){
@@ -234,11 +247,11 @@ export class Paging{
                     ['title','Last']
                 );
                 btn_last.className = this.btnPageCssClass;
-                btn_last.onclick = evt._Paging.last;
+                Event.add(btn_last, 'click', evt.last);
                 btnLastSpan.appendChild(btn_last);
             } else {
                 btnLastSpan.innerHTML = this.btnLastPageHtml;
-                btnLastSpan.onclick = evt._Paging.last;
+                Event.add(btnLastSpan, 'click', evt.last);
             }
             // First button
             if(!this.btnFirstPageHtml){
@@ -250,11 +263,11 @@ export class Paging{
                     ['title','First']
                 );
                 btn_first.className = this.btnPageCssClass;
-                btn_first.onclick = evt._Paging.first;
+                Event.add(btn_first, 'click', evt.first);
                 btnFirstSpan.appendChild(btn_first);
             } else {
                 btnFirstSpan.innerHTML = this.btnFirstPageHtml;
-                btnFirstSpan.onclick = evt._Paging.first;
+                Event.add(btnFirstSpan, 'click', evt.first);
             }
         }
 
@@ -263,17 +276,6 @@ export class Paging{
             tf.SetTopDiv();
         }
         var targetEl = !this.pagingTgtId ? tf.mDiv : Dom.id(this.pagingTgtId);
-
-        /***
-        if paging previously removed this prevents IE memory leak with
-        removeChild used in RemovePaging method. For more info refer to
-        http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2840253&SiteID=1
-        ***/
-        if (targetEl.innerHTML!==''){
-            targetEl.innerHTML = '';
-        }
-        /*** ***/
-
         targetEl.appendChild(btnFirstSpan);
         targetEl.appendChild(btnPrevSpan);
 
@@ -296,25 +298,9 @@ export class Paging{
         targetEl.appendChild(btnLastSpan);
         this.pagingSlc = Dom.id(tf.prfxSlcPages+tf.id);
 
-        /*====================================================
-            - onchange event for paging select
-        =====================================================*/
-        var o = this;
-        evt._OnSlcPagesChange = function(){
-            if(evt._Paging._OnSlcPagesChangeEvt){
-                evt._Paging._OnSlcPagesChangeEvt();
-            }
-            o.changePage();
-            this.blur();
-            //ie only: blur is not enough...
-            if(this.parentNode && Helpers.isIE()){
-                this.parentNode.focus();
-            }
-        };
-
-        // if this.rememberGridValues==true this.SetPagingInfo() is called
+        // if this.rememberGridValues==true this.setPagingInfo() is called
         // in ResetGridValues() method
-        if(!tf.rememberGridValues || tf.isPagingRemoved){
+        if(!tf.rememberGridValues || this.isPagingRemoved){
             this.setPagingInfo();
         }
         if(!tf.fltGrid){
@@ -322,17 +308,20 @@ export class Paging{
             this.setPagingInfo(tf.validRowsIndex);
         }
 
-        this.pagingBtnEvents = evt._Paging;
-        tf.isPagingRemoved = false;
+        this.isPagingRemoved = false;
     }
 
-    addPaging(filterTable){
+    /**
+     * Add paging when filters are already instanciated
+     * @param {Boolean} filterTable Execute filtering once paging instanciated
+     */
+    addPaging(filterTable=false){
         var tf = this.tf;
         if(!tf.hasGrid || tf.paging){
             return;
         }
         tf.paging = true;
-        tf.isPagingRemoved = true;
+        this.isPagingRemoved = true;
         this.init();
         tf.ResetValues();
         if(filterTable){
@@ -340,6 +329,11 @@ export class Paging{
         }
     }
 
+    /**
+     * Calculate number of pages based on valid rows
+     * Refresh paging select according to number of pages
+     * @param {Array} validRows Collection of valid rows
+     */
     setPagingInfo(validRows){
         var tf = this.tf;
         var rows = tf.tbl.rows;
@@ -398,6 +392,10 @@ export class Paging{
         this.groupByPage(tf.validRowsIndex);
     }
 
+    /**
+     * Group table rows by page and display valid rows
+     * @param  {Array} validRows Collection of valid rows
+     */
     groupByPage(validRows){
         var tf = this.tf;
         var rows = tf.tbl.rows;
@@ -434,12 +432,17 @@ export class Paging{
         tf.ApplyGridProps();
     }
 
+    /**
+     * Show page based param value (string or number):
+     * @param {String} or {Number} cmd possible string values: 'next',
+     * 'previous', 'last', 'first' or page number as per param
+     */
     setPage(cmd){
         var tf = this.tf;
         if(!tf.hasGrid || !this.paging){
             return;
         }
-        var btnEvt = this.pagingBtnEvents,
+        var btnEvt = this.evt,
             cmdtype = typeof cmd;
         if(cmdtype==='string'){
             switch(Str.lower(cmd)){
@@ -465,9 +468,12 @@ export class Paging{
         }
     }
 
+    /**
+     * Generates UI elements of the number of results per page drop-down
+     */
     setResultsPerPage(){
         var tf = this.tf;
-        var evt = tf.Evt;
+        var evt = this.evt;
 
         if(!tf.hasGrid && !tf.isFirstLoad){
             return;
@@ -476,20 +482,13 @@ export class Paging{
             return;
         }
 
-        //Change nb results per page event
-        if(!evt._OnSlcResultsChange){
-            /*====================================================
-                - onchange event for results per page select
-            =====================================================*/
-            evt._OnSlcResultsChange = function(){
-                this.changeResultsPerPage();
-                this.blur();
-                //ie only: blur is not enough...
-                if(this.parentNode && Helpers.isIE()){
-                    this.parentNode.focus();
-                }
-            };
-        }
+        /*====================================================
+            - onchange event for results per page select
+        =====================================================*/
+        evt.slcResultsChange = (ev) => {
+            this.changeResultsPerPage();
+            ev.target.blur();
+        };
 
         var slcR = Dom.create(
             tf.fltTypeSlc, ['id', tf.prfxSlcResults+tf.id]);
@@ -516,9 +515,12 @@ export class Paging{
             var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);
             this.resultsPerPageSlc.options[r] = currOpt;
         }
-        slcR.onchange = evt._OnSlcResultsChange;
+        Event.add(slcR, 'change', evt.slcResultsChange);
     }
 
+    /**
+     * Remove number of results per page UI elements
+     */
     removeResultsPerPage(){
         var tf = this.tf;
         if(!tf.hasGrid || !this.resultsPerPageSlc || !this.resultsPerPage){
@@ -535,37 +537,54 @@ export class Paging{
         this.resultsPerPageSlc = null;
     }
 
+    /**
+     * Change the page asynchronously according to passed index
+     * @param  {Number} index Index of the page (0-n)
+     */
     changePage(index){
         var tf = this.tf;
         var evt = tf.Evt;
         tf.EvtManager(evt.name.changepage, { pgIndex:index });
     }
 
+    /**
+     * Change rows asynchronously according to page results
+     */
     changeResultsPerPage(){
         var tf = this.tf;
         var evt = tf.Evt;
         tf.EvtManager(evt.name.changeresultsperpage);
     }
 
+    /**
+     * Re-set asynchronously page nb at page re-load
+     */
     resetPage(){
         var tf = this.tf;
         var evt = tf.Evt;
         tf.EvtManager(evt.name.resetpage);
     }
 
+    /**
+     * Re-set asynchronously page length at page re-load
+     */
     resetPageLength(){
         var tf = this.tf;
         var evt = tf.Evt;
         tf.EvtManager(evt.name.resetpagelength);
     }
 
+    /**
+     * Change the page according to passed index
+     * @param  {Number} index Index of the page (0-n)
+     */
     _changePage(index){
         var tf = this.tf;
 
         if(!tf.paging){
             return;
         }
-        if(index === undefined){
+        if(index === null){
             index = this.pageSelectorType===tf.fltTypeSlc ?
                 this.pagingSlc.options.selectedIndex : (this.pagingSlc.value-1);
         }
@@ -581,7 +600,7 @@ export class Paging{
             }
 
             if(tf.rememberPageNb){
-                tf.Cpt.store.savePageNb(this.pgNbCookie);
+                tf.Cpt.store.savePageNb(tf.pgNbCookie);
             }
             this.startPagingRow = (this.pageSelectorType===tf.fltTypeSlc) ?
                 this.pagingSlc.value : (index*this.pagingLength);
@@ -594,6 +613,9 @@ export class Paging{
         }
     }
 
+    /**
+     * Change rows according to page results
+     */
     _changeResultsPerPage(){
         var tf = this.tf;
 
@@ -625,6 +647,9 @@ export class Paging{
         }
     }
 
+    /**
+     * Re-set page nb at page re-load
+     */
     _resetPage(name){
         var tf = this.tf;
         var pgnb = tf.Cpt.store.getPageNb(name);
@@ -633,6 +658,9 @@ export class Paging{
         }
     }
 
+    /**
+     * Re-set page length at page re-load
+     */
     _resetPageLength(name){
         var tf = this.tf;
         if(!tf.paging){
@@ -646,10 +674,13 @@ export class Paging{
         }
     }
 
+    /**
+     * Remove paging feature
+     */
     destroy(){
         var tf = this.tf;
 
-        if(!tf.hasGrid || this.pagingSlc){
+        if(!tf.hasGrid){
             return;
         }
         // btns containers
@@ -666,21 +697,35 @@ export class Paging{
         //span containing nb of pages
         pgspan = Dom.id(tf.prfxPgSpan+tf.id);
 
-        this.pagingSlc.parentNode.removeChild(this.pagingSlc);
+        var evt = this.evt;
+
+        if(this.pagingSlc){
+            if(this.pageSelectorType === tf.fltTypeSlc){
+                Event.remove(this.pagingSlc, 'change', evt.slcPagesChange);
+            }
+            else if(this.pageSelectorType === tf.fltTypeInp){
+                Event.remove(this.pagingSlc, 'keypress', evt._detectKey);
+            }
+            this.pagingSlc.parentNode.removeChild(this.pagingSlc);
+        }
 
         if(btnNextSpan){
+            Event.remove(btnNextSpan, 'click', evt.next);
             btnNextSpan.parentNode.removeChild(btnNextSpan);
         }
 
         if(btnPrevSpan){
+            Event.remove(btnPrevSpan, 'click', evt.prev);
             btnPrevSpan.parentNode.removeChild(btnPrevSpan);
         }
 
         if(btnLastSpan){
+            Event.remove(btnLastSpan, 'click', evt.last);
             btnLastSpan.parentNode.removeChild(btnLastSpan);
         }
 
         if(btnFirstSpan){
+            Event.remove(btnFirstSpan, 'click', evt.first);
             btnFirstSpan.parentNode.removeChild(btnFirstSpan);
         }
 
@@ -696,9 +741,13 @@ export class Paging{
             pgspan.parentNode.removeChild(pgspan);
         }
 
-        this.pagingBtnEvents = null;
-        this.pagingSlc = null;
-        tf.isPagingRemoved = true;
-    }
+        if(this.hasResultsPerPage){
+            this.removeResultsPerPage();
+        }
 
+        this.pagingSlc = null;
+        this.nbPages = 0;
+        this.isPagingRemoved = true;
+        tf.paging = false;
+    }
 }

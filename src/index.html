@@ -4,8 +4,23 @@
     <title>HTML Table Filter Generator</title>
     <link href="./filtergrid.css" rel="stylesheet" type="text/css">
     <script src="../libs/requirejs/require.js"></script>
+    <script type="text/javascript">
+        var tf;
+    </script>
 </head>
 <body>
+    <p align="right">
+        <input type="button" value="Reset paging"
+            onclick="
+                if( tf.paging ) return;
+                tf.Cpt.paging.addPaging();" >
+    <input type="button" value="Remove paging"
+        onclick="
+            if( !tf.paging ) return;
+            tf.paging = false; //behaviour is removed here
+            tf.Cpt.paging.destroy();
+            tf.Filter();" >
+    </p>
     <table id="demo" cellpadding="0" cellspacing="0">
         <tbody>
             <tr>
@@ -70,7 +85,7 @@
     <script>
         requirejs(['core'], function(TableFilter){
             // Your logic here
-            var tf = new TableFilter("demo", {
+            tf = new TableFilter("demo", {
                 col_0: 'select',
                 col_3: 'checklist',
                 base_path: './',
@@ -79,7 +94,8 @@
                 enable_default_theme: true,
                 paging: true,
                 paging_length: 2,
-                // results_per_page: ['Results per page', [2,4,6]],
+                // page_selector_type: 'input',
+                results_per_page: ['Results per page', [2,4,6]],
                 // remember_grid_values: true,
                 // remember_page_number: true,
                 // remember_page_length: true,

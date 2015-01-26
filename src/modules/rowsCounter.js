@@ -99,10 +99,13 @@ define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom,
               totTxt = tf.nbFilterableRows - tf.nbHiddenRows - (tf.hasVisibleRows ? tf.visibleRows.length : 0);
             }
           } else {
-            //paging start row
-            var paging_start_row = parseInt(tf.startPagingRow, 10) + ((tf.nbVisibleRows > 0) ? 1 : 0);
-            var paging_end_row = (paging_start_row + tf.pagingLength) - 1 <= tf.nbVisibleRows ? paging_start_row + tf.pagingLength - 1 : tf.nbVisibleRows;
-            totTxt = paging_start_row + this.fromToTextSeparator + paging_end_row + this.overText + tf.nbVisibleRows;
+            var paging = tf.Cpt.paging;
+            if (paging) {
+              //paging start row
+              var paging_start_row = parseInt(paging.startPagingRow, 10) + ((tf.nbVisibleRows > 0) ? 1 : 0);
+              var paging_end_row = (paging_start_row + paging.pagingLength) - 1 <= tf.nbVisibleRows ? paging_start_row + paging.pagingLength - 1 : tf.nbVisibleRows;
+              totTxt = paging_start_row + this.fromToTextSeparator + paging_end_row + this.overText + tf.nbVisibleRows;
+            }
           }
           this.rowsCounterSpan.innerHTML = totTxt;
           if (this.onAfterRefreshCounter) {

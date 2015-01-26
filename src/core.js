@@ -397,23 +397,8 @@ function TableFilter(id) {
     /*** paging ***/
     //enables/disables table paging
     this.paging = f.paging===true ? true : false;
-    //enables/disables results per page drop-down
-    this.hasResultsPerPage = types.isArray(f.results_per_page) ? true : false;
-    //css class for paging buttons (previous,next,etc.)
-    this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';
-    //stores paging select element
-    this.pagingSlc = null;
-    //stores results per page text and values
-    this.resultsPerPage = null;
-    //results per page select element
-    this.resultsPerPageSlc = null;
-    //indicates if paging elements were previously removed
-    this.isPagingRemoved = false;
     this.nbVisibleRows = 0; //nb visible rows
     this.nbHiddenRows = 0; //nb hidden rows
-    this.startPagingRow = 0; //1st row index of current page
-    this.nbPages = 0; //total nb of pages
-    this.currentPageNb = 1; //current page nb
 
     /*** webfx sort adapter ***/
     //enables/disables default table sorting
@@ -486,9 +471,6 @@ function TableFilter(id) {
     /*** keyword highlighting ***/
     //enables/disables keyword highlighting
     this.highlightKeywords = f.highlight_keywords===true ? true : false;
-    // //defines css class for highlighting
-    // this.highlightCssClass = f.highlight_css_class || 'keyword';
-    // this.highlightedNodes = [];
 
     /*** data types ***/
     //defines default date type (european DMY)
@@ -973,15 +955,6 @@ TableFilter.prototype = {
             this.SetPopupFilterIcons();
         }
 
-        if(this.hasResultsPerPage){
-            this.resultsPerPage = f['results_per_page'] || this.resultsPerPage;
-            if(this.resultsPerPage.length<2){
-                this.hasResultsPerPage = false;
-            } else {
-                this.pagingLength = this.resultsPerPage[1][0];
-            }
-        }
-
         //filters grid is not generated
         if(!this.fltGrid){
             this.refRow = this.refRow-1;
@@ -1010,9 +983,6 @@ TableFilter.prototype = {
                     if(this.popUpFilters){
                         this.headersRow++;
                     }
-                    // if(this.fixedHeaders){
-                    //     this.SetFixedHeaders();
-                    // }
 
                     fltrow.className = this.fltsRowCssClass;
                     //Disable for grid_layout
@@ -1096,22 +1066,6 @@ TableFilter.prototype = {
                             var opt0 = dom.createOpt(this.displayAllText,'');
                             slc.appendChild(opt0);
                         }
-
-                        /*  Code below for IE: it prevents select options to
-                            slide out before select it-self is populated.
-                            This is an unexpeted behavior for users since at
-                            1st click options are empty. Work around:
-                            select is disabled and by clicking on element
-                            (parent td), users enable drop-down and select is
-                            populated at same time.  */
-                        // if(this.fillSlcOnDemand && hlp.isIE()){
-                        //     slc.disabled = true;
-                        //     slc.title = this.activateSlcTooltip;
-                        //     slc.parentNode.onclick = this.Evt._EnableSlc;
-                        //     if(col===this.fltTypeMulti){
-                        //         this.__deferMultipleSelection(slc,0);
-                        //     }
-                        // }
                     }
                     // checklist
                     else if(col===this.fltTypeCheckList){
@@ -1217,18 +1171,10 @@ TableFilter.prototype = {
         if(this.statusBar){
             this.SetStatusBar();
         }
-        // if(this.fixedHeaders && !this.isFirstLoad){
-        //     this.SetFixedHeaders();
-        // }
         if(this.paging){
-            //this.SetPaging();
             var Paging = require('modules/paging').Paging;
             this.Cpt.paging = new Paging(this);
             this.Cpt.paging.init();
-        }
-        if(this.hasResultsPerPage && this.paging){
-            // this.SetResultsPerPage();
-            this.Cpt.paging.setResultsPerPage();
         }
         if(this.btnReset){
             this.SetResetBtn();
@@ -1239,7 +1185,7 @@ TableFilter.prototype = {
         if(this.hasColWidth && !this.gridLayout){
             this.SetColWidths();
         }
-        if(this.alternateBgs /*&& this.isStartBgAlternate*/){
+        if(this.alternateBgs){
             //1st time only if no paging and rememberGridValues
             var AlternateRows = require('modules/alternateRows').AlternateRows;
             this.Cpt.alternateRows = new AlternateRows(this);
@@ -1280,7 +1226,7 @@ TableFilter.prototype = {
         }
 
         if(this.onFiltersLoaded){
-            this.onFiltersLoaded.call(null,this);
+            this.onFiltersLoaded.call(null, this);
         }
 
     },// AddGrid
@@ -1525,7 +1471,6 @@ TableFilter.prototype = {
         if(this.fltGrid && this.hasGrid){
             var rows = this.tbl.rows;
             if(this.paging){
-                // this.RemovePaging();
                 this.Cpt.paging.destroy();
             }
             if(this.statusBar){
@@ -1540,21 +1485,13 @@ TableFilter.prototype = {
             if(this.helpInstructions || !this.helpInstructions){
                 this.RemoveHelpInstructions();
             }
-            if(this.paging){
-                // this.RemoveResultsPerPage();
-                this.Cpt.paging.removeResultsPerPage();
-            }
             if(this.isExternalFlt && !this.popUpFilters){
                 this.RemoveExternalFlts();
             }
-            // if(this.fixedHeaders){
-            //     this.RemoveFixedHeaders();
-            // }
             if(this.infDiv){
                 this.RemoveTopDiv();
             }
             if(this.highlightKeywords){
-                // this.UnhighlightAll();
                 this.Cpt.highlightKeyword.unhighlightAll();
             }
             if(this.sort){
@@ -1629,10 +1566,6 @@ TableFilter.prototype = {
         if(this.toolBarTgtId){
             dom.id(this.toolBarTgtId).appendChild(infdiv);
         }
-        //fixed headers
-        // else if(this.fixedHeaders && this.contDiv){
-        //     this.contDiv.parentNode.insertBefore(infdiv, this.contDiv);
-        // }
         //grid-layout
         else if(this.gridLayout){
             this.Cpt.gridLayout.tblMainCont.appendChild(infdiv);
@@ -2059,9 +1992,7 @@ TableFilter.prototype = {
                     o.nbVisibleRows++;
                     o.nbFilterableRows++;
                     o.paging=false;
-                    // o.RemovePaging();
                     o.Cpt.paging.destroy();
-                    // o.AddPaging(false);
                     o.Cpt.paging.addPaging();
                 }
                 if(o.alternateBgs){
@@ -2082,9 +2013,7 @@ TableFilter.prototype = {
                         o.nbVisibleRows--;
                         o.nbFilterableRows--;
                         o.paging=false;
-                        // o.RemovePaging();
                         o.Cpt.paging.destroy();
-                        // o.AddPaging(false);
                         o.Cpt.paging.addPaging(false);
                     }
                     if(o.alternateBgs){
@@ -2102,589 +2031,6 @@ TableFilter.prototype = {
             o.ezEditTable.Init();
         } catch(e) { console.log(ezEditConfig.err); }
     },
-
-    /*====================================================
-        - Generates paging elements:
-            - pages drop-down list
-            - previous, next, first, last buttons
-    =====================================================*/
-    // SetPaging: function(){
-    //     if(!this.hasGrid && !this.isFirstLoad || !this.paging ||
-    //         (!this.isPagingRemoved && !this.isFirstLoad)){
-    //         return;
-    //     }
-
-    //     var f = this.fObj;
-    //     //id of container element
-    //     this.pagingTgtId = f.paging_target_id || null;
-    //     //defines table paging length
-    //     this.pagingLength = !isNaN(f.paging_length) ? f.paging_length : 10;
-    //     //id of container element
-    //     this.resultsPerPageTgtId = f.results_per_page_target_id || null;
-    //     //css class for paging select element
-    //     this.pgSlcCssClass = f.paging_slc_css_class || 'pgSlc';
-    //     //css class for paging input element
-    //     this.pgInpCssClass = f.paging_inp_css_class || 'pgNbInp';
-    //     //defines css class for results per page select
-    //     this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';
-    //     //css class for label preceding results per page select
-    //     this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';
-    //     //nb visible rows
-    //     this.nbVisibleRows = 0;
-    //     //nb hidden rows
-    //     this.nbHiddenRows = 0;
-    //     //1st row index of current page
-    //     this.startPagingRow = 0;
-    //     //total nb of pages
-    //     this.nbPages = 0;
-    //     //defines next page button text
-    //     this.btnNextPageText = f.btn_next_page_text || '>';
-    //     //defines previous page button text
-    //     this.btnPrevPageText = f.btn_prev_page_text || '<';
-    //     //defines last page button text
-    //     this.btnLastPageText = f.btn_last_page_text || '>|';
-    //     //defines first page button text
-    //     this.btnFirstPageText = f.btn_first_page_text || '|<';
-    //     //defines next page button html
-    //     this.btnNextPageHtml = f.btn_next_page_html ||
-    //         (!this.enableIcons ? null :
-    //         '<input type="button" value="" class="'+this.btnPageCssClass +
-    //         ' nextPage" title="Next page" />');
-    //     //defines previous page button html
-    //     this.btnPrevPageHtml = f.btn_prev_page_html ||
-    //         (!this.enableIcons ? null :
-    //         '<input type="button" value="" class="'+this.btnPageCssClass +
-    //         ' previousPage" title="Previous page" />');
-    //     //defines last page button html
-    //     this.btnFirstPageHtml = f.btn_first_page_html ||
-    //         (!this.enableIcons ? null :
-    //         '<input type="button" value="" class="'+this.btnPageCssClass +
-    //         ' firstPage" title="First page" />');
-    //     //defines previous page button html
-    //     this.btnLastPageHtml = f.btn_last_page_html ||
-    //         (!this.enableIcons ? null :
-    //         '<input type="button" value="" class="'+this.btnPageCssClass +
-    //         ' lastPage" title="Last page" />');
-    //     //defines text preceeding page selector drop-down
-    //     this.pageText = f.page_text || ' Page ';
-    //     //defines text after page selector drop-down
-    //     this.ofText = f.of_text || ' of ';
-    //     //css class for span containing tot nb of pages
-    //     this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';
-    //     //enables/disables paging buttons
-    //     this.hasPagingBtns = f.paging_btns===false ? false : true;
-    //     //stores paging buttons events
-    //     this.pagingBtnEvents = null;
-    //     //defines previous page button html
-    //     this.pageSelectorType = f.page_selector_type || this.fltTypeSlc;
-    //     //calls function before page is changed
-    //     this.onBeforeChangePage = types.isFn(f.on_before_change_page) ?
-    //         f.on_before_change_page : null;
-    //     //calls function before page is changed
-    //     this.onAfterChangePage = types.isFn(f.on_after_change_page) ?
-    //         f.on_after_change_page : null;
-    //     var start_row = this.refRow;
-    //     var nrows = this.nbRows;
-    //     //calculates page nb
-    //     this.nbPages = Math.ceil((nrows-start_row)/this.pagingLength);
-
-    //     //Paging elements events
-    //     if(!this.Evt._Paging.next){
-    //         var o = this;
-    //         this.Evt._Paging = {// paging buttons events
-    //             slcIndex: function(){
-    //                 return (o.pageSelectorType===o.fltTypeSlc) ?
-    //                     o.pagingSlc.options.selectedIndex :
-    //                     parseInt(o.pagingSlc.value,10)-1;
-    //             },
-    //             nbOpts: function(){
-    //                 return (o.pageSelectorType===o.fltTypeSlc) ?
-    //                     parseInt(o.pagingSlc.options.length,10)-1 :
-    //                     (o.nbPages-1);
-    //             },
-    //             next: function(){
-    //                 if(o.Evt._Paging.nextEvt){
-    //                     o.Evt._Paging.nextEvt();
-    //                 }
-    //                 var nextIndex =
-    //                     o.Evt._Paging.slcIndex()<o.Evt._Paging.nbOpts() ?
-    //                     o.Evt._Paging.slcIndex()+1 : 0;
-    //                 o.ChangePage(nextIndex);
-    //             },
-    //             prev: function(){
-    //                 if(o.Evt._Paging.prevEvt){
-    //                     o.Evt._Paging.prevEvt();
-    //                 }
-    //                 var prevIndex = o.Evt._Paging.slcIndex()>0 ?
-    //                     o.Evt._Paging.slcIndex()-1 : o.Evt._Paging.nbOpts();
-    //                 o.ChangePage(prevIndex);
-    //             },
-    //             last: function(){
-    //                 if(o.Evt._Paging.lastEvt){
-    //                     o.Evt._Paging.lastEvt();
-    //                 }
-    //                 o.ChangePage(o.Evt._Paging.nbOpts());
-    //             },
-    //             first: function(){
-    //                 if(o.Evt._Paging.firstEvt){
-    //                     o.Evt._Paging.firstEvt();
-    //                 }
-    //                 o.ChangePage(0);
-    //             },
-    //             _detectKey: function(e){
-    //                 var evt = e || global.event;
-    //                 if(evt){
-    //                     var key = o.Evt.getKeyCode(e);
-    //                     if(key===13){
-    //                         if(o.sorted){
-    //                             o.Filter();
-    //                             o.ChangePage(o.Evt._Paging.slcIndex());
-    //                         } else{
-    //                             o.ChangePage();
-    //                         }
-    //                         this.blur();
-    //                     }
-    //                 }
-    //             },
-    //             nextEvt: null,
-    //             prevEvt: null,
-    //             lastEvt: null,
-    //             firstEvt: null
-    //         };
-    //     }
-
-    //     ====================================================
-    //         - onchange event for paging select
-    //     =====================================================
-    //     if(!this.Evt._OnSlcPagesChange){
-    //         this.Evt._OnSlcPagesChange = function(){
-    //             if(o.Evt._Paging._OnSlcPagesChangeEvt){
-    //                 o.Evt._Paging._OnSlcPagesChangeEvt();
-    //             }
-    //             o.ChangePage();
-    //             this.blur();
-    //             //ie only: blur is not enough...
-    //             if(this.parentNode && hlp.isIE()){
-    //                 this.parentNode.focus();
-    //             }
-    //         };
-    //     }
-
-    //     var slcPages;
-
-    //     // Paging drop-down list selector
-    //     if(this.pageSelectorType === this.fltTypeSlc){
-    //         slcPages = dom.create(
-    //             this.fltTypeSlc, ['id',this.prfxSlcPages+this.id]);
-    //         slcPages.className = this.pgSlcCssClass;
-    //         slcPages.onchange = this.Evt._OnSlcPagesChange;
-    //     }
-
-    //     // Paging input selector
-    //     if(this.pageSelectorType === this.fltTypeInp){
-    //         slcPages = dom.create(
-    //             this.fltTypeInp,
-    //             ['id',this.prfxSlcPages+this.id],
-    //             ['value',this.currentPageNb]
-    //         );
-    //         slcPages.className = this.pgInpCssClass;
-    //         slcPages.onkeypress = this.Evt._Paging._detectKey;
-    //     }
-
-    //     // btns containers
-    //     var btnNextSpan = dom.create(
-    //         'span',['id',this.prfxBtnNextSpan+this.id]);
-    //     var btnPrevSpan = dom.create(
-    //         'span',['id',this.prfxBtnPrevSpan+this.id]);
-    //     var btnLastSpan = dom.create(
-    //         'span',['id',this.prfxBtnLastSpan+this.id]);
-    //     var btnFirstSpan = dom.create(
-    //         'span',['id',this.prfxBtnFirstSpan+this.id]);
-
-    //     if(this.hasPagingBtns){
-    //         // Next button
-    //         if(!this.btnNextPageHtml){
-    //             var btn_next = dom.create(
-    //                 this.fltTypeInp,['id',this.prfxBtnNext+this.id],
-    //                 ['type','button'],
-    //                 ['value',this.btnNextPageText],
-    //                 ['title','Next']
-    //             );
-    //             btn_next.className = this.btnPageCssClass;
-    //             btn_next.onclick = this.Evt._Paging.next;
-    //             btnNextSpan.appendChild(btn_next);
-    //         } else {
-    //             btnNextSpan.innerHTML = this.btnNextPageHtml;
-    //             btnNextSpan.onclick = this.Evt._Paging.next;
-    //         }
-    //         // Previous button
-    //         if(!this.btnPrevPageHtml){
-    //             var btn_prev = dom.create(
-    //                 this.fltTypeInp,
-    //                 ['id',this.prfxBtnPrev+this.id],
-    //                 ['type','button'],
-    //                 ['value',this.btnPrevPageText],
-    //                 ['title','Previous']
-    //             );
-    //             btn_prev.className = this.btnPageCssClass;
-    //             btn_prev.onclick = this.Evt._Paging.prev;
-    //             btnPrevSpan.appendChild(btn_prev);
-    //         } else {
-    //             btnPrevSpan.innerHTML = this.btnPrevPageHtml;
-    //             btnPrevSpan.onclick = this.Evt._Paging.prev;
-    //         }
-    //         // Last button
-    //         if(!this.btnLastPageHtml){
-    //             var btn_last = dom.create(
-    //                 this.fltTypeInp,
-    //                 ['id',this.prfxBtnLast+this.id],
-    //                 ['type','button'],
-    //                 ['value',this.btnLastPageText],
-    //                 ['title','Last']
-    //             );
-    //             btn_last.className = this.btnPageCssClass;
-    //             btn_last.onclick = this.Evt._Paging.last;
-    //             btnLastSpan.appendChild(btn_last);
-    //         } else {
-    //             btnLastSpan.innerHTML = this.btnLastPageHtml;
-    //             btnLastSpan.onclick = this.Evt._Paging.last;
-    //         }
-    //         // First button
-    //         if(!this.btnFirstPageHtml){
-    //             var btn_first = dom.create(
-    //                 this.fltTypeInp,
-    //                 ['id',this.prfxBtnFirst+this.id],
-    //                 ['type','button'],
-    //                 ['value',this.btnFirstPageText],
-    //                 ['title','First']
-    //             );
-    //             btn_first.className = this.btnPageCssClass;
-    //             btn_first.onclick = this.Evt._Paging.first;
-    //             btnFirstSpan.appendChild(btn_first);
-    //         } else {
-    //             btnFirstSpan.innerHTML = this.btnFirstPageHtml;
-    //             btnFirstSpan.onclick = this.Evt._Paging.first;
-    //         }
-    //     }
-
-    //     // paging elements (buttons+drop-down list) are added to defined element
-    //     if(!this.pagingTgtId){
-    //         this.SetTopDiv();
-    //     }
-    //     var targetEl = !this.pagingTgtId ? this.mDiv : dom.id(this.pagingTgtId);
-
-    //     /***
-    //     if paging previously removed this prevents IE memory leak with
-    //     removeChild used in RemovePaging method. For more info refer to
-    //     http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2840253&SiteID=1
-    //     ***/
-    //     if (targetEl.innerHTML!==''){
-    //         targetEl.innerHTML = '';
-    //     }
-    //     /*** ***/
-
-    //     targetEl.appendChild(btnFirstSpan);
-    //     targetEl.appendChild(btnPrevSpan);
-
-    //     var pgBeforeSpan = dom.create(
-    //         'span',['id',this.prfxPgBeforeSpan+this.id] );
-    //     pgBeforeSpan.appendChild( dom.text(this.pageText) );
-    //     pgBeforeSpan.className = this.nbPgSpanCssClass;
-    //     targetEl.appendChild(pgBeforeSpan);
-    //     targetEl.appendChild(slcPages);
-    //     var pgAfterSpan = dom.create(
-    //         'span',['id',this.prfxPgAfterSpan+this.id]);
-    //     pgAfterSpan.appendChild( dom.text(this.ofText) );
-    //     pgAfterSpan.className = this.nbPgSpanCssClass;
-    //     targetEl.appendChild(pgAfterSpan);
-    //     var pgspan = dom.create( 'span',['id',this.prfxPgSpan+this.id] );
-    //     pgspan.className = this.nbPgSpanCssClass;
-    //     pgspan.appendChild( dom.text(' '+this.nbPages+' ') );
-    //     targetEl.appendChild(pgspan);
-    //     targetEl.appendChild(btnNextSpan);
-    //     targetEl.appendChild(btnLastSpan);
-    //     this.pagingSlc = dom.id(this.prfxSlcPages+this.id);
-
-    //     // if this.rememberGridValues==true this.SetPagingInfo() is called
-    //     // in ResetGridValues() method
-    //     if(!this.rememberGridValues || this.isPagingRemoved){
-    //         this.SetPagingInfo();
-    //     }
-    //     if(!this.fltGrid){
-    //         this.ValidateAllRows();
-    //         this.SetPagingInfo(this.validRowsIndex);
-    //     }
-
-    //     this.pagingBtnEvents = this.Evt._Paging;
-    //     this.isPagingRemoved = false;
-    // },
-
-    /*====================================================
-        - Removes paging elements
-    =====================================================*/
-    // RemovePaging: function(){
-    //     if(!this.hasGrid || !this.pagingSlc){
-    //         return;
-    //     }
-
-    //     // btns containers
-    //     var btnNextSpan, btnPrevSpan, btnLastSpan, btnFirstSpan;
-    //     var pgBeforeSpan, pgAfterSpan, pgspan;
-    //     btnNextSpan = dom.id(this.prfxBtnNextSpan+this.id);
-    //     btnPrevSpan = dom.id(this.prfxBtnPrevSpan+this.id);
-    //     btnLastSpan = dom.id(this.prfxBtnLastSpan+this.id);
-    //     btnFirstSpan = dom.id(this.prfxBtnFirstSpan+this.id);
-    //     //span containing 'Page' text
-    //     pgBeforeSpan = dom.id(this.prfxPgBeforeSpan+this.id);
-    //     //span containing 'of' text
-    //     pgAfterSpan = dom.id(this.prfxPgAfterSpan+this.id);
-    //     //span containing nb of pages
-    //     pgspan = dom.id(this.prfxPgSpan+this.id);
-
-    //     this.pagingSlc.parentNode.removeChild(this.pagingSlc);
-
-    //     if(btnNextSpan){
-    //         btnNextSpan.parentNode.removeChild( btnNextSpan );
-    //     }
-
-    //     if(btnPrevSpan){
-    //         btnPrevSpan.parentNode.removeChild( btnPrevSpan );
-    //     }
-
-    //     if(btnLastSpan){
-    //         btnLastSpan.parentNode.removeChild( btnLastSpan );
-    //     }
-
-    //     if(btnFirstSpan){
-    //         btnFirstSpan.parentNode.removeChild( btnFirstSpan );
-    //     }
-
-    //     if(pgBeforeSpan){
-    //         pgBeforeSpan.parentNode.removeChild( pgBeforeSpan );
-    //     }
-
-    //     if(pgAfterSpan){
-    //         pgAfterSpan.parentNode.removeChild( pgAfterSpan );
-    //     }
-
-    //     if(pgspan){
-    //         pgspan.parentNode.removeChild( pgspan );
-    //     }
-
-    //     this.pagingBtnEvents = null;
-    //     this.pagingSlc = null;
-    //     this.isPagingRemoved = true;
-    // },
-
-    /*====================================================
-        - calculates page # according to valid rows
-        - refreshes paging select according to page #
-        - Calls GroupByPage method
-    =====================================================*/
-    // SetPagingInfo: function(validRows){
-    //     var rows = this.tbl.rows;
-    //     var mdiv = !this.pagingTgtId ? this.mDiv : dom.id(this.pagingTgtId);
-    //     var pgspan = dom.id(this.prfxPgSpan+this.id);
-    //     //stores valid rows indexes
-    //     if(validRows && validRows.length>0){
-    //         this.validRowsIndex = validRows;
-    //     } else {
-    //         //re-sets valid rows indexes array
-    //         this.validRowsIndex = [];
-
-    //         //counts rows to be grouped
-    //         for(var j=this.refRow; j<this.nbRows; j++){
-    //             var row = rows[j];
-    //             if(!row){
-    //                 continue;
-    //             }
-    //             var isRowValid = row.getAttribute('validRow');
-    //             if(isRowValid==='true' || !isRowValid){
-    //                 this.validRowsIndex.push(j);
-    //             }
-    //         }
-    //     }
-
-    //     //calculate nb of pages
-    //     this.nbPages = Math.ceil(this.validRowsIndex.length/this.pagingLength);
-    //     //refresh page nb span
-    //     pgspan.innerHTML = this.nbPages;
-    //     //select clearing shortcut
-    //     if(this.pageSelectorType===this.fltTypeSlc){
-    //         this.pagingSlc.innerHTML = '';
-    //     }
-
-    //     if(this.nbPages>0){
-    //         mdiv.style.visibility = 'visible';
-    //         if(this.pageSelectorType===this.fltTypeSlc){
-    //             for(var z=0; z<this.nbPages; z++){
-    //                 var currOpt = new Option(
-    //                     (z+1),
-    //                     z*this.pagingLength,
-    //                     false,
-    //                     false
-    //                 );
-    //                 this.pagingSlc.options[z] = currOpt;
-    //             }
-    //         } else{
-    //             //input type
-    //             this.pagingSlc.value = this.currentPageNb;
-    //         }
-
-    //     } else {
-    //         /*** if no results paging select and buttons are hidden ***/
-    //         mdiv.style.visibility = 'hidden';
-    //     }
-    //     this.GroupByPage(this.validRowsIndex);
-    // },
-
-    /*====================================================
-        - Displays current page rows
-    =====================================================*/
-    // GroupByPage: function(validRows){
-    //     var rows = this.tbl.rows;
-    //     var paging_end_row = parseInt(this.startPagingRow, 10) +
-    //         parseInt(this.pagingLength, 10);
-
-    //     //store valid rows indexes
-    //     if(validRows){
-    //         this.validRowsIndex = validRows;
-    //     }
-
-    //     //this loop shows valid rows of current page
-    //     for(var h=0; h<this.validRowsIndex.length; h++){
-    //         var r = rows[ this.validRowsIndex[h] ];
-    //         if(h>=this.startPagingRow && h<paging_end_row){
-    //             if(r.getAttribute('validRow')==='true' ||
-    //                 !r.getAttribute('validRow')){
-    //                 r.style.display = '';
-    //             }
-    //             if(this.alternateBgs){
-    //                 this.Cpt.alternateRows.setRowBg(this.validRowsIndex[h], h);
-    //             }
-    //         } else {
-    //             r.style.display = 'none';
-    //             if(this.alternateBgs){
-    //                 this.Cpt.alternateRows.removeRowBg(this.validRowsIndex[h]);
-    //             }
-    //         }
-    //     }
-
-    //     this.nbVisibleRows = this.validRowsIndex.length;
-    //     this.isStartBgAlternate = false;
-    //     //re-applies filter behaviours after filtering process
-    //     this.ApplyGridProps();
-    // },
-
-    /*====================================================
-        - If paging set true shows page according to
-        param value (string or number):
-            - strings: 'next','previous','last','first' or
-            - number: page number
-    =====================================================*/
-    // SetPage: function(cmd){
-    //     if(!this.hasGrid || !this.paging){
-    //         return;
-    //     }
-    //     var btnEvt = this.pagingBtnEvents,
-    //         cmdtype = typeof cmd;
-    //     if(cmdtype==='string'){
-    //         switch(str.lower(cmd)){
-    //             case 'next':
-    //                 btnEvt.next();
-    //             break;
-    //             case 'previous':
-    //                 btnEvt.prev();
-    //             break;
-    //             case 'last':
-    //                 btnEvt.last();
-    //             break;
-    //             case 'first':
-    //                 btnEvt.first();
-    //             break;
-    //             default:
-    //                 btnEvt.next();
-    //             break;
-    //         }
-    //     }
-    //     if(cmdtype==='number'){
-    //         this.ChangePage(cmd-1);
-    //     }
-    // },
-
-    /*====================================================
-        - Generates results per page select + label
-    =====================================================*/
-    // SetResultsPerPage: function(){
-    //     if(!this.hasGrid && !this.isFirstLoad){
-    //         return;
-    //     }
-    //     if(this.resultsPerPageSlc || !this.resultsPerPage){
-    //         return;
-    //     }
-
-    //     //Change nb results per page event
-    //     if(!this.Evt._OnSlcResultsChange){
-    //         var o = this;
-    //         /*====================================================
-    //             - onchange event for results per page select
-    //         =====================================================*/
-    //         this.Evt._OnSlcResultsChange = function(){
-    //             o.ChangeResultsPerPage();
-    //             this.blur();
-    //             //ie only: blur is not enough...
-    //             if(this.parentNode && hlp.isIE()){
-    //                 this.parentNode.focus();
-    //             }
-    //         };
-    //     }
-
-    //     var slcR = dom.create(
-    //         this.fltTypeSlc, ['id',this.prfxSlcResults+this.id]);
-    //     slcR.className = this.resultsSlcCssClass;
-    //     var slcRText = this.resultsPerPage[0],
-    //         slcROpts = this.resultsPerPage[1];
-    //     var slcRSpan = dom.create(
-    //         'span',['id',this.prfxSlcResultsTxt+this.id]);
-    //     slcRSpan.className = this.resultsSpanCssClass;
-
-    //     // results per page select is added to external element
-    //     if(!this.resultsPerPageTgtId){
-    //         this.SetTopDiv();
-    //     }
-    //     var targetEl = !this.resultsPerPageTgtId ?
-    //         this.rDiv : dom.id( this.resultsPerPageTgtId );
-    //     slcRSpan.appendChild(dom.text(slcRText));
-    //     targetEl.appendChild(slcRSpan);
-    //     targetEl.appendChild(slcR);
-
-    //     this.resultsPerPageSlc = dom.id(this.prfxSlcResults+this.id);
-
-    //     for(var r=0; r<slcROpts.length; r++)
-    //     {
-    //         var currOpt = new Option(slcROpts[r],slcROpts[r],false,false);
-    //         this.resultsPerPageSlc.options[r] = currOpt;
-    //     }
-    //     slcR.onchange = this.Evt._OnSlcResultsChange;
-    // },
-
-    /*====================================================
-        - Removes results per page select + label
-    =====================================================*/
-    // RemoveResultsPerPage: function(){
-    //     if(!this.hasGrid || !this.resultsPerPageSlc || !this.resultsPerPage){
-    //         return;
-    //     }
-    //     var slcR = this.resultsPerPageSlc,
-    //         slcRSpan = dom.id(this.prfxSlcResultsTxt+this.id);
-    //     if(slcR){
-    //         slcR.parentNode.removeChild( slcR );
-    //     }
-    //     if(slcRSpan){
-    //         slcRSpan.parentNode.removeChild( slcRSpan );
-    //     }
-    //     this.resultsPerPageSlc = null;
-    // },
 
     /*====================================================
         - Generates help instructions
@@ -2817,137 +2163,6 @@ TableFilter.prototype = {
             this.helpInstrContEl.style.display = 'none';
         }
     },
-
-    // ChangePage: function(index){
-    //     this.EvtManager(this.Evt.name.changepage,{ pgIndex:index });
-    // },
-    /*====================================================
-        - Changes page
-        - Param:
-            - index: option index of paging select
-            (numeric value)
-    =====================================================*/
-    // _ChangePage: function(index){
-    //     if(!this.paging){
-    //         return;
-    //     }
-    //     if(!index){
-    //         index = this.pageSelectorType===this.fltTypeSlc ?
-    //             this.pagingSlc.options.selectedIndex : (this.pagingSlc.value-1);
-    //     }
-    //     if( index>=0 && index<=(this.nbPages-1) ){
-    //         if(this.onBeforeChangePage){
-    //             this.onBeforeChangePage.call(null, this, index);
-    //         }
-    //         this.currentPageNb = parseInt(index, 10)+1;
-    //         if(this.pageSelectorType===this.fltTypeSlc){
-    //             this.pagingSlc.options[index].selected = true;
-    //         } else {
-    //             this.pagingSlc.value = this.currentPageNb;
-    //         }
-
-    //         if(this.rememberPageNb){
-    //             this.Cpt.store.savePageNb(this.pgNbCookie);
-    //         }
-    //         this.startPagingRow = (this.pageSelectorType===this.fltTypeSlc) ?
-    //             this.pagingSlc.value : (index*this.pagingLength);
-    //         this.GroupByPage();
-    //         if(this.onAfterChangePage){
-    //             this.onAfterChangePage.call(null, this, index);
-    //         }
-    //     }
-    // },
-
-    // ChangeResultsPerPage: function(){
-    //     this.EvtManager(this.Evt.name.changeresultsperpage);
-    // },
-    /*====================================================
-        - calculates rows to be displayed in a page
-        - method called by nb results per page select
-    =====================================================*/
-    // _ChangeResultsPerPage: function(){
-    //     if(!this.paging){
-    //         return;
-    //     }
-    //     var slcR = this.resultsPerPageSlc;
-    //     var slcPagesSelIndex = (this.pageSelectorType==this.fltTypeSlc) ?
-    //             this.pagingSlc.selectedIndex :
-    //             parseInt(this.pagingSlc.value-1, 10);
-    //     this.pagingLength = parseInt(slcR.options[slcR.selectedIndex].value,10);
-    //     this.startPagingRow = this.pagingLength*slcPagesSelIndex;
-
-    //     if(!isNaN(this.pagingLength)){
-    //         if(this.startPagingRow>=this.nbFilterableRows){
-    //             this.startPagingRow = (this.nbFilterableRows-this.pagingLength);
-    //         }
-    //         this.SetPagingInfo();
-
-    //         if(this.pageSelectorType===this.fltTypeSlc){
-    //             var slcIndex =
-    //                 (this.pagingSlc.options.length-1<=slcPagesSelIndex ) ?
-    //                 (this.pagingSlc.options.length-1) : slcPagesSelIndex;
-    //             this.pagingSlc.options[slcIndex].selected = true;
-    //         }
-    //         if(this.rememberPageLen){
-    //             this.Cpt.store.savePageLength(this.pgLenCookie);
-    //         }
-    //     }
-    // },
-
-    // ResetPage: function(name){
-    //     this.EvtManager(this.Evt.name.resetpage);
-    // },
-    /*==============================================
-        - re-sets page nb at page re-load
-        - Params:
-            - name: cookie name (string)
-    ===============================================*/
-    // _ResetPage: function(name){
-    //     var pgnb = this.Cpt.store.getPageNb(name);
-    //     if(pgnb!==''){
-    //         this.ChangePage((pgnb-1));
-    //     }
-    // },
-
-    // ResetPageLength: function(name){
-    //     this.EvtManager(this.Evt.name.resetpagelength);
-    // },
-    /*==============================================
-        - re-sets page length at page re-load
-        - Params:
-            - name: cookie name (string)
-    ===============================================*/
-    // _ResetPageLength: function(name){
-    //     if(!this.paging){
-    //         return;
-    //     }
-    //     var pglenIndex = this.Cpt.store.getPageLength(name);
-
-    //     if(pglenIndex!==''){
-    //         this.resultsPerPageSlc.options[pglenIndex].selected = true;
-    //         this.ChangeResultsPerPage();
-    //     }
-    // },
-
-    /*====================================================
-        - Adds paging feature if filter grid bar is
-        already set
-        - Param(s):
-            - execFilter: if true table is filtered
-            (boolean)
-    =====================================================*/
-    // AddPaging: function(filterTable){
-    //     if(!this.hasGrid || this.paging){
-    //         return;
-    //     }
-    //     this.paging = true;
-    //     this.isPagingRemoved = true;
-    //     this.SetPaging();
-    //     this.ResetValues();
-    //     if(filterTable){
-    //         this.Filter();
-    //     }
-    // },
 
     PopulateSelect: function(colIndex,isExternal,extSlcId){
         this.EvtManager(
@@ -3535,10 +2750,6 @@ TableFilter.prototype = {
                         o.__setCheckListValues(li.check);
                     }
                 }
-                //IE: label looses check capability
-                // if(hlp.isIE()){
-                //     li.label.onclick = labelClick;
-                // }
             }
             function labelClick(){
                 this.firstChild.click();
@@ -3550,21 +2761,6 @@ TableFilter.prototype = {
         }
         flt.appendChild(ul);
         flt.setAttribute('filled','1');
-
-        /*** remember grid values IE only, items remain un-checked ***/
-        // if(o.rememberGridValues && hlp.isIE()){
-        //     var slcIndexes = ul.getAttribute('indexes');
-        //     if(slcIndexes){
-        //         var indSplit = slcIndexes.split(',');//items indexes
-        //         for(var n=0; n<indSplit.length; n++){
-        //             //checked item
-        //             var cChk = dom.id(this.fltIds[colIndex]+'_'+indSplit[n]);
-        //             if(cChk){
-        //                 cChk.checked = true;
-        //             }
-        //         }
-        //     }
-        // }
     },
 
     /*====================================================
@@ -4166,116 +3362,6 @@ TableFilter.prototype = {
             }
         }//end if
     },
-
-    /*====================================================
-        - CSS solution making headers fixed
-    =====================================================*/
-    // SetFixedHeaders: function(){
-    //     if((!this.hasGrid && !this.isFirstLoad) || !this.fixedHeaders){
-    //         return;
-    //     }
-    //     if(this.contDiv){
-    //         return;
-    //     }
-    //     var thead = dom.tag(this.tbl,'thead');
-    //     if(thead.length===0){
-    //         return;
-    //     }
-    //     var tbody = dom.tag(this.tbl,'tbody');
-    //     //firefox returns tbody height
-    //     if(tbody[0].clientHeight!==0){
-    //         //previous values
-    //         this.prevTBodyH = tbody[0].clientHeight;
-    //         this.prevTBodyOverflow = tbody[0].style.overflow;
-    //         this.prevTBodyOverflowX = tbody[0].style.overflowX;
-
-    //         tbody[0].style.height = this.tBodyH+'px';
-    //         tbody[0].style.overflow = 'auto';
-    //         tbody[0].style.overflowX = 'hidden';
-    //     } else { //IE returns 0
-    //         // cont div is added to emulate fixed headers behaviour
-    //         var contDiv = dom.create(
-    //             'div',['id',this.prfxContentDiv+this.id]);
-    //         contDiv.className = this.contDivCssClass;
-    //         this.tbl.parentNode.insertBefore(contDiv, this.tbl);
-    //         contDiv.appendChild(this.tbl);
-    //         this.contDiv = dom.id(this.prfxContentDiv+this.id);
-    //         //prevents headers moving during window scroll (IE)
-    //         this.contDiv.style.position = 'relative';
-
-    //         var theadH = 0;
-    //         var theadTr = dom.tag(thead[0],'tr');
-    //         //css below emulates fixed headers on IE<=6
-    //         for(var i=0; i<theadTr.length; i++){
-    //             theadTr[i].style.cssText += 'position:relative; ' +
-    //                 'top:expression(offsetParent.scrollTop);';
-    //             theadH += parseInt(theadTr[i].clientHeight, 10);
-    //         }
-
-    //         this.contDiv.style.height = (this.tBodyH+theadH)+'px';
-
-    //         var tfoot = dom.tag(this.tbl,'tfoot');
-    //         if(tfoot.length===0){
-    //             return;
-    //         }
-
-    //         var tfootTr = dom.tag(tfoot[0],'tr');
-
-    //         //css below emulates fixed footer on IE<=6
-    //         for(var j=0; j<tfootTr.length; j++){
-    //             tfootTr[j].style.cssText +=
-    //                 'position:relative; overflow-x: hidden; ' +
-    //                 'top: expression(parentNode.parentNode.offsetHeight >= ' +
-    //                 'offsetParent.offsetHeight ? ' +
-    //                 '0 - parentNode.parentNode.offsetHeight + '+
-    //                 'offsetParent.offsetHeight + offsetParent.scrollTop : 0);';
-    //         }
-    //     }
-    // },
-
-    /*====================================================
-        - Removes fixed headers
-    =====================================================*/
-    // RemoveFixedHeaders: function(){
-    //     if(!this.hasGrid || !this.fixedHeaders ){
-    //         return;
-    //     }
-
-    //     if(this.contDiv){
-    //         this.contDiv.parentNode.insertBefore(this.tbl, this.contDiv);
-    //         this.contDiv.parentNode.removeChild( this.contDiv );
-    //         this.contDiv = null;
-    //         var thead = dom.tag(this.tbl,'thead');
-    //         if(thead.length===0){
-    //             return;
-    //         }
-    //         var theadTr = dom.tag(thead[0],'tr');
-    //         if(theadTr.length===0){
-    //             return;
-    //         }
-    //         for(var i=0; i<theadTr.length; i++){
-    //             theadTr[i].style.cssText = '';
-    //         }
-    //         var tfoot = dom.tag(this.tbl,'tfoot');
-    //         if(tfoot.length===0){
-    //             return;
-    //         }
-    //         var tfootTr = dom.tag(tfoot[0],'tr');
-    //         for(var j=0; j<tfootTr.length; j++){
-    //             tfootTr[j].style.position = 'relative';
-    //             tfootTr[j].style.top = '';
-    //             tfootTr[j].style.overeflowX = '';
-    //         }
-    //     } else {
-    //         var tbody = dom.tag(this.tbl,'tbody');
-    //         if(tbody.length===0){
-    //             return;
-    //         }
-    //         tbody[0].style.height = this.prevTBodyH+'px';
-    //         tbody[0].style.overflow = this.prevTBodyOverflow;
-    //         tbody[0].style.overflowX = this.prevTBodyOverflowX;
-    //     }
-    // },
 
     Filter: function(){
         this.EvtManager(this.Evt.name.filter);

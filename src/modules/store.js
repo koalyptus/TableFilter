@@ -49,7 +49,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
       savePageNb: {
         writable: true,
         value: function (name) {
-          Cookie.write(name, this.tf.currentPageNb, this.duration);
+          Cookie.write(name, this.tf.Cpt.paging.currentPageNb, this.duration);
         }
       },
       getPageNb: {
@@ -61,7 +61,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
       savePageLength: {
         writable: true,
         value: function (name) {
-          Cookie.write(name, this.tf.resultsPerPageSlc.selectedIndex, this.duration);
+          Cookie.write(name, this.tf.Cpt.paging.resultsPerPageSlc.selectedIndex, this.duration);
         }
       },
       getPageLength: {

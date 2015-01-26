@@ -32,7 +32,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     test('Page number value', function() {
         tf._ClearFilters();
         tf._Filter();
-        tf._ChangePage(1);
+        tf.Cpt.paging._changePage(1);
         var cookieName = tf.pgNbCookie;
         deepEqual(tf.Cpt.store.getPageNb(cookieName), '2', 'Page number value');
         tf._ClearFilters();
@@ -41,8 +41,9 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
 
     module('Check page length persistence');
     test('Page length value', function() {
-        tf.resultsPerPageSlc.options[2].selected = true;
-        tf._ChangeResultsPerPage();
+        var paging = tf.Cpt.paging;
+        paging.resultsPerPageSlc.options[2].selected = true;
+        paging._changeResultsPerPage();
         var cookieName = tf.pgLenCookie;
         deepEqual(tf.Cpt.store.getPageLength(cookieName), '2', 'Page length value');
         tf._ClearFilters();
