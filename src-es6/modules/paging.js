@@ -433,7 +433,7 @@ export class Paging{
     }
 
     /**
-     * Show page based param value (string or number):
+     * Show page based on passed param value (string or number):
      * @param {String} or {Number} cmd possible string values: 'next',
      * 'previous', 'last', 'first' or page number as per param
      */
@@ -463,13 +463,13 @@ export class Paging{
                 break;
             }
         }
-        if(cmdtype==='number'){
+        else if(cmdtype==='number'){
             this.changePage(cmd-1);
         }
     }
 
     /**
-     * Generates UI elements of the number of results per page drop-down
+     * Generates UI elements for the number of results per page drop-down
      */
     setResultsPerPage(){
         var tf = this.tf;

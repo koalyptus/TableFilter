@@ -392,8 +392,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                 btnEvt.next();
                 break;
             }
-          }
-          if (cmdtype === "number") {
+          } else if (cmdtype === "number") {
             this.changePage(cmd - 1);
           }
         }

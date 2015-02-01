@@ -22,6 +22,7 @@ var global = this,
     dateHelper = require('date').DateHelper,
     isValidDate = dateHelper.isValid,
     formatDate = dateHelper.format,
+    Sort = require('sort').Sort,
     doc = global.document;
 
 /**
@@ -321,29 +322,6 @@ function TableFilter(id) {
     //calls function after col operation
     this.onAfterOperation = types.isFn(f.on_after_operation) ?
         f.on_after_operation : null;
-
-    /*** checklist customisation and behaviours ***/
-    this.checkListDiv = []; //checklist container div
-    //defines css class for div containing checklist filter
-    this.checkListDivCssClass = f.div_checklist_css_class ||
-        'div_checklist';
-    //defines css class for checklist filters
-    this.checkListCssClass = f.checklist_css_class || 'flt_checklist';
-    //defines css class for checklist item (li)
-    this.checkListItemCssClass = f.checklist_item_css_class ||
-        'flt_checklist_item';
-    //defines css class for selected checklist item (li)
-    this.checkListSlcItemCssClass = f.checklist_selected_item_css_class ||
-        'flt_checklist_slc_item';
-    //Load on demand text
-    this.activateCheckListTxt = f.activate_checklist_text ||
-        'Click to load filter data';
-    //defines css class for checklist filters
-    this.checkListItemDisabledCssClass =
-        f.checklist_item_disabled_css_class ||
-        'flt_checklist_item_disabled';
-    this.enableCheckListResetFilter =
-        f.enable_checklist_reset_filter===false ? false : true;
 
     /*** Filter operators ***/
     this.rgxOperator = f.regexp_operator || 'rgx:';
@@ -655,7 +633,8 @@ function TableFilter(id) {
         gridLayout: null,
         store: null,
         highlightKeywords: null,
-        paging: null
+        paging: null,
+        checkList: null
     };
 
     /*** TF events ***/
@@ -664,7 +643,7 @@ function TableFilter(id) {
         name: {
             filter: 'Filter',
             populateselect: 'Populate',
-            populatechecklist: 'PopulateCheckList',
+            checklist: 'checkList',
             changepage: 'changePage',
             clear: 'Clear',
             changeresultsperpage: 'changeResults',
@@ -817,9 +796,9 @@ function TableFilter(id) {
             if(!o.activeFlt){ return; }
             var colIndex = o.activeFlt.getAttribute('colIndex');
             //Checks filter is a checklist and caller is not null
-            if(o.activeFlt && colIndex &&
-                o['col'+colIndex]===o.fltTypeCheckList &&
-                !o.Evt._OnSlcChange.caller){ return; }
+            // if(o.activeFlt && colIndex &&
+            //     o['col'+colIndex]===o.fltTypeCheckList &&
+            //     !o.Evt._OnSlcChange.caller){ return; }
             var _evt = e || global.event;
             if(o.popUpFilters){ evt.stop(_evt); }
             if(o.onSlcChange){ o.Filter(); }
@@ -829,22 +808,15 @@ function TableFilter(id) {
         =====================================================*/
         _OnSlcBlur: function(e) {},
         /*====================================================
-            - onchange event for checklist filters
-        =====================================================*/
-        _OnCheckListChange: function(e) {
-            //Checks caller is not null
-            if(!o.Evt._OnCheckListChange.caller){ return; }
-            o.Evt._OnSlcChange(e);
-        },
-        /*====================================================
             - onclick event for checklist filters
         =====================================================*/
         _OnCheckListClick: function() {
             if(o.fillSlcOnDemand && this.getAttribute('filled') === '0'){
                 var ct = this.getAttribute('ct');
-                o.PopulateCheckList(ct);
-                o.checkListDiv[ct].onclick = null;
-                o.checkListDiv[ct].title = '';
+                // o.PopulateCheckList(ct);
+                o.Cpt.checkList._build(ct);
+                o.Cpt.checkList.checkListDiv[ct].onclick = null;
+                o.Cpt.checkList.checkListDiv[ct].title = '';
             }
         },
         /*====================================================
@@ -1069,10 +1041,14 @@ TableFilter.prototype = {
                     }
                     // checklist
                     else if(col===this.fltTypeCheckList){
+                        var CheckList = require('modules/checkList').CheckList;
+                            this.Cpt.checkList = new CheckList(this);
+
                         var divCont = dom.create('div',
                             ['id',this.prfxCheckListDiv+i+'_'+this.id],
                             ['ct',i],['filled','0']);
-                        divCont.className = this.checkListDivCssClass;
+                        divCont.className =
+                            this.Cpt.checkList.checkListDivCssClass;
 
                         //filter is appended in desired element
                         if(externalFltTgtId){
@@ -1082,19 +1058,25 @@ TableFilter.prototype = {
                             fltcell.appendChild(divCont);
                         }
 
-                        this.checkListDiv[i] = divCont;
+                        // this.checkListDiv[i] = divCont;
+                        this.Cpt.checkList.checkListDiv[i] = divCont;
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
                         if(!this.fillSlcOnDemand){
-                            this._PopulateCheckList(i);
+                            // this._PopulateCheckList(i);
+                            this.Cpt.checkList._build(i);
                         }
-
-                        divCont.onclick = this.Evt._OnCheckListFocus;
 
                         if(this.fillSlcOnDemand){
-                            divCont.onclick = this.Evt._OnCheckListClick;
+                            //divCont.onclick = this.Evt._OnCheckListClick;
+                            evt.add(
+                                divCont, 'click', this.Evt._OnCheckListClick);
                             divCont.appendChild(
-                                dom.text(this.activateCheckListTxt));
+                                dom.text(
+                                    this.Cpt.checkList.activateCheckListTxt));
                         }
+
+                        //divCont.onclick = this.Evt._OnCheckListFocus;
+                        evt.add(divCont, 'click', this.Evt._OnCheckListFocus);
                     }
 
                     else{
@@ -1262,11 +1244,10 @@ TableFilter.prototype = {
                         o._PopulateSelect(slcIndex, false, slcExternal, slcId);
                     }
                 break;
-                case o.Evt.name.populatechecklist:
-                    o._PopulateCheckList(slcIndex, slcExternal, slcId);
+                case o.Evt.name.checklist:
+                    o.Cpt.checkList._build(slcIndex, slcExternal, slcId);
                 break;
                 case o.Evt.name.changepage:
-                    // o._ChangePage(pgIndex);
                     o.Cpt.paging._changePage(pgIndex);
                 break;
                 case o.Evt.name.clear:
@@ -1274,7 +1255,6 @@ TableFilter.prototype = {
                     o._Filter();
                 break;
                 case o.Evt.name.changeresultsperpage:
-                    // o._ChangeResultsPerPage();
                     o.Cpt.paging._changeResultsPerPage();
                 break;
                 case o.Evt.name.resetvalues:
@@ -1282,11 +1262,9 @@ TableFilter.prototype = {
                     o._Filter();
                 break;
                 case o.Evt.name.resetpage:
-                    // o._ResetPage(o.pgNbCookie);
                     o.Cpt.paging._resetPage(o.pgNbCookie);
                 break;
                 case o.Evt.name.resetpagelength:
-                    // o._ResetPageLength(o.pgLenCookie);
                     o.Cpt.paging._resetPageLength(o.pgLenCookie);
                 break;
                 case o.Evt.name.sort:
@@ -2283,9 +2261,9 @@ TableFilter.prototype = {
 
         if(this.sortSlc && !isCustomSlc){
             if (!matchCase){
-                optArray.sort(ignoreCaseSort);
+                optArray.sort(Sort.ignoreCase);
                 if(excludedOpts){
-                    excludedOpts.sort(ignoreCaseSort);
+                    excludedOpts.sort(Sort.ignoreCase);
                 }
             } else {
                 optArray.sort();
@@ -2492,356 +2470,6 @@ TableFilter.prototype = {
             optTxt.sort();
         }
         return [optArray,optTxt];
-    },
-
-    PopulateCheckList: function(colIndex, isExternal, extFltId){
-        this.EvtManager(
-            this.Evt.name.populatechecklist,
-            { slcIndex:colIndex, slcExternal:isExternal, slcId:extFltId }
-        );
-    },
-
-    /*====================================================
-        - populates checklist filters
-    =====================================================*/
-    _PopulateCheckList: function(colIndex, isExternal, extFltId){
-        isExternal = !isExternal ? false : isExternal;
-        var divFltId = this.prfxCheckListDiv+colIndex+'_'+this.id;
-        if(!dom.id(divFltId) && !isExternal){
-            return;
-        }
-        if(!dom.id(extFltId) && isExternal){
-            return;
-        }
-        var flt = !isExternal ? this.checkListDiv[colIndex] : dom.id(extFltId);
-        var ul = dom.create('ul',
-                ['id',this.fltIds[colIndex]], ['colIndex',colIndex]);
-        ul.className = this.checkListCssClass;
-        ul.onchange = this.Evt._OnCheckListChange;
-        var o = this, row = this.tbl.rows;
-        var optArray = [];
-        //custom select test
-        var isCustomSlc = (this.hasCustomSlcOptions &&
-                array.has(this.customSlcOptions.cols, colIndex));
-        //custom selects text
-        var optTxt = [],
-            activeFlt;
-        if(this.refreshFilters && this.activeFilterId){
-            activeFlt = this.activeFilterId.split('_')[0];
-            activeFlt = activeFlt.split(this.prfxFlt)[1];
-        }
-
-        var excludedOpts,
-            filteredDataCol = [];
-        if(this.refreshFilters && this.disableExcludedOptions){
-            excludedOpts = [];
-        }
-
-        for(var k=this.refRow; k<this.nbRows; k++){
-            // always visible rows don't need to appear on selects as always
-            // valid
-            if(this.hasVisibleRows && array.has(this.visibleRows, k) &&
-                !this.paging){
-                continue;
-            }
-
-            var cells = row[k].cells;
-            var ncells = cells.length;
-
-            // checks if row has exact cell #
-            if(ncells == this.nbCells && !isCustomSlc){
-                // this loop retrieves cell data
-                for(var j=0; j<ncells; j++){
-                    if((colIndex===j && (!this.refreshFilters ||
-                        (this.refreshFilters && this.disableExcludedOptions)))||
-                        (colIndex===j && this.refreshFilters &&
-                        ((row[k].style.display === '' && !this.paging) ||
-                        (this.paging && ((!activeFlt || activeFlt===colIndex )||
-                        (activeFlt!=colIndex &&
-                            array.has(this.validRowsIndex, k))) )))){
-                        var cell_data = this.GetCellData(j, cells[j]);
-                        //Vary Peter's patch
-                        var cell_string =
-                                str.matchCase(cell_data, this.matchCase);
-                        // checks if celldata is already in array
-                        if(!array.has(optArray, cell_string, this.matchCase)){
-                            optArray.push(cell_data);
-                        }
-                        var filteredCol = filteredDataCol[j];
-                        if(this.refreshFilters && this.disableExcludedOptions){
-                            if(!filteredCol){
-                                filteredDataCol[j] = this.GetFilteredDataCol(j);
-                            }
-                            if(!array.has(filteredCol,
-                                    cell_string,this.matchCase) &&
-                                !array.has(excludedOpts,
-                                    cell_string,this.matchCase) &&
-                                !this.isFirstLoad){
-                                excludedOpts.push(cell_data);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        //Retrieves custom values
-        if(isCustomSlc){
-            var customValues = this.__getCustomValues(colIndex);
-            optArray = customValues[0];
-            optTxt = customValues[1];
-        }
-
-        if(this.sortSlc && !isCustomSlc){
-            if (!this.matchCase){
-                optArray.sort(ignoreCaseSort);
-                if(excludedOpts){
-                    excludedOpts.sort(ignoreCaseSort);
-                }
-            } else {
-                optArray.sort();
-                if(excludedOpts){ excludedOpts.sort(); }
-            }
-        }
-        //asc sort
-        if(this.sortNumAsc && array.has(this.sortNumAsc, colIndex)){
-            try{
-                optArray.sort( numSortAsc );
-                if(excludedOpts){
-                    excludedOpts.sort( numSortAsc );
-                }
-                if(isCustomSlc){
-                    optTxt.sort( numSortAsc );
-                }
-            } catch(e) {
-                optArray.sort(); if(excludedOpts){ excludedOpts.sort(); }
-                if(isCustomSlc){
-                    optTxt.sort();
-                }
-            }//in case there are alphanumeric values
-        }
-        //desc sort
-        if(this.sortNumDesc && array.has(this.sortNumDesc, colIndex)){
-            try{
-                optArray.sort( numSortDesc );
-                if(excludedOpts){
-                    excludedOpts.sort( numSortDesc );
-                }
-                if(isCustomSlc){
-                    optTxt.sort( numSortDesc );
-                }
-            } catch(e) {
-                optArray.sort(); if(excludedOpts){ excludedOpts.sort(); }
-                if(isCustomSlc){
-                    optTxt.sort();
-                }
-            }//in case there are alphanumeric values
-        }
-
-        AddChecks(this.separator);
-
-        // adds 1st option
-        function AddTChecks(){
-            var chkCt = 1;
-            var li0 = dom.createCheckItem(
-                        o.fltIds[colIndex]+'_0', '', o.displayAllText);
-            li0.className = o.checkListItemCssClass;
-            ul.appendChild(li0);
-            li0.check.onclick = function(e){
-                o.__setCheckListValues(this);
-                ul.onchange.call(null, e);
-            };
-            if(!o.enableCheckListResetFilter){
-                li0.style.display = 'none';
-            }
-            //IE: label looses check capability
-            // if(hlp.isIE()){
-            //     li0.label.onclick = function(){ li0.check.click(); };
-            // }
-
-            if(o.enableEmptyOption){
-                var li1 = dom.createCheckItem(
-                        o.fltIds[colIndex]+'_1', o.emOperator, o.emptyText);
-                li1.className = o.checkListItemCssClass;
-                ul.appendChild(li1);
-                li1.check.onclick = function(e){
-                    o.__setCheckListValues(this);
-                    ul.onchange.call(null, e);
-                };
-                //IE: label looses check capability
-                // if(hlp.isIE()){
-                //     li1.label.onclick = function(){ li1.check.click(); };
-                // }
-                chkCt++;
-            }
-
-            if(o.enableNonEmptyOption){
-                var li2 = dom.createCheckItem(
-                    o.fltIds[colIndex]+'_2',
-                    o.nmOperator,
-                    o.nonEmptyText
-                );
-                li2.className = o.checkListItemCssClass;
-                ul.appendChild(li2);
-                li2.check.onclick = function(e){
-                    o.__setCheckListValues(this);
-                    ul.onchange.call(null, e);
-                };
-                //IE: label looses check capability
-                // if(hlp.isIE())
-                // {
-                //     li2.label.onclick = function(){ li2.check.click(); };
-                // }
-                chkCt++;
-            }
-            return chkCt;
-        }
-
-        function AddChecks(separator){
-            var chkCt = AddTChecks();
-
-            var flts_values = [], fltArr = []; //remember grid values
-            var tmpVal = cookie.getValueByIndex(
-                            o.fltsValuesCookie, colIndex, separator);
-            if(tmpVal && str.trim(tmpVal).length > 0){
-                if(o.hasCustomSlcOptions &&
-                    array.has(o.customSlcOptions.cols, colIndex)){
-                    fltArr.push(tmpVal);
-                } else {
-                    fltArr = tmpVal.split(' '+o.orOperator+' ');
-                }
-            }
-
-            function optionClick(evt){
-                o.__setCheckListValues(this);
-                ul.onchange.call(null, evt);
-            }
-
-            for(var y=0; y<optArray.length; y++){
-                var val = optArray[y]; //item value
-                var lbl = isCustomSlc ? optTxt[y] : val; //item text
-                var li = dom.createCheckItem(
-                            o.fltIds[colIndex]+'_'+(y+chkCt), val, lbl);
-                li.className = o.checkListItemCssClass;
-                if(o.refreshFilters && o.disableExcludedOptions &&
-                    array.has(excludedOpts,
-                            str.matchCase(val, o.matchCase), o.matchCase)){
-                        dom.addClass(li, o.checkListItemDisabledCssClass);
-                        li.check.disabled = true;
-                        li.disabled = true;
-                } else{
-                    li.check.onclick = optionClick;
-                }
-                ul.appendChild(li);
-
-                if(val===''){
-                    //item is hidden
-                    li.style.display = 'none';
-                }
-
-                /*** remember grid values ***/
-                if(o.rememberGridValues){
-                    if((o.hasCustomSlcOptions &&
-                        array.has(o.customSlcOptions.cols, colIndex) &&
-                        fltArr.toString().indexOf(val)!= -1) ||
-                        array.has(fltArr,
-                            str.matchCase(val, o.matchCase), o.matchCase)){
-                        li.check.checked = true;
-                        o.__setCheckListValues(li.check);
-                    }
-                }
-            }
-            function labelClick(){
-                this.firstChild.click();
-            }
-        }
-
-        if(this.fillSlcOnDemand){
-            flt.innerHTML = '';
-        }
-        flt.appendChild(ul);
-        flt.setAttribute('filled','1');
-    },
-
-    /*====================================================
-        - Sets checked items information of a checklist
-    =====================================================*/
-    __setCheckListValues: function(o){
-        if(!o){
-            return;
-        }
-        var chkValue = o.value; //checked item value
-        var chkIndex = parseInt(o.id.split('_')[2], 10);
-        var filterTag = 'ul', itemTag = 'li';
-        var n = o;
-
-        //ul tag search
-        while(str.lower(n.nodeName)!==filterTag){
-            n = n.parentNode;
-        }
-
-        var li = n.childNodes[chkIndex];
-        var colIndex = n.getAttribute('colIndex');
-        var fltValue = n.getAttribute('value'); //filter value (ul tag)
-        var fltIndexes = n.getAttribute('indexes'); //selected items (ul tag)
-
-        if(o.checked){
-            //show all item
-            if(chkValue===''){
-                if((fltIndexes && fltIndexes!=='')){
-                    //items indexes
-                    var indSplit = fltIndexes.split(this.separator);
-                    //checked items loop
-                    for(var u=0; u<indSplit.length; u++){
-                        //checked item
-                        var cChk = dom.id(
-                                    this.fltIds[colIndex]+'_'+indSplit[u]);
-                        if(cChk){
-                            cChk.checked = false;
-                            dom.removeClass(
-                                n.childNodes[indSplit[u]],
-                                this.checkListSlcItemCssClass
-                            );
-                        }
-                    }
-                }
-                n.setAttribute('value', '');
-                n.setAttribute('indexes', '');
-
-            } else {
-                fltValue = (fltValue) ? fltValue : '';
-                chkValue = str.trim(
-                    fltValue+' '+chkValue+' '+this.orOperator);
-                chkIndex = fltIndexes + chkIndex + this.separator;
-                n.setAttribute('value', chkValue );
-                n.setAttribute('indexes', chkIndex);
-                //1st option unchecked
-                if(dom.id(this.fltIds[colIndex]+'_0')){
-                    dom.id(this.fltIds[colIndex]+'_0').checked = false;
-                }
-            }
-
-            if(str.lower(li.nodeName) === itemTag){
-                dom.removeClass(
-                    n.childNodes[0],this.checkListSlcItemCssClass);
-                dom.addClass(li,this.checkListSlcItemCssClass);
-            }
-        } else { //removes values and indexes
-            if(chkValue!==''){
-                var replaceValue = new RegExp(
-                        str.rgxEsc(chkValue+' '+this.orOperator));
-                fltValue = fltValue.replace(replaceValue,'');
-                n.setAttribute('value', str.trim(fltValue));
-
-                var replaceIndex = new RegExp(
-                        str.rgxEsc(chkIndex + this.separator));
-                fltIndexes = fltIndexes.replace(replaceIndex,'');
-                n.setAttribute('indexes', fltIndexes);
-            }
-            if(str.lower(li.nodeName)===itemTag){
-                dom.removeClass(li,this.checkListSlcItemCssClass);
-            }
-        }
     },
 
     /*====================================================
@@ -3281,14 +2909,14 @@ TableFilter.prototype = {
         if(!this.fillSlcOnDemand){
             return;
         }
-        var flts_values = this.Cpt.store.getFilterValues(name),
+        var fltsValues = this.Cpt.store.getFilterValues(name),
             slcFltsIndex = this.GetFiltersByType(this.fltTypeSlc, true),
             multiFltsIndex = this.GetFiltersByType(this.fltTypeMulti, true);
 
         //if the number of columns is the same as before page reload
-        if(flts_values[(flts_values.length-1)] === this.fltIds.length){
-            for(var i=0; i<(flts_values.length - 1); i++){
-                if(flts_values[i]===' '){
+        if(Number(fltsValues[(fltsValues.length-1)]) === this.fltIds.length){
+            for(var i=0; i<(fltsValues.length - 1); i++){
+                if(fltsValues[i]===' '){
                     continue;
                 }
                 var s, opt;
@@ -3301,13 +2929,13 @@ TableFilter.prototype = {
 
                     //selects
                     if(array.has(slcFltsIndex, i)){
-                        opt = dom.createOpt(flts_values[i],flts_values[i],true);
+                        opt = dom.createOpt(fltsValues[i],fltsValues[i],true);
                         slc.appendChild(opt);
                         this.hasStoredValues = true;
                     }
                     //multiple select
                     if(array.has(multiFltsIndex, i)){
-                        s = flts_values[i].split(' '+this.orOperator+' ');
+                        s = fltsValues[i].split(' '+this.orOperator+' ');
                         for(j=0; j<s.length; j++){
                             if(s[j]===''){
                                 continue;
@@ -3325,39 +2953,39 @@ TableFilter.prototype = {
                     }// if multiFltsIndex
                 }
                 else if(this['col'+i]==this.fltTypeCheckList){
-                    var divChk = this.checkListDiv[i];
+                    var checkList = this.Cpt.checkList;
+                    var divChk = checkList.checkListDiv[i];
                     divChk.title = divChk.innerHTML;
                     divChk.innerHTML = '';
 
                     var ul = dom.create(
                         'ul',['id',this.fltIds[i]],['colIndex',i]);
-                    ul.className = this.checkListCssClass;
+                    ul.className = checkList.checkListCssClass;
 
                     var li0 = dom.createCheckItem(
                         this.fltIds[i]+'_0', '', this.displayAllText);
-                    li0.className = this.checkListItemCssClass;
+                    li0.className = checkList.checkListItemCssClass;
                     ul.appendChild(li0);
 
                     divChk.appendChild(ul);
 
-                    flts_values[i].split(' '+this.orOperator+' ');
+                    s = fltsValues[i].split(' '+this.orOperator+' ');
                     for(j=0; j<s.length; j++){
                         if(s[j]===''){
                             continue;
                         }
                         var li = dom.createCheckItem(
                             this.fltIds[i]+'_'+(j+1), s[j], s[j]);
-                        li.className = this.checkListItemCssClass;
+                        li.className = checkList.checkListItemCssClass;
                         ul.appendChild(li);
                         li.check.checked = true;
-                        this.__setCheckListValues(li.check);
+                        checkList.setCheckListValues(li.check);
                         this.hasStoredValues = true;
                     }
                 }
             }//end for
 
             if(!this.hasStoredValues && this.paging){
-                // this.SetPagingInfo();
                 this.Cpt.paging.setPagingInfo();
             }
         }//end if
@@ -3395,7 +3023,6 @@ TableFilter.prototype = {
 
         // removes keyword highlighting
         if(this.highlightKeywords){
-            // this.UnhighlightAll();
             this.Cpt.highlightKeyword.unhighlightAll();
         }
         //removes popup filters active icons
@@ -4191,11 +3818,11 @@ TableFilter.prototype = {
                         dom.getText(lbl), this.matchCase);
                 if(lblTxt!=='' && array.has(sarg, lblTxt, true)){
                     chk.checked = true;
-                    this.__setCheckListValues(chk);
+                    this.Cpt.checkList.setCheckListValues(chk);
                 }
                 else{
                     chk.checked = false;
-                    this.__setCheckListValues(chk);
+                    this.Cpt.checkList.setCheckListValues(chk);
                 }
             }
         }
@@ -4291,10 +3918,10 @@ TableFilter.prototype = {
         }
         this.nbRows = this.GetRowsNb(); //in case table is refreshed
         this.RemoveGrid();
-        window['tf_'+this.id] = new TF(this.id, this.startRow, configObj);
+        window['tf_'+this.id] = new TableFilter(this.id, this.startRow, configObj);
         this.isFirstLoad = true;
         this.fltIds = [];
-        this._AddGrid();
+        this.init();
         //New tbody content needs to be referenced in sortabletable script with
         //setTBody() method
         if(hasSort){
@@ -4333,7 +3960,9 @@ TableFilter.prototype = {
                     slcSelectedValue === this.displayAllText ){
 
                     if(array.has(slcA3, slcIndex[i])){
-                        this.checkListDiv[slcIndex[i]].innerHTML = '';
+                        // this.checkListDiv[slcIndex[i]].innerHTML = '';
+                        this.Cpt.checkList.checkListDiv[
+                            slcIndex[i]].innerHTML = '';
                     } else {
                         curSlc.innerHTML = '';
                     }
@@ -4347,9 +3976,10 @@ TableFilter.prototype = {
                     }
 
                     if(array.has(slcA3, slcIndex[i])){
-                        this._PopulateCheckList(slcIndex[i]);
+                        // this._PopulateCheckList(slcIndex[i]);
+                        this.Cpt.checkList._build(slcIndex[i]);
                     } else {
-                        this._PopulateSelect(slcIndex[i],true);
+                        this._PopulateSelect(slcIndex[i], true);
                     }
 
                     this.SetFilterValue(slcIndex[i],slcSelectedValue);
@@ -4396,7 +4026,8 @@ TableFilter.prototype = {
                             this.PopulateSelect(ct);
                         }
                         if(colFltType === this.fltTypeCheckList){
-                            this.PopulateCheckList(ct);
+                            // this.PopulateCheckList(ct);
+                            this.Cpt.checkList.build(ct);
                         }
                     }
                 }
@@ -4640,11 +4271,11 @@ function numSortAsc(a, b){ return (a-b); }
 
 function numSortDesc(a, b){ return (b-a); }
 
-function ignoreCaseSort(a, b){
-    var x = str.lower(a);
-    var y = str.lower(b);
-    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-}
+// function ignoreCaseSort(a, b){
+//     var x = str.lower(a);
+//     var y = str.lower(b);
+//     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+// }
 
 function removeNbFormat(data, format){
     if(!data){
