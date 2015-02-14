@@ -1,5 +1,6 @@
 import {Dom} from '../dom';
 import {Str} from '../string';
+import {Types} from '../types';
 
 export class ColOps{
 
@@ -10,6 +11,13 @@ export class ColOps{
     constructor(tf) {
         var f = tf.fObj;
         this.colOperation = f.col_operation;
+
+        //calls function before col operation
+        this.onBeforeOperation = Types.isFn(f.on_before_operation) ?
+            f.on_before_operation : null;
+        //calls function after col operation
+        this.onAfterOperation = Types.isFn(f.on_after_operation) ?
+            f.on_after_operation : null;
 
         this.tf = tf;
     }
@@ -35,8 +43,8 @@ export class ColOps{
             return;
         }
 
-        if(this.tf.onBeforeOperation){
-            this.tf.onBeforeOperation.call(null, this.tf);
+        if(this.onBeforeOperation){
+            this.onBeforeOperation.call(null, this.tf);
         }
 
         var colOperation = this.colOperation,
@@ -293,8 +301,8 @@ export class ColOps{
             }//for ucol
         }//if typeof
 
-        if(this.tf.onAfterOperation){
-            this.tf.onAfterOperation.call(null, this.tf);
+        if(this.onAfterOperation){
+            this.onAfterOperation.call(null, this.tf);
         }
     }
 

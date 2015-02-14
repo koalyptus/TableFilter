@@ -281,8 +281,8 @@ function TableFilter(id) {
     /*** select filter's customisation and behaviours ***/
     //defines 1st option text
     this.displayAllText = f.display_all_text || '';
-    this.enableSlcResetFilter = f.enable_slc_reset_filter===false ?
-        false : true;
+    // this.enableSlcResetFilter = f.enable_slc_reset_filter===false ?
+    //     false : true;
     //enables/disables empty option in combo-box filters
     this.enableEmptyOption = f.enable_empty_option===true ? true : false;
     //defines empty option text
@@ -292,8 +292,8 @@ function TableFilter(id) {
         true : false;
     //defines empty option text
     this.nonEmptyText = f.non_empty_text || '(Non empty)';
-    //enables/disables onChange event on combo-box
-    this.onSlcChange = f.on_change===false ? false : true;
+    // //enables/disables onChange event on combo-box
+    // this.onSlcChange = f.on_change===false ? false : true;
     //enables/disables select options sorting
     this.sortSlc = f.sort_select===false ? false : true;
     //enables/disables ascending numeric options sorting
@@ -302,26 +302,26 @@ function TableFilter(id) {
     //enables/disables descending numeric options sorting
     this.isSortNumDesc = f.sort_num_desc===true ? true : false;
     this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : null;
-    //sets select filling method: 'innerHTML' or 'createElement'
-    this.slcFillingMethod = f.slc_filling_method || 'createElement';
+    // //sets select filling method: 'innerHTML' or 'createElement'
+    // this.slcFillingMethod = f.slc_filling_method || 'createElement';
     //enabled selects are populated on demand
     this.fillSlcOnDemand = f.fill_slc_on_demand===true ? true : false;
-    //IE only, tooltip text appearing on select before it is populated
-    this.activateSlcTooltip =  f.activate_slc_tooltip ||
-        'Click to activate';
-    //tooltip text appearing on multiple select
-    this.multipleSlcTooltip = f.multiple_slc_tooltip ||
-        'Use Ctrl key for multiple selections';
-    this.hasCustomSlcOptions = types.isObj(f.custom_slc_options) ?
-        true : false;
-    this.customSlcOptions = types.isArray(f.custom_slc_options) ?
-        f.custom_slc_options : null;
-    //calls function before col operation
-    this.onBeforeOperation = types.isFn(f.on_before_operation) ?
-        f.on_before_operation : null;
-    //calls function after col operation
-    this.onAfterOperation = types.isFn(f.on_after_operation) ?
-        f.on_after_operation : null;
+    // //IE only, tooltip text appearing on select before it is populated
+    // this.activateSlcTooltip =  f.activate_slc_tooltip ||
+    //     'Click to activate';
+    // //tooltip text appearing on multiple select
+    // this.multipleSlcTooltip = f.multiple_slc_tooltip ||
+    //     'Use Ctrl key for multiple selections';
+    // this.hasCustomSlcOptions = types.isObj(f.custom_slc_options) ?
+    //     true : false;
+    // this.customSlcOptions = types.isArray(f.custom_slc_options) ?
+    //     f.custom_slc_options : null;
+    // //calls function before col operation
+    // this.onBeforeOperation = types.isFn(f.on_before_operation) ?
+    //     f.on_before_operation : null;
+    // //calls function after col operation
+    // this.onAfterOperation = types.isFn(f.on_after_operation) ?
+    //     f.on_after_operation : null;
 
     /*** Filter operators ***/
     this.rgxOperator = f.regexp_operator || 'rgx:';

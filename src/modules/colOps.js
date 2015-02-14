@@ -1,4 +1,4 @@
-define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
+define(["exports", "../dom", "../string", "../types"], function (exports, _dom, _string, _types) {
   "use strict";
 
   var _classProps = function (child, staticProps, instanceProps) {
@@ -8,10 +8,16 @@ define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
 
   var Dom = _dom.Dom;
   var Str = _string.Str;
+  var Types = _types.Types;
   var ColOps = (function () {
     var ColOps = function ColOps(tf) {
       var f = tf.fObj;
       this.colOperation = f.col_operation;
+
+      //calls function before col operation
+      this.onBeforeOperation = Types.isFn(f.on_before_operation) ? f.on_before_operation : null;
+      //calls function after col operation
+      this.onAfterOperation = Types.isFn(f.on_after_operation) ? f.on_after_operation : null;
 
       this.tf = tf;
     };
@@ -24,8 +30,8 @@ define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
             return;
           }
 
-          if (this.tf.onBeforeOperation) {
-            this.tf.onBeforeOperation.call(null, this.tf);
+          if (this.onBeforeOperation) {
+            this.onBeforeOperation.call(null, this.tf);
           }
 
           var colOperation = this.colOperation, labelId = colOperation.id, colIndex = colOperation.col, operation = colOperation.operation, outputType = colOperation.write_method, totRowIndex = colOperation.tot_row_index, excludeRow = colOperation.exclude_row, decimalPrecision = colOperation.decimal_precision !== undefined ? colOperation.decimal_precision : 2;
@@ -235,8 +241,8 @@ define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
             } //for ucol
           } //if typeof
 
-          if (this.tf.onAfterOperation) {
-            this.tf.onAfterOperation.call(null, this.tf);
+          if (this.onAfterOperation) {
+            this.onAfterOperation.call(null, this.tf);
           }
         }
       }
