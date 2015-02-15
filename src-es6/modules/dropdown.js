@@ -2,7 +2,6 @@ import {Dom} from '../dom';
 import {Arr as array} from '../array';
 import {Str} from '../string';
 import {Sort} from '../sort';
-import {Event} from '../event';
 
 export class Dropdown{
 
@@ -14,11 +13,9 @@ export class Dropdown{
         // Configuration object
         var f = tf.fObj;
 
-        this.enableSlcResetFilter = !f.enable_slc_reset_filter ? false : true;
+        this.enableSlcResetFilter = f.enable_slc_reset_filter ? false : true;
         //defines empty option text
         this.nonEmptyText = f.non_empty_text || '(Non empty)';
-        //enables/disables onChange event on combo-box
-        this.onSlcChange = f.on_change===false ? false : true;
         //sets select filling method: 'innerHTML' or 'createElement'
         this.slcFillingMethod = f.slc_filling_method || 'createElement';
         //IE only, tooltip text appearing on select before it is populated
@@ -27,29 +24,49 @@ export class Dropdown{
         //tooltip text appearing on multiple select
         this.multipleSlcTooltip = f.multiple_slc_tooltip ||
             'Use Ctrl key for multiple selections';
-        this.hasCustomSlcOptions = types.isObj(f.custom_slc_options) ?
-            true : false;
-        this.customSlcOptions = types.isArray(f.custom_slc_options) ?
-            f.custom_slc_options : null;
 
         this.isCustom = null;
-        this.opts = [];
-        this.optsTxt = [];
-        this.slcInnerHtml = '';
+        this.opts = null;
+        this.optsTxt = null;
+        this.slcInnerHtml = null;
 
         this.tf = tf;
     }
 
     /**
-     * Build checklist UI
+     * Build drop-down filter UI asynchronously
+     * @param  {Number}  colIndex   Column index
+     * @param  {Boolean} isRefreshed Enable linked refresh behaviour
+     * @param  {Boolean} isExternal Render in external container
+     * @param  {String}  extSlcId   External container id
+     */
+    build(colIndex, isRefreshed, isExternal, extSlcId){
+        var tf = this.tf;
+        tf.EvtManager(
+            tf.Evt.name.dropdown,
+            {
+                slcIndex: colIndex,
+                slcRefreshed: isRefreshed,
+                slcExternal: isExternal,
+                slcId: extSlcId
+            }
+        );
+    }
+
+    /**
+     * Build drop-down filter UI
      * @param  {Number}  colIndex    Column index
      * @param  {Boolean} isRefreshed Enable linked refresh behaviour
      * @param  {Boolean} isExternal  Render in external container
-     * @param  {String}  extFltId    External container id
+     * @param  {String}  extSlcId    External container id
      */
-    _build(colIndex, isRefreshed=false, isExternal=false, extFltId=null){
+    _build(colIndex, isRefreshed=false, isExternal=false, extSlcId=null){
         var tf = this.tf;
         colIndex = parseInt(colIndex, 10);
+
+        this.opts = [];
+        this.optsTxt = [];
+        this.slcInnerHtml = '';
 
         var slcId = tf.fltIds[colIndex];
         if((!Dom.id(slcId) && !isExternal) ||
@@ -62,8 +79,8 @@ export class Dropdown{
             fillMethod = Str.lower(this.slcFillingMethod);
 
         //custom select test
-        this.isCustom = (this.hasCustomSlcOptions &&
-            array.has(this.customSlcOptions.cols, colIndex));
+        this.isCustom = (tf.hasCustomSlcOptions &&
+            array.has(tf.customSlcOptions.cols, colIndex));
 
         //custom selects text
         var activeFlt;
@@ -73,14 +90,14 @@ export class Dropdown{
         }
 
         /*** remember grid values ***/
-        var flts_values = [], fltArr = [];
+        var fltsValues = [], fltArr = [];
         if(tf.rememberGridValues){
-            flts_values = tf.Cpt.store.getFilterValues(tf.fltsValuesCookie);
-            if(flts_values && !Str.isEmpty(flts_values.toString())){
+            fltsValues = tf.Cpt.store.getFilterValues(tf.fltsValuesCookie);
+            if(fltsValues && !Str.isEmpty(fltsValues.toString())){
                 if(this.isCustom){
-                    fltArr.push(flts_values[colIndex]);
+                    fltArr.push(fltsValues[colIndex]);
                 } else {
-                    fltArr = flts_values[colIndex].split(' '+tf.orOperator+' ');
+                    fltArr = fltsValues[colIndex].split(' '+tf.orOperator+' ');
                 }
             }
         }
@@ -107,8 +124,7 @@ export class Dropdown{
             if(nchilds !== tf.nbCells || this.isCustom){
                 continue;
             }
-            // checks if row has exact cell #
-            // if(nchilds === this.nbCells && !this.isCustom){
+
             // this loop retrieves cell data
             for(var j=0; j<nchilds; j++){
                 if((colIndex===j &&
@@ -122,7 +138,7 @@ export class Dropdown{
                         ((activeFlt===undefined || activeFlt==colIndex)  ||
                             (activeFlt!=colIndex &&
                                 array.has(tf.validRowsIndex, k) ))) ))){
-                    var cell_data = this.GetCellData(j, cell[j]),
+                    var cell_data = tf.GetCellData(j, cell[j]),
                         //Vary Peter's patch
                         cell_string = Str.matchCase(cell_data, matchCase);
 
@@ -145,7 +161,6 @@ export class Dropdown{
                     }
                 }//if colIndex==j
             }//for j
-            // }//if
         }//for k
 
         //Retrieves custom values
@@ -209,17 +224,20 @@ export class Dropdown{
         }
 
         //populates drop-down
-        this.addOptions(colIndex, slc, excludedOpts, fltArr);
+        this.addOptions(
+            colIndex, slc, isRefreshed, excludedOpts, fltsValues, fltArr);
     }
 
     /**
      * Add drop-down options
-     * @param {Number} colIndex    Column index
-     * @param {Object} slc         Select Dom element
-     * @param {Array} excludedOpts Array of excluded options
-     * @param {Array} fltArr       Collection of persisted filter values
+     * @param {Number} colIndex     Column index
+     * @param {Object} slc          Select Dom element
+     * @param {Boolean} isRefreshed Enable linked refresh behaviour
+     * @param {Array} excludedOpts  Array of excluded options
+     * @param {Array} fltsValues    Collection of persisted filter values
+     * @param {Array} fltArr        Collection of persisted filter values
      */
-    addOptions(colIndex, slc, excludedOpts, fltArr){
+    addOptions(colIndex, slc, isRefreshed, excludedOpts, fltsValues, fltArr){
         var tf = this.tf,
             fillMethod = Str.lower(this.slcFillingMethod),
             slcValue = slc.value;
@@ -262,8 +280,8 @@ export class Dropdown{
                         opt = Dom.createOpt(
                             lbl,
                             val,
-                            (flts_values[colIndex]!==' ' &&
-                                val===flts_values[colIndex]) ? true : false
+                            (fltsValues[colIndex]!==' ' &&
+                                val===fltsValues[colIndex]) ? true : false
                         );
                     } else {
                         opt = Dom.createOpt(

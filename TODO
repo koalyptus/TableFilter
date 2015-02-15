@@ -2,3 +2,4 @@
 - Initialise TableFilter object with a table DOM element
 - Use DOM event listeners for DOM events
 - Refactor persistence using localStorage or cookie
+- Verify linked filters work as per production

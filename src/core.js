@@ -281,8 +281,6 @@ function TableFilter(id) {
     /*** select filter's customisation and behaviours ***/
     //defines 1st option text
     this.displayAllText = f.display_all_text || '';
-    // this.enableSlcResetFilter = f.enable_slc_reset_filter===false ?
-    //     false : true;
     //enables/disables empty option in combo-box filters
     this.enableEmptyOption = f.enable_empty_option===true ? true : false;
     //defines empty option text
@@ -292,8 +290,8 @@ function TableFilter(id) {
         true : false;
     //defines empty option text
     this.nonEmptyText = f.non_empty_text || '(Non empty)';
-    // //enables/disables onChange event on combo-box
-    // this.onSlcChange = f.on_change===false ? false : true;
+    //enables/disables onChange event on combo-box
+    this.onSlcChange = f.on_change===false ? false : true;
     //enables/disables select options sorting
     this.sortSlc = f.sort_select===false ? false : true;
     //enables/disables ascending numeric options sorting
@@ -302,8 +300,6 @@ function TableFilter(id) {
     //enables/disables descending numeric options sorting
     this.isSortNumDesc = f.sort_num_desc===true ? true : false;
     this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : null;
-    // //sets select filling method: 'innerHTML' or 'createElement'
-    // this.slcFillingMethod = f.slc_filling_method || 'createElement';
     //enabled selects are populated on demand
     this.fillSlcOnDemand = f.fill_slc_on_demand===true ? true : false;
     // //IE only, tooltip text appearing on select before it is populated
@@ -312,16 +308,10 @@ function TableFilter(id) {
     // //tooltip text appearing on multiple select
     // this.multipleSlcTooltip = f.multiple_slc_tooltip ||
     //     'Use Ctrl key for multiple selections';
-    // this.hasCustomSlcOptions = types.isObj(f.custom_slc_options) ?
-    //     true : false;
-    // this.customSlcOptions = types.isArray(f.custom_slc_options) ?
-    //     f.custom_slc_options : null;
-    // //calls function before col operation
-    // this.onBeforeOperation = types.isFn(f.on_before_operation) ?
-    //     f.on_before_operation : null;
-    // //calls function after col operation
-    // this.onAfterOperation = types.isFn(f.on_after_operation) ?
-    //     f.on_after_operation : null;
+    this.hasCustomSlcOptions = types.isObj(f.custom_slc_options) ?
+        true : false;
+    this.customSlcOptions = types.isArray(f.custom_slc_options) ?
+        f.custom_slc_options : null;
 
     /*** Filter operators ***/
     this.rgxOperator = f.regexp_operator || 'rgx:';
@@ -634,7 +624,8 @@ function TableFilter(id) {
         store: null,
         highlightKeywords: null,
         paging: null,
-        checkList: null
+        checkList: null,
+        dropdown: null
     };
 
     /*** TF events ***/
@@ -642,7 +633,7 @@ function TableFilter(id) {
     this.Evt = {
         name: {
             filter: 'Filter',
-            populateselect: 'Populate',
+            dropdown: 'dropdown',
             checklist: 'checkList',
             changepage: 'changePage',
             clear: 'Clear',
@@ -781,8 +772,8 @@ function TableFilter(id) {
             // select is populated when element has focus
             if(o.fillSlcOnDemand && this.getAttribute('filled') === '0'){
                 var ct = this.getAttribute('ct');
-                o.PopulateSelect(ct);
-                if(!hlp.isIE()){ this.setAttribute('filled','1'); }
+                // o.PopulateSelect(ct);
+                o.Cpt.dropdown._build(ct);
             }
             if(o.popUpFilters){
                 evt.cancel(_evt);
@@ -813,7 +804,6 @@ function TableFilter(id) {
         _OnCheckListClick: function() {
             if(o.fillSlcOnDemand && this.getAttribute('filled') === '0'){
                 var ct = this.getAttribute('ct');
-                // o.PopulateCheckList(ct);
                 o.Cpt.checkList._build(ct);
                 o.Cpt.checkList.checkListDiv[ct].onclick = null;
                 o.Cpt.checkList.checkListDiv[ct].title = '';
@@ -999,16 +989,23 @@ TableFilter.prototype = {
                         inpclass = this.singleFltCssClass;
                     }
 
-                    //selects
-                    if(col===this.fltTypeSlc ||
-                        col===this.fltTypeMulti){
+                    //drop-down filters
+                    if(col===this.fltTypeSlc || col===this.fltTypeMulti){
+                        var dropdown;
+                        if(!this.Cpt.dropdown){
+                            var Dropdown = require('modules/dropdown').Dropdown;
+                            dropdown = new Dropdown(this);
+                        }
+                        this.Cpt.dropdown = dropdown;
+
                         var slc = dom.create(this.fltTypeSlc,
-                            ['id',this.prfxFlt+i+'_'+this.id],
-                            ['ct',i], ['filled','0']);
+                                ['id', this.prfxFlt+i+'_'+this.id],
+                                ['ct', i], ['filled', '0']
+                            );
 
                         if(col===this.fltTypeMulti){
                             slc.multiple = this.fltTypeMulti;
-                            slc.title = this.multipleSlcTooltip;
+                            slc.title = dropdown.multipleSlcTooltip;
                         }
                         slc.className = str.lower(col)===this.fltTypeSlc ?
                             inpclass : this.fltMultiCssClass;// for ie<=6
@@ -1024,25 +1021,33 @@ TableFilter.prototype = {
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
 
                         if(!this.fillSlcOnDemand){
-                            this._PopulateSelect(i);
+                            // this._PopulateSelect(i);
+                            dropdown._build(i);
                         }
 
-                        slc.onkeypress = this.Evt._DetectKey;
-                        slc.onchange = this.Evt._OnSlcChange;
-                        slc.onfocus = this.Evt._OnSlcFocus;
-                        slc.onblur = this.Evt._OnSlcBlur;
+                        // slc.onkeypress = this.Evt._DetectKey;
+                        evt.add(slc, 'keypress', this.Evt._DetectKey);
+                        // slc.onchange = this.Evt._OnSlcChange;
+                        evt.add(slc, 'change', this.Evt._OnSlcChange);
+                        // slc.onfocus = this.Evt._OnSlcFocus;
+                        evt.add(slc, 'focus', this.Evt._OnSlcFocus);
+                        // slc.onblur = this.Evt._OnSlcBlur;
+                        evt.add(slc, 'blur', this.Evt._OnSlcBlur);
 
                         //1st option is created here since PopulateSelect isn't
                         //invoked
                         if(this.fillSlcOnDemand){
-                            var opt0 = dom.createOpt(this.displayAllText,'');
+                            var opt0 = dom.createOpt(this.displayAllText, '');
                             slc.appendChild(opt0);
                         }
                     }
                     // checklist
                     else if(col===this.fltTypeCheckList){
-                        var CheckList = require('modules/checkList').CheckList;
+                        if(!this.Cpt.checkList){
+                            var CheckList =
+                                    require('modules/checkList').CheckList;
                             this.Cpt.checkList = new CheckList(this);
+                        }
 
                         var divCont = dom.create('div',
                             ['id',this.prfxCheckListDiv+i+'_'+this.id],
@@ -1058,16 +1063,13 @@ TableFilter.prototype = {
                             fltcell.appendChild(divCont);
                         }
 
-                        // this.checkListDiv[i] = divCont;
                         this.Cpt.checkList.checkListDiv[i] = divCont;
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
                         if(!this.fillSlcOnDemand){
-                            // this._PopulateCheckList(i);
                             this.Cpt.checkList._build(i);
                         }
 
                         if(this.fillSlcOnDemand){
-                            //divCont.onclick = this.Evt._OnCheckListClick;
                             evt.add(
                                 divCont, 'click', this.Evt._OnCheckListClick);
                             divCont.appendChild(
@@ -1075,7 +1077,6 @@ TableFilter.prototype = {
                                     this.Cpt.checkList.activateCheckListTxt));
                         }
 
-                        //divCont.onclick = this.Evt._OnCheckListFocus;
                         evt.add(divCont, 'click', this.Evt._OnCheckListFocus);
                     }
 
@@ -1090,7 +1091,7 @@ TableFilter.prototype = {
                                 this.inpWatermark[i] : this.inpWatermark;
                         }
                         inp.className = inpclass;// for ie<=6
-                        if(this.inpWatermark!==''){
+                        if(this.inpWatermark !== ''){
                             //watermark css class
                             dom.addClass(inp, this.inpWatermarkCssClass);
                         }
@@ -1237,11 +1238,14 @@ TableFilter.prototype = {
                         o._Filter();
                     }
                 break;
-                case o.Evt.name.populateselect:
+                case o.Evt.name.dropdown:
                     if(o.refreshFilters){
-                        o._PopulateSelect(slcIndex, true);
+                        // o._PopulateSelect(slcIndex, true);
+                        o.Cpt.dropdown._build(slcIndex, true);
                     } else {
-                        o._PopulateSelect(slcIndex, false, slcExternal, slcId);
+                        // o._PopulateSelect(slcIndex, false, slcExternal, slcId);
+                        o.Cpt.dropdown._build(
+                            slcIndex, false, slcExternal, slcId);
                     }
                 break;
                 case o.Evt.name.checklist:
@@ -2142,265 +2146,265 @@ TableFilter.prototype = {
         }
     },
 
-    PopulateSelect: function(colIndex,isExternal,extSlcId){
-        this.EvtManager(
-            this.Evt.name.populateselect,
-            { slcIndex:colIndex, slcExternal:isExternal, slcId:extSlcId }
-        );
-    },
+    // PopulateSelect: function(colIndex,isExternal,extSlcId){
+    //     this.EvtManager(
+    //         this.Evt.name.dropdown,
+    //         { slcIndex:colIndex, slcExternal:isExternal, slcId:extSlcId }
+    //     );
+    // },
 
     /*====================================================
         - populates drop-down filters
     =====================================================*/
-    _PopulateSelect: function(colIndex,isRefreshed,isExternal,extSlcId) {
-        isExternal = isExternal===undefined ? false : isExternal;
-        var slcId = this.fltIds[colIndex];
-        if((!dom.id(slcId) && !isExternal) ||
-            (!dom.id(extSlcId) && isExternal)){
-            return;
-        }
-        var slc = !isExternal ? dom.id(slcId) : dom.id(extSlcId),
-            o = this,
-            row = this.tbl.rows,
-            matchCase = this.matchCase,
-            fillMethod = str.lower(this.slcFillingMethod),
-            optArray = [],
-            slcInnerHtml = '',
-            opt0,
-            //custom select test
-            isCustomSlc = (this.hasCustomSlcOptions &&
-                array.has(this.customSlcOptions.cols, colIndex));
-        //custom selects text
-        var optTxt = [],
-            activeFlt;
-        if(isRefreshed && this.activeFilterId){
-            activeFlt = this.activeFilterId.split('_')[0];
-            activeFlt = activeFlt.split(this.prfxFlt)[1];
-        }
+    // _PopulateSelect: function(colIndex,isRefreshed,isExternal,extSlcId) {
+    //     isExternal = isExternal===undefined ? false : isExternal;
+    //     var slcId = this.fltIds[colIndex];
+    //     if((!dom.id(slcId) && !isExternal) ||
+    //         (!dom.id(extSlcId) && isExternal)){
+    //         return;
+    //     }
+    //     var slc = !isExternal ? dom.id(slcId) : dom.id(extSlcId),
+    //         o = this,
+    //         row = this.tbl.rows,
+    //         matchCase = this.matchCase,
+    //         fillMethod = str.lower(this.slcFillingMethod),
+    //         optArray = [],
+    //         slcInnerHtml = '',
+    //         opt0,
+    //         //custom select test
+    //         isCustomSlc = (this.hasCustomSlcOptions &&
+    //             array.has(this.customSlcOptions.cols, colIndex));
+    //     //custom selects text
+    //     var optTxt = [],
+    //         activeFlt;
+    //     if(isRefreshed && this.activeFilterId){
+    //         activeFlt = this.activeFilterId.split('_')[0];
+    //         activeFlt = activeFlt.split(this.prfxFlt)[1];
+    //     }
 
-        /*** remember grid values ***/
-        var flts_values = [], fltArr = [];
-        if(this.rememberGridValues){
-            // flts_values = cookie.valueToArray(
-            //     this.fltsValuesCookie, this.separator);
-            flts_values = this.Cpt.store.getFilterValues(this.fltsValuesCookie);
-            if(flts_values && !str.isEmpty(flts_values.toString())){
-                if(isCustomSlc){
-                    fltArr.push(flts_values[colIndex]);
-                } else {
-                    fltArr = flts_values[colIndex].split(' '+o.orOperator+' ');
-                }
-            }
-        }
+    //     /*** remember grid values ***/
+    //     var flts_values = [], fltArr = [];
+    //     if(this.rememberGridValues){
+    //         // flts_values = cookie.valueToArray(
+    //         //     this.fltsValuesCookie, this.separator);
+    //         flts_values = this.Cpt.store.getFilterValues(this.fltsValuesCookie);
+    //         if(flts_values && !str.isEmpty(flts_values.toString())){
+    //             if(isCustomSlc){
+    //                 fltArr.push(flts_values[colIndex]);
+    //             } else {
+    //                 fltArr = flts_values[colIndex].split(' '+o.orOperator+' ');
+    //             }
+    //         }
+    //     }
 
-        var excludedOpts = null,
-            filteredDataCol = null;
-        if(isRefreshed && this.disableExcludedOptions){
-            excludedOpts = [];
-            filteredDataCol = [];
-        }
+    //     var excludedOpts = null,
+    //         filteredDataCol = null;
+    //     if(isRefreshed && this.disableExcludedOptions){
+    //         excludedOpts = [];
+    //         filteredDataCol = [];
+    //     }
 
-        for(var k=this.refRow; k<this.nbRows; k++){
-            // always visible rows don't need to appear on selects as always
-            // valid
-            if(this.hasVisibleRows && array.has(this.visibleRows, k) &&
-                !this.paging){
-                continue;
-            }
+    //     for(var k=this.refRow; k<this.nbRows; k++){
+    //         // always visible rows don't need to appear on selects as always
+    //         // valid
+    //         if(this.hasVisibleRows && array.has(this.visibleRows, k) &&
+    //             !this.paging){
+    //             continue;
+    //         }
 
-            var cell = row[k].cells,
-                nchilds = cell.length;
+    //         var cell = row[k].cells,
+    //             nchilds = cell.length;
 
-            // checks if row has exact cell #
-            if(nchilds === this.nbCells && !isCustomSlc){
-                // this loop retrieves cell data
-                for(var j=0; j<nchilds; j++){
-                    if((colIndex===j &&
-                        (!isRefreshed ||
-                            (isRefreshed && this.disableExcludedOptions))) ||
-                        (colIndex==j && isRefreshed &&
-                            ((row[k].style.display === '' && !this.paging) ||
-                        (this.paging && (!this.validRowsIndex ||
-                            (this.validRowsIndex &&
-                                array.has(this.validRowsIndex, k))) &&
-                            ((activeFlt===undefined || activeFlt==colIndex)  ||
-                                (activeFlt!=colIndex &&
-                                    array.has(this.validRowsIndex, k) ))) ))){
-                        var cell_data = this.GetCellData(j, cell[j]),
-                            //Vary Peter's patch
-                            cell_string = str.matchCase(cell_data, matchCase);
+    //         // checks if row has exact cell #
+    //         if(nchilds === this.nbCells && !isCustomSlc){
+    //             // this loop retrieves cell data
+    //             for(var j=0; j<nchilds; j++){
+    //                 if((colIndex===j &&
+    //                     (!isRefreshed ||
+    //                         (isRefreshed && this.disableExcludedOptions))) ||
+    //                     (colIndex==j && isRefreshed &&
+    //                         ((row[k].style.display === '' && !this.paging) ||
+    //                     (this.paging && (!this.validRowsIndex ||
+    //                         (this.validRowsIndex &&
+    //                             array.has(this.validRowsIndex, k))) &&
+    //                         ((activeFlt===undefined || activeFlt==colIndex)  ||
+    //                             (activeFlt!=colIndex &&
+    //                                 array.has(this.validRowsIndex, k) ))) ))){
+    //                     var cell_data = this.GetCellData(j, cell[j]),
+    //                         //Vary Peter's patch
+    //                         cell_string = str.matchCase(cell_data, matchCase);
 
-                        // checks if celldata is already in array
-                        if(!array.has(optArray, cell_string, matchCase)){
-                            optArray.push(cell_data);
-                        }
+    //                     // checks if celldata is already in array
+    //                     if(!array.has(optArray, cell_string, matchCase)){
+    //                         optArray.push(cell_data);
+    //                     }
 
-                        if(isRefreshed && this.disableExcludedOptions){
-                            var filteredCol = filteredDataCol[j];
-                            if(!filteredCol){
-                                filteredCol = this.GetFilteredDataCol(j);
-                            }
-                            if(!array.has(filteredCol,cell_string, matchCase) &&
-                                !array.has(
-                                    excludedOpts,cell_string,matchCase) &&
-                                !this.isFirstLoad){
-                                excludedOpts.push(cell_data);
-                            }
-                        }
-                    }//if colIndex==j
-                }//for j
-            }//if
-        }//for k
+    //                     if(isRefreshed && this.disableExcludedOptions){
+    //                         var filteredCol = filteredDataCol[j];
+    //                         if(!filteredCol){
+    //                             filteredCol = this.GetFilteredDataCol(j);
+    //                         }
+    //                         if(!array.has(filteredCol,cell_string, matchCase) &&
+    //                             !array.has(
+    //                                 excludedOpts,cell_string,matchCase) &&
+    //                             !this.isFirstLoad){
+    //                             excludedOpts.push(cell_data);
+    //                         }
+    //                     }
+    //                 }//if colIndex==j
+    //             }//for j
+    //         }//if
+    //     }//for k
 
-        //Retrieves custom values
-        if(isCustomSlc){
-            var customValues = this.__getCustomValues(colIndex);
-            optArray = customValues[0];
-            optTxt = customValues[1];
-        }
+    //     //Retrieves custom values
+    //     if(isCustomSlc){
+    //         var customValues = this.__getCustomValues(colIndex);
+    //         optArray = customValues[0];
+    //         optTxt = customValues[1];
+    //     }
 
-        if(this.sortSlc && !isCustomSlc){
-            if (!matchCase){
-                optArray.sort(Sort.ignoreCase);
-                if(excludedOpts){
-                    excludedOpts.sort(Sort.ignoreCase);
-                }
-            } else {
-                optArray.sort();
-                if(excludedOpts){ excludedOpts.sort(); }
-            }
-        }
+    //     if(this.sortSlc && !isCustomSlc){
+    //         if (!matchCase){
+    //             optArray.sort(Sort.ignoreCase);
+    //             if(excludedOpts){
+    //                 excludedOpts.sort(Sort.ignoreCase);
+    //             }
+    //         } else {
+    //             optArray.sort();
+    //             if(excludedOpts){ excludedOpts.sort(); }
+    //         }
+    //     }
 
-        //asc sort
-        if(this.sortNumAsc && array.has(this.sortNumAsc, colIndex)){
-            try{
-                optArray.sort( numSortAsc );
-                if(excludedOpts){
-                    excludedOpts.sort( numSortAsc );
-                }
-                if(isCustomSlc){
-                    optTxt.sort( numSortAsc );
-                }
-            } catch(e) {
-                optArray.sort();
-                if(excludedOpts){
-                    excludedOpts.sort();
-                }
-                if(isCustomSlc){
-                    optTxt.sort();
-                }
-            }//in case there are alphanumeric values
-        }
-        //desc sort
-        if(this.sortNumDesc && array.has(this.sortNumDesc, colIndex)){
-            try{
-                optArray.sort( numSortDesc );
-                if(excludedOpts){
-                    excludedOpts.sort( numSortDesc );
-                }
-                if(isCustomSlc){
-                    optTxt.sort( numSortDesc );
-                }
-            } catch(e) {
-                optArray.sort();
-                if(excludedOpts){ excludedOpts.sort(); }
-                if(isCustomSlc){
-                    optTxt.sort();
-                }
-            }//in case there are alphanumeric values
-        }
+    //     //asc sort
+    //     if(this.sortNumAsc && array.has(this.sortNumAsc, colIndex)){
+    //         try{
+    //             optArray.sort( numSortAsc );
+    //             if(excludedOpts){
+    //                 excludedOpts.sort( numSortAsc );
+    //             }
+    //             if(isCustomSlc){
+    //                 optTxt.sort( numSortAsc );
+    //             }
+    //         } catch(e) {
+    //             optArray.sort();
+    //             if(excludedOpts){
+    //                 excludedOpts.sort();
+    //             }
+    //             if(isCustomSlc){
+    //                 optTxt.sort();
+    //             }
+    //         }//in case there are alphanumeric values
+    //     }
+    //     //desc sort
+    //     if(this.sortNumDesc && array.has(this.sortNumDesc, colIndex)){
+    //         try{
+    //             optArray.sort( numSortDesc );
+    //             if(excludedOpts){
+    //                 excludedOpts.sort( numSortDesc );
+    //             }
+    //             if(isCustomSlc){
+    //                 optTxt.sort( numSortDesc );
+    //             }
+    //         } catch(e) {
+    //             optArray.sort();
+    //             if(excludedOpts){ excludedOpts.sort(); }
+    //             if(isCustomSlc){
+    //                 optTxt.sort();
+    //             }
+    //         }//in case there are alphanumeric values
+    //     }
 
-        AddOpts();//populates drop-down
+    //     AddOpts();//populates drop-down
 
-        // adds 1st option
-        function AddOpt0(){
-            if(fillMethod === 'innerhtml'){
-                slcInnerHtml +='<option value="">'+o.displayAllText+'</option>';
-            }
-            else {
-                var opt0 = dom.createOpt(
-                    (!o.enableSlcResetFilter ? '' : o.displayAllText),'');
-                if(!o.enableSlcResetFilter){
-                    opt0.style.display = 'none';
-                }
-                slc.appendChild(opt0);
-                if(o.enableEmptyOption){
-                    var opt1 = dom.createOpt(o.emptyText,o.emOperator);
-                    slc.appendChild(opt1);
-                }
-                if(o.enableNonEmptyOption){
-                    var opt2 = dom.createOpt(o.nonEmptyText,o.nmOperator);
-                    slc.appendChild(opt2);
-                }
-            }
-        }
+    //     // adds 1st option
+    //     function AddOpt0(){
+    //         if(fillMethod === 'innerhtml'){
+    //             slcInnerHtml +='<option value="">'+o.displayAllText+'</option>';
+    //         }
+    //         else {
+    //             var opt0 = dom.createOpt(
+    //                 (!o.enableSlcResetFilter ? '' : o.displayAllText),'');
+    //             if(!o.enableSlcResetFilter){
+    //                 opt0.style.display = 'none';
+    //             }
+    //             slc.appendChild(opt0);
+    //             if(o.enableEmptyOption){
+    //                 var opt1 = dom.createOpt(o.emptyText,o.emOperator);
+    //                 slc.appendChild(opt1);
+    //             }
+    //             if(o.enableNonEmptyOption){
+    //                 var opt2 = dom.createOpt(o.nonEmptyText,o.nmOperator);
+    //                 slc.appendChild(opt2);
+    //             }
+    //         }
+    //     }
 
-        // populates select
-        function AddOpts(){
-            var slcValue = slc.value;
-            slc.innerHTML = '';
-            AddOpt0();
+    //     // populates select
+    //     function AddOpts(){
+    //         var slcValue = slc.value;
+    //         slc.innerHTML = '';
+    //         AddOpt0();
 
-            for(var y=0; y<optArray.length; y++){
-                if(optArray[y]===''){
-                    continue;
-                }
-                var val = optArray[y]; //option value
-                var lbl = isCustomSlc ? optTxt[y] : val; //option text
-                var isDisabled = false;
-                if(isRefreshed && o.disableExcludedOptions &&
-                    array.has(excludedOpts,
-                        str.matchCase(val, o.matchCase), o.matchCase)){
-                    isDisabled = true;
-                }
+    //         for(var y=0; y<optArray.length; y++){
+    //             if(optArray[y]===''){
+    //                 continue;
+    //             }
+    //             var val = optArray[y]; //option value
+    //             var lbl = isCustomSlc ? optTxt[y] : val; //option text
+    //             var isDisabled = false;
+    //             if(isRefreshed && o.disableExcludedOptions &&
+    //                 array.has(excludedOpts,
+    //                     str.matchCase(val, o.matchCase), o.matchCase)){
+    //                 isDisabled = true;
+    //             }
 
-                if(fillMethod === 'innerhtml'){
-                    var slcAttr = '';
-                    if(o.fillSlcOnDemand && slcValue==optArray[y]){
-                        slcAttr = 'selected="selected"';
-                    }
-                    slcInnerHtml += '<option value="'+val+'" ' + slcAttr +
-                        (isDisabled ? 'disabled="disabled"' : '')+ '>' +
-                        lbl+'</option>';
-                } else {
-                    var opt;
-                    //fill select on demand
-                    if(o.fillSlcOnDemand && slcValue==optArray[y] &&
-                        o['col'+colIndex]===o.fltTypeSlc){
-                        opt = dom.createOpt(lbl, val, true);
-                    } else {
-                        if(o['col'+colIndex]!=o.fltTypeMulti){
-                            opt = dom.createOpt(
-                                lbl,
-                                val,
-                                (flts_values[colIndex]!==' ' &&
-                                    val==flts_values[colIndex]) ? true : false
-                            );
-                        } else {
-                            opt = dom.createOpt(
-                                lbl,
-                                val,
-                                (array.has(fltArr,
-                                    str.matchCase(optArray[y],o.matchCase),
-                                    o.matchCase) ||
-                                  fltArr.toString().indexOf(val)!== -1) ?
-                                    true : false
-                            );
-                        }
-                    }
-                    if(isDisabled){
-                        opt.disabled = true;
-                    }
-                    slc.appendChild(opt);
-                }
-            }// for y
+    //             if(fillMethod === 'innerhtml'){
+    //                 var slcAttr = '';
+    //                 if(o.fillSlcOnDemand && slcValue==optArray[y]){
+    //                     slcAttr = 'selected="selected"';
+    //                 }
+    //                 slcInnerHtml += '<option value="'+val+'" ' + slcAttr +
+    //                     (isDisabled ? 'disabled="disabled"' : '')+ '>' +
+    //                     lbl+'</option>';
+    //             } else {
+    //                 var opt;
+    //                 //fill select on demand
+    //                 if(o.fillSlcOnDemand && slcValue==optArray[y] &&
+    //                     o['col'+colIndex]===o.fltTypeSlc){
+    //                     opt = dom.createOpt(lbl, val, true);
+    //                 } else {
+    //                     if(o['col'+colIndex]!=o.fltTypeMulti){
+    //                         opt = dom.createOpt(
+    //                             lbl,
+    //                             val,
+    //                             (flts_values[colIndex]!==' ' &&
+    //                                 val==flts_values[colIndex]) ? true : false
+    //                         );
+    //                     } else {
+    //                         opt = dom.createOpt(
+    //                             lbl,
+    //                             val,
+    //                             (array.has(fltArr,
+    //                                 str.matchCase(optArray[y],o.matchCase),
+    //                                 o.matchCase) ||
+    //                               fltArr.toString().indexOf(val)!== -1) ?
+    //                                 true : false
+    //                         );
+    //                     }
+    //                 }
+    //                 if(isDisabled){
+    //                     opt.disabled = true;
+    //                 }
+    //                 slc.appendChild(opt);
+    //             }
+    //         }// for y
 
-            if(fillMethod === 'innerhtml'){
-                slc.innerHTML += slcInnerHtml;
-            }
-            slc.setAttribute('filled','1');
-        }// fn AddOpt
-    },
+    //         if(fillMethod === 'innerhtml'){
+    //             slc.innerHTML += slcInnerHtml;
+    //         }
+    //         slc.setAttribute('filled','1');
+    //     }// fn AddOpt
+    // },
 
     /*====================================================
         - IE bug: it seems there is no way to make
@@ -3782,7 +3786,7 @@ TableFilter.prototype = {
             var s = searcharg.split(' '+this.orOperator+' '),
                 ct = 0; //keywords counter
             for(var j=0; j<slc.options.length; j++){
-                if(s===''){
+                if(s==='' || s[0]===''){
                     slc.options[j].selected = false;
                 }
                 if(slc.options[j].value===''){
@@ -3884,7 +3888,7 @@ TableFilter.prototype = {
             this.onBeforeReset.call(null, this, this.GetFiltersValue());
         }
         for(var i=0; i<this.fltIds.length; i++){
-            this.SetFilterValue(i,'');
+            this.SetFilterValue(i, '');
         }
         if(this.refreshFilters){
             this.activeFilterId = '';
@@ -3960,7 +3964,6 @@ TableFilter.prototype = {
                     slcSelectedValue === this.displayAllText ){
 
                     if(array.has(slcA3, slcIndex[i])){
-                        // this.checkListDiv[slcIndex[i]].innerHTML = '';
                         this.Cpt.checkList.checkListDiv[
                             slcIndex[i]].innerHTML = '';
                     } else {
@@ -3969,17 +3972,17 @@ TableFilter.prototype = {
 
                     //1st option needs to be inserted
                     if(this.fillSlcOnDemand) {
-                        var opt0 = dom.createOpt(this.displayAllText,'');
+                        var opt0 = dom.createOpt(this.displayAllText, '');
                         if(curSlc){
                             curSlc.appendChild(opt0);
                         }
                     }
 
                     if(array.has(slcA3, slcIndex[i])){
-                        // this._PopulateCheckList(slcIndex[i]);
                         this.Cpt.checkList._build(slcIndex[i]);
                     } else {
-                        this._PopulateSelect(slcIndex[i], true);
+                        // this._PopulateSelect(slcIndex[i], true);
+                        this.Cpt.dropdown._build(slcIndex[i], true);
                     }
 
                     this.SetFilterValue(slcIndex[i],slcSelectedValue);
@@ -4023,7 +4026,8 @@ TableFilter.prototype = {
                         colFltType !== this.fltTypeInp){
                         if(colFltType === this.fltTypeSlc ||
                             colFltType === this.fltTypeMulti){
-                            this.PopulateSelect(ct);
+                            // this.PopulateSelect(ct);
+                            this.Cpt.dropdown.build(ct);
                         }
                         if(colFltType === this.fltTypeCheckList){
                             // this.PopulateCheckList(ct);

@@ -37,8 +37,8 @@ export class CheckList{
             f.enable_checklist_reset_filter===false ? false : true;
 
         this.isCustom = null;
-        this.opts = [];
-        this.optsTxt = [];
+        this.opts = null;
+        this.optsTxt = null;
 
         this.tf = tf;
     }
@@ -77,11 +77,15 @@ export class CheckList{
         var tf = this.tf;
         colIndex = parseInt(colIndex, 10);
 
+        this.opts = [];
+        this.optsTxt = [];
+
         var divFltId = tf.prfxCheckListDiv+colIndex+'_'+tf.id;
         if((!Dom.id(divFltId) && !isExternal) ||
             (!Dom.id(extFltId) && isExternal)){
             return;
         }
+
         var flt = !isExternal ? this.checkListDiv[colIndex] : Dom.id(extFltId);
         var ul = Dom.create(
             'ul', ['id', tf.fltIds[colIndex]], ['colIndex', colIndex]);
