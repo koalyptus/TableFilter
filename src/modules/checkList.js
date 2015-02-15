@@ -108,25 +108,27 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
             var ncells = cells.length;
 
             // checks if row has exact cell #
-            if (ncells === tf.nbCells && !this.isCustom) {
-              // this loop retrieves cell data
-              for (var j = 0; j < ncells; j++) {
-                if ((colIndex === j && (!tf.refreshFilters || (tf.refreshFilters && tf.disableExcludedOptions))) || (colIndex === j && tf.refreshFilters && ((rows[k].style.display === "" && !tf.paging) || (tf.paging && ((!activeFlt || activeFlt === colIndex) || (activeFlt != colIndex && array.has(tf.validRowsIndex, k))))))) {
-                  var cell_data = tf.GetCellData(j, cells[j]);
-                  //Vary Peter's patch
-                  var cell_string = Str.matchCase(cell_data, tf.matchCase);
-                  // checks if celldata is already in array
-                  if (!array.has(this.opts, cell_string, tf.matchCase)) {
-                    this.opts.push(cell_data);
+            if (ncells !== tf.nbCells || this.isCustom) {
+              continue;
+            }
+
+            // this loop retrieves cell data
+            for (var j = 0; j < ncells; j++) {
+              if ((colIndex === j && (!tf.refreshFilters || (tf.refreshFilters && tf.disableExcludedOptions))) || (colIndex === j && tf.refreshFilters && ((rows[k].style.display === "" && !tf.paging) || (tf.paging && ((!activeFlt || activeFlt === colIndex) || (activeFlt != colIndex && array.has(tf.validRowsIndex, k))))))) {
+                var cell_data = tf.GetCellData(j, cells[j]);
+                //Vary Peter's patch
+                var cell_string = Str.matchCase(cell_data, tf.matchCase);
+                // checks if celldata is already in array
+                if (!array.has(this.opts, cell_string, tf.matchCase)) {
+                  this.opts.push(cell_data);
+                }
+                var filteredCol = filteredDataCol[j];
+                if (tf.refreshFilters && tf.disableExcludedOptions) {
+                  if (!filteredCol) {
+                    filteredDataCol[j] = tf.GetFilteredDataCol(j);
                   }
-                  var filteredCol = filteredDataCol[j];
-                  if (tf.refreshFilters && tf.disableExcludedOptions) {
-                    if (!filteredCol) {
-                      filteredDataCol[j] = tf.GetFilteredDataCol(j);
-                    }
-                    if (!array.has(filteredCol, cell_string, tf.matchCase) && !array.has(excludedOpts, cell_string, tf.matchCase) && !tf.isFirstLoad) {
-                      excludedOpts.push(cell_data);
-                    }
+                  if (!array.has(filteredCol, cell_string, tf.matchCase) && !array.has(excludedOpts, cell_string, tf.matchCase) && !tf.isFirstLoad) {
+                    excludedOpts.push(cell_data);
                   }
                 }
               }

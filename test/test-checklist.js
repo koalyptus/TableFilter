@@ -31,7 +31,4 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
         tf.RemoveGrid();
         deepEqual(dom.id(tf.fltIds[3]), null, 'CheckList UL element');
     });
-
-    // tf.fObj.fill_slc_on_demand = false;
-    // tf.RefreshGrid(tf.fObj);
 });

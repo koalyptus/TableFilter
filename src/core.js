@@ -772,7 +772,6 @@ function TableFilter(id) {
             // select is populated when element has focus
             if(o.fillSlcOnDemand && this.getAttribute('filled') === '0'){
                 var ct = this.getAttribute('ct');
-                // o.PopulateSelect(ct);
                 o.Cpt.dropdown._build(ct);
             }
             if(o.popUpFilters){
@@ -1021,20 +1020,15 @@ TableFilter.prototype = {
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
 
                         if(!this.fillSlcOnDemand){
-                            // this._PopulateSelect(i);
                             dropdown._build(i);
                         }
 
-                        // slc.onkeypress = this.Evt._DetectKey;
                         evt.add(slc, 'keypress', this.Evt._DetectKey);
-                        // slc.onchange = this.Evt._OnSlcChange;
                         evt.add(slc, 'change', this.Evt._OnSlcChange);
-                        // slc.onfocus = this.Evt._OnSlcFocus;
                         evt.add(slc, 'focus', this.Evt._OnSlcFocus);
-                        // slc.onblur = this.Evt._OnSlcBlur;
                         evt.add(slc, 'blur', this.Evt._OnSlcBlur);
 
-                        //1st option is created here since PopulateSelect isn't
+                        //1st option is created here since dropdown.build isn't
                         //invoked
                         if(this.fillSlcOnDemand){
                             var opt0 = dom.createOpt(this.displayAllText, '');
@@ -1240,10 +1234,8 @@ TableFilter.prototype = {
                 break;
                 case o.Evt.name.dropdown:
                     if(o.refreshFilters){
-                        // o._PopulateSelect(slcIndex, true);
                         o.Cpt.dropdown._build(slcIndex, true);
                     } else {
-                        // o._PopulateSelect(slcIndex, false, slcExternal, slcId);
                         o.Cpt.dropdown._build(
                             slcIndex, false, slcExternal, slcId);
                     }
@@ -2145,266 +2137,6 @@ TableFilter.prototype = {
             this.helpInstrContEl.style.display = 'none';
         }
     },
-
-    // PopulateSelect: function(colIndex,isExternal,extSlcId){
-    //     this.EvtManager(
-    //         this.Evt.name.dropdown,
-    //         { slcIndex:colIndex, slcExternal:isExternal, slcId:extSlcId }
-    //     );
-    // },
-
-    /*====================================================
-        - populates drop-down filters
-    =====================================================*/
-    // _PopulateSelect: function(colIndex,isRefreshed,isExternal,extSlcId) {
-    //     isExternal = isExternal===undefined ? false : isExternal;
-    //     var slcId = this.fltIds[colIndex];
-    //     if((!dom.id(slcId) && !isExternal) ||
-    //         (!dom.id(extSlcId) && isExternal)){
-    //         return;
-    //     }
-    //     var slc = !isExternal ? dom.id(slcId) : dom.id(extSlcId),
-    //         o = this,
-    //         row = this.tbl.rows,
-    //         matchCase = this.matchCase,
-    //         fillMethod = str.lower(this.slcFillingMethod),
-    //         optArray = [],
-    //         slcInnerHtml = '',
-    //         opt0,
-    //         //custom select test
-    //         isCustomSlc = (this.hasCustomSlcOptions &&
-    //             array.has(this.customSlcOptions.cols, colIndex));
-    //     //custom selects text
-    //     var optTxt = [],
-    //         activeFlt;
-    //     if(isRefreshed && this.activeFilterId){
-    //         activeFlt = this.activeFilterId.split('_')[0];
-    //         activeFlt = activeFlt.split(this.prfxFlt)[1];
-    //     }
-
-    //     /*** remember grid values ***/
-    //     var flts_values = [], fltArr = [];
-    //     if(this.rememberGridValues){
-    //         // flts_values = cookie.valueToArray(
-    //         //     this.fltsValuesCookie, this.separator);
-    //         flts_values = this.Cpt.store.getFilterValues(this.fltsValuesCookie);
-    //         if(flts_values && !str.isEmpty(flts_values.toString())){
-    //             if(isCustomSlc){
-    //                 fltArr.push(flts_values[colIndex]);
-    //             } else {
-    //                 fltArr = flts_values[colIndex].split(' '+o.orOperator+' ');
-    //             }
-    //         }
-    //     }
-
-    //     var excludedOpts = null,
-    //         filteredDataCol = null;
-    //     if(isRefreshed && this.disableExcludedOptions){
-    //         excludedOpts = [];
-    //         filteredDataCol = [];
-    //     }
-
-    //     for(var k=this.refRow; k<this.nbRows; k++){
-    //         // always visible rows don't need to appear on selects as always
-    //         // valid
-    //         if(this.hasVisibleRows && array.has(this.visibleRows, k) &&
-    //             !this.paging){
-    //             continue;
-    //         }
-
-    //         var cell = row[k].cells,
-    //             nchilds = cell.length;
-
-    //         // checks if row has exact cell #
-    //         if(nchilds === this.nbCells && !isCustomSlc){
-    //             // this loop retrieves cell data
-    //             for(var j=0; j<nchilds; j++){
-    //                 if((colIndex===j &&
-    //                     (!isRefreshed ||
-    //                         (isRefreshed && this.disableExcludedOptions))) ||
-    //                     (colIndex==j && isRefreshed &&
-    //                         ((row[k].style.display === '' && !this.paging) ||
-    //                     (this.paging && (!this.validRowsIndex ||
-    //                         (this.validRowsIndex &&
-    //                             array.has(this.validRowsIndex, k))) &&
-    //                         ((activeFlt===undefined || activeFlt==colIndex)  ||
-    //                             (activeFlt!=colIndex &&
-    //                                 array.has(this.validRowsIndex, k) ))) ))){
-    //                     var cell_data = this.GetCellData(j, cell[j]),
-    //                         //Vary Peter's patch
-    //                         cell_string = str.matchCase(cell_data, matchCase);
-
-    //                     // checks if celldata is already in array
-    //                     if(!array.has(optArray, cell_string, matchCase)){
-    //                         optArray.push(cell_data);
-    //                     }
-
-    //                     if(isRefreshed && this.disableExcludedOptions){
-    //                         var filteredCol = filteredDataCol[j];
-    //                         if(!filteredCol){
-    //                             filteredCol = this.GetFilteredDataCol(j);
-    //                         }
-    //                         if(!array.has(filteredCol,cell_string, matchCase) &&
-    //                             !array.has(
-    //                                 excludedOpts,cell_string,matchCase) &&
-    //                             !this.isFirstLoad){
-    //                             excludedOpts.push(cell_data);
-    //                         }
-    //                     }
-    //                 }//if colIndex==j
-    //             }//for j
-    //         }//if
-    //     }//for k
-
-    //     //Retrieves custom values
-    //     if(isCustomSlc){
-    //         var customValues = this.__getCustomValues(colIndex);
-    //         optArray = customValues[0];
-    //         optTxt = customValues[1];
-    //     }
-
-    //     if(this.sortSlc && !isCustomSlc){
-    //         if (!matchCase){
-    //             optArray.sort(Sort.ignoreCase);
-    //             if(excludedOpts){
-    //                 excludedOpts.sort(Sort.ignoreCase);
-    //             }
-    //         } else {
-    //             optArray.sort();
-    //             if(excludedOpts){ excludedOpts.sort(); }
-    //         }
-    //     }
-
-    //     //asc sort
-    //     if(this.sortNumAsc && array.has(this.sortNumAsc, colIndex)){
-    //         try{
-    //             optArray.sort( numSortAsc );
-    //             if(excludedOpts){
-    //                 excludedOpts.sort( numSortAsc );
-    //             }
-    //             if(isCustomSlc){
-    //                 optTxt.sort( numSortAsc );
-    //             }
-    //         } catch(e) {
-    //             optArray.sort();
-    //             if(excludedOpts){
-    //                 excludedOpts.sort();
-    //             }
-    //             if(isCustomSlc){
-    //                 optTxt.sort();
-    //             }
-    //         }//in case there are alphanumeric values
-    //     }
-    //     //desc sort
-    //     if(this.sortNumDesc && array.has(this.sortNumDesc, colIndex)){
-    //         try{
-    //             optArray.sort( numSortDesc );
-    //             if(excludedOpts){
-    //                 excludedOpts.sort( numSortDesc );
-    //             }
-    //             if(isCustomSlc){
-    //                 optTxt.sort( numSortDesc );
-    //             }
-    //         } catch(e) {
-    //             optArray.sort();
-    //             if(excludedOpts){ excludedOpts.sort(); }
-    //             if(isCustomSlc){
-    //                 optTxt.sort();
-    //             }
-    //         }//in case there are alphanumeric values
-    //     }
-
-    //     AddOpts();//populates drop-down
-
-    //     // adds 1st option
-    //     function AddOpt0(){
-    //         if(fillMethod === 'innerhtml'){
-    //             slcInnerHtml +='<option value="">'+o.displayAllText+'</option>';
-    //         }
-    //         else {
-    //             var opt0 = dom.createOpt(
-    //                 (!o.enableSlcResetFilter ? '' : o.displayAllText),'');
-    //             if(!o.enableSlcResetFilter){
-    //                 opt0.style.display = 'none';
-    //             }
-    //             slc.appendChild(opt0);
-    //             if(o.enableEmptyOption){
-    //                 var opt1 = dom.createOpt(o.emptyText,o.emOperator);
-    //                 slc.appendChild(opt1);
-    //             }
-    //             if(o.enableNonEmptyOption){
-    //                 var opt2 = dom.createOpt(o.nonEmptyText,o.nmOperator);
-    //                 slc.appendChild(opt2);
-    //             }
-    //         }
-    //     }
-
-    //     // populates select
-    //     function AddOpts(){
-    //         var slcValue = slc.value;
-    //         slc.innerHTML = '';
-    //         AddOpt0();
-
-    //         for(var y=0; y<optArray.length; y++){
-    //             if(optArray[y]===''){
-    //                 continue;
-    //             }
-    //             var val = optArray[y]; //option value
-    //             var lbl = isCustomSlc ? optTxt[y] : val; //option text
-    //             var isDisabled = false;
-    //             if(isRefreshed && o.disableExcludedOptions &&
-    //                 array.has(excludedOpts,
-    //                     str.matchCase(val, o.matchCase), o.matchCase)){
-    //                 isDisabled = true;
-    //             }
-
-    //             if(fillMethod === 'innerhtml'){
-    //                 var slcAttr = '';
-    //                 if(o.fillSlcOnDemand && slcValue==optArray[y]){
-    //                     slcAttr = 'selected="selected"';
-    //                 }
-    //                 slcInnerHtml += '<option value="'+val+'" ' + slcAttr +
-    //                     (isDisabled ? 'disabled="disabled"' : '')+ '>' +
-    //                     lbl+'</option>';
-    //             } else {
-    //                 var opt;
-    //                 //fill select on demand
-    //                 if(o.fillSlcOnDemand && slcValue==optArray[y] &&
-    //                     o['col'+colIndex]===o.fltTypeSlc){
-    //                     opt = dom.createOpt(lbl, val, true);
-    //                 } else {
-    //                     if(o['col'+colIndex]!=o.fltTypeMulti){
-    //                         opt = dom.createOpt(
-    //                             lbl,
-    //                             val,
-    //                             (flts_values[colIndex]!==' ' &&
-    //                                 val==flts_values[colIndex]) ? true : false
-    //                         );
-    //                     } else {
-    //                         opt = dom.createOpt(
-    //                             lbl,
-    //                             val,
-    //                             (array.has(fltArr,
-    //                                 str.matchCase(optArray[y],o.matchCase),
-    //                                 o.matchCase) ||
-    //                               fltArr.toString().indexOf(val)!== -1) ?
-    //                                 true : false
-    //                         );
-    //                     }
-    //                 }
-    //                 if(isDisabled){
-    //                     opt.disabled = true;
-    //                 }
-    //                 slc.appendChild(opt);
-    //             }
-    //         }// for y
-
-    //         if(fillMethod === 'innerhtml'){
-    //             slc.innerHTML += slcInnerHtml;
-    //         }
-    //         slc.setAttribute('filled','1');
-    //     }// fn AddOpt
-    // },
 
     /*====================================================
         - IE bug: it seems there is no way to make
@@ -3981,7 +3713,6 @@ TableFilter.prototype = {
                     if(array.has(slcA3, slcIndex[i])){
                         this.Cpt.checkList._build(slcIndex[i]);
                     } else {
-                        // this._PopulateSelect(slcIndex[i], true);
                         this.Cpt.dropdown._build(slcIndex[i], true);
                     }
 
@@ -4026,11 +3757,9 @@ TableFilter.prototype = {
                         colFltType !== this.fltTypeInp){
                         if(colFltType === this.fltTypeSlc ||
                             colFltType === this.fltTypeMulti){
-                            // this.PopulateSelect(ct);
                             this.Cpt.dropdown.build(ct);
                         }
                         if(colFltType === this.fltTypeCheckList){
-                            // this.PopulateCheckList(ct);
                             this.Cpt.checkList.build(ct);
                         }
                     }
@@ -4274,12 +4003,6 @@ TableFilter.prototype = {
 function numSortAsc(a, b){ return (a-b); }
 
 function numSortDesc(a, b){ return (b-a); }
-
-// function ignoreCaseSort(a, b){
-//     var x = str.lower(a);
-//     var y = str.lower(b);
-//     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-// }
 
 function removeNbFormat(data, format){
     if(!data){
