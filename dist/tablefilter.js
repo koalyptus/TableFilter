@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------ 
 	- TableFilter v3.0.0 by Max Guglielmi 
-	- build date: Sun Feb 15 2015 15:02:21 
+	- build date: Sun Feb 15 2015 15:16:20 
 	- http://tablefilter.free.fr 
 	- Copyright (c) 2014, Licensed under the MIT License 
 ------------------------------------------------------------------------*/ 
