@@ -57,9 +57,7 @@ export class PopupFilter{
             elm = evt.target.parentNode,
             colIndex = parseInt(elm.getAttribute('ci'), 10);
 
-        // o.CloseAllPopupFilters(colIndex);
         this.closeAll(colIndex);
-        // o.TogglePopupFilter(colIndex);
         this.toggle(colIndex);
 
         if(this.popUpFltAdjustToContainer){
@@ -93,20 +91,26 @@ export class PopupFilter{
             popUpSpan.innerHTML = this.popUpImgFltHtml;
             var header = tf.GetHeaderElement(i);
             header.appendChild(popUpSpan);
-            // popUpSpan.onclick = onClick;
             Event.add(popUpSpan, 'click', (evt) => { this.onClick(evt); });
             this.popUpFltSpans[i] = popUpSpan;
             this.popUpFltImgs[i] = popUpSpan.firstChild;
         }
     }
 
-
+    /**
+     * Build all pop-up filters elements
+     */
     buildAll(){
         for(var i=0; i<this.popUpFltElmCache.length; i++){
             this.build(i, this.popUpFltElmCache[i]);
         }
     }
 
+    /**
+     * Build a specified pop-up filter elements
+     * @param  {Number} colIndex Column index
+     * @param  {Object} div      Optional container DOM element
+     */
     build(colIndex, div){
         var tf = this.tf;
         var popUpDiv = !div ?
@@ -121,9 +125,14 @@ export class PopupFilter{
         this.popUpFltElms[colIndex] = popUpDiv;
     }
 
+    /**
+     * Toogle visibility of specified filter
+     * @param  {Number} colIndex Column index
+     */
     toggle(colIndex){
         var tf = this.tf,
             popUpFltElm = this.popUpFltElms[colIndex];
+
         if(popUpFltElm.style.display === 'none' ||
             popUpFltElm.style.display === ''){
             if(this.onBeforePopUpOpen){
@@ -151,6 +160,10 @@ export class PopupFilter{
         }
     }
 
+    /**
+     * Close all filters excepted for the specified one if any
+     * @param  {Number} exceptIdx Column index of the filter to not close
+     */
     closeAll(exceptIdx){
         for(var i=0; i<this.popUpFltElms.length; i++){
             if(i === exceptIdx){
@@ -163,12 +176,20 @@ export class PopupFilter{
         }
     }
 
+    /**
+     * Build all the icons representing the pop-up filters
+     */
     buildIcons(){
         for(var i=0; i<this.popUpFltImgs.length; i++){
             this.buildIcon(i, false);
         }
     }
 
+    /**
+     * Build specified icon
+     * @param  {Number} colIndex Column index
+     * @param  {Boolean} active   Apply active state
+     */
     buildIcon(colIndex, active){
         var activeImg = Types.isUndef(active) ? true : active;
         if(this.popUpFltImgs[colIndex]){
@@ -177,6 +198,9 @@ export class PopupFilter{
         }
     }
 
+    /**
+     * Remove pop-up filters
+     */
     destroy(){
         this.popUpFltElmCache = [];
         for(var i=0; i<this.popUpFltElms.length; i++){

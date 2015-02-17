@@ -907,9 +907,9 @@ TableFilter.prototype = {
         }
 
         if(this.popUpFilters){
-            if(!this.isFirstLoad && !this.gridLayout){
-                this.headersRow--;
-            }
+            // if(!this.isFirstLoad && !this.gridLayout){
+            //     this.headersRow--;
+            // }
             // this.SetPopupFilterIcons();
             if(!this.Cpt.popupFilter){
                 var PopupFilter = require('modules/popupFilter').PopupFilter;
@@ -3976,7 +3976,7 @@ TableFilter.prototype = {
         - returns a header DOM element for a given column
         index
     =====================================================*/
-    GetHeaderElement: function(colIndex){
+    GetHeaderElement: function(colIndex){console.log(this.headersRow);
         var table = this.gridLayout ? this.headTbl : this.tbl;
         var header, tHead = dom.tag(this.tbl,'thead');
         for(var i=0; i<this.nbCells; i++){

@@ -52,9 +52,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
         value: function (e) {
           var evt = e || global.event, elm = evt.target.parentNode, colIndex = parseInt(elm.getAttribute("ci"), 10);
 
-          // o.CloseAllPopupFilters(colIndex);
           this.closeAll(colIndex);
-          // o.TogglePopupFilter(colIndex);
           this.toggle(colIndex);
 
           if (this.popUpFltAdjustToContainer) {
@@ -82,7 +80,6 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
             popUpSpan.innerHTML = this.popUpImgFltHtml;
             var header = tf.GetHeaderElement(i);
             header.appendChild(popUpSpan);
-            // popUpSpan.onclick = onClick;
             Event.add(popUpSpan, "click", function (evt) {
               _this.onClick(evt);
             });
@@ -119,6 +116,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
         writable: true,
         value: function (colIndex) {
           var tf = this.tf, popUpFltElm = this.popUpFltElms[colIndex];
+
           if (popUpFltElm.style.display === "none" || popUpFltElm.style.display === "") {
             if (this.onBeforePopUpOpen) {
               this.onBeforePopUpOpen.call(null, this, this.popUpFltElms[colIndex], colIndex);
