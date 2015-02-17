@@ -907,10 +907,6 @@ TableFilter.prototype = {
         }
 
         if(this.popUpFilters){
-            // if(!this.isFirstLoad && !this.gridLayout){
-            //     this.headersRow--;
-            // }
-            // this.SetPopupFilterIcons();
             if(!this.Cpt.popupFilter){
                 var PopupFilter = require('modules/popupFilter').PopupFilter;
                 this.Cpt.popupFilter = new PopupFilter(this);
@@ -962,7 +958,6 @@ TableFilter.prototype = {
                 for(var i=0; i<n; i++){// this loop adds filters
 
                     if(this.popUpFilters){
-                        // this.SetPopupFilter(i);
                         this.Cpt.popupFilter.build(i);
                     }
 
@@ -1479,7 +1474,6 @@ TableFilter.prototype = {
                 this.Cpt.loader.remove();
             }
             if(this.popUpFilters){
-                // this.RemovePopupFilters();
                 this.Cpt.popupFilter.destroy();
             }
             if(this.markActiveColumns){
@@ -2421,198 +2415,6 @@ TableFilter.prototype = {
         }
     },
 
-    /*====================================================
-        - generates popup filters div
-    =====================================================*/
-    // SetPopupFilterIcons: function(){
-    //     if(!this.popUpFilters){
-    //         return;
-    //     }
-    //     //external filters behaviour is enabled
-    //     this.isExternalFlt = true;
-    //     var f = this.fObj;
-    //     //filter icon path
-    //     this.popUpImgFlt = f.popup_filters_image ||
-    //         this.themesPath+'icn_filter.gif';
-    //     //active filter icon path
-    //     this.popUpImgFltActive = f.popup_filters_image_active ||
-    //         this.themesPath+'icn_filterActive.gif';
-    //     this.popUpImgFltHtml = f.popup_filters_image_html ||
-    //         '<img src="'+ this.popUpImgFlt +'" alt="Column filter" />';
-    //     //defines css class for popup div containing filter
-    //     this.popUpDivCssClass = f.popup_div_css_class || 'popUpFilter';
-    //     //callback function before popup filtes is opened
-    //     this.onBeforePopUpOpen = types.isFn(f.on_before_popup_filter_open) ?
-    //         f.on_before_popup_filter_open : null;
-    //     //callback function after popup filtes is opened
-    //     this.onAfterPopUpOpen = types.isFn(f.on_after_popup_filter_open) ?
-    //         f.on_after_popup_filter_open : null;
-    //     //callback function before popup filtes is closed
-    //     this.onBeforePopUpClose =
-    //         types.isFn(f.on_before_popup_filter_close) ?
-    //         f.on_before_popup_filter_close : null;
-    //     //callback function after popup filtes is closed
-    //     this.onAfterPopUpClose = types.isFn(f.on_after_popup_filter_close) ?
-    //         f.on_after_popup_filter_close : null;
-    //     this.externalFltTgtIds = [];
-    //     //stores filters spans
-    //     this.popUpFltSpans = [];
-    //     //stores filters icons
-    //     this.popUpFltImgs = [];
-    //     //stores filters containers
-    //     this.popUpFltElms = this.popUpFltElmCache || [];
-    //     this.popUpFltAdjustToContainer = true;
-
-    //     function onClick(e){
-    //         var evt = e || global.event,
-    //             colIndex = parseInt(this.getAttribute('ci'), 10);
-
-    //         o.CloseAllPopupFilters(colIndex);
-    //         o.TogglePopupFilter(colIndex);
-
-    //         if(o.popUpFltAdjustToContainer){
-    //             var popUpDiv = o.popUpFltElms[colIndex],
-    //                 header = o.GetHeaderElement(colIndex),
-    //                 headerWidth = header.clientWidth * 0.95;
-    //             if(hlp.isIE()){
-    //                 var headerLeft = dom.position(header).left;
-    //                 popUpDiv.style.left = (headerLeft) + 'px';
-    //             }
-    //             popUpDiv.style.width = parseInt(headerWidth, 10)  + 'px';
-    //         }
-    //         evt.cancel(evt);
-    //         evt.stop(evt);
-    //     }
-
-    //     var o = this;
-    //     for(var i=0; i<this.nbCells; i++){
-    //         if(this['col'+i] == this.fltTypeNone){
-    //             continue;
-    //         }
-    //         var popUpSpan = dom.create(
-    //                 'span', ['id', this.prfxPopUpSpan+this.id+'_'+i], ['ci',i]);
-    //         popUpSpan.innerHTML = this.popUpImgFltHtml;
-    //         var header = this.GetHeaderElement(i);
-    //         header.appendChild(popUpSpan);
-    //         popUpSpan.onclick = onClick;
-    //         this.popUpFltSpans[i] = popUpSpan;
-    //         this.popUpFltImgs[i] = popUpSpan.firstChild;
-    //     }
-    // },
-
-    // /*====================================================
-    //     - generates all popup filters div
-    // =====================================================*/
-    // SetPopupFilters: function(){
-    //     for(var i=0; i<this.popUpFltElmCache.length; i++){
-    //         this.SetPopupFilter(i, this.popUpFltElmCache[i]);
-    //     }
-    // },
-
-    // /*====================================================
-    //     - generates a popup filters div for specifies
-    //     column
-    // =====================================================*/
-    // SetPopupFilter: function(colIndex, div){
-    //     var popUpDiv = !div ?
-    //         dom.create('div',['id',this.prfxPopUpDiv+this.id+'_'+colIndex]) :
-    //         div;
-    //     popUpDiv.className = this.popUpDivCssClass;
-    //     this.externalFltTgtIds.push(this.prfxPopUpDiv+this.id+'_'+colIndex);
-    //     var header = this.GetHeaderElement(colIndex);
-    //     header.insertBefore(popUpDiv, header.firstChild);
-    //     popUpDiv.onclick = function(e){ evt.stop(e || global.event); };
-    //     this.popUpFltElms[colIndex] = popUpDiv;
-    // },
-
-    // /*====================================================
-    //     - toggles popup filters div
-    // =====================================================*/
-    // TogglePopupFilter: function(colIndex){
-    //     var popUpFltElm = this.popUpFltElms[colIndex];
-    //     if(popUpFltElm.style.display === 'none' ||
-    //         popUpFltElm.style.display === ''){
-    //         if(this.onBeforePopUpOpen){
-    //             this.onBeforePopUpOpen.call(
-    //                 null,this, this.popUpFltElms[colIndex],colIndex);
-    //         }
-    //         popUpFltElm.style.display = 'block';
-    //         if(this['col'+colIndex] === this.fltTypeInp){
-    //             this.GetFilterElement(colIndex).focus();
-    //         }
-    //         if(this.onAfterPopUpOpen){
-    //             this.onAfterPopUpOpen.call(
-    //                 null,this, this.popUpFltElms[colIndex],colIndex);
-    //         }
-    //     } else {
-    //         if(this.onBeforePopUpClose){
-    //             this.onBeforePopUpClose.call(
-    //                 null,this, this.popUpFltElms[colIndex],colIndex);
-    //         }
-    //         popUpFltElm.style.display = 'none';
-    //         if(this.onAfterPopUpClose){
-    //             this.onAfterPopUpClose.call(
-    //                 null,this, this.popUpFltElms[colIndex],colIndex);
-    //         }
-    //     }
-    // },
-
-    /*====================================================
-        - closes all popup filters
-    =====================================================*/
-    // CloseAllPopupFilters: function(exceptColIndex){
-    //     for(var i=0; i<this.popUpFltElms.length; i++){
-    //         if(i === exceptColIndex){
-    //             continue;
-    //         }
-    //         var popUpFltElm = this.popUpFltElms[i];
-    //         if(popUpFltElm){
-    //             popUpFltElm.style.display = 'none';
-    //         }
-    //     }
-    // },
-    /*====================================================
-        - removes popup filters div
-    =====================================================*/
-    // RemovePopupFilters: function(){
-    //     this.popUpFltElmCache = [];
-    //     for(var i=0; i<this.popUpFltElms.length; i++){
-    //         var popUpFltElm = this.popUpFltElms[i],
-    //             popUpFltSpan = this.popUpFltSpans[i];
-    //         if(popUpFltElm){
-    //             popUpFltElm.parentNode.removeChild(popUpFltElm);
-    //             this.popUpFltElmCache[i] = popUpFltElm;
-    //         }
-    //         popUpFltElm = null;
-    //         if(popUpFltSpan){
-    //             popUpFltSpan.parentNode.removeChild(popUpFltSpan);
-    //         }
-    //         popUpFltSpan = null;
-    //     }
-    // },
-
-    /*====================================================
-        - sets inactive or active filter icon
-    =====================================================*/
-    // SetPopupFilterIcon: function(colIndex, active){
-    //     var activeImg = active===undefined ? true : active;
-    //     if(this.popUpFltImgs[colIndex]){
-    //         this.popUpFltImgs[colIndex].src = active ?
-    //             this.popUpImgFltActive : this.popUpImgFlt;
-    //     }
-    // },
-
-    /*====================================================
-        - sets inactive or active filter icon for all
-        filters
-    =====================================================*/
-    // SetAllPopupFiltersIcon: function(active){
-    //     var activeImg = active===undefined ? false : active;
-    //     for(var i=0; i<this.popUpFltImgs.length; i++){
-    //         this.SetPopupFilterIcon(i, false);
-    //     }
-    // },
-
     ResetValues: function(){
         this.EvtManager(this.Evt.name.resetvalues);
     },
@@ -2768,7 +2570,6 @@ TableFilter.prototype = {
         }
         //removes popup filters active icons
         if(this.popUpFilters){
-            // this.SetAllPopupFiltersIcon();
             this.Cpt.popupFilter.buildIcons();
         }
         //removes active column header class
@@ -3059,7 +2860,6 @@ TableFilter.prototype = {
                     singleFltRowValid = true;
                 }
                 if(this.popUpFilters){
-                    // this.SetPopupFilterIcon(j, true);
                     this.Cpt.popupFilter.buildIcon(j, true);
                 }
                 if(this.markActiveColumns){
@@ -3164,7 +2964,6 @@ TableFilter.prototype = {
             this.SetWatermark(true);
         }
         if(this.popUpFilters){
-            // this.CloseAllPopupFilters();
             this.Cpt.popupFilter.closeAll();
         }
     },
@@ -3787,7 +3586,6 @@ TableFilter.prototype = {
         } else {
             if(this.popUpFilters){
                 this.headersRow++;
-                // this.SetPopupFilters();
                 this.Cpt.popupFilter.buildAll();
             }
         }
@@ -3976,7 +3774,7 @@ TableFilter.prototype = {
         - returns a header DOM element for a given column
         index
     =====================================================*/
-    GetHeaderElement: function(colIndex){console.log(this.headersRow);
+    GetHeaderElement: function(colIndex){
         var table = this.gridLayout ? this.headTbl : this.tbl;
         var header, tHead = dom.tag(this.tbl,'thead');
         for(var i=0; i<this.nbCells; i++){

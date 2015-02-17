@@ -175,7 +175,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
         value: function () {
           this.popUpFltElmCache = [];
           for (var i = 0; i < this.popUpFltElms.length; i++) {
-            var popUpFltElm = this.popUpFltElms[i], popUpFltSpan = this.popUpFltSpans[i];
+            var popUpFltElm = this.popUpFltElms[i], popUpFltSpan = this.popUpFltSpans[i], popUpFltImg = this.popUpFltImgs[i];
             if (popUpFltElm) {
               popUpFltElm.parentNode.removeChild(popUpFltElm);
               this.popUpFltElmCache[i] = popUpFltElm;
@@ -185,7 +185,14 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
               popUpFltSpan.parentNode.removeChild(popUpFltSpan);
             }
             popUpFltSpan = null;
+            if (popUpFltImg) {
+              popUpFltImg.parentNode.removeChild(popUpFltImg);
+            }
+            popUpFltImg = null;
           }
+          this.popUpFltElms = [];
+          this.popUpFltSpans = [];
+          this.popUpFltImgs = [];
         }
       }
     });
