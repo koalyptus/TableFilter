@@ -620,7 +620,8 @@ function TableFilter(id) {
         paging: null,
         checkList: null,
         dropdown: null,
-        popupFilter: null
+        popupFilter: null,
+        clearButton: null
     };
 
     /*** TF events ***/
@@ -831,9 +832,9 @@ function TableFilter(id) {
         /*====================================================
             - clears filters
         =====================================================*/
-        _Clear: function() {
-            o.ClearFilters();
-        },
+        // _Clear: function() {
+        //     o.ClearFilters();
+        // },
         /*====================================================
             - Help button onclick event
         =====================================================*/
@@ -1153,7 +1154,10 @@ TableFilter.prototype = {
             this.Cpt.paging.init();
         }
         if(this.btnReset){
-            this.SetResetBtn();
+            // this.SetResetBtn();
+            var ClearButton = require('modules/clearButton').ClearButton;
+            this.Cpt.clearButton = new ClearButton(this);
+            this.Cpt.clearButton.init();
         }
         if(this.helpInstructions){
             this.SetHelpInstructions();
@@ -1453,7 +1457,8 @@ TableFilter.prototype = {
                 this.Cpt.rowsCounter.destroy();
             }
             if(this.btnReset){
-                this.RemoveResetBtn();
+                // this.RemoveResetBtn();
+                this.Cpt.clearButton.destroy();
             }
             if(this.helpInstructions || !this.helpInstructions){
                 this.RemoveHelpInstructions();
@@ -2210,63 +2215,63 @@ TableFilter.prototype = {
     /*====================================================
         - Generates reset button
     =====================================================*/
-    SetResetBtn: function(){
-        if(!this.hasGrid && !this.isFirstLoad && this.btnResetEl){
-            return;
-        }
+    // SetResetBtn: function(){
+    //     if(!this.hasGrid && !this.isFirstLoad && this.btnResetEl){
+    //         return;
+    //     }
 
-        var f = this.fObj;
-        //id of container element
-        this.btnResetTgtId = f.btn_reset_target_id || null;
-        //reset button element
-        this.btnResetEl = null;
-        //defines reset text
-        this.btnResetText = f.btn_reset_text || 'Reset';
-        //defines reset button tooltip
-        this.btnResetTooltip = f.btn_reset_tooltip || 'Clear filters';
-        //defines reset button innerHtml
-        this.btnResetHtml = f.btn_reset_html ||
-            (!this.enableIcons ? null :
-            '<input type="button" value="" class="'+this.btnResetCssClass+'" ' +
-            'title="'+this.btnResetTooltip+'" />');
+    //     var f = this.fObj;
+    //     //id of container element
+    //     this.btnResetTgtId = f.btn_reset_target_id || null;
+    //     //reset button element
+    //     this.btnResetEl = null;
+    //     //defines reset text
+    //     this.btnResetText = f.btn_reset_text || 'Reset';
+    //     //defines reset button tooltip
+    //     this.btnResetTooltip = f.btn_reset_tooltip || 'Clear filters';
+    //     //defines reset button innerHtml
+    //     this.btnResetHtml = f.btn_reset_html ||
+    //         (!this.enableIcons ? null :
+    //         '<input type="button" value="" class="'+this.btnResetCssClass+'" ' +
+    //         'title="'+this.btnResetTooltip+'" />');
 
-        var resetspan = dom.create('span', ['id',this.prfxResetSpan+this.id]);
+    //     var resetspan = dom.create('span', ['id',this.prfxResetSpan+this.id]);
 
-        // reset button is added to defined element
-        if(!this.btnResetTgtId){
-            this.SetTopDiv();
-        }
-        var targetEl = !this.btnResetTgtId ? this.rDiv :
-                dom.id( this.btnResetTgtId );
-        targetEl.appendChild(resetspan);
+    //     // reset button is added to defined element
+    //     if(!this.btnResetTgtId){
+    //         this.SetTopDiv();
+    //     }
+    //     var targetEl = !this.btnResetTgtId ? this.rDiv :
+    //             dom.id( this.btnResetTgtId );
+    //     targetEl.appendChild(resetspan);
 
-        if(!this.btnResetHtml){
-            var fltreset = dom.create('a', ['href', 'javascript:void(0);']);
-            fltreset.className = this.btnResetCssClass;
-            fltreset.appendChild(dom.text(this.btnResetText));
-            resetspan.appendChild(fltreset);
-            fltreset.onclick = this.Evt._Clear;
-        } else {
-            resetspan.innerHTML = this.btnResetHtml;
-            var resetEl = resetspan.firstChild;
-            resetEl.onclick = this.Evt._Clear;
-        }
-        this.btnResetEl = dom.id(this.prfxResetSpan+this.id).firstChild;
-    },
+    //     if(!this.btnResetHtml){
+    //         var fltreset = dom.create('a', ['href', 'javascript:void(0);']);
+    //         fltreset.className = this.btnResetCssClass;
+    //         fltreset.appendChild(dom.text(this.btnResetText));
+    //         resetspan.appendChild(fltreset);
+    //         fltreset.onclick = this.Evt._Clear;
+    //     } else {
+    //         resetspan.innerHTML = this.btnResetHtml;
+    //         var resetEl = resetspan.firstChild;
+    //         resetEl.onclick = this.Evt._Clear;
+    //     }
+    //     this.btnResetEl = dom.id(this.prfxResetSpan+this.id).firstChild;
+    // },
 
     /*====================================================
         - Removes reset button
     =====================================================*/
-    RemoveResetBtn: function(){
-        if(!this.hasGrid || !this.btnResetEl){
-            return;
-        }
-        var resetspan = dom.id(this.prfxResetSpan+this.id);
-        if(resetspan){
-            resetspan.parentNode.removeChild( resetspan );
-        }
-        this.btnResetEl = null;
-    },
+    // RemoveResetBtn: function(){
+    //     if(!this.hasGrid || !this.btnResetEl){
+    //         return;
+    //     }
+    //     var resetspan = dom.id(this.prfxResetSpan+this.id);
+    //     if(resetspan){
+    //         resetspan.parentNode.removeChild( resetspan );
+    //     }
+    //     this.btnResetEl = null;
+    // },
 
     /*====================================================
         - Generates status bar label
@@ -2908,7 +2913,6 @@ TableFilter.prototype = {
         this.isStartBgAlternate = false;
 
         if(this.rememberGridValues){
-            // this.RememberFiltersValue(this.fltsValuesCookie);
             this.Cpt.store.saveFilterValues(this.fltsValuesCookie);
         }
         //applies filter props after filtering process
@@ -2917,7 +2921,6 @@ TableFilter.prototype = {
         } else {
             this.startPagingRow = 0;
             this.currentPageNb = 1;
-            //this.SetPagingInfo(this.validRowsIndex);
             this.Cpt.paging.setPagingInfo(this.validRowsIndex);
         }//starts paging process
         //invokes onafter callback
