@@ -263,7 +263,7 @@ function TableFilter(id) {
     //id of toolbar container element
     this.toolBarTgtId = f.toolbar_target_id || null;
     //enables/disables help div
-    this.helpInstructions = f.help_instructions || null;
+    this.helpInstructions = f.help_instructions || false;
     //popup filters
     this.popUpFilters = f.popup_filters===true ? true : false;
     //active columns color
@@ -621,7 +621,8 @@ function TableFilter(id) {
         checkList: null,
         dropdown: null,
         popupFilter: null,
-        clearButton: null
+        clearButton: null,
+        help: null
     };
 
     /*** TF events ***/
@@ -838,9 +839,9 @@ function TableFilter(id) {
         /*====================================================
             - Help button onclick event
         =====================================================*/
-        _OnHelpBtnClick: function() {
-            o._ToggleHelp();
-        },
+        // _OnHelpBtnClick: function() {
+        //     o._ToggleHelp();
+        // },
         _Paging: { //used by sort adapter
             nextEvt: null,
             prevEvt: null,
@@ -1154,13 +1155,15 @@ TableFilter.prototype = {
             this.Cpt.paging.init();
         }
         if(this.btnReset){
-            // this.SetResetBtn();
             var ClearButton = require('modules/clearButton').ClearButton;
             this.Cpt.clearButton = new ClearButton(this);
             this.Cpt.clearButton.init();
         }
         if(this.helpInstructions){
-            this.SetHelpInstructions();
+            // this.SetHelpInstructions();
+            var Help = require('modules/help').Help;
+            this.Cpt.help = new Help(this);
+            this.Cpt.help.init();
         }
         if(this.hasColWidth && !this.gridLayout){
             this.SetColWidths();
@@ -1460,8 +1463,9 @@ TableFilter.prototype = {
                 // this.RemoveResetBtn();
                 this.Cpt.clearButton.destroy();
             }
-            if(this.helpInstructions || !this.helpInstructions){
-                this.RemoveHelpInstructions();
+            if(this.helpInstructions /*|| !this.helpInstructions*/){
+                // this.RemoveHelpInstructions();
+                this.Cpt.help.destroy();
             }
             if(this.isExternalFlt && !this.popUpFilters){
                 this.RemoveExternalFlts();
@@ -1574,8 +1578,14 @@ TableFilter.prototype = {
         infdiv.appendChild(mdiv);
         this.mDiv = dom.id(this.prfxMDiv+this.id);
 
+        // Enable help instructions by default is topbar is generated
         if(!this.helpInstructions){
-            this.SetHelpInstructions();
+            // this.SetHelpInstructions();
+            if(!this.Cpt.help){
+                var Help = require('modules/help').Help;
+                this.Cpt.help = new Help(this);
+            }
+            this.Cpt.help.init();
         }
     },
 
@@ -2010,137 +2020,137 @@ TableFilter.prototype = {
         } catch(e) { console.log(ezEditConfig.err); }
     },
 
-    /*====================================================
-        - Generates help instructions
-    =====================================================*/
-    SetHelpInstructions: function(){
-        if(this.helpInstrBtnEl){
-            return;
-        }
-        var f = this.fObj;
-        //id of custom container element for instructions
-        this.helpInstrTgtId = f.help_instructions_target_id || null;
-        //id of custom container element for instructions
-        this.helpInstrContTgtId = f.help_instructions_container_target_id ||
-            null;
-        //defines help text
-        this.helpInstrText = f.help_instructions_text  ?
-            f.help_instructions_text :
-            'Use the filters above each column to filter and limit table ' +
-            'data. Avanced searches can be performed by using the following ' +
-            'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
-            '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
-            '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
-            '<b>rgx:</b><br/> These operators are described here:<br/>' +
-            '<a href="http://tablefilter.free.fr/#operators" ' +
-            'target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
-        //defines help innerHtml
-        this.helpInstrHtml = f.help_instructions_html || null;
-        //defines reset button text
-        this.helpInstrBtnText = f.help_instructions_btn_text || '?';
-        //defines reset button innerHtml
-        this.helpInstrBtnHtml = f.help_instructions_btn_html || null;
-        //defines css class for help button
-        this.helpInstrBtnCssClass = f.help_instructions_btn_css_class ||
-            'helpBtn';
-        //defines css class for help container
-        this.helpInstrContCssClass = f.help_instructions_container_css_class ||
-            'helpCont';
-        //help button element
-        this.helpInstrBtnEl = null;
-         //help content div
-        this.helpInstrContEl = null;
-        this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>HTML Table ' +
-            'Filter Generator v. '+ this.version +'</h4>' +
-            '<a href="http://tablefilter.free.fr" target="_blank">' +
-            'http://tablefilter.free.fr</a><br/>' +
-            '<span>&copy;2009-'+ this.year +' Max Guglielmi.</span>' +
-            '<div align="center" style="margin-top:8px;">' +
-            '<a href="javascript:;" onclick="window[\'tf_'+ this.id +
-            '\']._ToggleHelp();">Close</a></div></div>';
+    // /*====================================================
+    //     - Generates help instructions
+    // =====================================================*/
+    // SetHelpInstructions: function(){
+    //     if(this.helpInstrBtnEl){
+    //         return;
+    //     }
+    //     var f = this.fObj;
+    //     //id of custom container element for instructions
+    //     this.helpInstrTgtId = f.help_instructions_target_id || null;
+    //     //id of custom container element for instructions
+    //     this.helpInstrContTgtId = f.help_instructions_container_target_id ||
+    //         null;
+    //     //defines help text
+    //     this.helpInstrText = f.help_instructions_text  ?
+    //         f.help_instructions_text :
+    //         'Use the filters above each column to filter and limit table ' +
+    //         'data. Avanced searches can be performed by using the following ' +
+    //         'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
+    //         '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
+    //         '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
+    //         '<b>rgx:</b><br/> These operators are described here:<br/>' +
+    //         '<a href="http://tablefilter.free.fr/#operators" ' +
+    //         'target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
+    //     //defines help innerHtml
+    //     this.helpInstrHtml = f.help_instructions_html || null;
+    //     //defines reset button text
+    //     this.helpInstrBtnText = f.help_instructions_btn_text || '?';
+    //     //defines reset button innerHtml
+    //     this.helpInstrBtnHtml = f.help_instructions_btn_html || null;
+    //     //defines css class for help button
+    //     this.helpInstrBtnCssClass = f.help_instructions_btn_css_class ||
+    //         'helpBtn';
+    //     //defines css class for help container
+    //     this.helpInstrContCssClass = f.help_instructions_container_css_class ||
+    //         'helpCont';
+    //     //help button element
+    //     this.helpInstrBtnEl = null;
+    //      //help content div
+    //     this.helpInstrContEl = null;
+    //     this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>HTML Table ' +
+    //         'Filter Generator v. '+ this.version +'</h4>' +
+    //         '<a href="http://tablefilter.free.fr" target="_blank">' +
+    //         'http://tablefilter.free.fr</a><br/>' +
+    //         '<span>&copy;2009-'+ this.year +' Max Guglielmi.</span>' +
+    //         '<div align="center" style="margin-top:8px;">' +
+    //         '<a href="javascript:;" onclick="window[\'tf_'+ this.id +
+    //         '\']._ToggleHelp();">Close</a></div></div>';
 
-        var helpspan = dom.create('span',['id',this.prfxHelpSpan+this.id]);
-        var helpdiv = dom.create('div',['id',this.prfxHelpDiv+this.id]);
+    //     var helpspan = dom.create('span',['id',this.prfxHelpSpan+this.id]);
+    //     var helpdiv = dom.create('div',['id',this.prfxHelpDiv+this.id]);
 
-        //help button is added to defined element
-        if(!this.helpInstrTgtId){
-            this.SetTopDiv();
-        }
-        var targetEl = !this.helpInstrTgtId ?
-            this.rDiv : dom.id(this.helpInstrTgtId);
-        targetEl.appendChild(helpspan);
+    //     //help button is added to defined element
+    //     if(!this.helpInstrTgtId){
+    //         this.SetTopDiv();
+    //     }
+    //     var targetEl = !this.helpInstrTgtId ?
+    //         this.rDiv : dom.id(this.helpInstrTgtId);
+    //     targetEl.appendChild(helpspan);
 
-        var divContainer = !this.helpInstrContTgtId ?
-            helpspan : dom.id( this.helpInstrContTgtId );
+    //     var divContainer = !this.helpInstrContTgtId ?
+    //         helpspan : dom.id( this.helpInstrContTgtId );
 
-        if(!this.helpInstrBtnHtml){
-            divContainer.appendChild(helpdiv);
-            var helplink = dom.create('a', ['href', 'javascript:void(0);']);
-            helplink.className = this.helpInstrBtnCssClass;
-            helplink.appendChild(dom.text(this.helpInstrBtnText));
-            helpspan.appendChild(helplink);
-            helplink.onclick = this.Evt._OnHelpBtnClick;
-        } else {
-            helpspan.innerHTML = this.helpInstrBtnHtml;
-            var helpEl = helpspan.firstChild;
-            helpEl.onclick = this.Evt._OnHelpBtnClick;
-            divContainer.appendChild(helpdiv);
-        }
+    //     if(!this.helpInstrBtnHtml){
+    //         divContainer.appendChild(helpdiv);
+    //         var helplink = dom.create('a', ['href', 'javascript:void(0);']);
+    //         helplink.className = this.helpInstrBtnCssClass;
+    //         helplink.appendChild(dom.text(this.helpInstrBtnText));
+    //         helpspan.appendChild(helplink);
+    //         helplink.onclick = this.Evt._OnHelpBtnClick;
+    //     } else {
+    //         helpspan.innerHTML = this.helpInstrBtnHtml;
+    //         var helpEl = helpspan.firstChild;
+    //         helpEl.onclick = this.Evt._OnHelpBtnClick;
+    //         divContainer.appendChild(helpdiv);
+    //     }
 
-        if(!this.helpInstrHtml){
-            helpdiv.innerHTML = this.helpInstrText;
-            helpdiv.className = this.helpInstrContCssClass;
-            helpdiv.ondblclick = this.Evt._OnHelpBtnClick;
-        } else {
-            if(this.helpInstrContTgtId){
-                divContainer.appendChild(helpdiv);
-            }
-            helpdiv.innerHTML = this.helpInstrHtml;
-            if(!this.helpInstrContTgtId){
-                helpdiv.className = this.helpInstrContCssClass;
-                helpdiv.ondblclick = this.Evt._OnHelpBtnClick;
-            }
-        }
-        helpdiv.innerHTML += this.helpInstrDefaultHtml;
-        this.helpInstrContEl = helpdiv;
-        this.helpInstrBtnEl = helpspan;
-    },
+    //     if(!this.helpInstrHtml){
+    //         helpdiv.innerHTML = this.helpInstrText;
+    //         helpdiv.className = this.helpInstrContCssClass;
+    //         helpdiv.ondblclick = this.Evt._OnHelpBtnClick;
+    //     } else {
+    //         if(this.helpInstrContTgtId){
+    //             divContainer.appendChild(helpdiv);
+    //         }
+    //         helpdiv.innerHTML = this.helpInstrHtml;
+    //         if(!this.helpInstrContTgtId){
+    //             helpdiv.className = this.helpInstrContCssClass;
+    //             helpdiv.ondblclick = this.Evt._OnHelpBtnClick;
+    //         }
+    //     }
+    //     helpdiv.innerHTML += this.helpInstrDefaultHtml;
+    //     this.helpInstrContEl = helpdiv;
+    //     this.helpInstrBtnEl = helpspan;
+    // },
 
-    /*====================================================
-        - Removes help instructions
-    =====================================================*/
-    RemoveHelpInstructions: function() {
-        if(!this.helpInstrBtnEl){
-            return;
-        }
-        this.helpInstrBtnEl.parentNode.removeChild(this.helpInstrBtnEl);
-        this.helpInstrBtnEl = null;
-        if(!this.helpInstrContEl){
-            return;
-        }
-        this.helpInstrContEl.parentNode.removeChild(this.helpInstrContEl);
-        this.helpInstrContEl = null;
-    },
+    // /*====================================================
+    //     - Removes help instructions
+    // =====================================================*/
+    // RemoveHelpInstructions: function() {
+    //     if(!this.helpInstrBtnEl){
+    //         return;
+    //     }
+    //     this.helpInstrBtnEl.parentNode.removeChild(this.helpInstrBtnEl);
+    //     this.helpInstrBtnEl = null;
+    //     if(!this.helpInstrContEl){
+    //         return;
+    //     }
+    //     this.helpInstrContEl.parentNode.removeChild(this.helpInstrContEl);
+    //     this.helpInstrContEl = null;
+    // },
 
-    /*====================================================
-        - Toggles help div
-    =====================================================*/
-    _ToggleHelp: function(){
-        if(!this.helpInstrContEl){
-            return;
-        }
-        var divDisplay = this.helpInstrContEl.style.display;
-        if(divDisplay==='' || divDisplay==='none'){
-            this.helpInstrContEl.style.display = 'block';
-            var btnLeft = dom.position(this.helpInstrBtnEl).left;
-            if(!this.helpInstrContTgtId){
-                this.helpInstrContEl.style.left =
-                    (btnLeft - this.helpInstrContEl.clientWidth + 25) + 'px';
-            }
-        } else {
-            this.helpInstrContEl.style.display = 'none';
-        }
-    },
+    // /*====================================================
+    //     - Toggles help div
+    // =====================================================*/
+    // _ToggleHelp: function(){
+    //     if(!this.helpInstrContEl){
+    //         return;
+    //     }
+    //     var divDisplay = this.helpInstrContEl.style.display;
+    //     if(divDisplay==='' || divDisplay==='none'){
+    //         this.helpInstrContEl.style.display = 'block';
+    //         var btnLeft = dom.position(this.helpInstrBtnEl).left;
+    //         if(!this.helpInstrContTgtId){
+    //             this.helpInstrContEl.style.left =
+    //                 (btnLeft - this.helpInstrContEl.clientWidth + 25) + 'px';
+    //         }
+    //     } else {
+    //         this.helpInstrContEl.style.display = 'none';
+    //     }
+    // },
 
     /*====================================================
         - IE bug: it seems there is no way to make
@@ -2211,67 +2221,6 @@ TableFilter.prototype = {
         }
         return [optArray,optTxt];
     },
-
-    /*====================================================
-        - Generates reset button
-    =====================================================*/
-    // SetResetBtn: function(){
-    //     if(!this.hasGrid && !this.isFirstLoad && this.btnResetEl){
-    //         return;
-    //     }
-
-    //     var f = this.fObj;
-    //     //id of container element
-    //     this.btnResetTgtId = f.btn_reset_target_id || null;
-    //     //reset button element
-    //     this.btnResetEl = null;
-    //     //defines reset text
-    //     this.btnResetText = f.btn_reset_text || 'Reset';
-    //     //defines reset button tooltip
-    //     this.btnResetTooltip = f.btn_reset_tooltip || 'Clear filters';
-    //     //defines reset button innerHtml
-    //     this.btnResetHtml = f.btn_reset_html ||
-    //         (!this.enableIcons ? null :
-    //         '<input type="button" value="" class="'+this.btnResetCssClass+'" ' +
-    //         'title="'+this.btnResetTooltip+'" />');
-
-    //     var resetspan = dom.create('span', ['id',this.prfxResetSpan+this.id]);
-
-    //     // reset button is added to defined element
-    //     if(!this.btnResetTgtId){
-    //         this.SetTopDiv();
-    //     }
-    //     var targetEl = !this.btnResetTgtId ? this.rDiv :
-    //             dom.id( this.btnResetTgtId );
-    //     targetEl.appendChild(resetspan);
-
-    //     if(!this.btnResetHtml){
-    //         var fltreset = dom.create('a', ['href', 'javascript:void(0);']);
-    //         fltreset.className = this.btnResetCssClass;
-    //         fltreset.appendChild(dom.text(this.btnResetText));
-    //         resetspan.appendChild(fltreset);
-    //         fltreset.onclick = this.Evt._Clear;
-    //     } else {
-    //         resetspan.innerHTML = this.btnResetHtml;
-    //         var resetEl = resetspan.firstChild;
-    //         resetEl.onclick = this.Evt._Clear;
-    //     }
-    //     this.btnResetEl = dom.id(this.prfxResetSpan+this.id).firstChild;
-    // },
-
-    /*====================================================
-        - Removes reset button
-    =====================================================*/
-    // RemoveResetBtn: function(){
-    //     if(!this.hasGrid || !this.btnResetEl){
-    //         return;
-    //     }
-    //     var resetspan = dom.id(this.prfxResetSpan+this.id);
-    //     if(resetspan){
-    //         resetspan.parentNode.removeChild( resetspan );
-    //     }
-    //     this.btnResetEl = null;
-    // },
 
     /*====================================================
         - Generates status bar label

@@ -7,7 +7,7 @@
   ],
   "description": "Filter HTML tables data easily",
   "main": [
-    "dist/tablefilter_all.js",
+    "dist/tablefilter.js",
     "dist/filtergrid.css"
   ],
   "moduleType": [
@@ -17,6 +17,7 @@
   "keywords": [
     "html",
     "table",
+    "filtering",
     "filter"
   ],
   "license": "MIT",
