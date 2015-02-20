@@ -830,18 +830,7 @@ function TableFilter(id) {
             this.firstChild.focus();
             this.onclick = null;
         },
-        /*====================================================
-            - clears filters
-        =====================================================*/
-        // _Clear: function() {
-        //     o.ClearFilters();
-        // },
-        /*====================================================
-            - Help button onclick event
-        =====================================================*/
-        // _OnHelpBtnClick: function() {
-        //     o._ToggleHelp();
-        // },
+
         _Paging: { //used by sort adapter
             nextEvt: null,
             prevEvt: null,
@@ -1160,7 +1149,6 @@ TableFilter.prototype = {
             this.Cpt.clearButton.init();
         }
         if(this.helpInstructions){
-            // this.SetHelpInstructions();
             var Help = require('modules/help').Help;
             this.Cpt.help = new Help(this);
             this.Cpt.help.init();
@@ -1464,7 +1452,6 @@ TableFilter.prototype = {
                 this.Cpt.clearButton.destroy();
             }
             if(this.helpInstructions /*|| !this.helpInstructions*/){
-                // this.RemoveHelpInstructions();
                 this.Cpt.help.destroy();
             }
             if(this.isExternalFlt && !this.popUpFilters){
@@ -1580,7 +1567,6 @@ TableFilter.prototype = {
 
         // Enable help instructions by default is topbar is generated
         if(!this.helpInstructions){
-            // this.SetHelpInstructions();
             if(!this.Cpt.help){
                 var Help = require('modules/help').Help;
                 this.Cpt.help = new Help(this);
@@ -2019,138 +2005,6 @@ TableFilter.prototype = {
             o.ezEditTable.Init();
         } catch(e) { console.log(ezEditConfig.err); }
     },
-
-    // /*====================================================
-    //     - Generates help instructions
-    // =====================================================*/
-    // SetHelpInstructions: function(){
-    //     if(this.helpInstrBtnEl){
-    //         return;
-    //     }
-    //     var f = this.fObj;
-    //     //id of custom container element for instructions
-    //     this.helpInstrTgtId = f.help_instructions_target_id || null;
-    //     //id of custom container element for instructions
-    //     this.helpInstrContTgtId = f.help_instructions_container_target_id ||
-    //         null;
-    //     //defines help text
-    //     this.helpInstrText = f.help_instructions_text  ?
-    //         f.help_instructions_text :
-    //         'Use the filters above each column to filter and limit table ' +
-    //         'data. Avanced searches can be performed by using the following ' +
-    //         'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
-    //         '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
-    //         '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
-    //         '<b>rgx:</b><br/> These operators are described here:<br/>' +
-    //         '<a href="http://tablefilter.free.fr/#operators" ' +
-    //         'target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
-    //     //defines help innerHtml
-    //     this.helpInstrHtml = f.help_instructions_html || null;
-    //     //defines reset button text
-    //     this.helpInstrBtnText = f.help_instructions_btn_text || '?';
-    //     //defines reset button innerHtml
-    //     this.helpInstrBtnHtml = f.help_instructions_btn_html || null;
-    //     //defines css class for help button
-    //     this.helpInstrBtnCssClass = f.help_instructions_btn_css_class ||
-    //         'helpBtn';
-    //     //defines css class for help container
-    //     this.helpInstrContCssClass = f.help_instructions_container_css_class ||
-    //         'helpCont';
-    //     //help button element
-    //     this.helpInstrBtnEl = null;
-    //      //help content div
-    //     this.helpInstrContEl = null;
-    //     this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>HTML Table ' +
-    //         'Filter Generator v. '+ this.version +'</h4>' +
-    //         '<a href="http://tablefilter.free.fr" target="_blank">' +
-    //         'http://tablefilter.free.fr</a><br/>' +
-    //         '<span>&copy;2009-'+ this.year +' Max Guglielmi.</span>' +
-    //         '<div align="center" style="margin-top:8px;">' +
-    //         '<a href="javascript:;" onclick="window[\'tf_'+ this.id +
-    //         '\']._ToggleHelp();">Close</a></div></div>';
-
-    //     var helpspan = dom.create('span',['id',this.prfxHelpSpan+this.id]);
-    //     var helpdiv = dom.create('div',['id',this.prfxHelpDiv+this.id]);
-
-    //     //help button is added to defined element
-    //     if(!this.helpInstrTgtId){
-    //         this.SetTopDiv();
-    //     }
-    //     var targetEl = !this.helpInstrTgtId ?
-    //         this.rDiv : dom.id(this.helpInstrTgtId);
-    //     targetEl.appendChild(helpspan);
-
-    //     var divContainer = !this.helpInstrContTgtId ?
-    //         helpspan : dom.id( this.helpInstrContTgtId );
-
-    //     if(!this.helpInstrBtnHtml){
-    //         divContainer.appendChild(helpdiv);
-    //         var helplink = dom.create('a', ['href', 'javascript:void(0);']);
-    //         helplink.className = this.helpInstrBtnCssClass;
-    //         helplink.appendChild(dom.text(this.helpInstrBtnText));
-    //         helpspan.appendChild(helplink);
-    //         helplink.onclick = this.Evt._OnHelpBtnClick;
-    //     } else {
-    //         helpspan.innerHTML = this.helpInstrBtnHtml;
-    //         var helpEl = helpspan.firstChild;
-    //         helpEl.onclick = this.Evt._OnHelpBtnClick;
-    //         divContainer.appendChild(helpdiv);
-    //     }
-
-    //     if(!this.helpInstrHtml){
-    //         helpdiv.innerHTML = this.helpInstrText;
-    //         helpdiv.className = this.helpInstrContCssClass;
-    //         helpdiv.ondblclick = this.Evt._OnHelpBtnClick;
-    //     } else {
-    //         if(this.helpInstrContTgtId){
-    //             divContainer.appendChild(helpdiv);
-    //         }
-    //         helpdiv.innerHTML = this.helpInstrHtml;
-    //         if(!this.helpInstrContTgtId){
-    //             helpdiv.className = this.helpInstrContCssClass;
-    //             helpdiv.ondblclick = this.Evt._OnHelpBtnClick;
-    //         }
-    //     }
-    //     helpdiv.innerHTML += this.helpInstrDefaultHtml;
-    //     this.helpInstrContEl = helpdiv;
-    //     this.helpInstrBtnEl = helpspan;
-    // },
-
-    // /*====================================================
-    //     - Removes help instructions
-    // =====================================================*/
-    // RemoveHelpInstructions: function() {
-    //     if(!this.helpInstrBtnEl){
-    //         return;
-    //     }
-    //     this.helpInstrBtnEl.parentNode.removeChild(this.helpInstrBtnEl);
-    //     this.helpInstrBtnEl = null;
-    //     if(!this.helpInstrContEl){
-    //         return;
-    //     }
-    //     this.helpInstrContEl.parentNode.removeChild(this.helpInstrContEl);
-    //     this.helpInstrContEl = null;
-    // },
-
-    // /*====================================================
-    //     - Toggles help div
-    // =====================================================*/
-    // _ToggleHelp: function(){
-    //     if(!this.helpInstrContEl){
-    //         return;
-    //     }
-    //     var divDisplay = this.helpInstrContEl.style.display;
-    //     if(divDisplay==='' || divDisplay==='none'){
-    //         this.helpInstrContEl.style.display = 'block';
-    //         var btnLeft = dom.position(this.helpInstrBtnEl).left;
-    //         if(!this.helpInstrContTgtId){
-    //             this.helpInstrContEl.style.left =
-    //                 (btnLeft - this.helpInstrContEl.clientWidth + 25) + 'px';
-    //         }
-    //     } else {
-    //         this.helpInstrContEl.style.display = 'none';
-    //     }
-    // },
 
     /*====================================================
         - IE bug: it seems there is no way to make
