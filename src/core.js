@@ -238,8 +238,6 @@ function TableFilter(id) {
     this.externalFltEls = [];
     //delays any filtering process if loader true
     this.execDelay = !isNaN(f.exec_delay) ? parseInt(f.exec_delay,10) : 100;
-    //enables/disables status messages
-    this.status = f.status===true ? true : false;
     //calls function when filters grid loaded
     this.onFiltersLoaded = types.isFn(f.on_filters_loaded) ?
         f.on_filters_loaded : null;
@@ -622,7 +620,8 @@ function TableFilter(id) {
         dropdown: null,
         popupFilter: null,
         clearButton: null,
-        help: null
+        help: null,
+        statusBar: null
     };
 
     /*** TF events ***/
@@ -1136,7 +1135,10 @@ TableFilter.prototype = {
             this.Cpt.rowsCounter.init();
         }
         if(this.statusBar){
-            this.SetStatusBar();
+            // this.SetStatusBar();
+            var StatusBar = require('modules/statusBar').StatusBar;
+            this.Cpt.statusBar = new StatusBar(this);
+            this.Cpt.statusBar.init();
         }
         if(this.paging){
             var Paging = require('modules/paging').Paging;
@@ -1270,18 +1272,19 @@ TableFilter.prototype = {
                     o['_'+evt].call(null,o,s);
                 break;
             }
-            if(o.status || o.statusBar){
-                o.StatusMsg('');
+            if(o.statusBar){
+                o.Cpt.statusBar.message('');
             }
             if(o.loader){
                 o.Cpt.loader.show('none');
             }
         }
 
-        if(this.loader || this.status || this.statusBar) {
+        if(this.loader || this.statusBar) {
             try{
                 this.Cpt.loader.show('');
-                this.StatusMsg(o['msg'+evt]);
+                // this.StatusMsg(o['msg'+evt]);
+                this.Cpt.statusBar.message(this['msg'+evt]);
             } catch(e){}
             global.setTimeout(efx, this.execDelay);
         } else {
@@ -1442,7 +1445,8 @@ TableFilter.prototype = {
                 this.Cpt.paging.destroy();
             }
             if(this.statusBar){
-                this.RemoveStatusBar();
+                // this.RemoveStatusBar();
+                this.Cpt.statusBar.destroy();
             }
             if(this.rowsCounter){
                 this.Cpt.rowsCounter.destroy();
@@ -2074,127 +2078,6 @@ TableFilter.prototype = {
             optTxt.sort();
         }
         return [optArray,optTxt];
-    },
-
-    /*====================================================
-        - Generates status bar label
-    =====================================================*/
-    SetStatusBar: function(){
-        if(!this.hasGrid && !this.isFirstLoad){
-            return;
-        }
-        var f = this.fObj;
-        //id of custom container element
-        this.statusBarTgtId = f.status_bar_target_id || null;
-        //element containing status bar label
-        this.statusBarDiv = null;
-        //status bar
-        this.statusBarSpan = null;
-        //status bar label
-        this.statusBarSpanText = null;
-        //defines status bar text
-        this.statusBarText = f.status_bar_text || '';
-        //defines css class status bar
-        this.statusBarCssClass = f.status_bar_css_class || 'status';
-        //delay for status bar clearing
-        this.statusBarCloseDelay =  250;
-        //status bar container
-        var statusDiv = dom.create('div', ['id',this.prfxStatus+this.id]);
-        statusDiv.className = this.statusBarCssClass;
-        //status bar label
-        var statusSpan = dom.create(
-                'span', ['id',this.prfxStatusSpan+this.id]);
-        //preceding text
-        var statusSpanText = dom.create(
-                'span', ['id',this.prfxStatusTxt+this.id]);
-        statusSpanText.appendChild(dom.text(this.statusBarText));
-        //calls function before message is displayed
-        this.onBeforeShowMsg = types.isFn(f.on_before_show_msg) ?
-            f.on_before_show_msg : null;
-        //calls function after message is displayed
-        this.onAfterShowMsg = types.isFn(f.on_after_show_msg) ?
-            f.on_after_show_msg : null;
-
-        // target element container
-        if(!this.statusBarTgtId){
-            this.SetTopDiv();
-        }
-        var targetEl = (!this.statusBarTgtId) ?
-            this.lDiv : dom.id(this.statusBarTgtId);
-
-        if(this.statusBarDiv && hlp.isIE()){
-            this.statusBarDiv.outerHTML = '';
-        }
-
-        //default container: 'lDiv'
-        if(!this.statusBarTgtId){
-            statusDiv.appendChild(statusSpanText);
-            statusDiv.appendChild(statusSpan);
-            targetEl.appendChild(statusDiv);
-        } else {
-            // custom container, no need to append statusDiv
-            targetEl.appendChild(statusSpanText);
-            targetEl.appendChild(statusSpan);
-        }
-
-        this.statusBarDiv = dom.id( this.prfxStatus+this.id );
-        this.statusBarSpan = dom.id( this.prfxStatusSpan+this.id );
-        this.statusBarSpanText = dom.id( this.prfxStatusTxt+this.id );
-    },
-
-    /*====================================================
-        - Removes status bar div
-    =====================================================*/
-    RemoveStatusBar: function(){
-        if(!this.hasGrid && !this.statusBarDiv){
-            return;
-        }
-
-        this.statusBarDiv.innerHTML = '';
-        this.statusBarDiv.parentNode.removeChild(this.statusBarDiv);
-        this.statusBarSpan = null;
-        this.statusBarSpanText = null;
-        this.statusBarDiv = null;
-    },
-
-    /*====================================================
-        - sets status messages
-    =====================================================*/
-    StatusMsg: function(t){
-        if(!t){
-            this.StatusMsg('');
-        }
-        if(this.status){ this.WinStatusMsg(t); }
-        if(this.statusBar){ this.StatusBarMsg(t); }
-    },
-
-    /*====================================================
-        - sets window status messages
-    =====================================================*/
-    WinStatusMsg: function(t){
-        if(!this.status){
-            return;
-        }
-        if(this.onBeforeShowMsg){ this.onBeforeShowMsg.call(null, this, t); }
-        global.status = t;
-        if(this.onAfterShowMsg){ this.onAfterShowMsg.call(null, this, t); }
-    },
-
-    /*====================================================
-        - sets status bar messages
-    =====================================================*/
-    StatusBarMsg: function(t){
-        if(!this.statusBar || !this.statusBarSpan){
-            return;
-        }
-        if(this.onBeforeShowMsg){ this.onBeforeShowMsg.call(null, this, t); }
-        var o = this;
-        function setMsg(){
-            o.statusBarSpan.innerHTML = t;
-            if(o.onAfterShowMsg){ o.onAfterShowMsg.call(null, o, t); }
-        }
-        var d = t==='' ? this.statusBarCloseDelay : 1;
-        global.setTimeout(setMsg, d);
     },
 
     /*====================================================

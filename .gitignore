@@ -1,4 +1,3 @@
-# Dependency directory
 node_modules
 npm-debug.log
 *.js.map
