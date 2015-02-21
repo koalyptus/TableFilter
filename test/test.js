@@ -15,7 +15,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     module('DOM tests');
     test('Filters row', function() {
         equal(tf.tbl.rows[0].className, 'fltrow', 'Filters row CSS class name');
-        equal(tf.GetFilterElement(0).nodeName, 'INPUT', 'Filter DOM element');
+        equal(tf.getFilterElement(0).nodeName, 'INPUT', 'Filter DOM element');
     });
 
 });

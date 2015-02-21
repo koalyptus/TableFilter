@@ -9,7 +9,7 @@ define(["exports", "../dom"], function (exports, _dom) {
   var Dom = _dom.Dom;
   var AlternateRows = (function () {
     var AlternateRows = function AlternateRows(tf) {
-      var f = tf.fObj;
+      var f = tf.config();
       //defines css class for even rows
       this.evenCss = f.even_row_css_class || "even";
       //defines css class for odd rows
@@ -22,7 +22,7 @@ define(["exports", "../dom"], function (exports, _dom) {
       init: {
         writable: true,
         value: function () {
-          if (!this.tf.hasGrid && !this.tf.isFirstLoad) {
+          if (!this.tf.hasGrid() && !this.tf.isFirstLoad) {
             return;
           }
           var rows = this.tf.tbl.rows;
@@ -67,7 +67,7 @@ define(["exports", "../dom"], function (exports, _dom) {
       remove: {
         writable: true,
         value: function () {
-          if (!this.tf.hasGrid) {
+          if (!this.tf.hasGrid()) {
             return;
           }
           var row = this.tf.tbl.rows;

@@ -104,18 +104,19 @@
                 // remember_page_number: true,
                 // remember_page_length: true,
                 fill_slc_on_demand: false,
-                refresh_filters: false,
+                linked_filters: false,
                 popup_filters: false,
                 alternate_rows: true,
                 highlight_keywords: true,
                 match_case: false,
                 btn_reset: true,
                 status_bar: true,
-                // grid_layout: true,
+                watermark: [null, 'Filter column...', null, null, 'Helo'],
+                grid_layout: false,
                 // grid_width: '500px',
                 // grid_height: '200px',
                 on_before_show_msg: function(tf){
-                    console.log('on_before_show_msg');
+                    // console.log('on_before_show_msg');
                 }
             });
 

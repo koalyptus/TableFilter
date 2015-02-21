@@ -11,7 +11,7 @@ export class Dropdown{
      */
     constructor(tf){
         // Configuration object
-        var f = tf.fObj;
+        var f = tf.config();
 
         this.enableSlcResetFilter = f.enable_slc_reset_filter ? false : true;
         //defines empty option text
@@ -138,7 +138,7 @@ export class Dropdown{
                         ((activeFlt===undefined || activeFlt==colIndex)  ||
                             (activeFlt!=colIndex &&
                                 array.has(tf.validRowsIndex, k) ))) ))){
-                    var cell_data = tf.GetCellData(j, cell[j]),
+                    var cell_data = tf.getCellData(j, cell[j]),
                         //Vary Peter's patch
                         cell_string = Str.matchCase(cell_data, matchCase);
 

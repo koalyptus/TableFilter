@@ -11,7 +11,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
   var ClearButton = (function () {
     var ClearButton = function ClearButton(tf) {
       // Configuration object
-      var f = tf.fObj;
+      var f = tf.config();
 
       //id of container element
       this.btnResetTgtId = f.btn_reset_target_id || null;
@@ -31,7 +31,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
       onClick: {
         writable: true,
         value: function () {
-          this.tf.ClearFilters();
+          this.tf.clearFilters();
         }
       },
       init: {
@@ -40,7 +40,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
           var _this = this;
           var tf = this.tf;
 
-          if (!tf.hasGrid && !tf.isFirstLoad && tf.btnResetEl) {
+          if (!tf.hasGrid() && !tf.isFirstLoad && tf.btnResetEl) {
             return;
           }
 
@@ -48,7 +48,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
 
           // reset button is added to defined element
           if (!this.btnResetTgtId) {
-            tf.SetTopDiv();
+            tf.setToolbar();
           }
           var targetEl = !this.btnResetTgtId ? tf.rDiv : Dom.id(this.btnResetTgtId);
           targetEl.appendChild(resetspan);
@@ -78,7 +78,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
         value: function () {
           var tf = this.tf;
 
-          if (!tf.hasGrid || !this.btnResetEl) {
+          if (!tf.hasGrid() || !this.btnResetEl) {
             return;
           }
 

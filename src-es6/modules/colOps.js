@@ -9,7 +9,7 @@ export class ColOps{
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
-        var f = tf.fObj;
+        var f = tf.config();
         this.colOperation = f.col_operation;
 
         //calls function before col operation
@@ -39,7 +39,7 @@ export class ColOps{
      * (2) added calculations for the median, lower and upper quartile.
      */
     calc() {
-        if(!this.tf.isFirstLoad && !this.tf.hasGrid){
+        if(!this.tf.isFirstLoad && !this.tf.hasGrid()){
             return;
         }
 
@@ -88,7 +88,7 @@ export class ColOps{
                 //use ucolIndex because we only want to pass through this loop
                 //once for each column get the values in this unique column
                 colvalues.push(
-                    this.tf.GetColValues(ucolIndex[ucol], true, excludeRow));
+                    this.tf.getColValues(ucolIndex[ucol], true, excludeRow));
 
                 //next: calculate all operations for this column
                 var result,

@@ -10,7 +10,7 @@ export class RowsCounter{
      */
     constructor(tf){
         // TableFilter configuration
-        var f = tf.fObj;
+        var f = tf.config();
 
         //id of custom container element
         this.rowsCounterTgtId = f.rows_counter_target_id || null;
@@ -37,7 +37,7 @@ export class RowsCounter{
     init(){
         var tf = this.tf;
 
-        if((!tf.hasGrid && !tf.isFirstLoad) || this.rowsCounterSpan){
+        if((!tf.hasGrid() && !tf.isFirstLoad) || this.rowsCounterSpan){
             return;
         }
 
@@ -51,7 +51,7 @@ export class RowsCounter{
 
         // counter is added to defined element
         if(!this.rowsCounterTgtId){
-            tf.SetTopDiv();
+            tf.setToolbar();
         }
         var targetEl = !this.rowsCounterTgtId ?
                 tf.lDiv : Dom.id( this.rowsCounterTgtId );
@@ -119,7 +119,7 @@ export class RowsCounter{
 
     destroy(){
         var tf = this.tf;
-        if(!tf.hasGrid){
+        if(!tf.hasGrid()){
             return;
         }
         if(!this.rowsCounterSpan){

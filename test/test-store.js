@@ -19,7 +19,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     Cookie.remove(tf.pgLenCookie);
 
     tf.init();
-    tf._ClearFilters();
+    tf._clearFilters();
 
     module('Sanity checks');
     test('Store module', function() {
@@ -30,13 +30,13 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
 
     module('Check page number persistence');
     test('Page number value', function() {
-        tf._ClearFilters();
-        tf._Filter();
+        tf._clearFilters();
+        tf._filter();
         tf.Cpt.paging._changePage(1);
         var cookieName = tf.pgNbCookie;
         deepEqual(tf.Cpt.store.getPageNb(cookieName), '2', 'Page number value');
-        tf._ClearFilters();
-        tf._Filter();
+        tf._clearFilters();
+        tf._filter();
     });
 
     module('Check page length persistence');
@@ -46,20 +46,20 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
         paging._changeResultsPerPage();
         var cookieName = tf.pgLenCookie;
         deepEqual(tf.Cpt.store.getPageLength(cookieName), '2', 'Page length value');
-        tf._ClearFilters();
-        tf._Filter();
+        tf._clearFilters();
+        tf._filter();
     });
 
     module('Check filters persistence');
     test('Filters value', function() {
-        tf.SetFilterValue(0, 'Sydney');
-        tf.SetFilterValue(3, '1.5');
-        tf._Filter();
+        tf.setFilterValue(0, 'Sydney');
+        tf.setFilterValue(3, '1.5');
+        tf._filter();
         var cookieName = tf.fltsValuesCookie;
         deepEqual(tf.Cpt.store.getFilterValues(cookieName)[0], 'Sydney', 'Filter 0 value');
         deepEqual(tf.Cpt.store.getFilterValues(cookieName)[3], '1.5', 'Filter 3 value');
-        tf._ClearFilters();
-        tf._Filter();
+        tf._clearFilters();
+        tf._filter();
     });
 
 });

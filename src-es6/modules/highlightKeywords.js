@@ -8,7 +8,7 @@ export class HighlightKeyword{
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
-        var f = tf.fObj;
+        var f = tf.config();
         //defines css class for highlighting
         this.highlightCssClass = f.highlight_css_class || 'keyword';
         this.highlightedNodes = [];

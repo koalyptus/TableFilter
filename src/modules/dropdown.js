@@ -13,7 +13,7 @@ define(["exports", "../dom", "../array", "../string", "../sort"], function (expo
   var Dropdown = (function () {
     var Dropdown = function Dropdown(tf) {
       // Configuration object
-      var f = tf.fObj;
+      var f = tf.config();
 
       this.enableSlcResetFilter = f.enable_slc_reset_filter ? false : true;
       //defines empty option text
@@ -111,7 +111,7 @@ define(["exports", "../dom", "../array", "../string", "../sort"], function (expo
             // this loop retrieves cell data
             for (var j = 0; j < nchilds; j++) {
               if ((colIndex === j && (!isRefreshed || (isRefreshed && tf.disableExcludedOptions))) || (colIndex == j && isRefreshed && ((rows[k].style.display === "" && !tf.paging) || (tf.paging && (!tf.validRowsIndex || (tf.validRowsIndex && array.has(tf.validRowsIndex, k))) && ((activeFlt === undefined || activeFlt == colIndex) || (activeFlt != colIndex && array.has(tf.validRowsIndex, k))))))) {
-                var cell_data = tf.GetCellData(j, cell[j]),
+                var cell_data = tf.getCellData(j, cell[j]),
                 //Vary Peter's patch
                 cell_string = Str.matchCase(cell_data, matchCase);
 

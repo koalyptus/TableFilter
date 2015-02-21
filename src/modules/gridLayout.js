@@ -12,7 +12,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
   var Event = _event.Event;
   var GridLayout = (function () {
     var GridLayout = function GridLayout(tf) {
-      var f = tf.fObj;
+      var f = tf.config();
 
       //defines grid width
       this.gridWidth = f.grid_width || null;
@@ -49,7 +49,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
         writable: true,
         value: function () {
           var tf = this.tf;
-          var f = tf.fObj;
+          var f = tf.config();
           var tbl = tf.tbl;
 
           if (!tf.gridLayout) {
@@ -74,7 +74,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
             }
             tf.hasColWidth = true;
           }
-          tf.SetColWidths(this.gridHeadRowIndex);
+          tf.setColWidths(this.gridHeadRowIndex);
 
           var tblW; //initial table width
           if (tbl.width !== "") {
@@ -108,7 +108,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
 
           //In case table width is expressed in %
           if (tbl.style.width === "") {
-            tbl.style.width = (tf.__containsStr("%", tblW) ? tbl.clientWidth : tblW) + "px";
+            tbl.style.width = (tf._containsStr("%", tblW) ? tbl.clientWidth : tblW) + "px";
           }
 
           var d = this.tblCont.parentNode.removeChild(this.tblCont);
@@ -179,7 +179,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
           this.headTbl.cellSpacing = tbl.cellSpacing;
 
           //content table without headers needs col widths to be reset
-          tf.SetColWidths();
+          tf.setColWidths();
 
           //Headers container width
           this.headTblCont.style.width = this.tblCont.clientWidth + "px";
@@ -227,7 +227,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
               };
               tf.hasExtensions = true;
             } else {
-              if (!tf.__containsStr("colsresizer", Str.lower(tf.extensions.src.toString()))) {
+              if (!tf._containsStr("colsresizer", Str.lower(tf.extensions.src.toString()))) {
                 tf.extensions.name.push("ColumnsResizer_" + tf.id);
                 tf.extensions.src.push(tf.gridColResizerPath);
                 tf.extensions.description.push("Columns Resizing");

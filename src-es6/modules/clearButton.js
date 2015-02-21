@@ -9,7 +9,7 @@ export class ClearButton{
      */
     constructor(tf){
         // Configuration object
-        var f = tf.fObj;
+        var f = tf.config();
 
         //id of container element
         this.btnResetTgtId = f.btn_reset_target_id || null;
@@ -29,7 +29,7 @@ export class ClearButton{
     }
 
     onClick(){
-        this.tf.ClearFilters();
+        this.tf.clearFilters();
     }
 
     /**
@@ -38,7 +38,7 @@ export class ClearButton{
     init(){
         var tf = this.tf;
 
-        if(!tf.hasGrid && !tf.isFirstLoad && tf.btnResetEl){
+        if(!tf.hasGrid() && !tf.isFirstLoad && tf.btnResetEl){
             return;
         }
 
@@ -46,7 +46,7 @@ export class ClearButton{
 
         // reset button is added to defined element
         if(!this.btnResetTgtId){
-            tf.SetTopDiv();
+            tf.setToolbar();
         }
         var targetEl = !this.btnResetTgtId ?
             tf.rDiv : Dom.id(this.btnResetTgtId);
@@ -74,7 +74,7 @@ export class ClearButton{
     destroy(){
         var tf = this.tf;
 
-        if(!tf.hasGrid || !this.btnResetEl){
+        if(!tf.hasGrid() || !this.btnResetEl){
             return;
         }
 

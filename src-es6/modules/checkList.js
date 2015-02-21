@@ -12,7 +12,7 @@ export class CheckList{
      */
     constructor(tf){
         // Configuration object
-        var f = tf.fObj;
+        var f = tf.config();
 
         this.checkListDiv = []; //checklist container div
         //defines css class for div containing checklist filter
@@ -132,7 +132,7 @@ export class CheckList{
                     (tf.paging && ((!activeFlt || activeFlt===colIndex )||
                     (activeFlt!=colIndex &&
                         array.has(tf.validRowsIndex, k))) )))){
-                    var cell_data = tf.GetCellData(j, cells[j]);
+                    var cell_data = tf.getCellData(j, cells[j]);
                     //Vary Peter's patch
                     var cell_string = Str.matchCase(
                         cell_data, tf.matchCase);

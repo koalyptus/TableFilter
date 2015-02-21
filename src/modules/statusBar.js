@@ -10,10 +10,14 @@ define(["exports", "../dom", "../event", "../types", "../helpers"], function (ex
   var Event = _event.Event;
   var Types = _types.Types;
   var Helpers = _helpers.Helpers;
+
+
+  var global = window;
+
   var StatusBar = (function () {
     var StatusBar = function StatusBar(tf) {
       // Configuration object
-      var f = tf.fObj || {};
+      var f = tf.config();
 
       //id of custom container element
       this.statusBarTgtId = f.status_bar_target_id || null;
@@ -43,7 +47,7 @@ define(["exports", "../dom", "../event", "../types", "../helpers"], function (ex
         writable: true,
         value: function () {
           var tf = this.tf;
-          if (!tf.hasGrid && !tf.isFirstLoad) {
+          if (!tf.hasGrid() && !tf.isFirstLoad) {
             return;
           }
 
@@ -59,7 +63,7 @@ define(["exports", "../dom", "../event", "../types", "../helpers"], function (ex
 
           // target element container
           if (!this.statusBarTgtId) {
-            tf.SetTopDiv();
+            tf.setToolbar();
           }
           var targetEl = (!this.statusBarTgtId) ? tf.lDiv : Dom.id(this.statusBarTgtId);
 
@@ -98,7 +102,7 @@ define(["exports", "../dom", "../event", "../types", "../helpers"], function (ex
           }
 
           var d = t === "" ? this.statusBarCloseDelay : 1;
-          window.setTimeout(function () {
+          global.setTimeout(function () {
             _this.statusBarSpan.innerHTML = t;
             if (_this.onAfterShowMsg) {
               _this.onAfterShowMsg.call(null, _this.tf, t);
@@ -110,7 +114,7 @@ define(["exports", "../dom", "../event", "../types", "../helpers"], function (ex
         writable: true,
         value: function () {
           var tf = this.tf;
-          if (!tf.hasGrid || !this.statusBarDiv) {
+          if (!tf.hasGrid() || !this.statusBarDiv) {
             return;
           }
 

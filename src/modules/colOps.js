@@ -11,7 +11,7 @@ define(["exports", "../dom", "../string", "../types"], function (exports, _dom, 
   var Types = _types.Types;
   var ColOps = (function () {
     var ColOps = function ColOps(tf) {
-      var f = tf.fObj;
+      var f = tf.config();
       this.colOperation = f.col_operation;
 
       //calls function before col operation
@@ -26,7 +26,7 @@ define(["exports", "../dom", "../string", "../types"], function (exports, _dom, 
       calc: {
         writable: true,
         value: function () {
-          if (!this.tf.isFirstLoad && !this.tf.hasGrid) {
+          if (!this.tf.isFirstLoad && !this.tf.hasGrid()) {
             return;
           }
 
@@ -62,7 +62,7 @@ define(["exports", "../dom", "../string", "../types"], function (exports, _dom, 
               //this retrieves col values
               //use ucolIndex because we only want to pass through this loop
               //once for each column get the values in this unique column
-              colvalues.push(this.tf.GetColValues(ucolIndex[ucol], true, excludeRow));
+              colvalues.push(this.tf.getColValues(ucolIndex[ucol], true, excludeRow));
 
               //next: calculate all operations for this column
               var result, nbvalues = 0, temp, meanValue = 0, sumValue = 0, minValue = null, maxValue = null, q1Value = null, medValue = null, q3Value = null, meanFlag = 0, sumFlag = 0, minFlag = 0, maxFlag = 0, q1Flag = 0, medFlag = 0, q3Flag = 0, theList = [], opsThisCol = [], decThisCol = [], labThisCol = [], oTypeThisCol = [], mThisCol = -1;

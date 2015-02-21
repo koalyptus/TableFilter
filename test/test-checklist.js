@@ -28,7 +28,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     });
 
     test('TableFilter removed', function() {
-        tf.RemoveGrid();
+        tf.remove();
         deepEqual(dom.id(tf.fltIds[3]), null, 'CheckList UL element');
     });
 });

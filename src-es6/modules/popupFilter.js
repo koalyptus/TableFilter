@@ -11,7 +11,7 @@ export class PopupFilter{
      */
     constructor(tf){
         // Configuration object
-        var f = tf.fObj;
+        var f = tf.config();
 
         // Enable external filters behaviour
         tf.isExternalFlt = true;
@@ -62,7 +62,7 @@ export class PopupFilter{
 
         if(this.popUpFltAdjustToContainer){
             var popUpDiv = this.popUpFltElms[colIndex],
-                header = this.tf.GetHeaderElement(colIndex),
+                header = this.tf.getHeaderElement(colIndex),
                 headerWidth = header.clientWidth * 0.95;
             if(Helpers.isIE()){
                 var headerLeft = Dom.position(header).left;
@@ -89,7 +89,7 @@ export class PopupFilter{
                 ['ci', i]
             );
             popUpSpan.innerHTML = this.popUpImgFltHtml;
-            var header = tf.GetHeaderElement(i);
+            var header = tf.getHeaderElement(i);
             header.appendChild(popUpSpan);
             Event.add(popUpSpan, 'click', (evt) => { this.onClick(evt); });
             this.popUpFltSpans[i] = popUpSpan;
@@ -118,9 +118,8 @@ export class PopupFilter{
             div;
         popUpDiv.className = this.popUpDivCssClass;
         tf.externalFltTgtIds.push(popUpDiv.id);
-        var header = tf.GetHeaderElement(colIndex);
+        var header = tf.getHeaderElement(colIndex);
         header.insertBefore(popUpDiv, header.firstChild);
-        //popUpDiv.onclick = function(e){ evt.stop(e || global.event); };
         Event.add(popUpDiv, 'click', (evt) => { Event.stop(evt); });
         this.popUpFltElms[colIndex] = popUpDiv;
     }

@@ -10,7 +10,7 @@ define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
   var Str = _string.Str;
   var HighlightKeyword = (function () {
     var HighlightKeyword = function HighlightKeyword(tf) {
-      var f = tf.fObj;
+      var f = tf.config();
       //defines css class for highlighting
       this.highlightCssClass = f.highlight_css_class || "keyword";
       this.highlightedNodes = [];

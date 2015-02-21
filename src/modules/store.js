@@ -9,7 +9,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
   var Cookie = _cookie.Cookie;
   var Store = (function () {
     var Store = function Store(tf) {
-      var f = tf.fObj;
+      var f = tf.config();
 
       this.duration = !isNaN(f.set_cookie_duration) ? parseInt(f.set_cookie_duration, 10) : 100000;
 
@@ -24,7 +24,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
           var fltValues = [];
           //store filters' values
           for (var i = 0; i < tf.fltIds.length; i++) {
-            var value = tf.GetFilterValue(i);
+            var value = tf.getFilterValue(i);
             if (value === "") {
               value = " ";
             }

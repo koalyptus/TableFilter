@@ -7,7 +7,7 @@ export class AlternateRows{
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
-        var f = tf.fObj;
+        var f = tf.config();
         //defines css class for even rows
         this.evenCss = f.even_row_css_class || 'even';
         //defines css class for odd rows
@@ -20,7 +20,7 @@ export class AlternateRows{
      * Sets alternating rows color
      */
     init() {
-        if(!this.tf.hasGrid && !this.tf.isFirstLoad){
+        if(!this.tf.hasGrid() && !this.tf.isFirstLoad){
             return;
         }
         var rows = this.tf.tbl.rows;
@@ -77,7 +77,7 @@ export class AlternateRows{
      * Removes all row background color
      */
     remove() {
-        if(!this.tf.hasGrid){
+        if(!this.tf.hasGrid()){
             return;
         }
         var row = this.tf.tbl.rows;

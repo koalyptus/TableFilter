@@ -9,7 +9,7 @@ export class Help{
      */
     constructor(tf){
         // Configuration object
-        var f = tf.fObj || {};
+        var f = tf.config();
 
         //id of custom container element for instructions
         this.helpInstrTgtId = f.help_instructions_target_id || null;
@@ -66,7 +66,7 @@ export class Help{
 
         //help button is added to defined element
         if(!this.helpInstrTgtId){
-            tf.SetTopDiv();
+            tf.setToolbar();
         }
         var targetEl = !this.helpInstrTgtId ?
             tf.rDiv : Dom.id(this.helpInstrTgtId);

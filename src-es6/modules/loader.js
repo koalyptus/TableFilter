@@ -13,7 +13,7 @@ export class Loader{
     constructor(tf){
 
         // TableFilter configuration
-        var f = tf.fObj;
+        var f = tf.config();
         //id of container element
         this.loaderTgtId = f.loader_target_id || null;
         //div containing loader
@@ -80,8 +80,9 @@ export class Loader{
         if(!this.loaderDiv){
             return;
         }
-        var targetEl = !this.loaderTgtId ?
-            (this.tf.gridLayout ? this.tf.tblCont : this.tf.tbl.parentNode):
+        var tf = this.tf,
+            targetEl = !this.loaderTgtId ?
+            (tf.gridLayout ? tf.Cpt.gridLayout.tblCont : tf.tbl.parentNode):
             Dom.id(this.loaderTgtId);
         targetEl.removeChild(this.loaderDiv);
         this.loaderDiv = null;

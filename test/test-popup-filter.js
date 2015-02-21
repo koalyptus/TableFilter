@@ -35,7 +35,7 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     });
 
     test('TableFilter removed', function() {
-        tf.RemoveGrid();
+        tf.remove();
         var fltIcn1 = tf.Cpt.popupFilter.popUpFltImgs[3];
         deepEqual(fltIcn1, undefined, 'Filter icon is removed');
         deepEqual(dom.id(tf.fltIds[3]), null, 'Filter is removed');

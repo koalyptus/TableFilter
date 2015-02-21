@@ -7,7 +7,7 @@ export class Store{
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
-        var f = tf.fObj;
+        var f = tf.config();
 
         this.duration = !isNaN(f.set_cookie_duration) ?
             parseInt(f.set_cookie_duration, 10) : 100000;
@@ -24,7 +24,7 @@ export class Store{
         var fltValues = [];
         //store filters' values
         for(var i=0; i<tf.fltIds.length; i++){
-            var value = tf.GetFilterValue(i);
+            var value = tf.getFilterValue(i);
             if (value === ''){
                 value = ' ';
             }

@@ -10,7 +10,7 @@ export class GridLayout{
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
-        var f = tf.fObj;
+        var f = tf.config();
 
         //defines grid width
         this.gridWidth = f.grid_width || null;
@@ -51,7 +51,7 @@ export class GridLayout{
      */
     init(){
         var tf = this.tf;
-        var f = tf.fObj;
+        var f = tf.config();
         var tbl = tf.tbl;
 
         if(!tf.gridLayout){
@@ -77,7 +77,7 @@ export class GridLayout{
             }
             tf.hasColWidth = true;
         }
-        tf.SetColWidths(this.gridHeadRowIndex);
+        tf.setColWidths(this.gridHeadRowIndex);
 
         var tblW;//initial table width
         if(tbl.width !== ''){
@@ -112,7 +112,7 @@ export class GridLayout{
 
         //In case table width is expressed in %
         if(tbl.style.width === ''){
-            tbl.style.width = (tf.__containsStr('%', tblW) ?
+            tbl.style.width = (tf._containsStr('%', tblW) ?
                 tbl.clientWidth : tblW) + 'px';
         }
 
@@ -185,7 +185,7 @@ export class GridLayout{
         this.headTbl.cellSpacing = tbl.cellSpacing;
 
         //content table without headers needs col widths to be reset
-        tf.SetColWidths();
+        tf.setColWidths();
 
         //Headers container width
         this.headTblCont.style.width = this.tblCont.clientWidth+'px';
@@ -234,7 +234,7 @@ export class GridLayout{
                 };
                 tf.hasExtensions = true;
             } else {
-                if(!tf.__containsStr(
+                if(!tf._containsStr(
                     'colsresizer',
                     Str.lower(tf.extensions.src.toString())) ){
                     tf.extensions.name.push('ColumnsResizer_'+tf.id);

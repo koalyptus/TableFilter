@@ -3,6 +3,8 @@ import {Event} from '../event';
 import {Types} from '../types';
 import {Helpers} from '../helpers';
 
+var global = window;
+
 export class StatusBar{
 
     /**
@@ -11,7 +13,7 @@ export class StatusBar{
      */
     constructor(tf){
         // Configuration object
-        var f = tf.fObj || {};
+        var f = tf.config();
 
         //id of custom container element
         this.statusBarTgtId = f.status_bar_target_id || null;
@@ -40,7 +42,7 @@ export class StatusBar{
 
     init(){
         var tf = this.tf;
-        if(!tf.hasGrid && !tf.isFirstLoad){
+        if(!tf.hasGrid() && !tf.isFirstLoad){
             return;
         }
 
@@ -56,7 +58,7 @@ export class StatusBar{
 
         // target element container
         if(!this.statusBarTgtId){
-            tf.SetTopDiv();
+            tf.setToolbar();
         }
         var targetEl = (!this.statusBarTgtId) ?
                 tf.lDiv : Dom.id(this.statusBarTgtId);
@@ -93,7 +95,7 @@ export class StatusBar{
         }
 
         var d = t==='' ? this.statusBarCloseDelay : 1;
-        window.setTimeout(() => {
+        global.setTimeout(() => {
             this.statusBarSpan.innerHTML = t;
             if(this.onAfterShowMsg){
                 this.onAfterShowMsg.call(null, this.tf, t);
@@ -103,7 +105,7 @@ export class StatusBar{
 
     destroy(){
         var tf = this.tf;
-        if(!tf.hasGrid || !this.statusBarDiv){
+        if(!tf.hasGrid() || !this.statusBarDiv){
             return;
         }
 

@@ -19,13 +19,13 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     });
 
     test('Highlighted keywords', function() {
-        tf.SetFilterValue(1, 'Perth');
-        tf.SetFilterValue(3, '3.1');
-        tf._Filter();
+        tf.setFilterValue(1, 'Perth');
+        tf.setFilterValue(3, '3.1');
+        tf._filter();
         deepEqual(highlightKeyword.highlightedNodes.length, 2, 'Number of highlighted words');
 
-        tf._ClearFilters();
-        tf._Filter();
+        tf._clearFilters();
+        tf._filter();
         deepEqual(highlightKeyword.highlightedNodes.length, 0, 'Number of highlighted words');
     });
 });

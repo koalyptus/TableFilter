@@ -14,7 +14,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
   var Paging = (function () {
     var Paging = function Paging(tf) {
       // Configuration object
-      var f = tf.fObj;
+      var f = tf.config();
 
       //css class for paging buttons (previous,next,etc.)
       this.btnPageCssClass = f.paging_btn_css_class || "pgInp";
@@ -109,7 +109,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
           var key = tf.Evt.getKeyCode(e);
           if (key === 13) {
             if (tf.sorted) {
-              tf.Filter();
+              tf.filter();
               o.changePage(o.evt.slcIndex());
             } else {
               o.changePage();
@@ -223,7 +223,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
 
           // paging elements (buttons+drop-down list) are added to defined element
           if (!this.pagingTgtId) {
-            tf.SetTopDiv();
+            tf.setToolbar();
           }
           var targetEl = !this.pagingTgtId ? tf.mDiv : Dom.id(this.pagingTgtId);
           targetEl.appendChild(btnFirstSpan);
@@ -264,15 +264,15 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
         value: function (filterTable) {
           if (filterTable === undefined) filterTable = false;
           var tf = this.tf;
-          if (!tf.hasGrid || tf.paging) {
+          if (!tf.hasGrid() || tf.paging) {
             return;
           }
           tf.paging = true;
           this.isPagingRemoved = true;
           this.init();
-          tf.ResetValues();
+          tf.resetValues();
           if (filterTable) {
-            tf.Filter();
+            tf.filter();
           }
         }
       },
@@ -363,14 +363,14 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
           tf.nbVisibleRows = tf.validRowsIndex.length;
           tf.isStartBgAlternate = false;
           //re-applies filter behaviours after filtering process
-          tf.ApplyGridProps();
+          tf.applyGridProps();
         }
       },
       setPage: {
         writable: true,
         value: function (cmd) {
           var tf = this.tf;
-          if (!tf.hasGrid || !this.paging) {
+          if (!tf.hasGrid() || !this.paging) {
             return;
           }
           var btnEvt = this.evt, cmdtype = typeof cmd;
@@ -404,7 +404,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
           var tf = this.tf;
           var evt = this.evt;
 
-          if (!tf.hasGrid && !tf.isFirstLoad) {
+          if (!tf.hasGrid() && !tf.isFirstLoad) {
             return;
           }
           if (this.resultsPerPageSlc || !this.resultsPerPage) {
@@ -427,7 +427,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
 
           // results per page select is added to external element
           if (!this.resultsPerPageTgtId) {
-            tf.SetTopDiv();
+            tf.setToolbar();
           }
           var targetEl = !this.resultsPerPageTgtId ? tf.rDiv : Dom.id(this.resultsPerPageTgtId);
           slcRSpan.appendChild(Dom.text(slcRText));
@@ -447,7 +447,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
         writable: true,
         value: function () {
           var tf = this.tf;
-          if (!tf.hasGrid || !this.resultsPerPageSlc || !this.resultsPerPage) {
+          if (!tf.hasGrid() || !this.resultsPerPageSlc || !this.resultsPerPage) {
             return;
           }
           var slcR = this.resultsPerPageSlc, slcRSpan = Dom.id(tf.prfxSlcResultsTxt + tf.id);
@@ -586,7 +586,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
         value: function () {
           var tf = this.tf;
 
-          if (!tf.hasGrid) {
+          if (!tf.hasGrid()) {
             return;
           }
           // btns containers

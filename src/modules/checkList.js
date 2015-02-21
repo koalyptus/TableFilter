@@ -14,7 +14,7 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
   var CheckList = (function () {
     var CheckList = function CheckList(tf) {
       // Configuration object
-      var f = tf.fObj;
+      var f = tf.config();
 
       this.checkListDiv = []; //checklist container div
       //defines css class for div containing checklist filter
@@ -115,7 +115,7 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
             // this loop retrieves cell data
             for (var j = 0; j < ncells; j++) {
               if ((colIndex === j && (!tf.refreshFilters || (tf.refreshFilters && tf.disableExcludedOptions))) || (colIndex === j && tf.refreshFilters && ((rows[k].style.display === "" && !tf.paging) || (tf.paging && ((!activeFlt || activeFlt === colIndex) || (activeFlt != colIndex && array.has(tf.validRowsIndex, k))))))) {
-                var cell_data = tf.GetCellData(j, cells[j]);
+                var cell_data = tf.getCellData(j, cells[j]);
                 //Vary Peter's patch
                 var cell_string = Str.matchCase(cell_data, tf.matchCase);
                 // checks if celldata is already in array

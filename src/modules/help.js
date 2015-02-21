@@ -11,7 +11,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
   var Help = (function () {
     var Help = function Help(tf) {
       // Configuration object
-      var f = tf.fObj || {};
+      var f = tf.config();
 
       //id of custom container element for instructions
       this.helpInstrTgtId = f.help_instructions_target_id || null;
@@ -54,7 +54,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
 
           //help button is added to defined element
           if (!this.helpInstrTgtId) {
-            tf.SetTopDiv();
+            tf.setToolbar();
           }
           var targetEl = !this.helpInstrTgtId ? tf.rDiv : Dom.id(this.helpInstrTgtId);
           targetEl.appendChild(helpspan);

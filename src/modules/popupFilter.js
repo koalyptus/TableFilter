@@ -13,7 +13,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
   var PopupFilter = (function () {
     var PopupFilter = function PopupFilter(tf) {
       // Configuration object
-      var f = tf.fObj;
+      var f = tf.config();
 
       // Enable external filters behaviour
       tf.isExternalFlt = true;
@@ -56,7 +56,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
           this.toggle(colIndex);
 
           if (this.popUpFltAdjustToContainer) {
-            var popUpDiv = this.popUpFltElms[colIndex], header = this.tf.GetHeaderElement(colIndex), headerWidth = header.clientWidth * 0.95;
+            var popUpDiv = this.popUpFltElms[colIndex], header = this.tf.getHeaderElement(colIndex), headerWidth = header.clientWidth * 0.95;
             if (Helpers.isIE()) {
               var headerLeft = Dom.position(header).left;
               popUpDiv.style.left = (headerLeft) + "px";
@@ -78,7 +78,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
             }
             var popUpSpan = Dom.create("span", ["id", tf.prfxPopUpSpan + tf.id + "_" + i], ["ci", i]);
             popUpSpan.innerHTML = this.popUpImgFltHtml;
-            var header = tf.GetHeaderElement(i);
+            var header = tf.getHeaderElement(i);
             header.appendChild(popUpSpan);
             Event.add(popUpSpan, "click", function (evt) {
               _this.onClick(evt);
@@ -103,9 +103,8 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
           var popUpDiv = !div ? Dom.create("div", ["id", tf.prfxPopUpDiv + tf.id + "_" + colIndex]) : div;
           popUpDiv.className = this.popUpDivCssClass;
           tf.externalFltTgtIds.push(popUpDiv.id);
-          var header = tf.GetHeaderElement(colIndex);
+          var header = tf.getHeaderElement(colIndex);
           header.insertBefore(popUpDiv, header.firstChild);
-          //popUpDiv.onclick = function(e){ evt.stop(e || global.event); };
           Event.add(popUpDiv, "click", function (evt) {
             Event.stop(evt);
           });
