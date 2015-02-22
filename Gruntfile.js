@@ -13,6 +13,7 @@ module.exports = function (grunt) {
             src: [
                 'Gruntfile.js',
                 '<%= source_folder %>*.js',
+                '!<%= source_folder %>core.js',
                 '!<%= source_folder %>sortabletable.js'
             ],
             options: {

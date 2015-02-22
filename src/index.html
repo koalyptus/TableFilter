@@ -3,7 +3,6 @@
 <head>
     <title>HTML Table Filter Generator</title>
     <link href="./filtergrid.css" rel="stylesheet" type="text/css">
-    <script src="../libs/requirejs/require.js"></script>
     <script type="text/javascript">
         var tf;
     </script>
@@ -84,10 +83,11 @@
         </table>
     </div>
 
+    <script src="../libs/requirejs/require.js"></script>
     <script>
         requirejs(['core'], function(TableFilter){
             // Your logic here
-            tf = new TableFilter("demo", {
+            tf = new TableFilter.TableFilter("demo", {
                 col_0: 'select',
                 col_2: 'multiple',
                 col_3: 'checklist',
