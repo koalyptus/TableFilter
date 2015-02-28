@@ -1,16 +1,20 @@
 define(["exports", "string"], function (exports, _string) {
   "use strict";
 
+  /**
+   * Sort helpers
+   */
+
   var Str = _string.Str;
 
-
   var Sort = {
-    ignoreCase: function (a, b) {
+    ignoreCase: function ignoreCase(a, b) {
       var x = Str.lower(a);
       var y = Str.lower(b);
-      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+      return x < y ? -1 : x > y ? 1 : 0;
     }
   };
 
   exports.Sort = Sort;
 });
+//# sourceMappingURL=sort.js.map

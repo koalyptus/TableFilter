@@ -20,13 +20,28 @@ import {Helpers as hlp} from 'helpers';
 import {DateHelper as dateHelper} from 'date';
 import {Sort} from 'sort';
 
+import {Store} from 'modules/store';
+import {GridLayout} from 'modules/gridLayout';
+import {Loader} from 'modules/loader';
+import {HighlightKeyword} from 'modules/highlightKeywords';
+import {PopupFilter} from 'modules/popupFilter';
+import {Dropdown} from 'modules/dropdown';
+import {CheckList} from 'modules/checkList';
+import {RowsCounter} from 'modules/rowsCounter';
+import {StatusBar} from 'modules/statusBar';
+import {Paging} from 'modules/paging';
+import {ClearButton} from 'modules/clearButton';
+import {Help} from 'modules/help';
+import {AlternateRows} from 'modules/alternateRows';
+import {ColOps} from 'modules/colOps';
+
 var global = window,
     isValidDate = dateHelper.isValid,
     formatDate = dateHelper.format,
     doc = global.document;
 
 
-export class TableFilter{
+export default class TableFilter{
 
     /**
      * TF object constructor
@@ -856,33 +871,36 @@ export class TableFilter{
         if(this.rememberGridValues || this.rememberPageNb ||
             this.rememberPageLen){
             //var Store = require('modules/store').Store;
-            import {Store} from 'modules/store';
+            // import {Store} from 'modules/store';
             this.Cpt.store = new Store(this);
         }
 
         if(this.gridLayout){
             // var GridLayout = require('modules/gridLayout').GridLayout;
-            import {GridLayout} from 'modules/gridLayoutf';
+            // import {GridLayout} from 'modules/gridLayout';
             this.Cpt.gridLayout = new GridLayout(this);
             this.Cpt.gridLayout.init();
         }
 
         if(this.loader){
             if(!this.Cpt.loader){
-                var Loader = require('modules/loader').Loader;
+                // var Loader = require('modules/loader').Loader;
+                // import {Loader} from 'modules/loader';
                 this.Cpt.loader = new Loader(this);
             }
         }
 
         if(this.highlightKeywords){
-            var Highlight =
-                require('modules/highlightKeywords').HighlightKeyword;
-            this.Cpt.highlightKeyword = new Highlight(this);
+            // var Highlight =
+            //     require('modules/highlightKeywords').HighlightKeyword;
+            // import {HighlightKeyword} from 'modules/highlightKeywords';
+            this.Cpt.highlightKeyword = new HighlightKeyword(this);
         }
 
         if(this.popUpFilters){
             if(!this.Cpt.popupFilter){
-                var PopupFilter = require('modules/popupFilter').PopupFilter;
+                // var PopupFilter = require('modules/popupFilter').PopupFilter;
+                // import {PopupFilter} from 'modules/popupFilter';
                 this.Cpt.popupFilter = new PopupFilter(this);
             }
             this.Cpt.popupFilter.init();
@@ -964,7 +982,8 @@ export class TableFilter{
                     //drop-down filters
                     if(col===this.fltTypeSlc || col===this.fltTypeMulti){
                         if(!this.Cpt.dropdown){
-                            var Dropdown = require('modules/dropdown').Dropdown;
+                            // var Dropdown = require('modules/dropdown').Dropdown;
+                            // import {Dropdown} from 'modules/dropdown';
                             this.Cpt.dropdown = new Dropdown(this);
                         }
                         var dropdown = this.Cpt.dropdown;
@@ -1010,8 +1029,9 @@ export class TableFilter{
                     // checklist
                     else if(col===this.fltTypeCheckList){
                         if(!this.Cpt.checkList){
-                            var CheckList =
-                                    require('modules/checkList').CheckList;
+                            // var CheckList =
+                            //         require('modules/checkList').CheckList;
+                            // import {CheckList} from 'modules/checkList';
                             this.Cpt.checkList = new CheckList(this);
                         }
 
@@ -1112,28 +1132,32 @@ export class TableFilter{
 
         /* Filter behaviours */
         if(this.rowsCounter){
-            var RowsCounter = require('modules/rowsCounter').RowsCounter;
+            // var RowsCounter = require('modules/rowsCounter').RowsCounter;
+            // import {RowsCounter} from 'modules/rowsCounter';
             this.Cpt.rowsCounter = new RowsCounter(this);
             this.Cpt.rowsCounter.init();
         }
         if(this.statusBar){
-            // this.SetStatusBar();
-            var StatusBar = require('modules/statusBar').StatusBar;
+            // var StatusBar = require('modules/statusBar').StatusBar;
+            // import {StatusBar} from 'modules/statusBar';
             this.Cpt.statusBar = new StatusBar(this);
             this.Cpt.statusBar.init();
         }
         if(this.paging){
-            var Paging = require('modules/paging').Paging;
+            // var Paging = require('modules/paging').Paging;
+            // import {Paging} from 'modules/paging';
             this.Cpt.paging = new Paging(this);
             this.Cpt.paging.init();
         }
         if(this.btnReset){
-            var ClearButton = require('modules/clearButton').ClearButton;
+            // var ClearButton = require('modules/clearButton').ClearButton;
+            // import {ClearButton} from 'modules/clearButton';
             this.Cpt.clearButton = new ClearButton(this);
             this.Cpt.clearButton.init();
         }
         if(this.helpInstructions){
-            var Help = require('modules/help').Help;
+            // var Help = require('modules/help').Help;
+            // import {Help} from 'modules/help';
             this.Cpt.help = new Help(this);
             this.Cpt.help.init();
         }
@@ -1142,16 +1166,18 @@ export class TableFilter{
         }
         if(this.alternateBgs){
             //1st time only if no paging and rememberGridValues
-            var AlternateRows = require('modules/alternateRows').AlternateRows;
+            // var AlternateRows = require('modules/alternateRows').AlternateRows;
+            // import {AlternateRows} from 'modules/alternateRows';
             this.Cpt.alternateRows = new AlternateRows(this);
             this.Cpt.alternateRows.init();
         }
         if(this.hasColOperation){
-            var ColOps = require('modules/colOps').ColOps;
+            // var ColOps = require('modules/colOps').ColOps;
+            // import {ColOps} from 'modules/colOps';
             this.Cpt.colOps = new ColOps(this);
             this.Cpt.colOps.calc();
         }
-        if(this.sort || this.gridLayout){
+        if(this.sort /*|| this.gridLayout*/){
             this.SetSort();
         }
         if(this.selectable || this.editable){
@@ -1555,7 +1581,8 @@ export class TableFilter{
         // Enable help instructions by default is topbar is generated
         if(!this.helpInstructions){
             if(!this.Cpt.help){
-                var Help = require('modules/help').Help;
+                // var Help = require('modules/help').Help;
+                // import {Help} from 'modules/help';
                 this.Cpt.help = new Help(this);
             }
             this.Cpt.help.init();
@@ -2425,7 +2452,7 @@ export class TableFilter{
                 else{
                     var fCol = f['col_'+j];
                     occurence = o._containsStr(
-                        sA, cell_data, !fCol ? this.fltTypeInp : fCol);
+                        sA, cell_data, !fCol ? o.fltTypeInp : fCol);
                 }
 
             }//else
@@ -3276,6 +3303,23 @@ export class TableFilter{
         return regexp.test(data);
     }
 
+    isImported(filePath, type){
+        var imported = false,
+            importType = !type ? 'script' : type,
+            attr = importType == 'script' ? 'src' : 'href',
+            files = dom.tag(doc, importType);
+        for (var i=0; i<files.length; i++){
+            if(files[i][attr] === undefined){
+                continue;
+            }
+            if(files[i][attr].match(filePath)){
+                imported = true;
+                break;
+            }
+        }
+        return imported;
+    }
+
     includeFile(fileId, filePath, callback, type){
         var ftype = !type ? 'script' : type,
             imported = this.isImported(filePath, ftype);
@@ -3444,15 +3488,15 @@ export class TableFilter{
         return this.getRowsNb(false);
     }
 
-// };
+}
 
 
 
-numSortAsc(a, b){ return (a-b); }
+function numSortAsc(a, b){ return (a-b); }
 
-numSortDesc(a, b){ return (b-a); }
+function numSortDesc(a, b){ return (b-a); }
 
-removeNbFormat(data, format){
+function removeNbFormat(data, format){
     if(!data){
         return;
     }
@@ -3466,23 +3510,6 @@ removeNbFormat(data, format){
         n =+ n.replace(/[^\d\,-]/g,'').replace(',','.');
     }
     return n;
-}
-
-isImported(filePath, type){
-    var imported = false,
-        importType = !type ? 'script' : type,
-        attr = importType == 'script' ? 'src' : 'href',
-        files = dom.tag(doc, importType);
-    for (var i=0; i<files.length; i++){
-        if(files[i][attr] === undefined){
-            continue;
-        }
-        if(files[i][attr].match(filePath)){
-            imported = true;
-            break;
-        }
-    }
-    return imported;
 }
 
 // function isStylesheetImported(stylesheet){
@@ -3515,7 +3542,7 @@ isImported(filePath, type){
 // }
 
 //Firefox does not support outerHTML property
-setOuterHtml(){
+function setOuterHtml(){
     if(doc.body.__defineGetter__){
         if(HTMLElement) {
             var element = HTMLElement.prototype;
@@ -3549,7 +3576,7 @@ setOuterHtml(){
 
 // });
 
-}
+// }
 
 /*====================================================
     - Sets filters grid bar

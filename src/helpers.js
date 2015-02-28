@@ -1,15 +1,16 @@
 define(["exports"], function (exports) {
-  "use strict";
+    "use strict";
 
-  /**
-   * Misc helpers
-   */
+    /**
+     * Misc helpers
+     */
 
-  var Helpers = {
-    isIE: function () {
-      return (/msie|MSIE/).test(navigator.userAgent);
-    }
-  };
+    var Helpers = {
+        isIE: function isIE() {
+            return /msie|MSIE/.test(navigator.userAgent);
+        }
+    };
 
-  exports.Helpers = Helpers;
+    exports.Helpers = Helpers;
 });
+//# sourceMappingURL=helpers.js.map

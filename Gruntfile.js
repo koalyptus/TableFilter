@@ -39,9 +39,9 @@ module.exports = function (grunt) {
             compile: {
                 options: {
                     baseUrl: '<%= source_folder %>',
-                    'paths': {
-                        'tf': '.'
-                    },
+                    // 'paths': {
+                    //     'tf': '.'
+                    // },
                     include: ['../libs/almond/almond', 'core'],
                     out: '<%= dist_folder %>tablefilter.js',
                     wrap: {
@@ -118,7 +118,7 @@ module.exports = function (grunt) {
             }
         },
 
-        '6to5': {
+        'babel': {
             options: {
                 sourceMap: true,
                 modules: 'amd'
@@ -143,12 +143,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-6to5');
+    grunt.loadNpmTasks('grunt-babel');
 
     // This is the default task being executed if Grunt
     // is called without any further parameter.
-    grunt.registerTask('default', ['jshint', '6to5', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
-    grunt.registerTask('dev', ['jshint', '6to5', 'concat', 'cssmin', 'copy']);
-    grunt.registerTask('toes5', ['6to5']);
+    grunt.registerTask('default', ['jshint', 'babel', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
+    grunt.registerTask('dev', ['jshint', 'babel', 'concat', 'cssmin', 'copy']);
+    grunt.registerTask('toes5', ['babel']);
     grunt.registerTask('test', ['qunit']);
 };

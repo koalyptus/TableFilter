@@ -5,7 +5,8 @@ requirejs(['test-config', '../src/core'], function(config, TableFilter){
     var GridLayout = require('modules/gridLayout').GridLayout;
 
     var tf = new TableFilter('demo', {
-        grid_layout: true
+        grid_layout: true,
+        sort: false
     });
     tf.init();
 
