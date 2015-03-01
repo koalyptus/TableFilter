@@ -39,10 +39,12 @@ module.exports = function (grunt) {
             compile: {
                 options: {
                     baseUrl: '<%= source_folder %>',
-                    // 'paths': {
-                    //     'tf': '.'
-                    // },
+                    'paths': {
+                        'tf': '.',
+                        'sortabletable': '<%= source_folder %>extensions/sortabletable/'
+                    },
                     include: ['../libs/almond/almond', 'core'],
+                    exclude: ['<%= source_folder %>/extensions/sortabletable/adapterSortabletable.js'],
                     out: '<%= dist_folder %>tablefilter.js',
                     wrap: {
                         startFile: "src/start.frag",
@@ -111,8 +113,8 @@ module.exports = function (grunt) {
         copy: {
             main: {
                 files: [
-                    { src: 'libs/sortabletable.js', dest: '<%= source_folder %>/sortabletable.js' },
-                    { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
+                    { src: 'libs/sortabletable.js', dest: '<%= source_folder %>/extensions/sortabletable/sortabletable.js' },
+                    // { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
             }

@@ -380,22 +380,28 @@ export default class TableFilter{
         this.sort = f.sort===true ? true : false;
         //indicates if sort is set (used in tfAdapter.sortabletable.js)
         this.isSortEnabled = false;
-        //indicates if tables was sorted
-        this.sorted = false;
         this.sortConfig = f.sort_config || {};
         this.sortConfig.name = this.sortConfig['name']!==undefined ?
             f.sort_config.name : 'sortabletable';
         this.sortConfig.src = this.sortConfig['src']!==undefined ?
-            f.sort_config.src : this.basePath+'sortabletable.js';
+            f.sort_config.src : this.basePath+'extensions/sortabletable/' +
+            'sortabletable.js';
         this.sortConfig.adapterSrc =
             this.sortConfig['adapter_src']!==undefined ?
             f.sort_config.adapter_src :
-            this.basePath+'tfAdapter.sortabletable.js';
+            this.basePath+'extensions/sortabletable/adapterSortabletable.js';
         this.sortConfig.initialize =
             this.sortConfig['initialize']!==undefined ?
                 f.sort_config.initialize :
                 function(o){
-                    if(o.SetSortTable){ o.SetSortTable(); }
+                    // if(o.SetSortTable){ o.SetSortTable(); }
+                    if(!o.Extensions.sort){
+                        var AdapterSortableTable =
+                            require(['extensions/sortabletable/' +
+                                'adapterSortabletable']).AdapterSortableTable;
+                        o.Extensions.sort = new AdapterSortableTable(o);
+                        o.Extensions.sort.init();
+                    }
                 };
         this.sortConfig.sortTypes =
             types.isArray(this.sortConfig['sort_types']) ?
@@ -621,7 +627,7 @@ export default class TableFilter{
         //themes path
         this.themesPath = f.themes_path || this.basePath+'TF_Themes/';
 
-        // Components
+        // Features registry
         this.Cpt = {
             loader: null,
             alternateRows: null,
@@ -637,6 +643,11 @@ export default class TableFilter{
             clearButton: null,
             help: null,
             statusBar: null
+        };
+
+        // Extensions registry
+        this.Extensions = {
+            sort: null
         };
 
         /*** TF events ***/
@@ -1178,7 +1189,7 @@ export default class TableFilter{
             this.Cpt.colOps.calc();
         }
         if(this.sort /*|| this.gridLayout*/){
-            this.SetSort();
+            this.setSort();
         }
         if(this.selectable || this.editable){
             this.SetEditable();
@@ -1453,21 +1464,19 @@ export default class TableFilter{
                 this.Cpt.paging.destroy();
             }
             if(this.statusBar){
-                // this.RemoveStatusBar();
                 this.Cpt.statusBar.destroy();
             }
             if(this.rowsCounter){
                 this.Cpt.rowsCounter.destroy();
             }
             if(this.btnReset){
-                // this.RemoveResetBtn();
                 this.Cpt.clearButton.destroy();
             }
-            if(this.helpInstructions /*|| !this.helpInstructions*/){
+            if(this.helpInstructions){
                 this.Cpt.help.destroy();
             }
             if(this.isExternalFlt && !this.popUpFilters){
-                this.RemoveExternalFlts();
+                this.removeExternalFlts();
             }
             if(this.infDiv){
                 this.removeToolbar();
@@ -1604,7 +1613,7 @@ export default class TableFilter{
     /*====================================================
         - removes external filters
     =====================================================*/
-    RemoveExternalFlts(){
+    removeExternalFlts(){
         if(!this.isExternalFlt && !this.externalFltTgtIds){
             return;
         }
@@ -1622,7 +1631,7 @@ export default class TableFilter{
         WebFX Sortable Table 1.12 plugin by Erik Arvidsson
         and TF adapter by Max Guglielmi
     =====================================================*/
-    SetSort(){
+    setSort(){
         var fn = this.Evt._EnableSort,
             sortConfig = this.sortConfig;
 
@@ -1636,13 +1645,13 @@ export default class TableFilter{
                 if(o.isSortEnabled && !o.gridLayout){
                     return;
                 }
-                if(this.isImported(sortConfig.adapterSrc)){
+                if(o.isImported(sortConfig.adapterSrc)){
                     sortConfig.initialize.call(null,o);
                 } else {
                     o.includeFile(
                         sortConfig.name+'_adapter',
                         sortConfig.adapterSrc,
-                        function(){ sortConfig.initialize.call(null,o); }
+                        function(){ sortConfig.initialize.call(null, o); }
                     );
                 }
             };
@@ -1659,11 +1668,11 @@ export default class TableFilter{
     /*====================================================
         - removes sorting feature
     =====================================================*/
-    RemoveSort(){
+    removeSort(){
         this.sort = false;
     }
 
-    Sort(){
+    sort(){
         this.EvtManager(this.Evt.name.sort);
     }
 
