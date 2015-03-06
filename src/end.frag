@@ -1,4 +1,4 @@
 
-return require('core');
+    return require('tablefilter');
 
 });

@@ -1,4 +1,4 @@
-define(["exports", "../../types", "../../dom", "../../array", "../../event", "../../date", "../../helpers"], function (exports, _types, _dom, _array, _event, _date, _helpers) {
+define(["exports", "module", "../../types", "../../dom", "../../array", "../../event", "../../date", "../../helpers"], function (exports, module, _types, _dom, _array, _event, _date, _helpers) {
     "use strict";
 
     var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -8,14 +8,11 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
     var Types = _types.Types;
     var Dom = _dom.Dom;
     var array = _array.Arr;
-
-    // import {Str} from '../string';
-    // import {Sort} from '../sort';
     var Event = _event.Event;
     var DateHelper = _date.DateHelper;
     var Helpers = _helpers.Helpers;
 
-    var AdapterSortableTable = exports.AdapterSortableTable = (function () {
+    var AdapterSortableTable = (function () {
 
         /**
          * SortableTable Adapter module
@@ -35,7 +32,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
 
             // edit .sort-arrow.descending / .sort-arrow.ascending in filtergrid.css
             // to reflect any path change
-            this.sortImgPath = f.sort_images_path || o.themesPath;
+            this.sortImgPath = f.sort_images_path || tf.themesPath;
             this.sortImgBlank = f.sort_image_blank || "blank.png";
             this.sortImgClassName = f.sort_image_class_name || "sort-arrow";
             this.sortImgAscClassName = f.sort_image_asc_class_name || "ascending";
@@ -65,16 +62,15 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
             init: {
                 value: function init() {
                     var tf = this.tf;
-                    var sortConfig = this.sortConfig;
+                    var sortConfig = tf.sortConfig;
 
                     // SortableTable class sanity check (sortabletable.js)
                     if (Types.isUndef(SortableTable)) {
                         throw new Error("SortableTable class not found.");
-                        // return;
                     }
 
-                    overrideSortableTable();
-                    setSortTypes();
+                    this.overrideSortableTable();
+                    this.setSortTypes();
 
                     //Column sort at start
                     if (sortConfig.sortCol) {
@@ -91,11 +87,12 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                         if (this.onBeforeSort) {
                             this.onBeforeSort.call(null, tf, this.stt.sortColumn);
                         }
-                        tf.sort(); //TF method
+
+                        tf.performSort();
 
                         /*** sort behaviour for paging ***/
                         if (tf.paging) {
-                            isPaged = true;
+                            this.isPaged = true;
                             tf.paging = false;
                             tf.Cpt.paging.destroy();
                         }
@@ -115,10 +112,11 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                                     removeOnly = false;
                                 }
                                 var altRows = tf.Cpt.alternateRows,
-                                    oddCls = altRows.rowBgOddCssClass,
-                                    evenCls = altRows.rowBgEvenCssClass;
+                                    oddCls = altRows.oddCss,
+                                    evenCls = altRows.evenCss;
                                 Dom.removeClass(row, oddCls);
                                 Dom.removeClass(row, evenCls);
+
                                 if (!removeOnly) {
                                     Dom.addClass(row, i % 2 ? oddCls : evenCls);
                                 }
@@ -140,7 +138,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                             }
                         }
                         //sort behaviour for paging
-                        if (isPaged) {
+                        if (this.isPaged) {
                             var paginator = tf.Cpt.paging,
                                 config = tf.config();
                             if (paginator.hasResultsPerPage) {
@@ -204,8 +202,8 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                      */
                     SortableTable.prototype.initHeader = function (oSortTypes) {
                         var stt = this;
-                        if (!sortableTable.tHead) {
-                            return;
+                        if (!stt.tHead) {
+                            throw new Error("Sorting feature requires a THEAD element");
                         }
                         stt.headersRow = tf.headersRow;
                         var cells = stt.tHead.rows[stt.headersRow].cells;
@@ -217,7 +215,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                             c = cells[i];
                             if (stt.sortTypes[i] !== null && stt.sortTypes[i] !== "None") {
                                 c.style.cursor = "pointer";
-                                img = Dom.create("img", ["src", o.sortImgPath + o.sortImgBlank]);
+                                img = Dom.create("img", ["src", adpt.sortImgPath + adpt.sortImgBlank]);
                                 c.appendChild(img);
                                 if (stt.sortTypes[i] !== null) {
                                     c.setAttribute("_sortType", stt.sortTypes[i]);
@@ -261,7 +259,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                                     cells[i].appendChild(img);
                                 }
                                 if (i === stt.sortColumn) {
-                                    img.className = adpt.sortImgClassName + " " + this.descending ? adpt.sortImgDescClassName : adpt.sortImgAscClassName;
+                                    img.className = adpt.sortImgClassName + " " + (this.descending ? adpt.sortImgDescClassName : adpt.sortImgAscClassName);
                                 } else {
                                     img.className = adpt.sortImgClassName;
                                 }
@@ -277,6 +275,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                      * @return {String}
                      */
                     SortableTable.prototype.getRowValue = function (oRow, sType, nColumn) {
+                        var stt = this;
                         // if we have defined a custom getRowValue use that
                         var sortTypeInfo = stt._sortTypeInfo[sType];
                         if (sortTypeInfo && sortTypeInfo.getRowValue) {
@@ -294,8 +293,8 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                      * @return {String}       DOM element inner text
                      */
                     SortableTable.getInnerText = function (oNode) {
-                        if (oNode.getAttribute(o.sortCustomKey) != null) {
-                            return oNode.getAttribute(o.sortCustomKey);
+                        if (oNode.getAttribute(tf.sortCustomKey) != null) {
+                            return oNode.getAttribute(tf.sortCustomKey);
                         } else {
                             return Dom.getText(oNode);
                         }
@@ -309,7 +308,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                     var _this = this;
 
                     var tf = this.tf,
-                        configSort = this.sortConfig,
+                        configSort = tf.sortConfig,
                         configSortTypes = configSort.sortTypes,
                         sortTypes = [];
 
@@ -472,8 +471,6 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
         return AdapterSortableTable;
     })();
 
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
+    module.exports = AdapterSortableTable;
 });
 //# sourceMappingURL=adapterSortabletable.js.map

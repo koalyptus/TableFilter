@@ -395,13 +395,6 @@ export default class TableFilter{
                 f.sort_config.initialize :
                 function(o){
                     // if(o.SetSortTable){ o.SetSortTable(); }
-                    if(!o.Extensions.sort){
-                        var AdapterSortableTable =
-                            require(['extensions/sortabletable/' +
-                                'adapterSortabletable']).AdapterSortableTable;
-                        o.Extensions.sort = new AdapterSortableTable(o);
-                        o.Extensions.sort.init();
-                    }
                 };
         this.sortConfig.sortTypes =
             types.isArray(this.sortConfig['sort_types']) ?
@@ -1645,15 +1638,23 @@ export default class TableFilter{
                 if(o.isSortEnabled && !o.gridLayout){
                     return;
                 }
-                if(o.isImported(sortConfig.adapterSrc)){
-                    sortConfig.initialize.call(null,o);
-                } else {
-                    o.includeFile(
-                        sortConfig.name+'_adapter',
-                        sortConfig.adapterSrc,
-                        function(){ sortConfig.initialize.call(null, o); }
-                    );
-                }
+
+                // if(o.isImported(sortConfig.adapterSrc)){
+                //     sortConfig.initialize.call(null,o);
+                // } else {
+                //     o.includeFile(
+                //         sortConfig.name+'_adapter',
+                //         sortConfig.adapterSrc,
+                //         function(){ sortConfig.initialize.call(null, o); }
+                //     );
+                // }
+
+                var AdapterSortableTable = require(
+                    ['extensions/sortabletable/adapterSortabletable'],
+                    function(adapterSortabletable){
+                        o.Extensions.sort = new adapterSortabletable(o);
+                        o.Extensions.sort.init();
+                });
             };
         }
 
@@ -1661,7 +1662,7 @@ export default class TableFilter{
             this.Evt._EnableSort();
         } else {
             this.includeFile(
-                sortConfig.name, sortConfig.src,this.Evt._EnableSort);
+                sortConfig.name, sortConfig.src, this.Evt._EnableSort);
         }
     }
 
@@ -1672,7 +1673,7 @@ export default class TableFilter{
         this.sort = false;
     }
 
-    sort(){
+    performSort(){
         this.EvtManager(this.Evt.name.sort);
     }
 

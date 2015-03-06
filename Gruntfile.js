@@ -13,8 +13,7 @@ module.exports = function (grunt) {
             src: [
                 'Gruntfile.js',
                 '<%= source_folder %>*.js',
-                '!<%= source_folder %>core.js',
-                '!<%= source_folder %>sortabletable.js'
+                '!<%= source_folder %>tablefilter.js'
             ],
             options: {
                 jshintrc: '.jshintrc'
@@ -41,20 +40,49 @@ module.exports = function (grunt) {
                     baseUrl: '<%= source_folder %>',
                     'paths': {
                         'tf': '.',
-                        'sortabletable': '<%= source_folder %>extensions/sortabletable/'
+                        'sortabletable': 'extensions/sortabletable'
                     },
-                    include: ['../libs/almond/almond', 'core'],
-                    exclude: ['<%= source_folder %>/extensions/sortabletable/adapterSortabletable.js'],
-                    out: '<%= dist_folder %>tablefilter.js',
+                    // include: ['../libs/almond/almond', 'tablefilter'],
+                    // exclude: [
+                    //     'extensions/sortabletable/sortabletable',
+                    //     'extensions/sortabletable/adapterSortabletable'
+                    // ],
+                    // name: 'tablefilter',
+                    // out: '<%= dist_folder %>tablefilter.js',
+                    dir: '<%= dist_folder %>',
                     wrap: {
-                        startFile: "src/start.frag",
-                        endFile: "src/end.frag"
+                        startFile: "<%= source_folder %>start.frag",
+                        endFile: "<%= source_folder %>end.frag"
                     },
                     shim: {
                         'SortableTable': {
                             exports: 'SortableTable'
                         }
-                    }/*,
+                    },
+                    modules:[
+                        {
+                            name: 'tablefilter',
+                            //out: '<%= dist_folder %>tablefilter.js',
+                            // create: true,
+                            include: [
+                                '../libs/almond/almond',
+                                'tablefilter'
+                            ],
+                            exclude: [
+                                'extensions/sortabletable/sortabletable',
+                                'extensions/sortabletable/adapterSortabletable'
+                            ]
+                        }
+                        // {
+                        //     name: 'extensions/sortabletable/adapterSortabletable',
+                        //     include: [
+                        //         'extensions/sortabletable/sortabletable'
+                        //     ]
+                        // }
+                    ],
+                    removeCombined: true,
+                    findNestedDependencies: true
+                    /*,
                     optimize: 'uglify2',
                     preserveLicenseComments: false,
                     generateSourceMaps: true*/
@@ -65,8 +93,8 @@ module.exports = function (grunt) {
         concat: {
             /*js: {
                 files: [{
-                    src: ['<%= source_folder %>core.js'],
-                    dest: '<%= dist_folder %>core.js'
+                    src: ['<%= source_folder %>tablefilter.js'],
+                    dest: '<%= dist_folder %>tablefilter.js'
                 }]
             },*/
             css: {
@@ -120,7 +148,7 @@ module.exports = function (grunt) {
             }
         },
 
-        'babel': {
+        babel: {
             options: {
                 sourceMap: true,
                 modules: 'amd'
@@ -150,6 +178,7 @@ module.exports = function (grunt) {
     // This is the default task being executed if Grunt
     // is called without any further parameter.
     grunt.registerTask('default', ['jshint', 'babel', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
+    grunt.registerTask('build', ['jshint', 'babel', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy']);
     grunt.registerTask('dev', ['jshint', 'babel', 'concat', 'cssmin', 'copy']);
     grunt.registerTask('toes5', ['babel']);
     grunt.registerTask('test', ['qunit']);

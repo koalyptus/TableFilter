@@ -1,4 +1,4 @@
-requirejs(['test-config', '../src/core'], function(config, TableFilter){
+requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
 
     QUnit.start();
 
