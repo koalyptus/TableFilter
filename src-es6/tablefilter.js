@@ -41,7 +41,7 @@ var global = window,
     doc = global.document;
 
 
-export default class TableFilter{
+export class TableFilter{
 
     /**
      * TF object constructor

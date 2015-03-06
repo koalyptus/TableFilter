@@ -39,7 +39,7 @@ module.exports = function (grunt) {
                 options: {
                     baseUrl: '<%= source_folder %>',
                     'paths': {
-                        'tf': '.',
+                        // 'tf': '.',
                         'sortabletable': 'extensions/sortabletable'
                     },
                     // include: ['../libs/almond/almond', 'tablefilter'],
@@ -63,7 +63,7 @@ module.exports = function (grunt) {
                         {
                             name: 'tablefilter',
                             //out: '<%= dist_folder %>tablefilter.js',
-                            // create: true,
+                            create: true,
                             include: [
                                 '../libs/almond/almond',
                                 'tablefilter'
