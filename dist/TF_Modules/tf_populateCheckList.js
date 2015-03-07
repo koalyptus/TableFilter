@@ -1,1 +1,325 @@
-function tf_CreateCheckItem(e,t,n){if(e==undefined||t==undefined||n==undefined)return;var r=tf_CreateElm("li"),i=tf_CreateElm("label",["for",e]),s=tf_CreateElm("input",["id",e],["name",e],["type","checkbox"],["value",t]);return i.appendChild(s),i.appendChild(tf_CreateText(n)),r.appendChild(i),r.label=i,r.check=s,r}TF.prototype.PopulateCheckList=function(e,t,n){this.EvtManager(this.Evt.name.populatechecklist,{slcIndex:e,slcExternal:t,slcId:n})},TF.prototype._PopulateCheckList=function(e,t,n){function S(){var t=1,n=tf_CreateCheckItem(o.fltIds[e]+"_0","",o.displayAllText);n.className=o.checkListItemCssClass,s.appendChild(n),n.check.onclick=function(e){o.__setCheckListValues(this),s.onchange.call(null,e)},o.enableCheckListResetFilter||(n.style.display="none"),tf_isIE&&(n.label.onclick=function(){n.check.click()});if(o.enableEmptyOption){var r=tf_CreateCheckItem(o.fltIds[e]+"_1",o.emOperator,o.emptyText);r.className=o.checkListItemCssClass,s.appendChild(r),r.check.onclick=function(e){o.__setCheckListValues(this),s.onchange.call(null,e)},tf_isIE&&(r.label.onclick=function(){r.check.click()}),t++}if(o.enableNonEmptyOption){var i=tf_CreateCheckItem(o.fltIds[e]+"_2",o.nmOperator,o.nonEmptyText);i.className=o.checkListItemCssClass,s.appendChild(i),i.check.onclick=function(e){o.__setCheckListValues(this),s.onchange.call(null,e)},tf_isIE&&(i.label.onclick=function(){i.check.click()}),t++}return t}function x(t){var n=S(),r=[],i=[],u=tf_CookieValueByIndex(o.fltsValuesCookie,e,t);u!=undefined&&u.tf_Trim().length>0&&(o.hasCustomSlcOptions&&o.customSlcOptions.cols.tf_Has(e)?i.push(u):i=u.split(" "+o.orOperator+" "));for(var c=0;c<a.length;c++){var p=a[c],d=f?l[c]:p,v=tf_CreateCheckItem(o.fltIds[e]+"_"+(c+n),p,d);v.className=o.checkListItemCssClass,o.refreshFilters&&o.disableExcludedOptions&&h.tf_Has(p.tf_MatchCase(o.matchCase),o.matchCase)?(tf_AddClass(v,o.checkListItemDisabledCssClass),v.check.disabled=!0,v.disabled=!0):v.check.onclick=function(e){o.__setCheckListValues(this),s.onchange.call(null,e)},s.appendChild(v),p==""&&(v.style.display="none"),o.rememberGridValues&&(o.hasCustomSlcOptions&&o.customSlcOptions.cols.tf_Has(e)&&i.toString().indexOf(p)!=-1||i.tf_Has(p.tf_MatchCase(o.matchCase),o.matchCase))&&(v.check.checked=!0,o.__setCheckListValues(v.check)),tf_isIE&&(v.label.onclick=function(){this.firstChild.click()})}}t=t==undefined?!1:t;var r=this.prfxCheckListDiv+e+"_"+this.id;if(tf_Id(r)==null&&!t)return;if(tf_Id(n)==null&&t)return;var i=t?tf_Id(n):this.checkListDiv[e],s=tf_CreateElm("ul",["id",this.fltIds[e]],["colIndex",e]);s.className=this.checkListCssClass,s.onchange=this.Evt._OnCheckListChange;var o=this,u=this.tbl.rows,a=[],f=this.hasCustomSlcOptions&&this.customSlcOptions.cols.tf_Has(e),l=[],c;this.refreshFilters&&this.activeFilterId&&(c=this.activeFilterId.split("_")[0],c=c.split(this.prfxFlt)[1]);var h=null,p=null;this.refreshFilters&&this.disableExcludedOptions&&(h=[],p=[]);for(var d=this.refRow;d<this.nbRows;d++){if(this.hasVisibleRows&&this.visibleRows.tf_Has(d)&&!this.paging)continue;var v=u[d].cells,m=v.length;if(m==this.nbCells&&!f)for(var g=0;g<m;g++)if(e==g&&(!this.refreshFilters||this.refreshFilters&&this.disableExcludedOptions)||e==g&&this.refreshFilters&&(u[d].style.display==""&&!this.paging||this.paging&&(c==undefined||c==e||c!=e&&this.validRowsIndex.tf_Has(d)))){var y=this.GetCellData(g,v[g]),b=y.tf_MatchCase(this.matchCase);a.tf_Has(b,this.matchCase)||a.push(y),this.refreshFilters&&this.disableExcludedOptions&&(p[g]||(p[g]=this.GetFilteredDataCol(g)),!p[g].tf_Has(b,this.matchCase)&&!h.tf_Has(b,this.matchCase)&&!this.isFirstLoad&&h.push(y))}}if(f){var w=this.__getCustomValues(e);a=w[0],l=w[1]}this.sortSlc&&!f&&(this.matchCase?(a.sort(),h&&h.sort()):(a.sort(tf_IgnoreCaseSort),h&&h.sort(tf_IgnoreCaseSort)));if(this.sortNumAsc&&this.sortNumAsc.tf_Has(e))try{a.sort(tf_NumSortAsc),h&&h.sort(tf_NumSortAsc),f&&l.sort(tf_NumSortAsc)}catch(E){a.sort(),h&&h.sort(),f&&l.sort()}if(this.sortNumDesc&&this.sortNumDesc.tf_Has(e))try{a.sort(tf_NumSortDesc),h&&h.sort(tf_NumSortDesc),f&&l.sort(tf_NumSortDesc)}catch(E){a.sort(),h&&h.sort(),f&&l.sort()}x(this.separator),this.fillSlcOnDemand&&(i.innerHTML=""),i.appendChild(s),i.setAttribute("filled","1");if(o.rememberGridValues&&tf_isIE){var T=s.getAttribute("indexes");if(T!=null){var N=T.split(",");for(var C=0;C<N.length;C++){var k=tf_Id(this.fltIds[e]+"_"+N[C]);k&&(k.checked=!0)}}}},TF.prototype.__setCheckListValues=function(e){if(e==null)return;var t=e.value,n=parseInt(e.id.split("_")[2]),r="ul",i="li",s=e;while(s.nodeName.tf_LCase()!=r)s=s.parentNode;if(s.nodeName.tf_LCase()!=r)return;var o=s.childNodes[n],u=s.getAttribute("colIndex"),a=s.getAttribute("value"),f=s.getAttribute("indexes");if(e.checked){if(t==""){if(f!=null&&f!=""){var l=f.split(this.separator);for(var c=0;c<l.length;c++){var h=tf_Id(this.fltIds[u]+"_"+l[c]);h&&(h.checked=!1,tf_RemoveClass(s.childNodes[l[c]],this.checkListSlcItemCssClass))}}s.setAttribute("value",""),s.setAttribute("indexes","")}else a=a?a:"",t=(a+" "+t+" "+this.orOperator).tf_Trim(),n=f+n+this.separator,s.setAttribute("value",t),s.setAttribute("indexes",n),tf_Id(this.fltIds[u]+"_0")&&(tf_Id(this.fltIds[u]+"_0").checked=!1);o.nodeName.tf_LCase()==i&&(tf_RemoveClass(s.childNodes[0],this.checkListSlcItemCssClass),tf_AddClass(o,this.checkListSlcItemCssClass))}else{if(t!=""){var p=new RegExp(tf_RegexpEscape(t+" "+this.orOperator));a=a.replace(p,""),s.setAttribute("value",a.tf_Trim());var d=new RegExp(tf_RegexpEscape(n+this.separator));f=f.replace(d,""),s.setAttribute("indexes",f)}o.nodeName.tf_LCase()==i&&tf_RemoveClass(o,this.checkListSlcItemCssClass)}};
+/*------------------------------------------------------------------------
+	- HTML Table Filter Generator 
+	- Populate Checklist filters feature v1.2
+	- By Max Guglielmi (tablefilter.free.fr)
+	- Licensed under the MIT License
+-------------------------------------------------------------------------*/
+
+TF.prototype.PopulateCheckList = function(colIndex, isExternal, extFltId)
+{
+	this.EvtManager(
+		this.Evt.name.populatechecklist,
+		{ slcIndex:colIndex, slcExternal:isExternal, slcId:extFltId }
+	); 
+}
+
+TF.prototype._PopulateCheckList = function(colIndex, isExternal, extFltId)
+/*====================================================
+	- populates checklist filters
+=====================================================*/
+{
+	isExternal = (isExternal==undefined) ? false : isExternal;
+	var divFltId = this.prfxCheckListDiv+colIndex+'_'+this.id;
+	if( tf_Id(divFltId)==null && !isExternal ) return;
+	if( tf_Id(extFltId)==null && isExternal ) return;
+	var flt = (!isExternal) ? this.checkListDiv[colIndex] : tf_Id(extFltId);
+	var ul = tf_CreateElm('ul',['id',this.fltIds[colIndex]],['colIndex',colIndex]);
+	ul.className = this.checkListCssClass;
+	ul.onchange = this.Evt._OnCheckListChange;
+	var o = this, row = this.tbl.rows;
+	var optArray = [];
+	var isCustomSlc = (this.hasCustomSlcOptions  //custom select test
+						&& this.customSlcOptions.cols.tf_Has(colIndex));
+	var optTxt = []; //custom selects text
+	var activeFlt;
+	if(this.refreshFilters && this.activeFilterId){
+		activeFlt = this.activeFilterId.split('_')[0];
+		activeFlt = activeFlt.split(this.prfxFlt)[1];
+	}
+
+	var excludedOpts = null, filteredDataCol = null;
+	if(this.refreshFilters && this.disableExcludedOptions){ excludedOpts = []; filteredDataCol = []; }
+	
+	for(var k=this.refRow; k<this.nbRows; k++)
+	{
+		// always visible rows don't need to appear on selects as always valid
+		if( this.hasVisibleRows && this.visibleRows.tf_Has(k) && !this.paging ) 
+			continue;
+
+		var cells = row[k].cells;
+		var ncells = cells.length;
+
+		if(ncells == this.nbCells && !isCustomSlc)
+		{// checks if row has exact cell #
+			for(var j=0; j<ncells; j++)
+			{// this loop retrieves cell data
+				if((colIndex==j && (!this.refreshFilters || (this.refreshFilters && this.disableExcludedOptions))) || 
+					(colIndex==j && this.refreshFilters && ((row[k].style.display == '' && !this.paging) || 
+					(this.paging && ((activeFlt==undefined || activeFlt==colIndex ) ||(activeFlt!=colIndex && this.validRowsIndex.tf_Has(k))) ))))
+				{
+					var cell_data = this.GetCellData(j, cells[j]);
+					var cell_string = cell_data.tf_MatchCase(this.matchCase);//V�ry P�ter's patch
+					// checks if celldata is already in array
+					if(!optArray.tf_Has(cell_string,this.matchCase)) optArray.push(cell_data);
+					
+					if(this.refreshFilters && this.disableExcludedOptions){
+						if(!filteredDataCol[j]) filteredDataCol[j] = this.GetFilteredDataCol(j);
+						if(!filteredDataCol[j].tf_Has(cell_string,this.matchCase) 
+							&& !excludedOpts.tf_Has(cell_string,this.matchCase) && !this.isFirstLoad) excludedOpts.push(cell_data);
+					}
+				}
+			}
+		}
+	}
+	
+	//Retrieves custom values
+	if(isCustomSlc)
+	{
+		var customValues = this.__getCustomValues(colIndex);
+		optArray = customValues[0];
+		optTxt = customValues[1];
+	}
+	
+	if(this.sortSlc && !isCustomSlc){
+		if (!this.matchCase){ 
+			optArray.sort(tf_IgnoreCaseSort); 
+			if(excludedOpts) excludedOpts.sort(tf_IgnoreCaseSort); 
+		} else { optArray.sort(); if(excludedOpts){ excludedOpts.sort(); }  }
+	}
+	
+	if(this.sortNumAsc && this.sortNumAsc.tf_Has(colIndex))
+	{//asc sort
+		try{
+			optArray.sort( tf_NumSortAsc );
+			if(excludedOpts) excludedOpts.sort( tf_NumSortAsc );
+			if(isCustomSlc) optTxt.sort( tf_NumSortAsc );
+		} catch(e) {
+			optArray.sort(); if(excludedOpts){ excludedOpts.sort(); } 
+			if(isCustomSlc) optTxt.sort();
+		}//in case there are alphanumeric values
+	}
+	if(this.sortNumDesc && this.sortNumDesc.tf_Has(colIndex))
+	{//desc sort
+		try{
+			optArray.sort( tf_NumSortDesc ); 
+			if(excludedOpts) excludedOpts.sort( tf_NumSortDesc );
+			if(isCustomSlc) optTxt.sort( tf_NumSortDesc );
+		} catch(e) {
+			optArray.sort(); if(excludedOpts){ excludedOpts.sort(); }
+			if(isCustomSlc) optTxt.sort();
+		}//in case there are alphanumeric values
+	}
+
+	AddChecks(this.separator);
+	
+	function AddTChecks()
+	{// adds 1st option
+		var chkCt = 1;
+		var li0 = tf_CreateCheckItem(o.fltIds[colIndex]+'_0', '', o.displayAllText);
+		li0.className = o.checkListItemCssClass;
+		ul.appendChild(li0);
+		li0.check.onclick = function(e){ o.__setCheckListValues(this); ul.onchange.call(null, e); };
+		if(!o.enableCheckListResetFilter) li0.style.display = 'none';
+		
+		if(tf_isIE)
+		{//IE: label looses check capability
+			li0.label.onclick = function(){ li0.check.click(); };
+		}
+		
+		if(o.enableEmptyOption){
+			var li1 = tf_CreateCheckItem(o.fltIds[colIndex]+'_1', o.emOperator, o.emptyText);
+			li1.className = o.checkListItemCssClass;
+			ul.appendChild(li1);
+			li1.check.onclick = function(e){ o.__setCheckListValues(this); ul.onchange.call(null, e); };				
+			if(tf_isIE)
+			{//IE: label looses check capability
+				li1.label.onclick = function(){ li1.check.click(); };
+			}
+			chkCt++;
+		}
+		
+		if(o.enableNonEmptyOption){
+			var li2 = tf_CreateCheckItem(o.fltIds[colIndex]+'_2', o.nmOperator, o.nonEmptyText);
+			li2.className = o.checkListItemCssClass;
+			ul.appendChild(li2);
+			li2.check.onclick = function(e){ o.__setCheckListValues(this); ul.onchange.call(null, e); };
+			if(tf_isIE)
+			{//IE: label looses check capability
+				li2.label.onclick = function(){ li2.check.click(); };
+			}
+			chkCt++;
+		}
+		return chkCt;
+	}
+	
+	function AddChecks(separator)
+	{		
+		var chkCt = AddTChecks();
+		
+		var flts_values = [], fltArr = []; //remember grid values
+		var tmpVal = tf_CookieValueByIndex(o.fltsValuesCookie, colIndex, separator);
+		if(tmpVal != undefined && tmpVal.tf_Trim().length > 0){
+			if(o.hasCustomSlcOptions && o.customSlcOptions.cols.tf_Has(colIndex)){
+				fltArr.push(tmpVal);
+			} else { fltArr = tmpVal.split(' '+o.orOperator+' '); }
+		}
+
+		for(var y=0; y<optArray.length; y++)
+		{				
+			var val = optArray[y]; //item value
+			var lbl = (isCustomSlc) ? optTxt[y] : val; //item text
+			var li = tf_CreateCheckItem(o.fltIds[colIndex]+'_'+(y+chkCt), val, lbl);
+			li.className = o.checkListItemCssClass;
+			if(o.refreshFilters && o.disableExcludedOptions && 
+				excludedOpts.tf_Has(val.tf_MatchCase(o.matchCase), o.matchCase)){ 
+					tf_AddClass(li, o.checkListItemDisabledCssClass);
+					li.check.disabled = true;
+					li.disabled = true;
+			} else
+				li.check.onclick = function(e){ o.__setCheckListValues(this); ul.onchange.call(null, e); };
+			ul.appendChild(li);
+
+			if(val=='') li.style.display = 'none'; //item is hidden
+
+			/*** remember grid values ***/
+			if(o.rememberGridValues)
+			{
+				if((o.hasCustomSlcOptions && o.customSlcOptions.cols.tf_Has(colIndex) 
+					&& fltArr.toString().indexOf(val)!= -1) 
+					|| fltArr.tf_Has(val.tf_MatchCase(o.matchCase),o.matchCase))
+				{
+					li.check.checked = true;
+					o.__setCheckListValues(li.check);
+				}			
+			}
+			
+			if(tf_isIE)
+			{//IE: label looses check capability
+				li.label.onclick = function(){ this.firstChild.click(); };	
+			}
+		}
+	}
+	
+	if(this.fillSlcOnDemand) flt.innerHTML = '';
+	flt.appendChild(ul);
+	flt.setAttribute('filled','1');
+	
+	/*** remember grid values IE only, items remain un-checked ***/
+	if(o.rememberGridValues && tf_isIE)
+	{
+		var slcIndexes = ul.getAttribute('indexes');
+		if(slcIndexes != null)
+		{
+			var indSplit = slcIndexes.split(',');//items indexes
+			for(var n=0; n<indSplit.length; n++)
+			{
+				var cChk = tf_Id(this.fltIds[colIndex]+'_'+indSplit[n]); //checked item
+				if(cChk) cChk.checked = true;
+			}
+		}
+	}
+}
+
+TF.prototype.__setCheckListValues = function(o)
+/*====================================================
+	- Sets checked items information of a checklist
+=====================================================*/
+{
+	if(o==null) return;
+	var chkValue = o.value; //checked item value
+	var chkIndex = parseInt(o.id.split('_')[2]);
+	var filterTag = 'ul', itemTag = 'li';
+	var n = o;
+	
+	//ul tag search
+	while(n.nodeName.tf_LCase() != filterTag)
+		n = n.parentNode;
+
+	if(n.nodeName.tf_LCase() != filterTag) return;
+	
+	var li = n.childNodes[chkIndex];
+	var colIndex = n.getAttribute('colIndex');
+	var fltValue = n.getAttribute('value'); //filter value (ul tag)
+	var fltIndexes = n.getAttribute('indexes'); //selected items (ul tag)
+
+	if(o.checked)		
+	{
+		if(chkValue=='')
+		{//show all item
+			if((fltIndexes!=null && fltIndexes!=''))
+			{
+				var indSplit = fltIndexes.split(this.separator);//items indexes
+				for(var u=0; u<indSplit.length; u++)
+				{//checked items loop
+					var cChk = tf_Id(this.fltIds[colIndex]+'_'+indSplit[u]); //checked item
+					if(cChk)
+					{ 
+						cChk.checked = false;
+						tf_RemoveClass(
+							n.childNodes[indSplit[u]],
+							this.checkListSlcItemCssClass
+						);
+					}
+				}
+			}
+			n.setAttribute('value', '');
+			n.setAttribute('indexes', '');
+			
+		} else {
+			fltValue = (fltValue) ? fltValue : '';
+			chkValue = (fltValue+' '+chkValue +' '+this.orOperator).tf_Trim();
+			chkIndex = fltIndexes + chkIndex + this.separator;
+			n.setAttribute('value', chkValue );
+			n.setAttribute('indexes', chkIndex);
+			//1st option unchecked
+			if(tf_Id(this.fltIds[colIndex]+'_0'))
+				tf_Id(this.fltIds[colIndex]+'_0').checked = false; 
+		}
+		
+		if(li.nodeName.tf_LCase() == itemTag)
+		{
+			tf_RemoveClass(n.childNodes[0],this.checkListSlcItemCssClass);
+			tf_AddClass(li,this.checkListSlcItemCssClass);
+		}
+	} else { //removes values and indexes
+		if(chkValue!='')
+		{
+			var replaceValue = new RegExp(tf_RegexpEscape(chkValue+' '+this.orOperator));
+			fltValue = fltValue.replace(replaceValue,'');
+			n.setAttribute('value', fltValue.tf_Trim());
+			
+			var replaceIndex = new RegExp(tf_RegexpEscape(chkIndex + this.separator));
+			fltIndexes = fltIndexes.replace(replaceIndex,'');
+			n.setAttribute('indexes', fltIndexes);
+		}
+		if(li.nodeName.tf_LCase() == itemTag)
+			tf_RemoveClass(li,this.checkListSlcItemCssClass);
+	}
+}
+
+
+function tf_CreateCheckItem(chkIndex, chkValue, labelText)
+/*====================================================
+	- creates an checklist item and returns it
+	- accepts the following params:
+		- chkIndex: index of check item (number)
+		- chkValue: check item value (string)
+		- labelText: check item label text (string)
+=====================================================*/
+{
+	if(chkIndex==undefined || chkValue==undefined || labelText==undefined )
+		return;
+	var li = tf_CreateElm('li');
+	var label = tf_CreateElm('label',['for',chkIndex]);
+	var check = tf_CreateElm( 'input',
+					['id',chkIndex],
+					['name',chkIndex],
+					['type','checkbox'],
+					['value',chkValue] );
+	label.appendChild(check);
+	label.appendChild(tf_CreateText(labelText));
+	li.appendChild(label);
+	li.label = label;
+	li.check = check;
+	return li;
+}

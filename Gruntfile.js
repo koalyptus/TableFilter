@@ -38,9 +38,9 @@ module.exports = function (grunt) {
             compile: {
                 options: {
                     baseUrl: '<%= source_folder %>',
-                    'paths': {
-                        // 'tf': '.',
-                        'sortabletable': 'extensions/sortabletable'
+                    paths: {
+                        'sortabletable': 'extensions/sortabletable',
+                        'adapterSortabletable': 'extensions/sortabletable/adapterSortabletable'
                     },
                     // include: ['../libs/almond/almond', 'tablefilter'],
                     // exclude: [
@@ -61,29 +61,31 @@ module.exports = function (grunt) {
                     },
                     modules:[
                         {
+                            name: 'extensions/sortabletable/adapterSortabletable',
+                            include: [
+                                'extensions/sortabletable/adapterSortabletable'
+                            ]
+                        },
+                        {
                             name: 'tablefilter',
-                            //out: '<%= dist_folder %>tablefilter.js',
                             create: true,
                             include: [
                                 '../libs/almond/almond',
                                 'tablefilter'
                             ],
-                            exclude: [
-                                'extensions/sortabletable/sortabletable',
+                            excludeShallow: [
                                 'extensions/sortabletable/adapterSortabletable'
                             ]
+                            // ,
+                            // exclude: [
+                            //     'extensions/sortabletable/sortabletable',
+                            //     'extensions/sortabletable/adapterSortabletable'
+                            // ]
                         }
-                        // {
-                        //     name: 'extensions/sortabletable/adapterSortabletable',
-                        //     include: [
-                        //         'extensions/sortabletable/sortabletable'
-                        //     ]
-                        // }
                     ],
                     removeCombined: true,
-                    findNestedDependencies: true
-                    /*,
-                    optimize: 'uglify2',
+                    findNestedDependencies: false,
+                    optimize: 'none'/*'uglify2',
                     preserveLicenseComments: false,
                     generateSourceMaps: true*/
                 }
@@ -118,8 +120,10 @@ module.exports = function (grunt) {
             },
 
             js: {
-                src: ['<%= dist_folder %>tablefilter.js'],
-                dest: '<%= dist_folder %>tablefilter.js'
+                files: [{
+                    src: ['<%= dist_folder %>tablefilter.js'],
+                    dest: '<%= dist_folder %>tablefilter.js'
+                }]
             }
         },
 
@@ -139,9 +143,10 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            main: {
+            tablefilter: {
                 files: [
-                    { src: 'libs/sortabletable.js', dest: '<%= source_folder %>/extensions/sortabletable/sortabletable.js' },
+                    { src: 'libs/sortabletable.js', dest: '<%= source_folder %>extensions/sortabletable/sortabletable.js' },
+                    { src: 'libs/requirejs/require.js', dest: '<%= dist_folder %>require.js' },
                     // { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
@@ -178,8 +183,9 @@ module.exports = function (grunt) {
     // This is the default task being executed if Grunt
     // is called without any further parameter.
     grunt.registerTask('default', ['jshint', 'babel', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
-    grunt.registerTask('build', ['jshint', 'babel', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy']);
+    grunt.registerTask('build', ['jshint', 'babel', 'requirejs', 'concat', /*'uglify',*/ 'cssmin', 'copy']);
     grunt.registerTask('dev', ['jshint', 'babel', 'concat', 'cssmin', 'copy']);
+    grunt.registerTask('build-requirejs', ['requirejs']);
     grunt.registerTask('toes5', ['babel']);
     grunt.registerTask('test', ['qunit']);
 };

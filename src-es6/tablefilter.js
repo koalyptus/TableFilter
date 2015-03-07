@@ -41,7 +41,7 @@ var global = window,
     doc = global.document;
 
 
-export class TableFilter{
+export default class TableFilter{
 
     /**
      * TF object constructor
@@ -1626,10 +1626,11 @@ export class TableFilter{
     =====================================================*/
     setSort(){
         var fn = this.Evt._EnableSort,
-            sortConfig = this.sortConfig;
+            sortConfig = this.sortConfig,
+            o = this;
 
         if(!types.isFn(fn)){
-            var o = this;
+
             /*====================================================
                 - enables table sorting
             =====================================================*/
@@ -1648,21 +1649,35 @@ export class TableFilter{
                 //         function(){ sortConfig.initialize.call(null, o); }
                 //     );
                 // }
-
+                // define(
+                //     'extensions/sortabletable/adapterSortabletable',
+                //     function(){}
+                // );
                 var AdapterSortableTable = require(
                     ['extensions/sortabletable/adapterSortabletable'],
                     function(adapterSortabletable){
+                        console.log(adapterSortabletable);
                         o.Extensions.sort = new adapterSortabletable(o);
                         o.Extensions.sort.init();
                 });
             };
         }
 
-        if(this.isImported(this.sortConfig.src)){
-            this.Evt._EnableSort();
+        function loadSortableTable(){console.log('loadSortable');
+            if(o.isImported(sortConfig.src)){
+                o.Evt._EnableSort();
+            } else {
+                o.includeFile(
+                    sortConfig.name, sortConfig.src, o.Evt._EnableSort);
+            }
+        }
+
+        // Import require.js if required for production environment
+        if(o.isImported('require.js')){
+            loadSortableTable();
         } else {
-            this.includeFile(
-                sortConfig.name, sortConfig.src, this.Evt._EnableSort);
+            o.includeFile(
+                'tf-requirejs', o.basePath + 'require.js', loadSortableTable);
         }
     }
 

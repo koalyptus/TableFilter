@@ -1,1 +1,27 @@
-TF.prototype.SetWatermark=function(e){if(!this.fltGrid)return;if(this.inpWatermark!=""){var e=e||e==undefined?!0:!1;for(var t=0;t<this.fltIds.length;t++){if(this["col"+t]!=this.fltTypeInp)continue;var n=this.isInpWatermarkArray?this.inpWatermark[t]:this.inpWatermark;this.GetFilterValue(t)==(e?"":n)&&(this.SetFilterValue(t,e?n:""),tf_AddClass(this.GetFilterElement(t),this.inpWatermarkCssClass))}}};
+/*------------------------------------------------------------------------
+	- HTML Table Filter Generator 
+	- Watermark feature v1.0
+	- By Max Guglielmi (tablefilter.free.fr)
+	- Licensed under the MIT License
+-------------------------------------------------------------------------*/
+
+TF.prototype.SetWatermark = function(set)
+/*====================================================
+	- inserts or removes input watermark
+	- Params:
+		- set: if true inserts watermark (boolean)
+=====================================================*/
+{
+	if( !this.fltGrid ) return;
+	if(this.inpWatermark!=''){ //Not necessary if empty
+		var set = (set || set==undefined) ? true : false;
+		for(var i=0; i<this.fltIds.length; i++){
+			if(this['col'+i]!=this.fltTypeInp) continue; //only input type filters
+			var inpWatermark = (!this.isInpWatermarkArray ? this.inpWatermark : this.inpWatermark[i]);
+			if(this.GetFilterValue(i) == (set ? '' : inpWatermark)){
+				this.SetFilterValue(i,(!set ? '' : inpWatermark));
+				tf_AddClass(this.GetFilterElement(i), this.inpWatermarkCssClass);
+			}
+		}
+	}
+}

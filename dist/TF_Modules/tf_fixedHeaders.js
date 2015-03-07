@@ -1,1 +1,95 @@
-TF.prototype.SetFixedHeaders=function(){if(!this.hasGrid&&!this.isFirstLoad||!this.fixedHeaders)return;if(this.contDiv)return;var e=tf_Tag(this.tbl,"thead");if(e.length==0)return;var t=tf_Tag(this.tbl,"tbody");if(t[0].clientHeight!=0)this.prevTBodyH=t[0].clientHeight,this.prevTBodyOverflow=t[0].style.overflow,this.prevTBodyOverflowX=t[0].style.overflowX,t[0].style.height=this.tBodyH+"px",t[0].style.overflow="auto",t[0].style.overflowX="hidden";else{var n=tf_CreateElm("div",["id",this.prfxContentDiv+this.id]);n.className=this.contDivCssClass,this.tbl.parentNode.insertBefore(n,this.tbl),n.appendChild(this.tbl),this.contDiv=tf_Id(this.prfxContentDiv+this.id),this.contDiv.style.position="relative";var r=0,i=tf_Tag(e[0],"tr");for(var s=0;s<i.length;s++)i[s].style.cssText+="position:relative; top:expression(offsetParent.scrollTop);",r+=parseInt(i[s].clientHeight);this.contDiv.style.height=this.tBodyH+r+"px";var o=tf_Tag(this.tbl,"tfoot");if(o.length==0)return;var u=tf_Tag(o[0],"tr");for(var a=0;a<u.length;a++)u[a].style.cssText+="position:relative; overflow-x: hidden; top: expression(parentNode.parentNode.offsetHeight >= offsetParent.offsetHeight ? 0 - parentNode.parentNode.offsetHeight + offsetParent.offsetHeight + offsetParent.scrollTop : 0);"}},TF.prototype.RemoveFixedHeaders=function(){if(!this.hasGrid||!this.fixedHeaders)return;if(this.contDiv){this.contDiv.parentNode.insertBefore(this.tbl,this.contDiv),this.contDiv.parentNode.removeChild(this.contDiv),this.contDiv=null;var e=tf_Tag(this.tbl,"thead");if(e.length==0)return;var t=tf_Tag(e[0],"tr");if(t.length==0)return;for(var n=0;n<t.length;n++)t[n].style.cssText="";var r=tf_Tag(this.tbl,"tfoot");if(r.length==0)return;var i=tf_Tag(r[0],"tr");for(var s=0;s<i.length;s++)i[s].style.position="relative",i[s].style.top="",i[s].style.overeflowX=""}else{var o=tf_Tag(this.tbl,"tbody");if(o.length==0)return;o[0].style.height=this.prevTBodyH+"px",o[0].style.overflow=this.prevTBodyOverflow,o[0].style.overflowX=this.prevTBodyOverflowX}};
+/*------------------------------------------------------------------------
+	- HTML Table Filter Generator 
+	- Fixed headers feature v1.0 - Deprecated!
+	- By Max Guglielmi (tablefilter.free.fr)
+	- Licensed under the MIT License
+-------------------------------------------------------------------------*/
+
+TF.prototype.SetFixedHeaders = function()
+/*====================================================
+	- CSS solution making headers fixed
+=====================================================*/
+{
+	if((!this.hasGrid && !this.isFirstLoad) || !this.fixedHeaders) return;
+	if(this.contDiv) return;	
+	var thead = tf_Tag(this.tbl,'thead');
+	if( thead.length==0 ) return;
+	var tbody = tf_Tag(this.tbl,'tbody');	
+	if( tbody[0].clientHeight!=0 ) 
+	{//firefox returns tbody height
+		//previous values
+		this.prevTBodyH = tbody[0].clientHeight;
+		this.prevTBodyOverflow = tbody[0].style.overflow;
+		this.prevTBodyOverflowX = tbody[0].style.overflowX;
+		
+		tbody[0].style.height = this.tBodyH+'px';
+		tbody[0].style.overflow = 'auto';
+		tbody[0].style.overflowX = 'hidden';
+	} else { //IE returns 0
+		// cont div is added to emulate fixed headers behaviour
+		var contDiv = tf_CreateElm( 'div',['id',this.prfxContentDiv+this.id] );
+		contDiv.className = this.contDivCssClass;
+		this.tbl.parentNode.insertBefore(contDiv, this.tbl);
+		contDiv.appendChild(this.tbl);
+		this.contDiv = tf_Id(this.prfxContentDiv+this.id);
+		//prevents headers moving during window scroll (IE)
+		this.contDiv.style.position = 'relative';
+		
+		var theadH = 0;
+		var theadTr = tf_Tag(thead[0],'tr');	
+		for(var i=0; i<theadTr.length; i++)
+		{//css below emulates fixed headers on IE<=6
+			theadTr[i].style.cssText += 'position:relative; ' +
+										'top:expression(offsetParent.scrollTop);';
+			theadH += parseInt(theadTr[i].clientHeight);
+		}
+		
+		this.contDiv.style.height = (this.tBodyH+theadH)+'px';
+		
+		var tfoot = tf_Tag(this.tbl,'tfoot');
+		if( tfoot.length==0 ) return;
+		
+		var tfootTr = tf_Tag(tfoot[0],'tr');
+			
+		for(var j=0; j<tfootTr.length; j++)//css below emulates fixed footer on IE<=6
+			tfootTr[j].style.cssText += 'position:relative; overflow-x: hidden; ' +
+										'top: expression(parentNode.parentNode.offsetHeight >= ' +
+										'offsetParent.offsetHeight ? 0 - parentNode.parentNode.offsetHeight + '+ 
+										'offsetParent.offsetHeight + offsetParent.scrollTop : 0);';		
+	}	
+}
+
+TF.prototype.RemoveFixedHeaders = function()
+/*====================================================
+	- Removes fixed headers
+=====================================================*/
+{
+	if(!this.hasGrid || !this.fixedHeaders ) return;
+	if( this.contDiv )//IE additional div
+	{
+		this.contDiv.parentNode.insertBefore(this.tbl, this.contDiv);
+		this.contDiv.parentNode.removeChild( this.contDiv );
+		this.contDiv = null;
+		var thead = tf_Tag(this.tbl,'thead');
+		if( thead.length==0 ) return;
+		var theadTr = tf_Tag(thead[0],'tr');
+		if( theadTr.length==0 ) return;
+		for(var i=0; i<theadTr.length; i++)
+			theadTr[i].style.cssText = '';
+		var tfoot = tf_Tag(this.tbl,'tfoot');
+		if( tfoot.length==0 ) return;		
+		var tfootTr = tf_Tag(tfoot[0],'tr');	
+		for(var j=0; j<tfootTr.length; j++)
+		{
+			tfootTr[j].style.position = 'relative';
+			tfootTr[j].style.top = '';
+			tfootTr[j].style.overeflowX = '';
+		}
+	} else {
+		var tbody = tf_Tag(this.tbl,'tbody');
+		if( tbody.length==0 ) return;
+		tbody[0].style.height = this.prevTBodyH+'px';
+		tbody[0].style.overflow = this.prevTBodyOverflow;
+		tbody[0].style.overflowX = this.prevTBodyOverflowX;
+	}
+}
