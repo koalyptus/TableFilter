@@ -1653,13 +1653,29 @@ export default class TableFilter{
                 //     'extensions/sortabletable/adapterSortabletable',
                 //     function(){}
                 // );
-                var AdapterSortableTable = require(
-                    ['extensions/sortabletable/adapterSortabletable'],
-                    function(adapterSortabletable){
-                        console.log(adapterSortabletable);
-                        o.Extensions.sort = new adapterSortabletable(o);
-                        o.Extensions.sort.init();
-                });
+                // require.config({
+                //     baseUrl: '../dist',
+                //     paths: {
+                //         'a': '/tablefilter',
+                //         'SortableTable':
+                //             '/extensions/sortabletable/sortabletable',
+                //         'sortabletable':
+                //             '/extensions/sortabletable/adapterSortabletable'
+                //     },
+                //     name: '../dist/extensions/sortabletable/adapterSortabletable'
+                // });
+
+                // Lazy loading for the sort extension
+                // console.log('lazy', define);
+                // define(['require'], function(require){
+                //     console.log(require);
+                    var AdapterSortableTable = require(
+                        ['extensions/sortabletable/adapterSortabletable'],
+                        function(adapterSortabletable){
+                            o.Extensions.sort = new adapterSortabletable(o);
+                            o.Extensions.sort.init();
+                    });
+                // });
             };
         }
 
@@ -1673,11 +1689,30 @@ export default class TableFilter{
         }
 
         // Import require.js if required for production environment
+        console.log('is require loaded: ' + o.isImported('require.js'));
         if(o.isImported('require.js')){
             loadSortableTable();
         } else {
             o.includeFile(
-                'tf-requirejs', o.basePath + 'require.js', loadSortableTable);
+                'tf-requirejs', o.basePath + 'require.js', o.Evt._EnableSort);
+
+            // o.includeFile('tf-requirejs',
+            //     o.basePath + 'require.js',
+            //     function(){
+                    // Lazy loading for the sort extension
+                    // console.log('lazy', define);
+                    // define(['require'], function(require){
+                    //     console.log(require);
+                    //     var AdapterSortableTable = require(
+                    //         ['extensions/sortabletable/adapterSortabletable'],
+                    //         function(adapterSortabletable){
+                    //             console.log(adapterSortabletable);
+                    //             // o.Extensions.sort = new adapterSortabletable(o);
+                    //             // o.Extensions.sort.init();
+                    //     });
+                    // });
+            //     }
+            // );
         }
     }
 

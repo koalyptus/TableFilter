@@ -37,10 +37,12 @@ module.exports = function (grunt) {
         requirejs: {
             compile: {
                 options: {
+                    // appDir: "<%= dist_folder %>",
                     baseUrl: '<%= source_folder %>',
                     paths: {
-                        'sortabletable': 'extensions/sortabletable',
-                        'adapterSortabletable': 'extensions/sortabletable/adapterSortabletable'
+                        almond: '../libs/almond/almond',
+                        sortabletable: 'extensions/sortabletable/sortabletable',
+                        adapterSortabletable: 'extensions/sortabletable/adapterSortabletable'
                     },
                     // include: ['../libs/almond/almond', 'tablefilter'],
                     // exclude: [
@@ -54,8 +56,9 @@ module.exports = function (grunt) {
                         startFile: "<%= source_folder %>start.frag",
                         endFile: "<%= source_folder %>end.frag"
                     },
+                    // insertRequire: ['tablefilter'],
                     shim: {
-                        'SortableTable': {
+                        'sortabletable': {
                             exports: 'SortableTable'
                         }
                     },
@@ -63,6 +66,7 @@ module.exports = function (grunt) {
                         {
                             name: 'extensions/sortabletable/adapterSortabletable',
                             include: [
+                                'extensions/sortabletable/sortabletable',
                                 'extensions/sortabletable/adapterSortabletable'
                             ]
                         },
@@ -70,17 +74,13 @@ module.exports = function (grunt) {
                             name: 'tablefilter',
                             create: true,
                             include: [
-                                '../libs/almond/almond',
+                                'almond',
                                 'tablefilter'
                             ],
+                            exclude: ['require'],
                             excludeShallow: [
-                                'extensions/sortabletable/adapterSortabletable'
+                                'adapterSortabletable'
                             ]
-                            // ,
-                            // exclude: [
-                            //     'extensions/sortabletable/sortabletable',
-                            //     'extensions/sortabletable/adapterSortabletable'
-                            // ]
                         }
                     ],
                     removeCombined: true,
