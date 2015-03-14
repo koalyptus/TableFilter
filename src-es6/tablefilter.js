@@ -1669,12 +1669,21 @@ export default class TableFilter{
                 // console.log('lazy', define);
                 // define(['require'], function(require){
                 //     console.log(require);
+                //
                     var AdapterSortableTable = require(
                         ['extensions/sortabletable/adapterSortabletable'],
                         function(adapterSortabletable){
                             o.Extensions.sort = new adapterSortabletable(o);
                             o.Extensions.sort.init();
                     });
+
+                    // o.includeFile(
+                    //     'sortConfig.name',
+                    //     o.basePath + '/extensions/sortabletable/adapterSortabletable.js',
+                    //     function(){
+                    //         console.log(AdapterSortableTable);
+                    //     });
+
                 // });
             };
         }

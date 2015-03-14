@@ -7,6 +7,7 @@ module.exports = function (grunt) {
         version: '<%= pkg.version %>',
         dist_folder: 'dist/',
         source_folder: 'src/',
+        frags_folder: 'frags/',
 
         // A list of files, which will be syntax-checked by JSHint
         jshint: {
@@ -35,7 +36,7 @@ module.exports = function (grunt) {
         },
 
         requirejs: {
-            compile: {
+            'compile-main': {
                 options: {
                     // appDir: "<%= dist_folder %>",
                     baseUrl: '<%= source_folder %>',
@@ -53,8 +54,8 @@ module.exports = function (grunt) {
                     // out: '<%= dist_folder %>tablefilter.js',
                     dir: '<%= dist_folder %>',
                     wrap: {
-                        startFile: "<%= source_folder %>start.frag",
-                        endFile: "<%= source_folder %>end.frag"
+                        startFile: "<%= frags_folder %>start.frag",
+                        endFile: "<%= frags_folder %>end.frag"
                     },
                     // insertRequire: ['tablefilter'],
                     shim: {
@@ -66,9 +67,13 @@ module.exports = function (grunt) {
                         {
                             name: 'extensions/sortabletable/adapterSortabletable',
                             include: [
-                                'extensions/sortabletable/sortabletable',
-                                'extensions/sortabletable/adapterSortabletable'
-                            ]
+                                'extensions/sortabletable/adapterSortabletable',
+                                'extensions/sortabletable/sortabletable'
+                            ],
+                            wrap: {
+                                start: "(function() {",
+                                end: "}());"
+                            }
                         },
                         {
                             name: 'tablefilter',
@@ -90,6 +95,35 @@ module.exports = function (grunt) {
                     generateSourceMaps: true*/
                 }
             }
+            // ,
+            // 'compile-extensions': {
+            //     options:{
+            //         baseUrl: '<%= source_folder %>extensions',
+            //         dir: '<%= dist_folder %>/extensions',
+            //         // paths: {
+            //         //     sortabletable: 'sortabletable/sortabletable',
+            //         //     adapterSortabletable: 'sortabletable/adapterSortabletable'
+            //         // },
+            //         wrap: {
+            //             startFile: "<%= frags_folder %>start.sort.frag",
+            //             endFile: "<%= frags_folder %>end.sort.frag"
+            //         },
+            //         modules:[
+            //            {
+            //                 name: 'sortabletable/adapterSortabletable',
+            //                 include: [
+            //                     'sortabletable/adapterSortabletable',
+            //                     'sortabletable/sortabletable'
+            //                 ]
+            //             }
+            //         ],
+            //         removeCombined: true,
+            //         findNestedDependencies: false,
+            //         optimize: 'none'/*'uglify2',
+            //         preserveLicenseComments: false,
+            //         generateSourceMaps: true*/
+            //     }
+            // }
         },
 
         concat: {
@@ -154,16 +188,33 @@ module.exports = function (grunt) {
         },
 
         babel: {
-            options: {
-                sourceMap: true,
-                modules: 'amd'
-            },
-            build: {
+            'build-main': {
+                options: {
+                    sourceMap: true,
+                    modules: 'amd'
+                },
                 files: [{
                     expand: true,
                     cwd: 'src-es6',
-                    src: ['**/*.js'],
+                    src: ['*.js'],
                     dest: '<%= source_folder %>'
+                },{
+                    expand: true,
+                    cwd: 'src-es6/modules',
+                    src: ['*.js'],
+                    dest: '<%= source_folder %>modules'
+                }]
+            },
+            'build-extensions':{
+                options: {
+                    sourceMap: true,
+                    modules: 'amd'
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'src-es6/extensions',
+                    src: ['**/*.js'],
+                    dest: '<%= source_folder %>extensions'
                 }]
             }
         }
@@ -182,10 +233,10 @@ module.exports = function (grunt) {
 
     // This is the default task being executed if Grunt
     // is called without any further parameter.
-    grunt.registerTask('default', ['jshint', 'babel', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
-    grunt.registerTask('build', ['jshint', 'babel', 'requirejs', 'concat', /*'uglify',*/ 'cssmin', 'copy']);
-    grunt.registerTask('dev', ['jshint', 'babel', 'concat', 'cssmin', 'copy']);
-    grunt.registerTask('build-requirejs', ['requirejs']);
-    grunt.registerTask('toes5', ['babel']);
+    grunt.registerTask('default', ['jshint', 'toes5', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
+    grunt.registerTask('build', ['jshint', 'toes5', 'requirejs', 'concat', /*'uglify',*/ 'cssmin', 'copy']);
+    grunt.registerTask('dev', ['jshint', 'toes5', 'concat', 'cssmin', 'copy']);
+    grunt.registerTask('build-requirejs', ['requirejs:compile-main', 'requirejs:compile-main']);
+    grunt.registerTask('toes5', ['babel:build-main','babel:build-extensions']);
     grunt.registerTask('test', ['qunit']);
 };
