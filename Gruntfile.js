@@ -236,7 +236,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['jshint', 'toes5', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
     grunt.registerTask('build', ['jshint', 'toes5', 'requirejs', 'concat', /*'uglify',*/ 'cssmin', 'copy']);
     grunt.registerTask('dev', ['jshint', 'toes5', 'concat', 'cssmin', 'copy']);
-    grunt.registerTask('build-requirejs', ['requirejs:compile-main', 'requirejs:compile-main']);
+    grunt.registerTask('build-requirejs', ['requirejs:compile-main']);
     grunt.registerTask('toes5', ['babel:build-main','babel:build-extensions']);
     grunt.registerTask('test', ['qunit']);
 };

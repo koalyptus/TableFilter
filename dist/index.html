@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HTML Table Filter Generator</title>
+    <link href="./filtergrid.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        var tf;
+    </script>
+</head>
+<body>
+    <p align="right">
+        <input type="button" value="Reset paging"
+            onclick="
+                if( tf.paging ) return;
+                tf.Cpt.paging.addPaging();" >
+    <input type="button" value="Remove paging"
+        onclick="
+            if( !tf.paging ) return;
+            tf.paging = false; //behaviour is removed here
+            tf.Cpt.paging.destroy();
+            tf.Filter();" >
+    </p>
+    <div style="width: 900px;">
+        <table id="demo" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>Destination</th>
+                    <th>Road Distance (km)</th>
+                    <th>By Air (hrs)</th>
+                    <th>By Rail (hrs)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Sydney</strong></td>
+                    <td>Adelaide</td>
+                    <td>1412</td>
+                    <td>1.4</td>
+                    <td>25.3</td>
+                </tr>
+                <tr>
+                    <td><strong>Sydney</strong></td>
+                    <td>Brisbane</td>
+                    <td>982</td>
+                    <td>1.5</td>
+                    <td>16</td>
+                </tr>
+                <tr>
+                    <td><strong>Sydney</strong></td>
+                    <td>Canberra</td>
+                    <td>286</td>
+                    <td>.6</td>
+                    <td>4.3</td>
+                </tr>
+                <tr>
+                    <td><strong>Sydney</strong></td>
+                    <td>Melbourne</td>
+                    <td>872</td>
+                    <td>1.1</td>
+                    <td>10.5</td>
+                </tr>
+                <tr>
+                    <td><strong>Adelaide</strong></td>
+                    <td>Perth</td>
+                    <td>2781</td>
+                    <td>3.1</td>
+                    <td>38</td>
+                </tr>
+                <tr>
+                    <td><strong>Adelaide</strong></td>
+                    <td>Alice Springs</td>
+                    <td>1533</td>
+                    <td>2</td>
+                    <td>20.25</td>
+                </tr>
+                <tr>
+                    <td><strong>Adelaide</strong></td>
+                    <td>Brisbane</td>
+                    <td>2045</td>
+                    <td>2.15</td>
+                    <td>40</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="../libs/requirejs/require.js"></script>
+    <script>
+        requirejs(['tablefilter'], function(TableFilter){
+            // Your logic here
+            tf = new TableFilter("demo", {
+                col_0: 'select',
+                col_2: 'multiple',
+                col_3: 'checklist',
+                base_path: './',
+                loader: false,
+                rows_counter: true,
+                enable_default_theme: true,
+                // slc_filling_method: 'innerhtml',
+                sort: true,
+                sort_config: {
+                    sort_types: ['string','string','number','number','number']
+                },
+                paging: true,
+                paging_length: 4,
+                // page_selector_type: 'input',
+                //results_per_page: ['Results per page', [2,4,6]],
+                remember_grid_values: true,
+                // remember_page_number: true,
+                // remember_page_length: true,
+                fill_slc_on_demand: false,
+                linked_filters: false,
+                popup_filters: false,
+                alternate_rows: true,
+                highlight_keywords: true,
+                match_case: false,
+                btn_reset: true,
+                status_bar: true,
+                watermark: [null, 'Filter column...', null, null, 'Helo'],
+                grid_layout: false,
+                // grid_width: '500px',
+                // grid_height: '200px',
+                on_before_show_msg: function(tf){
+                    // console.log('on_before_show_msg');
+                }
+            });
+
+            tf.init();
+        });
+    </script>
+</body>
+</html>
