@@ -20,6 +20,7 @@ import {Helpers as hlp} from 'helpers';
 import {DateHelper as dateHelper} from 'date';
 import {Sort} from 'sort';
 
+// Modules
 import {Store} from 'modules/store';
 import {GridLayout} from 'modules/gridLayout';
 import {Loader} from 'modules/loader';
@@ -35,11 +36,15 @@ import {Help} from 'modules/help';
 import {AlternateRows} from 'modules/alternateRows';
 import {ColOps} from 'modules/colOps';
 
+// Extensions
+import 'extensions/sortabletable/sortabletable';
+import {AdapterSortableTable}
+    from 'extensions/sortabletable/adapterSortabletable';
+
 var global = window,
     isValidDate = dateHelper.isValid,
     formatDate = dateHelper.format,
     doc = global.document;
-
 
 export default class TableFilter{
 
@@ -69,7 +74,8 @@ export default class TableFilter{
         if(!this.tbl || str.lower(this.tbl.nodeName) !== 'table' ||
             this.getRowsNb() === 0){
             throw new Error(
-                'Could not instantiate TF object: HTML table not found.');
+                'Could not instantiate TableFilter class: ' +
+                'HTML table not found.');
         }
 
         if(arguments.length>1){
@@ -1147,10 +1153,12 @@ export default class TableFilter{
             this.Cpt.statusBar = new StatusBar(this);
             this.Cpt.statusBar.init();
         }
-        if(this.paging){
+        if(this.paging || (this.Cpt.paging && this.Cpt.paging.isPagingRemoved)){
             // var Paging = require('modules/paging').Paging;
             // import {Paging} from 'modules/paging';
-            this.Cpt.paging = new Paging(this);
+            // if(!this.Cpt.paging){
+                this.Cpt.paging = new Paging(this);
+            // }
             this.Cpt.paging.init();
         }
         if(this.btnReset){
@@ -1478,7 +1486,8 @@ export default class TableFilter{
                 this.Cpt.highlightKeyword.unhighlightAll();
             }
             if(this.sort){
-                this.RemoveSort();
+                // this.RemoveSort();
+                this.Extensions.sort.destroy();
             }
             if(this.loader){
                 this.Cpt.loader.remove();
@@ -1625,6 +1634,11 @@ export default class TableFilter{
         and TF adapter by Max Guglielmi
     =====================================================*/
     setSort(){
+        var adapterSortabletable = new AdapterSortableTable(this);
+        this.Extensions.sort = adapterSortabletable;
+        adapterSortabletable.init();
+    }
+    setOldSort(){
         var fn = this.Evt._EnableSort,
             sortConfig = this.sortConfig,
             o = this;
@@ -1728,9 +1742,9 @@ export default class TableFilter{
     /*====================================================
         - removes sorting feature
     =====================================================*/
-    removeSort(){
-        this.sort = false;
-    }
+    // removeSort(){
+    //     this.sort = false;
+    // }
 
     performSort(){
         this.EvtManager(this.Evt.name.sort);
@@ -3526,16 +3540,18 @@ export default class TableFilter{
     =====================================================*/
     getHeaderElement(colIndex){
         var table = this.gridLayout ? this.headTbl : this.tbl;
-        var header, tHead = dom.tag(this.tbl, 'thead');
+        var tHead = dom.tag(table, 'thead');
+        var headersRow = this.headersRow;
+        var header;
         for(var i=0; i<this.nbCells; i++){
             if(i !== colIndex){
                 continue;
             }
             if(tHead.length === 0){
-                header = table.rows[this.headersRow].cells[i];
+                header = table.rows[headersRow].cells[i];
             }
             if(tHead.length === 1){
-                header = tHead[0].rows[this.headersRow].cells[i];
+                header = tHead[0].rows[headersRow].cells[i];
             }
             break;
         }

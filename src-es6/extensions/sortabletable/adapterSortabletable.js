@@ -5,7 +5,7 @@ import {Event} from '../../event';
 import {DateHelper} from '../../date';
 import {Helpers} from '../../helpers';
 
-export default class AdapterSortableTable{
+export class AdapterSortableTable{
 
     /**
      * SortableTable Adapter module
@@ -53,6 +53,7 @@ export default class AdapterSortableTable{
     init(){
         var tf = this.tf;
         var sortConfig = tf.sortConfig;
+        var adpt = this;
 
         // SortableTable class sanity check (sortabletable.js)
         if(Types.isUndef(SortableTable)){
@@ -82,14 +83,14 @@ export default class AdapterSortableTable{
 
             /*** sort behaviour for paging ***/
             if(tf.paging){
-                this.isPaged = true;
+                adpt.isPaged = true;
                 tf.paging = false;
                 tf.Cpt.paging.destroy();
             }
         };
 
         this.stt.onsort = function(){
-            this.sorted = true;
+            adpt.sorted = true;
 
             //rows alternating bg issue
             // TODO: move into AlternateRows component
@@ -128,7 +129,7 @@ export default class AdapterSortableTable{
                 }
             }
             //sort behaviour for paging
-            if(this.isPaged){
+            if(adpt.isPaged){
                 var paginator = tf.Cpt.paging,
                     config = tf.config();
                 if(paginator.hasResultsPerPage){
@@ -137,13 +138,21 @@ export default class AdapterSortableTable{
                 }
                 paginator.addPaging(false);
                 paginator.setPage(paginator.currentPageNb);
-                this.isPaged = false;
+                adpt.isPaged = false;
             }
 
-            if(this.onAfterSort){
-                this.onAfterSort.call(null, tf, tf.stt.sortColumn);
+            if(adpt.onAfterSort){
+                adpt.onAfterSort.call(null, tf, tf.stt.sortColumn);
             }
         };
+    }
+
+    /**
+     * Sort specified column
+     * @param  {Number} colIdx Column index
+     */
+    sortByColumnIndex(colIdx){
+        this.stt.sort(colIdx);
     }
 
     overrideSortableTable(){
@@ -159,10 +168,9 @@ export default class AdapterSortableTable{
                 return;
             }
             // find Header element
-            var el = evt.target || evt.srcElement,
-                tagName = el.tagName;
+            var el = evt.target || evt.srcElement;
 
-            while (tagName !== 'TD' && tagName !== 'TH'){
+            while(el.tagName !== 'TD' && el.tagName !== 'TH'){
                 el = el.parentNode;
             }
 
@@ -287,12 +295,17 @@ export default class AdapterSortableTable{
          * @return {String}       DOM element inner text
          */
         SortableTable.getInnerText = function(oNode){
-            if(oNode.getAttribute(tf.sortCustomKey) != null){
-                return oNode.getAttribute(tf.sortCustomKey);
+            if(oNode.getAttribute(adpt.sortCustomKey)){
+                return oNode.getAttribute(adpt.sortCustomKey);
             } else {
                 return Dom.getText(oNode);
             }
         };
+    }
+
+    addSortType(){
+        SortableTable.prototype.addSortType(
+            arguments[0], arguments[1], arguments[2], arguments[3]);
     }
 
     setSortTypes(){
@@ -322,23 +335,19 @@ export default class AdapterSortableTable{
         }
 
         //Public TF method to add sort type
-        this.addSortType = function(){
-            SortableTable.prototype.addSortType(
-                arguments[0], arguments[1], arguments[2], arguments[3]);
-        };
 
         //Custom sort types
         this.addSortType('number', Number);
         this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
         this.addSortType('date', SortableTable.toDate);
         this.addSortType('string');
-        this.addSortType('us', this.usNumberConverter);
-        this.addSortType('eu', this.euNumberConverter);
-        this.addSortType('dmydate', this.dmyDateConverter);
-        this.addSortType('ymddate', this.ymdDateConverter);
-        this.addSortType('mdydate', this.mdyDateConverter);
-        this.addSortType('ddmmmyyyydate', this.ddmmmyyyyDateConverter);
-        this.addSortType('ipaddress', this.ipAddress, this.sortIP);
+        this.addSortType('us', usNumberConverter);
+        this.addSortType('eu', euNumberConverter);
+        this.addSortType('dmydate', dmyDateConverter );
+        this.addSortType('ymddate', ymdDateConverter);
+        this.addSortType('mdydate', mdyDateConverter);
+        this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
+        this.addSortType('ipaddress', ipAddress, sortIP);
 
         this.stt = new SortableTable(tf.tbl, sortTypes);
 
@@ -362,7 +371,6 @@ export default class AdapterSortableTable{
                             return;
                         }
                         this.stt.asyncSort(
-                            // triggers.tf_IndexByValue(this.id, true)
                             Arr.indexByValue(triggers, elm.id, true)
                         );
                     });
@@ -372,37 +380,71 @@ export default class AdapterSortableTable{
         }
     }
 
-    //Converters
-    usNumberConverter(s){ return Helpers.removeNbFormat(s,'us'); }
-    euNumberConverter(s){ return Helpers.removeNbFormat(s,'eu'); }
-    dateConverter(s, format){ return DateHelper.format(s, format); }
-    dmyDateConverter(s){ return this.dateConverter(s,'DMY'); }
-    mdyDateConverter(s){ return this.dateConverter(s,'MDY'); }
-    ymdDateConverter(s){ return this.dateConverter(s,'YMD'); }
-    ddmmmyyyyDateConverter(s){ return this.dateConverter(s,'DDMMMYYYY'); }
+    /**
+     * Destroy sort
+     */
+    destroy(){
+        var tf = this.tf;
+        tf.sort = false;
+        this.sorted = false;
+        this.stt.destroy();
 
-    ipAddress(value){
-        var vals = value.split('.');
-        for (var x in vals) {
-            var val = vals[x];
-            while (3 > val.length){
-                val = '0'+val;
+        var ids = tf.getFiltersId();
+        for (var idx = 0; idx < ids.length; idx++){
+            var header = tf.getHeaderElement(idx);
+            var img = Dom.tag(header, 'img');
+
+            if(img.length === 1){
+                header.removeChild(img[0]);
             }
-            vals[x] = val;
-        }
-        return vals.join('.');
-    }
-
-    sortIP(a,b){
-        var aa = this.ipAddress(a.value.toLowerCase());
-        var bb = this.ipAddress(b.value.toLowerCase());
-        if (aa==bb){
-            return 0;
-        } else if (aa<bb){
-            return -1;
-        } else {
-            return 1;
         }
     }
 
+}
+
+//Converters
+function usNumberConverter(s){
+    return Helpers.removeNbFormat(s, 'us');
+}
+function euNumberConverter(s){
+    return Helpers.removeNbFormat(s, 'eu');
+}
+function dateConverter(s, format){
+    return DateHelper.format(s, format);
+}
+function dmyDateConverter(s){
+    return dateConverter(s, 'DMY');
+}
+function mdyDateConverter(s){
+    return dateConverter(s, 'MDY');
+}
+function ymdDateConverter(s){
+    return dateConverter(s, 'YMD');
+}
+function ddmmmyyyyDateConverter(s){
+    return dateConverter(s, 'DDMMMYYYY');
+}
+
+function ipAddress(value){
+    var vals = value.split('.');
+    for (var x in vals) {
+        var val = vals[x];
+        while (3 > val.length){
+            val = '0'+val;
+        }
+        vals[x] = val;
+    }
+    return vals.join('.');
+}
+
+function sortIP(a,b){
+    var aa = ipAddress(a.value.toLowerCase());
+    var bb = ipAddress(b.value.toLowerCase());
+    if (aa==bb){
+        return 0;
+    } else if (aa<bb){
+        return -1;
+    } else {
+        return 1;
+    }
 }

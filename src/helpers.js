@@ -1,9 +1,11 @@
-define(["exports"], function (exports) {
+define(["exports", "string"], function (exports, _string) {
     "use strict";
 
     /**
      * Misc helpers
      */
+
+    var Str = _string.Str;
 
     var Helpers = {
         isIE: function isIE() {
@@ -18,7 +20,7 @@ define(["exports"], function (exports) {
                 format = "us";
             }
             var n = data;
-            if (str.lower(format) === "us") {
+            if (Str.lower(format) === "us") {
                 n = +n.replace(/[^\d\.-]/g, "");
             } else {
                 n = +n.replace(/[^\d\,-]/g, "").replace(",", ".");

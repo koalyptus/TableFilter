@@ -9,16 +9,18 @@
 </head>
 <body>
     <p align="right">
+        <input type="button" value="Remove grid" onclick="tf.remove();" />
+        <input type="button" value="Reset grid" onclick="tf.init();" />
         <input type="button" value="Reset paging"
             onclick="
                 if( tf.paging ) return;
                 tf.Cpt.paging.addPaging();" >
-    <input type="button" value="Remove paging"
-        onclick="
-            if( !tf.paging ) return;
-            tf.paging = false; //behaviour is removed here
-            tf.Cpt.paging.destroy();
-            tf.Filter();" >
+        <input type="button" value="Remove paging"
+            onclick="
+                if( !tf.paging ) return;
+                tf.paging = false; //behaviour is removed here
+                tf.Cpt.paging.destroy();
+                tf.filter();" >
     </p>
     <div style="width: 900px;">
         <table id="demo" cellpadding="0" cellspacing="0">

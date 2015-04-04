@@ -2,6 +2,8 @@
  * Misc helpers
  */
 
+import {Str} from 'string';
+
 var Helpers = {
     isIE(){
         return (/msie|MSIE/).test(navigator.userAgent);
@@ -15,7 +17,7 @@ var Helpers = {
             format = 'us';
         }
         var n = data;
-        if(str.lower(format)==='us'){
+        if(Str.lower(format)==='us'){
             n =+ n.replace(/[^\d\.-]/g,'');
         } else {
             n =+ n.replace(/[^\d\,-]/g,'').replace(',','.');

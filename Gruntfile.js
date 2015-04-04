@@ -35,96 +35,118 @@ module.exports = function (grunt) {
             files: ['test/**/*.html']
         },
 
-        requirejs: {
+        requirejs:{
             'compile-main': {
                 options: {
-                    // appDir: "<%= dist_folder %>",
                     baseUrl: '<%= source_folder %>',
-                    paths: {
-                        almond: '../libs/almond/almond',
-                        sortabletable: 'extensions/sortabletable/sortabletable',
-                        adapterSortabletable: 'extensions/sortabletable/adapterSortabletable'
-                    },
-                    // include: ['../libs/almond/almond', 'tablefilter'],
+                    include: ['../libs/almond/almond', 'tablefilter'],
                     // exclude: [
                     //     'extensions/sortabletable/sortabletable',
                     //     'extensions/sortabletable/adapterSortabletable'
                     // ],
-                    // name: 'tablefilter',
-                    // out: '<%= dist_folder %>tablefilter.js',
-                    dir: '<%= dist_folder %>',
+                    shim: {
+                        'extensions/sortabletable/sortabletable': {
+                            exports: 'SortableTable'
+                        }
+                    },
                     wrap: {
                         startFile: "<%= frags_folder %>start.frag",
                         endFile: "<%= frags_folder %>end.frag"
                     },
-                    // insertRequire: ['tablefilter'],
-                    shim: {
-                        'sortabletable': {
-                            exports: 'SortableTable'
-                        }
-                    },
-                    modules:[
-                        {
-                            name: 'extensions/sortabletable/adapterSortabletable',
-                            include: [
-                                'extensions/sortabletable/adapterSortabletable',
-                                'extensions/sortabletable/sortabletable'
-                            ],
-                            wrap: {
-                                start: "(function() {",
-                                end: "}());"
-                            }
-                        },
-                        {
-                            name: 'tablefilter',
-                            create: true,
-                            include: [
-                                'almond',
-                                'tablefilter'
-                            ],
-                            exclude: ['require'],
-                            excludeShallow: [
-                                'adapterSortabletable'
-                            ]
-                        }
-                    ],
-                    removeCombined: true,
-                    findNestedDependencies: false,
-                    optimize: 'none'/*'uglify2',
-                    preserveLicenseComments: false,
-                    generateSourceMaps: true*/
+                    name: 'tablefilter',
+                    out: '<%= dist_folder %>tablefilter.js',
+                    optimize: 'none'
                 }
             }
-            // ,
-            // 'compile-extensions': {
-            //     options:{
-            //         baseUrl: '<%= source_folder %>extensions',
-            //         dir: '<%= dist_folder %>/extensions',
-            //         // paths: {
-            //         //     sortabletable: 'sortabletable/sortabletable',
-            //         //     adapterSortabletable: 'sortabletable/adapterSortabletable'
-            //         // },
-            //         wrap: {
-            //             startFile: "<%= frags_folder %>start.sort.frag",
-            //             endFile: "<%= frags_folder %>end.sort.frag"
-            //         },
-            //         modules:[
-            //            {
-            //                 name: 'sortabletable/adapterSortabletable',
-            //                 include: [
-            //                     'sortabletable/adapterSortabletable',
-            //                     'sortabletable/sortabletable'
-            //                 ]
-            //             }
-            //         ],
-            //         removeCombined: true,
-            //         findNestedDependencies: false,
-            //         optimize: 'none'/*'uglify2',
-            //         preserveLicenseComments: false,
-            //         generateSourceMaps: true*/
-            //     }
-            // }
         },
+
+        // requirejs: {
+        //     'compile-main': {
+        //         options: {
+        //             // appDir: "<%= dist_folder %>",
+        //             baseUrl: '<%= source_folder %>',
+        //             paths: {
+        //                 almond: '../libs/almond/almond',
+        //                 sortabletable: 'extensions/sortabletable/sortabletable',
+        //                 adapterSortabletable: 'extensions/sortabletable/adapterSortabletable'
+        //             },
+        //             // include: ['../libs/almond/almond', 'tablefilter'],
+        //             // exclude: [
+        //             //     'extensions/sortabletable/sortabletable',
+        //             //     'extensions/sortabletable/adapterSortabletable'
+        //             // ],
+        //             // name: 'tablefilter',
+        //             // out: '<%= dist_folder %>tablefilter.js',
+        //             dir: '<%= dist_folder %>',
+        //             wrap: {
+        //                 startFile: "<%= frags_folder %>start.frag",
+        //                 endFile: "<%= frags_folder %>end.frag"
+        //             },
+        //             // insertRequire: ['tablefilter'],
+        //             shim: {
+        //                 'sortabletable': {
+        //                     exports: 'SortableTable'
+        //                 }
+        //             },
+        //             modules:[
+        //                 {
+        //                     name: 'extensions/sortabletable/adapterSortabletable',
+        //                     include: [
+        //                         'extensions/sortabletable/adapterSortabletable',
+        //                         'extensions/sortabletable/sortabletable'
+        //                     ]
+        //                 },
+        //                 {
+        //                     name: 'tablefilter',
+        //                     create: true,
+        //                     include: [
+        //                         'almond',
+        //                         'tablefilter'
+        //                     ],
+        //                     exclude: ['require'],
+        //                     excludeShallow: [
+        //                         'adapterSortabletable'
+        //                     ]
+        //                 }
+        //             ],
+        //             removeCombined: true,
+        //             findNestedDependencies: false,
+        //             optimize: 'none'/*'uglify2'*/,
+        //             generateSourceMaps: false/*,
+        //             preserveLicenseComments: false,
+        //             generateSourceMaps: true*/
+        //         }
+        //     }
+        //     // ,
+        //     // 'compile-extensions': {
+        //     //     options:{
+        //     //         baseUrl: '<%= source_folder %>extensions',
+        //     //         dir: '<%= dist_folder %>/extensions',
+        //     //         // paths: {
+        //     //         //     sortabletable: 'sortabletable/sortabletable',
+        //     //         //     adapterSortabletable: 'sortabletable/adapterSortabletable'
+        //     //         // },
+        //     //         wrap: {
+        //     //             startFile: "<%= frags_folder %>start.sort.frag",
+        //     //             endFile: "<%= frags_folder %>end.sort.frag"
+        //     //         },
+        //     //         modules:[
+        //     //            {
+        //     //                 name: 'sortabletable/adapterSortabletable',
+        //     //                 include: [
+        //     //                     'sortabletable/adapterSortabletable',
+        //     //                     'sortabletable/sortabletable'
+        //     //                 ]
+        //     //             }
+        //     //         ],
+        //     //         removeCombined: true,
+        //     //         findNestedDependencies: false,
+        //     //         optimize: 'none'/*'uglify2',
+        //     //         preserveLicenseComments: false,
+        //     //         generateSourceMaps: true*/
+        //     //     }
+        //     // }
+        // },
 
         concat: {
             /*js: {
@@ -180,7 +202,7 @@ module.exports = function (grunt) {
             tablefilter: {
                 files: [
                     { src: 'libs/sortabletable.js', dest: '<%= source_folder %>extensions/sortabletable/sortabletable.js' },
-                    { src: 'libs/requirejs/require.js', dest: '<%= dist_folder %>require.js' },
+                    // { src: 'libs/requirejs/require.js', dest: '<%= dist_folder %>require.js' },
                     // { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
@@ -191,7 +213,8 @@ module.exports = function (grunt) {
             'build-main': {
                 options: {
                     sourceMap: true,
-                    modules: 'amd'
+                    modules: 'amd',
+                    compact: false
                 },
                 files: [{
                     expand: true,
