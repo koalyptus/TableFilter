@@ -618,19 +618,17 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     loadextensions: "LoadExtensions",
                     loadthemes: "LoadThemes"
                 },
-                getKeyCode: function getKeyCode(evt) {
-                    return evt.charCode ? evt.charCode : evt.keyCode ? evt.keyCode : evt.which ? evt.which : 0;
-                },
+
                 /*====================================================
                     - Detects <enter> key for a given element
                 =====================================================*/
-                _DetectKey: function _DetectKey(e) {
+                detectKey: function detectKey(e) {
                     if (!o.enterKey) {
                         return;
                     }
                     var _evt = e || global.event;
                     if (_evt) {
-                        var key = o.Evt.getKeyCode(_evt);
+                        var key = evt.keyCode(_evt);
                         if (key === 13) {
                             o._filter();
                             evt.cancel(_evt);
@@ -645,12 +643,12 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 /*====================================================
                     - onkeyup event for text filters
                 =====================================================*/
-                _OnKeyUp: function _OnKeyUp(e) {
+                onKeyUp: function onKeyUp(e) {
                     if (!o.onKeyUp) {
                         return;
                     }
                     var _evt = e || global.event;
-                    var key = o.Evt.getKeyCode(_evt);
+                    var key = evt.keyCode(_evt);
                     o.isUserTyping = false;
 
                     function filter() {
@@ -674,7 +672,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 /*====================================================
                     - onkeydown event for input filters
                 =====================================================*/
-                _OnKeyDown: function _OnKeyDown(e) {
+                onKeyDown: function onKeyDown(e) {
                     if (!o.onKeyUp) {
                         return;
                     }
@@ -683,7 +681,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 /*====================================================
                     - onblur event for input filters
                 =====================================================*/
-                _OnInpBlur: function _OnInpBlur(e) {
+                onInpBlur: function onInpBlur(e) {
                     if (o.onKeyUp) {
                         o.isUserTyping = false;
                         global.clearInterval(o.onKeyUpTimer);
@@ -700,7 +698,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 /*====================================================
                     - onfocus event for input filters
                 =====================================================*/
-                _OnInpFocus: function _OnInpFocus(e) {
+                onInpFocus: function onInpFocus(e) {
                     var _evt = e || global.event;
                     o.activeFilterId = this.getAttribute("id");
                     o.activeFlt = dom.id(o.activeFilterId);
@@ -720,7 +718,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 /*====================================================
                     - onfocus event for select filters
                 =====================================================*/
-                _OnSlcFocus: function _OnSlcFocus(e) {
+                onSlcFocus: function onSlcFocus(e) {
                     var _evt = e || global.event;
                     o.activeFilterId = this.getAttribute("id");
                     o.activeFlt = dom.id(o.activeFilterId);
@@ -737,7 +735,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 /*====================================================
                     - onchange event for select filters
                 =====================================================*/
-                _OnSlcChange: function _OnSlcChange(e) {
+                onSlcChange: function onSlcChange(e) {
                     if (!o.activeFlt) {
                         return;
                     }
@@ -745,7 +743,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     //Checks filter is a checklist and caller is not null
                     // if(o.activeFlt && colIndex &&
                     //     o['col'+colIndex]===o.fltTypeCheckList &&
-                    //     !o.Evt._OnSlcChange.caller){ return; }
+                    //     !o.Evt.onSlcChange.caller){ return; }
                     var _evt = e || global.event;
                     if (o.popUpFilters) {
                         evt.stop(_evt);
@@ -757,11 +755,11 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 /*====================================================
                     - onblur event for select filters
                 =====================================================*/
-                _OnSlcBlur: function _OnSlcBlur(e) {},
+                // _OnSlcBlur: function(e) {},
                 /*====================================================
                     - onclick event for checklist filters
                 =====================================================*/
-                _OnCheckListClick: function _OnCheckListClick() {
+                onCheckListClick: function onCheckListClick() {
                     if (o.fillSlcOnDemand && this.getAttribute("filled") === "0") {
                         var ct = this.getAttribute("ct");
                         o.Cpt.checkList._build(ct);
@@ -772,35 +770,35 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 /*====================================================
                     - onclick event for checklist filter container
                 =====================================================*/
-                _OnCheckListFocus: function _OnCheckListFocus(e) {
+                onCheckListFocus: function onCheckListFocus(e) {
                     o.activeFilterId = this.firstChild.getAttribute("id");
                     o.activeFlt = dom.id(o.activeFilterId);
                 },
-                _OnCheckListBlur: function _OnCheckListBlur(e) {},
                 /*====================================================
                     - onclick event for validation button
                     (btn property)
                 =====================================================*/
-                _OnBtnClick: function _OnBtnClick() {
+                onBtnClick: function onBtnClick() {
                     o.filter();
-                },
-                _OnSlcPagesChangeEvt: null, //used by sort adapter
+                }
+                // ,
+                // _OnSlcPagesChangeEvt: null, //used by sort adapter
                 /*====================================================
                     - onclick event slc parent node (enables filters)
                     IE only
                 =====================================================*/
-                _EnableSlc: function _EnableSlc() {
-                    this.firstChild.disabled = false;
-                    this.firstChild.focus();
-                    this.onclick = null;
-                },
+                // _EnableSlc: function() {
+                //     this.firstChild.disabled = false;
+                //     this.firstChild.focus();
+                //     this.onclick = null;
+                // },
 
-                _Paging: { //used by sort adapter
-                    nextEvt: null,
-                    prevEvt: null,
-                    lastEvt: null,
-                    firstEvt: null
-                }
+                // _Paging: { //used by sort adapter
+                //     nextEvt: null,
+                //     prevEvt: null,
+                //     lastEvt: null,
+                //     firstEvt: null
+                // }
             };
         }
 
@@ -977,10 +975,10 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                         dropdown._build(i);
                                     }
 
-                                    evt.add(slc, "keypress", this.Evt._DetectKey);
-                                    evt.add(slc, "change", this.Evt._OnSlcChange);
-                                    evt.add(slc, "focus", this.Evt._OnSlcFocus);
-                                    evt.add(slc, "blur", this.Evt._OnSlcBlur);
+                                    evt.add(slc, "keypress", this.Evt.detectKey);
+                                    evt.add(slc, "change", this.Evt.onSlcChange);
+                                    evt.add(slc, "focus", this.Evt.onSlcFocus);
+                                    // evt.add(slc, 'blur', this.Evt._OnSlcBlur);
 
                                     //1st option is created here since dropdown.build isn't
                                     //invoked
@@ -1016,11 +1014,11 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                     }
 
                                     if (this.fillSlcOnDemand) {
-                                        evt.add(divCont, "click", this.Evt._OnCheckListClick);
+                                        evt.add(divCont, "click", this.Evt.onCheckListClick);
                                         divCont.appendChild(dom.text(this.Cpt.checkList.activateCheckListTxt));
                                     }
 
-                                    evt.add(divCont, "click", this.Evt._OnCheckListFocus);
+                                    evt.add(divCont, "click", this.Evt.onCheckListFocus);
                                 } else {
                                     //show/hide input
                                     var inptype = col === this.fltTypeInp ? "text" : "hidden";
@@ -1029,7 +1027,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                         inp.setAttribute("placeholder", this.isWatermarkArray ? this.watermark[i] : this.watermark);
                                     }
                                     inp.className = inpclass;
-                                    inp.onfocus = this.Evt._OnInpFocus;
+                                    inp.onfocus = this.Evt.onInpFocus;
 
                                     //filter is appended in desired element
                                     if (externalFltTgtId) {
@@ -1041,10 +1039,10 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                                     this.fltIds.push(this.prfxFlt + i + "_" + this.id);
 
-                                    inp.onkeypress = this.Evt._DetectKey;
-                                    inp.onkeydown = this.Evt._OnKeyDown;
-                                    inp.onkeyup = this.Evt._OnKeyUp;
-                                    inp.onblur = this.Evt._OnInpBlur;
+                                    inp.onkeypress = this.Evt.detectKey;
+                                    inp.onkeydown = this.Evt.onKeyDown;
+                                    inp.onkeyup = this.Evt.onKeyUp;
+                                    inp.onblur = this.Evt.onInpBlur;
 
                                     if (this.rememberGridValues) {
                                         var flts_values = this.Cpt.store.getFilterValues(this.fltsValuesCookie);
@@ -1065,7 +1063,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                         fltcell.appendChild(btn);
                                     }
 
-                                    btn.onclick = this.Evt._OnBtnClick;
+                                    btn.onclick = this.Evt.onBtnClick;
                                 } //if
                             } // for i
                         } else {

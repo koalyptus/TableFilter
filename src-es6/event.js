@@ -3,7 +3,7 @@
  */
 
 var Event = {
-    add: function(obj, type, func, capture){
+    add(obj, type, func, capture){
         if(obj.addEventListener){
             obj.addEventListener(type, func, capture);
         }
@@ -13,7 +13,7 @@ var Event = {
             obj['on'+type] = func;
         }
     },
-    remove: function(obj, type, func, capture){
+    remove(obj, type, func, capture){
         if(obj.detachEvent){
             obj.detachEvent('on'+type,func);
         }
@@ -23,7 +23,7 @@ var Event = {
             obj['on'+type] = null;
         }
     },
-    stop: function(evt){
+    stop(evt){
         if(!evt){
             evt = window.event;
         }
@@ -33,7 +33,7 @@ var Event = {
             evt.cancelBubble = true;
         }
     },
-    cancel: function(evt){
+    cancel(evt){
         if(!evt){
             evt = window.event;
         }
@@ -42,6 +42,10 @@ var Event = {
         } else {
             evt.returnValue = false;
         }
+    },
+    keyCode(evt){
+        return evt.charCode ? evt.charCode :
+            (evt.keyCode ? evt.keyCode: (evt.which ? evt.which : 0));
     }
 };
 

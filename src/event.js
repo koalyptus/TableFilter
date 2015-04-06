@@ -43,6 +43,9 @@ define(["exports"], function (exports) {
             } else {
                 evt.returnValue = false;
             }
+        },
+        keyCode: function keyCode(evt) {
+            return evt.charCode ? evt.charCode : evt.keyCode ? evt.keyCode : evt.which ? evt.which : 0;
         }
     };
 

@@ -117,7 +117,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     o.changePage(0);
                 },
                 _detectKey: function _detectKey(e) {
-                    var key = tf.Evt.getKeyCode(e);
+                    var key = Event.keyCode(e);
                     if (key === 13) {
                         if (tf.sorted) {
                             tf.filter();

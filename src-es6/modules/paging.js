@@ -124,7 +124,7 @@ export class Paging{
                 o.changePage(0);
             },
             _detectKey(e){
-                var key = tf.Evt.getKeyCode(e);
+                var key = Event.keyCode(e);
                 if(key===13){
                     if(tf.sorted){
                         tf.filter();
