@@ -51,6 +51,11 @@ export class Help{
             '<div align="center" style="margin-top:8px;">' +
             '<a href="javascript:void(0);">Close</a></div></div>';
 
+        //id prefix for help elements
+        this.prfxHelpSpan = 'helpSpan_';
+        //id prefix for help elements
+        this.prfxHelpDiv = 'helpDiv_';
+
         this.tf = tf;
     }
 
@@ -61,8 +66,8 @@ export class Help{
 
         var tf = this.tf;
 
-        var helpspan = Dom.create('span',['id', tf.prfxHelpSpan+tf.id]);
-        var helpdiv = Dom.create('div',['id', tf.prfxHelpDiv+tf.id]);
+        var helpspan = Dom.create('span',['id', this.prfxHelpSpan+tf.id]);
+        var helpdiv = Dom.create('div',['id', this.prfxHelpDiv+tf.id]);
 
         //help button is added to defined element
         if(!this.helpInstrTgtId){

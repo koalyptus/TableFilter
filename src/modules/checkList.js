@@ -52,10 +52,10 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
         _createClass(CheckList, {
             onChange: {
 
-                // TODO: add _OnSlcChange event here
+                // TODO: move event here
 
                 value: function onChange(evt) {
-                    this.tf.Evt._OnSlcChange(evt);
+                    this.tf.Evt.onSlcChange(evt);
                 }
             },
             optionClick: {

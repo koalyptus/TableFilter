@@ -528,26 +528,6 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
             this.prfxCookiePageNb = "tf_pgnb_";
             //page length cookie
             this.prfxCookiePageLen = "tf_pglen_";
-            //div containing grid elements if grid_layout true
-            this.prfxMainTblCont = "gridCont_";
-            //div containing table if grid_layout true
-            this.prfxTblCont = "tblCont_";
-            //div containing headers table if grid_layout true
-            this.prfxHeadTblCont = "tblHeadCont_";
-            //headers' table if grid_layout true
-            this.prfxHeadTbl = "tblHead_";
-            //id of td containing the filter if grid_layout true
-            this.prfxGridFltTd = "_td_";
-            //id of th containing column header if grid_layout true
-            this.prfxGridTh = "tblHeadTh_";
-            //id prefix for help elements
-            this.prfxHelpSpan = "helpSpan_";
-            //id prefix for help elements
-            this.prfxHelpDiv = "helpDiv_";
-            //id prefix for pop-up filter span
-            this.prfxPopUpSpan = "popUpSpan_";
-            //id prefix for pop-up div containing filter
-            this.prfxPopUpDiv = "popUpDiv_";
 
             /*** cookies ***/
             this.hasStoredValues = false;
@@ -1914,16 +1894,12 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                     var rowIndex = row.rowIndex;
 
                                     if (rowIndex === validIndexes[validIdxLen - 1] && paging.currentPageNb !== paging.nbPages) {
-                                        console.log("last");
                                         paging.setPage("last");
                                     } else if (rowIndex == validIndexes[0] && paging.currentPageNb !== 1) {
-                                        console.log("first");
                                         paging.setPage("first");
                                     } else if (rowIndex > validIndexes[pagingEndRow - 1] && rowIndex < validIndexes[validIdxLen - 1]) {
-                                        console.log("next");
                                         paging.setPage("next");
                                     } else if (rowIndex < validIndexes[paging.startPagingRow] && rowIndex > validIndexes[0]) {
-                                        console.log("previous");
                                         paging.setPage("previous");
                                     }
                                 }

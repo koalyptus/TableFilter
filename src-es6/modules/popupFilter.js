@@ -49,6 +49,11 @@ export class PopupFilter{
         this.popUpFltElms = this.popUpFltElmCache || [];
         this.popUpFltAdjustToContainer = true;
 
+        //id prefix for pop-up filter span
+        this.prfxPopUpSpan = 'popUpSpan_';
+        //id prefix for pop-up div containing filter
+        this.prfxPopUpDiv = 'popUpDiv_';
+
         this.tf = tf;
     }
 
@@ -85,7 +90,7 @@ export class PopupFilter{
             }
             var popUpSpan = Dom.create(
                 'span',
-                ['id', tf.prfxPopUpSpan+tf.id+'_'+i],
+                ['id', this.prfxPopUpSpan+tf.id+'_'+i],
                 ['ci', i]
             );
             popUpSpan.innerHTML = this.popUpImgFltHtml;
@@ -114,7 +119,7 @@ export class PopupFilter{
     build(colIndex, div){
         var tf = this.tf;
         var popUpDiv = !div ?
-            Dom.create('div', ['id', tf.prfxPopUpDiv+tf.id+'_'+colIndex]) :
+            Dom.create('div', ['id', this.prfxPopUpDiv+tf.id+'_'+colIndex]) :
             div;
         popUpDiv.className = this.popUpDivCssClass;
         tf.externalFltTgtIds.push(popUpDiv.id);
@@ -140,7 +145,10 @@ export class PopupFilter{
             }
             popUpFltElm.style.display = 'block';
             if(tf['col'+colIndex] === tf.fltTypeInp){
-                tf.GetFilterElement(colIndex).focus();
+                var flt = tf.GetFilterElement(colIndex);
+                if(flt){
+                    flt.focus();
+                }
             }
             if(this.onAfterPopUpOpen){
                 this.onAfterPopUpOpen.call(

@@ -46,6 +46,11 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
             this.helpInstrContEl = null;
             this.helpInstrDefaultHtml = "<div class=\"helpFooter\"><h4>HTML Table " + "Filter Generator v. " + tf.version + "</h4>" + "<a href=\"http://tablefilter.free.fr\" target=\"_blank\">" + "http://tablefilter.free.fr</a><br/>" + "<span>&copy;2009-" + tf.year + " Max Guglielmi.</span>" + "<div align=\"center\" style=\"margin-top:8px;\">" + "<a href=\"javascript:void(0);\">Close</a></div></div>";
 
+            //id prefix for help elements
+            this.prfxHelpSpan = "helpSpan_";
+            //id prefix for help elements
+            this.prfxHelpDiv = "helpDiv_";
+
             this.tf = tf;
         }
 
@@ -60,8 +65,8 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
 
                     var tf = this.tf;
 
-                    var helpspan = Dom.create("span", ["id", tf.prfxHelpSpan + tf.id]);
-                    var helpdiv = Dom.create("div", ["id", tf.prfxHelpDiv + tf.id]);
+                    var helpspan = Dom.create("span", ["id", this.prfxHelpSpan + tf.id]);
+                    var helpdiv = Dom.create("div", ["id", this.prfxHelpDiv + tf.id]);
 
                     //help button is added to defined element
                     if (!this.helpInstrTgtId) {

@@ -54,6 +54,11 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
             this.popUpFltElms = this.popUpFltElmCache || [];
             this.popUpFltAdjustToContainer = true;
 
+            //id prefix for pop-up filter span
+            this.prfxPopUpSpan = "popUpSpan_";
+            //id prefix for pop-up div containing filter
+            this.prfxPopUpDiv = "popUpDiv_";
+
             this.tf = tf;
         }
 
@@ -95,7 +100,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                         if (tf["col" + i] === tf.fltTypeNone) {
                             continue;
                         }
-                        var popUpSpan = Dom.create("span", ["id", tf.prfxPopUpSpan + tf.id + "_" + i], ["ci", i]);
+                        var popUpSpan = Dom.create("span", ["id", this.prfxPopUpSpan + tf.id + "_" + i], ["ci", i]);
                         popUpSpan.innerHTML = this.popUpImgFltHtml;
                         var header = tf.getHeaderElement(i);
                         header.appendChild(popUpSpan);
@@ -129,7 +134,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
 
                 value: function build(colIndex, div) {
                     var tf = this.tf;
-                    var popUpDiv = !div ? Dom.create("div", ["id", tf.prfxPopUpDiv + tf.id + "_" + colIndex]) : div;
+                    var popUpDiv = !div ? Dom.create("div", ["id", this.prfxPopUpDiv + tf.id + "_" + colIndex]) : div;
                     popUpDiv.className = this.popUpDivCssClass;
                     tf.externalFltTgtIds.push(popUpDiv.id);
                     var header = tf.getHeaderElement(colIndex);
@@ -157,7 +162,10 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                         }
                         popUpFltElm.style.display = "block";
                         if (tf["col" + colIndex] === tf.fltTypeInp) {
-                            tf.GetFilterElement(colIndex).focus();
+                            var flt = tf.GetFilterElement(colIndex);
+                            if (flt) {
+                                flt.focus();
+                            }
                         }
                         if (this.onAfterPopUpOpen) {
                             this.onAfterPopUpOpen.call(null, this, this.popUpFltElms[colIndex], colIndex);

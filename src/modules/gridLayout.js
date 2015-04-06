@@ -52,6 +52,19 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
 
             this.gridColElms = [];
 
+            //div containing grid elements if grid_layout true
+            this.prfxMainTblCont = "gridCont_";
+            //div containing table if grid_layout true
+            this.prfxTblCont = "tblCont_";
+            //div containing headers table if grid_layout true
+            this.prfxHeadTblCont = "tblHeadCont_";
+            //headers' table if grid_layout true
+            this.prfxHeadTbl = "tblHead_";
+            //id of td containing the filter if grid_layout true
+            this.prfxGridFltTd = "_td_";
+            //id of th containing column header if grid_layout true
+            this.prfxGridTh = "tblHeadTh_";
+
             this.tf = tf;
         }
 
@@ -102,7 +115,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                     }
 
                     //Main container: it will contain all the elements
-                    this.tblMainCont = Dom.create("div", ["id", tf.prfxMainTblCont + tf.id]);
+                    this.tblMainCont = Dom.create("div", ["id", this.prfxMainTblCont + tf.id]);
                     this.tblMainCont.className = this.gridMainContCssClass;
                     if (this.gridWidth) {
                         this.tblMainCont.style.width = this.gridWidth;
@@ -110,7 +123,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                     tbl.parentNode.insertBefore(this.tblMainCont, tbl);
 
                     //Table container: div wrapping content table
-                    this.tblCont = Dom.create("div", ["id", tf.prfxTblCont + tf.id]);
+                    this.tblCont = Dom.create("div", ["id", this.prfxTblCont + tf.id]);
                     this.tblCont.className = this.gridContCssClass;
                     if (this.gridWidth) {
                         this.tblCont.style.width = this.gridWidth;
@@ -131,14 +144,14 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                     this.tblMainCont.appendChild(d);
 
                     //Headers table container: div wrapping headers table
-                    this.headTblCont = Dom.create("div", ["id", tf.prfxHeadTblCont + tf.id]);
+                    this.headTblCont = Dom.create("div", ["id", this.prfxHeadTblCont + tf.id]);
                     this.headTblCont.className = this.gridHeadContCssClass;
                     if (this.gridWidth) {
                         this.headTblCont.style.width = this.gridWidth;
                     }
 
                     //Headers table
-                    this.headTbl = Dom.create("table", ["id", tf.prfxHeadTbl + tf.id]);
+                    this.headTbl = Dom.create("table", ["id", this.prfxHeadTbl + tf.id]);
                     var tH = Dom.create("tHead"); //IE<7 needs it
 
                     //1st row should be headers row, ids are added if not set
@@ -149,7 +162,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                         var c = hRow.cells[n];
                         var thId = c.getAttribute("id");
                         if (!thId || thId === "") {
-                            thId = tf.prfxGridTh + n + "_" + tf.id;
+                            thId = this.prfxGridTh + n + "_" + tf.id;
                             c.setAttribute("id", thId);
                         }
                         sortTriggers.push(thId);
@@ -160,7 +173,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                     if (this.gridEnableFilters && tf.fltGrid) {
                         tf.externalFltTgtIds = [];
                         for (var j = 0; j < tf.nbCells; j++) {
-                            var fltTdId = tf.prfxFlt + j + tf.prfxGridFltTd + tf.id;
+                            var fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;
                             var cl = Dom.create(tf.fltCellTag, ["id", fltTdId]);
                             filtersRow.appendChild(cl);
                             tf.externalFltTgtIds[j] = fltTdId;

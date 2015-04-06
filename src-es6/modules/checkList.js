@@ -43,9 +43,9 @@ export class CheckList{
         this.tf = tf;
     }
 
-    // TODO: add _OnSlcChange event here
+    // TODO: move event here
     onChange(evt){
-        this.tf.Evt._OnSlcChange(evt);
+        this.tf.Evt.onSlcChange(evt);
     }
 
     optionClick(evt){
