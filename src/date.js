@@ -1,9 +1,9 @@
 define(["exports"], function (exports) {
-    "use strict";
-
     /**
      * Date utilities
      */
+
+    "use strict";
 
     var DateHelper = {
         isValid: function isValid(dateStr, format) {

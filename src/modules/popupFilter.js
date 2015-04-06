@@ -1,10 +1,13 @@
 define(["exports", "../types", "../dom", "../event", "../helpers"], function (exports, _types, _dom, _event, _helpers) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Types = _types.Types;
     var Dom = _dom.Dom;
     var Event = _event.Event;
@@ -54,7 +57,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
             this.tf = tf;
         }
 
-        _prototypeProperties(PopupFilter, null, {
+        _createClass(PopupFilter, {
             onClick: {
                 value: function onClick(e) {
                     var evt = e || global.event,
@@ -76,9 +79,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                     }
                     Event.cancel(evt);
                     Event.stop(evt);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             init: {
 
@@ -104,9 +105,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                         this.popUpFltSpans[i] = popUpSpan;
                         this.popUpFltImgs[i] = popUpSpan.firstChild;
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             buildAll: {
 
@@ -118,9 +117,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                     for (var i = 0; i < this.popUpFltElmCache.length; i++) {
                         this.build(i, this.popUpFltElmCache[i]);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             build: {
 
@@ -141,9 +138,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                         Event.stop(evt);
                     });
                     this.popUpFltElms[colIndex] = popUpDiv;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             toggle: {
 
@@ -176,9 +171,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                             this.onAfterPopUpClose.call(null, this, this.popUpFltElms[colIndex], colIndex);
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             closeAll: {
 
@@ -197,9 +190,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                             popUpFltElm.style.display = "none";
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             buildIcons: {
 
@@ -211,9 +202,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                     for (var i = 0; i < this.popUpFltImgs.length; i++) {
                         this.buildIcon(i, false);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             buildIcon: {
 
@@ -228,9 +217,7 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                     if (this.popUpFltImgs[colIndex]) {
                         this.popUpFltImgs[colIndex].src = active ? this.popUpImgFltActive : this.popUpImgFlt;
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             destroy: {
 
@@ -261,17 +248,11 @@ define(["exports", "../types", "../dom", "../event", "../helpers"], function (ex
                     this.popUpFltElms = [];
                     this.popUpFltSpans = [];
                     this.popUpFltImgs = [];
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return PopupFilter;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=popupFilter.js.map

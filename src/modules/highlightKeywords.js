@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var Str = _string.Str;
 
@@ -26,7 +29,7 @@ define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
             this.tf = tf;
         }
 
-        _prototypeProperties(HighlightKeyword, null, {
+        _createClass(HighlightKeyword, {
             highlight: {
 
                 /**
@@ -71,9 +74,7 @@ define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
                             }
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             unhighlight: {
 
@@ -111,9 +112,7 @@ define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
                     for (var k = 0; k < arrRemove.length; k++) {
                         highlightedNodes.splice(arrRemove[k], 1);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             unhighlightAll: {
 
@@ -129,17 +128,11 @@ define(["exports", "../dom", "../string"], function (exports, _dom, _string) {
                         this.unhighlight(this.tf.searchArgs[y], this.highlightCssClass);
                     }
                     this.highlightedNodes = [];
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return HighlightKeyword;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=highlightKeywords.js.map

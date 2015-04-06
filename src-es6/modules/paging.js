@@ -439,7 +439,7 @@ export class Paging{
      */
     setPage(cmd){
         var tf = this.tf;
-        if(!tf.hasGrid() || !this.paging){
+        if(!tf.hasGrid() || !tf.paging){
             return;
         }
         var btnEvt = this.evt,

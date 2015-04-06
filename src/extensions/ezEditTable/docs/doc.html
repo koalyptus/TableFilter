@@ -1,0 +1,2049 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ezEditTable, enhance HTML tables easily, advanced inline editing, selection and keyboard navigation - script by Max Guglielmi</title>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="description" content="ezEditTable is an open source javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation" />
+	<meta name="keywords" content="html table editing, html table inline cell editing, inline cell editor, row selection, script, javascript, max guglielmi" />
+	<meta name="robots" content="index,follow" />
+	<meta name="author" content="Max Guglielmi" />
+	<style type="text/css" media="screen, projection">
+		@import "http://edittable.free.fr/includes/common.css";
+	</style>
+	
+	<script type="text/javascript" src="../ezEditTable.js"></script>
+	<link href="../ezEditTable.css" rel="stylesheet" type="text/css">
+	
+	<style type="text/css" media="screen">
+		div#navmenu li a#lnk03{ 
+			color:#333; font-weight:bold;
+			border-top:2px solid #ff9900;
+			background:#fff;
+		}
+	</style>
+
+</head>
+<body>
+
+<div id="container">
+
+	<div id="banner">
+		 	
+	<div id="navmenu">
+		<ul>
+			<li><a id="lnk01" href="index.html">Home</a></li>
+			<li><a id="lnk02" href="samples.html">Samples</a></li>
+			<li><a id="lnk03" href="doc.html">Documentation</a></li>
+		</ul>
+	</div>
+	</div>
+	
+	<!-- BEGIN CONTENT -->
+
+	<div id="content">
+		
+		<div id="divsubmenu">
+			<ul class="submenu">
+				<li class="dir">
+					<a id="co" href="./doc.html">Configuration Object <small>&#9660;</small></a>
+					<ul>
+						<li><a href="./doc.html#ez_common">General</a></li>
+						<li><a href="./doc.html#ez_selection">Selection</a></li>
+						<li><a href="./doc.html#ez_sel_events">Selection callback events</a></li>
+						<li><a href="./doc.html#ez_editable">Editable</a></li>
+						<li><a href="./doc.html#ez_cell_editors">Cell editors</a></li>
+						<li><a href="./doc.html#ez_editable">Command buttons</a></li>
+						<li><a href="./doc.html#ez_uploader">Uploader editor</a></li>
+						<li><a href="./doc.html#ez_editable_events">Editable callback events</a></li>
+						<li><a href="./doc.html#ez_actions">Actions</a></li>
+						<li><a href="./doc.html#ez_actions_events">Actions callback events</a></li>
+						<li><a href="./doc.html#ez_msg">Messages</a></li>
+					</ul>
+				</li>
+				<li class="dir">
+					<a id="cl" href="./doc_class.html">TF Class<small>&#9660;</small></a>
+					<ul>
+
+						<li><a href="./doc_class.html#ez_constructor">Constructor</a></li>
+						<li><a href="./doc_methods.html#ez_methods">General public methods</a></li>
+						<li><a href="./doc_methods.html#ez_selection_methods">Selection public methods</a></li>
+						<li><a href="./doc_methods.html#ez_editable_methods">Editable public methods</a></li>
+						<li><a href="./doc_properties.html#ez_properties">General public properties</a></li>
+						<li><a href="./doc_properties.html#ez_selection_properties">Selection public properties</a></li>
+
+						<li><a href="./doc_properties.html#ez_editable_properties">Editable public properties</a></li>
+					</ul>
+				</li>
+				<li><a id="uf" href="./doc_utilities.html">Utility Functions</a></li>
+			</ul>
+		</div>
+		
+		<h1 class="marginTop30">Documentation</h1>
+
+		
+		
+    <h2>Configuration Object</h2>
+		
+		
+    <p>You will find here all the properties of the configuration object ( var 
+      etConfig = { property: value }) needed to configure the EditTable object:</p>
+		  
+		<!--[if lt IE 8]>
+            <p>
+               <a href="#ez_common">General</a> | <a href="#ez_selection">Selection</a> | 
+			   <a href="#ez_sel_events">Selection callback events</a> | <a href="#ez_editable">Editable</a> | 
+			   <a href="#ez_cell_editors">Cell editors</a> | <a href="#ez_command_btns">Command buttons</a> | 
+			   <a href="#ez_editable_events">Editable and cell editors callback events and delegates</a> | 
+			   <a href="#ez_actions">Actions</a> | <a href="#ez_actions_events">Actions callback events</a> | 
+			   <a href="#ez_msg">Messages</a> 
+            </p>
+        <![endif]-->
+
+        <a name="ez_common" id="ez_common"></a> 
+        
+    <h3>General</h3>
+    <table id="tblCommon" cellspacing="0" class="ezEditableTable">
+      <thead>
+
+        <tr> 
+          <th>Property</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Remarks</th>
+          <th>Example</th>
+        </tr>
+
+      </thead>
+      <tbody>
+        <tr> 
+          <th>selection</th>
+          <td>boolean</td>
+          <td>enables / disables selection model (default - true) </td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { selection: false }</code></td>
+
+        </tr>
+        <tr> 
+          <th>editable</th>
+          <td>boolean</td>
+          <td>enables / disables inline cell editing(default - false) </td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { editable: true }</code></td>
+
+        </tr>
+        <tr> 
+          <th>key_navigation</th>
+          <td>boolean</td>
+          <td>enables / disables keyboard navigation (default - true)</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { key_navigation: false }</code></td>
+
+        </tr>
+        <tr> 
+          <th>table_css</th>
+          <td>string</td>
+          <td>defines the css class of the table element (default - 'ezEditableTable')</td>
+          <td>Check out the ezEditTable.css stylesheet and edit the css classes 
+            for your project's needs</td>
+          <td> <code>var etConfig = { table_css: "myclass" }</code></td>
+
+        </tr>
+        <tr> 
+          <th>unselectable_css</th>
+          <td> string</td>
+          <td> defines the css class that makes the table text unselectable (default 
+            - 'ezUnselectable')</td>
+          <td>Older versions of IE do not support this css class, as an alternative 
+            use unselectable=&quot;on&quot; to expect same result</td>
+
+          <td> <code>var etConfig = { unselectable_css: "myclass" }</code></td>
+        </tr>
+        <tr> 
+          <th>activity_indicator_css</th>
+          <td> string</td>
+          <td> defines the css class to be applied to the table in order to indicate 
+            server activity </td>
+
+          <td>&nbsp;</td>
+          <td> <code>var etConfig = { activity_indicator_css: "myclass" }</code></td>
+        </tr>
+        <tr> 
+          <th>on_server_activity_start</th>
+          <td> function</td>
+          <td> callback event function called before server activity starts (default: 
+            null) </td>
+
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>row is the current row to be processed server-side</li>
+            </ul></td>
+          <td> <code>var etConfig = { on_server_activity_start: function(o, row){ 
+            alert('Row data to be processed: ' + o.Selection.GetRowValues(row)); } }</code></td>
+
+        </tr>
+        <tr> 
+          <th>on_server_activity_stop</th>
+          <td> function </td>
+          <td> callback event function called when server activity stopped (default: 
+            null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+
+
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>row is the current row to be processed server-side</li>
+            </ul></td>
+          <td><code>var etConfig = { on_server_activity_stop: function(o, row){ 
+            alert('Row data processed server-side: ' + o.Selection.GetRowValues(row)); 
+            } }</code></td>
+        </tr>
+        <tr> 
+          <th>base_path</th>
+
+          <td>string</td>
+          <td> defines the path to the script's directory (default: 'ezEditTable/')</td>
+          <td>This is used for the command editor icons' path</td>
+          <td> <code>var etConfig = { base_path: "myDir/" }</code></td>
+        </tr>
+      </tbody>
+
+    </table>
+		<a href="javascript:window.scroll(0,0);">Top of page</a> 
+        <hr/>
+		
+        <a name="ez_selection" id="ez_selection"></a> 
+        
+    <h3>Selection</h3>
+    <table id="tblSelection" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Property</th>
+
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr> 
+          <th>selection_model</th>
+          <td>string</td>
+          <td> defines the selection model: &quot;single&quot; or &quot;multiple&quot; 
+            (default: 'single') </td>
+
+          <td>2 possible values: 'single' or 'multiple'</td>
+          <td><code>var etConfig = { selection_model: 'multiple' }</code></td>
+        </tr>
+        <tr> 
+          <th>default_selection</th>
+          <td>string</td>
+          <td>defines the selection type (default: 'row')</td>
+
+          <td>3 possible values: 'row', 'cell' or 'both'</td>
+          <td><code>var etConfig = { default_selection: 'both' }</code></td>
+        </tr>
+        <tr> 
+          <th>key_selection</th>
+          <td>boolean</td>
+          <td>enables / disable multiple selection by using Ctrl and Shift keys 
+            (default: true)</td>
+
+          <td>select multiple rows by holding Ctrl or Shift key down, only if 
+            selection model is 'multiple'</td>
+          <td><code>var etConfig = { key_selection: false }</code></td>
+        </tr>
+        <tr> 
+          <th>select_row_at_start</th>
+          <td>boolean</td>
+          <td>first row is selected at start if set true (default: false)</td>
+
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { select_row_at_start: true }</code></td>
+        </tr>
+        <tr> 
+          <th>row_index_at_start</th>
+          <td>number</td>
+          <td>defines which row has to be selected at start (default: this.startRow)</td>
+
+          <td>this.startRow = numeric parameter passed to constructor:<br>
+            var et = new EditTable('myTableId', <strong>3</strong>, etConfig);</td>
+          <td><code>var etConfig = { row_index_at_start: 3 }</code></td>
+        </tr>
+        <tr> 
+          <th>scroll_into_view</th>
+
+          <td>boolean</td>
+          <td>If set true selected row scrolls into view; useful when row is selected 
+            by using keyboard (default: false)</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { scroll_into_view: true }</code></td>
+        </tr>
+        <tr> 
+          <th>active_row_css</th>
+
+          <td>string</td>
+          <td>defines css class for active row (default: 'ezActiveRow')</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { active_row_css: 'myClass' }</code></td>
+        </tr>
+        <tr class="newBg"> 
+          <th>selected_row_css</th>
+
+          <td>string</td>
+          <td>defines css class for selected rows (default: 'ezSelectedRow')</td>
+          <td><p>only if 'multiple' selection model is enabled</p>
+            </td>
+          <td><code>var etConfig = { selected_row_css: 'myClass' }</code></td>
+        </tr>
+        <tr> 
+          <th>active_cell_css</th>
+
+          <td>string</td>
+          <td> defines css class for active cell (default: 'ezActiveCell')</td>
+          <td>only if 'cell' or 'both' selection type is enabled</td>
+          <td><code>var etConfig = { active_cell_css: 'myClass' };</code></td>
+        </tr>
+        <tr> 
+          <th>nb_rows_per_page</th>
+
+          <td>number</td>
+          <td> defines number of rows to jump when PgDown or PgUp keys are pressed 
+            (default: 10) </td>
+          <td><p>specify a huge number to jump straight to 1st or last row (1000)</p>
+            </td>
+          <td><code>var etConfig = { nb_rows_per_page: 1000 }</code></td>
+        </tr>
+
+      </tbody>
+    </table>
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+    <hr/>
+	
+	<a name="ez_sel_events" id="ez_sel_events"></a>         
+    <h3>Selection callback events</h3>
+    <table id="tblSelEvents" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th>Property</th>
+
+          <th>Type</th>
+          <th>Description</th>
+          <th>Remarks</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr> 
+          <th>on_selection_initialized</th>
+          <td>function</td>
+          <td>callback event function called when Selection object is initialised 
+            (default: null) </td>
+          <td><p>1 parameter is passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+
+            </ul></td>
+          <td><code>var etConfig = { on_selection_initialized: function(o){ alert(o.id+' 
+            Selection object is initialised!'); } }</code></td>
+        </tr>
+        <tr> 
+          <th>on_before_selected_row</th>
+          <td>function</td>
+          <td>callback event function called before a row is selected (default: 
+            null) )</td>
+
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>row is the current row to be selected</li>
+            </ul></td>
+          <td><code>var etConfig = { on_before_selected_row: function(o, row){ 
+            alert('Row index: ' + row.rowIndex); } }</code></td>
+        </tr>
+
+        <tr> 
+          <th>on_after_selected_row</th>
+          <td>function</td>
+          <td>callback event function called after a row is selected (default: 
+            null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+
+              <li>row is the current selected row</li>
+            </ul></td>
+          <td><code>var etConfig = { on_after_selected_row: function(o, row){ 
+            alert('Row index: ' + row.rowIndex); } }</code></td>
+        </tr>
+        <tr> 
+          <th>on_before_selected_cell</th>
+          <td>function</td>
+
+          <td>callback event function called before a cell is selected (default: 
+            null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>cell is the current cell to be selected</li>
+            </ul></td>
+          <td><code>var etConfig = { on_before_selected_cell: function(o, cell){ 
+            alert('Cell index: ' + cell.cellIndex); } }</code></td>
+
+        </tr>
+        <tr> 
+          <th>on_after_selected_cell</th>
+          <td>function</td>
+          <td>callback event function called (default: null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+
+              <li>o is the current EditTable object</li>
+              <li>cell is the current selected cell</li>
+            </ul></td>
+          <td><code>var etConfig = { on_after_selected_cell: function(o, cell){ 
+            alert('Cell index: ' + cell.cellIndex); } }</code></td>
+        </tr>
+        <tr> 
+          <th>on_before_deselected_row</th>
+
+          <td>function</td>
+          <td>callback event function called before a row is deselected (default: 
+            null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>row is the current row to be deselected</li>
+
+            </ul></td>
+          <td><code>var etConfig = { on_before_deselected_row: function(o, row){ 
+            alert('Row index: ' + row.rowIndex); } }</code></td>
+        </tr>
+        <tr> 
+          <th>on_after_deselected_row</th>
+          <td>function</td>
+          <td>callback event function called after a row is deselected (default: 
+            null) </td>
+
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>row is the current deselected row</li>
+            </ul></td>
+          <td><code> var etConfig = { on_after_deselected_row: function(o, row){ 
+            alert('Row index: ' + row.rowIndex); } }</code></td>
+
+        </tr>
+        <tr class="newBg"> 
+          <th>on_before_deselected_cell</th>
+          <td>function</td>
+          <td>callback event function called before a cell is deselected (default: 
+            null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+
+              <li>o is the current EditTable object</li>
+              <li>cell is the current cell to be deselected</li>
+            </ul></td>
+          <td><code> var etConfig = { on_before_deselected_cell: function(o, cell){ 
+            alert('Cell index: ' + cell.cellIndex); } }</code></td>
+        </tr>
+        <tr> 
+          <th>on_after_deselected_cell</th>
+
+          <td>function</td>
+          <td>callback event function called after a cell is deselected (default: 
+            null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>cell is the current deselected cell</li>
+
+            </ul></td>
+          <td><code>var etConfig = { on_after_deselected_cell: function(o, cell){ 
+            alert('Cell index: ' + cell.cellIndex); } }</code></td>
+        </tr>
+		<tr> 
+          <th>on_validate_row</th>
+          <td>function</td>
+          <td>callback event function called after a row is validated by pressing enter key or on double-click (default: 
+            null) </td>
+
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>row is the current validated row</li>
+            </ul>
+			<p>Note the <b>editable</b> property needs to be set to <b>false</b></p>
+
+		  </td>
+          <td><code>var etConfig = { on_validate_row: function(o, row){ 
+            alert('Row index: ' + row.rowIndex); } }</code></td>
+        </tr>
+		<tr> 
+          <th>on_validate_cell</th>
+          <td>function</td>
+          <td>callback event function called after a cell is validated by pressing enter key or on double-click (default: 
+            null) </td>
+
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>cell is the current validated cell</li>
+            </ul>
+			<p>Note the <b>editable</b> property needs to be set to <b>false</b></p>
+
+		  </td>
+          <td><code>var etConfig = { on_validate_cell: function(o, cell){ 
+            alert('Cell index: ' + cell.cellIndex); } }</code></td>
+        </tr>
+      </tbody>
+    </table>
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+    <hr/>
+	
+   <a name="ez_editable" id="ez_editable"></a>
+
+    <h3>Editable</h3>
+        
+    <table id="tblEditable" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th width="193" >Property</th>
+          <th width="52" >Type</th>
+          <th width="239" >Description</th>
+
+          <th width="154" >Remarks</th>
+          <th width="185" >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <th>editor_model</th>
+          <td>string</td>
+
+          <td>defines the editor model (default: 'cell')</td>
+          <td>2 possible values: 'cell' or 'row'</td>
+          <td><code>var etConfig = { editor_model: 'row' }</code></td>
+        </tr>
+        <tr> 
+          <th height="178">open_editor_action</th>
+          <td>string</td>
+
+          <td>defines which mouse action opens the inline editing feature (default: 
+            'dblclick') </td>
+          <td>2 possible values: 'dblclick', 'click'</td>
+          <td><code>var etConfig = { open_editor_action: 'click' }</code></td>
+        </tr>
+        <tr> 
+          <th>ajax <sup>new</sup></th>
+          <td>boolean</td>
+          <td>enables AJAX requests (default: true if jQuery is detected)</td>
+          <td>it is enabled if jQuery is detected and the <code>ajax</code> property is 
+          	not explicitly set <code>false</code></td>
+          <td><code>var etConfig = { editable: true, ajax: false }</code></td>
+        </tr>
+        <tr>
+          <th>cell_editors</th>
+          <td>array</td>
+          <td>array defining the editor configuration for each column (default: 
+            []) </td>
+          <td>the number of editors must be equal to the number of columns. Refer 
+            to <a href="#ez_cell_editors">Cell editors properties</a> for details 
+            about editors' configuration</td>
+          <td><p><code>var etConfig = { cell_editors: [<br>
+              { type: 'select' },<br>
+              { type: 'textarea' },<br>
+              { type: 'input' },<br>
+			  { type: 'uploader' },<br>
+              { type: 'none' }, <br>
+              { type: 'command' }<br>
+              ] }</code></p></td>
+        </tr>
+        <tr>
+          <th>input_editor_css</th>
+
+          <td>string</td>
+          <td>defines the css class for 'input' type editors (default: 'ezInputEditor')</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { input_editor_css: 'myClass' };</code></td>
+        </tr>
+        <tr>
+          <th>textarea_editor_css</th>
+
+          <td>string</td>
+          <td>defines the css class for 'textarea' type editors (default: 'ezTextAreaEditor')</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { textarea_editor_css: 'myClass' };</code></td>
+        </tr>
+        <tr>
+          <th>select_editor_css</th>
+          <td>string</td>
+          <td>defines the css class for 'input' type editors (default: 'ezSelectEditor')</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { select_editor_css: 'myClass' };</code></td>
+        </tr>
+        <tr>
+          <th>command_editor_css</th>
+
+          <td>string</td>
+          <td>css class applied to command editor buttons container (default: 
+            'ezCommandEditor')</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { command_editor_css: 'myClass' };</code></td>
+        </tr>
+        <tr>
+          <th>modified_cell_css</th>
+          <td>string</td>
+          <td>css class applied to modified cells (default: 'ezModifiedCell')</td>
+          <td>this css class shows the green small triangle in the left-upper 
+            corner of the cell</td>
+          <td><code>var etConfig = { modified_cell_css: 'myClass' };</code></td>
+        </tr>
+		<tr>
+          <th>auto_save</th>
+          <td>boolean</td>
+          <td>saves automatically pending changes upon selection change</td>
+          <td><code>editable</code> property needs to be activated (default: true if editable is on)</td>
+          <td><code>var etConfig = { auto_save: false };</code></td>
+        </tr>
+		<tr>
+          <th>auto_save_model</th>
+          <td>string</td>
+          <td>determines when modified and/or added data is saved, upon row or cell selection change (default: 'row')</td>
+          <td>2 possible values 'row' or 'cell'</td>
+          <td><code>var etConfig = { auto_save_model: 'cell' };</code></td>
+        </tr>
+		<tr>
+          <th>auto_save_type</th>
+          <td>string</td>
+          <td>defines if only insertions or updates, or both are saved automatically  (default: 'both')</td>
+          <td>3 possible values 'insert', 'update' or 'both'</td>
+          <td><code>var etConfig = { auto_save_type: 'update' };</code></td>
+        </tr>
+        <tr>
+          <th>editable_on_keystroke <sup>new</sup></th>
+          <td>boolean</td>
+          <td>makes the inline cell editor appear upon keystroke (default: false)</td>
+          <td>only if edition is enabled and <code>editorModel</code> is set to <code>'cell'</code> and
+          	<code>selectionModel</code> to <code>'single'</code></td>
+          <td><code>var etConfig = { editable: true, editable_on_keystroke: true };</code></td>
+        </tr>
+		<tr>
+          <th>new_row_prefix</th>
+          <td>string</td>
+          <td>defines the prefix for new added row ids  (default: 'tr')</td>
+          <td>prefix should match the prefix assigned to already existing rows</td>
+          <td><code>var etConfig = { new_row_prefix: 'row' };</code></td>
+        </tr>
+		<tr>
+          <th>form_submit_interval</th>
+          <td>number</td>
+          <td>defines the interval in ms separating rows data submissions (default: 50)</td>
+          <td>by default the script submits a single form for each modified row. Depending on ISPs / network
+		  	security policies, multiple submissions to same page are blocked by the server.
+			This interval can be useful to fine tune the form submissions when those server restrictions apply.</td>
+          <td><code>var etConfig = { form_submit_interval: 750 };</code></td>
+        </tr>
+        <tr>
+          <th>new_row_pos <sup>new</sup></th>
+          <td>string or number</td>
+          <td>defines the row position of a newly created row (default: 'top')</td>
+          <td>2 possible values as a string: 'top' or 'bottom', and as an integer:
+          	any number &gt;= 0 and &lt;= total number of rows. If the supplied numeric 
+          	value exceeds the total number of rows then the script fallback to default
+          	value 'top'</td>
+          <td><code>var etConfig = { new_row_pos: 'bottom' };</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+    <hr/>
+		
+    <a name="ez_cell_editors" id="ez_cell_editors"></a>     
+    <h3>Cell editors</h3>
+    <table id="tblCellEditors" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Property</th>
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <th>type</th>
+          <td>string</td>
+          <td>sets the editor type (default: 'input')</td>
+          <td>these are the editor types: 'none', 'input', 'textarea', 'select', 
+            'multiple', 'boolean', 'command', 'custom', 'uploader'</td>
+          <td><code> var etConfig = { cell_editors: [<br>
+            { type: 'select' },<br>
+            { type: 'textarea' },<br>
+            { type: 'input' },<br>
+			{ type: 'uploader' },<br>
+            { type: 'none' }, <br>
+            { type: 'command' }<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>css</th>
+          <td>string</td>
+          <td>defines a css class for the editor (default: null)</td>
+          <td>&nbsp;</td>
+          <td><code> var etConfig = { cell_editors: [<br>
+            { type: 'select', css:'myClass' },...<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>attributes</th>
+          <td>array</td>
+          <td> defines the additional attributes for the editor's DOM element 
+            (default: null)</td>
+          <td>useful for specifying the max length of characters for input and 
+            textarea types</td>
+          <td><code>var etConfig = { cell_editors: [<br>
+
+            { type: 'input', attributes:[['maxLength',5],['title','5 chars max']] 
+            },...<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>style</th>
+          <td>string</td>
+          <td>sets the inline style for the editor's DOM element (default: null)</td>
+
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'textarea', style: 'background-color:#fff;' },...<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>custom_slc_options</th>
+          <td>array</td>
+          <td>defines the options of a 'select' editor type (default: null)</td>
+          <td>this property applies only to 'select' and 'multiple' editors { 
+            type: 'multiple', custom_slc_options:['a','b','c'], sort_slc_options: 
+            'string', values_separator: ', ' },</td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'select', custom_slc_options:['a','b','c'] },...<br>
+            ]}</code></td>
+        </tr>
+		<tr> 
+          <th>custom_slc_values</th>
+          <td>array</td>
+          <td>defines the options values of a 'select' editor type (default: null)</td>
+          <td>this property applies only to 'select' and 'multiple' editors { 
+            type: 'multiple', custom_slc_options:['a','b','c'], custom_slc_values:['1','2','3'], sort_slc_options: 
+            'string', values_separator: ', ' },</td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'select', custom_slc_options:['a','b','c'], custom_slc_values:['1','2','3'] },...<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>sort_slc_options</th>
+          <td>string</td>
+          <td>sorts the custom options (default: null)</td>
+          <td><p>this property applies only to 'select' and 'multiple' editors. 
+              3 possible values:</p>
+            <ul>
+
+              <li>'string': sorts string values </li>
+              <li>'numasc': sorts numeric values in ascending manner</li>
+              <li>'numdesc': sorts numeric values in descending manner</li>
+            </ul></td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'select', custom_slc_options:['a','b','c'], sort_slc_options: 
+            'string' },...<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>values_separator</th>
+          <td>string</td>
+          <td>defines the value separator for 'multiple' type editors (default: 
+            ', ') </td>
+          <td>this property applies only to 'multiple' editors</td>
+
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'multiple', custom_slc_options:['a','b','c'], sort_slc_options: 
+            'string', values_separator: '; ' },...<br>
+            ]}</code></td>
+        </tr>
+		<tr> 
+          <th>allow_empty_value</th>
+          <td>boolean</td>
+
+          <td>defines the columns accepting empty values (default: false)</td>
+          <td></td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'input', allow_empty_value:true },...<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>target</th>
+          <td>string</td>
+          <td>defines the custom editor target element id (default: 'null')</td>
+          <td>this property applies only to 'custom' editors</td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'custom', target: 'datePick' },...<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>command_column_index</th>
+          <td>number</td>
+          <td>tells the script in which column command buttons have to be generated 
+            (default: this.nbCells-1)</td>
+          <td>this property applies only to 'command' editors. Default value is 
+            the last column of the table</td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'command', command_column_index: 4 },...<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>buttons</th>
+          <td>object</td>
+          <td><p>this literal object is the configuration object of the command 
+              buttons generated in column (default: {})</p></td>
+          <td>this property applies only to 'command' editors. Refer to <a href="#ez_command_btns">Command 
+            buttons properties</a> for details about 'command' editor buttons 
+            configuration</td>
+          <td><p><code>var etConfig = { cell_editors: [<br>
+              { type: 'command', command_column_index: 4,<br>
+              buttons:{ <br>
+              enable: ['update', 'insert', 'delete', 'submit', 'cancel'], <br>
+              'update': { title:'Edit row' },<br>
+              'insert': { title:'Add row', scrollIntoView: false },<br>
+              'delete': { title:'Delete row' },<br>
+              'submit': { text:'Save', title:'Save' },<br>
+              'cancel': { text:'Cancel', title:'Cancel' } }<br>
+              },...<br>
+
+              ]}</code></p></td>
+        </tr>
+      </tbody>
+    </table>
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+    <hr/>
+			
+	<a name="ez_command_btns" id="ez_command_btns"></a>         
+    <h3>Command buttons</h3>
+
+    <table id="tblCommandBtns" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Property</th>
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <th>enable</th>
+          <td>array</td>
+          <td>enables the command buttons to be generated (default: ['update', 
+            'insert', 'delete', 'submit', 'cancel'])</td>
+
+          <td>command buttons types: 'update', 'insert', 'delete', 'submit', 'cancel'. 
+            To disable a particular button remove it from the array</td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'command', command_column_index: 4,<br>
+            buttons:{ <br>
+            enable: ['update', 'submit', 'cancel'], <br>
+            'update': { title:'Edit row' },<br>
+
+            'submit': { text:'Save', title:'Save' },<br>
+            'cancel': { text:'Cancel', title:'Cancel' } }<br> },...<br>
+            ]}</code></td>
+        </tr>
+        <tr> 
+          <th>update</th>
+
+          <td>object</td>
+          <td>configuration object of the 'update' button (default: {})</td>
+          <td><p>Below a list of the properties for the 'update' button:</p>
+            <ul>
+              <li>'text': text of the button (default: '')</li>
+              <li>'icon': icon image html (default: '&lt;img src=&quot;'+this.basePath+'themes/icn_edit.gif&quot; 
+                alt=&quot;&quot; /&gt;')</li>
+
+              <li>'title': tooltip for the button (default: 'Edit record')</li>
+              <li>'css': additional css class (default: null)</li>
+              <li>'style': inline style element (default: null)</li>
+            </ul></td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'command', command_column_index: 4,<br>
+
+            buttons:{ <br>
+            enable: ['update'], <br>
+            'update': { text:'Edit', title:'Edit row', css:'myClass'}</code><code>},...</code><code><br>
+            ]}</code></td>
+        </tr>
+        <tr class="newBg"> 
+          <th>insert</th>
+          <td>object</td>
+          <td> configuration object of the 'insert' button (default: {})</td>
+          <td><p>Below a list of the properties for the 'insert' button:</p>
+            <ul>
+              <li>'text': text of the button (default: '')</li>
+              <li>'icon': icon image html (default: '&lt;img src=&quot;'+this.basePath+'themes/icn_edit.gif&quot; 
+                alt=&quot;&quot; /&gt;')</li>
+
+              <li>'title': tooltip for the button (default: 'Create record')</li>
+              <li>'css': additional css class (default: null)</li>
+              <li>'style': inline style element (default: null)</li>
+              <li>'scrollIntoView': scrolls into view inserted row (default: false)</li>
+            </ul></td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'command', command_column_index: 4,<br>
+            buttons:{ <br>
+            enable: ['insert'], <br>
+            'insert': { text:'Add', title:'Add row', css:'myClass'}</code><code>},...</code><code><br>
+            ]}</code></td>
+        </tr>
+
+        <tr class="newBg"> 
+          <th>delete</th>
+          <td>object</td>
+          <td>configuration object of the 'delete' button (default: {})</td>
+          <td><p>Below a list of the properties for the 'delete' button:</p>
+            <ul>
+              <li>'text': text of the button (default: '')</li>
+
+              <li>'icon': icon image html (default: '&lt;img src=&quot;'+this.basePath+'themes/icn_edit.gif&quot; 
+                alt=&quot;&quot; /&gt;')</li>
+              <li>'title': tooltip for the button (default: 'Delete record')</li>
+              <li>'css': additional css class (default: null)</li>
+              <li>'style': inline style element (default: null)</li>
+
+            </ul></td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'command', command_column_index: 4,<br>
+            buttons:{ <br>
+            enable: ['delete'], <br>
+            'delete': { text:'Remove', title:'Remove row', css:'myClass'}</code><code>},...</code><code><br>
+
+            ]}</code></td>
+        </tr>
+        <tr class="newBg"> 
+          <th>submit</th>
+          <td>object</td>
+          <td>configuration object of the 'submit' button (default: {})</td>
+          <td><p>Below a list of the properties for the 'submit' button:</p>
+            <ul>
+              <li>'text': text of the button (default: 'Submit')</li>
+              <li>'icon': icon image html (default: '&lt;img src=&quot;'+this.basePath+'themes/icn_edit.gif&quot; 
+                alt=&quot;&quot; /&gt;')</li>
+              <li>'title': tooltip for the button (default: 'Submit record')</li>
+
+              <li>'css': additional css class (default: null)</li>
+              <li>'style': inline style element (default: null)</li>
+            </ul></td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'command', command_column_index: 4,<br>
+            buttons:{ <br>
+
+            enable: ['submit'], <br>
+            'submit': { text:'Save', title:'Save row', css:'myClass'}</code><code>},...</code><code><br>
+            ]}</code></td>
+        </tr>
+        <tr class="newBg"> 
+          <th>cancel</th>
+          <td>object</td>
+
+          <td>configuration object of the 'cancel' button (default: {})</td>
+          <td><p>Below a list of the properties for the 'cancel' button:</p>
+            <ul>
+              <li>'text': text of the button (default: 'Cancel')</li>
+              <li>'icon': icon image html (default: '&lt;img src=&quot;'+this.basePath+'themes/icn_edit.gif&quot; 
+                alt=&quot;&quot; /&gt;')</li>
+
+              <li>'title': tooltip for the button (default: 'Cancel')</li>
+              <li>'css': additional css class (default: null)</li>
+              <li>'style': inline style element (default: null)</li>
+            </ul></td>
+          <td><code>var etConfig = { cell_editors: [<br>
+            { type: 'command', command_column_index: 4,<br>
+
+            buttons:{ <br>
+            enable: ['cancel'], <br>
+            'cancel': { css:'myClass'}</code><code>},...</code><code><br>
+            ]}</code></td>
+        </tr>
+      </tbody>
+
+    </table>
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+    <hr/>
+
+	<a name="ez_uploader" id="ez_uploader"></a>         
+    <h3>Uploader editor</h3>
+    <table id="tblUploader" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Property</th>
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+	  	<tr> 
+          <th>uploader</th>
+          <td>object</td>
+          <td>defines the uploader editor settings (default: {})</td>
+          <td>&nbsp;</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { uri: 'php/uploadFile.php', path: 'images/uploads/', max_file_size: '51200', show_link: false }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>uri</th>
+          <td>string</td>
+          <td>defines the URL of the resource performing the upload operation (default: null)</td>
+          <td>&nbsp;</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { uri: 'php/uploadFile.php' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>path</th>
+          <td>string</td>
+          <td>defines the path to the uploads folder repository (default: null)</td>
+          <td>&nbsp;</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { path: 'images/uploads/' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>show_upload</th>
+          <td>boolean</td>
+          <td>shows or hides uploaded file (default: true)</td>
+          <td>&nbsp;</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { show_upload: false }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>sql_field</th>
+          <td>string</td>
+          <td>defines the name of the SQL field name storing upload filename (default: 'IMAGENAME')</td>
+          <td>optional depending on how the upload server-side operation is implemented. 
+		  	On the script's website, the name of the SQL field storing the filename is rerquired by the PHP resource. 
+			This does not mean that it is a good practice, it is just for demoing purposes.</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { sql_field: 'FILENAME' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>record_id_column_index</th>
+          <td>number</td>
+          <td>tells the script which is the index of the column containing the record id (default: null)</td>
+          <td>optional depending on how the id of a record is used in the HTML table.
+		  	If this property is defined, the script will use it in order to retrieve the
+			record id of working row. Otherwise, it will extract it from the id of the
+			working row, by default 'tr'+Id.
+		  </td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { record_id_column_index: 0 }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>show_link</th>
+          <td>boolean</td>
+          <td>Uploaded file appears as a link in the uploader box and in the cell if set true (default: true)</td>
+          <td>&nbsp;</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { show_link: false }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>link_css</th>
+          <td>string</td>
+          <td>defines the css class for the upload link (default: '')</td>
+          <td>&nbsp;</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { show_link: true, link_css: 'myClass' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>loader_image</th>
+          <td>string</td>
+          <td>defines the path of the loader image displayed during the upload operation (default: this.basePath + 'themes/img_loader.gif')</td>
+          <td>&nbsp;</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { loader_image: 'myFolder/loader.gif' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>ok_image</th>
+          <td>string</td>
+          <td>sets the path of the image used to notify users that cell contains an uploaded file (default: this.basePath + 'themes/img_loader.gif')</td>
+          <td>If <code>show_upload</code> is active and <code>show_link</code> property is set false this property applies.</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { ok_image: 'myFolder/ok.gif' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>max_file_size</th>
+          <td>number</td>
+          <td>sets the maximum file size allowed, default value is 100Kb (default: 102400)</td>
+          <td>Optional depending on the server-side implementation. This value is passed to the server in the online script's demos.</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { max_file_size: 51200 }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>valid_extensions</th>
+          <td>string</td>
+          <td>sets a list of comma separated file extensions to pass to the server logic (default: 'jpg, jpeg, gif, png')</td>
+          <td>Optional depending on the server-side implementation. This value is passed to the server in the online script's demos.</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { valid_extensions: 'doc,docx,pdf,rtf' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>css</th>
+          <td>string</td>
+          <td>defines the css class applied to the uploader container element (default: 'ezUploaderEditor')</td>
+          <td></td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { css: 'myClass' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>output_css</th>
+          <td>string</td>
+          <td>defines the css class applied to the uploader output messages container (default: 'ezUploaderEditorOutput')</td>
+          <td></td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { output_css: 'myClass' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>display_css</th>
+          <td>string</td>
+          <td>defines the css class applied to the image displayer container (default: 'ezUploaderEditorOutput')</td>
+          <td></td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { output_css: 'myClass' }
+				},... 
+			]
+</code></td>
+        </tr>
+		<tr> 
+          <th>javascript_code_success</th>
+          <td>string</td>
+          <td>defines javascript code to be injected by the server after a successfull upload operation 
+		  (default: '&lt;script&gt;window.parent["{1}"].SetUploadSuccess(true); window.parent["{1}"].SetUploadName("{0}");' +
+			'window.parent["{1}"].ShowUpload();&lt;/script&gt;')</td>
+          <td>Optional depending on server-side implementation.	This value is passed to the server in the online script's demos.</td>
+          <td><code>...cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { javascript_code_success: '&lt;script&gt;alert('Upload name: {0}');&lt;/script&gt;' }
+				},... 
+			]
+</code></td>
+        </tr>	
+	  </tbody>
+	</table>
+
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+    <hr/>
+		
+    <a name="ez_editable_events" id="ez_editable_events"></a> 
+    <h3>Editable and cell editors callback events and delegates</h3>
+        
+    <table id="tblEditEvents" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Property</th>
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr> 
+          <th>on_editable_initialized</th>
+          <td>function</td>
+          <td>callback event function called when Editable object is initialised 
+            (default: null)</td>
+          <td><p>1 parameter is passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+
+            </ul></td>
+          <td><code> var etConfig = { on_editable_initialized: function(o){ alert(o.id+ 
+            ' Editable object is initialised!'); } }</code></td>
+        </tr>
+        <tr> 
+          <th>on_before_open_editor</th>
+          <td>function</td>
+          <td>callback event function called before a cell editor is opened 
+              (default: null)
+            </td>
+
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>cell is the current cell</li>
+              <li>editor is the current opened editor</li>
+            </ul></td>
+          <td><code> var etConfig = { on_before_open_editor: function(o, cell, 
+            editor){ cell.style.backgroundColor = 'pink'; } }</code></td>
+
+        </tr>
+        <tr> 
+          <th>on_after_open_editor</th>
+          <td>function</td>
+          <td> callback event function called after a cell editor is opened (default: 
+            null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+
+              <li>o is the current EditTable object</li>
+              <li>cell is the current cell</li>
+              <li>editor is the current opened editor</li>
+            </ul></td>
+          <td><code>var etConfig = { on_after_open_editor: function(o, cell, editor){ 
+            cell.style.backgroundColor = 'transparent'; } }</code></td>
+        </tr>
+        <tr>
+
+          <th>on_before_close_editor</th>
+          <td>function</td>
+          <td>callback event function called before a cell editor is closed (default: 
+            null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+
+              <li>cell is the current cell</li>
+              <li>editor is the current opened editor</li>
+            </ul></td>
+          <td><code>var etConfig = { on_before_close_editor: function(o, cell, 
+            editor){ cell.style.backgroundColor = 'pink'; } }</code></td>
+        </tr>
+        <tr>
+          <th>on_after_close_editor</th>
+
+          <td>function</td>
+          <td>callback event function called after a cell editor is closed (default: 
+            null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>cell is the current cell</li>
+
+              <li>editor is the current opened editor</li>
+            </ul></td>
+          <td><code>var etConfig = { on_after_close_editor: function(o, cell, 
+            editor){ cell.style.backgroundColor = 'transparent'; } }</code></td>
+        </tr>
+        <tr>
+          <th>set_custom_editor_value</th>
+          <td>function</td>
+
+          <td>delegate function called to set 'custom' editor value (default: 
+            null)</td>
+          <td><p>4 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>editor is the current opened editor</li>
+              <li>colIndex is the column index</li>
+
+              <li>val is the value to set in the custom editor</li>
+            </ul></td>
+          <td><code>var etConfig = { set_custom_editor_value: function(o, editor, 
+            colIndex, val){ alert('Value to set in custom editor:' + val); } }</code></td>
+        </tr>
+        <tr>
+          <th>get_custom_editor_value</th>
+          <td>function</td>
+
+          <td>delegate function called to get 'custom' editor value (default: 
+            null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>editor is the current opened editor</li>
+              <li>colIndex is the column index</li>
+
+            </ul></td>
+          <td><code>var etConfig = { get_custom_editor_value: function(o, editor, 
+            colIndex){ alert('Call function to retrieve custom editor value for 
+            column '+colIndex); } }</code></td>
+        </tr>
+        <tr>
+          <th>set_cell_modified_value</th>
+          <td>function</td>
+          <td>delegate function called to write modified value in cell (default: 
+            null)</td>
+
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>cell is the current cell</li>
+              <li>val is the value to write in the cell</li>
+            </ul></td>
+          <td><code>var etConfig = { set_cell_modified_value: function(o, cell, 
+            val){ alert('This value has to be written in the cell: ' + val); } 
+            }</code></td>
+
+        </tr>
+        <tr>
+          <th>validate_modified_value</th>
+          <td>function</td>
+          <td>delegate function called to validate modified value to be written 
+            in cell (default: null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+
+              <li>o is the current EditTable object</li>
+              <li> colIndex is the column index</li>
+              <li> cellVal is the cell value</li>
+              <li>edtVal is the editor value</li>
+              <li>cell is the current cell</li>
+
+              <li>editor is the current editor</li>
+            </ul>
+            <p>The validation delegate must return a boolean</p></td>
+          <td><code>var etConfig = { validate_modified_value: function(o, colIndex, 
+            cellVal, edtVal, cell, editor){ alert('Validation function returns 
+            a boolean'); } }</code></td>
+        </tr>
+        <tr>
+          <th>open_custom_editor</th>
+
+          <td>function</td>
+          <td>delegate function called to open 'custom' editor (default: null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>cell is the current cell</li>
+
+              <li>editor is the current opened editor</li>
+            </ul></td>
+          <td><code>var etConfig = { open_custom_editor: function(o, cell, editor){ 
+            alert('Custom editor for column '+cell.cellIndex+' is being opened!'); 
+            } }</code></td>
+        </tr>
+        <tr> 
+          <th>close_custom_editor</th>
+          <td>function</td>
+
+          <td>delegate function called to close 'custom' editor (default: null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>cell is the current cell</li>
+              <li>editor is the current opened editor</li>
+
+            </ul></td>
+          <td><code>var etConfig = { close_custom_editor: function(o, cell, editor){ 
+            alert('Custom editor for column '+cell.cellIndex+' is closed!'); } 
+            }</code></td>
+        </tr>
+		<tr> 
+          <th>show_upload</th>
+          <td>function</td>
+          <td>delegate function called by uploader editor to display uploaded file (default: null)</td>
+          <td><p>4 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>divUplDisplay is the container element containing the upload</li>
+              <li>uploadName is the filename of the uploaded file</li>
+			  <li>path is the upload path</li>
+            </ul></td>
+          <td><code>var etConfig = { 
+		  		cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { 
+						show_upload: function(o, divUplDisplay, uploadName, path){ 
+							divUplDisplay.style.display = '';
+							divUplDisplay.innerHTML = uploadName;		
+						}
+					}
+				}]  
+            }</code></td>
+        </tr> 
+		<tr> 
+          <th>on_before_open</th>
+          <td>function</td>
+          <td>callback called before uploader editor is opened (default: null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>editor is the current opened uploader editor</li>
+			  <li>cell is the current cell</li>
+            </ul></td>
+          	<td><code>var etConfig = { 
+		  		cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { 
+						on_before_open: function(o, editor, cell){ 
+							alert('uploader is going to be opened');		
+						}
+					}
+				}]
+            }</code></td>
+        </tr>
+		<tr> 
+          <th>on_after_open</th>
+          <td>function</td>
+          <td>callback called after uploader editor is opened (default: null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>editor is the current opened uploader editor</li>
+			  <li>cell is the current cell</li>
+            </ul></td>
+          	<td><code>var etConfig = { 
+		  		cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { 
+						on_after_open: function(o, editor, cell){ 
+							alert('uploader is opened now');		
+						}
+					}
+				}]
+            }</code></td>
+        </tr>
+		<tr> 
+          <th>on_before_close</th>
+          <td>function</td>
+          <td>callback called before uploader editor is closed (default: null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>editor is the current opened uploader editor</li>
+			  <li>cell is the current cell</li>
+            </ul></td>
+          	<td><code>var etConfig = { 
+		  		cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { 
+						on_before_close: function(o, editor, cell){ 
+							alert('uploader is going to be closed');		
+						}
+					}
+				}]
+            }</code></td>
+        </tr>
+		<tr> 
+          <th>on_after_close</th>
+          <td>function</td>
+          <td>callback called after uploader editor is closed (default: null)</td>
+          <td><p>3 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>editor is the current opened uploader editor</li>
+			  <li>cell is the current cell</li>
+            </ul></td>
+          	<td><code>var etConfig = { 
+		  		cell_editors:[
+				{ 
+					type: 'uploader', 
+					uploader: { 
+						on_after_close: function(o, editor, cell){ 
+							alert('uploader is closed now');		
+						}
+					}
+				}]
+            }</code></td>
+        </tr>
+      </tbody>
+    </table>
+    <a href="javascript:window.scroll(0,0);">Top of page</a> 
+    <hr/>
+		
+	<a name="ez_actions" id="ez_actions"></a>     
+    <h3>Actions</h3>
+
+        
+    <table id="tblActions" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Property</th>
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <th>actions</th>
+          <td>object</td>
+          <td>server actions configuration object (default: {})&nbsp; </td>
+
+          <td>&nbsp;</td>
+          <td><p><code> var etConfig = {<br>
+              actions:{<br>
+              'update': { <br>
+              uri: 'updateRow.php', submit_method: 'form', form_method: 'POST', 
+              <br>
+              param_names: ['iso', 'name', 'printablename', 'iso3', 'code'] },<br>
+
+              'insert': { <br>
+              uri: 'insertRow.php', submit_method: 'form', form_method: 'POST', 
+              <br>
+              param_names: ['iso', 'name', 'printablename', 'iso3', 'code'] },<br>
+              'delete': { <br>
+              uri: 'script.delete.php', submit_method: 'script', bulk_delete: 
+              true }<br>
+              }<br>
+
+              </code><code>}</code></p>
+            </td>
+        </tr>
+        <tr> 
+          <th>update</th>
+          <td> object</td>
+          <td>'update' action configuration object (default: {})</td>
+
+          <td><p>Below the list of properties for the 'update' actions:</p>
+            <ul>
+              <li>uri: server-side page</li>
+              <li>form_method: 2 possible values 'form' or 'script'</li>
+              <li>submit_method: 'POST' or 'GET' requests, if form_method is script 
+                only GET requests</li>
+              <li>param_names: collection of parameters expected by the server-side 
+                page (uri property)</li>
+
+            </ul></td>
+          <td><code> var etConfig = {<br>
+            actions:{<br>
+            'update': { <br>
+            uri: 'updateRow.php', submit_method: 'form', form_method: 'POST', 
+            <br>
+            param_names: ['iso', 'name', 'printablename', 'iso3', 'code'] } }<br>
+
+            </code><code>}</code></td>
+        </tr>
+        <tr> 
+          <th>insert</th>
+          <td>object</td>
+          <td> 'insert' action configuration object (default: {})</td>
+          <td><p>Below the list of properties for the 'insert' actions:</p>
+
+            <ul>
+              <li>uri: server-side page</li>
+              <li>form_method: 2 possible values 'form' or 'script'</li>
+              <li>submit_method: 'POST' or 'GET' requests, if form_method is script 
+                only GET requests</li>
+              <li>param_names: collection of parameters expected by the server-side 
+                page (uri property)</li>
+              <li>default_record: collection of values to add when a row is added 
+                to table (insert command button)</li>
+
+            </ul></td>
+          <td><p><code>var etConfig = {<br>
+              actions:{<br>
+              'insert': { <br>
+              uri: 'insertRow.php', submit_method: 'form', form_method: 'POST', 
+              <br>
+              param_names: ['iso', 'name', 'printablename', 'iso3', 'code'],<br>
+
+              default_record: ['', 'New country', 'New country', 'XXX', '0']</code><code>} 
+              }<br>
+              </code><code>}</code></p>
+            </td>
+        </tr>
+        <tr> 
+          <th>delete</th>
+          <td>object</td>
+
+          <td>'delete' action configuration object &nbsp;(default: {})</td>
+          <td><p>Below the list of properties for the 'update' actions:</p>
+            <ul>
+              <li>uri: server-side page</li>
+              <li>form_method: 2 possible values 'form' or 'script'</li>
+              <li>submit_method: 'POST' or 'GET' requests, if form_method is script 
+                only GET requests</li>
+
+              <li>param_names: collection of parameters expected by the server-side 
+                page (uri property)</li>
+              <li>bulk_delete: enables multiple rows deletion operations</li>
+            </ul></td>
+          <td><code>var etConfig = {<br>
+            actions:{<br>
+            'delete': { <br>
+
+            uri: 'script.delete.php', submit_method: 'script', bulk_delete: true 
+            } } </code><code>}</code></td>
+        </tr>
+      </tbody>
+    </table>
+        
+	<a name="ez_actions_events" id="ez_actions_events"></a>     
+    <h3>Actions callback events</h3>
+        
+    <table id="tblActionsEvents" cellspacing="0" class="ezEditableTable" >
+      <thead>
+
+        <tr> 
+          <th >Property</th>
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+
+      </thead>
+      <tbody>
+        <tr> 
+          <th>on_update_submit</th>
+          <td>function</td>
+          <td>delegate function called for submitting modified data to server 
+            (default: null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>treated rows: array of modified rows objects</li>
+            </ul></td>
+          <td><p><code> <br>
+              var etConfig = {<br>
+              </code><code>actions:{<br>
+
+              'update': { <br>
+              uri: 'updateRow.php', submit_method: 'form', form_method: 'POST', 
+              <br>
+              on_update_submit: function(o, treatedRows){ alert(treatedRows); 
+              }<br>
+              } } } }</code></p>
+            </td>
+        </tr>
+        <tr> 
+          <th>on_insert_submit</th>
+
+          <td> function</td>
+          <td> delegate function called for submitting inserted data to server 
+            (default: null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>treated rows: array of inserted rows objects</li>
+
+            </ul></td>
+          <td><code> var etConfig = { <br>
+            actions:{<br>
+            'insert': { <br>
+            uri: 'insertRow.php', submit_method: 'form', form_method: 'POST', 
+            <br>
+            on_insert_submit: function(o, treatedRows){ alert(treatedRows); }<br>
+
+            } } } }</code></td>
+        </tr>
+        <tr> 
+          <th>on_delete_submit</th>
+          <td>function</td>
+          <td> delegate function called for submitting deleted data to server 
+            (default: null) </td>
+          <td><p>2 parameters are passed to the function:</p>
+
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>treated rows: array of deleted rows objects</li>
+            </ul></td>
+          <td> <code><br>
+            var etConfig = { <br>
+            actions:{<br>
+
+            'delete': { <br>
+            uri: 'script.delete.php', submit_method: 'script', bulk_delete: false,<br>
+            on_delete_submit: function(o, treatedRows){ alert(treatedRows); }<br>
+            } } } }</code></td>
+        </tr>
+        <tr> 
+          <th>on_before_submit</th>
+
+          <td> function</td>
+          <td> callback function called before data is sent to server (default: 
+            null)</td>
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>treated rows: array of modified rows objects</li>
+
+            </ul></td>
+          <td> <p><code>var etConfig = { <br>
+              actions:{<br>
+              'update': { <br>
+              uri: 'updateRow.php', submit_method: 'form', form_method: 'POST',<br>
+              on_before_submit: function(o, modifiedRows){ alert('before update'); 
+              }<br>
+
+              },<br>
+              'insert': { <br>
+              uri: 'insertRow.php', submit_method: 'form', form_method: 'POST', 
+              <br>
+              on_before_submit: function(o, modifiedRows){ alert('before insert'); 
+              }<br>
+              },<br>
+              'delete': { <br>
+
+              uri: 'script.delete.php', submit_method: 'script', bulk_delete: 
+              false,<br>
+              on_before_submit: function(o, modifiedRows){ alert('before delete'); 
+              } } </code><code>} }</code></p>
+            </td>
+        </tr>
+        <tr> 
+          <th>on_after_submit</th>
+          <td> function</td>
+
+          <td> callback function called after data is sent to server (default: 
+            null)</td>
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>treated rows: array of modified rows objects</li>
+            </ul> </td>
+
+          <td> <code>var etConfig = { <br>
+            actions:{<br>
+            'update': { <br>
+            uri: 'updateRow.php', submit_method: 'form', form_method: 'POST',<br>
+            on_after_submit: function(o, modifiedRows){ alert('before update'); 
+            }<br>
+            },<br>
+
+            'insert': { <br>
+            uri: 'insertRow.php', submit_method: 'form', form_method: 'POST', 
+            <br>
+            on_after_submit: function(o, modifiedRows){ alert('before insert'); 
+            }<br>
+            },<br>
+            'delete': { <br>
+            uri: 'script.delete.php', submit_method: 'script', bulk_delete: false,<br>
+
+            on_after_submit: function(o, modifiedRows){ alert('before delete'); 
+            } } </code><code>}</code></td>
+        </tr>
+        <tr> 
+          <th>on_submit_error</th>
+          <td> function</td>
+          <td> callback function called when error occurs when data is sent to 
+            server (default: null)</td>
+
+          <td><p>2 parameters are passed to the function:</p>
+            <ul>
+              <li>o is the current EditTable object</li>
+              <li>e is the error object</li>
+              <li>desc is the error object description</li>
+            </ul> </td>
+
+          <td>
+          	<pre>
+var etConfig = {
+        actions: {
+            'update': {
+                uri: 'updateRow.php',
+                submit_method: 'form',
+                form_method: 'POST',
+                on_submit_error: function (o, e, desc) {
+                    alert('An error occured');
+                }
+            },
+            'insert': {
+
+                uri: 'insertRow.php',
+                submit_method: 'form',
+                form_method: 'POST',
+
+                on_submit_error: function (o, e, desc) {
+                    alert('An error occured');
+                }
+            },
+            'delete': {
+                uri: 'script.delete.php',
+                submit_method: 'script',
+                bulk_delete: false,
+                on_submit_error: function (o, e, desc) {
+                    alert('An error occured');
+                }
+            }
+        }
+          	</pre>
+          </td>
+        </tr>
+        <tr> 
+          <th>check_response_sanity <sup>new</sup></th>
+          <td>function</td>
+          <td>callback function called when the AJAX request returns a response object 
+          	usually in JSON format. This delegate checks the sanity of the response object and
+          	returns a boolean (default: null)</td>
+
+          <td>
+          	<p>This callback is invoked only when <code>ajax</code> is on.</p>
+          	<p>1 parameter is passed to the function:</p>
+            <ul>
+              <li>data: response object, usually in JSON format</li>
+            </ul> 
+          </td>
+
+          <td>
+          	<pre>
+actions: {
+    'update': {
+        uri: 'php/json.update.record.php',
+        form_method: 'POST',
+        param_names: [
+        	'id', 'name', 'email', 'startdate', 'salary'
+        ],
+        check_response_sanity: function (data) {
+            return (data && data.hasOwnProperty('result') &&
+                data.result.hasOwnProperty('success'));
+        }
+    },
+    'insert': {
+        uri: 'php/json.insert.record.php',
+        form_method: 'POST',
+        param_names: [
+        	'id', 'name', 'email', 'startdate', 'salary'
+        ],
+        default_record: [
+        	'', 'Employee name...', 
+        	'employee@email.com', '2011-01-01', 
+        	'0.00'
+        ],
+        check_response_sanity: function (data) {
+            return (data && data.hasOwnProperty('result') &&
+                data.result.hasOwnProperty('success'));
+        }
+    },
+    'delete': {
+        uri: 'php/json.delete.record.php',
+        form_method: 'POST',
+        bulk_delete: false,
+        param_names: ['id'],
+        check_response_sanity: function (data) {
+            return (data && data.hasOwnProperty('result') &&
+                data.result.hasOwnProperty('success'));
+        }
+    }
+};
+          	</pre>
+          </td>
+        </tr>		
+
+        <tr> 
+          <th>process_response <sup>new</sup></th>
+          <td>function</td>
+          <td>callback function called when the AJAX request returns a response object 
+          	usually in JSON format. This delegate gives the possibility to add custom 
+          	processing of the response object (default: null)</td>
+
+          <td>
+          	<p>This callback is invoked only when <code>ajax</code> is on.</p>
+          	<p>1 parameter is passed to the function:</p>
+            <ul>
+              <li>data: response object, usually in JSON format</li>
+            </ul> 
+          </td>
+
+          <td>
+          	<pre>
+actions: {
+    'update': {
+        uri: 'php/json.update.record.php',
+        form_method: 'POST',
+        param_names: [
+        	'id', 'name', 'email', 'startdate', 'salary'
+        ],
+        process_response: function (data) {
+        	alert(data.result.description);
+        }
+    },
+    'insert': {
+        uri: 'php/json.insert.record.php',
+        form_method: 'POST',
+        param_names: [
+        	'id', 'name', 'email', 'startdate', 'salary'
+        ],
+        default_record: [
+        	'', 'Employee name...', 
+        	'employee@email.com', '2011-01-01', 
+        	'0.00'
+        ],
+        process_response: function (data) {
+            alert(data.result.description + 
+            	' ('+ data.result.id +')');
+        }
+    },
+    'delete': {
+        uri: 'php/json.delete.record.php',
+        form_method: 'POST',
+        bulk_delete: false,
+        param_names: ['id'],
+        process_response: function (data) {
+            alert(data.result.description + 
+            	' ('+ data.result.id +')');
+        }
+    }
+};
+          	</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+        
+	<a name="ez_msg" id="ez_msg"></a> 
+    <h3>Messages</h3>
+        
+    <table id="tblMsg" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Property</th>
+          <th >Type</th>
+
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <th>msg_submit_ok</th>
+
+          <td>string</td>
+          <td>text displayed when data was successfully sent to the server (default: 
+            'Modified rows were successfully submitted to server!')&nbsp;</td>
+          <td><p>&nbsp;</p></td>
+          <td><code> var etConfig = { msg_submit_ok: 'Data saved successfully!'}</code></td>
+        </tr>
+        <tr> 
+          <th>msg_confirm_delete_selected_rows</th>
+
+          <td>string</td>
+          <td>text displayed to ask confirmation for deleting operation (default: 
+            ''Do you want to delete the selected row(s)?'')&nbsp;</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { msg_confirm_delete_selected_rows: 'Are you 
+            sure you want to delete selected rows?' }</code></td>
+        </tr>
+        <tr> 
+          <th>msg_error_occured</th>
+
+
+          <td>string</td>
+          <td>text displayed when an error occurs in general (default: 'An error 
+            occured!')&nbsp;</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { msg_error_occured: 'Error!' }</code></td>
+        </tr>
+        <tr> 
+          <th>msg_submit_unsuccessful</th>
+
+          <td>string</td>
+          <td>text displayed when an error occurs when data is sent to server 
+            (default: 'Modified rows could not be saved correctly!')&nbsp;</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { msg_submit_unsuccessful: 'Data could not 
+            be saved correctly!' }</code></td>
+        </tr>
+        <tr> 
+          <th>undefined_submit_url</th>
+
+          <td>string</td>
+          <td>text displayed when data cannot be sent to server because URI is 
+            missing (default: 'Modified rows could not be saved! Submit URL is 
+            not defined')&nbsp;</td>
+          <td>&nbsp;</td>
+          <td><code>var etConfig = { msg_filter: 'Please provide a URL to which 
+            submit data!' }</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+    <hr/>
+
+		
+	</div>
+	<!-- END CONTENT -->
+	
+	<div id="footer"></div>
+	
+</div>
+
+
+</body>
+</html>

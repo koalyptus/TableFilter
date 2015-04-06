@@ -1,10 +1,13 @@
 define(["exports", "../cookie"], function (exports, _cookie) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Cookie = _cookie.Cookie;
 
     var Store = exports.Store = (function () {
@@ -24,7 +27,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
             this.tf = tf;
         }
 
-        _prototypeProperties(Store, null, {
+        _createClass(Store, {
             saveFilterValues: {
 
                 /**
@@ -48,9 +51,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
 
                     //writes cookie
                     Cookie.write(name, fltValues.join(tf.separator), this.duration);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFilterValues: {
 
@@ -65,9 +66,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
                     var rgx = new RegExp(this.tf.separator, "g");
                     // filters' values array
                     return flts.split(rgx);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             savePageNb: {
 
@@ -78,9 +77,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
 
                 value: function savePageNb(name) {
                     Cookie.write(name, this.tf.Cpt.paging.currentPageNb, this.duration);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getPageNb: {
 
@@ -92,9 +89,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
 
                 value: function getPageNb(name) {
                     return Cookie.read(name);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             savePageLength: {
 
@@ -105,9 +100,7 @@ define(["exports", "../cookie"], function (exports, _cookie) {
 
                 value: function savePageLength(name) {
                     Cookie.write(name, this.tf.Cpt.paging.resultsPerPageSlc.selectedIndex, this.duration);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getPageLength: {
 
@@ -119,17 +112,11 @@ define(["exports", "../cookie"], function (exports, _cookie) {
 
                 value: function getPageLength(name) {
                     return Cookie.read(name);
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return Store;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=store.js.map

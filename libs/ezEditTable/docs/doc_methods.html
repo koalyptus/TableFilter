@@ -1,0 +1,599 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ezEditTable, enhance HTML tables easily, advanced inline editing, selection and keyboard navigation - script by Max Guglielmi</title>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="description" content="ezEditTable is an open source javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation" />
+	<meta name="keywords" content="html table editing, html table inline cell editing, inline cell editor, row selection, script, javascript, max guglielmi" />
+	<meta name="robots" content="index,follow" />
+	<meta name="author" content="Max Guglielmi" />
+	<style type="text/css" media="screen, projection">
+		@import "http://edittable.free.fr/includes/common.css";
+	</style>
+	
+	<script language="javascript" type="text/javascript" src="../ezEditTable.js"></script>
+	<link href="../ezEditTable.css" rel="stylesheet" type="text/css">
+	
+	<style type="text/css" media="screen">		
+		div#navmenu li a#lnk03{ 
+			color:#333; font-weight:bold;
+			border-top:2px solid #ff9900;
+			background:#fff;
+		}
+	</style>
+
+</head>
+<body>
+
+<div id="container">
+
+	<div id="banner">
+		 	
+	<div id="navmenu">
+		<ul>
+			<li><a id="lnk01" href="index.html">Home</a></li>
+			<li><a id="lnk02" href="samples.html">Samples</a></li>
+			<li><a id="lnk03" href="doc.html">Documentation</a></li>
+		</ul>
+	</div>
+	</div>
+	
+	<!-- BEGIN CONTENT -->
+
+	<div id="content">
+	
+		<div id="divsubmenu">
+			<ul class="submenu">
+				<li class="dir">
+					<a id="co" href="./doc.html">Configuration Object <small>&#9660;</small></a>
+					<ul>
+						<li><a href="./doc.html#ez_common">General</a></li>
+						<li><a href="./doc.html#ez_selection">Selection</a></li>
+						<li><a href="./doc.html#ez_sel_events">Selection callback events</a></li>
+						<li><a href="./doc.html#ez_editable">Editable</a></li>
+						<li><a href="./doc.html#ez_cell_editors">Cell editors</a></li>
+						<li><a href="./doc.html#ez_editable">Command buttons</a></li>
+						 <li><a href="./doc.html#ez_uploader">Uploader editor <sup>new</sup></a></li>
+						<li><a href="./doc.html#ez_editable_events">Editable callback events</a></li>
+						<li><a href="./doc.html#ez_actions">Actions</a></li>
+						<li><a href="./doc.html#ez_actions_events">Actions callback events</a></li>
+						<li><a href="./doc.html#ez_msg">Messages</a></li>
+					</ul>
+				</li>
+				<li class="dir">
+					<a id="cl" href="./doc_class.html">TF Class<small>&#9660;</small></a>
+					<ul>
+
+						<li><a href="./doc_class.html#ez_constructor">Constructor</a></li>
+						<li><a href="./doc_methods.html#ez_methods">General public methods</a></li>
+						<li><a href="./doc_methods.html#ez_selection_methods">Selection public methods</a></li>
+						<li><a href="./doc_methods.html#ez_editable_methods">Editable public methods</a></li>
+						<li><a href="./doc_properties.html#ez_properties">General public properties</a></li>
+						<li><a href="./doc_properties.html#ez_selection_properties">Selection public properties</a></li>
+
+						<li><a href="./doc_properties.html#ez_editable_properties">Editable public properties</a></li>
+					</ul>
+				</li>
+				<li><a id="uf" href="./doc_utilities.html">Utility Functions</a></li>
+			</ul>
+		</div>
+		
+		<h1 class="marginTop30">Documentation</h1>
+
+		<a name="class" id="class"></a>
+
+		
+    <h2>EditTable Class</h2>
+		
+		<!--[if lt IE 8]>
+			 		
+			<p>
+				<a href="./doc_class.html#ez_constructor">Constructor</a></li> | 
+				<a href="./doc_methods.html#ez_methods">General public methods</a></li> | 
+				<a href="./doc_methods.html#ez_selection_methods">Selection public methods</a></li> | 
+				<a href="./doc_methods.html#ez_editable_methods">Editable public methods</a></li> | 
+				<a href="./doc_properties.html#ez_properties">General public properties</a></li> | 
+				<a href="./doc_properties.html#ez_selection_properties">Selection public properties</a></li> | 
+				<a href="./doc_properties.html#ez_editable_properties">Editable public properties</a></li>
+			</p>
+		<![endif]-->
+		
+ 		<a name="ez_methods" id="ez_methods"></a> 
+        <h3>General Public Methods</h3>
+    <table id="tblMethods" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Method</th>
+
+          <th width="200">Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <td><strong> Init()</strong></td>
+
+          <td>EditTable object initialisation</td>
+          <td>&nbsp;</td>
+          <td><code> var myET = new EditTable('myTableId');<br>
+            myET.editable = true;<br />
+            ... <br />
+            myET.Init();</code></td>
+
+        </tr>
+        <tr> 
+          <td><strong>GetCellsNb( rowIndex )</strong></td>
+          <td>returns number of cells of a specified row</td>
+          <td>&nbsp;</td>
+          <td><code> myET.GetCellsNb(4);</code></td>
+        </tr>
+
+        <tr class="newBg"> 
+          <td><strong>GetRowsNb()</strong></td>
+          <td>returns total number of rows</td>
+          <td>&nbsp;</td>
+          <td><code>myET.GetRowsNb();</code></td>
+        </tr>
+        <tr> 
+          <td><strong>GetRow(e)</strong></td>
+
+          <td>returns the DOM row element for a given event</td>
+          <td>&nbsp;</td>
+          <td><code>function myFunction(e){ var clickedRow = myET.GetRow(e); }</code></td>
+        </tr>
+        <tr> 
+          <td><strong>GetRowByIndex( rowIndex )</strong></td>
+          <td>returns the DOM row element for a given row index</td>
+
+          <td>&nbsp;</td>
+          <td> <code>myET.GetRowByIndex(5);</code></td>
+        </tr>
+        <tr> 
+          <td><strong>GetCell(e)</strong></td>
+          <td>returns the DOM cell element for a given event</td>
+          <td>&nbsp;</td>
+
+          <td> <code>function myFunction(e){ var clickedCell = myET.GetCell(e); 
+            }</code></td>
+        </tr>
+        <tr> 
+          <td><strong>IsSelectable()</strong></td>
+          <td>checks if table rows are selectable and returns a boolean </td>
+          <td>&nbsp;</td>
+          <td><code>myET.IsSelectable();</code></td>
+
+        </tr>
+        <tr> 
+          <td><strong>IsEditable()</strong></td>
+          <td>checks if table is editable and returns a boolean </td>
+          <td>&nbsp;</td>
+          <td><code>myET.IsEditable();</code></td>
+        </tr>
+        <tr> 
+          <td><strong>ClearSelections()</strong></td>
+
+          <td>clears current row(s) and/or cell selection</td>
+          <td>&nbsp; </td>
+          <td> <code>myET.ClearSelections();</code></td>
+        </tr>
+      </tbody>
+    </table>	
+     	
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+	<hr/>
+
+	<a name="ez_selection_methods" id="ez_selection_methods"></a>
+    <h3>Selection Public Methods</h3>
+    <table id="tblSelectionMethods" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Method</th>
+          <th >Description</th>
+          <th >Remarks</th>
+
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <td><strong> Init()</strong></td>
+          <td>Selection object initialisation</td>
+
+          <td>&nbsp;</td>
+          <td><code> var myET = new EditTable('myTableId');<br />
+            ... <br />
+            myET.Selection.Init();</code></td>
+        </tr>
+        <tr> 
+          <td><strong>Set()</strong></td>
+
+          <td>enables selection feature</td>
+          <td>&nbsp;</td>
+          <td><code> myET.Selection.Set();</code></td>
+        </tr>
+        <tr class="newBg"> 
+          <td><strong>Remove()</strong></td>
+          <td> disables selection feature</td>
+
+          <td>&nbsp;</td>
+          <td><code>myET.Selection.Remove();</code></td>
+        </tr>
+        <tr> 
+          <td><strong>SetEvents()</strong></td>
+          <td>sets click and keyboard events to table element</td>
+          <td>&nbsp;</td>
+          <td><code>myET.Selection.SetEvents();</code></td>
+
+        </tr>
+        <tr> 
+          <td><strong>RemoveEvents()</strong></td>
+          <td>removes click and keyboard events to table element</td>
+          <td>&nbsp;</td>
+          <td><code>myET.Selection.RemoveEvents();</code></td>
+        </tr>
+        <tr> 
+          <td><strong>GetActiveRow()</strong></td>
+
+          <td>returns the active row element, that is, the row currently selected</td>
+          <td>&nbsp;</td>
+          <td> <code>var activeRow = myET.Selection.GetActiveRow();<br>
+            if(activeRow){ ... }</code></td>
+        </tr>
+        <tr>
+          <td><strong>GetActiveCell()</strong></td>
+
+          <td>returns the active cell element, that is, the cell currently selected</td>
+          <td>&nbsp;</td>
+          <td><code>var activeCell = myET.Selection.GetActiveCell();<br>
+            if(activeCell){ ... }</code></td>
+        </tr>
+        <tr> 
+          <td><strong>GetSelectedRows()</strong></td>
+
+          <td>returns an array of the row elements currently selected, if selection 
+            model is multiple</td>
+          <td>returns: <br>
+            [rowobject, rowobject, rowobject, ... rowobject] </td>
+          <td> <code>var selRows = myET.Selection.GetSelectedRows();<br>
+            if(selRows.length &gt; 0){ ... }</code></td>
+
+        </tr>
+        <tr> 
+          <td><strong>GetSelectedValues()</strong></td>
+          <td>returns an array containing a collection of selected rows values 
+          </td>
+          <td>returns: [<br>
+            ['value 0', 'value 1', 'value 2', ... 'value 3'],<br>
+            ['value 0', 'value 1', 'value 2', ... 'value 3'],<br>
+
+            ['value 0', 'value 1', 'value 2', ... 'value 3'],<br>
+            ...<br>
+            ['value 0', 'value 1', 'value 2', ... 'value 3']<br>
+            ] </td>
+          <td><code>var selValues = myET.Selection.GetSelectedValues();<br>
+            if(selValues.length &gt; 0){<br>
+
+            var firstValueOfFirstSelectedRow = selValues[0][0];<br>
+            } </code></td>
+        </tr>
+        <tr> 
+          <td><strong>GetActiveRowValues()</strong></td>
+          <td>returns an array containing the cell values of active row</td>
+          <td>returns ['value 0', 'value 1', 'value 2', ... 'value 3']</td>
+
+          <td><code>var activeValues = myET.Selection.GetActiveRowValues();<br>
+            if(activeValues.length &gt; 0){ ... } </code></td>
+        </tr>
+        <tr> 
+          <td><strong>GetRowValues( row )</strong></td>
+          <td>returns an array containing the cell values of a given row, it accepts 
+            only a row DOM element</td>
+
+          <td>returns ['value 0', 'value 1', 'value 2', ... 'value 3'] </td>
+          <td> <p><code>var myRow = myET.GetRowByIndex(7);<br>
+              if(myRow){ <br>
+              myRowValues = myET.Selection.GetRowValues(myRow);<br>
+              </code><code>}</code></p></td>
+        </tr>
+
+        <tr> 
+          <td><strong>SelectRowByIndex( rowIndex )</strong></td>
+          <td>selects a row for a given row index</td>
+          <td>&nbsp;</td>
+          <td><code> myET.Selection.SelectRowByIndex(9);</code></td>
+        </tr>
+		
+		<tr> 
+          <td><strong>SelectRowsByIndexes( rowIndexes )</strong> <sup>new</sup></td>
+          <td>selects rows for a given array of row indexes</td>
+          <td>Multiple selection needs to be active (selection_model: 'multiple')</td>
+          <td><code> myET.Selection.SelectRowsByIndexes([2, 7, 9, 12]);</code></td>
+        </tr>
+		
+        <tr> 
+          <td><strong>SelectRow( row )</strong></td>
+          <td>selects given row element</td>
+          <td>&nbsp;</td>
+          <td><code>var myRow = myET.GetRowByIndex(6);<br>
+            if(myRow){<br>
+            myET.Selection.SelectRow(myRow);<br>
+            } </code></td>
+        </tr>
+		
+        <tr> 
+          <td><strong>DeselectRow( row )</strong></td>
+          <td>deselects given row element</td>
+          <td>&nbsp;</td>
+          <td><code>var myRow = myET.GetRowByIndex(6);<br>
+            if(myET.Selection.IsRowSelected(myRow)){<br>
+
+            myET.Selection.DeselectRow(myRow);<br>
+            } </code></td>
+        </tr>
+        <tr> 
+          <td><strong>SelectCell( cell )</strong></td>
+          <td>selects given cell element</td>
+          <td>&nbsp;</td>
+
+          <td><code>var myCell = myET.GetRowByIndex(3).cells[2];<br>
+            if(myCell) myET.Selection.SelectCell(myCell);</code></td>
+        </tr>
+        <tr> 
+          <td><strong>DeselectCell( cell )</strong></td>
+          <td>deselects given cell element</td>
+          <td>&nbsp;</td>
+
+          <td><code>var myCell = myET.GetRowByIndex(3).cells[2];<br>
+            if(myCell) myET.Selection.DeselectCell(myCell);</code></td>
+        </tr>
+        <tr> 
+          <td><strong>ClearSelections()</strong></td>
+          <td>clears current row(s) and/or cell selection</td>
+          <td>The general <code>ClearSelections()</code> invokes this method (<code> 
+            myET</code><code>.ClearSelections</code>() )</td>
+
+          <td><code>myET.Selection.ClearSelections();</code></td>
+        </tr>
+        <tr> 
+          <td><strong>IsRowSelected( row )</strong></td>
+          <td>determines if given row is selected and returns a boolean</td>
+          <td>&nbsp;</td>
+          <td><code>var myRow = myET.GetRowByIndex(6);<br>
+
+            if(myET.Selection.IsRowSelected(myRow)){ ... } </code></td>
+        </tr>
+        <tr> 
+          <td><strong>IsCellSelected( cell )</strong></td>
+          <td>determines if given cell is selected and returns a boolean</td>
+          <td>&nbsp;</td>
+          <td><code>var myCell = myET.GetRowByIndex(3).cells[2];<br>
+
+            if(myET.Selection.IsCellSelected( myCell )){ ... }</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+	<hr/>
+	
+	<a name="ez_editable_methods" id="ez_editable_methods"></a>
+    <h3>Editable Public Methods</h3>
+
+    <table id="tblEditableMethods" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Method</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <td><strong> Init()</strong></td>
+          <td>Editable object initialisation</td>
+          <td>&nbsp;</td>
+          <td><code> var myET = new EditTable('myTableId');<br />
+
+            ... <br />
+            myET.Editable.Init();</code></td>
+        </tr>
+        <tr> 
+          <td><strong>Set()</strong></td>
+          <td>enables inline editing feature</td>
+          <td>&nbsp;</td>
+
+          <td><code> myET.Editable.Set();</code></td>
+        </tr>
+        <tr class="newBg"> 
+          <td><strong>Remove()</strong></td>
+          <td> disables inline editing feature</td>
+          <td>&nbsp;</td>
+          <td><code>myET.Editable.Remove();</code></td>
+
+        </tr>
+        <tr> 
+          <td><strong>SetEvents()</strong></td>
+          <td>sets click and keyboard events to table element</td>
+          <td>&nbsp;</td>
+          <td><code>myET.Editable.SetEvents();</code></td>
+        </tr>
+        <tr> 
+          <td><strong>RemoveEvents()</strong></td>
+
+          <td>removes click and keyboard events to table element</td>
+          <td>&nbsp;</td>
+          <td><code>myET.Editable.RemoveEvents();</code></td>
+        </tr>
+        <tr> 
+          <td><strong>GetModifiedRows()</strong></td>
+          <td>returns an array containing the modified rows objects</td>
+
+          <td>returns: <br>
+            [<br>
+            [rowIndex, <br>
+            { values: [val0, val1, ...valn], <br>
+            urlParams: '&amp;ColName0=cellvalue0&amp;ColName1=cellvalue1',<br>
+
+            modified: [true, false, ...]<br>
+            }],<br>
+            ...<br>
+            [rowIndex, <br>
+            { values: [val0, val1, ...valn], <br>
+            urlParams: '&amp;ColName0=cellvalue0&amp;ColName1=cellvalue1',<br>
+
+            modified: [true, false, ...]<br>
+            }] <br>
+            ] <br>
+            urlParams are the paramaters names that are expected server-side. 
+            If the parameters' names are not defined by the property <code>param_names</code> 
+            in the actions object (configuration object <a href="doc.html#ez_actions">actions</a>), 
+            the param name by default equals to 'col_<strong>n</strong>' where 
+            n is the column index (col_0, col_1, ... col_n)</td>
+
+          <td> <p><code>var modRowObjs = myET.Editable.GetModifiedRows();<br>
+              for(var i=0; i&lt;modRowObjs.length; i++){<br>
+              var rowIndex = modRowObjs[i][0]; //int<br>
+              var obj = modRowObjs[i][1]; //object<br>
+              var objValues = obj.values; //array<br>
+
+              var objModValues = obj.modified; //array of booleans<br>
+              var objUrlParams = obj.urlParams //string<br>
+              } </code></p></td>
+        </tr>
+        <tr> 
+          <td><strong>GetAddedRows()</strong></td>
+          <td>returns an array containing the added rows objects</td>
+
+          <td>returns: <br>
+            [<br>
+            [rowIndex, <br>
+            { values: [val0, val1, ...valn], <br>
+            urlParams: '&amp;ColName0=cellvalue0&amp;ColName1=cellvalue1',<br>
+
+            modified: [true, true, ...]<br>
+            }],<br>
+            ...<br>
+            [rowIndex, <br>
+            { values: [val0, val1, ...valn], <br>
+            urlParams: '&amp;ColName0=cellvalue0&amp;ColName1=cellvalue1',<br>
+
+            modified: [true, true, ...]<br>
+            }] <br>
+            ] <br>
+            urlParams are the paramaters names that are expected server-side. 
+            If the parameters' names are not defined by the property <code>param_names</code> 
+            in the actions object (configuration object <a href="doc.html#ez_actions">actions</a>), 
+            the param name by default equals to 'col_<strong>n</strong>' where 
+            n is the column index (col_0, col_1, ... col_n)</td>
+
+          <td><code>var addRowObjs = myET.Editable.GetAddedRows();<br>
+            for(var i=0; i&lt;addRowObjs.length; i++){<br>
+            var rowIndex = addRowObjs[i][0]; //int<br>
+            var obj = addRowObjs[i][1]; //object<br>
+            var objValues = obj.values; //array<br>
+            var objModValues = obj.modified; //array of booleans<br>
+
+            var objUrlParams = obj.urlParams //string<br>
+            } </code></td>
+        </tr>
+        <tr> 
+          <td><strong>GetDeletedRows()</strong></td>
+          <td>returns an array containing the deleted rows objects</td>
+          <td>returns: <br>
+
+            [<br>
+            [rowIndex, <br>
+            { values: [val0, val1, ...valn], <br>
+            urlParams: '&amp;ColName0=cellvalue0&amp;ColName1=cellvalue1',<br>
+            modified: [false, false, ...]<br>
+
+            }],<br>
+            ...<br>
+            [rowIndex, <br>
+            { values: [val0, val1, ...valn], <br>
+            urlParams: '&amp;ColName0=cellvalue0&amp;ColName1=cellvalue1',<br>
+
+            modified: [false, false, ...]<br>
+            }] <br>
+            ] <br>
+            urlParams are the paramaters names that are expected server-side. 
+            If the parameters' names are not defined by the property <code>param_names</code> 
+            in the actions object (configuration object <a href="doc.html#ez_actions">actions</a>), 
+            the param name by default equals to 'col_<strong>n</strong>' where 
+            n is the column index (col_0, col_1, ... col_n)</td>
+
+          <td> <code>var delRowObjs = myET.Editable.GetDeletedRows();<br>
+            for(var i=0; i&lt;delRowObjs.length; i++){<br>
+            var rowIndex = delRowObjs[i][0]; //int<br>
+            var obj = delRowObjs[i][1]; //object<br>
+            var objValues = obj.values; //array<br>
+
+            var objModValues = obj.modified; //array of booleans<br>
+            var objUrlParams = obj.urlParams //string<br>
+            }</code></td>
+        </tr>
+        <tr> 
+          <td><strong>SubmitEditedRows()</strong></td>
+          <td>submits edited rows to server according to <a href="doc.html#ez_actions">actions</a> configuration 
+            options </td>
+
+          <td>modified rows objects are sent to server (uri property in 'update' 
+            <a href="doc.html#ez_actions">actions</a> configuration options)</td>
+          <td><p><code>function SaveEditedRows(){<br>
+              myET.Editable.SubmitEditedRows();<br>
+              }</code></p>
+            </td>
+
+        </tr>
+        <tr> 
+          <td><strong>SubmitAddedRows()</strong></td>
+          <td>submits added rows to server according to <a href="doc.html#ez_actions">actions</a> configuration 
+            options </td>
+          <td>added rows objects are sent to server (uri property in 'insert' 
+            <a href="doc.html#ez_actions">actions</a> configuration options)</td>
+          <td><code>function SaveAddedRows(){
+            myET.Editable.SubmitAddeddRows();
+            }</code></td>
+        </tr>
+        <tr> 
+          <td><strong>SubmitDeletedRows()</strong></td>
+          <td>submits deleted rows to server according to <a href="doc.html#ez_actions">actions</a> configuration 
+            options </td>
+          <td>deleted rows objects are sent to server (uri property in 'delete' 
+            <a href="doc.html#ez_actions">actions</a> configuration options). A 
+            confirmation prompt appears before sending data to server</td>
+
+          <td> <p><code>function DeleteSelectedRows(){
+              myET.Editable.SubmitDeletedRows();
+              }</code></p></td>
+        </tr>
+		<tr> 
+          <td><strong>SubmitAll()</strong> <sup>new</sup></td>
+          <td>submits added and edited rows to server according to <a href="doc.html#ez_actions">actions</a> configuration 
+            options </td>
+          <td></td>
+          <td><code>function SubmitAll(){ myET.Editable.SubmitAll(); }</code></td>
+        </tr>
+		<tr> 
+          <td><strong>AddNewRow()</strong></td>
+          <td>adds a row to the table</td>
+
+          <td></td>
+          <td><code>myET.Editable.AddNewRow();</code></td>
+        </tr>
+      </tbody>
+    </table>		
+			
+	</div>
+	<!-- END CONTENT -->
+	
+	<div id="footer"></div>
+	
+</div>
+
+
+</body>
+</html>

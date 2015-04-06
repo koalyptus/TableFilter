@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../string", "../types"], function (exports, _dom, _string, _types) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var Str = _string.Str;
     var Types = _types.Types;
@@ -30,7 +33,7 @@ define(["exports", "../dom", "../string", "../types"], function (exports, _dom, 
             this.tf = tf;
         }
 
-        _prototypeProperties(ColOps, null, {
+        _createClass(ColOps, {
             calc: {
 
                 /**
@@ -300,17 +303,11 @@ define(["exports", "../dom", "../string", "../types"], function (exports, _dom, 
                     if (this.onAfterOperation) {
                         this.onAfterOperation.call(null, this.tf);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return ColOps;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=colOps.js.map

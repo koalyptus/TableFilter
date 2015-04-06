@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var Types = _types.Types;
 
@@ -57,7 +60,7 @@ define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
             }
         }
 
-        _prototypeProperties(Loader, null, {
+        _createClass(Loader, {
             show: {
                 value: function show(p) {
                     var _this = this;
@@ -81,9 +84,7 @@ define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
 
                     var t = p === "none" ? this.loaderCloseDelay : 1;
                     global.setTimeout(displayLoader, t);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             remove: {
                 value: function remove() {
@@ -94,17 +95,11 @@ define(["exports", "../dom", "../types"], function (exports, _dom, _types) {
                         targetEl = !this.loaderTgtId ? tf.gridLayout ? tf.Cpt.gridLayout.tblCont : tf.tbl.parentNode : Dom.id(this.loaderTgtId);
                     targetEl.removeChild(this.loaderDiv);
                     this.loaderDiv = null;
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return Loader;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=loader.js.map

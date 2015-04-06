@@ -1,9 +1,9 @@
 define(["exports", "string"], function (exports, _string) {
-  "use strict";
-
   /**
    * Sort helpers
    */
+
+  "use strict";
 
   var Str = _string.Str;
 

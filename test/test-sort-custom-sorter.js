@@ -70,14 +70,14 @@ requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
                 'First custom key cell text after sorting');
         });
 
-        // module('Destroy and re-init');
-        // test('Remove sort', function() {
-        //     sort.destroy();
-        //     var th = tf.getHeaderElement(0),
-        //         indicator = dom.tag(th, 'img');
-        //     deepEqual(tf.sort, false, 'Sort is removed');
-        //     deepEqual(indicator.length, 0, 'Sort indicator is removed');
-        // });
+        module('Destroy and re-init');
+        test('Remove sort', function() {
+            sort.destroy();
+            var th = tf.getHeaderElement(0),
+                indicator = dom.tag(th, 'img');
+            deepEqual(tf.sort, false, 'Sort is removed');
+            deepEqual(indicator.length, 0, 'Sort indicator is removed');
+        });
 
     }
 

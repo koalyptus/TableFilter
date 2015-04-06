@@ -1,9 +1,9 @@
 define(["exports"], function (exports) {
-    "use strict";
-
     /**
      * Types utilities
      */
+
+    "use strict";
 
     var Types = {};
 

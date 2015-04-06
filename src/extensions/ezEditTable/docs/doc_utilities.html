@@ -1,0 +1,207 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ezEditTable, enhance HTML tables easily, advanced inline editing, selection and keyboard navigation - script by Max Guglielmi</title>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="description" content="ezEditTable is an open source javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation" />
+	<meta name="keywords" content="html table editing, html table inline cell editing, inline cell editor, row selection, script, javascript, max guglielmi" />
+	<meta name="robots" content="index,follow" />
+	<meta name="author" content="Max Guglielmi" />
+	<style type="text/css" media="screen, projection">
+		@import "http://edittable.free.fr/includes/common.css";
+	</style>
+	
+	<script language="javascript" type="text/javascript" src="../ezEditTable.js"></script>
+	<link href="../ezEditTable.css" rel="stylesheet" type="text/css">
+	
+	<style type="text/css" media="screen">		
+		div#navmenu li a#lnk03{ 
+			color:#333; font-weight:bold;
+			border-top:2px solid #ff9900;
+			background:#fff;
+		}
+	</style>
+
+</head>
+<body>
+
+<div id="container">
+
+	<div id="banner">
+		 	
+	<div id="navmenu">
+		<ul>
+			<li><a id="lnk01" href="index.html">Home</a></li>
+			<li><a id="lnk02" href="samples.html">Samples</a></li>
+			<li><a id="lnk03" href="doc.html">Documentation</a></li>
+		</ul>
+	</div>
+	</div>
+	
+	<!-- BEGIN CONTENT -->
+
+	<div id="content">
+	 		
+		<div id="divsubmenu">
+			<ul class="submenu">
+				<li class="dir">
+					<a id="co" href="./doc.html">Configuration Object <small>&#9660;</small></a>
+					<ul>
+						<li><a href="./doc.html#ez_common">General</a></li>
+						<li><a href="./doc.html#ez_selection">Selection</a></li>
+						<li><a href="./doc.html#ez_sel_events">Selection callback events</a></li>
+						<li><a href="./doc.html#ez_editable">Editable</a></li>
+						<li><a href="./doc.html#ez_cell_editors">Cell editors</a></li>
+						<li><a href="./doc.html#ez_editable">Command buttons</a></li>
+						<li><a href="./doc.html#ez_uploader">Uploader editor <sup>new</sup></a></li>
+						<li><a href="./doc.html#ez_editable_events">Editable callback events</a></li>
+						<li><a href="./doc.html#ez_actions">Actions</a></li>
+						<li><a href="./doc.html#ez_actions_events">Actions callback events</a></li>
+						<li><a href="./doc.html#ez_msg">Messages</a></li>
+					</ul>
+				</li>
+				<li class="dir">
+					<a id="cl" href="./doc_class.html">TF Class<small>&#9660;</small></a>
+					<ul>
+
+						<li><a href="./doc_class.html#ez_constructor">Constructor</a></li>
+						<li><a href="./doc_methods.html#ez_methods">General public methods</a></li>
+						<li><a href="./doc_methods.html#ez_selection_methods">Selection public methods</a></li>
+						<li><a href="./doc_methods.html#ez_editable_methods">Editable public methods</a></li>
+						<li><a href="./doc_properties.html#ez_properties">General public properties</a></li>
+						<li><a href="./doc_properties.html#ez_selection_properties">Selection public properties</a></li>
+
+						<li><a href="./doc_properties.html#ez_editable_properties">Editable public properties</a></li>
+					</ul>
+				</li>
+				<li><a id="uf" href="./doc_utilities.html">Utility Functions</a></li>
+			</ul>
+		</div>
+
+		<h1 class="marginTop30">Documentation</h1>
+
+		<a name="class" id="class"></a>
+
+		<h2>Utility Functions</h2>
+
+      
+    <table id="tblUtils" cellspacing="0" class="ezEditableTable" width="100%">
+      <thead>
+        <tr> 
+          <th >Method</th>
+          <th >Description</th>
+          <th >Remarks</th>
+
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <td><strong> setEditTable( id, startRow, config )</strong></td>
+          <td><p>Calls EditTable constructor and returns the EditTable object:</p>
+
+            <ul>
+              <li>id: table id (string)</li>
+              <li>startRow (optional): index of the first row from which row selection 
+                can start (number)</li>
+              <li>config (optional): configuration object (literal object)</li>
+            </ul></td>
+          <td>&nbsp;</td>
+          <td><code> var et = setEditTable('myTableId', 2, { editable: true });</code></td>
+
+        </tr>
+        <tr> 
+          <td><strong> Get(id)</strong></td>
+          <td><p>this is a <code>document.getElementById()</code> shortcut:</p>
+            <ul>
+              <li>id: id of the element (string)</li>
+
+            </ul></td>
+          <td>&nbsp;</td>
+          <td><code> var myElm = et.Get('myId');</code></td>
+        </tr>
+        <tr> 
+          <td><strong>Tag(o, tagname)</strong></td>
+          <td><p>this is just a <code>getElementsByTagName()</code> shortcut:</p>
+
+            <ul>
+              <li>o: target element (DOM element)</li>
+              <li>tagname: tag to search for (string)</li>
+            </ul>
+            <p>It returns an array</p></td>
+          <td>&nbsp;</td>
+          <td><code>var myTables = et.Tag(document, 'table');</code></td>
+
+        </tr>
+        <tr> 
+          <td><strong>GetText(n)</strong></td>
+          <td><p>returns the text of given a node and its child nodes:</p>
+            <ul>
+              <li>n: node (DOM element)</li>
+            </ul></td>
+          <td>&nbsp;</td>
+
+          <td><code>var tableText = et.GetText( et.Tag(document,'table' )[0]);</code></td>
+        </tr>
+        <tr> 
+          <td><strong>CreateElm(tag)</strong></td>
+          <td><p>creates an html element with defined attributes:</p>
+            <ul>
+              <li>the html tag to create (string)</li>
+
+              <li>an unlimited # of arrays defining the attributes values ('attribute 
+                name','value' ['id','myId'])</li>
+            </ul></td>
+          <td>&nbsp;</td>
+          <td><code>var myInput = et.CreateElm( 'input', ['id','myId'], ['value','Hello 
+            world'] );</code></td>
+        </tr>
+        <tr> 
+          <td><strong>CreateText(t)</strong></td>
+          <td><p>this is just a <code>document.createTextNode</code> shortcut:</p>
+
+            <ul>
+              <li>t: text to generate (string)</li>
+            </ul></td>
+          <td>&nbsp;</td>
+          <td><code>var myText = et.CreateText( 'Hello world' );</code></td>
+        </tr>
+        <tr> 
+          <td><strong>IsArray(obj)</strong></td>
+
+          <td><p>checks if passed param is an array. It returns a boolean</p></td>
+          <td>&nbsp;</td>
+          <td><code>alert(et.IsArray([1,2,3]));</code></td>
+        </tr>
+        <tr> 
+          <td><strong>IsObj(obj)</strong></td>
+          <td><p>checks if passed param is an object. It returns a boolean</p></td>
+
+          <td>&nbsp;</td>
+          <td><code>alert(et.IsObj({ text: 'hello'}));</code></td>
+        </tr>
+        <tr> 
+          <td><strong>IsFn(fn)</strong></td>
+          <td><p>checks if passed param is a function. It returns a boolean</p></td>
+          <td>&nbsp;</td>
+          <td><code>alert(et.IsFn(function(){ var a=0; }));</code></td>
+
+        </tr>
+      </tbody>
+    </table>	
+     	
+    <hr/>
+
+
+
+	</div>
+	<!-- END CONTENT -->
+	
+	<div id="footer"></div>
+	
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+/*====================================================
+	- ezEditTable global stylesheet
+	- Edit classes below for your projects' needs
+=====================================================*/
+
+.ezEditableTable{
+	padding:0; color:#000;
+	border-collapse:collapse;
+	font:12px/13px arial, tahoma, helvetica, sans-serif !important;
+} 
+.ezEditableTable th, .ezEditableTable td{ 
+	margin:0; padding:5px; 
+	color:inherit;
+	border:1px solid #ccc !important;
+}
+.ezEditableTable th{
+	background:#EBECEE !important;
+}
+
+/* Selection */
+.ezActiveRow{ background-color:#2852A8 !important; color:#fff; }
+.ezSelectedRow{	background-color:#316AC5; color:#fff; }
+.ezActiveCell{
+	background-color:#D9E8FB !important;
+	color:#000 !important; font-weight:bold;	
+}
+.ezUnselectable{
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -o-user-select: none;
+   user-select: none;
+}
+
+/* Cell editors */
+.ezInputEditor{ width:95%; height:auto; font-size:inherit; border:1px solid #AACCF6; }
+.ezTextareaEditor{ width:95%; height:35px; font-size:inherit; border:1px solid #AACCF6; }
+.ezSelectEditor{ width:100%; font-size:inherit; border:1px solid #AACCF6; }
+.ezModifiedCell{ background:transparent url(themes/bg_mod_cell.png) 0 0 no-repeat; }
+select[multiple="multiple"].ezSelectEditor{ height:35px; }
+/* Command type editor */
+.ezCommandEditor{ margin:2px; }
+.ezCommandEditor button{ 
+	font-size:10px;
+	border:1px solid #ccc;
+	background:#fff; margin:1px;
+	border-radius:4px 4px 4px 4px;
+	-moz-border-radius:4px 4px 4px 4px;
+}
+/* Uploader editor */
+.ezUploaderEditor{ 
+	position:absolute; display:inline; 
+	margin:15px 0 0 0px; 
+	border:1px solid #ccc; padding:5px; 
+	background:#fff; color:#000; z-index:10000;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	box-shadow:3px 3px 2px #888;
+	-moz-box-shadow:3px 3px 2px #888;
+	-webkit-box-shadow:3px 3px 2px #888;
+}
+.ezUploaderEditor button{ 
+	font-size:10px;
+	border:1px solid #ccc;
+	background:#fff; margin:1px;
+	border-radius:4px 4px 4px 4px;
+	-moz-border-radius:4px 4px 4px 4px;
+}
+.ezUploaderEditorOutput{ }
+.ezUploaderEditorDisplay{ 
+	display:none; position:relative; 
+	max-width:800px; max-height:600px; 
+	overflow:auto; border:0; 
+	background:#fff; padding:5px; margin:5px; 
+}
+
+/* Utils */
+.ezOpacity{
+	filter:alpha(opacity=60); /* for IE */
+	opacity:0.6; /* CSS3 standard */
+}
+.alignLeft{ text-align:left; }
+.alignCenter{ text-align:center; }
+.alignRight{ text-align:right; }
+.icnImg{ border:0; }

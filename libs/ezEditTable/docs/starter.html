@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ezEditTable, enhance HTML tables easily - Starter page - by Max Guglielmi</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="ezEditTable is an open source javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation" />
+    <meta name="keywords" content="html table editing, html table inline cell editing, inline cell editor, row selection, script, javascript" />
+    <meta name="author" content="Max Guglielmi" />
+
+	<link href="../ezEditTable.css" rel="stylesheet" type="text/css">
+    <script src="../ezEditTable.js"></script>
+</head>
+<body>
+
+  		<h1>Starter</h1>
+  		<p>
+  			<a href="index.html">&larr; Documentation</a>
+  		</p>
+  		<div>
+	       <table id="demo" cellspacing="0" cellpadding="0">
+            <thead>
+              <tr>
+                <th>From</th>
+                <th>Destination</th>
+                <th>Road Distance (km)</th>
+                <th>By Air (hrs)</th>
+                <th width="15%">By Rail (hrs)</th>
+
+              </tr>
+             </thead>
+              <tbody>
+              <tr>
+                <td><strong>Sydney</strong></td>
+                <td>Adelaide</td>
+                <td>1412</td>
+                <td>1.4</td>
+
+                <td>25.3</td>
+              </tr>
+              <tr>
+                <td><strong>Sydney</strong></td>
+                <td>Brisbane</td>
+                <td>982</td>
+                <td>1.5</td>
+
+                <td>16</td>
+              </tr>
+              <tr>
+                <td><strong>Sydney</strong></td>
+                <td>Canberra</td>
+                <td>286</td>
+                <td>.6</td>
+
+                <td>4.3</td>
+              </tr>
+              <tr>
+                <td><strong>Sydney</strong></td>
+                <td>Melbourne</td>
+                <td>872</td>
+                <td>1.1</td>
+
+                <td>10.5</td>
+              </tr>
+              <tr>
+                <td><strong>Adelaide</strong></td>
+                <td>Perth</td>
+                <td>2781</td>
+                <td>3.1</td>
+
+                <td>38</td>
+              </tr>
+              <tr>
+                <td><strong>Adelaide</strong></td>
+                <td>Alice Springs</td>
+                <td>1533</td>
+                <td>2</td>
+
+                <td>20.25</td>
+              </tr>
+              <tr>
+                <td><strong>Adelaide</strong></td>
+                <td>Brisbane</td>
+                <td>2045</td>
+                <td>2.15</td>
+
+                <td>40</td>
+              </tr>
+              </tbody>
+            </table>
+
+            <script language="javascript" type="text/javascript">
+                var config = {
+                    selection: true,
+                    default_selection: 'both'
+                };
+                var et = new EditTable('demo', config);
+                et.Init();
+            </script>
+
+  		</div>
+
+        <div>
+  		<h4>Source code of the page:</h4>
+  			<pre>
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;ezEditTable, enhance HTML tables easily - Starter page - by Max Guglielmi&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /&gt;
+
+    &lt;link href="../ezEditTable.css" rel="stylesheet" type="text/css"&gt;
+    &lt;script src="../ezEditTable.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;ezEditTable Starter&lt;/h1&gt;
+
+    &lt;table id="demo" cellspacing="0" cellpadding="0"&gt;
+        &lt;thead&gt;
+                    &lt;tr&gt;
+                        &lt;th&gt;From&lt;/th&gt;
+                        &lt;th&gt;Destination&lt;/th&gt;
+                        &lt;th&gt;Road Distance (km)&lt;/th&gt;
+                        &lt;th&gt;By Air (hrs)&lt;/th&gt;
+                        &lt;th width="15%"&gt;By Rail (hrs)&lt;/th&gt;
+
+                    &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;strong&gt;Sydney&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;Adelaide&lt;/td&gt;
+                        &lt;td&gt;1412&lt;/td&gt;
+                        &lt;td&gt;1.4&lt;/td&gt;
+                        &lt;td&gt;25.3&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;strong&gt;Sydney&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;Brisbane&lt;/td&gt;
+                        &lt;td&gt;982&lt;/td&gt;
+                        &lt;td&gt;1.5&lt;/td&gt;
+                        &lt;td&gt;16&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;strong&gt;Sydney&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;Canberra&lt;/td&gt;
+                        &lt;td&gt;286&lt;/td&gt;
+                        &lt;td&gt;.6&lt;/td&gt;
+                        &lt;td&gt;4.3&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;strong&gt;Sydney&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;Melbourne&lt;/td&gt;
+                        &lt;td&gt;872&lt;/td&gt;
+                        &lt;td&gt;1.1&lt;/td&gt;
+                        &lt;td&gt;10.5&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;strong&gt;Adelaide&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;Perth&lt;/td&gt;
+                        &lt;td&gt;2781&lt;/td&gt;
+                        &lt;td&gt;3.1&lt;/td&gt;
+                        &lt;td&gt;38&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;strong&gt;Adelaide&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;Alice Springs&lt;/td&gt;
+                        &lt;td&gt;1533&lt;/td&gt;
+                        &lt;td&gt;2&lt;/td&gt;
+                        &lt;td&gt;20.25&lt;/td&gt;
+                    &lt;/tr&gt;
+                     &lt;tr&gt;
+                        &lt;td&gt;&lt;strong&gt;Adelaide&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;Brisbane&lt;/td&gt;
+                        &lt;td&gt;2045&lt;/td&gt;
+                        &lt;td&gt;2.15&lt;/td&gt;
+                        &lt;td&gt;40&lt;/td&gt;
+                    &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;script language="javascript" type="text/javascript"&gt;
+        var config = {
+            selection: true,
+            default_selection: 'both'
+        };
+        var et = new EditTable('demo', config);
+        et.Init();
+    &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+	  		</pre>
+  		</div>
+</body>
+</html>

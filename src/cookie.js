@@ -1,9 +1,9 @@
 define(["exports"], function (exports) {
-    "use strict";
-
     /**
      * Cookie utilities
      */
+
+    "use strict";
 
     var Cookie = {};
 

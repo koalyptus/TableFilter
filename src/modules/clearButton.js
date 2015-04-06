@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var Event = _event.Event;
 
@@ -35,13 +38,11 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
             this.tf = tf;
         }
 
-        _prototypeProperties(ClearButton, null, {
+        _createClass(ClearButton, {
             onClick: {
                 value: function onClick() {
                     this.tf.clearFilters();
-                },
-                writable: true,
-                configurable: true
+                }
             },
             init: {
 
@@ -85,9 +86,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
                         });
                     }
                     this.btnResetEl = resetspan.firstChild;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             destroy: {
 
@@ -107,17 +106,11 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
                         resetspan.parentNode.removeChild(resetspan);
                     }
                     this.btnResetEl = null;
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return ClearButton;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=clearButton.js.map

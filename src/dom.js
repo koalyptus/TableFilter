@@ -1,9 +1,9 @@
 define(["exports"], function (exports) {
-    "use strict";
-
     /**
      * DOM utilities
      */
+
+    "use strict";
 
     var Dom = {};
 

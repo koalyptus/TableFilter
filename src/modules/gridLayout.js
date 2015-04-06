@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../types", "../helpers", "../event"], function (exports, _dom, _types, _helpers, _event) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var Types = _types.Types;
     var Helpers = _helpers.Helpers;
@@ -52,7 +55,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
             this.tf = tf;
         }
 
-        _prototypeProperties(GridLayout, null, {
+        _createClass(GridLayout, {
             init: {
 
                 /**
@@ -312,9 +315,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
 
                     // Re-adjust reference row
                     //tf.refRow = Helpers.isIE() ? (tf.refRow+1) : 0;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             destroy: {
 
@@ -341,17 +342,11 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                     tbl.outerHTML = tf.sourceTblHtml;
                     //needed to keep reference of table element
                     tbl = Dom.id(tf.id);
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return GridLayout;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=gridLayout.js.map

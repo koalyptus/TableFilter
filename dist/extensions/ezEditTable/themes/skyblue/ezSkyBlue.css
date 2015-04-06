@@ -1,0 +1,68 @@
+/*====================================================
+	- ezEditTable SkyBlue theme stylesheet
+	- Edit classes below for your project needs
+=====================================================*/
+
+.ezEditableTable{ 
+	padding:0; color:#000;
+    font:12px/13px "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif !important;
+    border-right:1px solid #A4BED4;
+    border-top:1px solid #A4BED4;
+    border-left:1px solid #A4BED4;
+    border-bottom:0;
+}
+.ezEditableTable td{
+    margin:0; padding:5px; color:inherit;
+    border-bottom:1px solid #A4BED4;
+    border-left:0; border-top:0; border-right:0;
+}
+.ezEditableTable th{
+    margin:0; padding:5px; color:inherit;
+    background:#D1E5FE url("img/sky_blue_grid.gif") 0 0 repeat-x !important;
+    border-color:#FDFDFD #A4BED4 #A4BED4 #FDFDFD;
+    border-width:1px; border-style:solid;
+}
+.ezModifiedCell{ background:transparent url(../bg_mod_cell.png) 0 0 no-repeat !important; }
+
+/* Selection */
+.ezActiveRow td{ background:#D9E8FB; border-top:1px solid #FDFDFD; border-bottom:1px solid #A4BED4 !important; color:#000 !important; }
+.ezSelectedRow{	background:#D1E5FE url("img/sky_blue_grid.gif") 0 0 repeat-x !important; color:#000; }
+td.ezActiveCell{
+    background-color:#fff !important; color:#000 !important;
+    font-weight:bold; font-style:italic; border-bottom:0;
+    border-top:1px solid #FDFDFD !important;   
+    border-left:1px solid #A4BED4 !important;
+    border-right:1px solid #A4BED4 !important;
+}
+.ezUnselectable{
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -o-user-select: none;
+   user-select: none;
+}
+
+/* Editors */
+.ezInputEditor{ width:100%; height:auto; font:12px/13px "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif !important; border:0; }
+.ezTextareaEditor{ width:100%; height:25px; font:12px/13px "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif !important; border:0; overflow:auto; }
+.ezSelectEditor{ width:100%; font:12px/13px "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif !important; border:1px solid #AACCF6; }
+select[multiple="multiple"].ezSelectEditor{ height:35px; }
+
+/* Command type editor */
+.ezCommandEditor button{
+	margin:2px !important; background:#D1E5FE;
+    border:1px solid #A4BED4;
+    font-size:12px !important;
+    border-radius:4px 4px 4px 4px;
+    -moz-border-radius:4px 4px 4px 4px; 
+}
+.ezCommandEditor button img{ vertical-align:middle; margin:2px; }
+
+/* Utils */
+.ezOpacity{
+	filter:alpha(opacity=60); /* for IE */
+	opacity:0.6; /* CSS3 standard */
+}
+.alignLeft{ text-align:left; }
+.alignCenter{ text-align:center; }
+.alignRight{ text-align:right; }

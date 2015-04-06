@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../event", "../types", "../helpers"], function (exports, _dom, _event, _types, _helpers) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var Event = _event.Event;
     var Types = _types.Types;
@@ -48,7 +51,7 @@ define(["exports", "../dom", "../event", "../types", "../helpers"], function (ex
             this.tf = tf;
         }
 
-        _prototypeProperties(StatusBar, null, {
+        _createClass(StatusBar, {
             init: {
                 value: function init() {
                     var tf = this.tf;
@@ -91,9 +94,7 @@ define(["exports", "../dom", "../event", "../types", "../helpers"], function (ex
                     this.statusBarDiv = statusDiv;
                     this.statusBarSpan = statusSpan;
                     this.statusBarSpanText = statusSpanText;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             message: {
                 value: function message() {
@@ -116,9 +117,7 @@ define(["exports", "../dom", "../event", "../types", "../helpers"], function (ex
                             _this.onAfterShowMsg.call(null, _this.tf, t);
                         }
                     }, d);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             destroy: {
                 value: function destroy() {
@@ -132,17 +131,11 @@ define(["exports", "../dom", "../event", "../types", "../helpers"], function (ex
                     this.statusBarSpan = null;
                     this.statusBarSpanText = null;
                     this.statusBarDiv = null;
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return StatusBar;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=statusBar.js.map

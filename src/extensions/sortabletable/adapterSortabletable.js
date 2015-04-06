@@ -1,10 +1,13 @@
 define(["exports", "../../types", "../../dom", "../../array", "../../event", "../../date", "../../helpers"], function (exports, _types, _dom, _array, _event, _date, _helpers) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Types = _types.Types;
     var Dom = _dom.Dom;
     var array = _array.Arr;
@@ -58,7 +61,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
             this.tf = tf;
         }
 
-        _prototypeProperties(AdapterSortableTable, null, {
+        _createClass(AdapterSortableTable, {
             init: {
                 value: function init() {
                     var tf = this.tf;
@@ -155,9 +158,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                             adpt.onAfterSort.call(null, tf, tf.stt.sortColumn);
                         }
                     };
-                },
-                writable: true,
-                configurable: true
+                }
             },
             sortByColumnIndex: {
 
@@ -168,9 +169,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
 
                 value: function sortByColumnIndex(colIdx) {
                     this.stt.sort(colIdx);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             overrideSortableTable: {
                 value: function overrideSortableTable() {
@@ -312,16 +311,12 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                             return Dom.getText(oNode);
                         }
                     };
-                },
-                writable: true,
-                configurable: true
+                }
             },
             addSortType: {
                 value: function addSortType() {
                     SortableTable.prototype.addSortType(arguments[0], arguments[1], arguments[2], arguments[3]);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setSortTypes: {
                 value: function setSortTypes() {
@@ -395,9 +390,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                             }
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             destroy: {
 
@@ -420,9 +413,7 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
                             header.removeChild(img[0]);
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
@@ -475,8 +466,5 @@ define(["exports", "../../types", "../../dom", "../../array", "../../event", "..
             return 1;
         }
     }
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=adapterSortabletable.js.map

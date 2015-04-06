@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../array", "../string", "../sort"], function (exports, _dom, _array, _string, _sort) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var array = _array.Arr;
     var Str = _string.Str;
@@ -41,7 +44,7 @@ define(["exports", "../dom", "../array", "../string", "../sort"], function (expo
             this.tf = tf;
         }
 
-        _prototypeProperties(Dropdown, null, {
+        _createClass(Dropdown, {
             build: {
 
                 /**
@@ -60,9 +63,7 @@ define(["exports", "../dom", "../array", "../string", "../sort"], function (expo
                         slcExternal: isExternal,
                         slcId: extSlcId
                     });
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _build: {
 
@@ -231,9 +232,7 @@ define(["exports", "../dom", "../array", "../string", "../sort"], function (expo
 
                     //populates drop-down
                     this.addOptions(colIndex, slc, isRefreshed, excludedOpts, fltsValues, fltArr);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             addOptions: {
 
@@ -295,9 +294,7 @@ define(["exports", "../dom", "../array", "../string", "../sort"], function (expo
                         slc.innerHTML += this.slcInnerHtml;
                     }
                     slc.setAttribute("filled", "1");
-                },
-                writable: true,
-                configurable: true
+                }
             },
             addFirstOption: {
 
@@ -328,17 +325,11 @@ define(["exports", "../dom", "../array", "../string", "../sort"], function (expo
                         }
                     }
                     return slc;
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return Dropdown;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=dropdown.js.map

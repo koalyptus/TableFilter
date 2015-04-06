@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../array", "../string", "../sort", "../event"], function (exports, _dom, _array, _string, _sort, _event) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var array = _array.Arr;
     var Str = _string.Str;
@@ -46,24 +49,20 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
             this.tf = tf;
         }
 
-        _prototypeProperties(CheckList, null, {
+        _createClass(CheckList, {
             onChange: {
 
                 // TODO: add _OnSlcChange event here
 
                 value: function onChange(evt) {
                     this.tf.Evt._OnSlcChange(evt);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             optionClick: {
                 value: function optionClick(evt) {
                     this.setCheckListValues(evt.target);
                     this.onChange(evt);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             build: {
 
@@ -77,9 +76,7 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
                 value: function build(colIndex, isExternal, extFltId) {
                     var tf = this.tf;
                     tf.EvtManager(tf.Evt.name.checklist, { slcIndex: colIndex, slcExternal: isExternal, slcId: extFltId });
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _build: {
 
@@ -235,9 +232,7 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
                     }
                     flt.appendChild(ul);
                     flt.setAttribute("filled", "1");
-                },
-                writable: true,
-                configurable: true
+                }
             },
             addChecks: {
 
@@ -294,9 +289,7 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
                             }
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             addTChecks: {
 
@@ -343,9 +336,7 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
                         chkCt++;
                     }
                     return chkCt;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setCheckListValues: {
 
@@ -424,17 +415,11 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
                             Dom.removeClass(li, this.checkListSlcItemCssClass);
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return CheckList;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=checkList.js.map

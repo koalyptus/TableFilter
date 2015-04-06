@@ -1,9 +1,9 @@
 define(["exports"], function (exports) {
-    "use strict";
-
     /**
      * String utilities
      */
+
+    "use strict";
 
     var Str = {};
 

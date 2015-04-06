@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../types", "../string", "../helpers", "../event"], function (exports, _dom, _types, _string, _helpers, _event) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var Types = _types.Types;
     var Str = _string.Str;
@@ -135,7 +138,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
             this.tf = tf;
         }
 
-        _prototypeProperties(Paging, null, {
+        _createClass(Paging, {
             init: {
 
                 /**
@@ -270,9 +273,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     }
 
                     this.isPagingRemoved = false;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             addPaging: {
 
@@ -295,9 +296,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     if (filterTable) {
                         tf.filter();
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setPagingInfo: {
 
@@ -357,9 +356,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                         mdiv.style.visibility = "hidden";
                     }
                     this.groupByPage(tf.validRowsIndex);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             groupByPage: {
 
@@ -400,9 +397,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     tf.isStartBgAlternate = false;
                     //re-applies filter behaviours after filtering process
                     tf.applyGridProps();
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setPage: {
 
@@ -414,7 +409,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
 
                 value: function setPage(cmd) {
                     var tf = this.tf;
-                    if (!tf.hasGrid() || !this.paging) {
+                    if (!tf.hasGrid() || !tf.paging) {
                         return;
                     }
                     var btnEvt = this.evt,
@@ -440,9 +435,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     } else if (cmdtype === "number") {
                         this.changePage(cmd - 1);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setResultsPerPage: {
 
@@ -494,9 +487,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                         this.resultsPerPageSlc.options[r] = currOpt;
                     }
                     Event.add(slcR, "change", evt.slcResultsChange);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             removeResultsPerPage: {
 
@@ -518,9 +509,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                         slcRSpan.parentNode.removeChild(slcRSpan);
                     }
                     this.resultsPerPageSlc = null;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             changePage: {
 
@@ -533,9 +522,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     var tf = this.tf;
                     var evt = tf.Evt;
                     tf.EvtManager(evt.name.changepage, { pgIndex: index });
-                },
-                writable: true,
-                configurable: true
+                }
             },
             changeResultsPerPage: {
 
@@ -547,9 +534,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     var tf = this.tf;
                     var evt = tf.Evt;
                     tf.EvtManager(evt.name.changeresultsperpage);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             resetPage: {
 
@@ -561,9 +546,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     var tf = this.tf;
                     var evt = tf.Evt;
                     tf.EvtManager(evt.name.resetpage);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             resetPageLength: {
 
@@ -575,9 +558,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     var tf = this.tf;
                     var evt = tf.Evt;
                     tf.EvtManager(evt.name.resetpagelength);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _changePage: {
 
@@ -617,9 +598,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                             this.onAfterChangePage.call(null, this, index);
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _changeResultsPerPage: {
 
@@ -652,9 +631,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                             tf.Cpt.store.savePageLength(tf.pgLenCookie);
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _resetPage: {
 
@@ -668,9 +645,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     if (pgnb !== "") {
                         this.changePage(pgnb - 1);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _resetPageLength: {
 
@@ -689,9 +664,7 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                         this.resultsPerPageSlc.options[pglenIndex].selected = true;
                         this.changeResultsPerPage();
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             destroy: {
 
@@ -770,17 +743,11 @@ define(["exports", "../dom", "../types", "../string", "../helpers", "../event"],
                     this.nbPages = 0;
                     this.isPagingRemoved = true;
                     tf.paging = false;
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return Paging;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=paging.js.map

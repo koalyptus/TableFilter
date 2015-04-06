@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom, _types, _helpers) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var Types = _types.Types;
     var Helpers = _helpers.Helpers;
@@ -42,7 +45,7 @@ define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom,
             this.tf = tf;
         }
 
-        _prototypeProperties(RowsCounter, null, {
+        _createClass(RowsCounter, {
             init: {
                 value: function init() {
                     var tf = this.tf;
@@ -83,9 +86,7 @@ define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom,
                     this.rowsCounterSpan = countSpan;
 
                     this.refresh();
-                },
-                writable: true,
-                configurable: true
+                }
             },
             refresh: {
                 value: function refresh(p) {
@@ -119,9 +120,7 @@ define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom,
                     if (this.onAfterRefreshCounter) {
                         this.onAfterRefreshCounter.call(null, tf, this.rowsCounterSpan, totTxt);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             destroy: {
                 value: function destroy() {
@@ -145,17 +144,11 @@ define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom,
                     }
                     this.rowsCounterSpan = null;
                     this.rowsCounterDiv = null;
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return RowsCounter;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=rowsCounter.js.map

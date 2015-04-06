@@ -204,6 +204,11 @@ module.exports = function (grunt) {
                     { src: 'libs/sortabletable.js', dest: '<%= source_folder %>extensions/sortabletable/sortabletable.js' },
                     // { src: 'libs/requirejs/require.js', dest: '<%= dist_folder %>require.js' },
                     // { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
+
+                    // TODO: remove ezEditTable
+                    { src: ['**'], cwd: 'libs/ezEditTable/', dest: '<%= source_folder %>extensions/ezEditTable/', expand: true },
+                    { src: ['**'], cwd: 'libs/ezEditTable/', dest: '<%= dist_folder %>extensions/ezEditTable/', expand: true },
+                    //
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
             }

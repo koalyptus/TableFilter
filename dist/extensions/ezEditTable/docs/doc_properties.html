@@ -1,0 +1,515 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ezEditTable, enhance HTML tables easily, advanced inline editing, selection and keyboard navigation - script by Max Guglielmi</title>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="description" content="ezEditTable is an open source javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation" />
+	<meta name="keywords" content="html table editing, html table inline cell editing, inline cell editor, row selection, script, javascript, max guglielmi" />
+	<meta name="robots" content="index,follow" />
+	<meta name="author" content="Max Guglielmi" />
+	<style type="text/css" media="screen, projection">
+		@import "http://edittable.free.fr/includes/common.css";
+	</style>
+	
+	<script language="javascript" type="text/javascript" src="../ezEditTable.js"></script>
+	<link href="../ezEditTable.css" rel="stylesheet" type="text/css">
+	
+	<style type="text/css" media="screen">		
+		div#navmenu li a#lnk03{ 
+			color:#333; font-weight:bold;
+			border-top:2px solid #ff9900;
+			background:#fff;
+		}
+	</style>
+
+</head>
+<body>
+
+<div id="container">
+
+	<div id="banner">
+		 	
+	<div id="navmenu">
+		<ul>
+			<li><a id="lnk01" href="index.html">Home</a></li>
+			<li><a id="lnk02" href="samples.html">Samples</a></li>
+			<li><a id="lnk03" href="doc.html">Documentation</a></li>
+		</ul>
+	</div>
+	</div>
+	
+	<!-- BEGIN CONTENT -->
+
+	<div id="content">
+	
+		<div id="divsubmenu">
+			<ul class="submenu">
+				<li class="dir">
+					<a id="co" href="./doc.html">Configuration Object <small>&#9660;</small></a>
+					<ul>
+						<li><a href="./doc.html#ez_common">General</a></li>
+						<li><a href="./doc.html#ez_selection">Selection</a></li>
+						<li><a href="./doc.html#ez_sel_events">Selection callback events</a></li>
+						<li><a href="./doc.html#ez_editable">Editable</a></li>
+						<li><a href="./doc.html#ez_cell_editors">Cell editors</a></li>
+						<li><a href="./doc.html#ez_uploader">Uploader editor</a></li>
+						<li><a href="./doc.html#ez_editable">Command buttons</a></li>
+						<li><a href="./doc.html#ez_editable_events">Editable callback events</a></li>
+						<li><a href="./doc.html#ez_actions">Actions</a></li>
+						<li><a href="./doc.html#ez_actions_events">Actions callback events</a></li>
+						<li><a href="./doc.html#ez_msg">Messages</a></li>
+					</ul>
+				</li>
+				<li class="dir">
+					<a id="cl" href="./doc_class.html">TF Class<small>&#9660;</small></a>
+					<ul>
+
+						<li><a href="./doc_class.html#ez_constructor">Constructor</a></li>
+						<li><a href="./doc_methods.html#ez_methods">General public methods</a></li>
+						<li><a href="./doc_methods.html#ez_selection_methods">Selection public methods</a></li>
+						<li><a href="./doc_methods.html#ez_editable_methods">Editable public methods</a></li>
+						<li><a href="./doc_properties.html#ez_properties">General public properties</a></li>
+						<li><a href="./doc_properties.html#ez_selection_properties">Selection public properties</a></li>
+
+						<li><a href="./doc_properties.html#ez_editable_properties">Editable public properties</a></li>
+					</ul>
+				</li>
+				<li><a id="uf" href="./doc_utilities.html">Utility Functions</a></li>
+			</ul>
+		</div>
+		
+		<h1 class="marginTop30">Documentation</h1>
+		
+		<a name="class" id="class"></a>
+
+		<h2>EditTable Class</h2>
+		
+		<!--[if lt IE 8]>
+			 		
+			<p>
+				<a href="./doc_class.html#ez_constructor">Constructor</a></li> | 
+				<a href="./doc_methods.html#ez_methods">General public methods</a></li> | 
+				<a href="./doc_methods.html#ez_selection_methods">Selection public methods</a></li> | 
+				<a href="./doc_methods.html#ez_editable_methods">Editable public methods</a></li> | 
+				<a href="./doc_properties.html#ez_properties">General public properties</a></li> | 
+				<a href="./doc_properties.html#ez_selection_properties">Selection public properties</a></li> | 
+				<a href="./doc_properties.html#ez_editable_properties">Editable public properties</a></li>
+			</p>
+		<![endif]-->
+		
+ 		<a name="ez_properties" id="ez_properties"></a> 
+        <h3>General Public Properties</h3>
+    <table id="tblProps" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Property</th>
+
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr> 
+          <td><strong>id</strong></td>
+          <td>string</td>
+          <td>returns the HTML table's id used by the EditTable object</td>
+          <td>use it as getter only</td>
+          <td><code>alert( myET.id );</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>table</strong></td>
+          <td>HTMLTableElement</td>
+          <td>returns the HTML table element used by the EditTable object</td>
+          <td>use it as getter only</td>
+          <td><code>alert( myET.table );</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>config</strong></td>
+          <td>object</td>
+          <td>returns the EditTable configuration object (literal object)</td>
+          <td>use it as getter or setter</td>
+          <td><code>alert( myET.config );</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>startRow</strong></td>
+          <td>number</td>
+          <td>index of the first row from which row selection can start</td>
+          <td>use it as getter only</td>
+          <td><code>alert( myET.startRow );</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>nbCells</strong></td>
+          <td>number</td>
+          <td>returns the number of table columns</td>
+          <td>use it as getter only</td>
+          <td><code>alert( myET.nbCells );</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>selection</strong></td>
+          <td>boolean</td>
+          <td>enables / disables selection model</td>
+          <td>use it as getter or setter</td>
+          <td><code>myET.selection = false;</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>keyNav</strong></td>
+          <td>boolean</td>
+          <td>enables / disables keyboard navigation</td>
+          <td>use it as getter or setter</td>
+          <td><code>myET.keyNav = false;</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>editable</strong></td>
+          <td>boolean</td>
+          <td>enables / disables inline editing</td>
+          <td>use it as getter or setter</td>
+          <td><code>myET.editable = true;</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>tableCss</strong></td>
+          <td>string</td>
+          <td>defines the css class of the table element</td>
+          <td>use it as getter or setter</td>
+          <td><code>myET.tableCss = 'myClass';</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>unselectableCss</strong></td>
+          <td>string</td>
+          <td>defines the css class that makes the table text unselectable</td>
+          <td>use it as getter or setter</td>
+          <td><code>alert( myET.unselectableCss );</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>activityIndicatorCss</strong></td>
+          <td>string</td>
+          <td>defines the css class to be applied to the table in order to indicate 
+            server activity </td>
+          <td>use it as getter or setter</td>
+          <td><code>alert( myET.activityIndicatorCss );</code></td>
+        </tr>
+
+        <tr> 
+          <td><strong>basePath</strong></td>
+          <td>string</td>
+          <td>defines the path to the script's directory</td>
+          <td>use it as getter or setter</td>
+          <td><code>alert( myET.basePath );</code></td>
+        </tr>
+
+      </tbody>
+    </table>		
+    <hr/>
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+	
+	<a name="ez_selection_properties" id="ez_selection_properties"></a> 
+    <h3>Selection Public Properties</h3>
+    <table id="tblSelectionProps" cellspacing="0" class="ezEditableTable" >
+      <thead>
+        <tr> 
+          <th >Property</th>
+
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr> 
+          <td><strong>selectionModel</strong></td>
+          <td>string</td>
+          <td>defines the selection model: &quot;single&quot; or &quot;multiple&quot;</td>
+          <td>use it as getter or setter - 2 possible values: 'single' or 'multiple'</td>
+
+          <td><code>myET.selectionModel = 'multiple';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>defaultSelection</strong></td>
+          <td>string</td>
+          <td>defines the selection type</td>
+          <td>use it as getter or setter - 3 possible values: 'row', 'cell' or 
+            'both'</td>
+
+          <td><code>myET.defaultSelection = 'both';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>keySelection</strong></td>
+          <td>boolean</td>
+          <td>enables / disable multiple selection by using Ctrl and Shift keys 
+          </td>
+          <td>use it as getter or setter - select multiple rows by holding Ctrl 
+            or Shift key down, only if selection model is 'multiple'</td>
+
+          <td><code>myET.keySelection = false;</code></td>
+        </tr>
+        <tr> 
+          <td><strong>selectRowAtStart</strong></td>
+          <td>boolean</td>
+          <td>first row is selected at start if set true</td>
+          <td>use it as getter or setter</td>
+
+          <td><code>myET.selectRowAtStart = true;</code></td>
+        </tr>
+        <tr> 
+          <td><strong>rowIndexAtStart</strong></td>
+          <td>number</td>
+          <td>defines which row has to be selected at start</td>
+          <td>use it as getter or setter</td>
+
+          <td><code>myET.rowIndexAtStart = 5;</code></td>
+        </tr>
+        <tr> 
+          <td><strong>scrollIntoView</strong></td>
+          <td>boolean</td>
+          <td>If set true selected row scrolls into view; useful when row is selected 
+            by using keyboard</td>
+          <td>use it as getter or setter</td>
+
+          <td><code>myET.scrollIntoView = true;</code></td>
+        </tr>
+        <tr> 
+          <td><strong>activeRowCss</strong></td>
+          <td>string</td>
+          <td>defines css class for active row</td>
+          <td>use it as getter or setter</td>
+
+          <td><code>myET.activeRowCss = 'myClass';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>selectedRowCss</strong></td>
+          <td>string</td>
+          <td>defines css class for selected rows</td>
+          <td>use it as getter or setter - only if 'multiple' selection model 
+            is enabled</td>
+
+          <td><code>myET.selectedRowCss = 'myClass';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>activeCellCss</strong></td>
+          <td>string</td>
+          <td>defines css class for active cell</td>
+          <td>use it as getter or setter - only if 'cell' or 'both' selection 
+            type is enabled</td>
+
+          <td><code>myET.activeCellCss = 'myClass';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>nbRowsPerPage</strong></td>
+          <td>number</td>
+          <td>defines number of rows to jump when PgDown or PgUp keys are pressed</td>
+          <td>use it as getter or setter - specify a huge number to jump straight 
+            to 1st or last row (1000)</td>
+
+          <td><code>myET.nbRowsPerPage = 1000;</code></td>
+        </tr>
+      </tbody>
+    </table> 	
+    <hr/>
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+	
+	<a name="ez_editable_properties" id="ez_editable_properties"></a> 
+    <h3>Editable Public Properties</h3>
+    <table id="tblEditableProps" cellspacing="0" class="ezEditableTable" >
+
+      <thead>
+        <tr> 
+          <th >Property</th>
+          <th >Type</th>
+          <th >Description</th>
+          <th >Remarks</th>
+          <th >Example</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          <td><strong>editorModel</strong></td>
+          <td>string</td>
+          <td>defines the editor model</td>
+          <td>use it as getter or setter - 2 possible values: 'cell' or 'row'</td>
+
+          <td><code>myET.editorModel = 'row';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>openEditorAction</strong></td>
+          <td>string</td>
+          <td>defines which mouse action opens the inline editing feature</td>
+          <td>use it as getter or setter - 2 possible values: 'dblclick', 'click'</td>
+
+          <td><code>myET.openEditorAction = 'click';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>ajax</strong> <sup>new</sup></td>
+          <td>boolean</td>
+          <td>enables AJAX requests (default: true if jQuery is detected)</td>
+          <td>it is enabled if jQuery is detected and the <code>ajax</code> property is 
+          	not explicitly set <code>false</code></td>
+          <td><code>myET.ajax = false;</code></td>
+        </tr>
+        <tr> 
+          <td><strong>inputEditorCss</strong></td>
+          <td>boolean</td>
+          <td>defines the css class for 'input' type editors</td>
+          <td>use it as getter or setter - select multiple rows by holding Ctrl 
+            or Shift key down, only if selection model is 'multiple'</td>
+
+          <td><code>myET.inputEditorCss = 'myClass';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>textareaEditorCss</strong></td>
+          <td>boolean</td>
+          <td>defines the css class for 'textarea' type editors</td>
+          <td>use it as getter or setter</td>
+
+          <td><code>myET.textareaEditorCss = 'myClass';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>selectEditorCss</strong></td>
+          <td>number</td>
+          <td>defines the css class for 'input' type editors</td>
+          <td>use it as getter or setter</td>
+
+          <td><code>myET.selectEditorCss = 'myClass';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>commandEditorCss</strong></td>
+          <td>boolean</td>
+          <td>css class applied to command editor buttons container</td>
+          <td>use it as getter or setter</td>
+
+          <td><code>myET.commandEditorCss = 'myClass';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>modifiedCellCss</strong></td>
+          <td>string</td>
+          <td>css class applied to modified cells</td>
+          <td>use it as getter or setter - this css class shows the green small 
+            triangle in the left-upper corner of the cell</td>
+
+          <td><code>myET.modifiedCellCss = 'myClass';</code></td>
+        </tr>
+        <tr> 
+          <td><strong>cellEditors</strong></td>
+          <td>array</td>
+          <td>array defining the editor configuration for each column</td>
+          <td>use it as getter or setter - the number of editors must be equal 
+            to the number of columns. Refer to <a href="doc.html#ez_cell_editors">Cell 
+            editors properties</a> for details about editors' configuration</td>
+          <td><code>myET.cellEditors = [<br>
+            { type: 'select' },<br>
+            { type: 'textarea' },<br>
+            { type: 'input' },<br>
+			{ type: 'uploader' },<br>
+            { type: 'none' }, <br>
+            { type: 'command' }<br>
+            ];</code></td>
+        </tr>
+        <tr> 
+          <td><strong>actions</strong></td>
+          <td>object</td>
+          <td>server actions configuration object </td>
+          <td>use it as getter or setter - Refer to <a href="doc.html#ez_actions">actions 
+            properties</a> for details about server actions configuration</td>
+
+          <td><code>myET.actions = {<br>
+            'update': { <br>
+            uri: 'updateRow.php', submit_method: 'form', form_method: 'POST', 
+            <br>
+            param_names: ['iso', 'name', 'printablename', 'iso3', 'code'] },<br>
+            'insert': { <br>
+            uri: 'insertRow.php', submit_method: 'form', form_method: 'POST', 
+            <br>
+
+            param_names: ['iso', 'name', 'printablename', 'iso3', 'code'] },<br>
+            'delete': { <br>
+            uri: 'script.delete.php', submit_method: 'script', bulk_delete: true 
+            }<br>
+            }</code></td>
+        </tr>
+		<tr>
+          <td><strong>autoSave</strong></td>
+          <td>boolean</td>
+          <td>saves automatically pending changes upon selection change</td>
+          <td><code>editable</code> property needs to be activated (default: true if editable is on)</td>
+          <td><code>myET.autoSave = false;</code></td>
+        </tr>
+		<tr>
+          <td><strong>autoSaveModel</strong></td>
+          <td>string</td>
+          <td>determines when modified and/or added data is saved, upon row or cell selection change (default: 'row')</td>
+          <td>2 possible values 'row' or 'cell'</td>
+          <td><code>myET.autoSaveModel = 'cell';</code></td>
+        </tr>
+		<tr>
+          <td><strong>autoSaveType</strong></td>
+          <td>string</td>
+          <td>defines if only insertions or updates, or both are saved automatically  (default: 'both')</td>
+          <td>3 possible values 'insert', 'update' or 'both'</td>
+          <td><code>myET.autoSaveType = 'update';</code></td>
+        </tr>
+        <tr>
+          <td><strong>editableOnKeystroke</strong> <sup>new</sup></td>
+          <td>boolean</td>
+          <td>makes the inline cell editor appear upon keystroke (default: false)</td>
+          <td>only if edition is enabled and <code>editorModel</code> is set to <code>'cell'</code> and
+          	<code>selectionModel</code> to <code>'single'</code></td>
+          <td><code>myET.editableOnKeystroke = true;</code></td>
+        </tr>
+		<tr>
+          <td><strong>newRowPrefix</strong></td>
+          <td>string</td>
+          <td>defines the prefix for new added row ids  (default: 'tr')</td>
+          <td>prefix should match the prefix assigned to already existing rows</td>
+          <td><code>myET.newRowPrefix = 'row';</code></td>
+        </tr>
+		<tr>
+          <td><strong>formSubmitInterval</strong></td>
+          <td>number</td>
+          <td>defines the interval in ms separating rows data submissions (default: 50)</td>
+          <td>by default the script submits a single form for each modified row. Depending on ISPs 
+		  	security policies, multiple submissions to same page are simply blocked by the server.
+			This interval can be useful to fine tune the form submissions when those server restrictions apply.</td>
+          <td><code>myET.formSubmitInterval = 750;</code></td>
+        </tr>
+        <tr>
+          <td><strong>newRowPos</strong> <sup>new</sup></td>
+          <td>string or number</td>
+          <td>defines the row position of a newly created row (default: 'top')</td>
+          <td>2 possible values as a string: 'top' or 'bottom', and as an integer:
+          	any number &gt;= 0 and &lt;= total number of rows. If the supplied numeric 
+          	value exceeds the total number of rows then the script fallback to default
+          	value 'top'</td>
+          <td><code>myET.newRowPos = 'bottom';</code></td>
+        </tr>
+      </tbody>
+    </table> 	
+    <hr/>
+
+	<a href="javascript:window.scroll(0,0);">Top of page</a> 
+		
+		
+	</div>
+	<!-- END CONTENT -->
+	
+	<div id="footer"></div>
+	
+</div>
+
+
+</body>
+</html>

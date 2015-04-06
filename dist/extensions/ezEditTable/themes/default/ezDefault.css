@@ -1,0 +1,23 @@
+/*====================================================
+	- ezEditTable default theme stylesheet
+	- Edit classes below for your project needs
+=====================================================*/
+
+.ezEditableTable{ 
+	border:0 !important;
+	border-left:1px solid #99BBE8 !important;
+	border-right:1px solid #99BBE8 !important;
+	border-bottom:1px solid #99BBE8 !important;
+	font:12px/13px arial, tahoma, helvetica, sans-serif !important;
+}
+.ezEditableTable th, td{ border:1px solid #C5D3EC !important; }
+.ezEditableTable th{
+	background:transparent url(img/bg_col_header.gif) 0 -2px repeat-x !important;
+}
+
+/* Selection */
+.ezActiveRow td{ background-color:#316AC5; color:#fff !important; }
+.ezSelectedRow{	background-color:#D9E8FB !important; border:1px dotted #909090 !important; color:#000; }
+
+/* Command type editor */
+.ezCommandEditor button{ border:1px solid #C5D3EC !important; }

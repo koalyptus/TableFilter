@@ -1,10 +1,13 @@
 define(["exports", "../dom"], function (exports, _dom) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
 
     var AlternateRows = exports.AlternateRows = (function () {
@@ -26,7 +29,7 @@ define(["exports", "../dom"], function (exports, _dom) {
             this.tf = tf;
         }
 
-        _prototypeProperties(AlternateRows, null, {
+        _createClass(AlternateRows, {
             init: {
 
                 /**
@@ -51,9 +54,7 @@ define(["exports", "../dom"], function (exports, _dom) {
                         this.setRowBg(rowIdx, idx);
                         idx++;
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setRowBg: {
 
@@ -72,9 +73,7 @@ define(["exports", "../dom"], function (exports, _dom) {
                     var i = !idx ? rowIdx : idx;
                     this.removeRowBg(rowIdx);
                     Dom.addClass(rows[rowIdx], i % 2 ? this.evenCss : this.oddCss);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             removeRowBg: {
 
@@ -90,9 +89,7 @@ define(["exports", "../dom"], function (exports, _dom) {
                     var rows = this.tf.tbl.rows;
                     Dom.removeClass(rows[idx], this.oddCss);
                     Dom.removeClass(rows[idx], this.evenCss);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             remove: {
 
@@ -109,31 +106,21 @@ define(["exports", "../dom"], function (exports, _dom) {
                         this.removeRowBg(i);
                     }
                     this.tf.isStartBgAlternate = true;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             enable: {
                 value: function enable() {
                     this.tf.alternateBgs = true;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             disable: {
                 value: function disable() {
                     this.tf.alternateBgs = false;
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return AlternateRows;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=alternateRows.js.map

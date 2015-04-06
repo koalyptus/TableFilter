@@ -424,14 +424,14 @@ export default class TableFilter{
             f.ezEditTable_config.name : 'ezedittable';
         this.ezEditTableConfig.src = this.ezEditTableConfig['src']!==undefined ?
             f.ezEditTable_config.src :
-            this.basePath+'ezEditTable/ezEditTable.js';
+            this.basePath+'extensions/ezEditTable/ezEditTable.js';
         //ezEditTable stylesheet not imported by default as filtergrid.css
         //applies
         this.ezEditTableConfig.loadStylesheet =
             this.ezEditTableConfig['loadStylesheet']===true ? true : false;
         this.ezEditTableConfig.stylesheet =
             this.ezEditTableConfig['stylesheet'] ||
-            this.basePath+'ezEditTable/ezEditTable.css';
+            this.basePath+'extensions/ezEditTable/ezEditTable.css';
         this.ezEditTableConfig.stylesheetName =
             this.ezEditTableConfig['stylesheetName']!==undefined ?
             f.ezEditTable_config.stylesheetName : 'ezEditTableCss';
@@ -646,7 +646,8 @@ export default class TableFilter{
 
         // Extensions registry
         this.Extensions = {
-            sort: null
+            sort: null,
+            ezEditTable: null
         };
 
         /*** TF events ***/
@@ -1193,7 +1194,7 @@ export default class TableFilter{
             this.setSort();
         }
         if(this.selectable || this.editable){
-            this.SetEditable();
+            this.setEditable();
         }
 
         this.isFirstLoad = false;
@@ -1499,7 +1500,7 @@ export default class TableFilter{
                 this.clearActiveColumns();
             }
             if(this.editable || this.selectable){
-                this.RemoveEditable();
+                this.removeEditable();
             }
             //this loop shows all rows and removes validRow attribute
             for(var j=this.refRow; j<this.nbRows; j++){
@@ -1754,15 +1755,15 @@ export default class TableFilter{
         - Sets selection or edition features by loading
         ezEditTable script by Max Guglielmi
     =====================================================*/
-    SetEditable(){
+    setEditable(){
         var ezEditConfig = this.ezEditTableConfig;
         if(this.isImported(ezEditConfig.src)){
-            this._EnableEditable();
+            this._enableEditable();
         } else {
             this.includeFile(
                 ezEditConfig.name,
                 ezEditConfig.src,
-                this._EnableEditable
+                this._enableEditable
             );
         }
         if(ezEditConfig.loadStylesheet &&
@@ -1777,7 +1778,7 @@ export default class TableFilter{
     /*====================================================
         - Removes selection or edition features
     =====================================================*/
-    RemoveEditable(){
+    removeEditable(){
         var ezEditTable = this.ezEditTable;
         if(ezEditTable){
             if(this.selectable){
@@ -1794,7 +1795,7 @@ export default class TableFilter{
         - Resets selection or edition features after
         removal
     =====================================================*/
-    ResetEditable(){
+    resetEditable(){
         var ezEditTable = this.ezEditTable;
         if(ezEditTable){
             if(this.selectable){
@@ -1806,10 +1807,8 @@ export default class TableFilter{
         }
     }
 
-    _EnableEditable(o){
-        if(!o){
-            o = this;
-        }
+    _enableEditable(o){
+        if(!o){ o = this; }
 
         //start row for EditTable constructor needs to be calculated
         var startRow,
@@ -1848,6 +1847,42 @@ export default class TableFilter{
             //Row navigation needs to be calculated according to TableFilter's
             //validRowsIndex array
             var onAfterSelection = function(et, selectedElm, e){
+                var slc = et.Selection;
+                //Next valid filtered row needs to be selected
+                var doSelect = function(nextRowIndex){
+                    if(et.defaultSelection === 'row'){
+                        slc.SelectRowByIndex(nextRowIndex);
+                    } else {
+                        et.ClearSelections();
+                        var cellIndex = selectedElm.cellIndex,
+                            row = o.tbl.rows[nextRowIndex];
+                        if(et.defaultSelection === 'both'){
+                            slc.SelectRowByIndex(nextRowIndex);
+                        }
+                        if(row){
+                            slc.SelectCell(row.cells[cellIndex]);
+                        }
+                    }
+                    //Table is filtered
+                    if(o.validRowsIndex.length !== o.getRowsNb()){
+                        var r = o.tbl.rows[nextRowIndex];
+                        if(r){
+                            r.scrollIntoView(false);
+                        }
+                        if(cell){
+                            if(cell.cellIndex===(o.getCellsNb()-1) &&
+                                o.gridLayout){
+                                o.tblCont.scrollLeft = 100000000;
+                            }
+                            else if(cell.cellIndex===0 && o.gridLayout){
+                                o.tblCont.scrollLeft = 0;
+                            } else {
+                                cell.scrollIntoView(false);
+                            }
+                        }
+                    }
+                };
+
                 //table is not filtered
                 if(!o.validRowsIndex){
                     return;
@@ -1891,7 +1926,7 @@ export default class TableFilter{
                         }
                     }
                     o._lastRowIndex = row.rowIndex;
-                    DoSelection(nextRowIndex);
+                    doSelect(nextRowIndex);
                 } else {
                     //If filtered row is valid, special calculation for
                     //pgup/pgdown keys
@@ -1920,44 +1955,9 @@ export default class TableFilter{
                         o._lastRowIndex = nextRowIndex;
                         o._lastValidRowIndex = array.indexByValue(validIndexes,
                             nextRowIndex);
-                        DoSelection(nextRowIndex);
+                        doSelect(nextRowIndex);
                     }
                 }
-
-                //Next valid filtered row needs to be selected
-                var DoSelection = function(nextRowIndex){
-                    if(et.defaultSelection === 'row'){
-                        et.Selection.SelectRowByIndex(nextRowIndex);
-                    } else {
-                        et.ClearSelections();
-                        var cellIndex = selectedElm.cellIndex,
-                            row = o.tbl.rows[nextRowIndex];
-                        if(et.defaultSelection === 'both'){
-                            et.Selection.SelectRowByIndex(nextRowIndex);
-                        }
-                        if(row){
-                            et.Selection.SelectCell(row.cells[cellIndex]);
-                        }
-                    }
-                    //Table is filtered
-                    if(o.validRowsIndex.length !== o.getRowsNb()){
-                        var r = o.tbl.rows[nextRowIndex];
-                        if(r){
-                            r.scrollIntoView(false);
-                        }
-                        if(cell){
-                            if(cell.cellIndex===(o.getCellsNb()-1) &&
-                                o.gridLayout){
-                                o.tblCont.scrollLeft = 100000000;
-                            }
-                            else if(cell.cellIndex===0 && o.gridLayout){
-                                o.tblCont.scrollLeft = 0;
-                            } else {
-                                cell.scrollIntoView(false);
-                            }
-                        }
-                    }
-                };
             };
 
             //Page navigation has to be enforced whenever selected row is out of
@@ -1966,33 +1966,36 @@ export default class TableFilter{
                 var row = et.defaultSelection !== 'row' ?
                     selectedElm.parentNode : selectedElm;
                 if(o.paging){
-                    if(o.nbPages>1){
+                    if(o.Cpt.paging.nbPages>1){
+                        var paging = o.Cpt.paging;
                         //page length is re-assigned in case it has changed
-                        et.nbRowsPerPage = o.pagingLength;
+                        et.nbRowsPerPage = paging.pagingLength;
                         var validIndexes = o.validRowsIndex,
                             validIdxLen = validIndexes.length,
-                            pagingEndRow = parseInt(o.startPagingRow, 10) +
-                            parseInt(o.pagingLength, 10);
+                            pagingEndRow = parseInt(paging.startPagingRow, 10) +
+                                parseInt(paging.pagingLength, 10);
                         var rowIndex = row.rowIndex;
+
                         if((rowIndex === validIndexes[validIdxLen-1]) &&
-                            o.currentPageNb!=o.nbPages){
-                            // o.SetPage('last');
-                            o.Cpt.paging.setPage('last');
+                            paging.currentPageNb!==paging.nbPages){
+                            console.log('last');
+                            paging.setPage('last');
                         }
                         else if((rowIndex == validIndexes[0]) &&
-                            o.currentPageNb!==1){
-                            // o.SetPage('first');
-                            o.Cpt.paging.setPage('first');
+                            paging.currentPageNb!==1){
+                            console.log('first');
+                            paging.setPage('first');
                         }
                         else if(rowIndex > validIndexes[pagingEndRow-1] &&
                             rowIndex < validIndexes[validIdxLen-1]){
-                            // o.SetPage('next');
-                            o.Cpt.paging.setPage('next');
+                            console.log('next');
+                            paging.setPage('next');
                         }
-                        else if(rowIndex < validIndexes[o.startPagingRow] &&
+                        else if(
+                            rowIndex < validIndexes[paging.startPagingRow] &&
                             rowIndex > validIndexes[0]){
-                            // o.SetPage('previous');
-                            o.Cpt.paging.setPage('previous');
+                            console.log('previous');
+                            paging.setPage('previous');
                         }
                     }
                 }
@@ -2001,12 +2004,13 @@ export default class TableFilter{
             //Selected row needs to be visible when paging is activated
             if(o.paging){
                 o.onAfterChangePage = function(tf, i){
-                    var et = tf.ezEditTable;
-                    var row = et.Selection.GetActiveRow();
+                    var et = tf.Extensions.ezEditTable;
+                    var slc = et.Selection;
+                    var row = slc.GetActiveRow();
                     if(row){
                         row.scrollIntoView(false);
                     }
-                    var cell = et.Selection.GetActiveCell();
+                    var cell = slc.GetActiveCell();
                     if(cell){
                         cell.scrollIntoView(false);
                     }
@@ -2098,8 +2102,9 @@ export default class TableFilter{
         }
 
         try{
-            o.ezEditTable = new EditTable(o.id, ezEditConfig, startRow);
-            o.ezEditTable.Init();
+            o.Extensions.ezEditTable = new EditTable(
+                o.id, ezEditConfig, startRow);
+            o.Extensions.ezEditTable.Init();
         } catch(e) { console.log(ezEditConfig.err); }
     }
 

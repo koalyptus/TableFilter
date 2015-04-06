@@ -1,10 +1,13 @@
 define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
     var Dom = _dom.Dom;
     var Event = _event.Event;
 
@@ -46,7 +49,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
             this.tf = tf;
         }
 
-        _prototypeProperties(Help, null, {
+        _createClass(Help, {
             init: {
                 value: function init() {
                     var _this = this;
@@ -112,9 +115,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
 
                     this.helpInstrContEl = helpdiv;
                     this.helpInstrBtnEl = helpspan;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             toggle: {
 
@@ -137,9 +138,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
                     } else {
                         this.helpInstrContEl.style.display = "none";
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             destroy: {
 
@@ -158,17 +157,11 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
                     }
                     this.helpInstrContEl.parentNode.removeChild(this.helpInstrContEl);
                     this.helpInstrContEl = null;
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 
         return Help;
     })();
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
 });
 //# sourceMappingURL=help.js.map

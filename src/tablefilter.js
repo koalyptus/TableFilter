@@ -1,7 +1,7 @@
 define(["exports", "module", "event", "dom", "string", "cookie", "types", "array", "helpers", "date", "sort", "modules/store", "modules/gridLayout", "modules/loader", "modules/highlightKeywords", "modules/popupFilter", "modules/dropdown", "modules/checkList", "modules/rowsCounter", "modules/statusBar", "modules/paging", "modules/clearButton", "modules/help", "modules/alternateRows", "modules/colOps", "extensions/sortabletable/sortabletable", "extensions/sortabletable/adapterSortabletable"], function (exports, module, _event, _dom, _string, _cookie, _types, _array, _helpers, _date, _sort, _modulesStore, _modulesGridLayout, _modulesLoader, _modulesHighlightKeywords, _modulesPopupFilter, _modulesDropdown, _modulesCheckList, _modulesRowsCounter, _modulesStatusBar, _modulesPaging, _modulesClearButton, _modulesHelp, _modulesAlternateRows, _modulesColOps, _extensionsSortabletableSortabletable, _extensionsSortabletableAdapterSortabletable) {
     "use strict";
 
-    var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+    var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
@@ -394,11 +394,11 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
             this.editable = f.editable === true ? true : false;
             this.ezEditTableConfig = f.ezEditTable_config || {};
             this.ezEditTableConfig.name = this.ezEditTableConfig.name !== undefined ? f.ezEditTable_config.name : "ezedittable";
-            this.ezEditTableConfig.src = this.ezEditTableConfig.src !== undefined ? f.ezEditTable_config.src : this.basePath + "ezEditTable/ezEditTable.js";
+            this.ezEditTableConfig.src = this.ezEditTableConfig.src !== undefined ? f.ezEditTable_config.src : this.basePath + "extensions/ezEditTable/ezEditTable.js";
             //ezEditTable stylesheet not imported by default as filtergrid.css
             //applies
             this.ezEditTableConfig.loadStylesheet = this.ezEditTableConfig.loadStylesheet === true ? true : false;
-            this.ezEditTableConfig.stylesheet = this.ezEditTableConfig.stylesheet || this.basePath + "ezEditTable/ezEditTable.css";
+            this.ezEditTableConfig.stylesheet = this.ezEditTableConfig.stylesheet || this.basePath + "extensions/ezEditTable/ezEditTable.css";
             this.ezEditTableConfig.stylesheetName = this.ezEditTableConfig.stylesheetName !== undefined ? f.ezEditTable_config.stylesheetName : "ezEditTableCss";
             this.ezEditTableConfig.err = "Failed to instantiate EditTable " + "object.\n\"ezEditTable\" module may not be available.";
 
@@ -597,7 +597,8 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
             // Extensions registry
             this.Extensions = {
-                sort: null
+                sort: null,
+                ezEditTable: null
             };
 
             /*** TF events ***/
@@ -803,7 +804,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
             };
         }
 
-        _prototypeProperties(TableFilter, null, {
+        _createClass(TableFilter, {
             init: {
 
                 /*====================================================
@@ -1125,7 +1126,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         this.setSort();
                     }
                     if (this.selectable || this.editable) {
-                        this.SetEditable();
+                        this.setEditable();
                     }
 
                     this.isFirstLoad = false;
@@ -1152,9 +1153,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     if (this.onFiltersLoaded) {
                         this.onFiltersLoaded.call(null, this);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             EvtManager: {
 
@@ -1246,9 +1245,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     } else {
                         efx();
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             ImportModule: {
                 value: function ImportModule(module) {
@@ -1256,9 +1253,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         return;
                     }
                     this.includeFile(module.name, module.path, module.init);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             LoadExtensions: {
                 value: function LoadExtensions() {
@@ -1282,9 +1277,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         };
                     }
                     this.EvtManager(this.Evt.name.loadextensions);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _LoadExtensions: {
 
@@ -1311,16 +1304,12 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             this.includeFile(extName, extPath, extInit);
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             LoadThemes: {
                 value: function LoadThemes() {
                     this.EvtManager(this.Evt.name.loadthemes);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _LoadThemes: {
 
@@ -1396,9 +1385,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     this.loader = true;
                     this.loaderHtml = "<div class=\"defaultLoader\"></div>";
                     this.loaderText = null;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             remove: {
 
@@ -1447,7 +1434,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             this.clearActiveColumns();
                         }
                         if (this.editable || this.selectable) {
-                            this.RemoveEditable();
+                            this.removeEditable();
                         }
                         //this loop shows all rows and removes validRow attribute
                         for (var j = this.refRow; j < this.nbRows; j++) {
@@ -1486,9 +1473,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         this._hasGrid = false;
                         this.tbl = null;
                     } //if this.fltGrid
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setToolbar: {
 
@@ -1549,9 +1534,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         }
                         this.Cpt.help.init();
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             removeToolbar: {
 
@@ -1566,9 +1549,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     }
                     this.infDiv.parentNode.removeChild(this.infDiv);
                     this.infDiv = null;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             removeExternalFlts: {
 
@@ -1587,9 +1568,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             externalFlt.innerHTML = "";
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setSort: {
 
@@ -1603,9 +1582,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     var adapterSortabletable = new AdapterSortableTable(this);
                     this.Extensions.sort = adapterSortabletable;
                     adapterSortabletable.init();
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setOldSort: {
                 value: function setOldSort() {
@@ -1704,9 +1681,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         //     }
                         // );
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             performSort: {
 
@@ -1719,38 +1694,34 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                 value: function performSort() {
                     this.EvtManager(this.Evt.name.sort);
-                },
-                writable: true,
-                configurable: true
+                }
             },
-            SetEditable: {
+            setEditable: {
 
                 /*====================================================
                     - Sets selection or edition features by loading
                     ezEditTable script by Max Guglielmi
                 =====================================================*/
 
-                value: function SetEditable() {
+                value: function setEditable() {
                     var ezEditConfig = this.ezEditTableConfig;
                     if (this.isImported(ezEditConfig.src)) {
-                        this._EnableEditable();
+                        this._enableEditable();
                     } else {
-                        this.includeFile(ezEditConfig.name, ezEditConfig.src, this._EnableEditable);
+                        this.includeFile(ezEditConfig.name, ezEditConfig.src, this._enableEditable);
                     }
                     if (ezEditConfig.loadStylesheet && !this.isImported(ezEditConfig.stylesheet, "link")) {
                         this.includeFile(ezEditConfig.stylesheetName, ezEditConfig.stylesheet, null, "link");
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
-            RemoveEditable: {
+            removeEditable: {
 
                 /*====================================================
                     - Removes selection or edition features
                 =====================================================*/
 
-                value: function RemoveEditable() {
+                value: function removeEditable() {
                     var ezEditTable = this.ezEditTable;
                     if (ezEditTable) {
                         if (this.selectable) {
@@ -1761,18 +1732,16 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             ezEditTable.Editable.Remove();
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
-            ResetEditable: {
+            resetEditable: {
 
                 /*====================================================
                     - Resets selection or edition features after
                     removal
                 =====================================================*/
 
-                value: function ResetEditable() {
+                value: function resetEditable() {
                     var ezEditTable = this.ezEditTable;
                     if (ezEditTable) {
                         if (this.selectable) {
@@ -1782,12 +1751,10 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             ezEditTable.Editable.Set();
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
-            _EnableEditable: {
-                value: function _EnableEditable(o) {
+            _enableEditable: {
+                value: function _enableEditable(o) {
                     if (!o) {
                         o = this;
                     }
@@ -1825,6 +1792,40 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         //Row navigation needs to be calculated according to TableFilter's
                         //validRowsIndex array
                         var onAfterSelection = function onAfterSelection(et, selectedElm, e) {
+                            var slc = et.Selection;
+                            //Next valid filtered row needs to be selected
+                            var doSelect = function doSelect(nextRowIndex) {
+                                if (et.defaultSelection === "row") {
+                                    slc.SelectRowByIndex(nextRowIndex);
+                                } else {
+                                    et.ClearSelections();
+                                    var cellIndex = selectedElm.cellIndex,
+                                        row = o.tbl.rows[nextRowIndex];
+                                    if (et.defaultSelection === "both") {
+                                        slc.SelectRowByIndex(nextRowIndex);
+                                    }
+                                    if (row) {
+                                        slc.SelectCell(row.cells[cellIndex]);
+                                    }
+                                }
+                                //Table is filtered
+                                if (o.validRowsIndex.length !== o.getRowsNb()) {
+                                    var r = o.tbl.rows[nextRowIndex];
+                                    if (r) {
+                                        r.scrollIntoView(false);
+                                    }
+                                    if (cell) {
+                                        if (cell.cellIndex === o.getCellsNb() - 1 && o.gridLayout) {
+                                            o.tblCont.scrollLeft = 100000000;
+                                        } else if (cell.cellIndex === 0 && o.gridLayout) {
+                                            o.tblCont.scrollLeft = 0;
+                                        } else {
+                                            cell.scrollIntoView(false);
+                                        }
+                                    }
+                                }
+                            };
+
                             //table is not filtered
                             if (!o.validRowsIndex) {
                                 return;
@@ -1868,7 +1869,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                     }
                                 }
                                 o._lastRowIndex = row.rowIndex;
-                                DoSelection(nextRowIndex);
+                                doSelect(nextRowIndex);
                             } else {
                                 //If filtered row is valid, special calculation for
                                 //pgup/pgdown keys
@@ -1895,42 +1896,9 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                     }
                                     o._lastRowIndex = nextRowIndex;
                                     o._lastValidRowIndex = array.indexByValue(validIndexes, nextRowIndex);
-                                    DoSelection(nextRowIndex);
+                                    doSelect(nextRowIndex);
                                 }
                             }
-
-                            //Next valid filtered row needs to be selected
-                            var DoSelection = function DoSelection(nextRowIndex) {
-                                if (et.defaultSelection === "row") {
-                                    et.Selection.SelectRowByIndex(nextRowIndex);
-                                } else {
-                                    et.ClearSelections();
-                                    var cellIndex = selectedElm.cellIndex,
-                                        row = o.tbl.rows[nextRowIndex];
-                                    if (et.defaultSelection === "both") {
-                                        et.Selection.SelectRowByIndex(nextRowIndex);
-                                    }
-                                    if (row) {
-                                        et.Selection.SelectCell(row.cells[cellIndex]);
-                                    }
-                                }
-                                //Table is filtered
-                                if (o.validRowsIndex.length !== o.getRowsNb()) {
-                                    var r = o.tbl.rows[nextRowIndex];
-                                    if (r) {
-                                        r.scrollIntoView(false);
-                                    }
-                                    if (cell) {
-                                        if (cell.cellIndex === o.getCellsNb() - 1 && o.gridLayout) {
-                                            o.tblCont.scrollLeft = 100000000;
-                                        } else if (cell.cellIndex === 0 && o.gridLayout) {
-                                            o.tblCont.scrollLeft = 0;
-                                        } else {
-                                            cell.scrollIntoView(false);
-                                        }
-                                    }
-                                }
-                            };
                         };
 
                         //Page navigation has to be enforced whenever selected row is out of
@@ -1938,25 +1906,27 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         var onBeforeSelection = function onBeforeSelection(et, selectedElm, e) {
                             var row = et.defaultSelection !== "row" ? selectedElm.parentNode : selectedElm;
                             if (o.paging) {
-                                if (o.nbPages > 1) {
+                                if (o.Cpt.paging.nbPages > 1) {
+                                    var paging = o.Cpt.paging;
                                     //page length is re-assigned in case it has changed
-                                    et.nbRowsPerPage = o.pagingLength;
+                                    et.nbRowsPerPage = paging.pagingLength;
                                     var validIndexes = o.validRowsIndex,
                                         validIdxLen = validIndexes.length,
-                                        pagingEndRow = parseInt(o.startPagingRow, 10) + parseInt(o.pagingLength, 10);
+                                        pagingEndRow = parseInt(paging.startPagingRow, 10) + parseInt(paging.pagingLength, 10);
                                     var rowIndex = row.rowIndex;
-                                    if (rowIndex === validIndexes[validIdxLen - 1] && o.currentPageNb != o.nbPages) {
-                                        // o.SetPage('last');
-                                        o.Cpt.paging.setPage("last");
-                                    } else if (rowIndex == validIndexes[0] && o.currentPageNb !== 1) {
-                                        // o.SetPage('first');
-                                        o.Cpt.paging.setPage("first");
+
+                                    if (rowIndex === validIndexes[validIdxLen - 1] && paging.currentPageNb !== paging.nbPages) {
+                                        console.log("last");
+                                        paging.setPage("last");
+                                    } else if (rowIndex == validIndexes[0] && paging.currentPageNb !== 1) {
+                                        console.log("first");
+                                        paging.setPage("first");
                                     } else if (rowIndex > validIndexes[pagingEndRow - 1] && rowIndex < validIndexes[validIdxLen - 1]) {
-                                        // o.SetPage('next');
-                                        o.Cpt.paging.setPage("next");
-                                    } else if (rowIndex < validIndexes[o.startPagingRow] && rowIndex > validIndexes[0]) {
-                                        // o.SetPage('previous');
-                                        o.Cpt.paging.setPage("previous");
+                                        console.log("next");
+                                        paging.setPage("next");
+                                    } else if (rowIndex < validIndexes[paging.startPagingRow] && rowIndex > validIndexes[0]) {
+                                        console.log("previous");
+                                        paging.setPage("previous");
                                     }
                                 }
                             }
@@ -1965,12 +1935,13 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         //Selected row needs to be visible when paging is activated
                         if (o.paging) {
                             o.onAfterChangePage = function (tf, i) {
-                                var et = tf.ezEditTable;
-                                var row = et.Selection.GetActiveRow();
+                                var et = tf.Extensions.ezEditTable;
+                                var slc = et.Selection;
+                                var row = slc.GetActiveRow();
                                 if (row) {
                                     row.scrollIntoView(false);
                                 }
-                                var cell = et.Selection.GetActiveCell();
+                                var cell = slc.GetActiveCell();
                                 if (cell) {
                                     cell.scrollIntoView(false);
                                 }
@@ -2058,14 +2029,12 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     }
 
                     try {
-                        o.ezEditTable = new EditTable(o.id, ezEditConfig, startRow);
-                        o.ezEditTable.Init();
+                        o.Extensions.ezEditTable = new EditTable(o.id, ezEditConfig, startRow);
+                        o.Extensions.ezEditTable.Init();
                     } catch (e) {
                         console.log(ezEditConfig.err);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             resetValues: {
 
@@ -2141,9 +2110,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                 value: function resetValues() {
                     this.EvtManager(this.Evt.name.resetvalues);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _resetValues: {
 
@@ -2168,9 +2135,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         // this.ResetPage(this.pgNbCookie);
                         this.Cpt.paging.resetPage(this.pgNbCookie);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             resetGridValues: {
 
@@ -2261,16 +2226,12 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             this.Cpt.paging.setPagingInfo();
                         }
                     } //end if
-                },
-                writable: true,
-                configurable: true
+                }
             },
             filter: {
                 value: function filter() {
                     this.EvtManager(this.Evt.name.filter);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _filter: {
                 /*====================================================
@@ -2634,9 +2595,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     if (this.onAfterFilter) {
                         this.onAfterFilter.call(null, this);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             applyGridProps: {
 
@@ -2675,9 +2634,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     if (this.popUpFilters) {
                         this.Cpt.popupFilter.closeAll();
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getColValues: {
 
@@ -2722,9 +2679,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         }
                     } //for i
                     return colValues;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFilterValue: {
 
@@ -2769,9 +2724,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         }
                     }
                     return fltValue;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFiltersValue: {
 
@@ -2788,9 +2741,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         searchArgs.push(str.trim(str.matchCase(this.getFilterValue(i), this.matchCase)));
                     }
                     return searchArgs;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFilterId: {
 
@@ -2805,9 +2756,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         return;
                     }
                     return this.fltIds[i];
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFiltersByType: {
 
@@ -2835,9 +2784,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         }
                     }
                     return arr;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFilterElement: {
 
@@ -2851,9 +2798,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         return null;
                     }
                     return dom.id(this.fltIds[index]);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getCellsNb: {
 
@@ -2866,9 +2811,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 value: function getCellsNb(rowIndex) {
                     var tr = !rowIndex ? this.tbl.rows[0] : this.tbl.rows[rowIndex];
                     return tr.cells.length;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getRowsNb: {
 
@@ -2887,9 +2830,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         s = 0;
                     }
                     return parseInt(ntrs - s, 10);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getCellData: {
 
@@ -2910,9 +2851,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     } else {
                         return dom.getText(cell);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getTableData: {
 
@@ -2934,9 +2873,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         this.tblData.push(rowData);
                     }
                     return this.tblData;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFilteredData: {
 
@@ -2973,9 +2910,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         filteredData.push(rData);
                     }
                     return filteredData;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFilteredDataCol: {
 
@@ -3005,9 +2940,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         colData.push(c);
                     }
                     return colData;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getRowDisplay: {
                 value: function getRowDisplay(row) {
@@ -3015,9 +2948,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         return;
                     }
                     return row.style.display;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             validateRow: {
 
@@ -3047,9 +2978,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     if (this.paging) {
                         row.setAttribute("validRow", validFlag);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             validateAllRows: {
 
@@ -3066,9 +2995,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         this.validateRow(k, true);
                         this.validRowsIndex.push(k);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setFilterValue: {
 
@@ -3141,9 +3068,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             }
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             setColWidths: {
 
@@ -3174,9 +3099,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             }
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             enforceVisibility: {
 
@@ -3194,16 +3117,12 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             }
                         }
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             clearFilters: {
                 value: function clearFilters() {
                     this.EvtManager(this.Evt.name.clear);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _clearFilters: {
                 /*====================================================
@@ -3233,9 +3152,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     if (this.onAfterReset) {
                         this.onAfterReset.call(null, this);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             clearActiveColumns: {
 
@@ -3247,9 +3164,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     for (var i = 0; i < this.fltIds.length; i++) {
                         dom.removeClass(this.getHeaderElement(i), this.activeColumnsCssClass);
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             refresh: {
 
@@ -3281,9 +3196,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         //finally sort property is enabled again
                         this.sort = true;
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             linkFilters: {
 
@@ -3332,9 +3245,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             }
                         } // for i
                     }
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _resetGrid: {
 
@@ -3413,9 +3324,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         dom.addClass(this.tbl, this.prfxTf);
                     }
                     this._hasGrid = true;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             _containsStr: {
 
@@ -3445,9 +3354,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         regexp = new RegExp(str.rgxEsc(arg), modifier);
                     }
                     return regexp.test(data);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             isImported: {
                 value: function isImported(filePath, type) {
@@ -3465,9 +3372,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         }
                     }
                     return imported;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             includeFile: {
                 value: function includeFile(fileId, filePath, callback, type) {
@@ -3500,9 +3405,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         throw new Error("TF script could not load:\n" + this.src);
                     };
                     head.appendChild(file);
-                },
-                writable: true,
-                configurable: true
+                }
             },
             hasGrid: {
 
@@ -3513,9 +3416,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                 value: function hasGrid() {
                     return this._hasGrid;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFiltersId: {
 
@@ -3529,9 +3430,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         return;
                     }
                     return this.fltIds;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getValidRowsIndex: {
 
@@ -3562,9 +3461,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         }
                     }
                     return this.validRowsIndex;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFiltersRowIndex: {
 
@@ -3578,9 +3475,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         return;
                     }
                     return this.filtersRowIndex;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getHeadersRowIndex: {
 
@@ -3593,9 +3488,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         return;
                     }
                     return this.headersRow;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getStartRowIndex: {
 
@@ -3609,9 +3502,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         return;
                     }
                     return this.refRow;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getLastRowIndex: {
 
@@ -3624,9 +3515,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         return;
                     }
                     return this.nbRows - 1;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getHeaderElement: {
 
@@ -3653,9 +3542,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         break;
                     }
                     return header;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             config: {
 
@@ -3665,9 +3552,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                 value: function config() {
                     return this.cfg;
-                },
-                writable: true,
-                configurable: true
+                }
             },
             getFilterableRowsNb: {
 
@@ -3678,9 +3563,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                 value: function getFilterableRowsNb() {
                     return this.getRowsNb(false);
-                },
-                writable: true,
-                configurable: true
+                }
             }
         });
 

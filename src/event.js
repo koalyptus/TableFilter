@@ -1,9 +1,9 @@
 define(["exports"], function (exports) {
-    "use strict";
-
     /**
      * DOM event utilities
      */
+
+    "use strict";
 
     var Event = {
         add: function add(obj, type, func, capture) {

@@ -1,9 +1,9 @@
 define(["exports", "string"], function (exports, _string) {
-    "use strict";
-
     /**
      * Array utilities
      */
+
+    "use strict";
 
     var Str = _string.Str;
 

@@ -1,0 +1,1082 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ezEditTable, enhance HTML tables easily, advanced inline editing, selection and keyboard navigation - script by Max Guglielmi | Samples, Examples</title>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="description" content="ezEditTable is an open source javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation" />
+	<meta name="keywords" content="html table editing, html table inline cell editing, inline cell editor, row selection, script, javascript, max guglielmi" />
+	<meta name="robots" content="index,follow" />
+	<meta name="author" content="Max Guglielmi" />
+	<style type="text/css" media="screen, projection">
+		@import "http://edittable.free.fr/includes/common.css";
+	</style>
+
+	<script language="javascript" type="text/javascript" src="../ezEditTable.js"></script>
+	<link href="../ezEditTable.css" rel="stylesheet" type="text/css">
+
+	<style type="text/css" media="screen">
+		div#navmenu li a#lnk02{
+			color:#333; font-weight:bold;
+			border-top:2px solid #ff9900;
+			background:#fff;
+		}
+	</style>
+
+</head>
+<body>
+
+<div id="container">
+
+	<div id="banner">
+
+	<div id="navmenu">
+		<ul>
+			<li><a id="lnk01" href="index.html">Home</a></li>
+			<li><a id="lnk02" href="samples.html">Samples</a></li>
+			<li><a id="lnk03" href="doc.html">Documentation</a></li>
+		</ul>
+	</div>
+	</div>
+
+	<!-- BEGIN CONTENT -->
+
+	<div id="content">
+
+    <h1>Samples
+      <span class="floatRight fontSize12px">
+          <a href="starter.html">Starter</a>
+      </span>
+    </h1>
+
+    <p>In this page you will find a collection of samples showing how to configure
+      the ezEditTable script.</p>
+    <div id="toc">
+      <ul>
+        <li><a href="#tbl1">Table 1</a>: call the script</li>
+        <li><a href="#tbl2">Table 2</a>: enable cell selection only</li>
+
+        <li><a href="#tbl3">Table 3</a>: enable multiple rows selection (click
+          + ctrl or shift key) and define selection's starting row</li>
+        <li><a href="#tbl4">Table 4</a>: disable key navigation and key selection
+          (ctrl and shift key for multiple selection), enable multiple selection
+          (click selection)</li>
+        <li><a href="#tbl5">Table 5</a>: select a row at start and use callback
+          event functions before and after a row is selected</li>
+        <li><a href="#tbl6">Table 6</a>: enable default inline cell editing, double-click
+          on a cell to display cell editor</li>
+        <li><a href="#tbl7">Table 7</a>: define editor type by column, double-click
+          or use F2, enter or spacebar keys to display editor</li>
+
+        <li><a href="#tbl8">Table 8</a>: use the script's public methods and properties
+          to change features programmatically or to retrieve information</li>
+        <li><a href="#tbl9">Table 9</a>: enable a command type column editor</li>
+      </ul>
+        </div>
+
+        <hr/>
+        <p>Here you have a regular HTML table:</p>
+
+        <table class="mytable" cellpadding="0" cellspacing="0">
+          <caption>
+          WORLD INTERNET USAGE AND POPULATION STATISTICS
+          </caption>
+          <tr>
+            <th>World Regions</th>
+            <th>Population ( 2007 Est.)</th>
+            <th>Population % of World</th>
+
+            <th>% Population ( Penetration )</th>
+            <th>Usage % of World</th>
+          </tr>
+          <tr>
+            <td>Africa</td>
+            <td>933,448,292</td>
+            <td>14.2 %</td>
+
+            <td>3.5 %</td>
+            <td>3.0 %</td>
+          </tr>
+          <tr>
+            <td>Asia</td>
+            <td>3,712,527,624</td>
+            <td>56.5 %</td>
+
+            <td>10.5 %</td>
+            <td>35.6 %</td>
+          </tr>
+          <tr>
+            <td>Europe</td>
+            <td>809,624,686</td>
+            <td>12.3 %</td>
+
+            <td>38.6 %</td>
+            <td>28.6 %</td>
+          </tr>
+          <tr>
+            <td>Middle East</td>
+            <td>193,452,727</td>
+            <td>2.9 %</td>
+
+            <td>10.0 %</td>
+            <td>1.8 %</td>
+          </tr>
+          <tr>
+            <td>North America</td>
+            <td>334,538,018</td>
+            <td>5.1 %</td>
+
+            <td>69.4 %</td>
+            <td>21.2 %</td>
+          </tr>
+          <tr>
+            <td>Latin America / Caribbean</td>
+            <td>556,606,627</td>
+            <td>8.5 %</td>
+
+            <td>16.0 %</td>
+            <td>8.1 %</td>
+          </tr>
+          <tr>
+            <td>Oceania / Australia</td>
+            <td>34,468,443</td>
+            <td>0.5 %</td>
+
+            <td>53.5 %</td>
+            <td>1.7 %</td>
+          </tr>
+        </table>
+
+   		<p>Below the same table enhanced by the ezEditTable script:</p>
+
+        <h2><a name="tbl1" id="tbl1"></a>TABLE 1</h2>
+        <p>Call the script</p>
+
+        <table id="table1" cellpadding="0" cellspacing="0">
+          <thead>
+		  <tr>
+            <th>World Regions</th>
+            <th>Population ( 2007 Est.)</th>
+            <th>Population % of World</th>
+            <th>% Population ( Penetration )</th>
+
+            <th>Usage % of World</th>
+          </tr>
+		  </thead>
+          <tbody>
+		  <tr>
+            <td>Africa</td>
+            <td>933,448,292</td>
+            <td>14.2 %</td>
+
+            <td>3.5 %</td>
+            <td>3.0 %</td>
+          </tr>
+          <tr>
+            <td>Asia</td>
+            <td>3,712,527,624</td>
+
+            <td>56.5 %</td>
+
+            <td>10.5 %</td>
+            <td>35.6 %</td>
+          </tr>
+          <tr>
+            <td>Europe</td>
+            <td>809,624,686</td>
+            <td>12.3 %</td>
+
+            <td>38.6 %</td>
+            <td>28.6 %</td>
+          </tr>
+          <tr>
+            <td>Middle East</td>
+            <td>193,452,727</td>
+            <td>2.9 %</td>
+
+            <td>10.0 %</td>
+            <td>1.8 %</td>
+          </tr>
+          <tr>
+            <td>North America</td>
+            <td>334,538,018</td>
+            <td>5.1 %</td>
+
+            <td>69.4 %</td>
+            <td>21.2 %</td>
+          </tr>
+          <tr>
+            <td>Latin America / Caribbean</td>
+            <td>556,606,627</td>
+            <td>8.5 %</td>
+
+            <td>16.0 %</td>
+            <td>8.1 %</td>
+          </tr>
+          <tr>
+            <td>Oceania / Australia</td>
+            <td>34,468,443</td>
+            <td>0.5 %</td>
+
+            <td>53.5 %</td>
+            <td>1.7 %</td>
+          </tr>
+		  </tbody>
+        </table>
+
+    <pre class="brush: js;">&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var et1 = setEditTable(&quot;table1&quot;);
+&lt;/script&gt;
+</pre>
+<script language="javascript" type="text/javascript">
+	var et1 = setEditTable( "table1" );
+</script>
+        <a href="javascript:window.scroll(0,0);">Top of page</a>
+        <hr/>
+
+		<h2><a name="tbl2" id="tbl2"></a>TABLE 2</h2>
+        <p>Enable cell selection only</p>
+
+        <table id="table2" cellpadding="0" cellspacing="0">
+          <thead>
+		  <tr>
+            <th>World Regions</th>
+            <th>Population ( 2007 Est.)</th>
+            <th>Population % of World</th>
+            <th>% Population ( Penetration )</th>
+
+            <th>Usage % of World</th>
+          </tr>
+		  </thead>
+          <tbody>
+		  <tr>
+            <td>Africa</td>
+            <td>933,448,292</td>
+            <td>14.2 %</td>
+
+            <td>3.5 %</td>
+            <td>3.0 %</td>
+          </tr>
+          <tr>
+            <td>Asia</td>
+            <td>3,712,527,624</td>
+            <td>56.5 %</td>
+
+            <td>10.5 %</td>
+            <td>35.6 %</td>
+          </tr>
+          <tr>
+            <td>Europe</td>
+            <td>809,624,686</td>
+            <td>12.3 %</td>
+
+            <td>38.6 %</td>
+            <td>28.6 %</td>
+          </tr>
+          <tr>
+            <td>Middle East</td>
+            <td>193,452,727</td>
+            <td>2.9 %</td>
+
+            <td>10.0 %</td>
+            <td>1.8 %</td>
+          </tr>
+          <tr>
+            <td>North America</td>
+            <td>334,538,018</td>
+            <td>5.1 %</td>
+
+            <td>69.4 %</td>
+            <td>21.2 %</td>
+          </tr>
+          <tr>
+            <td>Latin America / Caribbean</td>
+            <td>556,606,627</td>
+            <td>8.5 %</td>
+
+            <td>16.0 %</td>
+            <td>8.1 %</td>
+          </tr>
+          <tr>
+            <td>Oceania / Australia</td>
+            <td>34,468,443</td>
+            <td>0.5 %</td>
+
+            <td>53.5 %</td>
+            <td>1.7 %</td>
+          </tr>
+		  </tbody>
+        </table>
+
+    <pre class="brush: js;">&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var table2_Config = { default_selection:'cell' };
+	var et2 = setEditTable("table2", table2_Config);
+&lt;/script&gt;</pre>
+<script language="javascript" type="text/javascript">
+	var table2_Config = { default_selection:'cell' };
+	var et2 = setEditTable("table2", table2_Config);
+</script>
+        <a href="javascript:window.scroll(0,0);">Top of page</a>
+        <hr/>
+
+        <h2><a name="tbl3" id="tbl3"></a>TABLE 3</h2>
+
+    <p>Enable multiple rows selection (click + ctrl or shift key) and define selection's
+      starting row</p>
+
+    <table id="table3" cellpadding="0" cellspacing="0">
+      <tr>
+        <th colspan="2">Group 1</th>
+
+        <th colspan="2">Group 2</th>
+        <th>Group 3</th>
+      </tr>
+      <tr>
+        <th>World Regions</th>
+        <th>Population ( 2007 Est.)</th>
+        <th>Population % of World</th>
+
+        <th>% Population ( Penetration )</th>
+        <th>Usage % of World</th>
+      </tr>
+      <tr>
+        <td>Africa</td>
+        <td>933,448,292</td>
+        <td>14.2 %</td>
+
+        <td>3.5 %</td>
+        <td>3.0 %</td>
+      </tr>
+      <tr>
+        <td>Asia</td>
+        <td>3,712,527,624</td>
+        <td>56.5 %</td>
+
+        <td>10.5 %</td>
+        <td>35.6 %</td>
+      </tr>
+      <tr>
+        <td>Europe</td>
+        <td>809,624,686</td>
+        <td>12.3 %</td>
+
+        <td>38.6 %</td>
+        <td>28.6 %</td>
+      </tr>
+      <tr>
+        <td>Middle East</td>
+        <td>193,452,727</td>
+        <td>2.9 %</td>
+
+        <td>10.0 %</td>
+        <td>1.8 %</td>
+      </tr>
+      <tr>
+        <td>North America</td>
+        <td>334,538,018</td>
+        <td>5.1 %</td>
+
+        <td>69.4 %</td>
+        <td>21.2 %</td>
+      </tr>
+      <tr>
+        <td>Latin America / Caribbean</td>
+        <td>556,606,627</td>
+        <td>8.5 %</td>
+
+        <td>16.0 %</td>
+        <td>8.1 %</td>
+      </tr>
+      <tr>
+        <td>Oceania / Australia</td>
+        <td>34,468,443</td>
+        <td>0.5 %</td>
+
+        <td>53.5 %</td>
+        <td>1.7 %</td>
+      </tr>
+    </table>
+        <pre class="brush: js;">&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var table3_Config = { selection_model: 'multiple' };
+	var et3 = setEditTable(&quot;table3&quot;, table3_Config, 2);
+&lt;/script&gt;</pre>
+<script language="javascript" type="text/javascript">
+	var table3_Config =  { selection_model: 'multiple' };
+	var et3 = setEditTable("table3", table3_Config, 2);
+</script>
+        <a href="javascript:window.scroll(0,0);">Top of page</a>
+        <hr/>
+
+   <h2><a name="tbl4" id="tbl4"></a>TABLE 4</h2>
+    <p>Disable key navigation and key selection, enable multiple selection (click
+      selection)</p>
+      <table id="table4" cellpadding="0" cellspacing="0">
+      <thead>
+
+	  <tr>
+        <th>World Regions</th>
+        <th>Population ( 2007 Est.)</th>
+        <th>Population % of World</th>
+        <th>% Population ( Penetration )</th>
+        <th>Usage % of World</th>
+      </tr>
+
+	  </thead>
+	  <tbody>
+      <tr>
+        <td>Africa</td>
+        <td>933,448,292</td>
+        <td>14.2 %</td>
+        <td>3.5 %</td>
+
+        <td>3.0 %</td>
+      </tr>
+      <tr>
+        <td>Asia</td>
+        <td>3,712,527,624</td>
+        <td>56.5 %</td>
+        <td>10.5 %</td>
+
+        <td>35.6 %</td>
+      </tr>
+      <tr>
+        <td>Europe</td>
+        <td>809,624,686</td>
+        <td>12.3 %</td>
+        <td>38.6 %</td>
+
+        <td>28.6 %</td>
+      </tr>
+      <tr>
+        <td>Middle East</td>
+        <td>193,452,727</td>
+        <td>2.9 %</td>
+        <td>10.0 %</td>
+
+        <td>1.8 %</td>
+      </tr>
+      <tr>
+        <td>North America</td>
+        <td>334,538,018</td>
+        <td>5.1 %</td>
+        <td>69.4 %</td>
+
+        <td>21.2 %</td>
+      </tr>
+      <tr>
+        <td>Latin America / Caribbean</td>
+        <td>556,606,627</td>
+        <td>8.5 %</td>
+        <td>16.0 %</td>
+
+        <td>8.1 %</td>
+      </tr>
+      <tr>
+        <td>Oceania / Australia</td>
+        <td>34,468,443</td>
+        <td>0.5 %</td>
+        <td>53.5 %</td>
+
+        <td>1.7 %</td>
+      </tr>
+	  </tbody>
+    </table>
+        <pre class="brush: js;">&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	table4_Config = { key_navigation: false, key_selection: false, selection_model: 'multiple' };
+	var et4 = setEditTable(&quot;table4&quot;, table4_Config);
+&lt;/script&gt;</pre>
+<script language="javascript" type="text/javascript">
+	var table4_Config = { key_navigation: false, key_selection: false, selection_model: 'multiple' };
+	var et4 = setEditTable("table4", table4_Config);
+</script>
+        <a href="javascript:window.scroll(0,0);">Top of page</a>
+        <hr/>
+
+        <h2><a name="tbl5" id="tbl5"></a>TABLE 5</h2>
+
+    <p>Select a row at start and use callback event functions before (<code>on_before_selected_row</code>)
+      and after (<code>on_after_selected_row</code>) a row is selected</p>
+
+		<span id="output1"></span>&nbsp;<span id="output2"></span>
+        <table id="table5" cellpadding="0" cellspacing="0">
+		  <thead>
+          <tr>
+            <th>World Regions</th>
+            <th>Population ( 2007 Est.)</th>
+            <th>Population % of World</th>
+            <th>% Population ( Penetration )</th>
+
+            <th>Usage % of World</th>
+          </tr>
+		  </thead>
+		  <tbody>
+          <tr>
+            <td>Africa</td>
+            <td>933,448,292</td>
+            <td>14.2 %</td>
+
+            <td>3.5 %</td>
+            <td>3.0 %</td>
+          </tr>
+          <tr>
+            <td>Asia</td>
+            <td>3,712,527,624</td>
+            <td>56.5 %</td>
+
+            <td>10.5 %</td>
+            <td>35.6 %</td>
+          </tr>
+          <tr>
+            <td>Europe</td>
+            <td>809,624,686</td>
+            <td>12.3 %</td>
+
+            <td>38.6 %</td>
+            <td>28.6 %</td>
+          </tr>
+          <tr>
+            <td>Middle East</td>
+            <td>193,452,727</td>
+            <td>2.9 %</td>
+
+            <td>10.0 %</td>
+            <td>1.8 %</td>
+          </tr>
+          <tr>
+            <td>North America</td>
+            <td>334,538,018</td>
+            <td>5.1 %</td>
+
+            <td>69.4 %</td>
+            <td>21.2 %</td>
+          </tr>
+          <tr>
+            <td>Latin America / Caribbean</td>
+            <td>556,606,627</td>
+            <td>8.5 %</td>
+
+            <td>16.0 %</td>
+            <td>8.1 %</td>
+          </tr>
+          <tr>
+            <td>Oceania / Australia</td>
+            <td>34,468,443</td>
+            <td>0.5 %</td>
+
+            <td>53.5 %</td>
+            <td>1.7 %</td>
+          </tr>
+		  </tbody>
+        </table>
+
+    <pre class="brush: js;">
+&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var table5_Config = {
+		select_row_at_start: true,
+		row_index_at_start: 1,
+		on_before_selected_row: function(o, row){ o.Get('output1').innerHTML = 'Active row: '+row.rowIndex.toString() +' '; },
+		on_after_selected_row: function(o, row){ o.Get('output2').innerHTML = 'Active row data:' + o.Selection.GetRowValues(row); },
+	};
+	var et5 = setEditTable(&quot;table5&quot;, table5_Config);
+&lt;/script&gt;</pre>
+<script language="javascript" type="text/javascript">
+	var table5_Config = {
+		select_row_at_start: true,
+		row_index_at_start: 1,
+		on_before_selected_row: function(o, row){ o.Get('output1').innerHTML = 'Active row: '+row.rowIndex.toString() +' '; },
+		on_after_selected_row: function(o, row){ o.Get('output2').innerHTML = 'Active row data:' + o.Selection.GetRowValues(row); }
+	};
+	var et5 = setEditTable("table5", table5_Config);
+</script>
+        <a href="javascript:window.scroll(0,0);">Top of page</a>
+        <hr/>
+        <h2><a name="tbl6" id="tbl6"></a>TABLE 6</h2>
+
+    <p>Enable default inline cell editing, double-click on a cell to display cell
+      editor</p>
+
+        <table id="table6" class="mytable" cellpadding="0" cellspacing="0">
+          <thead>
+		  <tr>
+            <th>World Regions</th>
+            <th>Population ( 2007 Est.)</th>
+            <th>Population % of World</th>
+            <th>% Population ( Penetration )</th>
+
+            <th>Usage % of World</th>
+          </tr>
+		  </thead>
+		  <tbody>
+          <tr>
+            <td>Africa</td>
+            <td>933,448,292</td>
+            <td>14.2 %</td>
+
+            <td>3.5 %</td>
+            <td>3.0 %</td>
+          </tr>
+          <tr>
+            <td>Asia</td>
+            <td>3,712,527,624</td>
+            <td>56.5 %</td>
+
+            <td>10.5 %</td>
+            <td>35.6 %</td>
+          </tr>
+          <tr>
+            <td>Europe</td>
+            <td>809,624,686</td>
+            <td>12.3 %</td>
+
+            <td>38.6 %</td>
+            <td>28.6 %</td>
+          </tr>
+          <tr>
+            <td>Middle East</td>
+            <td>193,452,727</td>
+            <td>2.9 %</td>
+
+            <td>10.0 %</td>
+            <td>1.8 %</td>
+          </tr>
+          <tr>
+            <td>North America</td>
+            <td>334,538,018</td>
+            <td>5.1 %</td>
+
+            <td>69.4 %</td>
+            <td>21.2 %</td>
+          </tr>
+          <tr>
+            <td>Latin America / Caribbean</td>
+            <td>556,606,627</td>
+            <td>8.5 %</td>
+
+            <td>16.0 %</td>
+            <td>8.1 %</td>
+          </tr>
+          <tr>
+            <td>Oceania / Australia</td>
+            <td>34,468,443</td>
+            <td>0.5 %</td>
+
+            <td>53.5 %</td>
+            <td>1.7 %</td>
+          </tr>
+		  </tbody>
+        </table>
+        <pre class="brush: js;">
+&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var table6_Config = { editable: true, auto_save: false, default_selection: 'both' };
+	var et6 = setEditTable("table6", table6_Config);
+&lt;/script&gt;</pre>
+<script language="javascript" type="text/javascript">
+	var table6_Config = { editable: true, auto_save: false, default_selection: 'both' };
+	var et6 = setEditTable("table6", table6_Config);
+</script>
+        <a href="javascript:window.scroll(0,0);">Top of page</a>
+        <hr/>
+
+        <h2><a name="tbl7" id="tbl7"></a>TABLE 7</h2>
+
+    <p>Define editor type by column, double-click or use F2, enter or spacebar
+      keys to display editor</p>
+        <table id="table7" class="mytable" cellpadding="0" cellspacing="0">
+
+          <thead>
+		  <tr>
+            <th>World Regions</th>
+            <th>Population ( 2007 Est.)</th>
+            <th>Population % of World</th>
+            <th>% Population ( Penetration )</th>
+            <th>Usage % of World</th>
+
+          </tr>
+		  </thead>
+		  <tbody>
+          <tr>
+            <td>Africa</td>
+            <td>933,448,292</td>
+            <td>14.2 %</td>
+            <td>3.5 %</td>
+
+            <td>3.0 %</td>
+          </tr>
+          <tr>
+            <td>Asia</td>
+            <td>3,712,527,624</td>
+            <td>56.5 %</td>
+            <td>10.5 %</td>
+
+            <td>35.6 %</td>
+          </tr>
+          <tr>
+            <td>Europe</td>
+            <td>809,624,686</td>
+            <td>12.3 %</td>
+            <td>38.6 %</td>
+
+            <td>28.6 %</td>
+          </tr>
+          <tr>
+            <td>Middle East</td>
+            <td>193,452,727</td>
+            <td>2.9 %</td>
+            <td>10.0 %</td>
+
+            <td>1.8 %</td>
+          </tr>
+          <tr>
+            <td>North America</td>
+            <td>334,538,018</td>
+            <td>5.1 %</td>
+            <td>69.4 %</td>
+
+            <td>21.2 %</td>
+          </tr>
+          <tr>
+            <td>Latin America / Caribbean</td>
+            <td>556,606,627</td>
+            <td>8.5 %</td>
+            <td>16.0 %</td>
+
+            <td>8.1 %</td>
+          </tr>
+          <tr>
+            <td>Oceania / Australia</td>
+            <td>34,468,443</td>
+            <td>0.5 %</td>
+            <td>53.5 %</td>
+
+            <td>1.7 %</td>
+          </tr>
+		  </tbody>
+        </table>
+        <pre class="brush: js;">
+&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var table7_Config = {
+		editable: true,
+		auto_save: false,
+		default_selection: 'both',
+		cell_editors:[
+			{ type: 'select', attributes:[['title','Choose a continent']] },
+			{ type: 'input', css:'alignRight' },
+			{ type: 'textarea', style:'background-color: yellow;' },
+			{ type: 'input', attributes:[['maxLength',5],['title','5 chars max']] },
+			{ type: 'none' }
+		]
+	};
+var et7 = setEditTable('table7', table7_Config);
+&lt;/script&gt;</pre>
+<script language="javascript" type="text/javascript">
+	var table7_Config = {
+							editable: true,
+							auto_save: false,
+							default_selection: 'both',
+							cell_editors:[
+								{ type: 'select', attributes:[['title','Choose a continent']] },
+								{ type: 'input', css:'alignRight' },
+								{ type: 'textarea', style:'background-color: yellow;' },
+								{ type: 'input', attributes:[['maxLength',5],['title','5 chars max']] },
+								{ type: 'none' }
+							]
+						};
+	var et7 = setEditTable("table7", table7_Config);
+</script>
+        <a href="javascript:window.scroll(0,0);">Top of page</a>
+        <hr/>
+
+        <h2><a name="tbl8" id="tbl8"></a>TABLE 8</h2>
+
+    <p>Use the script's public methods and properties to change features programmatically
+      or to retrieve information</p>
+        <div class="tf_tools">
+          <table class="mytable" cellpadding="0" cellspacing="0">
+
+            <tr>
+              <td>
+			  	<input type="button" value="Is selectable?" onClick="alert( et8.IsSelectable() );" />
+                <input type="button" value="Is editable?" onClick="alert( et8.IsEditable() );" />
+                <input type="button" value="Clear selections" onClick="et8.ClearSelections();" />
+                <input type="button" value="Disable edition" onClick="et8.Editable.Remove();" />
+                <input type="button" value="Enable edition" onClick="et8.Editable.Set();" />
+                <input type="button" value="Disable selection" onClick="et8.Selection.Remove();" />
+                <input type="button" value="Enable selection" onClick="et8.Selection.Set();" />
+                <input type="button" value="Enable multiple selection" onClick="et8.selectionModel = 'multiple';" />
+                <input type="button" value="Disable multiple selection" onClick="et8.selectionModel = 'single';" />
+                <input type="button" value="Enable cell selection" onClick="et8.ClearSelections(); et8.defaultSelection = 'cell';" />
+                <input type="button" value="Disable cell selection" onClick="et8.ClearSelections(); et8.defaultSelection = 'row';" />
+                <input type="button" value="Enable row editor" onClick="et8.editorModel = 'row';" />
+                <input type="button" value="Disable row editor" onClick="et8.Editable.CloseRowEditor(); et8.editorModel = 'cell';" />
+				<input type="button" value="Get active row values" onClick="alert(et8.Selection.GetActiveRowValues());" />
+				<input type="button" value="Get selected rows values" onClick="alert(et8.Selection.GetSelectedValues());" />
+              </td>
+
+            </tr>
+          </table>
+        </div>
+        <table id="table8" cellpadding="0" cellspacing="0">
+          <thead>
+		  <tr>
+            <th>World Regions</th>
+            <th>Population ( 2007 Est.)</th>
+
+            <th>Population % of World</th>
+            <th>% Population ( Penetration )</th>
+            <th>Usage % of World</th>
+          </tr>
+		  </thead>
+          <tbody>
+		  <tr>
+            <td>Africa</td>
+
+            <td>933,448,292</td>
+            <td>14.2 %</td>
+            <td>3.5 %</td>
+            <td>3.0 %</td>
+          </tr>
+          <tr>
+            <td>Asia</td>
+
+            <td>3,712,527,624</td>
+            <td>56.5 %</td>
+            <td>10.5 %</td>
+            <td>35.6 %</td>
+          </tr>
+          <tr>
+            <td>Europe</td>
+
+            <td>809,624,686</td>
+            <td>12.3 %</td>
+            <td>38.6 %</td>
+            <td>28.6 %</td>
+          </tr>
+          <tr>
+            <td>Middle East</td>
+
+            <td>193,452,727</td>
+            <td>2.9 %</td>
+            <td>10.0 %</td>
+            <td>1.8 %</td>
+          </tr>
+          <tr>
+            <td>North America</td>
+
+            <td>334,538,018</td>
+            <td>5.1 %</td>
+            <td>69.4 %</td>
+            <td>21.2 %</td>
+          </tr>
+          <tr>
+            <td>Latin America / Caribbean</td>
+
+            <td>556,606,627</td>
+            <td>8.5 %</td>
+            <td>16.0 %</td>
+            <td>8.1 %</td>
+          </tr>
+          <tr>
+            <td>Oceania / Australia</td>
+
+            <td>34,468,443</td>
+            <td>0.5 %</td>
+            <td>53.5 %</td>
+            <td>1.7 %</td>
+          </tr>
+		  </tbody>
+        </table>
+
+
+    <pre class="brush: js;">
+&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var table8_Config = { editable: true, auto_save: false };
+	var et8 = setEditTable(&quot;table8&quot;, table8_Config);
+&lt;/script&gt;
+
+&lt;!-- buttons code below --&gt;
+
+&lt;input type=&quot;button&quot; value=&quot;Is selectable?&quot; onClick=&quot;alert( et8.IsSelectable() );&quot; /&gt;
+&lt;input type=&quot;button&quot; value=&quot;Is editable?&quot; onClick=&quot;alert( et8.IsEditable() );&quot; /&gt;
+
+&lt;input type=&quot;button&quot; value=&quot;Clear selections&quot; onClick=&quot;et8.ClearSelections();&quot; /&gt;
+&lt;input type=&quot;button&quot; value=&quot;Disable edition&quot; onClick=&quot;et8.Editable.Remove();&quot; /&gt;
+
+&lt;input type=&quot;button&quot; value=&quot;Enable edition&quot; onClick=&quot;et8.Editable.Set();&quot; /&gt;
+&lt;input type=&quot;button&quot; value=&quot;Disable selection&quot; onClick=&quot;et8.Selection.Remove();&quot; /&gt;
+
+&lt;input type=&quot;button&quot; value=&quot;Enable selection&quot; onClick=&quot;et8.Selection.Set();&quot; /&gt;
+&lt;input type=&quot;button&quot; value=&quot;Enable multiple selection&quot; onClick=&quot;et8.selectionModel = 'multiple';&quot; /&gt;
+
+&lt;input type=&quot;button&quot; value=&quot;Disable multiple selection&quot; onClick=&quot;et8.selectionModel = 'single';&quot; /&gt;
+&lt;input type=&quot;button&quot; value=&quot;Enable cell selection&quot; onClick=&quot;et8.ClearSelections(); et8.defaultSelection = 'cell';&quot; /&gt;
+
+&lt;input type=&quot;button&quot; value=&quot;Disable cell selection&quot; onClick=&quot;et8.ClearSelections(); et8.defaultSelection = 'row';&quot; /&gt;
+&lt;input type=&quot;button&quot; value=&quot;Enable row editor&quot; onClick=&quot;et8.editorModel = 'row';&quot; /&gt;
+
+&lt;input type=&quot;button&quot; value=&quot;Disable row editor&quot; onClick=&quot;et8.Editable.CloseRowEditor(); et8.editorModel = 'cell';&quot; /&gt;
+&lt;input type=&quot;button&quot; value=&quot;Get active row values&quot; onClick=&quot;alert(et8.Selection.GetActiveRowValues());&quot; /&gt;
+
+&lt;input type=&quot;button&quot; value=&quot;Get selected rows values&quot; onClick=&quot;alert(et8.Selection.GetSelectedValues());&quot; /&gt;
+</pre>
+    <script language="javascript" type="text/javascript">
+//<![CDATA[
+
+	var table8_Config = { editable: true, auto_save: false };
+	var et8 = setEditTable('table8', table8_Config);
+//]]>
+</script>
+        <a href="javascript:window.scroll(0,0);">Top of page</a>
+        <hr/>
+
+
+        <h2><a name="tbl9" id="tbl9"></a>TABLE 9</h2>
+        <p>Enable a command type column editor</p>
+
+    <table id="table9" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th>World Regions</th>
+          <th>Population ( 2007 Est.)</th>
+
+          <th>Population % of World</th>
+          <th>% Population ( Penetration )</th>
+          <th>Usage % of World</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td>Africa</td>
+          <td>933,448,292</td>
+          <td>14.2 %</td>
+          <td>3.5 %</td>
+          <td>3.0 %</td>
+          <td>&nbsp;</td>
+
+        </tr>
+        <tr>
+          <td>Asia</td>
+          <td>3,712,527,624</td>
+          <td>56.5 %</td>
+          <td>10.5 %</td>
+          <td>35.6 %</td>
+
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Europe</td>
+          <td>809,624,686</td>
+          <td>12.3 %</td>
+          <td>38.6 %</td>
+
+          <td>28.6 %</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Middle East</td>
+          <td>193,452,727</td>
+          <td>2.9 %</td>
+
+          <td>10.0 %</td>
+          <td>1.8 %</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>North America</td>
+          <td>334,538,018</td>
+
+          <td>5.1 %</td>
+          <td>69.4 %</td>
+          <td>21.2 %</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Latin America / Caribbean</td>
+
+          <td>556,606,627</td>
+          <td>8.5 %</td>
+          <td>16.0 %</td>
+          <td>8.1 %</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Oceania / Australia</td>
+
+          <td>34,468,443</td>
+          <td>0.5 %</td>
+          <td>53.5 %</td>
+          <td>1.7 %</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+
+    </table>
+        <pre class="brush: js;">
+&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+//&lt;![CDATA[
+	var table9_Config = {
+		base_path: '../',
+		editable: true,
+		auto_save: false,
+		cell_editors:[
+			{ type: 'select', attributes:[['title','Choose a continent']] },
+			{ type: 'input', css:'alignRight' },
+			{ type: 'textarea', style:'background-color: yellow;' },
+			{ type: 'input', attributes:[['maxLength',5],['title','5 chars max']] },
+			{ type: 'input' },
+			{ type: 'command',
+				buttons:{
+					enable: ['update', 'insert', 'delete', 'submit', 'cancel'],
+					'update': { title:'Edit row' },
+					'insert': { title:'Add row'  },
+					'delete': { title:'Delete row' },
+					'submit': { text:'Save', title:'Save'  },
+					'cancel': { text:'Cancel', title:'Cancel' }
+				}
+			}
+		]
+	};
+	var et9 = setEditTable(&quot;table9&quot;, table9_Config);
+//]]&gt;
+&lt;/script&gt;</pre>
+
+        <script language="javascript" type="text/javascript">
+//<![CDATA[
+	var table9_Config = {
+							base_path: '../',
+							editable: true,
+							auto_save: false,
+							cell_editors:[
+								{ type: 'select', attributes:[['title','Choose a continent']] },
+								{ type: 'input', css:'alignRight' },
+								{ type: 'textarea', style:'background-color: yellow;' },
+								{ type: 'input', attributes:[['maxLength',5],['title','5 chars max']] },
+								{ type: 'input' },
+								{ type: 'command',
+									buttons:{
+										enable: ['update', 'insert', 'delete', 'submit', 'cancel'],
+										'update': { title:'Edit row' },
+										'insert': { title:'Add row'  },
+										'delete': { title:'Delete row' },
+										'submit': { text:'Save', title:'Save'  },
+										'cancel': { text:'Cancel', title:'Cancel' }
+									}
+								}
+							]
+						};
+	var et9 = setEditTable("table9", table9_Config);
+//]]>
+</script>
+        <a href="javascript:window.scroll(0,0);">Top of page</a>
+        <hr/>
+
+	</div>
+	<!-- END CONTENT -->
+
+	<div id="footer"></div>
+
+</div>
+
+
+</body>
+</html>
