@@ -3499,7 +3499,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 =====================================================*/
 
                 value: function getHeaderElement(colIndex) {
-                    var table = this.gridLayout ? this.headTbl : this.tbl;
+                    var table = this.gridLayout ? this.Cpt.gridLayout.headTbl : this.tbl;
                     var tHead = dom.tag(table, "thead");
                     var headersRow = this.headersRow;
                     var header;
