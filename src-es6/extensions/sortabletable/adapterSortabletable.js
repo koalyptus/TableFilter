@@ -1,6 +1,6 @@
 import {Types} from '../../types';
 import {Dom} from '../../dom';
-import {Arr as array} from '../../array';
+import {Arr} from '../../array';
 import {Event} from '../../event';
 import {DateHelper} from '../../date';
 import {Helpers} from '../../helpers';
@@ -200,7 +200,8 @@ export class AdapterSortableTable{
         SortableTable.prototype.initHeader = function(oSortTypes){
             var stt = this;
             if (!stt.tHead){
-                throw new Error('Sorting feature requires a THEAD element');
+                // throw new Error('Sorting feature requires a THEAD element');
+                return;
             }
             stt.headersRow = tf.headersRow;
             var cells = stt.tHead.rows[stt.headersRow].cells;
@@ -295,6 +296,9 @@ export class AdapterSortableTable{
          * @return {String}       DOM element inner text
          */
         SortableTable.getInnerText = function(oNode){
+            if(!oNode){
+                return;
+            }
             if(oNode.getAttribute(adpt.sortCustomKey)){
                 return oNode.getAttribute(adpt.sortCustomKey);
             } else {
@@ -361,10 +365,7 @@ export class AdapterSortableTable{
                 var trigger = Dom.id(triggers[j]);
                 if(trigger){
                     trigger.style.cursor = 'pointer';
-                    // trigger.onclick = function(){
-                    //     if(o.sort)
-                    //         o.st.asyncSort( triggers.tf_IndexByValue(this.id, true) );
-                    // }
+
                     Event.add(trigger, 'click', (evt) => {
                         var elm = evt.target;
                         if(!this.tf.sort){
