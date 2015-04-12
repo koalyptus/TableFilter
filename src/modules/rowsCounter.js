@@ -37,6 +37,12 @@ define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom,
             this.overText = f.over_text || " / ";
             //defines css class rows counter
             this.totRowsCssClass = f.tot_rows_css_class || "tot";
+            //rows counter div
+            this.prfxCounter = "counter_";
+            //nb displayed rows label
+            this.prfxTotRows = "totrows_span_";
+            //label preceding nb rows label
+            this.prfxTotRowsTxt = "totRowsTextSpan_";
             //callback raised before counter is refreshed
             this.onBeforeRefreshCounter = Types.isFn(f.on_before_refresh_counter) ? f.on_before_refresh_counter : null;
             //callback raised after counter is refreshed
@@ -55,11 +61,11 @@ define(["exports", "../dom", "../types", "../helpers"], function (exports, _dom,
                     }
 
                     //rows counter container
-                    var countDiv = Dom.create("div", ["id", tf.prfxCounter + tf.id]);
+                    var countDiv = Dom.create("div", ["id", this.prfxCounter + tf.id]);
                     countDiv.className = this.totRowsCssClass;
                     //rows counter label
-                    var countSpan = Dom.create("span", ["id", tf.prfxTotRows + tf.id]);
-                    var countText = Dom.create("span", ["id", tf.prfxTotRowsTxt + tf.id]);
+                    var countSpan = Dom.create("span", ["id", this.prfxTotRows + tf.id]);
+                    var countText = Dom.create("span", ["id", this.prfxTotRowsTxt + tf.id]);
                     countText.appendChild(Dom.text(this.rowsCounterText));
 
                     // counter is added to defined element

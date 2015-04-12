@@ -111,6 +111,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
             //default script base path
             this.basePath = f.base_path !== undefined ? f.base_path : "";
+            this.extensionsPath = f.extensions_path || this.basePath + "extensions/";
 
             /*** filter types ***/
             this.fltTypeInp = "input";
@@ -379,8 +380,8 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
             this.isSortEnabled = false;
             this.sortConfig = f.sort_config || {};
             this.sortConfig.name = this.sortConfig.name !== undefined ? f.sort_config.name : "sortabletable";
-            this.sortConfig.src = this.sortConfig.src !== undefined ? f.sort_config.src : this.basePath + "extensions/sortabletable/" + "sortabletable.js";
-            this.sortConfig.adapterSrc = this.sortConfig.adapter_src !== undefined ? f.sort_config.adapter_src : this.basePath + "extensions/sortabletable/adapterSortabletable.js";
+            this.sortConfig.src = this.sortConfig.src !== undefined ? f.sort_config.src : this.extensionsPath + "sortabletable/" + "sortabletable.js";
+            this.sortConfig.adapterSrc = this.sortConfig.adapter_src !== undefined ? f.sort_config.adapter_src : this.extensionsPath + "sortabletable/adapterSortabletable.js";
             this.sortConfig.initialize = this.sortConfig.initialize !== undefined ? f.sort_config.initialize : function (o) {};
             this.sortConfig.sortTypes = types.isArray(this.sortConfig.sort_types) ? f.sort_config.sort_types : [];
             this.sortConfig.sortCol = this.sortConfig.sort_col !== undefined ? f.sort_config.sort_col : null;
@@ -394,11 +395,11 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
             this.editable = f.editable === true ? true : false;
             this.ezEditTableConfig = f.ezEditTable_config || {};
             this.ezEditTableConfig.name = this.ezEditTableConfig.name !== undefined ? f.ezEditTable_config.name : "ezedittable";
-            this.ezEditTableConfig.src = this.ezEditTableConfig.src !== undefined ? f.ezEditTable_config.src : this.basePath + "extensions/ezEditTable/ezEditTable.js";
+            this.ezEditTableConfig.src = this.ezEditTableConfig.src !== undefined ? f.ezEditTable_config.src : this.extensionsPath + "ezEditTable/ezEditTable.js";
             //ezEditTable stylesheet not imported by default as filtergrid.css
             //applies
             this.ezEditTableConfig.loadStylesheet = this.ezEditTableConfig.loadStylesheet === true ? true : false;
-            this.ezEditTableConfig.stylesheet = this.ezEditTableConfig.stylesheet || this.basePath + "extensions/ezEditTable/ezEditTable.css";
+            this.ezEditTableConfig.stylesheet = this.ezEditTableConfig.stylesheet || this.extensionsPath + "ezEditTable/ezEditTable.css";
             this.ezEditTableConfig.stylesheetName = this.ezEditTableConfig.stylesheetName !== undefined ? f.ezEditTable_config.stylesheetName : "ezEditTableCss";
             this.ezEditTableConfig.err = "Failed to instantiate EditTable " + "object.\n\"ezEditTable\" module may not be available.";
 
@@ -474,54 +475,6 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
             this.prfxRDiv = "rdiv_";
             //middle div
             this.prfxMDiv = "mdiv_";
-            //table container if fixed headers enabled
-            this.prfxContentDiv = "cont_";
-            //checklist filter container div
-            this.prfxCheckListDiv = "chkdiv_";
-            //pages select
-            this.prfxSlcPages = "slcPages_";
-            //results per page select
-            this.prfxSlcResults = "slcResults_";
-            //label preciding results per page select
-            this.prfxSlcResultsTxt = "slcResultsTxt_";
-            //span containing next page button
-            this.prfxBtnNextSpan = "btnNextSpan_";
-            //span containing previous page button
-            this.prfxBtnPrevSpan = "btnPrevSpan_";
-            //span containing last page button
-            this.prfxBtnLastSpan = "btnLastSpan_";
-            //span containing first page button
-            this.prfxBtnFirstSpan = "btnFirstSpan_";
-            //next button
-            this.prfxBtnNext = "btnNext_";
-            //previous button
-            this.prfxBtnPrev = "btnPrev_";
-            //last button
-            this.prfxBtnLast = "btnLast_";
-            //first button
-            this.prfxBtnFirst = "btnFirst_";
-            //span for tot nb pages
-            this.prfxPgSpan = "pgspan_";
-            //span preceding pages select (contains 'Page')
-            this.prfxPgBeforeSpan = "pgbeforespan_";
-            //span following pages select (contains ' of ')
-            this.prfxPgAfterSpan = "pgafterspan_";
-            //rows counter div
-            this.prfxCounter = "counter_";
-            //nb displayed rows label
-            this.prfxTotRows = "totrows_span_";
-            //label preceding nb rows label
-            this.prfxTotRowsTxt = "totRowsTextSpan_";
-            //span containing reset button
-            this.prfxResetSpan = "resetspan_";
-            //loader div
-            this.prfxLoader = "load_";
-            //status bar div
-            this.prfxStatus = "status_";
-            //status bar label
-            this.prfxStatusSpan = "statusSpan_";
-            //text preceding status bar label
-            this.prfxStatusTxt = "statusText_";
             //filter values cookie
             this.prfxCookieFltsValues = "tf_flts_";
             //page nb cookie
@@ -969,15 +922,17 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                 }
                                 // checklist
                                 else if (col === this.fltTypeCheckList) {
+                                    var checkList;
                                     if (!this.Cpt.checkList) {
                                         // var CheckList =
                                         //         require('modules/checkList').CheckList;
                                         // import {CheckList} from 'modules/checkList';
                                         this.Cpt.checkList = new CheckList(this);
+                                        checkList = this.Cpt.checkList;
                                     }
 
-                                    var divCont = dom.create("div", ["id", this.prfxCheckListDiv + i + "_" + this.id], ["ct", i], ["filled", "0"]);
-                                    divCont.className = this.Cpt.checkList.checkListDivCssClass;
+                                    var divCont = dom.create("div", ["id", checkList.prfxCheckListDiv + i + "_" + this.id], ["ct", i], ["filled", "0"]);
+                                    divCont.className = checkList.checkListDivCssClass;
 
                                     //filter is appended in desired element
                                     if (externalFltTgtId) {
@@ -987,15 +942,15 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                         fltcell.appendChild(divCont);
                                     }
 
-                                    this.Cpt.checkList.checkListDiv[i] = divCont;
+                                    checkList.checkListDiv[i] = divCont;
                                     this.fltIds.push(this.prfxFlt + i + "_" + this.id);
                                     if (!this.fillSlcOnDemand) {
-                                        this.Cpt.checkList._build(i);
+                                        checkList._build(i);
                                     }
 
                                     if (this.fillSlcOnDemand) {
                                         evt.add(divCont, "click", this.Evt.onCheckListClick);
-                                        divCont.appendChild(dom.text(this.Cpt.checkList.activateCheckListTxt));
+                                        divCont.appendChild(dom.text(checkList.activateCheckListTxt));
                                     }
 
                                     evt.add(divCont, "click", this.Evt.onCheckListFocus);

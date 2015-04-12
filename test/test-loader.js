@@ -12,9 +12,10 @@ requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
 
     module('Sanity checks');
     test('Loader component', function() {
-        deepEqual(tf.Cpt.loader instanceof Loader, true, 'Loader constructor');
-        notEqual(tf.Cpt.loader, null, 'Loader instanciated');
-        notEqual(dom.id(tf.prfxLoader+tf.id), null, 'Loader DOM container');
+        var loader = tf.Cpt.loader;
+        deepEqual(loader instanceof Loader, true, 'Loader constructor');
+        notEqual(loader, null, 'Loader instanciated');
+        notEqual(dom.id(loader.prfxLoader+tf.id), null, 'Loader DOM container');
     });
 
 });

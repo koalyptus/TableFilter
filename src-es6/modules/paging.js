@@ -88,6 +88,36 @@ export class Paging{
         //calls function before page is changed
         this.onAfterChangePage = Types.isFn(f.on_after_change_page) ?
             f.on_after_change_page : null;
+
+        //pages select
+        this.prfxSlcPages = 'slcPages_';
+        //results per page select
+        this.prfxSlcResults = 'slcResults_';
+        //label preciding results per page select
+        this.prfxSlcResultsTxt = 'slcResultsTxt_';
+        //span containing next page button
+        this.prfxBtnNextSpan = 'btnNextSpan_';
+        //span containing previous page button
+        this.prfxBtnPrevSpan = 'btnPrevSpan_';
+        //span containing last page button
+        this.prfxBtnLastSpan = 'btnLastSpan_';
+        //span containing first page button
+        this.prfxBtnFirstSpan = 'btnFirstSpan_';
+        //next button
+        this.prfxBtnNext = 'btnNext_';
+        //previous button
+        this.prfxBtnPrev = 'btnPrev_';
+        //last button
+        this.prfxBtnLast = 'btnLast_';
+        //first button
+        this.prfxBtnFirst = 'btnFirst_';
+        //span for tot nb pages
+        this.prfxPgSpan = 'pgspan_';
+        //span preceding pages select (contains 'Page')
+        this.prfxPgBeforeSpan = 'pgbeforespan_';
+        //span following pages select (contains ' of ')
+        this.prfxPgAfterSpan = 'pgafterspan_';
+
         var start_row = this.refRow;
         var nrows = this.nbRows;
         //calculates page nb
@@ -168,9 +198,6 @@ export class Paging{
             - onchange event for paging select
         =====================================================*/
         evt.slcPagesChange = (event) => {
-            // if(evt._Paging._OnSlcPagesChangeEvt){
-            //     evt._Paging._OnSlcPagesChangeEvt();
-            // }
             this.changePage();
             event.target.blur();
         };
@@ -178,7 +205,7 @@ export class Paging{
         // Paging drop-down list selector
         if(this.pageSelectorType === tf.fltTypeSlc){
             slcPages = Dom.create(
-                tf.fltTypeSlc, ['id', tf.prfxSlcPages+tf.id]);
+                tf.fltTypeSlc, ['id', this.prfxSlcPages+tf.id]);
             slcPages.className = this.pgSlcCssClass;
             Event.add(slcPages, 'change', evt.slcPagesChange);
         }
@@ -187,7 +214,7 @@ export class Paging{
         if(this.pageSelectorType === tf.fltTypeInp){
             slcPages = Dom.create(
                 tf.fltTypeInp,
-                ['id', tf.prfxSlcPages+tf.id],
+                ['id', this.prfxSlcPages+tf.id],
                 ['value', this.currentPageNb]
             );
             slcPages.className = this.pgInpCssClass;
@@ -196,20 +223,20 @@ export class Paging{
 
         // btns containers
         var btnNextSpan = Dom.create(
-            'span',['id', tf.prfxBtnNextSpan+tf.id]);
+            'span',['id', this.prfxBtnNextSpan+tf.id]);
         var btnPrevSpan = Dom.create(
-            'span',['id', tf.prfxBtnPrevSpan+tf.id]);
+            'span',['id', this.prfxBtnPrevSpan+tf.id]);
         var btnLastSpan = Dom.create(
-            'span',['id', tf.prfxBtnLastSpan+tf.id]);
+            'span',['id', this.prfxBtnLastSpan+tf.id]);
         var btnFirstSpan = Dom.create(
-            'span',['id', tf.prfxBtnFirstSpan+tf.id]);
+            'span',['id', this.prfxBtnFirstSpan+tf.id]);
 
         if(this.hasPagingBtns){
             // Next button
             if(!this.btnNextPageHtml){
                 var btn_next = Dom.create(
                     tf.fltTypeInp,
-                    ['id', tf.prfxBtnNext+tf.id],
+                    ['id', this.prfxBtnNext+tf.id],
                     ['type', 'button'],
                     ['value', this.btnNextPageText],
                     ['title', 'Next']
@@ -225,10 +252,10 @@ export class Paging{
             if(!this.btnPrevPageHtml){
                 var btn_prev = Dom.create(
                     tf.fltTypeInp,
-                    ['id',tf.prfxBtnPrev+tf.id],
-                    ['type','button'],
-                    ['value',this.btnPrevPageText],
-                    ['title','Previous']
+                    ['id', this.prfxBtnPrev+tf.id],
+                    ['type', 'button'],
+                    ['value', this.btnPrevPageText],
+                    ['title', 'Previous']
                 );
                 btn_prev.className = this.btnPageCssClass;
                 Event.add(btn_prev, 'click', evt.prev);
@@ -241,10 +268,10 @@ export class Paging{
             if(!this.btnLastPageHtml){
                 var btn_last = Dom.create(
                     tf.fltTypeInp,
-                    ['id',tf.prfxBtnLast+tf.id],
-                    ['type','button'],
-                    ['value',this.btnLastPageText],
-                    ['title','Last']
+                    ['id', this.prfxBtnLast+tf.id],
+                    ['type', 'button'],
+                    ['value', this.btnLastPageText],
+                    ['title', 'Last']
                 );
                 btn_last.className = this.btnPageCssClass;
                 Event.add(btn_last, 'click', evt.last);
@@ -257,10 +284,10 @@ export class Paging{
             if(!this.btnFirstPageHtml){
                 var btn_first = Dom.create(
                     tf.fltTypeInp,
-                    ['id',tf.prfxBtnFirst+tf.id],
-                    ['type','button'],
-                    ['value',this.btnFirstPageText],
-                    ['title','First']
+                    ['id', this.prfxBtnFirst+tf.id],
+                    ['type', 'button'],
+                    ['value', this.btnFirstPageText],
+                    ['title', 'First']
                 );
                 btn_first.className = this.btnPageCssClass;
                 Event.add(btn_first, 'click', evt.first);
@@ -280,23 +307,23 @@ export class Paging{
         targetEl.appendChild(btnPrevSpan);
 
         var pgBeforeSpan = Dom.create(
-            'span',['id', tf.prfxPgBeforeSpan+tf.id] );
+            'span',['id', this.prfxPgBeforeSpan+tf.id] );
         pgBeforeSpan.appendChild( Dom.text(this.pageText) );
         pgBeforeSpan.className = this.nbPgSpanCssClass;
         targetEl.appendChild(pgBeforeSpan);
         targetEl.appendChild(slcPages);
         var pgAfterSpan = Dom.create(
-            'span',['id', tf.prfxPgAfterSpan+tf.id]);
+            'span',['id', this.prfxPgAfterSpan+tf.id]);
         pgAfterSpan.appendChild( Dom.text(this.ofText) );
         pgAfterSpan.className = this.nbPgSpanCssClass;
         targetEl.appendChild(pgAfterSpan);
-        var pgspan = Dom.create( 'span',['id', tf.prfxPgSpan+tf.id] );
+        var pgspan = Dom.create( 'span',['id', this.prfxPgSpan+tf.id] );
         pgspan.className = this.nbPgSpanCssClass;
         pgspan.appendChild( Dom.text(' '+this.nbPages+' ') );
         targetEl.appendChild(pgspan);
         targetEl.appendChild(btnNextSpan);
         targetEl.appendChild(btnLastSpan);
-        this.pagingSlc = Dom.id(tf.prfxSlcPages+tf.id);
+        this.pagingSlc = Dom.id(this.prfxSlcPages+tf.id);
 
         // if this.rememberGridValues==true this.setPagingInfo() is called
         // in ResetGridValues() method
@@ -338,7 +365,7 @@ export class Paging{
         var tf = this.tf;
         var rows = tf.tbl.rows;
         var mdiv = !this.pagingTgtId ? tf.mDiv : Dom.id(this.pagingTgtId);
-        var pgspan = Dom.id(tf.prfxPgSpan+tf.id);
+        var pgspan = Dom.id(this.prfxPgSpan+tf.id);
         //stores valid rows indexes
         if(validRows && validRows.length>0){
             tf.validRowsIndex = validRows;
@@ -491,12 +518,12 @@ export class Paging{
         };
 
         var slcR = Dom.create(
-            tf.fltTypeSlc, ['id', tf.prfxSlcResults+tf.id]);
+            tf.fltTypeSlc, ['id', this.prfxSlcResults+tf.id]);
         slcR.className = tf.resultsSlcCssClass;
         var slcRText = this.resultsPerPage[0],
             slcROpts = this.resultsPerPage[1];
         var slcRSpan = Dom.create(
-            'span',['id', tf.prfxSlcResultsTxt+tf.id]);
+            'span',['id', this.prfxSlcResultsTxt+tf.id]);
         slcRSpan.className = this.resultsSpanCssClass;
 
         // results per page select is added to external element
@@ -509,7 +536,7 @@ export class Paging{
         targetEl.appendChild(slcRSpan);
         targetEl.appendChild(slcR);
 
-        this.resultsPerPageSlc = Dom.id(tf.prfxSlcResults+tf.id);
+        this.resultsPerPageSlc = Dom.id(this.prfxSlcResults+tf.id);
 
         for(var r=0; r<slcROpts.length; r++){
             var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);
@@ -527,7 +554,7 @@ export class Paging{
             return;
         }
         var slcR = this.resultsPerPageSlc,
-            slcRSpan = Dom.id(tf.prfxSlcResultsTxt+tf.id);
+            slcRSpan = Dom.id(this.prfxSlcResultsTxt+tf.id);
         if(slcR){
             slcR.parentNode.removeChild(slcR);
         }
@@ -686,16 +713,16 @@ export class Paging{
         // btns containers
         var btnNextSpan, btnPrevSpan, btnLastSpan, btnFirstSpan;
         var pgBeforeSpan, pgAfterSpan, pgspan;
-        btnNextSpan = Dom.id(tf.prfxBtnNextSpan+tf.id);
-        btnPrevSpan = Dom.id(tf.prfxBtnPrevSpan+tf.id);
-        btnLastSpan = Dom.id(tf.prfxBtnLastSpan+tf.id);
-        btnFirstSpan = Dom.id(tf.prfxBtnFirstSpan+tf.id);
+        btnNextSpan = Dom.id(this.prfxBtnNextSpan+tf.id);
+        btnPrevSpan = Dom.id(this.prfxBtnPrevSpan+tf.id);
+        btnLastSpan = Dom.id(this.prfxBtnLastSpan+tf.id);
+        btnFirstSpan = Dom.id(this.prfxBtnFirstSpan+tf.id);
         //span containing 'Page' text
-        pgBeforeSpan = Dom.id(tf.prfxPgBeforeSpan+tf.id);
+        pgBeforeSpan = Dom.id(this.prfxPgBeforeSpan+tf.id);
         //span containing 'of' text
-        pgAfterSpan = Dom.id(tf.prfxPgAfterSpan+tf.id);
+        pgAfterSpan = Dom.id(this.prfxPgAfterSpan+tf.id);
         //span containing nb of pages
-        pgspan = Dom.id(tf.prfxPgSpan+tf.id);
+        pgspan = Dom.id(this.prfxPgSpan+tf.id);
 
         var evt = this.evt;
 

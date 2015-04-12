@@ -37,6 +37,13 @@ export class StatusBar{
         this.onAfterShowMsg = Types.isFn(f.on_after_show_msg) ?
             f.on_after_show_msg : null;
 
+        // status bar div
+        this.prfxStatus = 'status_';
+        // status bar label
+        this.prfxStatusSpan = 'statusSpan_';
+        // text preceding status bar label
+        this.prfxStatusTxt = 'statusText_';
+
         this.tf = tf;
     }
 
@@ -47,13 +54,14 @@ export class StatusBar{
         }
 
         //status bar container
-        var statusDiv = Dom.create('div', ['id', tf.prfxStatus+tf.id]);
+        var statusDiv = Dom.create('div', ['id', this.prfxStatus+tf.id]);
         statusDiv.className = this.statusBarCssClass;
 
         //status bar label
-        var statusSpan = Dom.create('span', ['id', tf.prfxStatusSpan+tf.id]);
+        var statusSpan = Dom.create('span', ['id', this.prfxStatusSpan+tf.id]);
         //preceding text
-        var statusSpanText = Dom.create('span', ['id', tf.prfxStatusTxt+tf.id]);
+        var statusSpanText = Dom.create('span',
+            ['id', this.prfxStatusTxt+tf.id]);
         statusSpanText.appendChild(Dom.text(this.statusBarText));
 
         // target element container

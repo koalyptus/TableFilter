@@ -32,10 +32,12 @@ export class Loader{
         //callback function after loader is closed
         this.onHideLoader = Types.isFn(f.on_hide_loader) ?
             f.on_hide_loader : null;
+        //loader div
+        this.prfxLoader = 'load_';
 
         this.tf = tf;
 
-        var containerDiv = Dom.create('div', ['id', tf.prfxLoader+tf.id]);
+        var containerDiv = Dom.create('div', ['id', this.prfxLoader+tf.id]);
         containerDiv.className = this.loaderCssClass;
 
         var targetEl = !this.loaderTgtId ?
@@ -45,7 +47,7 @@ export class Loader{
         } else {
             targetEl.appendChild(containerDiv);
         }
-        this.loaderDiv = Dom.id(tf.prfxLoader+tf.id);
+        this.loaderDiv = Dom.id(this.prfxLoader+tf.id);
         if(!this.loaderHtml){
             this.loaderDiv.appendChild(Dom.text(this.loaderText));
         } else {

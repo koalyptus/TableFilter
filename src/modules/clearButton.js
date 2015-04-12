@@ -34,6 +34,8 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
             this.btnResetTooltip = f.btn_reset_tooltip || "Clear filters";
             //defines reset button innerHtml
             this.btnResetHtml = f.btn_reset_html || (!tf.enableIcons ? null : "<input type=\"button\" value=\"\" class=\"" + tf.btnResetCssClass + "\" " + "title=\"" + this.btnResetTooltip + "\" />");
+            //span containing reset button
+            this.prfxResetSpan = "resetspan_";
 
             this.tf = tf;
         }
@@ -59,7 +61,7 @@ define(["exports", "../dom", "../event"], function (exports, _dom, _event) {
                         return;
                     }
 
-                    var resetspan = Dom.create("span", ["id", tf.prfxResetSpan + tf.id]);
+                    var resetspan = Dom.create("span", ["id", this.prfxResetSpan + tf.id]);
 
                     // reset button is added to defined element
                     if (!this.btnResetTgtId) {

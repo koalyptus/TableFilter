@@ -25,20 +25,20 @@ requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
     test('Paging UI elements', function() {
         notEqual(paging.pagingSlc, null, 'Paging drop-down element');
         notEqual(paging.resultsPerPageSlc, null, 'Number of results per page drop-down element');
-        notEqual(dom.id(tf.prfxBtnNextSpan+tf.id), null, 'Next button container element');
-        notEqual(dom.id(tf.prfxBtnPrevSpan+tf.id), null, 'Previous button container element');
-        notEqual(dom.id(tf.prfxBtnLastSpan+tf.id), null, 'Last button container element');
-        notEqual(dom.id(tf.prfxBtnFirstSpan+tf.id), null, 'First button container element');
+        notEqual(dom.id(paging.prfxBtnNextSpan+tf.id), null, 'Next button container element');
+        notEqual(dom.id(paging.prfxBtnPrevSpan+tf.id), null, 'Previous button container element');
+        notEqual(dom.id(paging.prfxBtnLastSpan+tf.id), null, 'Last button container element');
+        notEqual(dom.id(paging.prfxBtnFirstSpan+tf.id), null, 'First button container element');
     });
 
     test('Destroy Paging component', function() {
         paging.destroy();
         deepEqual(paging.pagingSlc, null, 'Paging drop-down element');
         deepEqual(paging.resultsPerPageSlc, null, 'Paging drop-down element');
-        deepEqual(dom.id(tf.prfxBtnNextSpan+tf.id), null, 'Next button container element');
-        deepEqual(dom.id(tf.prfxBtnPrevSpan+tf.id), null, 'Previous button container element');
-        deepEqual(dom.id(tf.prfxBtnLastSpan+tf.id), null, 'Last button container element');
-        deepEqual(dom.id(tf.prfxBtnFirstSpan+tf.id), null, 'First button container element');
+        deepEqual(dom.id(paging.prfxBtnNextSpan+tf.id), null, 'Next button container element');
+        deepEqual(dom.id(paging.prfxBtnPrevSpan+tf.id), null, 'Previous button container element');
+        deepEqual(dom.id(paging.prfxBtnLastSpan+tf.id), null, 'Last button container element');
+        deepEqual(dom.id(paging.prfxBtnFirstSpan+tf.id), null, 'First button container element');
         deepEqual(paging.nbPages, 0, 'Number of pages');
     });
 

@@ -41,6 +41,8 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
             //defines css class for checklist filters
             this.checkListItemDisabledCssClass = f.checklist_item_disabled_css_class || "flt_checklist_item_disabled";
             this.enableCheckListResetFilter = f.enable_checklist_reset_filter === false ? false : true;
+            //checklist filter container div
+            this.prfxCheckListDiv = "chkdiv_";
 
             this.isCustom = null;
             this.opts = null;
@@ -99,7 +101,7 @@ define(["exports", "../dom", "../array", "../string", "../sort", "../event"], fu
                     this.opts = [];
                     this.optsTxt = [];
 
-                    var divFltId = tf.prfxCheckListDiv + colIndex + "_" + tf.id;
+                    var divFltId = this.prfxCheckListDiv + colIndex + "_" + tf.id;
                     if (!Dom.id(divFltId) && !isExternal || !Dom.id(extFltId) && isExternal) {
                         return;
                     }

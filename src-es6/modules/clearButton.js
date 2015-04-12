@@ -24,6 +24,8 @@ export class ClearButton{
             (!tf.enableIcons ? null :
             '<input type="button" value="" class="'+tf.btnResetCssClass+'" ' +
             'title="'+this.btnResetTooltip+'" />');
+        //span containing reset button
+        this.prfxResetSpan = 'resetspan_';
 
         this.tf = tf;
     }
@@ -42,7 +44,7 @@ export class ClearButton{
             return;
         }
 
-        var resetspan = Dom.create('span', ['id', tf.prfxResetSpan+tf.id]);
+        var resetspan = Dom.create('span', ['id', this.prfxResetSpan+tf.id]);
 
         // reset button is added to defined element
         if(!this.btnResetTgtId){

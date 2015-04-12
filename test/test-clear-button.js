@@ -23,7 +23,7 @@ requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
     test('ClearButton UI elements', function() {
         var container = clearButton.btnResetEl;
         deepEqual(container.nodeName, 'INPUT', 'Clear button container');
-        deepEqual(container.parentNode.id, tf.prfxResetSpan+tf.id, 'Container id');
+        deepEqual(container.parentNode.id, clearButton.prfxResetSpan+tf.id, 'Container id');
     });
 
     module('Destroy and re-init');
