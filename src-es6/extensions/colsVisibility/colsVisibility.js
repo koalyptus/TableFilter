@@ -246,87 +246,134 @@ export class ColsVisibility{
         ul.className = this.colVisListCss;
 
         var tbl = this.colVisHeadersTbl ? this.colVisHeadersTbl : tf.tbl;
-        var headerIndex = (o.colVisHeadersTbl)
-                            ? o.colVisHeadersIndex : o.GetHeadersRowIndex();
+        var headerIndex = this.colVisHeadersTbl ?
+            this.colVisHeadersIndex : tf.getHeadersRowIndex();
         var headerRow = tbl.rows[headerIndex];
 
         //Tick all option
-        if(o.showHideEnableTickAll){
-            var li = tf_CreateCheckItem('col__'+o.id, o.showHideTickAllText, o.showHideTickAllText);
-            tf_AddClass(li,this.colVisListItemCssClass);
+        if(this.colVisEnableTickAll){
+            var li = tf_CreateCheckItem(
+                'col__'+tf.id, this.colVisTickAllText, this.colVisTickAllText);
+            Dom.addClass(li, this.colVisListItemCssClass);
             ul.appendChild(li);
             var isAllTicked = false;
-            li.check.onclick = function(){
-                for(var h=0; h<headerRow.cells.length; h++)
-                {
-                    var itm = tf_Id('col_'+h+'_'+o.id);
-                    if(!isAllTicked && itm.checked) itm.checked = false;
-                    if(isAllTicked && !itm.checked) itm.checked = true;
-                    if(itm) itm.click();
+            // li.check.onclick = function(){
+            //     for(var h=0; h<headerRow.cells.length; h++)
+            //     {
+            //         var itm = tf_Id('col_'+h+'_'+o.id);
+            //         if(!isAllTicked && itm.checked) itm.checked = false;
+            //         if(isAllTicked && !itm.checked) itm.checked = true;
+            //         if(itm) itm.click();
+            //     }
+            //     isAllTicked = (isAllTicked ? false : true);
+            // };
+
+            Event.add(li.check, 'click', (evt)=> {
+                for(var h = 0; h < headerRow.cells.length; h++){
+                    var itm = Dom.id('col_'+h+'_'+tf.id);
+                    if(!isAllTicked && itm.checked){
+                        itm.checked = false;
+                    }
+                    if(isAllTicked && !itm.checked){
+                        itm.checked = true;
+                    }
+                    if(itm){
+                        itm.click();
+                    }
                 }
-                isAllTicked = (isAllTicked ? false : true);
-            };
-            if(tf_isIE)
-            {//IE: label looses check capability
-                li.label.onclick = function(){ this.firstChild.click(); };
-            }
+                isAllTicked = !isAllTicked;
+            });
+
+            // if(tf_isIE)
+            // {//IE: label looses check capability
+            //     li.label.onclick = function(){ this.firstChild.click(); };
+            // }
         }
 
-        for(var i=0; i<headerRow.cells.length; i++)
-        {
+        for(var i = 0; i < headerRow.cells.length; i++){
             var cell = headerRow.cells[i];
-            var cellText = (o.colVisHeadersText && o.colVisHeadersText[i])
-                            ? o.colVisHeadersText[i] : tf_GetHeaderText(cell);
-            var li = tf_CreateCheckItem('col_'+i+'_'+o.id, cellText, cellText);
-            tf_AddClass(li,this.colVisListItemCssClass);
-            if(!o.colVisTickToHide) tf_AddClass(li,this.colVisListSlcItemCssClass);
-            ul.appendChild(li);
-            if(!o.colVisTickToHide) li.check.checked = true;
-            li.check.onclick = function(){ o.Evt._CheckItem(this.parentNode); };
-            if(tf_isIE)
-            {//IE: label looses check capability
-                li.label.onclick = function(){ this.firstChild.click(); };
+            var cellText = this.colVisHeadersText && this.colVisHeadersText[i] ?
+                this.colVisHeadersText[i] : this._getHeaderText(cell);
+            var liElm = Dom.createCheckItem(
+                'col_'+i+'_'+tf.id, cellText, cellText);
+            Dom.addClass(liElm, this.colVisListItemCssClass);
+            if(!this.colVisTickToHide){
+                Dom.addClass(liElm, this.colVisListSlcItemCssClass);
             }
+            ul.appendChild(liElm);
+            if(!this.colVisTickToHide){
+                liElm.check.checked = true;
+            }
+            // liElm.check.onclick = function(){ o.Evt._CheckItem(this.parentNode); };
+            Event.add(liElm.check, 'click', (evt)=> {
+                var elm = evt.target;
+                this.checkItem(elm.parentNode);
+            });
+
+            // if(tf_isIE)
+            // {//IE: label looses check capability
+            //     li.label.onclick = function(){ this.firstChild.click(); };
+            // }
         }
 
         //separator
-        var p = tf_CreateElm('p',['align','center']);
-
+        var p = Dom.createElm('p', ['align','center']);
+        var btn;
         //Close link
-        if(this.btnColVisCloseHtml==null)
-        {
-            var btn = tf_CreateElm( 'a', ['href','javascript:;'] );
+        if(!this.btnColVisCloseHtml){
+            btn = Dom.createElm('a', ['href','javascript:;']);
             btn.className = this.btnColVisCloseCssClass;
             btn.innerHTML = this.btnColVisCloseText;
             btn.onclick = this.Evt._ShowColsVisibility;
             p.appendChild(btn);
         } else {
             p.innerHTML = this.btnColVisCloseHtml;
-            var btn = p.firstChild;
+            btn = p.firstChild;
             btn.onclick = this.Evt._ShowColsVisibility;
         }
 
         container.appendChild(ul);
         container.appendChild(p);
 
-        //this.colVisSpanEl.appendChild(container);
         this.btnColVisEl.parentNode.insertBefore(container, this.btnColVisEl);
         this.colVisContEl = container;
 
         //IE6 only: options are not checked if colVisTickToHide=false
-        if(tf_isIE && !o.colVisTickToHide)
-            for(var i=0; i<headerRow.cells.length; i++)
-                tf_Id('col_'+i+'_'+o.id).checked = true;
+        // if(tf_isIE && !o.colVisTickToHide)
+        //     for(var i=0; i<headerRow.cells.length; i++)
+        //         tf_Id('col_'+i+'_'+o.id).checked = true;
 
-        if(this.colVisAtStart != null)
-        {
+        if(this.colVisAtStart){
             var a = this.colVisAtStart;
-            for(var k=0; k<a.length; k++)
-            {
-                var itm = tf_Id('col_'+a[k]+'_'+o.id);
-                if(itm) itm.click();
+            for(var k=0; k<a.length; k++){
+                var itm = Dom.id('col_'+a[k]+'_'+tf.id);
+                if(itm){
+                    itm.click();
+                }
             }
         }
+    }
+
+
+    _getHeaderText(cell){
+        if(!cell.hasChildNodes){
+            return '';
+        }
+
+        for(var i=0; i<cell.childNodes.length; i++){
+            var n = cell.childNodes[i];
+            if(n.nodeType === 3){
+                return n.nodeValue;
+            } else if(n.nodeType === 1){
+                if(n['id'] && n.id.indexOf('popUp') !== -1){
+                    continue;
+                } else {
+                    return Dom.getText(n);
+                }
+            }
+            continue;
+        }
+        return '';
     }
 
 }
