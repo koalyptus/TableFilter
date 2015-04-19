@@ -1,4 +1,4 @@
-define(["exports", "module", "event", "dom", "string", "cookie", "types", "array", "helpers", "date", "sort", "modules/store", "modules/gridLayout", "modules/loader", "modules/highlightKeywords", "modules/popupFilter", "modules/dropdown", "modules/checkList", "modules/rowsCounter", "modules/statusBar", "modules/paging", "modules/clearButton", "modules/help", "modules/alternateRows", "modules/colOps", "extensions/sortabletable/sortabletable", "extensions/sortabletable/adapterSortabletable"], function (exports, module, _event, _dom, _string, _cookie, _types, _array, _helpers, _date, _sort, _modulesStore, _modulesGridLayout, _modulesLoader, _modulesHighlightKeywords, _modulesPopupFilter, _modulesDropdown, _modulesCheckList, _modulesRowsCounter, _modulesStatusBar, _modulesPaging, _modulesClearButton, _modulesHelp, _modulesAlternateRows, _modulesColOps, _extensionsSortabletableSortabletable, _extensionsSortabletableAdapterSortabletable) {
+define(["exports", "module", "event", "dom", "string", "cookie", "types", "array", "helpers", "date", "sort", "modules/store", "modules/gridLayout", "modules/loader", "modules/highlightKeywords", "modules/popupFilter", "modules/dropdown", "modules/checkList", "modules/rowsCounter", "modules/statusBar", "modules/paging", "modules/clearButton", "modules/help", "modules/alternateRows", "modules/colOps", "extensions/sortabletable/sortabletable", "extensions/sortabletable/adapterSortabletable", "extensions/colsVisibility/colsVisibility"], function (exports, module, _event, _dom, _string, _cookie, _types, _array, _helpers, _date, _sort, _modulesStore, _modulesGridLayout, _modulesLoader, _modulesHighlightKeywords, _modulesPopupFilter, _modulesDropdown, _modulesCheckList, _modulesRowsCounter, _modulesStatusBar, _modulesPaging, _modulesClearButton, _modulesHelp, _modulesAlternateRows, _modulesColOps, _extensionsSortabletableSortabletable, _extensionsSortabletableAdapterSortabletable, _extensionsColsVisibilityColsVisibility) {
     "use strict";
 
     var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -43,6 +43,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
     var AlternateRows = _modulesAlternateRows.AlternateRows;
     var ColOps = _modulesColOps.ColOps;
     var AdapterSortableTable = _extensionsSortabletableAdapterSortabletable.AdapterSortableTable;
+    var ColsVisibility = _extensionsColsVisibilityColsVisibility.ColsVisibility;
 
     var global = window,
         isValidDate = dateHelper.isValid,
@@ -499,8 +500,10 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
             /*** extensions ***/
             //imports external script
-            this.hasExtensions = f.extensions === true ? true : false;
-            this.extensions = this.hasExtensions ? f.extensions : null;
+            // this.hasExtensions = f.extensions===true ? true : false;
+            // this.extensions = this.hasExtensions ? f.extensions : null;
+            this.extensions = f.extensions;
+            this.hasExtensions = types.isArray(this.extensions);
 
             /*** themes ***/
             this.enableDefaultTheme = f.enable_default_theme === true ? true : false;
@@ -533,6 +536,8 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                 sort: null,
                 ezEditTable: null
             };
+
+            this.Exts = [];
 
             /*** TF events ***/
             var o = this;
@@ -1080,7 +1085,9 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                     /* Loads extensions */
                     if (this.hasExtensions) {
-                        this.LoadExtensions();
+                        // this.loadExtensions();
+                        this.registerExtensions();
+                        this.initExtensions();
                     }
 
                     if (this.onFiltersLoaded) {
@@ -1150,7 +1157,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                 void 0;
                                 break;
                             case o.Evt.name.loadextensions:
-                                o._LoadExtensions();
+                                o._loadExtensions();
                                 break;
                             case o.Evt.name.loadthemes:
                                 o._LoadThemes();
@@ -1180,66 +1187,95 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     }
                 }
             },
-            ImportModule: {
-                value: function ImportModule(module) {
-                    if (!module.path || !module.name) {
+            registerExtensions: {
+                value: function registerExtensions() {
+                    var exts = this.extensions;
+                    if (exts.length === 0) {
                         return;
                     }
-                    this.includeFile(module.name, module.path, module.init);
-                }
-            },
-            LoadExtensions: {
-                value: function LoadExtensions() {
-                    if (!this.Ext) {
-                        /*** TF extensions ***/
-                        var o = this;
-                        this.Ext = {
-                            list: {},
-                            add: function add(extName, extDesc, extPath, extCallBack) {
-                                var file = extPath.split("/")[extPath.split("/").length - 1],
-                                    re = new RegExp(file),
-                                    path = extPath.replace(re, "");
-                                o.Ext.list[extName] = {
-                                    name: extName,
-                                    description: extDesc,
-                                    file: file,
-                                    path: path,
-                                    callback: extCallBack
-                                };
-                            }
-                        };
-                    }
-                    this.EvtManager(this.Evt.name.loadextensions);
-                }
-            },
-            _LoadExtensions: {
 
-                /*====================================================
-                    - loads TF extensions
-                =====================================================*/
-
-                value: function _LoadExtensions() {
-                    if (!this.hasExtensions || !types.isArray(this.extensions.name) || !types.isArray(this.extensions.src)) {
-                        return;
-                    }
-                    var ext = this.extensions;
-                    for (var e = 0; e < ext.name.length; e++) {
-                        var extPath = ext.src[e],
-                            extName = ext.name[e],
-                            extInit = ext.initialize && ext.initialize[e] ? ext.initialize[e] : null,
-                            extDesc = ext.description && ext.description[e] ? ext.description[e] : null;
-
-                        //Registers extension
-                        this.Ext.add(extName, extDesc, extPath, extInit);
-                        if (this.isImported(extPath)) {
-                            extInit.call(null, this);
-                        } else {
-                            this.includeFile(extName, extPath, extInit);
+                    for (var i = 0; i < exts.length; i++) {
+                        var ext = exts[i];
+                        if (this.Exts.indexOf(ext.name) === -1) {
+                            this.Exts.push(ext.name);
                         }
                     }
                 }
             },
+            initExtensions: {
+                value: function initExtensions() {
+                    var exts = this.extensions;
+                    if (exts.length === 0) {
+                        return;
+                    }
+
+                    for (var i = 0; i < exts.length; i++) {
+                        var tf = this;
+                        var ext = exts[i];
+                        var inst = eval("new " + exts[i].name + "(tf, ext);");
+                        console.log(inst);
+                    }
+                }
+            },
             LoadThemes: {
+
+                // ImportModule(module){
+                //     if(!module.path || !module.name){
+                //         return;
+                //     }
+                //     this.includeFile(module.name, module.path, module.init);
+                // }
+
+                // loadExtensions(){
+                //     if(!this.Ext){
+                //         /*** TF extensions ***/
+                //         var o = this;
+                //         this.Ext = {
+                //             list: {},
+                //             add: function(extName, extDesc, extPath, extCallBack){
+                //                 var file = extPath.split('/')[extPath.split('/').length-1],
+                //                     re = new RegExp(file),
+                //                     path = extPath.replace(re,'');
+                //                 o.Ext.list[extName] = {
+                //                     name: extName,
+                //                     description: extDesc,
+                //                     file: file,
+                //                     path: path,
+                //                     callback: extCallBack
+                //                 };
+                //             }
+                //         };
+                //     }
+                //     this.EvtManager(this.Evt.name.loadextensions);
+                // }
+
+                /*====================================================
+                    - loads TF extensions
+                =====================================================*/
+                // _LoadExtensions(){
+                //     if(!this.hasExtensions || !types.isArray(this.extensions.name) ||
+                //         !types.isArray(this.extensions.src)){
+                //         return;
+                //     }
+                //     var ext = this.extensions;
+                //     for(var e=0; e<ext.name.length; e++){
+                //         var extPath = ext.src[e],
+                //             extName = ext.name[e],
+                //            extInit = (ext.initialize && ext.initialize[e]) ?
+                //                 ext.initialize[e] : null,
+                //             extDesc = (ext.description && ext.description[e] ) ?
+                //                 ext.description[e] : null;
+
+                //         //Registers extension
+                //         this.Ext.add(extName, extDesc, extPath, extInit);
+                //         if(this.isImported(extPath)){
+                //             extInit.call(null,this);
+                //         } else {
+                //             this.includeFile(extName, extPath, extInit);
+                //         }
+                //     }
+                // }
+
                 value: function LoadThemes() {
                     this.EvtManager(this.Evt.name.loadthemes);
                 }

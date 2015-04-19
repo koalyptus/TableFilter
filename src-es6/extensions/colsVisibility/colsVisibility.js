@@ -1,6 +1,8 @@
 import {Dom} from '../../dom';
 import {Types} from '../../types';
 import {Event} from '../../event';
+import {Helpers} from '../../helpers';
+import {Arr} from '../../array';
 
 export class ColsVisibility{
 
@@ -14,7 +16,7 @@ export class ColsVisibility{
 
         this.colsVisibility = f.cols_visibility;
 
-        this.colVisExtLoaded = false;
+        this.colVisInitialized = false;
         this.colVisExtName = ext.name;
         this.colVisExtDesc = ext.description;
 
@@ -148,11 +150,55 @@ export class ColsVisibility{
         //Sets button
         // if(this.colVisManager) o.SetShowHideColsBtn();
         this.init();
-        this.colVisExtLoaded = true;
+        this.colVisInitialized = true;
     }
 
     toggle(evt){
+        var tf = this.tf;
+        var contDisplay = this.colVisContEl.style.display;
+        var onBeforeOpenColsManager = this.onBeforeOpenColsManager;
+        var onBeforeCloseColsManager = this.onBeforeCloseColsManager;
+        var onAfterOpenColsManager = this.onAfterOpenColsManager;
 
+        if(onBeforeOpenColsManager && contDisplay !== 'inline'){
+            onBeforeOpenColsManager.call(null, this);
+        }
+        if(onBeforeCloseColsManager && contDisplay === 'inline'){
+            onBeforeCloseColsManager.call(null, this);
+        }
+
+        this.colVisContEl.style.display = contDisplay === 'inline' ?
+            'none' : 'inline';
+
+        if(onAfterOpenColsManager && contDisplay !== 'inline'){
+            onAfterOpenColsManager.call(null, this);
+        }
+        if(onAfterCloseColsManager && contDisplay === 'inline'){
+            onAfterCloseColsManager.call(null, this);
+        }
+    }
+
+    checkItem(evt){
+        var li = event.target;
+        var lbl = Dom.tag(el, 'label')[0];
+        if(!li || !li.firstChild || !lbl){
+            return;
+        }
+        var isChecked = lbl.firstChild.checked;
+        var colIndex = lbl.firstChild.getAttribute('id').split('_')[1];
+        var parentNode = li.parentNode;
+        if(isChecked){
+            Dom.addClass(parentNode, this.colVisListSlcItemCssClass);
+        } else {
+            Dom.removeClass(parentNode, this.colVisListSlcItemCssClass);
+        }
+        // var hide = (this.TickToHide && isChecked) || (!this.TickToHide && !isChecked) ? true : false;
+        var hide = false;
+        if((this.colViseTickToHide && isChecked) ||
+            (!this.colVisTickToHide && !isChecked)){
+            hide = true;
+        }
+        this.setHidden(colIndex, hide);
     }
 
     init(){
@@ -169,13 +215,13 @@ export class ColsVisibility{
         if(this.btnColVisEl){
             return;
         }
-        var colVisSpan = Dom.createElm('span',
+        var colVisSpan = Dom.create('span',
             ['id', this.prfxColVisSpan+tf.id]);
         colVisSpan.className = this.colVisSpanCss;
 
         //Container element (rdiv or custom element)
         if(!this.btnColVisTgtId){
-            this.SetTopDiv();
+            tf.setToolbar();
         }
         var targetEl = !this.btnColVisTgtId ?
             tf.rDiv : Dom.id(this.btnColVisTgtId);
@@ -188,7 +234,7 @@ export class ColsVisibility{
         }
 
         if(!this.btnColVisHtml){
-            var btn = Dom.createElm('a', ['href','javascript:;']);
+            var btn = Dom.create('a', ['href','javascript:;']);
             btn.className = this.btnColVisCssClass;
             btn.title = this.colVisExtDesc;
 
@@ -220,29 +266,29 @@ export class ColsVisibility{
         this.btnColVisEl = this.colVisSpanEl.firstChild;
 
         // this.SetColsVisibilityManager();
-        this.setManager();
+        this.buildManager();
 
         if(this.onColsManagerLoaded){
             this.onColsManagerLoaded.call(null, this);
         }
     }
 
-    setManager(){
+    buildManager(){
         var tf = this.tf;
         // if(!this.hasGrid && !this.isFirstLoad) return;
 
         var container = !this.colVisContElTgtId ?
-            Dom.createElm('div', ['id', this.prfxColVisCont+tf.id]) :
+            Dom.create('div', ['id', this.prfxColVisCont+tf.id]) :
             Dom.id(this.colVisContElTgtId);
         container.className = this.colVisContCss;
 
         //Extension description
-        var extNameLabel = Dom.createElm('p');
+        var extNameLabel = Dom.create('p');
         extNameLabel.innerHTML = this.colVisText;
         container.appendChild(extNameLabel);
 
         //Headers list
-        var ul = Dom.createElm('ul' ,['id', 'ul'+this.colVisExtName+'_'+tf.id]);
+        var ul = Dom.create('ul' ,['id', 'ul'+this.colVisExtName+'_'+tf.id]);
         ul.className = this.colVisListCss;
 
         var tbl = this.colVisHeadersTbl ? this.colVisHeadersTbl : tf.tbl;
@@ -317,19 +363,21 @@ export class ColsVisibility{
         }
 
         //separator
-        var p = Dom.createElm('p', ['align','center']);
+        var p = Dom.create('p', ['align','center']);
         var btn;
         //Close link
         if(!this.btnColVisCloseHtml){
-            btn = Dom.createElm('a', ['href','javascript:;']);
+            btn = Dom.create('a', ['href','javascript:;']);
             btn.className = this.btnColVisCloseCssClass;
             btn.innerHTML = this.btnColVisCloseText;
-            btn.onclick = this.Evt._ShowColsVisibility;
+            // btn.onclick = this.Evt._ShowColsVisibility;
+            Event.add(btn, 'click', (evt)=> { this.toggle(evt); });
             p.appendChild(btn);
         } else {
             p.innerHTML = this.btnColVisCloseHtml;
             btn = p.firstChild;
-            btn.onclick = this.Evt._ShowColsVisibility;
+            // btn.onclick = this.Evt._ShowColsVisibility;
+            Event.add(btn, 'click', (evt)=> { this.toggle(evt); });
         }
 
         container.appendChild(ul);
@@ -354,6 +402,187 @@ export class ColsVisibility{
         }
     }
 
+    setHidden(colIndex, hide){
+        var tf = this.tf;
+        var col = Dom.tag(this.tbl, 'col')[colIndex];
+        //External headers
+        var col1 = this.colVisHeadersTbl ?
+            Dom.tag(this.colVisHeadersTbl, 'col')[colIndex] : null;
+
+        if(this.onBeforeColIsHidden && hide){
+            this.onBeforeColIsHidden.call(null, this, colIndex);
+        }
+        if(this.onBeforeColIsDisplayed && !hide){
+            this.onBeforeColIsDisplayed.call(null, this, colIndex);
+        }
+
+        //cols can be hidden only under IE
+        if(this.tblHasColTag && Helpers.isIE()){
+            var tbl = this.colVisHeadersTbl || tf.tbl;
+            var filtersRow = tbl.rows[tf.getFiltersRowIndex()];
+            var a1 = tf.getFiltersByType(tf.fltTypeSlc, true);
+            var a2 = tf.getFiltersByType(tf.fltTypeMulti, true);
+            var a = a1.concat(a2);
+
+            if(col){
+                col.style.display = hide ? 'none' : '';
+                //Selects are displayed even if column is hidden under IE6
+                if(a.indexOf(colIndex) !== -1){
+                    if(!this.colVisHeadersTbl){
+                        filtersRow.cells[colIndex].style.visibility = hide ?
+                            'hidden' : 'visible';
+                    }
+                    else{
+                        var flt = Dom.id(tf.fltIds[colIndex]);
+                        flt.style.visibility = hide ? 'hidden' : 'visible';
+                    }
+                }
+            }
+            if(col1){
+                col1.style.display = hide ? 'none' : '';
+            }
+        } else {
+            this._hideCells(o.tbl, colIndex, true);
+            if(this.colVisHeadersTbl){
+                this._hideCells(this.colVisHeadersTbl, colIndex, true);
+            }
+        }
+
+        var hiddenCols = this.colVisHiddenCols;
+        if(hide){
+            if(hiddenCols.indexOf(colIndex) === -1){
+                this.colVisHiddenCols.push(colIndex);
+            }
+        } else {
+            // var itemIndex = o.showHideHiddenCols.tf_IndexByValue(colIndex, true);
+            var itemIndex = Arr.indexByValue(hiddenCols, colIndex, true);
+            if(hiddenCols.indexOf(colIndex) !== -1){
+                this.colVisHiddenCols.splice(itemIndex, 1);
+            }
+        }
+
+        var gridLayout;
+        var headTbl;
+        var gridColElms;
+        if(this.onAfterColIsHidden && hide){
+            //This event is fired just after a column is displayed for
+            //grid_layout compatibility
+            if(tf.gridLayout){
+                //Returns the removed column widths
+                // function getHiddenWidth(){
+                //     var ths = o.headTbl.rows[o.showHideColsHeadersIndex].cells;
+                //     var hW = 0;
+                //     for(var i=0; i<o.nbCells; i++){
+                //         if(ths[i].style.display == 'none'){
+                //             var w = parseInt(ths[i].style.width);
+                //             ths[i].style.width = 0;
+                //             hW += w;
+                //         }
+                //     }
+                //     return hW;
+                // }
+                gridLayout = tf.Cpt.gridLayout;
+                headTbl = gridLayout.headTbl;
+                gridColElms = gridLayout.gridColElms;
+                if(Helpers.isIE()){
+                    tf.tbl.style.width = headTbl.clientWidth + 'px';
+                } else {
+                    var ths = headTbl.rows[this.colVisHeadersIndex].cells;
+                    var hiddenWidth = 0;
+                    for(var i=0; i<o.nbCells; i++){
+                        if(ths[i].style.display === 'none'){
+                            var w = parseInt(ths[i].style.width, 10);
+                            ths[i].style.width = 0;
+                            hiddenWidth += w;
+                        }
+                    }
+                    var headTblW = parseInt(headTbl.style.width, 10);
+
+                    headTbl.style.width = headTblW - hiddenWidth + 'px';
+                    tf.tbl.style.width = headTbl.style.width;
+                    gridColElms[colIndex].style.display = 'none';
+                }
+            }
+            this.onAfterColIsHidden.call(null, this, colIndex);
+        }
+
+        if(this.onAfterColIsDisplayed && !hide){
+            //This event is fired just after a column is displayed for
+            //grid_layout compatibility
+            if(tf.gridLayout /*&& (!tf_isIE && !tf_isIE7)*/){
+                gridLayout = tf.Cpt.gridLayout;
+                headTbl = gridLayout.headTbl;
+                gridColElms = gridLayout.gridColElms;
+                gridColElms[colIndex].style.display = '';
+                var width = parseInt(gridColElms[colIndex].style.width, 10);
+                gridLayout.crWColsRow.cells[colIndex].style.width = width +'px';
+                headTbl.style.width =
+                    (parseInt(headTbl.style.width, 10) + width) + 'px';
+                tf.tbl.style.width = headTbl.style.width;
+            }
+            this.onAfterColIsDisplayed.call(null, this, colIndex);
+        }
+    }
+
+    showCol(colIndex){
+        if(colIndex === undefined || !this.IsColHidden(colIndex)){
+            return;
+        }
+        if(this.colVisManager && this.colVisContEl){
+            var itm = Dom.id('col_'+colIndex+'_'+this.tf.id);
+            if(itm){ itm.click(); }
+        } else {
+            this.setHidden(colIndex, false);
+        }
+    }
+
+    hideCol(colIndex){
+        if(colIndex === undefined || this.IsColHidden(colIndex)){
+            return;
+        }
+        if(this.colVisManager && this.colVisContEl){
+            var itm = Dom.id('col_'+colIndex+'_'+this.tf.id);
+            if(itm){ itm.click(); }
+        } else {
+            this.setHidden(colIndex, true);
+        }
+    }
+
+    isColHidden(colIndex){
+        if(this.colVisHiddenCols.indexOf(colIndex) !== -1){
+            return true;
+        }
+        return false;
+    }
+
+    toggleCol(colIndex){
+        if(colIndex === undefined || this.IsColHidden(colIndex)){
+            this.ShowCol(colIndex);
+        } else {
+            this.HideCol(colIndex);
+        }
+    }
+
+    getHiddenCols(){
+        return this.colVisHiddenCols;
+    }
+
+    destroy(){
+        if(!this.btnColVisEl || !this.colVisContEl){
+            return;
+        }
+        if(Dom.id(this.colVisContElTgtId)){
+            Dom.id(this.colVisContElTgtId).innerHTML = '';
+        } else {
+            this.colVisContEl.innerHTML = '';
+            this.colVisContEl.parentNode.removeChild(this.colVisContEl);
+            this.colVisContEl = null;
+        }
+        this.btnColVisEl.innerHTML = '';
+        this.btnColVisEl.parentNode.removeChild(this.btnColVisEl);
+        this.btnColVisEl = null;
+        this.colVisInitialized = false;
+    }
 
     _getHeaderText(cell){
         if(!cell.hasChildNodes){
@@ -374,6 +603,16 @@ export class ColsVisibility{
             continue;
         }
         return '';
+    }
+
+    _hideCells(tbl, colIndex, hide){
+        for(var i=0; i<tbl.rows.length; i++){
+            var row = tbl.rows[i];
+            var cell = row.cells[colIndex];
+            if(cell){
+                cell.style.display = hide ? 'none' : '';
+            }
+        }
     }
 
 }

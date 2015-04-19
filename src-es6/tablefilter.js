@@ -40,6 +40,7 @@ import {ColOps} from 'modules/colOps';
 import 'extensions/sortabletable/sortabletable';
 import {AdapterSortableTable}
     from 'extensions/sortabletable/adapterSortabletable';
+import {ColsVisibility} from 'extensions/colsVisibility/colsVisibility';
 
 var global = window,
     isValidDate = dateHelper.isValid,
@@ -546,8 +547,10 @@ export default class TableFilter{
 
         /*** extensions ***/
         //imports external script
-        this.hasExtensions = f.extensions===true ? true : false;
-        this.extensions = this.hasExtensions ? f.extensions : null;
+        // this.hasExtensions = f.extensions===true ? true : false;
+        // this.extensions = this.hasExtensions ? f.extensions : null;
+        this.extensions = f.extensions;
+        this.hasExtensions = types.isArray(this.extensions);
 
         /*** themes ***/
         this.enableDefaultTheme = f.enable_default_theme===true ?
@@ -582,6 +585,8 @@ export default class TableFilter{
             sort: null,
             ezEditTable: null
         };
+
+        this.Exts = [];
 
         /*** TF events ***/
         var o = this;
@@ -1146,7 +1151,9 @@ export default class TableFilter{
 
         /* Loads extensions */
         if(this.hasExtensions){
-            this.LoadExtensions();
+            // this.loadExtensions();
+            this.registerExtensions();
+            this.initExtensions();
         }
 
         if(this.onFiltersLoaded){
@@ -1214,7 +1221,7 @@ export default class TableFilter{
                     void(0);
                 break;
                 case o.Evt.name.loadextensions:
-                    o._LoadExtensions();
+                    o._loadExtensions();
                 break;
                 case o.Evt.name.loadthemes:
                     o._LoadThemes();
@@ -1243,62 +1250,90 @@ export default class TableFilter{
         }
     }
 
-    ImportModule(module){
-        if(!module.path || !module.name){
+    registerExtensions(){
+        var exts = this.extensions;
+        if(exts.length === 0){
             return;
         }
-        this.includeFile(module.name, module.path, module.init);
+
+        for(var i=0; i<exts.length; i++){
+            var ext = exts[i];
+            if(this.Exts.indexOf(ext.name) === -1){
+                this.Exts.push(ext.name);
+            }
+        }
     }
 
-    LoadExtensions(){
-        if(!this.Ext){
-            /*** TF extensions ***/
-            var o = this;
-            this.Ext = {
-                list: {},
-                add: function(extName, extDesc, extPath, extCallBack){
-                    var file = extPath.split('/')[extPath.split('/').length-1],
-                        re = new RegExp(file),
-                        path = extPath.replace(re,'');
-                    o.Ext.list[extName] = {
-                        name: extName,
-                        description: extDesc,
-                        file: file,
-                        path: path,
-                        callback: extCallBack
-                    };
-                }
-            };
+    initExtensions(){
+        var exts = this.extensions;
+        if(exts.length === 0){
+            return;
         }
-        this.EvtManager(this.Evt.name.loadextensions);
+
+        for(var i=0; i<exts.length; i++){
+            var tf = this;
+            var ext = exts[i];
+            var inst = eval('new '+ exts[i].name+'(tf, ext);');
+            console.log(inst);
+        }
     }
+
+    // ImportModule(module){
+    //     if(!module.path || !module.name){
+    //         return;
+    //     }
+    //     this.includeFile(module.name, module.path, module.init);
+    // }
+
+    // loadExtensions(){
+    //     if(!this.Ext){
+    //         /*** TF extensions ***/
+    //         var o = this;
+    //         this.Ext = {
+    //             list: {},
+    //             add: function(extName, extDesc, extPath, extCallBack){
+    //                 var file = extPath.split('/')[extPath.split('/').length-1],
+    //                     re = new RegExp(file),
+    //                     path = extPath.replace(re,'');
+    //                 o.Ext.list[extName] = {
+    //                     name: extName,
+    //                     description: extDesc,
+    //                     file: file,
+    //                     path: path,
+    //                     callback: extCallBack
+    //                 };
+    //             }
+    //         };
+    //     }
+    //     this.EvtManager(this.Evt.name.loadextensions);
+    // }
 
     /*====================================================
         - loads TF extensions
     =====================================================*/
-    _LoadExtensions(){
-        if(!this.hasExtensions || !types.isArray(this.extensions.name) ||
-            !types.isArray(this.extensions.src)){
-            return;
-        }
-        var ext = this.extensions;
-        for(var e=0; e<ext.name.length; e++){
-            var extPath = ext.src[e],
-                extName = ext.name[e],
-                extInit = (ext.initialize && ext.initialize[e]) ?
-                    ext.initialize[e] : null,
-                extDesc = (ext.description && ext.description[e] ) ?
-                    ext.description[e] : null;
+    // _LoadExtensions(){
+    //     if(!this.hasExtensions || !types.isArray(this.extensions.name) ||
+    //         !types.isArray(this.extensions.src)){
+    //         return;
+    //     }
+    //     var ext = this.extensions;
+    //     for(var e=0; e<ext.name.length; e++){
+    //         var extPath = ext.src[e],
+    //             extName = ext.name[e],
+    //            extInit = (ext.initialize && ext.initialize[e]) ?
+    //                 ext.initialize[e] : null,
+    //             extDesc = (ext.description && ext.description[e] ) ?
+    //                 ext.description[e] : null;
 
-            //Registers extension
-            this.Ext.add(extName, extDesc, extPath, extInit);
-            if(this.isImported(extPath)){
-                extInit.call(null,this);
-            } else {
-                this.includeFile(extName, extPath, extInit);
-            }
-        }
-    }
+    //         //Registers extension
+    //         this.Ext.add(extName, extDesc, extPath, extInit);
+    //         if(this.isImported(extPath)){
+    //             extInit.call(null,this);
+    //         } else {
+    //             this.includeFile(extName, extPath, extInit);
+    //         }
+    //     }
+    // }
 
     LoadThemes(){
         this.EvtManager(this.Evt.name.loadthemes);

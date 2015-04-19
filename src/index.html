@@ -113,25 +113,33 @@
                 // remember_page_length: true,
                 fill_slc_on_demand: false,
                 linked_filters: false,
-                popup_filters: true,
+                popup_filters: false,
                 alternate_rows: true,
                 highlight_keywords: true,
                 match_case: false,
                 btn_reset: true,
                 status_bar: true,
                 watermark: [null, 'Filter column...', null, null, 'Helo'],
-                selectable: true,
-                editable: true,
+                selectable: false,
+                editable: false,
                 ezEditTable_config:{
                     default_selection: 'both',
                     loadStylesheet: true
                 },
-                grid_layout: true,
+                grid_layout: false,
                 // grid_width: '500px',
                 // grid_height: '200px',
                 on_before_show_msg: function(tf){
                     // console.log('on_before_show_msg');
-                }
+                },
+
+                extensions: [{
+                    /*** Columns Visibility Manager extension load ***/
+                    name: 'ColsVisibility',
+                    src: 'TableFilter/TFExt_ColsVisibility/TFExt_ColsVisibility.js',
+                    description: 'Columns visibility manager'/*,
+                    initialize: function(o){o.SetColsVisibility();}*/
+                }]
             });
 
             tf.init();
