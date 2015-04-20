@@ -44,6 +44,9 @@ define(["exports"], function (exports) {
                 evt.returnValue = false;
             }
         },
+        target: function target(evt) {
+            return evt && evt.target || window.event && window.event.srcElement;
+        },
         keyCode: function keyCode(evt) {
             return evt.charCode ? evt.charCode : evt.keyCode ? evt.keyCode : evt.which ? evt.which : 0;
         }

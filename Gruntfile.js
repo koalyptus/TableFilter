@@ -24,9 +24,11 @@ module.exports = function (grunt) {
         watch: {
             files: [
                 'src-es6/**/*.js',
-                '<%= source_folder %>**/*.js',
-                '<%= source_folder %>**/*.css',
-                '<%= source_folder %>**/*.html'
+                'src-es6/**/*.css'
+                // ,
+                // '<%= source_folder %>**/*.js',
+                // '<%= source_folder %>**/*.css',
+                // '<%= source_folder %>**/*.html'
             ],
             tasks: ['dev']
         },
@@ -202,10 +204,11 @@ module.exports = function (grunt) {
             tablefilter: {
                 files: [
                     { src: 'libs/sortabletable.js', dest: '<%= source_folder %>extensions/sortabletable/sortabletable.js' },
+                    { src: 'src-es6/extensions/colsVisibility/colsVisibility.css', dest: '<%= source_folder %>extensions/colsVisibility/colsVisibility.css' },
                     // { src: 'libs/requirejs/require.js', dest: '<%= dist_folder %>require.js' },
                     // { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
 
-                    // TODO: remove ezEditTable
+                    // TODO: remove ezEditTable and other extensions
                     { src: ['**'], cwd: 'libs/ezEditTable/', dest: '<%= source_folder %>extensions/ezEditTable/', expand: true },
                     { src: ['**'], cwd: 'libs/ezEditTable/', dest: '<%= dist_folder %>extensions/ezEditTable/', expand: true },
                     //

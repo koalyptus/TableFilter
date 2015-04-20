@@ -10,7 +10,13 @@ export class ColsVisibility{
      * Columns Visibility extension
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf, ext){
+    constructor(
+        tf,
+        ext={
+            name:'ColsVisibility',
+            description:'Columns visibility manager'
+        }){
+
         // Configuration object
         var f = tf.config();
 
@@ -18,7 +24,7 @@ export class ColsVisibility{
 
         this.colVisInitialized = false;
         this.colVisExtName = ext.name;
-        this.colVisExtDesc = ext.description;
+        this.colVisExtDesc = ext.description ;
 
         //show/hide cols span element
         this.colVisSpanEl = null;
@@ -42,7 +48,7 @@ export class ColsVisibility{
         //id of button container element
         this.btnColVisTgtId = f.btn_colvis_target_id || null;
         //defines show/hide cols text
-        this.btnColVisText = f.btn_colvis_text || 'Display columns&#9660;';
+        this.btnColVisText = f.btn_colvis_text || 'Columns&#9660;';
             //defines show/hide cols button innerHtml
         this.btnColVisHtml = f.btn_colvis_html || null;
         //defines css class for show/hide cols button
@@ -55,8 +61,8 @@ export class ColsVisibility{
         this.btnColVisCloseCssClass =
             f.btn_colvis_close_css_class || this.btnColVisCssClass;
 
-        this.colVisExtPath = ext.path || 'TFExt_ColsVisibility/';
-        this.colVisStylesheet = 'TFExt_ColsVisibility.css';
+        this.colVisExtPath = ext.path || tf.extensionsPath + 'colsVisibility/';
+        this.colVisStylesheet = 'colsVisibility.css';
         //span containing show/hide cols button
         this.prfxColVisSpan = 'colVis_';
         //defines css class span containing show/hide cols
@@ -159,6 +165,7 @@ export class ColsVisibility{
         var onBeforeOpenColsManager = this.onBeforeOpenColsManager;
         var onBeforeCloseColsManager = this.onBeforeCloseColsManager;
         var onAfterOpenColsManager = this.onAfterOpenColsManager;
+        var onAfterCloseColsManager = this.onAfterCloseColsManager;
 
         if(onBeforeOpenColsManager && contDisplay !== 'inline'){
             onBeforeOpenColsManager.call(null, this);
@@ -178,23 +185,21 @@ export class ColsVisibility{
         }
     }
 
-    checkItem(evt){
-        var li = event.target;
-        var lbl = Dom.tag(el, 'label')[0];
-        if(!li || !li.firstChild || !lbl){
+    checkItem(lbl){
+        var li = lbl.parentNode;
+        if(!li || !lbl){
             return;
         }
         var isChecked = lbl.firstChild.checked;
         var colIndex = lbl.firstChild.getAttribute('id').split('_')[1];
-        var parentNode = li.parentNode;
         if(isChecked){
-            Dom.addClass(parentNode, this.colVisListSlcItemCssClass);
+            Dom.addClass(li, this.colVisListSlcItemCssClass);
         } else {
-            Dom.removeClass(parentNode, this.colVisListSlcItemCssClass);
+            Dom.removeClass(li, this.colVisListSlcItemCssClass);
         }
         // var hide = (this.TickToHide && isChecked) || (!this.TickToHide && !isChecked) ? true : false;
         var hide = false;
-        if((this.colViseTickToHide && isChecked) ||
+        if((this.colVisTickToHide && isChecked) ||
             (!this.colVisTickToHide && !isChecked)){
             hide = true;
         }
@@ -202,9 +207,11 @@ export class ColsVisibility{
     }
 
     init(){
-        if(this.colVisManager){
-            this.buildBtn();
+        if(!this.colVisManager){
+            return;
         }
+        this.buildBtn();
+        this.buildManager();
     }
 
     buildBtn(){
@@ -266,7 +273,7 @@ export class ColsVisibility{
         this.btnColVisEl = this.colVisSpanEl.firstChild;
 
         // this.SetColsVisibilityManager();
-        this.buildManager();
+        // this.buildManager();
 
         if(this.onColsManagerLoaded){
             this.onColsManagerLoaded.call(null, this);
@@ -298,7 +305,7 @@ export class ColsVisibility{
 
         //Tick all option
         if(this.colVisEnableTickAll){
-            var li = tf_CreateCheckItem(
+            var li = Dom.createCheckItem(
                 'col__'+tf.id, this.colVisTickAllText, this.colVisTickAllText);
             Dom.addClass(li, this.colVisListItemCssClass);
             ul.appendChild(li);
@@ -352,8 +359,9 @@ export class ColsVisibility{
             }
             // liElm.check.onclick = function(){ o.Evt._CheckItem(this.parentNode); };
             Event.add(liElm.check, 'click', (evt)=> {
-                var elm = evt.target;
-                this.checkItem(elm.parentNode);
+                var elm = Event.target(evt);
+                var lbl = elm.parentNode;
+                this.checkItem(lbl);
             });
 
             // if(tf_isIE)
@@ -404,7 +412,8 @@ export class ColsVisibility{
 
     setHidden(colIndex, hide){
         var tf = this.tf;
-        var col = Dom.tag(this.tbl, 'col')[colIndex];
+        var tbl = tf.tbl;
+        var col = Dom.tag(tbl, 'col')[colIndex];
         //External headers
         var col1 = this.colVisHeadersTbl ?
             Dom.tag(this.colVisHeadersTbl, 'col')[colIndex] : null;
@@ -418,7 +427,7 @@ export class ColsVisibility{
 
         //cols can be hidden only under IE
         if(this.tblHasColTag && Helpers.isIE()){
-            var tbl = this.colVisHeadersTbl || tf.tbl;
+            tbl = this.colVisHeadersTbl || tbl;
             var filtersRow = tbl.rows[tf.getFiltersRowIndex()];
             var a1 = tf.getFiltersByType(tf.fltTypeSlc, true);
             var a2 = tf.getFiltersByType(tf.fltTypeMulti, true);
@@ -442,9 +451,9 @@ export class ColsVisibility{
                 col1.style.display = hide ? 'none' : '';
             }
         } else {
-            this._hideCells(o.tbl, colIndex, true);
+            this._hideCells(tbl, colIndex, hide);
             if(this.colVisHeadersTbl){
-                this._hideCells(this.colVisHeadersTbl, colIndex, true);
+                this._hideCells(this.colVisHeadersTbl, colIndex, hide);
             }
         }
 
@@ -485,7 +494,7 @@ export class ColsVisibility{
                 headTbl = gridLayout.headTbl;
                 gridColElms = gridLayout.gridColElms;
                 if(Helpers.isIE()){
-                    tf.tbl.style.width = headTbl.clientWidth + 'px';
+                    tbl.style.width = headTbl.clientWidth + 'px';
                 } else {
                     var ths = headTbl.rows[this.colVisHeadersIndex].cells;
                     var hiddenWidth = 0;
@@ -499,7 +508,7 @@ export class ColsVisibility{
                     var headTblW = parseInt(headTbl.style.width, 10);
 
                     headTbl.style.width = headTblW - hiddenWidth + 'px';
-                    tf.tbl.style.width = headTbl.style.width;
+                    tbl.style.width = headTbl.style.width;
                     gridColElms[colIndex].style.display = 'none';
                 }
             }

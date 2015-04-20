@@ -21,7 +21,12 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
          * @param {Object} tf TableFilter instance
          */
 
-        function ColsVisibility(tf, ext) {
+        function ColsVisibility(tf) {
+            var ext = arguments[1] === undefined ? {
+                name: "ColsVisibility",
+                description: "Columns visibility manager"
+            } : arguments[1];
+
             _classCallCheck(this, ColsVisibility);
 
             // Configuration object
@@ -55,7 +60,7 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
             //id of button container element
             this.btnColVisTgtId = f.btn_colvis_target_id || null;
             //defines show/hide cols text
-            this.btnColVisText = f.btn_colvis_text || "Display columns&#9660;";
+            this.btnColVisText = f.btn_colvis_text || "Columns&#9660;";
             //defines show/hide cols button innerHtml
             this.btnColVisHtml = f.btn_colvis_html || null;
             //defines css class for show/hide cols button
@@ -67,8 +72,8 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
             //defines css class for close button
             this.btnColVisCloseCssClass = f.btn_colvis_close_css_class || this.btnColVisCssClass;
 
-            this.colVisExtPath = ext.path || "TFExt_ColsVisibility/";
-            this.colVisStylesheet = "TFExt_ColsVisibility.css";
+            this.colVisExtPath = ext.path || tf.extensionsPath + "colsVisibility/";
+            this.colVisStylesheet = "colsVisibility.css";
             //span containing show/hide cols button
             this.prfxColVisSpan = "colVis_";
             //defines css class span containing show/hide cols
@@ -158,6 +163,7 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
                     var onBeforeOpenColsManager = this.onBeforeOpenColsManager;
                     var onBeforeCloseColsManager = this.onBeforeCloseColsManager;
                     var onAfterOpenColsManager = this.onAfterOpenColsManager;
+                    var onAfterCloseColsManager = this.onAfterCloseColsManager;
 
                     if (onBeforeOpenColsManager && contDisplay !== "inline") {
                         onBeforeOpenColsManager.call(null, this);
@@ -177,23 +183,21 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
                 }
             },
             checkItem: {
-                value: function checkItem(evt) {
-                    var li = event.target;
-                    var lbl = Dom.tag(el, "label")[0];
-                    if (!li || !li.firstChild || !lbl) {
+                value: function checkItem(lbl) {
+                    var li = lbl.parentNode;
+                    if (!li || !lbl) {
                         return;
                     }
                     var isChecked = lbl.firstChild.checked;
                     var colIndex = lbl.firstChild.getAttribute("id").split("_")[1];
-                    var parentNode = li.parentNode;
                     if (isChecked) {
-                        Dom.addClass(parentNode, this.colVisListSlcItemCssClass);
+                        Dom.addClass(li, this.colVisListSlcItemCssClass);
                     } else {
-                        Dom.removeClass(parentNode, this.colVisListSlcItemCssClass);
+                        Dom.removeClass(li, this.colVisListSlcItemCssClass);
                     }
                     // var hide = (this.TickToHide && isChecked) || (!this.TickToHide && !isChecked) ? true : false;
                     var hide = false;
-                    if (this.colViseTickToHide && isChecked || !this.colVisTickToHide && !isChecked) {
+                    if (this.colVisTickToHide && isChecked || !this.colVisTickToHide && !isChecked) {
                         hide = true;
                     }
                     this.setHidden(colIndex, hide);
@@ -201,9 +205,11 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
             },
             init: {
                 value: function init() {
-                    if (this.colVisManager) {
-                        this.buildBtn();
+                    if (!this.colVisManager) {
+                        return;
                     }
+                    this.buildBtn();
+                    this.buildManager();
                 }
             },
             buildBtn: {
@@ -272,7 +278,7 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
                     this.btnColVisEl = this.colVisSpanEl.firstChild;
 
                     // this.SetColsVisibilityManager();
-                    this.buildManager();
+                    // this.buildManager();
 
                     if (this.onColsManagerLoaded) {
                         this.onColsManagerLoaded.call(null, this);
@@ -304,7 +310,7 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
 
                     //Tick all option
                     if (this.colVisEnableTickAll) {
-                        var li = tf_CreateCheckItem("col__" + tf.id, this.colVisTickAllText, this.colVisTickAllText);
+                        var li = Dom.createCheckItem("col__" + tf.id, this.colVisTickAllText, this.colVisTickAllText);
                         Dom.addClass(li, this.colVisListItemCssClass);
                         ul.appendChild(li);
                         var isAllTicked = false;
@@ -355,8 +361,9 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
                         }
                         // liElm.check.onclick = function(){ o.Evt._CheckItem(this.parentNode); };
                         Event.add(liElm.check, "click", function (evt) {
-                            var elm = evt.target;
-                            _this.checkItem(elm.parentNode);
+                            var elm = Event.target(evt);
+                            var lbl = elm.parentNode;
+                            _this.checkItem(lbl);
                         });
 
                         // if(tf_isIE)
@@ -412,7 +419,8 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
             setHidden: {
                 value: function setHidden(colIndex, hide) {
                     var tf = this.tf;
-                    var col = Dom.tag(this.tbl, "col")[colIndex];
+                    var tbl = tf.tbl;
+                    var col = Dom.tag(tbl, "col")[colIndex];
                     //External headers
                     var col1 = this.colVisHeadersTbl ? Dom.tag(this.colVisHeadersTbl, "col")[colIndex] : null;
 
@@ -425,7 +433,7 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
 
                     //cols can be hidden only under IE
                     if (this.tblHasColTag && Helpers.isIE()) {
-                        var tbl = this.colVisHeadersTbl || tf.tbl;
+                        tbl = this.colVisHeadersTbl || tbl;
                         var filtersRow = tbl.rows[tf.getFiltersRowIndex()];
                         var a1 = tf.getFiltersByType(tf.fltTypeSlc, true);
                         var a2 = tf.getFiltersByType(tf.fltTypeMulti, true);
@@ -447,9 +455,9 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
                             col1.style.display = hide ? "none" : "";
                         }
                     } else {
-                        this._hideCells(o.tbl, colIndex, true);
+                        this._hideCells(tbl, colIndex, hide);
                         if (this.colVisHeadersTbl) {
-                            this._hideCells(this.colVisHeadersTbl, colIndex, true);
+                            this._hideCells(this.colVisHeadersTbl, colIndex, hide);
                         }
                     }
 
@@ -490,7 +498,7 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
                             headTbl = gridLayout.headTbl;
                             gridColElms = gridLayout.gridColElms;
                             if (Helpers.isIE()) {
-                                tf.tbl.style.width = headTbl.clientWidth + "px";
+                                tbl.style.width = headTbl.clientWidth + "px";
                             } else {
                                 var ths = headTbl.rows[this.colVisHeadersIndex].cells;
                                 var hiddenWidth = 0;
@@ -504,7 +512,7 @@ define(["exports", "../../dom", "../../types", "../../event", "../../helpers", "
                                 var headTblW = parseInt(headTbl.style.width, 10);
 
                                 headTbl.style.width = headTblW - hiddenWidth + "px";
-                                tf.tbl.style.width = headTbl.style.width;
+                                tbl.style.width = headTbl.style.width;
                                 gridColElms[colIndex].style.display = "none";
                             }
                         }

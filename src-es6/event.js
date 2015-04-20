@@ -43,6 +43,9 @@ var Event = {
             evt.returnValue = false;
         }
     },
+    target(evt){
+        return (evt && evt.target) || (window.event && window.event.srcElement);
+    },
     keyCode(evt){
         return evt.charCode ? evt.charCode :
             (evt.keyCode ? evt.keyCode: (evt.which ? evt.which : 0));
