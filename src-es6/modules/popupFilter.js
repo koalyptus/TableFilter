@@ -145,7 +145,7 @@ export class PopupFilter{
             }
             popUpFltElm.style.display = 'block';
             if(tf['col'+colIndex] === tf.fltTypeInp){
-                var flt = tf.GetFilterElement(colIndex);
+                var flt = tf.getFilterElement(colIndex);
                 if(flt){
                     flt.focus();
                 }

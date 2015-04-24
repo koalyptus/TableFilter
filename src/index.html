@@ -6,6 +6,9 @@
     <script type="text/javascript">
         var tf;
     </script>
+    <style>
+        .test{ color: red !important; }
+    </style>
 </head>
 <body>
     <p align="right">
@@ -22,7 +25,8 @@
                 tf.Cpt.paging.destroy();
                 tf.filter();" >
     </p>
-    <div style="width: 900px;">
+    <div id="test_cont">sss</div>
+    <div style="width: 500px;">
         <table id="demo" cellpadding="0" cellspacing="0">
             <thead>
                 <tr>
@@ -98,7 +102,7 @@
                 base_path: './',
                 loader: false,
                 rows_counter: true,
-                enable_default_theme: true,
+                enable_default_theme: false,
                 // slc_filling_method: 'innerhtml',
                 sort: true,
                 sort_config: {
@@ -126,8 +130,8 @@
                     default_selection: 'both',
                     loadStylesheet: true
                 },
-                grid_layout: false,
-                // grid_width: '500px',
+                grid_layout: true,
+                grid_width: '600px',
                 // grid_height: '200px',
                 on_before_show_msg: function(tf){
                     // console.log('on_before_show_msg');
@@ -137,13 +141,44 @@
                     /*** Columns Visibility Manager extension load ***/
                     name: 'ColsVisibility',
                     //src: 'extensions/colsVisibility/colsVisibility.js',
-                    description: 'Columns visibility manager'/*,
+                    description: 'Columns visibility manager',/*
                     initialize: function(o){o.SetColsVisibility();}*/
+                    // manager: true,
+                    tick_to_hide: true,
+                    // headers_table: true,
+                    // container_target_id: 'test_cont',
+                    // headers_text: ['1','2','3','4','5','6'],
+                    btn_target_id: 'test_cont',
+                    // btn_text: 'Hola',
+                    // btn_html: '<button>Columns</button>',
+                    // btn_css_class: 'test',
+                    // btn_close_text: 'jj',
+                    // btn_close_html: '<button>close</button>',
+                    // btn_close_css_class: 'test',
+                    // stylesheet: 'hola.css',
+                    // cont_css_class: 'test',
+                    // checklist_item_css_class: 'test',
+                    // at_start: [0,1,2,3,4],
+                    // enable_hover: true,
+                    enable_tick_all: true
+                    // ,
+                    // tick_all_text: 'Hola',
+                    // text: 'tutu',
+                    // on_loaded: function(){ console.log(arguments); },
+                    // on_before_open: function(){ console.log('on_before_open', arguments); },
+                    // on_after_open: function(){ console.log('on_after_open',arguments); },
+                    // on_before_close: function(){ console.log('on_before_close',arguments); },
+                    // on_after_close: function(){ console.log('on_after_close',arguments); },
+                    // on_before_col_hidden: function(){ console.log('on_before_col_hidden',arguments); },
+                    // on_after_col_hidden: function(){ console.log('on_after_col_hidden',arguments); },
+                    // on_before_col_displayed: function(){ console.log('on_before_col_displayed',arguments); },
+                    // on_after_col_displayed: function(){ console.log('on_after_col_displayed',arguments); }
                 }]
             });
 
             tf.init();
         });
     </script>
+    <button onclick="javascript:tf.Extensions.ColsVisibility.toggleCol(2);">Toggle col 2</button>
 </body>
 </html>

@@ -14,7 +14,10 @@ module.exports = function (grunt) {
             src: [
                 'Gruntfile.js',
                 '<%= source_folder %>*.js',
+                'src-es6/**/*.js',
                 '!<%= source_folder %>tablefilter.js'
+                // ,
+                // '!src-es6/tablefilter.js'
             ],
             options: {
                 jshintrc: '.jshintrc'

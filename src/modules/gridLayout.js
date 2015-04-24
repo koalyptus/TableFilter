@@ -76,6 +76,8 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                  */
 
                 value: function init() {
+                    var _this = this;
+
                     var tf = this.tf;
                     var f = tf.config();
                     var tbl = tf.tbl;
@@ -201,11 +203,11 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                     }
 
                     //Headers table style
-                    this.headTbl.style.width = tbl.style.width;
                     this.headTbl.style.tableLayout = "fixed";
                     tbl.style.tableLayout = "fixed";
                     this.headTbl.cellPadding = tbl.cellPadding;
                     this.headTbl.cellSpacing = tbl.cellSpacing;
+                    // this.headTbl.style.width = tbl.style.width;
 
                     //content table without headers needs col widths to be reset
                     tf.setColWidths();
@@ -214,27 +216,30 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                     this.headTblCont.style.width = this.tblCont.clientWidth + "px";
 
                     tbl.style.width = "";
+                    //
+                    this.headTbl.style.width = tbl.clientWidth + "px";
+                    //
 
                     //scroll synchronisation
-                    var o = this;
-
                     Event.add(this.tblCont, "scroll", function (evt) {
-                        //this = scroll element
-                        var scrollLeft = this.scrollLeft;
-                        o.headTblCont.scrollLeft = scrollLeft;
+                        var elm = Event.target(evt);
+                        var scrollLeft = elm.scrollLeft;
+                        _this.headTblCont.scrollLeft = scrollLeft;
                         //New pointerX calc taking into account scrollLeft
-                        if (!o.isPointerXOverwritten) {
-                            try {
-                                o.Evt.pointerX = function (evt) {
-                                    var e = evt || global.event;
-                                    var bdScrollLeft = tf_StandardBody().scrollLeft + scrollLeft;
-                                    return e.pageX + scrollLeft || e.clientX + bdScrollLeft;
-                                };
-                                o.isPointerXOverwritten = true;
-                            } catch (err) {
-                                o.isPointerXOverwritten = false;
-                            }
-                        }
+                        // if(!o.isPointerXOverwritten){
+                        //     try{
+                        //         o.Evt.pointerX = function(evt){
+                        //             var e = evt || global.event;
+                        //             var bdScrollLeft = tf_StandardBody().scrollLeft +
+                        //                 scrollLeft;
+                        //             return (e.pageX + scrollLeft) ||
+                        //                 (e.clientX + bdScrollLeft);
+                        //         };
+                        //         o.isPointerXOverwritten = true;
+                        //     } catch(err) {
+                        //         o.isPointerXOverwritten = false;
+                        //     }
+                        // }
                     });
 
                     //Sort is enabled if not specified in config object
@@ -274,7 +279,7 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                     f.col_enable_text_ellipsis = false;
 
                     //Cols generation for all browsers excepted IE<=7
-                    o.tblHasColTag = Dom.tag(tbl, "col").length > 0 ? true : false;
+                    this.tblHasColTag = Dom.tag(tbl, "col").length > 0 ? true : false;
 
                     //Col elements are enough to keep column widths after sorting and
                     //filtering
@@ -290,8 +295,8 @@ define(["exports", "../dom", "../types", "../helpers", "../event"], function (ex
                         }
                         o.tblHasColTag = true;
                     };
-                    if (!o.tblHasColTag) {
-                        createColTags(o);
+                    if (!this.tblHasColTag) {
+                        createColTags(this);
                     } else {
                         var cols = Dom.tag(tbl, "col");
                         for (var ii = 0; ii < tf.nbCells; ii++) {

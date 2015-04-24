@@ -445,8 +445,7 @@ export default class TableFilter{
         //typing
         this.onKeyUp = f.on_keyup===true ? true : false;
         //onkeyup delay timer (msecs)
-        this.onKeyUpDelay = !isNaN(f.on_keyup_delay) ?
-            f.on_keyup_delay : 900;
+        this.onKeyUpDelay = !isNaN(f.on_keyup_delay) ? f.on_keyup_delay : 900;
         this.isUserTyping = null; //typing indicator
         this.onKeyUpTimer = undefined;
 
@@ -1022,7 +1021,7 @@ export default class TableFilter{
                             inp.setAttribute(
                                 'placeholder',
                                 this.isWatermarkArray ?
-                                    this.watermark[i] : this.watermark
+                                    (this.watermark[i] || '') : this.watermark
                             );
                         }
                         inp.className = inpclass;
@@ -1273,8 +1272,9 @@ export default class TableFilter{
         for(var i=0; i<exts.length; i++){
             var tf = this;
             var ext = exts[i];
-            var inst = eval('new '+ exts[i].name+'(tf, ext);');
-            console.log(inst);
+            var name = ext.name;
+            var inst = eval('new '+ name+'(tf, ext);');
+            tf.Extensions[name] = inst;
         }
     }
 
@@ -1527,8 +1527,9 @@ export default class TableFilter{
         }
         //grid-layout
         else if(this.gridLayout){
-            this.Cpt.gridLayout.tblMainCont.appendChild(infdiv);
-            infdiv.className = this.gridInfDivCssClass;
+            var gridLayout = this.Cpt.gridLayout;
+            gridLayout.tblMainCont.appendChild(infdiv);
+            infdiv.className = gridLayout.gridInfDivCssClass;
         }
         //default location: just above the table
         else{
@@ -2912,7 +2913,8 @@ export default class TableFilter{
         var row = this.tbl.rows,
             filteredData = [];
         if(includeHeaders){
-            var table = this.gridLayout ? this.headTbl : this.tbl,
+            var table = this.gridLayout ?
+                    this.Cpt.gridLayout.headTbl : this.tbl,
                 r = table.rows[this.headersRow],
                 rowData = [r.rowIndex,[]];
             for(var j=0; j<this.nbCells; j++){
@@ -3405,7 +3407,7 @@ export default class TableFilter{
             }
         };
         file.onerror = function(){
-            throw new Error('TF script could not load:\n' + this.src);
+            throw new Error('TF script could not load: ' + filePath);
         };
         head.appendChild(file);
     }

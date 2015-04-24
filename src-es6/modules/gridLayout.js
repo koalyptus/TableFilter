@@ -192,11 +192,11 @@ export class GridLayout{
         }
 
         //Headers table style
-        this.headTbl.style.width = tbl.style.width;
         this.headTbl.style.tableLayout = 'fixed';
         tbl.style.tableLayout = 'fixed';
         this.headTbl.cellPadding = tbl.cellPadding;
         this.headTbl.cellSpacing = tbl.cellSpacing;
+        // this.headTbl.style.width = tbl.style.width;
 
         //content table without headers needs col widths to be reset
         tf.setColWidths();
@@ -205,29 +205,30 @@ export class GridLayout{
         this.headTblCont.style.width = this.tblCont.clientWidth+'px';
 
         tbl.style.width = '';
+        //
+        this.headTbl.style.width = tbl.clientWidth + 'px';
+        //
 
         //scroll synchronisation
-        var o = this;
-
-        Event.add(this.tblCont, 'scroll', function(evt){
-            //this = scroll element
-            var scrollLeft = this.scrollLeft;
-            o.headTblCont.scrollLeft = scrollLeft;
+        Event.add(this.tblCont, 'scroll', (evt)=> {
+            var elm = Event.target(evt);
+            var scrollLeft = elm.scrollLeft;
+            this.headTblCont.scrollLeft = scrollLeft;
             //New pointerX calc taking into account scrollLeft
-            if(!o.isPointerXOverwritten){
-                try{
-                    o.Evt.pointerX = function(evt){
-                        var e = evt || global.event;
-                        var bdScrollLeft = tf_StandardBody().scrollLeft +
-                            scrollLeft;
-                        return (e.pageX + scrollLeft) ||
-                            (e.clientX + bdScrollLeft);
-                    };
-                    o.isPointerXOverwritten = true;
-                } catch(err) {
-                    o.isPointerXOverwritten = false;
-                }
-            }
+            // if(!o.isPointerXOverwritten){
+            //     try{
+            //         o.Evt.pointerX = function(evt){
+            //             var e = evt || global.event;
+            //             var bdScrollLeft = tf_StandardBody().scrollLeft +
+            //                 scrollLeft;
+            //             return (e.pageX + scrollLeft) ||
+            //                 (e.clientX + bdScrollLeft);
+            //         };
+            //         o.isPointerXOverwritten = true;
+            //     } catch(err) {
+            //         o.isPointerXOverwritten = false;
+            //     }
+            // }
         });
 
         //Sort is enabled if not specified in config object
@@ -267,7 +268,7 @@ export class GridLayout{
         f.col_enable_text_ellipsis = false;
 
         //Cols generation for all browsers excepted IE<=7
-        o.tblHasColTag = Dom.tag(tbl, 'col').length > 0 ? true : false;
+        this.tblHasColTag = Dom.tag(tbl, 'col').length > 0 ? true : false;
 
         //Col elements are enough to keep column widths after sorting and
         //filtering
@@ -283,8 +284,8 @@ export class GridLayout{
             }
             o.tblHasColTag = true;
         };
-        if(!o.tblHasColTag){
-            createColTags(o);
+        if(!this.tblHasColTag){
+            createColTags(this);
         } else {
             var cols = Dom.tag(tbl, 'col');
             for(var ii=0; ii<tf.nbCells; ii++){
@@ -296,7 +297,7 @@ export class GridLayout{
 
         var afterColResizedFn = Types.isFn(f.on_after_col_resized) ?
             f.on_after_col_resized : null;
-        f.on_after_col_resized = function(o,colIndex){
+        f.on_after_col_resized = function(o, colIndex){
             if(!colIndex){
                 return;
             }

@@ -964,7 +964,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                     var inptype = col === this.fltTypeInp ? "text" : "hidden";
                                     var inp = dom.create(this.fltTypeInp, ["id", this.prfxFlt + i + "_" + this.id], ["type", inptype], ["ct", i]);
                                     if (inptype !== "hidden" && this.watermark) {
-                                        inp.setAttribute("placeholder", this.isWatermarkArray ? this.watermark[i] : this.watermark);
+                                        inp.setAttribute("placeholder", this.isWatermarkArray ? this.watermark[i] || "" : this.watermark);
                                     }
                                     inp.className = inpclass;
                                     inp.onfocus = this.Evt.onInpFocus;
@@ -1212,8 +1212,9 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     for (var i = 0; i < exts.length; i++) {
                         var tf = this;
                         var ext = exts[i];
-                        var inst = eval("new " + exts[i].name + "(tf, ext);");
-                        console.log(inst);
+                        var name = ext.name;
+                        var inst = eval("new " + name + "(tf, ext);");
+                        tf.Extensions[name] = inst;
                     }
                 }
             },
@@ -1466,8 +1467,9 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     }
                     //grid-layout
                     else if (this.gridLayout) {
-                        this.Cpt.gridLayout.tblMainCont.appendChild(infdiv);
-                        infdiv.className = this.gridInfDivCssClass;
+                        var gridLayout = this.Cpt.gridLayout;
+                        gridLayout.tblMainCont.appendChild(infdiv);
+                        infdiv.className = gridLayout.gridInfDivCssClass;
                     }
                     //default location: just above the table
                     else {
@@ -2854,7 +2856,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     var row = this.tbl.rows,
                         filteredData = [];
                     if (includeHeaders) {
-                        var table = this.gridLayout ? this.headTbl : this.tbl,
+                        var table = this.gridLayout ? this.Cpt.gridLayout.headTbl : this.tbl,
                             r = table.rows[this.headersRow],
                             rowData = [r.rowIndex, []];
                         for (var j = 0; j < this.nbCells; j++) {
@@ -3367,7 +3369,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         }
                     };
                     file.onerror = function () {
-                        throw new Error("TF script could not load:\n" + this.src);
+                        throw new Error("TF script could not load: " + filePath);
                     };
                     head.appendChild(file);
                 }
