@@ -1,4 +1,4 @@
-define(["exports", "string"], function (exports, _string) {
+define(["exports", "./string"], function (exports, _string) {
     /**
      * Array utilities
      */

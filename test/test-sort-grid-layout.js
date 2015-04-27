@@ -29,7 +29,7 @@ requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
     QUnit.start();
 
     function startSimple(tf){
-        var sort = tf.Extensions.sort;
+        var sort = tf.ExtRegistry.sort;
 
         module('Sanity checks');
         test('Sort extension', function() {
@@ -58,7 +58,7 @@ requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
     }
 
     function startPaging(tf){
-        var sort = tf.Extensions.sort;
+        var sort = tf.ExtRegistry.sort;
 
         module('Sanity checks');
         test('Sort extension', function() {

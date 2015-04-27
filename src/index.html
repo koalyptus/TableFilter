@@ -91,7 +91,9 @@
         </table>
     </div>
 
+    <script src="../libs/system.js"></script>
     <script src="../libs/requirejs/require.js"></script>
+
     <script>
         requirejs(['tablefilter'], function(TableFilter){
             // Your logic here
@@ -140,7 +142,7 @@
                 extensions: [{
                     /*** Columns Visibility Manager extension load ***/
                     name: 'ColsVisibility',
-                    //src: 'extensions/colsVisibility/colsVisibility.js',
+                    src: 'extensions/colsVisibility/colsVisibility.js',
                     description: 'Columns visibility manager',/*
                     initialize: function(o){o.SetColsVisibility();}*/
                     // manager: true,
@@ -179,6 +181,6 @@
             tf.init();
         });
     </script>
-    <button onclick="javascript:tf.Extensions.ColsVisibility.toggleCol(2);">Toggle col 2</button>
+    <button onclick="javascript:tf.ExtRegistry.ColsVisibility.toggleCol(2);">Toggle col 2</button>
 </body>
 </html>

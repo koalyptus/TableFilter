@@ -40,7 +40,7 @@ import {ColOps} from 'modules/colOps';
 import 'extensions/sortabletable/sortabletable';
 import {AdapterSortableTable}
     from 'extensions/sortabletable/adapterSortabletable';
-import {ColsVisibility} from 'extensions/colsVisibility/colsVisibility';
+// import {ColsVisibility} from 'extensions/colsVisibility/colsVisibility';
 
 var global = window,
     isValidDate = dateHelper.isValid,
@@ -580,12 +580,10 @@ export default class TableFilter{
         };
 
         // Extensions registry
-        this.Extensions = {
+        this.ExtRegistry = {
             sort: null,
             ezEditTable: null
         };
-
-        this.Exts = [];
 
         /*** TF events ***/
         var o = this;
@@ -602,7 +600,7 @@ export default class TableFilter{
                 resetpagelength: 'resetPageLength',
                 sort: 'Sort',
                 loadextensions: 'LoadExtensions',
-                loadthemes: 'LoadThemes'
+                loadthemes: 'loadThemes'
             },
 
             /*====================================================
@@ -811,7 +809,7 @@ export default class TableFilter{
         this.includeFile(this.stylesheetId, this.stylesheet, null, 'link');
 
         //loads theme
-        if(this.hasThemes){ this._LoadThemes(); }
+        if(this.hasThemes){ this._loadThemes(); }
 
         if(this.rememberGridValues || this.rememberPageNb ||
             this.rememberPageLen){
@@ -1152,7 +1150,7 @@ export default class TableFilter{
         if(this.hasExtensions){
             // this.loadExtensions();
             this.registerExtensions();
-            this.initExtensions();
+            // this.initExtensions();
         }
 
         if(this.onFiltersLoaded){
@@ -1223,7 +1221,7 @@ export default class TableFilter{
                     o._loadExtensions();
                 break;
                 case o.Evt.name.loadthemes:
-                    o._LoadThemes();
+                    o._loadThemes();
                 break;
                 default: //to be used by extensions events when needed
                     o['_'+evt].call(null,o,s);
@@ -1240,7 +1238,6 @@ export default class TableFilter{
         if(this.loader || this.statusBar) {
             try{
                 this.Cpt.loader.show('');
-                // this.StatusMsg(o['msg'+evt]);
                 this.Cpt.statusBar.message(this['msg'+evt]);
             } catch(e){}
             global.setTimeout(efx, this.execDelay);
@@ -1257,92 +1254,37 @@ export default class TableFilter{
 
         for(var i=0; i<exts.length; i++){
             var ext = exts[i];
-            if(this.Exts.indexOf(ext.name) === -1){
-                this.Exts.push(ext.name);
+            if(types.isUndef(this.ExtRegistry[ext.name])){
+                this.loadExtension(ext);
             }
         }
     }
 
-    initExtensions(){
-        var exts = this.extensions;
-        if(exts.length === 0){
+    loadExtension(ext){
+        if(!ext || !ext.name || !ext.src){
             return;
         }
+        var sys = global.System,
+            className = ext.name,
+            tf = this;
 
-        for(var i=0; i<exts.length; i++){
-            var tf = this;
-            var ext = exts[i];
-            var name = ext.name;
-            var inst = eval('new '+ name+'(tf, ext);');
-            tf.Extensions[name] = inst;
-        }
+        sys.config({
+            baseURL: tf.basePath
+        });
+
+        sys.import(ext.src.replace('.js', '')).then((m)=> {
+            this.ExtRegistry[className] = new m[className](this, ext);
+        });
     }
 
-    // ImportModule(module){
-    //     if(!module.path || !module.name){
-    //         return;
-    //     }
-    //     this.includeFile(module.name, module.path, module.init);
-    // }
-
-    // loadExtensions(){
-    //     if(!this.Ext){
-    //         /*** TF extensions ***/
-    //         var o = this;
-    //         this.Ext = {
-    //             list: {},
-    //             add: function(extName, extDesc, extPath, extCallBack){
-    //                 var file = extPath.split('/')[extPath.split('/').length-1],
-    //                     re = new RegExp(file),
-    //                     path = extPath.replace(re,'');
-    //                 o.Ext.list[extName] = {
-    //                     name: extName,
-    //                     description: extDesc,
-    //                     file: file,
-    //                     path: path,
-    //                     callback: extCallBack
-    //                 };
-    //             }
-    //         };
-    //     }
-    //     this.EvtManager(this.Evt.name.loadextensions);
-    // }
-
-    /*====================================================
-        - loads TF extensions
-    =====================================================*/
-    // _LoadExtensions(){
-    //     if(!this.hasExtensions || !types.isArray(this.extensions.name) ||
-    //         !types.isArray(this.extensions.src)){
-    //         return;
-    //     }
-    //     var ext = this.extensions;
-    //     for(var e=0; e<ext.name.length; e++){
-    //         var extPath = ext.src[e],
-    //             extName = ext.name[e],
-    //            extInit = (ext.initialize && ext.initialize[e]) ?
-    //                 ext.initialize[e] : null,
-    //             extDesc = (ext.description && ext.description[e] ) ?
-    //                 ext.description[e] : null;
-
-    //         //Registers extension
-    //         this.Ext.add(extName, extDesc, extPath, extInit);
-    //         if(this.isImported(extPath)){
-    //             extInit.call(null,this);
-    //         } else {
-    //             this.includeFile(extName, extPath, extInit);
-    //         }
-    //     }
-    // }
-
-    LoadThemes(){
+    loadThemes(){
         this.EvtManager(this.Evt.name.loadthemes);
     }
 
     /*====================================================
         - loads TF themes
     =====================================================*/
-    _LoadThemes(){
+    _loadThemes(){
         if(!this.hasThemes){
             return;
         }
@@ -1453,7 +1395,7 @@ export default class TableFilter{
             }
             if(this.sort){
                 // this.RemoveSort();
-                this.Extensions.sort.destroy();
+                this.ExtRegistry.sort.destroy();
             }
             if(this.loader){
                 this.Cpt.loader.remove();
@@ -1602,7 +1544,7 @@ export default class TableFilter{
     =====================================================*/
     setSort(){
         var adapterSortabletable = new AdapterSortableTable(this);
-        this.Extensions.sort = adapterSortabletable;
+        this.ExtRegistry.sort = adapterSortabletable;
         adapterSortabletable.init();
     }
     setOldSort(){
@@ -1654,8 +1596,8 @@ export default class TableFilter{
                     var AdapterSortableTable = require(
                         ['extensions/sortabletable/adapterSortabletable'],
                         function(adapterSortabletable){
-                            o.Extensions.sort = new adapterSortabletable(o);
-                            o.Extensions.sort.init();
+                            o.ExtRegistry.sort = new adapterSortabletable(o);
+                            o.ExtRegistry.sort.init();
                     });
 
                     // o.includeFile(
@@ -1697,8 +1639,8 @@ export default class TableFilter{
                     //         ['extensions/sortabletable/adapterSortabletable'],
                     //         function(adapterSortabletable){
                     //             console.log(adapterSortabletable);
-                    //             // o.Extensions.sort = new adapterSortabletable(o);
-                    //             // o.Extensions.sort.init();
+                    //             // o.ExtRegistry.sort = new adapterSortabletable(o);
+                    //             // o.ExtRegistry.sort.init();
                     //     });
                     // });
             //     }
@@ -1966,7 +1908,7 @@ export default class TableFilter{
             //Selected row needs to be visible when paging is activated
             if(o.paging){
                 o.onAfterChangePage = function(tf, i){
-                    var et = tf.Extensions.ezEditTable;
+                    var et = tf.ExtRegistry.ezEditTable;
                     var slc = et.Selection;
                     var row = slc.GetActiveRow();
                     if(row){
@@ -2064,9 +2006,9 @@ export default class TableFilter{
         }
 
         try{
-            o.Extensions.ezEditTable = new EditTable(
+            o.ExtRegistry.ezEditTable = new EditTable(
                 o.id, ezEditConfig, startRow);
-            o.Extensions.ezEditTable.Init();
+            o.ExtRegistry.ezEditTable.Init();
         } catch(e) { console.log(ezEditConfig.err); }
     }
 

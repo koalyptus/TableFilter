@@ -5,6 +5,6 @@
     } else if (typeof exports === 'object') {
         module.exports = factory;
     } else {
-        root.ColsVisibility = factory();
+        root.AdapterSortableTable = factory();
     }
 })(this, function() {

@@ -2,7 +2,7 @@
  * Array utilities
  */
 
-import {Str} from 'string';
+import {Str} from './string';
 
 var Arr = {
     has: function(arr, val, caseSensitive){

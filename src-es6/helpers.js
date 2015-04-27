@@ -2,7 +2,7 @@
  * Misc helpers
  */
 
-import {Str} from 'string';
+import {Str} from './string';
 
 var Helpers = {
     isIE(){

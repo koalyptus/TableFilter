@@ -27,11 +27,11 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests",
     "libs"
   ],
-  "dependencies": {
-    "almond": "~0.3.0",
-    "requirejs": null
+  "dependencies": {},
+  "devDependencies": {
+    "requirejs": "~2.1.17",
+    "almond": "~0.3.1"
   }
 }

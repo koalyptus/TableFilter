@@ -1,4 +1,4 @@
-define(["exports", "module", "event", "dom", "string", "cookie", "types", "array", "helpers", "date", "sort", "modules/store", "modules/gridLayout", "modules/loader", "modules/highlightKeywords", "modules/popupFilter", "modules/dropdown", "modules/checkList", "modules/rowsCounter", "modules/statusBar", "modules/paging", "modules/clearButton", "modules/help", "modules/alternateRows", "modules/colOps", "extensions/sortabletable/sortabletable", "extensions/sortabletable/adapterSortabletable", "extensions/colsVisibility/colsVisibility"], function (exports, module, _event, _dom, _string, _cookie, _types, _array, _helpers, _date, _sort, _modulesStore, _modulesGridLayout, _modulesLoader, _modulesHighlightKeywords, _modulesPopupFilter, _modulesDropdown, _modulesCheckList, _modulesRowsCounter, _modulesStatusBar, _modulesPaging, _modulesClearButton, _modulesHelp, _modulesAlternateRows, _modulesColOps, _extensionsSortabletableSortabletable, _extensionsSortabletableAdapterSortabletable, _extensionsColsVisibilityColsVisibility) {
+define(["exports", "module", "event", "dom", "string", "cookie", "types", "array", "helpers", "date", "sort", "modules/store", "modules/gridLayout", "modules/loader", "modules/highlightKeywords", "modules/popupFilter", "modules/dropdown", "modules/checkList", "modules/rowsCounter", "modules/statusBar", "modules/paging", "modules/clearButton", "modules/help", "modules/alternateRows", "modules/colOps", "extensions/sortabletable/sortabletable", "extensions/sortabletable/adapterSortabletable"], function (exports, module, _event, _dom, _string, _cookie, _types, _array, _helpers, _date, _sort, _modulesStore, _modulesGridLayout, _modulesLoader, _modulesHighlightKeywords, _modulesPopupFilter, _modulesDropdown, _modulesCheckList, _modulesRowsCounter, _modulesStatusBar, _modulesPaging, _modulesClearButton, _modulesHelp, _modulesAlternateRows, _modulesColOps, _extensionsSortabletableSortabletable, _extensionsSortabletableAdapterSortabletable) {
     "use strict";
 
     var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -43,7 +43,8 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
     var AlternateRows = _modulesAlternateRows.AlternateRows;
     var ColOps = _modulesColOps.ColOps;
     var AdapterSortableTable = _extensionsSortabletableAdapterSortabletable.AdapterSortableTable;
-    var ColsVisibility = _extensionsColsVisibilityColsVisibility.ColsVisibility;
+
+    // import {ColsVisibility} from 'extensions/colsVisibility/colsVisibility';
 
     var global = window,
         isValidDate = dateHelper.isValid,
@@ -532,12 +533,10 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
             };
 
             // Extensions registry
-            this.Extensions = {
+            this.ExtRegistry = {
                 sort: null,
                 ezEditTable: null
             };
-
-            this.Exts = [];
 
             /*** TF events ***/
             var o = this;
@@ -554,7 +553,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     resetpagelength: "resetPageLength",
                     sort: "Sort",
                     loadextensions: "LoadExtensions",
-                    loadthemes: "LoadThemes"
+                    loadthemes: "loadThemes"
                 },
 
                 /*====================================================
@@ -775,7 +774,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                     //loads theme
                     if (this.hasThemes) {
-                        this._LoadThemes();
+                        this._loadThemes();
                     }
 
                     if (this.rememberGridValues || this.rememberPageNb || this.rememberPageLen) {
@@ -1087,7 +1086,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     if (this.hasExtensions) {
                         // this.loadExtensions();
                         this.registerExtensions();
-                        this.initExtensions();
+                        // this.initExtensions();
                     }
 
                     if (this.onFiltersLoaded) {
@@ -1160,7 +1159,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                                 o._loadExtensions();
                                 break;
                             case o.Evt.name.loadthemes:
-                                o._LoadThemes();
+                                o._loadThemes();
                                 break;
                             default:
                                 //to be used by extensions events when needed
@@ -1178,7 +1177,6 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     if (this.loader || this.statusBar) {
                         try {
                             this.Cpt.loader.show("");
-                            // this.StatusMsg(o['msg'+evt]);
                             this.Cpt.statusBar.message(this["msg" + evt]);
                         } catch (e) {}
                         global.setTimeout(efx, this.execDelay);
@@ -1196,98 +1194,44 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                     for (var i = 0; i < exts.length; i++) {
                         var ext = exts[i];
-                        if (this.Exts.indexOf(ext.name) === -1) {
-                            this.Exts.push(ext.name);
+                        if (types.isUndef(this.ExtRegistry[ext.name])) {
+                            this.loadExtension(ext);
                         }
                     }
                 }
             },
-            initExtensions: {
-                value: function initExtensions() {
-                    var exts = this.extensions;
-                    if (exts.length === 0) {
+            loadExtension: {
+                value: function loadExtension(ext) {
+                    var _this = this;
+
+                    if (!ext || !ext.name || !ext.src) {
                         return;
                     }
+                    var sys = global.System,
+                        className = ext.name,
+                        tf = this;
 
-                    for (var i = 0; i < exts.length; i++) {
-                        var tf = this;
-                        var ext = exts[i];
-                        var name = ext.name;
-                        var inst = eval("new " + name + "(tf, ext);");
-                        tf.Extensions[name] = inst;
-                    }
+                    sys.config({
+                        baseURL: tf.basePath
+                    });
+
+                    sys["import"](ext.src.replace(".js", "")).then(function (m) {
+                        _this.ExtRegistry[className] = new m[className](_this, ext);
+                    });
                 }
             },
-            LoadThemes: {
-
-                // ImportModule(module){
-                //     if(!module.path || !module.name){
-                //         return;
-                //     }
-                //     this.includeFile(module.name, module.path, module.init);
-                // }
-
-                // loadExtensions(){
-                //     if(!this.Ext){
-                //         /*** TF extensions ***/
-                //         var o = this;
-                //         this.Ext = {
-                //             list: {},
-                //             add: function(extName, extDesc, extPath, extCallBack){
-                //                 var file = extPath.split('/')[extPath.split('/').length-1],
-                //                     re = new RegExp(file),
-                //                     path = extPath.replace(re,'');
-                //                 o.Ext.list[extName] = {
-                //                     name: extName,
-                //                     description: extDesc,
-                //                     file: file,
-                //                     path: path,
-                //                     callback: extCallBack
-                //                 };
-                //             }
-                //         };
-                //     }
-                //     this.EvtManager(this.Evt.name.loadextensions);
-                // }
-
-                /*====================================================
-                    - loads TF extensions
-                =====================================================*/
-                // _LoadExtensions(){
-                //     if(!this.hasExtensions || !types.isArray(this.extensions.name) ||
-                //         !types.isArray(this.extensions.src)){
-                //         return;
-                //     }
-                //     var ext = this.extensions;
-                //     for(var e=0; e<ext.name.length; e++){
-                //         var extPath = ext.src[e],
-                //             extName = ext.name[e],
-                //            extInit = (ext.initialize && ext.initialize[e]) ?
-                //                 ext.initialize[e] : null,
-                //             extDesc = (ext.description && ext.description[e] ) ?
-                //                 ext.description[e] : null;
-
-                //         //Registers extension
-                //         this.Ext.add(extName, extDesc, extPath, extInit);
-                //         if(this.isImported(extPath)){
-                //             extInit.call(null,this);
-                //         } else {
-                //             this.includeFile(extName, extPath, extInit);
-                //         }
-                //     }
-                // }
-
-                value: function LoadThemes() {
+            loadThemes: {
+                value: function loadThemes() {
                     this.EvtManager(this.Evt.name.loadthemes);
                 }
             },
-            _LoadThemes: {
+            _loadThemes: {
 
                 /*====================================================
                     - loads TF themes
                 =====================================================*/
 
-                value: function _LoadThemes() {
+                value: function _loadThemes() {
                     if (!this.hasThemes) {
                         return;
                     }
@@ -1392,7 +1336,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         }
                         if (this.sort) {
                             // this.RemoveSort();
-                            this.Extensions.sort.destroy();
+                            this.ExtRegistry.sort.destroy();
                         }
                         if (this.loader) {
                             this.Cpt.loader.remove();
@@ -1551,7 +1495,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
 
                 value: function setSort() {
                     var adapterSortabletable = new AdapterSortableTable(this);
-                    this.Extensions.sort = adapterSortabletable;
+                    this.ExtRegistry.sort = adapterSortabletable;
                     adapterSortabletable.init();
                 }
             },
@@ -1603,8 +1547,8 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                             //     console.log(require);
                             //
                             var AdapterSortableTable = require(["extensions/sortabletable/adapterSortabletable"], function (adapterSortabletable) {
-                                o.Extensions.sort = new adapterSortabletable(o);
-                                o.Extensions.sort.init();
+                                o.ExtRegistry.sort = new adapterSortabletable(o);
+                                o.ExtRegistry.sort.init();
                             });
 
                             // o.includeFile(
@@ -1645,8 +1589,8 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         //         ['extensions/sortabletable/adapterSortabletable'],
                         //         function(adapterSortabletable){
                         //             console.log(adapterSortabletable);
-                        //             // o.Extensions.sort = new adapterSortabletable(o);
-                        //             // o.Extensions.sort.init();
+                        //             // o.ExtRegistry.sort = new adapterSortabletable(o);
+                        //             // o.ExtRegistry.sort.init();
                         //     });
                         // });
                         //     }
@@ -1902,7 +1846,7 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                         //Selected row needs to be visible when paging is activated
                         if (o.paging) {
                             o.onAfterChangePage = function (tf, i) {
-                                var et = tf.Extensions.ezEditTable;
+                                var et = tf.ExtRegistry.ezEditTable;
                                 var slc = et.Selection;
                                 var row = slc.GetActiveRow();
                                 if (row) {
@@ -1996,8 +1940,8 @@ define(["exports", "module", "event", "dom", "string", "cookie", "types", "array
                     }
 
                     try {
-                        o.Extensions.ezEditTable = new EditTable(o.id, ezEditConfig, startRow);
-                        o.Extensions.ezEditTable.Init();
+                        o.ExtRegistry.ezEditTable = new EditTable(o.id, ezEditConfig, startRow);
+                        o.ExtRegistry.ezEditTable.Init();
                     } catch (e) {
                         console.log(ezEditConfig.err);
                     }

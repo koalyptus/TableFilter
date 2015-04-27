@@ -44,7 +44,10 @@ module.exports = function (grunt) {
             'compile-main': {
                 options: {
                     baseUrl: '<%= source_folder %>',
-                    include: ['../libs/almond/almond', 'tablefilter'],
+                    include: [
+                        '../libs/almond/almond',
+                        '../libs/system'
+                    ],
                     // exclude: [
                     //     'extensions/sortabletable/sortabletable',
                     //     'extensions/sortabletable/adapterSortabletable'
@@ -63,6 +66,25 @@ module.exports = function (grunt) {
                     optimize: 'none'
                 }
             }
+            // ,
+            // 'compile-colsvisibility': {
+            //     options: {
+            //         baseUrl: '<%= source_folder %>extensions/colsVisibility',
+            //         include: [
+            //             '../../../libs/almond/almond'
+            //         ],
+            //         wrap: {
+            //             startFile: "<%= frags_folder %>start.colsvisibility.frag",
+            //             endFile: "<%= frags_folder %>end.colsvisibility.frag"
+            //         },
+            //         name: 'colsVisibility',
+            //         out: '<%= dist_folder %>extensions/colsVisibility/colsVisibility.js',
+            //         optimize: 'none',
+            //         findNestedDependencies: true,
+            //         removeCombined: true,
+            //         generateSourceMaps: false
+            //     }
+            // }
         },
 
         // requirejs: {
@@ -207,6 +229,7 @@ module.exports = function (grunt) {
             tablefilter: {
                 files: [
                     { src: 'libs/sortabletable.js', dest: '<%= source_folder %>extensions/sortabletable/sortabletable.js' },
+                    // { src: 'libs/es6-module-loader.js', dest: '<%= source_folder %>es6-module-loader.js' },
                     { src: 'src-es6/extensions/colsVisibility/colsVisibility.css', dest: '<%= source_folder %>extensions/colsVisibility/colsVisibility.css' },
                     // { src: 'libs/requirejs/require.js', dest: '<%= dist_folder %>require.js' },
                     // { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
@@ -214,9 +237,25 @@ module.exports = function (grunt) {
                     // TODO: remove ezEditTable and other extensions
                     { src: ['**'], cwd: 'libs/ezEditTable/', dest: '<%= source_folder %>extensions/ezEditTable/', expand: true },
                     { src: ['**'], cwd: 'libs/ezEditTable/', dest: '<%= dist_folder %>extensions/ezEditTable/', expand: true },
+                    // { src: ['**'], cwd: '<%= source_folder %>extensions/colsVisibility/', dest: '<%= dist_folder %>extensions/colsVisibility/', expand: true },
+
                     //
+                    { src: 'libs/es6-module-loader.src.js', dest: '<%= dist_folder %>es6-module-loader.src.js' },
+                    { src: 'libs/es6-module-loader.js', dest: '<%= dist_folder %>es6-module-loader.js' },
+                    { src: 'libs/es6-module-loader.js.map', dest: '<%= dist_folder %>es6-module-loader.js.map' },
+                    { src: 'libs/system.js.map', dest: '<%= dist_folder %>system.js.map' },
                     { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
                 ]
+            }
+        },
+
+        connect: {
+            server:{
+                options:{
+                    port: 9000,
+                    hostname: "*",
+                    keepalive: true
+                }
             }
         },
 
@@ -263,14 +302,16 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-babel');
 
     // This is the default task being executed if Grunt
     // is called without any further parameter.
-    grunt.registerTask('default', ['jshint', 'toes5', 'requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
-    grunt.registerTask('build', ['jshint', 'toes5', 'requirejs', 'concat', /*'uglify',*/ 'cssmin', 'copy']);
+    grunt.registerTask('default', ['jshint', 'toes5', 'build-requirejs', 'concat', 'uglify', 'cssmin', 'copy', 'qunit']);
+    grunt.registerTask('build', ['jshint', 'toes5', 'build-requirejs', 'concat', /*'uglify',*/ 'cssmin', 'copy']);
     grunt.registerTask('dev', ['jshint', 'toes5', 'concat', 'cssmin', 'copy']);
-    grunt.registerTask('build-requirejs', ['requirejs:compile-main']);
+    grunt.registerTask('build-requirejs', ['requirejs:compile-main', 'requirejs:compile-colsvisibility']);
     grunt.registerTask('toes5', ['babel:build-main','babel:build-extensions']);
     grunt.registerTask('test', ['qunit']);
+    grunt.registerTask('server', ['connect']);
 };
