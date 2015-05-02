@@ -19,6 +19,7 @@
   //"maxlen" : 80,
   "globals": {
     "System": true,
+    "Object": true,
     "module": true,
     "require": true,
     "define": true,

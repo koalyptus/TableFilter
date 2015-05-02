@@ -35,14 +35,14 @@
 | 2004-08-26 | Made the handling of tBody and tHead more flexible. Now you    |
 |            | can use another tHead or no tHead, and you can chose some      |
 |            | other tBody.                                                   |
-| 2006-04-25 | Changed license to Apache Software License 2.0                 |  
+| 2006-04-25 | Changed license to Apache Software License 2.0                 |
 |-----------------------------------------------------------------------------|
 | Created 2003-01-10 | All changes are in the log above. | Updated 2006-04-25 |
 \----------------------------------------------------------------------------*/
 
 
 function SortableTable(oTable, oSortTypes) {
-	
+
 	this.sortTypes = oSortTypes || [];
 
 	this.sortColumn = null;
@@ -436,3 +436,6 @@ SortableTable.prototype.addSortType("CaseInsensitiveString", SortableTable.toUpp
 SortableTable.prototype.addSortType("Date", SortableTable.toDate);
 SortableTable.prototype.addSortType("String");
 // None is a special case
+
+
+module.exports = SortableTable;

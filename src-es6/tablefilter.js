@@ -10,36 +10,36 @@
     and/or inspiration
 ------------------------------------------------------------------------ */
 
-import {Event as evt} from 'event';
-import {Dom as dom} from 'dom';
-import {Str as str} from 'string';
-import {Cookie as cookie} from 'cookie';
-import {Types as types} from 'types';
-import {Arr as array} from 'array';
-import {Helpers as hlp} from 'helpers';
-import {DateHelper as dateHelper} from 'date';
-import {Sort} from 'sort';
+import {Event as evt} from './event';
+import {Dom as dom} from './dom';
+import {Str as str} from './string';
+import {Cookie as cookie} from './cookie';
+import {Types as types} from './types';
+import {Arr as array} from './array';
+import {Helpers as hlp} from './helpers';
+import {DateHelper as dateHelper} from './date';
+import {Sort} from './sort';
 
 // Modules
-import {Store} from 'modules/store';
-import {GridLayout} from 'modules/gridLayout';
-import {Loader} from 'modules/loader';
-import {HighlightKeyword} from 'modules/highlightKeywords';
-import {PopupFilter} from 'modules/popupFilter';
-import {Dropdown} from 'modules/dropdown';
-import {CheckList} from 'modules/checkList';
-import {RowsCounter} from 'modules/rowsCounter';
-import {StatusBar} from 'modules/statusBar';
-import {Paging} from 'modules/paging';
-import {ClearButton} from 'modules/clearButton';
-import {Help} from 'modules/help';
-import {AlternateRows} from 'modules/alternateRows';
-import {ColOps} from 'modules/colOps';
+import {Store} from './modules/store';
+import {GridLayout} from './modules/gridLayout';
+import {Loader} from './modules/loader';
+import {HighlightKeyword} from './modules/highlightKeywords';
+import {PopupFilter} from './modules/popupFilter';
+import {Dropdown} from './modules/dropdown';
+import {CheckList} from './modules/checkList';
+import {RowsCounter} from './modules/rowsCounter';
+import {StatusBar} from './modules/statusBar';
+import {Paging} from './modules/paging';
+import {ClearButton} from './modules/clearButton';
+import {Help} from './modules/help';
+import {AlternateRows} from './modules/alternateRows';
+import {ColOps} from './modules/colOps';
 
 // Extensions
-import 'extensions/sortabletable/sortabletable';
-import {AdapterSortableTable}
-    from 'extensions/sortabletable/adapterSortabletable';
+// import './extensions/sortabletable/sortabletable';
+// import {AdapterSortableTable}
+    // from './extensions/sortabletable/adapterSortabletable';
 // import {ColsVisibility} from 'extensions/colsVisibility/colsVisibility';
 
 var global = window,
@@ -47,7 +47,7 @@ var global = window,
     formatDate = dateHelper.format,
     doc = global.document;
 
-export default class TableFilter{
+export class TableFilter{
 
     /**
      * TF object constructor
@@ -1264,16 +1264,11 @@ export default class TableFilter{
         if(!ext || !ext.name || !ext.src){
             return;
         }
-        var sys = global.System,
-            className = ext.name,
-            tf = this;
 
-        sys.config({
-            baseURL: tf.basePath
-        });
-
-        sys.import(ext.src.replace('.js', '')).then((m)=> {
-            this.ExtRegistry[className] = new m[className](this, ext);
+        var modulePath = ext.src.replace('.js', '');
+        require(['./'+modulePath], (m)=> {
+            var key = Object.keys(m)[0];
+            this.ExtRegistry[key] = new m[key](this, ext);
         });
     }
 
@@ -1543,9 +1538,38 @@ export default class TableFilter{
         and TF adapter by Max Guglielmi
     =====================================================*/
     setSort(){
-        var adapterSortabletable = new AdapterSortableTable(this);
-        this.ExtRegistry.sort = adapterSortabletable;
-        adapterSortabletable.init();
+        // require("script!../libs/sortabletable.js");
+        // var SortableTable = require('sortabletable');
+        // console.log(SortableTable);
+        // require(['sortabletable'], function(m) {
+        //     console.log(m);
+        // });
+        // var adapterSortabletable = new AdapterSortableTable(this);
+        // this.ExtRegistry.sort = adapterSortabletable;
+        // adapterSortabletable.init();
+        // require(['sortabletable',
+        //     './extensions/sortabletable/adapterSortabletable'],
+        //     (s, m)=> {
+        //     console.log(s, m);
+        //     var adapterSortabletable = new m.AdapterSortableTable(this);
+        //     this.ExtRegistry.sort = adapterSortabletable;
+        //     adapterSortabletable.init();
+        // });
+
+        // this.includeFile(
+        //     'sortConfig.name',
+        //     '../libs/sortabletable.js',
+        //     function(){
+        //         console.log(AdapterSortableTable);
+        //     }
+        // );
+
+        require(['adapterSortabletable'], (m)=> {
+            var adapterSortabletable = new m.AdapterSortableTable(this);
+            this.ExtRegistry.sort = adapterSortabletable;
+            adapterSortabletable.init();
+        });
+
     }
     setOldSort(){
         var fn = this.Evt._EnableSort,
@@ -1593,12 +1617,15 @@ export default class TableFilter{
                 // define(['require'], function(require){
                 //     console.log(require);
                 //
+
+                /*************************
                     var AdapterSortableTable = require(
                         ['extensions/sortabletable/adapterSortabletable'],
                         function(adapterSortabletable){
                             o.ExtRegistry.sort = new adapterSortabletable(o);
                             o.ExtRegistry.sort.init();
                     });
+                *************************/
 
                     // o.includeFile(
                     //     'sortConfig.name',
@@ -3484,12 +3511,6 @@ export default class TableFilter{
     }
 
 }
-
-
-
-function numSortAsc(a, b){ return (a-b); }
-
-function numSortDesc(a, b){ return (b-a); }
 
 function removeNbFormat(data, format){
     if(!data){

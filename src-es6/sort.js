@@ -2,7 +2,7 @@
  * Sort helpers
  */
 
-import {Str} from 'string';
+import {Str} from './string';
 
 var Sort = {
    ignoreCase(a, b){
