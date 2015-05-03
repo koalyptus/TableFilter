@@ -61,6 +61,7 @@ module.exports = function (grunt) {
                     publicPath: "/dist/",
                     path: __dirname + "/dist",
                     filename: "tablefilter.js",
+                    // chunkFilename: "[name]-[chunkhash].js",
                     chunkFilename: "[name].js",
                     libraryTarget: 'umd'
                 },
@@ -83,25 +84,7 @@ module.exports = function (grunt) {
                             compact: false
                         },
                         loader: 'babel-loader'
-                    }
-                    // ,
-                    // {
-                    //     // test: /[\/\\]libs[\/\\]sortabletable\.js$/,
-                    //     // test: path.join(__dirname, 'libs') + 'sortabletable.js',
-                    //     test:  /sortabletable\.js$/,
-                    //     exclude: /node_modules/,
-                    //     loader: "imports?this=>window"
-                    // },
-                    // {
-                    //     test:  /sortabletable\.js$/,
-                    //     exclude: /node_modules/,
-                    //     loader: "expose?SortableTable"
-                    // }
-                    // {
-                    //     test: /[\/]sortabletable\.js$/,
-                    //     loader: "exports?SortableTable"
-                    // }
-                    ]
+                    }]
                 },
                 plugins: [
                     // new webpack.DefinePlugin({
@@ -110,6 +93,12 @@ module.exports = function (grunt) {
                     //         "NODE_ENV": JSON.stringify("production")
                     //     }
                     // }),
+                    // new webpack.optimize.CommonsChunkPlugin(
+                    //     'main', 1, false),
+                    // new webpack.IgnorePlugin(/adapterSortabletable$/),
+                    // new webpack.optimize.CommonsChunkPlugin(
+                    //     "commons.js",
+                    //     ["1", "2"]),
                     new webpack.optimize.DedupePlugin()
                     // ,
                     // new webpack.optimize.UglifyJsPlugin()

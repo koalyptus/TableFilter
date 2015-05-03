@@ -4,9 +4,7 @@ import {Arr} from '../../array';
 import {Event} from '../../event';
 import {DateHelper} from '../../date';
 import {Helpers} from '../../helpers';
-import 'sortabletable';
-
-// var SortableTable = require('sortabletable');
+import 'script!sortabletable';
 
 export class AdapterSortableTable{
 
@@ -57,8 +55,6 @@ export class AdapterSortableTable{
         var tf = this.tf;
         var sortConfig = tf.sortConfig;
         var adpt = this;
-
-        // var SortableTable = require('sortabletable');
 
         // SortableTable class sanity check (sortabletable.js)
         if(Types.isUndef(SortableTable)){

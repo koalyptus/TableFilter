@@ -436,6 +436,3 @@ SortableTable.prototype.addSortType("CaseInsensitiveString", SortableTable.toUpp
 SortableTable.prototype.addSortType("Date", SortableTable.toDate);
 SortableTable.prototype.addSortType("String");
 // None is a special case
-
-
-module.exports = SortableTable;

@@ -37,7 +37,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		0:0
+/******/ 		0:0,
+/******/ 		3:0
 /******/ 	};
 
 /******/ 	// The require function
@@ -173,12 +174,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _AlternateRows = __webpack_require__(23);
 
 	var _ColOps = __webpack_require__(24);
-
-	// Extensions
-	// import './extensions/sortabletable/sortabletable';
-	// import {AdapterSortableTable}
-	// from './extensions/sortabletable/adapterSortabletable';
-	// import {ColsVisibility} from 'extensions/colsVisibility/colsVisibility';
 
 	var global = window,
 	    isValidDate = _dateHelper.DateHelper.isValid,
@@ -1616,32 +1611,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        =====================================================*/
 	        value: function setSort() {
 	            var _this2 = this;
-
-	            // require("script!../libs/sortabletable.js");
-	            // var SortableTable = require('sortabletable');
-	            // console.log(SortableTable);
-	            // require(['sortabletable'], function(m) {
-	            //     console.log(m);
-	            // });
-	            // var adapterSortabletable = new AdapterSortableTable(this);
-	            // this.ExtRegistry.sort = adapterSortabletable;
-	            // adapterSortabletable.init();
-	            // require(['sortabletable',
-	            //     './extensions/sortabletable/adapterSortabletable'],
-	            //     (s, m)=> {
-	            //     console.log(s, m);
-	            //     var adapterSortabletable = new m.AdapterSortableTable(this);
-	            //     this.ExtRegistry.sort = adapterSortabletable;
-	            //     adapterSortabletable.init();
-	            // });
-
-	            // this.includeFile(
-	            //     'sortConfig.name',
-	            //     '../libs/sortabletable.js',
-	            //     function(){
-	            //         console.log(AdapterSortableTable);
-	            //     }
-	            // );
 
 	            __webpack_require__.e/* require */(2, function(__webpack_require__) { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(25)]; (function (m) {
 	                var adapterSortabletable = new m.AdapterSortableTable(_this2);

@@ -36,12 +36,6 @@ import {Help} from './modules/help';
 import {AlternateRows} from './modules/alternateRows';
 import {ColOps} from './modules/colOps';
 
-// Extensions
-// import './extensions/sortabletable/sortabletable';
-// import {AdapterSortableTable}
-    // from './extensions/sortabletable/adapterSortabletable';
-// import {ColsVisibility} from 'extensions/colsVisibility/colsVisibility';
-
 var global = window,
     isValidDate = dateHelper.isValid,
     formatDate = dateHelper.format,
@@ -1538,38 +1532,12 @@ export class TableFilter{
         and TF adapter by Max Guglielmi
     =====================================================*/
     setSort(){
-        // require("script!../libs/sortabletable.js");
-        // var SortableTable = require('sortabletable');
-        // console.log(SortableTable);
-        // require(['sortabletable'], function(m) {
-        //     console.log(m);
-        // });
-        // var adapterSortabletable = new AdapterSortableTable(this);
-        // this.ExtRegistry.sort = adapterSortabletable;
-        // adapterSortabletable.init();
-        // require(['sortabletable',
-        //     './extensions/sortabletable/adapterSortabletable'],
-        //     (s, m)=> {
-        //     console.log(s, m);
-        //     var adapterSortabletable = new m.AdapterSortableTable(this);
-        //     this.ExtRegistry.sort = adapterSortabletable;
-        //     adapterSortabletable.init();
-        // });
-
-        // this.includeFile(
-        //     'sortConfig.name',
-        //     '../libs/sortabletable.js',
-        //     function(){
-        //         console.log(AdapterSortableTable);
-        //     }
-        // );
 
         require(['adapterSortabletable'], (m)=> {
             var adapterSortabletable = new m.AdapterSortableTable(this);
             this.ExtRegistry.sort = adapterSortabletable;
             adapterSortabletable.init();
         });
-
     }
     setOldSort(){
         var fn = this.Evt._EnableSort,
