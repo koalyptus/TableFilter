@@ -1143,8 +1143,8 @@ export class TableFilter{
         /* Loads extensions */
         if(this.hasExtensions){
             // this.loadExtensions();
-            this.registerExtensions();
-            // this.initExtensions();
+            // this.registerExtensions();
+            this.initExtensions();
         }
 
         if(this.onFiltersLoaded){
@@ -1240,11 +1240,8 @@ export class TableFilter{
         }
     }
 
-    registerExtensions(){
+    initExtensions(){
         var exts = this.extensions;
-        if(exts.length === 0){
-            return;
-        }
 
         for(var i=0; i<exts.length; i++){
             var ext = exts[i];
@@ -1255,14 +1252,19 @@ export class TableFilter{
     }
 
     loadExtension(ext){
-        if(!ext || !ext.name || !ext.src){
+        if(!ext || !ext.name){
             return;
         }
 
-        var modulePath = ext.src.replace('.js', '');
-        require(['./'+modulePath], (m)=> {
+        var name = ext.name;
+        var path = ext.path || './extensions/{}/{}'
+                                    .replace(new RegExp('{}', 'g'), name);
+
+        // var modulePath = ext.src.replace('.js', '');
+        require([path], (m)=> {
+        // require(['./'+modulePath], (m)=> {
             var key = Object.keys(m)[0];
-            this.ExtRegistry[key] = new m[key](this, ext);
+            this.ExtRegistry[key] = new m[key](this, ext).init();
         });
     }
 
@@ -1533,10 +1535,15 @@ export class TableFilter{
     =====================================================*/
     setSort(){
 
-        require(['adapterSortabletable'], (m)=> {
-            var adapterSortabletable = new m.AdapterSortableTable(this);
-            this.ExtRegistry.sort = adapterSortabletable;
-            adapterSortabletable.init();
+        // require(['adapterSortabletable'], (m)=> {
+        //     var adapterSortabletable = new m.AdapterSortableTable(this);
+        //     this.ExtRegistry.sort = adapterSortabletable;
+        //     adapterSortabletable.init();
+        // });
+
+        this.loadExtension({
+            name: 'adapterSortabletable',
+            path: './extensions/sortabletable/adapterSortabletable.js'
         });
     }
     setOldSort(){

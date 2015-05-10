@@ -6,11 +6,6 @@
         <link rel="stylesheet" href="libs/qunit/qunit.css">
         <link rel="stylesheet" href="../dist/filtergrid.css">
         <script src="libs/qunit/qunit.js"></script>
-        <script>
-            // Defer Qunit so RequireJS can work its magic and resolve all modules.
-            QUnit.config.autostart = false;
-            QUnit.config.autoload = false;
-        </script>
     </head>
     <body>
         <table id="demo" cellpadding="0" cellspacing="0">
@@ -74,7 +69,8 @@
             </tbody>
         </table>
 
-        <script data-main="test-checklist" src="../libs/requirejs/require.js"></script>
+        <script src="../dist/tablefilter.js"></script>
+        <script src="test-checklist.js"></script>
 
         <div id="qunit"></div>
         <div id="qunit-fixture"></div>

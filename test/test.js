@@ -1,6 +1,4 @@
-requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
-
-    QUnit.start();
+(function(win, TableFilter) {
 
     var tf = new TableFilter('demo');
     tf.init();
@@ -18,4 +16,4 @@ requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
         equal(tf.getFilterElement(0).nodeName, 'INPUT', 'Filter DOM element');
     });
 
-});
+})(window, TableFilter);

@@ -6,6 +6,20 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
 
+        jshint: {
+            src: [
+                'Gruntfile.js',
+                'src-es6/**/*.js'
+            ],
+            options: {
+                jshintrc: '.jshintrc'
+            }
+        },
+
+        qunit: {
+            files: ['test/**/*.html']
+        },
+
         "webpack-dev-server": {
             options: {
                 webpack: webpack.dev,
@@ -21,36 +35,36 @@ module.exports = function (grunt) {
         },
 
         webpack: {
-            "dev": {
-                entry: __dirname + '/src-es6/tablefilter.js',
-                // entry: {
-                //     tablefilter: __dirname + '/src-es6/tablefilter.js',
-                //     colsVisibility: __dirname +
-                //         '/src-es6/extensions/colsVisibility/colsVisibility.js'
-                // },
-                output: {
-                    publicPath: "/src/",
-                    path: __dirname + "/src",
-                    filename: "tablefilter.js",
-                    chunkFilename: "[name].js",
-                    libraryTarget: 'umd'
-                },
-                resolve: {
-                    extensions: ['', '.js']
-                },
-                module: {
-                    loaders: [{
-                        test: path.join(__dirname, 'src-es6'),
-                        exclude: /node_modules/,
-                        query: {
-                            compact: false
-                        },
-                        loader: 'babel-loader'
-                    }]
-                },
-                devtool: "sourcemap",
-                debug: true
-            },
+            // "dev": {
+            //     entry: __dirname + '/src-es6/tablefilter.js',
+            //     // entry: {
+            //     //     tablefilter: __dirname + '/src-es6/tablefilter.js',
+            //     //     colsVisibility: __dirname +
+            //     //         '/src-es6/extensions/colsVisibility/colsVisibility.js'
+            //     // },
+            //     output: {
+            //         publicPath: "/src/",
+            //         path: __dirname + "/src",
+            //         filename: "tablefilter.js",
+            //         chunkFilename: "[name].js",
+            //         libraryTarget: 'umd'
+            //     },
+            //     resolve: {
+            //         extensions: ['', '.js']
+            //     },
+            //     module: {
+            //         loaders: [{
+            //             test: path.join(__dirname, 'src-es6'),
+            //             exclude: /node_modules/,
+            //             query: {
+            //                 compact: false
+            //             },
+            //             loader: 'babel-loader'
+            //         }]
+            //     },
+            //     devtool: "sourcemap",
+            //     debug: true
+            // },
             "build": {
                 entry: __dirname + '/src-es6/tablefilter.js',
                 // entry: {
@@ -68,9 +82,10 @@ module.exports = function (grunt) {
                 resolve: {
                     extensions: ['', '.js'],
                     alias: {
-                        sortabletable: "../../../libs/sortabletable.js",
-                        adapterSortabletable:
-                            './extensions/sortabletable/adapterSortabletable'
+                        sortabletable: "../../../libs/sortabletable.js"
+                        // ,
+                        // adapterSortabletable:
+                        //     './extensions/sortabletable/adapterSortabletable'
                     }
                 },
                 // externals: {
@@ -93,13 +108,10 @@ module.exports = function (grunt) {
                     //         "NODE_ENV": JSON.stringify("production")
                     //     }
                     // }),
-                    // new webpack.optimize.CommonsChunkPlugin(
-                    //     'main', 1, false),
                     // new webpack.IgnorePlugin(/adapterSortabletable$/),
-                    // new webpack.optimize.CommonsChunkPlugin(
-                    //     "commons.js",
-                    //     ["1", "2"]),
-                    new webpack.optimize.DedupePlugin()
+                    new webpack.optimize.DedupePlugin(),
+                    new webpack.optimize.MinChunkSizePlugin(
+                        {minChunkSize: 10000})
                     // ,
                     // new webpack.optimize.UglifyJsPlugin()
                 ]
@@ -108,6 +120,8 @@ module.exports = function (grunt) {
 
     });
 
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-webpack');
 
     // The development server (the recommended option for development)
@@ -120,6 +134,9 @@ module.exports = function (grunt) {
     grunt.registerTask("dev", ["webpack:dev"/*, "watch:app"*/]);
 
     // Production build
-    grunt.registerTask("build", ["webpack:build"]);
+    grunt.registerTask("build", ['jshint', "webpack:build"]);
+
+    // Tests
+    grunt.registerTask('test', ['qunit']);
 
 };

@@ -129,8 +129,6 @@ export class ColsVisibility{
             f.name+'Style', this.path + this.stylesheet, null, 'link');
 
         this.tf = tf;
-
-        this.init();
     }
 
     toggle(evt){
