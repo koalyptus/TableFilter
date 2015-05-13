@@ -1,0 +1,760 @@
+define(['exports', '../dom', '../types', '../string', '../helpers', '../event'], function (exports, _dom, _types, _string, _helpers, _event) {
+    'use strict';
+
+    var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+
+    var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+    Object.defineProperty(exports, '__esModule', {
+        value: true
+    });
+
+    var Paging = (function () {
+
+        /**
+         * Pagination component
+         * @param {Object} tf TableFilter instance
+         */
+
+        function Paging(tf) {
+            _classCallCheck(this, Paging);
+
+            // Configuration object
+            var f = tf.config();
+
+            //css class for paging buttons (previous,next,etc.)
+            this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';
+            //stores paging select element
+            this.pagingSlc = null;
+            //results per page select element
+            this.resultsPerPageSlc = null;
+            //id of container element
+            this.pagingTgtId = f.paging_target_id || null;
+            //defines table paging length
+            this.pagingLength = !isNaN(f.paging_length) ? f.paging_length : 10;
+            //id of container element
+            this.resultsPerPageTgtId = f.results_per_page_target_id || null;
+            //css class for paging select element
+            this.pgSlcCssClass = f.paging_slc_css_class || 'pgSlc';
+            //css class for paging input element
+            this.pgInpCssClass = f.paging_inp_css_class || 'pgNbInp';
+            //stores results per page text and values
+            this.resultsPerPage = f.results_per_page || null;
+            //enables/disables results per page drop-down
+            this.hasResultsPerPage = _types.Types.isArray(this.resultsPerPage);
+            //defines css class for results per page select
+            this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';
+            //css class for label preceding results per page select
+            this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';
+            //1st row index of current page
+            this.startPagingRow = 0;
+            //total nb of pages
+            this.nbPages = 0;
+            //current page nb
+            this.currentPageNb = 1;
+            //defines next page button text
+            this.btnNextPageText = f.btn_next_page_text || '>';
+            //defines previous page button text
+            this.btnPrevPageText = f.btn_prev_page_text || '<';
+            //defines last page button text
+            this.btnLastPageText = f.btn_last_page_text || '>|';
+            //defines first page button text
+            this.btnFirstPageText = f.btn_first_page_text || '|<';
+            //defines next page button html
+            this.btnNextPageHtml = f.btn_next_page_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + this.btnPageCssClass + ' nextPage" title="Next page" />');
+            //defines previous page button html
+            this.btnPrevPageHtml = f.btn_prev_page_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + this.btnPageCssClass + ' previousPage" title="Previous page" />');
+            //defines last page button html
+            this.btnFirstPageHtml = f.btn_first_page_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + this.btnPageCssClass + ' firstPage" title="First page" />');
+            //defines previous page button html
+            this.btnLastPageHtml = f.btn_last_page_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + this.btnPageCssClass + ' lastPage" title="Last page" />');
+            //defines text preceeding page selector drop-down
+            this.pageText = f.page_text || ' Page ';
+            //defines text after page selector drop-down
+            this.ofText = f.of_text || ' of ';
+            //css class for span containing tot nb of pages
+            this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';
+            //enables/disables paging buttons
+            this.hasPagingBtns = f.paging_btns === false ? false : true;
+            //defines previous page button html
+            this.pageSelectorType = f.page_selector_type || tf.fltTypeSlc;
+            //calls function before page is changed
+            this.onBeforeChangePage = _types.Types.isFn(f.on_before_change_page) ? f.on_before_change_page : null;
+            //calls function before page is changed
+            this.onAfterChangePage = _types.Types.isFn(f.on_after_change_page) ? f.on_after_change_page : null;
+
+            //pages select
+            this.prfxSlcPages = 'slcPages_';
+            //results per page select
+            this.prfxSlcResults = 'slcResults_';
+            //label preciding results per page select
+            this.prfxSlcResultsTxt = 'slcResultsTxt_';
+            //span containing next page button
+            this.prfxBtnNextSpan = 'btnNextSpan_';
+            //span containing previous page button
+            this.prfxBtnPrevSpan = 'btnPrevSpan_';
+            //span containing last page button
+            this.prfxBtnLastSpan = 'btnLastSpan_';
+            //span containing first page button
+            this.prfxBtnFirstSpan = 'btnFirstSpan_';
+            //next button
+            this.prfxBtnNext = 'btnNext_';
+            //previous button
+            this.prfxBtnPrev = 'btnPrev_';
+            //last button
+            this.prfxBtnLast = 'btnLast_';
+            //first button
+            this.prfxBtnFirst = 'btnFirst_';
+            //span for tot nb pages
+            this.prfxPgSpan = 'pgspan_';
+            //span preceding pages select (contains 'Page')
+            this.prfxPgBeforeSpan = 'pgbeforespan_';
+            //span following pages select (contains ' of ')
+            this.prfxPgAfterSpan = 'pgafterspan_';
+
+            var start_row = this.refRow;
+            var nrows = this.nbRows;
+            //calculates page nb
+            this.nbPages = Math.ceil((nrows - start_row) / this.pagingLength);
+
+            //Paging elements events
+            var o = this;
+            // Paging DOM events
+            this.evt = {
+                slcIndex: function slcIndex() {
+                    return o.pageSelectorType === tf.fltTypeSlc ? o.pagingSlc.options.selectedIndex : parseInt(o.pagingSlc.value, 10) - 1;
+                },
+                nbOpts: function nbOpts() {
+                    return o.pageSelectorType === tf.fltTypeSlc ? parseInt(o.pagingSlc.options.length, 10) - 1 : o.nbPages - 1;
+                },
+                next: function next() {
+                    var nextIndex = o.evt.slcIndex() < o.evt.nbOpts() ? o.evt.slcIndex() + 1 : 0;
+                    o.changePage(nextIndex);
+                },
+                prev: function prev() {
+                    var prevIndex = o.evt.slcIndex() > 0 ? o.evt.slcIndex() - 1 : o.evt.nbOpts();
+                    o.changePage(prevIndex);
+                },
+                last: function last() {
+                    o.changePage(o.evt.nbOpts());
+                },
+                first: function first() {
+                    o.changePage(0);
+                },
+                _detectKey: function _detectKey(e) {
+                    var key = _event.Event.keyCode(e);
+                    if (key === 13) {
+                        if (tf.sorted) {
+                            tf.filter();
+                            o.changePage(o.evt.slcIndex());
+                        } else {
+                            o.changePage();
+                        }
+                        this.blur();
+                    }
+                },
+                slcPagesChange: null,
+                nextEvt: null,
+                prevEvt: null,
+                lastEvt: null,
+                firstEvt: null
+            };
+
+            this.tf = tf;
+        }
+
+        _createClass(Paging, [{
+            key: 'init',
+
+            /**
+             * Initialize DOM elements
+             */
+            value: function init() {
+                var _this = this;
+
+                var slcPages;
+                var tf = this.tf;
+                var evt = this.evt;
+
+                // Check resultsPerPage is in expected format and initialise the
+                // results per page component
+                if (this.hasResultsPerPage) {
+                    if (this.resultsPerPage.length < 2) {
+                        this.hasResultsPerPage = false;
+                    } else {
+                        this.pagingLength = this.resultsPerPage[1][0];
+                        this.setResultsPerPage();
+                    }
+                }
+
+                /*====================================================
+                    - onchange event for paging select
+                =====================================================*/
+                evt.slcPagesChange = function (event) {
+                    _this.changePage();
+                    event.target.blur();
+                };
+
+                // Paging drop-down list selector
+                if (this.pageSelectorType === tf.fltTypeSlc) {
+                    slcPages = _dom.Dom.create(tf.fltTypeSlc, ['id', this.prfxSlcPages + tf.id]);
+                    slcPages.className = this.pgSlcCssClass;
+                    _event.Event.add(slcPages, 'change', evt.slcPagesChange);
+                }
+
+                // Paging input selector
+                if (this.pageSelectorType === tf.fltTypeInp) {
+                    slcPages = _dom.Dom.create(tf.fltTypeInp, ['id', this.prfxSlcPages + tf.id], ['value', this.currentPageNb]);
+                    slcPages.className = this.pgInpCssClass;
+                    _event.Event.add(slcPages, 'keypress', evt._detectKey);
+                }
+
+                // btns containers
+                var btnNextSpan = _dom.Dom.create('span', ['id', this.prfxBtnNextSpan + tf.id]);
+                var btnPrevSpan = _dom.Dom.create('span', ['id', this.prfxBtnPrevSpan + tf.id]);
+                var btnLastSpan = _dom.Dom.create('span', ['id', this.prfxBtnLastSpan + tf.id]);
+                var btnFirstSpan = _dom.Dom.create('span', ['id', this.prfxBtnFirstSpan + tf.id]);
+
+                if (this.hasPagingBtns) {
+                    // Next button
+                    if (!this.btnNextPageHtml) {
+                        var btn_next = _dom.Dom.create(tf.fltTypeInp, ['id', this.prfxBtnNext + tf.id], ['type', 'button'], ['value', this.btnNextPageText], ['title', 'Next']);
+                        btn_next.className = this.btnPageCssClass;
+                        _event.Event.add(btn_next, 'click', evt.next);
+                        btnNextSpan.appendChild(btn_next);
+                    } else {
+                        btnNextSpan.innerHTML = this.btnNextPageHtml;
+                        _event.Event.add(btnNextSpan, 'click', evt.next);
+                    }
+                    // Previous button
+                    if (!this.btnPrevPageHtml) {
+                        var btn_prev = _dom.Dom.create(tf.fltTypeInp, ['id', this.prfxBtnPrev + tf.id], ['type', 'button'], ['value', this.btnPrevPageText], ['title', 'Previous']);
+                        btn_prev.className = this.btnPageCssClass;
+                        _event.Event.add(btn_prev, 'click', evt.prev);
+                        btnPrevSpan.appendChild(btn_prev);
+                    } else {
+                        btnPrevSpan.innerHTML = this.btnPrevPageHtml;
+                        _event.Event.add(btnPrevSpan, 'click', evt.prev);
+                    }
+                    // Last button
+                    if (!this.btnLastPageHtml) {
+                        var btn_last = _dom.Dom.create(tf.fltTypeInp, ['id', this.prfxBtnLast + tf.id], ['type', 'button'], ['value', this.btnLastPageText], ['title', 'Last']);
+                        btn_last.className = this.btnPageCssClass;
+                        _event.Event.add(btn_last, 'click', evt.last);
+                        btnLastSpan.appendChild(btn_last);
+                    } else {
+                        btnLastSpan.innerHTML = this.btnLastPageHtml;
+                        _event.Event.add(btnLastSpan, 'click', evt.last);
+                    }
+                    // First button
+                    if (!this.btnFirstPageHtml) {
+                        var btn_first = _dom.Dom.create(tf.fltTypeInp, ['id', this.prfxBtnFirst + tf.id], ['type', 'button'], ['value', this.btnFirstPageText], ['title', 'First']);
+                        btn_first.className = this.btnPageCssClass;
+                        _event.Event.add(btn_first, 'click', evt.first);
+                        btnFirstSpan.appendChild(btn_first);
+                    } else {
+                        btnFirstSpan.innerHTML = this.btnFirstPageHtml;
+                        _event.Event.add(btnFirstSpan, 'click', evt.first);
+                    }
+                }
+
+                // paging elements (buttons+drop-down list) are added to defined element
+                if (!this.pagingTgtId) {
+                    tf.setToolbar();
+                }
+                var targetEl = !this.pagingTgtId ? tf.mDiv : _dom.Dom.id(this.pagingTgtId);
+                targetEl.appendChild(btnFirstSpan);
+                targetEl.appendChild(btnPrevSpan);
+
+                var pgBeforeSpan = _dom.Dom.create('span', ['id', this.prfxPgBeforeSpan + tf.id]);
+                pgBeforeSpan.appendChild(_dom.Dom.text(this.pageText));
+                pgBeforeSpan.className = this.nbPgSpanCssClass;
+                targetEl.appendChild(pgBeforeSpan);
+                targetEl.appendChild(slcPages);
+                var pgAfterSpan = _dom.Dom.create('span', ['id', this.prfxPgAfterSpan + tf.id]);
+                pgAfterSpan.appendChild(_dom.Dom.text(this.ofText));
+                pgAfterSpan.className = this.nbPgSpanCssClass;
+                targetEl.appendChild(pgAfterSpan);
+                var pgspan = _dom.Dom.create('span', ['id', this.prfxPgSpan + tf.id]);
+                pgspan.className = this.nbPgSpanCssClass;
+                pgspan.appendChild(_dom.Dom.text(' ' + this.nbPages + ' '));
+                targetEl.appendChild(pgspan);
+                targetEl.appendChild(btnNextSpan);
+                targetEl.appendChild(btnLastSpan);
+                this.pagingSlc = _dom.Dom.id(this.prfxSlcPages + tf.id);
+
+                // if this.rememberGridValues==true this.setPagingInfo() is called
+                // in ResetGridValues() method
+                if (!tf.rememberGridValues || this.isPagingRemoved) {
+                    this.setPagingInfo();
+                }
+                if (!tf.fltGrid) {
+                    tf.ValidateAllRows();
+                    this.setPagingInfo(tf.validRowsIndex);
+                }
+
+                this.isPagingRemoved = false;
+            }
+        }, {
+            key: 'addPaging',
+
+            /**
+             * Add paging when filters are already instanciated
+             * @param {Boolean} filterTable Execute filtering once paging instanciated
+             */
+            value: function addPaging() {
+                var filterTable = arguments[0] === undefined ? false : arguments[0];
+
+                var tf = this.tf;
+                if (!tf.hasGrid() || tf.paging) {
+                    return;
+                }
+                tf.paging = true;
+                this.isPagingRemoved = true;
+                this.init();
+                tf.resetValues();
+                if (filterTable) {
+                    tf.filter();
+                }
+            }
+        }, {
+            key: 'setPagingInfo',
+
+            /**
+             * Calculate number of pages based on valid rows
+             * Refresh paging select according to number of pages
+             * @param {Array} validRows Collection of valid rows
+             */
+            value: function setPagingInfo(validRows) {
+                var tf = this.tf;
+                var rows = tf.tbl.rows;
+                var mdiv = !this.pagingTgtId ? tf.mDiv : _dom.Dom.id(this.pagingTgtId);
+                var pgspan = _dom.Dom.id(this.prfxPgSpan + tf.id);
+                //stores valid rows indexes
+                if (validRows && validRows.length > 0) {
+                    tf.validRowsIndex = validRows;
+                } else {
+                    //re-sets valid rows indexes array
+                    tf.validRowsIndex = [];
+
+                    //counts rows to be grouped
+                    for (var j = tf.refRow; j < tf.nbRows; j++) {
+                        var row = rows[j];
+                        if (!row) {
+                            continue;
+                        }
+                        var isRowValid = row.getAttribute('validRow');
+                        if (isRowValid === 'true' || !isRowValid) {
+                            tf.validRowsIndex.push(j);
+                        }
+                    }
+                }
+
+                //calculate nb of pages
+                this.nbPages = Math.ceil(tf.validRowsIndex.length / this.pagingLength);
+                //refresh page nb span
+                pgspan.innerHTML = this.nbPages;
+                //select clearing shortcut
+                if (this.pageSelectorType === tf.fltTypeSlc) {
+                    this.pagingSlc.innerHTML = '';
+                }
+
+                if (this.nbPages > 0) {
+                    mdiv.style.visibility = 'visible';
+                    if (this.pageSelectorType === tf.fltTypeSlc) {
+                        for (var z = 0; z < this.nbPages; z++) {
+                            var currOpt = new Option(z + 1, z * this.pagingLength, false, false);
+                            this.pagingSlc.options[z] = currOpt;
+                        }
+                    } else {
+                        //input type
+                        this.pagingSlc.value = this.currentPageNb;
+                    }
+                } else {
+                    /*** if no results paging select and buttons are hidden ***/
+                    mdiv.style.visibility = 'hidden';
+                }
+                this.groupByPage(tf.validRowsIndex);
+            }
+        }, {
+            key: 'groupByPage',
+
+            /**
+             * Group table rows by page and display valid rows
+             * @param  {Array} validRows Collection of valid rows
+             */
+            value: function groupByPage(validRows) {
+                var tf = this.tf;
+                var rows = tf.tbl.rows;
+                var paging_end_row = parseInt(this.startPagingRow, 10) + parseInt(this.pagingLength, 10);
+
+                //store valid rows indexes
+                if (validRows) {
+                    tf.validRowsIndex = validRows;
+                }
+
+                //this loop shows valid rows of current page
+                for (var h = 0; h < tf.validRowsIndex.length; h++) {
+                    var r = rows[tf.validRowsIndex[h]];
+                    if (h >= this.startPagingRow && h < paging_end_row) {
+                        if (r.getAttribute('validRow') === 'true' || !r.getAttribute('validRow')) {
+                            r.style.display = '';
+                        }
+                        if (tf.alternateBgs && tf.Cpt.alternateRows) {
+                            tf.Cpt.alternateRows.setRowBg(tf.validRowsIndex[h], h);
+                        }
+                    } else {
+                        r.style.display = 'none';
+                        if (tf.alternateBgs && tf.Cpt.alternateRows) {
+                            tf.Cpt.alternateRows.removeRowBg(tf.validRowsIndex[h]);
+                        }
+                    }
+                }
+
+                tf.nbVisibleRows = tf.validRowsIndex.length;
+                tf.isStartBgAlternate = false;
+                //re-applies filter behaviours after filtering process
+                tf.applyGridProps();
+            }
+        }, {
+            key: 'setPage',
+
+            /**
+             * Show page based on passed param value (string or number):
+             * @param {String} or {Number} cmd possible string values: 'next',
+             * 'previous', 'last', 'first' or page number as per param
+             */
+            value: function setPage(cmd) {
+                var tf = this.tf;
+                if (!tf.hasGrid() || !tf.paging) {
+                    return;
+                }
+                var btnEvt = this.evt,
+                    cmdtype = typeof cmd;
+                if (cmdtype === 'string') {
+                    switch (_string.Str.lower(cmd)) {
+                        case 'next':
+                            btnEvt.next();
+                            break;
+                        case 'previous':
+                            btnEvt.prev();
+                            break;
+                        case 'last':
+                            btnEvt.last();
+                            break;
+                        case 'first':
+                            btnEvt.first();
+                            break;
+                        default:
+                            btnEvt.next();
+                            break;
+                    }
+                } else if (cmdtype === 'number') {
+                    this.changePage(cmd - 1);
+                }
+            }
+        }, {
+            key: 'setResultsPerPage',
+
+            /**
+             * Generates UI elements for the number of results per page drop-down
+             */
+            value: function setResultsPerPage() {
+                var _this2 = this;
+
+                var tf = this.tf;
+                var evt = this.evt;
+
+                if (!tf.hasGrid() && !tf.isFirstLoad) {
+                    return;
+                }
+                if (this.resultsPerPageSlc || !this.resultsPerPage) {
+                    return;
+                }
+
+                /*====================================================
+                    - onchange event for results per page select
+                =====================================================*/
+                evt.slcResultsChange = function (ev) {
+                    _this2.changeResultsPerPage();
+                    ev.target.blur();
+                };
+
+                var slcR = _dom.Dom.create(tf.fltTypeSlc, ['id', this.prfxSlcResults + tf.id]);
+                slcR.className = tf.resultsSlcCssClass;
+                var slcRText = this.resultsPerPage[0],
+                    slcROpts = this.resultsPerPage[1];
+                var slcRSpan = _dom.Dom.create('span', ['id', this.prfxSlcResultsTxt + tf.id]);
+                slcRSpan.className = this.resultsSpanCssClass;
+
+                // results per page select is added to external element
+                if (!this.resultsPerPageTgtId) {
+                    tf.setToolbar();
+                }
+                var targetEl = !this.resultsPerPageTgtId ? tf.rDiv : _dom.Dom.id(this.resultsPerPageTgtId);
+                slcRSpan.appendChild(_dom.Dom.text(slcRText));
+                targetEl.appendChild(slcRSpan);
+                targetEl.appendChild(slcR);
+
+                this.resultsPerPageSlc = _dom.Dom.id(this.prfxSlcResults + tf.id);
+
+                for (var r = 0; r < slcROpts.length; r++) {
+                    var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);
+                    this.resultsPerPageSlc.options[r] = currOpt;
+                }
+                _event.Event.add(slcR, 'change', evt.slcResultsChange);
+            }
+        }, {
+            key: 'removeResultsPerPage',
+
+            /**
+             * Remove number of results per page UI elements
+             */
+            value: function removeResultsPerPage() {
+                var tf = this.tf;
+                if (!tf.hasGrid() || !this.resultsPerPageSlc || !this.resultsPerPage) {
+                    return;
+                }
+                var slcR = this.resultsPerPageSlc,
+                    slcRSpan = _dom.Dom.id(this.prfxSlcResultsTxt + tf.id);
+                if (slcR) {
+                    slcR.parentNode.removeChild(slcR);
+                }
+                if (slcRSpan) {
+                    slcRSpan.parentNode.removeChild(slcRSpan);
+                }
+                this.resultsPerPageSlc = null;
+            }
+        }, {
+            key: 'changePage',
+
+            /**
+             * Change the page asynchronously according to passed index
+             * @param  {Number} index Index of the page (0-n)
+             */
+            value: function changePage(index) {
+                var tf = this.tf;
+                var evt = tf.Evt;
+                tf.EvtManager(evt.name.changepage, { pgIndex: index });
+            }
+        }, {
+            key: 'changeResultsPerPage',
+
+            /**
+             * Change rows asynchronously according to page results
+             */
+            value: function changeResultsPerPage() {
+                var tf = this.tf;
+                var evt = tf.Evt;
+                tf.EvtManager(evt.name.changeresultsperpage);
+            }
+        }, {
+            key: 'resetPage',
+
+            /**
+             * Re-set asynchronously page nb at page re-load
+             */
+            value: function resetPage() {
+                var tf = this.tf;
+                var evt = tf.Evt;
+                tf.EvtManager(evt.name.resetpage);
+            }
+        }, {
+            key: 'resetPageLength',
+
+            /**
+             * Re-set asynchronously page length at page re-load
+             */
+            value: function resetPageLength() {
+                var tf = this.tf;
+                var evt = tf.Evt;
+                tf.EvtManager(evt.name.resetpagelength);
+            }
+        }, {
+            key: '_changePage',
+
+            /**
+             * Change the page according to passed index
+             * @param  {Number} index Index of the page (0-n)
+             */
+            value: function _changePage(index) {
+                var tf = this.tf;
+
+                if (!tf.paging) {
+                    return;
+                }
+                if (index === null) {
+                    index = this.pageSelectorType === tf.fltTypeSlc ? this.pagingSlc.options.selectedIndex : this.pagingSlc.value - 1;
+                }
+                if (index >= 0 && index <= this.nbPages - 1) {
+                    if (this.onBeforeChangePage) {
+                        this.onBeforeChangePage.call(null, this, index);
+                    }
+                    this.currentPageNb = parseInt(index, 10) + 1;
+                    if (this.pageSelectorType === tf.fltTypeSlc) {
+                        this.pagingSlc.options[index].selected = true;
+                    } else {
+                        this.pagingSlc.value = this.currentPageNb;
+                    }
+
+                    if (tf.rememberPageNb) {
+                        tf.Cpt.store.savePageNb(tf.pgNbCookie);
+                    }
+                    this.startPagingRow = this.pageSelectorType === tf.fltTypeSlc ? this.pagingSlc.value : index * this.pagingLength;
+
+                    this.groupByPage();
+
+                    if (this.onAfterChangePage) {
+                        this.onAfterChangePage.call(null, this, index);
+                    }
+                }
+            }
+        }, {
+            key: '_changeResultsPerPage',
+
+            /**
+             * Change rows according to page results
+             */
+            value: function _changeResultsPerPage() {
+                var tf = this.tf;
+
+                if (!tf.paging) {
+                    return;
+                }
+                var slcR = this.resultsPerPageSlc;
+                var slcPagesSelIndex = this.pageSelectorType === tf.fltTypeSlc ? this.pagingSlc.selectedIndex : parseInt(this.pagingSlc.value - 1, 10);
+                this.pagingLength = parseInt(slcR.options[slcR.selectedIndex].value, 10);
+                this.startPagingRow = this.pagingLength * slcPagesSelIndex;
+
+                if (!isNaN(this.pagingLength)) {
+                    if (this.startPagingRow >= tf.nbFilterableRows) {
+                        this.startPagingRow = tf.nbFilterableRows - this.pagingLength;
+                    }
+                    this.setPagingInfo();
+
+                    if (this.pageSelectorType === tf.fltTypeSlc) {
+                        var slcIndex = this.pagingSlc.options.length - 1 <= slcPagesSelIndex ? this.pagingSlc.options.length - 1 : slcPagesSelIndex;
+                        this.pagingSlc.options[slcIndex].selected = true;
+                    }
+                    if (tf.rememberPageLen) {
+                        tf.Cpt.store.savePageLength(tf.pgLenCookie);
+                    }
+                }
+            }
+        }, {
+            key: '_resetPage',
+
+            /**
+             * Re-set page nb at page re-load
+             */
+            value: function _resetPage(name) {
+                var tf = this.tf;
+                var pgnb = tf.Cpt.store.getPageNb(name);
+                if (pgnb !== '') {
+                    this.changePage(pgnb - 1);
+                }
+            }
+        }, {
+            key: '_resetPageLength',
+
+            /**
+             * Re-set page length at page re-load
+             */
+            value: function _resetPageLength(name) {
+                var tf = this.tf;
+                if (!tf.paging) {
+                    return;
+                }
+                var pglenIndex = tf.Cpt.store.getPageLength(name);
+
+                if (pglenIndex !== '') {
+                    this.resultsPerPageSlc.options[pglenIndex].selected = true;
+                    this.changeResultsPerPage();
+                }
+            }
+        }, {
+            key: 'destroy',
+
+            /**
+             * Remove paging feature
+             */
+            value: function destroy() {
+                var tf = this.tf;
+
+                if (!tf.hasGrid()) {
+                    return;
+                }
+                // btns containers
+                var btnNextSpan, btnPrevSpan, btnLastSpan, btnFirstSpan;
+                var pgBeforeSpan, pgAfterSpan, pgspan;
+                btnNextSpan = _dom.Dom.id(this.prfxBtnNextSpan + tf.id);
+                btnPrevSpan = _dom.Dom.id(this.prfxBtnPrevSpan + tf.id);
+                btnLastSpan = _dom.Dom.id(this.prfxBtnLastSpan + tf.id);
+                btnFirstSpan = _dom.Dom.id(this.prfxBtnFirstSpan + tf.id);
+                //span containing 'Page' text
+                pgBeforeSpan = _dom.Dom.id(this.prfxPgBeforeSpan + tf.id);
+                //span containing 'of' text
+                pgAfterSpan = _dom.Dom.id(this.prfxPgAfterSpan + tf.id);
+                //span containing nb of pages
+                pgspan = _dom.Dom.id(this.prfxPgSpan + tf.id);
+
+                var evt = this.evt;
+
+                if (this.pagingSlc) {
+                    if (this.pageSelectorType === tf.fltTypeSlc) {
+                        _event.Event.remove(this.pagingSlc, 'change', evt.slcPagesChange);
+                    } else if (this.pageSelectorType === tf.fltTypeInp) {
+                        _event.Event.remove(this.pagingSlc, 'keypress', evt._detectKey);
+                    }
+                    this.pagingSlc.parentNode.removeChild(this.pagingSlc);
+                }
+
+                if (btnNextSpan) {
+                    _event.Event.remove(btnNextSpan, 'click', evt.next);
+                    btnNextSpan.parentNode.removeChild(btnNextSpan);
+                }
+
+                if (btnPrevSpan) {
+                    _event.Event.remove(btnPrevSpan, 'click', evt.prev);
+                    btnPrevSpan.parentNode.removeChild(btnPrevSpan);
+                }
+
+                if (btnLastSpan) {
+                    _event.Event.remove(btnLastSpan, 'click', evt.last);
+                    btnLastSpan.parentNode.removeChild(btnLastSpan);
+                }
+
+                if (btnFirstSpan) {
+                    _event.Event.remove(btnFirstSpan, 'click', evt.first);
+                    btnFirstSpan.parentNode.removeChild(btnFirstSpan);
+                }
+
+                if (pgBeforeSpan) {
+                    pgBeforeSpan.parentNode.removeChild(pgBeforeSpan);
+                }
+
+                if (pgAfterSpan) {
+                    pgAfterSpan.parentNode.removeChild(pgAfterSpan);
+                }
+
+                if (pgspan) {
+                    pgspan.parentNode.removeChild(pgspan);
+                }
+
+                if (this.hasResultsPerPage) {
+                    this.removeResultsPerPage();
+                }
+
+                this.pagingSlc = null;
+                this.nbPages = 0;
+                this.isPagingRemoved = true;
+                tf.paging = false;
+            }
+        }]);
+
+        return Paging;
+    })();
+
+    exports.Paging = Paging;
+});
+//# sourceMappingURL=paging.js.map

@@ -25,8 +25,8 @@ Str.isEmpty = function(text){
 
 Str.rgxEsc = function(text){
     function escape(e){
-        var a = new RegExp('\\'+e,'g');
-        text = text.replace(a,'\\'+e);
+        var a = new RegExp('\\'+e, 'g');
+        text = text.replace(a, '\\'+e);
     }
 
     var chars = ['\\','[','^','$','.','|','?','*','+','(',')'];

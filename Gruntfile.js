@@ -116,6 +116,22 @@ module.exports = function (grunt) {
                     // new webpack.optimize.UglifyJsPlugin()
                 ]
             }
+        },
+
+        babel: {
+            options: {
+                sourceMap: true,
+                modules: 'amd',
+                compact: false
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: 'src-es6',
+                    src: ['**/*.js'],
+                    dest: 'dev'
+                }]
+            }
         }
 
     });
@@ -123,6 +139,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-webpack');
+    grunt.loadNpmTasks('grunt-babel');
 
     // The development server (the recommended option for development)
     grunt.registerTask("default", ["webpack-dev-server:start"]);
@@ -138,5 +155,8 @@ module.exports = function (grunt) {
 
     // Tests
     grunt.registerTask('test', ['qunit']);
+
+    // Transpile with Babel
+    grunt.registerTask('transpile', ['babel']);
 
 };

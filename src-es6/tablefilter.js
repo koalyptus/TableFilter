@@ -1257,14 +1257,20 @@ export class TableFilter{
         }
 
         var name = ext.name;
-        var path = ext.path || './extensions/{}/{}'
-                                    .replace(new RegExp('{}', 'g'), name);
+        var path = ext.path;
+        var modulePath;
 
-        // var modulePath = ext.src.replace('.js', '');
-        require([path], (m)=> {
-        // require(['./'+modulePath], (m)=> {
-            var key = Object.keys(m)[0];
-            this.ExtRegistry[key] = new m[key](this, ext).init();
+        if(name && path){
+            modulePath = ext.path + '/' + name;
+        } else {
+            name = name.replace('.js', '');
+            modulePath = './extensions/{}/{}'.replace(/{}/g, name);
+        }
+
+        require([modulePath], (mod)=> {
+            var inst = new mod(this, ext);
+            inst.init();
+            this.ExtRegistry[name] = inst;
         });
     }
 
@@ -1542,120 +1548,10 @@ export class TableFilter{
         // });
 
         this.loadExtension({
-            name: 'adapterSortabletable',
-            path: './extensions/sortabletable/adapterSortabletable.js'
+            name: 'adapterSortabletable.js',
+            path: './extensions/sortabletable'
         });
     }
-    setOldSort(){
-        var fn = this.Evt._EnableSort,
-            sortConfig = this.sortConfig,
-            o = this;
-
-        if(!types.isFn(fn)){
-
-            /*====================================================
-                - enables table sorting
-            =====================================================*/
-            this.Evt._EnableSort = function(){
-                //gridLayout needs sort to be re-enabled
-                if(o.isSortEnabled && !o.gridLayout){
-                    return;
-                }
-
-                // if(o.isImported(sortConfig.adapterSrc)){
-                //     sortConfig.initialize.call(null,o);
-                // } else {
-                //     o.includeFile(
-                //         sortConfig.name+'_adapter',
-                //         sortConfig.adapterSrc,
-                //         function(){ sortConfig.initialize.call(null, o); }
-                //     );
-                // }
-                // define(
-                //     'extensions/sortabletable/adapterSortabletable',
-                //     function(){}
-                // );
-                // require.config({
-                //     baseUrl: '../dist',
-                //     paths: {
-                //         'a': '/tablefilter',
-                //         'SortableTable':
-                //             '/extensions/sortabletable/sortabletable',
-                //         'sortabletable':
-                //             '/extensions/sortabletable/adapterSortabletable'
-                //     },
-                //     name: '../dist/extensions/sortabletable/adapterSortabletable'
-                // });
-
-                // Lazy loading for the sort extension
-                // console.log('lazy', define);
-                // define(['require'], function(require){
-                //     console.log(require);
-                //
-
-                /*************************
-                    var AdapterSortableTable = require(
-                        ['extensions/sortabletable/adapterSortabletable'],
-                        function(adapterSortabletable){
-                            o.ExtRegistry.sort = new adapterSortabletable(o);
-                            o.ExtRegistry.sort.init();
-                    });
-                *************************/
-
-                    // o.includeFile(
-                    //     'sortConfig.name',
-                    //     o.basePath + '/extensions/sortabletable/adapterSortabletable.js',
-                    //     function(){
-                    //         console.log(AdapterSortableTable);
-                    //     });
-
-                // });
-            };
-        }
-
-        function loadSortableTable(){console.log('loadSortable');
-            if(o.isImported(sortConfig.src)){
-                o.Evt._EnableSort();
-            } else {
-                o.includeFile(
-                    sortConfig.name, sortConfig.src, o.Evt._EnableSort);
-            }
-        }
-
-        // Import require.js if required for production environment
-        console.log('is require loaded: ' + o.isImported('require.js'));
-        if(o.isImported('require.js')){
-            loadSortableTable();
-        } else {
-            o.includeFile(
-                'tf-requirejs', o.basePath + 'require.js', o.Evt._EnableSort);
-
-            // o.includeFile('tf-requirejs',
-            //     o.basePath + 'require.js',
-            //     function(){
-                    // Lazy loading for the sort extension
-                    // console.log('lazy', define);
-                    // define(['require'], function(require){
-                    //     console.log(require);
-                    //     var AdapterSortableTable = require(
-                    //         ['extensions/sortabletable/adapterSortabletable'],
-                    //         function(adapterSortabletable){
-                    //             console.log(adapterSortabletable);
-                    //             // o.ExtRegistry.sort = new adapterSortabletable(o);
-                    //             // o.ExtRegistry.sort.init();
-                    //     });
-                    // });
-            //     }
-            // );
-        }
-    }
-
-    /*====================================================
-        - removes sorting feature
-    =====================================================*/
-    // removeSort(){
-    //     this.sort = false;
-    // }
 
     performSort(){
         this.EvtManager(this.Evt.name.sort);

@@ -4,7 +4,7 @@ import {Event} from '../../event';
 import {Helpers} from '../../helpers';
 import {Arr} from '../../array';
 
-export class ColsVisibility{
+export default class ColsVisibility{
 
     /**
      * Columns Visibility extension
@@ -13,7 +13,7 @@ export class ColsVisibility{
     constructor(
         tf,
         ext={
-            name:'ColsVisibility',
+            name:'colsVisibility',
             description:'Columns visibility manager'
         }){
 
@@ -126,7 +126,7 @@ export class ColsVisibility{
 
         //Loads extension stylesheet
         tf.includeFile(
-            f.name+'Style', this.path + this.stylesheet, null, 'link');
+            f.name+'Style', this.path +'/'+ this.stylesheet, null, 'link');
 
         this.tf = tf;
     }

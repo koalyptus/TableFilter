@@ -6,7 +6,7 @@ import {DateHelper} from '../../date';
 import {Helpers} from '../../helpers';
 import 'script!sortabletable';
 
-export class AdapterSortableTable{
+export default class AdapterSortableTable{
 
     /**
      * SortableTable Adapter module
