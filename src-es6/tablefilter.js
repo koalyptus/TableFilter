@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------------
-    - HTML Table Filter Generator v3.0
+    - HTML Table Filter Generator v0.0.1
     - By Max Guglielmi (tablefilter.free.fr)
     - Licensed under the MIT License
 ---------------------------------------------------------------------------
@@ -41,6 +41,8 @@ var global = window,
     formatDate = dateHelper.format,
     doc = global.document;
 
+// export {Paging, GridLayout};
+
 export class TableFilter{
 
     /**
@@ -53,7 +55,7 @@ export class TableFilter{
         if(arguments.length === 0){ return; }
 
         this.id = id;
-        this.version = '3.0';
+        this.version = '0.0.1';
         this.year = new Date().getFullYear();
         this.tbl = dom.id(id);
         this.startRow = null;
@@ -97,7 +99,7 @@ export class TableFilter{
         catch(e){ this.nbCells = this.getCellsNb(0); }
 
         //default script base path
-        this.basePath = f.base_path!==undefined ? f.base_path : '';
+        this.basePath = f.base_path!==undefined ? f.base_path : 'tablefilter/';
         this.extensionsPath = f.extensions_path || this.basePath+'extensions/';
 
         /*** filter types ***/
@@ -190,7 +192,7 @@ export class TableFilter{
 
         /*** filters' grid appearance ***/
         //stylesheet file
-        this.stylesheet = f.stylesheet || this.basePath+'filtergrid.css';
+        this.stylesheet = f.stylesheet || this.basePath+'tablefilter.css';
         this.stylesheetId = this.id + '_style';
         //defines css class for filters row
         this.fltsRowCssClass = f.flts_row_css_class || 'fltrow';
@@ -386,12 +388,12 @@ export class TableFilter{
         this.sortConfig.name = this.sortConfig['name']!==undefined ?
             f.sort_config.name : 'sortabletable';
         this.sortConfig.src = this.sortConfig['src']!==undefined ?
-            f.sort_config.src : this.extensionsPath+'sortabletable/' +
+            f.sort_config.src : this.extensionsPath+'sort/' +
             'sortabletable.js';
         this.sortConfig.adapterSrc =
             this.sortConfig['adapter_src']!==undefined ?
             f.sort_config.adapter_src :
-            this.extensionsPath+'sortabletable/adapterSortabletable.js';
+            this.extensionsPath+'sort/adapterSortabletable.js';
         this.sortConfig.initialize =
             this.sortConfig['initialize']!==undefined ?
                 f.sort_config.initialize :
@@ -553,7 +555,7 @@ export class TableFilter{
             (f.themes && types.isObj(f.themes))) ? true : false;
         this.themes = this.hasThemes ? f.themes : null;
         //themes path
-        this.themesPath = f.themes_path || this.basePath+'TF_Themes/';
+        this.themesPath = f.themes_path || this.basePath+'themes/';
 
         // Features registry
         this.Cpt = {
@@ -1548,8 +1550,8 @@ export class TableFilter{
         // });
 
         this.loadExtension({
-            name: 'adapterSortabletable.js',
-            path: './extensions/sortabletable'
+            name: 'sort'/*,
+            path: './extensions/sort/sort.js'*/
         });
     }
 
@@ -3380,8 +3382,10 @@ export class TableFilter{
     getFilterableRowsNb(){
         return this.getRowsNb(false);
     }
-
 }
+
+TableFilter.Paging = Paging;
+TableFilter.GridLayout = GridLayout;
 
 function removeNbFormat(data, format){
     if(!data){
@@ -3512,3 +3516,4 @@ function setOuterHtml(){
 //     }// for i
 // }
 /*===END removable section===========================*/
+

@@ -4,7 +4,6 @@
     <title>HTML Table Filter Generator</title>
 </head>
 <body>
-    <div style="width: 500px;">
     <table id="demo" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -12,10 +11,10 @@
                 <th>Destination</th>
                 <th>Road Distance (km)</th>
                 <th>By Air (hrs)</th>
-                <th>By Rail (hrs)</th>
+                <th width="15%">By Rail (hrs)</th>
             </tr>
         </thead>
-        <!-- <tfoot>
+        <tfoot>
             <tr>
                 <td>Tot:</td>
                 <td></td>
@@ -23,7 +22,7 @@
                 <td id="sum2"></td>
                 <td></td>
             </tr>
-        </tfoot> -->
+        </tfoot>
         <tbody>
             <tr>
                 <td><strong>Sydney</strong></td>
@@ -76,69 +75,45 @@
             </tr>
         </tbody>
     </table>
-    </div>
 
-    <script type="text/javascript" src="../dist/tablefilter.js"></script>
+    <script type="text/javascript" src="../dist/tablefilter/tablefilter.js"></script>
     <script>
-        // var table = document.getElementById('demo');
-        // var totRowIndex = table.getElementsByTagName("tr").length;
+        var table = document.getElementById('demo');
+        var totRowIndex = table.getElementsByTagName("tr").length;
 
         var tf = new TableFilter("demo", {
             col_0: 'select',
-            col_2: 'multiple',
             col_3: 'checklist',
-            base_path: '../dist/',
-            loader: true,
+            base_path: '../dist/tablefilter/',
             rows_counter: true,
             enable_default_theme: true,
-            // slc_filling_method: 'innerhtml',
+            paging: false,
+            alternate_rows: true,
+            highlight_keywords: true,
+            match_case: false,
+            remember_grid_values: true,
+            btn_reset: true,
+            grid_layout: false,
             sort: true,
             sort_config: {
                 sort_types: ['string','string','number','number','number']
             },
-            paging: false,
-            paging_length: 4,
-            // page_selector_type: 'input',
-            results_per_page: ['Results per page', [2,4,6]],
-            remember_grid_values: true,
-            // remember_page_number: true,
-            // remember_page_length: true,
-            fill_slc_on_demand: false,
-            linked_filters: false,
-            popup_filters: false,
-            alternate_rows: true,
-            highlight_keywords: true,
-            match_case: false,
-            btn_reset: true,
-            status_bar: true,
-            watermark: [null, 'Filter column...', null, null, 'Helo'],
-            selectable: false,
-            editable: false,
-            ezEditTable_config:{
-                default_selection: 'both',
-                loadStylesheet: true
-            },
-            grid_layout: true,
-            grid_width: '600px',
-            // grid_height: '200px',
-            on_before_show_msg: function(tf){
-                // console.log('on_before_show_msg');
-            },
 
-            // rows_always_visible: [totRowIndex],
-            // col_operation: {
-            //     id: ["sum1", "sum2"],
-            //     col: [2, 3],
-            //     operation: ["sum", "mean"],
-            //     write_method: ["innerhtml", 'innerhtml'],
-            //     exclude_row: [totRowIndex],
-            //     decimal_precision: [0, 2],
-            //     tot_row_index: [totRowIndex, totRowIndex]
-            // },
+            rows_always_visible: [totRowIndex],
+            col_operation: {
+                id: ["sum1", "sum2"],
+                col: [2, 3],
+                operation: ["sum", "mean"],
+                write_method: ["innerhtml", 'innerhtml'],
+                exclude_row: [totRowIndex],
+                decimal_precision: [0, 2],
+                tot_row_index: [totRowIndex, totRowIndex]
+            },
             extensions: [{
                 /*** Columns Visibility Manager extension load ***/
                 name: 'colsVisibility',
-                description: 'Columns visibility manager',
+                description: 'Columns visibility manager',/*
+                initialize: function(o){o.SetColsVisibility();}*/
                 // manager: true,
                 tick_to_hide: true,
                 // headers_table: true,
@@ -174,6 +149,5 @@
 
         tf.init();
     </script>
-    <button onclick="javascript:tf.ExtRegistry.colsVisibility.toggleCol(2);">Toggle col 2</button>
 </body>
 </html>

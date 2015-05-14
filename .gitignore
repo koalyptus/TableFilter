@@ -1,7 +1,6 @@
 node_modules
 npm-debug.log
-src/extensions/ezEditTable
-dist/extensions/ezEditTable
+build
 *.js.map
 .codio
 .settings

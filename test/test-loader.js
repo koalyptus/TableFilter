@@ -1,21 +1,18 @@
-requirejs(['test-config', '../src/tablefilter'], function(config, TableFilter){
 
-    QUnit.start();
+var tf = new TableFilter('demo', {
+    base_path: '../dist/tablefilter/',
+    loader: true
+});
+tf.init();
 
-    var dom = require('dom').Dom,
-        Loader = require('modules/loader').Loader;
-
-    var tf = new TableFilter('demo', {
-        loader: true
-    });
-    tf.init();
-
-    module('Sanity checks');
-    test('Loader component', function() {
-        var loader = tf.Cpt.loader;
-        deepEqual(loader instanceof Loader, true, 'Loader constructor');
-        notEqual(loader, null, 'Loader instanciated');
-        notEqual(dom.id(loader.prfxLoader+tf.id), null, 'Loader DOM container');
-    });
-
+module('Sanity checks');
+test('Loader component', function() {
+    var loader = tf.Cpt.loader;
+    notEqual(loader, null, 'Loader instanciated');
+    console.log(document.getElementById(loader.prfxLoader+tf.id));
+    notEqual(
+        document.getElementById(loader.prfxLoader+tf.id),
+        null,
+        'Loader DOM container'
+    );
 });

@@ -125,8 +125,10 @@ export default class ColsVisibility{
         }
 
         //Loads extension stylesheet
+        // tf.includeFile(
+        //     f.name+'Style', this.path +'/'+ this.stylesheet, null, 'link');
         tf.includeFile(
-            f.name+'Style', this.path +'/'+ this.stylesheet, null, 'link');
+            f.name+'Style', tf.basePath + this.stylesheet, null, 'link');
 
         this.tf = tf;
     }

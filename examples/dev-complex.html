@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HTML Table Filter Generator</title>
+</head>
+<body>
+    <div style="width: 500px;">
+    <table id="demo" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>Destination</th>
+                <th>Road Distance (km)</th>
+                <th>By Air (hrs)</th>
+                <th>By Rail (hrs)</th>
+            </tr>
+        </thead>
+        <!-- <tfoot>
+            <tr>
+                <td>Tot:</td>
+                <td></td>
+                <td id="sum1"></td>
+                <td id="sum2"></td>
+                <td></td>
+            </tr>
+        </tfoot> -->
+        <tbody>
+            <tr>
+                <td><strong>Sydney</strong></td>
+                <td>Adelaide</td>
+                <td>1412</td>
+                <td>1.4</td>
+                <td>25.3</td>
+            </tr>
+            <tr>
+                <td><strong>Sydney</strong></td>
+                <td>Brisbane</td>
+                <td>982</td>
+                <td>1.5</td>
+                <td>16</td>
+            </tr>
+            <tr>
+                <td><strong>Sydney</strong></td>
+                <td>Canberra</td>
+                <td>286</td>
+                <td>.6</td>
+                <td>4.3</td>
+            </tr>
+            <tr>
+                <td><strong>Sydney</strong></td>
+                <td>Melbourne</td>
+                <td>872</td>
+                <td>1.1</td>
+                <td>10.5</td>
+            </tr>
+            <tr>
+                <td><strong>Adelaide</strong></td>
+                <td>Perth</td>
+                <td>2781</td>
+                <td>3.1</td>
+                <td>38</td>
+            </tr>
+            <tr>
+                <td><strong>Adelaide</strong></td>
+                <td>Alice Springs</td>
+                <td>1533</td>
+                <td>2</td>
+                <td>20.25</td>
+            </tr>
+            <tr>
+                <td><strong>Adelaide</strong></td>
+                <td>Brisbane</td>
+                <td>2045</td>
+                <td>2.15</td>
+                <td>40</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <script type="text/javascript" src="../build/tablefilter/tablefilter.js"></script>
+    <script>
+        // var table = document.getElementById('demo');
+        // var totRowIndex = table.getElementsByTagName("tr").length;
+
+        var tf = new TableFilter("demo", {
+            col_0: 'select',
+            col_2: 'multiple',
+            col_3: 'checklist',
+            base_path: '../build/tablefilter/',
+            loader: true,
+            rows_counter: true,
+            enable_default_theme: true,
+            // slc_filling_method: 'innerhtml',
+            sort: true,
+            sort_config: {
+                sort_types: ['string','string','number','number','number']
+            },
+            paging: false,
+            paging_length: 4,
+            // page_selector_type: 'input',
+            results_per_page: ['Results per page', [2,4,6]],
+            remember_grid_values: true,
+            // remember_page_number: true,
+            // remember_page_length: true,
+            fill_slc_on_demand: false,
+            linked_filters: false,
+            popup_filters: false,
+            alternate_rows: true,
+            highlight_keywords: true,
+            match_case: false,
+            btn_reset: true,
+            status_bar: true,
+            watermark: [null, 'Filter column...', null, null, 'Helo'],
+            selectable: false,
+            editable: false,
+            ezEditTable_config:{
+                default_selection: 'both',
+                loadStylesheet: true
+            },
+            grid_layout: true,
+            grid_width: '600px',
+            // grid_height: '200px',
+            on_before_show_msg: function(tf){
+                // console.log('on_before_show_msg');
+            },
+
+            // rows_always_visible: [totRowIndex],
+            // col_operation: {
+            //     id: ["sum1", "sum2"],
+            //     col: [2, 3],
+            //     operation: ["sum", "mean"],
+            //     write_method: ["innerhtml", 'innerhtml'],
+            //     exclude_row: [totRowIndex],
+            //     decimal_precision: [0, 2],
+            //     tot_row_index: [totRowIndex, totRowIndex]
+            // },
+            extensions: [{
+                /*** Columns Visibility Manager extension load ***/
+                name: 'colsVisibility',
+                description: 'Columns visibility manager',
+                // manager: true,
+                tick_to_hide: true,
+                // headers_table: true,
+                // container_target_id: 'test_cont',
+                // headers_text: ['1','2','3','4','5','6'],
+                // btn_target_id: 'test_cont',
+                // btn_text: 'Hola',
+                // btn_html: '<button>Columns</button>',
+                // btn_css_class: 'test',
+                // btn_close_text: 'jj',
+                // btn_close_html: '<button>close</button>',
+                // btn_close_css_class: 'test',
+                // stylesheet: 'hola.css',
+                // cont_css_class: 'test',
+                // checklist_item_css_class: 'test',
+                // at_start: [0,1,2,3,4],
+                // enable_hover: true,
+                enable_tick_all: true
+                // ,
+                // tick_all_text: 'Hola',
+                // text: 'tutu',
+                // on_loaded: function(){ console.log(arguments); },
+                // on_before_open: function(){ console.log('on_before_open', arguments); },
+                // on_after_open: function(){ console.log('on_after_open',arguments); },
+                // on_before_close: function(){ console.log('on_before_close',arguments); },
+                // on_after_close: function(){ console.log('on_after_close',arguments); },
+                // on_before_col_hidden: function(){ console.log('on_before_col_hidden',arguments); },
+                // on_after_col_hidden: function(){ console.log('on_after_col_hidden',arguments); },
+                // on_before_col_displayed: function(){ console.log('on_before_col_displayed',arguments); },
+                // on_after_col_displayed: function(){ console.log('on_after_col_displayed',arguments); }
+            }]
+        });
+
+        tf.init();
+    </script>
+    <button onclick="javascript:tf.ExtRegistry.colsVisibility.toggleCol(2);">Toggle col 2</button>
+</body>
+</html>

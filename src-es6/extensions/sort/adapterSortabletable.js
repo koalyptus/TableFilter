@@ -4,7 +4,6 @@ import {Arr} from '../../array';
 import {Event} from '../../event';
 import {DateHelper} from '../../date';
 import {Helpers} from '../../helpers';
-import 'script!sortabletable';
 
 export default class AdapterSortableTable{
 
