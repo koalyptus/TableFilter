@@ -4,6 +4,7 @@ var table = document.getElementById('demo');
 var totRowIndex = table.getElementsByTagName('tr').length;
 
 var tf = new TableFilter('demo', {
+    base_path: '../dist/tablefilter/',
     rows_always_visible: [totRowIndex],
     col_operation: {
         id: ['sum1', 'sum2'],

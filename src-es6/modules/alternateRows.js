@@ -23,7 +23,6 @@ export class AlternateRows{
         if(!this.tf.hasGrid() && !this.tf.isFirstLoad){
             return;
         }
-        var rows = this.tf.tbl.rows;
         var noValidRowsIndex = this.tf.validRowsIndex===null;
         //1st index
         var beginIndex = noValidRowsIndex ? this.tf.refRow : 0;
@@ -80,7 +79,6 @@ export class AlternateRows{
         if(!this.tf.hasGrid()){
             return;
         }
-        var row = this.tf.tbl.rows;
         for(var i=this.tf.refRow; i<this.tf.nbRows; i++){
             this.removeRowBg(i);
         }

@@ -2,8 +2,12 @@ module.exports = function (grunt) {
 
     var webpack = require('webpack');
     var webpackConfig = require('./webpack.config.js');
-    var pkg = grunt.file.readJSON('package.json');
-    var version = pkg.version;
+    var fs = require('fs');
+    var path = require('path');
+    // var pkg = grunt.file.readJSON('package.json');
+    // var version = pkg.version;
+    var testDir = 'test';
+    var testHost = 'http://localhost:8080/';
 
     grunt.initConfig({
 
@@ -18,7 +22,18 @@ module.exports = function (grunt) {
         },
 
         qunit: {
-            files: ['test/**/*.html']
+            // files: ['test/**/*.html'],
+            // urls: ['http://localhost:9000/test/test.html']
+            all: {
+                options: {
+                    urls: getTestFiles(testDir, testHost)
+                }
+            },
+            only: {
+                options: {
+                    urls: []
+                }
+            }
         },
 
         copy: {
@@ -39,7 +54,7 @@ module.exports = function (grunt) {
         'webpack-dev-server': {
             options: {
                 webpack: webpack.dev,
-                publicPath: '/dev/'
+                publicPath: '/build/'
             },
             start: {
                 keepAlive: true,
@@ -96,7 +111,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'src-es6',
                     src: ['**/*.js'],
-                    dest: 'dev/tablefilter'
+                    dest: 'build/tablefilter'
                 }]
             }
         }
@@ -110,21 +125,86 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-babel');
 
     // The development server (the recommended option for development)
-    grunt.registerTask('dev-server', ['webpack-dev-server:start']);
+    grunt.registerTask('server', ['webpack-dev-server:start']);
 
     // Build and watch cycle (another option for development)
     // Advantage: No server required, can run app from filesystem
     // Disadvantage: Requests are not blocked until bundle is available,
     //               can serve an old app on too fast refresh
-    grunt.registerTask('dev', ['jshint', 'webpack:build', 'copy:build'/*, 'watch:app'*/]);
+    grunt.registerTask('dev', ['jshint', 'webpack:build', 'copy:build']);
 
     // Production build
     grunt.registerTask('dist', ['jshint', 'webpack:dist', 'copy:dist']);
 
-    // Tests
-    grunt.registerTask('test', ['qunit']);
-
     // Transpile with Babel
     grunt.registerTask('transpile', ['babel']);
 
+    // Tests
+    grunt.registerTask('test', ['qunit:all']);
+
+    // Custom task running QUnit tests for specified files.
+    // Usage: grunt test-only:test.html,test-help.html
+    grunt.registerTask('test-only',
+        'A task that runs only specified tests.',
+        function(tests) {
+            if(!tests) {
+                return;
+            }
+            tests = tests.split(',');
+            var res = [];
+
+            tests.forEach(function(itm) {
+                var filePath = path.resolve(testDir, itm);
+                var parts = filePath.split(path.sep);
+                res.push(buildTestUrl(testHost, testDir, parts));
+            });
+
+            grunt.config('qunit.only.options.urls', res);
+            grunt.task.run('qunit:only');
+    });
+
+    function isTestFile(pth) {
+        var allowedExts = ['.html', '.htm'];
+        for(var i=0, len=allowedExts.length; i<len; i++){
+            var ext = allowedExts[i];
+            if(pth.indexOf(ext) !== -1){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function buildTestUrl(host, testDir, parts) {
+        var idx = parts.indexOf(testDir);
+        var fileIdx = parts.length;
+        var relParts = parts.slice(idx, fileIdx);
+        return host.concat(relParts.join('/'));
+    }
+
+    // Returns the list of test files from the test folder for QUnit
+    function getTestFiles(testDir, host) {
+
+        var getFiles = function(dir, host) {
+            var res = [];
+            var items = fs.readdirSync(dir);
+
+            items.forEach(function(itm){
+                var fileOrDir = path.resolve(dir, itm);
+                if(isTestFile(fileOrDir)) {
+                    var parts = fileOrDir.split(path.sep);
+                    res.push(buildTestUrl(host, testDir, parts));
+                } else {
+                    if(fs.lstatSync(fileOrDir).isDirectory()) {
+                        res = res.concat(getFiles(fileOrDir, host));
+                    }
+                }
+            });
+
+            return res;
+        };
+
+        return getFiles(testDir, host);
+    }
+
 };
+

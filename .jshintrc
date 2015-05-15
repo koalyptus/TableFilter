@@ -11,14 +11,14 @@
   // Reserved words
   "-W024": true,
   "curly": true,
-  //"indent": 4,
+  "indent": 4,
   //"eqeqeq": true,
   "es3": true,
   "esnext": true,
+  "unused": true,
 
   //"maxlen" : 80,
   "globals": {
-    "System": true,
     "Object": true,
     "module": true,
     "require": true,

@@ -232,12 +232,11 @@ export class CheckList{
      * Add checklist options
      * @param {Number} colIndex  Column index
      * @param {Object} ul        Ul element
-     * @param {String} separator Data separator
      */
-    addChecks(colIndex, ul, separator){
+    addChecks(colIndex, ul){
         var tf = this.tf;
         var chkCt = this.addTChecks(colIndex, ul);
-        var flts_values = [], fltArr = []; //remember grid values
+        var fltArr = []; //remember grid values
         var store = tf.Cpt.store;
         var tmpVal = store ?
                 store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;

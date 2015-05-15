@@ -75,8 +75,7 @@ export class Dropdown{
         }
         var slc = !isExternal ? Dom.id(slcId) : Dom.id(extSlcId),
             rows = tf.tbl.rows,
-            matchCase = tf.matchCase,
-            fillMethod = Str.lower(this.slcFillingMethod);
+            matchCase = tf.matchCase;
 
         //custom select test
         this.isCustom = (tf.hasCustomSlcOptions &&

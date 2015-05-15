@@ -1,6 +1,5 @@
 import {Dom} from '../dom';
 import {Types} from '../types';
-import {Helpers} from '../helpers';
 import {Event} from '../event';
 
 export class GridLayout{

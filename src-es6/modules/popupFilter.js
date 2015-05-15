@@ -198,7 +198,6 @@ export class PopupFilter{
      * @param  {Boolean} active   Apply active state
      */
     buildIcon(colIndex, active){
-        var activeImg = Types.isUndef(active) ? true : active;
         if(this.popUpFltImgs[colIndex]){
             this.popUpFltImgs[colIndex].src = active ?
                 this.popUpImgFltActive : this.popUpImgFlt;

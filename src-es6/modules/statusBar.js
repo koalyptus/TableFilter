@@ -1,5 +1,4 @@
 import {Dom} from '../dom';
-import {Event} from '../event';
 import {Types} from '../types';
 import {Helpers} from '../helpers';
 

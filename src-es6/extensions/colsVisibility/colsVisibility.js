@@ -133,8 +133,7 @@ export default class ColsVisibility{
         this.tf = tf;
     }
 
-    toggle(evt){
-        var tf = this.tf;
+    toggle(){
         var contDisplay = this.contEl.style.display;
         var onBeforeOpen = this.onBeforeOpen;
         var onBeforeClose = this.onBeforeClose;
@@ -277,7 +276,7 @@ export default class ColsVisibility{
             ul.appendChild(li);
             li.check.checked = !this.tickToHide;
 
-            Event.add(li.check, 'click', (evt)=> {
+            Event.add(li.check, 'click', ()=> {
                 for(var h = 0; h < headerRow.cells.length; h++){
                     var itm = Dom.id('col_'+h+'_'+tf.id);
                     if(itm && li.check.checked !== itm.checked){
@@ -351,7 +350,6 @@ export default class ColsVisibility{
     setHidden(colIndex, hide){
         var tf = this.tf;
         var tbl = tf.tbl;
-        var col = Dom.tag(tbl, 'col')[colIndex];
 
         if(this.onBeforeColHidden && hide){
             this.onBeforeColHidden.call(null, this, colIndex);

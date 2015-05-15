@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <title>HTML Table Filter Generator</title>
-    <link href="../dev/filtergrid.css" rel="stylesheet" type="text/css">
     <script type="text/javascript">
         var tf;
     </script>
@@ -93,14 +92,13 @@
 
     <script src="../libs/requirejs/require.js"></script>
     <script>
-        requirejs(['../dev/tablefilter'], function(mod){
-            // Your logic here
+        requirejs(['../build/tablefilter/tablefilter'], function(mod){
             var TableFilter = mod.TableFilter;
             tf = new TableFilter("demo", {
                 col_0: 'select',
                 col_2: 'multiple',
                 col_3: 'checklist',
-                base_path: '../build/tablefilter',
+                base_path: '../build/tablefilter/',
                 loader: false,
                 rows_counter: true,
                 enable_default_theme: false,
@@ -141,7 +139,7 @@
                 extensions: [{
                     /*** Columns Visibility Manager extension load ***/
                     name: 'colsVisibility',
-                    path: '../build/extensions/colsVisibility',
+                    // path: './extensions/colsVisibility',
                     description: 'Columns visibility manager',/*
                     initialize: function(o){o.SetColsVisibility();}*/
                     // manager: true,
@@ -180,6 +178,6 @@
             tf.init();
         });
     </script>
-    <button onclick="javascript:tf.ExtRegistry.ColsVisibility.toggleCol(2);">Toggle col 2</button>
+    <button onclick="javascript:tf.ExtRegistry.colsVisibility.toggleCol(2);">Toggle col 2</button>
 </body>
 </html>

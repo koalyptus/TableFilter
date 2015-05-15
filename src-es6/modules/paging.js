@@ -1,7 +1,6 @@
 import {Dom} from '../dom';
 import {Types} from '../types';
 import {Str} from '../string';
-import {Helpers} from '../helpers';
 import {Event} from '../event';
 
 export class Paging{

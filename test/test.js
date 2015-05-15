@@ -1,6 +1,8 @@
 (function(win, TableFilter) {
 
-    var tf = new TableFilter('demo');
+    var tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/'
+    });
     tf.init();
 
     module("Sanity checks");

@@ -16,9 +16,7 @@ import {Str as str} from './string';
 import {Cookie as cookie} from './cookie';
 import {Types as types} from './types';
 import {Arr as array} from './array';
-import {Helpers as hlp} from './helpers';
 import {DateHelper as dateHelper} from './date';
-import {Sort} from './sort';
 
 // Modules
 import {Store} from './modules/store';
@@ -40,8 +38,6 @@ var global = window,
     isValidDate = dateHelper.isValid,
     formatDate = dateHelper.format,
     doc = global.document;
-
-// export {Paging, GridLayout};
 
 export class TableFilter{
 
@@ -75,7 +71,7 @@ export class TableFilter{
                 'HTML table not found.');
         }
 
-        if(arguments.length>1){
+        if(arguments.length > 1){
             for(var i=0; i<arguments.length; i++){
                 var arg = arguments[i];
                 var argtype = typeof arg;
@@ -99,7 +95,7 @@ export class TableFilter{
         catch(e){ this.nbCells = this.getCellsNb(0); }
 
         //default script base path
-        this.basePath = f.base_path!==undefined ? f.base_path : 'tablefilter/';
+        this.basePath = f.base_path || 'tablefilter/';
         this.extensionsPath = f.extensions_path || this.basePath+'extensions/';
 
         /*** filter types ***/
@@ -385,31 +381,18 @@ export class TableFilter{
         //indicates if sort is set (used in tfAdapter.sortabletable.js)
         this.isSortEnabled = false;
         this.sortConfig = f.sort_config || {};
-        this.sortConfig.name = this.sortConfig['name']!==undefined ?
-            f.sort_config.name : 'sortabletable';
-        this.sortConfig.src = this.sortConfig['src']!==undefined ?
-            f.sort_config.src : this.extensionsPath+'sort/' +
-            'sortabletable.js';
-        this.sortConfig.adapterSrc =
-            this.sortConfig['adapter_src']!==undefined ?
-            f.sort_config.adapter_src :
-            this.extensionsPath+'sort/adapterSortabletable.js';
-        this.sortConfig.initialize =
-            this.sortConfig['initialize']!==undefined ?
-                f.sort_config.initialize :
-                function(o){
-                    // if(o.SetSortTable){ o.SetSortTable(); }
-                };
-        this.sortConfig.sortTypes =
-            types.isArray(this.sortConfig['sort_types']) ?
-            f.sort_config.sort_types : [];
-        this.sortConfig.sortCol = this.sortConfig['sort_col']!==undefined ?
-            f.sort_config.sort_col : null;
-        this.sortConfig.asyncSort =
-            this.sortConfig['async_sort']===true ? true : false;
+        this.sortConfig.name = this.sortConfig.name || 'sort';
+        // this.sortConfig.src = this.sortConfig.src || this.extensionsPath +
+        //     'sort/sortabletable.js';
+        this.sortConfig.path = this.sortConfig.path || null;
+        this.sortConfig.sortTypes = types.isArray(this.sortConfig.sort_types) ?
+            this.sortConfig.sort_types : [];
+        this.sortConfig.sortCol = this.sortConfig.sort_col || null;
+        this.sortConfig.asyncSort = this.sortConfig.async_sort===true ?
+            true : false;
         this.sortConfig.triggerIds =
-            types.isArray(this.sortConfig['sort_trigger_ids']) ?
-            f.sort_config.sort_trigger_ids : [];
+            types.isArray(this.sortConfig.sort_trigger_ids) ?
+            this.sortConfig.sort_trigger_ids : [];
 
         /*** ezEditTable extension ***/
         //enables/disables table selection feature
@@ -651,14 +634,14 @@ export class TableFilter{
             /*====================================================
                 - onkeydown event for input filters
             =====================================================*/
-            onKeyDown: function(e) {
+            onKeyDown: function() {
                 if(!o.onKeyUp) { return; }
                 o.isUserTyping = true;
             },
             /*====================================================
                 - onblur event for input filters
             =====================================================*/
-            onInpBlur: function(e) {
+            onInpBlur: function() {
                 if(o.onKeyUp){
                     o.isUserTyping = false;
                     global.clearInterval(o.onKeyUpTimer);
@@ -714,7 +697,7 @@ export class TableFilter{
             =====================================================*/
             onSlcChange: function(e) {
                 if(!o.activeFlt){ return; }
-                var colIndex = o.activeFlt.getAttribute('colIndex');
+                // var colIndex = o.activeFlt.getAttribute('colIndex');
                 //Checks filter is a checklist and caller is not null
                 // if(o.activeFlt && colIndex &&
                 //     o['col'+colIndex]===o.fltTypeCheckList &&
@@ -741,7 +724,7 @@ export class TableFilter{
             /*====================================================
                 - onclick event for checklist filter container
             =====================================================*/
-            onCheckListFocus: function(e) {
+            onCheckListFocus: function() {
                 o.activeFilterId = this.firstChild.getAttribute('id');
                 o.activeFlt = dom.id(o.activeFilterId);
             },
@@ -1550,8 +1533,9 @@ export class TableFilter{
         // });
 
         this.loadExtension({
-            name: 'sort'/*,
-            path: './extensions/sort/sort.js'*/
+            name: this.sortConfig.name,
+            path: this.sortConfig.path
+            // path: './extensions/sort/sort.js'
         });
     }
 
@@ -1770,7 +1754,7 @@ export class TableFilter{
 
             //Page navigation has to be enforced whenever selected row is out of
             //the current page range
-            var onBeforeSelection = function(et, selectedElm, e){
+            var onBeforeSelection = function(et, selectedElm){
                 var row = et.defaultSelection !== 'row' ?
                     selectedElm.parentNode : selectedElm;
                 if(o.paging){
@@ -1807,7 +1791,7 @@ export class TableFilter{
 
             //Selected row needs to be visible when paging is activated
             if(o.paging){
-                o.onAfterChangePage = function(tf, i){
+                o.onAfterChangePage = function(tf){
                     var et = tf.ExtRegistry.ezEditTable;
                     var slc = et.Selection;
                     var row = slc.GetActiveRow();
@@ -2152,8 +2136,8 @@ export class TableFilter{
             re_eq = new RegExp(this.eqOperator),
             re_st = new RegExp(this.stOperator),
             re_en = new RegExp(this.enOperator),
-            re_an = new RegExp(this.anOperator),
-            re_cr = new RegExp(this.curExp),
+            // re_an = new RegExp(this.anOperator),
+            // re_cr = new RegExp(this.curExp),
             re_em = this.emOperator,
             re_nm = this.nmOperator,
             re_re = new RegExp(str.rgxEsc(this.rgxOperator));
@@ -2188,7 +2172,7 @@ export class TableFilter{
                 hasDF = re_d.test(sA),
                 hasEQ = re_eq.test(sA),
                 hasLK = re_lk.test(sA),
-                hasAN = re_an.test(sA),
+                // hasAN = re_an.test(sA),
                 hasST = re_st.test(sA),
                 hasEN = re_en.test(sA),
                 hasEM = (re_em === sA),
@@ -2644,7 +2628,7 @@ export class TableFilter{
         if(!this.fltGrid){
             return;
         }
-        return this.fltIds[i];
+        return this.fltIds[index];
     }
 
     /*====================================================
@@ -2862,13 +2846,13 @@ export class TableFilter{
             selects: executes filtering when multiple
             select populated... IE only!
     =====================================================*/
-    setFilterValue(index, searcharg, doFilter){
+    setFilterValue(index, searcharg/*, doFilter*/){
         if((!this.fltGrid && !this.isFirstLoad) ||
             !this.getFilterElement(index)){
             return;
         }
         var slc = this.getFilterElement(index),
-            execFilter = doFilter===undefined ? true : doFilter,
+            // execFilter = doFilter===undefined ? true : doFilter,
             fltColType = this['col'+index];
         searcharg = searcharg===undefined ? '' : searcharg;
 
@@ -2878,8 +2862,8 @@ export class TableFilter{
         }
         //multiple selects
         else if(fltColType === this.fltTypeMulti){
-            var s = searcharg.split(' '+this.orOperator+' '),
-                ct = 0; //keywords counter
+            var s = searcharg.split(' '+this.orOperator+' ');
+            // var ct = 0; //keywords counter
             for(var j=0; j<slc.options.length; j++){
                 if(s==='' || s[0]===''){
                     slc.options[j].selected = false;
@@ -2907,9 +2891,11 @@ export class TableFilter{
         //checklist
         else if(fltColType === this.fltTypeCheckList){
             searcharg = str.matchCase(searcharg, this.matchCase);
-            var sarg = searcharg.split(' '+this.orOperator+' '),
-                fltValue = slc.setAttribute('value',''),
-                fltIndex = slc.setAttribute('indexes','');
+            var sarg = searcharg.split(' '+this.orOperator+' ');
+
+            slc.setAttribute('value','');
+            slc.setAttribute('indexes','');
+
             for(var k=0; k<dom.tag(slc,'li').length; k++){
                 var li = dom.tag(slc,'li')[k],
                     lbl = dom.tag(li,'label')[0],
@@ -3384,8 +3370,21 @@ export class TableFilter{
     }
 }
 
-TableFilter.Paging = Paging;
+TableFilter.Cookie = cookie;
+TableFilter.Store = Store;
 TableFilter.GridLayout = GridLayout;
+TableFilter.Loader = Loader;
+TableFilter.HighlightKeyword = HighlightKeyword;
+TableFilter.PopupFilter = PopupFilter;
+TableFilter.Dropdown = Dropdown;
+TableFilter.CheckList = CheckList;
+TableFilter.RowsCounter = RowsCounter;
+TableFilter.StatusBar = StatusBar;
+TableFilter.Paging = Paging;
+TableFilter.ClearButton = ClearButton;
+TableFilter.Help = Help;
+TableFilter.AlternateRows = AlternateRows;
+TableFilter.ColOps = ColOps;
 
 function removeNbFormat(data, format){
     if(!data){

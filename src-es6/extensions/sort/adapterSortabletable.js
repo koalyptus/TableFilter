@@ -205,7 +205,6 @@ export default class AdapterSortableTable{
             }
             stt.headersRow = tf.headersRow;
             var cells = stt.tHead.rows[stt.headersRow].cells;
-            var doc = stt.tHead.ownerDocument || stt.tHead.document;
             stt.sortTypes = oSortTypes || [];
             var l = cells.length;
             var img, c;

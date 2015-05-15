@@ -1,5 +1,6 @@
 
 var tf = new TableFilter('demo', {
+    base_path: '../dist/tablefilter/',
     grid_layout: true,
     sort: false
 });

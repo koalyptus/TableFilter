@@ -1,5 +1,6 @@
 
 var tf = new TableFilter('demo', {
+    base_path: '../dist/tablefilter/',
     help_instructions: true
 });
 tf.init();
