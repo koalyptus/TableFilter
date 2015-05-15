@@ -175,7 +175,7 @@ export class TableFilter{
         //table container div for fixed headers (IE only)
         this.contDiv = null;
 
-        //defines css class for div containing paging elements, rows counter etc.
+        //defines css class for div containing paging elements, rows counter etc
         this.infDivCssClass = f.inf_div_css_class || 'inf';
         //defines css class for left div
         this.lDivCssClass = f.left_div_css_class || 'ldiv';
@@ -534,11 +534,10 @@ export class TableFilter{
         this.enableDefaultTheme = f.enable_default_theme===true ?
             true : false;
         //imports themes
-        this.hasThemes = (f.enable_default_theme ||
-            (f.themes && types.isObj(f.themes))) ? true : false;
-        this.themes = this.hasThemes ? f.themes : null;
+        this.hasThemes = (f.enable_default_theme || types.isArray(f.themes));
+        this.themes = f.themes || [];
         //themes path
-        this.themesPath = f.themes_path || this.basePath+'themes/';
+        this.themesPath = f.themes_path || this.basePath + 'themes/';
 
         // Features registry
         this.Cpt = {
@@ -784,8 +783,7 @@ export class TableFilter{
         }
 
         //loads stylesheet if not imported
-        //Issues with browsers != IE, IE rules in this case
-        this.includeFile(this.stylesheetId, this.stylesheet, null, 'link');
+        this.import(this.stylesheetId, this.stylesheet, null, 'link');
 
         //loads theme
         if(this.hasThemes){ this._loadThemes(); }
@@ -904,7 +902,8 @@ export class TableFilter{
                     //drop-down filters
                     if(col===this.fltTypeSlc || col===this.fltTypeMulti){
                         if(!this.Cpt.dropdown){
-                            // var Dropdown = require('modules/dropdown').Dropdown;
+                            // var Dropdown =
+                            //  require('modules/dropdown').Dropdown;
                             // import {Dropdown} from 'modules/dropdown';
                             this.Cpt.dropdown = new Dropdown(this);
                         }
@@ -1090,7 +1089,8 @@ export class TableFilter{
         }
         if(this.alternateBgs){
             //1st time only if no paging and rememberGridValues
-            // var AlternateRows = require('modules/alternateRows').AlternateRows;
+            // var AlternateRows = require('modules/alternateRows')
+            //  .AlternateRows;
             // import {AlternateRows} from 'modules/alternateRows';
             this.Cpt.alternateRows = new AlternateRows(this);
             this.Cpt.alternateRows.init();
@@ -1246,7 +1246,7 @@ export class TableFilter{
         var modulePath;
 
         if(name && path){
-            modulePath = ext.path + '/' + name;
+            modulePath = ext.path + name;
         } else {
             name = name.replace('.js', '');
             modulePath = './extensions/{}/{}'.replace(/{}/g, name);
@@ -1267,58 +1267,26 @@ export class TableFilter{
         - loads TF themes
     =====================================================*/
     _loadThemes(){
-        if(!this.hasThemes){
-            return;
-        }
-        if(!this.Thm){
-            /*** TF themes ***/
-            var o = this;
-            this.Thm = {
-                list: {},
-                add: function(thmName, thmDesc, thmPath, thmCallBack){
-                    var file = thmPath.split('/')[thmPath.split('/').length-1],
-                        re = new RegExp(file),
-                        path = thmPath.replace(re,'');
-                    o.Thm.list[thmName] = {
-                        name: thmName,
-                        description: thmDesc,
-                        file: file,
-                        path: path,
-                        callback: thmCallBack
-                    };
-                }
-            };
-        }
-
+        var themes = this.themes;
         //Default theme config
         if(this.enableDefaultTheme){
-            this.themes = {
-                name:['DefaultTheme'],
-                src:[this.themesPath+'Default/TF_Default.css'],
-                description:['Default Theme']
-            };
-            this.Thm.add('DefaultTheme',
-                this.themesPath+'Default/TF_Default.css', 'Default Theme');
+            var defaultTheme = { name: 'default' };
+            this.themes.push(defaultTheme);
         }
-        if(types.isArray(this.themes.name) &&
-            types.isArray(this.themes.src)){
-            var thm = this.themes;
-            for(var i=0; i<thm.name.length; i++){
-                var thmPath = thm.src[i],
-                    thmName = thm.name[i],
-                    thmInit = (thm.initialize && thm.initialize[i]) ?
-                        thm.initialize[i] : null,
-                    thmDesc = (thm.description && thm.description[i]) ?
-                        thm.description[i] : null;
-
-                //Registers theme
-                this.Thm.add(thmName, thmDesc, thmPath, thmInit);
-
-                if(!this.isImported(thmPath,'link')){
-                    this.includeFile(thmName, thmPath, null, 'link');
+        if(types.isArray(themes)){
+            for(var i=0, len=themes.length; i<len; i++){
+                var theme = themes[i];
+                var name = theme.name;
+                var path = theme.path;
+                if(name && !path){
+                    path = this.themesPath + name + '/' + name + '.css';
                 }
-                if(types.isFn(thmInit)){
-                    thmInit.call(null,this);
+                else if(!name && theme.path){
+                    name = 'theme{0}'.replace('{0}', i);
+                }
+
+                if(!this.isImported(path, 'link')){
+                    this.import(name, path, null, 'link');
                 }
             }
         }
@@ -1376,7 +1344,6 @@ export class TableFilter{
                 this.Cpt.highlightKeyword.unhighlightAll();
             }
             if(this.sort){
-                // this.RemoveSort();
                 this.ExtRegistry.sort.destroy();
             }
             if(this.loader){
@@ -1552,7 +1519,7 @@ export class TableFilter{
         if(this.isImported(ezEditConfig.src)){
             this._enableEditable();
         } else {
-            this.includeFile(
+            this.import(
                 ezEditConfig.name,
                 ezEditConfig.src,
                 this._enableEditable
@@ -1560,7 +1527,7 @@ export class TableFilter{
         }
         if(ezEditConfig.loadStylesheet &&
             !this.isImported(ezEditConfig.stylesheet, 'link')){
-            this.includeFile(
+            this.import(
                 ezEditConfig.stylesheetName,
                 ezEditConfig.stylesheet, null, 'link'
             );
@@ -3004,7 +2971,8 @@ export class TableFilter{
         }
         this.nbRows = this.getRowsNb(); //in case table is refreshed
         this.remove();
-        window['tf_'+this.id] = new TableFilter(this.id, this.startRow, configObj);
+        window['tf_'+this.id] = new TableFilter(
+            this.id, this.startRow, configObj);
         this.isFirstLoad = true;
         this.fltIds = [];
         this.init();
@@ -3199,7 +3167,7 @@ export class TableFilter{
         return imported;
     }
 
-    includeFile(fileId, filePath, callback, type){
+    import(fileId, filePath, callback, type){
         var ftype = !type ? 'script' : type,
             imported = this.isImported(filePath, ftype);
         if(imported){

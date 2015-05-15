@@ -32,8 +32,8 @@ var DateHelper = {
               reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
               reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
         }
-        // If it doesn't conform to the right format (with either a 2 digit year or
-        // 4 digit year), fail
+        // If it doesn't conform to the right format (with either a 2 digit year
+        // or 4 digit year), fail
         if(reg1.test(dateStr) === false && reg2.test(dateStr) === false) {
             return false;
         }
@@ -79,60 +79,14 @@ var DateHelper = {
         }
         return true;
     },
-    format: function(dateStr, format){
+    format: function(dateStr, format) {
         if(!format){
             format = 'DMY';
         }
         if(!dateStr || dateStr === ''){
             return new Date(1001, 0, 1);
         }
-        var oDate, parts;
-
-        function y2kDate(yr){
-            if(yr === undefined){
-                return 0;
-            }
-            if(yr.length>2){
-                return yr;
-            }
-            var y;
-            //>50 belong to 1900
-            if(yr <= 99 && yr>50){
-                y = '19' + yr;
-            }
-            //<50 belong to 2000
-            if(yr<50 || yr === '00'){
-                y = '20' + yr;
-            }
-            return y;
-        }
-
-        function mmm2mm(mmm){
-            if(mmm === undefined){
-                return 0;
-            }
-            var mondigit;
-            var MONTH_NAMES = [
-                'january','february','march','april','may','june','july',
-                'august','september','october','november','december',
-                'jan','feb','mar','apr','may','jun','jul','aug','sep','oct',
-                'nov','dec'
-            ];
-            for(var m_i=0; m_i < MONTH_NAMES.length; m_i++){
-                    var month_name = MONTH_NAMES[m_i];
-                    if (mmm.toLowerCase() === month_name){
-                        mondigit = m_i+1;
-                        break;
-                    }
-            }
-            if(mondigit > 11 || mondigit < 23){
-                mondigit = mondigit - 12;
-            }
-            if(mondigit < 1 || mondigit > 12){
-                return 0;
-            }
-            return mondigit;
-        }
+        var oDate;
 
         switch(format.toUpperCase()){
             case 'DDMMMYYYY':
@@ -140,26 +94,80 @@ var DateHelper = {
                 oDate = new Date(y2kDate(parts[2]),mmm2mm(parts[1])-1,parts[0]);
             break;
             case 'DMY':
+                /* jshint ignore:start */
                 parts = dateStr.replace(
                     /^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
                 oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
+                /* jshint ignore:end */
             break;
             case 'MDY':
+                /* jshint ignore:start */
                 parts = dateStr.replace(
                     /^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
                 oDate = new Date(y2kDate(parts[2]),parts[0]-1,parts[1]);
+                /* jshint ignore:end */
             break;
             case 'YMD':
+                /* jshint ignore:start */
                 parts = dateStr.replace(/^((\d\d)?\d\d)([- \/.])(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])$/,'$1 $4 $6').split(' ');
                 oDate = new Date(y2kDate(parts[0]),parts[1]-1,parts[2]);
+                /* jshint ignore:end */
             break;
             default: //in case format is not correct
+                /* jshint ignore:start */
                 parts = dateStr.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
                 oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
+                /* jshint ignore:end */
             break;
         }
         return oDate;
     }
 };
+
+function y2kDate(yr){
+    if(yr === undefined){
+        return 0;
+    }
+    if(yr.length>2){
+        return yr;
+    }
+    var y;
+    //>50 belong to 1900
+    if(yr <= 99 && yr>50){
+        y = '19' + yr;
+    }
+    //<50 belong to 2000
+    if(yr<50 || yr === '00'){
+        y = '20' + yr;
+    }
+    return y;
+}
+
+function mmm2mm(mmm){
+    if(mmm === undefined){
+        return 0;
+    }
+    var mondigit;
+    var MONTH_NAMES = [
+        'january','february','march','april','may','june','july',
+        'august','september','october','november','december',
+        'jan','feb','mar','apr','may','jun','jul','aug','sep','oct',
+        'nov','dec'
+    ];
+    for(var m_i=0; m_i < MONTH_NAMES.length; m_i++){
+            var month_name = MONTH_NAMES[m_i];
+            if (mmm.toLowerCase() === month_name){
+                mondigit = m_i+1;
+                break;
+            }
+    }
+    if(mondigit > 11 || mondigit < 23){
+        mondigit = mondigit - 12;
+    }
+    if(mondigit < 1 || mondigit > 12){
+        return 0;
+    }
+    return mondigit;
+}
 
 exports.DateHelper = DateHelper;

@@ -90,7 +90,7 @@
         </table>
     </div>
 
-    <script src="../libs/requirejs/require.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
     <script>
         requirejs(['../build/tablefilter/tablefilter'], function(mod){
             var TableFilter = mod.TableFilter;
@@ -105,6 +105,7 @@
                 // slc_filling_method: 'innerhtml',
                 sort: true,
                 sort_config: {
+                    path: '../build/tablefilter/extensions/sort/',
                     sort_types: ['string','string','number','number','number']
                 },
                 paging: false,
@@ -139,7 +140,7 @@
                 extensions: [{
                     /*** Columns Visibility Manager extension load ***/
                     name: 'colsVisibility',
-                    // path: './extensions/colsVisibility',
+                    path: '../build/tablefilter/extensions/colsVisibility/',
                     description: 'Columns visibility manager',/*
                     initialize: function(o){o.SetColsVisibility();}*/
                     // manager: true,

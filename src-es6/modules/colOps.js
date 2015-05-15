@@ -264,7 +264,7 @@ export class ColOps{
                                         nbvalues===0){
                                         Dom.id(labThisCol[i]).innerHTML = '.';
                                     } else{
-                                        Dom.id(labThisCol[i]).innerHTML = result;
+                                        Dom.id(labThisCol[i]).innerHTML= result;
                                     }
                                 break;
                                 case 'setvalue':

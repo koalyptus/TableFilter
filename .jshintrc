@@ -17,7 +17,7 @@
   "esnext": true,
   "unused": true,
 
-  //"maxlen" : 80,
+  "maxlen" : 80,
   "globals": {
     "Object": true,
     "module": true,

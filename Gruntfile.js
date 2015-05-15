@@ -14,6 +14,7 @@ module.exports = function (grunt) {
         jshint: {
             src: [
                 'Gruntfile.js',
+                'webpack.config.js',
                 'src-es6/**/*.js'
             ],
             options: {
@@ -73,7 +74,7 @@ module.exports = function (grunt) {
             //     // entry: {
             //     //     tablefilter: __dirname + '/src-es6/tablefilter.js',
             //     //     colsVisibility: __dirname +
-            //     //         '/src-es6/extensions/colsVisibility/colsVisibility.js'
+            //     //     '/src-es6/extensions/colsVisibility/colsVisibility.js'
             //     // },
             //     output: {
             //         publicPath: '/src/',
@@ -137,7 +138,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', ['jshint', 'webpack:dist', 'copy:dist']);
 
     // Transpile with Babel
-    grunt.registerTask('transpile', ['babel']);
+    grunt.registerTask('dev-modules', ['babel', 'copy:build']);
 
     // Tests
     grunt.registerTask('test', ['qunit:all']);
