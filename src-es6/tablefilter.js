@@ -46,6 +46,8 @@ export class TableFilter{
      * @param {String} id Table id
      * @param {Number} row index indicating the 1st row
      * @param {Object} configuration object
+     *
+     * TODO: Accept a TABLE element or query selectors
      */
     constructor(id) {
         if(arguments.length === 0){ return; }
@@ -216,10 +218,6 @@ export class TableFilter{
         /*** filters' grid behaviours ***/
         //enables/disables enter key
         this.enterKey = f.enter_key===false ? false : true;
-        //enables/disables alternative fn call
-        this.isModFilterFn = f.mod_filter_fn===true ? true : false;
-        // used by tf_DetectKey fn
-        this.modFilterFn = this.isModFilterFn ? f.mod_filter_fn : null;
         //calls function before filtering starts
         this.onBeforeFilter = types.isFn(f.on_before_filter) ?
             f.on_before_filter : null;
@@ -382,8 +380,6 @@ export class TableFilter{
         this.isSortEnabled = false;
         this.sortConfig = f.sort_config || {};
         this.sortConfig.name = this.sortConfig.name || 'sort';
-        // this.sortConfig.src = this.sortConfig.src || this.extensionsPath +
-        //     'sort/sortabletable.js';
         this.sortConfig.path = this.sortConfig.path || null;
         this.sortConfig.sortTypes = types.isArray(this.sortConfig.sort_types) ?
             this.sortConfig.sort_types : [];
@@ -399,24 +395,21 @@ export class TableFilter{
         this.selectable = f.selectable===true ? true : false;
         //enables/disables editable table feature
         this.editable = f.editable===true ? true : false;
-        this.ezEditTableConfig = f.ezEditTable_config || {};
-        this.ezEditTableConfig.name =
-            this.ezEditTableConfig['name']!==undefined ?
-            f.ezEditTable_config.name : 'ezedittable';
-        this.ezEditTableConfig.src = this.ezEditTableConfig['src']!==undefined ?
-            f.ezEditTable_config.src :
-            this.extensionsPath+'ezEditTable/ezEditTable.js';
+        //ezEditTable configuration options
+        this.ezEditTableCfg = f.ezEditTable_config || {};
+        this.ezEditTableCfg.name = this.ezEditTableCfg.name || 'ezedittable';
+        this.ezEditTableCfg.path = this.ezEditTableCfg.path ||
+            this.extensionsPath + 'ezEditTable/ezEditTable.js';
         //ezEditTable stylesheet not imported by default as filtergrid.css
         //applies
-        this.ezEditTableConfig.loadStylesheet =
-            this.ezEditTableConfig['loadStylesheet']===true ? true : false;
-        this.ezEditTableConfig.stylesheet =
-            this.ezEditTableConfig['stylesheet'] ||
-            this.extensionsPath+'ezEditTable/ezEditTable.css';
-        this.ezEditTableConfig.stylesheetName =
-            this.ezEditTableConfig['stylesheetName']!==undefined ?
-            f.ezEditTable_config.stylesheetName : 'ezEditTableCss';
-        this.ezEditTableConfig.err = 'Failed to instantiate EditTable ' +
+        this.ezEditTableCfg.loadStylesheet =
+            this.ezEditTableCfg.loadStylesheet===true ? true : false;
+        this.ezEditTableCfg.stylesheet =
+            this.ezEditTableCfg.stylesheet || this.extensionsPath +
+                'ezEditTable/ezEditTable.css';
+        this.ezEditTableCfg.stylesheetName =
+            this.ezEditTableCfg.stylesheetName || 'ezEditTableCss';
+        this.ezEditTableCfg.err = 'Failed to instantiate EditTable ' +
             'object.\n"ezEditTable" module may not be available.';
 
         /*** onkeyup event ***/
@@ -1144,84 +1137,90 @@ export class TableFilter{
             - event name (string)
             - config object (optional literal object)
     =====================================================*/
-    EvtManager(evt, s){
-        var o = this;
-        var slcIndex = s && s.slcIndex!==undefined ? s.slcIndex : null;
-        var slcExternal = s && s.slcExternal!==undefined ?
-            s.slcExternal : false;
-        var slcId = s && s.slcId!==undefined ? s.slcId : null;
-        var pgIndex = s && s.pgIndex!==undefined ? s.pgIndex : null;
+    EvtManager(evt,
+        cfg={ slcIndex: null, slcExternal: false, slcId: null, pgIndex: null }){
+        // var o = this;
+        // var slcIndex = s && s.slcIndex!==undefined ? s.slcIndex : null;
+        // var slcExternal = s && s.slcExternal!==undefined ?
+        //     s.slcExternal : false;
+        // var slcId = s && s.slcId!==undefined ? s.slcId : null;
+        // var pgIndex = s && s.pgIndex!==undefined ? s.pgIndex : null;
+        var slcIndex = cfg.slcIndex;
+        var slcExternal = cfg.slcExternal;
+        var slcId = cfg.slcId;
+        var pgIndex = cfg.pgIndex;
+        var cpt = this.Cpt;
 
         function efx(){
-            if(!evt){ return; }
+            /*jshint validthis:true */
+            var ev = this.Evt.name;
+
             switch(evt){
-                case o.Evt.name.filter:
-                    if(o.isModFilterFn){
-                        o.modFilterFn.call(null,o);
-                    } else {
-                        o._filter();
-                    }
+                case ev.filter:
+                    this._filter();
                 break;
-                case o.Evt.name.dropdown:
-                    if(o.linkedFilters){
-                        o.Cpt.dropdown._build(slcIndex, true);
+                case ev.dropdown:
+                    if(this.linkedFilters){
+                        cpt.dropdown._build(slcIndex, true);
                     } else {
-                        o.Cpt.dropdown._build(
+                        cpt.dropdown._build(
                             slcIndex, false, slcExternal, slcId);
                     }
                 break;
-                case o.Evt.name.checklist:
-                    o.Cpt.checkList._build(slcIndex, slcExternal, slcId);
+                case ev.checklist:
+                    cpt.checkList._build(slcIndex, slcExternal, slcId);
                 break;
-                case o.Evt.name.changepage:
-                    o.Cpt.paging._changePage(pgIndex);
+                case ev.changepage:
+                    cpt.paging._changePage(pgIndex);
                 break;
-                case o.Evt.name.clear:
-                    o._clearFilters();
-                    o._filter();
+                case ev.clear:
+                    this._clearFilters();
+                    this._filter();
                 break;
-                case o.Evt.name.changeresultsperpage:
-                    o.Cpt.paging._changeResultsPerPage();
+                case ev.changeresultsperpage:
+                    cpt.paging._changeResultsPerPage();
                 break;
-                case o.Evt.name.resetvalues:
-                    o._resetValues();
-                    o._filter();
+                case ev.resetvalues:
+                    this._resetValues();
+                    this._filter();
                 break;
-                case o.Evt.name.resetpage:
-                    o.Cpt.paging._resetPage(o.pgNbCookie);
+                case ev.resetpage:
+                    cpt.paging._resetPage(this.pgNbCookie);
                 break;
-                case o.Evt.name.resetpagelength:
-                    o.Cpt.paging._resetPageLength(o.pgLenCookie);
+                case ev.resetpagelength:
+                    cpt.paging._resetPageLength(this.pgLenCookie);
                 break;
-                case o.Evt.name.sort:
+                case ev.sort:
                     void(0);
                 break;
-                case o.Evt.name.loadextensions:
-                    o._loadExtensions();
+                case ev.loadextensions:
+                    this._loadExtensions();
                 break;
-                case o.Evt.name.loadthemes:
-                    o._loadThemes();
+                case ev.loadthemes:
+                    this._loadThemes();
                 break;
-                default: //to be used by extensions events when needed
-                    o['_'+evt].call(null,o,s);
-                break;
+                // default: //to be used by extensions events when needed
+                //     this['_'+evt].call(null, o, s);
+                // break;
             }
-            if(o.statusBar){
-                o.Cpt.statusBar.message('');
+            if(this.statusBar){
+                cpt.statusBar.message('');
             }
-            if(o.loader){
-                o.Cpt.loader.show('none');
+            if(this.loader){
+                cpt.loader.show('none');
             }
         }
 
-        if(this.loader || this.statusBar) {
-            try{
-                this.Cpt.loader.show('');
-                this.Cpt.statusBar.message(this['msg'+evt]);
-            } catch(e){}
-            global.setTimeout(efx, this.execDelay);
+        if(!this.loader && !this.statusBar) {
+            efx.call(this);
         } else {
-            efx();
+            if(this.loader){
+                cpt.loader.show('');
+            }
+            if(this.statusBar){
+                cpt.statusBar.message(this['msg'+evt]);
+            }
+            global.setTimeout(efx.bind(this), this.execDelay);
         }
     }
 
@@ -1404,7 +1403,7 @@ export class TableFilter{
         reset button, rows counter label etc. are placed
     =====================================================*/
     setToolbar(){
-        if(this.infDiv!==null){
+        if(this.infDiv){
             return;
         }
 
@@ -1492,13 +1491,6 @@ export class TableFilter{
         and TF adapter by Max Guglielmi
     =====================================================*/
     setSort(){
-
-        // require(['adapterSortabletable'], (m)=> {
-        //     var adapterSortabletable = new m.AdapterSortableTable(this);
-        //     this.ExtRegistry.sort = adapterSortabletable;
-        //     adapterSortabletable.init();
-        // });
-
         this.loadExtension({
             name: this.sortConfig.name,
             path: this.sortConfig.path
@@ -1515,22 +1507,17 @@ export class TableFilter{
         ezEditTable script by Max Guglielmi
     =====================================================*/
     setEditable(){
-        var ezEditConfig = this.ezEditTableConfig;
-        if(this.isImported(ezEditConfig.src)){
+        var ezEditConfig = this.ezEditTableCfg;
+        if(this.isImported(ezEditConfig.path)){
             this._enableEditable();
         } else {
-            this.import(
-                ezEditConfig.name,
-                ezEditConfig.src,
-                this._enableEditable
-            );
+            this.import(ezEditConfig.name,
+                ezEditConfig.path, this._enableEditable);
         }
         if(ezEditConfig.loadStylesheet &&
             !this.isImported(ezEditConfig.stylesheet, 'link')){
-            this.import(
-                ezEditConfig.stylesheetName,
-                ezEditConfig.stylesheet, null, 'link'
-            );
+            this.import(ezEditConfig.stylesheetName,
+                ezEditConfig.stylesheet, null, 'link');
         }
     }
 
@@ -1571,7 +1558,7 @@ export class TableFilter{
 
         //start row for EditTable constructor needs to be calculated
         var startRow,
-            ezEditConfig = o.ezEditTableConfig,
+            ezEditConfig = o.ezEditTableCfg,
             thead = dom.tag(o.tbl,'thead');
 
         //if thead exists and startRow not specified, startRow is calculated

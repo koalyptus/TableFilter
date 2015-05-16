@@ -5,6 +5,8 @@ export class Store{
     /**
      * Store, persistence manager
      * @param {Object} tf TableFilter instance
+     *
+     * TODO: use localStorage and fallback to cookie persistence
      */
     constructor(tf) {
         var f = tf.config();
