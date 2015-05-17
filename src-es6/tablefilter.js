@@ -101,12 +101,12 @@ export class TableFilter{
         this.extensionsPath = f.extensions_path || this.basePath+'extensions/';
 
         /*** filter types ***/
-        this.fltTypeInp =           'input';
-        this.fltTypeSlc =           'select';
-        this.fltTypeMulti =         'multiple';
-        this.fltTypeCheckList =     'checklist';
-        this.fltTypeNone =          'none';
-        this.fltCol =               []; //filter type of each column
+        this.fltTypeInp = 'input';
+        this.fltTypeSlc = 'select';
+        this.fltTypeMulti = 'multiple';
+        this.fltTypeCheckList = 'checklist';
+        this.fltTypeNone = 'none';
+        this.fltCol = []; //filter type of each column
 
         for(var j=0; j<this.nbCells; j++){
             var cfgCol = f['col_'+j];
@@ -392,25 +392,9 @@ export class TableFilter{
 
         /*** ezEditTable extension ***/
         //enables/disables table selection feature
-        this.selectable = f.selectable===true ? true : false;
+        // this.selectable = f.selectable===true ? true : false;
         //enables/disables editable table feature
-        this.editable = f.editable===true ? true : false;
-        //ezEditTable configuration options
-        this.ezEditTableCfg = f.ezEditTable_config || {};
-        this.ezEditTableCfg.name = this.ezEditTableCfg.name || 'ezedittable';
-        this.ezEditTableCfg.path = this.ezEditTableCfg.path ||
-            this.extensionsPath + 'ezEditTable/ezEditTable.js';
-        //ezEditTable stylesheet not imported by default as filtergrid.css
-        //applies
-        this.ezEditTableCfg.loadStylesheet =
-            this.ezEditTableCfg.loadStylesheet===true ? true : false;
-        this.ezEditTableCfg.stylesheet =
-            this.ezEditTableCfg.stylesheet || this.extensionsPath +
-                'ezEditTable/ezEditTable.css';
-        this.ezEditTableCfg.stylesheetName =
-            this.ezEditTableCfg.stylesheetName || 'ezEditTableCss';
-        this.ezEditTableCfg.err = 'Failed to instantiate EditTable ' +
-            'object.\n"ezEditTable" module may not be available.';
+        // this.editable = f.editable===true ? true : false;
 
         /*** onkeyup event ***/
         //enables/disables onkeyup event, table is filtered when user stops
@@ -518,8 +502,6 @@ export class TableFilter{
 
         /*** extensions ***/
         //imports external script
-        // this.hasExtensions = f.extensions===true ? true : false;
-        // this.extensions = this.hasExtensions ? f.extensions : null;
         this.extensions = f.extensions;
         this.hasExtensions = types.isArray(this.extensions);
 
@@ -638,14 +620,14 @@ export class TableFilter{
                     o.isUserTyping = false;
                     global.clearInterval(o.onKeyUpTimer);
                 }
-                if(o.ezEditTable){
-                    if(o.editable){
-                        o.ezEditTable.Editable.Set();
-                    }
-                    if(o.selectable){
-                        o.ezEditTable.Selection.Set();
-                    }
-                }
+                // if(o.ezEditTable){
+                //     if(o.editable){
+                //         o.ezEditTable.Editable.Set();
+                //     }
+                //     if(o.selectable){
+                //         o.ezEditTable.Selection.Set();
+                //     }
+                // }
             },
             /*====================================================
                 - onfocus event for input filters
@@ -658,14 +640,14 @@ export class TableFilter{
                     evt.cancel(_evt);
                     evt.stop(_evt);
                 }
-                if(o.ezEditTable){
-                    if(o.editable){
-                        o.ezEditTable.Editable.Remove();
-                    }
-                    if(o.selectable){
-                        o.ezEditTable.Selection.Remove();
-                    }
-                }
+                // if(o.ezEditTable){
+                //     if(o.editable){
+                //         o.ezEditTable.Editable.Remove();
+                //     }
+                //     if(o.selectable){
+                //         o.ezEditTable.Selection.Remove();
+                //     }
+                // }
             },
             /*====================================================
                 - onfocus event for select filters
@@ -1097,9 +1079,9 @@ export class TableFilter{
         if(this.sort /*|| this.gridLayout*/){
             this.setSort();
         }
-        if(this.selectable || this.editable){
-            this.setEditable();
-        }
+        // if(this.selectable || this.editable){
+        //     this.setEditable();
+        // }
 
         this.isFirstLoad = false;
         this._hasGrid = true;
@@ -1354,9 +1336,9 @@ export class TableFilter{
             if(this.markActiveColumns){
                 this.clearActiveColumns();
             }
-            if(this.editable || this.selectable){
-                this.removeEditable();
-            }
+            // if(this.editable || this.selectable){
+            //     this.removeEditable();
+            // }
             //this loop shows all rows and removes validRow attribute
             for(var j=this.refRow; j<this.nbRows; j++){
                 rows[j].style.display = '';
@@ -1506,349 +1488,11 @@ export class TableFilter{
         - Sets selection or edition features by loading
         ezEditTable script by Max Guglielmi
     =====================================================*/
-    setEditable(){
-        var ezEditConfig = this.ezEditTableCfg;
-        if(this.isImported(ezEditConfig.path)){
-            this._enableEditable();
-        } else {
-            this.import(ezEditConfig.name,
-                ezEditConfig.path, this._enableEditable);
-        }
-        if(ezEditConfig.loadStylesheet &&
-            !this.isImported(ezEditConfig.stylesheet, 'link')){
-            this.import(ezEditConfig.stylesheetName,
-                ezEditConfig.stylesheet, null, 'link');
-        }
-    }
-
-    /*====================================================
-        - Removes selection or edition features
-    =====================================================*/
-    removeEditable(){
-        var ezEditTable = this.ezEditTable;
-        if(ezEditTable){
-            if(this.selectable){
-                ezEditTable.Selection.ClearSelections();
-                ezEditTable.Selection.Remove();
-            }
-            if(this.editable){
-                ezEditTable.Editable.Remove();
-            }
-        }
-    }
-
-    /*====================================================
-        - Resets selection or edition features after
-        removal
-    =====================================================*/
-    resetEditable(){
-        var ezEditTable = this.ezEditTable;
-        if(ezEditTable){
-            if(this.selectable){
-                ezEditTable.Selection.Set();
-            }
-            if(this.editable){
-                ezEditTable.Editable.Set();
-            }
-        }
-    }
-
-    _enableEditable(o){
-        if(!o){ o = this; }
-
-        //start row for EditTable constructor needs to be calculated
-        var startRow,
-            ezEditConfig = o.ezEditTableCfg,
-            thead = dom.tag(o.tbl,'thead');
-
-        //if thead exists and startRow not specified, startRow is calculated
-        //automatically by EditTable
-        if(thead.length > 0 && !ezEditConfig.startRow){
-            startRow = undefined;
-        }
-        //otherwise startRow config property if any or TableFilter refRow
-        else{
-            startRow = ezEditConfig.startRow || o.refRow;
-        }
-
-        ezEditConfig.scroll_into_view = ezEditConfig.scroll_into_view===false ?
-            false : true;
-        ezEditConfig.base_path = ezEditConfig.base_path  ||
-            o.basePath + 'ezEditTable/';
-        ezEditConfig.editable = o.editable = o.cfg.editable;
-        ezEditConfig.selection = o.selectable = o.cfg.selectable;
-
-        if(o.selectable){
-            ezEditConfig.default_selection =
-                ezEditConfig.default_selection || 'row';
-        }
-        //CSS Styles
-        ezEditConfig.active_cell_css = ezEditConfig.active_cell_css ||
-            'ezETSelectedCell';
-
-        o._lastValidRowIndex = 0;
-        o._lastRowIndex = 0;
-
-        if(o.selectable){
-            //Row navigation needs to be calculated according to TableFilter's
-            //validRowsIndex array
-            var onAfterSelection = function(et, selectedElm, e){
-                var slc = et.Selection;
-                //Next valid filtered row needs to be selected
-                var doSelect = function(nextRowIndex){
-                    if(et.defaultSelection === 'row'){
-                        slc.SelectRowByIndex(nextRowIndex);
-                    } else {
-                        et.ClearSelections();
-                        var cellIndex = selectedElm.cellIndex,
-                            row = o.tbl.rows[nextRowIndex];
-                        if(et.defaultSelection === 'both'){
-                            slc.SelectRowByIndex(nextRowIndex);
-                        }
-                        if(row){
-                            slc.SelectCell(row.cells[cellIndex]);
-                        }
-                    }
-                    //Table is filtered
-                    if(o.validRowsIndex.length !== o.getRowsNb()){
-                        var r = o.tbl.rows[nextRowIndex];
-                        if(r){
-                            r.scrollIntoView(false);
-                        }
-                        if(cell){
-                            if(cell.cellIndex===(o.getCellsNb()-1) &&
-                                o.gridLayout){
-                                o.tblCont.scrollLeft = 100000000;
-                            }
-                            else if(cell.cellIndex===0 && o.gridLayout){
-                                o.tblCont.scrollLeft = 0;
-                            } else {
-                                cell.scrollIntoView(false);
-                            }
-                        }
-                    }
-                };
-
-                //table is not filtered
-                if(!o.validRowsIndex){
-                    return;
-                }
-                var validIndexes = o.validRowsIndex,
-                    validIdxLen = validIndexes.length,
-                    row = et.defaultSelection !== 'row' ?
-                        selectedElm.parentNode : selectedElm,
-                    //cell for default_selection = 'both' or 'cell'
-                    cell = selectedElm.nodeName==='TD' ? selectedElm : null,
-                    keyCode = e !== undefined ? et.Event.GetKey(e) : 0,
-                    isRowValid = array.has(validIndexes, row.rowIndex),
-                    nextRowIndex,
-                    //pgup/pgdown keys
-                    d = (keyCode === 34 || keyCode === 33 ?
-                        (o.pagingLength || et.nbRowsPerPage) : 1);
-
-                //If next row is not valid, next valid filtered row needs to be
-                //calculated
-                if(!isRowValid){
-                    //Selection direction up/down
-                    if(row.rowIndex>o._lastRowIndex){
-                        //last row
-                        if(row.rowIndex >= validIndexes[validIdxLen-1]){
-                            nextRowIndex = validIndexes[validIdxLen-1];
-                        } else {
-                            var calcRowIndex = (o._lastValidRowIndex + d);
-                            if(calcRowIndex > (validIdxLen-1)){
-                                nextRowIndex = validIndexes[validIdxLen-1];
-                            } else {
-                                nextRowIndex = validIndexes[calcRowIndex];
-                            }
-                        }
-                    } else{
-                        //first row
-                        if(row.rowIndex <= validIndexes[0]){
-                            nextRowIndex = validIndexes[0];
-                        } else {
-                            var v = validIndexes[o._lastValidRowIndex - d];
-                            nextRowIndex = v ? v : validIndexes[0];
-                        }
-                    }
-                    o._lastRowIndex = row.rowIndex;
-                    doSelect(nextRowIndex);
-                } else {
-                    //If filtered row is valid, special calculation for
-                    //pgup/pgdown keys
-                    if(keyCode!==34 && keyCode!==33){
-                        o._lastValidRowIndex = array.indexByValue(validIndexes,
-                            row.rowIndex);
-                        o._lastRowIndex = row.rowIndex;
-                    } else {
-                        if(keyCode === 34){ //pgdown
-                            //last row
-                            if((o._lastValidRowIndex + d) <= (validIdxLen-1)){
-                                nextRowIndex = validIndexes[
-                                o._lastValidRowIndex + d];
-                            } else {
-                                nextRowIndex = [validIdxLen-1];
-                            }
-                        } else { //pgup
-                            //first row
-                            if((o._lastValidRowIndex - d) <= validIndexes[0]){
-                                nextRowIndex = validIndexes[0];
-                            } else {
-                                nextRowIndex = validIndexes[
-                                    o._lastValidRowIndex - d];
-                            }
-                        }
-                        o._lastRowIndex = nextRowIndex;
-                        o._lastValidRowIndex = array.indexByValue(validIndexes,
-                            nextRowIndex);
-                        doSelect(nextRowIndex);
-                    }
-                }
-            };
-
-            //Page navigation has to be enforced whenever selected row is out of
-            //the current page range
-            var onBeforeSelection = function(et, selectedElm){
-                var row = et.defaultSelection !== 'row' ?
-                    selectedElm.parentNode : selectedElm;
-                if(o.paging){
-                    if(o.Cpt.paging.nbPages>1){
-                        var paging = o.Cpt.paging;
-                        //page length is re-assigned in case it has changed
-                        et.nbRowsPerPage = paging.pagingLength;
-                        var validIndexes = o.validRowsIndex,
-                            validIdxLen = validIndexes.length,
-                            pagingEndRow = parseInt(paging.startPagingRow, 10) +
-                                parseInt(paging.pagingLength, 10);
-                        var rowIndex = row.rowIndex;
-
-                        if((rowIndex === validIndexes[validIdxLen-1]) &&
-                            paging.currentPageNb!==paging.nbPages){
-                            paging.setPage('last');
-                        }
-                        else if((rowIndex == validIndexes[0]) &&
-                            paging.currentPageNb!==1){
-                            paging.setPage('first');
-                        }
-                        else if(rowIndex > validIndexes[pagingEndRow-1] &&
-                            rowIndex < validIndexes[validIdxLen-1]){
-                            paging.setPage('next');
-                        }
-                        else if(
-                            rowIndex < validIndexes[paging.startPagingRow] &&
-                            rowIndex > validIndexes[0]){
-                            paging.setPage('previous');
-                        }
-                    }
-                }
-            };
-
-            //Selected row needs to be visible when paging is activated
-            if(o.paging){
-                o.onAfterChangePage = function(tf){
-                    var et = tf.ExtRegistry.ezEditTable;
-                    var slc = et.Selection;
-                    var row = slc.GetActiveRow();
-                    if(row){
-                        row.scrollIntoView(false);
-                    }
-                    var cell = slc.GetActiveCell();
-                    if(cell){
-                        cell.scrollIntoView(false);
-                    }
-                };
-            }
-
-            //Rows navigation when rows are filtered is performed with the
-            //EditTable row selection callback events
-            if(ezEditConfig.default_selection==='row'){
-                var fnB = ezEditConfig.on_before_selected_row;
-                ezEditConfig.on_before_selected_row = function(){
-                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);
-                    if(fnB){
-                        fnB.call(
-                            null, arguments[0], arguments[1], arguments[2]);
-                    }
-                };
-                var fnA = ezEditConfig.on_after_selected_row;
-                ezEditConfig.on_after_selected_row = function(){
-                    onAfterSelection(arguments[0], arguments[1], arguments[2]);
-                    if(fnA){
-                        fnA.call(
-                            null, arguments[0], arguments[1], arguments[2]);
-                    }
-                };
-            } else {
-                var fnD = ezEditConfig.on_before_selected_cell;
-                ezEditConfig.on_before_selected_cell = function(){
-                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);
-                    if(fnD){
-                        fnD.call(
-                            null, arguments[0], arguments[1], arguments[2]);
-                    }
-                };
-                var fnC = ezEditConfig.on_after_selected_cell;
-                ezEditConfig.on_after_selected_cell = function(){
-                    onAfterSelection(arguments[0], arguments[1], arguments[2]);
-                    if(fnC){
-                        fnC.call(
-                            null, arguments[0], arguments[1], arguments[2]);
-                    }
-                };
-            }
-        }
-        if(o.editable){
-            //Added or removed rows, TF rows number needs to be re-calculated
-            var fnE = ezEditConfig.on_added_dom_row;
-            ezEditConfig.on_added_dom_row = function(){
-                o.nbFilterableRows++;
-                if(!o.paging){
-                    o.Cpt.rowsCounter.refresh();
-                } else {
-                    o.nbRows++;
-                    o.nbVisibleRows++;
-                    o.nbFilterableRows++;
-                    o.paging=false;
-                    o.Cpt.paging.destroy();
-                    o.Cpt.paging.addPaging();
-                }
-                if(o.alternateBgs){
-                    o.Cpt.alternateRows.init();
-                }
-                if(fnE){
-                    fnE.call(null, arguments[0], arguments[1], arguments[2]);
-                }
-            };
-            if(ezEditConfig.actions && ezEditConfig.actions['delete']){
-                var fnF = ezEditConfig.actions['delete'].on_after_submit;
-                ezEditConfig.actions['delete'].on_after_submit = function(){
-                    o.nbFilterableRows--;
-                    if(!o.paging){
-                        o.Cpt.rowsCounter.refresh();
-                    } else {
-                        o.nbRows--;
-                        o.nbVisibleRows--;
-                        o.nbFilterableRows--;
-                        o.paging=false;
-                        o.Cpt.paging.destroy();
-                        o.Cpt.paging.addPaging(false);
-                    }
-                    if(o.alternateBgs){
-                        o.Cpt.alternateRows.init();
-                    }
-                    if(fnF){
-                        fnF.call(null, arguments[0], arguments[1]);
-                    }
-                };
-            }
-        }
-
-        try{
-            o.ExtRegistry.ezEditTable = new EditTable(
-                o.id, ezEditConfig, startRow);
-            o.ExtRegistry.ezEditTable.Init();
-        } catch(e) { console.log(ezEditConfig.err); }
-    }
+    // setEditable(){
+    //     this.loadExtension({
+    //         name: 'advancedGrid'
+    //     });
+    // }
 
     /*====================================================
         - IE bug: it seems there is no way to make

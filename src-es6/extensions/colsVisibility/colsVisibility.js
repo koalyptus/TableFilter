@@ -10,12 +10,9 @@ export default class ColsVisibility{
      * Columns Visibility extension
      * @param {Object} tf TableFilter instance
      */
-    constructor(
-        tf,
-        ext={
+    constructor(tf, ext={
             name:'colsVisibility',
-            description:'Columns visibility manager'
-        }){
+            description:'Columns visibility manager'}){
 
         // Configuration object
         var f = ext;
