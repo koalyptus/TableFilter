@@ -135,7 +135,8 @@ module.exports = function (grunt) {
     grunt.registerTask('dev', ['jshint', 'webpack:build', 'copy:build']);
 
     // Production build
-    grunt.registerTask('dist', ['jshint', 'webpack:dist', 'copy:dist']);
+    grunt.registerTask('dist',
+        ['jshint', 'webpack:dist', 'copy:dist'/*, 'test'*/]);
 
     // Transpile with Babel
     grunt.registerTask('dev-modules', ['babel', 'copy:build']);

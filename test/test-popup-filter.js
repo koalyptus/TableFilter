@@ -30,7 +30,7 @@ test('Pop-up filter UI elements', function() {
 });
 
 test('TableFilter removed', function() {
-    tf.remove();
+    tf.destroy();
     var fltIcn1 = tf.Cpt.popupFilter.popUpFltImgs[3];
     deepEqual(fltIcn1, undefined, 'Filter icon is removed');
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');

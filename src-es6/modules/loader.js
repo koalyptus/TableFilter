@@ -78,7 +78,7 @@ export class Loader{
         global.setTimeout(displayLoader, t);
     }
 
-    remove(){
+    destroy(){
         if(!this.loaderDiv){
             return;
         }

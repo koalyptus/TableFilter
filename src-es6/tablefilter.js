@@ -17,6 +17,7 @@ import {Cookie as cookie} from './cookie';
 import {Types as types} from './types';
 import {Arr as array} from './array';
 import {DateHelper as dateHelper} from './date';
+import {Helpers as helpers} from './helpers';
 
 // Modules
 import {Store} from './modules/store';
@@ -559,7 +560,7 @@ export class TableFilter{
             /*====================================================
                 - Detects <enter> key for a given element
             =====================================================*/
-            detectKey: function(e) {
+            detectKey(e) {
                 if(!o.enterKey){ return; }
                 var _evt = e || global.event;
                 if(_evt){
@@ -578,7 +579,7 @@ export class TableFilter{
             /*====================================================
                 - onkeyup event for text filters
             =====================================================*/
-            onKeyUp: function(e) {
+            onKeyUp(e) {
                 if(!o.onKeyUp){
                     return;
                 }
@@ -608,14 +609,14 @@ export class TableFilter{
             /*====================================================
                 - onkeydown event for input filters
             =====================================================*/
-            onKeyDown: function() {
+            onKeyDown() {
                 if(!o.onKeyUp) { return; }
                 o.isUserTyping = true;
             },
             /*====================================================
                 - onblur event for input filters
             =====================================================*/
-            onInpBlur: function() {
+            onInpBlur() {
                 if(o.onKeyUp){
                     o.isUserTyping = false;
                     global.clearInterval(o.onKeyUpTimer);
@@ -632,7 +633,7 @@ export class TableFilter{
             /*====================================================
                 - onfocus event for input filters
             =====================================================*/
-            onInpFocus: function(e) {
+            onInpFocus(e) {
                 var _evt = e || global.event;
                 o.activeFilterId = this.getAttribute('id');
                 o.activeFlt = dom.id(o.activeFilterId);
@@ -652,7 +653,7 @@ export class TableFilter{
             /*====================================================
                 - onfocus event for select filters
             =====================================================*/
-            onSlcFocus: function(e) {
+            onSlcFocus(e) {
                 var _evt = e || global.event;
                 o.activeFilterId = this.getAttribute('id');
                 o.activeFlt = dom.id(o.activeFilterId);
@@ -669,7 +670,7 @@ export class TableFilter{
             /*====================================================
                 - onchange event for select filters
             =====================================================*/
-            onSlcChange: function(e) {
+            onSlcChange(e) {
                 if(!o.activeFlt){ return; }
                 // var colIndex = o.activeFlt.getAttribute('colIndex');
                 //Checks filter is a checklist and caller is not null
@@ -687,7 +688,7 @@ export class TableFilter{
             /*====================================================
                 - onclick event for checklist filters
             =====================================================*/
-            onCheckListClick: function() {
+            onCheckListClick() {
                 if(o.fillSlcOnDemand && this.getAttribute('filled') === '0'){
                     var ct = this.getAttribute('ct');
                     o.Cpt.checkList._build(ct);
@@ -698,7 +699,7 @@ export class TableFilter{
             /*====================================================
                 - onclick event for checklist filter container
             =====================================================*/
-            onCheckListFocus: function() {
+            onCheckListFocus() {
                 o.activeFilterId = this.firstChild.getAttribute('id');
                 o.activeFlt = dom.id(o.activeFilterId);
             },
@@ -706,7 +707,7 @@ export class TableFilter{
                 - onclick event for validation button
                 (btn property)
             =====================================================*/
-            onBtnClick: function() {
+            onBtnClick() {
                 o.filter();
             }
             // ,
@@ -730,10 +731,11 @@ export class TableFilter{
         };
     }
 
-    /*====================================================
-        - initialises filtering grid bar behaviours and
-        layout
-    =====================================================*/
+    /**
+     * Initialise filtering grid bar behaviours and layout
+     *
+     * TODO: decompose in smaller methods
+     */
     init(){
         if(this._hasGrid){
             return;
@@ -1077,11 +1079,8 @@ export class TableFilter{
             this.Cpt.colOps.calc();
         }
         if(this.sort /*|| this.gridLayout*/){
-            this.setSort();
+            this.importSort();
         }
-        // if(this.selectable || this.editable){
-        //     this.setEditable();
-        // }
 
         this.isFirstLoad = false;
         this._hasGrid = true;
@@ -1102,8 +1101,6 @@ export class TableFilter{
 
         /* Loads extensions */
         if(this.hasExtensions){
-            // this.loadExtensions();
-            // this.registerExtensions();
             this.initExtensions();
         }
 
@@ -1121,12 +1118,6 @@ export class TableFilter{
     =====================================================*/
     EvtManager(evt,
         cfg={ slcIndex: null, slcExternal: false, slcId: null, pgIndex: null }){
-        // var o = this;
-        // var slcIndex = s && s.slcIndex!==undefined ? s.slcIndex : null;
-        // var slcExternal = s && s.slcExternal!==undefined ?
-        //     s.slcExternal : false;
-        // var slcId = s && s.slcId!==undefined ? s.slcId : null;
-        // var pgIndex = s && s.pgIndex!==undefined ? s.pgIndex : null;
         var slcIndex = cfg.slcIndex;
         var slcExternal = cfg.slcExternal;
         var slcId = cfg.slcId;
@@ -1206,6 +1197,9 @@ export class TableFilter{
         }
     }
 
+    /**
+     * Initialise all the extensions defined in the configuration object
+     */
     initExtensions(){
         var exts = this.extensions;
 
@@ -1217,6 +1211,10 @@ export class TableFilter{
         }
     }
 
+    /**
+     * Load an extension module
+     * @param  {Object} ext Extension config object
+     */
     loadExtension(ext){
         if(!ext || !ext.name){
             return;
@@ -1244,9 +1242,9 @@ export class TableFilter{
         this.EvtManager(this.Evt.name.loadthemes);
     }
 
-    /*====================================================
-        - loads TF themes
-    =====================================================*/
+    /**
+     * Load themes defined in the configuration object
+     */
     _loadThemes(){
         var themes = this.themes;
         //Default theme config
@@ -1294,96 +1292,97 @@ export class TableFilter{
         this.loaderText = null;
     }
 
-    /*====================================================
-        - removes a filter grid
-    =====================================================*/
-    remove(){
-        if(this.fltGrid && this._hasGrid){
-            var rows = this.tbl.rows;
-            if(this.paging){
-                this.Cpt.paging.destroy();
-            }
-            if(this.statusBar){
-                this.Cpt.statusBar.destroy();
-            }
-            if(this.rowsCounter){
-                this.Cpt.rowsCounter.destroy();
-            }
-            if(this.btnReset){
-                this.Cpt.clearButton.destroy();
-            }
-            if(this.helpInstructions){
-                this.Cpt.help.destroy();
-            }
-            if(this.isExternalFlt && !this.popUpFilters){
-                this.removeExternalFlts();
-            }
-            if(this.infDiv){
-                this.removeToolbar();
-            }
-            if(this.highlightKeywords){
-                this.Cpt.highlightKeyword.unhighlightAll();
-            }
-            if(this.sort){
-                this.ExtRegistry.sort.destroy();
-            }
-            if(this.loader){
-                this.Cpt.loader.remove();
-            }
-            if(this.popUpFilters){
-                this.Cpt.popupFilter.destroy();
-            }
-            if(this.markActiveColumns){
-                this.clearActiveColumns();
-            }
-            // if(this.editable || this.selectable){
-            //     this.removeEditable();
-            // }
-            //this loop shows all rows and removes validRow attribute
-            for(var j=this.refRow; j<this.nbRows; j++){
-                rows[j].style.display = '';
-                try{
-                    if(rows[j].hasAttribute('validRow')){
-                        rows[j].removeAttribute('validRow');
-                    }
-                } catch(e) {
-                    //ie<=6 doesn't support hasAttribute method
-                    var row = rows[j];
-                    var attribs = row.attributes;
-                    for(var x = 0; x < attribs.length; x++){
-                        if(str.lower(attribs.nodeName)==='validrow'){
-                            row.removeAttribute('validRow');
-                        }
+    /**
+     * Destroy filter grid
+     */
+    destroy(){
+        if(!this._hasGrid){
+            return;
+        }
+        var rows = this.tbl.rows,
+            Cpt = this.Cpt,
+            ExtRegistry = this.ExtRegistry;
+        if(this.paging){
+            Cpt.paging.destroy();
+        }
+        if(this.statusBar){
+            Cpt.statusBar.destroy();
+        }
+        if(this.rowsCounter){
+            Cpt.rowsCounter.destroy();
+        }
+        if(this.btnReset){
+            Cpt.clearButton.destroy();
+        }
+        if(this.helpInstructions){
+            Cpt.help.destroy();
+        }
+        if(this.isExternalFlt && !this.popUpFilters){
+            this.removeExternalFlts();
+        }
+        if(this.infDiv){
+            this.removeToolbar();
+        }
+        if(this.highlightKeywords){
+            Cpt.highlightKeyword.unhighlightAll();
+        }
+        if(this.sort){
+            ExtRegistry.sort.destroy();
+        }
+        if(this.loader){
+            Cpt.loader.destroy();
+        }
+        if(this.popUpFilters){
+            Cpt.popupFilter.destroy();
+        }
+        if(this.markActiveColumns){
+            this.clearActiveColumns();
+        }
+        if(ExtRegistry.advancedGrid){
+            ExtRegistry.advancedGrid.destroy();
+        }
+        //this loop shows all rows and removes validRow attribute
+        for(var j=this.refRow; j<this.nbRows; j++){
+            rows[j].style.display = '';
+            try{
+                if(rows[j].hasAttribute('validRow')){
+                    rows[j].removeAttribute('validRow');
+                }
+            } catch(e) {
+                //ie<=6 doesn't support hasAttribute method
+                var row = rows[j];
+                var attribs = row.attributes;
+                for(var x = 0; x < attribs.length; x++){
+                    if(str.lower(attribs.nodeName)==='validrow'){
+                        row.removeAttribute('validRow');
                     }
                 }
-
-                //removes alternating colors
-                if(this.alternateBgs){
-                    this.Cpt.alternateRows.removeRowBg(j);
-                }
-
-            }//for j
-
-            if(this.fltGrid && !this.gridLayout){
-                this.fltGridEl = rows[this.filtersRowIndex];
-                this.tbl.deleteRow(this.filtersRowIndex);
             }
-            if(this.gridLayout){
-                this.Cpt.gridLayout.destroy();
-            }
-            dom.removeClass(this.tbl, this.prfxTf);
-            this.activeFlt = null;
-            this.isStartBgAlternate = true;
-            this._hasGrid = false;
-            this.tbl = null;
 
-        }//if this.fltGrid
+            //removes alternating colors
+            if(this.alternateBgs){
+                Cpt.alternateRows.removeRowBg(j);
+            }
+
+        }//for j
+
+        if(this.fltGrid && !this.gridLayout){
+            this.fltGridEl = rows[this.filtersRowIndex];
+            this.tbl.deleteRow(this.filtersRowIndex);
+        }
+        if(this.gridLayout){
+            Cpt.gridLayout.destroy();
+        }
+        dom.removeClass(this.tbl, this.prfxTf);
+        this.activeFlt = null;
+        this.isStartBgAlternate = true;
+        this._hasGrid = false;
+        this.tbl = null;
     }
 
-    /*====================================================
-        - Generates div above table where paging,
-        reset button, rows counter label etc. are placed
-    =====================================================*/
+    /**
+     * Generate container element for paging, reset button, rows counter etc.
+     */
     setToolbar(){
         if(this.infDiv){
             return;
@@ -1431,18 +1430,15 @@ export class TableFilter{
         // Enable help instructions by default is topbar is generated
         if(!this.helpInstructions){
             if(!this.Cpt.help){
-                // var Help = require('modules/help').Help;
-                // import {Help} from 'modules/help';
                 this.Cpt.help = new Help(this);
             }
             this.Cpt.help.init();
         }
     }
 
-    /*====================================================
-        - Removes div above table where paging,
-        reset button, rows counter label etc. are placed
-    =====================================================*/
+    /**
+     * Remove toolbar container element
+     */
     removeToolbar(){
         if(!this.infDiv){
             return;
@@ -1451,15 +1447,17 @@ export class TableFilter{
         this.infDiv = null;
     }
 
-    /*====================================================
-        - removes external filters
-    =====================================================*/
+    /**
+     * Remove all the external column filters
+     */
     removeExternalFlts(){
-        if(!this.isExternalFlt && !this.externalFltTgtIds){
+        if(!this.isExternalFlt || !this.externalFltTgtIds){
             return;
         }
-        for(var ct=0; ct<this.externalFltTgtIds.length; ct++){
-            var externalFltTgtId = this.externalFltTgtIds[ct],
+        var ids = this.externalFltTgtIds,
+            len = ids.length;
+        for(var ct=0; ct<len; ct++){
+            var externalFltTgtId = ids[ct],
                 externalFlt = dom.id(externalFltTgtId);
             if(externalFlt){
                 externalFlt.innerHTML = '';
@@ -1467,12 +1465,12 @@ export class TableFilter{
         }
     }
 
-    /*====================================================
-        - Sets sorting feature by loading
-        WebFX Sortable Table 1.12 plugin by Erik Arvidsson
-        and TF adapter by Max Guglielmi
-    =====================================================*/
-    setSort(){
+    /**
+     * Load sorting module:
+     * - WebFX Sortable Table 1.12 plugin by Erik Arvidsson
+     * - Sortable Table adapter
+     */
+    importSort(){
         this.loadExtension({
             name: this.sortConfig.name,
             path: this.sortConfig.path
@@ -1568,36 +1566,28 @@ export class TableFilter{
         this.EvtManager(this.Evt.name.resetvalues);
     }
 
-    /*==============================================
-        - re-sets grid values when page is
-        re-loaded. It invokes resetGridValues,
-        ResetPage and ResetPageLength methods
-        - Params:
-            - name: cookie name (string)
-    ===============================================*/
+    /**
+     * Reset persisted filter values
+     */
     _resetValues(){
         //only fillSlcOnDemand
         if(this.rememberGridValues && this.fillSlcOnDemand){
-            this.resetGridValues(this.fltsValuesCookie);
+            this._resetGridValues(this.fltsValuesCookie);
         }
-        if(this.rememberPageLen){
-            // this.ResetPageLength(this.pgLenCookie);
+        if(this.rememberPageLen && this.Cpt.paging){
             this.Cpt.paging.resetPageLength(this.pgLenCookie);
         }
-        if(this.rememberPageNb){
-            // this.ResetPage(this.pgNbCookie);
+        if(this.rememberPageNb && this.Cpt.paging){
             this.Cpt.paging.resetPage(this.pgNbCookie);
         }
     }
 
-    /*==============================================
-        - re-sets filters' values when page is
-        re-loaded if load on demand is enabled
-        - Params:
-            - name: cookie name (string)
-        - credits to Florent Hirchy
-    ===============================================*/
-    resetGridValues(name){
+    /**
+     * Reset persisted filter values when load filters on demand feature is
+     * enabled
+     * @param  {String} name cookie name storing filter values
+     */
+    _resetGridValues(name){
         if(!this.fillSlcOnDemand){
             return;
         }
@@ -1686,36 +1676,35 @@ export class TableFilter{
     filter(){
         this.EvtManager(this.Evt.name.filter);
     }
-    /*====================================================
-        - Filtering fn
-        - retrieves data from each td in every single tr
-        and compares to search string for current
-        column
-        - tr is hidden if all search strings are not
-        found
-    =====================================================*/
+
+    /**
+     * Filter the table by retrieving the data from each td in every single tr
+     * and comparing it to the search term for current column. A tr is hidden
+     * when all search terms are not found
+     */
     _filter(){
         if(!this.fltGrid || (!this._hasGrid && !this.isFirstLoad)){
             return;
         }
-        //invokes onbefore callback
+        //invoke onbefore callback
         if(this.onBeforeFilter){
             this.onBeforeFilter.call(null, this);
         }
 
         var row = this.tbl.rows,
+            Cpt = this.Cpt,
             f = this.cfg,
             hiddenrows = 0;
         this.validRowsIndex = [];
-        var o = this;
+        // var o = this;
 
         // removes keyword highlighting
         if(this.highlightKeywords){
-            this.Cpt.highlightKeyword.unhighlightAll();
+            Cpt.highlightKeyword.unhighlightAll();
         }
         //removes popup filters active icons
         if(this.popUpFilters){
-            this.Cpt.popupFilter.buildIcons();
+            Cpt.popupFilter.buildIcons();
         }
         //removes active column header class
         if(this.markActiveColumns){
@@ -1742,7 +1731,8 @@ export class TableFilter{
 
         //keyword highlighting
         function highlight(str, ok, cell){
-            if(o.highlightKeywords && ok){
+            /*jshint validthis:true */
+            if(this.highlightKeywords && ok){
                 str = str.replace(re_lk,'');
                 str = str.replace(re_eq,'');
                 str = str.replace(re_st,'');
@@ -1752,16 +1742,18 @@ export class TableFilter{
                     re_g.test(str) || re_d.test(str)){
                     w = dom.getText(cell);
                 }
-                if(w!==''){
-                    o.Cpt.highlightKeyword.highlight(
-                        cell, w, o.Cpt.highlightKeyword.highlightCssClass);
+                if(w !== ''){
+                    Cpt.highlightKeyword.highlight(
+                        cell, w, Cpt.highlightKeyword.highlightCssClass);
                 }
             }
         }
 
         //looks for search argument in current row
         function hasArg(sA, cell_data, j){
-            var occurence;
+            /*jshint validthis:true */
+            var occurence,
+                removeNbFormat = helpers.removeNbFormat;
             //Search arg operator tests
             var hasLO = re_l.test(sA),
                 hasLE = re_le.test(sA),
@@ -1821,7 +1813,7 @@ export class TableFilter{
                 }
                 // searched keyword with * operator doesn't have to be a date
                 else if(re_lk.test(sA)){// like date
-                    occurence = o._containsStr(
+                    occurence = this._containsStr(
                         sA.replace(re_lk,''),cell_data,null,false);
                 }
                 else if(isValidDate(sA,dtType)){
@@ -1840,16 +1832,17 @@ export class TableFilter{
 
             else{
                 //first numbers need to be formated
-                if(o.hasColNbFormat && o.colNbFormat[j]){
+                if(this.hasColNbFormat && this.colNbFormat[j]){
                     num_cell_data = removeNbFormat(
-                        cell_data,o.colNbFormat[j]);
-                    nbFormat = o.colNbFormat[j];
+                        cell_data, this.colNbFormat[j]);
+                    nbFormat = this.colNbFormat[j];
                 } else {
-                    if(o.thousandsSeparator===',' && o.decimalSeparator==='.'){
-                        num_cell_data = removeNbFormat(cell_data,'us');
+                    if(this.thousandsSeparator === ',' &&
+                        this.decimalSeparator === '.'){
+                        num_cell_data = removeNbFormat(cell_data, 'us');
                         nbFormat = 'us';
                     } else {
-                        num_cell_data = removeNbFormat(cell_data,'eu');
+                        num_cell_data = removeNbFormat(cell_data, 'eu');
                         nbFormat = 'eu';
                     }
                 }
@@ -1859,36 +1852,36 @@ export class TableFilter{
                 // lower equal
                 if(hasLE){
                     occurence = num_cell_data <= removeNbFormat(
-                        sA.replace(re_le,''),nbFormat);
+                        sA.replace(re_le,''), nbFormat);
                 }
                 //greater equal
                 else if(hasGE){
                     occurence = num_cell_data >= removeNbFormat(
-                        sA.replace(re_ge,''),nbFormat);
+                        sA.replace(re_ge,''), nbFormat);
                 }
                 //lower
                 else if(hasLO){
                     occurence = num_cell_data < removeNbFormat(
-                        sA.replace(re_l,''),nbFormat);
+                        sA.replace(re_l,''), nbFormat);
                 }
                 //greater
                 else if(hasGR){
                     occurence = num_cell_data > removeNbFormat(
-                        sA.replace(re_g,''),nbFormat);
+                        sA.replace(re_g,''), nbFormat);
                 }
                 //different
                 else if(hasDF){
-                    occurence = o._containsStr(
+                    occurence = this._containsStr(
                         sA.replace(re_d,''),cell_data) ? false : true;
                 }
                 //like
                 else if(hasLK){
-                    occurence = o._containsStr(
+                    occurence = this._containsStr(
                         sA.replace(re_lk,''),cell_data,null,false);
                 }
                 //equal
                 else if(hasEQ){
-                    occurence = o._containsStr(
+                    occurence = this._containsStr(
                         sA.replace(re_eq,''),cell_data,null,true);
                 }
                 //starts with
@@ -1925,8 +1918,8 @@ export class TableFilter{
                 }
                 else{
                     var fCol = f['col_'+j];
-                    occurence = o._containsStr(
-                        sA, cell_data, !fCol ? o.fltTypeInp : fCol);
+                    occurence = this._containsStr(
+                        sA, cell_data, !fCol ? this.fltTypeInp : fCol);
                 }
 
             }//else
@@ -1981,8 +1974,8 @@ export class TableFilter{
                         s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
                     for(var w=0; w<s.length; w++){
                         cS = str.trim(s[w]);
-                        occur = hasArg(cS,cell_data,j);
-                        highlight(cS,occur,cell[j]);
+                        occur = hasArg.call(this, cS, cell_data, j);
+                        highlight.call(this, cS, occur, cell[j]);
                         if(hasMultiOrSA && occur){
                             break;
                         }
@@ -1994,8 +1987,9 @@ export class TableFilter{
                 }
                 //single search parameter
                 else {
-                    occurence[j] = hasArg(str.trim(sA), cell_data, j);
-                    highlight(sA, occurence[j], cell[j]);
+                    occurence[j] =
+                        hasArg.call(this, str.trim(sA), cell_data, j);
+                    highlight.call(this, sA, occurence[j], cell[j]);
                 }//else single param
 
                 if(!occurence[j]){
@@ -2005,7 +1999,7 @@ export class TableFilter{
                     singleFltRowValid = true;
                 }
                 if(this.popUpFilters){
-                    this.Cpt.popupFilter.buildIcon(j, true);
+                    Cpt.popupFilter.buildIcon(j, true);
                 }
                 if(this.markActiveColumns){
                     if(k === this.refRow){
@@ -2039,8 +2033,7 @@ export class TableFilter{
                 this.validateRow(k,true);
                 this.validRowsIndex.push(k);
                 if(this.alternateBgs){
-                    this.Cpt.alternateRows.setRowBg(
-                        k, this.validRowsIndex.length);
+                    Cpt.alternateRows.setRowBg(k, this.validRowsIndex.length);
                 }
                 if(this.onRowValidated){
                     this.onRowValidated.call(null,this,k);
@@ -2053,7 +2046,7 @@ export class TableFilter{
         this.isStartBgAlternate = false;
 
         if(this.rememberGridValues){
-            this.Cpt.store.saveFilterValues(this.fltsValuesCookie);
+            Cpt.store.saveFilterValues(this.fltsValuesCookie);
         }
         //applies filter props after filtering process
         if(!this.paging){
@@ -2061,7 +2054,7 @@ export class TableFilter{
         } else {
             this.startPagingRow = 0;
             this.currentPageNb = 1;
-            this.Cpt.paging.setPagingInfo(this.validRowsIndex);
+            Cpt.paging.setPagingInfo(this.validRowsIndex);
         }//starts paging process
         //invokes onafter callback
         if(this.onAfterFilter){
@@ -2069,10 +2062,9 @@ export class TableFilter{
         }
     }
 
-    /*====================================================
-        - checks methods that should be called
-        after filtering and/or paging process
-    =====================================================*/
+    /**
+     * Re-apply the filters grid properties after a filtering/paging operation
+     */
     applyGridProps(){
         // blurs active filter (IE)
         if(this.activeFlt &&
@@ -2084,13 +2076,15 @@ export class TableFilter{
             }
         }
 
+        var Cpt = this.Cpt;
+
         //shows rows always visible
         if(this.visibleRows){
             this.enforceVisibility();
         }
         //makes operation on a col
         if(this.hasColOperation){
-            this.Cpt.colOps.calc();
+            Cpt.colOps.calc();
         }
         //re-populates drop-down filters
         if(this.linkedFilters){
@@ -2100,24 +2094,21 @@ export class TableFilter{
             this.nbVisibleRows - this.visibleRows.length : this.nbVisibleRows;
         //refreshes rows counter
         if(this.rowsCounter){
-            this.Cpt.rowsCounter.refresh(nr);
+            Cpt.rowsCounter.refresh(nr);
         }
 
         if(this.popUpFilters){
-            this.Cpt.popupFilter.closeAll();
+            Cpt.popupFilter.closeAll();
         }
     }
 
-    /*====================================================
-        - returns an array containing cell values of
-        a column
-        - needs following args:
-            - column index (number)
-            - a boolean set to true if we want only
-            numbers to be returned
-            - array containing rows index to be excluded
-            from returned values
-    =====================================================*/
+    /**
+     * Return the data for a given colum
+     * @param  {Number} colindex Column index
+     * @param  {Boolean} num     Return unformatted number
+     * @param  {Array} exclude   List of row indexes to be excluded
+     * @return {Array}           Flat list of data for a column
+     */
     getColValues(colindex, num, exclude){
         if(!this.fltGrid){
             return;
@@ -2135,17 +2126,16 @@ export class TableFilter{
                 nchilds = cell.length;
 
             // checks if row has exact cell # and is not excluded
-            if(nchilds == this.nbCells && !isExludedRow){
+            if(nchilds === this.nbCells && !isExludedRow){
                 // this loop retrieves cell data
                 for(var j=0; j<nchilds; j++){
-                    if(j===colindex && row[i].style.display===''){
-                        var cell_data = str.lower(
-                                this.getCellData(j, cell[j])),
+                    if(j === colindex && row[i].style.display === ''){
+                        var cell_data = str.lower(this.getCellData(j, cell[j])),
                             nbFormat = this.colNbFormat ?
                                 this.colNbFormat[colindex] : null,
                             data = num ?
-                                removeNbFormat(cell_data,nbFormat) :
-                                cell_data;
+                                    helpers.removeNbFormat(cell_data,nbFormat) :
+                                    cell_data;
                         colValues.push(data);
                     }
                 }
@@ -2154,11 +2144,11 @@ export class TableFilter{
         return colValues;
     }
 
-    /*====================================================
-        - Returns value of a specified filter
-        - Params:
-            - index: filter column index (numeric value)
-    =====================================================*/
+    /**
+     * Returns the filter value for a specified column index
+     * @param  {Number} index Column index
+     * @return {String}       Filter value
+     */
     getFilterValue(index){
         if(!this.fltGrid){
             return;
@@ -2185,7 +2175,7 @@ export class TableFilter{
                 }
             }
             //removes last operator ||
-            fltValue = fltValue.substr(0,fltValue.length-4);
+            fltValue = fltValue.substr(0, fltValue.length-4);
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
@@ -2984,51 +2974,6 @@ TableFilter.ClearButton = ClearButton;
 TableFilter.Help = Help;
 TableFilter.AlternateRows = AlternateRows;
 TableFilter.ColOps = ColOps;
-
-function removeNbFormat(data, format){
-    if(!data){
-        return;
-    }
-    if(!format){
-        format = 'us';
-    }
-    var n = data;
-    if(str.lower(format)==='us'){
-        n =+ n.replace(/[^\d\.-]/g,'');
-    } else {
-        n =+ n.replace(/[^\d\,-]/g,'').replace(',','.');
-    }
-    return n;
-}
-
-// function isStylesheetImported(stylesheet){
-//     var isImported = false;
-//     if(!doc.styleSheets){
-//         return isImported;
-//     }
-//     var s = doc.styleSheets,
-//         regexp = new RegExp(stylesheet);
-//     for(var i=0; i<s.length; i++){
-//         if(s[i].imports){//IE
-//             var imp = s[i].imports;
-//             for(var j=0; j<imp.length; j++){
-//                 if(str.lower(imp[j].href) === str.lower(stylesheet)){
-//                     isImported = true;
-//                     break;
-//                 }
-//             }
-//         } else {
-//             var r = s[i].cssRules ? s[i].cssRules : s[i].rules;
-//             for(var k=0; k<r.length; k++){
-//                 if(regexp.test(r[k].cssText)){
-//                     isImported = true;
-//                     break;
-//                 }
-//             }
-//         }
-//     }
-//     return isImported;
-// }
 
 //Firefox does not support outerHTML property
 function setOuterHtml(){

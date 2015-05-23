@@ -9,8 +9,8 @@ module.exports = {
             publicPath: '/build/tablefilter/',
             path: path.join(__dirname, '/build/tablefilter'),
             filename: 'tablefilter.js',
-            // chunkFilename: '[name]-[chunkhash].js',
-            chunkFilename: '[name].js',
+            chunkFilename: '[name]-[chunkhash].js',
+            // chunkFilename: '[name].js',
             libraryTarget: 'umd'
         },
         resolve: {
@@ -20,6 +20,8 @@ module.exports = {
             }
         },
         module: {
+            // exprContextRegExp: /$^/,
+            // exprContextCritical: true,
             loaders: [{
                 test: path.join(__dirname, 'src-es6'),
                 exclude: /node_modules/,
@@ -69,6 +71,8 @@ module.exports = {
         //     'sortabletable': 'SortableTable'
         // },
         module: {
+            // exprContextRegExp: /$^/,
+            // exprContextCritical: true,
             loaders: [{
                 test: path.join(__dirname, 'src-es6'),
                 exclude: /node_modules/,

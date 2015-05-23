@@ -25,6 +25,6 @@ test('Drop-down UI elements', function() {
 });
 
 test('TableFilter removed', function() {
-    tf.remove();
+    tf.destroy();
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
 });

@@ -22,7 +22,7 @@ test('CheckList UI elements', function() {
 });
 
 test('TableFilter removed', function() {
-    tf.remove();
+    tf.destroy();
     deepEqual(id(tf.fltIds[3]), null, 'CheckList UL element');
 });
 
