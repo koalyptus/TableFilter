@@ -2021,7 +2021,7 @@ export class TableFilter{
             }
 
             if(!isRowValid){
-                this.validateRow(k,false);
+                this.validateRow(k, false);
                 // always visible rows need to be counted as valid
                 if(this.hasVisibleRows && array.has(this.visibleRows, k) &&
                     !this.paging){
@@ -2030,13 +2030,13 @@ export class TableFilter{
                     hiddenrows++;
                 }
             } else {
-                this.validateRow(k,true);
+                this.validateRow(k, true);
                 this.validRowsIndex.push(k);
                 if(this.alternateBgs){
                     Cpt.alternateRows.setRowBg(k, this.validRowsIndex.length);
                 }
                 if(this.onRowValidated){
-                    this.onRowValidated.call(null,this,k);
+                    this.onRowValidated.call(null, this, k);
                 }
             }
         }// for k
@@ -2145,7 +2145,7 @@ export class TableFilter{
     }
 
     /**
-     * Returns the filter value for a specified column index
+     * Return the filter's value of a specified column
      * @param  {Number} index Column index
      * @return {String}       Filter value
      */
@@ -2190,9 +2190,10 @@ export class TableFilter{
         return fltValue;
     }
 
-    /*====================================================
-        - Returns the value of every single filter
-    =====================================================*/
+    /**
+     * Return the filters' values
+     * @return {Array} List of filters' values
+     */
     getFiltersValue(){
         if(!this.fltGrid){
             return;
@@ -2207,11 +2208,11 @@ export class TableFilter{
         return searchArgs;
     }
 
-    /*====================================================
-        - Returns filter id of a specified column
-        - Params:
-            - index: column index (numeric value)
-    =====================================================*/
+    /**
+     * Return the ID of the filter of a specified column
+     * @param  {Number} index Column's index
+     * @return {String}       ID of the filter element
+     */
     getFilterId(index){
         if(!this.fltGrid){
             return;
@@ -2219,16 +2220,15 @@ export class TableFilter{
         return this.fltIds[index];
     }
 
-    /*====================================================
-        - returns an array containing ids of filters of a
-        specified type (inputs or selects)
-        - Note that hidden filters are also returned
-        - Needs folllowing args:
-            - filter type string ('input','select',
-            'multiple')
-            - optional boolean: if set true method
-            returns column indexes otherwise filters ids
-    =====================================================*/
+    /**
+     * Return the list of ids of filters matching a specified type.
+     * Note: hidden filters are also returned
+     *
+     * @param  {String} type  Filter type string ('input', 'select', 'multiple',
+     *                        'checklist')
+     * @param  {Boolean} bool If true returns columns indexes instead of IDs
+     * @return {[type]}       List of element IDs or column indexes
+     */
     getFiltersByType(type, bool){
         if(!this.fltGrid){
             return;
@@ -2244,34 +2244,32 @@ export class TableFilter{
         return arr;
     }
 
-    /*====================================================
-        - returns filter DOM element for a given column
-        index
-    =====================================================*/
+    /**
+     * Return the filter's DOM element for a given column
+     * @param  {Number} index     Column's index
+     * @return {DOMElement}
+     */
     getFilterElement(index){
-        if(!this.fltGrid){
-            return null;
-        }
-        return dom.id(this.fltIds[index]);
+        var fltId = this.fltIds[index];
+        return dom.id(fltId);
     }
 
-    /*====================================================
-        - returns number of cells in a row
-        - if rowIndex param is passed returns number of
-        cells of specified row (number)
-    =====================================================*/
+    /**
+     * Return the number of cells for a given row index
+     * @param  {Number} rowIndex Index of the row
+     * @return {Number}          Number of cells
+     */
     getCellsNb(rowIndex){
         var tr = !rowIndex ? this.tbl.rows[0] : this.tbl.rows[rowIndex];
         return tr.cells.length;
     }
 
-    /*====================================================
-        - returns total nb of filterable rows starting
-        from reference row if defined
-        - Param:
-            - includeHeaders: if true header rows are
-            included in calculation(= table rows number)
-    =====================================================*/
+    /**
+     * Return the number of filterable rows starting from reference row if
+     * defined
+     * @param  {Boolean} includeHeaders Include the headers row
+     * @return {Number}                 Number of filterable rows
+     */
     getRowsNb(includeHeaders){
         var s = !this.refRow ? 0 : this.refRow,
             ntrs = this.tbl.rows.length;
@@ -2279,28 +2277,32 @@ export class TableFilter{
         return parseInt(ntrs-s, 10);
     }
 
-    /*====================================================
-        - returns text content of a given cell
-        - Params:
-            - i: index of the column (number)
-            - cell: td DOM object
-    =====================================================*/
+    /**
+     * Return the data of a given cell
+     * @param  {Number} i    Column's index
+     * @param  {Object} cell Cell's DOM object
+     * @return {String}
+     */
     getCellData(i, cell){
         if(i===undefined || !cell){
             return '';
         }
         //First checks for customCellData event
         if(this.customCellData && array.has(this.customCellDataCols, i)){
-            return this.customCellData.call(null,this,cell,i);
+            return this.customCellData.call(null, this, cell, i);
         } else {
             return dom.getText(cell);
         }
     }
 
-    /*====================================================
-        - returns an array containing table data:
-        [rowindex,[value1,value2,value3...]]
-    =====================================================*/
+    /**
+     * Return the table data with following format:
+     * [
+     *     [rowIndex, [value0, value1...]],
+     *     [rowIndex, [value0, value1...]]
+     * ]
+     * @return {Array}
+     */
     getTableData(){
         var row = this.tbl.rows;
         for(var k=this.refRow; k<this.nbRows; k++){
@@ -2316,10 +2318,15 @@ export class TableFilter{
         return this.tblData;
     }
 
-    /*====================================================
-        - returns an array containing filtered data:
-        [rowindex,[value1,value2,value3...]]
-    =====================================================*/
+    /**
+     * Return the filtered data with following format:
+     * [
+     *     [rowIndex, [value0, value1...]],
+     *     [rowIndex, [value0, value1...]]
+     * ]
+     * @param  {Boolean} includeHeaders  Include headers row
+     * @return {Array}
+     */
     getFilteredData(includeHeaders){
         if(!this.validRowsIndex){
             return [];
@@ -2351,14 +2358,11 @@ export class TableFilter{
         return filteredData;
     }
 
-    /*====================================================
-        - returns an array containing filtered data of a
-        specified column.
-        - Params:
-            - colIndex: index of the column (number)
-        - returned array:
-        [value1,value2,value3...]
-    =====================================================*/
+    /**
+     * Return the filtered data for a given column index
+     * @param  {Number} colIndex Colmun's index
+     * @return {Array}           Flat list of values ['val0','val1','val2'...]
+     */
     getFilteredDataCol(colIndex){
         if(colIndex===undefined){
             return [];
@@ -2376,20 +2380,23 @@ export class TableFilter{
         return colData;
     }
 
+    /**
+     * Get the display value of a row
+     * @param  {RowElement} DOM element of the row
+     * @return {String}     Usually 'none' or ''
+     */
     getRowDisplay(row){
-        if(!this.fltGrid && !types.isObj(row)){
+        if(!this.fltGrid || !types.isObj(row)){
             return;
         }
         return row.style.display;
     }
 
-    /*====================================================
-        - Validates/unvalidates row by setting 'validRow'
-        attribute and shows/hides row
-        - Params:
-            - rowIndex: index of the row (number)
-            - isValid: boolean
-    =====================================================*/
+    /**
+     * Validate/invalidate row by setting the 'validRow' attribute on the row
+     * @param  {Number}  rowIndex Index of the row
+     * @param  {Boolean} isValid
+     */
     validateRow(rowIndex, isValid){
         var row = this.tbl.rows[rowIndex];
         if(!row || str.lower(typeof isValid)!=='boolean'){
@@ -2407,7 +2414,7 @@ export class TableFilter{
         row.style.display = displayFlag;
 
         if(this.paging){
-            row.setAttribute('validRow',validFlag);
+            row.setAttribute('validRow', validFlag);
         }
     }
 
