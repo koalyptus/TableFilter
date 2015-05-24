@@ -2,7 +2,7 @@
  * DOM event utilities
  */
 
-var Event = {
+export var Event = {
     add(obj, type, func, capture){
         if(obj.addEventListener){
             obj.addEventListener(type, func, capture);
@@ -51,5 +51,3 @@ var Event = {
             (evt.keyCode ? evt.keyCode: (evt.which ? evt.which : 0));
     }
 };
-
-exports.Event = Event;

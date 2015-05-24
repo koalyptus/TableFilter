@@ -226,7 +226,7 @@ export class TableFilter{
         this.onAfterFilter = types.isFn(f.on_after_filter) ?
             f.on_after_filter : null;
         //enables/disables case sensitivity
-        this.matchCase = f.match_case===true ? true : false;
+        this.caseSensitive = f.case_sensitive===true ? true : false;
         //enables/disbles exact match for search
         this.exactMatch = f.exact_match===true ? true : false;
         //refreshes drop-down lists upon validation
@@ -562,19 +562,19 @@ export class TableFilter{
             =====================================================*/
             detectKey(e) {
                 if(!o.enterKey){ return; }
-                var _evt = e || global.event;
-                if(_evt){
-                    var key = evt.keyCode(_evt);
+                var _ev = e || global.event;
+                if(_ev){
+                    var key = evt.keyCode(_ev);
                     if(key===13){
                         o._filter();
-                        evt.cancel(_evt);
-                        evt.stop(_evt);
+                        evt.cancel(_ev);
+                        evt.stop(_ev);
                     } else {
                         o.isUserTyping = true;
                         global.clearInterval(o.onKeyUpTimer);
                         o.onKeyUpTimer = undefined;
                     }
-                }//if evt
+                }
             },
             /*====================================================
                 - onkeyup event for text filters
@@ -583,8 +583,8 @@ export class TableFilter{
                 if(!o.onKeyUp){
                     return;
                 }
-                var _evt = e || global.event;
-                var key = evt.keyCode(_evt);
+                var _ev = e || global.event;
+                var key = evt.keyCode(_ev);
                 o.isUserTyping = false;
 
                 function filter() {
@@ -634,12 +634,12 @@ export class TableFilter{
                 - onfocus event for input filters
             =====================================================*/
             onInpFocus(e) {
-                var _evt = e || global.event;
+                var _ev = e || global.event;
                 o.activeFilterId = this.getAttribute('id');
                 o.activeFlt = dom.id(o.activeFilterId);
                 if(o.popUpFilters){
-                    evt.cancel(_evt);
-                    evt.stop(_evt);
+                    evt.cancel(_ev);
+                    evt.stop(_ev);
                 }
                 // if(o.ezEditTable){
                 //     if(o.editable){
@@ -654,7 +654,7 @@ export class TableFilter{
                 - onfocus event for select filters
             =====================================================*/
             onSlcFocus(e) {
-                var _evt = e || global.event;
+                var _ev = e || global.event;
                 o.activeFilterId = this.getAttribute('id');
                 o.activeFlt = dom.id(o.activeFilterId);
                 // select is populated when element has focus
@@ -663,8 +663,8 @@ export class TableFilter{
                     o.Cpt.dropdown._build(ct);
                 }
                 if(o.popUpFilters){
-                    evt.cancel(_evt);
-                    evt.stop(_evt);
+                    evt.cancel(_ev);
+                    evt.stop(_ev);
                 }
             },
             /*====================================================
@@ -677,8 +677,8 @@ export class TableFilter{
                 // if(o.activeFlt && colIndex &&
                 //     o['col'+colIndex]===o.fltTypeCheckList &&
                 //     !o.Evt.onSlcChange.caller){ return; }
-                var _evt = e || global.event;
-                if(o.popUpFilters){ evt.stop(_evt); }
+                var _ev = e || global.event;
+                if(o.popUpFilters){ evt.stop(_ev); }
                 if(o.onSlcChange){ o.filter(); }
             },
             /*====================================================
@@ -879,9 +879,6 @@ export class TableFilter{
                     //drop-down filters
                     if(col===this.fltTypeSlc || col===this.fltTypeMulti){
                         if(!this.Cpt.dropdown){
-                            // var Dropdown =
-                            //  require('modules/dropdown').Dropdown;
-                            // import {Dropdown} from 'modules/dropdown';
                             this.Cpt.dropdown = new Dropdown(this);
                         }
                         var dropdown = this.Cpt.dropdown;
@@ -928,9 +925,6 @@ export class TableFilter{
                     else if(col===this.fltTypeCheckList){
                         var checkList;
                         if(!this.Cpt.checkList){
-                            // var CheckList =
-                            //         require('modules/checkList').CheckList;
-                            // import {CheckList} from 'modules/checkList';
                             this.Cpt.checkList = new CheckList(this);
                             checkList = this.Cpt.checkList;
                         }
@@ -990,16 +984,16 @@ export class TableFilter{
 
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
 
-                        inp.onkeypress = this.Evt.detectKey;
-                        inp.onkeydown = this.Evt.onKeyDown;
-                        inp.onkeyup = this.Evt.onKeyUp;
-                        inp.onblur = this.Evt.onInpBlur;
+                        evt.add(inp, 'keypress', this.Evt.detectKey);
+                        evt.add(inp, 'keydown', this.Evt.onKeyDown);
+                        evt.add(inp, 'keyup', this.Evt.onKeyUp);
+                        evt.add(inp, 'blur', this.Evt.onInpBlur);
 
                         if(this.rememberGridValues){
                             var flts_values = this.Cpt.store.getFilterValues(
                                 this.fltsValuesCookie);
                             if(flts_values[i]!=' '){
-                                this.setFilterValue(i,flts_values[i],false);
+                                this.setFilterValue(i, flts_values[i], false);
                             }
                         }
                     }
@@ -1164,7 +1158,6 @@ export class TableFilter{
                     cpt.paging._resetPageLength(this.pgLenCookie);
                 break;
                 case ev.sort:
-                    void(0);
                 break;
                 case ev.loadextensions:
                     this._loadExtensions();
@@ -1678,9 +1671,9 @@ export class TableFilter{
     }
 
     /**
-     * Filter the table by retrieving the data from each td in every single tr
-     * and comparing it to the search term for current column. A tr is hidden
-     * when all search terms are not found
+     * Filter the table by retrieving the data from each cell in every single
+     * row and comparing it to the search term for current column. A row is
+     * hidden when all the search terms are not found in current row.
      */
     _filter(){
         if(!this.fltGrid || (!this._hasGrid && !this.isFirstLoad)){
@@ -1956,7 +1949,7 @@ export class TableFilter{
                 }
 
                 var cell_data = str.matchCase(
-                    this.getCellData(j, cell[j]), this.matchCase);
+                    this.getCellData(j, cell[j]), this.caseSensitive);
 
                 //multiple search parameter operator ||
                 var sAOrSplit = sA.split(this.orOperator),
@@ -2202,7 +2195,7 @@ export class TableFilter{
         for(var i=0; i<this.fltIds.length; i++){
             searchArgs.push(
                 str.trim(
-                    str.matchCase(this.getFilterValue(i), this.matchCase))
+                    str.matchCase(this.getFilterValue(i), this.caseSensitive))
             );
         }
         return searchArgs;
@@ -2345,7 +2338,7 @@ export class TableFilter{
             filteredData.push(rowData);
         }
 
-        var validRows = this.getValidRowsIndex(true);
+        var validRows = this.getValidRows(true);
         for(var i=0; i<validRows.length; i++){
             var rData = [this.validRowsIndex[i],[]],
                 cells = row[this.validRowsIndex[i]].cells;
@@ -2485,19 +2478,20 @@ export class TableFilter{
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
-            searcharg = str.matchCase(searcharg, this.matchCase);
+            searcharg = str.matchCase(searcharg, this.caseSensitive);
             var sarg = searcharg.split(' '+this.orOperator+' ');
+            var lisNb = dom.tag(slc,'li').length;
 
             slc.setAttribute('value','');
             slc.setAttribute('indexes','');
 
-            for(var k=0; k<dom.tag(slc,'li').length; k++){
+            for(var k=0; k<lisNb; k++){
                 var li = dom.tag(slc,'li')[k],
                     lbl = dom.tag(li,'label')[0],
                     chk = dom.tag(li,'input')[0],
                     lblTxt = str.matchCase(
-                        dom.getText(lbl), this.matchCase);
-                if(lblTxt!=='' && array.has(sarg, lblTxt, true)){
+                        dom.getText(lbl), this.caseSensitive);
+                if(lblTxt !== '' && array.has(sarg, lblTxt, true)){
                     chk.checked = true;
                     this.Cpt.checkList.setCheckListValues(chk);
                 }
@@ -2767,7 +2761,7 @@ export class TableFilter{
         // automatic exact match for selects and special characters are now
         // filtered
         var regexp,
-            modifier = (this.matchCase) ? 'g' : 'gi',
+            modifier = (this.caseSensitive) ? 'g' : 'gi',
             exactMatch = !forceMatch ? this.exactMatch : forceMatch;
         if(exactMatch || (fltType!==this.fltTypeInp && fltType)){
             regexp = new RegExp(
@@ -2859,7 +2853,7 @@ export class TableFilter{
         - returns an array containing valid rows indexes
         (valid rows upon filtering)
     =====================================================*/
-    getValidRowsIndex(reCalc){
+    getValidRows(reCalc){
         if(!this._hasGrid){
             return;
         }

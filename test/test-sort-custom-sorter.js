@@ -42,7 +42,7 @@ function startTest(tf, sort){
     test('Sort UI elements', function() {
         var th = tf.getHeaderElement(0),
             indicator = tag(th, 'img'),
-            validRows = tf.getValidRowsIndex(true);
+            validRows = tf.getValidRows(true);
 
         deepEqual(indicator.length, 1, 'Sort indicator in header element');
         deepEqual(
@@ -53,7 +53,7 @@ function startTest(tf, sort){
 
     test('Sort behaviour', function() {
         var th = tf.getHeaderElement(1),
-            validRows = tf.getValidRowsIndex();
+            validRows = tf.getValidRows();
         sort.sortByColumnIndex(1);
 
         deepEqual(sort.sorted, true, 'Table column sorted');
