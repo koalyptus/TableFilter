@@ -2295,6 +2295,8 @@ export class TableFilter{
      *     [rowIndex, [value0, value1...]]
      * ]
      * @return {Array}
+     *
+     * TODO: provide an API returning data in JSON format
      */
     getTableData(){
         var row = this.tbl.rows;
@@ -2319,6 +2321,8 @@ export class TableFilter{
      * ]
      * @param  {Boolean} includeHeaders  Include headers row
      * @return {Array}
+     *
+     * TODO: provide an API returning data in JSON format
      */
     getFilteredData(includeHeaders){
         if(!this.validRowsIndex){
@@ -2355,6 +2359,8 @@ export class TableFilter{
      * Return the filtered data for a given column index
      * @param  {Number} colIndex Colmun's index
      * @return {Array}           Flat list of values ['val0','val1','val2'...]
+     *
+     * TODO: provide an API returning data in JSON format
      */
     getFilteredDataCol(colIndex){
         if(colIndex===undefined){
@@ -2411,9 +2417,9 @@ export class TableFilter{
         }
     }
 
-    /*====================================================
-        - Validates all filterable rows
-    =====================================================*/
+    /**
+     * Validate all filterable rows
+     */
     validateAllRows(){
         if(!this._hasGrid){
             return;
@@ -2425,15 +2431,11 @@ export class TableFilter{
         }
     }
 
-    /*====================================================
-        - Inserts value in a specified filter
-        - Params:
-            - index: filter column index (numeric value)
-            - searcharg: search string
-            - doFilter: optional boolean for multiple
-            selects: executes filtering when multiple
-            select populated... IE only!
-    =====================================================*/
+    /**
+     * Set search value to a given filter
+     * @param {Number} index     Column's index
+     * @param {String} searcharg Search term
+     */
     setFilterValue(index, searcharg/*, doFilter*/){
         if((!this.fltGrid && !this.isFirstLoad) ||
             !this.getFilterElement(index)){
@@ -2503,43 +2505,49 @@ export class TableFilter{
         }
     }
 
-    /*====================================================
-        - sets coluun widths in pixels
-    =====================================================*/
+    /**
+     * Set them columns' widths as per configuration
+     * @param {Number} rowIndex Optional row index to apply the widths to
+     */
     setColWidths(rowIndex){
         if(!this.fltGrid || !this.hasColWidth){
             return;
         }
-        var o = this, rIndex;
+        var rIndex;
         if(rowIndex===undefined){
             rIndex = this.tbl.rows[0].style.display!='none' ? 0 : 1;
         } else{
             rIndex = rowIndex;
         }
-        setWidths(this.tbl.rows[rIndex]);
+        setWidths.call(this, this.tbl.rows[rIndex]);
 
         function setWidths(row){
-            if(!o && (o.nbCells!=o.colWidth.length)){
-                return;
+            /*jshint validthis:true */
+            var nbCols = this.nbCells;
+            var colWidth = this.colWidth;
+            if((nbCols != colWidth.length) || (nbCols != row.cells.length)){
+                throw new Error('Columns number mismatch!');
             }
-            if(o.nbCells==row.cells.length){
-                for(var k=0; k<o.nbCells; k++){
-                    row.cells[k].style.width = o.colWidth[k];
-                }
+
+            for(var k=0; k<nbCols; k++){
+                row.cells[k].style.width = colWidth[k];
             }
+
         }
     }
 
-    /*====================================================
-        - makes a row always visible
-        - Note this works only if paging is false
-    =====================================================*/
+    /**
+     * Makes defined rows always visible
+     *
+     * NOTE: This applies only when paging is disabled
+     */
     enforceVisibility(){
         if(this._hasGrid && this.hasVisibleRows && !this.paging){
-            for(var i=0; i<this.visibleRows.length; i++){
+            for(var i=0, len=this.visibleRows.length; i<len; i++){
+                var row = this.visibleRows[i];
                 //row index cannot be > nrows
-                if(this.visibleRows[i] <= this.nbRows){
-                    this.validateRow(this.visibleRows[i],true);
+                if(row <= this.nbRows){
+                    this.validateRow(row, true);
                 }
             }
         }
