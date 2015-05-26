@@ -2556,9 +2556,10 @@ export class TableFilter{
     clearFilters(){
         this.EvtManager(this.Evt.name.clear);
     }
-    /*====================================================
-        - clears grid filters
-    =====================================================*/
+
+    /**
+     * Clear all the filters' values
+     */
     _clearFilters(){
         if(!this.fltGrid){
             return;
@@ -2578,19 +2579,21 @@ export class TableFilter{
         if(this.onAfterReset){ this.onAfterReset.call(null, this); }
     }
 
-    /*====================================================
-        - clears active columns header class name
-    =====================================================*/
+    /**
+     * Clears filtered columns visual indicator (background color)
+     * @return {[type]} [description]
+     */
     clearActiveColumns(){
-        for(var i=0; i<this.fltIds.length; i++){
+        for(var i=0, len=this.fltIds.length; i<len; i++){
             dom.removeClass(
                 this.getHeaderElement(i), this.activeColumnsCssClass);
         }
     }
 
-    /*====================================================
-        - Re-generates filters grid
-    =====================================================*/
+    /**
+     * Refresh the filters
+     * @param  {Object} config Configuration literal object
+     */
     refresh(config){
         var configObj = !config ? this.cfg : config;
         var hasSort = this.sort;
@@ -2618,10 +2621,10 @@ export class TableFilter{
         }
     }
 
-    /*====================================================
-        - retrieves select, multiple and checklist filters
-        - calls method repopulating filters
-    =====================================================*/
+    /**
+     * Refresh the filters subject to linking ('select', 'multiple',
+     * 'checklist' type)
+     */
     linkFilters(){
         var slcA1 = this.getFiltersByType(this.fltTypeSlc, true),
             slcA2 = this.getFiltersByType(this.fltTypeMulti, true),
@@ -2629,45 +2632,46 @@ export class TableFilter{
             slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
 
-        if(this.activeFilterId){
-            var activeFlt = this.activeFilterId.split('_')[0];
-            activeFlt = activeFlt.split(this.prfxFlt)[1];
-            var slcSelectedValue;
-            for(var i=0; i<slcIndex.length; i++){
-                var curSlc = dom.id(this.fltIds[slcIndex[i]]);
-                slcSelectedValue = this.getFilterValue(slcIndex[i]);
-                if(activeFlt!==slcIndex[i] ||
-                    (this.paging && array.has(slcA1, slcIndex[i]) &&
-                        activeFlt === slcIndex[i] ) ||
-                    (!this.paging && (array.has(slcA3, slcIndex[i]) ||
-                        array.has(slcA2, slcIndex[i]))) ||
-                    slcSelectedValue === this.displayAllText ){
-
-                    if(array.has(slcA3, slcIndex[i])){
-                        this.Cpt.checkList.checkListDiv[
-                            slcIndex[i]].innerHTML = '';
-                    } else {
-                        curSlc.innerHTML = '';
-                    }
-
-                    //1st option needs to be inserted
-                    if(this.fillSlcOnDemand) {
-                        var opt0 = dom.createOpt(this.displayAllText, '');
-                        if(curSlc){
-                            curSlc.appendChild(opt0);
-                        }
-                    }
-
-                    if(array.has(slcA3, slcIndex[i])){
-                        this.Cpt.checkList._build(slcIndex[i]);
-                    } else {
-                        this.Cpt.dropdown._build(slcIndex[i], true);
-                    }
-
-                    this.setFilterValue(slcIndex[i],slcSelectedValue);
-                }
-            }// for i
+        if(!this.activeFilterId){
+            return;
         }
+
+        var activeFlt = this.activeFilterId.split('_')[0];
+        activeFlt = activeFlt.split(this.prfxFlt)[1];
+        var slcSelectedValue;
+        for(var i=0; i<slcIndex.length; i++){
+            var curSlc = dom.id(this.fltIds[slcIndex[i]]);
+            slcSelectedValue = this.getFilterValue(slcIndex[i]);
+            if(activeFlt!==slcIndex[i] ||
+                (this.paging && array.has(slcA1, slcIndex[i]) &&
+                    activeFlt === slcIndex[i] ) ||
+                (!this.paging && (array.has(slcA3, slcIndex[i]) ||
+                    array.has(slcA2, slcIndex[i]))) ||
+                slcSelectedValue === this.displayAllText ){
+
+                if(array.has(slcA3, slcIndex[i])){
+                    this.Cpt.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
+                } else {
+                    curSlc.innerHTML = '';
+                }
+
+                //1st option needs to be inserted
+                if(this.fillSlcOnDemand) {
+                    var opt0 = dom.createOpt(this.displayAllText, '');
+                    if(curSlc){
+                        curSlc.appendChild(opt0);
+                    }
+                }
+
+                if(array.has(slcA3, slcIndex[i])){
+                    this.Cpt.checkList._build(slcIndex[i]);
+                } else {
+                    this.Cpt.dropdown._build(slcIndex[i], true);
+                }
+
+                this.setFilterValue(slcIndex[i],slcSelectedValue);
+            }
+        }// for i
     }
 
     /*====================================================
