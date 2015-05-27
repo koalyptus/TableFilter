@@ -2674,14 +2674,9 @@ export class TableFilter{
         }// for i
     }
 
-    /*====================================================
-        - Private methods
-    =====================================================*/
-
-    /*====================================================
-        - Only used by AddGrid() method
-        - Resets filtering grid bar if previously removed
-    =====================================================*/
+    /**
+     * Re-generate the filters grid bar when previously removed
+     */
     _resetGrid(){
         if(this.isFirstLoad){
             return;
@@ -2756,18 +2751,17 @@ export class TableFilter{
         this._hasGrid = true;
     }
 
-    /*==============================================
-        - Checks if data contains searched arg,
-        returns a boolean
-        - Params:
-            - arg: searched string
-            - data: data string
-            - fltType: filter type (string,
-            exact match by default for selects -
-            optional)
-            - forceMatch: boolean forcing exact
-            match (optional)
-    ===============================================*/
+    /**
+     * Checks if passed data contains the searched arg
+     * @param  {String} arg         Search term
+     * @param  {String} data        Data string
+     * @param  {String} fltType     Filter type ('input', 'select')
+     * @param  {Boolean} forceMatch Exact match
+     * @return {Boolean]}
+     *
+     * TODO: move into string module, remove fltType in order to decouple it
+     * from TableFilter module
+     */
     _containsStr(arg, data, fltType, forceMatch){
         // Improved by Cedric Wartel (cwl)
         // automatic exact match for selects and special characters are now
@@ -2784,6 +2778,12 @@ export class TableFilter{
         return regexp.test(data);
     }
 
+    /**
+     * Check if passed script or stylesheet is already imported
+     * @param  {String}  filePath Ressource path
+     * @param  {String}  type     Possible values: 'script' or 'link'
+     * @return {Boolean}
+     */
     isImported(filePath, type){
         var imported = false,
             importType = !type ? 'script' : type,
@@ -2801,6 +2801,13 @@ export class TableFilter{
         return imported;
     }
 
+    /**
+     * Import script or stylesheet
+     * @param  {String}   fileId   Ressource ID
+     * @param  {String}   filePath Ressource path
+     * @param  {Function} callback Callback
+     * @param  {String}   type     Possible values: 'script' or 'link'
+     */
     import(fileId, filePath, callback, type){
         var ftype = !type ? 'script' : type,
             imported = this.isImported(filePath, ftype);
@@ -2842,29 +2849,27 @@ export class TableFilter{
         head.appendChild(file);
     }
 
-    /*====================================================
-        - checks if table has a filter grid
-        - returns a boolean
-    =====================================================*/
+    /**
+     * Check if table has filters grid
+     * @return {Boolean}
+     */
     hasGrid(){
         return this._hasGrid;
     }
 
-    /*====================================================
-        - returns an array containing filters ids
-        - Note that hidden filters are also returned
-    =====================================================*/
+    /**
+     * Get list of filter IDs
+     * @return {[type]} [description]
+     */
     getFiltersId(){
-        if(!this._hasGrid){
-            return;
-        }
-        return this.fltIds;
+        return this.fltIds || [];
     }
 
-    /*====================================================
-        - returns an array containing valid rows indexes
-        (valid rows upon filtering)
-    =====================================================*/
+    /**
+     * Get filtered (valid) rows indexes
+     * @param  {Boolean} reCalc Force calculation of filtered rows list
+     * @return {Array}          List of row indexes
+     */
     getValidRows(reCalc){
         if(!this._hasGrid){
             return;
@@ -2890,10 +2895,10 @@ export class TableFilter{
         return this.validRowsIndex;
     }
 
-    /*====================================================
-        - Returns the index of the row containing the
-        filters
-    =====================================================*/
+    /**
+     * Get the index of the row containing the filters
+     * @return {Number}
+     */
     getFiltersRowIndex(){
         if(!this._hasGrid){
             return;
@@ -2901,9 +2906,10 @@ export class TableFilter{
         return this.filtersRowIndex;
     }
 
-    /*====================================================
-        - Returns the index of the headers row
-    =====================================================*/
+    /**
+     * Get the index of the headers row
+     * @return {Number}
+     */
     getHeadersRowIndex(){
         if(!this._hasGrid){
             return;
@@ -2911,10 +2917,11 @@ export class TableFilter{
         return this.headersRow;
     }
 
-    /*====================================================
-        - Returns the index of the row from which will
-        start the filtering process (1st filterable row)
-    =====================================================*/
+    /**
+     * Get the row index from where the filtering process start (1st filterable
+     * row)
+     * @return {Number}
+     */
     getStartRowIndex(){
         if(!this._hasGrid){
             return;
@@ -2922,9 +2929,10 @@ export class TableFilter{
         return this.refRow;
     }
 
-    /*====================================================
-        - Returns the index of the last row
-    =====================================================*/
+    /**
+     * Get the index of the last row
+     * @return {Number}
+     */
     getLastRowIndex(){
         if(!this._hasGrid){
             return;
@@ -2932,10 +2940,11 @@ export class TableFilter{
         return (this.nbRows-1);
     }
 
-    /*====================================================
-        - returns a header DOM element for a given column
-        index
-    =====================================================*/
+    /**
+     * Get the header DOM element for a given column index
+     * @param  {Number} colIndex Column index
+     * @return {Object}
+     */
     getHeaderElement(colIndex){
         var table = this.gridLayout ? this.Cpt.gridLayout.headTbl : this.tbl;
         var tHead = dom.tag(table, 'thead');
@@ -2956,17 +2965,18 @@ export class TableFilter{
         return header;
     }
 
-    /*====================================================
-        - returns the original configuration object
-    =====================================================*/
+    /**
+     * Get the configuration object (literal object)
+     * @return {Object}
+     */
     config(){
         return this.cfg;
     }
 
-    /*====================================================
-        - returns the total number of rows that can be
-        filtered
-    =====================================================*/
+    /**
+     * Get the total number of filterable rows
+     * @return {Number}
+     */
     getFilterableRowsNb(){
         return this.getRowsNb(false);
     }
