@@ -73,8 +73,8 @@ export class GridLayout{
         tf.isExternalFlt = true;
 
         // default width of 100px if column widths not set
-        if(!tf.hasColWidth){
-            tf.colWidth = [];
+        if(!tf.hasColWidths){
+            tf.colWidths = [];
             for(var k=0; k<tf.nbCells; k++){
                 var colW,
                     cell = tbl.rows[this.gridHeadRowIndex].cells[k];
@@ -85,9 +85,9 @@ export class GridLayout{
                 } else {
                     colW = this.gridDefaultColWidth;
                 }
-                tf.colWidth[k] = colW;
+                tf.colWidths[k] = colW;
             }
-            tf.hasColWidth = true;
+            tf.hasColWidths = true;
         }
         tf.setColWidths(this.gridHeadRowIndex);
 
@@ -237,34 +237,34 @@ export class GridLayout{
             tf.sortConfig.triggerIds = sortTriggers;
         }
 
-        if(this.gridEnableColResizer){
-            if(!tf.hasExtensions){
-                tf.extensions = {
-                    name:['ColumnsResizer_'+tf.id],
-                    src:[this.gridColResizerPath],
-                    description:['Columns Resizing'],
-                    initialize:[function(o){
-                        o.SetColsResizer('ColumnsResizer_'+o.id);}]
-                };
-                tf.hasExtensions = true;
-            } else {
-                if(!tf._containsStr(
-                    'colsresizer',
-                    Str.lower(tf.extensions.src.toString())) ){
-                    tf.extensions.name.push('ColumnsResizer_'+tf.id);
-                    tf.extensions.src.push(tf.gridColResizerPath);
-                    tf.extensions.description.push('Columns Resizing');
-                    tf.extensions.initialize.push(function(o){
-                        o.SetColsResizer('ColumnsResizer_'+o.id);});
-                }
-            }
-        }
+        // if(this.gridEnableColResizer){
+        //     if(!tf.hasExtensions){
+        //         tf.extensions = {
+        //             name:['ColumnsResizer_'+tf.id],
+        //             src:[this.gridColResizerPath],
+        //             description:['Columns Resizing'],
+        //             initialize:[function(o){
+        //                 o.SetColsResizer('ColumnsResizer_'+o.id);}]
+        //         };
+        //         tf.hasExtensions = true;
+        //     } else {
+        //         if(!tf._containsStr(
+        //             'colsresizer',
+        //             Str.lower(tf.extensions.src.toString())) ){
+        //             tf.extensions.name.push('ColumnsResizer_'+tf.id);
+        //             tf.extensions.src.push(tf.gridColResizerPath);
+        //             tf.extensions.description.push('Columns Resizing');
+        //             tf.extensions.initialize.push(function(o){
+        //                 o.SetColsResizer('ColumnsResizer_'+o.id);});
+        //         }
+        //     }
+        // }
 
         //Default columns resizer properties for grid layout
-        f.col_resizer_cols_headers_table = this.headTbl.getAttribute('id');
-        f.col_resizer_cols_headers_index = this.gridHeadRowIndex;
-        f.col_resizer_width_adjustment = 0;
-        f.col_enable_text_ellipsis = false;
+        // f.col_resizer_cols_headers_table = this.headTbl.getAttribute('id');
+        // f.col_resizer_cols_headers_index = this.gridHeadRowIndex;
+        // f.col_resizer_width_adjustment = 0;
+        // f.col_enable_text_ellipsis = false;
 
         //Cols generation for all browsers excepted IE<=7
         this.tblHasColTag = Dom.tag(tbl, 'col').length > 0 ? true : false;
@@ -278,7 +278,7 @@ export class GridLayout{
             for(var k=(tf.nbCells-1); k>=0; k--){
                 var col = Dom.create('col', ['id', tf.id+'_col_'+k]);
                 tbl.firstChild.parentNode.insertBefore(col, tbl.firstChild);
-                col.style.width = tf.colWidth[k];
+                col.style.width = tf.colWidths[k];
                 o.gridColElms[k] = col;
             }
             o.tblHasColTag = true;
@@ -289,7 +289,7 @@ export class GridLayout{
             var cols = Dom.tag(tbl, 'col');
             for(var ii=0; ii<tf.nbCells; ii++){
                 cols[ii].setAttribute('id', tf.id+'_col_'+ii);
-                cols[ii].style.width = tf.colWidth[ii];
+                cols[ii].style.width = tf.colWidths[ii];
                 o.gridColElms.push(cols[ii]);
             }
         }

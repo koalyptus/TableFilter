@@ -54,8 +54,8 @@ module.exports = {
             publicPath: '/dist/tablefilter/',
             path: path.join(__dirname, '/dist/tablefilter'),
             filename: 'tablefilter.js',
-            // chunkFilename: '[name]-[chunkhash].js',
-            chunkFilename: '[name].js',
+            chunkFilename: '[name]-[chunkhash].js',
+            // chunkFilename: '[name].js',
             libraryTarget: 'umd'
         },
         resolve: {

@@ -131,7 +131,7 @@ export class TableFilter{
         this.sourceTblHtml = null;
         if(this.gridLayout){
             //Firefox does not support outerHTML property...
-            if(this.tbl.outerHTML===undefined){ setOuterHtml(); }
+            // if(this.tbl.outerHTML===undefined){ setOuterHtml(); }
             this.sourceTblHtml = this.tbl.outerHTML;
         }
         /*** ***/
@@ -200,8 +200,8 @@ export class TableFilter{
         //enables/disbles rows alternating bg colors
         this.alternateBgs = f.alternate_rows===true ? true : false;
         //defines widths of columns
-        this.hasColWidth = f.col_width===true ? true : false;
-        this.colWidth = this.hasColWidth ? f.col_width : null;
+        this.hasColWidths = types.isArray(f.col_widths);
+        this.colWidths = this.hasColWidths ? f.col_widths : null;
         //enables/disables fixed headers
         this.fixedHeaders = f.fixed_headers===true ? true : false;
         //tbody height if fixed headers enabled
@@ -275,7 +275,7 @@ export class TableFilter{
         //id of toolbar container element
         this.toolBarTgtId = f.toolbar_target_id || null;
         //enables/disables help div
-        this.helpInstructions = f.help_instructions===false ? false : true;
+        this.helpInstructions = !f.help_instructions ? false : true;
         //popup filters
         this.popUpFilters = f.popup_filters===true ? true : false;
         //active columns color
@@ -754,9 +754,9 @@ export class TableFilter{
             n = this.singleSearchFlt ? 1 : this.nbCells,
             inpclass;
 
-        if(window['tf_'+this.id] === undefined){
-            window['tf_'+this.id] = this;
-        }
+        // if(global['tf_'+this.id] === undefined){
+        //     global['tf_'+this.id] = this;
+        // }
 
         //loads stylesheet if not imported
         this.import(this.stylesheetId, this.stylesheet, null, 'link');
@@ -1054,7 +1054,7 @@ export class TableFilter{
             this.Cpt.help = new Help(this);
             this.Cpt.help.init();
         }
-        if(this.hasColWidth && !this.gridLayout){
+        if(this.hasColWidths && !this.gridLayout){
             this.setColWidths();
         }
         if(this.alternateBgs){
@@ -1346,10 +1346,6 @@ export class TableFilter{
         if(this.markActiveColumns){
             this.clearActiveColumns();
         }
-        // if(ExtRegistry.advancedGrid){
-        //     ExtRegistry.advancedGrid.destroy();
-        // }
-
         if(this.hasExtensions){
             this.destroyExtensions();
         }
@@ -1402,7 +1398,7 @@ export class TableFilter{
         }
 
         /*** container div ***/
-        var infdiv = dom.create('div', ['id',this.prfxInfDiv+this.id]);
+        var infdiv = dom.create('div', ['id', this.prfxInfDiv+this.id]);
         infdiv.className = this.infDivCssClass;
 
         //custom container
@@ -1422,32 +1418,32 @@ export class TableFilter{
         this.infDiv = dom.id(this.prfxInfDiv+this.id);
 
         /*** left div containing rows # displayer ***/
-        var ldiv = dom.create('div', ['id',this.prfxLDiv+this.id]);
+        var ldiv = dom.create('div', ['id', this.prfxLDiv+this.id]);
         ldiv.className = this.lDivCssClass;
         infdiv.appendChild(ldiv);
         this.lDiv = dom.id(this.prfxLDiv+this.id);
 
         /***    right div containing reset button
                 + nb results per page select    ***/
-        var rdiv = dom.create('div', ['id',this.prfxRDiv+this.id]);
+        var rdiv = dom.create('div', ['id', this.prfxRDiv+this.id]);
         rdiv.className = this.rDivCssClass;
         infdiv.appendChild(rdiv);
         this.rDiv = dom.id(this.prfxRDiv+this.id);
 
         /*** mid div containing paging elements ***/
-        var mdiv = dom.create('div', ['id',this.prfxMDiv+this.id]);
+        var mdiv = dom.create('div', ['id', this.prfxMDiv+this.id]);
         mdiv.className = this.mDivCssClass;
         infdiv.appendChild(mdiv);
         this.mDiv = dom.id(this.prfxMDiv+this.id);
 
         // Enable help instructions by default if topbar is generated
-        // if(!this.helpInstructions){
-        //     if(!this.Cpt.help){
-        //         this.Cpt.help = new Help(this);
-        //     }
-        //     this.Cpt.help.init();
-        //     this.helpInstructions = true;
-        // }
+        if(!this.helpInstructions){
+            if(!this.Cpt.help){
+                this.Cpt.help = new Help(this);
+            }
+            this.Cpt.help.init();
+            this.helpInstructions = true;
+        }
     }
 
     /**
@@ -1709,8 +1705,8 @@ export class TableFilter{
             Cpt = this.Cpt,
             f = this.cfg,
             hiddenrows = 0;
+
         this.validRowsIndex = [];
-        // var o = this;
 
         // removes keyword highlighting
         if(this.highlightKeywords){
@@ -2531,7 +2527,7 @@ export class TableFilter{
      * @param {Number} rowIndex Optional row index to apply the widths to
      */
     setColWidths(rowIndex){
-        if(!this.fltGrid || !this.hasColWidth){
+        if(!this.fltGrid || !this.hasColWidths){
             return;
         }
         var rIndex;
@@ -2545,13 +2541,13 @@ export class TableFilter{
         function setWidths(row){
             /*jshint validthis:true */
             var nbCols = this.nbCells;
-            var colWidth = this.colWidth;
-            if((nbCols != colWidth.length) || (nbCols != row.cells.length)){
+            var colWidths = this.colWidths;
+            if((nbCols != colWidths.length) || (nbCols != row.cells.length)){
                 throw new Error('Columns number mismatch!');
             }
 
             for(var k=0; k<nbCols; k++){
-                row.cells[k].style.width = colWidth[k];
+                row.cells[k].style.width = colWidths[k];
             }
 
         }
@@ -2615,32 +2611,32 @@ export class TableFilter{
      * Refresh the filters
      * @param  {Object} config Configuration literal object
      */
-    refresh(config){
-        var configObj = !config ? this.cfg : config;
-        var hasSort = this.sort;
-        //sort property is set to false in order to avoid sort object
-        //re-instanciation
-        if(hasSort){
-            this.sort = false;
-        }
-        this.nbRows = this.getRowsNb(); //in case table is refreshed
-        this.remove();
-        window['tf_'+this.id] = new TableFilter(
-            this.id, this.startRow, configObj);
-        this.isFirstLoad = true;
-        this.fltIds = [];
-        this.init();
-        //New tbody content needs to be referenced in sortabletable script with
-        //setTBody() method
-        if(hasSort){
-            //this.st =  SortableTable object
-            //Note this is a method of the Sortable Table 1.12 script
-            //(Erik Arvidsson)
-            this.st.setTBody(this.tbl.tBodies[0]);
-            //finally sort property is enabled again
-            this.sort = true;
-        }
-    }
+    // refresh(config){
+    //     var configObj = !config ? this.cfg : config;
+    //     var hasSort = this.sort;
+    //     //sort property is set to false in order to avoid sort object
+    //     //re-instanciation
+    //     if(hasSort){
+    //         this.sort = false;
+    //     }
+    //     this.nbRows = this.getRowsNb(); //in case table is refreshed
+    //     this.remove();
+    //     global['tf_'+this.id] = new TableFilter(
+    //         this.id, this.startRow, configObj);
+    //     this.isFirstLoad = true;
+    //     this.fltIds = [];
+    //     this.init();
+    //     //New tbody content needs to be referenced in sortabletable script
+    //     //with setTBody() method
+    //     if(hasSort){
+    //         //this.st =  SortableTable object
+    //         //Note this is a method of the Sortable Table 1.12 script
+    //         //(Erik Arvidsson)
+    //         this.st.setTBody(this.tbl.tBodies[0]);
+    //         //finally sort property is enabled again
+    //         this.sort = true;
+    //     }
+    // }
 
     /**
      * Refresh the filters subject to linking ('select', 'multiple',
@@ -3026,35 +3022,35 @@ TableFilter.AlternateRows = AlternateRows;
 TableFilter.ColOps = ColOps;
 
 //Firefox does not support outerHTML property
-function setOuterHtml(){
-    if(doc.body.__defineGetter__){
-        if(HTMLElement) {
-            var element = HTMLElement.prototype;
-            if(element.__defineGetter__){
-                element.__defineGetter__("outerHTML",
-                    function(){
-                        var parent = this.parentNode;
-                        var el = dom.create(parent.tagName);
-                        el.appendChild(this);
-                        var shtml = el.innerHTML;
-                        parent.appendChild(this);
-                        return shtml;
-                    }
-                );
-            }
-            if(element.__defineSetter__) {
-                HTMLElement.prototype.__defineSetter__(
-                    "outerHTML", function(sHTML){
-                   var r = this.ownerDocument.createRange();
-                   r.setStartBefore(this);
-                   var df = r.createContextualFragment(sHTML);
-                   this.parentNode.replaceChild(df, this);
-                   return sHTML;
-                });
-            }
-        }
-    }
-}
+// function setOuterHtml(){
+//     if(doc.body.__defineGetter__){
+//         if(HTMLElement) {
+//             var element = HTMLElement.prototype;
+//             if(element.__defineGetter__){
+//                 element.__defineGetter__("outerHTML",
+//                     function(){
+//                         var parent = this.parentNode;
+//                         var el = dom.create(parent.tagName);
+//                         el.appendChild(this);
+//                         var shtml = el.innerHTML;
+//                         parent.appendChild(this);
+//                         return shtml;
+//                     }
+//                 );
+//             }
+//             if(element.__defineSetter__) {
+//                 HTMLElement.prototype.__defineSetter__(
+//                     "outerHTML", function(sHTML){
+//                    var r = this.ownerDocument.createRange();
+//                    r.setStartBefore(this);
+//                    var df = r.createContextualFragment(sHTML);
+//                    this.parentNode.replaceChild(df, this);
+//                    return sHTML;
+//                 });
+//             }
+//         }
+//     }
+// }
 
 // return TableFilter;
 
@@ -3081,32 +3077,3 @@ function setOuterHtml(){
 //     window['tf_'+id] = tf;
 //     return tf;
 // }
-
-/*===BEGIN removable section===========================
-    - Unobtrusive grid bar generation using
-    'filterable' class
-    - If you don't use it you can remove safely this
-    section
-/*=====================================================*/
-// window['tf_isNotIE'] = !(/msie|MSIE/.test(navigator.userAgent));
-// TF.Event.add(window,
-//     (tf_isNotIE || (typeof window.addEventListener === 'function') ?
-//         'DOMContentLoaded' : 'load'),
-//     initFilterGrid);
-
-// function initFilterGrid(){
-//     if(!document.getElementsByTagName){ return; }
-//     var tbls = dom.tag(document,'table'), config;
-//     for (var i=0; i<tbls.length; i++){
-//         var cTbl = tbls[i], cTblId = cTbl.getAttribute('id');
-//         if(TF.Dom.hasClass(cTbl,'filterable') && cTblId){
-//             if(TF.Types.isObj(cTblId+'cfg')){
-//                 config = window[cTblId+'cfg'];
-//             } else { config = undefined; }
-//             window[cTblId+'_isUnob'] = true;
-//             setFilterGrid(cTblId,config);
-//         }
-//     }// for i
-// }
-/*===END removable section===========================*/
-
