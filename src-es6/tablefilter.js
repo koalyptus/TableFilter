@@ -275,7 +275,7 @@ export class TableFilter{
         //id of toolbar container element
         this.toolBarTgtId = f.toolbar_target_id || null;
         //enables/disables help div
-        this.helpInstructions = f.help_instructions || false;
+        this.helpInstructions = f.help_instructions===false ? false : true;
         //popup filters
         this.popUpFilters = f.popup_filters===true ? true : false;
         //active columns color
@@ -535,8 +535,7 @@ export class TableFilter{
 
         // Extensions registry
         this.ExtRegistry = {
-            sort: null,
-            ezEditTable: null
+            sort: null
         };
 
         /*** TF events ***/
@@ -1196,9 +1195,9 @@ export class TableFilter{
     initExtensions(){
         var exts = this.extensions;
 
-        for(var i=0; i<exts.length; i++){
+        for(var i=0, len=exts.length; i<len; i++){
             var ext = exts[i];
-            if(types.isUndef(this.ExtRegistry[ext.name])){
+            if(!this.ExtRegistry[ext.name]){
                 this.loadExtension(ext);
             }
         }
@@ -1229,6 +1228,22 @@ export class TableFilter{
             inst.init();
             this.ExtRegistry[name] = inst;
         });
+    }
+
+    /**
+     * Destroy all the extensions defined in the configuration object
+     */
+    destroyExtensions(){
+        var exts = this.extensions;
+
+        for(var i=0, len=exts.length; i<len; i++){
+            var ext = exts[i];
+            var extInstance = this.ExtRegistry[ext.name];
+            if(extInstance){
+                extInstance.destroy();
+                this.ExtRegistry[ext.name] = null;
+            }
+        }
     }
 
     loadThemes(){
@@ -1331,9 +1346,14 @@ export class TableFilter{
         if(this.markActiveColumns){
             this.clearActiveColumns();
         }
-        if(ExtRegistry.advancedGrid){
-            ExtRegistry.advancedGrid.destroy();
+        // if(ExtRegistry.advancedGrid){
+        //     ExtRegistry.advancedGrid.destroy();
+        // }
+
+        if(this.hasExtensions){
+            this.destroyExtensions();
         }
+
         //this loop shows all rows and removes validRow attribute
         for(var j=this.refRow; j<this.nbRows; j++){
             rows[j].style.display = '';
@@ -1420,13 +1440,14 @@ export class TableFilter{
         infdiv.appendChild(mdiv);
         this.mDiv = dom.id(this.prfxMDiv+this.id);
 
-        // Enable help instructions by default is topbar is generated
-        if(!this.helpInstructions){
-            if(!this.Cpt.help){
-                this.Cpt.help = new Help(this);
-            }
-            this.Cpt.help.init();
-        }
+        // Enable help instructions by default if topbar is generated
+        // if(!this.helpInstructions){
+        //     if(!this.Cpt.help){
+        //         this.Cpt.help = new Help(this);
+        //     }
+        //     this.Cpt.help.init();
+        //     this.helpInstructions = true;
+        // }
     }
 
     /**
@@ -2682,33 +2703,39 @@ export class TableFilter{
             return;
         }
 
+        var Cpt = this.Cpt;
+        var tbl = this.tbl;
+        var rows = tbl.rows;
+        var filtersRowIndex = this.filtersRowIndex;
+        var filtersRow = rows[filtersRowIndex];
+
         // grid was removed, grid row element is stored in fltGridEl property
         if(!this.gridLayout){
-            this.tbl.rows[this.filtersRowIndex].parentNode.insertBefore(
-                this.fltGridEl,
-                this.tbl.rows[this.filtersRowIndex]
-            );
+            filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
         }
 
         // filters are appended in external placeholders elements
         if(this.isExternalFlt){
-            for(var ct=0; ct<this.externalFltTgtIds.length; ct++){
-                var extFlt = dom.id(this.externalFltTgtIds[ct]);
-                if(extFlt){
-                    extFlt.appendChild(this.externalFltEls[ct]);
-                    var colFltType = this['col'+ct];
-                    //IE special treatment for gridLayout, appended filters are
-                    //empty
-                    if(this.gridLayout &&
-                        this.externalFltEls[ct].innerHTML === '' &&
-                        colFltType !== this.fltTypeInp){
-                        if(colFltType === this.fltTypeSlc ||
-                            colFltType === this.fltTypeMulti){
-                            this.Cpt.dropdown.build(ct);
-                        }
-                        if(colFltType === this.fltTypeCheckList){
-                            this.Cpt.checkList.build(ct);
-                        }
+            var externalFltTgtIds = this.externalFltTgtIds;
+            for(var ct=0, len=externalFltTgtIds.length; ct<len; ct++){
+                var extFlt = dom.id(externalFltTgtIds[ct]);
+
+                if(!extFlt){ continue; }
+
+                var externalFltEl = this.externalFltEls[ct];
+                extFlt.appendChild(externalFltEl);
+                var colFltType = this['col'+ct];
+                //IE special treatment for gridLayout, appended filters are
+                //empty
+                if(this.gridLayout &&
+                    externalFltEl.innerHTML === '' &&
+                    colFltType !== this.fltTypeInp){
+                    if(colFltType === this.fltTypeSlc ||
+                        colFltType === this.fltTypeMulti){
+                        Cpt.dropdown.build(ct);
+                    }
+                    if(colFltType === this.fltTypeCheckList){
+                        Cpt.checkList.build(ct);
                     }
                 }
             }
@@ -2716,34 +2743,34 @@ export class TableFilter{
 
         this.nbFilterableRows = this.getRowsNb();
         this.nbVisibleRows = this.nbFilterableRows;
-        this.nbRows = this.tbl.rows.length;
+        this.nbRows = rows.length;
         if(this.isSortEnabled){
             this.sort = true;
         }
 
-        if(this.tbl.rows[this.filtersRowIndex].innerHTML === ''){
-            refreshFilters(this);
-        } else {
+        // if(filtersRow.innerHTML === ''){
+        //     refreshFilters(this);
+        // } else {
             if(this.popUpFilters){
                 this.headersRow++;
-                this.Cpt.popupFilter.buildAll();
+                Cpt.popupFilter.buildAll();
             }
-        }
+        // }
 
         /***    ie bug work-around, filters need to be re-generated since row
                 is empty; insertBefore method doesn't seem to work properly
                 with previously generated DOM nodes modified by innerHTML   ***/
-        function refreshFilters(o){
-            o.tbl.deleteRow(o.filtersRowIndex);
-            o.remove();
-            o.fltIds = [];
-            o.isFirstLoad = true;
-            if(o.popUpFilters){
-                // o.RemovePopupFilters();
-                o.Cpt.popupFilter.destroy();
-            }
-            o._AddGrid();
-        }
+        // function refreshFilters(o){
+        //     tbl.deleteRow(filtersRowIndex);
+        //     o.remove();
+        //     o.fltIds = [];
+        //     o.isFirstLoad = true;
+        //     if(o.popUpFilters){
+        //         // o.RemovePopupFilters();
+        //         o.Cpt.popupFilter.destroy();
+        //     }
+        //     o.init();
+        // }
 
         if(!this.gridLayout){
             dom.addClass(this.tbl, this.prfxTf);
