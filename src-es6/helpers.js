@@ -2,9 +2,9 @@
  * Misc helpers
  */
 
-import {Str} from './string';
+import Str from './string';
 
-var Helpers = {
+export default {
     isIE(){
         return (/msie|MSIE/).test(navigator.userAgent);
     },
@@ -16,7 +16,7 @@ var Helpers = {
         if(!format){
             format = 'us';
         }
-        var n = data;
+        let n = data;
         if(Str.lower(format)==='us'){
             n =+ n.replace(/[^\d\.-]/g,'');
         } else {
@@ -25,5 +25,3 @@ var Helpers = {
         return n;
     }
 };
-
-exports.Helpers = Helpers;

@@ -1,5 +1,5 @@
-import {Dom} from '../dom';
-import {Event} from '../event';
+import Dom from '../dom';
+import Event from '../event';
 
 export class Help{
 

@@ -1,6 +1,5 @@
-
-import {Dom} from '../dom';
-import {Types} from '../types';
+import Dom from '../dom';
+import Types from '../types';
 
 var global = window;
 

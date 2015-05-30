@@ -1,8 +1,8 @@
-import {Dom} from '../../dom';
-import {Types} from '../../types';
-import {Event} from '../../event';
-import {Helpers} from '../../helpers';
-import {Arr} from '../../array';
+import Dom from '../../dom';
+import Types from '../../types';
+import Event from '../../event';
+import Helpers from '../../helpers';
+import Arr from '../../array';
 
 export default class ColsVisibility{
 

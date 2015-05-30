@@ -2,7 +2,7 @@
  * DOM event utilities
  */
 
-export var Event = {
+export default {
     add(obj, type, func, capture){
         if(obj.addEventListener){
             obj.addEventListener(type, func, capture);

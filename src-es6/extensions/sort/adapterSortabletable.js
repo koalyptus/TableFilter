@@ -1,9 +1,9 @@
-import {Types} from '../../types';
-import {Dom} from '../../dom';
-import {Arr} from '../../array';
-import {Event} from '../../event';
-import {DateHelper} from '../../date';
-import {Helpers} from '../../helpers';
+import Types from '../../types';
+import Dom from '../../dom';
+import Arr from '../../array';
+import Event from '../../event';
+import DateHelper from '../../date';
+import Helpers from '../../helpers';
 
 export default class AdapterSortableTable{
 

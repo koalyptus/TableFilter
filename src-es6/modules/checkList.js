@@ -1,8 +1,8 @@
-import {Dom} from '../dom';
-import {Arr as array} from '../array';
-import {Str} from '../string';
-import {Sort} from '../sort';
-import {Event} from '../event';
+import Dom from '../dom';
+import Arr from '../array';
+import Str from '../string';
+import Sort from '../sort';
+import Event from '../event';
 
 export class CheckList{
 
@@ -96,7 +96,7 @@ export class CheckList{
 
         var rows = tf.tbl.rows;
         this.isCustom = (tf.hasCustomSlcOptions &&
-                array.has(tf.customSlcOptions.cols, colIndex));
+                Arr.has(tf.customSlcOptions.cols, colIndex));
 
         var activeFlt;
         if(tf.refreshFilters && tf.activeFilterId){
@@ -113,7 +113,7 @@ export class CheckList{
         for(var k=tf.refRow; k<tf.nbRows; k++){
             // always visible rows don't need to appear on selects as always
             // valid
-            if(tf.hasVisibleRows && array.has(tf.visibleRows, k) && !tf.paging){
+            if(tf.hasVisibleRows && Arr.has(tf.visibleRows, k) && !tf.paging){
                 continue;
             }
 
@@ -133,13 +133,13 @@ export class CheckList{
                     ((rows[k].style.display === '' && !tf.paging) ||
                     (tf.paging && ((!activeFlt || activeFlt===colIndex )||
                     (activeFlt!=colIndex &&
-                        array.has(tf.validRowsIndex, k))) )))){
+                        Arr.has(tf.validRowsIndex, k))) )))){
                     var cell_data = tf.getCellData(j, cells[j]);
                     //Vary Peter's patch
                     var cell_string = Str.matchCase(
                         cell_data, tf.matchCase);
                     // checks if celldata is already in array
-                    if(!array.has(this.opts, cell_string, tf.matchCase)){
+                    if(!Arr.has(this.opts, cell_string, tf.matchCase)){
                         this.opts.push(cell_data);
                     }
                     var filteredCol = filteredDataCol[j];
@@ -147,9 +147,9 @@ export class CheckList{
                         if(!filteredCol){
                             filteredDataCol[j] = tf.GetFilteredDataCol(j);
                         }
-                        if(!array.has(filteredCol,
+                        if(!Arr.has(filteredCol,
                             cell_string, tf.matchCase) &&
-                            !array.has(excludedOpts,
+                            !Arr.has(excludedOpts,
                                 cell_string, tf.matchCase) &&
                             !tf.isFirstLoad){
                             excludedOpts.push(cell_data);
@@ -180,7 +180,7 @@ export class CheckList{
             }
         }
         //asc sort
-        if(tf.sortNumAsc && array.has(tf.sortNumAsc, colIndex)){
+        if(tf.sortNumAsc && Arr.has(tf.sortNumAsc, colIndex)){
             try{
                 this.opts.sort(numSortAsc);
                 if(excludedOpts){
@@ -200,7 +200,7 @@ export class CheckList{
             }//in case there are alphanumeric values
         }
         //desc sort
-        if(tf.sortNumDesc && array.has(tf.sortNumDesc, colIndex)){
+        if(tf.sortNumDesc && Arr.has(tf.sortNumDesc, colIndex)){
             try{
                 this.opts.sort(numSortDesc);
                 if(excludedOpts){
@@ -242,7 +242,7 @@ export class CheckList{
                 store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
         if(tmpVal && Str.trim(tmpVal).length > 0){
             if(tf.hasCustomSlcOptions &&
-                array.has(tf.customSlcOptions.cols, colIndex)){
+                Arr.has(tf.customSlcOptions.cols, colIndex)){
                 fltArr.push(tmpVal);
             } else {
                 fltArr = tmpVal.split(' '+tf.orOperator+' ');
@@ -256,7 +256,7 @@ export class CheckList{
                         tf.fltIds[colIndex]+'_'+(y+chkCt), val, lbl);
             li.className = this.checkListItemCssClass;
             if(tf.refreshFilters && tf.disableExcludedOptions &&
-                array.has(excludedOpts,
+                Arr.has(excludedOpts,
                         Str.matchCase(val, tf.matchCase), tf.matchCase)){
                     Dom.addClass(li, this.checkListItemDisabledCssClass);
                     li.check.disabled = true;
@@ -276,9 +276,9 @@ export class CheckList{
             /*** remember grid values ***/
             if(tf.rememberGridValues){
                 if((tf.hasCustomSlcOptions &&
-                    array.has(tf.customSlcOptions.cols, colIndex) &&
+                    Arr.has(tf.customSlcOptions.cols, colIndex) &&
                     fltArr.toString().indexOf(val)!= -1) ||
-                    array.has(fltArr,
+                    Arr.has(fltArr,
                         Str.matchCase(val, tf.matchCase), tf.matchCase)){
                     li.check.checked = true;
                     this.setCheckListValues(li.check);

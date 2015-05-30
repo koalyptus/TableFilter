@@ -1,5 +1,5 @@
-import {Dom} from '../../dom';
-import {Arr} from '../../array';
+import Dom from '../../dom';
+import Arr from '../../array';
 
 export default class AdapterEzEditTable {
     /**

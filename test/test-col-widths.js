@@ -1,6 +1,5 @@
 
 (function(win, TableFilter){
-    var id = function (id){ return document.getElementById(id); };
 
     var tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',

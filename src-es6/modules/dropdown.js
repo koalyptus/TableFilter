@@ -1,7 +1,7 @@
-import {Dom} from '../dom';
-import {Arr as array} from '../array';
-import {Str} from '../string';
-import {Sort} from '../sort';
+import Dom from '../dom';
+import Arr from '../array';
+import Str from '../string';
+import Sort from '../sort';
 
 export class Dropdown{
 
@@ -79,7 +79,7 @@ export class Dropdown{
 
         //custom select test
         this.isCustom = (tf.hasCustomSlcOptions &&
-            array.has(tf.customSlcOptions.cols, colIndex));
+            Arr.has(tf.customSlcOptions.cols, colIndex));
 
         //custom selects text
         var activeFlt;
@@ -111,7 +111,7 @@ export class Dropdown{
         for(var k=tf.refRow; k<tf.nbRows; k++){
             // always visible rows don't need to appear on selects as always
             // valid
-            if(tf.hasVisibleRows && array.has(tf.visibleRows, k) &&
+            if(tf.hasVisibleRows && Arr.has(tf.visibleRows, k) &&
                 !tf.paging){
                 continue;
             }
@@ -133,16 +133,16 @@ export class Dropdown{
                         ((rows[k].style.display === '' && !tf.paging) ||
                     (tf.paging && (!tf.validRowsIndex ||
                         (tf.validRowsIndex &&
-                            array.has(tf.validRowsIndex, k))) &&
+                            Arr.has(tf.validRowsIndex, k))) &&
                         ((activeFlt===undefined || activeFlt==colIndex)  ||
                             (activeFlt!=colIndex &&
-                                array.has(tf.validRowsIndex, k) ))) ))){
+                                Arr.has(tf.validRowsIndex, k) ))) ))){
                     var cell_data = tf.getCellData(j, cell[j]),
                         //Vary Peter's patch
                         cell_string = Str.matchCase(cell_data, matchCase);
 
                     // checks if celldata is already in array
-                    if(!array.has(this.opts, cell_string, matchCase)){
+                    if(!Arr.has(this.opts, cell_string, matchCase)){
                         this.opts.push(cell_data);
                     }
 
@@ -151,8 +151,8 @@ export class Dropdown{
                         if(!filteredCol){
                             filteredCol = this.GetFilteredDataCol(j);
                         }
-                        if(!array.has(filteredCol, cell_string, matchCase) &&
-                            !array.has(
+                        if(!Arr.has(filteredCol, cell_string, matchCase) &&
+                            !Arr.has(
                                 excludedOpts, cell_string, matchCase) &&
                             !this.isFirstLoad){
                             excludedOpts.push(cell_data);
@@ -182,7 +182,7 @@ export class Dropdown{
         }
 
         //asc sort
-        if(tf.sortNumAsc && array.has(tf.sortNumAsc, colIndex)){
+        if(tf.sortNumAsc && Arr.has(tf.sortNumAsc, colIndex)){
             try{
                 this.opts.sort( numSortAsc );
                 if(excludedOpts){
@@ -202,7 +202,7 @@ export class Dropdown{
             }//in case there are alphanumeric values
         }
         //desc sort
-        if(tf.sortNumDesc && array.has(tf.sortNumDesc, colIndex)){
+        if(tf.sortNumDesc && Arr.has(tf.sortNumDesc, colIndex)){
             try{
                 this.opts.sort(numSortDesc);
                 if(excludedOpts){
@@ -252,7 +252,7 @@ export class Dropdown{
             var lbl = this.isCustom ? this.optsTxt[y] : val; //option text
             var isDisabled = false;
             if(isRefreshed && this.disableExcludedOptions &&
-                array.has(
+                Arr.has(
                     excludedOpts,
                     Str.matchCase(val, tf.matchCase),
                     tf.matchCase
@@ -286,7 +286,7 @@ export class Dropdown{
                         opt = Dom.createOpt(
                             lbl,
                             val,
-                            (array.has(fltArr,
+                            (Arr.has(fltArr,
                                 Str.matchCase(this.opts[y], tf.matchCase),
                                 tf.matchCase) ||
                               fltArr.toString().indexOf(val)!== -1) ?

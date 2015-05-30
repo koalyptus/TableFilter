@@ -1,5 +1,5 @@
-import {Dom} from '../dom';
-import {Str} from '../string';
+import Dom from '../dom';
+import Str from '../string';
 
 export class HighlightKeyword{
 

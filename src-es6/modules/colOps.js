@@ -1,6 +1,6 @@
-import {Dom} from '../dom';
-import {Str} from '../string';
-import {Types} from '../types';
+import Dom from '../dom';
+import Str from '../string';
+import Types from '../types';
 
 export class ColOps{
 

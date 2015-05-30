@@ -2,15 +2,15 @@
  * Date utilities
  */
 
-var DateHelper = {
-    isValid: function(dateStr, format){
+export default {
+    isValid(dateStr, format){
         if(!format) {
             format = 'DMY';
         }
         format = format.toUpperCase();
         if(format.length != 3) {
             if(format==='DDMMMYYYY'){
-                var d = this.format(dateStr, format);
+                let d = this.format(dateStr, format);
                 dateStr = d.getDate() +'/'+ (d.getMonth()+1) +'/'+
                     d.getFullYear();
                 format = 'DMY';
@@ -20,7 +20,7 @@ var DateHelper = {
             (format.indexOf('Y') === -1)){
             format = 'DMY';
         }
-        var reg1, reg2;
+        let reg1, reg2;
         // If the year is first
         if(format.substring(0, 1) == 'Y') {
               reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
@@ -38,8 +38,8 @@ var DateHelper = {
             return false;
         }
         // Split into 3 parts based on what the divider was
-        var parts = dateStr.split(RegExp.$1);
-        var mm, dd, yy;
+        let parts = dateStr.split(RegExp.$1);
+        let mm, dd, yy;
         // Check to see if the 3 parts end up making a valid date
         if(format.substring(0, 1) === 'M'){
             mm = parts[0];
@@ -68,7 +68,7 @@ var DateHelper = {
         if(parseInt(yy, 10) <= 99){
             yy = (parseInt(yy, 10) + 1900).toString();
         }
-        var dt = new Date(
+        let dt = new Date(
             parseInt(yy, 10), parseInt(mm, 10)-1, parseInt(dd, 10),
             0, 0, 0, 0);
         if(parseInt(dd, 10) != dt.getDate()){
@@ -79,16 +79,16 @@ var DateHelper = {
         }
         return true;
     },
-    format: function(dateStr, format) {
-        if(!format){
-            format = 'DMY';
+    format(dateStr, formatStr) {
+        if(!formatStr){
+            formatStr = 'DMY';
         }
         if(!dateStr || dateStr === ''){
             return new Date(1001, 0, 1);
         }
-        var oDate;
+        let oDate;
 
-        switch(format.toUpperCase()){
+        switch(formatStr.toUpperCase()){
             case 'DDMMMYYYY':
                 parts = dateStr.replace(/[- \/.]/g,' ').split(' ');
                 oDate = new Date(y2kDate(parts[2]),mmm2mm(parts[1])-1,parts[0]);
@@ -131,7 +131,7 @@ function y2kDate(yr){
     if(yr.length>2){
         return yr;
     }
-    var y;
+    let y;
     //>50 belong to 1900
     if(yr <= 99 && yr>50){
         y = '19' + yr;
@@ -147,15 +147,15 @@ function mmm2mm(mmm){
     if(mmm === undefined){
         return 0;
     }
-    var mondigit;
-    var MONTH_NAMES = [
+    let mondigit;
+    let MONTH_NAMES = [
         'january','february','march','april','may','june','july',
         'august','september','october','november','december',
         'jan','feb','mar','apr','may','jun','jul','aug','sep','oct',
         'nov','dec'
     ];
-    for(var m_i=0; m_i < MONTH_NAMES.length; m_i++){
-            var month_name = MONTH_NAMES[m_i];
+    for(let m_i=0; m_i < MONTH_NAMES.length; m_i++){
+            let month_name = MONTH_NAMES[m_i];
             if (mmm.toLowerCase() === month_name){
                 mondigit = m_i+1;
                 break;
@@ -169,5 +169,3 @@ function mmm2mm(mmm){
     }
     return mondigit;
 }
-
-exports.DateHelper = DateHelper;

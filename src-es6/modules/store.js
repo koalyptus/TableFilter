@@ -1,4 +1,4 @@
-import {Cookie} from '../cookie';
+import Cookie from '../cookie';
 
 export class Store{
 

@@ -1,7 +1,7 @@
-import {Types} from '../types';
-import {Dom} from '../dom';
-import {Event} from '../event';
-import {Helpers} from '../helpers';
+import Types from '../types';
+import Dom from '../dom';
+import Event from '../event';
+import Helpers from '../helpers';
 
 export class PopupFilter{
 
