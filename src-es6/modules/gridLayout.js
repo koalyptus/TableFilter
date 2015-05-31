@@ -34,11 +34,11 @@ export class GridLayout{
         //default col width
         this.gridDefaultColWidth = f.grid_default_col_width || '100px';
         //enables/disables columns resizer
-        this.gridEnableColResizer = f.grid_enable_cols_resizer!==undefined ?
-            f.grid_enable_cols_resizer : false;
-        //defines col resizer script path
-        this.gridColResizerPath = f.grid_cont_col_resizer_path ||
-            this.basePath+'TFExt_ColsResizer/TFExt_ColsResizer.js';
+        // this.gridEnableColResizer = f.grid_enable_cols_resizer!==undefined ?
+        //     f.grid_enable_cols_resizer : false;
+        // //defines col resizer script path
+        // this.gridColResizerPath = f.grid_cont_col_resizer_path ||
+        //     this.basePath+'TFExt_ColsResizer/TFExt_ColsResizer.js';
 
         this.gridColElms = [];
 

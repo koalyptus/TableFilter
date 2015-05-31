@@ -1071,7 +1071,7 @@ export class TableFilter{
             this.Cpt.colOps = new ColOps(this);
             this.Cpt.colOps.calc();
         }
-        if(this.sort /*|| this.gridLayout*/){
+        if(this.sort){
             this.importSort();
         }
 
@@ -1308,8 +1308,8 @@ export class TableFilter{
             return;
         }
         let rows = this.tbl.rows,
-            Cpt = this.Cpt,
-            ExtRegistry = this.ExtRegistry;
+            Cpt = this.Cpt/*,
+            ExtRegistry = this.ExtRegistry*/;
         if(this.paging){
             Cpt.paging.destroy();
         }
@@ -1334,9 +1334,10 @@ export class TableFilter{
         if(this.highlightKeywords){
             Cpt.highlightKeyword.unhighlightAll();
         }
-        if(this.sort){
-            ExtRegistry.sort.destroy();
-        }
+        // if(this.sort){
+        //     console.log('sort.destroy',this.ExtRegistry, ExtRegistry.sort);
+        //     ExtRegistry.sort.destroy();
+        // }
         if(this.loader){
             Cpt.loader.destroy();
         }
@@ -1723,8 +1724,8 @@ export class TableFilter{
         // search args re-init
         this.searchArgs = this.getFiltersValue();
 
-        let num_cell_data, nbFormat;
-        let re_le = new RegExp(this.leOperator),
+        var num_cell_data, nbFormat;
+        var re_le = new RegExp(this.leOperator),
             re_ge = new RegExp(this.geOperator),
             re_l = new RegExp(this.lwOperator),
             re_g = new RegExp(this.grOperator),
@@ -1743,10 +1744,10 @@ export class TableFilter{
         function highlight(str, ok, cell){
             /*jshint validthis:true */
             if(this.highlightKeywords && ok){
-                str = Str.replace(re_lk,'');
-                str = Str.replace(re_eq,'');
-                str = Str.replace(re_st,'');
-                str = Str.replace(re_en,'');
+                str = str.replace(re_lk, '');
+                str = str.replace(re_eq, '');
+                str = str.replace(re_st, '');
+                str = str.replace(re_en, '');
                 let w = str;
                 if(re_le.test(str) || re_ge.test(str) || re_l.test(str) ||
                     re_g.test(str) || re_d.test(str)){
@@ -1780,12 +1781,12 @@ export class TableFilter{
                 hasRE = re_re.test(sA);
 
             //Search arg dates tests
-            let isLDate = hasLO && isValidDate(sA.replace(re_l,''),dtType);
-            let isLEDate = hasLE && isValidDate(sA.replace(re_le,''),dtType);
-            let isGDate = hasGR && isValidDate(sA.replace(re_g,''),dtType);
-            let isGEDate = hasGE && isValidDate(sA.replace(re_ge,''),dtType);
-            let isDFDate = hasDF && isValidDate(sA.replace(re_d,''),dtType);
-            let isEQDate = hasEQ && isValidDate(sA.replace(re_eq,''),dtType);
+            let isLDate = hasLO && isValidDate(sA.replace(re_l,''), dtType);
+            let isLEDate = hasLE && isValidDate(sA.replace(re_le,''), dtType);
+            let isGDate = hasGR && isValidDate(sA.replace(re_g,''), dtType);
+            let isGEDate = hasGE && isValidDate(sA.replace(re_ge,''), dtType);
+            let isDFDate = hasDF && isValidDate(sA.replace(re_d,''), dtType);
+            let isEQDate = hasEQ && isValidDate(sA.replace(re_eq,''), dtType);
 
             let dte1, dte2;
             //dates
@@ -2247,7 +2248,7 @@ export class TableFilter{
         for(let i=0; i<this.fltIds.length; i++){
             let fltType = this['col'+i];
             if(fltType === Str.lower(type)){
-                let a = (bool) ? i : this.fltIds[i];
+                let a = bool ? i : this.fltIds[i];
                 arr.push(a);
             }
         }
