@@ -95,8 +95,7 @@ export class CheckList{
         Event.add(ul, 'change', (evt) => { this.onChange(evt); });
 
         var rows = tf.tbl.rows;
-        this.isCustom = (tf.hasCustomSlcOptions &&
-                Arr.has(tf.customSlcOptions.cols, colIndex));
+        this.isCustom = tf.isCustomOptions(colIndex);
 
         var activeFlt;
         if(tf.refreshFilters && tf.activeFilterId){
@@ -161,7 +160,7 @@ export class CheckList{
 
         //Retrieves custom values
         if(this.isCustom){
-            var customValues = tf.__getCustomValues(colIndex);
+            var customValues = tf.getCustomOptions(colIndex);
             this.opts = customValues[0];
             this.optsTxt = customValues[1];
         }

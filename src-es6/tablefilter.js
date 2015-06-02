@@ -314,10 +314,8 @@ export class TableFilter{
         this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : null;
         //enabled selects are populated on demand
         this.fillSlcOnDemand = f.fill_slc_on_demand===true ? true : false;
-        this.hasCustomSlcOptions = Types.isObj(f.custom_slc_options) ?
-            true : false;
-        this.customSlcOptions = Types.isArray(f.custom_slc_options) ?
-            f.custom_slc_options : null;
+        this.hasCustomOptions = Types.isObj(f.custom_options);
+        this.customOptions = f.custom_options;
 
         /*** Filter operators ***/
         this.rgxOperator = f.regexp_operator || 'rgx:';
@@ -923,10 +921,10 @@ export class TableFilter{
                     // checklist
                     else if(col===this.fltTypeCheckList){
                         let checkList;
-                        if(!this.Cpt.checkList){
+                        // if(!this.Cpt.checkList){
                             this.Cpt.checkList = new CheckList(this);
                             checkList = this.Cpt.checkList;
-                        }
+                        // }
 
                         let divCont = Dom.create('div',
                             ['id', checkList.prfxCheckListDiv+i+'_'+this.id],
@@ -1538,40 +1536,49 @@ export class TableFilter{
     //     }, 0.1);
     // },
 
-    /*====================================================
-        - Returns an array [[values],[texts]] with
-        custom values for a given filter
-        - Param: column index (integer)
-    =====================================================*/
-    // _getCustomValues: function(colIndex){
-    //     if(!colIndex){
-    //         return;
-    //     }
-    //     //custom select test
-    //     let isCustomSlc = this.hasCustomSlcOptions &&
-    //             Arr.has(this.customSlcOptions.cols, colIndex);
-    //     if(!isCustomSlc){
-    //         return;
-    //     }
-    //     let optTxt = [], optArray = [];
-    //     let index = Arr.indexByValue(this.customSlcOptions.cols, colIndex);
-    //     let slcValues = this.customSlcOptions.values[index];
-    //     let slcTexts = this.customSlcOptions.texts[index];
-    //     let slcSort = this.customSlcOptions.sorts[index];
-    //     for(let r=0; r<slcValues.length; r++){
-    //         optArray.push(slcValues[r]);
-    //         if(slcTexts[r]){
-    //             optTxt.push(slcTexts[r]);
-    //         } else {
-    //             optTxt.push(slcValues[r]);
-    //         }
-    //     }
-    //     if(slcSort){
-    //         optArray.sort();
-    //         optTxt.sort();
-    //     }
-    //     return [optArray,optTxt];
-    // },
+    /**
+     * Check if given column implements a filter with custom options
+     * @param  {Number}  colIndex Column's index
+     * @return {Boolean}
+     */
+    isCustomOptions(colIndex) {
+        return this.hasCustomOptions &&
+            this.customOptions.cols.indexOf(colIndex) != -1;
+    }
+
+    /**
+     * Returns an array [[value0, value1 ...],[text0, text1 ...]] with the
+     * custom options values and texts
+     * @param  {Number} colIndex Column's index
+     * @return {Array}
+     */
+    getCustomOptions(colIndex){
+        if(!colIndex || !this.isCustomOptions(colIndex)){
+            return;
+        }
+
+        let customOptions = this.customOptions;
+        let cols = customOptions.cols;
+        let optTxt = [], optArray = [];
+        let index = Arr.indexByValue(cols, colIndex);
+        let slcValues = customOptions.values[index];
+        let slcTexts = customOptions.texts[index];
+        let slcSort = customOptions.sorts[index];
+
+        for(let r=0, len=slcValues.length; r<len; r++){
+            optArray.push(slcValues[r]);
+            if(slcTexts[r]){
+                optTxt.push(slcTexts[r]);
+            } else {
+                optTxt.push(slcValues[r]);
+            }
+        }
+        if(slcSort){
+            optArray.sort();
+            optTxt.sort();
+        }
+        return [optArray, optTxt];
+    }
 
     resetValues(){
         this.EvtManager(this.Evt.name.resetvalues);

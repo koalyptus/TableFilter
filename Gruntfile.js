@@ -125,18 +125,19 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
 
+
+    grunt.registerTask('default',
+        ['jshint', 'webpack:dist', 'copy:dist', 'test']);
+
     // The development server (the recommended option for development)
     grunt.registerTask('server', ['webpack-dev-server:start']);
 
-    // Build and watch cycle (another option for development)
-    // Advantage: No server required, can run app from filesystem
-    // Disadvantage: Requests are not blocked until bundle is available,
-    //               can serve an old app on too fast refresh
+
     grunt.registerTask('dev', ['jshint', 'webpack:build', 'copy:build']);
 
     // Production build
     grunt.registerTask('dist',
-        ['jshint', 'webpack:dist', 'copy:dist'/*, 'test'*/]);
+        ['jshint', 'webpack:dist', 'copy:dist']);
 
     // Transpile with Babel
     grunt.registerTask('dev-modules', ['babel', 'copy:build']);
