@@ -1636,7 +1636,7 @@ export class TableFilter{
                     //multiple select
                     if(Arr.has(multiFltsIndex, i)){
                         s = fltsValues[i].split(' '+this.orOperator+' ');
-                        for(j=0; j<s.length; j++){
+                        for(let j=0, len=s.length; j<len; j++){
                             if(s[j]===''){
                                 continue;
                             }
@@ -1670,7 +1670,7 @@ export class TableFilter{
                     divChk.appendChild(ul);
 
                     s = fltsValues[i].split(' '+this.orOperator+' ');
-                    for(j=0; j<s.length; j++){
+                    for(let j=0, len=s.length; j<len; j++){
                         if(s[j]===''){
                             continue;
                         }
@@ -1801,38 +1801,38 @@ export class TableFilter{
                 dte1 = formatDate(cell_data,dtType);
                 // lower date
                 if(isLDate){
-                    dte2 = formatDate(sA.replace(re_l,''),dtType);
+                    dte2 = formatDate(sA.replace(re_l,''), dtType);
                     occurence = dte1 < dte2;
                 }
                 // lower equal date
                 else if(isLEDate){
-                    dte2 = formatDate(sA.replace(re_le,''),dtType);
+                    dte2 = formatDate(sA.replace(re_le,''), dtType);
                     occurence = dte1 <= dte2;
                 }
                 // greater equal date
                 else if(isGEDate){
-                    dte2 = formatDate(sA.replace(re_ge,''),dtType);
+                    dte2 = formatDate(sA.replace(re_ge,''), dtType);
                     occurence = dte1 >= dte2;
                 }
                 // greater date
                 else if(isGDate){
-                    dte2 = formatDate(sA.replace(re_g,''),dtType);
+                    dte2 = formatDate(sA.replace(re_g,''), dtType);
                     occurence = dte1 > dte2;
                 }
                 // different date
                 else if(isDFDate){
-                    dte2 = formatDate(sA.replace(re_d,''),dtType);
+                    dte2 = formatDate(sA.replace(re_d,''), dtType);
                     occurence = dte1.toString() != dte2.toString();
                 }
                 // equal date
                 else if(isEQDate){
-                    dte2 = formatDate(sA.replace(re_eq,''),dtType);
+                    dte2 = formatDate(sA.replace(re_eq,''), dtType);
                     occurence = dte1.toString() == dte2.toString();
                 }
                 // searched keyword with * operator doesn't have to be a date
                 else if(re_lk.test(sA)){// like date
                     occurence = this._containsStr(
-                        sA.replace(re_lk,''),cell_data,null,false);
+                        sA.replace(re_lk,''), cell_data, null, false);
                 }
                 else if(isValidDate(sA,dtType)){
                     dte2 = formatDate(sA,dtType);
@@ -2147,15 +2147,18 @@ export class TableFilter{
             if(nchilds === this.nbCells && !isExludedRow){
                 // this loop retrieves cell data
                 for(let j=0; j<nchilds; j++){
-                    if(j === colindex && row[i].style.display === ''){
-                        let cell_data = Str.lower(this.getCellData(j, cell[j])),
-                            nbFormat = this.colNbFormat ?
-                                this.colNbFormat[colindex] : null,
-                            data = num ?
-                                    Helpers.removeNbFormat(cell_data,nbFormat) :
-                                    cell_data;
-                        colValues.push(data);
+                    if(j != colindex || row[i].style.display != ''){
+                        continue;
                     }
+                    // if(j === colindex && row[i].style.display === ''){
+                    let cell_data = Str.lower(this.getCellData(j, cell[j])),
+                        nbFormat = this.colNbFormat ?
+                            this.colNbFormat[colindex] : null,
+                        data = num ?
+                                Helpers.removeNbFormat(cell_data,nbFormat) :
+                                cell_data;
+                    colValues.push(data);
+                    // }
                 }
             }
         }
@@ -2200,7 +2203,7 @@ export class TableFilter{
             if(flt.getAttribute('value') !== null){
                 fltValue = flt.getAttribute('value');
                 //removes last operator ||
-                fltValue = fltValue.substr(0,fltValue.length-3);
+                fltValue = fltValue.substr(0, fltValue.length-3);
             } else{
                 fltValue = '';
             }
