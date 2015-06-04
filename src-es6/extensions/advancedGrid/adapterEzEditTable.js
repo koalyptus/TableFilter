@@ -15,7 +15,7 @@ export default class AdapterEzEditTable {
         this.name = 'ezEditTable.js';
         this.vendorPath = this.cfg.vendor_path || tf.extensionsPath +
             'ezEditTable/';
-        this.loadStylesheet = this.cfg.loadStylesheet===true ? true : false;
+        this.loadStylesheet = Boolean(this.cfg.loadStylesheet);
         this.stylesheet = this.cfg.stylesheet || this.vendorPath +
             'ezEditTable.css';
         this.stylesheetName = this.cfg.stylesheetName || 'ezEditTableCss';
@@ -237,8 +237,9 @@ export default class AdapterEzEditTable {
 
             //Selected row needs to be visible when paging is activated
             if(tf.paging){
-                tf.Cpt.paging.onAfterChangePage = function(tf){
-                    var et = tf.ExtRegistry.ezEditTable;
+                tf.Cpt.paging.onAfterChangePage = function(paging){
+                    var advGrid = paging.tf.ExtRegistry.advancedGrid;
+                    var et = advGrid._ezEditTable;
                     var slc = et.Selection;
                     var row = slc.GetActiveRow();
                     if(row){

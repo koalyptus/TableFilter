@@ -330,7 +330,7 @@ export class Paging{
             this.setPagingInfo();
         }
         if(!tf.fltGrid){
-            tf.ValidateAllRows();
+            tf.validateAllRows();
             this.setPagingInfo(tf.validRowsIndex);
         }
 

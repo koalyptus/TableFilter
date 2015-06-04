@@ -47,7 +47,10 @@ export class CheckList{
 
     // TODO: move event here
     onChange(evt){
-        this.tf.Evt.onSlcChange(evt);
+        let elm = evt.target;
+        this.tf.activeFilterId = elm.getAttribute('id');
+        this.tf.activeFlt = Dom.id(this.tf.activeFilterId);
+        this.tf.Evt.onSlcChange.call(this.tf, evt);
     }
 
     optionClick(evt){

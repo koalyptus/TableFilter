@@ -116,10 +116,6 @@ export class TableFilter{
             this['col'+j] = col;
         }
 
-        /*** Developer's additional methods ***/
-        this.publicMethods = f.public_methods!==undefined ?
-            f.public_methods : false;
-
         /*** filters' grid properties ***/
 
         //enables/disables filter grid
@@ -127,7 +123,7 @@ export class TableFilter{
 
         /*** Grid layout ***/
         //enables/disables grid layout (fixed headers)
-        this.gridLayout = f.grid_layout ? true : false;
+        this.gridLayout = Boolean(f.grid_layout);
         this.sourceTblHtml = null;
         if(this.gridLayout){
             //Firefox does not support outerHTML property...
@@ -198,12 +194,10 @@ export class TableFilter{
          //enables/disables icons (paging, reset button)
         this.enableIcons = f.enable_icons===false ? false : true;
         //enables/disbles rows alternating bg colors
-        this.alternateBgs = f.alternate_rows===true ? true : false;
+        this.alternateBgs = Boolean(f.alternate_rows);
         //defines widths of columns
         this.hasColWidths = Types.isArray(f.col_widths);
         this.colWidths = this.hasColWidths ? f.col_widths : null;
-        //enables/disables fixed headers
-        this.fixedHeaders = f.fixed_headers===true ? true : false;
         //tbody height if fixed headers enabled
         this.tBodyH = !isNaN(f.tbody_height) ? f.tbody_height : 200;
         //defines css class for filters
@@ -226,29 +220,28 @@ export class TableFilter{
         this.onAfterFilter = Types.isFn(f.on_after_filter) ?
             f.on_after_filter : null;
         //enables/disables case sensitivity
-        this.caseSensitive = f.case_sensitive===true ? true : false;
+        this.caseSensitive = Boolean(f.case_sensitive);
         //enables/disbles exact match for search
-        this.exactMatch = f.exact_match===true ? true : false;
+        this.exactMatch = Boolean(f.exact_match);
         //refreshes drop-down lists upon validation
-        this.linkedFilters = f.linked_filters===true ? true : false;
+        this.linkedFilters = Boolean(f.linked_filters);
         //wheter excluded options are disabled
-        this.disableExcludedOptions = f.disable_excluded_options===true ?
-            true : false;
+        this.disableExcludedOptions = Boolean(f.disable_excluded_options);
         //stores active filter element
         this.activeFlt = null;
         //id of active filter
         this.activeFilterId = null;
         //enables/disbles column operation(sum,mean)
-        this.hasColOperation = f.col_operation ? true : false;
+        this.hasColOperation = Boolean(f.col_operation);
         this.colOperation = null;
         //enables always visible rows
-        this.hasVisibleRows = f.rows_always_visible ? true : false;
+        this.hasVisibleRows = Boolean(f.rows_always_visible);
         //array containing always visible rows
         this.visibleRows = this.hasVisibleRows ? f.rows_always_visible : [];
         //defines search type: include or exclude
         this.searchType = f.search_type || 'include';
         //enables/disables external filters generation
-        this.isExternalFlt = f.external_flt_grid===true ? true : false;
+        this.isExternalFlt = Boolean(f.external_flt_grid);
         //array containing ids of external elements containing filters
         this.externalFltTgtIds = f.external_flt_grid_ids || null;
         //stores filters elements if isExternalFlt is true
@@ -259,7 +252,7 @@ export class TableFilter{
         this.onFiltersLoaded = Types.isFn(f.on_filters_loaded) ?
             f.on_filters_loaded : null;
         //enables/disables single filter search
-        this.singleSearchFlt = f.single_search_filter===true ? true : false;
+        this.singleSearchFlt = Boolean(f.single_search_filter);
         //calls function after row is validated
         this.onRowValidated = Types.isFn(f.on_row_validated) ?
             f.on_row_validated : null;
@@ -277,9 +270,9 @@ export class TableFilter{
         //enables/disables help div
         this.helpInstructions = !f.help_instructions ? false : true;
         //popup filters
-        this.popUpFilters = f.popup_filters===true ? true : false;
+        this.popUpFilters = Boolean(f.popup_filters);
         //active columns color
-        this.markActiveColumns = f.mark_active_columns===true ? true : false;
+        this.markActiveColumns = Boolean(f.mark_active_columns);
         //defines css class for active column header
         this.activeColumnsCssClass = f.active_columns_css_class ||
             'activeHeader';
@@ -294,12 +287,11 @@ export class TableFilter{
         //defines 1st option text
         this.displayAllText = f.display_all_text || '';
         //enables/disables empty option in combo-box filters
-        this.enableEmptyOption = f.enable_empty_option===true ? true : false;
+        this.enableEmptyOption = Boolean(f.enable_empty_option);
         //defines empty option text
         this.emptyText = f.empty_text || '(Empty)';
         //enables/disables non empty option in combo-box filters
-        this.enableNonEmptyOption = f.enable_non_empty_option===true ?
-            true : false;
+        this.enableNonEmptyOption = Boolean(f.enable_non_empty_option);
         //defines empty option text
         this.nonEmptyText = f.non_empty_text || '(Non empty)';
         //enables/disables onChange event on combo-box
@@ -307,13 +299,13 @@ export class TableFilter{
         //enables/disables select options sorting
         this.sortSlc = f.sort_select===false ? false : true;
         //enables/disables ascending numeric options sorting
-        this.isSortNumAsc = f.sort_num_asc===true ? true : false;
+        this.isSortNumAsc = Boolean(f.sort_num_asc);
         this.sortNumAsc = this.isSortNumAsc ? f.sort_num_asc : null;
         //enables/disables descending numeric options sorting
-        this.isSortNumDesc = f.sort_num_desc===true ? true : false;
+        this.isSortNumDesc = Boolean(f.sort_num_desc);
         this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : null;
         //enabled selects are populated on demand
-        this.fillSlcOnDemand = f.fill_slc_on_demand===true ? true : false;
+        this.fillSlcOnDemand = Boolean(f.fill_slc_on_demand);
         this.hasCustomOptions = Types.isObj(f.custom_options);
         this.customOptions = f.custom_options;
 
@@ -337,26 +329,26 @@ export class TableFilter{
 
         /*** rows counter ***/
         //show/hides rows counter
-        this.rowsCounter = f.rows_counter===true ? true : false;
+        this.rowsCounter = Boolean(f.rows_counter);
 
         /*** status bar ***/
         //show/hides status bar
-        this.statusBar = f.status_bar===true ? true : false;
+        this.statusBar = Boolean(f.status_bar);
 
         /*** loader ***/
         //enables/disables loader/spinner indicator
-        this.loader = f.loader===true ? true : false;
+        this.loader = Boolean(f.loader);
 
         /*** validation - reset buttons/links ***/
         //show/hides filter's validation button
-        this.displayBtn = f.btn===true ? true : false;
+        this.displayBtn = Boolean(f.btn);
         //defines validation button text
         this.btnText = f.btn_text || (!this.enableIcons ? 'Go' : '');
         //defines css class for validation button
         this.btnCssClass = f.btn_css_class ||
             (!this.enableIcons ? 'btnflt' : 'btnflt_icon');
         //show/hides reset link
-        this.btnReset = f.btn_reset===true ? true : false;
+        this.btnReset = Boolean(f.btn_reset);
         //defines css class for reset button
         this.btnResetCssClass = f.btn_reset_css_class || 'reset';
         //callback function before filters are cleared
@@ -368,13 +360,13 @@ export class TableFilter{
 
         /*** paging ***/
         //enables/disables table paging
-        this.paging = f.paging===true ? true : false;
+        this.paging = Boolean(f.paging);
         this.nbVisibleRows = 0; //nb visible rows
         this.nbHiddenRows = 0; //nb hidden rows
 
         /*** webfx sort adapter ***/
         //enables/disables default table sorting
-        this.sort = f.sort===true ? true : false;
+        this.sort = Boolean(f.sort);
         //indicates if sort is set (used in tfAdapter.sortabletable.js)
         this.isSortEnabled = false;
         this.sortConfig = f.sort_config || {};
@@ -383,8 +375,7 @@ export class TableFilter{
         this.sortConfig.sortTypes = Types.isArray(this.sortConfig.sort_types) ?
             this.sortConfig.sort_types : [];
         this.sortConfig.sortCol = this.sortConfig.sort_col || null;
-        this.sortConfig.asyncSort = this.sortConfig.async_sort===true ?
-            true : false;
+        this.sortConfig.asyncSort = Boolean(this.sortConfig.async_sort);
         this.sortConfig.triggerIds =
             Types.isArray(this.sortConfig.sort_trigger_ids) ?
             this.sortConfig.sort_trigger_ids : [];
@@ -396,17 +387,19 @@ export class TableFilter{
         // this.editable = f.editable===true ? true : false;
 
         /*** onkeyup event ***/
-        //enables/disables onkeyup event, table is filtered when user stops
+        //enables/disables auto filtering, table is filtered when user stops
         //typing
-        this.onKeyUp = f.on_keyup===true ? true : false;
+        this.autoFilter = Boolean(f.auto_filter);
         //onkeyup delay timer (msecs)
-        this.onKeyUpDelay = !isNaN(f.on_keyup_delay) ? f.on_keyup_delay : 900;
-        this.isUserTyping = null; //typing indicator
-        this.onKeyUpTimer = undefined;
+        this.autoFilterDelay = !isNaN(f.auto_filter_delay) ?
+            f.auto_filter_delay : 900;
+        //typing indicator
+        this.isUserTyping = null;
+        this.autoFilterTimer = null;
 
         /*** keyword highlighting ***/
         //enables/disables keyword highlighting
-        this.highlightKeywords = f.highlight_keywords===true ? true : false;
+        this.highlightKeywords = Boolean(f.highlight_keywords);
 
         /*** data types ***/
         //defines default date type (european DMY)
@@ -418,15 +411,14 @@ export class TableFilter{
         //US & javascript = '.' EU = ','
         this.decimalSeparator = f.decimal_separator || '.';
         //enables number format per column
-        this.hasColNbFormat = f.col_number_format===true ? true : false;
+        this.hasColNbFormat = Boolean(f.col_number_format);
         //array containing columns nb formats
         this.colNbFormat = Types.isArray(this.hasColNbFormat) ?
             f.col_number_format : null;
         //enables date type per column
-        this.hasColDateType = f.col_date_type===true ? true : false;
+        this.hasColDateType = Types.isArray(f.col_date_type);
         //array containing columns date type
-        this.colDateType = Types.isArray(this.hasColDateType) ?
-            f.col_date_type : null;
+        this.colDateType = this.hasColDateType ? f.col_date_type : null;
 
         /*** status messages ***/
         //filtering
@@ -484,18 +476,15 @@ export class TableFilter{
         /*** cookies ***/
         this.hasStoredValues = false;
         //remembers filters values on page load
-        this.rememberGridValues = f.remember_grid_values===true ?
-            true : false;
+        this.rememberGridValues = Boolean(f.remember_grid_values);
         //cookie storing filter values
         this.fltsValuesCookie = this.prfxCookieFltsValues + this.id;
         //remembers page nb on page load
-        this.rememberPageNb = this.paging && f.remember_page_number ?
-            true : false;
+        this.rememberPageNb = this.paging && f.remember_page_number;
         //cookie storing page nb
         this.pgNbCookie = this.prfxCookiePageNb + this.id;
         //remembers page length on page load
-        this.rememberPageLen = this.paging && f.remember_page_length ?
-            true : false;
+        this.rememberPageLen = this.paging && f.remember_page_length;
         //cookie storing page length
         this.pgLenCookie = this.prfxCookiePageLen + this.id;
 
@@ -505,10 +494,9 @@ export class TableFilter{
         this.hasExtensions = Types.isArray(this.extensions);
 
         /*** themes ***/
-        this.enableDefaultTheme = f.enable_default_theme===true ?
-            true : false;
+        this.enableDefaultTheme = Boolean(f.enable_default_theme);
         //imports themes
-        this.hasThemes = (f.enable_default_theme || Types.isArray(f.themes));
+        this.hasThemes = (this.enableDefaultTheme || Types.isArray(f.themes));
         this.themes = f.themes || [];
         //themes path
         this.themesPath = f.themes_path || this.basePath + 'themes/';
@@ -537,7 +525,7 @@ export class TableFilter{
         };
 
         /*** TF events ***/
-        let o = this;
+        // let o = this;
         this.Evt = {
             name: {
                 filter: 'Filter',
@@ -558,65 +546,66 @@ export class TableFilter{
                 - Detects <enter> key for a given element
             =====================================================*/
             detectKey(e) {
-                if(!o.enterKey){ return; }
+                if(!this.enterKey){ return; }
                 let _ev = e || global.event;
                 if(_ev){
                     let key = Event.keyCode(_ev);
                     if(key===13){
-                        o._filter();
+                        this.filter();
                         Event.cancel(_ev);
                         Event.stop(_ev);
                     } else {
-                        o.isUserTyping = true;
-                        global.clearInterval(o.onKeyUpTimer);
-                        o.onKeyUpTimer = undefined;
+                        this.isUserTyping = true;
+                        global.clearInterval(this.autoFilterTimer);
+                        this.autoFilterTimer = null;
                     }
                 }
             },
             /*====================================================
-                - onkeyup event for text filters
+                - auto filter for text filters
             =====================================================*/
             onKeyUp(e) {
-                if(!o.onKeyUp){
+                if(!this.autoFilter){
                     return;
                 }
                 let _ev = e || global.event;
                 let key = Event.keyCode(_ev);
-                o.isUserTyping = false;
+                this.isUserTyping = false;
 
                 function filter() {
-                    global.clearInterval(o.onKeyUpTimer);
-                    o.onKeyUpTimer = undefined;
-                    if(!o.isUserTyping){
-                        o.filter();
-                        o.isUserTyping = null;
+                    /*jshint validthis:true */
+                    global.clearInterval(this.autoFilterTimer);
+                    this.autoFilterTimer = null;
+                    if(!this.isUserTyping){
+                        this.filter();
+                        this.isUserTyping = null;
                     }
                 }
 
                 if(key!==13 && key!==9 && key!==27 && key!==38 && key!==40) {
-                    if(o.onKeyUpTimer===undefined){
-                        o.onKeyUpTimer = global.setInterval(
-                            filter, o.onKeyUpDelay);
+                    if(this.autoFilterTimer === null){
+                        this.autoFilterTimer = global.setInterval(
+                            filter.bind(this), this.autoFilterDelay);
                     }
                 } else {
-                    global.clearInterval(o.onKeyUpTimer);
-                    o.onKeyUpTimer = undefined;
+                    global.clearInterval(this.autoFilterTimer);
+                    this.autoFilterTimer = null;
                 }
             },
             /*====================================================
                 - onkeydown event for input filters
             =====================================================*/
             onKeyDown() {
-                if(!o.onKeyUp) { return; }
-                o.isUserTyping = true;
+                if(!this.autoFilter) { return; }
+                this.isUserTyping = true;
             },
             /*====================================================
                 - onblur event for input filters
             =====================================================*/
             onInpBlur() {
-                if(o.onKeyUp){
-                    o.isUserTyping = false;
-                    global.clearInterval(o.onKeyUpTimer);
+                if(this.autoFilter){
+                    this.isUserTyping = false;
+                    global.clearInterval(this.autoFilterTimer);
                 }
                 // if(o.ezEditTable){
                 //     if(o.editable){
@@ -632,9 +621,10 @@ export class TableFilter{
             =====================================================*/
             onInpFocus(e) {
                 let _ev = e || global.event;
-                o.activeFilterId = this.getAttribute('id');
-                o.activeFlt = Dom.id(o.activeFilterId);
-                if(o.popUpFilters){
+                let elm = Event.target(_ev);
+                this.activeFilterId = elm.getAttribute('id');
+                this.activeFlt = Dom.id(this.activeFilterId);
+                if(this.popUpFilters){
                     Event.cancel(_ev);
                     Event.stop(_ev);
                 }
@@ -652,14 +642,15 @@ export class TableFilter{
             =====================================================*/
             onSlcFocus(e) {
                 let _ev = e || global.event;
-                o.activeFilterId = this.getAttribute('id');
-                o.activeFlt = Dom.id(o.activeFilterId);
+                let elm = Event.target(_ev);
+                this.activeFilterId = elm.getAttribute('id');
+                this.activeFlt = Dom.id(this.activeFilterId);
                 // select is populated when element has focus
-                if(o.fillSlcOnDemand && this.getAttribute('filled') === '0'){
-                    let ct = this.getAttribute('ct');
-                    o.Cpt.dropdown._build(ct);
+                if(this.fillSlcOnDemand && elm.getAttribute('filled') === '0'){
+                    let ct = elm.getAttribute('ct');
+                    this.Cpt.dropdown._build(ct);
                 }
-                if(o.popUpFilters){
+                if(this.popUpFilters){
                     Event.cancel(_ev);
                     Event.stop(_ev);
                 }
@@ -667,64 +658,37 @@ export class TableFilter{
             /*====================================================
                 - onchange event for select filters
             =====================================================*/
-            onSlcChange(e) {
-                if(!o.activeFlt){ return; }
+            onSlcChange(e) {console.log('onSlcChange',this.activeFlt);
+                if(!this.activeFlt){ return; }
                 // let colIndex = o.activeFlt.getAttribute('colIndex');
                 //Checks filter is a checklist and caller is not null
                 // if(o.activeFlt && colIndex &&
                 //     o['col'+colIndex]===o.fltTypeCheckList &&
                 //     !o.Evt.onSlcChange.caller){ return; }
                 let _ev = e || global.event;
-                if(o.popUpFilters){ Event.stop(_ev); }
-                if(o.onSlcChange){ o.filter(); }
+                if(this.popUpFilters){ Event.stop(_ev); }
+                if(this.onSlcChange){ this.filter(); }
             },
-            /*====================================================
-                - onblur event for select filters
-            =====================================================*/
-            // _OnSlcBlur: function(e) {},
             /*====================================================
                 - onclick event for checklist filters
             =====================================================*/
-            onCheckListClick() {
-                if(o.fillSlcOnDemand && this.getAttribute('filled') === '0'){
-                    let ct = this.getAttribute('ct');
-                    o.Cpt.checkList._build(ct);
-                    o.Cpt.checkList.checkListDiv[ct].onclick = null;
-                    o.Cpt.checkList.checkListDiv[ct].title = '';
+            onCheckListClick(e) {
+                let _ev = e || global.event;
+                let elm = Event.target(_ev);
+                if(this.fillSlcOnDemand && elm.getAttribute('filled') === '0'){
+                    let ct = elm.getAttribute('ct');
+                    this.Cpt.checkList._build(ct);
+                    this.Cpt.checkList.checkListDiv[ct].onclick = null;
+                    this.Cpt.checkList.checkListDiv[ct].title = '';
                 }
-            },
-            /*====================================================
-                - onclick event for checklist filter container
-            =====================================================*/
-            onCheckListFocus() {
-                o.activeFilterId = this.firstChild.getAttribute('id');
-                o.activeFlt = Dom.id(o.activeFilterId);
             },
             /*====================================================
                 - onclick event for validation button
                 (btn property)
             =====================================================*/
             onBtnClick() {
-                o.filter();
+                this.filter();
             }
-            // ,
-            // _OnSlcPagesChangeEvt: null, //used by sort adapter
-            /*====================================================
-                - onclick event slc parent node (enables filters)
-                IE only
-            =====================================================*/
-            // _EnableSlc: function() {
-            //     this.firstChild.disabled = false;
-            //     this.firstChild.focus();
-            //     this.onclick = null;
-            // },
-
-            // _Paging: { //used by sort adapter
-            //     nextEvt: null,
-            //     prevEvt: null,
-            //     lastEvt: null,
-            //     firstEvt: null
-            // }
         };
     }
 
@@ -906,9 +870,11 @@ export class TableFilter{
                             dropdown._build(i);
                         }
 
-                        Event.add(slc, 'keypress', this.Evt.detectKey);
-                        Event.add(slc, 'change', this.Evt.onSlcChange);
-                        Event.add(slc, 'focus', this.Evt.onSlcFocus);
+                        Event.add(slc, 'keypress',
+                            this.Evt.detectKey.bind(this));
+                        Event.add(slc, 'change',
+                            this.Evt.onSlcChange.bind(this));
+                        Event.add(slc, 'focus', this.Evt.onSlcFocus.bind(this));
                         // Event.add(slc, 'blur', this.Evt._OnSlcBlur);
 
                         //1st option is created here since dropdown.build isn't
@@ -946,13 +912,11 @@ export class TableFilter{
                         }
 
                         if(this.fillSlcOnDemand){
-                            Event.add(
-                                divCont, 'click', this.Evt.onCheckListClick);
+                            Event.add(divCont, 'click',
+                                this.Evt.onCheckListClick.bind(this));
                             divCont.appendChild(
                                 Dom.text(checkList.activateCheckListTxt));
                         }
-
-                        Event.add(divCont, 'click', this.Evt.onCheckListFocus);
                     }
 
                     else{
@@ -969,7 +933,7 @@ export class TableFilter{
                             );
                         }
                         inp.className = inpclass;
-                        inp.onfocus = this.Evt.onInpFocus;
+                        Event.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
 
                         //filter is appended in desired element
                         if(externalFltTgtId){
@@ -981,10 +945,12 @@ export class TableFilter{
 
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
 
-                        Event.add(inp, 'keypress', this.Evt.detectKey);
-                        Event.add(inp, 'keydown', this.Evt.onKeyDown);
-                        Event.add(inp, 'keyup', this.Evt.onKeyUp);
-                        Event.add(inp, 'blur', this.Evt.onInpBlur);
+                        Event.add(inp, 'keypress',
+                            this.Evt.detectKey.bind(this));
+                        Event.add(inp, 'keydown',
+                            this.Evt.onKeyDown.bind(this));
+                        Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
+                        Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
 
                         if(this.rememberGridValues){
                             let flts_values = this.Cpt.store.getFilterValues(
@@ -1008,7 +974,8 @@ export class TableFilter{
                             fltcell.appendChild(btn);
                         }
 
-                        btn.onclick = this.Evt.onBtnClick;
+                        // btn.onclick = this.Evt.onBtnClick;
+                        Event.add(btn, 'click', this.Evt.onBtnClick.bind(this));
                     }//if
 
                 }// for i

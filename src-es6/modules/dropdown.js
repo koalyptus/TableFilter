@@ -13,7 +13,8 @@ export class Dropdown{
         // Configuration object
         var f = tf.config();
 
-        this.enableSlcResetFilter = f.enable_slc_reset_filter ? false : true;
+        this.enableSlcResetFilter = f.enable_slc_reset_filter===false ?
+            false : true;
         //defines empty option text
         this.nonEmptyText = f.non_empty_text || '(Non empty)';
         //sets select filling method: 'innerHTML' or 'createElement'
