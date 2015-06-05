@@ -75,7 +75,7 @@ export class TableFilter{
         }
 
         if(arguments.length > 1){
-            for(let i=0; i<arguments.length; i++){
+            for(let i=0, len=arguments.length; i<len; i++){
                 let arg = arguments[i];
                 let argtype = typeof arg;
                 switch(Str.lower(argtype)){
@@ -110,8 +110,9 @@ export class TableFilter{
         this.fltCol = []; //filter type of each column
 
         for(let j=0; j<this.nbCells; j++){
-            let cfgCol = f['col_'+j];
-            let col = !cfgCol ? this.fltTypeInp : Str.lower(cfgCol);
+            // let cfgCol = f['col_'+j];
+            // let col = !cfgCol ? this.fltTypeInp : Str.lower(cfgCol);
+            let col = this.getFilterType(j);
             this.fltCol.push(col);
             this['col'+j] = col;
         }
@@ -658,7 +659,7 @@ export class TableFilter{
             /*====================================================
                 - onchange event for select filters
             =====================================================*/
-            onSlcChange(e) {console.log('onSlcChange',this.activeFlt);
+            onSlcChange(e) {
                 if(!this.activeFlt){ return; }
                 // let colIndex = o.activeFlt.getAttribute('colIndex');
                 //Checks filter is a checklist and caller is not null
@@ -712,7 +713,7 @@ export class TableFilter{
             this.gridLayout)){
             this.headersRow = 0;
         }
-        let f = this.cfg,
+        let /*f = this.cfg,*/
             n = this.singleSearchFlt ? 1 : this.nbCells,
             inpclass;
 
@@ -812,7 +813,8 @@ export class TableFilter{
                     }
 
                     let fltcell = Dom.create(this.fltCellTag),
-                        col = this['col'+i],
+                        // col = this['col'+i],
+                        col = this.getFilterType(i),
                         externalFltTgtId =
                             this.isExternalFlt && this.externalFltTgtIds ?
                             this.externalFltTgtIds[i] : null;
@@ -826,10 +828,10 @@ export class TableFilter{
                     inpclass = (i==n-1 && this.displayBtn) ?
                         this.fltSmallCssClass : this.fltCssClass;
 
-                    if(col===undefined){
-                        col = f['col_'+i]===undefined ?
-                            this.fltTypeInp : Str.lower(f['col_'+i]);
-                    }
+                    // if(col===undefined){
+                    //     col = f['col_'+i]===undefined ?
+                    //         this.fltTypeInp : Str.lower(f['col_'+i]);
+                    // }
 
                     //only 1 input for single search
                     if(this.singleSearchFlt){
@@ -1068,12 +1070,11 @@ export class TableFilter{
 
     }
 
-    /*====================================================
-        - TF events manager
-        - Params:
-            - event name (string)
-            - config object (optional literal object)
-    =====================================================*/
+    /**
+     * Manages state messages
+     * @param {String} evt Event name
+     * @param {Object} cfg Config object
+     */
     EvtManager(evt,
         cfg={ slcIndex: null, slcExternal: false, slcId: null, pgIndex: null }){
         let slcIndex = cfg.slcIndex;
@@ -1299,10 +1300,6 @@ export class TableFilter{
         if(this.highlightKeywords){
             Cpt.highlightKeyword.unhighlightAll();
         }
-        // if(this.sort){
-        //     console.log('sort.destroy',this.ExtRegistry, ExtRegistry.sort);
-        //     ExtRegistry.sort.destroy();
-        // }
         if(this.loader){
             Cpt.loader.destroy();
         }
@@ -1327,7 +1324,7 @@ export class TableFilter{
                 //ie<=6 doesn't support hasAttribute method
                 let row = rows[j];
                 let attribs = row.attributes;
-                for(let x = 0; x < attribs.length; x++){
+                for(let x=0, len=attribs.length; x<len; x++){
                     if(Str.lower(attribs.nodeName)==='validrow'){
                         row.removeAttribute('validRow');
                     }
@@ -1665,7 +1662,7 @@ export class TableFilter{
     /**
      * Filter the table by retrieving the data from each cell in every single
      * row and comparing it to the search term for current column. A row is
-     * hidden when all the search terms are not found in current row.
+     * hidden when all the search terms are not found in inspected row.
      */
     _filter(){
         if(!this.fltGrid || (!this._hasGrid && !this.isFirstLoad)){
@@ -1678,7 +1675,7 @@ export class TableFilter{
 
         let row = this.tbl.rows,
             Cpt = this.Cpt,
-            f = this.cfg,
+            // f = this.cfg,
             hiddenrows = 0;
 
         this.validRowsIndex = [];
@@ -1862,12 +1859,12 @@ export class TableFilter{
                 //like
                 else if(hasLK){
                     occurence = this._containsStr(
-                        sA.replace(re_lk,''),cell_data,null,false);
+                        sA.replace(re_lk,''), cell_data, null, false);
                 }
                 //equal
                 else if(hasEQ){
                     occurence = this._containsStr(
-                        sA.replace(re_eq,''),cell_data,null,true);
+                        sA.replace(re_eq,''), cell_data, null, true);
                 }
                 //starts with
                 else if(hasST){
@@ -1881,7 +1878,7 @@ export class TableFilter{
                         cell_data.lastIndexOf(searchArg,cell_data.length-1) ===
                         (cell_data.length-1)-(searchArg.length-1) &&
                         cell_data.lastIndexOf(
-                            searchArg,cell_data.length-1) > -1 ? true : false;
+                            searchArg, cell_data.length-1) > -1 ? true : false;
                 }
                 //empty
                 else if(hasEM){
@@ -1902,9 +1899,11 @@ export class TableFilter{
                     } catch(e) { occurence = false; }
                 }
                 else{
-                    let fCol = f['col_'+j];
+                    // let fCol = f['col_'+j];
+                    // occurence = this._containsStr(
+                    //     sA, cell_data, !fCol ? this.fltTypeInp : fCol);
                     occurence = this._containsStr(
-                        sA, cell_data, !fCol ? this.fltTypeInp : fCol);
+                        sA, cell_data, this.getFilterType(j));
                 }
 
             }//else
@@ -1957,7 +1956,7 @@ export class TableFilter{
                     let cS,
                         occur = false,
                         s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
-                    for(let w=0; w<s.length; w++){
+                    for(let w=0, len=s.length; w<len; w++){
                         cS = Str.trim(s[w]);
                         occur = hasArg.call(this, cS, cell_data, j);
                         highlight.call(this, cS, occur, cell[j]);
@@ -2040,7 +2039,7 @@ export class TableFilter{
             this.startPagingRow = 0;
             this.currentPageNb = 1;
             Cpt.paging.setPagingInfo(this.validRowsIndex);
-        }//starts paging process
+        }
         //invokes onafter callback
         if(this.onAfterFilter){
             this.onAfterFilter.call(null,this);
@@ -2154,7 +2153,7 @@ export class TableFilter{
         //mutiple select
         else if(fltColType === this.fltTypeMulti){
             fltValue = '';
-            for(let j=0; j<flt.options.length; j++){
+            for(let j=0, len=flt.options.length; j<len; j++){
                 if(flt.options[j].selected){
                     fltValue = fltValue.concat(
                         flt.options[j].value+' ' +
@@ -2187,7 +2186,7 @@ export class TableFilter{
             return;
         }
         let searchArgs = [];
-        for(let i=0; i<this.fltIds.length; i++){
+        for(let i=0, len=this.fltIds.length; i<len; i++){
             searchArgs.push(
                 Str.trim(
                     Str.matchCase(this.getFilterValue(i), this.caseSensitive))
@@ -2222,7 +2221,7 @@ export class TableFilter{
             return;
         }
         let arr = [];
-        for(let i=0; i<this.fltIds.length; i++){
+        for(let i=0, len=this.fltIds.length; i<len; i++){
             let fltType = this['col'+i];
             if(fltType === Str.lower(type)){
                 let a = bool ? i : this.fltIds[i];
@@ -2299,7 +2298,7 @@ export class TableFilter{
             let rowData = [k,[]];
             let cells = row[k].cells;
             // this loop retrieves cell data
-            for(let j=0; j<cells.length; j++){
+            for(let j=0, len=cells.length; j<len; j++){
                 let cell_data = this.getCellData(j, cells[j]);
                 rowData[1].push(cell_data);
             }
@@ -2329,7 +2328,7 @@ export class TableFilter{
             let table = this.gridLayout ?
                     this.Cpt.gridLayout.headTbl : this.tbl,
                 r = table.rows[this.headersRow],
-                rowData = [r.rowIndex,[]];
+                rowData = [r.rowIndex, []];
             for(let j=0; j<this.nbCells; j++){
                 let headerText = this.getCellData(j, r.cells[j]);
                 rowData[1].push(headerText);
@@ -2363,7 +2362,7 @@ export class TableFilter{
         }
         let data =  this.getFilteredData(),
             colData = [];
-        for(let i=0; i<data.length; i++){
+        for(let i=0, len=data.length; i<len; i++){
             let r = data[i],
                 //cols values of current row
                 d = r[1],
@@ -2431,15 +2430,15 @@ export class TableFilter{
      * @param {Number} index     Column's index
      * @param {String} searcharg Search term
      */
-    setFilterValue(index, searcharg/*, doFilter*/){
+    setFilterValue(index, searcharg=''/*, doFilter*/){
         if((!this.fltGrid && !this.isFirstLoad) ||
             !this.getFilterElement(index)){
             return;
         }
         let slc = this.getFilterElement(index),
             // execFilter = doFilter===undefined ? true : doFilter,
-            fltColType = this['col'+index];
-        searcharg = searcharg===undefined ? '' : searcharg;
+            // fltColType = this['col'+index];
+            fltColType = this.getFilterType(index);
 
         if(fltColType !== this.fltTypeMulti &&
             fltColType != this.fltTypeCheckList){
@@ -2449,7 +2448,7 @@ export class TableFilter{
         else if(fltColType === this.fltTypeMulti){
             let s = searcharg.split(' '+this.orOperator+' ');
             // let ct = 0; //keywords counter
-            for(let j=0; j<slc.options.length; j++){
+            for(let j=0, len=slc.options.length; j<len; j++){
                 if(s==='' || s[0]===''){
                     slc.options[j].selected = false;
                 }
@@ -2562,7 +2561,7 @@ export class TableFilter{
         if(this.onBeforeReset){
             this.onBeforeReset.call(null, this, this.getFiltersValue());
         }
-        for(let i=0; i<this.fltIds.length; i++){
+        for(let i=0, len=this.fltIds.length; i<len; i++){
             this.setFilterValue(i, '');
         }
         if(this.linkedFilters){
@@ -2634,7 +2633,7 @@ export class TableFilter{
         let activeFlt = this.activeFilterId.split('_')[0];
         activeFlt = activeFlt.split(this.prfxFlt)[1];
         let slcSelectedValue;
-        for(let i=0; i<slcIndex.length; i++){
+        for(let i=0, len=slcIndex.length; i<len; i++){
             let curSlc = Dom.id(this.fltIds[slcIndex[i]]);
             slcSelectedValue = this.getFilterValue(slcIndex[i]);
             if(activeFlt!==slcIndex[i] ||
@@ -2790,7 +2789,7 @@ export class TableFilter{
             importType = !type ? 'script' : type,
             attr = importType == 'script' ? 'src' : 'href',
             files = Dom.tag(doc, importType);
-        for (let i=0; i<files.length; i++){
+        for (let i=0, len=files.length; i<len; i++){
             if(files[i][attr] === undefined){
                 continue;
             }
@@ -2967,11 +2966,13 @@ export class TableFilter{
     }
 
     /**
-     * Get the configuration object (literal object)
-     * @return {Object}
+     * Return the filter type for a specified column
+     * @param  {Number} colIndex Column's index
+     * @return {String}
      */
-    config(){
-        return this.cfg;
+    getFilterType(colIndex){
+        let colType = this.cfg['col_'+colIndex];
+        return !colType ? this.fltTypeInp : Str.lower(colType);
     }
 
     /**
@@ -2980,6 +2981,14 @@ export class TableFilter{
      */
     getFilterableRowsNb(){
         return this.getRowsNb(false);
+    }
+
+    /**
+     * Get the configuration object (literal object)
+     * @return {Object}
+     */
+    config(){
+        return this.cfg;
     }
 }
 
