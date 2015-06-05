@@ -7,7 +7,8 @@
 /* TABLE LAYOUT
 =====================================================*/
 table.TF{
-	font:normal 12px arial, tahoma, helvetica, sans-serif;
+	/*font:normal 12px arial, tahoma, helvetica, sans-serif;*/
+	font:inherit;
 	border-top:1px solid #D0D0D0; border-left:1px solid #D0D0D0;
 	border-bottom:1px solid #ccc; border-right:1px solid #ccc;
 }
@@ -61,9 +62,9 @@ select.flt_multi{ /* multiple select filter */
 	border-top:1px solid #ccc; border-bottom:1px solid #999;
 	margin:0; width:120px; vertical-align:middle;
 }
-.fltWatermark{ /* watermark input */
+/*.fltWatermark{  watermark input
 	color:#999;
-}
+}*/
 .div_checklist{ /* div containing checklist  */
 	width:100%; height:100px;
 	border:1px solid #ccc;
@@ -108,7 +109,10 @@ input.reset:hover{ background:#CAD1D6 url(themes/btn_clear_filters.png) center c
 	border:1px solid #ccc; overflow:hidden;
 }
 .ldiv{ /* left div */
-	float:left; width:30%; position:inherit;
+	float:left;
+	width:30%;
+	position:inherit;
+	text-align:left;
 }
 .mdiv{ /* middle div */
 	float:left; width:38%; position:inherit; text-align:center;

@@ -9,7 +9,7 @@
     test("TableFilter object", function() {
         equal(tf.id, 'demo', 'id check');
         equal(tf.filtersRowIndex, 0, 'Filters row index');
-        deepEqual(tf.fltCol.length, 5, 'filters type collection length');
+        deepEqual(tf.getCellsNb(), 5, 'filters type collection length');
     });
 
     module('DOM tests');

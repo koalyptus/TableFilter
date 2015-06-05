@@ -101,6 +101,16 @@ module.exports = function (grunt) {
             // },
         },
 
+        watch: {
+            app: {
+                files: ["src-es6/**/*"],
+                tasks: ["dev"],
+                options: {
+                    spawn: false
+                }
+            }
+        },
+
         babel: {
             options: {
                 sourceMap: true,
@@ -122,6 +132,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
 
@@ -133,7 +144,8 @@ module.exports = function (grunt) {
     grunt.registerTask('server', ['webpack-dev-server:start']);
 
 
-    grunt.registerTask('dev', ['jshint', 'webpack:build', 'copy:build']);
+    grunt.registerTask('dev',
+        ['jshint', 'webpack:build', 'copy:build', 'watch:app']);
 
     // Production build
     grunt.registerTask('dist',
