@@ -23,6 +23,12 @@ solution
 * Exhaustive documentation and API
 * Valuable support provided under a Premium request
 
+##Setup
+Include the bundled js file in your page:
+```shell
+<script src="tablefilter/tablefilter.js"></script>
+```
+
 ##Development
 Start by installing any dependencies.
 
