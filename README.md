@@ -37,7 +37,7 @@ sever on port ``8080``:
 grunt dev
 ```
 
-Use ``build`` task for a production build:
+Use the ``build`` task to generate a production build:
 
 ```shell
 grunt build
@@ -56,10 +56,11 @@ To run all the tests:
 grunt test
 ```
 
-and to run a specific test:
+and to run specific test(s):
 
 ```shell
 grunt test-only:test.html
+grunt test-only:test.html,test-sort.html
 ```
 
 ## License
