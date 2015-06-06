@@ -8,7 +8,6 @@ users to filter and limit the data displayed within a long table. The script
 automatically adds a filter grid bar at the top of the desired table.
 
 ##Features
-
 * Convert a regular HTML table into an advanced grid component providing:
     * Advanced columns filtering model
     * Sorting and pagination facilities
@@ -63,7 +62,9 @@ grunt test-only:test.html
 grunt test-only:test.html,test-sort.html
 ```
 
-## License
+## Support
+* GitHub for reporting bugs and feature requests.
 
+## License
 MIT
 
