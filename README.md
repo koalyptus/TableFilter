@@ -37,7 +37,7 @@ sever on port ``8080``:
 grunt dev
 ```
 
-or the ``build`` task for a production build:
+Use ``build`` task for a production build:
 
 ```shell
 grunt build
