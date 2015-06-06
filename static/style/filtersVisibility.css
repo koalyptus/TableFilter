@@ -17,10 +17,7 @@ span.expClpFlt img{
 	margin:1px 1px 1px 1px;
 	/*background:#f4f4f4;*/
 }
-span.expClpFlt img:hover{
-    background:#fff;
-    /*border:1px solid #666;  */
-}
+span.expClpFlt img:hover{}
 
 /* button */
 .btnExpClpFlt{ margin:0 5px 0 5px; }

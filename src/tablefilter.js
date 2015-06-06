@@ -99,7 +99,8 @@ export class TableFilter{
 
         //default script base path
         this.basePath = f.base_path || 'tablefilter/';
-        this.extensionsPath = f.extensions_path || this.basePath+'extensions/';
+        //this.extensionsPath = f.extensions_path ||
+        //  this.basePath+'extensions/';
 
         /*** filter types ***/
         this.fltTypeInp = 'input';
@@ -179,7 +180,8 @@ export class TableFilter{
 
         /*** filters' grid appearance ***/
         //stylesheet file
-        this.stylesheet = f.stylesheet || this.basePath+'tablefilter.css';
+        this.stylePath = f.style_path || this.basePath + 'style/';
+        this.stylesheet = f.stylesheet || this.stylePath+'tablefilter.css';
         this.stylesheetId = this.id + '_style';
         //defines css class for filters row
         this.fltsRowCssClass = f.flts_row_css_class || 'fltrow';
@@ -486,7 +488,7 @@ export class TableFilter{
         this.hasThemes = (this.enableDefaultTheme || Types.isArray(f.themes));
         this.themes = f.themes || [];
         //themes path
-        this.themesPath = f.themes_path || this.basePath + 'themes/';
+        this.themesPath = f.themes_path || this.stylePath + 'themes/';
 
         // Features registry
         this.Cpt = {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>HTML Table Filter Generator</title>
-    <link rel="stylesheet" type="text/css" href="../build/tablefilter/tablefilter.css">
+    <link rel="stylesheet" type="text/css" href="../dist/tablefilter/style/tablefilter.css">
 </head>
 <body>
     <div id="test"></div>
@@ -86,7 +86,7 @@
         <button onclick="tf.init();">Reset</button>
     </div>
 
-    <script type="text/javascript" src="../build/tablefilter/tablefilter.js"></script>
+    <script type="text/javascript" src="../dist/tablefilter/tablefilter.js"></script>
     <script>
         var table = document.getElementById('demo');
         var totRowIndex = table.getElementsByTagName("tr").length;
@@ -95,7 +95,7 @@
             col_0: 'select',
             col_2: 'checklist',
             col_3: 'select',
-            base_path: '../build/tablefilter/',
+            base_path: '../dist/tablefilter/',
             // fill_slc_on_demand: true,
             rows_counter: true,
             // enable_default_theme: true,

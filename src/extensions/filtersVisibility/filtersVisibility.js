@@ -16,7 +16,7 @@ export default class FiltersVisibility{
         this.desc = f.description || 'Filters row visibility manager';
 
         // Path and image filenames
-        this.path = f.path || tf.basePath;
+        this.path = f.path || tf.stylePath;
         this.stylesheet = f.stylesheet || 'filtersVisibility.css';
         this.icnExpand = f.expand_icon_name || 'icn_exp.png';
         this.icnCollapse = f.collapse_icon_name || 'icn_clp.png';
@@ -74,12 +74,14 @@ export default class FiltersVisibility{
         this.onAfterHide = Types.isFn(f.on_after_hide) ? f.on_after_hide : null;
 
         //Loads extension stylesheet
-        tf.import(
-            f.name+'Style', tf.basePath + this.stylesheet, null, 'link');
+        tf.import(f.name+'Style', tf.stylePath + this.stylesheet, null, 'link');
 
         this.tf = tf;
     }
 
+    /**
+     * Initialise extension
+     */
     init(){
         if(this.initialized){
             return;
@@ -89,6 +91,9 @@ export default class FiltersVisibility{
         this.initialized = true;
     }
 
+    /**
+     * Build UI elements
+     */
     buildUI(){
         let tf = this.tf;
         let span = Dom.create('span',['id', this.prfx+tf.id]);
@@ -129,6 +134,9 @@ export default class FiltersVisibility{
         }
     }
 
+    /**
+     * Toggle filters visibility
+     */
     toggle(){
         let tf = this.tf;
         let tbl = tf.gridLayout? tf.Cpt.gridLayout.headTbl : tf.tbl;
@@ -156,6 +164,9 @@ export default class FiltersVisibility{
         }
     }
 
+    /**
+     * Destroy the UI
+     */
     destroy(){
         if(!this.btnEl && !this.contEl){
             return;

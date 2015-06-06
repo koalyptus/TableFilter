@@ -9,11 +9,10 @@
 
     module('Sanity checks');
     test('Column widths', function() {
-        var filterRow = tf.tbl.rows[tf.getFiltersRowIndex()];
+        var cols = tf.tbl.getElementsByTagName('col');
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
-        deepEqual(filterRow.cells[1].style.width,
-            '100px', 'Expected column width');
-        deepEqual(filterRow.cells[4].style.width, '', 'Expected column width');
+        deepEqual(cols[1].style.width, '100px', 'Expected column width');
+        deepEqual(cols[4].style.width, '', 'Expected column width');
     });
 
     test('Grid layout column widths', function() {
@@ -26,10 +25,9 @@
             sort: false
         });
         tf.init();
-        deepEqual(tf.getHeaderElement(0).style.width,
-            '150px', 'Expected column width');
-        deepEqual(tf.getHeaderElement(4).style.width,
-            '200px', 'Expected column width');
+        var cols = tf.Cpt.gridLayout.headTbl.getElementsByTagName('col');
+        deepEqual(cols[0].style.width, '150px', 'Expected column width');
+        deepEqual(cols[4].style.width, '200px', 'Expected column width');
     });
 
 })(window, TableFilter);

@@ -2,6 +2,7 @@ module.exports = function (grunt) {
 
     var webpack = require('webpack');
     var webpackConfig = require('./webpack.config.js');
+    var Clean = require('clean-webpack-plugin');
     var fs = require('fs');
     var path = require('path');
     // var pkg = grunt.file.readJSON('package.json');
@@ -38,16 +39,10 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            build: {
-                src: ['**'],
-                cwd: 'static/style',
-                dest: 'build/tablefilter',
-                expand: true
-            },
             dist: {
                 src: ['**'],
                 cwd: 'static/style',
-                dest: 'dist/tablefilter',
+                dest: 'dist/tablefilter/style',
                 expand: true
             }
         },
@@ -55,7 +50,7 @@ module.exports = function (grunt) {
         'webpack-dev-server': {
             options: {
                 webpack: webpack.dev,
-                publicPath: '/build/'
+                publicPath: '/dist/'
             },
             start: {
                 keepAlive: true,
@@ -67,44 +62,31 @@ module.exports = function (grunt) {
         },
 
         webpack: {
-            dist: webpackConfig.dist,
-            build: webpackConfig.build
-            // 'dev': {
-            //     entry: __dirname + '/src/tablefilter.js',
-            //     // entry: {
-            //     //     tablefilter: __dirname + '/src/tablefilter.js',
-            //     //     colsVisibility: __dirname +
-            //     //     '/src/extensions/colsVisibility/colsVisibility.js'
-            //     // },
-            //     output: {
-            //         publicPath: '/src/',
-            //         path: __dirname + '/src',
-            //         filename: 'tablefilter.js',
-            //         chunkFilename: '[name].js',
-            //         libraryTarget: 'umd'
-            //     },
-            //     resolve: {
-            //         extensions: ['', '.js']
-            //     },
-            //     module: {
-            //         loaders: [{
-            //             test: path.join(__dirname, 'src'),
-            //             exclude: /node_modules/,
-            //             query: {
-            //                 compact: false
-            //             },
-            //             loader: 'babel-loader'
-            //         }]
-            //     },
-            //     devtool: 'sourcemap',
-            //     debug: true
-            // },
+            options: webpackConfig,
+            build: {
+                plugins: [
+                    new Clean(['dist']),
+                    new webpack.optimize.DedupePlugin(),
+                    new webpack.optimize.MinChunkSizePlugin(
+                        {minChunkSize: 10000}),
+                    new webpack.optimize.UglifyJsPlugin()
+                ]
+            },
+            // build: webpackConfig.build,
+            'build-dev': {
+                devtool: 'sourcemap',
+                debug: true,
+                plugins: [
+                    new Clean(['dist']),
+                    new webpack.optimize.DedupePlugin()
+                ]
+            }
         },
 
         watch: {
             app: {
-                files: ["src/**/*"],
-                tasks: ["dev"],
+                files: ['src/**/*'],
+                tasks: ['dev'],
                 options: {
                     spawn: false
                 }
@@ -122,7 +104,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'src',
                     src: ['**/*.js'],
-                    dest: 'build/tablefilter'
+                    dest: 'dist/tablefilter'
                 }]
             }
         }
@@ -136,23 +118,22 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
 
-
     grunt.registerTask('default',
-        ['jshint', 'webpack:dist', 'copy:dist', 'test']);
+        ['jshint', 'webpack:build', 'copy:dist', 'test']);
 
     // The development server (the recommended option for development)
     grunt.registerTask('server', ['webpack-dev-server:start']);
 
 
     grunt.registerTask('dev',
-        ['jshint', 'webpack:build', 'copy:build', 'watch:app']);
+        ['jshint', 'webpack:build-dev', 'copy:dist', 'watch:app']);
 
     // Production build
-    grunt.registerTask('dist',
-        ['jshint', 'webpack:dist', 'copy:dist']);
+    grunt.registerTask('build',
+        ['jshint', 'webpack:build', 'copy:dist']);
 
     // Transpile with Babel
-    grunt.registerTask('dev-modules', ['babel', 'copy:build']);
+    grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
 
     // Tests
     grunt.registerTask('test', ['qunit:all']);
