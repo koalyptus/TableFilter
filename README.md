@@ -24,11 +24,42 @@ solution
 * Exhaustive documentation and API
 * Valuable support provided under a Premium request
 
-##Install
+##Development
 Start by installing any dependencies.
 
 ```shell
 npm install
+```
+Use the Grunt ``dev`` task to launch a build / watch cycle and start the local
+sever on port ``8080``:
+
+```shell
+grunt dev
+```
+
+or the ``build`` task for a production build:
+
+```shell
+grunt build
+```
+
+The ``default`` Grunt task will create a production build and also run the
+tests:
+
+```shell
+grunt
+```
+
+To run all the tests:
+
+```shell
+grunt test
+```
+
+and to run a specific test:
+
+```shell
+grunt test-only:test.html
 ```
 
 ## License
