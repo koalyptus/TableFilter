@@ -9,18 +9,16 @@ export default class ColsVisibility{
     /**
      * Columns Visibility extension
      * @param {Object} tf TableFilter instance
+     * @param {Object} f Config
      */
-    constructor(tf, ext={
-            name:'colsVisibility',
-            description:'Columns visibility manager'}){
+    constructor(tf, f){
 
         // Configuration object
-        var f = ext;
         var cfg = tf.config();
 
         this.initialized = false;
-        this.extName = f.name;
-        this.extDesc = f.description;
+        this.name = f.name;
+        this.desc = f.description || 'Columns visibility manager';
 
         //show/hide cols span element
         this.spanEl = null;
@@ -56,7 +54,7 @@ export default class ColsVisibility{
         //defines css class for close button
         this.btnCloseCssClass = f.btn_close_css_class || this.btnCssClass;
 
-        this.path = f.path || tf.extensionsPath + 'colsVisibility/';
+        // this.path = f.path || tf.extensionsPath + 'colsVisibility/';
         this.stylesheet = f.stylesheet || 'colsVisibility.css';
         //span containing show/hide cols button
         this.prfx = 'colVis_';
@@ -100,16 +98,16 @@ export default class ColsVisibility{
         this.onAfterClose = Types.isFn(f.on_after_close) ?
             f.on_after_close : null;
 
-        //calls function before col is hidden
+        //callback before col is hidden
         this.onBeforeColHidden = Types.isFn(f.on_before_col_hidden) ?
             f.on_before_col_hidden : null;
-        //calls function after col is hidden
+        //callback after col is hidden
         this.onAfterColHidden = Types.isFn(f.on_after_col_hidden) ?
             f.on_after_col_hidden : null;
-        //calls function before col is displayed
+        //callback before col is displayed
         this.onBeforeColDisplayed = Types.isFn(f.on_before_col_displayed) ?
             f.on_before_col_displayed : null;
-        //calls function after col is displayed
+        //callback after col is displayed
         this.onAfterColDisplayed = Types.isFn(f.on_after_col_displayed) ?
             f.on_after_col_displayed : null;
 
@@ -213,7 +211,7 @@ export default class ColsVisibility{
         if(!this.btnHtml){
             var btn = Dom.create('a', ['href','javascript:;']);
             btn.className = this.btnCssClass;
-            btn.title = this.extDesc;
+            btn.title = this.desc;
 
             btn.innerHTML = this.btnText;
             span.appendChild(btn);
@@ -257,7 +255,7 @@ export default class ColsVisibility{
         container.appendChild(extNameLabel);
 
         //Headers list
-        var ul = Dom.create('ul' ,['id', 'ul'+this.extName+'_'+tf.id]);
+        var ul = Dom.create('ul' ,['id', 'ul'+this.name+'_'+tf.id]);
         ul.className = this.listCssClass;
 
         var tbl = this.headersTbl ? this.headersTbl : tf.tbl;
@@ -490,7 +488,7 @@ export default class ColsVisibility{
      * Remove the columns manager
      */
     destroy(){
-        if(!this.btnEl || !this.contEl){
+        if(!this.btnEl && !this.contEl){
             return;
         }
         if(Dom.id(this.contElTgtId)){

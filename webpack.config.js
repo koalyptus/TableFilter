@@ -4,7 +4,7 @@ var Clean = require('clean-webpack-plugin');
 
 module.exports = {
     build: {
-        entry: path.join(__dirname, '/src-es6/tablefilter.js'),
+        entry: path.join(__dirname, '/src/tablefilter.js'),
         output: {
             publicPath: '/build/tablefilter/',
             path: path.join(__dirname, '/build/tablefilter'),
@@ -23,7 +23,7 @@ module.exports = {
             // exprContextRegExp: /$^/,
             // exprContextCritical: true,
             loaders: [{
-                test: path.join(__dirname, 'src-es6'),
+                test: path.join(__dirname, 'src'),
                 exclude: /node_modules/,
                 query: {
                     compact: false
@@ -45,9 +45,9 @@ module.exports = {
         debug: true
     },
     dist: {
-        entry: path.join(__dirname, '/src-es6/tablefilter.js'),
+        entry: path.join(__dirname, '/src/tablefilter.js'),
         // entry: {
-        //     tablefilter: __dirname + '/src-es6/tablefilter.js',
+        //     tablefilter: __dirname + '/src/tablefilter.js',
         //     sortabletable: __dirname + '/libs/sortabletable.js'
         // },
         output: {
@@ -74,7 +74,7 @@ module.exports = {
             // exprContextRegExp: /$^/,
             // exprContextCritical: true,
             loaders: [{
-                test: path.join(__dirname, 'src-es6'),
+                test: path.join(__dirname, 'src'),
                 exclude: /node_modules/,
                 query: {
                     compact: false

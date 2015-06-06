@@ -15,7 +15,7 @@ module.exports = function (grunt) {
             src: [
                 'Gruntfile.js',
                 'webpack.config.js',
-                'src-es6/**/*.js'
+                'src/**/*.js'
             ],
             options: {
                 jshintrc: '.jshintrc'
@@ -70,11 +70,11 @@ module.exports = function (grunt) {
             dist: webpackConfig.dist,
             build: webpackConfig.build
             // 'dev': {
-            //     entry: __dirname + '/src-es6/tablefilter.js',
+            //     entry: __dirname + '/src/tablefilter.js',
             //     // entry: {
-            //     //     tablefilter: __dirname + '/src-es6/tablefilter.js',
+            //     //     tablefilter: __dirname + '/src/tablefilter.js',
             //     //     colsVisibility: __dirname +
-            //     //     '/src-es6/extensions/colsVisibility/colsVisibility.js'
+            //     //     '/src/extensions/colsVisibility/colsVisibility.js'
             //     // },
             //     output: {
             //         publicPath: '/src/',
@@ -88,7 +88,7 @@ module.exports = function (grunt) {
             //     },
             //     module: {
             //         loaders: [{
-            //             test: path.join(__dirname, 'src-es6'),
+            //             test: path.join(__dirname, 'src'),
             //             exclude: /node_modules/,
             //             query: {
             //                 compact: false
@@ -103,7 +103,7 @@ module.exports = function (grunt) {
 
         watch: {
             app: {
-                files: ["src-es6/**/*"],
+                files: ["src/**/*"],
                 tasks: ["dev"],
                 options: {
                     spawn: false
@@ -120,7 +120,7 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: 'src-es6',
+                    cwd: 'src',
                     src: ['**/*.js'],
                     dest: 'build/tablefilter'
                 }]

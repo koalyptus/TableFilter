@@ -198,7 +198,7 @@ export class GridLayout{
         // this.headTbl.style.width = tbl.style.width;
 
         //content table without headers needs col widths to be reset
-        tf.setColWidths();
+        tf.setColWidths(0, this.headTbl);
 
         //Headers container width
         this.headTblCont.style.width = this.tblCont.clientWidth+'px';
@@ -271,26 +271,24 @@ export class GridLayout{
 
         //Col elements are enough to keep column widths after sorting and
         //filtering
-        var createColTags = function(o){
-            if(!o){
-                return;
-            }
+        var createColTags = function(){
             for(var k=(tf.nbCells-1); k>=0; k--){
                 var col = Dom.create('col', ['id', tf.id+'_col_'+k]);
-                tbl.firstChild.parentNode.insertBefore(col, tbl.firstChild);
+                tbl.insertBefore(col, tbl.firstChild);
                 col.style.width = tf.colWidths[k];
-                o.gridColElms[k] = col;
+                this.gridColElms[k] = col;
             }
-            o.tblHasColTag = true;
+            this.tblHasColTag = true;
         };
+
         if(!this.tblHasColTag){
-            createColTags(this);
+            createColTags.call(this);
         } else {
             var cols = Dom.tag(tbl, 'col');
             for(var ii=0; ii<tf.nbCells; ii++){
                 cols[ii].setAttribute('id', tf.id+'_col_'+ii);
                 cols[ii].style.width = tf.colWidths[ii];
-                o.gridColElms.push(cols[ii]);
+                this.gridColElms.push(cols[ii]);
             }
         }
 

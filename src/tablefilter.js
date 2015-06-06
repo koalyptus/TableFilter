@@ -1222,21 +1222,7 @@ export class TableFilter{
         }
         let rows = this.tbl.rows,
             Cpt = this.Cpt;
-        // if(this.paging){
-        //     Cpt.paging.destroy();
-        // }
-        // if(this.statusBar){
-        //     Cpt.statusBar.destroy();
-        // }
-        // if(this.rowsCounter){
-        //     Cpt.rowsCounter.destroy();
-        // }
-        // if(this.btnReset){
-        //     Cpt.clearButton.destroy();
-        // }
-        // if(this.helpInstructions){
-        //     Cpt.help.destroy();
-        // }
+
         if(this.isExternalFlt && !this.popUpFilters){
             this.removeExternalFlts();
         }
@@ -1246,12 +1232,6 @@ export class TableFilter{
         if(this.highlightKeywords){
             Cpt.highlightKeyword.unhighlightAll();
         }
-        // if(this.loader){
-        //     Cpt.loader.destroy();
-        // }
-        // if(this.popUpFilters){
-        //     Cpt.popupFilter.destroy();
-        // }
         if(this.markActiveColumns){
             this.clearActiveColumns();
         }
@@ -1288,9 +1268,8 @@ export class TableFilter{
             this.fltGridEl = rows[this.filtersRowIndex];
             this.tbl.deleteRow(this.filtersRowIndex);
         }
-        // if(this.gridLayout){
-        //     Cpt.gridLayout.destroy();
-        // }
+
+        // Destroy extensions
         Object.keys(Cpt).forEach(function(key) {
             var feature = Cpt[key];
             if(feature && Types.isFn(feature.destroy)){
@@ -1375,6 +1354,14 @@ export class TableFilter{
         }
         this.infDiv.parentNode.removeChild(this.infDiv);
         this.infDiv = null;
+
+        let tbl = this.tbl;
+        let captions = Dom.tag(tbl, 'caption');
+        if(captions.length > 0){
+            [].forEach.call(captions, function(elm) {
+                tbl.removeChild(elm);
+            });
+        }
     }
 
     /**
@@ -2422,8 +2409,8 @@ export class TableFilter{
             let sarg = searcharg.split(' '+this.orOperator+' ');
             let lisNb = Dom.tag(slc,'li').length;
 
-            slc.setAttribute('value','');
-            slc.setAttribute('indexes','');
+            slc.setAttribute('value', '');
+            slc.setAttribute('indexes', '');
 
             for(let k=0; k<lisNb; k++){
                 let li = Dom.tag(slc,'li')[k],
@@ -2446,18 +2433,21 @@ export class TableFilter{
     /**
      * Set them columns' widths as per configuration
      * @param {Number} rowIndex Optional row index to apply the widths to
+     * @param {Element} tbl DOM element
      */
-    setColWidths(rowIndex){
+    setColWidths(rowIndex, tbl){
         if(!this.fltGrid || !this.hasColWidths){
             return;
         }
+        tbl = tbl || this.tbl;
         let rIndex;
         if(rowIndex===undefined){
-            rIndex = this.tbl.rows[0].style.display!='none' ? 0 : 1;
+            rIndex = tbl.rows[0].style.display!='none' ? 0 : 1;
         } else{
             rIndex = rowIndex;
         }
-        setWidths.call(this, this.tbl.rows[rIndex]);
+
+        setWidths.call(this, tbl.rows[rIndex]);
 
         function setWidths(row){
             /*jshint validthis:true */
@@ -2467,10 +2457,23 @@ export class TableFilter{
                 throw new Error('Columns number mismatch!');
             }
 
+            let colTags = Dom.tag(tbl, 'col');
+            let tblHasColTag = colTags.length > 0;
+            let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
             for(let k=0; k<nbCols; k++){
-                row.cells[k].style.width = colWidths[k];
+                // row.cells[k].style.width = colWidths[k];
+                let col;
+                if(tblHasColTag){
+                    col = colTags[k];
+                } else {
+                    col = Dom.create('col', ['id', this.id+'_col_'+k]);
+                    frag.appendChild(col);
+                }
+                col.style.width = colWidths[k];
             }
-
+            if(!tblHasColTag){
+                tbl.insertBefore(frag, tbl.firstChild);
+            }
         }
     }
 

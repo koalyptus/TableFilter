@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <title>HTML Table Filter Generator</title>
+    <link rel="stylesheet" type="text/css" href="../build/tablefilter/tablefilter.css">
 </head>
 <body>
+    <div id="test"></div>
     <table id="demo" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -84,7 +86,6 @@
         <button onclick="tf.init();">Reset</button>
     </div>
 
-    <link rel="stylesheet" type="text/css" href="../build/tablefilter/themes/skyblue/skyblue.css">
     <script type="text/javascript" src="../build/tablefilter/tablefilter.js"></script>
     <script>
         var table = document.getElementById('demo');
@@ -100,7 +101,7 @@
             // enable_default_theme: true,
             // help_instructions: false,
             mark_active_columns: true,
-            // auto_filter: false,
+            auto_filter: false,
             auto_filter_delay: 200,
             loader: true,
             themes: [{ name: 'skyblue'}],
@@ -148,6 +149,14 @@
                 editable: true,
                 default_selection: 'both',
                 auto_save: false
+                },{
+                    name: 'filtersVisibility',
+                    // enable_icon: true,
+                    // target_id: 'test',
+                    visible_at_start: false
+                    // ,
+                    // btn_text: 'Filters',
+                    // filters_row_index: 0
                 },{
                 /*** Columns Visibility Manager extension load ***/
                 name: 'colsVisibility',
