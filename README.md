@@ -1,4 +1,4 @@
-HTML-Table-Filter-Generator
+TableFilter
 ===========================
 
 Filter HTML tables data easily
@@ -22,6 +22,12 @@ solution
 * Callbacks for all events, and delegates for most actions
 * Exhaustive documentation and API
 * Valuable support provided under a Premium request
+
+##Setup
+Include the bundled js file in your page:
+```shell
+<script src="tablefilter/tablefilter.js"></script>
+```
 
 ##Development
 Start by installing any dependencies.
