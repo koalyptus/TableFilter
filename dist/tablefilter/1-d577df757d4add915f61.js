@@ -1176,7 +1176,7 @@ webpackJsonp([1],[
 	
 	        this.icnExpandHtml = '<img src="' + this.path + this.icnExpand + '" alt="Expand filters" >';
 	        this.icnCollapseHtml = '<img src="' + this.path + this.icnCollapse + '" alt="Collapse filters" >';
-	        this.defaultText = 'Expand/Collapse filters';
+	        this.defaultText = 'Toggle filters';
 	
 	        //id of container element
 	        this.targetId = f.target_id || null;
@@ -1244,7 +1244,7 @@ webpackJsonp([1],[
 	            span.className = this.contCssClass;
 	
 	            //Container element (rdiv or custom element)
-	            if (this.targetId) {
+	            if (!this.targetId) {
 	                tf.setToolbar();
 	            }
 	            var targetEl = !this.targetId ? tf.rDiv : _Dom2['default'].id(this.targetId);
@@ -1888,4 +1888,4 @@ webpackJsonp([1],[
 
 /***/ }
 ]);
-//# sourceMappingURL=1-eda749d2ef2fcdb2e245.js.map
+//# sourceMappingURL=1-d577df757d4add915f61.js.map

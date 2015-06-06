@@ -30,7 +30,7 @@ export default class FiltersVisibility{
             '" alt="Expand filters" >';
         this.icnCollapseHtml = '<img src="'+ this.path + this.icnCollapse +
             '" alt="Collapse filters" >';
-        this.defaultText = 'Expand/Collapse filters';
+        this.defaultText = 'Toggle filters';
 
         //id of container element
         this.targetId =  f.target_id || null;
@@ -100,7 +100,7 @@ export default class FiltersVisibility{
         span.className = this.contCssClass;
 
         //Container element (rdiv or custom element)
-        if(this.targetId){
+        if(!this.targetId){
             tf.setToolbar();
         }
         let targetEl = !this.targetId ? tf.rDiv : Dom.id(this.targetId);
