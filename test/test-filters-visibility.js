@@ -14,7 +14,7 @@
 
     module('Sanity checks');
     test('Filters visibility extension', function() {
-        var ext = tf.ExtRegistry.filtersVisibility;
+        var ext = tf.getExtension('filtersVisibility');
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         notEqual(ext, null, 'Extension instanciated');
         deepEqual(ext.initialized, true, 'Extension initialized');
@@ -22,7 +22,7 @@
 
     module('Check UI');
     test('UI elements', function() {
-        var ext = tf.ExtRegistry.filtersVisibility;
+        var ext = tf.getExtension('filtersVisibility');
         var cont = ext.contEl;
         var btn = ext.btnEl;
         deepEqual(cont.nodeName, 'SPAN', 'Container element');
@@ -34,7 +34,7 @@
 
     module('Check behaviours');
     test('Toggle filters', function() {
-        var ext = tf.ExtRegistry.filtersVisibility;
+        var ext = tf.getExtension('filtersVisibility');
         ext.toggle();
         var filtersRow = tf.tbl.rows[tf.getFiltersRowIndex()];
         deepEqual(filtersRow.style.display, 'none', 'Filters hidden');
@@ -43,7 +43,7 @@
     });
 
     test('Remove extension', function() {
-        var ext = tf.ExtRegistry.filtersVisibility;
+        var ext = tf.getExtension('filtersVisibility');
         ext.destroy();
         deepEqual(ext.contEl, null, 'Container element removed');
         deepEqual(ext.btnEl, null, 'Button element removed');
@@ -60,7 +60,7 @@
             }]
         });
         tf.init();
-        var ext = tf.ExtRegistry.filtersVisibility;
+        var ext = tf.getExtension('filtersVisibility');
         deepEqual(ext.contEl.nodeName, 'SPAN', 'Container element');
         deepEqual(ext.btnEl.nodeName, 'A', 'Button element');
         deepEqual(ext.btnEl.innerHTML, 'Toggle filters', 'Expected text');
@@ -78,7 +78,7 @@
         });
         tf.init();
 
-        var ext = tf.ExtRegistry.filtersVisibility;
+        var ext = tf.getExtension('filtersVisibility');
         var btn = ext.btnEl;
         deepEqual(
             extTargetElement.firstChild.nodeName, 'SPAN', 'Container element');
@@ -98,8 +98,8 @@
         });
         tf.init();
 
-        var ext = tf.ExtRegistry.filtersVisibility;
-        var gridLayout = tf.Cpt.gridLayout;
+        var ext = tf.getExtension('filtersVisibility');
+        var gridLayout = tf.feature('gridLayout');
         var filtersRow = gridLayout.headTbl.rows[tf.getFiltersRowIndex()];
         var cont = ext.contEl;
         var btn = ext.btnEl;

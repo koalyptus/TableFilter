@@ -139,7 +139,7 @@ export default class FiltersVisibility{
      */
     toggle(){
         let tf = this.tf;
-        let tbl = tf.gridLayout? tf.Cpt.gridLayout.headTbl : tf.tbl;
+        let tbl = tf.gridLayout? tf.feature('gridLayout').headTbl : tf.tbl;
         let fltRow = tbl.rows[this.filtersRowIndex];
         let fltRowDisplay = fltRow.style.display;
 

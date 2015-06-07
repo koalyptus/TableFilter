@@ -9,7 +9,7 @@ var tf = new TableFilter('demo', {
 });
 tf.init();
 
-var popupFilter = tf.Cpt.popupFilter;
+var popupFilter = tf.feature('popupFilter');
 module('Sanity checks');
 test('Pop-up filter component', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
@@ -20,8 +20,8 @@ module('UI elements');
 test('Pop-up filter UI elements', function() {
     var flt1 = id(tf.fltIds[3]);
     var flt2 = id(tf.fltIds[2]);
-    var fltIcn1 = tf.Cpt.popupFilter.popUpFltImgs[3];
-    var fltIcn2 = tf.Cpt.popupFilter.popUpFltImgs[2];
+    var fltIcn1 = tf.feature('popupFilter').popUpFltImgs[3];
+    var fltIcn2 = tf.feature('popupFilter').popUpFltImgs[2];
     notEqual(flt1, null, 'Filter element exists');
     notEqual(flt2, null, 'Filter element exists');
     deepEqual(flt2.hasAttribute('multiple'), true, 'Multiple select exists');
@@ -31,14 +31,14 @@ test('Pop-up filter UI elements', function() {
 
 test('TableFilter removed', function() {
     tf.destroy();
-    var fltIcn1 = tf.Cpt.popupFilter.popUpFltImgs[3];
+    var fltIcn1 = tf.feature('popupFilter').popUpFltImgs[3];
     deepEqual(fltIcn1, undefined, 'Filter icon is removed');
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
 });
 
 test('TableFilter re-initialised', function() {
     tf.init();
-    var fltIcn1 = tf.Cpt.popupFilter.popUpFltImgs[3];
+    var fltIcn1 = tf.feature('popupFilter').popUpFltImgs[3];
     deepEqual(fltIcn1.nodeName, 'IMG', 'Filter icon exists');
     deepEqual(id(tf.fltIds[3]).nodeName, 'SELECT', 'Filter exists');
 });

@@ -239,7 +239,7 @@ export class CheckList{
         var tf = this.tf;
         var chkCt = this.addTChecks(colIndex, ul);
         var fltArr = []; //remember grid values
-        var store = tf.Cpt.store;
+        var store = tf.feature('store');
         var tmpVal = store ?
                 store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
         if(tmpVal && Str.trim(tmpVal).length > 0){

@@ -5,7 +5,7 @@ var tf = new TableFilter('demo', {
 });
 tf.init();
 
-var highlightKeyword = tf.Cpt.highlightKeyword;
+var highlightKeyword = tf.feature('highlightKeyword');
 module('Sanity checks');
 test('HighlightKeyword component', function() {
     deepEqual(typeof highlightKeyword, 'object', 'Instanciated');

@@ -424,6 +424,7 @@ export class Paging{
      */
     groupByPage(validRows){
         var tf = this.tf;
+        var alternateRows =  tf.feature('alternateRows');
         var rows = tf.tbl.rows;
         var paging_end_row = parseInt(this.startPagingRow, 10) +
             parseInt(this.pagingLength, 10);
@@ -436,18 +437,19 @@ export class Paging{
         //this loop shows valid rows of current page
         for(var h=0; h<tf.validRowsIndex.length; h++){
             var r = rows[tf.validRowsIndex[h]];
+
             if(h>=this.startPagingRow && h<paging_end_row){
                 if(r.getAttribute('validRow')==='true' ||
                     !r.getAttribute('validRow')){
                     r.style.display = '';
                 }
-                if(tf.alternateBgs && tf.Cpt.alternateRows){
-                    tf.Cpt.alternateRows.setRowBg(tf.validRowsIndex[h], h);
+                if(tf.alternateBgs && alternateRows){
+                    alternateRows.setRowBg(tf.validRowsIndex[h], h);
                 }
             } else {
                 r.style.display = 'none';
-                if(tf.alternateBgs && tf.Cpt.alternateRows){
-                    tf.Cpt.alternateRows.removeRowBg(tf.validRowsIndex[h]);
+                if(tf.alternateBgs && alternateRows){
+                    alternateRows.removeRowBg(tf.validRowsIndex[h]);
                 }
             }
         }
@@ -626,7 +628,7 @@ export class Paging{
             }
 
             if(tf.rememberPageNb){
-                tf.Cpt.store.savePageNb(tf.pgNbCookie);
+                tf.feature('store').savePageNb(tf.pgNbCookie);
             }
             this.startPagingRow = (this.pageSelectorType===tf.fltTypeSlc) ?
                 this.pagingSlc.value : (index*this.pagingLength);
@@ -668,7 +670,7 @@ export class Paging{
                 this.pagingSlc.options[slcIndex].selected = true;
             }
             if(tf.rememberPageLen){
-                tf.Cpt.store.savePageLength(tf.pgLenCookie);
+                tf.feature('store').savePageLength(tf.pgLenCookie);
             }
         }
     }
@@ -678,7 +680,7 @@ export class Paging{
      */
     _resetPage(name){
         var tf = this.tf;
-        var pgnb = tf.Cpt.store.getPageNb(name);
+        var pgnb = tf.feature('store').getPageNb(name);
         if(pgnb!==''){
             this.changePage((pgnb-1));
         }
@@ -692,7 +694,7 @@ export class Paging{
         if(!tf.paging){
             return;
         }
-        var pglenIndex = tf.Cpt.store.getPageLength(name);
+        var pglenIndex = tf.feature('store').getPageLength(name);
 
         if(pglenIndex!==''){
             this.resultsPerPageSlc.options[pglenIndex].selected = true;

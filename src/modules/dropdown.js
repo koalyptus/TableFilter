@@ -91,7 +91,8 @@ export class Dropdown{
         /*** remember grid values ***/
         var fltsValues = [], fltArr = [];
         if(tf.rememberGridValues){
-            fltsValues = tf.Cpt.store.getFilterValues(tf.fltsValuesCookie);
+            fltsValues =
+                tf.feature('store').getFilterValues(tf.fltsValuesCookie);
             if(fltsValues && !Str.isEmpty(fltsValues.toString())){
                 if(this.isCustom){
                     fltArr.push(fltsValues[colIndex]);

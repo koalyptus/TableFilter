@@ -1,30 +1,33 @@
-import Dom from '../dom';
-import Str from '../string';
-import Types from '../types';
+import Dom from '../../dom';
+import Str from '../../string';
+import Types from '../../types';
 
-export class ColOps{
+export default class ColOps{
 
     /**
      * Column calculations
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf) {
-        var f = tf.config();
-        this.colOperation = f.col_operation;
+    constructor(tf, opts) {
 
         //calls function before col operation
-        this.onBeforeOperation = Types.isFn(f.on_before_operation) ?
-            f.on_before_operation : null;
+        this.onBeforeOperation = Types.isFn(opts.on_before_operation) ?
+            opts.on_before_operation : null;
         //calls function after col operation
-        this.onAfterOperation = Types.isFn(f.on_after_operation) ?
-            f.on_after_operation : null;
+        this.onAfterOperation = Types.isFn(opts.on_after_operation) ?
+            opts.on_after_operation : null;
 
+        this.opts = opts;
         this.tf = tf;
+    }
+
+    init(){
+        this.calc();
     }
 
     /**
      * Calculates columns' values
-     * Configuration options are stored in 'colOperation' property
+     * Configuration options are stored in 'opts' property
      * - 'id' contains ids of elements showing result (array)
      * - 'col' contains the columns' indexes (array)
      * - 'operation' contains operation type (array, values: 'sum', 'mean',
@@ -39,23 +42,24 @@ export class ColOps{
      * (2) added calculations for the median, lower and upper quartile.
      */
     calc() {
-        if(!this.tf.isFirstLoad && !this.tf.hasGrid()){
+        var tf = this.tf;
+        if(!tf.isFirstLoad && !tf.hasGrid()){
             return;
         }
 
         if(this.onBeforeOperation){
-            this.onBeforeOperation.call(null, this.tf);
+            this.onBeforeOperation.call(null, tf);
         }
 
-        var colOperation = this.colOperation,
-            labelId = colOperation.id,
-            colIndex = colOperation.col,
-            operation = colOperation.operation,
-            outputType = colOperation.write_method,
-            totRowIndex = colOperation.tot_row_index,
-            excludeRow = colOperation.exclude_row,
-            decimalPrecision = colOperation.decimal_precision !== undefined ?
-                colOperation.decimal_precision : 2;
+        var opts = this.opts,
+            labelId = opts.id,
+            colIndex = opts.col,
+            operation = opts.operation,
+            outputType = opts.write_method,
+            totRowIndex = opts.tot_row_index,
+            excludeRow = opts.exclude_row,
+            decimalPrecision = Types.isUndef(opts.decimal_precision) ?
+                2 : opts.decimal_precision;
 
         //nuovella: determine unique list of columns to operate on
         var ucolIndex = [],
@@ -80,7 +84,7 @@ export class ColOps{
         if(Str.lower(typeof labelId)=='object' &&
             Str.lower(typeof colIndex)=='object' &&
             Str.lower(typeof operation)=='object'){
-            var row = this.tf.tbl.rows,
+            var rows = tf.tbl.rows,
                 colvalues = [];
 
             for(var ucol=0; ucol<=ucolMax; ucol++){
@@ -88,7 +92,7 @@ export class ColOps{
                 //use ucolIndex because we only want to pass through this loop
                 //once for each column get the values in this unique column
                 colvalues.push(
-                    this.tf.getColValues(ucolIndex[ucol], true, excludeRow));
+                    tf.getColValues(ucolIndex[ucol], true, excludeRow));
 
                 //next: calculate all operations for this column
                 var result,
@@ -294,7 +298,7 @@ export class ColOps{
 
                 // row(s) with result are always visible
                 var totRow = totRowIndex && totRowIndex[ucol] ?
-                                row[totRowIndex[ucol]] : null;
+                                rows[totRowIndex[ucol]] : null;
                 if(totRow){
                     totRow.style.display = '';
                 }
@@ -302,8 +306,10 @@ export class ColOps{
         }//if typeof
 
         if(this.onAfterOperation){
-            this.onAfterOperation.call(null, this.tf);
+            this.onAfterOperation.call(null, tf);
         }
     }
+
+    destroy(){}
 
 }

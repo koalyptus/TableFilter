@@ -43,8 +43,8 @@ export class Help{
         this.helpInstrBtnEl = null;
          //help content div
         this.helpInstrContEl = null;
-        this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>HTML Table ' +
-            'Filter Generator v. '+ tf.version +'</h4>' +
+        this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>TableFilter ' +
+            'v. '+ tf.version +'</h4>' +
             '<a href="http://tablefilter.free.fr" target="_blank">' +
             'http://tablefilter.free.fr</a><br/>' +
             '<span>&copy;2009-'+ tf.year +' Max Guglielmi.</span>' +

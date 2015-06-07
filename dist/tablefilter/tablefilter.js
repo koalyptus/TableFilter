@@ -83,7 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"d57d3ca8ae58d8b3dce2"}[chunkId] + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"09888dfbd41479c269a9"}[chunkId] + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -116,17 +116,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
-	/* ------------------------------------------------------------------------
-	    - HTML Table Filter Generator v0.0.1
-	    - By Max Guglielmi (tablefilter.free.fr)
-	    - Licensed under the MIT License
-	---------------------------------------------------------------------------
-	    - Special credit to:
-	    Cedric Wartel, cnx.claude@free.fr, Florent Hirchy, Váry Péter,
-	    Anthony Maes, Nuovella Williams, Fuggerbit, Venkata Seshagiri Rao
-	    Raya, Piepiax, Manuel Kern, Baladhandayutham for active contribution
-	    and/or inspiration
-	------------------------------------------------------------------------ */
 	
 	var _Event = __webpack_require__(2);
 	
@@ -187,8 +176,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Help = __webpack_require__(21);
 	
 	var _AlternateRows = __webpack_require__(22);
-	
-	var _ColOps = __webpack_require__(23);
 	
 	var global = window,
 	    isValidDate = _DateHelper2['default'].isValid,
@@ -348,8 +335,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //defines widths of columns
 	        this.hasColWidths = _Types2['default'].isArray(f.col_widths);
 	        this.colWidths = this.hasColWidths ? f.col_widths : null;
-	        //tbody height if fixed headers enabled
-	        this.tBodyH = !isNaN(f.tbody_height) ? f.tbody_height : 200;
 	        //defines css class for filters
 	        this.fltCssClass = f.flt_css_class || 'flt';
 	        //defines css class for multiple selects filters
@@ -379,9 +364,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.activeFlt = null;
 	        //id of active filter
 	        this.activeFilterId = null;
-	        //enables/disbles column operation(sum,mean)
-	        this.hasColOperation = Boolean(f.col_operation);
-	        this.colOperation = null;
 	        //enables always visible rows
 	        this.hasVisibleRows = Boolean(f.rows_always_visible);
 	        //array containing always visible rows
@@ -611,28 +593,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.themesPath = f.themes_path || this.stylePath + 'themes/';
 	
 	        // Features registry
-	        this.Cpt = {
-	            loader: null,
-	            alternateRows: null,
-	            colOps: null,
-	            rowsCounter: null,
-	            gridLayout: null,
-	            store: null,
-	            highlightKeywords: null,
-	            paging: null,
-	            checkList: null,
-	            dropdown: null,
-	            popupFilter: null,
-	            clearButton: null,
-	            help: null,
-	            statusBar: null
-	        };
+	        this.Mod = {};
 	
 	        // Extensions registry
 	        this.ExtRegistry = {};
 	
 	        /*** TF events ***/
-	        // let o = this;
 	        this.Evt = {
 	            name: {
 	                filter: 'Filter',
@@ -757,7 +723,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // select is populated when element has focus
 	                if (this.fillSlcOnDemand && elm.getAttribute('filled') === '0') {
 	                    var ct = elm.getAttribute('ct');
-	                    this.Cpt.dropdown._build(ct);
+	                    this.Mod.dropdown._build(ct);
 	                }
 	                if (this.popUpFilters) {
 	                    _Event2['default'].cancel(_ev);
@@ -792,9 +758,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var elm = _Event2['default'].target(_ev);
 	                if (this.fillSlcOnDemand && elm.getAttribute('filled') === '0') {
 	                    var ct = elm.getAttribute('ct');
-	                    this.Cpt.checkList._build(ct);
-	                    this.Cpt.checkList.checkListDiv[ct].onclick = null;
-	                    this.Cpt.checkList.checkListDiv[ct].title = '';
+	                    this.Mod.checkList._build(ct);
+	                    this.Mod.checkList.checkListDiv[ct].onclick = null;
+	                    this.Mod.checkList.checkListDiv[ct].title = '';
 	                }
 	            },
 	            /*====================================================
@@ -828,6 +794,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.popUpFilters && (this.filtersRowIndex === 0 && this.headersRow === 1 || this.gridLayout)) {
 	                this.headersRow = 0;
 	            }
+	
+	            var Mod = this.Mod;
 	            var n = this.singleSearchFlt ? 1 : this.nbCells,
 	                inpclass = undefined;
 	
@@ -844,29 +812,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            if (this.rememberGridValues || this.rememberPageNb || this.rememberPageLen) {
-	                this.Cpt.store = new _Store.Store(this);
+	                Mod.store = new _Store.Store(this);
 	            }
 	
 	            if (this.gridLayout) {
-	                this.Cpt.gridLayout = new _GridLayout.GridLayout(this);
-	                this.Cpt.gridLayout.init();
+	                Mod.gridLayout = new _GridLayout.GridLayout(this);
+	                Mod.gridLayout.init();
 	            }
 	
 	            if (this.loader) {
-	                if (!this.Cpt.loader) {
-	                    this.Cpt.loader = new _Loader.Loader(this);
+	                if (!Mod.loader) {
+	                    Mod.loader = new _Loader.Loader(this);
 	                }
 	            }
 	
 	            if (this.highlightKeywords) {
-	                this.Cpt.highlightKeyword = new _HighlightKeyword.HighlightKeyword(this);
+	                Mod.highlightKeyword = new _HighlightKeyword.HighlightKeyword(this);
 	            }
 	
 	            if (this.popUpFilters) {
-	                if (!this.Cpt.popupFilter) {
-	                    this.Cpt.popupFilter = new _PopupFilter.PopupFilter(this);
+	                if (!Mod.popupFilter) {
+	                    Mod.popupFilter = new _PopupFilter.PopupFilter(this);
 	                }
-	                this.Cpt.popupFilter.init();
+	                Mod.popupFilter.init();
 	            }
 	
 	            //filters grid is not generated
@@ -911,7 +879,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        // this loop adds filters
 	
 	                        if (this.popUpFilters) {
-	                            this.Cpt.popupFilter.build(i);
+	                            Mod.popupFilter.build(i);
 	                        }
 	
 	                        var fltcell = _Dom2['default'].create(this.fltCellTag),
@@ -934,10 +902,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                        //drop-down filters
 	                        if (col === this.fltTypeSlc || col === this.fltTypeMulti) {
-	                            if (!this.Cpt.dropdown) {
-	                                this.Cpt.dropdown = new _Dropdown.Dropdown(this);
+	                            if (!Mod.dropdown) {
+	                                Mod.dropdown = new _Dropdown.Dropdown(this);
 	                            }
-	                            var dropdown = this.Cpt.dropdown;
+	                            var dropdown = Mod.dropdown;
 	
 	                            var slc = _Dom2['default'].create(this.fltTypeSlc, ['id', this.prfxFlt + i + '_' + this.id], ['ct', i], ['filled', '0']);
 	
@@ -976,8 +944,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        // checklist
 	                        else if (col === this.fltTypeCheckList) {
 	                            var checkList = undefined;
-	                            this.Cpt.checkList = new _CheckList.CheckList(this);
-	                            checkList = this.Cpt.checkList;
+	                            Mod.checkList = new _CheckList.CheckList(this);
+	                            checkList = Mod.checkList;
 	
 	                            var divCont = _Dom2['default'].create('div', ['id', checkList.prfxCheckListDiv + i + '_' + this.id], ['ct', i], ['filled', '0']);
 	                            divCont.className = checkList.checkListDivCssClass;
@@ -1026,7 +994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            _Event2['default'].add(inp, 'blur', this.Evt.onInpBlur.bind(this));
 	
 	                            if (this.rememberGridValues) {
-	                                var flts_values = this.Cpt.store.getFilterValues(this.fltsValuesCookie);
+	                                var flts_values = this.Mod.store.getFilterValues(this.fltsValuesCookie);
 	                                if (flts_values[i] != ' ') {
 	                                    this.setFilterValue(i, flts_values[i], false);
 	                                }
@@ -1054,41 +1022,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            /* Filter behaviours */
 	            if (this.rowsCounter) {
-	                this.Cpt.rowsCounter = new _RowsCounter.RowsCounter(this);
-	                this.Cpt.rowsCounter.init();
+	                Mod.rowsCounter = new _RowsCounter.RowsCounter(this);
+	                Mod.rowsCounter.init();
 	            }
 	            if (this.statusBar) {
-	                this.Cpt.statusBar = new _StatusBar.StatusBar(this);
-	                this.Cpt.statusBar.init();
+	                Mod.statusBar = new _StatusBar.StatusBar(this);
+	                Mod.statusBar.init();
 	            }
-	            if (this.paging || this.Cpt.paging && this.Cpt.paging.isPagingRemoved) {
-	                this.Cpt.paging = new _Paging.Paging(this);
-	                this.Cpt.paging.init();
+	            if (this.paging || Mod.paging && Mod.paging.isPagingRemoved) {
+	                Mod.paging = new _Paging.Paging(this);
+	                Mod.paging.init();
 	            }
 	            if (this.btnReset) {
-	                this.Cpt.clearButton = new _ClearButton.ClearButton(this);
-	                this.Cpt.clearButton.init();
+	                Mod.clearButton = new _ClearButton.ClearButton(this);
+	                Mod.clearButton.init();
 	            }
 	            if (this.helpInstructions) {
-	                if (!this.Cpt.help) {
-	                    this.Cpt.help = new _Help.Help(this);
+	                if (!Mod.help) {
+	                    Mod.help = new _Help.Help(this);
 	                }
-	                this.Cpt.help.init();
+	                Mod.help.init();
 	            }
 	            if (this.hasColWidths && !this.gridLayout) {
 	                this.setColWidths();
 	            }
 	            if (this.alternateBgs) {
-	                this.Cpt.alternateRows = new _AlternateRows.AlternateRows(this);
-	                this.Cpt.alternateRows.init();
+	                Mod.alternateRows = new _AlternateRows.AlternateRows(this);
+	                Mod.alternateRows.init();
 	            }
-	            if (this.hasColOperation) {
-	                this.Cpt.colOps = new _ColOps.ColOps(this);
-	                this.Cpt.colOps.calc();
-	            }
-	            // if(this.sort){
-	            //     this.importSort();
-	            // }
 	
 	            this.isFirstLoad = false;
 	            this._hasGrid = true;
@@ -1103,7 +1064,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            if (this.loader) {
-	                this.Cpt.loader.show('none');
+	                Mod.loader.show('none');
 	            }
 	
 	            /* Loads extensions */
@@ -1130,7 +1091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var slcExternal = cfg.slcExternal;
 	            var slcId = cfg.slcId;
 	            var pgIndex = cfg.pgIndex;
-	            var cpt = this.Cpt;
+	            var cpt = this.Mod;
 	
 	            function efx() {
 	                /*jshint validthis:true */
@@ -1176,9 +1137,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    case ev.loadthemes:
 	                        this._loadThemes();
 	                        break;
-	                        // default: //to be used by extensions events when needed
-	                        //     this['_'+evt].call(null, o, s);
-	                        // break;
 	                }
 	                if (this.statusBar) {
 	                    cpt.statusBar.message('');
@@ -1199,6 +1157,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                global.setTimeout(efx.bind(this), this.execDelay);
 	            }
+	        }
+	    }, {
+	        key: 'feature',
+	
+	        /**
+	         * Return a feature instance for a given name
+	         * @param  {String} name Name of the feature
+	         * @return {Object}
+	         */
+	        value: function feature(name) {
+	            return this.Mod[name];
 	        }
 	    }, {
 	        key: 'initExtensions',
@@ -1246,6 +1215,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	                inst.init();
 	                _this.ExtRegistry[name] = inst;
 	            }.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));});
+	        }
+	    }, {
+	        key: 'getExtension',
+	
+	        /**
+	         * Get an extension instance
+	         * @param  {String} name Name of the extension
+	         * @return {Object}      Extension instance
+	         */
+	        value: function getExtension(name) {
+	            return this.ExtRegistry[name];
+	        }
+	    }, {
+	        key: 'hasExtension',
+	
+	        /**
+	         * Check passed extension name exists
+	         * @param  {String}  name Name of the extension
+	         * @return {Boolean}
+	         */
+	        value: function hasExtension(name) {
+	            return !_Types2['default'].isUndef(this.ExtRegistry[name]);
 	        }
 	    }, {
 	        key: 'destroyExtensions',
@@ -1327,7 +1318,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            var rows = this.tbl.rows,
-	                Cpt = this.Cpt;
+	                Mod = this.Mod;
 	
 	            if (this.isExternalFlt && !this.popUpFilters) {
 	                this.removeExternalFlts();
@@ -1336,7 +1327,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.removeToolbar();
 	            }
 	            if (this.highlightKeywords) {
-	                Cpt.highlightKeyword.unhighlightAll();
+	                Mod.highlightKeyword.unhighlightAll();
 	            }
 	            if (this.markActiveColumns) {
 	                this.clearActiveColumns();
@@ -1348,24 +1339,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //this loop shows all rows and removes validRow attribute
 	            for (var j = this.refRow; j < this.nbRows; j++) {
 	                rows[j].style.display = '';
-	                // try{
+	
 	                if (rows[j].hasAttribute('validRow')) {
 	                    rows[j].removeAttribute('validRow');
 	                }
-	                // } catch(e) {
-	                //     //ie<=6 doesn't support hasAttribute method
-	                //     let row = rows[j];
-	                //     let attribs = row.attributes;
-	                //     for(let x=0, len=attribs.length; x<len; x++){
-	                //         if(Str.lower(attribs.nodeName)==='validrow'){
-	                //             row.removeAttribute('validRow');
-	                //         }
-	                //     }
-	                // }
 	
 	                //removes alternating colors
 	                if (this.alternateBgs) {
-	                    Cpt.alternateRows.removeRowBg(j);
+	                    Mod.alternateRows.removeRowBg(j);
 	                }
 	            } //for j
 	
@@ -1374,9 +1355,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.tbl.deleteRow(this.filtersRowIndex);
 	            }
 	
-	            // Destroy extensions
-	            Object.keys(Cpt).forEach(function (key) {
-	                var feature = Cpt[key];
+	            // Destroy module
+	            Object.keys(Mod).forEach(function (key) {
+	                var feature = Mod[key];
 	                if (feature && _Types2['default'].isFn(feature.destroy)) {
 	                    feature.destroy();
 	                }
@@ -1409,7 +1390,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            //grid-layout
 	            else if (this.gridLayout) {
-	                var gridLayout = this.Cpt.gridLayout;
+	                var gridLayout = this.Mod.gridLayout;
 	                gridLayout.tblMainCont.appendChild(infdiv);
 	                infdiv.className = gridLayout.gridInfDivCssClass;
 	            }
@@ -1444,10 +1425,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Enable help instructions by default if topbar is generated and not
 	            // explicitely set to false
 	            if (_Types2['default'].isUndef(this.helpInstructions)) {
-	                if (!this.Cpt.help) {
-	                    this.Cpt.help = new _Help.Help(this);
+	                if (!this.Mod.help) {
+	                    this.Mod.help = new _Help.Help(this);
 	                }
-	                this.Cpt.help.init();
+	                this.Mod.help.init();
 	                this.helpInstructions = true;
 	            }
 	        }
@@ -1591,11 +1572,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.rememberGridValues && this.fillSlcOnDemand) {
 	                this._resetGridValues(this.fltsValuesCookie);
 	            }
-	            if (this.rememberPageLen && this.Cpt.paging) {
-	                this.Cpt.paging.resetPageLength(this.pgLenCookie);
+	            if (this.rememberPageLen && this.Mod.paging) {
+	                this.Mod.paging.resetPageLength(this.pgLenCookie);
 	            }
-	            if (this.rememberPageNb && this.Cpt.paging) {
-	                this.Cpt.paging.resetPage(this.pgNbCookie);
+	            if (this.rememberPageNb && this.Mod.paging) {
+	                this.Mod.paging.resetPage(this.pgNbCookie);
 	            }
 	        }
 	    }, {
@@ -1610,7 +1591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!this.fillSlcOnDemand) {
 	                return;
 	            }
-	            var fltsValues = this.Cpt.store.getFilterValues(name),
+	            var fltsValues = this.Mod.store.getFilterValues(name),
 	                slcFltsIndex = this.getFiltersByType(this.fltTypeSlc, true),
 	                multiFltsIndex = this.getFiltersByType(this.fltTypeMulti, true);
 	
@@ -1654,7 +1635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            }
 	                        } // if multiFltsIndex
 	                    } else if (fltType === this.fltTypeCheckList) {
-	                        var checkList = this.Cpt.checkList;
+	                        var checkList = this.Mod.checkList;
 	                        var divChk = checkList.checkListDiv[i];
 	                        divChk.title = divChk.innerHTML;
 	                        divChk.innerHTML = '';
@@ -1684,7 +1665,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } //end for
 	
 	                if (!this.hasStoredValues && this.paging) {
-	                    this.Cpt.paging.setPagingInfo();
+	                    this.Mod.paging.setPagingInfo();
 	                }
 	            } //end if
 	        }
@@ -1711,7 +1692,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            var row = this.tbl.rows,
-	                Cpt = this.Cpt,
+	                Mod = this.Mod,
 	
 	            // f = this.cfg,
 	            hiddenrows = 0;
@@ -1720,11 +1701,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            // removes keyword highlighting
 	            if (this.highlightKeywords) {
-	                Cpt.highlightKeyword.unhighlightAll();
+	                Mod.highlightKeyword.unhighlightAll();
 	            }
 	            //removes popup filters active icons
 	            if (this.popUpFilters) {
-	                Cpt.popupFilter.buildIcons();
+	                Mod.popupFilter.buildIcons();
 	            }
 	            //removes active column header class
 	            if (this.markActiveColumns) {
@@ -1763,7 +1744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        w = _Dom2['default'].getText(cell);
 	                    }
 	                    if (w !== '') {
-	                        Cpt.highlightKeyword.highlight(cell, w, Cpt.highlightKeyword.highlightCssClass);
+	                        Mod.highlightKeyword.highlight(cell, w, Mod.highlightKeyword.highlightCssClass);
 	                    }
 	                }
 	            }
@@ -2002,7 +1983,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        singleFltRowValid = true;
 	                    }
 	                    if (this.popUpFilters) {
-	                        Cpt.popupFilter.buildIcon(j, true);
+	                        Mod.popupFilter.buildIcon(j, true);
 	                    }
 	                    if (this.markActiveColumns) {
 	                        if (k === this.refRow) {
@@ -2033,7 +2014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.validateRow(k, true);
 	                    this.validRowsIndex.push(k);
 	                    if (this.alternateBgs) {
-	                        Cpt.alternateRows.setRowBg(k, this.validRowsIndex.length);
+	                        Mod.alternateRows.setRowBg(k, this.validRowsIndex.length);
 	                    }
 	                    if (this.onRowValidated) {
 	                        this.onRowValidated.call(null, this, k);
@@ -2046,7 +2027,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.isStartBgAlternate = false;
 	
 	            if (this.rememberGridValues) {
-	                Cpt.store.saveFilterValues(this.fltsValuesCookie);
+	                Mod.store.saveFilterValues(this.fltsValuesCookie);
 	            }
 	            //applies filter props after filtering process
 	            if (!this.paging) {
@@ -2054,7 +2035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                this.startPagingRow = 0;
 	                this.currentPageNb = 1;
-	                Cpt.paging.setPagingInfo(this.validRowsIndex);
+	                Mod.paging.setPagingInfo(this.validRowsIndex);
 	            }
 	            //invokes onafter callback
 	            if (this.onAfterFilter) {
@@ -2076,16 +2057,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	
-	            var Cpt = this.Cpt;
+	            var Mod = this.Mod;
 	
 	            //shows rows always visible
 	            if (this.visibleRows) {
 	                this.enforceVisibility();
 	            }
-	            //makes operation on a col
-	            if (this.hasColOperation) {
-	                Cpt.colOps.calc();
+	            //columns operations
+	            if (this.hasExtension('colOps')) {
+	                this.getExtension('colOps').calc();
 	            }
+	
 	            //re-populates drop-down filters
 	            if (this.linkedFilters) {
 	                this.linkFilters();
@@ -2093,11 +2075,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var nr = !this.paging && this.hasVisibleRows ? this.nbVisibleRows - this.visibleRows.length : this.nbVisibleRows;
 	            //refreshes rows counter
 	            if (this.rowsCounter) {
-	                Cpt.rowsCounter.refresh(nr);
+	                Mod.rowsCounter.refresh(nr);
 	            }
 	
 	            if (this.popUpFilters) {
-	                Cpt.popupFilter.closeAll();
+	                Mod.popupFilter.closeAll();
 	            }
 	        }
 	    }, {
@@ -2356,7 +2338,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var row = this.tbl.rows,
 	                filteredData = [];
 	            if (includeHeaders) {
-	                var table = this.gridLayout ? this.Cpt.gridLayout.headTbl : this.tbl,
+	                var table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl,
 	                    r = table.rows[this.headersRow],
 	                    rowData = [r.rowIndex, []];
 	                for (var j = 0; j < this.nbCells; j++) {
@@ -2529,10 +2511,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        lblTxt = _Str2['default'].matchCase(_Dom2['default'].getText(lbl), this.caseSensitive);
 	                    if (lblTxt !== '' && _Arr2['default'].has(sarg, lblTxt, true)) {
 	                        chk.checked = true;
-	                        this.Cpt.checkList.setCheckListValues(chk);
+	                        this.Mod.checkList.setCheckListValues(chk);
 	                    } else {
 	                        chk.checked = false;
-	                        this.Cpt.checkList.setCheckListValues(chk);
+	                        this.Mod.checkList.setCheckListValues(chk);
 	                    }
 	                }
 	            }
@@ -2713,7 +2695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (activeFlt !== slcIndex[i] || this.paging && _Arr2['default'].has(slcA1, slcIndex[i]) && activeFlt === slcIndex[i] || !this.paging && (_Arr2['default'].has(slcA3, slcIndex[i]) || _Arr2['default'].has(slcA2, slcIndex[i])) || slcSelectedValue === this.displayAllText) {
 	
 	                    if (_Arr2['default'].has(slcA3, slcIndex[i])) {
-	                        this.Cpt.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
+	                        this.Mod.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
 	                    } else {
 	                        curSlc.innerHTML = '';
 	                    }
@@ -2727,9 +2709,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	
 	                    if (_Arr2['default'].has(slcA3, slcIndex[i])) {
-	                        this.Cpt.checkList._build(slcIndex[i]);
+	                        this.Mod.checkList._build(slcIndex[i]);
 	                    } else {
-	                        this.Cpt.dropdown._build(slcIndex[i], true);
+	                        this.Mod.dropdown._build(slcIndex[i], true);
 	                    }
 	
 	                    this.setFilterValue(slcIndex[i], slcSelectedValue);
@@ -2747,7 +2729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	
-	            var Cpt = this.Cpt;
+	            var Mod = this.Mod;
 	            var tbl = this.tbl;
 	            var rows = tbl.rows;
 	            var filtersRowIndex = this.filtersRowIndex;
@@ -2775,10 +2757,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    //empty
 	                    if (this.gridLayout && externalFltEl.innerHTML === '' && colFltType !== this.fltTypeInp) {
 	                        if (colFltType === this.fltTypeSlc || colFltType === this.fltTypeMulti) {
-	                            Cpt.dropdown.build(ct);
+	                            Mod.dropdown.build(ct);
 	                        }
 	                        if (colFltType === this.fltTypeCheckList) {
-	                            Cpt.checkList.build(ct);
+	                            Mod.checkList.build(ct);
 	                        }
 	                    }
 	                }
@@ -2787,18 +2769,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.nbFilterableRows = this.getRowsNb();
 	            this.nbVisibleRows = this.nbFilterableRows;
 	            this.nbRows = rows.length;
-	            // if(this.isSortEnabled){
-	            //     this.sort = true;
-	            // }
 	
-	            // if(filtersRow.innerHTML === ''){
-	            //     refreshFilters(this);
-	            // } else {
 	            if (this.popUpFilters) {
 	                this.headersRow++;
-	                Cpt.popupFilter.buildAll();
+	                Mod.popupFilter.buildAll();
 	            }
-	            // }
 	
 	            /***    ie bug work-around, filters need to be re-generated since row
 	                    is empty; insertBefore method doesn't seem to work properly
@@ -2810,7 +2785,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //     o.isFirstLoad = true;
 	            //     if(o.popUpFilters){
 	            //         // o.RemovePopupFilters();
-	            //         o.Cpt.popupFilter.destroy();
+	            //         o.Mod.popupFilter.destroy();
 	            //     }
 	            //     o.init();
 	            // }
@@ -3027,7 +3002,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {Object}
 	         */
 	        value: function getHeaderElement(colIndex) {
-	            var table = this.gridLayout ? this.Cpt.gridLayout.headTbl : this.tbl;
+	            var table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl;
 	            var tHead = _Dom2['default'].tag(table, 'thead');
 	            var headersRow = this.headersRow;
 	            var header = undefined;
@@ -3085,21 +3060,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.TableFilter = TableFilter;
 	
 	TableFilter.Cookie = _Cookie2['default'];
-	TableFilter.Store = _Store.Store;
-	TableFilter.GridLayout = _GridLayout.GridLayout;
-	TableFilter.Loader = _Loader.Loader;
-	TableFilter.HighlightKeyword = _HighlightKeyword.HighlightKeyword;
-	TableFilter.PopupFilter = _PopupFilter.PopupFilter;
-	TableFilter.Dropdown = _Dropdown.Dropdown;
-	TableFilter.CheckList = _CheckList.CheckList;
-	TableFilter.RowsCounter = _RowsCounter.RowsCounter;
-	TableFilter.StatusBar = _StatusBar.StatusBar;
+	// TableFilter.Store = Store;
+	// TableFilter.GridLayout = GridLayout;
+	// TableFilter.Loader = Loader;
+	// TableFilter.HighlightKeyword = HighlightKeyword;
+	// TableFilter.PopupFilter = PopupFilter;
+	// TableFilter.Dropdown = Dropdown;
+	// TableFilter.CheckList = CheckList;
+	// TableFilter.RowsCounter = RowsCounter;
+	// TableFilter.StatusBar = StatusBar;
 	TableFilter.Paging = _Paging.Paging;
-	TableFilter.ClearButton = _ClearButton.ClearButton;
-	TableFilter.Help = _Help.Help;
-	TableFilter.AlternateRows = _AlternateRows.AlternateRows;
-	TableFilter.ColOps = _ColOps.ColOps;
-	
+	// TableFilter.ClearButton = ClearButton;
+	// TableFilter.Help = Help;
+	// TableFilter.AlternateRows = AlternateRows;
+
 	//Firefox does not support outerHTML property
 	// function setOuterHtml(){
 	//     if(doc.body.__defineGetter__){
@@ -3156,6 +3130,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	//     window['tf_'+id] = tf;
 	//     return tf;
 	// }
+
+	// loader: null,
+	// alternateRows: null,
+	// rowsCounter: null,
+	// gridLayout: null,
+	// store: null,
+	// highlightKeywords: null,
+	// paging: null,
+	// checkList: null,
+	// dropdown: null,
+	// popupFilter: null,
+	// clearButton: null,
+	// help: null,
+	// statusBar: null
 
 /***/ },
 /* 1 */,
@@ -3932,7 +3920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param {String} cookie name
 	         */
 	        value: function savePageNb(name) {
-	            _Cookie2['default'].write(name, this.tf.Cpt.paging.currentPageNb, this.duration);
+	            _Cookie2['default'].write(name, this.tf.feature('paging').currentPageNb, this.duration);
 	        }
 	    }, {
 	        key: 'getPageNb',
@@ -3953,7 +3941,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param {String} cookie name
 	         */
 	        value: function savePageLength(name) {
-	            _Cookie2['default'].write(name, this.tf.Cpt.paging.resultsPerPageSlc.selectedIndex, this.duration);
+	            _Cookie2['default'].write(name, this.tf.feature('paging').resultsPerPageSlc.selectedIndex, this.duration);
 	        }
 	    }, {
 	        key: 'getPageLength',
@@ -4463,7 +4451,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            var tf = this.tf,
-	                targetEl = !this.loaderTgtId ? tf.gridLayout ? tf.Cpt.gridLayout.tblCont : tf.tbl.parentNode : _Dom2['default'].id(this.loaderTgtId);
+	                targetEl = !this.loaderTgtId ? tf.gridLayout ? tf.feature('gridLayout').tblCont : tf.tbl.parentNode : _Dom2['default'].id(this.loaderTgtId);
 	            targetEl.removeChild(this.loaderDiv);
 	            this.loaderDiv = null;
 	        }
@@ -4923,7 +4911,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	
-	var _Sort = __webpack_require__(24);
+	var _Sort = __webpack_require__(23);
 	
 	var _Sort2 = _interopRequireDefault(_Sort);
 	
@@ -5021,7 +5009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var fltsValues = [],
 	                fltArr = [];
 	            if (tf.rememberGridValues) {
-	                fltsValues = tf.Cpt.store.getFilterValues(tf.fltsValuesCookie);
+	                fltsValues = tf.feature('store').getFilterValues(tf.fltsValuesCookie);
 	                if (fltsValues && !_Str2['default'].isEmpty(fltsValues.toString())) {
 	                    if (this.isCustom) {
 	                        fltArr.push(fltsValues[colIndex]);
@@ -5270,7 +5258,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	
-	var _Sort = __webpack_require__(24);
+	var _Sort = __webpack_require__(23);
 	
 	var _Sort2 = _interopRequireDefault(_Sort);
 	
@@ -5513,7 +5501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var tf = this.tf;
 	            var chkCt = this.addTChecks(colIndex, ul);
 	            var fltArr = []; //remember grid values
-	            var store = tf.Cpt.store;
+	            var store = tf.feature('store');
 	            var tmpVal = store ? store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
 	            if (tmpVal && _Str2['default'].trim(tmpVal).length > 0) {
 	                if (tf.hasCustomSlcOptions && _Arr2['default'].has(tf.customSlcOptions.cols, colIndex)) {
@@ -5814,7 +5802,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    totTxt = tf.nbFilterableRows - tf.nbHiddenRows - (tf.hasVisibleRows ? tf.visibleRows.length : 0);
 	                }
 	            } else {
-	                var paging = tf.Cpt.paging;
+	                var paging = tf.feature('paging');
 	                if (paging) {
 	                    //paging start row
 	                    var paging_start_row = parseInt(paging.startPagingRow, 10) + (tf.nbVisibleRows > 0 ? 1 : 0);
@@ -6427,6 +6415,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        value: function groupByPage(validRows) {
 	            var tf = this.tf;
+	            var alternateRows = tf.feature('alternateRows');
 	            var rows = tf.tbl.rows;
 	            var paging_end_row = parseInt(this.startPagingRow, 10) + parseInt(this.pagingLength, 10);
 	
@@ -6438,17 +6427,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //this loop shows valid rows of current page
 	            for (var h = 0; h < tf.validRowsIndex.length; h++) {
 	                var r = rows[tf.validRowsIndex[h]];
+	
 	                if (h >= this.startPagingRow && h < paging_end_row) {
 	                    if (r.getAttribute('validRow') === 'true' || !r.getAttribute('validRow')) {
 	                        r.style.display = '';
 	                    }
-	                    if (tf.alternateBgs && tf.Cpt.alternateRows) {
-	                        tf.Cpt.alternateRows.setRowBg(tf.validRowsIndex[h], h);
+	                    if (tf.alternateBgs && alternateRows) {
+	                        alternateRows.setRowBg(tf.validRowsIndex[h], h);
 	                    }
 	                } else {
 	                    r.style.display = 'none';
-	                    if (tf.alternateBgs && tf.Cpt.alternateRows) {
-	                        tf.Cpt.alternateRows.removeRowBg(tf.validRowsIndex[h]);
+	                    if (tf.alternateBgs && alternateRows) {
+	                        alternateRows.removeRowBg(tf.validRowsIndex[h]);
 	                    }
 	                }
 	            }
@@ -6640,7 +6630,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	
 	                if (tf.rememberPageNb) {
-	                    tf.Cpt.store.savePageNb(tf.pgNbCookie);
+	                    tf.feature('store').savePageNb(tf.pgNbCookie);
 	                }
 	                this.startPagingRow = this.pageSelectorType === tf.fltTypeSlc ? this.pagingSlc.value : index * this.pagingLength;
 	
@@ -6679,7 +6669,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.pagingSlc.options[slcIndex].selected = true;
 	                }
 	                if (tf.rememberPageLen) {
-	                    tf.Cpt.store.savePageLength(tf.pgLenCookie);
+	                    tf.feature('store').savePageLength(tf.pgLenCookie);
 	                }
 	            }
 	        }
@@ -6691,7 +6681,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        value: function _resetPage(name) {
 	            var tf = this.tf;
-	            var pgnb = tf.Cpt.store.getPageNb(name);
+	            var pgnb = tf.feature('store').getPageNb(name);
 	            if (pgnb !== '') {
 	                this.changePage(pgnb - 1);
 	            }
@@ -6707,7 +6697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!tf.paging) {
 	                return;
 	            }
-	            var pglenIndex = tf.Cpt.store.getPageLength(name);
+	            var pglenIndex = tf.feature('store').getPageLength(name);
 	
 	            if (pglenIndex !== '') {
 	                this.resultsPerPageSlc.options[pglenIndex].selected = true;
@@ -6983,7 +6973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.helpInstrBtnEl = null;
 	        //help content div
 	        this.helpInstrContEl = null;
-	        this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>HTML Table ' + 'Filter Generator v. ' + tf.version + '</h4>' + '<a href="http://tablefilter.free.fr" target="_blank">' + 'http://tablefilter.free.fr</a><br/>' + '<span>&copy;2009-' + tf.year + ' Max Guglielmi.</span>' + '<div align="center" style="margin-top:8px;">' + '<a href="javascript:void(0);">Close</a></div></div>';
+	        this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>TableFilter ' + 'v. ' + tf.version + '</h4>' + '<a href="http://tablefilter.free.fr" target="_blank">' + 'http://tablefilter.free.fr</a><br/>' + '<span>&copy;2009-' + tf.year + ' Max Guglielmi.</span>' + '<div align="center" style="margin-top:8px;">' + '<a href="javascript:void(0);">Close</a></div></div>';
 	
 	        //id prefix for help elements
 	        this.prfxHelpSpan = 'helpSpan_';
@@ -7237,332 +7227,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-	
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	
-	var _Dom = __webpack_require__(3);
-	
-	var _Dom2 = _interopRequireDefault(_Dom);
-	
-	var _Str = __webpack_require__(4);
-	
-	var _Str2 = _interopRequireDefault(_Str);
-	
-	var _Types = __webpack_require__(6);
-	
-	var _Types2 = _interopRequireDefault(_Types);
-	
-	var ColOps = (function () {
-	
-	    /**
-	     * Column calculations
-	     * @param {Object} tf TableFilter instance
-	     */
-	
-	    function ColOps(tf) {
-	        _classCallCheck(this, ColOps);
-	
-	        var f = tf.config();
-	        this.colOperation = f.col_operation;
-	
-	        //calls function before col operation
-	        this.onBeforeOperation = _Types2['default'].isFn(f.on_before_operation) ? f.on_before_operation : null;
-	        //calls function after col operation
-	        this.onAfterOperation = _Types2['default'].isFn(f.on_after_operation) ? f.on_after_operation : null;
-	
-	        this.tf = tf;
-	    }
-	
-	    _createClass(ColOps, [{
-	        key: 'calc',
-	
-	        /**
-	         * Calculates columns' values
-	         * Configuration options are stored in 'colOperation' property
-	         * - 'id' contains ids of elements showing result (array)
-	         * - 'col' contains the columns' indexes (array)
-	         * - 'operation' contains operation type (array, values: 'sum', 'mean',
-	         *   'min', 'max', 'median', 'q1', 'q3')
-	         * - 'write_method' array defines which method to use for displaying the
-	         *    result (innerHTML, setValue, createTextNode) - default: 'innerHTML'
-	         * - 'tot_row_index' defines in which row results are displayed
-	         *   (integers array)
-	         *
-	         * - changes made by Nuovella:
-	         * (1) optimized the routine (now it will only process each column once),
-	         * (2) added calculations for the median, lower and upper quartile.
-	         */
-	        value: function calc() {
-	            if (!this.tf.isFirstLoad && !this.tf.hasGrid()) {
-	                return;
-	            }
-	
-	            if (this.onBeforeOperation) {
-	                this.onBeforeOperation.call(null, this.tf);
-	            }
-	
-	            var colOperation = this.colOperation,
-	                labelId = colOperation.id,
-	                colIndex = colOperation.col,
-	                operation = colOperation.operation,
-	                outputType = colOperation.write_method,
-	                totRowIndex = colOperation.tot_row_index,
-	                excludeRow = colOperation.exclude_row,
-	                decimalPrecision = colOperation.decimal_precision !== undefined ? colOperation.decimal_precision : 2;
-	
-	            //nuovella: determine unique list of columns to operate on
-	            var ucolIndex = [],
-	                ucolMax = 0;
-	            ucolIndex[ucolMax] = colIndex[0];
-	
-	            for (var ii = 1; ii < colIndex.length; ii++) {
-	                var saved = 0;
-	                //see if colIndex[ii] is already in the list of unique indexes
-	                for (var jj = 0; jj <= ucolMax; jj++) {
-	                    if (ucolIndex[jj] === colIndex[ii]) {
-	                        saved = 1;
-	                    }
-	                }
-	                //if not saved then, save the index;
-	                if (saved === 0) {
-	                    ucolMax++;
-	                    ucolIndex[ucolMax] = colIndex[ii];
-	                }
-	            }
-	
-	            if (_Str2['default'].lower(typeof labelId) == 'object' && _Str2['default'].lower(typeof colIndex) == 'object' && _Str2['default'].lower(typeof operation) == 'object') {
-	                var row = this.tf.tbl.rows,
-	                    colvalues = [];
-	
-	                for (var ucol = 0; ucol <= ucolMax; ucol++) {
-	                    //this retrieves col values
-	                    //use ucolIndex because we only want to pass through this loop
-	                    //once for each column get the values in this unique column
-	                    colvalues.push(this.tf.getColValues(ucolIndex[ucol], true, excludeRow));
-	
-	                    //next: calculate all operations for this column
-	                    var result,
-	                        nbvalues = 0,
-	                        temp,
-	                        meanValue = 0,
-	                        sumValue = 0,
-	                        minValue = null,
-	                        maxValue = null,
-	                        q1Value = null,
-	                        medValue = null,
-	                        q3Value = null,
-	                        meanFlag = 0,
-	                        sumFlag = 0,
-	                        minFlag = 0,
-	                        maxFlag = 0,
-	                        q1Flag = 0,
-	                        medFlag = 0,
-	                        q3Flag = 0,
-	                        theList = [],
-	                        opsThisCol = [],
-	                        decThisCol = [],
-	                        labThisCol = [],
-	                        oTypeThisCol = [],
-	                        mThisCol = -1;
-	
-	                    for (var k = 0; k < colIndex.length; k++) {
-	                        if (colIndex[k] === ucolIndex[ucol]) {
-	                            mThisCol++;
-	                            opsThisCol[mThisCol] = _Str2['default'].lower(operation[k]);
-	                            decThisCol[mThisCol] = decimalPrecision[k];
-	                            labThisCol[mThisCol] = labelId[k];
-	                            oTypeThisCol = outputType !== undefined && _Str2['default'].lower(typeof outputType) === 'object' ? outputType[k] : null;
-	
-	                            switch (opsThisCol[mThisCol]) {
-	                                case 'mean':
-	                                    meanFlag = 1;
-	                                    break;
-	                                case 'sum':
-	                                    sumFlag = 1;
-	                                    break;
-	                                case 'min':
-	                                    minFlag = 1;
-	                                    break;
-	                                case 'max':
-	                                    maxFlag = 1;
-	                                    break;
-	                                case 'median':
-	                                    medFlag = 1;
-	                                    break;
-	                                case 'q1':
-	                                    q1Flag = 1;
-	                                    break;
-	                                case 'q3':
-	                                    q3Flag = 1;
-	                                    break;
-	                            }
-	                        }
-	                    }
-	
-	                    for (var j = 0; j < colvalues[ucol].length; j++) {
-	                        //sort the list for calculation of median and quartiles
-	                        if (q1Flag == 1 || q3Flag == 1 || medFlag == 1) {
-	                            if (j < colvalues[ucol].length - 1) {
-	                                for (k = j + 1; k < colvalues[ucol].length; k++) {
-	                                    if (eval(colvalues[ucol][k]) < eval(colvalues[ucol][j])) {
-	                                        temp = colvalues[ucol][j];
-	                                        colvalues[ucol][j] = colvalues[ucol][k];
-	                                        colvalues[ucol][k] = temp;
-	                                    }
-	                                }
-	                            }
-	                        }
-	                        var cvalue = parseFloat(colvalues[ucol][j]);
-	                        theList[j] = parseFloat(cvalue);
-	
-	                        if (!isNaN(cvalue)) {
-	                            nbvalues++;
-	                            if (sumFlag === 1 || meanFlag === 1) {
-	                                sumValue += parseFloat(cvalue);
-	                            }
-	                            if (minFlag === 1) {
-	                                if (minValue === null) {
-	                                    minValue = parseFloat(cvalue);
-	                                } else {
-	                                    minValue = parseFloat(cvalue) < minValue ? parseFloat(cvalue) : minValue;
-	                                }
-	                            }
-	                            if (maxFlag === 1) {
-	                                if (maxValue === null) {
-	                                    maxValue = parseFloat(cvalue);
-	                                } else {
-	                                    maxValue = parseFloat(cvalue) > maxValue ? parseFloat(cvalue) : maxValue;
-	                                }
-	                            }
-	                        }
-	                    } //for j
-	                    if (meanFlag === 1) {
-	                        meanValue = sumValue / nbvalues;
-	                    }
-	                    if (medFlag === 1) {
-	                        var aux = 0;
-	                        if (nbvalues % 2 === 1) {
-	                            aux = Math.floor(nbvalues / 2);
-	                            medValue = theList[aux];
-	                        } else {
-	                            medValue = (theList[nbvalues / 2] + theList[nbvalues / 2 - 1]) / 2;
-	                        }
-	                    }
-	                    var posa;
-	                    if (q1Flag === 1) {
-	                        posa = 0;
-	                        posa = Math.floor(nbvalues / 4);
-	                        if (4 * posa == nbvalues) {
-	                            q1Value = (theList[posa - 1] + theList[posa]) / 2;
-	                        } else {
-	                            q1Value = theList[posa];
-	                        }
-	                    }
-	                    if (q3Flag === 1) {
-	                        posa = 0;
-	                        var posb = 0;
-	                        posa = Math.floor(nbvalues / 4);
-	                        if (4 * posa === nbvalues) {
-	                            posb = 3 * posa;
-	                            q3Value = (theList[posb] + theList[posb - 1]) / 2;
-	                        } else {
-	                            q3Value = theList[nbvalues - posa - 1];
-	                        }
-	                    }
-	
-	                    for (var i = 0; i <= mThisCol; i++) {
-	                        switch (opsThisCol[i]) {
-	                            case 'mean':
-	                                result = meanValue;
-	                                break;
-	                            case 'sum':
-	                                result = sumValue;
-	                                break;
-	                            case 'min':
-	                                result = minValue;
-	                                break;
-	                            case 'max':
-	                                result = maxValue;
-	                                break;
-	                            case 'median':
-	                                result = medValue;
-	                                break;
-	                            case 'q1':
-	                                result = q1Value;
-	                                break;
-	                            case 'q3':
-	                                result = q3Value;
-	                                break;
-	                        }
-	
-	                        var precision = !isNaN(decThisCol[i]) ? decThisCol[i] : 2;
-	
-	                        //if outputType is defined
-	                        if (oTypeThisCol && result) {
-	                            result = result.toFixed(precision);
-	
-	                            if (_Dom2['default'].id(labThisCol[i])) {
-	                                switch (_Str2['default'].lower(oTypeThisCol)) {
-	                                    case 'innerhtml':
-	                                        if (isNaN(result) || !isFinite(result) || nbvalues === 0) {
-	                                            _Dom2['default'].id(labThisCol[i]).innerHTML = '.';
-	                                        } else {
-	                                            _Dom2['default'].id(labThisCol[i]).innerHTML = result;
-	                                        }
-	                                        break;
-	                                    case 'setvalue':
-	                                        _Dom2['default'].id(labThisCol[i]).value = result;
-	                                        break;
-	                                    case 'createtextnode':
-	                                        var oldnode = _Dom2['default'].id(labThisCol[i]).firstChild;
-	                                        var txtnode = _Dom2['default'].text(result);
-	                                        _Dom2['default'].id(labThisCol[i]).replaceChild(txtnode, oldnode);
-	                                        break;
-	                                } //switch
-	                            }
-	                        } else {
-	                            try {
-	                                if (isNaN(result) || !isFinite(result) || nbvalues === 0) {
-	                                    _Dom2['default'].id(labThisCol[i]).innerHTML = '.';
-	                                } else {
-	                                    _Dom2['default'].id(labThisCol[i]).innerHTML = result.toFixed(precision);
-	                                }
-	                            } catch (e) {} //catch
-	                        } //else
-	                    } //for i
-	
-	                    // row(s) with result are always visible
-	                    var totRow = totRowIndex && totRowIndex[ucol] ? row[totRowIndex[ucol]] : null;
-	                    if (totRow) {
-	                        totRow.style.display = '';
-	                    }
-	                } //for ucol
-	            } //if typeof
-	
-	            if (this.onAfterOperation) {
-	                this.onAfterOperation.call(null, this.tf);
-	            }
-	        }
-	    }]);
-	
-	    return ColOps;
-	})();
-	
-	exports.ColOps = ColOps;
-
-/***/ },
-/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

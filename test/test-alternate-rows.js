@@ -7,5 +7,9 @@ tf.init();
 
 module('Sanity checks');
 test('AlternateRows component', function() {
-    deepEqual(typeof tf.Cpt.alternateRows, 'object', 'AlternateRows instanciated');
+    deepEqual(
+        typeof tf.feature('alternateRows'),
+        'object',
+        'AlternateRows instanciated'
+    );
 });

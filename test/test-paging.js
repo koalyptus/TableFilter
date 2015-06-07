@@ -9,7 +9,7 @@ var tf = new TableFilter('demo', {
 });
 tf.init();
 
-var paging = tf.Cpt.paging;
+var paging = tf.feature('paging');
 module('Sanity checks');
 test('Paging component', function() {
     notEqual(paging, null, 'Paging instanciated');

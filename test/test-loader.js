@@ -7,7 +7,7 @@ tf.init();
 
 module('Sanity checks');
 test('Loader component', function() {
-    var loader = tf.Cpt.loader;
+    var loader = tf.feature('loader');
     notEqual(loader, null, 'Loader instanciated');
     notEqual(
         document.getElementById(loader.prfxLoader+tf.id),

@@ -25,7 +25,7 @@
             sort: false
         });
         tf.init();
-        var cols = tf.Cpt.gridLayout.headTbl.getElementsByTagName('col');
+        var cols = tf.feature('gridLayout').headTbl.getElementsByTagName('col');
         deepEqual(cols[0].style.width, '150px', 'Expected column width');
         deepEqual(cols[4].style.width, '200px', 'Expected column width');
     });

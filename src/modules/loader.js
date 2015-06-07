@@ -83,7 +83,8 @@ export class Loader{
         }
         var tf = this.tf,
             targetEl = !this.loaderTgtId ?
-            (tf.gridLayout ? tf.Cpt.gridLayout.tblCont : tf.tbl.parentNode):
+            (tf.gridLayout ?
+                tf.feature('gridLayout').tblCont : tf.tbl.parentNode):
             Dom.id(this.loaderTgtId);
         targetEl.removeChild(this.loaderDiv);
         this.loaderDiv = null;

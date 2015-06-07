@@ -103,7 +103,7 @@ export class RowsCounter{
                     (tf.hasVisibleRows ? tf.visibleRows.length : 0);
             }
         } else {
-            var paging = tf.Cpt.paging;
+            var paging = tf.feature('paging');
             if(paging){
                 //paging start row
                 var paging_start_row = parseInt(paging.startPagingRow, 10) +

@@ -136,7 +136,8 @@ export default class AdapterEzEditTable {
                     nextRowIndex,
                     //pgup/pgdown keys
                     d = (keyCode === 34 || keyCode === 33 ?
-                        (tf.Cpt.paging.pagingLength || et.nbRowsPerPage) : 1);
+                        (tf.feature('paging').pagingLength ||
+                            et.nbRowsPerPage) : 1);
 
                 //If next row is not valid, next valid filtered row needs to be
                 //calculated
@@ -204,8 +205,8 @@ export default class AdapterEzEditTable {
                 var row = et.defaultSelection !== 'row' ?
                     selectedElm.parentNode : selectedElm;
                 if(tf.paging){
-                    if(tf.Cpt.paging.nbPages > 1){
-                        var paging = tf.Cpt.paging;
+                    if(tf.feature('paging').nbPages > 1){
+                        var paging = tf.feature('paging');
                         //page length is re-assigned in case it has changed
                         et.nbRowsPerPage = paging.pagingLength;
                         var validIndexes = tf.validRowsIndex,
@@ -237,8 +238,8 @@ export default class AdapterEzEditTable {
 
             //Selected row needs to be visible when paging is activated
             if(tf.paging){
-                tf.Cpt.paging.onAfterChangePage = function(paging){
-                    var advGrid = paging.tf.ExtRegistry.advancedGrid;
+                tf.feature('paging').onAfterChangePage = function(paging){
+                    var advGrid = paging.tf.getExtension('advancedGrid');
                     var et = advGrid._ezEditTable;
                     var slc = et.Selection;
                     var row = slc.GetActiveRow();
@@ -296,17 +297,17 @@ export default class AdapterEzEditTable {
             cfg.on_added_dom_row = function(){
                 tf.nbFilterableRows++;
                 if(!tf.paging){
-                    tf.Cpt.rowsCounter.refresh();
+                    tf.feature('rowsCounter').refresh();
                 } else {
                     tf.nbRows++;
                     tf.nbVisibleRows++;
                     tf.nbFilterableRows++;
                     tf.paging=false;
-                    tf.Cpt.paging.destroy();
-                    tf.Cpt.paging.addPaging();
+                    tf.feature('paging').destroy();
+                    tf.feature('paging').addPaging();
                 }
                 if(tf.alternateBgs){
-                    tf.Cpt.alternateRows.init();
+                    tf.feature('alternateRows').init();
                 }
                 if(fnE){
                     fnE.call(null, arguments[0], arguments[1], arguments[2]);
@@ -317,17 +318,17 @@ export default class AdapterEzEditTable {
                 cfg.actions['delete'].on_after_submit = function(){
                     tf.nbFilterableRows--;
                     if(!tf.paging){
-                        tf.Cpt.rowsCounter.refresh();
+                        tf.feature('rowsCounter').refresh();
                     } else {
                         tf.nbRows--;
                         tf.nbVisibleRows--;
                         tf.nbFilterableRows--;
                         tf.paging=false;
-                        tf.Cpt.paging.destroy();
-                        tf.Cpt.paging.addPaging(false);
+                        tf.feature('paging').destroy();
+                        tf.feature('paging').addPaging(false);
                     }
                     if(tf.alternateBgs){
-                        tf.Cpt.alternateRows.init();
+                        tf.feature('alternateRows').init();
                     }
                     if(fnF){
                         fnF.call(null, arguments[0], arguments[1]);

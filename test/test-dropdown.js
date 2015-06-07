@@ -8,7 +8,7 @@ var tf = new TableFilter('demo', {
 });
 tf.init();
 
-var dropdown = tf.Cpt.dropdown;
+var dropdown = tf.feature('dropdown');
 module('Sanity checks');
 test('Drop-down component', function() {
     deepEqual(typeof dropdown, 'object', 'DropDown instanciated');

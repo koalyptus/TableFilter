@@ -6,7 +6,7 @@ var tf = new TableFilter('demo', {
 });
 tf.init();
 
-var gridLayout = tf.Cpt.gridLayout;
+var gridLayout = tf.feature('gridLayout');
 module('Sanity checks');
 test('GridLayout component', function() {
     deepEqual(typeof gridLayout, 'object', 'GridLayout instanciated');

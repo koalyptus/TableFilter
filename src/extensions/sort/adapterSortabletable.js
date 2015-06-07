@@ -97,7 +97,7 @@ export default class AdapterSortableTable{
             if(tf.paging){
                 adpt.isPaged = true;
                 tf.paging = false;
-                tf.Cpt.paging.destroy();
+                tf.feature('paging').destroy();
             }
         };
 
@@ -113,7 +113,7 @@ export default class AdapterSortableTable{
                     if(Types.isUndef(removeOnly)){
                         removeOnly = false;
                     }
-                    let altRows = tf.Cpt.alternateRows,
+                    let altRows = tf.feature('alternateRows'),
                         oddCls = altRows.oddCss,
                         evenCls = altRows.evenCss;
                     Dom.removeClass(row, oddCls);
@@ -142,7 +142,7 @@ export default class AdapterSortableTable{
             }
             //sort behaviour for paging
             if(adpt.isPaged){
-                let paginator = tf.Cpt.paging,
+                let paginator = tf.feature('paging'),
                     config = tf.config();
                 if(paginator.hasResultsPerPage){
                     let slc = paginator.resultsPerPageSlc;
@@ -216,7 +216,7 @@ export default class AdapterSortableTable{
             let stt = this;
             if (!stt.tHead){
                 if(tf.gridLayout){
-                    stt.tHead = tf.Cpt.gridLayout.headTbl.tHead;
+                    stt.tHead = tf.feature('gridLayout').headTbl.tHead;
                 } else {
                     return;
                 }

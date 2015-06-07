@@ -113,7 +113,7 @@
             remember_grid_values: true,
             col_widths: ['150px','150px','150px','200px','150px'],
             btn_reset: true,
-            grid_layout: true,
+            grid_layout: false,
             rows_always_visible: [totRowIndex],
             custom_options: {
                 cols: [3],
@@ -121,15 +121,15 @@
                 values: [['>0 && <=0.5', '>0.5 && <=1', '>1 && <=2', '>2']],
                 sorts: [false]
             },
-            col_operation: {
-                id: ["sum1", "sum2"],
-                col: [2, 3],
-                operation: ["sum", "mean"],
-                write_method: ["innerhtml", 'innerhtml'],
-                exclude_row: [totRowIndex],
-                decimal_precision: [0, 2],
-                tot_row_index: [totRowIndex, totRowIndex]
-            },
+            // col_operation: {
+            //     id: ["sum1", "sum2"],
+            //     col: [2, 3],
+            //     operation: ["sum", "mean"],
+            //     write_method: ["innerhtml", 'innerhtml'],
+            //     exclude_row: [totRowIndex],
+            //     decimal_precision: [0, 2],
+            //     tot_row_index: [totRowIndex, totRowIndex]
+            // },
             // selectable: true,
             // editable: true,
             // ezEditTable_config: {
@@ -141,16 +141,23 @@
                 {
                     name: 'sort',
                     types: ['string', 'string', 'number', 'number', 'number']
-                    // sort_config: {
-                    //     sort_types: ['string','string','number','number','number']
-                    // }
                 },{
                     name: 'advancedGrid',
                     vendor_path: '../libs/ezEditTable/',
                     selectable: true,
                     editable: true,
                     default_selection: 'both',
+                    // loadStylesheet: true,
                     auto_save: false
+                },{
+                    name: 'colOps',
+                    id: ["sum1", "sum2"],
+                    col: [2, 3],
+                    operation: ["sum", "mean"],
+                    write_method: ["innerhtml", 'innerhtml'],
+                    exclude_row: [totRowIndex],
+                    decimal_precision: [0, 2],
+                    tot_row_index: [totRowIndex, totRowIndex]
                 },{
                     name: 'filtersVisibility',
                     // enable_icon: true,

@@ -5,7 +5,7 @@ var tf = new TableFilter('demo', {
 });
 tf.init();
 
-var help = tf.Cpt.help;
+var help = tf.feature('help');
 module('Sanity checks');
 test('Clear button component', function() {
     deepEqual(typeof help, 'object', 'Help instanciated');
@@ -30,10 +30,11 @@ test('Remove UI', function() {
 });
 
 test('Re-set UI', function() {
-    tf.Cpt.help.destroy();
-    tf.Cpt.help.helpInstrBtnText = '→Help←';
-    tf.Cpt.help.helpInstrText = 'Hello world!';
-    tf.Cpt.help.init();
+    var help = tf.feature('help');
+    help.destroy();
+    help.helpInstrBtnText = '→Help←';
+    help.helpInstrText = 'Hello world!';
+    help.init();
 
     var container = help.helpInstrContEl,
         helpBtn = help.helpInstrBtnEl;

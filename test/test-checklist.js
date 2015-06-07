@@ -7,7 +7,7 @@ var tf = new TableFilter('demo', {
 });
 tf.init();
 
-var checkList = tf.Cpt.checkList;
+var checkList = tf.feature('checkList');
 module('Sanity checks');
 test('CheckList component', function() {
     deepEqual(typeof checkList, 'object', 'CheckList instanciated');

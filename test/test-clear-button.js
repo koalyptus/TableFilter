@@ -5,7 +5,7 @@ var tf = new TableFilter('demo', {
 });
 tf.init();
 
-var clearButton = tf.Cpt.clearButton;
+var clearButton = tf.feature('clearButton');
 module('Sanity checks');
 test('Clear button component', function() {
     deepEqual(typeof clearButton, 'object', 'ClearButton instanciated');
@@ -22,17 +22,17 @@ test('ClearButton UI elements', function() {
 module('Destroy and re-init');
 test('Remove UI', function() {
     clearButton.destroy();
-    var btnResetEl = tf.Cpt.clearButton.btnResetEl;
+    var btnResetEl = tf.feature('clearButton').btnResetEl;
     deepEqual(btnResetEl, null, 'Clear button is removed');
 });
 
 test('Re-set UI', function() {
     tf.enableIcons = false;
-    tf.Cpt.clearButton.btnResetHtml = null;
-    tf.Cpt.clearButton.btnResetText = 'Clear';
-    tf.Cpt.clearButton.init();
+    tf.feature('clearButton').btnResetHtml = null;
+    tf.feature('clearButton').btnResetText = 'Clear';
+    tf.feature('clearButton').init();
 
-    var btnResetEl = tf.Cpt.clearButton.btnResetEl;
+    var btnResetEl = tf.feature('clearButton').btnResetEl;
     deepEqual(btnResetEl.nodeName, 'A', 'Clear button tag changed');
     deepEqual(btnResetEl.innerText, 'Clear', 'Clear button text');
 });

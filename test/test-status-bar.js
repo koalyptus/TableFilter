@@ -1,16 +1,13 @@
-
-var StatusBar = TableFilter.StatusBar;
-
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
     status_bar: true
 });
 tf.init();
 
-var statusBar = tf.Cpt.statusBar;
+var statusBar = tf.feature('statusBar');
 module('Sanity checks');
 test('Status bar component', function() {
-    deepEqual(statusBar instanceof StatusBar, true, 'StatusBar type');
+    deepEqual(typeof statusBar, 'object', 'StatusBar instantiated');
     notEqual(statusBar.statusBarDiv, null, 'statusBarDiv property');
 });
 

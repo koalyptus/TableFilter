@@ -1,15 +1,3 @@
-/* ------------------------------------------------------------------------
-    - HTML Table Filter Generator v0.0.1
-    - By Max Guglielmi (tablefilter.free.fr)
-    - Licensed under the MIT License
----------------------------------------------------------------------------
-    - Special credit to:
-    Cedric Wartel, cnx.claude@free.fr, Florent Hirchy, Váry Péter,
-    Anthony Maes, Nuovella Williams, Fuggerbit, Venkata Seshagiri Rao
-    Raya, Piepiax, Manuel Kern, Baladhandayutham for active contribution
-    and/or inspiration
------------------------------------------------------------------------- */
-
 import Event from './event';
 import Dom from './dom';
 import Str from './string';
@@ -33,7 +21,6 @@ import {Paging} from './modules/paging';
 import {ClearButton} from './modules/clearButton';
 import {Help} from './modules/help';
 import {AlternateRows} from './modules/alternateRows';
-import {ColOps} from './modules/colOps';
 
 var global = window,
     isValidDate = DateHelper.isValid,
@@ -189,8 +176,6 @@ export class TableFilter{
         //defines widths of columns
         this.hasColWidths = Types.isArray(f.col_widths);
         this.colWidths = this.hasColWidths ? f.col_widths : null;
-        //tbody height if fixed headers enabled
-        this.tBodyH = !isNaN(f.tbody_height) ? f.tbody_height : 200;
         //defines css class for filters
         this.fltCssClass = f.flt_css_class || 'flt';
         //defines css class for multiple selects filters
@@ -222,9 +207,6 @@ export class TableFilter{
         this.activeFlt = null;
         //id of active filter
         this.activeFilterId = null;
-        //enables/disbles column operation(sum,mean)
-        this.hasColOperation = Boolean(f.col_operation);
-        this.colOperation = null;
         //enables always visible rows
         this.hasVisibleRows = Boolean(f.rows_always_visible);
         //array containing always visible rows
@@ -472,28 +454,26 @@ export class TableFilter{
         this.themesPath = f.themes_path || this.stylePath + 'themes/';
 
         // Features registry
-        this.Cpt = {
-            loader: null,
-            alternateRows: null,
-            colOps: null,
-            rowsCounter: null,
-            gridLayout: null,
-            store: null,
-            highlightKeywords: null,
-            paging: null,
-            checkList: null,
-            dropdown: null,
-            popupFilter: null,
-            clearButton: null,
-            help: null,
-            statusBar: null
+        this.Mod = {
+            // loader: null,
+            // alternateRows: null,
+            // rowsCounter: null,
+            // gridLayout: null,
+            // store: null,
+            // highlightKeywords: null,
+            // paging: null,
+            // checkList: null,
+            // dropdown: null,
+            // popupFilter: null,
+            // clearButton: null,
+            // help: null,
+            // statusBar: null
         };
 
         // Extensions registry
         this.ExtRegistry = {};
 
         /*** TF events ***/
-        // let o = this;
         this.Evt = {
             name: {
                 filter: 'Filter',
@@ -615,7 +595,7 @@ export class TableFilter{
                 // select is populated when element has focus
                 if(this.fillSlcOnDemand && elm.getAttribute('filled') === '0'){
                     let ct = elm.getAttribute('ct');
-                    this.Cpt.dropdown._build(ct);
+                    this.Mod.dropdown._build(ct);
                 }
                 if(this.popUpFilters){
                     Event.cancel(_ev);
@@ -644,9 +624,9 @@ export class TableFilter{
                 let elm = Event.target(_ev);
                 if(this.fillSlcOnDemand && elm.getAttribute('filled') === '0'){
                     let ct = elm.getAttribute('ct');
-                    this.Cpt.checkList._build(ct);
-                    this.Cpt.checkList.checkListDiv[ct].onclick = null;
-                    this.Cpt.checkList.checkListDiv[ct].title = '';
+                    this.Mod.checkList._build(ct);
+                    this.Mod.checkList.checkListDiv[ct].onclick = null;
+                    this.Mod.checkList.checkListDiv[ct].title = '';
                 }
             },
             /*====================================================
@@ -679,6 +659,8 @@ export class TableFilter{
             this.gridLayout)){
             this.headersRow = 0;
         }
+
+        let Mod = this.Mod;
         let n = this.singleSearchFlt ? 1 : this.nbCells,
             inpclass;
 
@@ -694,29 +676,29 @@ export class TableFilter{
 
         if(this.rememberGridValues || this.rememberPageNb ||
             this.rememberPageLen){
-            this.Cpt.store = new Store(this);
+            Mod.store = new Store(this);
         }
 
         if(this.gridLayout){
-            this.Cpt.gridLayout = new GridLayout(this);
-            this.Cpt.gridLayout.init();
+            Mod.gridLayout = new GridLayout(this);
+            Mod.gridLayout.init();
         }
 
         if(this.loader){
-            if(!this.Cpt.loader){
-                this.Cpt.loader = new Loader(this);
+            if(!Mod.loader){
+                Mod.loader = new Loader(this);
             }
         }
 
         if(this.highlightKeywords){
-            this.Cpt.highlightKeyword = new HighlightKeyword(this);
+            Mod.highlightKeyword = new HighlightKeyword(this);
         }
 
         if(this.popUpFilters){
-            if(!this.Cpt.popupFilter){
-                this.Cpt.popupFilter = new PopupFilter(this);
+            if(!Mod.popupFilter){
+                Mod.popupFilter = new PopupFilter(this);
             }
-            this.Cpt.popupFilter.init();
+            Mod.popupFilter.init();
         }
 
         //filters grid is not generated
@@ -763,7 +745,7 @@ export class TableFilter{
                 for(let i=0; i<n; i++){// this loop adds filters
 
                     if(this.popUpFilters){
-                        this.Cpt.popupFilter.build(i);
+                        Mod.popupFilter.build(i);
                     }
 
                     let fltcell = Dom.create(this.fltCellTag),
@@ -789,10 +771,10 @@ export class TableFilter{
 
                     //drop-down filters
                     if(col===this.fltTypeSlc || col===this.fltTypeMulti){
-                        if(!this.Cpt.dropdown){
-                            this.Cpt.dropdown = new Dropdown(this);
+                        if(!Mod.dropdown){
+                            Mod.dropdown = new Dropdown(this);
                         }
-                        let dropdown = this.Cpt.dropdown;
+                        let dropdown = Mod.dropdown;
 
                         let slc = Dom.create(this.fltTypeSlc,
                                 ['id', this.prfxFlt+i+'_'+this.id],
@@ -837,8 +819,8 @@ export class TableFilter{
                     // checklist
                     else if(col===this.fltTypeCheckList){
                         let checkList;
-                        this.Cpt.checkList = new CheckList(this);
-                        checkList = this.Cpt.checkList;
+                        Mod.checkList = new CheckList(this);
+                        checkList = Mod.checkList;
 
                         let divCont = Dom.create('div',
                             ['id', checkList.prfxCheckListDiv+i+'_'+this.id],
@@ -901,7 +883,7 @@ export class TableFilter{
                         Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
 
                         if(this.rememberGridValues){
-                            let flts_values = this.Cpt.store.getFilterValues(
+                            let flts_values = this.Mod.store.getFilterValues(
                                 this.fltsValuesCookie);
                             if(flts_values[i]!=' '){
                                 this.setFilterValue(i, flts_values[i], false);
@@ -935,41 +917,34 @@ export class TableFilter{
 
         /* Filter behaviours */
         if(this.rowsCounter){
-            this.Cpt.rowsCounter = new RowsCounter(this);
-            this.Cpt.rowsCounter.init();
+            Mod.rowsCounter = new RowsCounter(this);
+            Mod.rowsCounter.init();
         }
         if(this.statusBar){
-            this.Cpt.statusBar = new StatusBar(this);
-            this.Cpt.statusBar.init();
+            Mod.statusBar = new StatusBar(this);
+            Mod.statusBar.init();
         }
-        if(this.paging || (this.Cpt.paging && this.Cpt.paging.isPagingRemoved)){
-            this.Cpt.paging = new Paging(this);
-            this.Cpt.paging.init();
+        if(this.paging || (Mod.paging && Mod.paging.isPagingRemoved)){
+            Mod.paging = new Paging(this);
+            Mod.paging.init();
         }
         if(this.btnReset){
-            this.Cpt.clearButton = new ClearButton(this);
-            this.Cpt.clearButton.init();
+            Mod.clearButton = new ClearButton(this);
+            Mod.clearButton.init();
         }
         if(this.helpInstructions){
-            if(!this.Cpt.help){
-                this.Cpt.help = new Help(this);
+            if(!Mod.help){
+                Mod.help = new Help(this);
             }
-            this.Cpt.help.init();
+            Mod.help.init();
         }
         if(this.hasColWidths && !this.gridLayout){
             this.setColWidths();
         }
         if(this.alternateBgs){
-            this.Cpt.alternateRows = new AlternateRows(this);
-            this.Cpt.alternateRows.init();
+            Mod.alternateRows = new AlternateRows(this);
+            Mod.alternateRows.init();
         }
-        if(this.hasColOperation){
-            this.Cpt.colOps = new ColOps(this);
-            this.Cpt.colOps.calc();
-        }
-        // if(this.sort){
-        //     this.importSort();
-        // }
 
         this.isFirstLoad = false;
         this._hasGrid = true;
@@ -985,7 +960,7 @@ export class TableFilter{
         }
 
         if(this.loader){
-            this.Cpt.loader.show('none');
+            Mod.loader.show('none');
         }
 
         /* Loads extensions */
@@ -996,7 +971,6 @@ export class TableFilter{
         if(this.onFiltersLoaded){
             this.onFiltersLoaded.call(null, this);
         }
-
     }
 
     /**
@@ -1010,7 +984,7 @@ export class TableFilter{
         let slcExternal = cfg.slcExternal;
         let slcId = cfg.slcId;
         let pgIndex = cfg.pgIndex;
-        let cpt = this.Cpt;
+        let cpt = this.Mod;
 
         function efx(){
             /*jshint validthis:true */
@@ -1057,9 +1031,6 @@ export class TableFilter{
                 case ev.loadthemes:
                     this._loadThemes();
                 break;
-                // default: //to be used by extensions events when needed
-                //     this['_'+evt].call(null, o, s);
-                // break;
             }
             if(this.statusBar){
                 cpt.statusBar.message('');
@@ -1080,6 +1051,15 @@ export class TableFilter{
             }
             global.setTimeout(efx.bind(this), this.execDelay);
         }
+    }
+
+    /**
+     * Return a feature instance for a given name
+     * @param  {String} name Name of the feature
+     * @return {Object}
+     */
+    feature(name){
+        return this.Mod[name];
     }
 
     /**
@@ -1121,6 +1101,24 @@ export class TableFilter{
             inst.init();
             this.ExtRegistry[name] = inst;
         });
+    }
+
+    /**
+     * Get an extension instance
+     * @param  {String} name Name of the extension
+     * @return {Object}      Extension instance
+     */
+    getExtension(name){
+        return this.ExtRegistry[name];
+    }
+
+    /**
+     * Check passed extension name exists
+     * @param  {String}  name Name of the extension
+     * @return {Boolean}
+     */
+    hasExtension(name){
+        return !Types.isUndef(this.ExtRegistry[name]);
     }
 
     /**
@@ -1201,7 +1199,7 @@ export class TableFilter{
             return;
         }
         let rows = this.tbl.rows,
-            Cpt = this.Cpt;
+            Mod = this.Mod;
 
         if(this.isExternalFlt && !this.popUpFilters){
             this.removeExternalFlts();
@@ -1210,7 +1208,7 @@ export class TableFilter{
             this.removeToolbar();
         }
         if(this.highlightKeywords){
-            Cpt.highlightKeyword.unhighlightAll();
+            Mod.highlightKeyword.unhighlightAll();
         }
         if(this.markActiveColumns){
             this.clearActiveColumns();
@@ -1222,24 +1220,14 @@ export class TableFilter{
         //this loop shows all rows and removes validRow attribute
         for(let j=this.refRow; j<this.nbRows; j++){
             rows[j].style.display = '';
-            // try{
-                if(rows[j].hasAttribute('validRow')){
-                    rows[j].removeAttribute('validRow');
-                }
-            // } catch(e) {
-            //     //ie<=6 doesn't support hasAttribute method
-            //     let row = rows[j];
-            //     let attribs = row.attributes;
-            //     for(let x=0, len=attribs.length; x<len; x++){
-            //         if(Str.lower(attribs.nodeName)==='validrow'){
-            //             row.removeAttribute('validRow');
-            //         }
-            //     }
-            // }
+
+            if(rows[j].hasAttribute('validRow')){
+                rows[j].removeAttribute('validRow');
+            }
 
             //removes alternating colors
             if(this.alternateBgs){
-                Cpt.alternateRows.removeRowBg(j);
+                Mod.alternateRows.removeRowBg(j);
             }
 
         }//for j
@@ -1249,9 +1237,9 @@ export class TableFilter{
             this.tbl.deleteRow(this.filtersRowIndex);
         }
 
-        // Destroy extensions
-        Object.keys(Cpt).forEach(function(key) {
-            var feature = Cpt[key];
+        // Destroy module
+        Object.keys(Mod).forEach(function(key) {
+            var feature = Mod[key];
             if(feature && Types.isFn(feature.destroy)){
                 feature.destroy();
             }
@@ -1282,7 +1270,7 @@ export class TableFilter{
         }
         //grid-layout
         else if(this.gridLayout){
-            let gridLayout = this.Cpt.gridLayout;
+            let gridLayout = this.Mod.gridLayout;
             gridLayout.tblMainCont.appendChild(infdiv);
             infdiv.className = gridLayout.gridInfDivCssClass;
         }
@@ -1317,10 +1305,10 @@ export class TableFilter{
         // Enable help instructions by default if topbar is generated and not
         // explicitely set to false
         if(Types.isUndef(this.helpInstructions)){
-            if(!this.Cpt.help){
-                this.Cpt.help = new Help(this);
+            if(!this.Mod.help){
+                this.Mod.help = new Help(this);
             }
-            this.Cpt.help.init();
+            this.Mod.help.init();
             this.helpInstructions = true;
         }
     }
@@ -1453,11 +1441,11 @@ export class TableFilter{
         if(this.rememberGridValues && this.fillSlcOnDemand){
             this._resetGridValues(this.fltsValuesCookie);
         }
-        if(this.rememberPageLen && this.Cpt.paging){
-            this.Cpt.paging.resetPageLength(this.pgLenCookie);
+        if(this.rememberPageLen && this.Mod.paging){
+            this.Mod.paging.resetPageLength(this.pgLenCookie);
         }
-        if(this.rememberPageNb && this.Cpt.paging){
-            this.Cpt.paging.resetPage(this.pgNbCookie);
+        if(this.rememberPageNb && this.Mod.paging){
+            this.Mod.paging.resetPage(this.pgNbCookie);
         }
     }
 
@@ -1470,7 +1458,7 @@ export class TableFilter{
         if(!this.fillSlcOnDemand){
             return;
         }
-        let fltsValues = this.Cpt.store.getFilterValues(name),
+        let fltsValues = this.Mod.store.getFilterValues(name),
             slcFltsIndex = this.getFiltersByType(this.fltTypeSlc, true),
             multiFltsIndex = this.getFiltersByType(this.fltTypeMulti, true);
 
@@ -1514,7 +1502,7 @@ export class TableFilter{
                     }// if multiFltsIndex
                 }
                 else if(fltType===this.fltTypeCheckList){
-                    let checkList = this.Cpt.checkList;
+                    let checkList = this.Mod.checkList;
                     let divChk = checkList.checkListDiv[i];
                     divChk.title = divChk.innerHTML;
                     divChk.innerHTML = '';
@@ -1547,7 +1535,7 @@ export class TableFilter{
             }//end for
 
             if(!this.hasStoredValues && this.paging){
-                this.Cpt.paging.setPagingInfo();
+                this.Mod.paging.setPagingInfo();
             }
         }//end if
     }
@@ -1571,7 +1559,7 @@ export class TableFilter{
         }
 
         let row = this.tbl.rows,
-            Cpt = this.Cpt,
+            Mod = this.Mod,
             // f = this.cfg,
             hiddenrows = 0;
 
@@ -1579,11 +1567,11 @@ export class TableFilter{
 
         // removes keyword highlighting
         if(this.highlightKeywords){
-            Cpt.highlightKeyword.unhighlightAll();
+            Mod.highlightKeyword.unhighlightAll();
         }
         //removes popup filters active icons
         if(this.popUpFilters){
-            Cpt.popupFilter.buildIcons();
+            Mod.popupFilter.buildIcons();
         }
         //removes active column header class
         if(this.markActiveColumns){
@@ -1622,8 +1610,8 @@ export class TableFilter{
                     w = Dom.getText(cell);
                 }
                 if(w !== ''){
-                    Cpt.highlightKeyword.highlight(
-                        cell, w, Cpt.highlightKeyword.highlightCssClass);
+                    Mod.highlightKeyword.highlight(
+                        cell, w, Mod.highlightKeyword.highlightCssClass);
                 }
             }
         }
@@ -1877,7 +1865,7 @@ export class TableFilter{
                     singleFltRowValid = true;
                 }
                 if(this.popUpFilters){
-                    Cpt.popupFilter.buildIcon(j, true);
+                    Mod.popupFilter.buildIcon(j, true);
                 }
                 if(this.markActiveColumns){
                     if(k === this.refRow){
@@ -1911,7 +1899,7 @@ export class TableFilter{
                 this.validateRow(k, true);
                 this.validRowsIndex.push(k);
                 if(this.alternateBgs){
-                    Cpt.alternateRows.setRowBg(k, this.validRowsIndex.length);
+                    Mod.alternateRows.setRowBg(k, this.validRowsIndex.length);
                 }
                 if(this.onRowValidated){
                     this.onRowValidated.call(null, this, k);
@@ -1924,7 +1912,7 @@ export class TableFilter{
         this.isStartBgAlternate = false;
 
         if(this.rememberGridValues){
-            Cpt.store.saveFilterValues(this.fltsValuesCookie);
+            Mod.store.saveFilterValues(this.fltsValuesCookie);
         }
         //applies filter props after filtering process
         if(!this.paging){
@@ -1932,7 +1920,7 @@ export class TableFilter{
         } else {
             this.startPagingRow = 0;
             this.currentPageNb = 1;
-            Cpt.paging.setPagingInfo(this.validRowsIndex);
+            Mod.paging.setPagingInfo(this.validRowsIndex);
         }
         //invokes onafter callback
         if(this.onAfterFilter){
@@ -1954,16 +1942,17 @@ export class TableFilter{
             }
         }
 
-        let Cpt = this.Cpt;
+        let Mod = this.Mod;
 
         //shows rows always visible
         if(this.visibleRows){
             this.enforceVisibility();
         }
-        //makes operation on a col
-        if(this.hasColOperation){
-            Cpt.colOps.calc();
+        //columns operations
+        if(this.hasExtension('colOps')){
+            this.getExtension('colOps').calc();
         }
+
         //re-populates drop-down filters
         if(this.linkedFilters){
             this.linkFilters();
@@ -1972,11 +1961,11 @@ export class TableFilter{
             this.nbVisibleRows - this.visibleRows.length : this.nbVisibleRows;
         //refreshes rows counter
         if(this.rowsCounter){
-            Cpt.rowsCounter.refresh(nr);
+            Mod.rowsCounter.refresh(nr);
         }
 
         if(this.popUpFilters){
-            Cpt.popupFilter.closeAll();
+            Mod.popupFilter.closeAll();
         }
     }
 
@@ -2220,7 +2209,7 @@ export class TableFilter{
             filteredData = [];
         if(includeHeaders){
             let table = this.gridLayout ?
-                    this.Cpt.gridLayout.headTbl : this.tbl,
+                    this.Mod.gridLayout.headTbl : this.tbl,
                 r = table.rows[this.headersRow],
                 rowData = [r.rowIndex, []];
             for(let j=0; j<this.nbCells; j++){
@@ -2383,11 +2372,11 @@ export class TableFilter{
                         Dom.getText(lbl), this.caseSensitive);
                 if(lblTxt !== '' && Arr.has(sarg, lblTxt, true)){
                     chk.checked = true;
-                    this.Cpt.checkList.setCheckListValues(chk);
+                    this.Mod.checkList.setCheckListValues(chk);
                 }
                 else{
                     chk.checked = false;
-                    this.Cpt.checkList.setCheckListValues(chk);
+                    this.Mod.checkList.setCheckListValues(chk);
                 }
             }
         }
@@ -2557,7 +2546,7 @@ export class TableFilter{
                 slcSelectedValue === this.displayAllText ){
 
                 if(Arr.has(slcA3, slcIndex[i])){
-                    this.Cpt.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
+                    this.Mod.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
                 } else {
                     curSlc.innerHTML = '';
                 }
@@ -2571,9 +2560,9 @@ export class TableFilter{
                 }
 
                 if(Arr.has(slcA3, slcIndex[i])){
-                    this.Cpt.checkList._build(slcIndex[i]);
+                    this.Mod.checkList._build(slcIndex[i]);
                 } else {
-                    this.Cpt.dropdown._build(slcIndex[i], true);
+                    this.Mod.dropdown._build(slcIndex[i], true);
                 }
 
                 this.setFilterValue(slcIndex[i],slcSelectedValue);
@@ -2589,7 +2578,7 @@ export class TableFilter{
             return;
         }
 
-        let Cpt = this.Cpt;
+        let Mod = this.Mod;
         let tbl = this.tbl;
         let rows = tbl.rows;
         let filtersRowIndex = this.filtersRowIndex;
@@ -2618,10 +2607,10 @@ export class TableFilter{
                     colFltType !== this.fltTypeInp){
                     if(colFltType === this.fltTypeSlc ||
                         colFltType === this.fltTypeMulti){
-                        Cpt.dropdown.build(ct);
+                        Mod.dropdown.build(ct);
                     }
                     if(colFltType === this.fltTypeCheckList){
-                        Cpt.checkList.build(ct);
+                        Mod.checkList.build(ct);
                     }
                 }
             }
@@ -2630,18 +2619,11 @@ export class TableFilter{
         this.nbFilterableRows = this.getRowsNb();
         this.nbVisibleRows = this.nbFilterableRows;
         this.nbRows = rows.length;
-        // if(this.isSortEnabled){
-        //     this.sort = true;
-        // }
 
-        // if(filtersRow.innerHTML === ''){
-        //     refreshFilters(this);
-        // } else {
         if(this.popUpFilters){
             this.headersRow++;
-            Cpt.popupFilter.buildAll();
+            Mod.popupFilter.buildAll();
         }
-        // }
 
         /***    ie bug work-around, filters need to be re-generated since row
                 is empty; insertBefore method doesn't seem to work properly
@@ -2653,7 +2635,7 @@ export class TableFilter{
         //     o.isFirstLoad = true;
         //     if(o.popUpFilters){
         //         // o.RemovePopupFilters();
-        //         o.Cpt.popupFilter.destroy();
+        //         o.Mod.popupFilter.destroy();
         //     }
         //     o.init();
         // }
@@ -2859,7 +2841,7 @@ export class TableFilter{
      * @return {Object}
      */
     getHeaderElement(colIndex){
-        let table = this.gridLayout ? this.Cpt.gridLayout.headTbl : this.tbl;
+        let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl;
         let tHead = Dom.tag(table, 'thead');
         let headersRow = this.headersRow;
         let header;
@@ -2906,20 +2888,19 @@ export class TableFilter{
 }
 
 TableFilter.Cookie = Cookie;
-TableFilter.Store = Store;
-TableFilter.GridLayout = GridLayout;
-TableFilter.Loader = Loader;
-TableFilter.HighlightKeyword = HighlightKeyword;
-TableFilter.PopupFilter = PopupFilter;
-TableFilter.Dropdown = Dropdown;
-TableFilter.CheckList = CheckList;
-TableFilter.RowsCounter = RowsCounter;
-TableFilter.StatusBar = StatusBar;
+// TableFilter.Store = Store;
+// TableFilter.GridLayout = GridLayout;
+// TableFilter.Loader = Loader;
+// TableFilter.HighlightKeyword = HighlightKeyword;
+// TableFilter.PopupFilter = PopupFilter;
+// TableFilter.Dropdown = Dropdown;
+// TableFilter.CheckList = CheckList;
+// TableFilter.RowsCounter = RowsCounter;
+// TableFilter.StatusBar = StatusBar;
 TableFilter.Paging = Paging;
-TableFilter.ClearButton = ClearButton;
-TableFilter.Help = Help;
-TableFilter.AlternateRows = AlternateRows;
-TableFilter.ColOps = ColOps;
+// TableFilter.ClearButton = ClearButton;
+// TableFilter.Help = Help;
+// TableFilter.AlternateRows = AlternateRows;
 
 //Firefox does not support outerHTML property
 // function setOuterHtml(){

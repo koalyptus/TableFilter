@@ -113,7 +113,7 @@ export default class ColsVisibility{
 
         //Grid layout compatibility
         if(tf.gridLayout){
-            this.headersTbl = tf.Cpt.gridLayout.headTbl; //headers table
+            this.headersTbl = tf.feature('gridLayout').headTbl; //headers table
             this.headersIndex = 0; //headers index
             this.onAfterColDisplayed = function(){};
             this.onAfterColHidden = function(){};
@@ -374,7 +374,7 @@ export default class ColsVisibility{
             //This event is fired just after a column is displayed for
             //grid_layout compatibility
             if(tf.gridLayout){
-                gridLayout = tf.Cpt.gridLayout;
+                gridLayout = tf.feature('gridLayout');
                 headTbl = gridLayout.headTbl;
                 gridColElms = gridLayout.gridColElms;
                 if(Helpers.isIE()){
@@ -403,7 +403,7 @@ export default class ColsVisibility{
             //This event is fired just after a column is displayed for
             //grid_layout compatibility
             if(tf.gridLayout){
-                gridLayout = tf.Cpt.gridLayout;
+                gridLayout = tf.feature('gridLayout');
                 headTbl = gridLayout.headTbl;
                 gridColElms = gridLayout.gridColElms;
                 gridColElms[colIndex].style.display = '';
