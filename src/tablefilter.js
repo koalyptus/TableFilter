@@ -54,7 +54,7 @@ export class TableFilter{
         if(arguments.length === 0){ return; }
 
         this.id = id;
-        this.version = '0.0.1';
+        this.version = '{VERSION}';
         this.year = new Date().getFullYear();
         this.tbl = Dom.id(id);
         this.startRow = null;
@@ -67,8 +67,7 @@ export class TableFilter{
         this._hasGrid = false;
         this.enableModules = false;
 
-        if(!this.tbl || Str.lower(this.tbl.nodeName) !== 'table' ||
-            this.getRowsNb() === 0){
+        if(!this.tbl || this.tbl.nodeName != 'TABLE' || this.getRowsNb() === 0){
             throw new Error(
                 'Could not instantiate TableFilter class: ' +
                 'HTML table not found.');
@@ -99,8 +98,6 @@ export class TableFilter{
 
         //default script base path
         this.basePath = f.base_path || 'tablefilter/';
-        //this.extensionsPath = f.extensions_path ||
-        //  this.basePath+'extensions/';
 
         /*** filter types ***/
         this.fltTypeInp = 'input';
@@ -359,23 +356,7 @@ export class TableFilter{
         this.nbVisibleRows = 0; //nb visible rows
         this.nbHiddenRows = 0; //nb hidden rows
 
-        /*** webfx sort adapter ***/
-        //enables/disables default table sorting
-        this.sort = Boolean(f.sort);
-        //indicates if sort is set (used in tfAdapter.sortabletable.js)
-        this.isSortEnabled = false;
-        this.sortConfig = f.sort_config || {};
-        this.sortConfig.name = this.sortConfig.name || 'sort';
-        this.sortConfig.path = this.sortConfig.path || null;
-        this.sortConfig.sortTypes = Types.isArray(this.sortConfig.sort_types) ?
-            this.sortConfig.sort_types : [];
-        this.sortConfig.sortCol = this.sortConfig.sort_col || null;
-        this.sortConfig.asyncSort = Boolean(this.sortConfig.async_sort);
-        this.sortConfig.triggerIds =
-            Types.isArray(this.sortConfig.sort_trigger_ids) ?
-            this.sortConfig.sort_trigger_ids : [];
-
-        /*** onkeyup event ***/
+        /*** autofilter on typing ***/
         //enables/disables auto filtering, table is filtered when user stops
         //typing
         this.autoFilter = Boolean(f.auto_filter);
@@ -524,7 +505,6 @@ export class TableFilter{
                 resetvalues: 'ResetValues',
                 resetpage: 'resetPage',
                 resetpagelength: 'resetPageLength',
-                sort: 'Sort',
                 loadextensions: 'LoadExtensions',
                 loadthemes: 'loadThemes'
             },
@@ -987,9 +967,9 @@ export class TableFilter{
             this.Cpt.colOps = new ColOps(this);
             this.Cpt.colOps.calc();
         }
-        if(this.sort){
-            this.importSort();
-        }
+        // if(this.sort){
+        //     this.importSort();
+        // }
 
         this.isFirstLoad = false;
         this._hasGrid = true;
@@ -1070,8 +1050,6 @@ export class TableFilter{
                 break;
                 case ev.resetpagelength:
                     cpt.paging._resetPageLength(this.pgLenCookie);
-                break;
-                case ev.sort:
                 break;
                 case ev.loadextensions:
                     this._loadExtensions();
@@ -1382,23 +1360,6 @@ export class TableFilter{
                 externalFlt.innerHTML = '';
             }
         }
-    }
-
-    /**
-     * Load sorting module:
-     * - WebFX Sortable Table 1.12 plugin by Erik Arvidsson
-     * - Sortable Table adapter
-     */
-    importSort(){
-        this.loadExtension({
-            name: this.sortConfig.name,
-            path: this.sortConfig.path
-            // path: './extensions/sort/sort.js'
-        });
-    }
-
-    performSort(){
-        this.EvtManager(this.Evt.name.sort);
     }
 
     /*====================================================
@@ -1868,7 +1829,7 @@ export class TableFilter{
                 let sA = this.searchArgs[this.singleSearchFlt ? 0 : j];
                 var dtType = this.hasColDateType ?
                         this.colDateType[j] : this.defaultDateType;
-                if(sA===''){
+                if(sA === ''){
                     continue;
                 }
 
@@ -2585,6 +2546,9 @@ export class TableFilter{
         for(let i=0, len=slcIndex.length; i<len; i++){
             let curSlc = Dom.id(this.fltIds[slcIndex[i]]);
             slcSelectedValue = this.getFilterValue(slcIndex[i]);
+
+            // Welcome to cyclomatic complexity hell :)
+            // TODO: simplify/refactor if statement
             if(activeFlt!==slcIndex[i] ||
                 (this.paging && Arr.has(slcA1, slcIndex[i]) &&
                     activeFlt === slcIndex[i] ) ||
@@ -2646,7 +2610,6 @@ export class TableFilter{
 
                 let externalFltEl = this.externalFltEls[ct];
                 extFlt.appendChild(externalFltEl);
-                // let colFltType = this['col'+ct];
                 let colFltType = this.getFilterType(ct);
                 //IE special treatment for gridLayout, appended filters are
                 //empty
@@ -2667,17 +2630,17 @@ export class TableFilter{
         this.nbFilterableRows = this.getRowsNb();
         this.nbVisibleRows = this.nbFilterableRows;
         this.nbRows = rows.length;
-        if(this.isSortEnabled){
-            this.sort = true;
-        }
+        // if(this.isSortEnabled){
+        //     this.sort = true;
+        // }
 
         // if(filtersRow.innerHTML === ''){
         //     refreshFilters(this);
         // } else {
-            if(this.popUpFilters){
-                this.headersRow++;
-                Cpt.popupFilter.buildAll();
-            }
+        if(this.popUpFilters){
+            this.headersRow++;
+            Cpt.popupFilter.buildAll();
+        }
         // }
 
         /***    ie bug work-around, filters need to be re-generated since row

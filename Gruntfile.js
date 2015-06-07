@@ -1,14 +1,11 @@
-module.exports = function (grunt) {
+var webpack = require('webpack');
+var webpackConfig = require('./webpack.config.js');
+var fs = require('fs');
+var path = require('path');
+var testDir = 'test';
+var testHost = 'http://localhost:8080/';
 
-    var webpack = require('webpack');
-    var webpackConfig = require('./webpack.config.js');
-    var Clean = require('clean-webpack-plugin');
-    var fs = require('fs');
-    var path = require('path');
-    // var pkg = grunt.file.readJSON('package.json');
-    // var version = pkg.version;
-    var testDir = 'test';
-    var testHost = 'http://localhost:8080/';
+module.exports = function (grunt) {
 
     grunt.initConfig({
 
@@ -63,24 +60,8 @@ module.exports = function (grunt) {
 
         webpack: {
             options: webpackConfig,
-            build: {
-                plugins: [
-                    new Clean(['dist']),
-                    new webpack.optimize.DedupePlugin(),
-                    new webpack.optimize.MinChunkSizePlugin(
-                        {minChunkSize: 10000}),
-                    new webpack.optimize.UglifyJsPlugin()
-                ]
-            },
-            // build: webpackConfig.build,
-            'build-dev': {
-                devtool: 'sourcemap',
-                debug: true,
-                plugins: [
-                    new Clean(['dist']),
-                    new webpack.optimize.DedupePlugin()
-                ]
-            }
+            build: webpackConfig.build,
+            dev: webpackConfig.dev
         },
 
         watch: {
@@ -126,7 +107,7 @@ module.exports = function (grunt) {
 
 
     grunt.registerTask('dev',
-        ['jshint', 'webpack:build-dev', 'copy:dist', 'watch:app']);
+        ['jshint', 'webpack:dev', 'copy:dist', 'watch:app']);
 
     // Production build
     grunt.registerTask('build',
@@ -177,7 +158,7 @@ module.exports = function (grunt) {
         return host.concat(relParts.join('/'));
     }
 
-    // Returns the list of test files from the test folder for QUnit
+    // Returns the list of test files from the test folder for qunit task
     function getTestFiles(testDir, host) {
 
         var getFiles = function(dir, host) {

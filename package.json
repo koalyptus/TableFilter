@@ -13,6 +13,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-webpack": "^1.0.8",
     "script-loader": "^0.6.1",
+    "string-replace-webpack-plugin": "0.0.1",
     "webpack": "^1.8.10",
     "webpack-dev-server": "^1.8.2"
   },

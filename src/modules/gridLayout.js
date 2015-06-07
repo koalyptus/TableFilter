@@ -230,11 +230,13 @@ export class GridLayout{
             // }
         });
 
-        //Sort is enabled if not specified in config object
-        if(f.sort !== false){
-            tf.sort = true;
-            tf.sortConfig.asyncSort = true;
-            tf.sortConfig.triggerIds = sortTriggers;
+        //Configure sort extension if any
+        var sort = (f.extensions || []).filter(function(itm){
+            return itm.name === 'sort';
+        });
+        if(sort.length === 1){
+            sort[0].async_sort = true;
+            sort[0].trigger_ids = sortTriggers;
         }
 
         // if(this.gridEnableColResizer){

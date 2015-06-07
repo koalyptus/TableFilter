@@ -83,7 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"d577df757d4add915f61"}[chunkId] + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"d57d3ca8ae58d8b3dce2"}[chunkId] + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -227,7 +227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._hasGrid = false;
 	        this.enableModules = false;
 	
-	        if (!this.tbl || _Str2['default'].lower(this.tbl.nodeName) !== 'table' || this.getRowsNb() === 0) {
+	        if (!this.tbl || this.tbl.nodeName != 'TABLE' || this.getRowsNb() === 0) {
 	            throw new Error('Could not instantiate TableFilter class: ' + 'HTML table not found.');
 	        }
 	
@@ -259,8 +259,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        //default script base path
 	        this.basePath = f.base_path || 'tablefilter/';
-	        //this.extensionsPath = f.extensions_path ||
-	        //  this.basePath+'extensions/';
 	
 	        /*** filter types ***/
 	        this.fltTypeInp = 'input';
@@ -504,20 +502,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.nbVisibleRows = 0; //nb visible rows
 	        this.nbHiddenRows = 0; //nb hidden rows
 	
-	        /*** webfx sort adapter ***/
-	        //enables/disables default table sorting
-	        this.sort = Boolean(f.sort);
-	        //indicates if sort is set (used in tfAdapter.sortabletable.js)
-	        this.isSortEnabled = false;
-	        this.sortConfig = f.sort_config || {};
-	        this.sortConfig.name = this.sortConfig.name || 'sort';
-	        this.sortConfig.path = this.sortConfig.path || null;
-	        this.sortConfig.sortTypes = _Types2['default'].isArray(this.sortConfig.sort_types) ? this.sortConfig.sort_types : [];
-	        this.sortConfig.sortCol = this.sortConfig.sort_col || null;
-	        this.sortConfig.asyncSort = Boolean(this.sortConfig.async_sort);
-	        this.sortConfig.triggerIds = _Types2['default'].isArray(this.sortConfig.sort_trigger_ids) ? this.sortConfig.sort_trigger_ids : [];
-	
-	        /*** onkeyup event ***/
+	        /*** autofilter on typing ***/
 	        //enables/disables auto filtering, table is filtered when user stops
 	        //typing
 	        this.autoFilter = Boolean(f.auto_filter);
@@ -659,7 +644,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                resetvalues: 'ResetValues',
 	                resetpage: 'resetPage',
 	                resetpagelength: 'resetPageLength',
-	                sort: 'Sort',
 	                loadextensions: 'LoadExtensions',
 	                loadthemes: 'loadThemes'
 	            },
@@ -1102,9 +1086,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.Cpt.colOps = new _ColOps.ColOps(this);
 	                this.Cpt.colOps.calc();
 	            }
-	            if (this.sort) {
-	                this.importSort();
-	            }
+	            // if(this.sort){
+	            //     this.importSort();
+	            // }
 	
 	            this.isFirstLoad = false;
 	            this._hasGrid = true;
@@ -1185,8 +1169,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        break;
 	                    case ev.resetpagelength:
 	                        cpt.paging._resetPageLength(this.pgLenCookie);
-	                        break;
-	                    case ev.sort:
 	                        break;
 	                    case ev.loadextensions:
 	                        this._loadExtensions();
@@ -1509,26 +1491,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    externalFlt.innerHTML = '';
 	                }
 	            }
-	        }
-	    }, {
-	        key: 'importSort',
-	
-	        /**
-	         * Load sorting module:
-	         * - WebFX Sortable Table 1.12 plugin by Erik Arvidsson
-	         * - Sortable Table adapter
-	         */
-	        value: function importSort() {
-	            this.loadExtension({
-	                name: this.sortConfig.name,
-	                path: this.sortConfig.path
-	                // path: './extensions/sort/sort.js'
-	            });
-	        }
-	    }, {
-	        key: 'performSort',
-	        value: function performSort() {
-	            this.EvtManager(this.Evt.name.sort);
 	        }
 	    }, {
 	        key: 'isCustomOptions',
@@ -2745,6 +2707,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var i = 0, len = slcIndex.length; i < len; i++) {
 	                var curSlc = _Dom2['default'].id(this.fltIds[slcIndex[i]]);
 	                slcSelectedValue = this.getFilterValue(slcIndex[i]);
+	
+	                // Welcome to cyclomatic complexity hell :)
+	                // TODO: simplify/refactor if statement
 	                if (activeFlt !== slcIndex[i] || this.paging && _Arr2['default'].has(slcA1, slcIndex[i]) && activeFlt === slcIndex[i] || !this.paging && (_Arr2['default'].has(slcA3, slcIndex[i]) || _Arr2['default'].has(slcA2, slcIndex[i])) || slcSelectedValue === this.displayAllText) {
 	
 	                    if (_Arr2['default'].has(slcA3, slcIndex[i])) {
@@ -2805,7 +2770,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                    var externalFltEl = this.externalFltEls[ct];
 	                    extFlt.appendChild(externalFltEl);
-	                    // let colFltType = this['col'+ct];
 	                    var colFltType = this.getFilterType(ct);
 	                    //IE special treatment for gridLayout, appended filters are
 	                    //empty
@@ -2823,9 +2787,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.nbFilterableRows = this.getRowsNb();
 	            this.nbVisibleRows = this.nbFilterableRows;
 	            this.nbRows = rows.length;
-	            if (this.isSortEnabled) {
-	                this.sort = true;
-	            }
+	            // if(this.isSortEnabled){
+	            //     this.sort = true;
+	            // }
 	
 	            // if(filtersRow.innerHTML === ''){
 	            //     refreshFilters(this);
@@ -4267,11 +4231,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // }
 	            });
 	
-	            //Sort is enabled if not specified in config object
-	            if (f.sort !== false) {
-	                tf.sort = true;
-	                tf.sortConfig.asyncSort = true;
-	                tf.sortConfig.triggerIds = sortTriggers;
+	            //Configure sort extension if any
+	            var sort = (f.extensions || []).filter(function (itm) {
+	                return itm.name === 'sort';
+	            });
+	            if (sort.length === 1) {
+	                sort[0].async_sort = true;
+	                sort[0].trigger_ids = sortTriggers;
 	            }
 	
 	            // if(this.gridEnableColResizer){

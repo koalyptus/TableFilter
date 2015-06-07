@@ -11,24 +11,36 @@ export default class AdapterSortableTable{
      * SortableTable Adapter module
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf, opts){
         // Configuration object
-        var f = tf.config();
+        let f = tf.config();
 
+        this.initialized = false;
+        this.name = opts.name;
+        this.desc = opts.description || 'Sortable table';
+
+        //indicates if paging is enabled
         this.isPaged = false;
 
         //indicates if tables was sorted
         this.sorted = false;
 
-        // edit .sort-arrow.descending / .sort-arrow.ascending in filtergrid.css
-        // to reflect any path change
-        this.sortImgPath = f.sort_images_path || tf.themesPath;
-        this.sortImgBlank = f.sort_image_blank || 'blank.png';
-        this.sortImgClassName = f.sort_image_class_name || 'sort-arrow';
-        this.sortImgAscClassName = f.sort_image_asc_class_name || 'ascending';
-        this.sortImgDescClassName = f.sort_image_desc_class_name ||'descending';
+        this.sortTypes = Types.isArray(opts.types) ? opts.types : [];
+        this.sortColAtStart = Types.isArray(opts.sort_col_at_start) ?
+            opts.sort_col_at_start : null;
+        this.asyncSort = Boolean(opts.async_sort);
+        this.triggerIds = Types.isArray(opts.trigger_ids) ?
+            opts.trigger_ids : [];
+
+        // edit .sort-arrow.descending / .sort-arrow.ascending in
+        // tablefilter.css to reflect any path change
+        this.imgPath = opts.images_path || tf.themesPath;
+        this.imgBlank = opts.image_blank || 'blank.png';
+        this.imgClassName = opts.image_class_name || 'sort-arrow';
+        this.imgAscClassName = opts.image_asc_class_name || 'ascending';
+        this.imgDescClassName = opts.image_desc_class_name ||'descending';
         //cell attribute storing custom key
-        this.sortCustomKey = f.sort_custom_key || 'data-tf-sortKey';
+        this.customKey = opts.sort_custom_key || 'data-tf-sortKey';
 
         /*** TF additional events ***/
         //additional paging events for alternating background
@@ -41,21 +53,21 @@ export default class AdapterSortableTable{
         // o.Evt._OnSlcPagesChangeEvt = o.Evt._Paging.nextEvt;
 
         // callback invoked after sort is loaded and instanciated
-        this.onSortLoaded = Types.isFn(f.on_sort_loaded) ?
-            f.on_sort_loaded : null;
+        this.onSortLoaded = Types.isFn(opts.on_sort_loaded) ?
+            opts.on_sort_loaded : null;
         // callback invoked before table is sorted
-        this.onBeforeSort = Types.isFn(f.on_before_sort) ?
-            f.on_before_sort : null;
+        this.onBeforeSort = Types.isFn(opts.on_before_sort) ?
+            opts.on_before_sort : null;
         // callback invoked after table is sorted
-        this.onAfterSort = Types.isFn(f.on_after_sort) ? f.on_after_sort : null;
+        this.onAfterSort = Types.isFn(opts.on_after_sort) ?
+            f.on_after_sort : null;
 
         this.tf = tf;
     }
 
     init(){
-        var tf = this.tf;
-        var sortConfig = tf.sortConfig;
-        var adpt = this;
+        let tf = this.tf;
+        let adpt = this;
 
         // SortableTable class sanity check (sortabletable.js)
         if(Types.isUndef(SortableTable)){
@@ -66,11 +78,11 @@ export default class AdapterSortableTable{
         this.setSortTypes();
 
         //Column sort at start
-        if(sortConfig.sortCol){
-            this.stt.sort(sortConfig.sortCol[0], sortConfig.sortCol[1]);
+        let sortColAtStart = adpt.sortColAtStart;
+        if(sortColAtStart){
+            this.stt.sort(sortColAtStart[0], sortColAtStart[1]);
         }
 
-        tf.isSortEnabled = true;
         if(this.onSortLoaded){
             this.onSortLoaded.call(null, tf, this);
         }
@@ -80,8 +92,6 @@ export default class AdapterSortableTable{
             if(this.onBeforeSort){
                 this.onBeforeSort.call(null, tf, this.stt.sortColumn);
             }
-
-            tf.performSort();
 
             /*** sort behaviour for paging ***/
             if(tf.paging){
@@ -97,13 +107,13 @@ export default class AdapterSortableTable{
             //rows alternating bg issue
             // TODO: move into AlternateRows component
             if(tf.alternateBgs){
-                var rows = tf.tbl.rows, c = 0;
+                let rows = tf.tbl.rows, c = 0;
 
-                var setClass = function(row, i, removeOnly){
+                let setClass = function(row, i, removeOnly){
                     if(Types.isUndef(removeOnly)){
                         removeOnly = false;
                     }
-                    var altRows = tf.Cpt.alternateRows,
+                    let altRows = tf.Cpt.alternateRows,
                         oddCls = altRows.oddCss,
                         evenCls = altRows.evenCss;
                     Dom.removeClass(row, oddCls);
@@ -114,8 +124,8 @@ export default class AdapterSortableTable{
                     }
                 };
 
-                for (var i = tf.refRow; i < tf.nbRows; i++){
-                    var isRowValid = rows[i].getAttribute('validRow');
+                for (let i = tf.refRow; i < tf.nbRows; i++){
+                    let isRowValid = rows[i].getAttribute('validRow');
                     if(tf.paging && rows[i].style.display === ''){
                         setClass(rows[i], c);
                         c++;
@@ -132,10 +142,10 @@ export default class AdapterSortableTable{
             }
             //sort behaviour for paging
             if(adpt.isPaged){
-                var paginator = tf.Cpt.paging,
+                let paginator = tf.Cpt.paging,
                     config = tf.config();
                 if(paginator.hasResultsPerPage){
-                    var slc = paginator.resultsPerPageSlc;
+                    let slc = paginator.resultsPerPageSlc;
                     config.paging_length = slc.options[slc.selectedIndex].value;
                 }
                 paginator.addPaging(false);
@@ -147,6 +157,8 @@ export default class AdapterSortableTable{
                 adpt.onAfterSort.call(null, tf, tf.stt.sortColumn);
             }
         };
+
+        this.initialized = true;
     }
 
     /**
@@ -158,7 +170,7 @@ export default class AdapterSortableTable{
     }
 
     overrideSortableTable(){
-        var adpt = this,
+        let adpt = this,
             tf = this.tf;
 
         /**
@@ -166,11 +178,12 @@ export default class AdapterSortableTable{
          * @param  {Object} e [description]
          */
         SortableTable.prototype.headerOnclick = function(evt){
-            if(!tf.sort){
+            if(!adpt.initialized){
                 return;
             }
+
             // find Header element
-            var el = evt.target || evt.srcElement;
+            let el = evt.target || evt.srcElement;
 
             while(el.tagName !== 'TD' && el.tagName !== 'TH'){
                 el = el.parentNode;
@@ -189,7 +202,7 @@ export default class AdapterSortableTable{
          * @return {Number}     Cell index
          */
         SortableTable.getCellIndex = function(oTd){
-            var cells = oTd.parentNode.cells,
+            let cells = oTd.parentNode.cells,
                 l = cells.length, i;
             for (i = 0; cells[i] != oTd && i < l; i++){}
             return i;
@@ -200,22 +213,27 @@ export default class AdapterSortableTable{
          * @param  {Array} oSortTypes
          */
         SortableTable.prototype.initHeader = function(oSortTypes){
-            var stt = this;
+            let stt = this;
             if (!stt.tHead){
-                // throw new Error('Sorting feature requires a THEAD element');
-                return;
+                if(tf.gridLayout){
+                    stt.tHead = tf.Cpt.gridLayout.headTbl.tHead;
+                } else {
+                    return;
+                }
             }
+
             stt.headersRow = tf.headersRow;
-            var cells = stt.tHead.rows[stt.headersRow].cells;
+            let cells = stt.tHead.rows[stt.headersRow].cells;
             stt.sortTypes = oSortTypes || [];
-            var l = cells.length;
-            var img, c;
-            for (var i = 0; i < l; i++) {
+            let l = cells.length;
+            let img, c;
+
+            for (let i = 0; i < l; i++) {
                 c = cells[i];
                 if (stt.sortTypes[i] !== null && stt.sortTypes[i] !== 'None'){
                     c.style.cursor = 'pointer';
                     img = Dom.create('img',
-                        ['src', adpt.sortImgPath + adpt.sortImgBlank]);
+                        ['src', adpt.imgPath + adpt.imgBlank]);
                     c.appendChild(img);
                     if (stt.sortTypes[i] !== null){
                         c.setAttribute( '_sortType', stt.sortTypes[i]);
@@ -233,14 +251,15 @@ export default class AdapterSortableTable{
          * Overrides updateHeaderArrows in order to handle arrows indicators
          */
         SortableTable.prototype.updateHeaderArrows = function(){
-            var stt = this;
-            var cells, l, img;
+            let stt = this;
+            let cells, l, img;
+
             // external headers
-            if(tf.sortConfig.asyncSort && tf.sortConfig.triggerIds !== null){
-                var triggers = tf.sortConfig.triggerIds;
+            if(adpt.asyncSort && adpt.triggerIds.length > 0){
+                let triggers = adpt.triggerIds;
                 cells = [];
                 l = triggers.length;
-                for(var j=0; j<triggers.length; j++){
+                for(let j=0; j<triggers.length; j++){
                     cells.push(Dom.id(triggers[j]));
                 }
             } else {
@@ -250,22 +269,22 @@ export default class AdapterSortableTable{
                 cells = stt.tHead.rows[stt.headersRow].cells;
                 l = cells.length;
             }
-            for(var i = 0; i < l; i++){
-                var cellAttr = cells[i].getAttribute('_sortType');
+            for(let i = 0; i < l; i++){
+                let cellAttr = cells[i].getAttribute('_sortType');
                 if(cellAttr !== null && cellAttr !== 'None'){
                     img = cells[i].lastChild || cells[i];
                     if(img.nodeName.toLowerCase() !== 'img'){
                         img = Dom.create('img',
-                            ['src', adpt.sortImgPath + adpt.sortImgBlank]);
+                            ['src', adpt.imgPath + adpt.imgBlank]);
                         cells[i].appendChild(img);
                     }
                     if (i === stt.sortColumn){
-                        img.className = adpt.sortImgClassName +' '+
+                        img.className = adpt.imgClassName +' '+
                             (this.descending ?
-                                adpt.sortImgDescClassName :
-                                adpt.sortImgAscClassName);
+                                adpt.imgDescClassName :
+                                adpt.imgAscClassName);
                     } else{
-                        img.className = adpt.sortImgClassName;
+                        img.className = adpt.imgClassName;
                     }
                 }
             }
@@ -279,14 +298,14 @@ export default class AdapterSortableTable{
          * @return {String}
          */
         SortableTable.prototype.getRowValue = function(oRow, sType, nColumn){
-            var stt = this;
+            let stt = this;
             // if we have defined a custom getRowValue use that
-            var sortTypeInfo = stt._sortTypeInfo[sType];
+            let sortTypeInfo = stt._sortTypeInfo[sType];
             if (sortTypeInfo && sortTypeInfo.getRowValue){
                 return sortTypeInfo.getRowValue(oRow, nColumn);
             }
-            var c = oRow.cells[nColumn];
-            var s = SortableTable.getInnerText(c);
+            let c = oRow.cells[nColumn];
+            let s = SortableTable.getInnerText(c);
             return stt.getValueFromString(s, sType);
         };
 
@@ -300,8 +319,8 @@ export default class AdapterSortableTable{
             if(!oNode){
                 return;
             }
-            if(oNode.getAttribute(adpt.sortCustomKey)){
-                return oNode.getAttribute(adpt.sortCustomKey);
+            if(oNode.getAttribute(adpt.customKey)){
+                return oNode.getAttribute(adpt.customKey);
             } else {
                 return Dom.getText(oNode);
             }
@@ -314,16 +333,15 @@ export default class AdapterSortableTable{
     }
 
     setSortTypes(){
-        var tf = this.tf,
-            configSort = tf.sortConfig,
-            configSortTypes = configSort.sortTypes,
-            sortTypes = [];
+        let tf = this.tf,
+            sortTypes = this.sortTypes,
+            _sortTypes = [];
 
-        for(var i=0; i<tf.nbCells; i++){
-            var colType;
+        for(let i=0; i<tf.nbCells; i++){
+            let colType;
 
-            if(configSortTypes !== null && configSortTypes[i] != null){
-                colType = configSortTypes[i].toLowerCase();
+            if(sortTypes[i] !== null){
+                colType = sortTypes[i].toLowerCase();
                 if(colType === 'none'){
                     colType = 'None';
                 }
@@ -336,7 +354,7 @@ export default class AdapterSortableTable{
                     colType = 'String';
                 }
             }
-            sortTypes.push(colType);
+            _sortTypes.push(colType);
         }
 
         //Public TF method to add sort type
@@ -354,21 +372,21 @@ export default class AdapterSortableTable{
         this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
         this.addSortType('ipaddress', ipAddress, sortIP);
 
-        this.stt = new SortableTable(tf.tbl, sortTypes);
+        this.stt = new SortableTable(tf.tbl, _sortTypes);
 
         /*** external table headers adapter ***/
-        if(configSort.asyncSort && configSort.triggerIds !== null){
-            var triggers = configSort.triggerIds;
-            for(var j=0; j<triggers.length; j++){
+        if(this.asyncSort && this.triggerIds.length > 0){
+            let triggers = this.triggerIds;
+            for(let j=0; j<triggers.length; j++){
                 if(triggers[j] === null){
                     continue;
                 }
-                var trigger = Dom.id(triggers[j]);
+                let trigger = Dom.id(triggers[j]);
                 if(trigger){
                     trigger.style.cursor = 'pointer';
 
                     Event.add(trigger, 'click', (evt) => {
-                        var elm = evt.target;
+                        let elm = evt.target;
                         if(!this.tf.sort){
                             return;
                         }
@@ -376,7 +394,7 @@ export default class AdapterSortableTable{
                             Arr.indexByValue(triggers, elm.id, true)
                         );
                     });
-                    trigger.setAttribute('_sortType', sortTypes[j]);
+                    trigger.setAttribute('_sortType', _sortTypes[j]);
                 }
             }
         }
@@ -386,15 +404,15 @@ export default class AdapterSortableTable{
      * Destroy sort
      */
     destroy(){
-        var tf = this.tf;
-        tf.sort = false;
+        let tf = this.tf;
         this.sorted = false;
+        this.initialized = false;
         this.stt.destroy();
 
-        var ids = tf.getFiltersId();
-        for (var idx = 0; idx < ids.length; idx++){
-            var header = tf.getHeaderElement(idx);
-            var img = Dom.tag(header, 'img');
+        let ids = tf.getFiltersId();
+        for (let idx = 0; idx < ids.length; idx++){
+            let header = tf.getHeaderElement(idx);
+            let img = Dom.tag(header, 'img');
 
             if(img.length === 1){
                 header.removeChild(img[0]);
@@ -428,9 +446,9 @@ function ddmmmyyyyDateConverter(s){
 }
 
 function ipAddress(value){
-    var vals = value.split('.');
-    for (var x in vals) {
-        var val = vals[x];
+    let vals = value.split('.');
+    for (let x in vals) {
+        let val = vals[x];
         while (3 > val.length){
             val = '0'+val;
         }
@@ -440,8 +458,8 @@ function ipAddress(value){
 }
 
 function sortIP(a,b){
-    var aa = ipAddress(a.value.toLowerCase());
-    var bb = ipAddress(b.value.toLowerCase());
+    let aa = ipAddress(a.value.toLowerCase());
+    let bb = ipAddress(b.value.toLowerCase());
     if (aa==bb){
         return 0;
     } else if (aa<bb){

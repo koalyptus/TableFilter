@@ -3,9 +3,9 @@ var tag = function (elm, tag){ return elm.getElementsByTagName(tag); };
 
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
-    sort: true,
-    sort_config: {
-        sort_types:[
+    extensions:[{
+        name: 'sort',
+        types:[
             'String',
             'Number',
             'String',
@@ -15,9 +15,9 @@ var tf = new TableFilter('demo', {
             'String',
             'dmydate',
             'mdydate'
-        ]
-    },
-    on_sort_loaded: start
+        ],
+        on_sort_loaded: start
+    }]
 });
 tf.init();
 
@@ -28,6 +28,7 @@ function start(tf, sort){
         notEqual(sort, null, 'Sort instanciated');
         deepEqual(sort.stt instanceof SortableTable, true, 'Sort type');
         deepEqual(sort.sorted, false, 'Table not sorted');
+        deepEqual(sort.initialized, true, 'Sort initialized');
     });
 
     module('UI elements');
@@ -44,7 +45,6 @@ function start(tf, sort){
     });
 
     test('Sort behaviour', function() {
-        var th = tf.getHeaderElement(1),
             validRows = tf.getValidRows();
         sort.sortByColumnIndex(1);
 
@@ -60,7 +60,7 @@ function start(tf, sort){
         sort.destroy();
         var th = tf.getHeaderElement(0),
             indicator = tag(th, 'img');
-        deepEqual(tf.sort, false, 'Sort is removed');
+        deepEqual(sort.initialized, false, 'Sort is removed');
         deepEqual(indicator.length, 0, 'Sort indicator is removed');
     });
 

@@ -3,24 +3,24 @@ var tag = function (elm, tag){ return elm.getElementsByTagName(tag); };
 
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
-    sort: true,
-    sort_config: {
-        sort_types: ['string','string','number','number','number']
-    },
     grid_layout: true,
-    on_sort_loaded: startSimple
+    extensions:[{
+        name: 'sort',
+        types: ['string','string','number','number','number'],
+        on_sort_loaded: startSimple
+    }]
 });
 tf.init();
 
 var tf1 = new TableFilter('demo2', {
     base_path: '../dist/tablefilter/',
     paging: true,
-    sort: true,
-    sort_config: {
-        sort_types: ['string','string','number','number','number']
-    },
     grid_layout: true,
-    on_sort_loaded: startPaging
+    extensions:[{
+        name: 'sort',
+        types: ['string','string','number','number','number'],
+        on_sort_loaded: startPaging
+    }]
 });
 tf1.init();
 
@@ -30,10 +30,10 @@ function startSimple(tf, sort){
         notEqual(sort, null, 'Sort instanciated');
         deepEqual(sort.stt instanceof SortableTable, true, 'Sort type');
         deepEqual(sort.sorted, false, 'Table not sorted');
+        deepEqual(sort.initialized, true, 'Sort initialized');
     });
 
     test('Sort behaviour', function() {
-        var th = tf.getHeaderElement(0);
         sort.sortByColumnIndex(0);
 
         deepEqual(sort.sorted, true, 'Table column sorted');
@@ -45,20 +45,20 @@ function startSimple(tf, sort){
         sort.destroy();
         var th = tf.getHeaderElement(0),
             indicator = tag(th, 'img');
-        deepEqual(tf.sort, false, 'Sort is removed');
+        deepEqual(sort.initialized, false, 'Sort is removed');
         deepEqual(indicator.length, 0, 'Sort indicator is removed');
     });
 
 }
 
 function startPaging(tf, sort){
-    // var sort = tf.ExtRegistry.sort;
 
     module('Sanity checks');
     test('Sort extension', function() {
         notEqual(sort, null, 'Sort instanciated');
         deepEqual(sort.stt instanceof SortableTable, true, 'Sort type');
         deepEqual(sort.sorted, false, 'Table not sorted');
+        deepEqual(sort.initialized, true, 'Sort initialized');
     });
 
     module('UI elements');
@@ -70,7 +70,6 @@ function startPaging(tf, sort){
     });
 
     test('Sort behaviour', function() {
-        var th = tf.getHeaderElement(0);
         sort.sortByColumnIndex(0);
 
         deepEqual(sort.sorted, true, 'Table column sorted');
@@ -82,7 +81,7 @@ function startPaging(tf, sort){
         sort.destroy();
         var th = tf.getHeaderElement(0),
             indicator = tag(th, 'img');
-        deepEqual(tf.sort, false, 'Sort is removed');
+        deepEqual(sort.initialized, false, 'Sort is removed');
         deepEqual(indicator.length, 0, 'Sort indicator is removed');
     });
 
