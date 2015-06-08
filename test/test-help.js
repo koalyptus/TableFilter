@@ -9,13 +9,13 @@ var help = tf.feature('help');
 module('Sanity checks');
 test('Clear button component', function() {
     deepEqual(typeof help, 'object', 'Help instanciated');
-    notEqual(help.helpInstrBtnEl, null, 'helpInstrBtnEl property');
+    notEqual(help.btn, null, 'btn property');
 });
 
 module('UI elements');
 test('Help UI elements', function() {
-    var container = help.helpInstrContEl,
-        helpBtn = help.helpInstrBtnEl;
+    var container = help.cont,
+        helpBtn = help.btn;
     deepEqual(container.nodeName, 'DIV', 'Help container');
     deepEqual(helpBtn.nodeName, 'SPAN', 'Help button');
 });
@@ -23,8 +23,8 @@ test('Help UI elements', function() {
 module('Destroy and re-init');
 test('Remove UI', function() {
     help.destroy();
-    var container = help.helpInstrContEl,
-        helpBtn = help.helpInstrBtnEl;
+    var container = help.cont,
+        helpBtn = help.btn;
     deepEqual(container, null, 'Help container removed');
     deepEqual(helpBtn, null, 'Help button removed');
 });
@@ -32,12 +32,12 @@ test('Remove UI', function() {
 test('Re-set UI', function() {
     var help = tf.feature('help');
     help.destroy();
-    help.helpInstrBtnText = '→Help←';
-    help.helpInstrText = 'Hello world!';
+    help.btnText = '→Help←';
+    help.instrText = 'Hello world!';
     help.init();
 
-    var container = help.helpInstrContEl,
-        helpBtn = help.helpInstrBtnEl;
+    var container = help.cont,
+        helpBtn = help.btn;
     notEqual(
         container.innerHTML.indexOf('Hello world!'),
         -1,

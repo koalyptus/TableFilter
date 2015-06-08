@@ -363,10 +363,9 @@ export class TableFilter{
         //US & javascript = '.' EU = ','
         this.decimalSeparator = f.decimal_separator || '.';
         //enables number format per column
-        this.hasColNbFormat = Boolean(f.col_number_format);
+        this.hasColNbFormat = Types.isArray(f.col_number_format);
         //array containing columns nb formats
-        this.colNbFormat = Types.isArray(this.hasColNbFormat) ?
-            f.col_number_format : null;
+        this.colNbFormat = this.hasColNbFormat ? f.col_number_format : null;
         //enables date type per column
         this.hasColDateType = Types.isArray(f.col_date_type);
         //array containing columns date type
@@ -454,21 +453,7 @@ export class TableFilter{
         this.themesPath = f.themes_path || this.stylePath + 'themes/';
 
         // Features registry
-        this.Mod = {
-            // loader: null,
-            // alternateRows: null,
-            // rowsCounter: null,
-            // gridLayout: null,
-            // store: null,
-            // highlightKeywords: null,
-            // paging: null,
-            // checkList: null,
-            // dropdown: null,
-            // popupFilter: null,
-            // clearButton: null,
-            // help: null,
-            // statusBar: null
-        };
+        this.Mod = {};
 
         // Extensions registry
         this.ExtRegistry = {};
@@ -477,16 +462,16 @@ export class TableFilter{
         this.Evt = {
             name: {
                 filter: 'Filter',
-                dropdown: 'dropdown',
-                checklist: 'checkList',
-                changepage: 'changePage',
+                dropdown: 'DropDown',
+                checklist: 'CheckList',
+                changepage: 'ChangePage',
                 clear: 'Clear',
-                changeresultsperpage: 'changeResults',
+                changeresultsperpage: 'ChangeResults',
                 resetvalues: 'ResetValues',
-                resetpage: 'resetPage',
-                resetpagelength: 'resetPageLength',
+                resetpage: 'ResetPage',
+                resetpagelength: 'ResetPageLength',
                 loadextensions: 'LoadExtensions',
-                loadthemes: 'loadThemes'
+                loadthemes: 'LoadThemes'
             },
 
             /*====================================================
@@ -663,10 +648,6 @@ export class TableFilter{
         let Mod = this.Mod;
         let n = this.singleSearchFlt ? 1 : this.nbCells,
             inpclass;
-
-        // if(global['tf_'+this.id] === undefined){
-        //     global['tf_'+this.id] = this;
-        // }
 
         //loads stylesheet if not imported
         this.import(this.stylesheetId, this.stylesheet, null, 'link');
@@ -1279,7 +1260,6 @@ export class TableFilter{
             var cont = Dom.create('caption');
             cont.appendChild(infdiv);
             this.tbl.insertBefore(cont, this.tbl.firstChild);
-            // this.tbl.parentNode.insertBefore(infdiv, this.tbl);
         }
         this.infDiv = Dom.id(this.prfxInfDiv+this.id);
 
@@ -1548,6 +1528,8 @@ export class TableFilter{
      * Filter the table by retrieving the data from each cell in every single
      * row and comparing it to the search term for current column. A row is
      * hidden when all the search terms are not found in inspected row.
+     *
+     * TODO: Reduce complexity of this massive method
      */
     _filter(){
         if(!this.fltGrid || (!this._hasGrid && !this.isFirstLoad)){
@@ -1560,7 +1542,6 @@ export class TableFilter{
 
         let row = this.tbl.rows,
             Mod = this.Mod,
-            // f = this.cfg,
             hiddenrows = 0;
 
         this.validRowsIndex = [];
@@ -2586,7 +2567,14 @@ export class TableFilter{
 
         // grid was removed, grid row element is stored in fltGridEl property
         if(!this.gridLayout){
-            filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
+            // If table has a thead ensure the filters row is appended in the
+            // thead element
+            if(tbl.tHead){
+                var tempRow = tbl.tHead.insertRow(this.filtersRowIndex);
+                tbl.tHead.replaceChild(this.fltGridEl, tempRow);
+            } else {
+                filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
+            }
         }
 
         // filters are appended in external placeholders elements

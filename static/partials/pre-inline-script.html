@@ -1,0 +1,8 @@
+<script>
+    var config = document.querySelectorAll('script[data-config]')[0];
+    var pre = document.body.getElementsByTagName('pre')[0];
+    if(pre && config){
+        pre.innerHTML = config.innerHTML
+                            .replace('<', '&lt;').replace('>', '&gt;');
+    }
+</script>

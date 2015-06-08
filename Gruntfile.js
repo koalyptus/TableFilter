@@ -1,11 +1,12 @@
-var webpack = require('webpack');
-var webpackConfig = require('./webpack.config.js');
-var fs = require('fs');
-var path = require('path');
-var testDir = 'test';
-var testHost = 'http://localhost:8080/';
-
 module.exports = function (grunt) {
+
+    var webpack = require('webpack');
+    var webpackConfig = require('./webpack.config.js');
+    var fs = require('fs');
+    var path = require('path');
+    var testDir = 'test';
+    var testHost = 'http://localhost:8080/';
+    var pkg = grunt.file.readJSON('package.json');
 
     grunt.initConfig({
 
@@ -41,6 +42,34 @@ module.exports = function (grunt) {
                 cwd: 'static/style',
                 dest: 'dist/tablefilter/style',
                 expand: true
+            },
+            templates: {
+                src: ['**'],
+                cwd: 'static/templates',
+                dest: 'examples',
+                expand: true
+            }
+        },
+
+        'string-replace': {
+            examples: {
+                files: { 'examples/': 'examples/*.html' },
+                options: {
+                    replacements: [
+                        {
+                            pattern: /{NAME}/ig,
+                            replacement: pkg.name
+                        },{
+                            pattern: /{VERSION}/ig,
+                            replacement: pkg.version
+                        },{
+                            pattern: /<!-- @import (.*?) -->/ig,
+                            replacement: function (match, p1) {
+                                return grunt.file.read('static/' + p1);
+                            }
+                        }
+                    ]
+                }
             }
         },
 
@@ -71,6 +100,13 @@ module.exports = function (grunt) {
                 options: {
                     spawn: false
                 }
+            },
+            templates: {
+                files: ['static/templates/**/*', 'static/partials/**/*'],
+                tasks: ['build-examples'],
+                options: {
+                    spawn: false
+                }
             }
         },
 
@@ -96,22 +132,28 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
 
     grunt.registerTask('default',
         ['jshint', 'webpack:build', 'copy:dist', 'test']);
 
-    // The development server (the recommended option for development)
+    // Development server
     grunt.registerTask('server', ['webpack-dev-server:start']);
 
-
+    // Dev dev/build/watch cycle
     grunt.registerTask('dev',
         ['jshint', 'webpack:dev', 'copy:dist', 'watch:app']);
 
     // Production build
     grunt.registerTask('build',
         ['jshint', 'webpack:build', 'copy:dist']);
+
+    // Build examples
+    grunt.registerTask('dev-examples', ['build-examples', 'watch:templates']);
+    grunt.registerTask('build-examples',
+        ['copy:templates', 'string-replace:examples']);
 
     // Transpile with Babel
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);

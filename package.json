@@ -1,6 +1,6 @@
 {
   "name": "TableFilter",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "devDependencies": {
     "babel-core": "^5.1.13",
     "babel-loader": "^5.0.0",
@@ -11,6 +11,7 @@
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-qunit": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-string-replace": "^1.2.0",
     "grunt-webpack": "^1.0.8",
     "script-loader": "^0.6.1",
     "string-replace-webpack-plugin": "0.0.1",

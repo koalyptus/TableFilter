@@ -9,17 +9,23 @@
 table.TF{
 	/*font:normal 12px arial, tahoma, helvetica, sans-serif;*/
 	font:inherit;
+	border-spacing: 0;
 	border-top:1px solid #D0D0D0; border-left:1px solid #D0D0D0;
 	border-bottom:1px solid #ccc; border-right:1px solid #ccc;
 }
 table.TF th{
+	margin:0;
 	background-color:#EBECEE;
 	border-bottom:1px solid #D0D0D0; border-right:1px solid #D0D0D0;
 	border-left:1px solid #fff; border-top:1px solid #fff;
 	padding:5px 5px 5px 5px; color:#333;
 }
 
-table.TF td{ padding:5px 5px 5px 5px; border-bottom:1px solid #D0D0D0; border-right:1px solid #D0D0D0; }
+table.TF td{
+	margin: 0;
+	padding:5px 5px 5px 5px;
+	border-bottom:1px solid #D0D0D0; border-right:1px solid #D0D0D0;
+}
 
 /* FILTERS BAR
 =====================================================*/
@@ -38,26 +44,26 @@ table.TF td{ padding:5px 5px 5px 5px; border-bottom:1px solid #D0D0D0; border-ri
 	background:transparent url(themes/btn_filter.png) center center no-repeat !important;
 }
 .flt{ /* filter (input) appearance */
-	background-color:#fff; font-size:10px;
+	background-color:#fff;
 	border:1px solid #ccc;
 	margin:0; width:97%; vertical-align:middle;
 }
 select.flt{ /* select filter */
 	background-color:#fff; border:1px solid #ccc;
-	margin:0 1px 1px 0; width:99%; font-size:9px; vertical-align:middle;
+	margin:0 1px 1px 0; width:99%; vertical-align:middle;
 }
 select.flt_multi{ /* multiple select filter */
 	background-color:#fff; border:1px solid #ccc;
 	margin:0 1px 1px 0; width:99%; height:100px;
-	font-size:9px; vertical-align:middle;
+	vertical-align:middle;
 }
 .flt_s{ /* small filter (input) appearance */
-	background-color:#fff; font-size:10px;
+	background-color:#fff;
 	border:1px solid #ccc;
 	margin:0; width:80%; vertical-align:middle;
 }
 .single_flt{ /* single filter appearance (input) */
-	background-color:#fff; font-size:11px;
+	background-color:#fff;
 	border-left:1px solid #999; border-right:1px solid #ccc;
 	border-top:1px solid #ccc; border-bottom:1px solid #999;
 	margin:0; width:120px; vertical-align:middle;

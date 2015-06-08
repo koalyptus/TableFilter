@@ -12,12 +12,12 @@ export class Help{
         var f = tf.config();
 
         //id of custom container element for instructions
-        this.helpInstrTgtId = f.help_instructions_target_id || null;
+        this.tgtId = f.help_instructions_target_id || null;
         //id of custom container element for instructions
-        this.helpInstrContTgtId = f.help_instructions_container_target_id ||
+        this.contTgtId = f.help_instructions_container_target_id ||
             null;
         //defines help text
-        this.helpInstrText = f.help_instructions_text  ?
+        this.instrText = f.help_instructions_text  ?
             f.help_instructions_text :
             'Use the filters above each column to filter and limit table ' +
             'data. Avanced searches can be performed by using the following ' +
@@ -28,22 +28,21 @@ export class Help{
             '<a href="http://tablefilter.free.fr/#operators" ' +
             'target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
         //defines help innerHtml
-        this.helpInstrHtml = f.help_instructions_html || null;
+        this.instrHtml = f.help_instructions_html || null;
         //defines reset button text
-        this.helpInstrBtnText = f.help_instructions_btn_text || '?';
+        this.btnText = f.help_instructions_btn_text || '?';
         //defines reset button innerHtml
-        this.helpInstrBtnHtml = f.help_instructions_btn_html || null;
+        this.btnHtml = f.help_instructions_btn_html || null;
         //defines css class for help button
-        this.helpInstrBtnCssClass = f.help_instructions_btn_css_class ||
-            'helpBtn';
+        this.btnCssClass = f.help_instructions_btn_css_class || 'helpBtn';
         //defines css class for help container
-        this.helpInstrContCssClass = f.help_instructions_container_css_class ||
+        this.contCssClass = f.help_instructions_container_css_class ||
             'helpCont';
         //help button element
-        this.helpInstrBtnEl = null;
+        this.btn = null;
          //help content div
-        this.helpInstrContEl = null;
-        this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>TableFilter ' +
+        this.cont = null;
+        this.defaultHtml = '<div class="helpFooter"><h4>TableFilter ' +
             'v. '+ tf.version +'</h4>' +
             '<a href="http://tablefilter.free.fr" target="_blank">' +
             'http://tablefilter.free.fr</a><br/>' +
@@ -60,7 +59,7 @@ export class Help{
     }
 
     init(){
-        if(this.helpInstrBtnEl){
+        if(this.btn){
             return;
         }
 
@@ -70,69 +69,69 @@ export class Help{
         var helpdiv = Dom.create('div',['id', this.prfxHelpDiv+tf.id]);
 
         //help button is added to defined element
-        if(!this.helpInstrTgtId){
+        if(!this.tgtId){
             tf.setToolbar();
         }
-        var targetEl = !this.helpInstrTgtId ?
-            tf.rDiv : Dom.id(this.helpInstrTgtId);
+        var targetEl = !this.tgtId ?
+            tf.rDiv : Dom.id(this.tgtId);
         targetEl.appendChild(helpspan);
 
-        var divContainer = !this.helpInstrContTgtId ?
-                helpspan : Dom.id(this.helpInstrContTgtId);
+        var divContainer = !this.contTgtId ?
+                helpspan : Dom.id(this.contTgtId);
 
-        if(!this.helpInstrBtnHtml){
+        if(!this.btnHtml){
             divContainer.appendChild(helpdiv);
             var helplink = Dom.create('a', ['href', 'javascript:void(0);']);
-            helplink.className = this.helpInstrBtnCssClass;
-            helplink.appendChild(Dom.text(this.helpInstrBtnText));
+            helplink.className = this.btnCssClass;
+            helplink.appendChild(Dom.text(this.btnText));
             helpspan.appendChild(helplink);
             Event.add(helplink, 'click', () => { this.toggle(); });
         } else {
-            helpspan.innerHTML = this.helpInstrBtnHtml;
+            helpspan.innerHTML = this.btnHtml;
             var helpEl = helpspan.firstChild;
             Event.add(helpEl, 'click', () => { this.toggle(); });
             divContainer.appendChild(helpdiv);
         }
 
-        if(!this.helpInstrHtml){
-            helpdiv.innerHTML = this.helpInstrText;
-            helpdiv.className = this.helpInstrContCssClass;
+        if(!this.instrHtml){
+            helpdiv.innerHTML = this.instrText;
+            helpdiv.className = this.contCssClass;
             Event.add(helpdiv, 'dblclick', () => { this.toggle(); });
         } else {
-            if(this.helpInstrContTgtId){
+            if(this.contTgtId){
                 divContainer.appendChild(helpdiv);
             }
-            helpdiv.innerHTML = this.helpInstrHtml;
-            if(!this.helpInstrContTgtId){
-                helpdiv.className = this.helpInstrContCssClass;
+            helpdiv.innerHTML = this.instrHtml;
+            if(!this.contTgtId){
+                helpdiv.className = this.contCssClass;
                 Event.add(helpdiv, 'dblclick', () => { this.toggle(); });
             }
         }
-        helpdiv.innerHTML += this.helpInstrDefaultHtml;
+        helpdiv.innerHTML += this.defaultHtml;
         Event.add(helpdiv, 'click', () => { this.toggle(); });
 
-        this.helpInstrContEl = helpdiv;
-        this.helpInstrBtnEl = helpspan;
+        this.cont = helpdiv;
+        this.btn = helpspan;
     }
 
     /**
      * Toggle help pop-up
      */
     toggle(){
-        if(!this.helpInstrContEl){
+        if(!this.cont){
             return;
         }
-        var divDisplay = this.helpInstrContEl.style.display;
+        var divDisplay = this.cont.style.display;
         if(divDisplay==='' || divDisplay==='none'){
-            this.helpInstrContEl.style.display = 'block';
+            this.cont.style.display = 'block';
             // TODO: use CSS instead for element positioning
-            var btnLeft = Dom.position(this.helpInstrBtnEl).left;
-            if(!this.helpInstrContTgtId){
-                this.helpInstrContEl.style.left =
-                    (btnLeft - this.helpInstrContEl.clientWidth + 25) + 'px';
+            var btnLeft = Dom.position(this.btn).left;
+            if(!this.contTgtId){
+                this.cont.style.left =
+                    (btnLeft - this.cont.clientWidth + 25) + 'px';
             }
         } else {
-            this.helpInstrContEl.style.display = 'none';
+            this.cont.style.display = 'none';
         }
     }
 
@@ -140,16 +139,16 @@ export class Help{
      * Remove help UI
      */
     destroy(){
-        if(!this.helpInstrBtnEl){
+        if(!this.btn){
             return;
         }
-        this.helpInstrBtnEl.parentNode.removeChild(this.helpInstrBtnEl);
-        this.helpInstrBtnEl = null;
-        if(!this.helpInstrContEl){
+        this.btn.parentNode.removeChild(this.btn);
+        this.btn = null;
+        if(!this.cont){
             return;
         }
-        this.helpInstrContEl.parentNode.removeChild(this.helpInstrContEl);
-        this.helpInstrContEl = null;
+        this.cont.parentNode.removeChild(this.cont);
+        this.cont = null;
     }
 
 }

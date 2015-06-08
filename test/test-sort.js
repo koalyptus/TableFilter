@@ -55,7 +55,6 @@ function startSimple(tf, sort){
         deepEqual(sort.initialized, false, 'Sort is removed');
         deepEqual(indicator.length, 0, 'Sort indicator is removed');
     });
-
 }
 
 function startPaging(tf, sort){

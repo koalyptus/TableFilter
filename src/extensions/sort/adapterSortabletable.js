@@ -142,12 +142,7 @@ export default class AdapterSortableTable{
             }
             //sort behaviour for paging
             if(adpt.isPaged){
-                let paginator = tf.feature('paging'),
-                    config = tf.config();
-                if(paginator.hasResultsPerPage){
-                    let slc = paginator.resultsPerPageSlc;
-                    config.paging_length = slc.options[slc.selectedIndex].value;
-                }
+                let paginator = tf.feature('paging');
                 paginator.addPaging(false);
                 paginator.setPage(paginator.currentPageNb);
                 adpt.isPaged = false;
@@ -328,8 +323,8 @@ export default class AdapterSortableTable{
     }
 
     addSortType(){
-        SortableTable.prototype.addSortType(
-            arguments[0], arguments[1], arguments[2], arguments[3]);
+        var args = arguments;
+        SortableTable.prototype.addSortType(args[0], args[1], args[2], args[3]);
     }
 
     setSortTypes(){
@@ -340,7 +335,7 @@ export default class AdapterSortableTable{
         for(let i=0; i<tf.nbCells; i++){
             let colType;
 
-            if(sortTypes[i] !== null){
+            if(sortTypes[i]){
                 colType = sortTypes[i].toLowerCase();
                 if(colType === 'none'){
                     colType = 'None';

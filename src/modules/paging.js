@@ -534,16 +534,22 @@ export class Paging{
         var targetEl = !this.resultsPerPageTgtId ?
             tf.rDiv : Dom.id(this.resultsPerPageTgtId);
         slcRSpan.appendChild(Dom.text(slcRText));
-        targetEl.appendChild(slcRSpan);
-        targetEl.appendChild(slcR);
 
-        this.resultsPerPageSlc = Dom.id(this.prfxSlcResults+tf.id);
+        var help = tf.feature('help');
+        if(help && help.cont){
+            help.cont.parentNode.insertBefore(slcRSpan, help.cont);
+            help.cont.parentNode.insertBefore(slcR, help.cont);
+        } else {
+            targetEl.appendChild(slcRSpan);
+            targetEl.appendChild(slcR);
+        }
 
         for(var r=0; r<slcROpts.length; r++){
             var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);
-            this.resultsPerPageSlc.options[r] = currOpt;
+            slcR.options[r] = currOpt;
         }
         Event.add(slcR, 'change', evt.slcResultsChange);
+        this.resultsPerPageSlc = slcR;
     }
 
     /**
@@ -687,7 +693,7 @@ export class Paging{
     }
 
     /**
-     * Re-set page length at page re-load
+     * Re-set page length value at page re-load
      */
     _resetPageLength(name){
         var tf = this.tf;

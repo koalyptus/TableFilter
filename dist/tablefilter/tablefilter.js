@@ -83,7 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"09888dfbd41479c269a9"}[chunkId] + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"d59e614953f2afdbdeca"}[chunkId] + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -201,7 +201,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        this.id = id;
-	        this.version = '0.0.1';
+	        this.version = '0.0.0';
 	        this.year = new Date().getFullYear();
 	        this.tbl = _Dom2['default'].id(id);
 	        this.startRow = null;
@@ -508,9 +508,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //US & javascript = '.' EU = ','
 	        this.decimalSeparator = f.decimal_separator || '.';
 	        //enables number format per column
-	        this.hasColNbFormat = Boolean(f.col_number_format);
+	        this.hasColNbFormat = _Types2['default'].isArray(f.col_number_format);
 	        //array containing columns nb formats
-	        this.colNbFormat = _Types2['default'].isArray(this.hasColNbFormat) ? f.col_number_format : null;
+	        this.colNbFormat = this.hasColNbFormat ? f.col_number_format : null;
 	        //enables date type per column
 	        this.hasColDateType = _Types2['default'].isArray(f.col_date_type);
 	        //array containing columns date type
@@ -602,16 +602,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.Evt = {
 	            name: {
 	                filter: 'Filter',
-	                dropdown: 'dropdown',
-	                checklist: 'checkList',
-	                changepage: 'changePage',
+	                dropdown: 'DropDown',
+	                checklist: 'CheckList',
+	                changepage: 'ChangePage',
 	                clear: 'Clear',
-	                changeresultsperpage: 'changeResults',
+	                changeresultsperpage: 'ChangeResults',
 	                resetvalues: 'ResetValues',
-	                resetpage: 'resetPage',
-	                resetpagelength: 'resetPageLength',
+	                resetpage: 'ResetPage',
+	                resetpagelength: 'ResetPageLength',
 	                loadextensions: 'LoadExtensions',
-	                loadthemes: 'loadThemes'
+	                loadthemes: 'LoadThemes'
 	            },
 	
 	            /*====================================================
@@ -798,10 +798,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var Mod = this.Mod;
 	            var n = this.singleSearchFlt ? 1 : this.nbCells,
 	                inpclass = undefined;
-	
-	            // if(global['tf_'+this.id] === undefined){
-	            //     global['tf_'+this.id] = this;
-	            // }
 	
 	            //loads stylesheet if not imported
 	            this['import'](this.stylesheetId, this.stylesheet, null, 'link');
@@ -1399,7 +1395,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var cont = _Dom2['default'].create('caption');
 	                cont.appendChild(infdiv);
 	                this.tbl.insertBefore(cont, this.tbl.firstChild);
-	                // this.tbl.parentNode.insertBefore(infdiv, this.tbl);
 	            }
 	            this.infDiv = _Dom2['default'].id(this.prfxInfDiv + this.id);
 	
@@ -1681,6 +1676,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Filter the table by retrieving the data from each cell in every single
 	         * row and comparing it to the search term for current column. A row is
 	         * hidden when all the search terms are not found in inspected row.
+	         *
+	         * TODO: Reduce complexity of this massive method
 	         */
 	        value: function _filter() {
 	            if (!this.fltGrid || !this._hasGrid && !this.isFirstLoad) {
@@ -1693,9 +1690,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var row = this.tbl.rows,
 	                Mod = this.Mod,
-	
-	            // f = this.cfg,
-	            hiddenrows = 0;
+	                hiddenrows = 0;
 	
 	            this.validRowsIndex = [];
 	
@@ -2737,7 +2732,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            // grid was removed, grid row element is stored in fltGridEl property
 	            if (!this.gridLayout) {
-	                filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
+	                // If table has a thead ensure the filters row is appended in the
+	                // thead element
+	                if (tbl.tHead) {
+	                    var tempRow = tbl.tHead.insertRow(this.filtersRowIndex);
+	                    tbl.tHead.replaceChild(this.fltGridEl, tempRow);
+	                } else {
+	                    filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
+	                }
 	            }
 	
 	            // filters are appended in external placeholders elements
@@ -3130,20 +3132,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	//     window['tf_'+id] = tf;
 	//     return tf;
 	// }
-
-	// loader: null,
-	// alternateRows: null,
-	// rowsCounter: null,
-	// gridLayout: null,
-	// store: null,
-	// highlightKeywords: null,
-	// paging: null,
-	// checkList: null,
-	// dropdown: null,
-	// popupFilter: null,
-	// clearButton: null,
-	// help: null,
-	// statusBar: null
 
 /***/ },
 /* 1 */,
@@ -6525,16 +6513,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            var targetEl = !this.resultsPerPageTgtId ? tf.rDiv : _Dom2['default'].id(this.resultsPerPageTgtId);
 	            slcRSpan.appendChild(_Dom2['default'].text(slcRText));
-	            targetEl.appendChild(slcRSpan);
-	            targetEl.appendChild(slcR);
 	
-	            this.resultsPerPageSlc = _Dom2['default'].id(this.prfxSlcResults + tf.id);
+	            var help = tf.feature('help');
+	            if (help && help.cont) {
+	                help.cont.parentNode.insertBefore(slcRSpan, help.cont);
+	                help.cont.parentNode.insertBefore(slcR, help.cont);
+	            } else {
+	                targetEl.appendChild(slcRSpan);
+	                targetEl.appendChild(slcR);
+	            }
 	
 	            for (var r = 0; r < slcROpts.length; r++) {
 	                var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);
-	                this.resultsPerPageSlc.options[r] = currOpt;
+	                slcR.options[r] = currOpt;
 	            }
 	            _Event2['default'].add(slcR, 'change', evt.slcResultsChange);
+	            this.resultsPerPageSlc = slcR;
 	        }
 	    }, {
 	        key: 'removeResultsPerPage',
@@ -6690,7 +6684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: '_resetPageLength',
 	
 	        /**
-	         * Re-set page length at page re-load
+	         * Re-set page length value at page re-load
 	         */
 	        value: function _resetPageLength(name) {
 	            var tf = this.tf;
@@ -6954,26 +6948,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var f = tf.config();
 	
 	        //id of custom container element for instructions
-	        this.helpInstrTgtId = f.help_instructions_target_id || null;
+	        this.tgtId = f.help_instructions_target_id || null;
 	        //id of custom container element for instructions
-	        this.helpInstrContTgtId = f.help_instructions_container_target_id || null;
+	        this.contTgtId = f.help_instructions_container_target_id || null;
 	        //defines help text
-	        this.helpInstrText = f.help_instructions_text ? f.help_instructions_text : 'Use the filters above each column to filter and limit table ' + 'data. Avanced searches can be performed by using the following ' + 'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' + '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' + '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' + '<b>rgx:</b><br/> These operators are described here:<br/>' + '<a href="http://tablefilter.free.fr/#operators" ' + 'target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
+	        this.instrText = f.help_instructions_text ? f.help_instructions_text : 'Use the filters above each column to filter and limit table ' + 'data. Avanced searches can be performed by using the following ' + 'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' + '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' + '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' + '<b>rgx:</b><br/> These operators are described here:<br/>' + '<a href="http://tablefilter.free.fr/#operators" ' + 'target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
 	        //defines help innerHtml
-	        this.helpInstrHtml = f.help_instructions_html || null;
+	        this.instrHtml = f.help_instructions_html || null;
 	        //defines reset button text
-	        this.helpInstrBtnText = f.help_instructions_btn_text || '?';
+	        this.btnText = f.help_instructions_btn_text || '?';
 	        //defines reset button innerHtml
-	        this.helpInstrBtnHtml = f.help_instructions_btn_html || null;
+	        this.btnHtml = f.help_instructions_btn_html || null;
 	        //defines css class for help button
-	        this.helpInstrBtnCssClass = f.help_instructions_btn_css_class || 'helpBtn';
+	        this.btnCssClass = f.help_instructions_btn_css_class || 'helpBtn';
 	        //defines css class for help container
-	        this.helpInstrContCssClass = f.help_instructions_container_css_class || 'helpCont';
+	        this.contCssClass = f.help_instructions_container_css_class || 'helpCont';
 	        //help button element
-	        this.helpInstrBtnEl = null;
+	        this.btn = null;
 	        //help content div
-	        this.helpInstrContEl = null;
-	        this.helpInstrDefaultHtml = '<div class="helpFooter"><h4>TableFilter ' + 'v. ' + tf.version + '</h4>' + '<a href="http://tablefilter.free.fr" target="_blank">' + 'http://tablefilter.free.fr</a><br/>' + '<span>&copy;2009-' + tf.year + ' Max Guglielmi.</span>' + '<div align="center" style="margin-top:8px;">' + '<a href="javascript:void(0);">Close</a></div></div>';
+	        this.cont = null;
+	        this.defaultHtml = '<div class="helpFooter"><h4>TableFilter ' + 'v. ' + tf.version + '</h4>' + '<a href="http://tablefilter.free.fr" target="_blank">' + 'http://tablefilter.free.fr</a><br/>' + '<span>&copy;2009-' + tf.year + ' Max Guglielmi.</span>' + '<div align="center" style="margin-top:8px;">' + '<a href="javascript:void(0);">Close</a></div></div>';
 	
 	        //id prefix for help elements
 	        this.prfxHelpSpan = 'helpSpan_';
@@ -6988,7 +6982,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function init() {
 	            var _this = this;
 	
-	            if (this.helpInstrBtnEl) {
+	            if (this.btn) {
 	                return;
 	            }
 	
@@ -6998,25 +6992,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var helpdiv = _Dom2['default'].create('div', ['id', this.prfxHelpDiv + tf.id]);
 	
 	            //help button is added to defined element
-	            if (!this.helpInstrTgtId) {
+	            if (!this.tgtId) {
 	                tf.setToolbar();
 	            }
-	            var targetEl = !this.helpInstrTgtId ? tf.rDiv : _Dom2['default'].id(this.helpInstrTgtId);
+	            var targetEl = !this.tgtId ? tf.rDiv : _Dom2['default'].id(this.tgtId);
 	            targetEl.appendChild(helpspan);
 	
-	            var divContainer = !this.helpInstrContTgtId ? helpspan : _Dom2['default'].id(this.helpInstrContTgtId);
+	            var divContainer = !this.contTgtId ? helpspan : _Dom2['default'].id(this.contTgtId);
 	
-	            if (!this.helpInstrBtnHtml) {
+	            if (!this.btnHtml) {
 	                divContainer.appendChild(helpdiv);
 	                var helplink = _Dom2['default'].create('a', ['href', 'javascript:void(0);']);
-	                helplink.className = this.helpInstrBtnCssClass;
-	                helplink.appendChild(_Dom2['default'].text(this.helpInstrBtnText));
+	                helplink.className = this.btnCssClass;
+	                helplink.appendChild(_Dom2['default'].text(this.btnText));
 	                helpspan.appendChild(helplink);
 	                _Event2['default'].add(helplink, 'click', function () {
 	                    _this.toggle();
 	                });
 	            } else {
-	                helpspan.innerHTML = this.helpInstrBtnHtml;
+	                helpspan.innerHTML = this.btnHtml;
 	                var helpEl = helpspan.firstChild;
 	                _Event2['default'].add(helpEl, 'click', function () {
 	                    _this.toggle();
@@ -7024,31 +7018,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	                divContainer.appendChild(helpdiv);
 	            }
 	
-	            if (!this.helpInstrHtml) {
-	                helpdiv.innerHTML = this.helpInstrText;
-	                helpdiv.className = this.helpInstrContCssClass;
+	            if (!this.instrHtml) {
+	                helpdiv.innerHTML = this.instrText;
+	                helpdiv.className = this.contCssClass;
 	                _Event2['default'].add(helpdiv, 'dblclick', function () {
 	                    _this.toggle();
 	                });
 	            } else {
-	                if (this.helpInstrContTgtId) {
+	                if (this.contTgtId) {
 	                    divContainer.appendChild(helpdiv);
 	                }
-	                helpdiv.innerHTML = this.helpInstrHtml;
-	                if (!this.helpInstrContTgtId) {
-	                    helpdiv.className = this.helpInstrContCssClass;
+	                helpdiv.innerHTML = this.instrHtml;
+	                if (!this.contTgtId) {
+	                    helpdiv.className = this.contCssClass;
 	                    _Event2['default'].add(helpdiv, 'dblclick', function () {
 	                        _this.toggle();
 	                    });
 	                }
 	            }
-	            helpdiv.innerHTML += this.helpInstrDefaultHtml;
+	            helpdiv.innerHTML += this.defaultHtml;
 	            _Event2['default'].add(helpdiv, 'click', function () {
 	                _this.toggle();
 	            });
 	
-	            this.helpInstrContEl = helpdiv;
-	            this.helpInstrBtnEl = helpspan;
+	            this.cont = helpdiv;
+	            this.btn = helpspan;
 	        }
 	    }, {
 	        key: 'toggle',
@@ -7057,19 +7051,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Toggle help pop-up
 	         */
 	        value: function toggle() {
-	            if (!this.helpInstrContEl) {
+	            if (!this.cont) {
 	                return;
 	            }
-	            var divDisplay = this.helpInstrContEl.style.display;
+	            var divDisplay = this.cont.style.display;
 	            if (divDisplay === '' || divDisplay === 'none') {
-	                this.helpInstrContEl.style.display = 'block';
+	                this.cont.style.display = 'block';
 	                // TODO: use CSS instead for element positioning
-	                var btnLeft = _Dom2['default'].position(this.helpInstrBtnEl).left;
-	                if (!this.helpInstrContTgtId) {
-	                    this.helpInstrContEl.style.left = btnLeft - this.helpInstrContEl.clientWidth + 25 + 'px';
+	                var btnLeft = _Dom2['default'].position(this.btn).left;
+	                if (!this.contTgtId) {
+	                    this.cont.style.left = btnLeft - this.cont.clientWidth + 25 + 'px';
 	                }
 	            } else {
-	                this.helpInstrContEl.style.display = 'none';
+	                this.cont.style.display = 'none';
 	            }
 	        }
 	    }, {
@@ -7079,16 +7073,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Remove help UI
 	         */
 	        value: function destroy() {
-	            if (!this.helpInstrBtnEl) {
+	            if (!this.btn) {
 	                return;
 	            }
-	            this.helpInstrBtnEl.parentNode.removeChild(this.helpInstrBtnEl);
-	            this.helpInstrBtnEl = null;
-	            if (!this.helpInstrContEl) {
+	            this.btn.parentNode.removeChild(this.btn);
+	            this.btn = null;
+	            if (!this.cont) {
 	                return;
 	            }
-	            this.helpInstrContEl.parentNode.removeChild(this.helpInstrContEl);
-	            this.helpInstrContEl = null;
+	            this.cont.parentNode.removeChild(this.cont);
+	            this.cont = null;
 	        }
 	    }]);
 	
