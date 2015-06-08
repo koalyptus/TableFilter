@@ -7,7 +7,7 @@ This script adds to any html table a "filter by column" feature that enables
 users to filter and limit the data displayed within a long table. The script
 automatically adds a filter grid bar at the top of the desired table.
 
-TableFilter is based on the HTML Table Filter generator script, it is a modernized version of it.
+TableFilter is a modernised version of the ``HTML Table Filter generator`` plugin.
 
 ##Features
 * Convert a regular HTML table into an advanced grid component providing:
@@ -41,6 +41,7 @@ tf.init();
 ```
 
 ##Development
+If you are not familiar with ``Grunt`` visit this page: [gruntjs.com/getting-started](http://gruntjs.com/getting-started). Once ``Grunt`` is sorted out you can follow the instructions below. 
 Start by installing any dependencies.
 
 ```shell
