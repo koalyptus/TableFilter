@@ -28,12 +28,14 @@ solution
 ##Setup
 Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the bundle js file in your page:
 ```shell
-<script src="``path/to/my/scripts``/tablefilter/tablefilter.js"></script>
+<script src="path/to/my/scripts/tablefilter/tablefilter.js"></script>
 ```
-Place the following snippet just under the HTML table 
+Place the following snippet just under the HTML table and always define a ``base_path`` property in the configuration object to reflect the path to the script
 ```shell
 <script>
-var tf = new TableFilter('my-table-id');
+var tf = new TableFilter('my-table-id', {
+    base_path: 'path/to/my/scripts/tablefilter/'
+});
 tf.init();
 </script>
 ```
