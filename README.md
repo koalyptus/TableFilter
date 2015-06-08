@@ -7,6 +7,8 @@ This script adds to any html table a "filter by column" feature that enables
 users to filter and limit the data displayed within a long table. The script
 automatically adds a filter grid bar at the top of the desired table.
 
+TableFilter is based on the HTML Table Filter generator script, it is a modernized version of it.
+
 ##Features
 * Convert a regular HTML table into an advanced grid component providing:
     * Advanced columns filtering model
@@ -24,9 +26,16 @@ solution
 * Valuable support provided under a Premium request
 
 ##Setup
-Include the bundled js file in your page:
+Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the bundle js file in your page:
 ```shell
-<script src="tablefilter/tablefilter.js"></script>
+<script src="``path/to/my/scripts``/tablefilter/tablefilter.js"></script>
+```
+Place the following snippet just under the HTML table 
+```shell
+<script>
+var tf = new TableFilter('my-table-id');
+tf.init();
+</script>
 ```
 
 ##Development
