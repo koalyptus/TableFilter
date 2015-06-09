@@ -259,7 +259,7 @@ export class TableFilter{
 
         /*** select filter's customisation and behaviours ***/
         //defines 1st option text
-        this.displayAllText = f.display_all_text || '';
+        this.displayAllText = f.display_all_text || 'Clear';
         //enables/disables empty option in combo-box filters
         this.enableEmptyOption = Boolean(f.enable_empty_option);
         //defines empty option text

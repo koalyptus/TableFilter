@@ -101,14 +101,14 @@ export class CheckList{
         this.isCustom = tf.isCustomOptions(colIndex);
 
         var activeFlt;
-        if(tf.refreshFilters && tf.activeFilterId){
+        if(tf.linkedFilters && tf.activeFilterId){
             activeFlt = tf.activeFilterId.split('_')[0];
             activeFlt = activeFlt.split(tf.prfxFlt)[1];
         }
 
         var excludedOpts,
             filteredDataCol = [];
-        if(tf.refreshFilters && tf.disableExcludedOptions){
+        if(tf.linkedFilters && tf.disableExcludedOptions){
             excludedOpts = [];
         }
 
@@ -129,9 +129,9 @@ export class CheckList{
 
             // this loop retrieves cell data
             for(var j=0; j<ncells; j++){
-                if((colIndex===j && (!tf.refreshFilters ||
-                    (tf.refreshFilters && tf.disableExcludedOptions)))||
-                    (colIndex===j && tf.refreshFilters &&
+                if((colIndex===j && (!tf.linkedFilters ||
+                    (tf.linkedFilters && tf.disableExcludedOptions)))||
+                    (colIndex===j && tf.linkedFilters &&
                     ((rows[k].style.display === '' && !tf.paging) ||
                     (tf.paging && ((!activeFlt || activeFlt===colIndex )||
                     (activeFlt!=colIndex &&
@@ -145,7 +145,7 @@ export class CheckList{
                         this.opts.push(cell_data);
                     }
                     var filteredCol = filteredDataCol[j];
-                    if(tf.refreshFilters && tf.disableExcludedOptions){
+                    if(tf.linkedFilters && tf.disableExcludedOptions){
                         if(!filteredCol){
                             filteredDataCol[j] = tf.GetFilteredDataCol(j);
                         }
@@ -257,7 +257,7 @@ export class CheckList{
             var li = Dom.createCheckItem(
                         tf.fltIds[colIndex]+'_'+(y+chkCt), val, lbl);
             li.className = this.checkListItemCssClass;
-            if(tf.refreshFilters && tf.disableExcludedOptions &&
+            if(tf.linkedFilters && tf.disableExcludedOptions &&
                 Arr.has(excludedOpts,
                         Str.matchCase(val, tf.matchCase), tf.matchCase)){
                     Dom.addClass(li, this.checkListItemDisabledCssClass);

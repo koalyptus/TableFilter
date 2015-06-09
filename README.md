@@ -3,11 +3,9 @@ TableFilter
 
 Filter HTML tables data easily
 
-This script adds to any html table a "filter by column" feature that enables
-users to filter and limit the data displayed within a long table. The script
-automatically adds a filter grid bar at the top of the desired table.
-
 TableFilter is a modernised version of the ``HTML Table Filter generator`` plugin.
+This script adds to any html table a "filter by column" feature that enables
+users to filter and limit the data displayed within a long table. By default, the script automatically adds a filter grid bar at the top of the desired table.
 
 ##Features
 * Convert a regular HTML table into an advanced grid component providing:

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{NAME} v{VERSION} - Data types Demo</title>
+    <!-- @import partials/style.html -->
+</head>
+<body>
+<h1>{NAME} v{VERSION}</h1>
+<h2>Data types demo</h2>
+
+<p>In this example, 3 date types are used and numeric data for currency columns
+  is formated differently: </p>
+
+<ul>
+    <li>"." thousands separator and "," decimal separator for &euro;</li>
+    <li>"," thousands separator and "." decimal separator for US$</li>
+</ul>
+<p>
+    Use <code>col_number_format</code> property to set numeric formats
+    ('EU', 'US' or 'IPADDRESS') for columns and <code>col_date_type</code> to
+    set date types.
+</p>
+
+<!-- @import partials/pre.html -->
+<!-- @import partials/dummy-table-with-totals-footer.html -->
+
+<!-- @import partials/tablefilter-script.html -->
+<script data-config>
+    var id = function (id){
+        return document.getElementById(id);
+    };
+    var table = id('demo-tot');
+    var totRowIndex = table.getElementsByTagName('tr').length;
+
+    var filtersConfig = {
+        base_path: '../dist/tablefilter/',
+        filters_row_index: 1,
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: true,
+        loader: true,
+        status_bar: true,
+        col_number_format: [
+            null, null, null,
+            'EU', 'US', null,
+            null, null, null,
+            'IpAddress'
+        ],
+        col_date_type: [
+            null, null, null,
+            null, null, null,
+            'dmy', 'mdy', 'ddmmmyyyy',
+            null
+        ],
+        rows_always_visible: [totRowIndex],
+        on_filters_loaded: function(o){
+            o.setFilterValue(3, '>1.000');
+            o.setFilterValue(4, '<2,500');
+            o.setFilterValue(6, '>23-01-95');
+            o.filter();
+        },
+        extensions:[
+            {
+                name: 'sort',
+                types: [
+                    'number', 'string', 'string',
+                    'US', 'none', 'string'
+                ]
+            },{
+                name: 'colOps',
+                id: ["sum1", "sum2"],
+                col: [3, 4],
+                operation: ["sum", "sum"],
+                write_method: ["innerhtml", 'innerhtml'],
+                exclude_row: [totRowIndex],
+                decimal_precision: [2, 2],
+                tot_row_index: [totRowIndex],
+                on_after_operation: formatTotals
+            }
+        ]
+    };
+
+    var tf = new TableFilter('demo-tot', filtersConfig);
+    tf.init();
+
+    function addCommas(nStr){
+        nStr += '';
+        var x = nStr.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
+
+    function addDots(nStr){
+        nStr += '';
+        var x = nStr.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? ',' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + '.' + '$2');
+        }
+        return x1 + x2;
+    }
+
+    function formatTotals(){
+        var tot1 = id('sum1').innerHTML;
+        tot1 = addDots(tot1);
+        id('sum1').innerHTML = tot1;
+
+        var tot2 = id('sum2').innerHTML;
+        tot2 = addCommas(tot2);
+        id('sum2').innerHTML = tot2;
+    }
+
+</script>
+<!-- @import partials/pre-inline-script.html -->
+</body>
+</html>

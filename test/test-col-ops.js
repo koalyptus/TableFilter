@@ -1,6 +1,6 @@
 
 var id = function (id){ return document.getElementById(id); };
-var table = document.getElementById('demo');
+var table = id('demo');
 var totRowIndex = table.getElementsByTagName('tr').length;
 
 var tf = new TableFilter('demo', {

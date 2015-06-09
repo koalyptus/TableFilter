@@ -87,6 +87,7 @@ export default {
             return new Date(1001, 0, 1);
         }
         let oDate;
+        let parts;
 
         switch(formatStr.toUpperCase()){
             case 'DDMMMYYYY':

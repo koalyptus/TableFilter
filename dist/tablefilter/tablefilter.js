@@ -1,11 +1,7252 @@
-/** 
- *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-06-08T10:22:50.010Z 
- *	 MIT License  
- */ 
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define(factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// install a JSONP callback for chunk loading
+/******/ 	var parentJsonpFunction = window["webpackJsonp"];
+/******/ 	window["webpackJsonp"] = function webpackJsonpCallback(chunkIds, moreModules) {
+/******/ 		// add "moreModules" to the modules object,
+/******/ 		// then flag all "chunkIds" as loaded and fire callback
+/******/ 		var moduleId, chunkId, i = 0, callbacks = [];
+/******/ 		for(;i < chunkIds.length; i++) {
+/******/ 			chunkId = chunkIds[i];
+/******/ 			if(installedChunks[chunkId])
+/******/ 				callbacks.push.apply(callbacks, installedChunks[chunkId]);
+/******/ 			installedChunks[chunkId] = 0;
+/******/ 		}
+/******/ 		for(moduleId in moreModules) {
+/******/ 			modules[moduleId] = moreModules[moduleId];
+/******/ 		}
+/******/ 		if(parentJsonpFunction) parentJsonpFunction(chunkIds, moreModules);
+/******/ 		while(callbacks.length)
+/******/ 			callbacks.shift().call(null, __webpack_require__);
+/******/
+/******/ 	};
+/******/
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// object to store loaded and loading chunks
+/******/ 	// "0" means "already loaded"
+/******/ 	// Array means "loading", array contains callbacks
+/******/ 	var installedChunks = {
+/******/ 		0:0
+/******/ 	};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/ 	// This file contains only the entry chunk.
+/******/ 	// The chunk loading function for additional chunks
+/******/ 	__webpack_require__.e = function requireEnsure(chunkId, callback) {
+/******/ 		// "0" is the signal for "already loaded"
+/******/ 		if(installedChunks[chunkId] === 0)
+/******/ 			return callback.call(null, __webpack_require__);
+/******/
+/******/ 		// an array means "currently loading".
+/******/ 		if(installedChunks[chunkId] !== undefined) {
+/******/ 			installedChunks[chunkId].push(callback);
+/******/ 		} else {
+/******/ 			// start chunk loading
+/******/ 			installedChunks[chunkId] = [callback];
+/******/ 			var head = document.getElementsByTagName('head')[0];
+/******/ 			var script = document.createElement('script');
+/******/ 			script.type = 'text/javascript';
+/******/ 			script.charset = 'utf-8';
+/******/ 			script.async = true;
+/******/
+/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"d59e614953f2afdbdeca"}[chunkId] + ".js";
+/******/ 			head.appendChild(script);
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/dist/tablefilter/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
 
-!function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var s=e();for(var i in s)("object"==typeof exports?exports:t)[i]=s[i]}}(this,function(){return function(t){function e(s){if(i[s])return i[s].exports;var a=i[s]={exports:{},id:s,loaded:!1};return t[s].call(a.exports,a,a.exports,e),a.loaded=!0,a.exports}var s=window.webpackJsonp;window.webpackJsonp=function(i,l){for(var r,n,o=0,h=[];o<i.length;o++)n=i[o],a[n]&&h.push.apply(h,a[n]),a[n]=0;for(r in l)t[r]=l[r];for(s&&s(i,l);h.length;)h.shift().call(null,e)};var i={},a={0:0};return e.e=function(t,s){if(0===a[t])return s.call(null,e);if(void 0!==a[t])a[t].push(s);else{a[t]=[s];var i=document.getElementsByTagName("head")[0],l=document.createElement("script");l.type="text/javascript",l.charset="utf-8",l.async=!0,l.src=e.p+""+({}[t]||t)+"-"+{1:"671c99050af173051c24"}[t]+".js",i.appendChild(l)}},e.m=t,e.c=i,e.p="/dist/tablefilter/",e(0)}([function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(2),n=i(r),o=s(3),h=i(o),d=s(4),u=i(d),f=s(5),c=i(f),p=s(6),g=i(p),v=s(7),b=i(v),m=s(8),_=i(m),C=s(9),y=i(C),w=s(10),x=s(11),T=s(12),k=s(13),R=s(14),F=s(15),P=s(16),I=s(17),S=s(18),L=s(19),E=s(20),N=s(21),D=s(22),B=window,M=_["default"].isValid,O=_["default"].format,A=B.document,H=function(){function t(e){if(a(this,t),0!==arguments.length){if(this.id=e,this.version="0.0.0",this.year=(new Date).getFullYear(),this.tbl=h["default"].id(e),this.startRow=null,this.refRow=null,this.headersRow=null,this.cfg={},this.nbFilterableRows=null,this.nbRows=null,this.nbCells=null,this._hasGrid=!1,this.enableModules=!1,!this.tbl||"TABLE"!=this.tbl.nodeName||0===this.getRowsNb())throw new Error("Could not instantiate TableFilter class: HTML table not found.");if(arguments.length>1)for(var s=0,i=arguments.length;i>s;s++){var l=arguments[s],r=typeof l;switch(u["default"].lower(r)){case"number":this.startRow=l;break;case"object":this.cfg=l}}var o=this.cfg;this.refRow=null===this.startRow?2:this.startRow+1;try{this.nbCells=this.getCellsNb(this.refRow)}catch(d){this.nbCells=this.getCellsNb(0)}this.basePath=o.base_path||"tablefilter/",this.fltTypeInp="input",this.fltTypeSlc="select",this.fltTypeMulti="multiple",this.fltTypeCheckList="checklist",this.fltTypeNone="none",this.fltGrid=o.grid===!1?!1:!0,this.gridLayout=Boolean(o.grid_layout),this.sourceTblHtml=null,this.gridLayout&&(this.sourceTblHtml=this.tbl.outerHTML),this.filtersRowIndex=o.filters_row_index||0,this.headersRow=o.headers_row_index||(0===this.filtersRowIndex?1:0),this.gridLayout&&(this.headersRow>1?this.filtersRowIndex=this.headersRow+1:(this.filtersRowIndex=1,this.headersRow=0)),this.fltCellTag="th"!==o.filters_cell_tag||"td"!==o.filters_cell_tag?"td":o.filters_cell_tag,this.fltIds=[],this.fltElms=[],this.searchArgs=null,this.tblData=[],this.validRowsIndex=null,this.fltGridEl=null,this.isFirstLoad=!0,this.infDiv=null,this.lDiv=null,this.rDiv=null,this.mDiv=null,this.contDiv=null,this.infDivCssClass=o.inf_div_css_class||"inf",this.lDivCssClass=o.left_div_css_class||"ldiv",this.rDivCssClass=o.right_div_css_class||"rdiv",this.mDivCssClass=o.middle_div_css_class||"mdiv",this.contDivCssClass=o.content_div_css_class||"cont",this.stylePath=o.style_path||this.basePath+"style/",this.stylesheet=o.stylesheet||this.stylePath+"tablefilter.css",this.stylesheetId=this.id+"_style",this.fltsRowCssClass=o.flts_row_css_class||"fltrow",this.enableIcons=o.enable_icons===!1?!1:!0,this.alternateBgs=Boolean(o.alternate_rows),this.hasColWidths=g["default"].isArray(o.col_widths),this.colWidths=this.hasColWidths?o.col_widths:null,this.fltCssClass=o.flt_css_class||"flt",this.fltMultiCssClass=o.flt_multi_css_class||"flt_multi",this.fltSmallCssClass=o.flt_small_css_class||"flt_s",this.singleFltCssClass=o.single_flt_css_class||"single_flt",this.isStartBgAlternate=!0,this.enterKey=o.enter_key===!1?!1:!0,this.onBeforeFilter=g["default"].isFn(o.on_before_filter)?o.on_before_filter:null,this.onAfterFilter=g["default"].isFn(o.on_after_filter)?o.on_after_filter:null,this.caseSensitive=Boolean(o.case_sensitive),this.exactMatch=Boolean(o.exact_match),this.linkedFilters=Boolean(o.linked_filters),this.disableExcludedOptions=Boolean(o.disable_excluded_options),this.activeFlt=null,this.activeFilterId=null,this.hasVisibleRows=Boolean(o.rows_always_visible),this.visibleRows=this.hasVisibleRows?o.rows_always_visible:[],this.searchType=o.search_type||"include",this.isExternalFlt=Boolean(o.external_flt_grid),this.externalFltTgtIds=o.external_flt_grid_ids||null,this.externalFltEls=[],this.execDelay=isNaN(o.exec_delay)?100:parseInt(o.exec_delay,10),this.onFiltersLoaded=g["default"].isFn(o.on_filters_loaded)?o.on_filters_loaded:null,this.singleSearchFlt=Boolean(o.single_search_filter),this.onRowValidated=g["default"].isFn(o.on_row_validated)?o.on_row_validated:null,this.customCellDataCols=o.custom_cell_data_cols?o.custom_cell_data_cols:[],this.customCellData=g["default"].isFn(o.custom_cell_data)?o.custom_cell_data:null,this.watermark=o.watermark||"",this.isWatermarkArray=g["default"].isArray(this.watermark),this.toolBarTgtId=o.toolbar_target_id||null,this.helpInstructions=g["default"].isUndef(o.help_instructions)?void 0:Boolean(o.help_instructions),this.popUpFilters=Boolean(o.popup_filters),this.markActiveColumns=Boolean(o.mark_active_columns),this.activeColumnsCssClass=o.active_columns_css_class||"activeHeader",this.onBeforeActiveColumn=g["default"].isFn(o.on_before_active_column)?o.on_before_active_column:null,this.onAfterActiveColumn=g["default"].isFn(o.on_after_active_column)?o.on_after_active_column:null,this.displayAllText=o.display_all_text||"",this.enableEmptyOption=Boolean(o.enable_empty_option),this.emptyText=o.empty_text||"(Empty)",this.enableNonEmptyOption=Boolean(o.enable_non_empty_option),this.nonEmptyText=o.non_empty_text||"(Non empty)",this.onSlcChange=o.on_change===!1?!1:!0,this.sortSlc=o.sort_select===!1?!1:!0,this.isSortNumAsc=Boolean(o.sort_num_asc),this.sortNumAsc=this.isSortNumAsc?o.sort_num_asc:null,this.isSortNumDesc=Boolean(o.sort_num_desc),this.sortNumDesc=this.isSortNumDesc?o.sort_num_desc:null,this.fillSlcOnDemand=Boolean(o.fill_slc_on_demand),this.hasCustomOptions=g["default"].isObj(o.custom_options),this.customOptions=o.custom_options,this.rgxOperator=o.regexp_operator||"rgx:",this.emOperator=o.empty_operator||"[empty]",this.nmOperator=o.nonempty_operator||"[nonempty]",this.orOperator=o.or_operator||"||",this.anOperator=o.and_operator||"&&",this.grOperator=o.greater_operator||">",this.lwOperator=o.lower_operator||"<",this.leOperator=o.lower_equal_operator||"<=",this.geOperator=o.greater_equal_operator||">=",this.dfOperator=o.different_operator||"!",this.lkOperator=o.like_operator||"*",this.eqOperator=o.equal_operator||"=",this.stOperator=o.start_with_operator||"{",this.enOperator=o.end_with_operator||"}",this.curExp=o.cur_exp||"^[¥£€$]",this.separator=o.separator||",",this.rowsCounter=Boolean(o.rows_counter),this.statusBar=Boolean(o.status_bar),this.loader=Boolean(o.loader),this.displayBtn=Boolean(o.btn),this.btnText=o.btn_text||(this.enableIcons?"":"Go"),this.btnCssClass=o.btn_css_class||(this.enableIcons?"btnflt_icon":"btnflt"),this.btnReset=Boolean(o.btn_reset),this.btnResetCssClass=o.btn_reset_css_class||"reset",this.onBeforeReset=g["default"].isFn(o.on_before_reset)?o.on_before_reset:null,this.onAfterReset=g["default"].isFn(o.on_after_reset)?o.on_after_reset:null,this.paging=Boolean(o.paging),this.nbVisibleRows=0,this.nbHiddenRows=0,this.autoFilter=Boolean(o.auto_filter),this.autoFilterDelay=isNaN(o.auto_filter_delay)?900:o.auto_filter_delay,this.isUserTyping=null,this.autoFilterTimer=null,this.highlightKeywords=Boolean(o.highlight_keywords),this.defaultDateType=o.default_date_type||"DMY",this.thousandsSeparator=o.thousands_separator||",",this.decimalSeparator=o.decimal_separator||".",this.hasColNbFormat=g["default"].isArray(o.col_number_format),this.colNbFormat=this.hasColNbFormat?o.col_number_format:null,this.hasColDateType=g["default"].isArray(o.col_date_type),this.colDateType=this.hasColDateType?o.col_date_type:null,this.msgFilter=o.msg_filter||"Filtering data...",this.msgPopulate=o.msg_populate||"Populating filter...",this.msgPopulateCheckList=o.msg_populate_checklist||"Populating list...",this.msgChangePage=o.msg_change_page||"Collecting paging data...",this.msgClear=o.msg_clear||"Clearing filters...",this.msgChangeResults=o.msg_change_results||"Changing results per page...",this.msgResetValues=o.msg_reset_grid_values||"Re-setting filters values...",this.msgResetPage=o.msg_reset_page||"Re-setting page...",this.msgResetPageLength=o.msg_reset_page_length||"Re-setting page length...",this.msgSort=o.msg_sort||"Sorting data...",this.msgLoadExtensions=o.msg_load_extensions||"Loading extensions...",this.msgLoadThemes=o.msg_load_themes||"Loading theme(s)...",this.prfxTf="TF",this.prfxFlt="flt",this.prfxValButton="btn",this.prfxInfDiv="inf_",this.prfxLDiv="ldiv_",this.prfxRDiv="rdiv_",this.prfxMDiv="mdiv_",this.prfxCookieFltsValues="tf_flts_",this.prfxCookiePageNb="tf_pgnb_",this.prfxCookiePageLen="tf_pglen_",this.hasStoredValues=!1,this.rememberGridValues=Boolean(o.remember_grid_values),this.fltsValuesCookie=this.prfxCookieFltsValues+this.id,this.rememberPageNb=this.paging&&o.remember_page_number,this.pgNbCookie=this.prfxCookiePageNb+this.id,this.rememberPageLen=this.paging&&o.remember_page_length,this.pgLenCookie=this.prfxCookiePageLen+this.id,this.extensions=o.extensions,this.hasExtensions=g["default"].isArray(this.extensions),this.enableDefaultTheme=Boolean(o.enable_default_theme),this.hasThemes=this.enableDefaultTheme||g["default"].isArray(o.themes),this.themes=o.themes||[],this.themesPath=o.themes_path||this.stylePath+"themes/",this.Mod={},this.ExtRegistry={},this.Evt={name:{filter:"Filter",dropdown:"DropDown",checklist:"CheckList",changepage:"ChangePage",clear:"Clear",changeresultsperpage:"ChangeResults",resetvalues:"ResetValues",resetpage:"ResetPage",resetpagelength:"ResetPageLength",loadextensions:"LoadExtensions",loadthemes:"LoadThemes"},detectKey:function(t){if(this.enterKey){var e=t||B.event;if(e){var s=n["default"].keyCode(e);13===s?(this.filter(),n["default"].cancel(e),n["default"].stop(e)):(this.isUserTyping=!0,B.clearInterval(this.autoFilterTimer),this.autoFilterTimer=null)}}},onKeyUp:function(t){function e(){B.clearInterval(this.autoFilterTimer),this.autoFilterTimer=null,this.isUserTyping||(this.filter(),this.isUserTyping=null)}if(this.autoFilter){var s=t||B.event,i=n["default"].keyCode(s);this.isUserTyping=!1,13!==i&&9!==i&&27!==i&&38!==i&&40!==i?null===this.autoFilterTimer&&(this.autoFilterTimer=B.setInterval(e.bind(this),this.autoFilterDelay)):(B.clearInterval(this.autoFilterTimer),this.autoFilterTimer=null)}},onKeyDown:function(){this.autoFilter&&(this.isUserTyping=!0)},onInpBlur:function(){this.autoFilter&&(this.isUserTyping=!1,B.clearInterval(this.autoFilterTimer))},onInpFocus:function(t){var e=t||B.event,s=n["default"].target(e);this.activeFilterId=s.getAttribute("id"),this.activeFlt=h["default"].id(this.activeFilterId),this.popUpFilters&&(n["default"].cancel(e),n["default"].stop(e))},onSlcFocus:function(t){var e=t||B.event,s=n["default"].target(e);if(this.activeFilterId=s.getAttribute("id"),this.activeFlt=h["default"].id(this.activeFilterId),this.fillSlcOnDemand&&"0"===s.getAttribute("filled")){var i=s.getAttribute("ct");this.Mod.dropdown._build(i)}this.popUpFilters&&(n["default"].cancel(e),n["default"].stop(e))},onSlcChange:function(t){if(this.activeFlt){var e=t||B.event;this.popUpFilters&&n["default"].stop(e),this.onSlcChange&&this.filter()}},onCheckListClick:function(t){var e=t||B.event,s=n["default"].target(e);if(this.fillSlcOnDemand&&"0"===s.getAttribute("filled")){var i=s.getAttribute("ct");this.Mod.checkList._build(i),this.Mod.checkList.checkListDiv[i].onclick=null,this.Mod.checkList.checkListDiv[i].title=""}},onBtnClick:function(){this.filter()}}}}return l(t,[{key:"init",value:function(){if(!this._hasGrid){this.tbl||(this.tbl=h["default"].id(this.id)),this.gridLayout&&(this.refRow=null===this.startRow?0:this.startRow),this.popUpFilters&&(0===this.filtersRowIndex&&1===this.headersRow||this.gridLayout)&&(this.headersRow=0);var t=this.Mod,e=this.singleSearchFlt?1:this.nbCells,s=void 0;if(this["import"](this.stylesheetId,this.stylesheet,null,"link"),this.hasThemes&&this._loadThemes(),(this.rememberGridValues||this.rememberPageNb||this.rememberPageLen)&&(t.store=new w.Store(this)),this.gridLayout&&(t.gridLayout=new x.GridLayout(this),t.gridLayout.init()),this.loader&&(t.loader||(t.loader=new T.Loader(this))),this.highlightKeywords&&(t.highlightKeyword=new k.HighlightKeyword(this)),this.popUpFilters&&(t.popupFilter||(t.popupFilter=new R.PopupFilter(this)),t.popupFilter.init()),this.fltGrid)if(this.isFirstLoad){var i=void 0;if(!this.gridLayout){var a=h["default"].tag(this.tbl,"thead");i=a.length>0?a[0].insertRow(this.filtersRowIndex):this.tbl.insertRow(this.filtersRowIndex),this.headersRow>1&&this.filtersRowIndex<=this.headersRow&&!this.popUpFilters&&this.headersRow++,this.popUpFilters&&this.headersRow++,i.className=this.fltsRowCssClass,!this.isExternalFlt||this.gridLayout&&!this.popUpFilters||(i.style.display="none")}this.nbFilterableRows=this.getRowsNb(),this.nbVisibleRows=this.nbFilterableRows,this.nbRows=this.tbl.rows.length;for(var l=0;e>l;l++){this.popUpFilters&&t.popupFilter.build(l);var r=h["default"].create(this.fltCellTag),o=this.getFilterType(l),d=this.isExternalFlt&&this.externalFltTgtIds?this.externalFltTgtIds[l]:null;if(this.singleSearchFlt&&(r.colSpan=this.nbCells),this.gridLayout||i.appendChild(r),s=l==e-1&&this.displayBtn?this.fltSmallCssClass:this.fltCssClass,this.singleSearchFlt&&(o=this.fltTypeInp,s=this.singleFltCssClass),o===this.fltTypeSlc||o===this.fltTypeMulti){t.dropdown||(t.dropdown=new F.Dropdown(this));var f=t.dropdown,c=h["default"].create(this.fltTypeSlc,["id",this.prfxFlt+l+"_"+this.id],["ct",l],["filled","0"]);if(o===this.fltTypeMulti&&(c.multiple=this.fltTypeMulti,c.title=f.multipleSlcTooltip),c.className=u["default"].lower(o)===this.fltTypeSlc?s:this.fltMultiCssClass,d?(h["default"].id(d).appendChild(c),this.externalFltEls.push(c)):r.appendChild(c),this.fltIds.push(this.prfxFlt+l+"_"+this.id),this.fillSlcOnDemand||f._build(l),n["default"].add(c,"keypress",this.Evt.detectKey.bind(this)),n["default"].add(c,"change",this.Evt.onSlcChange.bind(this)),n["default"].add(c,"focus",this.Evt.onSlcFocus.bind(this)),this.fillSlcOnDemand){var p=h["default"].createOpt(this.displayAllText,"");c.appendChild(p)}}else if(o===this.fltTypeCheckList){var g=void 0;t.checkList=new P.CheckList(this),g=t.checkList;var v=h["default"].create("div",["id",g.prfxCheckListDiv+l+"_"+this.id],["ct",l],["filled","0"]);v.className=g.checkListDivCssClass,d?(h["default"].id(d).appendChild(v),this.externalFltEls.push(v)):r.appendChild(v),g.checkListDiv[l]=v,this.fltIds.push(this.prfxFlt+l+"_"+this.id),this.fillSlcOnDemand||g._build(l),this.fillSlcOnDemand&&(n["default"].add(v,"click",this.Evt.onCheckListClick.bind(this)),v.appendChild(h["default"].text(g.activateCheckListTxt)))}else{var b=o===this.fltTypeInp?"text":"hidden",m=h["default"].create(this.fltTypeInp,["id",this.prfxFlt+l+"_"+this.id],["type",b],["ct",l]);if("hidden"!==b&&this.watermark&&m.setAttribute("placeholder",this.isWatermarkArray?this.watermark[l]||"":this.watermark),m.className=s,n["default"].add(m,"focus",this.Evt.onInpFocus.bind(this)),d?(h["default"].id(d).appendChild(m),this.externalFltEls.push(m)):r.appendChild(m),this.fltIds.push(this.prfxFlt+l+"_"+this.id),n["default"].add(m,"keypress",this.Evt.detectKey.bind(this)),n["default"].add(m,"keydown",this.Evt.onKeyDown.bind(this)),n["default"].add(m,"keyup",this.Evt.onKeyUp.bind(this)),n["default"].add(m,"blur",this.Evt.onInpBlur.bind(this)),this.rememberGridValues){var _=this.Mod.store.getFilterValues(this.fltsValuesCookie);" "!=_[l]&&this.setFilterValue(l,_[l],!1)}}if(l==e-1&&this.displayBtn){var C=h["default"].create(this.fltTypeInp,["id",this.prfxValButton+l+"_"+this.id],["type","button"],["value",this.btnText]);C.className=this.btnCssClass,d?h["default"].id(d).appendChild(C):r.appendChild(C),n["default"].add(C,"click",this.Evt.onBtnClick.bind(this))}}}else this._resetGrid();else this.refRow=this.refRow-1,this.gridLayout&&(this.refRow=0),this.nbFilterableRows=this.getRowsNb(),this.nbVisibleRows=this.nbFilterableRows,this.nbRows=this.nbFilterableRows+this.refRow;this.rowsCounter&&(t.rowsCounter=new I.RowsCounter(this),t.rowsCounter.init()),this.statusBar&&(t.statusBar=new S.StatusBar(this),t.statusBar.init()),(this.paging||t.paging&&t.paging.isPagingRemoved)&&(t.paging=new L.Paging(this),t.paging.init()),this.btnReset&&(t.clearButton=new E.ClearButton(this),t.clearButton.init()),this.helpInstructions&&(t.help||(t.help=new N.Help(this)),t.help.init()),this.hasColWidths&&!this.gridLayout&&this.setColWidths(),this.alternateBgs&&(t.alternateRows=new D.AlternateRows(this),t.alternateRows.init()),this.isFirstLoad=!1,this._hasGrid=!0,(this.rememberGridValues||this.rememberPageLen||this.rememberPageNb)&&this.resetValues(),this.gridLayout||h["default"].addClass(this.tbl,this.prfxTf),this.loader&&t.loader.show("none"),this.hasExtensions&&this.initExtensions(),this.onFiltersLoaded&&this.onFiltersLoaded.call(null,this)}}},{key:"EvtManager",value:function(t){function e(){var e=this.Evt.name;switch(t){case e.filter:this._filter();break;case e.dropdown:this.linkedFilters?n.dropdown._build(i,!0):n.dropdown._build(i,!1,a,l);break;case e.checklist:n.checkList._build(i,a,l);break;case e.changepage:n.paging._changePage(r);break;case e.clear:this._clearFilters(),this._filter();break;case e.changeresultsperpage:n.paging._changeResultsPerPage();break;case e.resetvalues:this._resetValues(),this._filter();break;case e.resetpage:n.paging._resetPage(this.pgNbCookie);break;case e.resetpagelength:n.paging._resetPageLength(this.pgLenCookie);break;case e.loadextensions:this._loadExtensions();break;case e.loadthemes:this._loadThemes()}this.statusBar&&n.statusBar.message(""),this.loader&&n.loader.show("none")}var s=void 0===arguments[1]?{slcIndex:null,slcExternal:!1,slcId:null,pgIndex:null}:arguments[1],i=s.slcIndex,a=s.slcExternal,l=s.slcId,r=s.pgIndex,n=this.Mod;this.loader||this.statusBar?(this.loader&&n.loader.show(""),this.statusBar&&n.statusBar.message(this["msg"+t]),B.setTimeout(e.bind(this),this.execDelay)):e.call(this)}},{key:"feature",value:function(t){return this.Mod[t]}},{key:"initExtensions",value:function(){for(var t=this.extensions,e=0,s=t.length;s>e;e++){var i=t[e];this.ExtRegistry[i.name]||this.loadExtension(i)}}},{key:"loadExtension",value:function(t){var e=this;if(t&&t.name){var i=t.name,a=t.path,l=void 0;i&&a?l=t.path+i:(i=i.replace(".js",""),l="./extensions/{}/{}".replace(/{}/g,i)),s.e(1,function(s){var a=[s(1)(l)];(function(s){var a=new s(e,t);a.init(),e.ExtRegistry[i]=a}).apply(null,a)})}}},{key:"getExtension",value:function(t){return this.ExtRegistry[t]}},{key:"hasExtension",value:function(t){return!g["default"].isUndef(this.ExtRegistry[t])}},{key:"destroyExtensions",value:function(){for(var t=this.extensions,e=0,s=t.length;s>e;e++){var i=t[e],a=this.ExtRegistry[i.name];a&&(a.destroy(),this.ExtRegistry[i.name]=null)}}},{key:"loadThemes",value:function(){this.EvtManager(this.Evt.name.loadthemes)}},{key:"_loadThemes",value:function(){var t=this.themes;if(this.enableDefaultTheme){var e={name:"default"};this.themes.push(e)}if(g["default"].isArray(t))for(var s=0,i=t.length;i>s;s++){var a=t[s],l=a.name,r=a.path;l&&!r?r=this.themesPath+l+"/"+l+".css":!l&&a.path&&(l="theme{0}".replace("{0}",s)),this.isImported(r,"link")||this["import"](l,r,null,"link")}this.btnResetText=null,this.btnResetHtml='<input type="button" value="" class="'+this.btnResetCssClass+'" title="Clear filters" />',this.btnPrevPageHtml='<input type="button" value="" class="'+this.btnPageCssClass+' previousPage" title="Previous page" />',this.btnNextPageHtml='<input type="button" value="" class="'+this.btnPageCssClass+' nextPage" title="Next page" />',this.btnFirstPageHtml='<input type="button" value="" class="'+this.btnPageCssClass+' firstPage" title="First page" />',this.btnLastPageHtml='<input type="button" value="" class="'+this.btnPageCssClass+' lastPage" title="Last page" />',this.loader=!0,this.loaderHtml='<div class="defaultLoader"></div>',this.loaderText=null}},{key:"destroy",value:function(){if(this._hasGrid){var t=this.tbl.rows,e=this.Mod;this.isExternalFlt&&!this.popUpFilters&&this.removeExternalFlts(),this.infDiv&&this.removeToolbar(),this.highlightKeywords&&e.highlightKeyword.unhighlightAll(),this.markActiveColumns&&this.clearActiveColumns(),this.hasExtensions&&this.destroyExtensions();for(var s=this.refRow;s<this.nbRows;s++)t[s].style.display="",t[s].hasAttribute("validRow")&&t[s].removeAttribute("validRow"),this.alternateBgs&&e.alternateRows.removeRowBg(s);this.fltGrid&&!this.gridLayout&&(this.fltGridEl=t[this.filtersRowIndex],this.tbl.deleteRow(this.filtersRowIndex)),Object.keys(e).forEach(function(t){var s=e[t];s&&g["default"].isFn(s.destroy)&&s.destroy()}),h["default"].removeClass(this.tbl,this.prfxTf),this.activeFlt=null,this.isStartBgAlternate=!0,this._hasGrid=!1,this.tbl=null}}},{key:"setToolbar",value:function(){if(!this.infDiv){var t=h["default"].create("div",["id",this.prfxInfDiv+this.id]);if(t.className=this.infDivCssClass,this.toolBarTgtId)h["default"].id(this.toolBarTgtId).appendChild(t);else if(this.gridLayout){var e=this.Mod.gridLayout;e.tblMainCont.appendChild(t),t.className=e.gridInfDivCssClass}else{var s=h["default"].create("caption");s.appendChild(t),this.tbl.insertBefore(s,this.tbl.firstChild)}this.infDiv=h["default"].id(this.prfxInfDiv+this.id);var i=h["default"].create("div",["id",this.prfxLDiv+this.id]);i.className=this.lDivCssClass,t.appendChild(i),this.lDiv=h["default"].id(this.prfxLDiv+this.id);var a=h["default"].create("div",["id",this.prfxRDiv+this.id]);a.className=this.rDivCssClass,t.appendChild(a),this.rDiv=h["default"].id(this.prfxRDiv+this.id);var l=h["default"].create("div",["id",this.prfxMDiv+this.id]);l.className=this.mDivCssClass,t.appendChild(l),this.mDiv=h["default"].id(this.prfxMDiv+this.id),g["default"].isUndef(this.helpInstructions)&&(this.Mod.help||(this.Mod.help=new N.Help(this)),this.Mod.help.init(),this.helpInstructions=!0)}}},{key:"removeToolbar",value:function(){if(this.infDiv){this.infDiv.parentNode.removeChild(this.infDiv),this.infDiv=null;var t=this.tbl,e=h["default"].tag(t,"caption");e.length>0&&[].forEach.call(e,function(e){t.removeChild(e)})}}},{key:"removeExternalFlts",value:function(){if(this.isExternalFlt&&this.externalFltTgtIds)for(var t=this.externalFltTgtIds,e=t.length,s=0;e>s;s++){var i=t[s],a=h["default"].id(i);a&&(a.innerHTML="")}}},{key:"isCustomOptions",value:function(t){return this.hasCustomOptions&&-1!=this.customOptions.cols.indexOf(t)}},{key:"getCustomOptions",value:function(t){if(t&&this.isCustomOptions(t)){for(var e=this.customOptions,s=e.cols,i=[],a=[],l=b["default"].indexByValue(s,t),r=e.values[l],n=e.texts[l],o=e.sorts[l],h=0,d=r.length;d>h;h++)a.push(r[h]),i.push(n[h]?n[h]:r[h]);return o&&(a.sort(),i.sort()),[a,i]}}},{key:"resetValues",value:function(){this.EvtManager(this.Evt.name.resetvalues)}},{key:"_resetValues",value:function(){this.rememberGridValues&&this.fillSlcOnDemand&&this._resetGridValues(this.fltsValuesCookie),this.rememberPageLen&&this.Mod.paging&&this.Mod.paging.resetPageLength(this.pgLenCookie),this.rememberPageNb&&this.Mod.paging&&this.Mod.paging.resetPage(this.pgNbCookie)}},{key:"_resetGridValues",value:function(t){if(this.fillSlcOnDemand){var e=this.Mod.store.getFilterValues(t),s=this.getFiltersByType(this.fltTypeSlc,!0),i=this.getFiltersByType(this.fltTypeMulti,!0);if(Number(e[e.length-1])===this.fltIds.length){for(var a=0;a<e.length-1;a++)if(" "!==e[a]){var l=void 0,r=void 0,n=this.getFilterType(a);if(n===this.fltTypeSlc||n===this.fltTypeMulti){var o=h["default"].id(this.fltIds[a]);if(o.options[0].selected=!1,b["default"].has(s,a)&&(r=h["default"].createOpt(e[a],e[a],!0),o.appendChild(r),this.hasStoredValues=!0),b["default"].has(i,a)){l=e[a].split(" "+this.orOperator+" ");for(var d=0,u=l.length;u>d;d++)""!==l[d]&&(r=h["default"].createOpt(l[d],l[d],!0),o.appendChild(r),this.hasStoredValues=!0)}}else if(n===this.fltTypeCheckList){var f=this.Mod.checkList,c=f.checkListDiv[a];c.title=c.innerHTML,c.innerHTML="";var p=h["default"].create("ul",["id",this.fltIds[a]],["colIndex",a]);p.className=f.checkListCssClass;var g=h["default"].createCheckItem(this.fltIds[a]+"_0","",this.displayAllText);g.className=f.checkListItemCssClass,p.appendChild(g),c.appendChild(p),l=e[a].split(" "+this.orOperator+" ");for(var d=0,u=l.length;u>d;d++)if(""!==l[d]){var v=h["default"].createCheckItem(this.fltIds[a]+"_"+(d+1),l[d],l[d]);v.className=f.checkListItemCssClass,p.appendChild(v),v.check.checked=!0,f.setCheckListValues(v.check),this.hasStoredValues=!0}}}!this.hasStoredValues&&this.paging&&this.Mod.paging.setPagingInfo()}}}},{key:"filter",value:function(){this.EvtManager(this.Evt.name.filter)}},{key:"_filter",value:function(){function t(t,e,s){if(this.highlightKeywords&&e){t=t.replace(p,""),t=t.replace(g,""),t=t.replace(v,""),t=t.replace(m,"");var a=t;(n.test(t)||o.test(t)||d.test(t)||f.test(t)||c.test(t))&&(a=h["default"].getText(s)),""!==a&&i.highlightKeyword.highlight(s,a,i.highlightKeyword.highlightCssClass)}}function e(t,e,s){var i=void 0,a=y["default"].removeNbFormat,h=d.test(t),b=n.test(t),x=f.test(t),T=o.test(t),k=c.test(t),R=g.test(t),F=p.test(t),P=v.test(t),I=m.test(t),S=_===t,E=C===t,N=w.test(t),D=h&&M(t.replace(d,""),L),B=b&&M(t.replace(n,""),L),A=x&&M(t.replace(f,""),L),H=T&&M(t.replace(o,""),L),V=k&&M(t.replace(c,""),L),U=R&&M(t.replace(g,""),L),G=void 0,j=void 0;if(M(e,L))G=O(e,L),D?(j=O(t.replace(d,""),L),i=j>G):B?(j=O(t.replace(n,""),L),i=j>=G):H?(j=O(t.replace(o,""),L),i=G>=j):A?(j=O(t.replace(f,""),L),i=G>j):V?(j=O(t.replace(c,""),L),i=G.toString()!=j.toString()):U?(j=O(t.replace(g,""),L),i=G.toString()==j.toString()):p.test(t)?i=this._containsStr(t.replace(p,""),e,null,!1):M(t,L)?(j=O(t,L),i=G.toString()==j.toString()):S?i=u["default"].isEmpty(e):E&&(i=!u["default"].isEmpty(e));else if(this.hasColNbFormat&&this.colNbFormat[s]?(l=a(e,this.colNbFormat[s]),r=this.colNbFormat[s]):","===this.thousandsSeparator&&"."===this.decimalSeparator?(l=a(e,"us"),r="us"):(l=a(e,"eu"),r="eu"),b)i=l<=a(t.replace(n,""),r);else if(T)i=l>=a(t.replace(o,""),r);else if(h)i=l<a(t.replace(d,""),r);else if(x)i=l>a(t.replace(f,""),r);else if(k)i=this._containsStr(t.replace(c,""),e)?!1:!0;else if(F)i=this._containsStr(t.replace(p,""),e,null,!1);else if(R)i=this._containsStr(t.replace(g,""),e,null,!0);else if(P)i=0===e.indexOf(t.replace(v,""))?!0:!1;else if(I){var W=t.replace(m,"");i=e.lastIndexOf(W,e.length-1)===e.length-1-(W.length-1)&&e.lastIndexOf(W,e.length-1)>-1?!0:!1}else if(S)i=u["default"].isEmpty(e);else if(E)i=!u["default"].isEmpty(e);else if(N)try{var $=t.replace(w,""),K=new RegExp($);i=K.test(e)}catch(Y){i=!1}else i=this._containsStr(t,e,this.getFilterType(s));return i}if(this.fltGrid&&(this._hasGrid||this.isFirstLoad)){this.onBeforeFilter&&this.onBeforeFilter.call(null,this);var s=this.tbl.rows,i=this.Mod,a=0;this.validRowsIndex=[],this.highlightKeywords&&i.highlightKeyword.unhighlightAll(),this.popUpFilters&&i.popupFilter.buildIcons(),this.markActiveColumns&&this.clearActiveColumns(),this.searchArgs=this.getFiltersValue();for(var l,r,n=new RegExp(this.leOperator),o=new RegExp(this.geOperator),d=new RegExp(this.lwOperator),f=new RegExp(this.grOperator),c=new RegExp(this.dfOperator),p=new RegExp(u["default"].rgxEsc(this.lkOperator)),g=new RegExp(this.eqOperator),v=new RegExp(this.stOperator),m=new RegExp(this.enOperator),_=this.emOperator,C=this.nmOperator,w=new RegExp(u["default"].rgxEsc(this.rgxOperator)),x=this.refRow;x<this.nbRows;x++){"none"===s[x].style.display&&(s[x].style.display="");var T=s[x].cells,k=T.length;if(k===this.nbCells){for(var R=[],F="include"===this.searchType?!0:!1,P=!1,I=0;k>I;I++){var S=this.searchArgs[this.singleSearchFlt?0:I],L=this.hasColDateType?this.colDateType[I]:this.defaultDateType;if(""!==S){var E=u["default"].matchCase(this.getCellData(I,T[I]),this.caseSensitive),N=S.split(this.orOperator),D=N.length>1?!0:!1,B=S.split(this.anOperator),A=B.length>1?!0:!1;if(D||A){for(var H=void 0,V=!1,U=D?N:B,G=0,j=U.length;j>G&&(H=u["default"].trim(U[G]),V=e.call(this,H,E,I),t.call(this,H,V,T[I]),!D||!V)&&(!A||V);G++);R[I]=V}else R[I]=e.call(this,u["default"].trim(S),E,I),t.call(this,S,R[I],T[I]);R[I]||(F="include"===this.searchType?!1:!0),this.singleSearchFlt&&R[I]&&(P=!0),this.popUpFilters&&i.popupFilter.buildIcon(I,!0),this.markActiveColumns&&x===this.refRow&&(this.onBeforeActiveColumn&&this.onBeforeActiveColumn.call(null,this,I),h["default"].addClass(this.getHeaderElement(I),this.activeColumnsCssClass),this.onAfterActiveColumn&&this.onAfterActiveColumn.call(null,this,I))}}this.singleSearchFlt&&P&&(F=!0),F?(this.validateRow(x,!0),this.validRowsIndex.push(x),this.alternateBgs&&i.alternateRows.setRowBg(x,this.validRowsIndex.length),this.onRowValidated&&this.onRowValidated.call(null,this,x)):(this.validateRow(x,!1),this.hasVisibleRows&&b["default"].has(this.visibleRows,x)&&!this.paging?this.validRowsIndex.push(x):a++)}}this.nbVisibleRows=this.validRowsIndex.length,this.nbHiddenRows=a,this.isStartBgAlternate=!1,this.rememberGridValues&&i.store.saveFilterValues(this.fltsValuesCookie),this.paging?(this.startPagingRow=0,this.currentPageNb=1,i.paging.setPagingInfo(this.validRowsIndex)):this.applyGridProps(),this.onAfterFilter&&this.onAfterFilter.call(null,this)}}},{key:"applyGridProps",value:function(){this.activeFlt&&u["default"].lower(this.activeFlt.nodeName)===this.fltTypeSlc&&!this.popUpFilters&&(this.activeFlt.blur(),this.activeFlt.parentNode&&this.activeFlt.parentNode.focus());var t=this.Mod;this.visibleRows&&this.enforceVisibility(),this.hasExtension("colOps")&&this.getExtension("colOps").calc(),this.linkedFilters&&this.linkFilters();var e=!this.paging&&this.hasVisibleRows?this.nbVisibleRows-this.visibleRows.length:this.nbVisibleRows;this.rowsCounter&&t.rowsCounter.refresh(e),this.popUpFilters&&t.popupFilter.closeAll()}},{key:"getColValues",value:function(t,e,s){if(this.fltGrid){for(var i=this.tbl.rows,a=[],l=this.refRow;l<this.nbRows;l++){var r=!1;s&&g["default"].isArray(s)&&(r=b["default"].has(s,l));var n=i[l].cells,o=n.length;if(o===this.nbCells&&!r)for(var h=0;o>h;h++)if(h==t&&""==i[l].style.display){var d=u["default"].lower(this.getCellData(h,n[h])),f=this.colNbFormat?this.colNbFormat[t]:null,c=e?y["default"].removeNbFormat(d,f):d;a.push(c)}}return a}}},{key:"getFilterValue",value:function(t){if(this.fltGrid){var e=void 0,s=this.getFilterElement(t);if(!s)return"";var i=this.getFilterType(t);if(i!==this.fltTypeMulti&&i!==this.fltTypeCheckList)e=s.value;else if(i===this.fltTypeMulti){e="";for(var a=0,l=s.options.length;l>a;a++)s.options[a].selected&&(e=e.concat(s.options[a].value+" "+this.orOperator+" "));e=e.substr(0,e.length-4)}else i===this.fltTypeCheckList&&(null!==s.getAttribute("value")?(e=s.getAttribute("value"),e=e.substr(0,e.length-3)):e="");return e}}},{key:"getFiltersValue",value:function(){if(this.fltGrid){for(var t=[],e=0,s=this.fltIds.length;s>e;e++)t.push(u["default"].trim(u["default"].matchCase(this.getFilterValue(e),this.caseSensitive)));return t}}},{key:"getFilterId",value:function(t){return this.fltGrid?this.fltIds[t]:void 0}},{key:"getFiltersByType",value:function(t,e){if(this.fltGrid){for(var s=[],i=0,a=this.fltIds.length;a>i;i++){
-var l=this.getFilterType(i);if(l===u["default"].lower(t)){var r=e?i:this.fltIds[i];s.push(r)}}return s}}},{key:"getFilterElement",value:function(t){var e=this.fltIds[t];return h["default"].id(e)}},{key:"getCellsNb",value:function(){var t=void 0===arguments[0]?0:arguments[0],e=this.tbl.rows[t];return e.cells.length}},{key:"getRowsNb",value:function(t){var e=g["default"].isUndef(this.refRow)?0:this.refRow,s=this.tbl.rows.length;return t&&(e=0),parseInt(s-e,10)}},{key:"getCellData",value:function(t,e){return void 0!==t&&e?this.customCellData&&b["default"].has(this.customCellDataCols,t)?this.customCellData.call(null,this,e,t):h["default"].getText(e):""}},{key:"getTableData",value:function(){for(var t=this.tbl.rows,e=this.refRow;e<this.nbRows;e++){for(var s=[e,[]],i=t[e].cells,a=0,l=i.length;l>a;a++){var r=this.getCellData(a,i[a]);s[1].push(r)}this.tblData.push(s)}return this.tblData}},{key:"getFilteredData",value:function(t){if(!this.validRowsIndex)return[];var e=this.tbl.rows,s=[];if(t){for(var i=this.gridLayout?this.Mod.gridLayout.headTbl:this.tbl,a=i.rows[this.headersRow],l=[a.rowIndex,[]],r=0;r<this.nbCells;r++){var n=this.getCellData(r,a.cells[r]);l[1].push(n)}s.push(l)}for(var o=this.getValidRows(!0),h=0;h<o.length;h++){for(var d=[this.validRowsIndex[h],[]],u=e[this.validRowsIndex[h]].cells,f=0;f<u.length;f++){var c=this.getCellData(f,u[f]);d[1].push(c)}s.push(d)}return s}},{key:"getFilteredDataCol",value:function(t){if(void 0===t)return[];for(var e=this.getFilteredData(),s=[],i=0,a=e.length;a>i;i++){var l=e[i],r=l[1],n=r[t];s.push(n)}return s}},{key:"getRowDisplay",value:function(t){return this.fltGrid&&g["default"].isObj(t)?t.style.display:void 0}},{key:"validateRow",value:function(t,e){var s=this.tbl.rows[t];if(s&&"boolean"===u["default"].lower(typeof e)){this.hasVisibleRows&&b["default"].has(this.visibleRows,t)&&!this.paging&&(e=!0);var i=e?"":"none",a=e?"true":"false";s.style.display=i,this.paging&&s.setAttribute("validRow",a)}}},{key:"validateAllRows",value:function(){if(this._hasGrid){this.validRowsIndex=[];for(var t=this.refRow;t<this.nbFilterableRows;t++)this.validateRow(t,!0),this.validRowsIndex.push(t)}}},{key:"setFilterValue",value:function(t){var e=void 0===arguments[1]?"":arguments[1];if((this.fltGrid||this.isFirstLoad)&&this.getFilterElement(t)){var s=this.getFilterElement(t),i=this.getFilterType(t);if(i!==this.fltTypeMulti&&i!=this.fltTypeCheckList)s.value=e;else if(i===this.fltTypeMulti)for(var a=e.split(" "+this.orOperator+" "),l=0,r=s.options.length;r>l;l++){var n=s.options[l];(""===a||""===a[0])&&(n.selected=!1),""===n.value&&(n.selected=!1),""!==n.value&&b["default"].has(a,n.value,!0)&&(n.selected=!0)}else if(i===this.fltTypeCheckList){e=u["default"].matchCase(e,this.caseSensitive);var o=e.split(" "+this.orOperator+" "),d=h["default"].tag(s,"li").length;s.setAttribute("value",""),s.setAttribute("indexes","");for(var f=0;d>f;f++){var c=h["default"].tag(s,"li")[f],p=h["default"].tag(c,"label")[0],g=h["default"].tag(c,"input")[0],v=u["default"].matchCase(h["default"].getText(p),this.caseSensitive);""!==v&&b["default"].has(o,v,!0)?(g.checked=!0,this.Mod.checkList.setCheckListValues(g)):(g.checked=!1,this.Mod.checkList.setCheckListValues(g))}}}}},{key:"setColWidths",value:function(t,e){function s(t){var s=this.nbCells,i=this.colWidths;if(s!=i.length||s!=t.cells.length)throw new Error("Columns number mismatch!");for(var a=h["default"].tag(e,"col"),l=a.length>0,r=l?null:A.createDocumentFragment(),n=0;s>n;n++){var o=void 0;l?o=a[n]:(o=h["default"].create("col",["id",this.id+"_col_"+n]),r.appendChild(o)),o.style.width=i[n]}l||e.insertBefore(r,e.firstChild)}if(this.fltGrid&&this.hasColWidths){e=e||this.tbl;var i=void 0;i=void 0===t?"none"!=e.rows[0].style.display?0:1:t,s.call(this,e.rows[i])}}},{key:"enforceVisibility",value:function(){if(this._hasGrid&&this.hasVisibleRows&&!this.paging)for(var t=0,e=this.visibleRows.length;e>t;t++){var s=this.visibleRows[t];s<=this.nbRows&&this.validateRow(s,!0)}}},{key:"clearFilters",value:function(){this.EvtManager(this.Evt.name.clear)}},{key:"_clearFilters",value:function(){if(this.fltGrid){this.onBeforeReset&&this.onBeforeReset.call(null,this,this.getFiltersValue());for(var t=0,e=this.fltIds.length;e>t;t++)this.setFilterValue(t,"");this.linkedFilters&&(this.activeFilterId="",this.linkFilters()),this.rememberPageLen&&c["default"].remove(this.pgLenCookie),this.rememberPageNb&&c["default"].remove(this.pgNbCookie),this.onAfterReset&&this.onAfterReset.call(null,this)}}},{key:"clearActiveColumns",value:function(){for(var t=0,e=this.fltIds.length;e>t;t++)h["default"].removeClass(this.getHeaderElement(t),this.activeColumnsCssClass)}},{key:"linkFilters",value:function(){var t=this.getFiltersByType(this.fltTypeSlc,!0),e=this.getFiltersByType(this.fltTypeMulti,!0),s=this.getFiltersByType(this.fltTypeCheckList,!0),i=t.concat(e);if(i=i.concat(s),this.activeFilterId){var a=this.activeFilterId.split("_")[0];a=a.split(this.prfxFlt)[1];for(var l=void 0,r=0,n=i.length;n>r;r++){var o=h["default"].id(this.fltIds[i[r]]);if(l=this.getFilterValue(i[r]),a!==i[r]||this.paging&&b["default"].has(t,i[r])&&a===i[r]||!this.paging&&(b["default"].has(s,i[r])||b["default"].has(e,i[r]))||l===this.displayAllText){if(b["default"].has(s,i[r])?this.Mod.checkList.checkListDiv[i[r]].innerHTML="":o.innerHTML="",this.fillSlcOnDemand){var d=h["default"].createOpt(this.displayAllText,"");o&&o.appendChild(d)}b["default"].has(s,i[r])?this.Mod.checkList._build(i[r]):this.Mod.dropdown._build(i[r],!0),this.setFilterValue(i[r],l)}}}}},{key:"_resetGrid",value:function(){if(!this.isFirstLoad){var t=this.Mod,e=this.tbl,s=e.rows,i=this.filtersRowIndex,a=s[i];if(!this.gridLayout)if(e.tHead){var l=e.tHead.insertRow(this.filtersRowIndex);e.tHead.replaceChild(this.fltGridEl,l)}else a.parentNode.insertBefore(this.fltGridEl,a);if(this.isExternalFlt)for(var r=this.externalFltTgtIds,n=0,o=r.length;o>n;n++){var d=h["default"].id(r[n]);if(d){var u=this.externalFltEls[n];d.appendChild(u);var f=this.getFilterType(n);this.gridLayout&&""===u.innerHTML&&f!==this.fltTypeInp&&((f===this.fltTypeSlc||f===this.fltTypeMulti)&&t.dropdown.build(n),f===this.fltTypeCheckList&&t.checkList.build(n))}}this.nbFilterableRows=this.getRowsNb(),this.nbVisibleRows=this.nbFilterableRows,this.nbRows=s.length,this.popUpFilters&&(this.headersRow++,t.popupFilter.buildAll()),this.gridLayout||h["default"].addClass(this.tbl,this.prfxTf),this._hasGrid=!0}}},{key:"_containsStr",value:function(t,e,s,i){var a=void 0,l=this.caseSensitive?"g":"gi",r=i?i:this.exactMatch;return a=r||s!==this.fltTypeInp&&s?new RegExp("(^\\s*)"+u["default"].rgxEsc(t)+"(\\s*$)",l):new RegExp(u["default"].rgxEsc(t),l),a.test(e)}},{key:"isImported",value:function(t,e){for(var s=!1,i=e?e:"script",a="script"==i?"src":"href",l=h["default"].tag(A,i),r=0,n=l.length;n>r;r++)if(void 0!==l[r][a]&&l[r][a].match(t)){s=!0;break}return s}},{key:"import",value:function(t,e,s,i){var a=i?i:"script",l=this.isImported(e,a);if(!l){var r=this,n=!1,o=void 0,d=h["default"].tag(A,"head")[0];o="link"===u["default"].lower(a)?h["default"].create("link",["id",t],["type","text/css"],["rel","stylesheet"],["href",e]):h["default"].create("script",["id",t],["type","text/javascript"],["src",e]),o.onload=o.onreadystatechange=function(){n||this.readyState&&"loaded"!==this.readyState&&"complete"!==this.readyState||(n=!0,"function"==typeof s&&s.call(null,r))},o.onerror=function(){throw new Error("TF script could not load: "+e)},d.appendChild(o)}}},{key:"hasGrid",value:function(){return this._hasGrid}},{key:"getFiltersId",value:function(){return this.fltIds||[]}},{key:"getValidRows",value:function(t){if(this._hasGrid){if(!t)return this.validRowsIndex;this.validRowsIndex=[];for(var e=this.refRow;e<this.getRowsNb(!0);e++){var s=this.tbl.rows[e];this.paging?("true"===s.getAttribute("validRow")||null===s.getAttribute("validRow"))&&this.validRowsIndex.push(s.rowIndex):"none"!==this.getRowDisplay(s)&&this.validRowsIndex.push(s.rowIndex)}return this.validRowsIndex}}},{key:"getFiltersRowIndex",value:function(){return this._hasGrid?this.filtersRowIndex:void 0}},{key:"getHeadersRowIndex",value:function(){return this._hasGrid?this.headersRow:void 0}},{key:"getStartRowIndex",value:function(){return this._hasGrid?this.refRow:void 0}},{key:"getLastRowIndex",value:function(){return this._hasGrid?this.nbRows-1:void 0}},{key:"getHeaderElement",value:function(t){for(var e=this.gridLayout?this.Mod.gridLayout.headTbl:this.tbl,s=h["default"].tag(e,"thead"),i=this.headersRow,a=void 0,l=0;l<this.nbCells;l++)if(l===t){0===s.length&&(a=e.rows[i].cells[l]),1===s.length&&(a=s[0].rows[i].cells[l]);break}return a}},{key:"getFilterType",value:function(t){var e=this.cfg["col_"+t];return e?u["default"].lower(e):this.fltTypeInp}},{key:"getFilterableRowsNb",value:function(){return this.getRowsNb(!1)}},{key:"config",value:function(){return this.cfg}}]),t}();e.TableFilter=H,H.Cookie=c["default"],H.Paging=L.Paging},,function(t,e,s){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={add:function(t,e,s,i){t.addEventListener?t.addEventListener(e,s,i):t.attachEvent?t.attachEvent("on"+e,s):t["on"+e]=s},remove:function(t,e,s,i){t.detachEvent?t.detachEvent("on"+e,s):t.removeEventListener?t.removeEventListener(e,s,i):t["on"+e]=null},stop:function(t){t||(t=window.event),t.stopPropagation?t.stopPropagation():t.cancelBubble=!0},cancel:function(t){t||(t=window.event),t.preventDefault?t.preventDefault():t.returnValue=!1},target:function(t){return t&&t.target||window.event&&window.event.srcElement},keyCode:function(t){return t.charCode?t.charCode:t.keyCode?t.keyCode:t.which?t.which:0}},t.exports=e["default"]},function(t,e,s){"use strict";function i(){return document.documentElement.classList}Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={getText:function(t){var e=t.textContent||t.innerText||t.innerHTML.replace(/<[^<>]+>/g,"");return e=e.replace(/^\s+/,"").replace(/\s+$/,"")},create:function(t){if(t&&""!==t){var e=document.createElement(t),s=arguments;if(s.length>1)for(var i=0;i<s.length;i++){var a=typeof s[i];"object"===a.toLowerCase()&&2===s[i].length&&e.setAttribute(s[i][0],s[i][1])}return e}},text:function(t){function e(e){return t.apply(this,arguments)}return e.toString=function(){return t.toString()},e}(function(t){return document.createTextNode(t)}),position:function(t){var e=0,s=0;if(t&&t.offsetParent)do e+=t.offsetLeft,s+=t.offsetTop;while(t==t.offsetParent);return{left:e,top:s}},hasClass:function(t,e){return t?i()?t.classList.contains(e):t.className.match(new RegExp("(\\s|^)"+e+"(\\s|$)")):!1},addClass:function(t,e){return t?i()?void t.classList.add(e):void(""===t.className?t.className=e:this.hasClass(t,e)||(t.className+=" "+e)):void 0},removeClass:function(t,e){if(t){if(i())return void t.classList.remove(e);var s=new RegExp("(\\s|^)"+e+"(\\s|$)","g");t.className=t.className.replace(s,"")}},createOpt:function(t,e,s){var i=s?!0:!1,a=i?this.create("option",["value",e],["selected","true"]):this.create("option",["value",e]);return a.appendChild(this.text(t)),a},createCheckItem:function(t,e,s){var i=this.create("li"),a=this.create("label",["for",t]),l=this.create("input",["id",t],["name",t],["type","checkbox"],["value",e]);return a.appendChild(l),a.appendChild(this.text(s)),i.appendChild(a),i.label=a,i.check=l,i},id:function(t){return document.getElementById(t)},tag:function(t,e){return t.getElementsByTagName(e)}},t.exports=e["default"]},function(t,e,s){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={lower:function(t){return t.toLowerCase()},upper:function(t){return t.toUpperCase()},trim:function(t){return t.trim?t.trim():t.replace(/^\s*|\s*$/g,"")},isEmpty:function(t){return""===this.trim(t)},rgxEsc:function(t){function e(e){var s=new RegExp("\\"+e,"g");t=t.replace(s,"\\"+e)}for(var s=["\\","[","^","$",".","|","?","*","+","(",")"],i=0,a=s.length;a>i;i++)e(s[i]);return t},matchCase:function(t,e){return e?t:this.lower(t)}},t.exports=e["default"]},function(t,e,s){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={write:function(t,e,s){var i="";s&&(i=new Date((new Date).getTime()+36e5*s),i="; expires="+i.toGMTString()),document.cookie=t+"="+escape(e)+i},read:function(t){var e="",s=t+"=";if(document.cookie.length>0){var i=document.cookie,a=i.indexOf(s);if(-1!==a){a+=s.length;var l=i.indexOf(";",a);-1===l&&(l=i.length),e=unescape(i.substring(a,l))}}return e},remove:function(t){this.write(t,"",-1)},valueToArray:function(t,e){e||(e=",");var s=this.read(t),i=s.split(e);return i},getValueByIndex:function(t,e,s){s||(s=",");var i=this.valueToArray(t,s);return i[e]}},t.exports=e["default"]},function(t,e,s){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=void 0;e["default"]={isObj:function(t){var e=!1;return"string"==typeof t?window[t]&&"object"==typeof window[t]&&(e=!0):t&&"object"==typeof t&&(e=!0),e},isFn:function(t){return t&&t.constructor==Function},isArray:function(t){return t&&t.constructor==Array},isUndef:function(t){return t===i}},t.exports=e["default"]},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}};Object.defineProperty(e,"__esModule",{value:!0});var a=s(4),l=i(a);e["default"]={has:function(t,e,s){for(var i=void 0===s?!1:s,a=0;a<t.length;a++)if(l["default"].matchCase(t[a].toString(),i)==e)return!0;return!1},indexByValue:function(t,e,s){for(var i=void 0===s?!1:s,a=0;a<t.length;a++)if(l["default"].matchCase(t[a].toString(),i)==e)return a;return-1}},t.exports=e["default"]},function(t,e,s){"use strict";function i(t){if(void 0===t)return 0;if(t.length>2)return t;var e=void 0;return 99>=t&&t>50&&(e="19"+t),(50>t||"00"===t)&&(e="20"+t),e}function a(t){if(void 0===t)return 0;for(var e=void 0,s=["january","february","march","april","may","june","july","august","september","october","november","december","jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"],i=0;i<s.length;i++){var a=s[i];if(t.toLowerCase()===a){e=i+1;break}}return(e>11||23>e)&&(e-=12),1>e||e>12?0:e}Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={isValid:function(t,e){if(e||(e="DMY"),e=e.toUpperCase(),3!=e.length&&"DDMMMYYYY"===e){var s=this.format(t,e);t=s.getDate()+"/"+(s.getMonth()+1)+"/"+s.getFullYear(),e="DMY"}(-1===e.indexOf("M")||-1===e.indexOf("D")||-1===e.indexOf("Y"))&&(e="DMY");var i=void 0,a=void 0;if("Y"==e.substring(0,1)?(i=/^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/,a=/^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/):"Y"==e.substring(1,2)?(i=/^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/,a=/^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/):(i=/^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/,a=/^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/),i.test(t)===!1&&a.test(t)===!1)return!1;var l=t.split(RegExp.$1),r=void 0,n=void 0,o=void 0;r="M"===e.substring(0,1)?l[0]:"M"===e.substring(1,2)?l[1]:l[2],n="D"===e.substring(0,1)?l[0]:"D"===e.substring(1,2)?l[1]:l[2],o="Y"===e.substring(0,1)?l[0]:"Y"===e.substring(1,2)?l[1]:l[2],parseInt(o,10)<=50&&(o=(parseInt(o,10)+2e3).toString()),parseInt(o,10)<=99&&(o=(parseInt(o,10)+1900).toString());var h=new Date(parseInt(o,10),parseInt(r,10)-1,parseInt(n,10),0,0,0,0);return parseInt(n,10)!=h.getDate()?!1:parseInt(r,10)-1!=h.getMonth()?!1:!0},format:function(t,e){if(e||(e="DMY"),!t||""===t)return new Date(1001,0,1);var s=void 0;switch(e.toUpperCase()){case"DDMMMYYYY":parts=t.replace(/[- \/.]/g," ").split(" "),s=new Date(i(parts[2]),a(parts[1])-1,parts[0]);break;case"DMY":parts=t.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,"$1 $3 $5").split(" "),s=new Date(i(parts[2]),parts[1]-1,parts[0]);break;case"MDY":parts=t.replace(/^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/,"$1 $3 $5").split(" "),s=new Date(i(parts[2]),parts[0]-1,parts[1]);break;case"YMD":parts=t.replace(/^((\d\d)?\d\d)([- \/.])(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])$/,"$1 $4 $6").split(" "),s=new Date(i(parts[0]),parts[1]-1,parts[2]);break;default:parts=t.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,"$1 $3 $5").split(" "),s=new Date(i(parts[2]),parts[1]-1,parts[0])}return s}},t.exports=e["default"]},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}};Object.defineProperty(e,"__esModule",{value:!0});var a=s(4),l=i(a);e["default"]={isIE:function(){return/msie|MSIE/.test(navigator.userAgent)},removeNbFormat:function(t,e){if(t){e||(e="us");var s=t;return s="us"===l["default"].lower(e)?+s.replace(/[^\d\.-]/g,""):+s.replace(/[^\d\,-]/g,"").replace(",",".")}}},t.exports=e["default"]},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(5),n=i(r),o=function(){function t(e){a(this,t);var s=e.config();this.duration=isNaN(s.set_cookie_duration)?1e5:parseInt(s.set_cookie_duration,10),this.tf=e}return l(t,[{key:"saveFilterValues",value:function(t){for(var e=this.tf,s=[],i=0;i<e.fltIds.length;i++){var a=e.getFilterValue(i);""===a&&(a=" "),s.push(a)}s.push(e.fltIds.length),n["default"].write(t,s.join(e.separator),this.duration)}},{key:"getFilterValues",value:function(t){var e=n["default"].read(t),s=new RegExp(this.tf.separator,"g");return e.split(s)}},{key:"savePageNb",value:function(t){n["default"].write(t,this.tf.feature("paging").currentPageNb,this.duration)}},{key:"getPageNb",value:function(t){return n["default"].read(t)}},{key:"savePageLength",value:function(t){n["default"].write(t,this.tf.feature("paging").resultsPerPageSlc.selectedIndex,this.duration)}},{key:"getPageLength",value:function(t){return n["default"].read(t)}}]),t}();e.Store=o},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(6),h=i(o),d=s(2),u=i(d),f=function(){function t(e){a(this,t);var s=e.config();this.gridWidth=s.grid_width||null,this.gridHeight=s.grid_height||null,this.gridMainContCssClass=s.grid_cont_css_class||"grd_Cont",this.gridContCssClass=s.grid_tbl_cont_css_class||"grd_tblCont",this.gridHeadContCssClass=s.grid_tblHead_cont_css_class||"grd_headTblCont",this.gridInfDivCssClass=s.grid_inf_grid_css_class||"grd_inf",this.gridHeadRowIndex=s.grid_headers_row_index||0,this.gridHeadRows=s.grid_headers_rows||[0],this.gridEnableFilters=void 0!==s.grid_enable_default_filters?s.grid_enable_default_filters:!0,this.gridDefaultColWidth=s.grid_default_col_width||"100px",this.gridColElms=[],this.prfxMainTblCont="gridCont_",this.prfxTblCont="tblCont_",this.prfxHeadTblCont="tblHeadCont_",this.prfxHeadTbl="tblHead_",this.prfxGridFltTd="_td_",this.prfxGridTh="tblHeadTh_",this.tf=e}return l(t,[{key:"init",value:function(){var t=this,e=this.tf,s=e.config(),i=e.tbl;if(e.gridLayout){if(e.isExternalFlt=!0,!e.hasColWidths){e.colWidths=[];for(var a=0;a<e.nbCells;a++){var l,r=i.rows[this.gridHeadRowIndex].cells[a];l=""!==r.width?r.width:""!==r.style.width?parseInt(r.style.width,10):this.gridDefaultColWidth,e.colWidths[a]=l}e.hasColWidths=!0}e.setColWidths(this.gridHeadRowIndex);var o;o=""!==i.width?i.width:""!==i.style.width?parseInt(i.style.width,10):i.clientWidth,this.tblMainCont=n["default"].create("div",["id",this.prfxMainTblCont+e.id]),this.tblMainCont.className=this.gridMainContCssClass,this.gridWidth&&(this.tblMainCont.style.width=this.gridWidth),i.parentNode.insertBefore(this.tblMainCont,i),this.tblCont=n["default"].create("div",["id",this.prfxTblCont+e.id]),this.tblCont.className=this.gridContCssClass,this.gridWidth&&(this.tblCont.style.width=this.gridWidth),this.gridHeight&&(this.tblCont.style.height=this.gridHeight),i.parentNode.insertBefore(this.tblCont,i);var d=i.parentNode.removeChild(i);this.tblCont.appendChild(d),""===i.style.width&&(i.style.width=(e._containsStr("%",o)?i.clientWidth:o)+"px");var f=this.tblCont.parentNode.removeChild(this.tblCont);this.tblMainCont.appendChild(f),this.headTblCont=n["default"].create("div",["id",this.prfxHeadTblCont+e.id]),this.headTblCont.className=this.gridHeadContCssClass,this.gridWidth&&(this.headTblCont.style.width=this.gridWidth),this.headTbl=n["default"].create("table",["id",this.prfxHeadTbl+e.id]);for(var c=n["default"].create("tHead"),p=i.rows[this.gridHeadRowIndex],g=[],v=0;v<e.nbCells;v++){var b=p.cells[v],m=b.getAttribute("id");m&&""!==m||(m=this.prfxGridTh+v+"_"+e.id,b.setAttribute("id",m)),g.push(m)}var _=n["default"].create("tr");if(this.gridEnableFilters&&e.fltGrid){e.externalFltTgtIds=[];for(var C=0;C<e.nbCells;C++){var y=e.prfxFlt+C+this.prfxGridFltTd+e.id,w=n["default"].create(e.fltCellTag,["id",y]);_.appendChild(w),e.externalFltTgtIds[C]=y}}for(var x=0;x<this.gridHeadRows.length;x++){var T=i.rows[this.gridHeadRows[0]];c.appendChild(T)}this.headTbl.appendChild(c),0===e.filtersRowIndex?c.insertBefore(_,p):c.appendChild(_),this.headTblCont.appendChild(this.headTbl),this.tblCont.parentNode.insertBefore(this.headTblCont,this.tblCont);var k=n["default"].tag(i,"thead");k.length>0&&i.removeChild(k[0]),this.headTbl.style.tableLayout="fixed",i.style.tableLayout="fixed",this.headTbl.cellPadding=i.cellPadding,this.headTbl.cellSpacing=i.cellSpacing,e.setColWidths(0,this.headTbl),this.headTblCont.style.width=this.tblCont.clientWidth+"px",i.style.width="",this.headTbl.style.width=i.clientWidth+"px",u["default"].add(this.tblCont,"scroll",function(e){var s=u["default"].target(e),i=s.scrollLeft;t.headTblCont.scrollLeft=i});var R=(s.extensions||[]).filter(function(t){return"sort"===t.name});1===R.length&&(R[0].async_sort=!0,R[0].trigger_ids=g),this.tblHasColTag=n["default"].tag(i,"col").length>0?!0:!1;var F=function(){for(var t=e.nbCells-1;t>=0;t--){var s=n["default"].create("col",["id",e.id+"_col_"+t]);i.insertBefore(s,i.firstChild),s.style.width=e.colWidths[t],this.gridColElms[t]=s}this.tblHasColTag=!0};if(this.tblHasColTag)for(var P=n["default"].tag(i,"col"),I=0;I<e.nbCells;I++)P[I].setAttribute("id",e.id+"_col_"+I),P[I].style.width=e.colWidths[I],this.gridColElms.push(P[I]);else F.call(this);var S=h["default"].isFn(s.on_after_col_resized)?s.on_after_col_resized:null;s.on_after_col_resized=function(t,e){if(e){var s=t.crWColsRow.cells[e].style.width,a=t.gridColElms[e];a.style.width=s;var l=t.crWColsRow.cells[e].clientWidth,r=t.crWRowDataTbl.cells[e].clientWidth;l!=r&&(t.headTbl.style.width=i.clientWidth+"px"),S&&S.call(null,t,e)}},i.clientWidth!==this.headTbl.clientWidth&&(i.style.width=this.headTbl.clientWidth+"px")}}},{key:"destroy",value:function(){var t=this.tf,e=t.tbl;if(t.gridLayout){var s=e.parentNode.removeChild(e);this.tblMainCont.parentNode.insertBefore(s,this.tblMainCont),this.tblMainCont.parentNode.removeChild(this.tblMainCont),this.tblMainCont=null,this.headTblCont=null,this.headTbl=null,this.tblCont=null,e.outerHTML=t.sourceTblHtml,e=n["default"].id(t.id)}}}]),t}();e.GridLayout=f},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(6),h=i(o),d=window,u=function(){function t(e){a(this,t);var s=e.config();this.loaderTgtId=s.loader_target_id||null,this.loaderDiv=null,this.loaderText=s.loader_text||"Loading...",this.loaderHtml=s.loader_html||null,this.loaderCssClass=s.loader_css_class||"loader",this.loaderCloseDelay=200,this.onShowLoader=h["default"].isFn(s.on_show_loader)?s.on_show_loader:null,this.onHideLoader=h["default"].isFn(s.on_hide_loader)?s.on_hide_loader:null,this.prfxLoader="load_",this.tf=e;var i=n["default"].create("div",["id",this.prfxLoader+e.id]);i.className=this.loaderCssClass;var l=this.loaderTgtId?n["default"].id(this.loaderTgtId):e.tbl.parentNode;this.loaderTgtId?l.appendChild(i):l.insertBefore(i,e.tbl),this.loaderDiv=n["default"].id(this.prfxLoader+e.id),this.loaderHtml?this.loaderDiv.innerHTML=this.loaderHtml:this.loaderDiv.appendChild(n["default"].text(this.loaderText))}return l(t,[{key:"show",value:function(t){var e=this;if(this.tf.loader&&this.loaderDiv&&this.loaderDiv.style.display!==t){var s=function(){e.loaderDiv&&(e.onShowLoader&&"none"!==t&&e.onShowLoader.call(null,e),e.loaderDiv.style.display=t,e.onHideLoader&&"none"===t&&e.onHideLoader.call(null,e))},i="none"===t?this.loaderCloseDelay:1;d.setTimeout(s,i)}}},{key:"destroy",value:function(){if(this.loaderDiv){var t=this.tf,e=this.loaderTgtId?n["default"].id(this.loaderTgtId):t.gridLayout?t.feature("gridLayout").tblCont:t.tbl.parentNode;e.removeChild(this.loaderDiv),this.loaderDiv=null}}}]),t}();e.Loader=u},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(4),h=i(o),d=function(){function t(e){a(this,t);var s=e.config();this.highlightCssClass=s.highlight_css_class||"keyword",this.highlightedNodes=[],this.tf=e}return l(t,[{key:"highlight",value:function(t,e,s){if(t.hasChildNodes)for(var i=t.childNodes,a=0;a<i.length;a++)this.highlight(i[a],e,s);if(3===t.nodeType){var l=h["default"].lower(t.nodeValue),r=h["default"].lower(e);if(-1!=l.indexOf(r)){var o=t.parentNode;if(o&&o.className!=s){var d=t.nodeValue,u=l.indexOf(r),f=n["default"].text(d.substr(0,u)),c=d.substr(u,e.length),p=n["default"].text(d.substr(u+e.length)),g=n["default"].text(c),v=n["default"].create("span");v.className=s,v.appendChild(g),o.insertBefore(f,t),o.insertBefore(v,t),o.insertBefore(p,t),o.removeChild(t),this.highlightedNodes.push(v.firstChild)}}}}},{key:"unhighlight",value:function(t,e){for(var s=[],i=this.highlightedNodes,a=0;a<i.length;a++){var l=i[a];if(l){var r=h["default"].lower(l.nodeValue),n=h["default"].lower(t);if(-1!==r.indexOf(n)){var o=l.parentNode;if(o&&o.className===e){var d=o.previousSibling,u=o.nextSibling;if(!d||!u)continue;u.nodeValue=d.nodeValue+l.nodeValue+u.nodeValue,d.nodeValue="",l.nodeValue="",s.push(a)}}}}for(var f=0;f<s.length;f++)i.splice(s[f],1)}},{key:"unhighlightAll",value:function(){if(this.tf.highlightKeywords&&this.tf.searchArgs){for(var t=0;t<this.tf.searchArgs.length;t++)this.unhighlight(this.tf.searchArgs[t],this.highlightCssClass);this.highlightedNodes=[]}}}]),t}();e.HighlightKeyword=d},function(t,e,s){(function(t){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(6),n=i(r),o=s(3),h=i(o),d=s(2),u=i(d),f=s(9),c=i(f),p=function(){function e(t){a(this,e);var s=t.config();t.isExternalFlt=!0,t.externalFltTgtIds=[],this.popUpImgFlt=s.popup_filters_image||t.themesPath+"icn_filter.gif",this.popUpImgFltActive=s.popup_filters_image_active||t.themesPath+"icn_filterActive.gif",this.popUpImgFltHtml=s.popup_filters_image_html||'<img src="'+this.popUpImgFlt+'" alt="Column filter" />',this.popUpDivCssClass=s.popup_div_css_class||"popUpFilter",this.onBeforePopUpOpen=n["default"].isFn(s.on_before_popup_filter_open)?s.on_before_popup_filter_open:null,this.onAfterPopUpOpen=n["default"].isFn(s.on_after_popup_filter_open)?s.on_after_popup_filter_open:null,this.onBeforePopUpClose=n["default"].isFn(s.on_before_popup_filter_close)?s.on_before_popup_filter_close:null,this.onAfterPopUpClose=n["default"].isFn(s.on_after_popup_filter_close)?s.on_after_popup_filter_close:null,this.popUpFltSpans=[],this.popUpFltImgs=[],this.popUpFltElms=this.popUpFltElmCache||[],this.popUpFltAdjustToContainer=!0,this.prfxPopUpSpan="popUpSpan_",this.prfxPopUpDiv="popUpDiv_",this.tf=t}return l(e,[{key:"onClick",value:function(e){var s=e||t.event,i=s.target.parentNode,a=parseInt(i.getAttribute("ci"),10);if(this.closeAll(a),this.toggle(a),this.popUpFltAdjustToContainer){var l=this.popUpFltElms[a],r=this.tf.getHeaderElement(a),n=.95*r.clientWidth;if(c["default"].isIE()){var o=h["default"].position(r).left;l.style.left=o+"px"}l.style.width=parseInt(n,10)+"px"}u["default"].cancel(s),u["default"].stop(s)}},{key:"init",value:function(){for(var t=this,e=this.tf,s=0;s<e.nbCells;s++)if(e["col"+s]!==e.fltTypeNone){var i=h["default"].create("span",["id",this.prfxPopUpSpan+e.id+"_"+s],["ci",s]);i.innerHTML=this.popUpImgFltHtml;var a=e.getHeaderElement(s);a.appendChild(i),u["default"].add(i,"click",function(e){t.onClick(e)}),this.popUpFltSpans[s]=i,this.popUpFltImgs[s]=i.firstChild}}},{key:"buildAll",value:function(){for(var t=0;t<this.popUpFltElmCache.length;t++)this.build(t,this.popUpFltElmCache[t])}},{key:"build",value:function(t,e){var s=this.tf,i=e?e:h["default"].create("div",["id",this.prfxPopUpDiv+s.id+"_"+t]);i.className=this.popUpDivCssClass,s.externalFltTgtIds.push(i.id);var a=s.getHeaderElement(t);a.insertBefore(i,a.firstChild),u["default"].add(i,"click",function(t){u["default"].stop(t)}),this.popUpFltElms[t]=i}},{key:"toggle",value:function(t){var e=this.tf,s=this.popUpFltElms[t];if("none"===s.style.display||""===s.style.display){if(this.onBeforePopUpOpen&&this.onBeforePopUpOpen.call(null,this,this.popUpFltElms[t],t),s.style.display="block",e["col"+t]===e.fltTypeInp){var i=e.getFilterElement(t);i&&i.focus()}this.onAfterPopUpOpen&&this.onAfterPopUpOpen.call(null,this,this.popUpFltElms[t],t)}else this.onBeforePopUpClose&&this.onBeforePopUpClose.call(null,this,this.popUpFltElms[t],t),s.style.display="none",this.onAfterPopUpClose&&this.onAfterPopUpClose.call(null,this,this.popUpFltElms[t],t)}},{key:"closeAll",value:function(t){for(var e=0;e<this.popUpFltElms.length;e++)if(e!==t){var s=this.popUpFltElms[e];s&&(s.style.display="none")}}},{key:"buildIcons",value:function(){for(var t=0;t<this.popUpFltImgs.length;t++)this.buildIcon(t,!1)}},{key:"buildIcon",value:function(t,e){this.popUpFltImgs[t]&&(this.popUpFltImgs[t].src=e?this.popUpImgFltActive:this.popUpImgFlt)}},{key:"destroy",value:function(){this.popUpFltElmCache=[];for(var t=0;t<this.popUpFltElms.length;t++){var e=this.popUpFltElms[t],s=this.popUpFltSpans[t],i=this.popUpFltImgs[t];e&&(e.parentNode.removeChild(e),this.popUpFltElmCache[t]=e),e=null,s&&s.parentNode.removeChild(s),s=null,i&&i.parentNode.removeChild(i),i=null}this.popUpFltElms=[],this.popUpFltSpans=[],this.popUpFltImgs=[]}}]),e}();e.PopupFilter=p}).call(e,function(){return this}())},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i);
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Str = __webpack_require__(4);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
+	var _Cookie = __webpack_require__(5);
+	
+	var _Cookie2 = _interopRequireDefault(_Cookie);
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var _Arr = __webpack_require__(7);
+	
+	var _Arr2 = _interopRequireDefault(_Arr);
+	
+	var _DateHelper = __webpack_require__(8);
+	
+	var _DateHelper2 = _interopRequireDefault(_DateHelper);
+	
+	var _Helpers = __webpack_require__(9);
+	
+	var _Helpers2 = _interopRequireDefault(_Helpers);
+	
+	// Modules
+	
+	var _Store = __webpack_require__(10);
+	
+	var _GridLayout = __webpack_require__(11);
+	
+	var _Loader = __webpack_require__(12);
+	
+	var _HighlightKeyword = __webpack_require__(13);
+	
+	var _PopupFilter = __webpack_require__(14);
+	
+	var _Dropdown = __webpack_require__(15);
+	
+	var _CheckList = __webpack_require__(16);
+	
+	var _RowsCounter = __webpack_require__(17);
+	
+	var _StatusBar = __webpack_require__(18);
+	
+	var _Paging = __webpack_require__(19);
+	
+	var _ClearButton = __webpack_require__(20);
+	
+	var _Help = __webpack_require__(21);
+	
+	var _AlternateRows = __webpack_require__(22);
+	
+	var global = window,
+	    isValidDate = _DateHelper2['default'].isValid,
+	    formatDate = _DateHelper2['default'].format,
+	    doc = global.document;
+	
+	var TableFilter = (function () {
+	
+	    /**
+	     * TF object constructor
+	     * @param {String} id Table id
+	     * @param {Number} row index indicating the 1st row
+	     * @param {Object} configuration object
+	     *
+	     * TODO: Accept a TABLE element or query selectors
+	     */
+	
+	    function TableFilter(id) {
+	        _classCallCheck(this, TableFilter);
+	
+	        if (arguments.length === 0) {
+	            return;
+	        }
+	
+	        this.id = id;
+	        this.version = '0.0.0';
+	        this.year = new Date().getFullYear();
+	        this.tbl = _Dom2['default'].id(id);
+	        this.startRow = null;
+	        this.refRow = null;
+	        this.headersRow = null;
+	        this.cfg = {};
+	        this.nbFilterableRows = null;
+	        this.nbRows = null;
+	        this.nbCells = null;
+	        this._hasGrid = false;
+	        this.enableModules = false;
+	
+	        if (!this.tbl || this.tbl.nodeName != 'TABLE' || this.getRowsNb() === 0) {
+	            throw new Error('Could not instantiate TableFilter class: ' + 'HTML table not found.');
+	        }
+	
+	        if (arguments.length > 1) {
+	            for (var i = 0, len = arguments.length; i < len; i++) {
+	                var arg = arguments[i];
+	                var argtype = typeof arg;
+	                switch (_Str2['default'].lower(argtype)) {
+	                    case 'number':
+	                        this.startRow = arg;
+	                        break;
+	                    case 'object':
+	                        this.cfg = arg;
+	                        break;
+	                }
+	            }
+	        }
+	
+	        // configuration object
+	        var f = this.cfg;
+	
+	        //Start row et cols nb
+	        this.refRow = this.startRow === null ? 2 : this.startRow + 1;
+	        try {
+	            this.nbCells = this.getCellsNb(this.refRow);
+	        } catch (e) {
+	            this.nbCells = this.getCellsNb(0);
+	        }
+	
+	        //default script base path
+	        this.basePath = f.base_path || 'tablefilter/';
+	
+	        /*** filter types ***/
+	        this.fltTypeInp = 'input';
+	        this.fltTypeSlc = 'select';
+	        this.fltTypeMulti = 'multiple';
+	        this.fltTypeCheckList = 'checklist';
+	        this.fltTypeNone = 'none';
+	
+	        /*** filters' grid properties ***/
+	
+	        //enables/disables filter grid
+	        this.fltGrid = f.grid === false ? false : true;
+	
+	        /*** Grid layout ***/
+	        //enables/disables grid layout (fixed headers)
+	        this.gridLayout = Boolean(f.grid_layout);
+	        this.sourceTblHtml = null;
+	        if (this.gridLayout) {
+	            //Firefox does not support outerHTML property...
+	            // if(this.tbl.outerHTML===undefined){ setOuterHtml(); }
+	            this.sourceTblHtml = this.tbl.outerHTML;
+	        }
+	        /*** ***/
+	
+	        this.filtersRowIndex = f.filters_row_index || 0;
+	        this.headersRow = f.headers_row_index || (this.filtersRowIndex === 0 ? 1 : 0);
+	
+	        if (this.gridLayout) {
+	            if (this.headersRow > 1) {
+	                this.filtersRowIndex = this.headersRow + 1;
+	            } else {
+	                this.filtersRowIndex = 1;
+	                this.headersRow = 0;
+	            }
+	        }
+	
+	        //defines tag of the cells containing filters (td/th)
+	        this.fltCellTag = f.filters_cell_tag !== 'th' || f.filters_cell_tag !== 'td' ? 'td' : f.filters_cell_tag;
+	
+	        //stores filters ids
+	        this.fltIds = [];
+	        //stores filters DOM elements
+	        this.fltElms = [];
+	        //stores filters values
+	        this.searchArgs = null;
+	        //stores table data
+	        this.tblData = [];
+	        //stores valid rows indexes (rows visible upon filtering)
+	        this.validRowsIndex = null;
+	        //stores filters row element
+	        this.fltGridEl = null;
+	        //is first load boolean
+	        this.isFirstLoad = true;
+	        //container div for paging elements, reset btn etc.
+	        this.infDiv = null;
+	        //div for rows counter
+	        this.lDiv = null;
+	        //div for reset button and results per page select
+	        this.rDiv = null;
+	        //div for paging elements
+	        this.mDiv = null;
+	        //table container div for fixed headers (IE only)
+	        this.contDiv = null;
+	
+	        //defines css class for div containing paging elements, rows counter etc
+	        this.infDivCssClass = f.inf_div_css_class || 'inf';
+	        //defines css class for left div
+	        this.lDivCssClass = f.left_div_css_class || 'ldiv';
+	        //defines css class for right div
+	        this.rDivCssClass = f.right_div_css_class || 'rdiv';
+	        //defines css class for mid div
+	        this.mDivCssClass = f.middle_div_css_class || 'mdiv';
+	        //table container div css class
+	        this.contDivCssClass = f.content_div_css_class || 'cont';
+	
+	        /*** filters' grid appearance ***/
+	        //stylesheet file
+	        this.stylePath = f.style_path || this.basePath + 'style/';
+	        this.stylesheet = f.stylesheet || this.stylePath + 'tablefilter.css';
+	        this.stylesheetId = this.id + '_style';
+	        //defines css class for filters row
+	        this.fltsRowCssClass = f.flts_row_css_class || 'fltrow';
+	        //enables/disables icons (paging, reset button)
+	        this.enableIcons = f.enable_icons === false ? false : true;
+	        //enables/disbles rows alternating bg colors
+	        this.alternateBgs = Boolean(f.alternate_rows);
+	        //defines widths of columns
+	        this.hasColWidths = _Types2['default'].isArray(f.col_widths);
+	        this.colWidths = this.hasColWidths ? f.col_widths : null;
+	        //defines css class for filters
+	        this.fltCssClass = f.flt_css_class || 'flt';
+	        //defines css class for multiple selects filters
+	        this.fltMultiCssClass = f.flt_multi_css_class || 'flt_multi';
+	        //defines css class for filters
+	        this.fltSmallCssClass = f.flt_small_css_class || 'flt_s';
+	        //defines css class for single-filter
+	        this.singleFltCssClass = f.single_flt_css_class || 'single_flt';
+	        this.isStartBgAlternate = true;
+	
+	        /*** filters' grid behaviours ***/
+	        //enables/disables enter key
+	        this.enterKey = f.enter_key === false ? false : true;
+	        //calls function before filtering starts
+	        this.onBeforeFilter = _Types2['default'].isFn(f.on_before_filter) ? f.on_before_filter : null;
+	        //calls function after filtering
+	        this.onAfterFilter = _Types2['default'].isFn(f.on_after_filter) ? f.on_after_filter : null;
+	        //enables/disables case sensitivity
+	        this.caseSensitive = Boolean(f.case_sensitive);
+	        //enables/disbles exact match for search
+	        this.exactMatch = Boolean(f.exact_match);
+	        //refreshes drop-down lists upon validation
+	        this.linkedFilters = Boolean(f.linked_filters);
+	        //wheter excluded options are disabled
+	        this.disableExcludedOptions = Boolean(f.disable_excluded_options);
+	        //stores active filter element
+	        this.activeFlt = null;
+	        //id of active filter
+	        this.activeFilterId = null;
+	        //enables always visible rows
+	        this.hasVisibleRows = Boolean(f.rows_always_visible);
+	        //array containing always visible rows
+	        this.visibleRows = this.hasVisibleRows ? f.rows_always_visible : [];
+	        //defines search type: include or exclude
+	        this.searchType = f.search_type || 'include';
+	        //enables/disables external filters generation
+	        this.isExternalFlt = Boolean(f.external_flt_grid);
+	        //array containing ids of external elements containing filters
+	        this.externalFltTgtIds = f.external_flt_grid_ids || null;
+	        //stores filters elements if isExternalFlt is true
+	        this.externalFltEls = [];
+	        //delays any filtering process if loader true
+	        this.execDelay = !isNaN(f.exec_delay) ? parseInt(f.exec_delay, 10) : 100;
+	        //calls function when filters grid loaded
+	        this.onFiltersLoaded = _Types2['default'].isFn(f.on_filters_loaded) ? f.on_filters_loaded : null;
+	        //enables/disables single filter search
+	        this.singleSearchFlt = Boolean(f.single_search_filter);
+	        //calls function after row is validated
+	        this.onRowValidated = _Types2['default'].isFn(f.on_row_validated) ? f.on_row_validated : null;
+	        //array defining columns for customCellData event
+	        this.customCellDataCols = f.custom_cell_data_cols ? f.custom_cell_data_cols : [];
+	        //calls custom function for retrieving cell data
+	        this.customCellData = _Types2['default'].isFn(f.custom_cell_data) ? f.custom_cell_data : null;
+	        //input watermark text array
+	        this.watermark = f.watermark || '';
+	        this.isWatermarkArray = _Types2['default'].isArray(this.watermark);
+	        //id of toolbar container element
+	        this.toolBarTgtId = f.toolbar_target_id || null;
+	        //enables/disables help div
+	        this.helpInstructions = _Types2['default'].isUndef(f.help_instructions) ? undefined : Boolean(f.help_instructions);
+	        //popup filters
+	        this.popUpFilters = Boolean(f.popup_filters);
+	        //active columns color
+	        this.markActiveColumns = Boolean(f.mark_active_columns);
+	        //defines css class for active column header
+	        this.activeColumnsCssClass = f.active_columns_css_class || 'activeHeader';
+	        //calls function before active column header is marked
+	        this.onBeforeActiveColumn = _Types2['default'].isFn(f.on_before_active_column) ? f.on_before_active_column : null;
+	        //calls function after active column header is marked
+	        this.onAfterActiveColumn = _Types2['default'].isFn(f.on_after_active_column) ? f.on_after_active_column : null;
+	
+	        /*** select filter's customisation and behaviours ***/
+	        //defines 1st option text
+	        this.displayAllText = f.display_all_text || 'Clear';
+	        //enables/disables empty option in combo-box filters
+	        this.enableEmptyOption = Boolean(f.enable_empty_option);
+	        //defines empty option text
+	        this.emptyText = f.empty_text || '(Empty)';
+	        //enables/disables non empty option in combo-box filters
+	        this.enableNonEmptyOption = Boolean(f.enable_non_empty_option);
+	        //defines empty option text
+	        this.nonEmptyText = f.non_empty_text || '(Non empty)';
+	        //enables/disables onChange event on combo-box
+	        this.onSlcChange = f.on_change === false ? false : true;
+	        //enables/disables select options sorting
+	        this.sortSlc = f.sort_select === false ? false : true;
+	        //enables/disables ascending numeric options sorting
+	        this.isSortNumAsc = Boolean(f.sort_num_asc);
+	        this.sortNumAsc = this.isSortNumAsc ? f.sort_num_asc : null;
+	        //enables/disables descending numeric options sorting
+	        this.isSortNumDesc = Boolean(f.sort_num_desc);
+	        this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : null;
+	        //enabled selects are populated on demand
+	        this.fillSlcOnDemand = Boolean(f.fill_slc_on_demand);
+	        this.hasCustomOptions = _Types2['default'].isObj(f.custom_options);
+	        this.customOptions = f.custom_options;
+	
+	        /*** Filter operators ***/
+	        this.rgxOperator = f.regexp_operator || 'rgx:';
+	        this.emOperator = f.empty_operator || '[empty]';
+	        this.nmOperator = f.nonempty_operator || '[nonempty]';
+	        this.orOperator = f.or_operator || '||';
+	        this.anOperator = f.and_operator || '&&';
+	        this.grOperator = f.greater_operator || '>';
+	        this.lwOperator = f.lower_operator || '<';
+	        this.leOperator = f.lower_equal_operator || '<=';
+	        this.geOperator = f.greater_equal_operator || '>=';
+	        this.dfOperator = f.different_operator || '!';
+	        this.lkOperator = f.like_operator || '*';
+	        this.eqOperator = f.equal_operator || '=';
+	        this.stOperator = f.start_with_operator || '{';
+	        this.enOperator = f.end_with_operator || '}';
+	        this.curExp = f.cur_exp || '^[¥£€$]';
+	        this.separator = f.separator || ',';
+	
+	        /*** rows counter ***/
+	        //show/hides rows counter
+	        this.rowsCounter = Boolean(f.rows_counter);
+	
+	        /*** status bar ***/
+	        //show/hides status bar
+	        this.statusBar = Boolean(f.status_bar);
+	
+	        /*** loader ***/
+	        //enables/disables loader/spinner indicator
+	        this.loader = Boolean(f.loader);
+	
+	        /*** validation - reset buttons/links ***/
+	        //show/hides filter's validation button
+	        this.displayBtn = Boolean(f.btn);
+	        //defines validation button text
+	        this.btnText = f.btn_text || (!this.enableIcons ? 'Go' : '');
+	        //defines css class for validation button
+	        this.btnCssClass = f.btn_css_class || (!this.enableIcons ? 'btnflt' : 'btnflt_icon');
+	        //show/hides reset link
+	        this.btnReset = Boolean(f.btn_reset);
+	        //defines css class for reset button
+	        this.btnResetCssClass = f.btn_reset_css_class || 'reset';
+	        //callback function before filters are cleared
+	        this.onBeforeReset = _Types2['default'].isFn(f.on_before_reset) ? f.on_before_reset : null;
+	        //callback function after filters are cleared
+	        this.onAfterReset = _Types2['default'].isFn(f.on_after_reset) ? f.on_after_reset : null;
+	
+	        /*** paging ***/
+	        //enables/disables table paging
+	        this.paging = Boolean(f.paging);
+	        this.nbVisibleRows = 0; //nb visible rows
+	        this.nbHiddenRows = 0; //nb hidden rows
+	
+	        /*** autofilter on typing ***/
+	        //enables/disables auto filtering, table is filtered when user stops
+	        //typing
+	        this.autoFilter = Boolean(f.auto_filter);
+	        //onkeyup delay timer (msecs)
+	        this.autoFilterDelay = !isNaN(f.auto_filter_delay) ? f.auto_filter_delay : 900;
+	        //typing indicator
+	        this.isUserTyping = null;
+	        this.autoFilterTimer = null;
+	
+	        /*** keyword highlighting ***/
+	        //enables/disables keyword highlighting
+	        this.highlightKeywords = Boolean(f.highlight_keywords);
+	
+	        /*** data types ***/
+	        //defines default date type (european DMY)
+	        this.defaultDateType = f.default_date_type || 'DMY';
+	        //defines default thousands separator
+	        //US = ',' EU = '.'
+	        this.thousandsSeparator = f.thousands_separator || ',';
+	        //defines default decimal separator
+	        //US & javascript = '.' EU = ','
+	        this.decimalSeparator = f.decimal_separator || '.';
+	        //enables number format per column
+	        this.hasColNbFormat = _Types2['default'].isArray(f.col_number_format);
+	        //array containing columns nb formats
+	        this.colNbFormat = this.hasColNbFormat ? f.col_number_format : null;
+	        //enables date type per column
+	        this.hasColDateType = _Types2['default'].isArray(f.col_date_type);
+	        //array containing columns date type
+	        this.colDateType = this.hasColDateType ? f.col_date_type : null;
+	
+	        /*** status messages ***/
+	        //filtering
+	        this.msgFilter = f.msg_filter || 'Filtering data...';
+	        //populating drop-downs
+	        this.msgPopulate = f.msg_populate || 'Populating filter...';
+	        //populating drop-downs
+	        this.msgPopulateCheckList = f.msg_populate_checklist || 'Populating list...';
+	        //changing paging page
+	        this.msgChangePage = f.msg_change_page || 'Collecting paging data...';
+	        //clearing filters
+	        this.msgClear = f.msg_clear || 'Clearing filters...';
+	        //changing nb results/page
+	        this.msgChangeResults = f.msg_change_results || 'Changing results per page...';
+	        //re-setting grid values
+	        this.msgResetValues = f.msg_reset_grid_values || 'Re-setting filters values...';
+	        //re-setting page
+	        this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
+	        //re-setting page length
+	        this.msgResetPageLength = f.msg_reset_page_length || 'Re-setting page length...';
+	        //table sorting
+	        this.msgSort = f.msg_sort || 'Sorting data...';
+	        //extensions loading
+	        this.msgLoadExtensions = f.msg_load_extensions || 'Loading extensions...';
+	        //themes loading
+	        this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
+	
+	        /*** ids prefixes ***/
+	        //css class name added to table
+	        this.prfxTf = 'TF';
+	        //filters (inputs - selects)
+	        this.prfxFlt = 'flt';
+	        //validation button
+	        this.prfxValButton = 'btn';
+	        //container div for paging elements, rows counter etc.
+	        this.prfxInfDiv = 'inf_';
+	        //left div
+	        this.prfxLDiv = 'ldiv_';
+	        //right div
+	        this.prfxRDiv = 'rdiv_';
+	        //middle div
+	        this.prfxMDiv = 'mdiv_';
+	        //filter values cookie
+	        this.prfxCookieFltsValues = 'tf_flts_';
+	        //page nb cookie
+	        this.prfxCookiePageNb = 'tf_pgnb_';
+	        //page length cookie
+	        this.prfxCookiePageLen = 'tf_pglen_';
+	
+	        /*** cookies ***/
+	        this.hasStoredValues = false;
+	        //remembers filters values on page load
+	        this.rememberGridValues = Boolean(f.remember_grid_values);
+	        //cookie storing filter values
+	        this.fltsValuesCookie = this.prfxCookieFltsValues + this.id;
+	        //remembers page nb on page load
+	        this.rememberPageNb = this.paging && f.remember_page_number;
+	        //cookie storing page nb
+	        this.pgNbCookie = this.prfxCookiePageNb + this.id;
+	        //remembers page length on page load
+	        this.rememberPageLen = this.paging && f.remember_page_length;
+	        //cookie storing page length
+	        this.pgLenCookie = this.prfxCookiePageLen + this.id;
+	
+	        /*** extensions ***/
+	        //imports external script
+	        this.extensions = f.extensions;
+	        this.hasExtensions = _Types2['default'].isArray(this.extensions);
+	
+	        /*** themes ***/
+	        this.enableDefaultTheme = Boolean(f.enable_default_theme);
+	        //imports themes
+	        this.hasThemes = this.enableDefaultTheme || _Types2['default'].isArray(f.themes);
+	        this.themes = f.themes || [];
+	        //themes path
+	        this.themesPath = f.themes_path || this.stylePath + 'themes/';
+	
+	        // Features registry
+	        this.Mod = {};
+	
+	        // Extensions registry
+	        this.ExtRegistry = {};
+	
+	        /*** TF events ***/
+	        this.Evt = {
+	            name: {
+	                filter: 'Filter',
+	                dropdown: 'DropDown',
+	                checklist: 'CheckList',
+	                changepage: 'ChangePage',
+	                clear: 'Clear',
+	                changeresultsperpage: 'ChangeResults',
+	                resetvalues: 'ResetValues',
+	                resetpage: 'ResetPage',
+	                resetpagelength: 'ResetPageLength',
+	                loadextensions: 'LoadExtensions',
+	                loadthemes: 'LoadThemes'
+	            },
+	
+	            /*====================================================
+	                - Detects <enter> key for a given element
+	            =====================================================*/
+	            detectKey: function detectKey(e) {
+	                if (!this.enterKey) {
+	                    return;
+	                }
+	                var _ev = e || global.event;
+	                if (_ev) {
+	                    var key = _Event2['default'].keyCode(_ev);
+	                    if (key === 13) {
+	                        this.filter();
+	                        _Event2['default'].cancel(_ev);
+	                        _Event2['default'].stop(_ev);
+	                    } else {
+	                        this.isUserTyping = true;
+	                        global.clearInterval(this.autoFilterTimer);
+	                        this.autoFilterTimer = null;
+	                    }
+	                }
+	            },
+	            /*====================================================
+	                - auto filter for text filters
+	            =====================================================*/
+	            onKeyUp: function onKeyUp(e) {
+	                if (!this.autoFilter) {
+	                    return;
+	                }
+	                var _ev = e || global.event;
+	                var key = _Event2['default'].keyCode(_ev);
+	                this.isUserTyping = false;
+	
+	                function filter() {
+	                    /*jshint validthis:true */
+	                    global.clearInterval(this.autoFilterTimer);
+	                    this.autoFilterTimer = null;
+	                    if (!this.isUserTyping) {
+	                        this.filter();
+	                        this.isUserTyping = null;
+	                    }
+	                }
+	
+	                if (key !== 13 && key !== 9 && key !== 27 && key !== 38 && key !== 40) {
+	                    if (this.autoFilterTimer === null) {
+	                        this.autoFilterTimer = global.setInterval(filter.bind(this), this.autoFilterDelay);
+	                    }
+	                } else {
+	                    global.clearInterval(this.autoFilterTimer);
+	                    this.autoFilterTimer = null;
+	                }
+	            },
+	            /*====================================================
+	                - onkeydown event for input filters
+	            =====================================================*/
+	            onKeyDown: function onKeyDown() {
+	                if (!this.autoFilter) {
+	                    return;
+	                }
+	                this.isUserTyping = true;
+	            },
+	            /*====================================================
+	                - onblur event for input filters
+	            =====================================================*/
+	            onInpBlur: function onInpBlur() {
+	                if (this.autoFilter) {
+	                    this.isUserTyping = false;
+	                    global.clearInterval(this.autoFilterTimer);
+	                }
+	                // if(o.ezEditTable){
+	                //     if(o.editable){
+	                //         o.ezEditTable.Editable.Set();
+	                //     }
+	                //     if(o.selectable){
+	                //         o.ezEditTable.Selection.Set();
+	                //     }
+	                // }
+	            },
+	            /*====================================================
+	                - onfocus event for input filters
+	            =====================================================*/
+	            onInpFocus: function onInpFocus(e) {
+	                var _ev = e || global.event;
+	                var elm = _Event2['default'].target(_ev);
+	                this.activeFilterId = elm.getAttribute('id');
+	                this.activeFlt = _Dom2['default'].id(this.activeFilterId);
+	                if (this.popUpFilters) {
+	                    _Event2['default'].cancel(_ev);
+	                    _Event2['default'].stop(_ev);
+	                }
+	                // if(o.ezEditTable){
+	                //     if(o.editable){
+	                //         o.ezEditTable.Editable.Remove();
+	                //     }
+	                //     if(o.selectable){
+	                //         o.ezEditTable.Selection.Remove();
+	                //     }
+	                // }
+	            },
+	            /*====================================================
+	                - onfocus event for select filters
+	            =====================================================*/
+	            onSlcFocus: function onSlcFocus(e) {
+	                var _ev = e || global.event;
+	                var elm = _Event2['default'].target(_ev);
+	                this.activeFilterId = elm.getAttribute('id');
+	                this.activeFlt = _Dom2['default'].id(this.activeFilterId);
+	                // select is populated when element has focus
+	                if (this.fillSlcOnDemand && elm.getAttribute('filled') === '0') {
+	                    var ct = elm.getAttribute('ct');
+	                    this.Mod.dropdown._build(ct);
+	                }
+	                if (this.popUpFilters) {
+	                    _Event2['default'].cancel(_ev);
+	                    _Event2['default'].stop(_ev);
+	                }
+	            },
+	            /*====================================================
+	                - onchange event for select filters
+	            =====================================================*/
+	            onSlcChange: function onSlcChange(e) {
+	                if (!this.activeFlt) {
+	                    return;
+	                }
+	                // let colIndex = o.activeFlt.getAttribute('colIndex');
+	                //Checks filter is a checklist and caller is not null
+	                // if(o.activeFlt && colIndex &&
+	                //     o['col'+colIndex]===o.fltTypeCheckList &&
+	                //     !o.Evt.onSlcChange.caller){ return; }
+	                var _ev = e || global.event;
+	                if (this.popUpFilters) {
+	                    _Event2['default'].stop(_ev);
+	                }
+	                if (this.onSlcChange) {
+	                    this.filter();
+	                }
+	            },
+	            /*====================================================
+	                - onclick event for checklist filters
+	            =====================================================*/
+	            onCheckListClick: function onCheckListClick(e) {
+	                var _ev = e || global.event;
+	                var elm = _Event2['default'].target(_ev);
+	                if (this.fillSlcOnDemand && elm.getAttribute('filled') === '0') {
+	                    var ct = elm.getAttribute('ct');
+	                    this.Mod.checkList._build(ct);
+	                    this.Mod.checkList.checkListDiv[ct].onclick = null;
+	                    this.Mod.checkList.checkListDiv[ct].title = '';
+	                }
+	            },
+	            /*====================================================
+	                - onclick event for validation button
+	                (btn property)
+	            =====================================================*/
+	            onBtnClick: function onBtnClick() {
+	                this.filter();
+	            }
+	        };
+	    }
+	
+	    _createClass(TableFilter, [{
+	        key: 'init',
+	
+	        /**
+	         * Initialise filtering grid bar behaviours and layout
+	         *
+	         * TODO: decompose in smaller methods
+	         */
+	        value: function init() {
+	            if (this._hasGrid) {
+	                return;
+	            }
+	            if (!this.tbl) {
+	                this.tbl = _Dom2['default'].id(this.id);
+	            }
+	            if (this.gridLayout) {
+	                this.refRow = this.startRow === null ? 0 : this.startRow;
+	            }
+	            if (this.popUpFilters && (this.filtersRowIndex === 0 && this.headersRow === 1 || this.gridLayout)) {
+	                this.headersRow = 0;
+	            }
+	
+	            var Mod = this.Mod;
+	            var n = this.singleSearchFlt ? 1 : this.nbCells,
+	                inpclass = undefined;
+	
+	            //loads stylesheet if not imported
+	            this['import'](this.stylesheetId, this.stylesheet, null, 'link');
+	
+	            //loads theme
+	            if (this.hasThemes) {
+	                this._loadThemes();
+	            }
+	
+	            if (this.rememberGridValues || this.rememberPageNb || this.rememberPageLen) {
+	                Mod.store = new _Store.Store(this);
+	            }
+	
+	            if (this.gridLayout) {
+	                Mod.gridLayout = new _GridLayout.GridLayout(this);
+	                Mod.gridLayout.init();
+	            }
+	
+	            if (this.loader) {
+	                if (!Mod.loader) {
+	                    Mod.loader = new _Loader.Loader(this);
+	                }
+	            }
+	
+	            if (this.highlightKeywords) {
+	                Mod.highlightKeyword = new _HighlightKeyword.HighlightKeyword(this);
+	            }
+	
+	            if (this.popUpFilters) {
+	                if (!Mod.popupFilter) {
+	                    Mod.popupFilter = new _PopupFilter.PopupFilter(this);
+	                }
+	                Mod.popupFilter.init();
+	            }
+	
+	            //filters grid is not generated
+	            if (!this.fltGrid) {
+	                this.refRow = this.refRow - 1;
+	                if (this.gridLayout) {
+	                    this.refRow = 0;
+	                }
+	                this.nbFilterableRows = this.getRowsNb();
+	                this.nbVisibleRows = this.nbFilterableRows;
+	                this.nbRows = this.nbFilterableRows + this.refRow;
+	            } else {
+	                if (this.isFirstLoad) {
+	                    var fltrow = undefined;
+	                    if (!this.gridLayout) {
+	                        var thead = _Dom2['default'].tag(this.tbl, 'thead');
+	                        if (thead.length > 0) {
+	                            fltrow = thead[0].insertRow(this.filtersRowIndex);
+	                        } else {
+	                            fltrow = this.tbl.insertRow(this.filtersRowIndex);
+	                        }
+	
+	                        if (this.headersRow > 1 && this.filtersRowIndex <= this.headersRow && !this.popUpFilters) {
+	                            this.headersRow++;
+	                        }
+	                        if (this.popUpFilters) {
+	                            this.headersRow++;
+	                        }
+	
+	                        fltrow.className = this.fltsRowCssClass;
+	                        //Disable for grid_layout
+	                        if (this.isExternalFlt && (!this.gridLayout || this.popUpFilters)) {
+	                            fltrow.style.display = 'none';
+	                        }
+	                    }
+	
+	                    this.nbFilterableRows = this.getRowsNb();
+	                    this.nbVisibleRows = this.nbFilterableRows;
+	                    this.nbRows = this.tbl.rows.length;
+	
+	                    for (var i = 0; i < n; i++) {
+	                        // this loop adds filters
+	
+	                        if (this.popUpFilters) {
+	                            Mod.popupFilter.build(i);
+	                        }
+	
+	                        var fltcell = _Dom2['default'].create(this.fltCellTag),
+	                            col = this.getFilterType(i),
+	                            externalFltTgtId = this.isExternalFlt && this.externalFltTgtIds ? this.externalFltTgtIds[i] : null;
+	
+	                        if (this.singleSearchFlt) {
+	                            fltcell.colSpan = this.nbCells;
+	                        }
+	                        if (!this.gridLayout) {
+	                            fltrow.appendChild(fltcell);
+	                        }
+	                        inpclass = i == n - 1 && this.displayBtn ? this.fltSmallCssClass : this.fltCssClass;
+	
+	                        //only 1 input for single search
+	                        if (this.singleSearchFlt) {
+	                            col = this.fltTypeInp;
+	                            inpclass = this.singleFltCssClass;
+	                        }
+	
+	                        //drop-down filters
+	                        if (col === this.fltTypeSlc || col === this.fltTypeMulti) {
+	                            if (!Mod.dropdown) {
+	                                Mod.dropdown = new _Dropdown.Dropdown(this);
+	                            }
+	                            var dropdown = Mod.dropdown;
+	
+	                            var slc = _Dom2['default'].create(this.fltTypeSlc, ['id', this.prfxFlt + i + '_' + this.id], ['ct', i], ['filled', '0']);
+	
+	                            if (col === this.fltTypeMulti) {
+	                                slc.multiple = this.fltTypeMulti;
+	                                slc.title = dropdown.multipleSlcTooltip;
+	                            }
+	                            slc.className = _Str2['default'].lower(col) === this.fltTypeSlc ? inpclass : this.fltMultiCssClass; // for ie<=6
+	
+	                            //filter is appended in desired external element
+	                            if (externalFltTgtId) {
+	                                _Dom2['default'].id(externalFltTgtId).appendChild(slc);
+	                                this.externalFltEls.push(slc);
+	                            } else {
+	                                fltcell.appendChild(slc);
+	                            }
+	
+	                            this.fltIds.push(this.prfxFlt + i + '_' + this.id);
+	
+	                            if (!this.fillSlcOnDemand) {
+	                                dropdown._build(i);
+	                            }
+	
+	                            _Event2['default'].add(slc, 'keypress', this.Evt.detectKey.bind(this));
+	                            _Event2['default'].add(slc, 'change', this.Evt.onSlcChange.bind(this));
+	                            _Event2['default'].add(slc, 'focus', this.Evt.onSlcFocus.bind(this));
+	                            // Event.add(slc, 'blur', this.Evt._OnSlcBlur);
+	
+	                            //1st option is created here since dropdown.build isn't
+	                            //invoked
+	                            if (this.fillSlcOnDemand) {
+	                                var opt0 = _Dom2['default'].createOpt(this.displayAllText, '');
+	                                slc.appendChild(opt0);
+	                            }
+	                        }
+	                        // checklist
+	                        else if (col === this.fltTypeCheckList) {
+	                            var checkList = undefined;
+	                            Mod.checkList = new _CheckList.CheckList(this);
+	                            checkList = Mod.checkList;
+	
+	                            var divCont = _Dom2['default'].create('div', ['id', checkList.prfxCheckListDiv + i + '_' + this.id], ['ct', i], ['filled', '0']);
+	                            divCont.className = checkList.checkListDivCssClass;
+	
+	                            //filter is appended in desired element
+	                            if (externalFltTgtId) {
+	                                _Dom2['default'].id(externalFltTgtId).appendChild(divCont);
+	                                this.externalFltEls.push(divCont);
+	                            } else {
+	                                fltcell.appendChild(divCont);
+	                            }
+	
+	                            checkList.checkListDiv[i] = divCont;
+	                            this.fltIds.push(this.prfxFlt + i + '_' + this.id);
+	                            if (!this.fillSlcOnDemand) {
+	                                checkList._build(i);
+	                            }
+	
+	                            if (this.fillSlcOnDemand) {
+	                                _Event2['default'].add(divCont, 'click', this.Evt.onCheckListClick.bind(this));
+	                                divCont.appendChild(_Dom2['default'].text(checkList.activateCheckListTxt));
+	                            }
+	                        } else {
+	                            //show/hide input
+	                            var inptype = col === this.fltTypeInp ? 'text' : 'hidden';
+	                            var inp = _Dom2['default'].create(this.fltTypeInp, ['id', this.prfxFlt + i + '_' + this.id], ['type', inptype], ['ct', i]);
+	                            if (inptype !== 'hidden' && this.watermark) {
+	                                inp.setAttribute('placeholder', this.isWatermarkArray ? this.watermark[i] || '' : this.watermark);
+	                            }
+	                            inp.className = inpclass;
+	                            _Event2['default'].add(inp, 'focus', this.Evt.onInpFocus.bind(this));
+	
+	                            //filter is appended in desired element
+	                            if (externalFltTgtId) {
+	                                _Dom2['default'].id(externalFltTgtId).appendChild(inp);
+	                                this.externalFltEls.push(inp);
+	                            } else {
+	                                fltcell.appendChild(inp);
+	                            }
+	
+	                            this.fltIds.push(this.prfxFlt + i + '_' + this.id);
+	
+	                            _Event2['default'].add(inp, 'keypress', this.Evt.detectKey.bind(this));
+	                            _Event2['default'].add(inp, 'keydown', this.Evt.onKeyDown.bind(this));
+	                            _Event2['default'].add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
+	                            _Event2['default'].add(inp, 'blur', this.Evt.onInpBlur.bind(this));
+	
+	                            if (this.rememberGridValues) {
+	                                var flts_values = this.Mod.store.getFilterValues(this.fltsValuesCookie);
+	                                if (flts_values[i] != ' ') {
+	                                    this.setFilterValue(i, flts_values[i], false);
+	                                }
+	                            }
+	                        }
+	                        // this adds submit button
+	                        if (i == n - 1 && this.displayBtn) {
+	                            var btn = _Dom2['default'].create(this.fltTypeInp, ['id', this.prfxValButton + i + '_' + this.id], ['type', 'button'], ['value', this.btnText]);
+	                            btn.className = this.btnCssClass;
+	
+	                            //filter is appended in desired element
+	                            if (externalFltTgtId) {
+	                                _Dom2['default'].id(externalFltTgtId).appendChild(btn);
+	                            } else {
+	                                fltcell.appendChild(btn);
+	                            }
+	
+	                            _Event2['default'].add(btn, 'click', this.Evt.onBtnClick.bind(this));
+	                        } //if
+	                    } // for i
+	                } else {
+	                    this._resetGrid();
+	                } //if isFirstLoad
+	            } //if this.fltGrid
+	
+	            /* Filter behaviours */
+	            if (this.rowsCounter) {
+	                Mod.rowsCounter = new _RowsCounter.RowsCounter(this);
+	                Mod.rowsCounter.init();
+	            }
+	            if (this.statusBar) {
+	                Mod.statusBar = new _StatusBar.StatusBar(this);
+	                Mod.statusBar.init();
+	            }
+	            if (this.paging || Mod.paging && Mod.paging.isPagingRemoved) {
+	                Mod.paging = new _Paging.Paging(this);
+	                Mod.paging.init();
+	            }
+	            if (this.btnReset) {
+	                Mod.clearButton = new _ClearButton.ClearButton(this);
+	                Mod.clearButton.init();
+	            }
+	            if (this.helpInstructions) {
+	                if (!Mod.help) {
+	                    Mod.help = new _Help.Help(this);
+	                }
+	                Mod.help.init();
+	            }
+	            if (this.hasColWidths && !this.gridLayout) {
+	                this.setColWidths();
+	            }
+	            if (this.alternateBgs) {
+	                Mod.alternateRows = new _AlternateRows.AlternateRows(this);
+	                Mod.alternateRows.init();
+	            }
+	
+	            this.isFirstLoad = false;
+	            this._hasGrid = true;
+	
+	            if (this.rememberGridValues || this.rememberPageLen || this.rememberPageNb) {
+	                this.resetValues();
+	            }
+	
+	            //TF css class is added to table
+	            if (!this.gridLayout) {
+	                _Dom2['default'].addClass(this.tbl, this.prfxTf);
+	            }
+	
+	            if (this.loader) {
+	                Mod.loader.show('none');
+	            }
+	
+	            /* Loads extensions */
+	            if (this.hasExtensions) {
+	                this.initExtensions();
+	            }
+	
+	            if (this.onFiltersLoaded) {
+	                this.onFiltersLoaded.call(null, this);
+	            }
+	        }
+	    }, {
+	        key: 'EvtManager',
+	
+	        /**
+	         * Manages state messages
+	         * @param {String} evt Event name
+	         * @param {Object} cfg Config object
+	         */
+	        value: function EvtManager(evt) {
+	            var cfg = arguments[1] === undefined ? { slcIndex: null, slcExternal: false, slcId: null, pgIndex: null } : arguments[1];
+	
+	            var slcIndex = cfg.slcIndex;
+	            var slcExternal = cfg.slcExternal;
+	            var slcId = cfg.slcId;
+	            var pgIndex = cfg.pgIndex;
+	            var cpt = this.Mod;
+	
+	            function efx() {
+	                /*jshint validthis:true */
+	                var ev = this.Evt.name;
+	
+	                switch (evt) {
+	                    case ev.filter:
+	                        this._filter();
+	                        break;
+	                    case ev.dropdown:
+	                        if (this.linkedFilters) {
+	                            cpt.dropdown._build(slcIndex, true);
+	                        } else {
+	                            cpt.dropdown._build(slcIndex, false, slcExternal, slcId);
+	                        }
+	                        break;
+	                    case ev.checklist:
+	                        cpt.checkList._build(slcIndex, slcExternal, slcId);
+	                        break;
+	                    case ev.changepage:
+	                        cpt.paging._changePage(pgIndex);
+	                        break;
+	                    case ev.clear:
+	                        this._clearFilters();
+	                        this._filter();
+	                        break;
+	                    case ev.changeresultsperpage:
+	                        cpt.paging._changeResultsPerPage();
+	                        break;
+	                    case ev.resetvalues:
+	                        this._resetValues();
+	                        this._filter();
+	                        break;
+	                    case ev.resetpage:
+	                        cpt.paging._resetPage(this.pgNbCookie);
+	                        break;
+	                    case ev.resetpagelength:
+	                        cpt.paging._resetPageLength(this.pgLenCookie);
+	                        break;
+	                    case ev.loadextensions:
+	                        this._loadExtensions();
+	                        break;
+	                    case ev.loadthemes:
+	                        this._loadThemes();
+	                        break;
+	                }
+	                if (this.statusBar) {
+	                    cpt.statusBar.message('');
+	                }
+	                if (this.loader) {
+	                    cpt.loader.show('none');
+	                }
+	            }
+	
+	            if (!this.loader && !this.statusBar) {
+	                efx.call(this);
+	            } else {
+	                if (this.loader) {
+	                    cpt.loader.show('');
+	                }
+	                if (this.statusBar) {
+	                    cpt.statusBar.message(this['msg' + evt]);
+	                }
+	                global.setTimeout(efx.bind(this), this.execDelay);
+	            }
+	        }
+	    }, {
+	        key: 'feature',
+	
+	        /**
+	         * Return a feature instance for a given name
+	         * @param  {String} name Name of the feature
+	         * @return {Object}
+	         */
+	        value: function feature(name) {
+	            return this.Mod[name];
+	        }
+	    }, {
+	        key: 'initExtensions',
+	
+	        /**
+	         * Initialise all the extensions defined in the configuration object
+	         */
+	        value: function initExtensions() {
+	            var exts = this.extensions;
+	
+	            for (var i = 0, len = exts.length; i < len; i++) {
+	                var ext = exts[i];
+	                if (!this.ExtRegistry[ext.name]) {
+	                    this.loadExtension(ext);
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'loadExtension',
+	
+	        /**
+	         * Load an extension module
+	         * @param  {Object} ext Extension config object
+	         */
+	        value: function loadExtension(ext) {
+	            var _this = this;
+	
+	            if (!ext || !ext.name) {
+	                return;
+	            }
+	
+	            var name = ext.name;
+	            var path = ext.path;
+	            var modulePath = undefined;
+	
+	            if (name && path) {
+	                modulePath = ext.path + name;
+	            } else {
+	                name = name.replace('.js', '');
+	                modulePath = './extensions/{}/{}'.replace(/{}/g, name);
+	            }
+	
+	            __webpack_require__.e/* require */(1, function(__webpack_require__) { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(1)(modulePath)]; (function (mod) {
+	                var inst = new mod(_this, ext);
+	                inst.init();
+	                _this.ExtRegistry[name] = inst;
+	            }.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));});
+	        }
+	    }, {
+	        key: 'getExtension',
+	
+	        /**
+	         * Get an extension instance
+	         * @param  {String} name Name of the extension
+	         * @return {Object}      Extension instance
+	         */
+	        value: function getExtension(name) {
+	            return this.ExtRegistry[name];
+	        }
+	    }, {
+	        key: 'hasExtension',
+	
+	        /**
+	         * Check passed extension name exists
+	         * @param  {String}  name Name of the extension
+	         * @return {Boolean}
+	         */
+	        value: function hasExtension(name) {
+	            return !_Types2['default'].isUndef(this.ExtRegistry[name]);
+	        }
+	    }, {
+	        key: 'destroyExtensions',
+	
+	        /**
+	         * Destroy all the extensions defined in the configuration object
+	         */
+	        value: function destroyExtensions() {
+	            var exts = this.extensions;
+	
+	            for (var i = 0, len = exts.length; i < len; i++) {
+	                var ext = exts[i];
+	                var extInstance = this.ExtRegistry[ext.name];
+	                if (extInstance) {
+	                    extInstance.destroy();
+	                    this.ExtRegistry[ext.name] = null;
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'loadThemes',
+	        value: function loadThemes() {
+	            this.EvtManager(this.Evt.name.loadthemes);
+	        }
+	    }, {
+	        key: '_loadThemes',
+	
+	        /**
+	         * Load themes defined in the configuration object
+	         */
+	        value: function _loadThemes() {
+	            var themes = this.themes;
+	            //Default theme config
+	            if (this.enableDefaultTheme) {
+	                var defaultTheme = { name: 'default' };
+	                this.themes.push(defaultTheme);
+	            }
+	            if (_Types2['default'].isArray(themes)) {
+	                for (var i = 0, len = themes.length; i < len; i++) {
+	                    var theme = themes[i];
+	                    var _name = theme.name;
+	                    var path = theme.path;
+	                    if (_name && !path) {
+	                        path = this.themesPath + _name + '/' + _name + '.css';
+	                    } else if (!_name && theme.path) {
+	                        _name = 'theme{0}'.replace('{0}', i);
+	                    }
+	
+	                    if (!this.isImported(path, 'link')) {
+	                        this['import'](_name, path, null, 'link');
+	                    }
+	                }
+	            }
+	
+	            //Some elements need to be overriden for theme
+	            //Reset button
+	            this.btnResetText = null;
+	            this.btnResetHtml = '<input type="button" value="" class="' + this.btnResetCssClass + '" title="Clear filters" />';
+	
+	            //Paging buttons
+	            this.btnPrevPageHtml = '<input type="button" value="" class="' + this.btnPageCssClass + ' previousPage" title="Previous page" />';
+	            this.btnNextPageHtml = '<input type="button" value="" class="' + this.btnPageCssClass + ' nextPage" title="Next page" />';
+	            this.btnFirstPageHtml = '<input type="button" value="" class="' + this.btnPageCssClass + ' firstPage" title="First page" />';
+	            this.btnLastPageHtml = '<input type="button" value="" class="' + this.btnPageCssClass + ' lastPage" title="Last page" />';
+	
+	            //Loader
+	            this.loader = true;
+	            this.loaderHtml = '<div class="defaultLoader"></div>';
+	            this.loaderText = null;
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Destroy filter grid
+	         */
+	        value: function destroy() {
+	            if (!this._hasGrid) {
+	                return;
+	            }
+	            var rows = this.tbl.rows,
+	                Mod = this.Mod;
+	
+	            if (this.isExternalFlt && !this.popUpFilters) {
+	                this.removeExternalFlts();
+	            }
+	            if (this.infDiv) {
+	                this.removeToolbar();
+	            }
+	            if (this.highlightKeywords) {
+	                Mod.highlightKeyword.unhighlightAll();
+	            }
+	            if (this.markActiveColumns) {
+	                this.clearActiveColumns();
+	            }
+	            if (this.hasExtensions) {
+	                this.destroyExtensions();
+	            }
+	
+	            //this loop shows all rows and removes validRow attribute
+	            for (var j = this.refRow; j < this.nbRows; j++) {
+	                rows[j].style.display = '';
+	
+	                if (rows[j].hasAttribute('validRow')) {
+	                    rows[j].removeAttribute('validRow');
+	                }
+	
+	                //removes alternating colors
+	                if (this.alternateBgs) {
+	                    Mod.alternateRows.removeRowBg(j);
+	                }
+	            } //for j
+	
+	            if (this.fltGrid && !this.gridLayout) {
+	                this.fltGridEl = rows[this.filtersRowIndex];
+	                this.tbl.deleteRow(this.filtersRowIndex);
+	            }
+	
+	            // Destroy module
+	            Object.keys(Mod).forEach(function (key) {
+	                var feature = Mod[key];
+	                if (feature && _Types2['default'].isFn(feature.destroy)) {
+	                    feature.destroy();
+	                }
+	            });
+	
+	            _Dom2['default'].removeClass(this.tbl, this.prfxTf);
+	            this.activeFlt = null;
+	            this.isStartBgAlternate = true;
+	            this._hasGrid = false;
+	            this.tbl = null;
+	        }
+	    }, {
+	        key: 'setToolbar',
+	
+	        /**
+	         * Generate container element for paging, reset button, rows counter etc.
+	         */
+	        value: function setToolbar() {
+	            if (this.infDiv) {
+	                return;
+	            }
+	
+	            /*** container div ***/
+	            var infdiv = _Dom2['default'].create('div', ['id', this.prfxInfDiv + this.id]);
+	            infdiv.className = this.infDivCssClass;
+	
+	            //custom container
+	            if (this.toolBarTgtId) {
+	                _Dom2['default'].id(this.toolBarTgtId).appendChild(infdiv);
+	            }
+	            //grid-layout
+	            else if (this.gridLayout) {
+	                var gridLayout = this.Mod.gridLayout;
+	                gridLayout.tblMainCont.appendChild(infdiv);
+	                infdiv.className = gridLayout.gridInfDivCssClass;
+	            }
+	            //default location: just above the table
+	            else {
+	                var cont = _Dom2['default'].create('caption');
+	                cont.appendChild(infdiv);
+	                this.tbl.insertBefore(cont, this.tbl.firstChild);
+	            }
+	            this.infDiv = _Dom2['default'].id(this.prfxInfDiv + this.id);
+	
+	            /*** left div containing rows # displayer ***/
+	            var ldiv = _Dom2['default'].create('div', ['id', this.prfxLDiv + this.id]);
+	            ldiv.className = this.lDivCssClass;
+	            infdiv.appendChild(ldiv);
+	            this.lDiv = _Dom2['default'].id(this.prfxLDiv + this.id);
+	
+	            /***    right div containing reset button
+	                    + nb results per page select    ***/
+	            var rdiv = _Dom2['default'].create('div', ['id', this.prfxRDiv + this.id]);
+	            rdiv.className = this.rDivCssClass;
+	            infdiv.appendChild(rdiv);
+	            this.rDiv = _Dom2['default'].id(this.prfxRDiv + this.id);
+	
+	            /*** mid div containing paging elements ***/
+	            var mdiv = _Dom2['default'].create('div', ['id', this.prfxMDiv + this.id]);
+	            mdiv.className = this.mDivCssClass;
+	            infdiv.appendChild(mdiv);
+	            this.mDiv = _Dom2['default'].id(this.prfxMDiv + this.id);
+	
+	            // Enable help instructions by default if topbar is generated and not
+	            // explicitely set to false
+	            if (_Types2['default'].isUndef(this.helpInstructions)) {
+	                if (!this.Mod.help) {
+	                    this.Mod.help = new _Help.Help(this);
+	                }
+	                this.Mod.help.init();
+	                this.helpInstructions = true;
+	            }
+	        }
+	    }, {
+	        key: 'removeToolbar',
+	
+	        /**
+	         * Remove toolbar container element
+	         */
+	        value: function removeToolbar() {
+	            if (!this.infDiv) {
+	                return;
+	            }
+	            this.infDiv.parentNode.removeChild(this.infDiv);
+	            this.infDiv = null;
+	
+	            var tbl = this.tbl;
+	            var captions = _Dom2['default'].tag(tbl, 'caption');
+	            if (captions.length > 0) {
+	                [].forEach.call(captions, function (elm) {
+	                    tbl.removeChild(elm);
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'removeExternalFlts',
+	
+	        /**
+	         * Remove all the external column filters
+	         */
+	        value: function removeExternalFlts() {
+	            if (!this.isExternalFlt || !this.externalFltTgtIds) {
+	                return;
+	            }
+	            var ids = this.externalFltTgtIds,
+	                len = ids.length;
+	            for (var ct = 0; ct < len; ct++) {
+	                var externalFltTgtId = ids[ct],
+	                    externalFlt = _Dom2['default'].id(externalFltTgtId);
+	                if (externalFlt) {
+	                    externalFlt.innerHTML = '';
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'isCustomOptions',
+	
+	        /*====================================================
+	            - IE bug: it seems there is no way to make
+	            multiple selections programatically, only last
+	            selection is kept (multiple select previously
+	            populated via DOM)
+	            - Work-around: defer selection with a setTimeout
+	            If you find a more elegant solution to
+	            this let me know ;-)
+	            - For the moment only this solution seems to work!
+	            - Params:
+	                - slc = select object (select obj)
+	                - index to be selected (integer)
+	                - execute filtering (boolean)
+	        =====================================================*/
+	        // __deferMultipleSelection: function(slc,index,filter){
+	        //     if(Str.lower(slc.nodeName)!=='select'){
+	        //         return;
+	        //     }
+	        //     let doFilter = filter===undefined ? false : filter;
+	        //     let o = this;
+	        //     global.setTimeout(function(){
+	        //         slc.options[0].selected = false;
+	
+	        //         if(slc.options[index].value===''){
+	        //             slc.options[index].selected = false;
+	        //         }
+	        //         else{
+	        //             slc.options[index].selected = true;
+	        //             if(doFilter){
+	        //                 o.filter();
+	        //             }
+	        //         }
+	        //     }, 0.1);
+	        // },
+	
+	        /**
+	         * Check if given column implements a filter with custom options
+	         * @param  {Number}  colIndex Column's index
+	         * @return {Boolean}
+	         */
+	        value: function isCustomOptions(colIndex) {
+	            return this.hasCustomOptions && this.customOptions.cols.indexOf(colIndex) != -1;
+	        }
+	    }, {
+	        key: 'getCustomOptions',
+	
+	        /**
+	         * Returns an array [[value0, value1 ...],[text0, text1 ...]] with the
+	         * custom options values and texts
+	         * @param  {Number} colIndex Column's index
+	         * @return {Array}
+	         */
+	        value: function getCustomOptions(colIndex) {
+	            if (!colIndex || !this.isCustomOptions(colIndex)) {
+	                return;
+	            }
+	
+	            var customOptions = this.customOptions;
+	            var cols = customOptions.cols;
+	            var optTxt = [],
+	                optArray = [];
+	            var index = _Arr2['default'].indexByValue(cols, colIndex);
+	            var slcValues = customOptions.values[index];
+	            var slcTexts = customOptions.texts[index];
+	            var slcSort = customOptions.sorts[index];
+	
+	            for (var r = 0, len = slcValues.length; r < len; r++) {
+	                optArray.push(slcValues[r]);
+	                if (slcTexts[r]) {
+	                    optTxt.push(slcTexts[r]);
+	                } else {
+	                    optTxt.push(slcValues[r]);
+	                }
+	            }
+	            if (slcSort) {
+	                optArray.sort();
+	                optTxt.sort();
+	            }
+	            return [optArray, optTxt];
+	        }
+	    }, {
+	        key: 'resetValues',
+	        value: function resetValues() {
+	            this.EvtManager(this.Evt.name.resetvalues);
+	        }
+	    }, {
+	        key: '_resetValues',
+	
+	        /**
+	         * Reset persisted filter values
+	         */
+	        value: function _resetValues() {
+	            //only fillSlcOnDemand
+	            if (this.rememberGridValues && this.fillSlcOnDemand) {
+	                this._resetGridValues(this.fltsValuesCookie);
+	            }
+	            if (this.rememberPageLen && this.Mod.paging) {
+	                this.Mod.paging.resetPageLength(this.pgLenCookie);
+	            }
+	            if (this.rememberPageNb && this.Mod.paging) {
+	                this.Mod.paging.resetPage(this.pgNbCookie);
+	            }
+	        }
+	    }, {
+	        key: '_resetGridValues',
+	
+	        /**
+	         * Reset persisted filter values when load filters on demand feature is
+	         * enabled
+	         * @param  {String} name cookie name storing filter values
+	         */
+	        value: function _resetGridValues(name) {
+	            if (!this.fillSlcOnDemand) {
+	                return;
+	            }
+	            var fltsValues = this.Mod.store.getFilterValues(name),
+	                slcFltsIndex = this.getFiltersByType(this.fltTypeSlc, true),
+	                multiFltsIndex = this.getFiltersByType(this.fltTypeMulti, true);
+	
+	            //if the number of columns is the same as before page reload
+	            if (Number(fltsValues[fltsValues.length - 1]) === this.fltIds.length) {
+	                for (var i = 0; i < fltsValues.length - 1; i++) {
+	                    if (fltsValues[i] === ' ') {
+	                        continue;
+	                    }
+	                    var s = undefined,
+	                        opt = undefined;
+	                    var fltType = this.getFilterType(i);
+	                    // if fillSlcOnDemand, drop-down needs to contain stored
+	                    // value(s) for filtering
+	                    if (fltType === this.fltTypeSlc || fltType === this.fltTypeMulti) {
+	                        var slc = _Dom2['default'].id(this.fltIds[i]);
+	                        slc.options[0].selected = false;
+	
+	                        //selects
+	                        if (_Arr2['default'].has(slcFltsIndex, i)) {
+	                            opt = _Dom2['default'].createOpt(fltsValues[i], fltsValues[i], true);
+	                            slc.appendChild(opt);
+	                            this.hasStoredValues = true;
+	                        }
+	                        //multiple select
+	                        if (_Arr2['default'].has(multiFltsIndex, i)) {
+	                            s = fltsValues[i].split(' ' + this.orOperator + ' ');
+	                            for (var j = 0, len = s.length; j < len; j++) {
+	                                if (s[j] === '') {
+	                                    continue;
+	                                }
+	                                opt = _Dom2['default'].createOpt(s[j], s[j], true);
+	                                slc.appendChild(opt);
+	                                this.hasStoredValues = true;
+	
+	                                // IE multiple selection work-around
+	                                // if(hlp.isIE()){
+	                                //     this.__deferMultipleSelection(slc,j,false);
+	                                //     hasStoredValues = false;
+	                                // }
+	                            }
+	                        } // if multiFltsIndex
+	                    } else if (fltType === this.fltTypeCheckList) {
+	                        var checkList = this.Mod.checkList;
+	                        var divChk = checkList.checkListDiv[i];
+	                        divChk.title = divChk.innerHTML;
+	                        divChk.innerHTML = '';
+	
+	                        var ul = _Dom2['default'].create('ul', ['id', this.fltIds[i]], ['colIndex', i]);
+	                        ul.className = checkList.checkListCssClass;
+	
+	                        var li0 = _Dom2['default'].createCheckItem(this.fltIds[i] + '_0', '', this.displayAllText);
+	                        li0.className = checkList.checkListItemCssClass;
+	                        ul.appendChild(li0);
+	
+	                        divChk.appendChild(ul);
+	
+	                        s = fltsValues[i].split(' ' + this.orOperator + ' ');
+	                        for (var j = 0, len = s.length; j < len; j++) {
+	                            if (s[j] === '') {
+	                                continue;
+	                            }
+	                            var li = _Dom2['default'].createCheckItem(this.fltIds[i] + '_' + (j + 1), s[j], s[j]);
+	                            li.className = checkList.checkListItemCssClass;
+	                            ul.appendChild(li);
+	                            li.check.checked = true;
+	                            checkList.setCheckListValues(li.check);
+	                            this.hasStoredValues = true;
+	                        }
+	                    }
+	                } //end for
+	
+	                if (!this.hasStoredValues && this.paging) {
+	                    this.Mod.paging.setPagingInfo();
+	                }
+	            } //end if
+	        }
+	    }, {
+	        key: 'filter',
+	        value: function filter() {
+	            this.EvtManager(this.Evt.name.filter);
+	        }
+	    }, {
+	        key: '_filter',
+	
+	        /**
+	         * Filter the table by retrieving the data from each cell in every single
+	         * row and comparing it to the search term for current column. A row is
+	         * hidden when all the search terms are not found in inspected row.
+	         *
+	         * TODO: Reduce complexity of this massive method
+	         */
+	        value: function _filter() {
+	            if (!this.fltGrid || !this._hasGrid && !this.isFirstLoad) {
+	                return;
+	            }
+	            //invoke onbefore callback
+	            if (this.onBeforeFilter) {
+	                this.onBeforeFilter.call(null, this);
+	            }
+	
+	            var row = this.tbl.rows,
+	                Mod = this.Mod,
+	                hiddenrows = 0;
+	
+	            this.validRowsIndex = [];
+	
+	            // removes keyword highlighting
+	            if (this.highlightKeywords) {
+	                Mod.highlightKeyword.unhighlightAll();
+	            }
+	            //removes popup filters active icons
+	            if (this.popUpFilters) {
+	                Mod.popupFilter.buildIcons();
+	            }
+	            //removes active column header class
+	            if (this.markActiveColumns) {
+	                this.clearActiveColumns();
+	            }
+	            // search args re-init
+	            this.searchArgs = this.getFiltersValue();
+	
+	            var num_cell_data, nbFormat;
+	            var re_le = new RegExp(this.leOperator),
+	                re_ge = new RegExp(this.geOperator),
+	                re_l = new RegExp(this.lwOperator),
+	                re_g = new RegExp(this.grOperator),
+	                re_d = new RegExp(this.dfOperator),
+	                re_lk = new RegExp(_Str2['default'].rgxEsc(this.lkOperator)),
+	                re_eq = new RegExp(this.eqOperator),
+	                re_st = new RegExp(this.stOperator),
+	                re_en = new RegExp(this.enOperator),
+	
+	            // re_an = new RegExp(this.anOperator),
+	            // re_cr = new RegExp(this.curExp),
+	            re_em = this.emOperator,
+	                re_nm = this.nmOperator,
+	                re_re = new RegExp(_Str2['default'].rgxEsc(this.rgxOperator));
+	
+	            //keyword highlighting
+	            function highlight(str, ok, cell) {
+	                /*jshint validthis:true */
+	                if (this.highlightKeywords && ok) {
+	                    str = str.replace(re_lk, '');
+	                    str = str.replace(re_eq, '');
+	                    str = str.replace(re_st, '');
+	                    str = str.replace(re_en, '');
+	                    var w = str;
+	                    if (re_le.test(str) || re_ge.test(str) || re_l.test(str) || re_g.test(str) || re_d.test(str)) {
+	                        w = _Dom2['default'].getText(cell);
+	                    }
+	                    if (w !== '') {
+	                        Mod.highlightKeyword.highlight(cell, w, Mod.highlightKeyword.highlightCssClass);
+	                    }
+	                }
+	            }
+	
+	            //looks for search argument in current row
+	            function hasArg(sA, cell_data, j) {
+	                /*jshint validthis:true */
+	                var occurence = undefined,
+	                    removeNbFormat = _Helpers2['default'].removeNbFormat;
+	                //Search arg operator tests
+	                var hasLO = re_l.test(sA),
+	                    hasLE = re_le.test(sA),
+	                    hasGR = re_g.test(sA),
+	                    hasGE = re_ge.test(sA),
+	                    hasDF = re_d.test(sA),
+	                    hasEQ = re_eq.test(sA),
+	                    hasLK = re_lk.test(sA),
+	
+	                // hasAN = re_an.test(sA),
+	                hasST = re_st.test(sA),
+	                    hasEN = re_en.test(sA),
+	                    hasEM = re_em === sA,
+	                    hasNM = re_nm === sA,
+	                    hasRE = re_re.test(sA);
+	
+	                //Search arg dates tests
+	                var isLDate = hasLO && isValidDate(sA.replace(re_l, ''), dtType);
+	                var isLEDate = hasLE && isValidDate(sA.replace(re_le, ''), dtType);
+	                var isGDate = hasGR && isValidDate(sA.replace(re_g, ''), dtType);
+	                var isGEDate = hasGE && isValidDate(sA.replace(re_ge, ''), dtType);
+	                var isDFDate = hasDF && isValidDate(sA.replace(re_d, ''), dtType);
+	                var isEQDate = hasEQ && isValidDate(sA.replace(re_eq, ''), dtType);
+	
+	                var dte1 = undefined,
+	                    dte2 = undefined;
+	                //dates
+	                if (isValidDate(cell_data, dtType)) {
+	                    dte1 = formatDate(cell_data, dtType);
+	                    // lower date
+	                    if (isLDate) {
+	                        dte2 = formatDate(sA.replace(re_l, ''), dtType);
+	                        occurence = dte1 < dte2;
+	                    }
+	                    // lower equal date
+	                    else if (isLEDate) {
+	                        dte2 = formatDate(sA.replace(re_le, ''), dtType);
+	                        occurence = dte1 <= dte2;
+	                    }
+	                    // greater equal date
+	                    else if (isGEDate) {
+	                        dte2 = formatDate(sA.replace(re_ge, ''), dtType);
+	                        occurence = dte1 >= dte2;
+	                    }
+	                    // greater date
+	                    else if (isGDate) {
+	                        dte2 = formatDate(sA.replace(re_g, ''), dtType);
+	                        occurence = dte1 > dte2;
+	                    }
+	                    // different date
+	                    else if (isDFDate) {
+	                        dte2 = formatDate(sA.replace(re_d, ''), dtType);
+	                        occurence = dte1.toString() != dte2.toString();
+	                    }
+	                    // equal date
+	                    else if (isEQDate) {
+	                        dte2 = formatDate(sA.replace(re_eq, ''), dtType);
+	                        occurence = dte1.toString() == dte2.toString();
+	                    }
+	                    // searched keyword with * operator doesn't have to be a date
+	                    else if (re_lk.test(sA)) {
+	                        // like date
+	                        occurence = this._containsStr(sA.replace(re_lk, ''), cell_data, null, false);
+	                    } else if (isValidDate(sA, dtType)) {
+	                        dte2 = formatDate(sA, dtType);
+	                        occurence = dte1.toString() == dte2.toString();
+	                    }
+	                    //empty
+	                    else if (hasEM) {
+	                        occurence = _Str2['default'].isEmpty(cell_data);
+	                    }
+	                    //non-empty
+	                    else if (hasNM) {
+	                        occurence = !_Str2['default'].isEmpty(cell_data);
+	                    }
+	                } else {
+	                    //first numbers need to be formated
+	                    if (this.hasColNbFormat && this.colNbFormat[j]) {
+	                        num_cell_data = removeNbFormat(cell_data, this.colNbFormat[j]);
+	                        nbFormat = this.colNbFormat[j];
+	                    } else {
+	                        if (this.thousandsSeparator === ',' && this.decimalSeparator === '.') {
+	                            num_cell_data = removeNbFormat(cell_data, 'us');
+	                            nbFormat = 'us';
+	                        } else {
+	                            num_cell_data = removeNbFormat(cell_data, 'eu');
+	                            nbFormat = 'eu';
+	                        }
+	                    }
+	
+	                    // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
+	                    // rgx:)
+	                    // lower equal
+	                    if (hasLE) {
+	                        occurence = num_cell_data <= removeNbFormat(sA.replace(re_le, ''), nbFormat);
+	                    }
+	                    //greater equal
+	                    else if (hasGE) {
+	                        occurence = num_cell_data >= removeNbFormat(sA.replace(re_ge, ''), nbFormat);
+	                    }
+	                    //lower
+	                    else if (hasLO) {
+	                        occurence = num_cell_data < removeNbFormat(sA.replace(re_l, ''), nbFormat);
+	                    }
+	                    //greater
+	                    else if (hasGR) {
+	                        occurence = num_cell_data > removeNbFormat(sA.replace(re_g, ''), nbFormat);
+	                    }
+	                    //different
+	                    else if (hasDF) {
+	                        occurence = this._containsStr(sA.replace(re_d, ''), cell_data) ? false : true;
+	                    }
+	                    //like
+	                    else if (hasLK) {
+	                        occurence = this._containsStr(sA.replace(re_lk, ''), cell_data, null, false);
+	                    }
+	                    //equal
+	                    else if (hasEQ) {
+	                        occurence = this._containsStr(sA.replace(re_eq, ''), cell_data, null, true);
+	                    }
+	                    //starts with
+	                    else if (hasST) {
+	                        occurence = cell_data.indexOf(sA.replace(re_st, '')) === 0 ? true : false;
+	                    }
+	                    //ends with
+	                    else if (hasEN) {
+	                        var searchArg = sA.replace(re_en, '');
+	                        occurence = cell_data.lastIndexOf(searchArg, cell_data.length - 1) === cell_data.length - 1 - (searchArg.length - 1) && cell_data.lastIndexOf(searchArg, cell_data.length - 1) > -1 ? true : false;
+	                    }
+	                    //empty
+	                    else if (hasEM) {
+	                        occurence = _Str2['default'].isEmpty(cell_data);
+	                    }
+	                    //non-empty
+	                    else if (hasNM) {
+	                        occurence = !_Str2['default'].isEmpty(cell_data);
+	                    }
+	                    //regexp
+	                    else if (hasRE) {
+	                        //in case regexp fires an exception
+	                        try {
+	                            //operator is removed
+	                            var srchArg = sA.replace(re_re, '');
+	                            var rgx = new RegExp(srchArg);
+	                            occurence = rgx.test(cell_data);
+	                        } catch (e) {
+	                            occurence = false;
+	                        }
+	                    } else {
+	                        occurence = this._containsStr(sA, cell_data, this.getFilterType(j));
+	                    }
+	                } //else
+	                return occurence;
+	            } //fn
+	
+	            for (var k = this.refRow; k < this.nbRows; k++) {
+	                /*** if table already filtered some rows are not visible ***/
+	                if (row[k].style.display === 'none') {
+	                    row[k].style.display = '';
+	                }
+	
+	                var cell = row[k].cells,
+	                    nchilds = cell.length;
+	
+	                // checks if row has exact cell #
+	                if (nchilds !== this.nbCells) {
+	                    continue;
+	                }
+	
+	                var occurence = [],
+	                    isRowValid = this.searchType === 'include' ? true : false,
+	
+	                //only for single filter search
+	                singleFltRowValid = false;
+	
+	                // this loop retrieves cell data
+	                for (var j = 0; j < nchilds; j++) {
+	                    //searched keyword
+	                    var sA = this.searchArgs[this.singleSearchFlt ? 0 : j];
+	                    var dtType = this.hasColDateType ? this.colDateType[j] : this.defaultDateType;
+	                    if (sA === '') {
+	                        continue;
+	                    }
+	
+	                    var cell_data = _Str2['default'].matchCase(this.getCellData(j, cell[j]), this.caseSensitive);
+	
+	                    //multiple search parameter operator ||
+	                    var sAOrSplit = sA.split(this.orOperator),
+	
+	                    //multiple search || parameter boolean
+	                    hasMultiOrSA = sAOrSplit.length > 1 ? true : false,
+	
+	                    //multiple search parameter operator &&
+	                    sAAndSplit = sA.split(this.anOperator),
+	
+	                    //multiple search && parameter boolean
+	                    hasMultiAndSA = sAAndSplit.length > 1 ? true : false;
+	
+	                    //multiple sarch parameters
+	                    if (hasMultiOrSA || hasMultiAndSA) {
+	                        var cS = undefined,
+	                            occur = false,
+	                            s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
+	                        for (var w = 0, len = s.length; w < len; w++) {
+	                            cS = _Str2['default'].trim(s[w]);
+	                            occur = hasArg.call(this, cS, cell_data, j);
+	                            highlight.call(this, cS, occur, cell[j]);
+	                            if (hasMultiOrSA && occur) {
+	                                break;
+	                            }
+	                            if (hasMultiAndSA && !occur) {
+	                                break;
+	                            }
+	                        }
+	                        occurence[j] = occur;
+	                    }
+	                    //single search parameter
+	                    else {
+	                        occurence[j] = hasArg.call(this, _Str2['default'].trim(sA), cell_data, j);
+	                        highlight.call(this, sA, occurence[j], cell[j]);
+	                    } //else single param
+	
+	                    if (!occurence[j]) {
+	                        isRowValid = this.searchType === 'include' ? false : true;
+	                    }
+	                    if (this.singleSearchFlt && occurence[j]) {
+	                        singleFltRowValid = true;
+	                    }
+	                    if (this.popUpFilters) {
+	                        Mod.popupFilter.buildIcon(j, true);
+	                    }
+	                    if (this.markActiveColumns) {
+	                        if (k === this.refRow) {
+	                            if (this.onBeforeActiveColumn) {
+	                                this.onBeforeActiveColumn.call(null, this, j);
+	                            }
+	                            _Dom2['default'].addClass(this.getHeaderElement(j), this.activeColumnsCssClass);
+	                            if (this.onAfterActiveColumn) {
+	                                this.onAfterActiveColumn.call(null, this, j);
+	                            }
+	                        }
+	                    }
+	                } //for j
+	
+	                if (this.singleSearchFlt && singleFltRowValid) {
+	                    isRowValid = true;
+	                }
+	
+	                if (!isRowValid) {
+	                    this.validateRow(k, false);
+	                    // always visible rows need to be counted as valid
+	                    if (this.hasVisibleRows && _Arr2['default'].has(this.visibleRows, k) && !this.paging) {
+	                        this.validRowsIndex.push(k);
+	                    } else {
+	                        hiddenrows++;
+	                    }
+	                } else {
+	                    this.validateRow(k, true);
+	                    this.validRowsIndex.push(k);
+	                    if (this.alternateBgs) {
+	                        Mod.alternateRows.setRowBg(k, this.validRowsIndex.length);
+	                    }
+	                    if (this.onRowValidated) {
+	                        this.onRowValidated.call(null, this, k);
+	                    }
+	                }
+	            } // for k
+	
+	            this.nbVisibleRows = this.validRowsIndex.length;
+	            this.nbHiddenRows = hiddenrows;
+	            this.isStartBgAlternate = false;
+	
+	            if (this.rememberGridValues) {
+	                Mod.store.saveFilterValues(this.fltsValuesCookie);
+	            }
+	            //applies filter props after filtering process
+	            if (!this.paging) {
+	                this.applyGridProps();
+	            } else {
+	                this.startPagingRow = 0;
+	                this.currentPageNb = 1;
+	                Mod.paging.setPagingInfo(this.validRowsIndex);
+	            }
+	            //invokes onafter callback
+	            if (this.onAfterFilter) {
+	                this.onAfterFilter.call(null, this);
+	            }
+	        }
+	    }, {
+	        key: 'applyGridProps',
+	
+	        /**
+	         * Re-apply the filters grid properties after a filtering/paging operation
+	         */
+	        value: function applyGridProps() {
+	            // blurs active filter (IE)
+	            if (this.activeFlt && _Str2['default'].lower(this.activeFlt.nodeName) === this.fltTypeSlc && !this.popUpFilters) {
+	                this.activeFlt.blur();
+	                if (this.activeFlt.parentNode) {
+	                    this.activeFlt.parentNode.focus();
+	                }
+	            }
+	
+	            var Mod = this.Mod;
+	
+	            //shows rows always visible
+	            if (this.visibleRows) {
+	                this.enforceVisibility();
+	            }
+	            //columns operations
+	            if (this.hasExtension('colOps')) {
+	                this.getExtension('colOps').calc();
+	            }
+	
+	            //re-populates drop-down filters
+	            if (this.linkedFilters) {
+	                this.linkFilters();
+	            }
+	            var nr = !this.paging && this.hasVisibleRows ? this.nbVisibleRows - this.visibleRows.length : this.nbVisibleRows;
+	            //refreshes rows counter
+	            if (this.rowsCounter) {
+	                Mod.rowsCounter.refresh(nr);
+	            }
+	
+	            if (this.popUpFilters) {
+	                Mod.popupFilter.closeAll();
+	            }
+	        }
+	    }, {
+	        key: 'getColValues',
+	
+	        /**
+	         * Return the data for a given colum
+	         * @param  {Number} colindex Column index
+	         * @param  {Boolean} num     Return unformatted number
+	         * @param  {Array} exclude   List of row indexes to be excluded
+	         * @return {Array}           Flat list of data for a column
+	         */
+	        value: function getColValues(colindex, num, exclude) {
+	            if (!this.fltGrid) {
+	                return;
+	            }
+	            var row = this.tbl.rows,
+	                colValues = [];
+	
+	            for (var i = this.refRow; i < this.nbRows; i++) {
+	                var isExludedRow = false;
+	                // checks if current row index appears in exclude array
+	                if (exclude && _Types2['default'].isArray(exclude)) {
+	                    isExludedRow = _Arr2['default'].has(exclude, i);
+	                }
+	                var cell = row[i].cells,
+	                    nchilds = cell.length;
+	
+	                // checks if row has exact cell # and is not excluded
+	                if (nchilds === this.nbCells && !isExludedRow) {
+	                    // this loop retrieves cell data
+	                    for (var j = 0; j < nchilds; j++) {
+	                        if (j != colindex || row[i].style.display != '') {
+	                            continue;
+	                        }
+	                        var cell_data = _Str2['default'].lower(this.getCellData(j, cell[j])),
+	                            nbFormat = this.colNbFormat ? this.colNbFormat[colindex] : null,
+	                            data = num ? _Helpers2['default'].removeNbFormat(cell_data, nbFormat) : cell_data;
+	                        colValues.push(data);
+	                    }
+	                }
+	            }
+	            return colValues;
+	        }
+	    }, {
+	        key: 'getFilterValue',
+	
+	        /**
+	         * Return the filter's value of a specified column
+	         * @param  {Number} index Column index
+	         * @return {String}       Filter value
+	         */
+	        value: function getFilterValue(index) {
+	            if (!this.fltGrid) {
+	                return;
+	            }
+	            var fltValue = undefined,
+	                flt = this.getFilterElement(index);
+	            if (!flt) {
+	                return '';
+	            }
+	            // let fltColType = this.fltCol[index];
+	            var fltColType = this.getFilterType(index);
+	            if (fltColType !== this.fltTypeMulti && fltColType !== this.fltTypeCheckList) {
+	                fltValue = flt.value;
+	            }
+	            //mutiple select
+	            else if (fltColType === this.fltTypeMulti) {
+	                fltValue = '';
+	                for (var j = 0, len = flt.options.length; j < len; j++) {
+	                    if (flt.options[j].selected) {
+	                        fltValue = fltValue.concat(flt.options[j].value + ' ' + this.orOperator + ' ');
+	                    }
+	                }
+	                //removes last operator ||
+	                fltValue = fltValue.substr(0, fltValue.length - 4);
+	            }
+	            //checklist
+	            else if (fltColType === this.fltTypeCheckList) {
+	                if (flt.getAttribute('value') !== null) {
+	                    fltValue = flt.getAttribute('value');
+	                    //removes last operator ||
+	                    fltValue = fltValue.substr(0, fltValue.length - 3);
+	                } else {
+	                    fltValue = '';
+	                }
+	            }
+	            return fltValue;
+	        }
+	    }, {
+	        key: 'getFiltersValue',
+	
+	        /**
+	         * Return the filters' values
+	         * @return {Array} List of filters' values
+	         */
+	        value: function getFiltersValue() {
+	            if (!this.fltGrid) {
+	                return;
+	            }
+	            var searchArgs = [];
+	            for (var i = 0, len = this.fltIds.length; i < len; i++) {
+	                searchArgs.push(_Str2['default'].trim(_Str2['default'].matchCase(this.getFilterValue(i), this.caseSensitive)));
+	            }
+	            return searchArgs;
+	        }
+	    }, {
+	        key: 'getFilterId',
+	
+	        /**
+	         * Return the ID of the filter of a specified column
+	         * @param  {Number} index Column's index
+	         * @return {String}       ID of the filter element
+	         */
+	        value: function getFilterId(index) {
+	            if (!this.fltGrid) {
+	                return;
+	            }
+	            return this.fltIds[index];
+	        }
+	    }, {
+	        key: 'getFiltersByType',
+	
+	        /**
+	         * Return the list of ids of filters matching a specified type.
+	         * Note: hidden filters are also returned
+	         *
+	         * @param  {String} type  Filter type string ('input', 'select', 'multiple',
+	         *                        'checklist')
+	         * @param  {Boolean} bool If true returns columns indexes instead of IDs
+	         * @return {[type]}       List of element IDs or column indexes
+	         */
+	        value: function getFiltersByType(type, bool) {
+	            if (!this.fltGrid) {
+	                return;
+	            }
+	            var arr = [];
+	            for (var i = 0, len = this.fltIds.length; i < len; i++) {
+	                var fltType = this.getFilterType(i);
+	                if (fltType === _Str2['default'].lower(type)) {
+	                    var a = bool ? i : this.fltIds[i];
+	                    arr.push(a);
+	                }
+	            }
+	            return arr;
+	        }
+	    }, {
+	        key: 'getFilterElement',
+	
+	        /**
+	         * Return the filter's DOM element for a given column
+	         * @param  {Number} index     Column's index
+	         * @return {DOMElement}
+	         */
+	        value: function getFilterElement(index) {
+	            var fltId = this.fltIds[index];
+	            return _Dom2['default'].id(fltId);
+	        }
+	    }, {
+	        key: 'getCellsNb',
+	
+	        /**
+	         * Return the number of cells for a given row index
+	         * @param  {Number} rowIndex Index of the row
+	         * @return {Number}          Number of cells
+	         */
+	        value: function getCellsNb() {
+	            var rowIndex = arguments[0] === undefined ? 0 : arguments[0];
+	
+	            // let tr = !rowIndex ? this.tbl.rows[0] : this.tbl.rows[rowIndex];
+	            var tr = this.tbl.rows[rowIndex];
+	            return tr.cells.length;
+	        }
+	    }, {
+	        key: 'getRowsNb',
+	
+	        /**
+	         * Return the number of filterable rows starting from reference row if
+	         * defined
+	         * @param  {Boolean} includeHeaders Include the headers row
+	         * @return {Number}                 Number of filterable rows
+	         */
+	        value: function getRowsNb(includeHeaders) {
+	            var s = _Types2['default'].isUndef(this.refRow) ? 0 : this.refRow,
+	                ntrs = this.tbl.rows.length;
+	            if (includeHeaders) {
+	                s = 0;
+	            }
+	            return parseInt(ntrs - s, 10);
+	        }
+	    }, {
+	        key: 'getCellData',
+	
+	        /**
+	         * Return the data of a given cell
+	         * @param  {Number} i    Column's index
+	         * @param  {Object} cell Cell's DOM object
+	         * @return {String}
+	         */
+	        value: function getCellData(i, cell) {
+	            if (i === undefined || !cell) {
+	                return '';
+	            }
+	            //First checks for customCellData event
+	            if (this.customCellData && _Arr2['default'].has(this.customCellDataCols, i)) {
+	                return this.customCellData.call(null, this, cell, i);
+	            } else {
+	                return _Dom2['default'].getText(cell);
+	            }
+	        }
+	    }, {
+	        key: 'getTableData',
+	
+	        /**
+	         * Return the table data with following format:
+	         * [
+	         *     [rowIndex, [value0, value1...]],
+	         *     [rowIndex, [value0, value1...]]
+	         * ]
+	         * @return {Array}
+	         *
+	         * TODO: provide an API returning data in JSON format
+	         */
+	        value: function getTableData() {
+	            var row = this.tbl.rows;
+	            for (var k = this.refRow; k < this.nbRows; k++) {
+	                var rowData = [k, []];
+	                var cells = row[k].cells;
+	                // this loop retrieves cell data
+	                for (var j = 0, len = cells.length; j < len; j++) {
+	                    var cell_data = this.getCellData(j, cells[j]);
+	                    rowData[1].push(cell_data);
+	                }
+	                this.tblData.push(rowData);
+	            }
+	            return this.tblData;
+	        }
+	    }, {
+	        key: 'getFilteredData',
+	
+	        /**
+	         * Return the filtered data with following format:
+	         * [
+	         *     [rowIndex, [value0, value1...]],
+	         *     [rowIndex, [value0, value1...]]
+	         * ]
+	         * @param  {Boolean} includeHeaders  Include headers row
+	         * @return {Array}
+	         *
+	         * TODO: provide an API returning data in JSON format
+	         */
+	        value: function getFilteredData(includeHeaders) {
+	            if (!this.validRowsIndex) {
+	                return [];
+	            }
+	            var row = this.tbl.rows,
+	                filteredData = [];
+	            if (includeHeaders) {
+	                var table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl,
+	                    r = table.rows[this.headersRow],
+	                    rowData = [r.rowIndex, []];
+	                for (var j = 0; j < this.nbCells; j++) {
+	                    var headerText = this.getCellData(j, r.cells[j]);
+	                    rowData[1].push(headerText);
+	                }
+	                filteredData.push(rowData);
+	            }
+	
+	            var validRows = this.getValidRows(true);
+	            for (var i = 0; i < validRows.length; i++) {
+	                var rData = [this.validRowsIndex[i], []],
+	                    cells = row[this.validRowsIndex[i]].cells;
+	                for (var k = 0; k < cells.length; k++) {
+	                    var cell_data = this.getCellData(k, cells[k]);
+	                    rData[1].push(cell_data);
+	                }
+	                filteredData.push(rData);
+	            }
+	            return filteredData;
+	        }
+	    }, {
+	        key: 'getFilteredDataCol',
+	
+	        /**
+	         * Return the filtered data for a given column index
+	         * @param  {Number} colIndex Colmun's index
+	         * @return {Array}           Flat list of values ['val0','val1','val2'...]
+	         *
+	         * TODO: provide an API returning data in JSON format
+	         */
+	        value: function getFilteredDataCol(colIndex) {
+	            if (colIndex === undefined) {
+	                return [];
+	            }
+	            var data = this.getFilteredData(),
+	                colData = [];
+	            for (var i = 0, len = data.length; i < len; i++) {
+	                var r = data[i],
+	
+	                //cols values of current row
+	                d = r[1],
+	
+	                //data of searched column
+	                c = d[colIndex];
+	                colData.push(c);
+	            }
+	            return colData;
+	        }
+	    }, {
+	        key: 'getRowDisplay',
+	
+	        /**
+	         * Get the display value of a row
+	         * @param  {RowElement} DOM element of the row
+	         * @return {String}     Usually 'none' or ''
+	         */
+	        value: function getRowDisplay(row) {
+	            if (!this.fltGrid || !_Types2['default'].isObj(row)) {
+	                return;
+	            }
+	            return row.style.display;
+	        }
+	    }, {
+	        key: 'validateRow',
+	
+	        /**
+	         * Validate/invalidate row by setting the 'validRow' attribute on the row
+	         * @param  {Number}  rowIndex Index of the row
+	         * @param  {Boolean} isValid
+	         */
+	        value: function validateRow(rowIndex, isValid) {
+	            var row = this.tbl.rows[rowIndex];
+	            if (!row || _Str2['default'].lower(typeof isValid) !== 'boolean') {
+	                return;
+	            }
+	
+	            // always visible rows are valid
+	            if (this.hasVisibleRows && _Arr2['default'].has(this.visibleRows, rowIndex) && !this.paging) {
+	                isValid = true;
+	            }
+	
+	            var displayFlag = isValid ? '' : 'none',
+	                validFlag = isValid ? 'true' : 'false';
+	            row.style.display = displayFlag;
+	
+	            if (this.paging) {
+	                row.setAttribute('validRow', validFlag);
+	            }
+	        }
+	    }, {
+	        key: 'validateAllRows',
+	
+	        /**
+	         * Validate all filterable rows
+	         */
+	        value: function validateAllRows() {
+	            if (!this._hasGrid) {
+	                return;
+	            }
+	            this.validRowsIndex = [];
+	            for (var k = this.refRow; k < this.nbFilterableRows; k++) {
+	                this.validateRow(k, true);
+	                this.validRowsIndex.push(k);
+	            }
+	        }
+	    }, {
+	        key: 'setFilterValue',
+	
+	        /**
+	         * Set search value to a given filter
+	         * @param {Number} index     Column's index
+	         * @param {String} searcharg Search term
+	         */
+	        value: function setFilterValue(index) {
+	            var searcharg = arguments[1] === undefined ? '' /*, doFilter*/ : arguments[1];
+	
+	            if (!this.fltGrid && !this.isFirstLoad || !this.getFilterElement(index)) {
+	                return;
+	            }
+	            var slc = this.getFilterElement(index),
+	
+	            // execFilter = doFilter===undefined ? true : doFilter,
+	            fltColType = this.getFilterType(index);
+	
+	            if (fltColType !== this.fltTypeMulti && fltColType != this.fltTypeCheckList) {
+	                slc.value = searcharg;
+	            }
+	            //multiple selects
+	            else if (fltColType === this.fltTypeMulti) {
+	                var s = searcharg.split(' ' + this.orOperator + ' ');
+	                // let ct = 0; //keywords counter
+	                for (var j = 0, len = slc.options.length; j < len; j++) {
+	                    var option = slc.options[j];
+	                    if (s === '' || s[0] === '') {
+	                        option.selected = false;
+	                    }
+	                    if (option.value === '') {
+	                        option.selected = false;
+	                    }
+	                    if (option.value !== '' && _Arr2['default'].has(s, option.value, true)) {
+	                        // IE multiple selection work-around
+	                        // if(hlp.isIE()){
+	                        //     //when last value reached filtering can be executed
+	                        //     let filter = ct==(s.length-1) && execFilter ?
+	                        //         true : false;
+	                        //     this.__deferMultipleSelection(slc,j,filter);
+	                        //     ct++;
+	                        // }
+	                        // else{
+	                        //     slc.options[j].selected = true;
+	                        // }
+	                        option.selected = true;
+	                    } //if
+	                } //for j
+	            }
+	            //checklist
+	            else if (fltColType === this.fltTypeCheckList) {
+	                searcharg = _Str2['default'].matchCase(searcharg, this.caseSensitive);
+	                var sarg = searcharg.split(' ' + this.orOperator + ' ');
+	                var lisNb = _Dom2['default'].tag(slc, 'li').length;
+	
+	                slc.setAttribute('value', '');
+	                slc.setAttribute('indexes', '');
+	
+	                for (var k = 0; k < lisNb; k++) {
+	                    var li = _Dom2['default'].tag(slc, 'li')[k],
+	                        lbl = _Dom2['default'].tag(li, 'label')[0],
+	                        chk = _Dom2['default'].tag(li, 'input')[0],
+	                        lblTxt = _Str2['default'].matchCase(_Dom2['default'].getText(lbl), this.caseSensitive);
+	                    if (lblTxt !== '' && _Arr2['default'].has(sarg, lblTxt, true)) {
+	                        chk.checked = true;
+	                        this.Mod.checkList.setCheckListValues(chk);
+	                    } else {
+	                        chk.checked = false;
+	                        this.Mod.checkList.setCheckListValues(chk);
+	                    }
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'setColWidths',
+	
+	        /**
+	         * Set them columns' widths as per configuration
+	         * @param {Number} rowIndex Optional row index to apply the widths to
+	         * @param {Element} tbl DOM element
+	         */
+	        value: function setColWidths(rowIndex, tbl) {
+	            if (!this.fltGrid || !this.hasColWidths) {
+	                return;
+	            }
+	            tbl = tbl || this.tbl;
+	            var rIndex = undefined;
+	            if (rowIndex === undefined) {
+	                rIndex = tbl.rows[0].style.display != 'none' ? 0 : 1;
+	            } else {
+	                rIndex = rowIndex;
+	            }
+	
+	            setWidths.call(this, tbl.rows[rIndex]);
+	
+	            function setWidths(row) {
+	                /*jshint validthis:true */
+	                var nbCols = this.nbCells;
+	                var colWidths = this.colWidths;
+	                if (nbCols != colWidths.length || nbCols != row.cells.length) {
+	                    throw new Error('Columns number mismatch!');
+	                }
+	
+	                var colTags = _Dom2['default'].tag(tbl, 'col');
+	                var tblHasColTag = colTags.length > 0;
+	                var frag = !tblHasColTag ? doc.createDocumentFragment() : null;
+	                for (var k = 0; k < nbCols; k++) {
+	                    // row.cells[k].style.width = colWidths[k];
+	                    var col = undefined;
+	                    if (tblHasColTag) {
+	                        col = colTags[k];
+	                    } else {
+	                        col = _Dom2['default'].create('col', ['id', this.id + '_col_' + k]);
+	                        frag.appendChild(col);
+	                    }
+	                    col.style.width = colWidths[k];
+	                }
+	                if (!tblHasColTag) {
+	                    tbl.insertBefore(frag, tbl.firstChild);
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'enforceVisibility',
+	
+	        /**
+	         * Makes defined rows always visible
+	         *
+	         * NOTE: This applies only when paging is disabled
+	         */
+	        value: function enforceVisibility() {
+	            if (this._hasGrid && this.hasVisibleRows && !this.paging) {
+	                for (var i = 0, len = this.visibleRows.length; i < len; i++) {
+	                    var row = this.visibleRows[i];
+	                    //row index cannot be > nrows
+	                    if (row <= this.nbRows) {
+	                        this.validateRow(row, true);
+	                    }
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'clearFilters',
+	        value: function clearFilters() {
+	            this.EvtManager(this.Evt.name.clear);
+	        }
+	    }, {
+	        key: '_clearFilters',
+	
+	        /**
+	         * Clear all the filters' values
+	         */
+	        value: function _clearFilters() {
+	            if (!this.fltGrid) {
+	                return;
+	            }
+	            if (this.onBeforeReset) {
+	                this.onBeforeReset.call(null, this, this.getFiltersValue());
+	            }
+	            for (var i = 0, len = this.fltIds.length; i < len; i++) {
+	                this.setFilterValue(i, '');
+	            }
+	            if (this.linkedFilters) {
+	                this.activeFilterId = '';
+	                this.linkFilters();
+	            }
+	            if (this.rememberPageLen) {
+	                _Cookie2['default'].remove(this.pgLenCookie);
+	            }
+	            if (this.rememberPageNb) {
+	                _Cookie2['default'].remove(this.pgNbCookie);
+	            }
+	            if (this.onAfterReset) {
+	                this.onAfterReset.call(null, this);
+	            }
+	        }
+	    }, {
+	        key: 'clearActiveColumns',
+	
+	        /**
+	         * Clears filtered columns visual indicator (background color)
+	         * @return {[type]} [description]
+	         */
+	        value: function clearActiveColumns() {
+	            for (var i = 0, len = this.fltIds.length; i < len; i++) {
+	                _Dom2['default'].removeClass(this.getHeaderElement(i), this.activeColumnsCssClass);
+	            }
+	        }
+	    }, {
+	        key: 'linkFilters',
+	
+	        /**
+	         * Refresh the filters
+	         * @param  {Object} config Configuration literal object
+	         */
+	        // refresh(config){
+	        //     let configObj = !config ? this.cfg : config;
+	        //     let hasSort = this.sort;
+	        //     //sort property is set to false in order to avoid sort object
+	        //     //re-instanciation
+	        //     if(hasSort){
+	        //         this.sort = false;
+	        //     }
+	        //     this.nbRows = this.getRowsNb(); //in case table is refreshed
+	        //     this.remove();
+	        //     global['tf_'+this.id] = new TableFilter(
+	        //         this.id, this.startRow, configObj);
+	        //     this.isFirstLoad = true;
+	        //     this.fltIds = [];
+	        //     this.init();
+	        //     //New tbody content needs to be referenced in sortabletable script
+	        //     //with setTBody() method
+	        //     if(hasSort){
+	        //         //this.st =  SortableTable object
+	        //         //Note this is a method of the Sortable Table 1.12 script
+	        //         //(Erik Arvidsson)
+	        //         this.st.setTBody(this.tbl.tBodies[0]);
+	        //         //finally sort property is enabled again
+	        //         this.sort = true;
+	        //     }
+	        // }
+	
+	        /**
+	         * Refresh the filters subject to linking ('select', 'multiple',
+	         * 'checklist' type)
+	         */
+	        value: function linkFilters() {
+	            var slcA1 = this.getFiltersByType(this.fltTypeSlc, true),
+	                slcA2 = this.getFiltersByType(this.fltTypeMulti, true),
+	                slcA3 = this.getFiltersByType(this.fltTypeCheckList, true),
+	                slcIndex = slcA1.concat(slcA2);
+	            slcIndex = slcIndex.concat(slcA3);
+	
+	            if (!this.activeFilterId) {
+	                return;
+	            }
+	
+	            var activeFlt = this.activeFilterId.split('_')[0];
+	            activeFlt = activeFlt.split(this.prfxFlt)[1];
+	            var slcSelectedValue = undefined;
+	            for (var i = 0, len = slcIndex.length; i < len; i++) {
+	                var curSlc = _Dom2['default'].id(this.fltIds[slcIndex[i]]);
+	                slcSelectedValue = this.getFilterValue(slcIndex[i]);
+	
+	                // Welcome to cyclomatic complexity hell :)
+	                // TODO: simplify/refactor if statement
+	                if (activeFlt !== slcIndex[i] || this.paging && _Arr2['default'].has(slcA1, slcIndex[i]) && activeFlt === slcIndex[i] || !this.paging && (_Arr2['default'].has(slcA3, slcIndex[i]) || _Arr2['default'].has(slcA2, slcIndex[i])) || slcSelectedValue === this.displayAllText) {
+	
+	                    if (_Arr2['default'].has(slcA3, slcIndex[i])) {
+	                        this.Mod.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
+	                    } else {
+	                        curSlc.innerHTML = '';
+	                    }
+	
+	                    //1st option needs to be inserted
+	                    if (this.fillSlcOnDemand) {
+	                        var opt0 = _Dom2['default'].createOpt(this.displayAllText, '');
+	                        if (curSlc) {
+	                            curSlc.appendChild(opt0);
+	                        }
+	                    }
+	
+	                    if (_Arr2['default'].has(slcA3, slcIndex[i])) {
+	                        this.Mod.checkList._build(slcIndex[i]);
+	                    } else {
+	                        this.Mod.dropdown._build(slcIndex[i], true);
+	                    }
+	
+	                    this.setFilterValue(slcIndex[i], slcSelectedValue);
+	                }
+	            } // for i
+	        }
+	    }, {
+	        key: '_resetGrid',
+	
+	        /**
+	         * Re-generate the filters grid bar when previously removed
+	         */
+	        value: function _resetGrid() {
+	            if (this.isFirstLoad) {
+	                return;
+	            }
+	
+	            var Mod = this.Mod;
+	            var tbl = this.tbl;
+	            var rows = tbl.rows;
+	            var filtersRowIndex = this.filtersRowIndex;
+	            var filtersRow = rows[filtersRowIndex];
+	
+	            // grid was removed, grid row element is stored in fltGridEl property
+	            if (!this.gridLayout) {
+	                // If table has a thead ensure the filters row is appended in the
+	                // thead element
+	                if (tbl.tHead) {
+	                    var tempRow = tbl.tHead.insertRow(this.filtersRowIndex);
+	                    tbl.tHead.replaceChild(this.fltGridEl, tempRow);
+	                } else {
+	                    filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
+	                }
+	            }
+	
+	            // filters are appended in external placeholders elements
+	            if (this.isExternalFlt) {
+	                var externalFltTgtIds = this.externalFltTgtIds;
+	                for (var ct = 0, len = externalFltTgtIds.length; ct < len; ct++) {
+	                    var extFlt = _Dom2['default'].id(externalFltTgtIds[ct]);
+	
+	                    if (!extFlt) {
+	                        continue;
+	                    }
+	
+	                    var externalFltEl = this.externalFltEls[ct];
+	                    extFlt.appendChild(externalFltEl);
+	                    var colFltType = this.getFilterType(ct);
+	                    //IE special treatment for gridLayout, appended filters are
+	                    //empty
+	                    if (this.gridLayout && externalFltEl.innerHTML === '' && colFltType !== this.fltTypeInp) {
+	                        if (colFltType === this.fltTypeSlc || colFltType === this.fltTypeMulti) {
+	                            Mod.dropdown.build(ct);
+	                        }
+	                        if (colFltType === this.fltTypeCheckList) {
+	                            Mod.checkList.build(ct);
+	                        }
+	                    }
+	                }
+	            }
+	
+	            this.nbFilterableRows = this.getRowsNb();
+	            this.nbVisibleRows = this.nbFilterableRows;
+	            this.nbRows = rows.length;
+	
+	            if (this.popUpFilters) {
+	                this.headersRow++;
+	                Mod.popupFilter.buildAll();
+	            }
+	
+	            /***    ie bug work-around, filters need to be re-generated since row
+	                    is empty; insertBefore method doesn't seem to work properly
+	                    with previously generated DOM nodes modified by innerHTML   ***/
+	            // function refreshFilters(o){
+	            //     tbl.deleteRow(filtersRowIndex);
+	            //     o.remove();
+	            //     o.fltIds = [];
+	            //     o.isFirstLoad = true;
+	            //     if(o.popUpFilters){
+	            //         // o.RemovePopupFilters();
+	            //         o.Mod.popupFilter.destroy();
+	            //     }
+	            //     o.init();
+	            // }
+	
+	            if (!this.gridLayout) {
+	                _Dom2['default'].addClass(this.tbl, this.prfxTf);
+	            }
+	            this._hasGrid = true;
+	        }
+	    }, {
+	        key: '_containsStr',
+	
+	        /**
+	         * Checks if passed data contains the searched arg
+	         * @param  {String} arg         Search term
+	         * @param  {String} data        Data string
+	         * @param  {String} fltType     Filter type ('input', 'select')
+	         * @param  {Boolean} forceMatch Exact match
+	         * @return {Boolean]}
+	         *
+	         * TODO: move into string module, remove fltType in order to decouple it
+	         * from TableFilter module
+	         */
+	        value: function _containsStr(arg, data, fltType, forceMatch) {
+	            // Improved by Cedric Wartel (cwl)
+	            // automatic exact match for selects and special characters are now
+	            // filtered
+	            var regexp = undefined,
+	                modifier = this.caseSensitive ? 'g' : 'gi',
+	                exactMatch = !forceMatch ? this.exactMatch : forceMatch;
+	            if (exactMatch || fltType !== this.fltTypeInp && fltType) {
+	                regexp = new RegExp('(^\\s*)' + _Str2['default'].rgxEsc(arg) + '(\\s*$)', modifier);
+	            } else {
+	                regexp = new RegExp(_Str2['default'].rgxEsc(arg), modifier);
+	            }
+	            return regexp.test(data);
+	        }
+	    }, {
+	        key: 'isImported',
+	
+	        /**
+	         * Check if passed script or stylesheet is already imported
+	         * @param  {String}  filePath Ressource path
+	         * @param  {String}  type     Possible values: 'script' or 'link'
+	         * @return {Boolean}
+	         */
+	        value: function isImported(filePath, type) {
+	            var imported = false,
+	                importType = !type ? 'script' : type,
+	                attr = importType == 'script' ? 'src' : 'href',
+	                files = _Dom2['default'].tag(doc, importType);
+	            for (var i = 0, len = files.length; i < len; i++) {
+	                if (files[i][attr] === undefined) {
+	                    continue;
+	                }
+	                if (files[i][attr].match(filePath)) {
+	                    imported = true;
+	                    break;
+	                }
+	            }
+	            return imported;
+	        }
+	    }, {
+	        key: 'import',
+	
+	        /**
+	         * Import script or stylesheet
+	         * @param  {String}   fileId   Ressource ID
+	         * @param  {String}   filePath Ressource path
+	         * @param  {Function} callback Callback
+	         * @param  {String}   type     Possible values: 'script' or 'link'
+	         */
+	        value: function _import(fileId, filePath, callback, type) {
+	            var ftype = !type ? 'script' : type,
+	                imported = this.isImported(filePath, ftype);
+	            if (imported) {
+	                return;
+	            }
+	            var o = this,
+	                isLoaded = false,
+	                file = undefined,
+	                head = _Dom2['default'].tag(doc, 'head')[0];
+	
+	            if (_Str2['default'].lower(ftype) === 'link') {
+	                file = _Dom2['default'].create('link', ['id', fileId], ['type', 'text/css'], ['rel', 'stylesheet'], ['href', filePath]);
+	            } else {
+	                file = _Dom2['default'].create('script', ['id', fileId], ['type', 'text/javascript'], ['src', filePath]);
+	            }
+	
+	            //Browser <> IE onload event works only for scripts, not for stylesheets
+	            file.onload = file.onreadystatechange = function () {
+	                if (!isLoaded && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete')) {
+	                    isLoaded = true;
+	                    if (typeof callback === 'function') {
+	                        callback.call(null, o);
+	                    }
+	                }
+	            };
+	            file.onerror = function () {
+	                throw new Error('TF script could not load: ' + filePath);
+	            };
+	            head.appendChild(file);
+	        }
+	    }, {
+	        key: 'hasGrid',
+	
+	        /**
+	         * Check if table has filters grid
+	         * @return {Boolean}
+	         */
+	        value: function hasGrid() {
+	            return this._hasGrid;
+	        }
+	    }, {
+	        key: 'getFiltersId',
+	
+	        /**
+	         * Get list of filter IDs
+	         * @return {[type]} [description]
+	         */
+	        value: function getFiltersId() {
+	            return this.fltIds || [];
+	        }
+	    }, {
+	        key: 'getValidRows',
+	
+	        /**
+	         * Get filtered (valid) rows indexes
+	         * @param  {Boolean} reCalc Force calculation of filtered rows list
+	         * @return {Array}          List of row indexes
+	         */
+	        value: function getValidRows(reCalc) {
+	            if (!this._hasGrid) {
+	                return;
+	            }
+	            if (!reCalc) {
+	                return this.validRowsIndex;
+	            }
+	
+	            this.validRowsIndex = [];
+	            for (var k = this.refRow; k < this.getRowsNb(true); k++) {
+	                var r = this.tbl.rows[k];
+	                if (!this.paging) {
+	                    if (this.getRowDisplay(r) !== 'none') {
+	                        this.validRowsIndex.push(r.rowIndex);
+	                    }
+	                } else {
+	                    if (r.getAttribute('validRow') === 'true' || r.getAttribute('validRow') === null) {
+	                        this.validRowsIndex.push(r.rowIndex);
+	                    }
+	                }
+	            }
+	            return this.validRowsIndex;
+	        }
+	    }, {
+	        key: 'getFiltersRowIndex',
+	
+	        /**
+	         * Get the index of the row containing the filters
+	         * @return {Number}
+	         */
+	        value: function getFiltersRowIndex() {
+	            if (!this._hasGrid) {
+	                return;
+	            }
+	            return this.filtersRowIndex;
+	        }
+	    }, {
+	        key: 'getHeadersRowIndex',
+	
+	        /**
+	         * Get the index of the headers row
+	         * @return {Number}
+	         */
+	        value: function getHeadersRowIndex() {
+	            if (!this._hasGrid) {
+	                return;
+	            }
+	            return this.headersRow;
+	        }
+	    }, {
+	        key: 'getStartRowIndex',
+	
+	        /**
+	         * Get the row index from where the filtering process start (1st filterable
+	         * row)
+	         * @return {Number}
+	         */
+	        value: function getStartRowIndex() {
+	            if (!this._hasGrid) {
+	                return;
+	            }
+	            return this.refRow;
+	        }
+	    }, {
+	        key: 'getLastRowIndex',
+	
+	        /**
+	         * Get the index of the last row
+	         * @return {Number}
+	         */
+	        value: function getLastRowIndex() {
+	            if (!this._hasGrid) {
+	                return;
+	            }
+	            return this.nbRows - 1;
+	        }
+	    }, {
+	        key: 'getHeaderElement',
+	
+	        /**
+	         * Get the header DOM element for a given column index
+	         * @param  {Number} colIndex Column index
+	         * @return {Object}
+	         */
+	        value: function getHeaderElement(colIndex) {
+	            var table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl;
+	            var tHead = _Dom2['default'].tag(table, 'thead');
+	            var headersRow = this.headersRow;
+	            var header = undefined;
+	            for (var i = 0; i < this.nbCells; i++) {
+	                if (i !== colIndex) {
+	                    continue;
+	                }
+	                if (tHead.length === 0) {
+	                    header = table.rows[headersRow].cells[i];
+	                }
+	                if (tHead.length === 1) {
+	                    header = tHead[0].rows[headersRow].cells[i];
+	                }
+	                break;
+	            }
+	            return header;
+	        }
+	    }, {
+	        key: 'getFilterType',
+	
+	        /**
+	         * Return the filter type for a specified column
+	         * @param  {Number} colIndex Column's index
+	         * @return {String}
+	         */
+	        value: function getFilterType(colIndex) {
+	            var colType = this.cfg['col_' + colIndex];
+	            return !colType ? this.fltTypeInp : _Str2['default'].lower(colType);
+	        }
+	    }, {
+	        key: 'getFilterableRowsNb',
+	
+	        /**
+	         * Get the total number of filterable rows
+	         * @return {Number}
+	         */
+	        value: function getFilterableRowsNb() {
+	            return this.getRowsNb(false);
+	        }
+	    }, {
+	        key: 'config',
+	
+	        /**
+	         * Get the configuration object (literal object)
+	         * @return {Object}
+	         */
+	        value: function config() {
+	            return this.cfg;
+	        }
+	    }]);
+	
+	    return TableFilter;
+	})();
+	
+	exports.TableFilter = TableFilter;
+	
+	TableFilter.Cookie = _Cookie2['default'];
+	// TableFilter.Store = Store;
+	// TableFilter.GridLayout = GridLayout;
+	// TableFilter.Loader = Loader;
+	// TableFilter.HighlightKeyword = HighlightKeyword;
+	// TableFilter.PopupFilter = PopupFilter;
+	// TableFilter.Dropdown = Dropdown;
+	// TableFilter.CheckList = CheckList;
+	// TableFilter.RowsCounter = RowsCounter;
+	// TableFilter.StatusBar = StatusBar;
+	TableFilter.Paging = _Paging.Paging;
+	// TableFilter.ClearButton = ClearButton;
+	// TableFilter.Help = Help;
+	// TableFilter.AlternateRows = AlternateRows;
 
-}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(7),h=i(o),d=s(4),u=i(d),f=s(23),c=i(f),p=function(){function t(e){a(this,t);var s=e.config();this.enableSlcResetFilter=s.enable_slc_reset_filter===!1?!1:!0,this.nonEmptyText=s.non_empty_text||"(Non empty)",this.slcFillingMethod=s.slc_filling_method||"createElement",this.activateSlcTooltip=s.activate_slc_tooltip||"Click to activate",this.multipleSlcTooltip=s.multiple_slc_tooltip||"Use Ctrl key for multiple selections",this.isCustom=null,this.opts=null,this.optsTxt=null,this.slcInnerHtml=null,this.tf=e}return l(t,[{key:"build",value:function(t,e,s,i){var a=this.tf;a.EvtManager(a.Evt.name.dropdown,{slcIndex:t,slcRefreshed:e,slcExternal:s,slcId:i})}},{key:"_build",value:function(t){var e=void 0===arguments[1]?!1:arguments[1],s=void 0===arguments[2]?!1:arguments[2],i=void 0===arguments[3]?null:arguments[3],a=this.tf;t=parseInt(t,10),this.opts=[],this.optsTxt=[],this.slcInnerHtml="";var l=a.fltIds[t];if((n["default"].id(l)||s)&&(n["default"].id(i)||!s)){var r=n["default"].id(s?i:l),o=a.tbl.rows,d=a.matchCase;this.isCustom=a.isCustomOptions(t);var f;e&&a.activeFilterId&&(f=a.activeFilterId.split("_")[0],f=f.split(a.prfxFlt)[1]);var p=[],g=[];a.rememberGridValues&&(p=a.feature("store").getFilterValues(a.fltsValuesCookie),p&&!u["default"].isEmpty(p.toString())&&(this.isCustom?g.push(p[t]):g=p[t].split(" "+a.orOperator+" ")));var v=null,b=null;e&&a.disableExcludedOptions&&(v=[],b=[]);for(var m=a.refRow;m<a.nbRows;m++)if(!a.hasVisibleRows||!h["default"].has(a.visibleRows,m)||a.paging){var _=o[m].cells,C=_.length;if(C===a.nbCells&&!this.isCustom)for(var y=0;C>y;y++)if(t===y&&(!e||e&&a.disableExcludedOptions)||t==y&&e&&(""===o[m].style.display&&!a.paging||a.paging&&(!a.validRowsIndex||a.validRowsIndex&&h["default"].has(a.validRowsIndex,m))&&(void 0===f||f==t||f!=t&&h["default"].has(a.validRowsIndex,m)))){var w=a.getCellData(y,_[y]),x=u["default"].matchCase(w,d);if(h["default"].has(this.opts,x,d)||this.opts.push(w),e&&a.disableExcludedOptions){var T=b[y];T||(T=this.GetFilteredDataCol(y)),h["default"].has(T,x,d)||h["default"].has(v,x,d)||this.isFirstLoad||v.push(w)}}}if(this.isCustom){var k=a.getCustomOptions(t);this.opts=k[0],this.optsTxt=k[1]}if(a.sortSlc&&!this.isCustom&&(d?(this.opts.sort(),v&&v.sort()):(this.opts.sort(c["default"].ignoreCase),v&&v.sort(c["default"].ignoreCase))),a.sortNumAsc&&h["default"].has(a.sortNumAsc,t))try{this.opts.sort(numSortAsc),v&&v.sort(numSortAsc),this.isCustom&&this.optsTxt.sort(numSortAsc)}catch(R){this.opts.sort(),v&&v.sort(),this.isCustom&&this.optsTxt.sort()}if(a.sortNumDesc&&h["default"].has(a.sortNumDesc,t))try{this.opts.sort(numSortDesc),v&&v.sort(numSortDesc),this.isCustom&&this.optsTxt.sort(numSortDesc)}catch(R){this.opts.sort(),v&&v.sort(),this.isCustom&&this.optsTxt.sort()}this.addOptions(t,r,e,v,p,g)}}},{key:"addOptions",value:function(t,e,s,i,a,l){var r=this.tf,o=u["default"].lower(this.slcFillingMethod),d=e.value;e.innerHTML="",e=this.addFirstOption(e);for(var f=0;f<this.opts.length;f++)if(""!==this.opts[f]){var c=this.opts[f],p=this.isCustom?this.optsTxt[f]:c,g=!1;if(s&&this.disableExcludedOptions&&h["default"].has(i,u["default"].matchCase(c,r.matchCase),r.matchCase)&&(g=!0),"innerhtml"===o){var v="";r.fillSlcOnDemand&&d===this.opts[f]&&(v='selected="selected"'),this.slcInnerHtml+='<option value="'+c+'" '+v+(g?'disabled="disabled"':"")+">"+p+"</option>"}else{var b;b=r.fillSlcOnDemand&&d===this.opts[f]&&r["col"+t]===r.fltTypeSlc?n["default"].createOpt(p,c,!0):r["col"+t]!==r.fltTypeMulti?n["default"].createOpt(p,c," "!==a[t]&&c===a[t]?!0:!1):n["default"].createOpt(p,c,h["default"].has(l,u["default"].matchCase(this.opts[f],r.matchCase),r.matchCase)||-1!==l.toString().indexOf(c)?!0:!1),g&&(b.disabled=!0),e.appendChild(b)}}"innerhtml"===o&&(e.innerHTML+=this.slcInnerHtml),e.setAttribute("filled","1")}},{key:"addFirstOption",value:function(t){var e=this.tf,s=u["default"].lower(this.slcFillingMethod);if("innerhtml"===s)this.slcInnerHtml+='<option value="">'+e.displayAllText+"</option>";else{var i=n["default"].createOpt(this.enableSlcResetFilter?e.displayAllText:"","");if(this.enableSlcResetFilter||(i.style.display="none"),t.appendChild(i),e.enableEmptyOption){var a=n["default"].createOpt(e.emptyText,e.emOperator);t.appendChild(a)}if(e.enableNonEmptyOption){var l=n["default"].createOpt(e.nonEmptyText,e.nmOperator);t.appendChild(l)}}return t}}]),t}();e.Dropdown=p},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(7),h=i(o),d=s(4),u=i(d),f=s(23),c=i(f),p=s(2),g=i(p),v=function(){function t(e){a(this,t);var s=e.config();this.checkListDiv=[],this.checkListDivCssClass=s.div_checklist_css_class||"div_checklist",this.checkListCssClass=s.checklist_css_class||"flt_checklist",this.checkListItemCssClass=s.checklist_item_css_class||"flt_checklist_item",this.checkListSlcItemCssClass=s.checklist_selected_item_css_class||"flt_checklist_slc_item",this.activateCheckListTxt=s.activate_checklist_text||"Click to load filter data",this.checkListItemDisabledCssClass=s.checklist_item_disabled_css_class||"flt_checklist_item_disabled",this.enableCheckListResetFilter=s.enable_checklist_reset_filter===!1?!1:!0,this.prfxCheckListDiv="chkdiv_",this.isCustom=null,this.opts=null,this.optsTxt=null,this.tf=e}return l(t,[{key:"onChange",value:function(t){var e=t.target;this.tf.activeFilterId=e.getAttribute("id"),this.tf.activeFlt=n["default"].id(this.tf.activeFilterId),this.tf.Evt.onSlcChange.call(this.tf,t)}},{key:"optionClick",value:function(t){this.setCheckListValues(t.target),this.onChange(t)}},{key:"build",value:function(t,e,s){var i=this.tf;i.EvtManager(i.Evt.name.checklist,{slcIndex:t,slcExternal:e,slcId:s})}},{key:"_build",value:function(t){var e=this,s=void 0===arguments[1]?!1:arguments[1],i=void 0===arguments[2]?null:arguments[2],a=this.tf;t=parseInt(t,10),this.opts=[],this.optsTxt=[];var l=this.prfxCheckListDiv+t+"_"+a.id;if((n["default"].id(l)||s)&&(n["default"].id(i)||!s)){var r=s?n["default"].id(i):this.checkListDiv[t],o=n["default"].create("ul",["id",a.fltIds[t]],["colIndex",t]);o.className=this.checkListCssClass,g["default"].add(o,"change",function(t){e.onChange(t)});var d=a.tbl.rows;this.isCustom=a.isCustomOptions(t);var f;a.refreshFilters&&a.activeFilterId&&(f=a.activeFilterId.split("_")[0],f=f.split(a.prfxFlt)[1]);var p,v=[];a.refreshFilters&&a.disableExcludedOptions&&(p=[]);for(var b=a.refRow;b<a.nbRows;b++)if(!a.hasVisibleRows||!h["default"].has(a.visibleRows,b)||a.paging){var m=d[b].cells,_=m.length;if(_===a.nbCells&&!this.isCustom)for(var C=0;_>C;C++)if(t===C&&(!a.refreshFilters||a.refreshFilters&&a.disableExcludedOptions)||t===C&&a.refreshFilters&&(""===d[b].style.display&&!a.paging||a.paging&&(!f||f===t||f!=t&&h["default"].has(a.validRowsIndex,b)))){var y=a.getCellData(C,m[C]),w=u["default"].matchCase(y,a.matchCase);h["default"].has(this.opts,w,a.matchCase)||this.opts.push(y);var x=v[C];a.refreshFilters&&a.disableExcludedOptions&&(x||(v[C]=a.GetFilteredDataCol(C)),h["default"].has(x,w,a.matchCase)||h["default"].has(p,w,a.matchCase)||a.isFirstLoad||p.push(y))}}if(this.isCustom){var T=a.getCustomOptions(t);this.opts=T[0],this.optsTxt=T[1]}if(a.sortSlc&&!this.isCustom&&(a.matchCase?(this.opts.sort(),p&&p.sort()):(this.opts.sort(c["default"].ignoreCase),p&&p.sort(c["default"].ignoreCase))),a.sortNumAsc&&h["default"].has(a.sortNumAsc,t))try{this.opts.sort(numSortAsc),p&&p.sort(numSortAsc),this.isCustom&&this.optsTxt.sort(numSortAsc)}catch(k){this.opts.sort(),p&&p.sort(),this.isCustom&&this.optsTxt.sort()}if(a.sortNumDesc&&h["default"].has(a.sortNumDesc,t))try{this.opts.sort(numSortDesc),p&&p.sort(numSortDesc),this.isCustom&&this.optsTxt.sort(numSortDesc)}catch(k){this.opts.sort(),p&&p.sort(),this.isCustom&&this.optsTxt.sort()}this.addChecks(t,o,a.separator),a.fillSlcOnDemand&&(r.innerHTML=""),r.appendChild(o),r.setAttribute("filled","1")}}},{key:"addChecks",value:function(t,e){var s=this,i=this.tf,a=this.addTChecks(t,e),l=[],r=i.feature("store"),o=r?r.getFilterValues(i.fltsValuesCookie)[t]:null;o&&u["default"].trim(o).length>0&&(i.hasCustomSlcOptions&&h["default"].has(i.customSlcOptions.cols,t)?l.push(o):l=o.split(" "+i.orOperator+" "));for(var d=0;d<this.opts.length;d++){var f=this.opts[d],c=this.isCustom?this.optsTxt[d]:f,p=n["default"].createCheckItem(i.fltIds[t]+"_"+(d+a),f,c);p.className=this.checkListItemCssClass,i.refreshFilters&&i.disableExcludedOptions&&h["default"].has(excludedOpts,u["default"].matchCase(f,i.matchCase),i.matchCase)?(n["default"].addClass(p,this.checkListItemDisabledCssClass),p.check.disabled=!0,p.disabled=!0):g["default"].add(p.check,"click",function(t){s.optionClick(t)}),e.appendChild(p),""===f&&(p.style.display="none"),i.rememberGridValues&&(i.hasCustomSlcOptions&&h["default"].has(i.customSlcOptions.cols,t)&&-1!=l.toString().indexOf(f)||h["default"].has(l,u["default"].matchCase(f,i.matchCase),i.matchCase))&&(p.check.checked=!0,this.setCheckListValues(p.check))}}},{key:"addTChecks",value:function(t,e){var s=this,i=this.tf,a=1,l=n["default"].createCheckItem(i.fltIds[t]+"_0","",i.displayAllText);if(l.className=this.checkListItemCssClass,e.appendChild(l),g["default"].add(l.check,"click",function(t){s.optionClick(t)}),this.enableCheckListResetFilter||(l.style.display="none"),i.enableEmptyOption){var r=n["default"].createCheckItem(i.fltIds[t]+"_1",i.emOperator,i.emptyText);r.className=this.checkListItemCssClass,e.appendChild(r),g["default"].add(r.check,"click",function(t){s.optionClick(t)}),a++}if(i.enableNonEmptyOption){var o=n["default"].createCheckItem(i.fltIds[t]+"_2",i.nmOperator,i.nonEmptyText);o.className=this.checkListItemCssClass,e.appendChild(o),g["default"].add(o.check,"click",function(t){s.optionClick(t)}),a++}return a}},{key:"setCheckListValues",value:function(t){if(t){for(var e=this.tf,s=t.value,i=parseInt(t.id.split("_")[2],10),a="ul",l="li",r=t;u["default"].lower(r.nodeName)!==a;)r=r.parentNode;var o=r.childNodes[i],h=r.getAttribute("colIndex"),d=r.getAttribute("value"),f=r.getAttribute("indexes");if(t.checked){if(""===s){if(f&&""!==f)for(var c=f.split(e.separator),p=0;p<c.length;p++){var g=n["default"].id(e.fltIds[h]+"_"+c[p]);g&&(g.checked=!1,n["default"].removeClass(r.childNodes[c[p]],this.checkListSlcItemCssClass))}r.setAttribute("value",""),r.setAttribute("indexes","")}else d=d?d:"",s=u["default"].trim(d+" "+s+" "+e.orOperator),i=f+i+e.separator,r.setAttribute("value",s),r.setAttribute("indexes",i),n["default"].id(e.fltIds[h]+"_0")&&(n["default"].id(e.fltIds[h]+"_0").checked=!1);u["default"].lower(o.nodeName)===l&&(n["default"].removeClass(r.childNodes[0],this.checkListSlcItemCssClass),n["default"].addClass(o,this.checkListSlcItemCssClass))}else{if(""!==s){var v=new RegExp(u["default"].rgxEsc(s+" "+e.orOperator));d=d.replace(v,""),r.setAttribute("value",u["default"].trim(d));var b=new RegExp(u["default"].rgxEsc(i+e.separator));f=f.replace(b,""),r.setAttribute("indexes",f)}u["default"].lower(o.nodeName)===l&&n["default"].removeClass(o,this.checkListSlcItemCssClass)}}}}]),t}();e.CheckList=v},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(6),h=i(o),d=s(9),u=i(d),f=function(){function t(e){a(this,t);var s=e.config();this.rowsCounterTgtId=s.rows_counter_target_id||null,this.rowsCounterDiv=null,this.rowsCounterSpan=null,this.rowsCounterText=s.rows_counter_text||"Rows: ",this.fromToTextSeparator=s.from_to_text_separator||"-",this.overText=s.over_text||" / ",this.totRowsCssClass=s.tot_rows_css_class||"tot",this.prfxCounter="counter_",this.prfxTotRows="totrows_span_",this.prfxTotRowsTxt="totRowsTextSpan_",this.onBeforeRefreshCounter=h["default"].isFn(s.on_before_refresh_counter)?s.on_before_refresh_counter:null,this.onAfterRefreshCounter=h["default"].isFn(s.on_after_refresh_counter)?s.on_after_refresh_counter:null,this.tf=e}return l(t,[{key:"init",value:function(){var t=this.tf;if((t.hasGrid()||t.isFirstLoad)&&!this.rowsCounterSpan){var e=n["default"].create("div",["id",this.prfxCounter+t.id]);e.className=this.totRowsCssClass;var s=n["default"].create("span",["id",this.prfxTotRows+t.id]),i=n["default"].create("span",["id",this.prfxTotRowsTxt+t.id]);i.appendChild(n["default"].text(this.rowsCounterText)),this.rowsCounterTgtId||t.setToolbar();var a=this.rowsCounterTgtId?n["default"].id(this.rowsCounterTgtId):t.lDiv;this.rowsCounterDiv&&u["default"].isIE()&&(this.rowsCounterDiv.outerHTML=""),this.rowsCounterTgtId?(a.appendChild(i),a.appendChild(s)):(e.appendChild(i),e.appendChild(s),a.appendChild(e)),this.rowsCounterDiv=e,this.rowsCounterSpan=s,this.refresh()}}},{key:"refresh",value:function(t){if(this.rowsCounterSpan){var e=this.tf;this.onBeforeRefreshCounter&&this.onBeforeRefreshCounter.call(null,e,this.rowsCounterSpan);var s;if(e.paging){var i=e.feature("paging");if(i){var a=parseInt(i.startPagingRow,10)+(e.nbVisibleRows>0?1:0),l=a+i.pagingLength-1<=e.nbVisibleRows?a+i.pagingLength-1:e.nbVisibleRows;s=a+this.fromToTextSeparator+l+this.overText+e.nbVisibleRows}}else s=t&&""!==t?t:e.nbFilterableRows-e.nbHiddenRows-(e.hasVisibleRows?e.visibleRows.length:0);this.rowsCounterSpan.innerHTML=s,this.onAfterRefreshCounter&&this.onAfterRefreshCounter.call(null,e,this.rowsCounterSpan,s)}}},{key:"destroy",value:function(){var t=this.tf;t.hasGrid()&&this.rowsCounterSpan&&(!this.rowsCounterTgtId&&this.rowsCounterDiv?u["default"].isIE()?this.rowsCounterDiv.outerHTML="":this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv):n["default"].id(this.rowsCounterTgtId).innerHTML="",this.rowsCounterSpan=null,this.rowsCounterDiv=null)}}]),t}();e.RowsCounter=f},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(6),h=i(o),d=s(9),u=i(d),f=window,c=function(){function t(e){a(this,t);var s=e.config();this.statusBarTgtId=s.status_bar_target_id||null,this.statusBarDiv=null,this.statusBarSpan=null,this.statusBarSpanText=null,this.statusBarText=s.status_bar_text||"",this.statusBarCssClass=s.status_bar_css_class||"status",this.statusBarCloseDelay=250,this.onBeforeShowMsg=h["default"].isFn(s.on_before_show_msg)?s.on_before_show_msg:null,this.onAfterShowMsg=h["default"].isFn(s.on_after_show_msg)?s.on_after_show_msg:null,this.prfxStatus="status_",this.prfxStatusSpan="statusSpan_",this.prfxStatusTxt="statusText_",this.tf=e}return l(t,[{key:"init",value:function(){var t=this.tf;if(t.hasGrid()||t.isFirstLoad){var e=n["default"].create("div",["id",this.prfxStatus+t.id]);e.className=this.statusBarCssClass;var s=n["default"].create("span",["id",this.prfxStatusSpan+t.id]),i=n["default"].create("span",["id",this.prfxStatusTxt+t.id]);i.appendChild(n["default"].text(this.statusBarText)),this.statusBarTgtId||t.setToolbar();var a=this.statusBarTgtId?n["default"].id(this.statusBarTgtId):t.lDiv;this.statusBarDiv&&u["default"].isIE()&&(this.statusBarDiv.outerHTML=""),this.statusBarTgtId?(a.appendChild(i),a.appendChild(s)):(e.appendChild(i),e.appendChild(s),a.appendChild(e)),this.statusBarDiv=e,this.statusBarSpan=s,this.statusBarSpanText=i}}},{key:"message",value:function(){var t=this,e=void 0===arguments[0]?"":arguments[0],s=this.tf;if(s.statusBar&&this.statusBarSpan){this.onBeforeShowMsg&&this.onBeforeShowMsg.call(null,this.tf,e);var i=""===e?this.statusBarCloseDelay:1;f.setTimeout(function(){t.statusBarSpan.innerHTML=e,t.onAfterShowMsg&&t.onAfterShowMsg.call(null,t.tf,e)},i)}}},{key:"destroy",value:function(){var t=this.tf;t.hasGrid()&&this.statusBarDiv&&(this.statusBarDiv.innerHTML="",this.statusBarDiv.parentNode.removeChild(this.statusBarDiv),this.statusBarSpan=null,this.statusBarSpanText=null,this.statusBarDiv=null)}}]),t}();e.StatusBar=c},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(6),h=i(o),d=s(4),u=i(d),f=s(2),c=i(f),p=function(){function t(e){a(this,t);var s=e.config();this.btnPageCssClass=s.paging_btn_css_class||"pgInp",this.pagingSlc=null,this.resultsPerPageSlc=null,this.pagingTgtId=s.paging_target_id||null,this.pagingLength=isNaN(s.paging_length)?10:s.paging_length,this.resultsPerPageTgtId=s.results_per_page_target_id||null,this.pgSlcCssClass=s.paging_slc_css_class||"pgSlc",this.pgInpCssClass=s.paging_inp_css_class||"pgNbInp",this.resultsPerPage=s.results_per_page||null,this.hasResultsPerPage=h["default"].isArray(this.resultsPerPage),this.resultsSlcCssClass=s.results_slc_css_class||"rspg",this.resultsSpanCssClass=s.results_span_css_class||"rspgSpan",this.startPagingRow=0,this.nbPages=0,this.currentPageNb=1,this.btnNextPageText=s.btn_next_page_text||">",this.btnPrevPageText=s.btn_prev_page_text||"<",this.btnLastPageText=s.btn_last_page_text||">|",this.btnFirstPageText=s.btn_first_page_text||"|<",this.btnNextPageHtml=s.btn_next_page_html||(e.enableIcons?'<input type="button" value="" class="'+this.btnPageCssClass+' nextPage" title="Next page" />':null),this.btnPrevPageHtml=s.btn_prev_page_html||(e.enableIcons?'<input type="button" value="" class="'+this.btnPageCssClass+' previousPage" title="Previous page" />':null),this.btnFirstPageHtml=s.btn_first_page_html||(e.enableIcons?'<input type="button" value="" class="'+this.btnPageCssClass+' firstPage" title="First page" />':null),this.btnLastPageHtml=s.btn_last_page_html||(e.enableIcons?'<input type="button" value="" class="'+this.btnPageCssClass+' lastPage" title="Last page" />':null),this.pageText=s.page_text||" Page ",this.ofText=s.of_text||" of ",this.nbPgSpanCssClass=s.nb_pages_css_class||"nbpg",this.hasPagingBtns=s.paging_btns===!1?!1:!0,this.pageSelectorType=s.page_selector_type||e.fltTypeSlc,this.onBeforeChangePage=h["default"].isFn(s.on_before_change_page)?s.on_before_change_page:null,this.onAfterChangePage=h["default"].isFn(s.on_after_change_page)?s.on_after_change_page:null,this.prfxSlcPages="slcPages_",this.prfxSlcResults="slcResults_",this.prfxSlcResultsTxt="slcResultsTxt_",this.prfxBtnNextSpan="btnNextSpan_",this.prfxBtnPrevSpan="btnPrevSpan_",this.prfxBtnLastSpan="btnLastSpan_",this.prfxBtnFirstSpan="btnFirstSpan_",this.prfxBtnNext="btnNext_",this.prfxBtnPrev="btnPrev_",this.prfxBtnLast="btnLast_",this.prfxBtnFirst="btnFirst_",this.prfxPgSpan="pgspan_",this.prfxPgBeforeSpan="pgbeforespan_",this.prfxPgAfterSpan="pgafterspan_";var i=this.refRow,l=this.nbRows;this.nbPages=Math.ceil((l-i)/this.pagingLength);var r=this;this.evt={slcIndex:function(){return r.pageSelectorType===e.fltTypeSlc?r.pagingSlc.options.selectedIndex:parseInt(r.pagingSlc.value,10)-1},nbOpts:function(){return r.pageSelectorType===e.fltTypeSlc?parseInt(r.pagingSlc.options.length,10)-1:r.nbPages-1},next:function(){var t=r.evt.slcIndex()<r.evt.nbOpts()?r.evt.slcIndex()+1:0;r.changePage(t)},prev:function(){var t=r.evt.slcIndex()>0?r.evt.slcIndex()-1:r.evt.nbOpts();r.changePage(t)},last:function(){r.changePage(r.evt.nbOpts())},first:function(){r.changePage(0)},_detectKey:function(t){var s=c["default"].keyCode(t);13===s&&(e.sorted?(e.filter(),r.changePage(r.evt.slcIndex())):r.changePage(),this.blur())},slcPagesChange:null,nextEvt:null,prevEvt:null,lastEvt:null,firstEvt:null},this.tf=e}return l(t,[{key:"init",value:function(){var t,e=this,s=this.tf,i=this.evt;this.hasResultsPerPage&&(this.resultsPerPage.length<2?this.hasResultsPerPage=!1:(this.pagingLength=this.resultsPerPage[1][0],this.setResultsPerPage())),i.slcPagesChange=function(t){e.changePage(),t.target.blur()},this.pageSelectorType===s.fltTypeSlc&&(t=n["default"].create(s.fltTypeSlc,["id",this.prfxSlcPages+s.id]),t.className=this.pgSlcCssClass,c["default"].add(t,"change",i.slcPagesChange)),this.pageSelectorType===s.fltTypeInp&&(t=n["default"].create(s.fltTypeInp,["id",this.prfxSlcPages+s.id],["value",this.currentPageNb]),t.className=this.pgInpCssClass,c["default"].add(t,"keypress",i._detectKey));var a=n["default"].create("span",["id",this.prfxBtnNextSpan+s.id]),l=n["default"].create("span",["id",this.prfxBtnPrevSpan+s.id]),r=n["default"].create("span",["id",this.prfxBtnLastSpan+s.id]),o=n["default"].create("span",["id",this.prfxBtnFirstSpan+s.id]);if(this.hasPagingBtns){if(this.btnNextPageHtml)a.innerHTML=this.btnNextPageHtml,c["default"].add(a,"click",i.next);else{var h=n["default"].create(s.fltTypeInp,["id",this.prfxBtnNext+s.id],["type","button"],["value",this.btnNextPageText],["title","Next"]);h.className=this.btnPageCssClass,c["default"].add(h,"click",i.next),a.appendChild(h)}if(this.btnPrevPageHtml)l.innerHTML=this.btnPrevPageHtml,c["default"].add(l,"click",i.prev);else{var d=n["default"].create(s.fltTypeInp,["id",this.prfxBtnPrev+s.id],["type","button"],["value",this.btnPrevPageText],["title","Previous"]);d.className=this.btnPageCssClass,c["default"].add(d,"click",i.prev),l.appendChild(d)}if(this.btnLastPageHtml)r.innerHTML=this.btnLastPageHtml,c["default"].add(r,"click",i.last);else{var u=n["default"].create(s.fltTypeInp,["id",this.prfxBtnLast+s.id],["type","button"],["value",this.btnLastPageText],["title","Last"]);u.className=this.btnPageCssClass,c["default"].add(u,"click",i.last),r.appendChild(u)}if(this.btnFirstPageHtml)o.innerHTML=this.btnFirstPageHtml,c["default"].add(o,"click",i.first);else{var f=n["default"].create(s.fltTypeInp,["id",this.prfxBtnFirst+s.id],["type","button"],["value",this.btnFirstPageText],["title","First"]);f.className=this.btnPageCssClass,c["default"].add(f,"click",i.first),o.appendChild(f)}}this.pagingTgtId||s.setToolbar();var p=this.pagingTgtId?n["default"].id(this.pagingTgtId):s.mDiv;p.appendChild(o),p.appendChild(l);var g=n["default"].create("span",["id",this.prfxPgBeforeSpan+s.id]);g.appendChild(n["default"].text(this.pageText)),g.className=this.nbPgSpanCssClass,p.appendChild(g),p.appendChild(t);var v=n["default"].create("span",["id",this.prfxPgAfterSpan+s.id]);v.appendChild(n["default"].text(this.ofText)),v.className=this.nbPgSpanCssClass,p.appendChild(v);var b=n["default"].create("span",["id",this.prfxPgSpan+s.id]);b.className=this.nbPgSpanCssClass,b.appendChild(n["default"].text(" "+this.nbPages+" ")),p.appendChild(b),p.appendChild(a),p.appendChild(r),this.pagingSlc=n["default"].id(this.prfxSlcPages+s.id),(!s.rememberGridValues||this.isPagingRemoved)&&this.setPagingInfo(),s.fltGrid||(s.validateAllRows(),this.setPagingInfo(s.validRowsIndex)),this.isPagingRemoved=!1}},{key:"addPaging",value:function(){var t=void 0===arguments[0]?!1:arguments[0],e=this.tf;e.hasGrid()&&!e.paging&&(e.paging=!0,this.isPagingRemoved=!0,this.init(),e.resetValues(),t&&e.filter())}},{key:"setPagingInfo",value:function(t){var e=this.tf,s=e.tbl.rows,i=this.pagingTgtId?n["default"].id(this.pagingTgtId):e.mDiv,a=n["default"].id(this.prfxPgSpan+e.id);if(t&&t.length>0)e.validRowsIndex=t;else{e.validRowsIndex=[];for(var l=e.refRow;l<e.nbRows;l++){var r=s[l];if(r){var o=r.getAttribute("validRow");"true"!==o&&o||e.validRowsIndex.push(l)}}}if(this.nbPages=Math.ceil(e.validRowsIndex.length/this.pagingLength),a.innerHTML=this.nbPages,this.pageSelectorType===e.fltTypeSlc&&(this.pagingSlc.innerHTML=""),this.nbPages>0)if(i.style.visibility="visible",this.pageSelectorType===e.fltTypeSlc)for(var h=0;h<this.nbPages;h++){var d=new Option(h+1,h*this.pagingLength,!1,!1);this.pagingSlc.options[h]=d}else this.pagingSlc.value=this.currentPageNb;else i.style.visibility="hidden";this.groupByPage(e.validRowsIndex)}},{key:"groupByPage",value:function(t){var e=this.tf,s=e.feature("alternateRows"),i=e.tbl.rows,a=parseInt(this.startPagingRow,10)+parseInt(this.pagingLength,10);t&&(e.validRowsIndex=t);for(var l=0;l<e.validRowsIndex.length;l++){var r=i[e.validRowsIndex[l]];l>=this.startPagingRow&&a>l?("true"!==r.getAttribute("validRow")&&r.getAttribute("validRow")||(r.style.display=""),e.alternateBgs&&s&&s.setRowBg(e.validRowsIndex[l],l)):(r.style.display="none",e.alternateBgs&&s&&s.removeRowBg(e.validRowsIndex[l]))}e.nbVisibleRows=e.validRowsIndex.length,e.isStartBgAlternate=!1,e.applyGridProps()}},{key:"setPage",value:function(t){var e=this.tf;if(e.hasGrid()&&e.paging){var s=this.evt,i=typeof t;if("string"===i)switch(u["default"].lower(t)){case"next":s.next();break;case"previous":s.prev();break;case"last":s.last();break;case"first":s.first();break;default:s.next()}else"number"===i&&this.changePage(t-1)}}},{key:"setResultsPerPage",value:function(){var t=this,e=this.tf,s=this.evt;if((e.hasGrid()||e.isFirstLoad)&&!this.resultsPerPageSlc&&this.resultsPerPage){s.slcResultsChange=function(e){t.changeResultsPerPage(),e.target.blur()};var i=n["default"].create(e.fltTypeSlc,["id",this.prfxSlcResults+e.id]);i.className=e.resultsSlcCssClass;var a=this.resultsPerPage[0],l=this.resultsPerPage[1],r=n["default"].create("span",["id",this.prfxSlcResultsTxt+e.id]);r.className=this.resultsSpanCssClass,this.resultsPerPageTgtId||e.setToolbar();var o=this.resultsPerPageTgtId?n["default"].id(this.resultsPerPageTgtId):e.rDiv;r.appendChild(n["default"].text(a));var h=e.feature("help");h&&h.cont?(h.cont.parentNode.insertBefore(r,h.cont),h.cont.parentNode.insertBefore(i,h.cont)):(o.appendChild(r),o.appendChild(i));for(var d=0;d<l.length;d++){var u=new Option(l[d],l[d],!1,!1);i.options[d]=u}c["default"].add(i,"change",s.slcResultsChange),this.resultsPerPageSlc=i}}},{key:"removeResultsPerPage",value:function(){var t=this.tf;if(t.hasGrid()&&this.resultsPerPageSlc&&this.resultsPerPage){var e=this.resultsPerPageSlc,s=n["default"].id(this.prfxSlcResultsTxt+t.id);e&&e.parentNode.removeChild(e),s&&s.parentNode.removeChild(s),this.resultsPerPageSlc=null}}},{key:"changePage",value:function(t){var e=this.tf,s=e.Evt;e.EvtManager(s.name.changepage,{pgIndex:t})}},{key:"changeResultsPerPage",value:function(){var t=this.tf,e=t.Evt;t.EvtManager(e.name.changeresultsperpage)}},{key:"resetPage",value:function(){var t=this.tf,e=t.Evt;t.EvtManager(e.name.resetpage)}},{key:"resetPageLength",value:function(){var t=this.tf,e=t.Evt;t.EvtManager(e.name.resetpagelength)}},{key:"_changePage",value:function(t){var e=this.tf;e.paging&&(null===t&&(t=this.pageSelectorType===e.fltTypeSlc?this.pagingSlc.options.selectedIndex:this.pagingSlc.value-1),t>=0&&t<=this.nbPages-1&&(this.onBeforeChangePage&&this.onBeforeChangePage.call(null,this,t),this.currentPageNb=parseInt(t,10)+1,this.pageSelectorType===e.fltTypeSlc?this.pagingSlc.options[t].selected=!0:this.pagingSlc.value=this.currentPageNb,e.rememberPageNb&&e.feature("store").savePageNb(e.pgNbCookie),this.startPagingRow=this.pageSelectorType===e.fltTypeSlc?this.pagingSlc.value:t*this.pagingLength,this.groupByPage(),this.onAfterChangePage&&this.onAfterChangePage.call(null,this,t)))}},{key:"_changeResultsPerPage",value:function(){var t=this.tf;if(t.paging){var e=this.resultsPerPageSlc,s=this.pageSelectorType===t.fltTypeSlc?this.pagingSlc.selectedIndex:parseInt(this.pagingSlc.value-1,10);if(this.pagingLength=parseInt(e.options[e.selectedIndex].value,10),this.startPagingRow=this.pagingLength*s,!isNaN(this.pagingLength)){if(this.startPagingRow>=t.nbFilterableRows&&(this.startPagingRow=t.nbFilterableRows-this.pagingLength),this.setPagingInfo(),this.pageSelectorType===t.fltTypeSlc){var i=this.pagingSlc.options.length-1<=s?this.pagingSlc.options.length-1:s;this.pagingSlc.options[i].selected=!0}t.rememberPageLen&&t.feature("store").savePageLength(t.pgLenCookie)}}}},{key:"_resetPage",value:function(t){var e=this.tf,s=e.feature("store").getPageNb(t);""!==s&&this.changePage(s-1)}},{key:"_resetPageLength",value:function(t){var e=this.tf;if(e.paging){var s=e.feature("store").getPageLength(t);""!==s&&(this.resultsPerPageSlc.options[s].selected=!0,this.changeResultsPerPage())}}},{key:"destroy",value:function(){var t=this.tf;if(t.hasGrid()){var e,s,i,a,l,r,o;e=n["default"].id(this.prfxBtnNextSpan+t.id),s=n["default"].id(this.prfxBtnPrevSpan+t.id),i=n["default"].id(this.prfxBtnLastSpan+t.id),a=n["default"].id(this.prfxBtnFirstSpan+t.id),l=n["default"].id(this.prfxPgBeforeSpan+t.id),r=n["default"].id(this.prfxPgAfterSpan+t.id),o=n["default"].id(this.prfxPgSpan+t.id);var h=this.evt;this.pagingSlc&&(this.pageSelectorType===t.fltTypeSlc?c["default"].remove(this.pagingSlc,"change",h.slcPagesChange):this.pageSelectorType===t.fltTypeInp&&c["default"].remove(this.pagingSlc,"keypress",h._detectKey),this.pagingSlc.parentNode.removeChild(this.pagingSlc)),e&&(c["default"].remove(e,"click",h.next),e.parentNode.removeChild(e)),s&&(c["default"].remove(s,"click",h.prev),s.parentNode.removeChild(s)),i&&(c["default"].remove(i,"click",h.last),i.parentNode.removeChild(i)),a&&(c["default"].remove(a,"click",h.first),a.parentNode.removeChild(a)),l&&l.parentNode.removeChild(l),r&&r.parentNode.removeChild(r),o&&o.parentNode.removeChild(o),this.hasResultsPerPage&&this.removeResultsPerPage(),this.pagingSlc=null,this.nbPages=0,this.isPagingRemoved=!0,t.paging=!1}}}]),t}();e.Paging=p},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(2),h=i(o),d=function(){function t(e){a(this,t);var s=e.config();this.btnResetTgtId=s.btn_reset_target_id||null,this.btnResetEl=null,this.btnResetText=s.btn_reset_text||"Reset",this.btnResetTooltip=s.btn_reset_tooltip||"Clear filters",this.btnResetHtml=s.btn_reset_html||(e.enableIcons?'<input type="button" value="" class="'+e.btnResetCssClass+'" title="'+this.btnResetTooltip+'" />':null),this.prfxResetSpan="resetspan_",this.tf=e}return l(t,[{key:"onClick",value:function(){this.tf.clearFilters()}},{key:"init",value:function(){var t=this,e=this.tf;if(e.hasGrid()||e.isFirstLoad||!e.btnResetEl){var s=n["default"].create("span",["id",this.prfxResetSpan+e.id]);this.btnResetTgtId||e.setToolbar();var i=this.btnResetTgtId?n["default"].id(this.btnResetTgtId):e.rDiv;if(i.appendChild(s),this.btnResetHtml){s.innerHTML=this.btnResetHtml;var a=s.firstChild;h["default"].add(a,"click",function(){t.onClick()})}else{var l=n["default"].create("a",["href","javascript:void(0);"]);l.className=e.btnResetCssClass,l.appendChild(n["default"].text(this.btnResetText)),s.appendChild(l),h["default"].add(l,"click",function(){t.onClick()})}this.btnResetEl=s.firstChild}}},{key:"destroy",value:function(){var t=this.tf;if(t.hasGrid()&&this.btnResetEl){
-var e=n["default"].id(t.prfxResetSpan+t.id);e&&e.parentNode.removeChild(e),this.btnResetEl=null}}}]),t}();e.ClearButton=d},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=s(2),h=i(o),d=function(){function t(e){a(this,t);var s=e.config();this.tgtId=s.help_instructions_target_id||null,this.contTgtId=s.help_instructions_container_target_id||null,this.instrText=s.help_instructions_text?s.help_instructions_text:'Use the filters above each column to filter and limit table data. Avanced searches can be performed by using the following operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, <b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, <b>rgx:</b><br/> These operators are described here:<br/><a href="http://tablefilter.free.fr/#operators" target="_blank">http://tablefilter.free.fr/#operators</a><hr/>',this.instrHtml=s.help_instructions_html||null,this.btnText=s.help_instructions_btn_text||"?",this.btnHtml=s.help_instructions_btn_html||null,this.btnCssClass=s.help_instructions_btn_css_class||"helpBtn",this.contCssClass=s.help_instructions_container_css_class||"helpCont",this.btn=null,this.cont=null,this.defaultHtml='<div class="helpFooter"><h4>TableFilter v. '+e.version+'</h4><a href="http://tablefilter.free.fr" target="_blank">http://tablefilter.free.fr</a><br/><span>&copy;2009-'+e.year+' Max Guglielmi.</span><div align="center" style="margin-top:8px;"><a href="javascript:void(0);">Close</a></div></div>',this.prfxHelpSpan="helpSpan_",this.prfxHelpDiv="helpDiv_",this.tf=e}return l(t,[{key:"init",value:function(){var t=this;if(!this.btn){var e=this.tf,s=n["default"].create("span",["id",this.prfxHelpSpan+e.id]),i=n["default"].create("div",["id",this.prfxHelpDiv+e.id]);this.tgtId||e.setToolbar();var a=this.tgtId?n["default"].id(this.tgtId):e.rDiv;a.appendChild(s);var l=this.contTgtId?n["default"].id(this.contTgtId):s;if(this.btnHtml){s.innerHTML=this.btnHtml;var r=s.firstChild;h["default"].add(r,"click",function(){t.toggle()}),l.appendChild(i)}else{l.appendChild(i);var o=n["default"].create("a",["href","javascript:void(0);"]);o.className=this.btnCssClass,o.appendChild(n["default"].text(this.btnText)),s.appendChild(o),h["default"].add(o,"click",function(){t.toggle()})}this.instrHtml?(this.contTgtId&&l.appendChild(i),i.innerHTML=this.instrHtml,this.contTgtId||(i.className=this.contCssClass,h["default"].add(i,"dblclick",function(){t.toggle()}))):(i.innerHTML=this.instrText,i.className=this.contCssClass,h["default"].add(i,"dblclick",function(){t.toggle()})),i.innerHTML+=this.defaultHtml,h["default"].add(i,"click",function(){t.toggle()}),this.cont=i,this.btn=s}}},{key:"toggle",value:function(){if(this.cont){var t=this.cont.style.display;if(""===t||"none"===t){this.cont.style.display="block";var e=n["default"].position(this.btn).left;this.contTgtId||(this.cont.style.left=e-this.cont.clientWidth+25+"px")}else this.cont.style.display="none"}}},{key:"destroy",value:function(){this.btn&&(this.btn.parentNode.removeChild(this.btn),this.btn=null,this.cont&&(this.cont.parentNode.removeChild(this.cont),this.cont=null))}}]),t}();e.Help=d},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},a=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},l=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var r=s(3),n=i(r),o=function(){function t(e){a(this,t);var s=e.config();this.evenCss=s.even_row_css_class||"even",this.oddCss=s.odd_row_css_class||"odd",this.tf=e}return l(t,[{key:"init",value:function(){if(this.tf.hasGrid()||this.tf.isFirstLoad)for(var t=null===this.tf.validRowsIndex,e=t?this.tf.refRow:0,s=t?this.tf.nbFilterableRows+e:this.tf.validRowsIndex.length,i=0,a=e;s>a;a++){var l=t?a:this.tf.validRowsIndex[a];this.setRowBg(l,i),i++}}},{key:"setRowBg",value:function(t,e){if(this.tf.alternateBgs&&!isNaN(t)){var s=this.tf.tbl.rows,i=e?e:t;this.removeRowBg(t),n["default"].addClass(s[t],i%2?this.evenCss:this.oddCss)}}},{key:"removeRowBg",value:function(t){if(!isNaN(t)){var e=this.tf.tbl.rows;n["default"].removeClass(e[t],this.oddCss),n["default"].removeClass(e[t],this.evenCss)}}},{key:"remove",value:function(){if(this.tf.hasGrid()){for(var t=this.tf.refRow;t<this.tf.nbRows;t++)this.removeRowBg(t);this.tf.isStartBgAlternate=!0}}},{key:"enable",value:function(){this.tf.alternateBgs=!0}},{key:"disable",value:function(){this.tf.alternateBgs=!1}}]),t}();e.AlternateRows=o},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}};Object.defineProperty(e,"__esModule",{value:!0});var a=s(4),l=i(a);e["default"]={ignoreCase:function(t,e){var s=l["default"].lower(t),i=l["default"].lower(e);return i>s?-1:s>i?1:0}},t.exports=e["default"]}])});
+	//Firefox does not support outerHTML property
+	// function setOuterHtml(){
+	//     if(doc.body.__defineGetter__){
+	//         if(HTMLElement) {
+	//             let element = HTMLElement.prototype;
+	//             if(element.__defineGetter__){
+	//                 element.__defineGetter__("outerHTML",
+	//                     function(){
+	//                         let parent = this.parentNode;
+	//                         let el = Dom.create(parent.tagName);
+	//                         el.appendChild(this);
+	//                         let shtml = el.innerHTML;
+	//                         parent.appendChild(this);
+	//                         return shtml;
+	//                     }
+	//                 );
+	//             }
+	//             if(element.__defineSetter__) {
+	//                 HTMLElement.prototype.__defineSetter__(
+	//                     "outerHTML", function(sHTML){
+	//                    let r = this.ownerDocument.createRange();
+	//                    r.setStartBefore(this);
+	//                    let df = r.createContextualFragment(sHTML);
+	//                    this.parentNode.replaceChild(df, this);
+	//                    return sHTML;
+	//                 });
+	//             }
+	//         }
+	//     }
+	// }
+
+	// return TableFilter;
+
+	// });
+
+	// }
+
+	/*====================================================
+	    - Sets filters grid bar
+	    - Calls TF Constructor and generates grid bar
+	    - Params:
+	            - id: table id (string)
+	            - refRow (optional): row index (number)
+	            - config (optional): configuration
+	            object (literal object)
+	    - Returns TF object
+	=====================================================*/
+	// function setFilterGrid(id){
+	//     if(arguments.length === 0){
+	//         return;
+	//     }
+	//     let tf = new TableFilter(arguments[0], arguments[1], arguments[2]);
+	//     tf.init();
+	//     window['tf_'+id] = tf;
+	//     return tf;
+	// }
+
+/***/ },
+/* 1 */,
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
+	 * DOM event utilities
+	 */
+	
+	exports['default'] = {
+	    add: function add(obj, type, func, capture) {
+	        if (obj.addEventListener) {
+	            obj.addEventListener(type, func, capture);
+	        } else if (obj.attachEvent) {
+	            obj.attachEvent('on' + type, func);
+	        } else {
+	            obj['on' + type] = func;
+	        }
+	    },
+	    remove: function remove(obj, type, func, capture) {
+	        if (obj.detachEvent) {
+	            obj.detachEvent('on' + type, func);
+	        } else if (obj.removeEventListener) {
+	            obj.removeEventListener(type, func, capture);
+	        } else {
+	            obj['on' + type] = null;
+	        }
+	    },
+	    stop: function stop(evt) {
+	        if (!evt) {
+	            evt = window.event;
+	        }
+	        if (evt.stopPropagation) {
+	            evt.stopPropagation();
+	        } else {
+	            evt.cancelBubble = true;
+	        }
+	    },
+	    cancel: function cancel(evt) {
+	        if (!evt) {
+	            evt = window.event;
+	        }
+	        if (evt.preventDefault) {
+	            evt.preventDefault();
+	        } else {
+	            evt.returnValue = false;
+	        }
+	    },
+	    target: function target(evt) {
+	        return evt && evt.target || window.event && window.event.srcElement;
+	    },
+	    keyCode: function keyCode(evt) {
+	        return evt.charCode ? evt.charCode : evt.keyCode ? evt.keyCode : evt.which ? evt.which : 0;
+	    }
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
+	 * DOM utilities
+	 */
+	
+	exports['default'] = {
+	
+	    /**
+	     * Returns text + text of children of given node
+	     * @param  {NodeElement} node
+	     * @return {String}
+	     */
+	    getText: function getText(node) {
+	        var s = node.textContent || node.innerText || node.innerHTML.replace(/<[^<>]+>/g, '');
+	        s = s.replace(/^\s+/, '').replace(/\s+$/, '');
+	        return s;
+	    },
+	
+	    /**
+	     * Creates an html element with given collection of attributes
+	     * @param  {String} tag a string of the html tag to create
+	     * @param  {Array} an undetermined number of arrays containing the with 2
+	     *                    items, the attribute name and its value ['id','myId']
+	     * @return {Object}     created element
+	     */
+	    create: function create(tag) {
+	        if (!tag || tag === '') {
+	            return;
+	        }
+	
+	        var el = document.createElement(tag),
+	            args = arguments;
+	
+	        if (args.length > 1) {
+	            for (var i = 0; i < args.length; i++) {
+	                var argtype = typeof args[i];
+	                if (argtype.toLowerCase() === 'object' && args[i].length === 2) {
+	                    el.setAttribute(args[i][0], args[i][1]);
+	                }
+	            }
+	        }
+	        return el;
+	    },
+	
+	    /**
+	     * Returns a text node with given text
+	     * @param  {String} text
+	     * @return {Object}
+	     */
+	    text: (function (_text) {
+	        function text(_x) {
+	            return _text.apply(this, arguments);
+	        }
+	
+	        text.toString = function () {
+	            return _text.toString();
+	        };
+	
+	        return text;
+	    })(function (text) {
+	        return document.createTextNode(text);
+	    }),
+	
+	    /**
+	     * Returns offset position of passed element
+	     * @param  {object} obj [description]
+	     * @return {object}     literal object with left and top values
+	     */
+	    position: function position(obj) {
+	        var l = 0,
+	            t = 0;
+	        if (obj && obj.offsetParent) {
+	            do {
+	                l += obj.offsetLeft;
+	                t += obj.offsetTop;
+	            } while (obj == obj.offsetParent);
+	        }
+	        return { left: l, top: t };
+	    },
+	
+	    hasClass: function hasClass(ele, cls) {
+	        if (!ele) {
+	            return false;
+	        }
+	
+	        if (supportsClassList()) {
+	            return ele.classList.contains(cls);
+	        }
+	        return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+	    },
+	
+	    addClass: function addClass(ele, cls) {
+	        if (!ele) {
+	            return;
+	        }
+	
+	        if (supportsClassList()) {
+	            ele.classList.add(cls);
+	            return;
+	        }
+	
+	        if (ele.className === '') {
+	            ele.className = cls;
+	        } else if (!this.hasClass(ele, cls)) {
+	            ele.className += ' ' + cls;
+	        }
+	    },
+	
+	    removeClass: function removeClass(ele, cls) {
+	        if (!ele) {
+	            return;
+	        }
+	
+	        if (supportsClassList()) {
+	            ele.classList.remove(cls);
+	            return;
+	        }
+	        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)', 'g');
+	        ele.className = ele.className.replace(reg, '');
+	    },
+	
+	    /**
+	     * Creates and returns an option element
+	     * @param  {String}  text  option text
+	     * @param  {String}  value option value
+	     * @param  {Boolean} isSel whether option is selected
+	     * @return {Object}        option element
+	     */
+	    createOpt: function createOpt(text, value, isSel) {
+	        var isSelected = isSel ? true : false,
+	            opt = isSelected ? this.create('option', ['value', value], ['selected', 'true']) : this.create('option', ['value', value]);
+	        opt.appendChild(this.text(text));
+	        return opt;
+	    },
+	
+	    /**
+	     * Creates and returns a checklist item
+	     * @param  {Number} chkIndex  index of check item
+	     * @param  {String} chkValue  check item value
+	     * @param  {String} labelText check item label text
+	     * @return {Object}           li DOM element
+	     */
+	    createCheckItem: function createCheckItem(chkIndex, chkValue, labelText) {
+	        var li = this.create('li'),
+	            label = this.create('label', ['for', chkIndex]),
+	            check = this.create('input', ['id', chkIndex], ['name', chkIndex], ['type', 'checkbox'], ['value', chkValue]);
+	        label.appendChild(check);
+	        label.appendChild(this.text(labelText));
+	        li.appendChild(label);
+	        li.label = label;
+	        li.check = check;
+	        return li;
+	    },
+	
+	    id: function id(_id) {
+	        return document.getElementById(_id);
+	    },
+	
+	    tag: function tag(o, tagname) {
+	        return o.getElementsByTagName(tagname);
+	    }
+	};
+	
+	// HTML5 classList API
+	function supportsClassList() {
+	    return document.documentElement.classList;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
+	 * String utilities
+	 */
+	
+	exports['default'] = {
+	
+	    lower: function lower(text) {
+	        return text.toLowerCase();
+	    },
+	
+	    upper: function upper(text) {
+	        return text.toUpperCase();
+	    },
+	
+	    trim: function trim(text) {
+	        if (text.trim) {
+	            return text.trim();
+	        }
+	        return text.replace(/^\s*|\s*$/g, '');
+	    },
+	
+	    isEmpty: function isEmpty(text) {
+	        return this.trim(text) === '';
+	    },
+	
+	    rgxEsc: function rgxEsc(text) {
+	        function escape(e) {
+	            var a = new RegExp('\\' + e, 'g');
+	            text = text.replace(a, '\\' + e);
+	        }
+	
+	        var chars = ['\\', '[', '^', '$', '.', '|', '?', '*', '+', '(', ')'];
+	        for (var e = 0, len = chars.length; e < len; e++) {
+	            escape(chars[e]);
+	        }
+	        return text;
+	    },
+	
+	    matchCase: function matchCase(text, mc) {
+	        if (!mc) {
+	            return this.lower(text);
+	        }
+	        return text;
+	    }
+	
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
+	 * Cookie utilities
+	 */
+	
+	exports['default'] = {
+	
+	    write: function write(name, value, hours) {
+	        var expire = '';
+	        if (hours) {
+	            expire = new Date(new Date().getTime() + hours * 3600000);
+	            expire = '; expires=' + expire.toGMTString();
+	        }
+	        document.cookie = name + '=' + escape(value) + expire;
+	    },
+	
+	    read: function read(name) {
+	        var cookieValue = '',
+	            search = name + '=';
+	        if (document.cookie.length > 0) {
+	            var cookie = document.cookie,
+	                offset = cookie.indexOf(search);
+	            if (offset !== -1) {
+	                offset += search.length;
+	                var end = cookie.indexOf(';', offset);
+	                if (end === -1) {
+	                    end = cookie.length;
+	                }
+	                cookieValue = unescape(cookie.substring(offset, end));
+	            }
+	        }
+	        return cookieValue;
+	    },
+	
+	    remove: function remove(name) {
+	        this.write(name, '', -1);
+	    },
+	
+	    valueToArray: function valueToArray(name, separator) {
+	        if (!separator) {
+	            separator = ',';
+	        }
+	        //reads the cookie
+	        var val = this.read(name);
+	        //creates an array with filters' values
+	        var arr = val.split(separator);
+	        return arr;
+	    },
+	
+	    getValueByIndex: function getValueByIndex(name, index, separator) {
+	        if (!separator) {
+	            separator = ',';
+	        }
+	        //reads the cookie
+	        var val = this.valueToArray(name, separator);
+	        return val[index];
+	    }
+	
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
+	 * Types utilities
+	 */
+	
+	var UNDEFINED = void 0;
+	
+	exports['default'] = {
+	    /**
+	     * Checks if var exists and is an object
+	     * @param  {String or Object}  v
+	     * @return {Boolean}
+	     */
+	    isObj: function isObj(v) {
+	        var isO = false;
+	        if (typeof v === 'string') {
+	            if (window[v] && typeof window[v] === 'object') {
+	                isO = true;
+	            }
+	        } else {
+	            if (v && typeof v === 'object') {
+	                isO = true;
+	            }
+	        }
+	        return isO;
+	    },
+	
+	    /**
+	     * Checks if passed parameter is a function
+	     * @param  {Function} fn
+	     * @return {Boolean}
+	     */
+	    isFn: function isFn(fn) {
+	        return fn && fn.constructor == Function;
+	    },
+	
+	    /**
+	     * Checks if passed param is an array
+	     * @param  {Array}  obj
+	     * @return {Boolean}
+	     */
+	    isArray: function isArray(obj) {
+	        return obj && obj.constructor == Array;
+	    },
+	
+	    /**
+	     * Determines if passed param is undefined
+	     * @param  {Any}  o
+	     * @return {Boolean}
+	     */
+	    isUndef: function isUndef(o) {
+	        return o === UNDEFINED;
+	    }
+	
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
+	 * Array utilities
+	 */
+	
+	var _Str = __webpack_require__(4);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
+	exports['default'] = {
+	    has: function has(arr, val, caseSensitive) {
+	        var sCase = caseSensitive === undefined ? false : caseSensitive;
+	        for (var i = 0; i < arr.length; i++) {
+	            if (_Str2['default'].matchCase(arr[i].toString(), sCase) == val) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    },
+	    indexByValue: function indexByValue(arr, val, caseSensitive) {
+	        var sCase = caseSensitive === undefined ? false : caseSensitive;
+	        for (var i = 0; i < arr.length; i++) {
+	            if (_Str2['default'].matchCase(arr[i].toString(), sCase) == val) {
+	                return i;
+	            }
+	        }
+	        return -1;
+	    }
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
+	 * Date utilities
+	 */
+	
+	exports['default'] = {
+	    isValid: function isValid(dateStr, format) {
+	        if (!format) {
+	            format = 'DMY';
+	        }
+	        format = format.toUpperCase();
+	        if (format.length != 3) {
+	            if (format === 'DDMMMYYYY') {
+	                var d = this.format(dateStr, format);
+	                dateStr = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+	                format = 'DMY';
+	            }
+	        }
+	        if (format.indexOf('M') === -1 || format.indexOf('D') === -1 || format.indexOf('Y') === -1) {
+	            format = 'DMY';
+	        }
+	        var reg1 = undefined,
+	            reg2 = undefined;
+	        // If the year is first
+	        if (format.substring(0, 1) == 'Y') {
+	            reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+	            reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+	        } else if (format.substring(1, 2) == 'Y') {
+	            // If the year is second
+	            reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/;
+	            reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/;
+	        } else {
+	            // The year must be third
+	            reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
+	            reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
+	        }
+	        // If it doesn't conform to the right format (with either a 2 digit year
+	        // or 4 digit year), fail
+	        if (reg1.test(dateStr) === false && reg2.test(dateStr) === false) {
+	            return false;
+	        }
+	        // Split into 3 parts based on what the divider was
+	        var parts = dateStr.split(RegExp.$1);
+	        var mm = undefined,
+	            dd = undefined,
+	            yy = undefined;
+	        // Check to see if the 3 parts end up making a valid date
+	        if (format.substring(0, 1) === 'M') {
+	            mm = parts[0];
+	        } else if (format.substring(1, 2) === 'M') {
+	            mm = parts[1];
+	        } else {
+	            mm = parts[2];
+	        }
+	        if (format.substring(0, 1) === 'D') {
+	            dd = parts[0];
+	        } else if (format.substring(1, 2) === 'D') {
+	            dd = parts[1];
+	        } else {
+	            dd = parts[2];
+	        }
+	        if (format.substring(0, 1) === 'Y') {
+	            yy = parts[0];
+	        } else if (format.substring(1, 2) === 'Y') {
+	            yy = parts[1];
+	        } else {
+	            yy = parts[2];
+	        }
+	        if (parseInt(yy, 10) <= 50) {
+	            yy = (parseInt(yy, 10) + 2000).toString();
+	        }
+	        if (parseInt(yy, 10) <= 99) {
+	            yy = (parseInt(yy, 10) + 1900).toString();
+	        }
+	        var dt = new Date(parseInt(yy, 10), parseInt(mm, 10) - 1, parseInt(dd, 10), 0, 0, 0, 0);
+	        if (parseInt(dd, 10) != dt.getDate()) {
+	            return false;
+	        }
+	        if (parseInt(mm, 10) - 1 != dt.getMonth()) {
+	            return false;
+	        }
+	        return true;
+	    },
+	    format: function format(dateStr, formatStr) {
+	        if (!formatStr) {
+	            formatStr = 'DMY';
+	        }
+	        if (!dateStr || dateStr === '') {
+	            return new Date(1001, 0, 1);
+	        }
+	        var oDate = undefined;
+	        var parts = undefined;
+	
+	        switch (formatStr.toUpperCase()) {
+	            case 'DDMMMYYYY':
+	                parts = dateStr.replace(/[- \/.]/g, ' ').split(' ');
+	                oDate = new Date(y2kDate(parts[2]), mmm2mm(parts[1]) - 1, parts[0]);
+	                break;
+	            case 'DMY':
+	                /* jshint ignore:start */
+	                parts = dateStr.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/, '$1 $3 $5').split(' ');
+	                oDate = new Date(y2kDate(parts[2]), parts[1] - 1, parts[0]);
+	                /* jshint ignore:end */
+	                break;
+	            case 'MDY':
+	                /* jshint ignore:start */
+	                parts = dateStr.replace(/^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/, '$1 $3 $5').split(' ');
+	                oDate = new Date(y2kDate(parts[2]), parts[0] - 1, parts[1]);
+	                /* jshint ignore:end */
+	                break;
+	            case 'YMD':
+	                /* jshint ignore:start */
+	                parts = dateStr.replace(/^((\d\d)?\d\d)([- \/.])(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])$/, '$1 $4 $6').split(' ');
+	                oDate = new Date(y2kDate(parts[0]), parts[1] - 1, parts[2]);
+	                /* jshint ignore:end */
+	                break;
+	            default:
+	                //in case format is not correct
+	                /* jshint ignore:start */
+	                parts = dateStr.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/, '$1 $3 $5').split(' ');
+	                oDate = new Date(y2kDate(parts[2]), parts[1] - 1, parts[0]);
+	                /* jshint ignore:end */
+	                break;
+	        }
+	        return oDate;
+	    }
+	};
+	
+	function y2kDate(yr) {
+	    if (yr === undefined) {
+	        return 0;
+	    }
+	    if (yr.length > 2) {
+	        return yr;
+	    }
+	    var y = undefined;
+	    //>50 belong to 1900
+	    if (yr <= 99 && yr > 50) {
+	        y = '19' + yr;
+	    }
+	    //<50 belong to 2000
+	    if (yr < 50 || yr === '00') {
+	        y = '20' + yr;
+	    }
+	    return y;
+	}
+	
+	function mmm2mm(mmm) {
+	    if (mmm === undefined) {
+	        return 0;
+	    }
+	    var mondigit = undefined;
+	    var MONTH_NAMES = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+	    for (var m_i = 0; m_i < MONTH_NAMES.length; m_i++) {
+	        var month_name = MONTH_NAMES[m_i];
+	        if (mmm.toLowerCase() === month_name) {
+	            mondigit = m_i + 1;
+	            break;
+	        }
+	    }
+	    if (mondigit > 11 || mondigit < 23) {
+	        mondigit = mondigit - 12;
+	    }
+	    if (mondigit < 1 || mondigit > 12) {
+	        return 0;
+	    }
+	    return mondigit;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
+	 * Misc helpers
+	 */
+	
+	var _Str = __webpack_require__(4);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
+	exports['default'] = {
+	    isIE: function isIE() {
+	        return /msie|MSIE/.test(navigator.userAgent);
+	    },
+	
+	    removeNbFormat: function removeNbFormat(data, format) {
+	        if (!data) {
+	            return;
+	        }
+	        if (!format) {
+	            format = 'us';
+	        }
+	        var n = data;
+	        if (_Str2['default'].lower(format) === 'us') {
+	            n = +n.replace(/[^\d\.-]/g, '');
+	        } else {
+	            n = +n.replace(/[^\d\,-]/g, '').replace(',', '.');
+	        }
+	        return n;
+	    }
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Cookie = __webpack_require__(5);
+	
+	var _Cookie2 = _interopRequireDefault(_Cookie);
+	
+	var Store = (function () {
+	
+	    /**
+	     * Store, persistence manager
+	     * @param {Object} tf TableFilter instance
+	     *
+	     * TODO: use localStorage and fallback to cookie persistence
+	     */
+	
+	    function Store(tf) {
+	        _classCallCheck(this, Store);
+	
+	        var f = tf.config();
+	
+	        this.duration = !isNaN(f.set_cookie_duration) ? parseInt(f.set_cookie_duration, 10) : 100000;
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(Store, [{
+	        key: 'saveFilterValues',
+	
+	        /**
+	         * Store filters' values in cookie
+	         * @param {String} cookie name
+	         */
+	        value: function saveFilterValues(name) {
+	            var tf = this.tf;
+	            var fltValues = [];
+	            //store filters' values
+	            for (var i = 0; i < tf.fltIds.length; i++) {
+	                var value = tf.getFilterValue(i);
+	                if (value === '') {
+	                    value = ' ';
+	                }
+	                fltValues.push(value);
+	            }
+	            //adds array size
+	            fltValues.push(tf.fltIds.length);
+	
+	            //writes cookie
+	            _Cookie2['default'].write(name, fltValues.join(tf.separator), this.duration);
+	        }
+	    }, {
+	        key: 'getFilterValues',
+	
+	        /**
+	         * Retrieve filters' values from cookie
+	         * @param {String} cookie name
+	         * @return {Array}
+	         */
+	        value: function getFilterValues(name) {
+	            var flts = _Cookie2['default'].read(name);
+	            var rgx = new RegExp(this.tf.separator, 'g');
+	            // filters' values array
+	            return flts.split(rgx);
+	        }
+	    }, {
+	        key: 'savePageNb',
+	
+	        /**
+	         * Store page number in cookie
+	         * @param {String} cookie name
+	         */
+	        value: function savePageNb(name) {
+	            _Cookie2['default'].write(name, this.tf.feature('paging').currentPageNb, this.duration);
+	        }
+	    }, {
+	        key: 'getPageNb',
+	
+	        /**
+	         * Retrieve page number from cookie
+	         * @param {String} cookie name
+	         * @return {String}
+	         */
+	        value: function getPageNb(name) {
+	            return _Cookie2['default'].read(name);
+	        }
+	    }, {
+	        key: 'savePageLength',
+	
+	        /**
+	         * Store page length in cookie
+	         * @param {String} cookie name
+	         */
+	        value: function savePageLength(name) {
+	            _Cookie2['default'].write(name, this.tf.feature('paging').resultsPerPageSlc.selectedIndex, this.duration);
+	        }
+	    }, {
+	        key: 'getPageLength',
+	
+	        /**
+	         * Retrieve page length from cookie
+	         * @param {String} cookie name
+	         * @return {String}
+	         */
+	        value: function getPageLength(name) {
+	            return _Cookie2['default'].read(name);
+	        }
+	    }]);
+	
+	    return Store;
+	})();
+	
+	exports.Store = Store;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var GridLayout = (function () {
+	
+	    /**
+	     * Grid layout, table with fixed headers
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function GridLayout(tf) {
+	        _classCallCheck(this, GridLayout);
+	
+	        var f = tf.config();
+	
+	        //defines grid width
+	        this.gridWidth = f.grid_width || null;
+	        //defines grid height
+	        this.gridHeight = f.grid_height || null;
+	        //defines css class for main container
+	        this.gridMainContCssClass = f.grid_cont_css_class || 'grd_Cont';
+	        //defines css class for div containing table
+	        this.gridContCssClass = f.grid_tbl_cont_css_class || 'grd_tblCont';
+	        //defines css class for div containing headers' table
+	        this.gridHeadContCssClass = f.grid_tblHead_cont_css_class || 'grd_headTblCont';
+	        //defines css class for div containing rows counter, paging etc.
+	        this.gridInfDivCssClass = f.grid_inf_grid_css_class || 'grd_inf';
+	        //defines which row contains column headers
+	        this.gridHeadRowIndex = f.grid_headers_row_index || 0;
+	        //array of headers row indexes to be placed in header table
+	        this.gridHeadRows = f.grid_headers_rows || [0];
+	        //generate filters in table headers
+	        this.gridEnableFilters = f.grid_enable_default_filters !== undefined ? f.grid_enable_default_filters : true;
+	        //default col width
+	        this.gridDefaultColWidth = f.grid_default_col_width || '100px';
+	        //enables/disables columns resizer
+	        // this.gridEnableColResizer = f.grid_enable_cols_resizer!==undefined ?
+	        //     f.grid_enable_cols_resizer : false;
+	        // //defines col resizer script path
+	        // this.gridColResizerPath = f.grid_cont_col_resizer_path ||
+	        //     this.basePath+'TFExt_ColsResizer/TFExt_ColsResizer.js';
+	
+	        this.gridColElms = [];
+	
+	        //div containing grid elements if grid_layout true
+	        this.prfxMainTblCont = 'gridCont_';
+	        //div containing table if grid_layout true
+	        this.prfxTblCont = 'tblCont_';
+	        //div containing headers table if grid_layout true
+	        this.prfxHeadTblCont = 'tblHeadCont_';
+	        //headers' table if grid_layout true
+	        this.prfxHeadTbl = 'tblHead_';
+	        //id of td containing the filter if grid_layout true
+	        this.prfxGridFltTd = '_td_';
+	        //id of th containing column header if grid_layout true
+	        this.prfxGridTh = 'tblHeadTh_';
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(GridLayout, [{
+	        key: 'init',
+	
+	        /**
+	         * Generates a grid with fixed headers
+	         */
+	        value: function init() {
+	            var _this = this;
+	
+	            var tf = this.tf;
+	            var f = tf.config();
+	            var tbl = tf.tbl;
+	
+	            if (!tf.gridLayout) {
+	                return;
+	            }
+	
+	            tf.isExternalFlt = true;
+	
+	            // default width of 100px if column widths not set
+	            if (!tf.hasColWidths) {
+	                tf.colWidths = [];
+	                for (var k = 0; k < tf.nbCells; k++) {
+	                    var colW,
+	                        cell = tbl.rows[this.gridHeadRowIndex].cells[k];
+	                    if (cell.width !== '') {
+	                        colW = cell.width;
+	                    } else if (cell.style.width !== '') {
+	                        colW = parseInt(cell.style.width, 10);
+	                    } else {
+	                        colW = this.gridDefaultColWidth;
+	                    }
+	                    tf.colWidths[k] = colW;
+	                }
+	                tf.hasColWidths = true;
+	            }
+	            tf.setColWidths(this.gridHeadRowIndex);
+	
+	            var tblW; //initial table width
+	            if (tbl.width !== '') {
+	                tblW = tbl.width;
+	            } else if (tbl.style.width !== '') {
+	                tblW = parseInt(tbl.style.width, 10);
+	            } else {
+	                tblW = tbl.clientWidth;
+	            }
+	
+	            //Main container: it will contain all the elements
+	            this.tblMainCont = _Dom2['default'].create('div', ['id', this.prfxMainTblCont + tf.id]);
+	            this.tblMainCont.className = this.gridMainContCssClass;
+	            if (this.gridWidth) {
+	                this.tblMainCont.style.width = this.gridWidth;
+	            }
+	            tbl.parentNode.insertBefore(this.tblMainCont, tbl);
+	
+	            //Table container: div wrapping content table
+	            this.tblCont = _Dom2['default'].create('div', ['id', this.prfxTblCont + tf.id]);
+	            this.tblCont.className = this.gridContCssClass;
+	            if (this.gridWidth) {
+	                this.tblCont.style.width = this.gridWidth;
+	            }
+	            if (this.gridHeight) {
+	                this.tblCont.style.height = this.gridHeight;
+	            }
+	            tbl.parentNode.insertBefore(this.tblCont, tbl);
+	            var t = tbl.parentNode.removeChild(tbl);
+	            this.tblCont.appendChild(t);
+	
+	            //In case table width is expressed in %
+	            if (tbl.style.width === '') {
+	                tbl.style.width = (tf._containsStr('%', tblW) ? tbl.clientWidth : tblW) + 'px';
+	            }
+	
+	            var d = this.tblCont.parentNode.removeChild(this.tblCont);
+	            this.tblMainCont.appendChild(d);
+	
+	            //Headers table container: div wrapping headers table
+	            this.headTblCont = _Dom2['default'].create('div', ['id', this.prfxHeadTblCont + tf.id]);
+	            this.headTblCont.className = this.gridHeadContCssClass;
+	            if (this.gridWidth) {
+	                this.headTblCont.style.width = this.gridWidth;
+	            }
+	
+	            //Headers table
+	            this.headTbl = _Dom2['default'].create('table', ['id', this.prfxHeadTbl + tf.id]);
+	            var tH = _Dom2['default'].create('tHead'); //IE<7 needs it
+	
+	            //1st row should be headers row, ids are added if not set
+	            //Those ids are used by the sort feature
+	            var hRow = tbl.rows[this.gridHeadRowIndex];
+	            var sortTriggers = [];
+	            for (var n = 0; n < tf.nbCells; n++) {
+	                var c = hRow.cells[n];
+	                var thId = c.getAttribute('id');
+	                if (!thId || thId === '') {
+	                    thId = this.prfxGridTh + n + '_' + tf.id;
+	                    c.setAttribute('id', thId);
+	                }
+	                sortTriggers.push(thId);
+	            }
+	
+	            //Filters row is created
+	            var filtersRow = _Dom2['default'].create('tr');
+	            if (this.gridEnableFilters && tf.fltGrid) {
+	                tf.externalFltTgtIds = [];
+	                for (var j = 0; j < tf.nbCells; j++) {
+	                    var fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;
+	                    var cl = _Dom2['default'].create(tf.fltCellTag, ['id', fltTdId]);
+	                    filtersRow.appendChild(cl);
+	                    tf.externalFltTgtIds[j] = fltTdId;
+	                }
+	            }
+	            //Headers row are moved from content table to headers table
+	            for (var i = 0; i < this.gridHeadRows.length; i++) {
+	                var headRow = tbl.rows[this.gridHeadRows[0]];
+	                tH.appendChild(headRow);
+	            }
+	            this.headTbl.appendChild(tH);
+	            if (tf.filtersRowIndex === 0) {
+	                tH.insertBefore(filtersRow, hRow);
+	            } else {
+	                tH.appendChild(filtersRow);
+	            }
+	
+	            this.headTblCont.appendChild(this.headTbl);
+	            this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);
+	
+	            //THead needs to be removed in content table for sort feature
+	            var thead = _Dom2['default'].tag(tbl, 'thead');
+	            if (thead.length > 0) {
+	                tbl.removeChild(thead[0]);
+	            }
+	
+	            //Headers table style
+	            this.headTbl.style.tableLayout = 'fixed';
+	            tbl.style.tableLayout = 'fixed';
+	            this.headTbl.cellPadding = tbl.cellPadding;
+	            this.headTbl.cellSpacing = tbl.cellSpacing;
+	            // this.headTbl.style.width = tbl.style.width;
+	
+	            //content table without headers needs col widths to be reset
+	            tf.setColWidths(0, this.headTbl);
+	
+	            //Headers container width
+	            this.headTblCont.style.width = this.tblCont.clientWidth + 'px';
+	
+	            tbl.style.width = '';
+	            //
+	            this.headTbl.style.width = tbl.clientWidth + 'px';
+	            //
+	
+	            //scroll synchronisation
+	            _Event2['default'].add(this.tblCont, 'scroll', function (evt) {
+	                var elm = _Event2['default'].target(evt);
+	                var scrollLeft = elm.scrollLeft;
+	                _this.headTblCont.scrollLeft = scrollLeft;
+	                //New pointerX calc taking into account scrollLeft
+	                // if(!o.isPointerXOverwritten){
+	                //     try{
+	                //         o.Evt.pointerX = function(evt){
+	                //             var e = evt || global.event;
+	                //             var bdScrollLeft = tf_StandardBody().scrollLeft +
+	                //                 scrollLeft;
+	                //             return (e.pageX + scrollLeft) ||
+	                //                 (e.clientX + bdScrollLeft);
+	                //         };
+	                //         o.isPointerXOverwritten = true;
+	                //     } catch(err) {
+	                //         o.isPointerXOverwritten = false;
+	                //     }
+	                // }
+	            });
+	
+	            //Configure sort extension if any
+	            var sort = (f.extensions || []).filter(function (itm) {
+	                return itm.name === 'sort';
+	            });
+	            if (sort.length === 1) {
+	                sort[0].async_sort = true;
+	                sort[0].trigger_ids = sortTriggers;
+	            }
+	
+	            // if(this.gridEnableColResizer){
+	            //     if(!tf.hasExtensions){
+	            //         tf.extensions = {
+	            //             name:['ColumnsResizer_'+tf.id],
+	            //             src:[this.gridColResizerPath],
+	            //             description:['Columns Resizing'],
+	            //             initialize:[function(o){
+	            //                 o.SetColsResizer('ColumnsResizer_'+o.id);}]
+	            //         };
+	            //         tf.hasExtensions = true;
+	            //     } else {
+	            //         if(!tf._containsStr(
+	            //             'colsresizer',
+	            //             Str.lower(tf.extensions.src.toString())) ){
+	            //             tf.extensions.name.push('ColumnsResizer_'+tf.id);
+	            //             tf.extensions.src.push(tf.gridColResizerPath);
+	            //             tf.extensions.description.push('Columns Resizing');
+	            //             tf.extensions.initialize.push(function(o){
+	            //                 o.SetColsResizer('ColumnsResizer_'+o.id);});
+	            //         }
+	            //     }
+	            // }
+	
+	            //Default columns resizer properties for grid layout
+	            // f.col_resizer_cols_headers_table = this.headTbl.getAttribute('id');
+	            // f.col_resizer_cols_headers_index = this.gridHeadRowIndex;
+	            // f.col_resizer_width_adjustment = 0;
+	            // f.col_enable_text_ellipsis = false;
+	
+	            //Cols generation for all browsers excepted IE<=7
+	            this.tblHasColTag = _Dom2['default'].tag(tbl, 'col').length > 0 ? true : false;
+	
+	            //Col elements are enough to keep column widths after sorting and
+	            //filtering
+	            var createColTags = function createColTags() {
+	                for (var k = tf.nbCells - 1; k >= 0; k--) {
+	                    var col = _Dom2['default'].create('col', ['id', tf.id + '_col_' + k]);
+	                    tbl.insertBefore(col, tbl.firstChild);
+	                    col.style.width = tf.colWidths[k];
+	                    this.gridColElms[k] = col;
+	                }
+	                this.tblHasColTag = true;
+	            };
+	
+	            if (!this.tblHasColTag) {
+	                createColTags.call(this);
+	            } else {
+	                var cols = _Dom2['default'].tag(tbl, 'col');
+	                for (var ii = 0; ii < tf.nbCells; ii++) {
+	                    cols[ii].setAttribute('id', tf.id + '_col_' + ii);
+	                    cols[ii].style.width = tf.colWidths[ii];
+	                    this.gridColElms.push(cols[ii]);
+	                }
+	            }
+	
+	            var afterColResizedFn = _Types2['default'].isFn(f.on_after_col_resized) ? f.on_after_col_resized : null;
+	            f.on_after_col_resized = function (o, colIndex) {
+	                if (!colIndex) {
+	                    return;
+	                }
+	                var w = o.crWColsRow.cells[colIndex].style.width;
+	                var col = o.gridColElms[colIndex];
+	                col.style.width = w;
+	
+	                var thCW = o.crWColsRow.cells[colIndex].clientWidth;
+	                var tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
+	
+	                if (thCW != tdCW /*&& !Helpers.isIE()*/) {
+	                    o.headTbl.style.width = tbl.clientWidth + 'px';
+	                }
+	
+	                if (afterColResizedFn) {
+	                    afterColResizedFn.call(null, o, colIndex);
+	                }
+	            };
+	
+	            if (tbl.clientWidth !== this.headTbl.clientWidth) {
+	                tbl.style.width = this.headTbl.clientWidth + 'px';
+	            }
+	
+	            // Re-adjust reference row
+	            //tf.refRow = Helpers.isIE() ? (tf.refRow+1) : 0;
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Removes the grid layout
+	         */
+	        value: function destroy() {
+	            var tf = this.tf;
+	            var tbl = tf.tbl;
+	
+	            if (!tf.gridLayout) {
+	                return;
+	            }
+	            var t = tbl.parentNode.removeChild(tbl);
+	            this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);
+	            this.tblMainCont.parentNode.removeChild(this.tblMainCont);
+	
+	            this.tblMainCont = null;
+	            this.headTblCont = null;
+	            this.headTbl = null;
+	            this.tblCont = null;
+	
+	            tbl.outerHTML = tf.sourceTblHtml;
+	            //needed to keep reference of table element
+	            tbl = _Dom2['default'].id(tf.id);
+	        }
+	    }]);
+	
+	    return GridLayout;
+	})();
+	
+	exports.GridLayout = GridLayout;
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var global = window;
+	
+	/**
+	 * Loading message/spinner
+	 * @param {Object} tf TableFilter instance
+	 */
+	
+	var Loader = (function () {
+	    function Loader(tf) {
+	        _classCallCheck(this, Loader);
+	
+	        // TableFilter configuration
+	        var f = tf.config();
+	        //id of container element
+	        this.loaderTgtId = f.loader_target_id || null;
+	        //div containing loader
+	        this.loaderDiv = null;
+	        //defines loader text
+	        this.loaderText = f.loader_text || 'Loading...';
+	        //defines loader innerHtml
+	        this.loaderHtml = f.loader_html || null;
+	        //defines css class for loader div
+	        this.loaderCssClass = f.loader_css_class || 'loader';
+	        //delay for hiding loader
+	        this.loaderCloseDelay = 200;
+	        //callback function before loader is displayed
+	        this.onShowLoader = _Types2['default'].isFn(f.on_show_loader) ? f.on_show_loader : null;
+	        //callback function after loader is closed
+	        this.onHideLoader = _Types2['default'].isFn(f.on_hide_loader) ? f.on_hide_loader : null;
+	        //loader div
+	        this.prfxLoader = 'load_';
+	
+	        this.tf = tf;
+	
+	        var containerDiv = _Dom2['default'].create('div', ['id', this.prfxLoader + tf.id]);
+	        containerDiv.className = this.loaderCssClass;
+	
+	        var targetEl = !this.loaderTgtId ? tf.tbl.parentNode : _Dom2['default'].id(this.loaderTgtId);
+	        if (!this.loaderTgtId) {
+	            targetEl.insertBefore(containerDiv, tf.tbl);
+	        } else {
+	            targetEl.appendChild(containerDiv);
+	        }
+	        this.loaderDiv = _Dom2['default'].id(this.prfxLoader + tf.id);
+	        if (!this.loaderHtml) {
+	            this.loaderDiv.appendChild(_Dom2['default'].text(this.loaderText));
+	        } else {
+	            this.loaderDiv.innerHTML = this.loaderHtml;
+	        }
+	    }
+	
+	    _createClass(Loader, [{
+	        key: 'show',
+	        value: function show(p) {
+	            var _this = this;
+	
+	            if (!this.tf.loader || !this.loaderDiv || this.loaderDiv.style.display === p) {
+	                return;
+	            }
+	
+	            var displayLoader = function displayLoader() {
+	                if (!_this.loaderDiv) {
+	                    return;
+	                }
+	                if (_this.onShowLoader && p !== 'none') {
+	                    _this.onShowLoader.call(null, _this);
+	                }
+	                _this.loaderDiv.style.display = p;
+	                if (_this.onHideLoader && p === 'none') {
+	                    _this.onHideLoader.call(null, _this);
+	                }
+	            };
+	
+	            var t = p === 'none' ? this.loaderCloseDelay : 1;
+	            global.setTimeout(displayLoader, t);
+	        }
+	    }, {
+	        key: 'destroy',
+	        value: function destroy() {
+	            if (!this.loaderDiv) {
+	                return;
+	            }
+	            var tf = this.tf,
+	                targetEl = !this.loaderTgtId ? tf.gridLayout ? tf.feature('gridLayout').tblCont : tf.tbl.parentNode : _Dom2['default'].id(this.loaderTgtId);
+	            targetEl.removeChild(this.loaderDiv);
+	            this.loaderDiv = null;
+	        }
+	    }]);
+	
+	    return Loader;
+	})();
+	
+	exports.Loader = Loader;
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Str = __webpack_require__(4);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
+	var HighlightKeyword = (function () {
+	
+	    /**
+	     * HighlightKeyword, highlight matched keyword
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function HighlightKeyword(tf) {
+	        _classCallCheck(this, HighlightKeyword);
+	
+	        var f = tf.config();
+	        //defines css class for highlighting
+	        this.highlightCssClass = f.highlight_css_class || 'keyword';
+	        this.highlightedNodes = [];
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(HighlightKeyword, [{
+	        key: 'highlight',
+	
+	        /**
+	         * highlight occurences of searched term in passed node
+	         * @param  {Node} node
+	         * @param  {String} word     Searched term
+	         * @param  {String} cssClass Css class name
+	         */
+	        value: function highlight(node, word, cssClass) {
+	            // Iterate into this nodes childNodes
+	            if (node.hasChildNodes) {
+	                var children = node.childNodes;
+	                for (var i = 0; i < children.length; i++) {
+	                    this.highlight(children[i], word, cssClass);
+	                }
+	            }
+	
+	            if (node.nodeType === 3) {
+	                var tempNodeVal = _Str2['default'].lower(node.nodeValue);
+	                var tempWordVal = _Str2['default'].lower(word);
+	                if (tempNodeVal.indexOf(tempWordVal) != -1) {
+	                    var pn = node.parentNode;
+	                    if (pn && pn.className != cssClass) {
+	                        // word not highlighted yet
+	                        var nv = node.nodeValue,
+	                            ni = tempNodeVal.indexOf(tempWordVal),
+	
+	                        // Create a load of replacement nodes
+	                        before = _Dom2['default'].text(nv.substr(0, ni)),
+	                            docWordVal = nv.substr(ni, word.length),
+	                            after = _Dom2['default'].text(nv.substr(ni + word.length)),
+	                            hiwordtext = _Dom2['default'].text(docWordVal),
+	                            hiword = _Dom2['default'].create('span');
+	                        hiword.className = cssClass;
+	                        hiword.appendChild(hiwordtext);
+	                        pn.insertBefore(before, node);
+	                        pn.insertBefore(hiword, node);
+	                        pn.insertBefore(after, node);
+	                        pn.removeChild(node);
+	                        this.highlightedNodes.push(hiword.firstChild);
+	                    }
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'unhighlight',
+	
+	        /**
+	         * Removes highlight to nodes matching passed string
+	         * @param  {String} word
+	         * @param  {String} cssClass Css class to remove
+	         */
+	        value: function unhighlight(word, cssClass) {
+	            var arrRemove = [];
+	            var highlightedNodes = this.highlightedNodes;
+	            for (var i = 0; i < highlightedNodes.length; i++) {
+	                var n = highlightedNodes[i];
+	                if (!n) {
+	                    continue;
+	                }
+	                var tempNodeVal = _Str2['default'].lower(n.nodeValue),
+	                    tempWordVal = _Str2['default'].lower(word);
+	                if (tempNodeVal.indexOf(tempWordVal) !== -1) {
+	                    var pn = n.parentNode;
+	                    if (pn && pn.className === cssClass) {
+	                        var prevSib = pn.previousSibling,
+	                            nextSib = pn.nextSibling;
+	                        if (!prevSib || !nextSib) {
+	                            continue;
+	                        }
+	                        nextSib.nodeValue = prevSib.nodeValue + n.nodeValue + nextSib.nodeValue;
+	                        prevSib.nodeValue = '';
+	                        n.nodeValue = '';
+	                        arrRemove.push(i);
+	                    }
+	                }
+	            }
+	            for (var k = 0; k < arrRemove.length; k++) {
+	                highlightedNodes.splice(arrRemove[k], 1);
+	            }
+	        }
+	    }, {
+	        key: 'unhighlightAll',
+	
+	        /**
+	         * Clear all occurrences of highlighted nodes
+	         */
+	        value: function unhighlightAll() {
+	            if (!this.tf.highlightKeywords || !this.tf.searchArgs) {
+	                return;
+	            }
+	            for (var y = 0; y < this.tf.searchArgs.length; y++) {
+	                this.unhighlight(this.tf.searchArgs[y], this.highlightCssClass);
+	            }
+	            this.highlightedNodes = [];
+	        }
+	    }]);
+	
+	    return HighlightKeyword;
+	})();
+	
+	exports.HighlightKeyword = HighlightKeyword;
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var _Helpers = __webpack_require__(9);
+	
+	var _Helpers2 = _interopRequireDefault(_Helpers);
+	
+	var PopupFilter = (function () {
+	
+	    /**
+	     * Pop-up filter component
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function PopupFilter(tf) {
+	        _classCallCheck(this, PopupFilter);
+	
+	        // Configuration object
+	        var f = tf.config();
+	
+	        // Enable external filters behaviour
+	        tf.isExternalFlt = true;
+	        tf.externalFltTgtIds = [];
+	
+	        //filter icon path
+	        this.popUpImgFlt = f.popup_filters_image || tf.themesPath + 'icn_filter.gif';
+	        //active filter icon path
+	        this.popUpImgFltActive = f.popup_filters_image_active || tf.themesPath + 'icn_filterActive.gif';
+	        this.popUpImgFltHtml = f.popup_filters_image_html || '<img src="' + this.popUpImgFlt + '" alt="Column filter" />';
+	        //defines css class for popup div containing filter
+	        this.popUpDivCssClass = f.popup_div_css_class || 'popUpFilter';
+	        //callback function before popup filtes is opened
+	        this.onBeforePopUpOpen = _Types2['default'].isFn(f.on_before_popup_filter_open) ? f.on_before_popup_filter_open : null;
+	        //callback function after popup filtes is opened
+	        this.onAfterPopUpOpen = _Types2['default'].isFn(f.on_after_popup_filter_open) ? f.on_after_popup_filter_open : null;
+	        //callback function before popup filtes is closed
+	        this.onBeforePopUpClose = _Types2['default'].isFn(f.on_before_popup_filter_close) ? f.on_before_popup_filter_close : null;
+	        //callback function after popup filtes is closed
+	        this.onAfterPopUpClose = _Types2['default'].isFn(f.on_after_popup_filter_close) ? f.on_after_popup_filter_close : null;
+	
+	        //stores filters spans
+	        this.popUpFltSpans = [];
+	        //stores filters icons
+	        this.popUpFltImgs = [];
+	        //stores filters containers
+	        this.popUpFltElms = this.popUpFltElmCache || [];
+	        this.popUpFltAdjustToContainer = true;
+	
+	        //id prefix for pop-up filter span
+	        this.prfxPopUpSpan = 'popUpSpan_';
+	        //id prefix for pop-up div containing filter
+	        this.prfxPopUpDiv = 'popUpDiv_';
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(PopupFilter, [{
+	        key: 'onClick',
+	        value: function onClick(e) {
+	            var evt = e || global.event,
+	                elm = evt.target.parentNode,
+	                colIndex = parseInt(elm.getAttribute('ci'), 10);
+	
+	            this.closeAll(colIndex);
+	            this.toggle(colIndex);
+	
+	            if (this.popUpFltAdjustToContainer) {
+	                var popUpDiv = this.popUpFltElms[colIndex],
+	                    header = this.tf.getHeaderElement(colIndex),
+	                    headerWidth = header.clientWidth * 0.95;
+	                if (_Helpers2['default'].isIE()) {
+	                    var headerLeft = _Dom2['default'].position(header).left;
+	                    popUpDiv.style.left = headerLeft + 'px';
+	                }
+	                popUpDiv.style.width = parseInt(headerWidth, 10) + 'px';
+	            }
+	            _Event2['default'].cancel(evt);
+	            _Event2['default'].stop(evt);
+	        }
+	    }, {
+	        key: 'init',
+	
+	        /**
+	         * Initialize DOM elements
+	         */
+	        value: function init() {
+	            var _this = this;
+	
+	            var tf = this.tf;
+	            for (var i = 0; i < tf.nbCells; i++) {
+	                if (tf['col' + i] === tf.fltTypeNone) {
+	                    continue;
+	                }
+	                var popUpSpan = _Dom2['default'].create('span', ['id', this.prfxPopUpSpan + tf.id + '_' + i], ['ci', i]);
+	                popUpSpan.innerHTML = this.popUpImgFltHtml;
+	                var header = tf.getHeaderElement(i);
+	                header.appendChild(popUpSpan);
+	                _Event2['default'].add(popUpSpan, 'click', function (evt) {
+	                    _this.onClick(evt);
+	                });
+	                this.popUpFltSpans[i] = popUpSpan;
+	                this.popUpFltImgs[i] = popUpSpan.firstChild;
+	            }
+	        }
+	    }, {
+	        key: 'buildAll',
+	
+	        /**
+	         * Build all pop-up filters elements
+	         */
+	        value: function buildAll() {
+	            for (var i = 0; i < this.popUpFltElmCache.length; i++) {
+	                this.build(i, this.popUpFltElmCache[i]);
+	            }
+	        }
+	    }, {
+	        key: 'build',
+	
+	        /**
+	         * Build a specified pop-up filter elements
+	         * @param  {Number} colIndex Column index
+	         * @param  {Object} div      Optional container DOM element
+	         */
+	        value: function build(colIndex, div) {
+	            var tf = this.tf;
+	            var popUpDiv = !div ? _Dom2['default'].create('div', ['id', this.prfxPopUpDiv + tf.id + '_' + colIndex]) : div;
+	            popUpDiv.className = this.popUpDivCssClass;
+	            tf.externalFltTgtIds.push(popUpDiv.id);
+	            var header = tf.getHeaderElement(colIndex);
+	            header.insertBefore(popUpDiv, header.firstChild);
+	            _Event2['default'].add(popUpDiv, 'click', function (evt) {
+	                _Event2['default'].stop(evt);
+	            });
+	            this.popUpFltElms[colIndex] = popUpDiv;
+	        }
+	    }, {
+	        key: 'toggle',
+	
+	        /**
+	         * Toogle visibility of specified filter
+	         * @param  {Number} colIndex Column index
+	         */
+	        value: function toggle(colIndex) {
+	            var tf = this.tf,
+	                popUpFltElm = this.popUpFltElms[colIndex];
+	
+	            if (popUpFltElm.style.display === 'none' || popUpFltElm.style.display === '') {
+	                if (this.onBeforePopUpOpen) {
+	                    this.onBeforePopUpOpen.call(null, this, this.popUpFltElms[colIndex], colIndex);
+	                }
+	                popUpFltElm.style.display = 'block';
+	                if (tf['col' + colIndex] === tf.fltTypeInp) {
+	                    var flt = tf.getFilterElement(colIndex);
+	                    if (flt) {
+	                        flt.focus();
+	                    }
+	                }
+	                if (this.onAfterPopUpOpen) {
+	                    this.onAfterPopUpOpen.call(null, this, this.popUpFltElms[colIndex], colIndex);
+	                }
+	            } else {
+	                if (this.onBeforePopUpClose) {
+	                    this.onBeforePopUpClose.call(null, this, this.popUpFltElms[colIndex], colIndex);
+	                }
+	                popUpFltElm.style.display = 'none';
+	                if (this.onAfterPopUpClose) {
+	                    this.onAfterPopUpClose.call(null, this, this.popUpFltElms[colIndex], colIndex);
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'closeAll',
+	
+	        /**
+	         * Close all filters excepted for the specified one if any
+	         * @param  {Number} exceptIdx Column index of the filter to not close
+	         */
+	        value: function closeAll(exceptIdx) {
+	            for (var i = 0; i < this.popUpFltElms.length; i++) {
+	                if (i === exceptIdx) {
+	                    continue;
+	                }
+	                var popUpFltElm = this.popUpFltElms[i];
+	                if (popUpFltElm) {
+	                    popUpFltElm.style.display = 'none';
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'buildIcons',
+	
+	        /**
+	         * Build all the icons representing the pop-up filters
+	         */
+	        value: function buildIcons() {
+	            for (var i = 0; i < this.popUpFltImgs.length; i++) {
+	                this.buildIcon(i, false);
+	            }
+	        }
+	    }, {
+	        key: 'buildIcon',
+	
+	        /**
+	         * Build specified icon
+	         * @param  {Number} colIndex Column index
+	         * @param  {Boolean} active   Apply active state
+	         */
+	        value: function buildIcon(colIndex, active) {
+	            if (this.popUpFltImgs[colIndex]) {
+	                this.popUpFltImgs[colIndex].src = active ? this.popUpImgFltActive : this.popUpImgFlt;
+	            }
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Remove pop-up filters
+	         */
+	        value: function destroy() {
+	            this.popUpFltElmCache = [];
+	            for (var i = 0; i < this.popUpFltElms.length; i++) {
+	                var popUpFltElm = this.popUpFltElms[i],
+	                    popUpFltSpan = this.popUpFltSpans[i],
+	                    popUpFltImg = this.popUpFltImgs[i];
+	                if (popUpFltElm) {
+	                    popUpFltElm.parentNode.removeChild(popUpFltElm);
+	                    this.popUpFltElmCache[i] = popUpFltElm;
+	                }
+	                popUpFltElm = null;
+	                if (popUpFltSpan) {
+	                    popUpFltSpan.parentNode.removeChild(popUpFltSpan);
+	                }
+	                popUpFltSpan = null;
+	                if (popUpFltImg) {
+	                    popUpFltImg.parentNode.removeChild(popUpFltImg);
+	                }
+	                popUpFltImg = null;
+	            }
+	            this.popUpFltElms = [];
+	            this.popUpFltSpans = [];
+	            this.popUpFltImgs = [];
+	        }
+	    }]);
+	
+	    return PopupFilter;
+	})();
+	
+	exports.PopupFilter = PopupFilter;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Arr = __webpack_require__(7);
+	
+	var _Arr2 = _interopRequireDefault(_Arr);
+	
+	var _Str = __webpack_require__(4);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
+	var _Sort = __webpack_require__(23);
+	
+	var _Sort2 = _interopRequireDefault(_Sort);
+	
+	var Dropdown = (function () {
+	
+	    /**
+	     * Dropdown UI component
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function Dropdown(tf) {
+	        _classCallCheck(this, Dropdown);
+	
+	        // Configuration object
+	        var f = tf.config();
+	
+	        this.enableSlcResetFilter = f.enable_slc_reset_filter === false ? false : true;
+	        //defines empty option text
+	        this.nonEmptyText = f.non_empty_text || '(Non empty)';
+	        //sets select filling method: 'innerHTML' or 'createElement'
+	        this.slcFillingMethod = f.slc_filling_method || 'createElement';
+	        //IE only, tooltip text appearing on select before it is populated
+	        this.activateSlcTooltip = f.activate_slc_tooltip || 'Click to activate';
+	        //tooltip text appearing on multiple select
+	        this.multipleSlcTooltip = f.multiple_slc_tooltip || 'Use Ctrl key for multiple selections';
+	
+	        this.isCustom = null;
+	        this.opts = null;
+	        this.optsTxt = null;
+	        this.slcInnerHtml = null;
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(Dropdown, [{
+	        key: 'build',
+	
+	        /**
+	         * Build drop-down filter UI asynchronously
+	         * @param  {Number}  colIndex   Column index
+	         * @param  {Boolean} isRefreshed Enable linked refresh behaviour
+	         * @param  {Boolean} isExternal Render in external container
+	         * @param  {String}  extSlcId   External container id
+	         */
+	        value: function build(colIndex, isRefreshed, isExternal, extSlcId) {
+	            var tf = this.tf;
+	            tf.EvtManager(tf.Evt.name.dropdown, {
+	                slcIndex: colIndex,
+	                slcRefreshed: isRefreshed,
+	                slcExternal: isExternal,
+	                slcId: extSlcId
+	            });
+	        }
+	    }, {
+	        key: '_build',
+	
+	        /**
+	         * Build drop-down filter UI
+	         * @param  {Number}  colIndex    Column index
+	         * @param  {Boolean} isRefreshed Enable linked refresh behaviour
+	         * @param  {Boolean} isExternal  Render in external container
+	         * @param  {String}  extSlcId    External container id
+	         */
+	        value: function _build(colIndex) {
+	            var isRefreshed = arguments[1] === undefined ? false : arguments[1];
+	            var isExternal = arguments[2] === undefined ? false : arguments[2];
+	            var extSlcId = arguments[3] === undefined ? null : arguments[3];
+	
+	            var tf = this.tf;
+	            colIndex = parseInt(colIndex, 10);
+	
+	            this.opts = [];
+	            this.optsTxt = [];
+	            this.slcInnerHtml = '';
+	
+	            var slcId = tf.fltIds[colIndex];
+	            if (!_Dom2['default'].id(slcId) && !isExternal || !_Dom2['default'].id(extSlcId) && isExternal) {
+	                return;
+	            }
+	            var slc = !isExternal ? _Dom2['default'].id(slcId) : _Dom2['default'].id(extSlcId),
+	                rows = tf.tbl.rows,
+	                matchCase = tf.matchCase;
+	
+	            //custom select test
+	            this.isCustom = tf.isCustomOptions(colIndex);
+	
+	            //custom selects text
+	            var activeFlt;
+	            if (isRefreshed && tf.activeFilterId) {
+	                activeFlt = tf.activeFilterId.split('_')[0];
+	                activeFlt = activeFlt.split(tf.prfxFlt)[1];
+	            }
+	
+	            /*** remember grid values ***/
+	            var fltsValues = [],
+	                fltArr = [];
+	            if (tf.rememberGridValues) {
+	                fltsValues = tf.feature('store').getFilterValues(tf.fltsValuesCookie);
+	                if (fltsValues && !_Str2['default'].isEmpty(fltsValues.toString())) {
+	                    if (this.isCustom) {
+	                        fltArr.push(fltsValues[colIndex]);
+	                    } else {
+	                        fltArr = fltsValues[colIndex].split(' ' + tf.orOperator + ' ');
+	                    }
+	                }
+	            }
+	
+	            var excludedOpts = null,
+	                filteredDataCol = null;
+	            if (isRefreshed && tf.disableExcludedOptions) {
+	                excludedOpts = [];
+	                filteredDataCol = [];
+	            }
+	
+	            for (var k = tf.refRow; k < tf.nbRows; k++) {
+	                // always visible rows don't need to appear on selects as always
+	                // valid
+	                if (tf.hasVisibleRows && _Arr2['default'].has(tf.visibleRows, k) && !tf.paging) {
+	                    continue;
+	                }
+	
+	                var cell = rows[k].cells,
+	                    nchilds = cell.length;
+	
+	                // checks if row has exact cell #
+	                if (nchilds !== tf.nbCells || this.isCustom) {
+	                    continue;
+	                }
+	
+	                // this loop retrieves cell data
+	                for (var j = 0; j < nchilds; j++) {
+	                    if (colIndex === j && (!isRefreshed || isRefreshed && tf.disableExcludedOptions) || colIndex == j && isRefreshed && (rows[k].style.display === '' && !tf.paging || tf.paging && (!tf.validRowsIndex || tf.validRowsIndex && _Arr2['default'].has(tf.validRowsIndex, k)) && (activeFlt === undefined || activeFlt == colIndex || activeFlt != colIndex && _Arr2['default'].has(tf.validRowsIndex, k)))) {
+	                        var cell_data = tf.getCellData(j, cell[j]),
+	
+	                        //Vary Peter's patch
+	                        cell_string = _Str2['default'].matchCase(cell_data, matchCase);
+	
+	                        // checks if celldata is already in array
+	                        if (!_Arr2['default'].has(this.opts, cell_string, matchCase)) {
+	                            this.opts.push(cell_data);
+	                        }
+	
+	                        if (isRefreshed && tf.disableExcludedOptions) {
+	                            var filteredCol = filteredDataCol[j];
+	                            if (!filteredCol) {
+	                                filteredCol = this.GetFilteredDataCol(j);
+	                            }
+	                            if (!_Arr2['default'].has(filteredCol, cell_string, matchCase) && !_Arr2['default'].has(excludedOpts, cell_string, matchCase) && !this.isFirstLoad) {
+	                                excludedOpts.push(cell_data);
+	                            }
+	                        }
+	                    } //if colIndex==j
+	                } //for j
+	            } //for k
+	
+	            //Retrieves custom values
+	            if (this.isCustom) {
+	                var customValues = tf.getCustomOptions(colIndex);
+	                this.opts = customValues[0];
+	                this.optsTxt = customValues[1];
+	            }
+	
+	            if (tf.sortSlc && !this.isCustom) {
+	                if (!matchCase) {
+	                    this.opts.sort(_Sort2['default'].ignoreCase);
+	                    if (excludedOpts) {
+	                        excludedOpts.sort(_Sort2['default'].ignoreCase);
+	                    }
+	                } else {
+	                    this.opts.sort();
+	                    if (excludedOpts) {
+	                        excludedOpts.sort();
+	                    }
+	                }
+	            }
+	
+	            //asc sort
+	            if (tf.sortNumAsc && _Arr2['default'].has(tf.sortNumAsc, colIndex)) {
+	                try {
+	                    this.opts.sort(numSortAsc);
+	                    if (excludedOpts) {
+	                        excludedOpts.sort(numSortAsc);
+	                    }
+	                    if (this.isCustom) {
+	                        this.optsTxt.sort(numSortAsc);
+	                    }
+	                } catch (e) {
+	                    this.opts.sort();
+	                    if (excludedOpts) {
+	                        excludedOpts.sort();
+	                    }
+	                    if (this.isCustom) {
+	                        this.optsTxt.sort();
+	                    }
+	                } //in case there are alphanumeric values
+	            }
+	            //desc sort
+	            if (tf.sortNumDesc && _Arr2['default'].has(tf.sortNumDesc, colIndex)) {
+	                try {
+	                    this.opts.sort(numSortDesc);
+	                    if (excludedOpts) {
+	                        excludedOpts.sort(numSortDesc);
+	                    }
+	                    if (this.isCustom) {
+	                        this.optsTxt.sort(numSortDesc);
+	                    }
+	                } catch (e) {
+	                    this.opts.sort();
+	                    if (excludedOpts) {
+	                        excludedOpts.sort();
+	                    }
+	                    if (this.isCustom) {
+	                        this.optsTxt.sort();
+	                    }
+	                } //in case there are alphanumeric values
+	            }
+	
+	            //populates drop-down
+	            this.addOptions(colIndex, slc, isRefreshed, excludedOpts, fltsValues, fltArr);
+	        }
+	    }, {
+	        key: 'addOptions',
+	
+	        /**
+	         * Add drop-down options
+	         * @param {Number} colIndex     Column index
+	         * @param {Object} slc          Select Dom element
+	         * @param {Boolean} isRefreshed Enable linked refresh behaviour
+	         * @param {Array} excludedOpts  Array of excluded options
+	         * @param {Array} fltsValues    Collection of persisted filter values
+	         * @param {Array} fltArr        Collection of persisted filter values
+	         */
+	        value: function addOptions(colIndex, slc, isRefreshed, excludedOpts, fltsValues, fltArr) {
+	            var tf = this.tf,
+	                fillMethod = _Str2['default'].lower(this.slcFillingMethod),
+	                slcValue = slc.value;
+	
+	            slc.innerHTML = '';
+	            slc = this.addFirstOption(slc);
+	
+	            for (var y = 0; y < this.opts.length; y++) {
+	                if (this.opts[y] === '') {
+	                    continue;
+	                }
+	                var val = this.opts[y]; //option value
+	                var lbl = this.isCustom ? this.optsTxt[y] : val; //option text
+	                var isDisabled = false;
+	                if (isRefreshed && this.disableExcludedOptions && _Arr2['default'].has(excludedOpts, _Str2['default'].matchCase(val, tf.matchCase), tf.matchCase)) {
+	                    isDisabled = true;
+	                }
+	
+	                if (fillMethod === 'innerhtml') {
+	                    var slcAttr = '';
+	                    if (tf.fillSlcOnDemand && slcValue === this.opts[y]) {
+	                        slcAttr = 'selected="selected"';
+	                    }
+	                    this.slcInnerHtml += '<option value="' + val + '" ' + slcAttr + (isDisabled ? 'disabled="disabled"' : '') + '>' + lbl + '</option>';
+	                } else {
+	                    var opt;
+	                    //fill select on demand
+	                    if (tf.fillSlcOnDemand && slcValue === this.opts[y] && tf['col' + colIndex] === tf.fltTypeSlc) {
+	                        opt = _Dom2['default'].createOpt(lbl, val, true);
+	                    } else {
+	                        if (tf['col' + colIndex] !== tf.fltTypeMulti) {
+	                            opt = _Dom2['default'].createOpt(lbl, val, fltsValues[colIndex] !== ' ' && val === fltsValues[colIndex] ? true : false);
+	                        } else {
+	                            opt = _Dom2['default'].createOpt(lbl, val, _Arr2['default'].has(fltArr, _Str2['default'].matchCase(this.opts[y], tf.matchCase), tf.matchCase) || fltArr.toString().indexOf(val) !== -1 ? true : false);
+	                        }
+	                    }
+	                    if (isDisabled) {
+	                        opt.disabled = true;
+	                    }
+	                    slc.appendChild(opt);
+	                }
+	            } // for y
+	
+	            if (fillMethod === 'innerhtml') {
+	                slc.innerHTML += this.slcInnerHtml;
+	            }
+	            slc.setAttribute('filled', '1');
+	        }
+	    }, {
+	        key: 'addFirstOption',
+	
+	        /**
+	         * Add drop-down header option
+	         * @param {Object} slc Select DOM element
+	         */
+	        value: function addFirstOption(slc) {
+	            var tf = this.tf,
+	                fillMethod = _Str2['default'].lower(this.slcFillingMethod);
+	
+	            if (fillMethod === 'innerhtml') {
+	                this.slcInnerHtml += '<option value="">' + tf.displayAllText + '</option>';
+	            } else {
+	                var opt0 = _Dom2['default'].createOpt(!this.enableSlcResetFilter ? '' : tf.displayAllText, '');
+	                if (!this.enableSlcResetFilter) {
+	                    opt0.style.display = 'none';
+	                }
+	                slc.appendChild(opt0);
+	                if (tf.enableEmptyOption) {
+	                    var opt1 = _Dom2['default'].createOpt(tf.emptyText, tf.emOperator);
+	                    slc.appendChild(opt1);
+	                }
+	                if (tf.enableNonEmptyOption) {
+	                    var opt2 = _Dom2['default'].createOpt(tf.nonEmptyText, tf.nmOperator);
+	                    slc.appendChild(opt2);
+	                }
+	            }
+	            return slc;
+	        }
+	    }]);
+	
+	    return Dropdown;
+	})();
+	
+	exports.Dropdown = Dropdown;
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Arr = __webpack_require__(7);
+	
+	var _Arr2 = _interopRequireDefault(_Arr);
+	
+	var _Str = __webpack_require__(4);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
+	var _Sort = __webpack_require__(23);
+	
+	var _Sort2 = _interopRequireDefault(_Sort);
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var CheckList = (function () {
+	
+	    /**
+	     * Checklist UI component
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function CheckList(tf) {
+	        _classCallCheck(this, CheckList);
+	
+	        // Configuration object
+	        var f = tf.config();
+	
+	        this.checkListDiv = []; //checklist container div
+	        //defines css class for div containing checklist filter
+	        this.checkListDivCssClass = f.div_checklist_css_class || 'div_checklist';
+	        //defines css class for checklist filters
+	        this.checkListCssClass = f.checklist_css_class || 'flt_checklist';
+	        //defines css class for checklist item (li)
+	        this.checkListItemCssClass = f.checklist_item_css_class || 'flt_checklist_item';
+	        //defines css class for selected checklist item (li)
+	        this.checkListSlcItemCssClass = f.checklist_selected_item_css_class || 'flt_checklist_slc_item';
+	        //Load on demand text
+	        this.activateCheckListTxt = f.activate_checklist_text || 'Click to load filter data';
+	        //defines css class for checklist filters
+	        this.checkListItemDisabledCssClass = f.checklist_item_disabled_css_class || 'flt_checklist_item_disabled';
+	        this.enableCheckListResetFilter = f.enable_checklist_reset_filter === false ? false : true;
+	        //checklist filter container div
+	        this.prfxCheckListDiv = 'chkdiv_';
+	
+	        this.isCustom = null;
+	        this.opts = null;
+	        this.optsTxt = null;
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(CheckList, [{
+	        key: 'onChange',
+	
+	        // TODO: move event here
+	        value: function onChange(evt) {
+	            var elm = evt.target;
+	            this.tf.activeFilterId = elm.getAttribute('id');
+	            this.tf.activeFlt = _Dom2['default'].id(this.tf.activeFilterId);
+	            this.tf.Evt.onSlcChange.call(this.tf, evt);
+	        }
+	    }, {
+	        key: 'optionClick',
+	        value: function optionClick(evt) {
+	            this.setCheckListValues(evt.target);
+	            this.onChange(evt);
+	        }
+	    }, {
+	        key: 'build',
+	
+	        /**
+	         * Build checklist UI asynchronously
+	         * @param  {Number}  colIndex   Column index
+	         * @param  {Boolean} isExternal Render in external container
+	         * @param  {String}  extFltId   External container id
+	         */
+	        value: function build(colIndex, isExternal, extFltId) {
+	            var tf = this.tf;
+	            tf.EvtManager(tf.Evt.name.checklist, { slcIndex: colIndex, slcExternal: isExternal, slcId: extFltId });
+	        }
+	    }, {
+	        key: '_build',
+	
+	        /**
+	         * Build checklist UI
+	         * @param  {Number}  colIndex   Column index
+	         * @param  {Boolean} isExternal Render in external container
+	         * @param  {String}  extFltId   External container id
+	         */
+	        value: function _build(colIndex) {
+	            var _this = this;
+	
+	            var isExternal = arguments[1] === undefined ? false : arguments[1];
+	            var extFltId = arguments[2] === undefined ? null : arguments[2];
+	
+	            var tf = this.tf;
+	            colIndex = parseInt(colIndex, 10);
+	
+	            this.opts = [];
+	            this.optsTxt = [];
+	
+	            var divFltId = this.prfxCheckListDiv + colIndex + '_' + tf.id;
+	            if (!_Dom2['default'].id(divFltId) && !isExternal || !_Dom2['default'].id(extFltId) && isExternal) {
+	                return;
+	            }
+	
+	            var flt = !isExternal ? this.checkListDiv[colIndex] : _Dom2['default'].id(extFltId);
+	            var ul = _Dom2['default'].create('ul', ['id', tf.fltIds[colIndex]], ['colIndex', colIndex]);
+	            ul.className = this.checkListCssClass;
+	            _Event2['default'].add(ul, 'change', function (evt) {
+	                _this.onChange(evt);
+	            });
+	
+	            var rows = tf.tbl.rows;
+	            this.isCustom = tf.isCustomOptions(colIndex);
+	
+	            var activeFlt;
+	            if (tf.linkedFilters && tf.activeFilterId) {
+	                activeFlt = tf.activeFilterId.split('_')[0];
+	                activeFlt = activeFlt.split(tf.prfxFlt)[1];
+	            }
+	
+	            var excludedOpts,
+	                filteredDataCol = [];
+	            if (tf.linkedFilters && tf.disableExcludedOptions) {
+	                excludedOpts = [];
+	            }
+	
+	            for (var k = tf.refRow; k < tf.nbRows; k++) {
+	                // always visible rows don't need to appear on selects as always
+	                // valid
+	                if (tf.hasVisibleRows && _Arr2['default'].has(tf.visibleRows, k) && !tf.paging) {
+	                    continue;
+	                }
+	
+	                var cells = rows[k].cells;
+	                var ncells = cells.length;
+	
+	                // checks if row has exact cell #
+	                if (ncells !== tf.nbCells || this.isCustom) {
+	                    continue;
+	                }
+	
+	                // this loop retrieves cell data
+	                for (var j = 0; j < ncells; j++) {
+	                    if (colIndex === j && (!tf.linkedFilters || tf.linkedFilters && tf.disableExcludedOptions) || colIndex === j && tf.linkedFilters && (rows[k].style.display === '' && !tf.paging || tf.paging && (!activeFlt || activeFlt === colIndex || activeFlt != colIndex && _Arr2['default'].has(tf.validRowsIndex, k)))) {
+	                        var cell_data = tf.getCellData(j, cells[j]);
+	                        //Vary Peter's patch
+	                        var cell_string = _Str2['default'].matchCase(cell_data, tf.matchCase);
+	                        // checks if celldata is already in array
+	                        if (!_Arr2['default'].has(this.opts, cell_string, tf.matchCase)) {
+	                            this.opts.push(cell_data);
+	                        }
+	                        var filteredCol = filteredDataCol[j];
+	                        if (tf.linkedFilters && tf.disableExcludedOptions) {
+	                            if (!filteredCol) {
+	                                filteredDataCol[j] = tf.GetFilteredDataCol(j);
+	                            }
+	                            if (!_Arr2['default'].has(filteredCol, cell_string, tf.matchCase) && !_Arr2['default'].has(excludedOpts, cell_string, tf.matchCase) && !tf.isFirstLoad) {
+	                                excludedOpts.push(cell_data);
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	
+	            //Retrieves custom values
+	            if (this.isCustom) {
+	                var customValues = tf.getCustomOptions(colIndex);
+	                this.opts = customValues[0];
+	                this.optsTxt = customValues[1];
+	            }
+	
+	            if (tf.sortSlc && !this.isCustom) {
+	                if (!tf.matchCase) {
+	                    this.opts.sort(_Sort2['default'].ignoreCase);
+	                    if (excludedOpts) {
+	                        excludedOpts.sort(_Sort2['default'].ignoreCase);
+	                    }
+	                } else {
+	                    this.opts.sort();
+	                    if (excludedOpts) {
+	                        excludedOpts.sort();
+	                    }
+	                }
+	            }
+	            //asc sort
+	            if (tf.sortNumAsc && _Arr2['default'].has(tf.sortNumAsc, colIndex)) {
+	                try {
+	                    this.opts.sort(numSortAsc);
+	                    if (excludedOpts) {
+	                        excludedOpts.sort(numSortAsc);
+	                    }
+	                    if (this.isCustom) {
+	                        this.optsTxt.sort(numSortAsc);
+	                    }
+	                } catch (e) {
+	                    this.opts.sort();
+	                    if (excludedOpts) {
+	                        excludedOpts.sort();
+	                    }
+	                    if (this.isCustom) {
+	                        this.optsTxt.sort();
+	                    }
+	                } //in case there are alphanumeric values
+	            }
+	            //desc sort
+	            if (tf.sortNumDesc && _Arr2['default'].has(tf.sortNumDesc, colIndex)) {
+	                try {
+	                    this.opts.sort(numSortDesc);
+	                    if (excludedOpts) {
+	                        excludedOpts.sort(numSortDesc);
+	                    }
+	                    if (this.isCustom) {
+	                        this.optsTxt.sort(numSortDesc);
+	                    }
+	                } catch (e) {
+	                    this.opts.sort();
+	                    if (excludedOpts) {
+	                        excludedOpts.sort();
+	                    }
+	                    if (this.isCustom) {
+	                        this.optsTxt.sort();
+	                    }
+	                } //in case there are alphanumeric values
+	            }
+	
+	            this.addChecks(colIndex, ul, tf.separator);
+	
+	            if (tf.fillSlcOnDemand) {
+	                flt.innerHTML = '';
+	            }
+	            flt.appendChild(ul);
+	            flt.setAttribute('filled', '1');
+	        }
+	    }, {
+	        key: 'addChecks',
+	
+	        /**
+	         * Add checklist options
+	         * @param {Number} colIndex  Column index
+	         * @param {Object} ul        Ul element
+	         */
+	        value: function addChecks(colIndex, ul) {
+	            var _this2 = this;
+	
+	            var tf = this.tf;
+	            var chkCt = this.addTChecks(colIndex, ul);
+	            var fltArr = []; //remember grid values
+	            var store = tf.feature('store');
+	            var tmpVal = store ? store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
+	            if (tmpVal && _Str2['default'].trim(tmpVal).length > 0) {
+	                if (tf.hasCustomSlcOptions && _Arr2['default'].has(tf.customSlcOptions.cols, colIndex)) {
+	                    fltArr.push(tmpVal);
+	                } else {
+	                    fltArr = tmpVal.split(' ' + tf.orOperator + ' ');
+	                }
+	            }
+	
+	            for (var y = 0; y < this.opts.length; y++) {
+	                var val = this.opts[y]; //item value
+	                var lbl = this.isCustom ? this.optsTxt[y] : val; //item text
+	                var li = _Dom2['default'].createCheckItem(tf.fltIds[colIndex] + '_' + (y + chkCt), val, lbl);
+	                li.className = this.checkListItemCssClass;
+	                if (tf.linkedFilters && tf.disableExcludedOptions && _Arr2['default'].has(excludedOpts, _Str2['default'].matchCase(val, tf.matchCase), tf.matchCase)) {
+	                    _Dom2['default'].addClass(li, this.checkListItemDisabledCssClass);
+	                    li.check.disabled = true;
+	                    li.disabled = true;
+	                } else {
+	                    _Event2['default'].add(li.check, 'click', function (evt) {
+	                        _this2.optionClick(evt);
+	                    });
+	                }
+	                ul.appendChild(li);
+	
+	                if (val === '') {
+	                    //item is hidden
+	                    li.style.display = 'none';
+	                }
+	
+	                /*** remember grid values ***/
+	                if (tf.rememberGridValues) {
+	                    if (tf.hasCustomSlcOptions && _Arr2['default'].has(tf.customSlcOptions.cols, colIndex) && fltArr.toString().indexOf(val) != -1 || _Arr2['default'].has(fltArr, _Str2['default'].matchCase(val, tf.matchCase), tf.matchCase)) {
+	                        li.check.checked = true;
+	                        this.setCheckListValues(li.check);
+	                    }
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'addTChecks',
+	
+	        /**
+	         * Add checklist header option
+	         * @param {Number} colIndex Column index
+	         * @param {Object} ul       Ul element
+	         */
+	        value: function addTChecks(colIndex, ul) {
+	            var _this3 = this;
+	
+	            var tf = this.tf;
+	            var chkCt = 1;
+	            var li0 = _Dom2['default'].createCheckItem(tf.fltIds[colIndex] + '_0', '', tf.displayAllText);
+	            li0.className = this.checkListItemCssClass;
+	            ul.appendChild(li0);
+	
+	            _Event2['default'].add(li0.check, 'click', function (evt) {
+	                _this3.optionClick(evt);
+	            });
+	
+	            if (!this.enableCheckListResetFilter) {
+	                li0.style.display = 'none';
+	            }
+	
+	            if (tf.enableEmptyOption) {
+	                var li1 = _Dom2['default'].createCheckItem(tf.fltIds[colIndex] + '_1', tf.emOperator, tf.emptyText);
+	                li1.className = this.checkListItemCssClass;
+	                ul.appendChild(li1);
+	                _Event2['default'].add(li1.check, 'click', function (evt) {
+	                    _this3.optionClick(evt);
+	                });
+	                chkCt++;
+	            }
+	
+	            if (tf.enableNonEmptyOption) {
+	                var li2 = _Dom2['default'].createCheckItem(tf.fltIds[colIndex] + '_2', tf.nmOperator, tf.nonEmptyText);
+	                li2.className = this.checkListItemCssClass;
+	                ul.appendChild(li2);
+	                _Event2['default'].add(li2.check, 'click', function (evt) {
+	                    _this3.optionClick(evt);
+	                });
+	                chkCt++;
+	            }
+	            return chkCt;
+	        }
+	    }, {
+	        key: 'setCheckListValues',
+	
+	        /**
+	         * Store checked options in DOM element attribute
+	         * @param {Object} o checklist option DOM element
+	         */
+	        value: function setCheckListValues(o) {
+	            if (!o) {
+	                return;
+	            }
+	            var tf = this.tf;
+	            var chkValue = o.value; //checked item value
+	            var chkIndex = parseInt(o.id.split('_')[2], 10);
+	            var filterTag = 'ul',
+	                itemTag = 'li';
+	            var n = o;
+	
+	            //ul tag search
+	            while (_Str2['default'].lower(n.nodeName) !== filterTag) {
+	                n = n.parentNode;
+	            }
+	
+	            var li = n.childNodes[chkIndex];
+	            var colIndex = n.getAttribute('colIndex');
+	            var fltValue = n.getAttribute('value'); //filter value (ul tag)
+	            var fltIndexes = n.getAttribute('indexes'); //selected items (ul tag)
+	
+	            if (o.checked) {
+	                //show all item
+	                if (chkValue === '') {
+	                    if (fltIndexes && fltIndexes !== '') {
+	                        //items indexes
+	                        var indSplit = fltIndexes.split(tf.separator);
+	                        //checked items loop
+	                        for (var u = 0; u < indSplit.length; u++) {
+	                            //checked item
+	                            var cChk = _Dom2['default'].id(tf.fltIds[colIndex] + '_' + indSplit[u]);
+	                            if (cChk) {
+	                                cChk.checked = false;
+	                                _Dom2['default'].removeClass(n.childNodes[indSplit[u]], this.checkListSlcItemCssClass);
+	                            }
+	                        }
+	                    }
+	                    n.setAttribute('value', '');
+	                    n.setAttribute('indexes', '');
+	                } else {
+	                    fltValue = fltValue ? fltValue : '';
+	                    chkValue = _Str2['default'].trim(fltValue + ' ' + chkValue + ' ' + tf.orOperator);
+	                    chkIndex = fltIndexes + chkIndex + tf.separator;
+	                    n.setAttribute('value', chkValue);
+	                    n.setAttribute('indexes', chkIndex);
+	                    //1st option unchecked
+	                    if (_Dom2['default'].id(tf.fltIds[colIndex] + '_0')) {
+	                        _Dom2['default'].id(tf.fltIds[colIndex] + '_0').checked = false;
+	                    }
+	                }
+	
+	                if (_Str2['default'].lower(li.nodeName) === itemTag) {
+	                    _Dom2['default'].removeClass(n.childNodes[0], this.checkListSlcItemCssClass);
+	                    _Dom2['default'].addClass(li, this.checkListSlcItemCssClass);
+	                }
+	            } else {
+	                //removes values and indexes
+	                if (chkValue !== '') {
+	                    var replaceValue = new RegExp(_Str2['default'].rgxEsc(chkValue + ' ' + tf.orOperator));
+	                    fltValue = fltValue.replace(replaceValue, '');
+	                    n.setAttribute('value', _Str2['default'].trim(fltValue));
+	
+	                    var replaceIndex = new RegExp(_Str2['default'].rgxEsc(chkIndex + tf.separator));
+	                    fltIndexes = fltIndexes.replace(replaceIndex, '');
+	                    n.setAttribute('indexes', fltIndexes);
+	                }
+	                if (_Str2['default'].lower(li.nodeName) === itemTag) {
+	                    _Dom2['default'].removeClass(li, this.checkListSlcItemCssClass);
+	                }
+	            }
+	        }
+	    }]);
+	
+	    return CheckList;
+	})();
+	
+	exports.CheckList = CheckList;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var _Helpers = __webpack_require__(9);
+	
+	var _Helpers2 = _interopRequireDefault(_Helpers);
+	
+	var RowsCounter = (function () {
+	
+	    /**
+	     * Rows counter
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function RowsCounter(tf) {
+	        _classCallCheck(this, RowsCounter);
+	
+	        // TableFilter configuration
+	        var f = tf.config();
+	
+	        //id of custom container element
+	        this.rowsCounterTgtId = f.rows_counter_target_id || null;
+	        //element containing tot nb rows
+	        this.rowsCounterDiv = null;
+	        //element containing tot nb rows label
+	        this.rowsCounterSpan = null;
+	        //defines rows counter text
+	        this.rowsCounterText = f.rows_counter_text || 'Rows: ';
+	        this.fromToTextSeparator = f.from_to_text_separator || '-';
+	        this.overText = f.over_text || ' / ';
+	        //defines css class rows counter
+	        this.totRowsCssClass = f.tot_rows_css_class || 'tot';
+	        //rows counter div
+	        this.prfxCounter = 'counter_';
+	        //nb displayed rows label
+	        this.prfxTotRows = 'totrows_span_';
+	        //label preceding nb rows label
+	        this.prfxTotRowsTxt = 'totRowsTextSpan_';
+	        //callback raised before counter is refreshed
+	        this.onBeforeRefreshCounter = _Types2['default'].isFn(f.on_before_refresh_counter) ? f.on_before_refresh_counter : null;
+	        //callback raised after counter is refreshed
+	        this.onAfterRefreshCounter = _Types2['default'].isFn(f.on_after_refresh_counter) ? f.on_after_refresh_counter : null;
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(RowsCounter, [{
+	        key: 'init',
+	        value: function init() {
+	            var tf = this.tf;
+	
+	            if (!tf.hasGrid() && !tf.isFirstLoad || this.rowsCounterSpan) {
+	                return;
+	            }
+	
+	            //rows counter container
+	            var countDiv = _Dom2['default'].create('div', ['id', this.prfxCounter + tf.id]);
+	            countDiv.className = this.totRowsCssClass;
+	            //rows counter label
+	            var countSpan = _Dom2['default'].create('span', ['id', this.prfxTotRows + tf.id]);
+	            var countText = _Dom2['default'].create('span', ['id', this.prfxTotRowsTxt + tf.id]);
+	            countText.appendChild(_Dom2['default'].text(this.rowsCounterText));
+	
+	            // counter is added to defined element
+	            if (!this.rowsCounterTgtId) {
+	                tf.setToolbar();
+	            }
+	            var targetEl = !this.rowsCounterTgtId ? tf.lDiv : _Dom2['default'].id(this.rowsCounterTgtId);
+	
+	            //IE only: clears all for sure
+	            if (this.rowsCounterDiv && _Helpers2['default'].isIE()) {
+	                this.rowsCounterDiv.outerHTML = '';
+	            }
+	            //default container: 'lDiv'
+	            if (!this.rowsCounterTgtId) {
+	                countDiv.appendChild(countText);
+	                countDiv.appendChild(countSpan);
+	                targetEl.appendChild(countDiv);
+	            } else {
+	                //custom container, no need to append statusDiv
+	                targetEl.appendChild(countText);
+	                targetEl.appendChild(countSpan);
+	            }
+	            this.rowsCounterDiv = countDiv;
+	            this.rowsCounterSpan = countSpan;
+	
+	            this.refresh();
+	        }
+	    }, {
+	        key: 'refresh',
+	        value: function refresh(p) {
+	            if (!this.rowsCounterSpan) {
+	                return;
+	            }
+	
+	            var tf = this.tf;
+	
+	            if (this.onBeforeRefreshCounter) {
+	                this.onBeforeRefreshCounter.call(null, tf, this.rowsCounterSpan);
+	            }
+	
+	            var totTxt;
+	            if (!tf.paging) {
+	                if (p && p !== '') {
+	                    totTxt = p;
+	                } else {
+	                    totTxt = tf.nbFilterableRows - tf.nbHiddenRows - (tf.hasVisibleRows ? tf.visibleRows.length : 0);
+	                }
+	            } else {
+	                var paging = tf.feature('paging');
+	                if (paging) {
+	                    //paging start row
+	                    var paging_start_row = parseInt(paging.startPagingRow, 10) + (tf.nbVisibleRows > 0 ? 1 : 0);
+	                    var paging_end_row = paging_start_row + paging.pagingLength - 1 <= tf.nbVisibleRows ? paging_start_row + paging.pagingLength - 1 : tf.nbVisibleRows;
+	                    totTxt = paging_start_row + this.fromToTextSeparator + paging_end_row + this.overText + tf.nbVisibleRows;
+	                }
+	            }
+	            this.rowsCounterSpan.innerHTML = totTxt;
+	            if (this.onAfterRefreshCounter) {
+	                this.onAfterRefreshCounter.call(null, tf, this.rowsCounterSpan, totTxt);
+	            }
+	        }
+	    }, {
+	        key: 'destroy',
+	        value: function destroy() {
+	            var tf = this.tf;
+	            if (!tf.hasGrid()) {
+	                return;
+	            }
+	            if (!this.rowsCounterSpan) {
+	                return;
+	            }
+	
+	            if (!this.rowsCounterTgtId && this.rowsCounterDiv) {
+	                //IE only: clears all for sure
+	                if (_Helpers2['default'].isIE()) {
+	                    this.rowsCounterDiv.outerHTML = '';
+	                } else {
+	                    this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
+	                }
+	            } else {
+	                _Dom2['default'].id(this.rowsCounterTgtId).innerHTML = '';
+	            }
+	            this.rowsCounterSpan = null;
+	            this.rowsCounterDiv = null;
+	        }
+	    }]);
+	
+	    return RowsCounter;
+	})();
+	
+	exports.RowsCounter = RowsCounter;
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var _Helpers = __webpack_require__(9);
+	
+	var _Helpers2 = _interopRequireDefault(_Helpers);
+	
+	var global = window;
+	
+	var StatusBar = (function () {
+	
+	    /**
+	     * Status bar UI component
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function StatusBar(tf) {
+	        _classCallCheck(this, StatusBar);
+	
+	        // Configuration object
+	        var f = tf.config();
+	
+	        //id of custom container element
+	        this.statusBarTgtId = f.status_bar_target_id || null;
+	        //element containing status bar label
+	        this.statusBarDiv = null;
+	        //status bar
+	        this.statusBarSpan = null;
+	        //status bar label
+	        this.statusBarSpanText = null;
+	        //defines status bar text
+	        this.statusBarText = f.status_bar_text || '';
+	        //defines css class status bar
+	        this.statusBarCssClass = f.status_bar_css_class || 'status';
+	        //delay for status bar clearing
+	        this.statusBarCloseDelay = 250;
+	
+	        //calls function before message is displayed
+	        this.onBeforeShowMsg = _Types2['default'].isFn(f.on_before_show_msg) ? f.on_before_show_msg : null;
+	        //calls function after message is displayed
+	        this.onAfterShowMsg = _Types2['default'].isFn(f.on_after_show_msg) ? f.on_after_show_msg : null;
+	
+	        // status bar div
+	        this.prfxStatus = 'status_';
+	        // status bar label
+	        this.prfxStatusSpan = 'statusSpan_';
+	        // text preceding status bar label
+	        this.prfxStatusTxt = 'statusText_';
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(StatusBar, [{
+	        key: 'init',
+	        value: function init() {
+	            var tf = this.tf;
+	            if (!tf.hasGrid() && !tf.isFirstLoad) {
+	                return;
+	            }
+	
+	            //status bar container
+	            var statusDiv = _Dom2['default'].create('div', ['id', this.prfxStatus + tf.id]);
+	            statusDiv.className = this.statusBarCssClass;
+	
+	            //status bar label
+	            var statusSpan = _Dom2['default'].create('span', ['id', this.prfxStatusSpan + tf.id]);
+	            //preceding text
+	            var statusSpanText = _Dom2['default'].create('span', ['id', this.prfxStatusTxt + tf.id]);
+	            statusSpanText.appendChild(_Dom2['default'].text(this.statusBarText));
+	
+	            // target element container
+	            if (!this.statusBarTgtId) {
+	                tf.setToolbar();
+	            }
+	            var targetEl = !this.statusBarTgtId ? tf.lDiv : _Dom2['default'].id(this.statusBarTgtId);
+	
+	            // TODO: use alternative to outerHTML
+	            if (this.statusBarDiv && _Helpers2['default'].isIE()) {
+	                this.statusBarDiv.outerHTML = '';
+	            }
+	
+	            //default container: 'lDiv'
+	            if (!this.statusBarTgtId) {
+	                statusDiv.appendChild(statusSpanText);
+	                statusDiv.appendChild(statusSpan);
+	                targetEl.appendChild(statusDiv);
+	            } else {
+	                // custom container, no need to append statusDiv
+	                targetEl.appendChild(statusSpanText);
+	                targetEl.appendChild(statusSpan);
+	            }
+	
+	            this.statusBarDiv = statusDiv;
+	            this.statusBarSpan = statusSpan;
+	            this.statusBarSpanText = statusSpanText;
+	        }
+	    }, {
+	        key: 'message',
+	        value: function message() {
+	            var _this = this;
+	
+	            var t = arguments[0] === undefined ? '' : arguments[0];
+	
+	            var tf = this.tf;
+	            if (!tf.statusBar || !this.statusBarSpan) {
+	                return;
+	            }
+	            if (this.onBeforeShowMsg) {
+	                this.onBeforeShowMsg.call(null, this.tf, t);
+	            }
+	
+	            var d = t === '' ? this.statusBarCloseDelay : 1;
+	            global.setTimeout(function () {
+	                _this.statusBarSpan.innerHTML = t;
+	                if (_this.onAfterShowMsg) {
+	                    _this.onAfterShowMsg.call(null, _this.tf, t);
+	                }
+	            }, d);
+	        }
+	    }, {
+	        key: 'destroy',
+	        value: function destroy() {
+	            var tf = this.tf;
+	            if (!tf.hasGrid() || !this.statusBarDiv) {
+	                return;
+	            }
+	
+	            this.statusBarDiv.innerHTML = '';
+	            this.statusBarDiv.parentNode.removeChild(this.statusBarDiv);
+	            this.statusBarSpan = null;
+	            this.statusBarSpanText = null;
+	            this.statusBarDiv = null;
+	        }
+	    }]);
+	
+	    return StatusBar;
+	})();
+	
+	exports.StatusBar = StatusBar;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var _Str = __webpack_require__(4);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var Paging = (function () {
+	
+	    /**
+	     * Pagination component
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function Paging(tf) {
+	        _classCallCheck(this, Paging);
+	
+	        // Configuration object
+	        var f = tf.config();
+	
+	        //css class for paging buttons (previous,next,etc.)
+	        this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';
+	        //stores paging select element
+	        this.pagingSlc = null;
+	        //results per page select element
+	        this.resultsPerPageSlc = null;
+	        //id of container element
+	        this.pagingTgtId = f.paging_target_id || null;
+	        //defines table paging length
+	        this.pagingLength = !isNaN(f.paging_length) ? f.paging_length : 10;
+	        //id of container element
+	        this.resultsPerPageTgtId = f.results_per_page_target_id || null;
+	        //css class for paging select element
+	        this.pgSlcCssClass = f.paging_slc_css_class || 'pgSlc';
+	        //css class for paging input element
+	        this.pgInpCssClass = f.paging_inp_css_class || 'pgNbInp';
+	        //stores results per page text and values
+	        this.resultsPerPage = f.results_per_page || null;
+	        //enables/disables results per page drop-down
+	        this.hasResultsPerPage = _Types2['default'].isArray(this.resultsPerPage);
+	        //defines css class for results per page select
+	        this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';
+	        //css class for label preceding results per page select
+	        this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';
+	        //1st row index of current page
+	        this.startPagingRow = 0;
+	        //total nb of pages
+	        this.nbPages = 0;
+	        //current page nb
+	        this.currentPageNb = 1;
+	        //defines next page button text
+	        this.btnNextPageText = f.btn_next_page_text || '>';
+	        //defines previous page button text
+	        this.btnPrevPageText = f.btn_prev_page_text || '<';
+	        //defines last page button text
+	        this.btnLastPageText = f.btn_last_page_text || '>|';
+	        //defines first page button text
+	        this.btnFirstPageText = f.btn_first_page_text || '|<';
+	        //defines next page button html
+	        this.btnNextPageHtml = f.btn_next_page_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + this.btnPageCssClass + ' nextPage" title="Next page" />');
+	        //defines previous page button html
+	        this.btnPrevPageHtml = f.btn_prev_page_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + this.btnPageCssClass + ' previousPage" title="Previous page" />');
+	        //defines last page button html
+	        this.btnFirstPageHtml = f.btn_first_page_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + this.btnPageCssClass + ' firstPage" title="First page" />');
+	        //defines previous page button html
+	        this.btnLastPageHtml = f.btn_last_page_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + this.btnPageCssClass + ' lastPage" title="Last page" />');
+	        //defines text preceeding page selector drop-down
+	        this.pageText = f.page_text || ' Page ';
+	        //defines text after page selector drop-down
+	        this.ofText = f.of_text || ' of ';
+	        //css class for span containing tot nb of pages
+	        this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';
+	        //enables/disables paging buttons
+	        this.hasPagingBtns = f.paging_btns === false ? false : true;
+	        //defines previous page button html
+	        this.pageSelectorType = f.page_selector_type || tf.fltTypeSlc;
+	        //calls function before page is changed
+	        this.onBeforeChangePage = _Types2['default'].isFn(f.on_before_change_page) ? f.on_before_change_page : null;
+	        //calls function before page is changed
+	        this.onAfterChangePage = _Types2['default'].isFn(f.on_after_change_page) ? f.on_after_change_page : null;
+	
+	        //pages select
+	        this.prfxSlcPages = 'slcPages_';
+	        //results per page select
+	        this.prfxSlcResults = 'slcResults_';
+	        //label preciding results per page select
+	        this.prfxSlcResultsTxt = 'slcResultsTxt_';
+	        //span containing next page button
+	        this.prfxBtnNextSpan = 'btnNextSpan_';
+	        //span containing previous page button
+	        this.prfxBtnPrevSpan = 'btnPrevSpan_';
+	        //span containing last page button
+	        this.prfxBtnLastSpan = 'btnLastSpan_';
+	        //span containing first page button
+	        this.prfxBtnFirstSpan = 'btnFirstSpan_';
+	        //next button
+	        this.prfxBtnNext = 'btnNext_';
+	        //previous button
+	        this.prfxBtnPrev = 'btnPrev_';
+	        //last button
+	        this.prfxBtnLast = 'btnLast_';
+	        //first button
+	        this.prfxBtnFirst = 'btnFirst_';
+	        //span for tot nb pages
+	        this.prfxPgSpan = 'pgspan_';
+	        //span preceding pages select (contains 'Page')
+	        this.prfxPgBeforeSpan = 'pgbeforespan_';
+	        //span following pages select (contains ' of ')
+	        this.prfxPgAfterSpan = 'pgafterspan_';
+	
+	        var start_row = this.refRow;
+	        var nrows = this.nbRows;
+	        //calculates page nb
+	        this.nbPages = Math.ceil((nrows - start_row) / this.pagingLength);
+	
+	        //Paging elements events
+	        var o = this;
+	        // Paging DOM events
+	        this.evt = {
+	            slcIndex: function slcIndex() {
+	                return o.pageSelectorType === tf.fltTypeSlc ? o.pagingSlc.options.selectedIndex : parseInt(o.pagingSlc.value, 10) - 1;
+	            },
+	            nbOpts: function nbOpts() {
+	                return o.pageSelectorType === tf.fltTypeSlc ? parseInt(o.pagingSlc.options.length, 10) - 1 : o.nbPages - 1;
+	            },
+	            next: function next() {
+	                var nextIndex = o.evt.slcIndex() < o.evt.nbOpts() ? o.evt.slcIndex() + 1 : 0;
+	                o.changePage(nextIndex);
+	            },
+	            prev: function prev() {
+	                var prevIndex = o.evt.slcIndex() > 0 ? o.evt.slcIndex() - 1 : o.evt.nbOpts();
+	                o.changePage(prevIndex);
+	            },
+	            last: function last() {
+	                o.changePage(o.evt.nbOpts());
+	            },
+	            first: function first() {
+	                o.changePage(0);
+	            },
+	            _detectKey: function _detectKey(e) {
+	                var key = _Event2['default'].keyCode(e);
+	                if (key === 13) {
+	                    if (tf.sorted) {
+	                        tf.filter();
+	                        o.changePage(o.evt.slcIndex());
+	                    } else {
+	                        o.changePage();
+	                    }
+	                    this.blur();
+	                }
+	            },
+	            slcPagesChange: null,
+	            nextEvt: null,
+	            prevEvt: null,
+	            lastEvt: null,
+	            firstEvt: null
+	        };
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(Paging, [{
+	        key: 'init',
+	
+	        /**
+	         * Initialize DOM elements
+	         */
+	        value: function init() {
+	            var _this = this;
+	
+	            var slcPages;
+	            var tf = this.tf;
+	            var evt = this.evt;
+	
+	            // Check resultsPerPage is in expected format and initialise the
+	            // results per page component
+	            if (this.hasResultsPerPage) {
+	                if (this.resultsPerPage.length < 2) {
+	                    this.hasResultsPerPage = false;
+	                } else {
+	                    this.pagingLength = this.resultsPerPage[1][0];
+	                    this.setResultsPerPage();
+	                }
+	            }
+	
+	            /*====================================================
+	                - onchange event for paging select
+	            =====================================================*/
+	            evt.slcPagesChange = function (event) {
+	                _this.changePage();
+	                event.target.blur();
+	            };
+	
+	            // Paging drop-down list selector
+	            if (this.pageSelectorType === tf.fltTypeSlc) {
+	                slcPages = _Dom2['default'].create(tf.fltTypeSlc, ['id', this.prfxSlcPages + tf.id]);
+	                slcPages.className = this.pgSlcCssClass;
+	                _Event2['default'].add(slcPages, 'change', evt.slcPagesChange);
+	            }
+	
+	            // Paging input selector
+	            if (this.pageSelectorType === tf.fltTypeInp) {
+	                slcPages = _Dom2['default'].create(tf.fltTypeInp, ['id', this.prfxSlcPages + tf.id], ['value', this.currentPageNb]);
+	                slcPages.className = this.pgInpCssClass;
+	                _Event2['default'].add(slcPages, 'keypress', evt._detectKey);
+	            }
+	
+	            // btns containers
+	            var btnNextSpan = _Dom2['default'].create('span', ['id', this.prfxBtnNextSpan + tf.id]);
+	            var btnPrevSpan = _Dom2['default'].create('span', ['id', this.prfxBtnPrevSpan + tf.id]);
+	            var btnLastSpan = _Dom2['default'].create('span', ['id', this.prfxBtnLastSpan + tf.id]);
+	            var btnFirstSpan = _Dom2['default'].create('span', ['id', this.prfxBtnFirstSpan + tf.id]);
+	
+	            if (this.hasPagingBtns) {
+	                // Next button
+	                if (!this.btnNextPageHtml) {
+	                    var btn_next = _Dom2['default'].create(tf.fltTypeInp, ['id', this.prfxBtnNext + tf.id], ['type', 'button'], ['value', this.btnNextPageText], ['title', 'Next']);
+	                    btn_next.className = this.btnPageCssClass;
+	                    _Event2['default'].add(btn_next, 'click', evt.next);
+	                    btnNextSpan.appendChild(btn_next);
+	                } else {
+	                    btnNextSpan.innerHTML = this.btnNextPageHtml;
+	                    _Event2['default'].add(btnNextSpan, 'click', evt.next);
+	                }
+	                // Previous button
+	                if (!this.btnPrevPageHtml) {
+	                    var btn_prev = _Dom2['default'].create(tf.fltTypeInp, ['id', this.prfxBtnPrev + tf.id], ['type', 'button'], ['value', this.btnPrevPageText], ['title', 'Previous']);
+	                    btn_prev.className = this.btnPageCssClass;
+	                    _Event2['default'].add(btn_prev, 'click', evt.prev);
+	                    btnPrevSpan.appendChild(btn_prev);
+	                } else {
+	                    btnPrevSpan.innerHTML = this.btnPrevPageHtml;
+	                    _Event2['default'].add(btnPrevSpan, 'click', evt.prev);
+	                }
+	                // Last button
+	                if (!this.btnLastPageHtml) {
+	                    var btn_last = _Dom2['default'].create(tf.fltTypeInp, ['id', this.prfxBtnLast + tf.id], ['type', 'button'], ['value', this.btnLastPageText], ['title', 'Last']);
+	                    btn_last.className = this.btnPageCssClass;
+	                    _Event2['default'].add(btn_last, 'click', evt.last);
+	                    btnLastSpan.appendChild(btn_last);
+	                } else {
+	                    btnLastSpan.innerHTML = this.btnLastPageHtml;
+	                    _Event2['default'].add(btnLastSpan, 'click', evt.last);
+	                }
+	                // First button
+	                if (!this.btnFirstPageHtml) {
+	                    var btn_first = _Dom2['default'].create(tf.fltTypeInp, ['id', this.prfxBtnFirst + tf.id], ['type', 'button'], ['value', this.btnFirstPageText], ['title', 'First']);
+	                    btn_first.className = this.btnPageCssClass;
+	                    _Event2['default'].add(btn_first, 'click', evt.first);
+	                    btnFirstSpan.appendChild(btn_first);
+	                } else {
+	                    btnFirstSpan.innerHTML = this.btnFirstPageHtml;
+	                    _Event2['default'].add(btnFirstSpan, 'click', evt.first);
+	                }
+	            }
+	
+	            // paging elements (buttons+drop-down list) are added to defined element
+	            if (!this.pagingTgtId) {
+	                tf.setToolbar();
+	            }
+	            var targetEl = !this.pagingTgtId ? tf.mDiv : _Dom2['default'].id(this.pagingTgtId);
+	            targetEl.appendChild(btnFirstSpan);
+	            targetEl.appendChild(btnPrevSpan);
+	
+	            var pgBeforeSpan = _Dom2['default'].create('span', ['id', this.prfxPgBeforeSpan + tf.id]);
+	            pgBeforeSpan.appendChild(_Dom2['default'].text(this.pageText));
+	            pgBeforeSpan.className = this.nbPgSpanCssClass;
+	            targetEl.appendChild(pgBeforeSpan);
+	            targetEl.appendChild(slcPages);
+	            var pgAfterSpan = _Dom2['default'].create('span', ['id', this.prfxPgAfterSpan + tf.id]);
+	            pgAfterSpan.appendChild(_Dom2['default'].text(this.ofText));
+	            pgAfterSpan.className = this.nbPgSpanCssClass;
+	            targetEl.appendChild(pgAfterSpan);
+	            var pgspan = _Dom2['default'].create('span', ['id', this.prfxPgSpan + tf.id]);
+	            pgspan.className = this.nbPgSpanCssClass;
+	            pgspan.appendChild(_Dom2['default'].text(' ' + this.nbPages + ' '));
+	            targetEl.appendChild(pgspan);
+	            targetEl.appendChild(btnNextSpan);
+	            targetEl.appendChild(btnLastSpan);
+	            this.pagingSlc = _Dom2['default'].id(this.prfxSlcPages + tf.id);
+	
+	            // if this.rememberGridValues==true this.setPagingInfo() is called
+	            // in ResetGridValues() method
+	            if (!tf.rememberGridValues || this.isPagingRemoved) {
+	                this.setPagingInfo();
+	            }
+	            if (!tf.fltGrid) {
+	                tf.validateAllRows();
+	                this.setPagingInfo(tf.validRowsIndex);
+	            }
+	
+	            this.isPagingRemoved = false;
+	        }
+	    }, {
+	        key: 'addPaging',
+	
+	        /**
+	         * Add paging when filters are already instanciated
+	         * @param {Boolean} filterTable Execute filtering once paging instanciated
+	         */
+	        value: function addPaging() {
+	            var filterTable = arguments[0] === undefined ? false : arguments[0];
+	
+	            var tf = this.tf;
+	            if (!tf.hasGrid() || tf.paging) {
+	                return;
+	            }
+	            tf.paging = true;
+	            this.isPagingRemoved = true;
+	            this.init();
+	            tf.resetValues();
+	            if (filterTable) {
+	                tf.filter();
+	            }
+	        }
+	    }, {
+	        key: 'setPagingInfo',
+	
+	        /**
+	         * Calculate number of pages based on valid rows
+	         * Refresh paging select according to number of pages
+	         * @param {Array} validRows Collection of valid rows
+	         */
+	        value: function setPagingInfo(validRows) {
+	            var tf = this.tf;
+	            var rows = tf.tbl.rows;
+	            var mdiv = !this.pagingTgtId ? tf.mDiv : _Dom2['default'].id(this.pagingTgtId);
+	            var pgspan = _Dom2['default'].id(this.prfxPgSpan + tf.id);
+	            //stores valid rows indexes
+	            if (validRows && validRows.length > 0) {
+	                tf.validRowsIndex = validRows;
+	            } else {
+	                //re-sets valid rows indexes array
+	                tf.validRowsIndex = [];
+	
+	                //counts rows to be grouped
+	                for (var j = tf.refRow; j < tf.nbRows; j++) {
+	                    var row = rows[j];
+	                    if (!row) {
+	                        continue;
+	                    }
+	                    var isRowValid = row.getAttribute('validRow');
+	                    if (isRowValid === 'true' || !isRowValid) {
+	                        tf.validRowsIndex.push(j);
+	                    }
+	                }
+	            }
+	
+	            //calculate nb of pages
+	            this.nbPages = Math.ceil(tf.validRowsIndex.length / this.pagingLength);
+	            //refresh page nb span
+	            pgspan.innerHTML = this.nbPages;
+	            //select clearing shortcut
+	            if (this.pageSelectorType === tf.fltTypeSlc) {
+	                this.pagingSlc.innerHTML = '';
+	            }
+	
+	            if (this.nbPages > 0) {
+	                mdiv.style.visibility = 'visible';
+	                if (this.pageSelectorType === tf.fltTypeSlc) {
+	                    for (var z = 0; z < this.nbPages; z++) {
+	                        var currOpt = new Option(z + 1, z * this.pagingLength, false, false);
+	                        this.pagingSlc.options[z] = currOpt;
+	                    }
+	                } else {
+	                    //input type
+	                    this.pagingSlc.value = this.currentPageNb;
+	                }
+	            } else {
+	                /*** if no results paging select and buttons are hidden ***/
+	                mdiv.style.visibility = 'hidden';
+	            }
+	            this.groupByPage(tf.validRowsIndex);
+	        }
+	    }, {
+	        key: 'groupByPage',
+	
+	        /**
+	         * Group table rows by page and display valid rows
+	         * @param  {Array} validRows Collection of valid rows
+	         */
+	        value: function groupByPage(validRows) {
+	            var tf = this.tf;
+	            var alternateRows = tf.feature('alternateRows');
+	            var rows = tf.tbl.rows;
+	            var paging_end_row = parseInt(this.startPagingRow, 10) + parseInt(this.pagingLength, 10);
+	
+	            //store valid rows indexes
+	            if (validRows) {
+	                tf.validRowsIndex = validRows;
+	            }
+	
+	            //this loop shows valid rows of current page
+	            for (var h = 0; h < tf.validRowsIndex.length; h++) {
+	                var r = rows[tf.validRowsIndex[h]];
+	
+	                if (h >= this.startPagingRow && h < paging_end_row) {
+	                    if (r.getAttribute('validRow') === 'true' || !r.getAttribute('validRow')) {
+	                        r.style.display = '';
+	                    }
+	                    if (tf.alternateBgs && alternateRows) {
+	                        alternateRows.setRowBg(tf.validRowsIndex[h], h);
+	                    }
+	                } else {
+	                    r.style.display = 'none';
+	                    if (tf.alternateBgs && alternateRows) {
+	                        alternateRows.removeRowBg(tf.validRowsIndex[h]);
+	                    }
+	                }
+	            }
+	
+	            tf.nbVisibleRows = tf.validRowsIndex.length;
+	            tf.isStartBgAlternate = false;
+	            //re-applies filter behaviours after filtering process
+	            tf.applyGridProps();
+	        }
+	    }, {
+	        key: 'setPage',
+	
+	        /**
+	         * Show page based on passed param value (string or number):
+	         * @param {String} or {Number} cmd possible string values: 'next',
+	         * 'previous', 'last', 'first' or page number as per param
+	         */
+	        value: function setPage(cmd) {
+	            var tf = this.tf;
+	            if (!tf.hasGrid() || !tf.paging) {
+	                return;
+	            }
+	            var btnEvt = this.evt,
+	                cmdtype = typeof cmd;
+	            if (cmdtype === 'string') {
+	                switch (_Str2['default'].lower(cmd)) {
+	                    case 'next':
+	                        btnEvt.next();
+	                        break;
+	                    case 'previous':
+	                        btnEvt.prev();
+	                        break;
+	                    case 'last':
+	                        btnEvt.last();
+	                        break;
+	                    case 'first':
+	                        btnEvt.first();
+	                        break;
+	                    default:
+	                        btnEvt.next();
+	                        break;
+	                }
+	            } else if (cmdtype === 'number') {
+	                this.changePage(cmd - 1);
+	            }
+	        }
+	    }, {
+	        key: 'setResultsPerPage',
+	
+	        /**
+	         * Generates UI elements for the number of results per page drop-down
+	         */
+	        value: function setResultsPerPage() {
+	            var _this2 = this;
+	
+	            var tf = this.tf;
+	            var evt = this.evt;
+	
+	            if (!tf.hasGrid() && !tf.isFirstLoad) {
+	                return;
+	            }
+	            if (this.resultsPerPageSlc || !this.resultsPerPage) {
+	                return;
+	            }
+	
+	            /*====================================================
+	                - onchange event for results per page select
+	            =====================================================*/
+	            evt.slcResultsChange = function (ev) {
+	                _this2.changeResultsPerPage();
+	                ev.target.blur();
+	            };
+	
+	            var slcR = _Dom2['default'].create(tf.fltTypeSlc, ['id', this.prfxSlcResults + tf.id]);
+	            slcR.className = tf.resultsSlcCssClass;
+	            var slcRText = this.resultsPerPage[0],
+	                slcROpts = this.resultsPerPage[1];
+	            var slcRSpan = _Dom2['default'].create('span', ['id', this.prfxSlcResultsTxt + tf.id]);
+	            slcRSpan.className = this.resultsSpanCssClass;
+	
+	            // results per page select is added to external element
+	            if (!this.resultsPerPageTgtId) {
+	                tf.setToolbar();
+	            }
+	            var targetEl = !this.resultsPerPageTgtId ? tf.rDiv : _Dom2['default'].id(this.resultsPerPageTgtId);
+	            slcRSpan.appendChild(_Dom2['default'].text(slcRText));
+	
+	            var help = tf.feature('help');
+	            if (help && help.cont) {
+	                help.cont.parentNode.insertBefore(slcRSpan, help.cont);
+	                help.cont.parentNode.insertBefore(slcR, help.cont);
+	            } else {
+	                targetEl.appendChild(slcRSpan);
+	                targetEl.appendChild(slcR);
+	            }
+	
+	            for (var r = 0; r < slcROpts.length; r++) {
+	                var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);
+	                slcR.options[r] = currOpt;
+	            }
+	            _Event2['default'].add(slcR, 'change', evt.slcResultsChange);
+	            this.resultsPerPageSlc = slcR;
+	        }
+	    }, {
+	        key: 'removeResultsPerPage',
+	
+	        /**
+	         * Remove number of results per page UI elements
+	         */
+	        value: function removeResultsPerPage() {
+	            var tf = this.tf;
+	            if (!tf.hasGrid() || !this.resultsPerPageSlc || !this.resultsPerPage) {
+	                return;
+	            }
+	            var slcR = this.resultsPerPageSlc,
+	                slcRSpan = _Dom2['default'].id(this.prfxSlcResultsTxt + tf.id);
+	            if (slcR) {
+	                slcR.parentNode.removeChild(slcR);
+	            }
+	            if (slcRSpan) {
+	                slcRSpan.parentNode.removeChild(slcRSpan);
+	            }
+	            this.resultsPerPageSlc = null;
+	        }
+	    }, {
+	        key: 'changePage',
+	
+	        /**
+	         * Change the page asynchronously according to passed index
+	         * @param  {Number} index Index of the page (0-n)
+	         */
+	        value: function changePage(index) {
+	            var tf = this.tf;
+	            var evt = tf.Evt;
+	            tf.EvtManager(evt.name.changepage, { pgIndex: index });
+	        }
+	    }, {
+	        key: 'changeResultsPerPage',
+	
+	        /**
+	         * Change rows asynchronously according to page results
+	         */
+	        value: function changeResultsPerPage() {
+	            var tf = this.tf;
+	            var evt = tf.Evt;
+	            tf.EvtManager(evt.name.changeresultsperpage);
+	        }
+	    }, {
+	        key: 'resetPage',
+	
+	        /**
+	         * Re-set asynchronously page nb at page re-load
+	         */
+	        value: function resetPage() {
+	            var tf = this.tf;
+	            var evt = tf.Evt;
+	            tf.EvtManager(evt.name.resetpage);
+	        }
+	    }, {
+	        key: 'resetPageLength',
+	
+	        /**
+	         * Re-set asynchronously page length at page re-load
+	         */
+	        value: function resetPageLength() {
+	            var tf = this.tf;
+	            var evt = tf.Evt;
+	            tf.EvtManager(evt.name.resetpagelength);
+	        }
+	    }, {
+	        key: '_changePage',
+	
+	        /**
+	         * Change the page according to passed index
+	         * @param  {Number} index Index of the page (0-n)
+	         */
+	        value: function _changePage(index) {
+	            var tf = this.tf;
+	
+	            if (!tf.paging) {
+	                return;
+	            }
+	            if (index === null) {
+	                index = this.pageSelectorType === tf.fltTypeSlc ? this.pagingSlc.options.selectedIndex : this.pagingSlc.value - 1;
+	            }
+	            if (index >= 0 && index <= this.nbPages - 1) {
+	                if (this.onBeforeChangePage) {
+	                    this.onBeforeChangePage.call(null, this, index);
+	                }
+	                this.currentPageNb = parseInt(index, 10) + 1;
+	                if (this.pageSelectorType === tf.fltTypeSlc) {
+	                    this.pagingSlc.options[index].selected = true;
+	                } else {
+	                    this.pagingSlc.value = this.currentPageNb;
+	                }
+	
+	                if (tf.rememberPageNb) {
+	                    tf.feature('store').savePageNb(tf.pgNbCookie);
+	                }
+	                this.startPagingRow = this.pageSelectorType === tf.fltTypeSlc ? this.pagingSlc.value : index * this.pagingLength;
+	
+	                this.groupByPage();
+	
+	                if (this.onAfterChangePage) {
+	                    this.onAfterChangePage.call(null, this, index);
+	                }
+	            }
+	        }
+	    }, {
+	        key: '_changeResultsPerPage',
+	
+	        /**
+	         * Change rows according to page results
+	         */
+	        value: function _changeResultsPerPage() {
+	            var tf = this.tf;
+	
+	            if (!tf.paging) {
+	                return;
+	            }
+	            var slcR = this.resultsPerPageSlc;
+	            var slcPagesSelIndex = this.pageSelectorType === tf.fltTypeSlc ? this.pagingSlc.selectedIndex : parseInt(this.pagingSlc.value - 1, 10);
+	            this.pagingLength = parseInt(slcR.options[slcR.selectedIndex].value, 10);
+	            this.startPagingRow = this.pagingLength * slcPagesSelIndex;
+	
+	            if (!isNaN(this.pagingLength)) {
+	                if (this.startPagingRow >= tf.nbFilterableRows) {
+	                    this.startPagingRow = tf.nbFilterableRows - this.pagingLength;
+	                }
+	                this.setPagingInfo();
+	
+	                if (this.pageSelectorType === tf.fltTypeSlc) {
+	                    var slcIndex = this.pagingSlc.options.length - 1 <= slcPagesSelIndex ? this.pagingSlc.options.length - 1 : slcPagesSelIndex;
+	                    this.pagingSlc.options[slcIndex].selected = true;
+	                }
+	                if (tf.rememberPageLen) {
+	                    tf.feature('store').savePageLength(tf.pgLenCookie);
+	                }
+	            }
+	        }
+	    }, {
+	        key: '_resetPage',
+	
+	        /**
+	         * Re-set page nb at page re-load
+	         */
+	        value: function _resetPage(name) {
+	            var tf = this.tf;
+	            var pgnb = tf.feature('store').getPageNb(name);
+	            if (pgnb !== '') {
+	                this.changePage(pgnb - 1);
+	            }
+	        }
+	    }, {
+	        key: '_resetPageLength',
+	
+	        /**
+	         * Re-set page length value at page re-load
+	         */
+	        value: function _resetPageLength(name) {
+	            var tf = this.tf;
+	            if (!tf.paging) {
+	                return;
+	            }
+	            var pglenIndex = tf.feature('store').getPageLength(name);
+	
+	            if (pglenIndex !== '') {
+	                this.resultsPerPageSlc.options[pglenIndex].selected = true;
+	                this.changeResultsPerPage();
+	            }
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Remove paging feature
+	         */
+	        value: function destroy() {
+	            var tf = this.tf;
+	
+	            if (!tf.hasGrid()) {
+	                return;
+	            }
+	            // btns containers
+	            var btnNextSpan, btnPrevSpan, btnLastSpan, btnFirstSpan;
+	            var pgBeforeSpan, pgAfterSpan, pgspan;
+	            btnNextSpan = _Dom2['default'].id(this.prfxBtnNextSpan + tf.id);
+	            btnPrevSpan = _Dom2['default'].id(this.prfxBtnPrevSpan + tf.id);
+	            btnLastSpan = _Dom2['default'].id(this.prfxBtnLastSpan + tf.id);
+	            btnFirstSpan = _Dom2['default'].id(this.prfxBtnFirstSpan + tf.id);
+	            //span containing 'Page' text
+	            pgBeforeSpan = _Dom2['default'].id(this.prfxPgBeforeSpan + tf.id);
+	            //span containing 'of' text
+	            pgAfterSpan = _Dom2['default'].id(this.prfxPgAfterSpan + tf.id);
+	            //span containing nb of pages
+	            pgspan = _Dom2['default'].id(this.prfxPgSpan + tf.id);
+	
+	            var evt = this.evt;
+	
+	            if (this.pagingSlc) {
+	                if (this.pageSelectorType === tf.fltTypeSlc) {
+	                    _Event2['default'].remove(this.pagingSlc, 'change', evt.slcPagesChange);
+	                } else if (this.pageSelectorType === tf.fltTypeInp) {
+	                    _Event2['default'].remove(this.pagingSlc, 'keypress', evt._detectKey);
+	                }
+	                this.pagingSlc.parentNode.removeChild(this.pagingSlc);
+	            }
+	
+	            if (btnNextSpan) {
+	                _Event2['default'].remove(btnNextSpan, 'click', evt.next);
+	                btnNextSpan.parentNode.removeChild(btnNextSpan);
+	            }
+	
+	            if (btnPrevSpan) {
+	                _Event2['default'].remove(btnPrevSpan, 'click', evt.prev);
+	                btnPrevSpan.parentNode.removeChild(btnPrevSpan);
+	            }
+	
+	            if (btnLastSpan) {
+	                _Event2['default'].remove(btnLastSpan, 'click', evt.last);
+	                btnLastSpan.parentNode.removeChild(btnLastSpan);
+	            }
+	
+	            if (btnFirstSpan) {
+	                _Event2['default'].remove(btnFirstSpan, 'click', evt.first);
+	                btnFirstSpan.parentNode.removeChild(btnFirstSpan);
+	            }
+	
+	            if (pgBeforeSpan) {
+	                pgBeforeSpan.parentNode.removeChild(pgBeforeSpan);
+	            }
+	
+	            if (pgAfterSpan) {
+	                pgAfterSpan.parentNode.removeChild(pgAfterSpan);
+	            }
+	
+	            if (pgspan) {
+	                pgspan.parentNode.removeChild(pgspan);
+	            }
+	
+	            if (this.hasResultsPerPage) {
+	                this.removeResultsPerPage();
+	            }
+	
+	            this.pagingSlc = null;
+	            this.nbPages = 0;
+	            this.isPagingRemoved = true;
+	            tf.paging = false;
+	        }
+	    }]);
+	
+	    return Paging;
+	})();
+	
+	exports.Paging = Paging;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var ClearButton = (function () {
+	
+	    /**
+	     * Clear button component
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function ClearButton(tf) {
+	        _classCallCheck(this, ClearButton);
+	
+	        // Configuration object
+	        var f = tf.config();
+	
+	        //id of container element
+	        this.btnResetTgtId = f.btn_reset_target_id || null;
+	        //reset button element
+	        this.btnResetEl = null;
+	        //defines reset text
+	        this.btnResetText = f.btn_reset_text || 'Reset';
+	        //defines reset button tooltip
+	        this.btnResetTooltip = f.btn_reset_tooltip || 'Clear filters';
+	        //defines reset button innerHtml
+	        this.btnResetHtml = f.btn_reset_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + tf.btnResetCssClass + '" ' + 'title="' + this.btnResetTooltip + '" />');
+	        //span containing reset button
+	        this.prfxResetSpan = 'resetspan_';
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(ClearButton, [{
+	        key: 'onClick',
+	        value: function onClick() {
+	            this.tf.clearFilters();
+	        }
+	    }, {
+	        key: 'init',
+	
+	        /**
+	         * Build DOM elements
+	         */
+	        value: function init() {
+	            var _this = this;
+	
+	            var tf = this.tf;
+	
+	            if (!tf.hasGrid() && !tf.isFirstLoad && tf.btnResetEl) {
+	                return;
+	            }
+	
+	            var resetspan = _Dom2['default'].create('span', ['id', this.prfxResetSpan + tf.id]);
+	
+	            // reset button is added to defined element
+	            if (!this.btnResetTgtId) {
+	                tf.setToolbar();
+	            }
+	            var targetEl = !this.btnResetTgtId ? tf.rDiv : _Dom2['default'].id(this.btnResetTgtId);
+	            targetEl.appendChild(resetspan);
+	
+	            if (!this.btnResetHtml) {
+	                var fltreset = _Dom2['default'].create('a', ['href', 'javascript:void(0);']);
+	                fltreset.className = tf.btnResetCssClass;
+	                fltreset.appendChild(_Dom2['default'].text(this.btnResetText));
+	                resetspan.appendChild(fltreset);
+	                // fltreset.onclick = this.Evt._Clear;
+	                _Event2['default'].add(fltreset, 'click', function () {
+	                    _this.onClick();
+	                });
+	            } else {
+	                resetspan.innerHTML = this.btnResetHtml;
+	                var resetEl = resetspan.firstChild;
+	                // resetEl.onclick = this.Evt._Clear;
+	                _Event2['default'].add(resetEl, 'click', function () {
+	                    _this.onClick();
+	                });
+	            }
+	            this.btnResetEl = resetspan.firstChild;
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Remove clear button UI
+	         */
+	        value: function destroy() {
+	            var tf = this.tf;
+	
+	            if (!tf.hasGrid() || !this.btnResetEl) {
+	                return;
+	            }
+	
+	            var resetspan = _Dom2['default'].id(tf.prfxResetSpan + tf.id);
+	            if (resetspan) {
+	                resetspan.parentNode.removeChild(resetspan);
+	            }
+	            this.btnResetEl = null;
+	        }
+	    }]);
+	
+	    return ClearButton;
+	})();
+	
+	exports.ClearButton = ClearButton;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var Help = (function () {
+	
+	    /**
+	     * Help UI component
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function Help(tf) {
+	        _classCallCheck(this, Help);
+	
+	        // Configuration object
+	        var f = tf.config();
+	
+	        //id of custom container element for instructions
+	        this.tgtId = f.help_instructions_target_id || null;
+	        //id of custom container element for instructions
+	        this.contTgtId = f.help_instructions_container_target_id || null;
+	        //defines help text
+	        this.instrText = f.help_instructions_text ? f.help_instructions_text : 'Use the filters above each column to filter and limit table ' + 'data. Avanced searches can be performed by using the following ' + 'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' + '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' + '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' + '<b>rgx:</b><br/> These operators are described here:<br/>' + '<a href="http://tablefilter.free.fr/#operators" ' + 'target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
+	        //defines help innerHtml
+	        this.instrHtml = f.help_instructions_html || null;
+	        //defines reset button text
+	        this.btnText = f.help_instructions_btn_text || '?';
+	        //defines reset button innerHtml
+	        this.btnHtml = f.help_instructions_btn_html || null;
+	        //defines css class for help button
+	        this.btnCssClass = f.help_instructions_btn_css_class || 'helpBtn';
+	        //defines css class for help container
+	        this.contCssClass = f.help_instructions_container_css_class || 'helpCont';
+	        //help button element
+	        this.btn = null;
+	        //help content div
+	        this.cont = null;
+	        this.defaultHtml = '<div class="helpFooter"><h4>TableFilter ' + 'v. ' + tf.version + '</h4>' + '<a href="http://tablefilter.free.fr" target="_blank">' + 'http://tablefilter.free.fr</a><br/>' + '<span>&copy;2009-' + tf.year + ' Max Guglielmi.</span>' + '<div align="center" style="margin-top:8px;">' + '<a href="javascript:void(0);">Close</a></div></div>';
+	
+	        //id prefix for help elements
+	        this.prfxHelpSpan = 'helpSpan_';
+	        //id prefix for help elements
+	        this.prfxHelpDiv = 'helpDiv_';
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(Help, [{
+	        key: 'init',
+	        value: function init() {
+	            var _this = this;
+	
+	            if (this.btn) {
+	                return;
+	            }
+	
+	            var tf = this.tf;
+	
+	            var helpspan = _Dom2['default'].create('span', ['id', this.prfxHelpSpan + tf.id]);
+	            var helpdiv = _Dom2['default'].create('div', ['id', this.prfxHelpDiv + tf.id]);
+	
+	            //help button is added to defined element
+	            if (!this.tgtId) {
+	                tf.setToolbar();
+	            }
+	            var targetEl = !this.tgtId ? tf.rDiv : _Dom2['default'].id(this.tgtId);
+	            targetEl.appendChild(helpspan);
+	
+	            var divContainer = !this.contTgtId ? helpspan : _Dom2['default'].id(this.contTgtId);
+	
+	            if (!this.btnHtml) {
+	                divContainer.appendChild(helpdiv);
+	                var helplink = _Dom2['default'].create('a', ['href', 'javascript:void(0);']);
+	                helplink.className = this.btnCssClass;
+	                helplink.appendChild(_Dom2['default'].text(this.btnText));
+	                helpspan.appendChild(helplink);
+	                _Event2['default'].add(helplink, 'click', function () {
+	                    _this.toggle();
+	                });
+	            } else {
+	                helpspan.innerHTML = this.btnHtml;
+	                var helpEl = helpspan.firstChild;
+	                _Event2['default'].add(helpEl, 'click', function () {
+	                    _this.toggle();
+	                });
+	                divContainer.appendChild(helpdiv);
+	            }
+	
+	            if (!this.instrHtml) {
+	                helpdiv.innerHTML = this.instrText;
+	                helpdiv.className = this.contCssClass;
+	                _Event2['default'].add(helpdiv, 'dblclick', function () {
+	                    _this.toggle();
+	                });
+	            } else {
+	                if (this.contTgtId) {
+	                    divContainer.appendChild(helpdiv);
+	                }
+	                helpdiv.innerHTML = this.instrHtml;
+	                if (!this.contTgtId) {
+	                    helpdiv.className = this.contCssClass;
+	                    _Event2['default'].add(helpdiv, 'dblclick', function () {
+	                        _this.toggle();
+	                    });
+	                }
+	            }
+	            helpdiv.innerHTML += this.defaultHtml;
+	            _Event2['default'].add(helpdiv, 'click', function () {
+	                _this.toggle();
+	            });
+	
+	            this.cont = helpdiv;
+	            this.btn = helpspan;
+	        }
+	    }, {
+	        key: 'toggle',
+	
+	        /**
+	         * Toggle help pop-up
+	         */
+	        value: function toggle() {
+	            if (!this.cont) {
+	                return;
+	            }
+	            var divDisplay = this.cont.style.display;
+	            if (divDisplay === '' || divDisplay === 'none') {
+	                this.cont.style.display = 'block';
+	                // TODO: use CSS instead for element positioning
+	                var btnLeft = _Dom2['default'].position(this.btn).left;
+	                if (!this.contTgtId) {
+	                    this.cont.style.left = btnLeft - this.cont.clientWidth + 25 + 'px';
+	                }
+	            } else {
+	                this.cont.style.display = 'none';
+	            }
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Remove help UI
+	         */
+	        value: function destroy() {
+	            if (!this.btn) {
+	                return;
+	            }
+	            this.btn.parentNode.removeChild(this.btn);
+	            this.btn = null;
+	            if (!this.cont) {
+	                return;
+	            }
+	            this.cont.parentNode.removeChild(this.cont);
+	            this.cont = null;
+	        }
+	    }]);
+	
+	    return Help;
+	})();
+	
+	exports.Help = Help;
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var AlternateRows = (function () {
+	
+	    /**
+	     * Alternating rows color
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function AlternateRows(tf) {
+	        _classCallCheck(this, AlternateRows);
+	
+	        var f = tf.config();
+	        //defines css class for even rows
+	        this.evenCss = f.even_row_css_class || 'even';
+	        //defines css class for odd rows
+	        this.oddCss = f.odd_row_css_class || 'odd';
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(AlternateRows, [{
+	        key: 'init',
+	
+	        /**
+	         * Sets alternating rows color
+	         */
+	        value: function init() {
+	            if (!this.tf.hasGrid() && !this.tf.isFirstLoad) {
+	                return;
+	            }
+	            var noValidRowsIndex = this.tf.validRowsIndex === null;
+	            //1st index
+	            var beginIndex = noValidRowsIndex ? this.tf.refRow : 0;
+	            // nb indexes
+	            var indexLen = noValidRowsIndex ? this.tf.nbFilterableRows + beginIndex : this.tf.validRowsIndex.length;
+	            var idx = 0;
+	
+	            //alternates bg color
+	            for (var j = beginIndex; j < indexLen; j++) {
+	                var rowIdx = noValidRowsIndex ? j : this.tf.validRowsIndex[j];
+	                this.setRowBg(rowIdx, idx);
+	                idx++;
+	            }
+	        }
+	    }, {
+	        key: 'setRowBg',
+	
+	        /**
+	         * Sets row background color
+	         * @param {Number} rowIdx Row index
+	         * @param {Number} idx    Valid rows collection index needed to calculate bg
+	         * color
+	         */
+	        value: function setRowBg(rowIdx, idx) {
+	            if (!this.tf.alternateBgs || isNaN(rowIdx)) {
+	                return;
+	            }
+	            var rows = this.tf.tbl.rows;
+	            var i = !idx ? rowIdx : idx;
+	            this.removeRowBg(rowIdx);
+	            _Dom2['default'].addClass(rows[rowIdx], i % 2 ? this.evenCss : this.oddCss);
+	        }
+	    }, {
+	        key: 'removeRowBg',
+	
+	        /**
+	         * Removes row background color
+	         * @param  {Number} idx Row index
+	         */
+	        value: function removeRowBg(idx) {
+	            if (isNaN(idx)) {
+	                return;
+	            }
+	            var rows = this.tf.tbl.rows;
+	            _Dom2['default'].removeClass(rows[idx], this.oddCss);
+	            _Dom2['default'].removeClass(rows[idx], this.evenCss);
+	        }
+	    }, {
+	        key: 'remove',
+	
+	        /**
+	         * Removes all row background color
+	         */
+	        value: function remove() {
+	            if (!this.tf.hasGrid()) {
+	                return;
+	            }
+	            for (var i = this.tf.refRow; i < this.tf.nbRows; i++) {
+	                this.removeRowBg(i);
+	            }
+	            this.tf.isStartBgAlternate = true;
+	        }
+	    }, {
+	        key: 'enable',
+	        value: function enable() {
+	            this.tf.alternateBgs = true;
+	        }
+	    }, {
+	        key: 'disable',
+	        value: function disable() {
+	            this.tf.alternateBgs = false;
+	        }
+	    }]);
+	
+	    return AlternateRows;
+	})();
+	
+	exports.AlternateRows = AlternateRows;
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	Object.defineProperty(exports, '__esModule', {
+	     value: true
+	});
+	
+	var _Str = __webpack_require__(4);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
+	exports['default'] = {
+	     ignoreCase: function ignoreCase(a, b) {
+	          var x = _Str2['default'].lower(a);
+	          var y = _Str2['default'].lower(b);
+	          return x < y ? -1 : x > y ? 1 : 0;
+	     }
+	};
+	module.exports = exports['default'];
+
+/***/ }
+/******/ ])
+});
+;
+//# sourceMappingURL=tablefilter.js.map
