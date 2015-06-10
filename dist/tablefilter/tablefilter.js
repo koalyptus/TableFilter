@@ -83,7 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"d59e614953f2afdbdeca"}[chunkId] + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"7e7f7c02333b80894c94"}[chunkId] + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -117,11 +117,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Event = __webpack_require__(2);
+	var _Event = __webpack_require__(3);
 	
 	var _Event2 = _interopRequireDefault(_Event);
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -1142,7 +1142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	
-	            if (!this.loader && !this.statusBar) {
+	            if (!this.loader && !this.statusBar && !this.linkedFilters) {
 	                efx.call(this);
 	            } else {
 	                if (this.loader) {
@@ -3144,67 +3144,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	/**
-	 * DOM event utilities
-	 */
-	
-	exports['default'] = {
-	    add: function add(obj, type, func, capture) {
-	        if (obj.addEventListener) {
-	            obj.addEventListener(type, func, capture);
-	        } else if (obj.attachEvent) {
-	            obj.attachEvent('on' + type, func);
-	        } else {
-	            obj['on' + type] = func;
-	        }
-	    },
-	    remove: function remove(obj, type, func, capture) {
-	        if (obj.detachEvent) {
-	            obj.detachEvent('on' + type, func);
-	        } else if (obj.removeEventListener) {
-	            obj.removeEventListener(type, func, capture);
-	        } else {
-	            obj['on' + type] = null;
-	        }
-	    },
-	    stop: function stop(evt) {
-	        if (!evt) {
-	            evt = window.event;
-	        }
-	        if (evt.stopPropagation) {
-	            evt.stopPropagation();
-	        } else {
-	            evt.cancelBubble = true;
-	        }
-	    },
-	    cancel: function cancel(evt) {
-	        if (!evt) {
-	            evt = window.event;
-	        }
-	        if (evt.preventDefault) {
-	            evt.preventDefault();
-	        } else {
-	            evt.returnValue = false;
-	        }
-	    },
-	    target: function target(evt) {
-	        return evt && evt.target || window.event && window.event.srcElement;
-	    },
-	    keyCode: function keyCode(evt) {
-	        return evt.charCode ? evt.charCode : evt.keyCode ? evt.keyCode : evt.which ? evt.which : 0;
-	    }
-	};
-	module.exports = exports['default'];
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	/**
 	 * DOM utilities
 	 */
 	
@@ -3370,6 +3309,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	function supportsClassList() {
 	    return document.documentElement.classList;
 	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
+	 * DOM event utilities
+	 */
+	
+	exports['default'] = {
+	    add: function add(obj, type, func, capture) {
+	        if (obj.addEventListener) {
+	            obj.addEventListener(type, func, capture);
+	        } else if (obj.attachEvent) {
+	            obj.attachEvent('on' + type, func);
+	        } else {
+	            obj['on' + type] = func;
+	        }
+	    },
+	    remove: function remove(obj, type, func, capture) {
+	        if (obj.detachEvent) {
+	            obj.detachEvent('on' + type, func);
+	        } else if (obj.removeEventListener) {
+	            obj.removeEventListener(type, func, capture);
+	        } else {
+	            obj['on' + type] = null;
+	        }
+	    },
+	    stop: function stop(evt) {
+	        if (!evt) {
+	            evt = window.event;
+	        }
+	        if (evt.stopPropagation) {
+	            evt.stopPropagation();
+	        } else {
+	            evt.cancelBubble = true;
+	        }
+	    },
+	    cancel: function cancel(evt) {
+	        if (!evt) {
+	            evt = window.event;
+	        }
+	        if (evt.preventDefault) {
+	            evt.preventDefault();
+	        } else {
+	            evt.returnValue = false;
+	        }
+	    },
+	    target: function target(evt) {
+	        return evt && evt.target || window.event && window.event.srcElement;
+	    },
+	    keyCode: function keyCode(evt) {
+	        return evt.charCode ? evt.charCode : evt.keyCode ? evt.keyCode : evt.which ? evt.which : 0;
+	    }
+	};
 	module.exports = exports['default'];
 
 /***/ },
@@ -3966,7 +3966,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -3974,7 +3974,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Types2 = _interopRequireDefault(_Types);
 	
-	var _Event = __webpack_require__(2);
+	var _Event = __webpack_require__(3);
 	
 	var _Event2 = _interopRequireDefault(_Event);
 	
@@ -4349,7 +4349,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -4467,7 +4467,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -4617,11 +4617,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Types2 = _interopRequireDefault(_Types);
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _Event = __webpack_require__(2);
+	var _Event = __webpack_require__(3);
 	
 	var _Event2 = _interopRequireDefault(_Event);
 	
@@ -4888,7 +4888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -4941,15 +4941,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * Build drop-down filter UI asynchronously
 	         * @param  {Number}  colIndex   Column index
-	         * @param  {Boolean} isRefreshed Enable linked refresh behaviour
+	         * @param  {Boolean} isLinked Enable linked refresh behaviour
 	         * @param  {Boolean} isExternal Render in external container
 	         * @param  {String}  extSlcId   External container id
 	         */
-	        value: function build(colIndex, isRefreshed, isExternal, extSlcId) {
+	        value: function build(colIndex, isLinked, isExternal, extSlcId) {
 	            var tf = this.tf;
 	            tf.EvtManager(tf.Evt.name.dropdown, {
 	                slcIndex: colIndex,
-	                slcRefreshed: isRefreshed,
+	                slcRefreshed: isLinked,
 	                slcExternal: isExternal,
 	                slcId: extSlcId
 	            });
@@ -4960,12 +4960,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * Build drop-down filter UI
 	         * @param  {Number}  colIndex    Column index
-	         * @param  {Boolean} isRefreshed Enable linked refresh behaviour
+	         * @param  {Boolean} isLinked Enable linked refresh behaviour
 	         * @param  {Boolean} isExternal  Render in external container
 	         * @param  {String}  extSlcId    External container id
 	         */
 	        value: function _build(colIndex) {
-	            var isRefreshed = arguments[1] === undefined ? false : arguments[1];
+	            var isLinked = arguments[1] === undefined ? false : arguments[1];
 	            var isExternal = arguments[2] === undefined ? false : arguments[2];
 	            var extSlcId = arguments[3] === undefined ? null : arguments[3];
 	
@@ -4989,7 +4989,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            //custom selects text
 	            var activeFlt;
-	            if (isRefreshed && tf.activeFilterId) {
+	            if (isLinked && tf.activeFilterId) {
 	                activeFlt = tf.activeFilterId.split('_')[0];
 	                activeFlt = activeFlt.split(tf.prfxFlt)[1];
 	            }
@@ -5010,7 +5010,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var excludedOpts = null,
 	                filteredDataCol = null;
-	            if (isRefreshed && tf.disableExcludedOptions) {
+	            if (isLinked && tf.disableExcludedOptions) {
 	                excludedOpts = [];
 	                filteredDataCol = [];
 	            }
@@ -5032,7 +5032,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                // this loop retrieves cell data
 	                for (var j = 0; j < nchilds; j++) {
-	                    if (colIndex === j && (!isRefreshed || isRefreshed && tf.disableExcludedOptions) || colIndex == j && isRefreshed && (rows[k].style.display === '' && !tf.paging || tf.paging && (!tf.validRowsIndex || tf.validRowsIndex && _Arr2['default'].has(tf.validRowsIndex, k)) && (activeFlt === undefined || activeFlt == colIndex || activeFlt != colIndex && _Arr2['default'].has(tf.validRowsIndex, k)))) {
+	                    if (colIndex === j && (!isLinked || isLinked && tf.disableExcludedOptions) || colIndex == j && isLinked && (rows[k].style.display === '' && !tf.paging || tf.paging && (!tf.validRowsIndex || tf.validRowsIndex && _Arr2['default'].has(tf.validRowsIndex, k)) && (activeFlt === undefined || activeFlt == colIndex || activeFlt != colIndex && _Arr2['default'].has(tf.validRowsIndex, k)))) {
 	                        var cell_data = tf.getCellData(j, cell[j]),
 	
 	                        //Vary Peter's patch
@@ -5043,7 +5043,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            this.opts.push(cell_data);
 	                        }
 	
-	                        if (isRefreshed && tf.disableExcludedOptions) {
+	                        if (isLinked && tf.disableExcludedOptions) {
 	                            var filteredCol = filteredDataCol[j];
 	                            if (!filteredCol) {
 	                                filteredCol = this.GetFilteredDataCol(j);
@@ -5119,7 +5119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            //populates drop-down
-	            this.addOptions(colIndex, slc, isRefreshed, excludedOpts, fltsValues, fltArr);
+	            this.addOptions(colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr);
 	        }
 	    }, {
 	        key: 'addOptions',
@@ -5128,12 +5128,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Add drop-down options
 	         * @param {Number} colIndex     Column index
 	         * @param {Object} slc          Select Dom element
-	         * @param {Boolean} isRefreshed Enable linked refresh behaviour
+	         * @param {Boolean} isLinked    Enable linked refresh behaviour
 	         * @param {Array} excludedOpts  Array of excluded options
 	         * @param {Array} fltsValues    Collection of persisted filter values
 	         * @param {Array} fltArr        Collection of persisted filter values
 	         */
-	        value: function addOptions(colIndex, slc, isRefreshed, excludedOpts, fltsValues, fltArr) {
+	        value: function addOptions(colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr) {
 	            var tf = this.tf,
 	                fillMethod = _Str2['default'].lower(this.slcFillingMethod),
 	                slcValue = slc.value;
@@ -5148,7 +5148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var val = this.opts[y]; //option value
 	                var lbl = this.isCustom ? this.optsTxt[y] : val; //option text
 	                var isDisabled = false;
-	                if (isRefreshed && this.disableExcludedOptions && _Arr2['default'].has(excludedOpts, _Str2['default'].matchCase(val, tf.matchCase), tf.matchCase)) {
+	                if (isLinked && this.disableExcludedOptions && _Arr2['default'].has(excludedOpts, _Str2['default'].matchCase(val, tf.matchCase), tf.matchCase)) {
 	                    isDisabled = true;
 	                }
 	
@@ -5235,7 +5235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -5251,7 +5251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Sort2 = _interopRequireDefault(_Sort);
 	
-	var _Event = __webpack_require__(2);
+	var _Event = __webpack_require__(3);
 	
 	var _Event2 = _interopRequireDefault(_Event);
 	
@@ -5677,7 +5677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -5851,7 +5851,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -6012,7 +6012,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -6024,7 +6024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	
-	var _Event = __webpack_require__(2);
+	var _Event = __webpack_require__(3);
 	
 	var _Event2 = _interopRequireDefault(_Event);
 	
@@ -6800,11 +6800,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _Event = __webpack_require__(2);
+	var _Event = __webpack_require__(3);
 	
 	var _Event2 = _interopRequireDefault(_Event);
 	
@@ -6927,11 +6927,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _Event = __webpack_require__(2);
+	var _Event = __webpack_require__(3);
 	
 	var _Event2 = _interopRequireDefault(_Event);
 	
@@ -7108,7 +7108,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(2);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	

@@ -37,17 +37,17 @@ export class Dropdown{
     /**
      * Build drop-down filter UI asynchronously
      * @param  {Number}  colIndex   Column index
-     * @param  {Boolean} isRefreshed Enable linked refresh behaviour
+     * @param  {Boolean} isLinked Enable linked refresh behaviour
      * @param  {Boolean} isExternal Render in external container
      * @param  {String}  extSlcId   External container id
      */
-    build(colIndex, isRefreshed, isExternal, extSlcId){
+    build(colIndex, isLinked, isExternal, extSlcId){
         var tf = this.tf;
         tf.EvtManager(
             tf.Evt.name.dropdown,
             {
                 slcIndex: colIndex,
-                slcRefreshed: isRefreshed,
+                slcRefreshed: isLinked,
                 slcExternal: isExternal,
                 slcId: extSlcId
             }
@@ -57,11 +57,11 @@ export class Dropdown{
     /**
      * Build drop-down filter UI
      * @param  {Number}  colIndex    Column index
-     * @param  {Boolean} isRefreshed Enable linked refresh behaviour
+     * @param  {Boolean} isLinked Enable linked refresh behaviour
      * @param  {Boolean} isExternal  Render in external container
      * @param  {String}  extSlcId    External container id
      */
-    _build(colIndex, isRefreshed=false, isExternal=false, extSlcId=null){
+    _build(colIndex, isLinked=false, isExternal=false, extSlcId=null){
         var tf = this.tf;
         colIndex = parseInt(colIndex, 10);
 
@@ -83,7 +83,7 @@ export class Dropdown{
 
         //custom selects text
         var activeFlt;
-        if(isRefreshed && tf.activeFilterId){
+        if(isLinked && tf.activeFilterId){
             activeFlt = tf.activeFilterId.split('_')[0];
             activeFlt = activeFlt.split(tf.prfxFlt)[1];
         }
@@ -104,7 +104,7 @@ export class Dropdown{
 
         var excludedOpts = null,
             filteredDataCol = null;
-        if(isRefreshed && tf.disableExcludedOptions){
+        if(isLinked && tf.disableExcludedOptions){
             excludedOpts = [];
             filteredDataCol = [];
         }
@@ -128,9 +128,9 @@ export class Dropdown{
             // this loop retrieves cell data
             for(var j=0; j<nchilds; j++){
                 if((colIndex===j &&
-                    (!isRefreshed ||
-                        (isRefreshed && tf.disableExcludedOptions))) ||
-                    (colIndex==j && isRefreshed &&
+                    (!isLinked ||
+                        (isLinked && tf.disableExcludedOptions))) ||
+                    (colIndex==j && isLinked &&
                         ((rows[k].style.display === '' && !tf.paging) ||
                     (tf.paging && (!tf.validRowsIndex ||
                         (tf.validRowsIndex &&
@@ -147,7 +147,7 @@ export class Dropdown{
                         this.opts.push(cell_data);
                     }
 
-                    if(isRefreshed && tf.disableExcludedOptions){
+                    if(isLinked && tf.disableExcludedOptions){
                         var filteredCol = filteredDataCol[j];
                         if(!filteredCol){
                             filteredCol = this.GetFilteredDataCol(j);
@@ -225,19 +225,19 @@ export class Dropdown{
 
         //populates drop-down
         this.addOptions(
-            colIndex, slc, isRefreshed, excludedOpts, fltsValues, fltArr);
+            colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr);
     }
 
     /**
      * Add drop-down options
      * @param {Number} colIndex     Column index
      * @param {Object} slc          Select Dom element
-     * @param {Boolean} isRefreshed Enable linked refresh behaviour
+     * @param {Boolean} isLinked    Enable linked refresh behaviour
      * @param {Array} excludedOpts  Array of excluded options
      * @param {Array} fltsValues    Collection of persisted filter values
      * @param {Array} fltArr        Collection of persisted filter values
      */
-    addOptions(colIndex, slc, isRefreshed, excludedOpts, fltsValues, fltArr){
+    addOptions(colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr){
         var tf = this.tf,
             fillMethod = Str.lower(this.slcFillingMethod),
             slcValue = slc.value;
@@ -252,7 +252,7 @@ export class Dropdown{
             var val = this.opts[y]; //option value
             var lbl = this.isCustom ? this.optsTxt[y] : val; //option text
             var isDisabled = false;
-            if(isRefreshed && this.disableExcludedOptions &&
+            if(isLinked && this.disableExcludedOptions &&
                 Arr.has(
                     excludedOpts,
                     Str.matchCase(val, tf.matchCase),

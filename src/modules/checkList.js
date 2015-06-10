@@ -263,10 +263,9 @@ export class CheckList{
                     Dom.addClass(li, this.checkListItemDisabledCssClass);
                     li.check.disabled = true;
                     li.disabled = true;
-            } else{
+            } else {
                 Event.add(li.check, 'click',
-                    (evt) => { this.optionClick(evt);
-                });
+                    (evt) => { this.optionClick(evt); });
             }
             ul.appendChild(li);
 

@@ -1021,7 +1021,7 @@ export class TableFilter{
             }
         }
 
-        if(!this.loader && !this.statusBar) {
+        if(!this.loader && !this.statusBar && !this.linkedFilters) {
             efx.call(this);
         } else {
             if(this.loader){
@@ -2546,7 +2546,7 @@ export class TableFilter{
                     this.Mod.dropdown._build(slcIndex[i], true);
                 }
 
-                this.setFilterValue(slcIndex[i],slcSelectedValue);
+                this.setFilterValue(slcIndex[i], slcSelectedValue);
             }
         }// for i
     }
