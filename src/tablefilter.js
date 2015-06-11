@@ -148,8 +148,6 @@ export class TableFilter{
         this.rDiv = null;
         //div for paging elements
         this.mDiv = null;
-        //table container div for fixed headers (IE only)
-        this.contDiv = null;
 
         //defines css class for div containing paging elements, rows counter etc
         this.infDivCssClass = f.inf_div_css_class || 'inf';
@@ -1949,13 +1947,13 @@ export class TableFilter{
     }
 
     /**
-     * Return the data for a given colum
+     * Return the data of a specified colum
      * @param  {Number} colindex Column index
      * @param  {Boolean} num     Return unformatted number
      * @param  {Array} exclude   List of row indexes to be excluded
      * @return {Array}           Flat list of data for a column
      */
-    getColValues(colindex, num, exclude){
+    getColValues(colindex, num=false, exclude=undefined){
         if(!this.fltGrid){
             return;
         }
@@ -2108,7 +2106,6 @@ export class TableFilter{
      * @return {Number}          Number of cells
      */
     getCellsNb(rowIndex=0){
-        // let tr = !rowIndex ? this.tbl.rows[0] : this.tbl.rows[rowIndex];
         let tr = this.tbl.rows[rowIndex];
         return tr.cells.length;
     }

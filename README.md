@@ -79,7 +79,7 @@ grunt test-only:test.html,test-sort.html
 ```
 
 ## Documentation
-Find the complete documentation in the [WIKI](https://github.com/koalyptus/TableFilter/wiki).
+Find the complete documentation in the [WIKI](https://github.com/koalyptus/TableFilter/wiki) section.
 
 ## Support
 * GitHub for reporting bugs and feature requests.
