@@ -211,8 +211,6 @@ export class TableFilter{
         this.hasVisibleRows = Boolean(f.rows_always_visible);
         //array containing always visible rows
         this.visibleRows = this.hasVisibleRows ? f.rows_always_visible : [];
-        //defines search type: include or exclude
-        this.searchType = f.search_type || 'include';
         //enables/disables external filters generation
         this.isExternalFlt = Boolean(f.external_flt_grid);
         //array containing ids of external elements containing filters
@@ -1788,7 +1786,7 @@ export class TableFilter{
             }
 
             let occurence = [],
-                isRowValid = this.searchType==='include' ? true : false,
+                isRowValid = true,
                 //only for single filter search
                 singleFltRowValid = false;
 
@@ -1840,7 +1838,7 @@ export class TableFilter{
                 }//else single param
 
                 if(!occurence[j]){
-                    isRowValid = this.searchType==='include' ? false : true;
+                    isRowValid = false;
                 }
                 if(this.singleSearchFlt && occurence[j]){
                     singleFltRowValid = true;
