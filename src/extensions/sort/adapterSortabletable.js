@@ -40,7 +40,7 @@ export default class AdapterSortableTable{
         this.imgAscClassName = opts.image_asc_class_name || 'ascending';
         this.imgDescClassName = opts.image_desc_class_name ||'descending';
         //cell attribute storing custom key
-        this.customKey = opts.sort_custom_key || 'data-tf-sortKey';
+        this.customKey = opts.custom_key || 'data-tf-sortKey';
 
         /*** TF additional events ***/
         //additional paging events for alternating background
