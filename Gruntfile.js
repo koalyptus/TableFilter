@@ -48,6 +48,12 @@ module.exports = function (grunt) {
                 cwd: 'static/templates',
                 dest: 'examples',
                 expand: true
+            },
+            assets: {
+                src: ['**'],
+                cwd: 'static/examples-assets',
+                dest: 'examples/assets',
+                expand: true
             }
         },
 
@@ -153,7 +159,7 @@ module.exports = function (grunt) {
     // Build examples
     grunt.registerTask('dev-examples', ['build-examples', 'watch:templates']);
     grunt.registerTask('build-examples',
-        ['copy:templates', 'string-replace:examples']);
+        ['copy:templates', 'copy:assets', 'string-replace:examples']);
 
     // Transpile with Babel
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
