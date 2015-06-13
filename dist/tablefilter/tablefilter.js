@@ -2674,15 +2674,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * 'checklist' type)
 	         */
 	        value: function linkFilters() {
+	            if (_Types2['default'].isUndef(this.activeFilterId)) {
+	                return;
+	            }
 	            var slcA1 = this.getFiltersByType(this.fltTypeSlc, true),
 	                slcA2 = this.getFiltersByType(this.fltTypeMulti, true),
 	                slcA3 = this.getFiltersByType(this.fltTypeCheckList, true),
 	                slcIndex = slcA1.concat(slcA2);
 	            slcIndex = slcIndex.concat(slcA3);
-	
-	            if (!this.activeFilterId) {
-	                return;
-	            }
 	
 	            var activeFlt = this.activeFilterId.split('_')[0];
 	            activeFlt = activeFlt.split(this.prfxFlt)[1];
@@ -4100,7 +4099,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.tblCont = _Dom2['default'].create('div', ['id', this.prfxTblCont + tf.id]);
 	            this.tblCont.className = this.gridContCssClass;
 	            if (this.gridWidth) {
-	                this.tblCont.style.width = this.gridWidth;
+	                if (this.gridWidth.indexOf('%') != -1) {
+	                    console.log(this.gridWidth);
+	                    this.tblCont.style.width = '100%';
+	                } else {
+	                    this.tblCont.style.width = this.gridWidth;
+	                }
 	            }
 	            if (this.gridHeight) {
 	                this.tblCont.style.height = this.gridHeight;
@@ -4121,7 +4125,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.headTblCont = _Dom2['default'].create('div', ['id', this.prfxHeadTblCont + tf.id]);
 	            this.headTblCont.className = this.gridHeadContCssClass;
 	            if (this.gridWidth) {
-	                this.headTblCont.style.width = this.gridWidth;
+	                if (this.gridWidth.indexOf('%') != -1) {
+	                    console.log(this.gridWidth);
+	                    this.headTblCont.style.width = '100%';
+	                } else {
+	                    this.headTblCont.style.width = this.gridWidth;
+	                }
 	            }
 	
 	            //Headers table
@@ -4185,7 +4194,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            tf.setColWidths(0, this.headTbl);
 	
 	            //Headers container width
-	            this.headTblCont.style.width = this.tblCont.clientWidth + 'px';
+	            // this.headTblCont.style.width = this.tblCont.clientWidth+'px';
 	
 	            tbl.style.width = '';
 	            //
@@ -4290,7 +4299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var thCW = o.crWColsRow.cells[colIndex].clientWidth;
 	                var tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
 	
-	                if (thCW != tdCW /*&& !Helpers.isIE()*/) {
+	                if (thCW != tdCW) {
 	                    o.headTbl.style.width = tbl.clientWidth + 'px';
 	                }
 	
@@ -4302,9 +4311,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (tbl.clientWidth !== this.headTbl.clientWidth) {
 	                tbl.style.width = this.headTbl.clientWidth + 'px';
 	            }
-	
-	            // Re-adjust reference row
-	            //tf.refRow = Helpers.isIE() ? (tf.refRow+1) : 0;
 	        }
 	    }, {
 	        key: 'destroy',
@@ -5052,7 +5058,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        if (isLinked && tf.disableExcludedOptions) {
 	                            var filteredCol = filteredDataCol[j];
 	                            if (!filteredCol) {
-	                                filteredCol = this.GetFilteredDataCol(j);
+	                                filteredCol = tf.getFilteredDataCol(j);
 	                            }
 	                            if (!_Arr2['default'].has(filteredCol, cell_string, matchCase) && !_Arr2['default'].has(excludedOpts, cell_string, matchCase) && !this.isFirstLoad) {
 	                                excludedOpts.push(cell_data);
@@ -5154,7 +5160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var val = this.opts[y]; //option value
 	                var lbl = this.isCustom ? this.optsTxt[y] : val; //option text
 	                var isDisabled = false;
-	                if (isLinked && this.disableExcludedOptions && _Arr2['default'].has(excludedOpts, _Str2['default'].matchCase(val, tf.matchCase), tf.matchCase)) {
+	                if (isLinked && tf.disableExcludedOptions && _Arr2['default'].has(excludedOpts, _Str2['default'].matchCase(val, tf.matchCase), tf.matchCase)) {
 	                    isDisabled = true;
 	                }
 	
@@ -5294,6 +5300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.isCustom = null;
 	        this.opts = null;
 	        this.optsTxt = null;
+	        this.excludedOpts = null;
 	
 	        this.tf = tf;
 	    }
@@ -5369,10 +5376,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                activeFlt = activeFlt.split(tf.prfxFlt)[1];
 	            }
 	
-	            var excludedOpts,
-	                filteredDataCol = [];
+	            var filteredDataCol = [];
 	            if (tf.linkedFilters && tf.disableExcludedOptions) {
-	                excludedOpts = [];
+	                this.excludedOpts = [];
 	            }
 	
 	            for (var k = tf.refRow; k < tf.nbRows; k++) {
@@ -5403,10 +5409,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        var filteredCol = filteredDataCol[j];
 	                        if (tf.linkedFilters && tf.disableExcludedOptions) {
 	                            if (!filteredCol) {
-	                                filteredDataCol[j] = tf.GetFilteredDataCol(j);
+	                                filteredCol = tf.getFilteredDataCol(j);
 	                            }
-	                            if (!_Arr2['default'].has(filteredCol, cell_string, tf.matchCase) && !_Arr2['default'].has(excludedOpts, cell_string, tf.matchCase) && !tf.isFirstLoad) {
-	                                excludedOpts.push(cell_data);
+	                            if (!_Arr2['default'].has(filteredCol, cell_string, tf.matchCase) && !_Arr2['default'].has(this.excludedOpts, cell_string, tf.matchCase) && !tf.isFirstLoad) {
+	                                this.excludedOpts.push(cell_data);
 	                            }
 	                        }
 	                    }
@@ -5423,13 +5429,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (tf.sortSlc && !this.isCustom) {
 	                if (!tf.matchCase) {
 	                    this.opts.sort(_Sort2['default'].ignoreCase);
-	                    if (excludedOpts) {
-	                        excludedOpts.sort(_Sort2['default'].ignoreCase);
+	                    if (this.excludedOpts) {
+	                        this.excludedOpts.sort(_Sort2['default'].ignoreCase);
 	                    }
 	                } else {
 	                    this.opts.sort();
-	                    if (excludedOpts) {
-	                        excludedOpts.sort();
+	                    if (this.excludedOpts) {
+	                        this.excludedOpts.sort();
 	                    }
 	                }
 	            }
@@ -5437,16 +5443,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (tf.sortNumAsc && _Arr2['default'].has(tf.sortNumAsc, colIndex)) {
 	                try {
 	                    this.opts.sort(numSortAsc);
-	                    if (excludedOpts) {
-	                        excludedOpts.sort(numSortAsc);
+	                    if (this.excludedOpts) {
+	                        this.excludedOpts.sort(numSortAsc);
 	                    }
 	                    if (this.isCustom) {
 	                        this.optsTxt.sort(numSortAsc);
 	                    }
 	                } catch (e) {
 	                    this.opts.sort();
-	                    if (excludedOpts) {
-	                        excludedOpts.sort();
+	                    if (this.excludedOpts) {
+	                        this.excludedOpts.sort();
 	                    }
 	                    if (this.isCustom) {
 	                        this.optsTxt.sort();
@@ -5457,16 +5463,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (tf.sortNumDesc && _Arr2['default'].has(tf.sortNumDesc, colIndex)) {
 	                try {
 	                    this.opts.sort(numSortDesc);
-	                    if (excludedOpts) {
-	                        excludedOpts.sort(numSortDesc);
+	                    if (this.excludedOpts) {
+	                        this.excludedOpts.sort(numSortDesc);
 	                    }
 	                    if (this.isCustom) {
 	                        this.optsTxt.sort(numSortDesc);
 	                    }
 	                } catch (e) {
 	                    this.opts.sort();
-	                    if (excludedOpts) {
-	                        excludedOpts.sort();
+	                    if (this.excludedOpts) {
+	                        this.excludedOpts.sort();
 	                    }
 	                    if (this.isCustom) {
 	                        this.optsTxt.sort();
@@ -5511,7 +5517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var lbl = this.isCustom ? this.optsTxt[y] : val; //item text
 	                var li = _Dom2['default'].createCheckItem(tf.fltIds[colIndex] + '_' + (y + chkCt), val, lbl);
 	                li.className = this.checkListItemCssClass;
-	                if (tf.linkedFilters && tf.disableExcludedOptions && _Arr2['default'].has(excludedOpts, _Str2['default'].matchCase(val, tf.matchCase), tf.matchCase)) {
+	                if (tf.linkedFilters && tf.disableExcludedOptions && _Arr2['default'].has(this.excludedOpts, _Str2['default'].matchCase(val, tf.matchCase), tf.matchCase)) {
 	                    _Dom2['default'].addClass(li, this.checkListItemDisabledCssClass);
 	                    li.check.disabled = true;
 	                    li.disabled = true;

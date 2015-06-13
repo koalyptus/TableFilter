@@ -2503,15 +2503,14 @@ export class TableFilter{
      * 'checklist' type)
      */
     linkFilters(){
+        if(Types.isUndef(this.activeFilterId)){
+            return;
+        }
         let slcA1 = this.getFiltersByType(this.fltTypeSlc, true),
             slcA2 = this.getFiltersByType(this.fltTypeMulti, true),
             slcA3 = this.getFiltersByType(this.fltTypeCheckList, true),
             slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
-
-        if(!this.activeFilterId){
-            return;
-        }
 
         let activeFlt = this.activeFilterId.split('_')[0];
         activeFlt = activeFlt.split(this.prfxFlt)[1];

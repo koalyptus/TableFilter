@@ -115,4 +115,6 @@ test('Set results per page', function() {
     paging.changeResultsPerPage();
     deepEqual(paging.pagingLength, 6, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
+
+    tf.destroy();
 });

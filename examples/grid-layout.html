@@ -6,11 +6,12 @@
 <style type="text/css">
     body{
         font-family: Helvetica, arial, nimbussansl, liberationsans, freesans,
-            clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"
+            clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+        padding: 1em;
     }
     pre{
         margin: auto 1em 1em 1em;
-        padding: 0 1em 0 0;
+        padding: 0 1em 1em 1em;
         float: right;
         line-height: 1.45;
         background-color: #F7F7F7;
@@ -13012,12 +13013,15 @@
 
 </script>
 <script>
-    var config = document.querySelectorAll('script[data-config]')[0];
+    var configs = document.querySelectorAll('script[data-config]');
     var pre = document.body.getElementsByTagName('pre')[0];
-    if(pre && config){
-        pre.innerHTML = config.innerHTML
-                            .replace('<', '&lt;').replace('>', '&gt;');
-    }
+
+    [].forEach.call(configs, function(config) {
+        if(pre){
+            pre.innerHTML +=
+                config.innerHTML.replace('<', '&lt;').replace('>', '&gt;');
+        }
+    });
 </script>
 
 </body>

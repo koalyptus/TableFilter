@@ -114,7 +114,12 @@ export class GridLayout{
         this.tblCont = Dom.create('div',['id', this.prfxTblCont + tf.id]);
         this.tblCont.className = this.gridContCssClass;
         if(this.gridWidth){
-            this.tblCont.style.width = this.gridWidth;
+            if(this.gridWidth.indexOf('%') != -1){
+                console.log(this.gridWidth);
+                this.tblCont.style.width = '100%';
+            } else {
+                this.tblCont.style.width = this.gridWidth;
+            }
         }
         if(this.gridHeight){
             this.tblCont.style.height = this.gridHeight;
@@ -137,7 +142,12 @@ export class GridLayout{
             'div',['id', this.prfxHeadTblCont + tf.id]);
         this.headTblCont.className = this.gridHeadContCssClass;
         if(this.gridWidth){
-            this.headTblCont.style.width = this.gridWidth;
+            if(this.gridWidth.indexOf('%') != -1){
+                console.log(this.gridWidth);
+                this.headTblCont.style.width = '100%';
+            } else {
+                this.headTblCont.style.width = this.gridWidth;
+            }
         }
 
         //Headers table
@@ -201,7 +211,7 @@ export class GridLayout{
         tf.setColWidths(0, this.headTbl);
 
         //Headers container width
-        this.headTblCont.style.width = this.tblCont.clientWidth+'px';
+        // this.headTblCont.style.width = this.tblCont.clientWidth+'px';
 
         tbl.style.width = '';
         //
@@ -307,7 +317,7 @@ export class GridLayout{
             var thCW = o.crWColsRow.cells[colIndex].clientWidth;
             var tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
 
-            if(thCW != tdCW /*&& !Helpers.isIE()*/){
+            if(thCW != tdCW){
                 o.headTbl.style.width = tbl.clientWidth+'px';
             }
 
@@ -319,9 +329,6 @@ export class GridLayout{
         if(tbl.clientWidth !== this.headTbl.clientWidth){
             tbl.style.width = this.headTbl.clientWidth+'px';
         }
-
-        // Re-adjust reference row
-        //tf.refRow = Helpers.isIE() ? (tf.refRow+1) : 0;
     }
 
     /**

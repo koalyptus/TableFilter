@@ -150,7 +150,7 @@ export class Dropdown{
                     if(isLinked && tf.disableExcludedOptions){
                         var filteredCol = filteredDataCol[j];
                         if(!filteredCol){
-                            filteredCol = this.GetFilteredDataCol(j);
+                            filteredCol = tf.getFilteredDataCol(j);
                         }
                         if(!Arr.has(filteredCol, cell_string, matchCase) &&
                             !Arr.has(
@@ -252,7 +252,7 @@ export class Dropdown{
             var val = this.opts[y]; //option value
             var lbl = this.isCustom ? this.optsTxt[y] : val; //option text
             var isDisabled = false;
-            if(isLinked && this.disableExcludedOptions &&
+            if(isLinked && tf.disableExcludedOptions &&
                 Arr.has(
                     excludedOpts,
                     Str.matchCase(val, tf.matchCase),

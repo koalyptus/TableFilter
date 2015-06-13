@@ -41,6 +41,7 @@ export class CheckList{
         this.isCustom = null;
         this.opts = null;
         this.optsTxt = null;
+        this.excludedOpts = null;
 
         this.tf = tf;
     }
@@ -106,10 +107,9 @@ export class CheckList{
             activeFlt = activeFlt.split(tf.prfxFlt)[1];
         }
 
-        var excludedOpts,
-            filteredDataCol = [];
+        var filteredDataCol = [];
         if(tf.linkedFilters && tf.disableExcludedOptions){
-            excludedOpts = [];
+            this.excludedOpts = [];
         }
 
         for(var k=tf.refRow; k<tf.nbRows; k++){
@@ -147,14 +147,14 @@ export class CheckList{
                     var filteredCol = filteredDataCol[j];
                     if(tf.linkedFilters && tf.disableExcludedOptions){
                         if(!filteredCol){
-                            filteredDataCol[j] = tf.GetFilteredDataCol(j);
+                            filteredCol = tf.getFilteredDataCol(j);
                         }
                         if(!Arr.has(filteredCol,
                             cell_string, tf.matchCase) &&
-                            !Arr.has(excludedOpts,
+                            !Arr.has(this.excludedOpts,
                                 cell_string, tf.matchCase) &&
                             !tf.isFirstLoad){
-                            excludedOpts.push(cell_data);
+                            this.excludedOpts.push(cell_data);
                         }
                     }
                 }
@@ -171,13 +171,13 @@ export class CheckList{
         if(tf.sortSlc && !this.isCustom){
             if (!tf.matchCase){
                 this.opts.sort(Sort.ignoreCase);
-                if(excludedOpts){
-                    excludedOpts.sort(Sort.ignoreCase);
+                if(this.excludedOpts){
+                    this.excludedOpts.sort(Sort.ignoreCase);
                 }
             } else {
                 this.opts.sort();
-                if(excludedOpts){
-                    excludedOpts.sort();
+                if(this.excludedOpts){
+                    this.excludedOpts.sort();
                 }
             }
         }
@@ -185,16 +185,16 @@ export class CheckList{
         if(tf.sortNumAsc && Arr.has(tf.sortNumAsc, colIndex)){
             try{
                 this.opts.sort(numSortAsc);
-                if(excludedOpts){
-                    excludedOpts.sort(numSortAsc);
+                if(this.excludedOpts){
+                    this.excludedOpts.sort(numSortAsc);
                 }
                 if(this.isCustom){
                     this.optsTxt.sort(numSortAsc);
                 }
             } catch(e) {
                 this.opts.sort();
-                if(excludedOpts){
-                    excludedOpts.sort();
+                if(this.excludedOpts){
+                    this.excludedOpts.sort();
                 }
                 if(this.isCustom){
                     this.optsTxt.sort();
@@ -205,16 +205,16 @@ export class CheckList{
         if(tf.sortNumDesc && Arr.has(tf.sortNumDesc, colIndex)){
             try{
                 this.opts.sort(numSortDesc);
-                if(excludedOpts){
-                    excludedOpts.sort(numSortDesc);
+                if(this.excludedOpts){
+                    this.excludedOpts.sort(numSortDesc);
                 }
                 if(this.isCustom){
                     this.optsTxt.sort(numSortDesc);
                 }
             } catch(e) {
                 this.opts.sort();
-                if(excludedOpts){
-                    excludedOpts.sort(); }
+                if(this.excludedOpts){
+                    this.excludedOpts.sort(); }
                 if(this.isCustom){
                     this.optsTxt.sort();
                 }
@@ -258,7 +258,7 @@ export class CheckList{
                         tf.fltIds[colIndex]+'_'+(y+chkCt), val, lbl);
             li.className = this.checkListItemCssClass;
             if(tf.linkedFilters && tf.disableExcludedOptions &&
-                Arr.has(excludedOpts,
+                Arr.has(this.excludedOpts,
                         Str.matchCase(val, tf.matchCase), tf.matchCase)){
                     Dom.addClass(li, this.checkListItemDisabledCssClass);
                     li.check.disabled = true;
