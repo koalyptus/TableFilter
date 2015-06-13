@@ -784,7 +784,6 @@ export class TableFilter{
                         Event.add(slc, 'change',
                             this.Evt.onSlcChange.bind(this));
                         Event.add(slc, 'focus', this.Evt.onSlcFocus.bind(this));
-                        // Event.add(slc, 'blur', this.Evt._OnSlcBlur);
 
                         //1st option is created here since dropdown.build isn't
                         //invoked
@@ -1334,41 +1333,6 @@ export class TableFilter{
         }
     }
 
-    /*====================================================
-        - IE bug: it seems there is no way to make
-        multiple selections programatically, only last
-        selection is kept (multiple select previously
-        populated via DOM)
-        - Work-around: defer selection with a setTimeout
-        If you find a more elegant solution to
-        this let me know ;-)
-        - For the moment only this solution seems to work!
-        - Params:
-            - slc = select object (select obj)
-            - index to be selected (integer)
-            - execute filtering (boolean)
-    =====================================================*/
-    // __deferMultipleSelection: function(slc,index,filter){
-    //     if(Str.lower(slc.nodeName)!=='select'){
-    //         return;
-    //     }
-    //     let doFilter = filter===undefined ? false : filter;
-    //     let o = this;
-    //     global.setTimeout(function(){
-    //         slc.options[0].selected = false;
-
-    //         if(slc.options[index].value===''){
-    //             slc.options[index].selected = false;
-    //         }
-    //         else{
-    //             slc.options[index].selected = true;
-    //             if(doFilter){
-    //                 o.filter();
-    //             }
-    //         }
-    //     }, 0.1);
-    // },
-
     /**
      * Check if given column implements a filter with custom options
      * @param  {Number}  colIndex Column's index
@@ -1476,12 +1440,6 @@ export class TableFilter{
                             opt = Dom.createOpt(s[j],s[j],true);
                             slc.appendChild(opt);
                             this.hasStoredValues = true;
-
-                            // IE multiple selection work-around
-                            // if(hlp.isIE()){
-                            //     this.__deferMultipleSelection(slc,j,false);
-                            //     hasStoredValues = false;
-                            // }
                         }
                     }// if multiFltsIndex
                 }
@@ -2138,7 +2096,7 @@ export class TableFilter{
      * @return {String}
      */
     getCellData(i, cell){
-        if(i===undefined || !cell){
+        if(Types.isUndef(i) || !cell){
             return '';
         }
         //First checks for customCellData event
@@ -2297,7 +2255,7 @@ export class TableFilter{
      * @param {Number} index     Column's index
      * @param {String} searcharg Search term
      */
-    setFilterValue(index, searcharg=''/*, doFilter*/){
+    setFilterValue(index, searcharg=''){
         if((!this.fltGrid && !this.isFirstLoad) ||
             !this.getFilterElement(index)){
             return;
@@ -2324,17 +2282,6 @@ export class TableFilter{
                 }
                 if(option.value!=='' &&
                     Arr.has(s, option.value, true)){
-                    // IE multiple selection work-around
-                    // if(hlp.isIE()){
-                    //     //when last value reached filtering can be executed
-                    //     let filter = ct==(s.length-1) && execFilter ?
-                    //         true : false;
-                    //     this.__deferMultipleSelection(slc,j,filter);
-                    //     ct++;
-                    // }
-                    // else{
-                    //     slc.options[j].selected = true;
-                    // }
                     option.selected = true;
                 }//if
             }//for j
@@ -2615,21 +2562,6 @@ export class TableFilter{
             Mod.popupFilter.buildAll();
         }
 
-        /***    ie bug work-around, filters need to be re-generated since row
-                is empty; insertBefore method doesn't seem to work properly
-                with previously generated DOM nodes modified by innerHTML   ***/
-        // function refreshFilters(o){
-        //     tbl.deleteRow(filtersRowIndex);
-        //     o.remove();
-        //     o.fltIds = [];
-        //     o.isFirstLoad = true;
-        //     if(o.popUpFilters){
-        //         // o.RemovePopupFilters();
-        //         o.Mod.popupFilter.destroy();
-        //     }
-        //     o.init();
-        // }
-
         if(!this.gridLayout){
             Dom.addClass(this.tbl, this.prfxTf);
         }
@@ -2891,43 +2823,6 @@ TableFilter.Paging = Paging;
 // TableFilter.ClearButton = ClearButton;
 // TableFilter.Help = Help;
 // TableFilter.AlternateRows = AlternateRows;
-
-//Firefox does not support outerHTML property
-// function setOuterHtml(){
-//     if(doc.body.__defineGetter__){
-//         if(HTMLElement) {
-//             let element = HTMLElement.prototype;
-//             if(element.__defineGetter__){
-//                 element.__defineGetter__("outerHTML",
-//                     function(){
-//                         let parent = this.parentNode;
-//                         let el = Dom.create(parent.tagName);
-//                         el.appendChild(this);
-//                         let shtml = el.innerHTML;
-//                         parent.appendChild(this);
-//                         return shtml;
-//                     }
-//                 );
-//             }
-//             if(element.__defineSetter__) {
-//                 HTMLElement.prototype.__defineSetter__(
-//                     "outerHTML", function(sHTML){
-//                    let r = this.ownerDocument.createRange();
-//                    r.setStartBefore(this);
-//                    let df = r.createContextualFragment(sHTML);
-//                    this.parentNode.replaceChild(df, this);
-//                    return sHTML;
-//                 });
-//             }
-//         }
-//     }
-// }
-
-// return TableFilter;
-
-// });
-
-// }
 
 /*====================================================
     - Sets filters grid bar

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>TableFilter v0.0.0 - Linked filters Demo</title>
+    <title>TableFilter v0.0.0 - Columns Visibility Extension Demo</title>
     <link rel="stylesheet" type="text/css" href="../dist/tablefilter/style/tablefilter.css">
 <style type="text/css">
     body{
@@ -28,13 +28,19 @@
 </head>
 <body>
 <h1>TableFilter v0.0.0</h1>
-<h2>Linked filters demo</h2>
+<h2>Columns visibility extension demo</h2>
 <p>
-    This demo features the linked filters behaviour. In this mode, the drop-down
-    filters are linked, when a column is filtered only the valid values of the
-    other columns are included in their respective filters.
+    This demo features the columns visibility extension.
 </p>
 
+<p>
+<button onclick="javascript:
+    tf.getExtension('colsVisibility').hideCol(0);">Hide Column 0</button>
+<button onclick="javascript:
+    tf.getExtension('colsVisibility').showCol(0);">Show Column 0</button>
+<button onclick="javascript:
+    tf.getExtension('colsVisibility').toggleCol(2);">Toggle Column 2</button>
+</p>
 <pre></pre>
 
 
@@ -2590,26 +2596,36 @@
 
 <script src="../dist/tablefilter/tablefilter.js"></script>
 <script data-config>
-var filtersConfig = {
+var tfConfig = {
     base_path: '../dist/tablefilter/',
-    linked_filters: true,
-    col_1: 'multiple',
-    col_2: 'checklist',
-    btn_reset: true,
-    display_all_text: '< Clear >',
+    paging: true,
+    remember_grid_values: true,
     alternate_rows: true,
     rows_counter: true,
-    enable_default_theme: true,
-    extensions:[{
-        name: 'sort',
-        types: [
-            'number', 'string', 'string',
-            'US', 'none', 'string'
-        ]
-    }]
+    btn_reset: true,
+    btn_reset_text: "Clear",
+    status_bar: true,
+    col_1: "select",
+    col_2: "select",
+
+    /* columns visibility and sort extension */
+    extensions:[
+        {
+            name: 'colsVisibility',
+            at_start: [3, 5],
+            text: 'Columns: ',
+            enable_tick_all: true
+        }, {
+            name: 'sort',
+            types: [
+                'number', 'string', 'string',
+                'US', 'none', 'string'
+            ]
+        }
+    ]
 };
 
-var tf = new TableFilter('demo', filtersConfig);
+var tf = new TableFilter('demo', tfConfig);
 tf.init();
 </script>
 <script>
