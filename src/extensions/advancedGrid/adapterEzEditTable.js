@@ -11,18 +11,18 @@ export default class AdapterEzEditTable {
      */
     constructor(tf, cfg){
         // ezEditTable config
-        this.cfg = cfg;
-        this.name = 'ezEditTable.js';
-        this.vendorPath = this.cfg.vendor_path || tf.extensionsPath +
-            'ezEditTable/';
-        this.loadStylesheet = Boolean(this.cfg.loadStylesheet);
-        this.stylesheet = this.cfg.stylesheet || this.vendorPath +
-            'ezEditTable.css';
-        this.stylesheetName = this.cfg.stylesheetName || 'ezEditTableCss';
+        this.initialized = false;
+        this.desc = cfg.description || 'ezEditTable adapter';
+        this.filename = cfg.filename || 'ezEditTable.js';
+        this.vendorPath = cfg.vendor_path;
+        this.loadStylesheet = Boolean(cfg.load_stylesheet);
+        this.stylesheet = cfg.stylesheet || this.vendorPath + 'ezEditTable.css';
+        this.stylesheetName = cfg.stylesheet_name || 'ezEditTableCss';
         this.err = 'Failed to instantiate EditTable object.\n"ezEditTable" ' +
             'dependency not found.';
 
         this._ezEditTable = null;
+        this.cfg = cfg;
         this.tf = tf;
     }
 
@@ -32,11 +32,11 @@ export default class AdapterEzEditTable {
      */
     init(){
         var tf = this.tf;
-        if(window.EditTable/*tf.isImported(this.path)*/){
+        if(window.EditTable){
             this._setAdvancedGrid();
         } else {
-            var path = this.vendorPath + this.name;
-            tf.import(this.name, path, ()=> { this._setAdvancedGrid(); });
+            var path = this.vendorPath + this.filename;
+            tf.import(this.filename, path, ()=> { this._setAdvancedGrid(); });
         }
         if(this.loadStylesheet && !tf.isImported(this.stylesheet, 'link')){
             tf.import(this.stylesheetName, this.stylesheet, null, 'link');
@@ -304,7 +304,7 @@ export default class AdapterEzEditTable {
                     tf.nbFilterableRows++;
                     tf.paging=false;
                     tf.feature('paging').destroy();
-                    tf.feature('paging').addPaging();
+                    tf.feature('paging').reset();
                 }
                 if(tf.alternateBgs){
                     tf.feature('alternateRows').init();
@@ -325,7 +325,7 @@ export default class AdapterEzEditTable {
                         tf.nbFilterableRows--;
                         tf.paging=false;
                         tf.feature('paging').destroy();
-                        tf.feature('paging').addPaging(false);
+                        tf.feature('paging').reset(false);
                     }
                     if(tf.alternateBgs){
                         tf.feature('alternateRows').init();
@@ -341,6 +341,8 @@ export default class AdapterEzEditTable {
             this._ezEditTable = new EditTable(tf.id, cfg, startRow);
             this._ezEditTable.Init();
         } catch(e) { throw new Error(this.err); }
+
+        this.initialized = true;
     }
 
     /**
@@ -372,5 +374,6 @@ export default class AdapterEzEditTable {
                 ezEditTable.Editable.Remove();
             }
         }
+        this.initialized = false;
     }
 }

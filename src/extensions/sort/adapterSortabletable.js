@@ -143,8 +143,8 @@ export default class AdapterSortableTable{
             //sort behaviour for paging
             if(adpt.isPaged){
                 let paginator = tf.feature('paging');
-                paginator.addPaging(false);
-                paginator.setPage(paginator.currentPageNb);
+                paginator.reset(false);
+                paginator.setPage(paginator.getPage());
                 adpt.isPaged = false;
             }
 

@@ -193,9 +193,6 @@ export class Paging{
             }
         }
 
-        /*====================================================
-            - onchange event for paging select
-        =====================================================*/
         evt.slcPagesChange = (event) => {
             this.changePage();
             event.target.blur();
@@ -338,10 +335,10 @@ export class Paging{
     }
 
     /**
-     * Add paging when filters are already instanciated
+     * Reset paging when filters are already instantiated
      * @param {Boolean} filterTable Execute filtering once paging instanciated
      */
-    addPaging(filterTable=false){
+    reset(filterTable=false){
         var tf = this.tf;
         if(!tf.hasGrid() || tf.paging){
             return;
@@ -360,18 +357,16 @@ export class Paging{
      * Refresh paging select according to number of pages
      * @param {Array} validRows Collection of valid rows
      */
-    setPagingInfo(validRows){
+    setPagingInfo(validRows=[]){
         var tf = this.tf;
         var rows = tf.tbl.rows;
         var mdiv = !this.pagingTgtId ? tf.mDiv : Dom.id(this.pagingTgtId);
         var pgspan = Dom.id(this.prfxPgSpan+tf.id);
-        //stores valid rows indexes
-        if(validRows && validRows.length>0){
-            tf.validRowsIndex = validRows;
-        } else {
-            //re-sets valid rows indexes array
-            tf.validRowsIndex = [];
 
+        //store valid rows indexes
+        tf.validRowsIndex = validRows;
+
+        if(validRows.length === 0){
             //counts rows to be grouped
             for(var j=tf.refRow; j<tf.nbRows; j++){
                 var row = rows[j];
@@ -461,6 +456,14 @@ export class Paging{
     }
 
     /**
+     * Return the current page number
+     * @return {Number} Page number
+     */
+    getPage(){
+        return this.currentPageNb;
+    }
+
+    /**
      * Show page based on passed param value (string or number):
      * @param {String} or {Number} cmd possible string values: 'next',
      * 'previous', 'last', 'first' or page number as per param
@@ -510,9 +513,6 @@ export class Paging{
             return;
         }
 
-        /*====================================================
-            - onchange event for results per page select
-        =====================================================*/
         evt.slcResultsChange = (ev) => {
             this.changeResultsPerPage();
             ev.target.blur();
@@ -648,7 +648,8 @@ export class Paging{
     }
 
     /**
-     * Change rows according to page results
+     * Change rows according to page results drop-down
+     * TODO: accept a parameter setting the results per page length
      */
     _changeResultsPerPage(){
         var tf = this.tf;
@@ -718,18 +719,16 @@ export class Paging{
             return;
         }
         // btns containers
-        var btnNextSpan, btnPrevSpan, btnLastSpan, btnFirstSpan;
-        var pgBeforeSpan, pgAfterSpan, pgspan;
-        btnNextSpan = Dom.id(this.prfxBtnNextSpan+tf.id);
-        btnPrevSpan = Dom.id(this.prfxBtnPrevSpan+tf.id);
-        btnLastSpan = Dom.id(this.prfxBtnLastSpan+tf.id);
-        btnFirstSpan = Dom.id(this.prfxBtnFirstSpan+tf.id);
+        var btnNextSpan = Dom.id(this.prfxBtnNextSpan+tf.id);
+        var btnPrevSpan = Dom.id(this.prfxBtnPrevSpan+tf.id);
+        var btnLastSpan = Dom.id(this.prfxBtnLastSpan+tf.id);
+        var btnFirstSpan = Dom.id(this.prfxBtnFirstSpan+tf.id);
         //span containing 'Page' text
-        pgBeforeSpan = Dom.id(this.prfxPgBeforeSpan+tf.id);
+        var pgBeforeSpan = Dom.id(this.prfxPgBeforeSpan+tf.id);
         //span containing 'of' text
-        pgAfterSpan = Dom.id(this.prfxPgAfterSpan+tf.id);
+        var pgAfterSpan = Dom.id(this.prfxPgAfterSpan+tf.id);
         //span containing nb of pages
-        pgspan = Dom.id(this.prfxPgSpan+tf.id);
+        var pgspan = Dom.id(this.prfxPgSpan+tf.id);
 
         var evt = this.evt;
 

@@ -13,12 +13,14 @@ test('RowsCounter component', function() {
 test('RowsCounter component with paging', function() {
     tf.Mod.paging = new TableFilter.Paging(tf);
     var paging = tf.Mod.paging;
-    paging.addPaging();
-    equal(tf.feature('rowsCounter').rowsCounterSpan.innerHTML, '1-7 / 7', 'Counter value with paging');
+    paging.reset();
+    equal(tf.feature('rowsCounter').rowsCounterSpan.innerHTML,
+        '1-7 / 7', 'Counter value with paging');
     paging.destroy();
 });
 
 test('RowsCounter component without paging', function() {
     tf.feature('rowsCounter').refresh();
-    equal(tf.feature('rowsCounter').rowsCounterSpan.innerHTML, 7, 'Counter value');
+    equal(tf.feature('rowsCounter').rowsCounterSpan.innerHTML,
+        7, 'Counter value');
 });

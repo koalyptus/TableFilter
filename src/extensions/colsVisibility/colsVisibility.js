@@ -53,8 +53,6 @@ export default class ColsVisibility{
         this.btnCloseHtml = f.btn_close_html || null;
         //defines css class for close button
         this.btnCloseCssClass = f.btn_close_css_class || this.btnCssClass;
-
-        // this.path = f.path || tf.extensionsPath + 'colsVisibility/';
         this.stylesheet = f.stylesheet || 'colsVisibility.css';
         //span containing show/hide cols button
         this.prfx = 'colVis_';

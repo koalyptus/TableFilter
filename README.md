@@ -86,3 +86,6 @@ Find the complete documentation in the [WIKI](https://github.com/koalyptus/Table
 
 ## License
 MIT
+
+
+

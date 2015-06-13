@@ -901,9 +901,17 @@ export class TableFilter{
             Mod.statusBar = new StatusBar(this);
             Mod.statusBar.init();
         }
-        if(this.paging || (Mod.paging && Mod.paging.isPagingRemoved)){
-            Mod.paging = new Paging(this);
-            Mod.paging.init();
+        if(this.paging || Mod.paging){
+            if(!Mod.paging){
+                Mod.paging = new Paging(this);
+            }
+
+            // TODO: handle both cases in paging init
+            if(Mod.paging.isPagingRemoved){
+                Mod.paging.reset();
+            } else {
+                Mod.paging.init();
+            }
         }
         if(this.btnReset){
             Mod.clearButton = new ClearButton(this);
