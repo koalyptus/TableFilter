@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>HTML Table Filter Generator</title>
-    <link rel="stylesheet" type="text/css" href="../dist/tablefilter/style/tablefilter.css">
+    <link rel="stylesheet" type="text/css" href="../../dist/tablefilter/style/tablefilter.css">
 </head>
 <body>
     <div id="test"></div>
@@ -86,7 +86,7 @@
         <button onclick="tf.init();">Reset</button>
     </div>
 
-    <script type="text/javascript" src="../dist/tablefilter/tablefilter.js"></script>
+    <script type="text/javascript" src="../../dist/tablefilter/tablefilter.js"></script>
     <script>
         var table = document.getElementById('demo');
         var totRowIndex = table.getElementsByTagName("tr").length;
@@ -95,7 +95,7 @@
             col_0: 'select',
             col_2: 'checklist',
             col_3: 'select',
-            base_path: '../dist/tablefilter/',
+            base_path: '../../dist/tablefilter/',
             // fill_slc_on_demand: true,
             rows_counter: true,
             // enable_default_theme: true,
@@ -143,9 +143,9 @@
                     types: ['string', 'string', 'number', 'number', 'number']
                 },{
                     name: 'advancedGrid',
-                    vendor_path: '../libs/ezEditTable/',
-                    // filename: 'ezEditTable_min.js',
-                    // vendor_path: 'http://edittable.free.fr/ezEditTable/',
+                    // vendor_path: '../../libs/ezEditTable/',
+                    filename: 'ezEditTable_min.js',
+                    vendor_path: 'http://edittable.free.fr/ezEditTable/',
                     selectable: true,
                     editable: true,
                     default_selection: 'both',
