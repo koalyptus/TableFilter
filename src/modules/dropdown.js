@@ -127,6 +127,7 @@ export class Dropdown{
 
             // this loop retrieves cell data
             for(var j=0; j<nchilds; j++){
+                // WTF: cyclomatic complexity hell
                 if((colIndex===j &&
                     (!isLinked ||
                         (isLinked && tf.disableExcludedOptions))) ||

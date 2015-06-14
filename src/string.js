@@ -24,19 +24,6 @@ export default {
     },
 
     rgxEsc(text){
-        // function escape(e){
-        //     let a = new RegExp('\\'+e, 'g');
-        //     text = text.replace(a, '\\'+e);
-        // }
-
-        // let chars = ['\\','[','^','$','.','|','?','*','+','(',')'];
-        // cache escape + match String
-
-        // for(let e=0, len=chars.length; e<len; e++){
-        //     escape(chars[e]);
-        // }
-        // return text;
-
         let chars = /[-\/\\^$*+?.()|[\]{}]/g;
         let escMatch = '\\$&';
         return String(text).replace(chars, escMatch);

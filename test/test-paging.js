@@ -55,12 +55,23 @@ test('Reset Paging component', function() {
 
 module('Behaviour');
 test('Set page', function() {
-    paging.setPage(3);
-    deepEqual(paging.getPage(), 3, 'Expected page number');
     paging.setPage(1);
     deepEqual(paging.getPage(), 1, 'Expected page number');
+    paging.setPage(3);
+    deepEqual(paging.getPage(), 3, 'Expected page number');
 });
+
+test('Filter from non starting page', function() {
+    tf.setFilterValue(1, 'Melbourne');
+    tf.filter();
+    deepEqual(tf.validRowsIndex.length,
+        1, 'Expected valid rows after page change');
+    deepEqual(tf.nbVisibleRows,
+        1, 'Expected visible rows after page change');
+});
+
 test('Set results per page', function() {
+    tf.clearFilters();
     paging.resultsPerPageSlc.options[1].selected = true;
     paging.changeResultsPerPage();
     deepEqual(paging.pagingLength, 4, 'Expected page length');
@@ -101,11 +112,21 @@ test('Grid layout with paging', function() {
 
 module('Behaviour');
 test('Set page', function() {
-    paging.setPage(3);
-    deepEqual(paging.getPage(), 3, 'Expected page number');
     paging.setPage(1);
     deepEqual(paging.getPage(), 1, 'Expected page number');
+    paging.setPage(3);
+    deepEqual(paging.getPage(), 3, 'Expected page number');
 });
+
+test('Filter from non starting page', function() {
+    tf.setFilterValue(1, 'Perth');
+    tf.filter();
+    deepEqual(tf.validRowsIndex.length,
+        1, 'Expected valid rows after page change');
+    deepEqual(tf.nbVisibleRows,
+        1, 'Expected visible rows after page change');
+});
+
 test('Set results per page', function() {
     paging.resultsPerPageSlc.options[1].selected = true;
     paging.changeResultsPerPage();

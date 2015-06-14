@@ -373,8 +373,9 @@ export class Paging{
                 if(!row){
                     continue;
                 }
+
                 var isRowValid = row.getAttribute('validRow');
-                if(isRowValid==='true' || !isRowValid){
+                if(Types.isNull(isRowValid) || Boolean(isRowValid)){
                     tf.validRowsIndex.push(j);
                 }
             }
@@ -421,7 +422,7 @@ export class Paging{
         var tf = this.tf;
         var alternateRows =  tf.feature('alternateRows');
         var rows = tf.tbl.rows;
-        var paging_end_row = parseInt(this.startPagingRow, 10) +
+        var endPagingRow = parseInt(this.startPagingRow, 10) +
             parseInt(this.pagingLength, 10);
 
         //store valid rows indexes
@@ -430,21 +431,24 @@ export class Paging{
         }
 
         //this loop shows valid rows of current page
-        for(var h=0; h<tf.validRowsIndex.length; h++){
-            var r = rows[tf.validRowsIndex[h]];
+        for(var h=0, len=tf.validRowsIndex.length; h<len; h++){
+            var validRowIdx = tf.validRowsIndex[h];
+            var r = rows[validRowIdx];
+            var isRowValid = r.getAttribute('validRow');
 
-            if(h>=this.startPagingRow && h<paging_end_row){
-                if(r.getAttribute('validRow')==='true' ||
-                    !r.getAttribute('validRow')){
+            if(h>=this.startPagingRow && h<endPagingRow){
+                // if(r.getAttribute('validRow')==='true' ||
+                //     !r.getAttribute('validRow')){
+                if(Types.isNull(isRowValid) || Boolean(isRowValid)){
                     r.style.display = '';
                 }
                 if(tf.alternateBgs && alternateRows){
-                    alternateRows.setRowBg(tf.validRowsIndex[h], h);
+                    alternateRows.setRowBg(validRowIdx, h);
                 }
             } else {
                 r.style.display = 'none';
                 if(tf.alternateBgs && alternateRows){
-                    alternateRows.removeRowBg(tf.validRowsIndex[h]);
+                    alternateRows.removeRowBg(validRowIdx);
                 }
             }
         }

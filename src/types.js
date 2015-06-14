@@ -6,7 +6,7 @@ const UNDEFINED = void 0;
 
 export default {
     /**
-     * Checks if var exists and is an object
+     * Check if argument exists and is an object
      * @param  {String or Object}  v
      * @return {Boolean}
      */
@@ -25,7 +25,7 @@ export default {
     },
 
     /**
-     * Checks if passed parameter is a function
+     * Check if argument is a function
      * @param  {Function} fn
      * @return {Boolean}
      */
@@ -34,7 +34,7 @@ export default {
     },
 
     /**
-     * Checks if passed param is an array
+     * Check if argument is an array
      * @param  {Array}  obj
      * @return {Boolean}
      */
@@ -43,12 +43,20 @@ export default {
     },
 
     /**
-     * Determines if passed param is undefined
+     * Determine if argument is undefined
      * @param  {Any}  o
      * @return {Boolean}
      */
     isUndef(o){
         return  o === UNDEFINED;
-    }
+    },
 
+    /**
+     * Determine if argument is null
+     * @param  {Any}  o
+     * @return {Boolean}
+     */
+    isNull(o){
+        return o === null;
+    }
 };

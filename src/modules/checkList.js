@@ -129,6 +129,7 @@ export class CheckList{
 
             // this loop retrieves cell data
             for(var j=0; j<ncells; j++){
+                // WTF: cyclomatic complexity hell :)
                 if((colIndex===j && (!tf.linkedFilters ||
                     (tf.linkedFilters && tf.disableExcludedOptions)))||
                     (colIndex===j && tf.linkedFilters &&

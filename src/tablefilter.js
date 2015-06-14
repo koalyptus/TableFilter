@@ -1861,8 +1861,11 @@ export class TableFilter{
         if(!this.paging){
             this.applyGridProps();
         } else {
-            this.startPagingRow = 0;
-            this.currentPageNb = 1;
+            // Shouldn't need to care of that here...
+            // TODO: provide a method in paging module
+            Mod.paging.startPagingRow = 0;
+            Mod.paging.currentPageNb = 1;
+            //
             Mod.paging.setPagingInfo(this.validRowsIndex);
         }
         //invokes onafter callback
@@ -2450,7 +2453,7 @@ export class TableFilter{
      * 'checklist' type)
      */
     linkFilters(){
-        if(Types.isUndef(this.activeFilterId)){
+        if(!this.activeFilterId){
             return;
         }
         let slcA1 = this.getFiltersByType(this.fltTypeSlc, true),
