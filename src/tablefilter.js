@@ -1102,7 +1102,7 @@ export class TableFilter{
      * @return {Boolean}
      */
     hasExtension(name){
-        return !Types.isUndef(this.ExtRegistry[name]);
+        return !Types.isEmpty(this.ExtRegistry[name]);
     }
 
     /**

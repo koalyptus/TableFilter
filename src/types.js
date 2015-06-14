@@ -58,5 +58,14 @@ export default {
      */
     isNull(o){
         return o === null;
+    },
+
+    /**
+     * Determine if argument is empty (undefined, null or empty string)
+     * @param  {Any}  o
+     * @return {Boolean}
+     */
+    isEmpty(o){
+        return this.isUndef(o) || this.isNull(o) || o.length===0;
     }
 };
