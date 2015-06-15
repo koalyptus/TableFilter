@@ -85,7 +85,7 @@ Find the complete documentation in the [WIKI](https://github.com/koalyptus/Table
 * GitHub for reporting bugs and feature requests.
 
 ## License
-MIT
+[MIT](LICENSE.md)
 
 
 
