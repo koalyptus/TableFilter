@@ -44,11 +44,11 @@ export default {
 
     /**
      * Returns a text node with given text
-     * @param  {String} text
+     * @param  {String} txt
      * @return {Object}
      */
-    text(text){
-        return document.createTextNode(text);
+    text(txt){
+        return document.createTextNode(txt);
     },
 
     /**

@@ -20,21 +20,23 @@ export class AlternateRows{
      * Sets alternating rows color
      */
     init() {
-        if(!this.tf.hasGrid() && !this.tf.isFirstLoad){
+        var tf = this.tf;
+        if(!tf.hasGrid() && !tf.isFirstLoad){
             return;
         }
-        var noValidRowsIndex = this.tf.validRowsIndex===null;
+        var validRowsIndex = tf.validRowsIndex;
+        var noValidRowsIndex = validRowsIndex===null;
         //1st index
-        var beginIndex = noValidRowsIndex ? this.tf.refRow : 0;
+        var beginIndex = noValidRowsIndex ? tf.refRow : 0;
         // nb indexes
         var indexLen = noValidRowsIndex ?
-                this.tf.nbFilterableRows+beginIndex :
-                this.tf.validRowsIndex.length;
+                tf.nbFilterableRows+beginIndex :
+                validRowsIndex.length;
         var idx = 0;
 
         //alternates bg color
         for(var j=beginIndex; j<indexLen; j++){
-            var rowIdx = noValidRowsIndex ? j : this.tf.validRowsIndex[j];
+            var rowIdx = noValidRowsIndex ? j : validRowsIndex[j];
             this.setRowBg(rowIdx, idx);
             idx++;
         }
@@ -74,7 +76,7 @@ export class AlternateRows{
     }
 
     /**
-     * Removes all row background color
+     * Removes all alternating backgrounds
      */
     remove() {
         if(!this.tf.hasGrid()){
@@ -83,7 +85,6 @@ export class AlternateRows{
         for(var i=this.tf.refRow; i<this.tf.nbRows; i++){
             this.removeRowBg(i);
         }
-        this.tf.isStartBgAlternate = true;
     }
 
     enable() {

@@ -454,9 +454,8 @@ export class Paging{
         }
 
         tf.nbVisibleRows = tf.validRowsIndex.length;
-        tf.isStartBgAlternate = false;
         //re-applies filter behaviours after filtering process
-        tf.applyGridProps();
+        tf.applyProps();
     }
 
     /**

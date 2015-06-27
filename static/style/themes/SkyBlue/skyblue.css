@@ -40,12 +40,9 @@ input.flt{ width:99% !important; }
 =====================================================*/
 /* div containing left, middle and right divs */
 .inf{
-	background:#D9EAED !important;
-	border:1px solid #99CCCC;
+	background:#E3EFFF !important;
+	border:1px solid #A4BED4;
 	height:25px; color:#004A6F;
-	border-radius:3px;
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
 }
 div.tot, div.status{ border-right:0 !important; }
 

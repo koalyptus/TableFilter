@@ -83,7 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"1624429a94932563c8ae"}[chunkId] + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "-" + {"1":"4139a7961dcf632fbba6"}[chunkId] + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -121,15 +121,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Event2 = _interopRequireDefault(_Event);
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _Str = __webpack_require__(4);
+	var _Str = __webpack_require__(3);
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	
-	var _Cookie = __webpack_require__(5);
+	var _Cookie = __webpack_require__(7);
 	
 	var _Cookie2 = _interopRequireDefault(_Cookie);
 	
@@ -137,7 +137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Types2 = _interopRequireDefault(_Types);
 	
-	var _Arr = __webpack_require__(7);
+	var _Arr = __webpack_require__(5);
 	
 	var _Arr2 = _interopRequireDefault(_Arr);
 	
@@ -341,7 +341,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.fltSmallCssClass = f.flt_small_css_class || 'flt_s';
 	        //defines css class for single-filter
 	        this.singleFltCssClass = f.single_flt_css_class || 'single_flt';
-	        this.isStartBgAlternate = true;
 	
 	        /*** filters' grid behaviours ***/
 	        //enables/disables enter key
@@ -610,9 +609,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                loadthemes: 'LoadThemes'
 	            },
 	
-	            /*====================================================
-	                - Detects <enter> key for a given element
-	            =====================================================*/
+	            // Detect <enter> key
 	            detectKey: function detectKey(e) {
 	                if (!this.enterKey) {
 	                    return;
@@ -631,9 +628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 	            },
-	            /*====================================================
-	                - auto filter for text filters
-	            =====================================================*/
+	            // if auto-filter on, detect user is typing and filter columns
 	            onKeyUp: function onKeyUp(e) {
 	                if (!this.autoFilter) {
 	                    return;
@@ -661,18 +656,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.autoFilterTimer = null;
 	                }
 	            },
-	            /*====================================================
-	                - onkeydown event for input filters
-	            =====================================================*/
+	            // if auto-filter on, detect user is typing
 	            onKeyDown: function onKeyDown() {
 	                if (!this.autoFilter) {
 	                    return;
 	                }
 	                this.isUserTyping = true;
 	            },
-	            /*====================================================
-	                - onblur event for input filters
-	            =====================================================*/
+	            // if auto-filter on, clear interval on filter blur
 	            onInpBlur: function onInpBlur() {
 	                if (this.autoFilter) {
 	                    this.isUserTyping = false;
@@ -687,9 +678,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                //     }
 	                // }
 	            },
-	            /*====================================================
-	                - onfocus event for input filters
-	            =====================================================*/
+	            // set focused text-box filter as active
 	            onInpFocus: function onInpFocus(e) {
 	                var _ev = e || global.event;
 	                var elm = _Event2['default'].target(_ev);
@@ -708,9 +697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                //     }
 	                // }
 	            },
-	            /*====================================================
-	                - onfocus event for select filters
-	            =====================================================*/
+	            // set focused drop-down filter as active
 	            onSlcFocus: function onSlcFocus(e) {
 	                var _ev = e || global.event;
 	                var elm = _Event2['default'].target(_ev);
@@ -726,18 +713,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    _Event2['default'].stop(_ev);
 	                }
 	            },
-	            /*====================================================
-	                - onchange event for select filters
-	            =====================================================*/
+	            // filter columns on drop-down filter change
 	            onSlcChange: function onSlcChange(e) {
 	                if (!this.activeFlt) {
 	                    return;
 	                }
-	                // let colIndex = o.activeFlt.getAttribute('colIndex');
-	                //Checks filter is a checklist and caller is not null
-	                // if(o.activeFlt && colIndex &&
-	                //     o['col'+colIndex]===o.fltTypeCheckList &&
-	                //     !o.Evt.onSlcChange.caller){ return; }
 	                var _ev = e || global.event;
 	                if (this.popUpFilters) {
 	                    _Event2['default'].stop(_ev);
@@ -746,9 +726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.filter();
 	                }
 	            },
-	            /*====================================================
-	                - onclick event for checklist filters
-	            =====================================================*/
+	            // fill checklist filter on click if required
 	            onCheckListClick: function onCheckListClick(e) {
 	                var _ev = e || global.event;
 	                var elm = _Event2['default'].target(_ev);
@@ -759,10 +737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.Mod.checkList.checkListDiv[ct].title = '';
 	                }
 	            },
-	            /*====================================================
-	                - onclick event for validation button
-	                (btn property)
-	            =====================================================*/
+	            // filter when validation button clicked
 	            onBtnClick: function onBtnClick() {
 	                this.filter();
 	            }
@@ -1278,6 +1253,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var theme = themes[i];
 	                    var _name = theme.name;
 	                    var path = theme.path;
+	                    var styleId = this.prfxTf + _name;
 	                    if (_name && !path) {
 	                        path = this.themesPath + _name + '/' + _name + '.css';
 	                    } else if (!_name && theme.path) {
@@ -1285,12 +1261,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	
 	                    if (!this.isImported(path, 'link')) {
-	                        this['import']('tf-' + _name, path, null, 'link');
+	                        this['import'](styleId, path, null, 'link');
 	                    }
 	                }
 	            }
 	
-	            //Some elements need to be overriden for theme
+	            //Some elements need to be overriden for default theme
 	            //Reset button
 	            this.btnResetText = null;
 	            this.btnResetHtml = '<input type="button" value="" class="' + this.btnResetCssClass + '" title="Clear filters" />';
@@ -1305,6 +1281,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.loader = true;
 	            this.loaderHtml = '<div class="defaultLoader"></div>';
 	            this.loaderText = null;
+	        }
+	    }, {
+	        key: 'getStylesheet',
+	
+	        /**
+	         * Return stylesheet DOM element for a given theme name
+	         * @return {DOMElement} stylesheet element
+	         */
+	        value: function getStylesheet() {
+	            var name = arguments[0] === undefined ? 'default' : arguments[0];
+	
+	            return _Dom2['default'].id(this.prfxTf + name);
 	        }
 	    }, {
 	        key: 'destroy',
@@ -1354,7 +1342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.tbl.deleteRow(this.filtersRowIndex);
 	            }
 	
-	            // Destroy module
+	            // Destroy modules
 	            Object.keys(Mod).forEach(function (key) {
 	                var feature = Mod[key];
 	                if (feature && _Types2['default'].isFn(feature.destroy)) {
@@ -1961,6 +1949,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                if (!isRowValid) {
 	                    this.validateRow(k, false);
+	                    if (Mod.alternateRows) {
+	                        Mod.alternateRows.removeRowBg(k);
+	                    }
 	                    // always visible rows need to be counted as valid
 	                    if (this.hasVisibleRows && _Arr2['default'].has(this.visibleRows, k) && !this.paging) {
 	                        this.validRowsIndex.push(k);
@@ -1981,14 +1972,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            this.nbVisibleRows = this.validRowsIndex.length;
 	            this.nbHiddenRows = hiddenrows;
-	            this.isStartBgAlternate = false;
 	
 	            if (this.rememberGridValues) {
 	                Mod.store.saveFilterValues(this.fltsValuesCookie);
 	            }
 	            //applies filter props after filtering process
 	            if (!this.paging) {
-	                this.applyGridProps();
+	                this.applyProps();
 	            } else {
 	                // Shouldn't need to care of that here...
 	                // TODO: provide a method in paging module
@@ -2003,20 +1993,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    }, {
-	        key: 'applyGridProps',
+	        key: 'applyProps',
 	
 	        /**
-	         * Re-apply the filters grid properties after a filtering/paging operation
+	         * Re-apply the features/behaviour concerned by filtering/paging operation
+	         *
+	         * NOTE: this will disappear whenever custom events in place
 	         */
-	        value: function applyGridProps() {
-	            // blurs active filter (IE)
-	            if (this.activeFlt && _Str2['default'].lower(this.activeFlt.nodeName) === this.fltTypeSlc && !this.popUpFilters) {
-	                this.activeFlt.blur();
-	                if (this.activeFlt.parentNode) {
-	                    this.activeFlt.parentNode.focus();
-	                }
-	            }
-	
+	        value: function applyProps() {
 	            var Mod = this.Mod;
 	
 	            //shows rows always visible
@@ -3096,6 +3080,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	/**
+	 * String utilities
+	 */
+	
+	exports['default'] = {
+	
+	    lower: function lower(text) {
+	        return text.toLowerCase();
+	    },
+	
+	    upper: function upper(text) {
+	        return text.toUpperCase();
+	    },
+	
+	    trim: function trim(text) {
+	        if (text.trim) {
+	            return text.trim();
+	        }
+	        return text.replace(/^\s*|\s*$/g, '');
+	    },
+	
+	    isEmpty: function isEmpty(text) {
+	        return this.trim(text) === '';
+	    },
+	
+	    rgxEsc: function rgxEsc(text) {
+	        var chars = /[-\/\\^$*+?.()|[\]{}]/g;
+	        var escMatch = '\\$&';
+	        return String(text).replace(chars, escMatch);
+	    },
+	
+	    matchCase: function matchCase(text, mc) {
+	        if (!mc) {
+	            return this.lower(text);
+	        }
+	        return text;
+	    }
+	
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	/**
 	 * DOM utilities
 	 */
 	
@@ -3140,22 +3174,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * Returns a text node with given text
-	     * @param  {String} text
+	     * @param  {String} txt
 	     * @return {Object}
 	     */
-	    text: (function (_text) {
-	        function text(_x) {
-	            return _text.apply(this, arguments);
-	        }
-	
-	        text.toString = function () {
-	            return _text.toString();
-	        };
-	
-	        return text;
-	    })(function (text) {
-	        return document.createTextNode(text);
-	    }),
+	    text: function text(txt) {
+	        return document.createTextNode(txt);
+	    },
 	
 	    /**
 	     * Returns offset position of passed element
@@ -3264,121 +3288,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	/**
-	 * String utilities
-	 */
-	
-	exports['default'] = {
-	
-	    lower: function lower(text) {
-	        return text.toLowerCase();
-	    },
-	
-	    upper: function upper(text) {
-	        return text.toUpperCase();
-	    },
-	
-	    trim: function trim(text) {
-	        if (text.trim) {
-	            return text.trim();
-	        }
-	        return text.replace(/^\s*|\s*$/g, '');
-	    },
-	
-	    isEmpty: function isEmpty(text) {
-	        return this.trim(text) === '';
-	    },
-	
-	    rgxEsc: function rgxEsc(text) {
-	        var chars = /[-\/\\^$*+?.()|[\]{}]/g;
-	        var escMatch = '\\$&';
-	        return String(text).replace(chars, escMatch);
-	    },
-	
-	    matchCase: function matchCase(text, mc) {
-	        if (!mc) {
-	            return this.lower(text);
-	        }
-	        return text;
-	    }
-	
-	};
-	module.exports = exports['default'];
-
-/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
 	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
 	/**
-	 * Cookie utilities
+	 * Array utilities
 	 */
 	
+	var _Str = __webpack_require__(3);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
 	exports['default'] = {
-	
-	    write: function write(name, value, hours) {
-	        var expire = '';
-	        if (hours) {
-	            expire = new Date(new Date().getTime() + hours * 3600000);
-	            expire = '; expires=' + expire.toGMTString();
-	        }
-	        document.cookie = name + '=' + escape(value) + expire;
-	    },
-	
-	    read: function read(name) {
-	        var cookieValue = '',
-	            search = name + '=';
-	        if (document.cookie.length > 0) {
-	            var cookie = document.cookie,
-	                offset = cookie.indexOf(search);
-	            if (offset !== -1) {
-	                offset += search.length;
-	                var end = cookie.indexOf(';', offset);
-	                if (end === -1) {
-	                    end = cookie.length;
-	                }
-	                cookieValue = unescape(cookie.substring(offset, end));
+	    has: function has(arr, val, caseSensitive) {
+	        var sCase = caseSensitive === undefined ? false : caseSensitive;
+	        for (var i = 0; i < arr.length; i++) {
+	            if (_Str2['default'].matchCase(arr[i].toString(), sCase) == val) {
+	                return true;
 	            }
 	        }
-	        return cookieValue;
+	        return false;
 	    },
-	
-	    remove: function remove(name) {
-	        this.write(name, '', -1);
-	    },
-	
-	    valueToArray: function valueToArray(name, separator) {
-	        if (!separator) {
-	            separator = ',';
+	    indexByValue: function indexByValue(arr, val, caseSensitive) {
+	        var sCase = caseSensitive === undefined ? false : caseSensitive;
+	        for (var i = 0; i < arr.length; i++) {
+	            if (_Str2['default'].matchCase(arr[i].toString(), sCase) == val) {
+	                return i;
+	            }
 	        }
-	        //reads the cookie
-	        var val = this.read(name);
-	        //creates an array with filters' values
-	        var arr = val.split(separator);
-	        return arr;
-	    },
-	
-	    getValueByIndex: function getValueByIndex(name, index, separator) {
-	        if (!separator) {
-	            separator = ',';
-	        }
-	        //reads the cookie
-	        var val = this.valueToArray(name, separator);
-	        return val[index];
+	        return -1;
 	    }
-	
 	};
 	module.exports = exports['default'];
 
@@ -3470,38 +3416,66 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-	
 	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
 	/**
-	 * Array utilities
+	 * Cookie utilities
 	 */
 	
-	var _Str = __webpack_require__(4);
-	
-	var _Str2 = _interopRequireDefault(_Str);
-	
 	exports['default'] = {
-	    has: function has(arr, val, caseSensitive) {
-	        var sCase = caseSensitive === undefined ? false : caseSensitive;
-	        for (var i = 0; i < arr.length; i++) {
-	            if (_Str2['default'].matchCase(arr[i].toString(), sCase) == val) {
-	                return true;
-	            }
+	
+	    write: function write(name, value, hours) {
+	        var expire = '';
+	        if (hours) {
+	            expire = new Date(new Date().getTime() + hours * 3600000);
+	            expire = '; expires=' + expire.toGMTString();
 	        }
-	        return false;
+	        document.cookie = name + '=' + escape(value) + expire;
 	    },
-	    indexByValue: function indexByValue(arr, val, caseSensitive) {
-	        var sCase = caseSensitive === undefined ? false : caseSensitive;
-	        for (var i = 0; i < arr.length; i++) {
-	            if (_Str2['default'].matchCase(arr[i].toString(), sCase) == val) {
-	                return i;
+	
+	    read: function read(name) {
+	        var cookieValue = '',
+	            search = name + '=';
+	        if (document.cookie.length > 0) {
+	            var cookie = document.cookie,
+	                offset = cookie.indexOf(search);
+	            if (offset !== -1) {
+	                offset += search.length;
+	                var end = cookie.indexOf(';', offset);
+	                if (end === -1) {
+	                    end = cookie.length;
+	                }
+	                cookieValue = unescape(cookie.substring(offset, end));
 	            }
 	        }
-	        return -1;
+	        return cookieValue;
+	    },
+	
+	    remove: function remove(name) {
+	        this.write(name, '', -1);
+	    },
+	
+	    valueToArray: function valueToArray(name, separator) {
+	        if (!separator) {
+	            separator = ',';
+	        }
+	        //reads the cookie
+	        var val = this.read(name);
+	        //creates an array with filters' values
+	        var arr = val.split(separator);
+	        return arr;
+	    },
+	
+	    getValueByIndex: function getValueByIndex(name, index, separator) {
+	        if (!separator) {
+	            separator = ',';
+	        }
+	        //reads the cookie
+	        var val = this.valueToArray(name, separator);
+	        return val[index];
 	    }
+	
 	};
 	module.exports = exports['default'];
 
@@ -3698,7 +3672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Misc helpers
 	 */
 	
-	var _Str = __webpack_require__(4);
+	var _Str = __webpack_require__(3);
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	
@@ -3741,7 +3715,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Cookie = __webpack_require__(5);
+	var _Cookie = __webpack_require__(7);
 	
 	var _Cookie2 = _interopRequireDefault(_Cookie);
 	
@@ -3867,7 +3841,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -4257,7 +4231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -4375,11 +4349,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _Str = __webpack_require__(4);
+	var _Str = __webpack_require__(3);
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	
@@ -4525,7 +4499,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Types2 = _interopRequireDefault(_Types);
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -4796,15 +4770,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _Arr = __webpack_require__(7);
+	var _Arr = __webpack_require__(5);
 	
 	var _Arr2 = _interopRequireDefault(_Arr);
 	
-	var _Str = __webpack_require__(4);
+	var _Str = __webpack_require__(3);
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	
@@ -5144,15 +5118,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _Arr = __webpack_require__(7);
+	var _Arr = __webpack_require__(5);
 	
 	var _Arr2 = _interopRequireDefault(_Arr);
 	
-	var _Str = __webpack_require__(4);
+	var _Str = __webpack_require__(3);
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	
@@ -5587,7 +5561,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -5761,7 +5735,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -5922,7 +5896,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -5930,7 +5904,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Types2 = _interopRequireDefault(_Types);
 	
-	var _Str = __webpack_require__(4);
+	var _Str = __webpack_require__(3);
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	
@@ -6345,9 +6319,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            tf.nbVisibleRows = tf.validRowsIndex.length;
-	            tf.isStartBgAlternate = false;
 	            //re-applies filter behaviours after filtering process
-	            tf.applyGridProps();
+	            tf.applyProps();
 	        }
 	    }, {
 	        key: 'getPage',
@@ -6718,7 +6691,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -6845,7 +6818,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -7026,7 +6999,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	var _Dom = __webpack_require__(3);
+	var _Dom = __webpack_require__(4);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
@@ -7056,19 +7029,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Sets alternating rows color
 	         */
 	        value: function init() {
-	            if (!this.tf.hasGrid() && !this.tf.isFirstLoad) {
+	            var tf = this.tf;
+	            if (!tf.hasGrid() && !tf.isFirstLoad) {
 	                return;
 	            }
-	            var noValidRowsIndex = this.tf.validRowsIndex === null;
+	            var validRowsIndex = tf.validRowsIndex;
+	            var noValidRowsIndex = validRowsIndex === null;
 	            //1st index
-	            var beginIndex = noValidRowsIndex ? this.tf.refRow : 0;
+	            var beginIndex = noValidRowsIndex ? tf.refRow : 0;
 	            // nb indexes
-	            var indexLen = noValidRowsIndex ? this.tf.nbFilterableRows + beginIndex : this.tf.validRowsIndex.length;
+	            var indexLen = noValidRowsIndex ? tf.nbFilterableRows + beginIndex : validRowsIndex.length;
 	            var idx = 0;
 	
 	            //alternates bg color
 	            for (var j = beginIndex; j < indexLen; j++) {
-	                var rowIdx = noValidRowsIndex ? j : this.tf.validRowsIndex[j];
+	                var rowIdx = noValidRowsIndex ? j : validRowsIndex[j];
 	                this.setRowBg(rowIdx, idx);
 	                idx++;
 	            }
@@ -7111,7 +7086,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'remove',
 	
 	        /**
-	         * Removes all row background color
+	         * Removes all alternating backgrounds
 	         */
 	        value: function remove() {
 	            if (!this.tf.hasGrid()) {
@@ -7120,7 +7095,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var i = this.tf.refRow; i < this.tf.nbRows; i++) {
 	                this.removeRowBg(i);
 	            }
-	            this.tf.isStartBgAlternate = true;
 	        }
 	    }, {
 	        key: 'enable',
@@ -7151,7 +7125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     value: true
 	});
 	
-	var _Str = __webpack_require__(4);
+	var _Str = __webpack_require__(3);
 	
 	var _Str2 = _interopRequireDefault(_Str);
 	

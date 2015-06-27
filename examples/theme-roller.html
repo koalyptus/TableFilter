@@ -388,13 +388,8 @@ var THEMES = {
 };
 
 function changeTheme(name){
-    var styleId = 'tf-default';
-    var stylesheet = document.getElementById(styleId);
-    if(!stylesheet){
-        tf.import(styleId, THEMES[name], null, 'link');
-    } else {
-        stylesheet.href = THEMES[name];
-    }
+    var stylesheet = tf.getStylesheet('default');
+    stylesheet.href = THEMES[name];
 }
 </script>
 

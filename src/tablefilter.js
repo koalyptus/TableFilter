@@ -182,7 +182,6 @@ export class TableFilter{
         this.fltSmallCssClass = f.flt_small_css_class || 'flt_s';
         //defines css class for single-filter
         this.singleFltCssClass = f.single_flt_css_class || 'single_flt';
-        this.isStartBgAlternate =   true;
 
         /*** filters' grid behaviours ***/
         //enables/disables enter key
@@ -470,9 +469,7 @@ export class TableFilter{
                 loadthemes: 'LoadThemes'
             },
 
-            /*====================================================
-                - Detects <enter> key for a given element
-            =====================================================*/
+            // Detect <enter> key
             detectKey(e) {
                 if(!this.enterKey){ return; }
                 let _ev = e || global.event;
@@ -489,9 +486,7 @@ export class TableFilter{
                     }
                 }
             },
-            /*====================================================
-                - auto filter for text filters
-            =====================================================*/
+            // if auto-filter on, detect user is typing and filter columns
             onKeyUp(e) {
                 if(!this.autoFilter){
                     return;
@@ -520,16 +515,12 @@ export class TableFilter{
                     this.autoFilterTimer = null;
                 }
             },
-            /*====================================================
-                - onkeydown event for input filters
-            =====================================================*/
+            // if auto-filter on, detect user is typing
             onKeyDown() {
                 if(!this.autoFilter) { return; }
                 this.isUserTyping = true;
             },
-            /*====================================================
-                - onblur event for input filters
-            =====================================================*/
+            // if auto-filter on, clear interval on filter blur
             onInpBlur() {
                 if(this.autoFilter){
                     this.isUserTyping = false;
@@ -544,9 +535,7 @@ export class TableFilter{
                 //     }
                 // }
             },
-            /*====================================================
-                - onfocus event for input filters
-            =====================================================*/
+            // set focused text-box filter as active
             onInpFocus(e) {
                 let _ev = e || global.event;
                 let elm = Event.target(_ev);
@@ -565,9 +554,7 @@ export class TableFilter{
                 //     }
                 // }
             },
-            /*====================================================
-                - onfocus event for select filters
-            =====================================================*/
+            // set focused drop-down filter as active
             onSlcFocus(e) {
                 let _ev = e || global.event;
                 let elm = Event.target(_ev);
@@ -583,23 +570,14 @@ export class TableFilter{
                     Event.stop(_ev);
                 }
             },
-            /*====================================================
-                - onchange event for select filters
-            =====================================================*/
+            // filter columns on drop-down filter change
             onSlcChange(e) {
                 if(!this.activeFlt){ return; }
-                // let colIndex = o.activeFlt.getAttribute('colIndex');
-                //Checks filter is a checklist and caller is not null
-                // if(o.activeFlt && colIndex &&
-                //     o['col'+colIndex]===o.fltTypeCheckList &&
-                //     !o.Evt.onSlcChange.caller){ return; }
                 let _ev = e || global.event;
                 if(this.popUpFilters){ Event.stop(_ev); }
                 if(this.onSlcChange){ this.filter(); }
             },
-            /*====================================================
-                - onclick event for checklist filters
-            =====================================================*/
+            // fill checklist filter on click if required
             onCheckListClick(e) {
                 let _ev = e || global.event;
                 let elm = Event.target(_ev);
@@ -610,10 +588,7 @@ export class TableFilter{
                     this.Mod.checkList.checkListDiv[ct].title = '';
                 }
             },
-            /*====================================================
-                - onclick event for validation button
-                (btn property)
-            =====================================================*/
+            // filter when validation button clicked
             onBtnClick() {
                 this.filter();
             }
@@ -1140,6 +1115,7 @@ export class TableFilter{
                 let theme = themes[i];
                 let name = theme.name;
                 let path = theme.path;
+                let styleId = this.prfxTf + name;
                 if(name && !path){
                     path = this.themesPath + name + '/' + name + '.css';
                 }
@@ -1148,12 +1124,12 @@ export class TableFilter{
                 }
 
                 if(!this.isImported(path, 'link')){
-                    this.import('tf-' + name, path, null, 'link');
+                    this.import(styleId, path, null, 'link');
                 }
             }
         }
 
-        //Some elements need to be overriden for theme
+        //Some elements need to be overriden for default theme
         //Reset button
         this.btnResetText = null;
         this.btnResetHtml = '<input type="button" value="" class="' +
@@ -1173,6 +1149,14 @@ export class TableFilter{
         this.loader = true;
         this.loaderHtml = '<div class="defaultLoader"></div>';
         this.loaderText = null;
+    }
+
+    /**
+     * Return stylesheet DOM element for a given theme name
+     * @return {DOMElement} stylesheet element
+     */
+    getStylesheet(name='default'){
+        return Dom.id(this.prfxTf + name);
     }
 
     /**
@@ -1221,7 +1205,7 @@ export class TableFilter{
             this.tbl.deleteRow(this.filtersRowIndex);
         }
 
-        // Destroy module
+        // Destroy modules
         Object.keys(Mod).forEach(function(key) {
             var feature = Mod[key];
             if(feature && Types.isFn(feature.destroy)){
@@ -1831,6 +1815,9 @@ export class TableFilter{
 
             if(!isRowValid){
                 this.validateRow(k, false);
+                if(Mod.alternateRows){
+                    Mod.alternateRows.removeRowBg(k);
+                }
                 // always visible rows need to be counted as valid
                 if(this.hasVisibleRows && Arr.has(this.visibleRows, k) &&
                     !this.paging){
@@ -1852,14 +1839,13 @@ export class TableFilter{
 
         this.nbVisibleRows = this.validRowsIndex.length;
         this.nbHiddenRows = hiddenrows;
-        this.isStartBgAlternate = false;
 
         if(this.rememberGridValues){
             Mod.store.saveFilterValues(this.fltsValuesCookie);
         }
         //applies filter props after filtering process
         if(!this.paging){
-            this.applyGridProps();
+            this.applyProps();
         } else {
             // Shouldn't need to care of that here...
             // TODO: provide a method in paging module
@@ -1875,19 +1861,11 @@ export class TableFilter{
     }
 
     /**
-     * Re-apply the filters grid properties after a filtering/paging operation
+     * Re-apply the features/behaviour concerned by filtering/paging operation
+     *
+     * NOTE: this will disappear whenever custom events in place
      */
-    applyGridProps(){
-        // blurs active filter (IE)
-        if(this.activeFlt &&
-            Str.lower(this.activeFlt.nodeName)===this.fltTypeSlc &&
-            !this.popUpFilters){
-            this.activeFlt.blur();
-            if(this.activeFlt.parentNode){
-                this.activeFlt.parentNode.focus();
-            }
-        }
-
+    applyProps(){
         let Mod = this.Mod;
 
         //shows rows always visible
