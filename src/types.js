@@ -6,7 +6,7 @@ const UNDEFINED = void 0;
 
 export default {
     /**
-     * Check if argument exists and is an object
+     * Check if argument is an object or a global object
      * @param  {String or Object}  v
      * @return {Boolean}
      */

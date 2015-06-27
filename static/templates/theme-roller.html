@@ -93,7 +93,7 @@ var THEMES = {
 };
 
 function changeTheme(name){
-    var styleId = 'default';
+    var styleId = 'tf-default';
     var stylesheet = document.getElementById(styleId);
     if(!stylesheet){
         tf.import(styleId, THEMES[name], null, 'link');

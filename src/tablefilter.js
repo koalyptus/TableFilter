@@ -1148,7 +1148,7 @@ export class TableFilter{
                 }
 
                 if(!this.isImported(path, 'link')){
-                    this.import(name, path, null, 'link');
+                    this.import('tf-' + name, path, null, 'link');
                 }
             }
         }
@@ -2220,7 +2220,7 @@ export class TableFilter{
      */
     validateRow(rowIndex, isValid){
         let row = this.tbl.rows[rowIndex];
-        if(!row || Str.lower(typeof isValid)!=='boolean'){
+        if(!row || typeof isValid !== 'boolean'){
             return;
         }
 
@@ -2691,9 +2691,6 @@ export class TableFilter{
      * @return {Array}          List of row indexes
      */
     getValidRows(reCalc){
-        if(!this._hasGrid){
-            return;
-        }
         if(!reCalc){
             return this.validRowsIndex;
         }
@@ -2720,9 +2717,6 @@ export class TableFilter{
      * @return {Number}
      */
     getFiltersRowIndex(){
-        if(!this._hasGrid){
-            return;
-        }
         return this.filtersRowIndex;
     }
 
@@ -2731,9 +2725,6 @@ export class TableFilter{
      * @return {Number}
      */
     getHeadersRowIndex(){
-        if(!this._hasGrid){
-            return;
-        }
         return this.headersRow;
     }
 
@@ -2743,9 +2734,6 @@ export class TableFilter{
      * @return {Number}
      */
     getStartRowIndex(){
-        if(!this._hasGrid){
-            return;
-        }
         return this.refRow;
     }
 

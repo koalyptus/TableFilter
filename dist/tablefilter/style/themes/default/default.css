@@ -1,18 +1,17 @@
 /*====================================================
-	- HTML Table Filter Generator Default Theme
-	- Do not hesitate to edit classes below to 
+	- Table Filter Default Theme
+	- Do not hesitate to edit classes below to
 	change theme appearance
 =====================================================*/
 
 /* TABLE LAYOUT
 =====================================================*/
 table.TF{
-	font:normal 12px arial, tahoma, helvetica, sans-serif !important;
 	border-left:1px solid #ccc !important; border-top:none !important;
 	border-right:none !important; border-bottom:none !important;
 }
 table.TF th{
-	background:#EBECEE url(images/bg_th.jpg) left top repeat-x !important; 
+	background:#EBECEE url(images/bg_th.jpg) left top repeat-x !important;
 	border-bottom:1px solid #D0D0D0 !important; border-right:1px solid #D0D0D0 !important;
 	border-left:1px solid #fff !important; border-top:1px solid #fff !important;
 	padding:2px !important; color:#333 !important; height:25px !important;
@@ -77,8 +76,8 @@ div.grd_tblCont table th, div.grd_headTblCont table th, div.grd_headTblCont tabl
 	border-left:1px solid #fff !important; border-top:1px solid #fff !important;
 }
 /* div containing left, middle and right divs */
-.grd_inf{ 
-	background:#D7D7D7 url(images/bg_infDiv.jpg) 0 0 repeat-x !important; 
+.grd_inf{
+	background:#D7D7D7 url(images/bg_infDiv.jpg) 0 0 repeat-x !important;
 	border-top:1px solid #D0D0D0 !important; height:29px !important;
 }
 /*row bg alternating color*/

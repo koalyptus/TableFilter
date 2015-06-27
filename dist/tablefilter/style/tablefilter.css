@@ -7,8 +7,6 @@
 /* TABLE LAYOUT
 =====================================================*/
 table.TF{
-	/*font:normal 12px arial, tahoma, helvetica, sans-serif;*/
-	font:inherit;
 	border-spacing: 0;
 	border-top:1px solid #D0D0D0; border-left:1px solid #D0D0D0;
 	border-bottom:1px solid #ccc; border-right:1px solid #ccc;

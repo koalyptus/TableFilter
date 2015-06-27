@@ -1,6 +1,6 @@
 /*====================================================
-	- HTML Table Filter Generator SkyBlue Theme
-	- Do not hesitate to edit classes below to 
+	- Table Filter SkyBlue Theme
+	- Do not hesitate to edit classes below to
 	change theme appearance
 =====================================================*/
 
@@ -8,7 +8,6 @@
 =====================================================*/
 table.TF{
 	padding:0; color:#000;
-    font:12px/13px "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif !important;
     border-right:1px solid #A4BED4;
     border-top:1px solid #A4BED4;
     border-left:1px solid #A4BED4;
@@ -50,10 +49,10 @@ input.flt{ width:99% !important; }
 }
 div.tot, div.status{ border-right:0 !important; }
 
-.helpBtn{ 
-	margin:0 5px 0 5px; padding: 2px 4px 2px 4px; 
-	color:#004A6F !important; font-size:13px; 
-	border:1px solid transparent !important; 
+.helpBtn{
+	margin:0 5px 0 5px; padding: 2px 4px 2px 4px;
+	color:#004A6F !important; font-size:13px;
+	border:1px solid transparent !important;
 } /* help button */
 .helpBtn:hover{ background-color:#FFE4AB; border:1px solid #FFB552 !important; text-decoration:none; }
 div.helpCont{ color:inherit !important: }
@@ -110,7 +109,7 @@ div.grd_tblCont table td{
 }
 
 /* div containing left, middle and right divs */
-.grd_inf{ 
+.grd_inf{
 	background:#D9EAED !important;
 	height:25px; color:#004A6F;
 	border-top:1px solid #99CCCC !important;
@@ -143,6 +142,6 @@ div.grd_Cont .odd{ background-color:#E3EFFF; }
 .ezSelectedRow{	background-color:#FFE4AB !important; color:inherit; }
 .ezActiveCell{
 	background-color:#fff !important;
-	color:#000 !important; font-weight:bold;	
+	color:#000 !important; font-weight:bold;
 }
 .ezETSelectedCell{ background-color:#FFF !important; font-weight:bold; color:rgb(0,0,0)!important; }

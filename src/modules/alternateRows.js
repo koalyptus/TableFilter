@@ -51,8 +51,9 @@ export class AlternateRows{
             return;
         }
         var rows = this.tf.tbl.rows;
-        var i = !idx ? rowIdx : idx;
+        var i = isNaN(idx) ? rowIdx : idx;
         this.removeRowBg(rowIdx);
+
         Dom.addClass(
             rows[rowIdx],
             (i%2) ? this.evenCss : this.oddCss

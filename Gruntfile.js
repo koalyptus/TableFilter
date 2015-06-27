@@ -168,7 +168,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['qunit:all']);
 
     // Custom task running QUnit tests for specified files.
-    // Usage: grunt test-only:test.html,test-help.html
+    // Usage example: grunt test-only:test.html,test-help.html
     grunt.registerTask('test-only',
         'A task that runs only specified tests.',
         function(tests) {

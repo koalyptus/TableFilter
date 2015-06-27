@@ -1285,7 +1285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	
 	                    if (!this.isImported(path, 'link')) {
-	                        this['import'](_name, path, null, 'link');
+	                        this['import']('tf-' + _name, path, null, 'link');
 	                    }
 	                }
 	            }
@@ -2374,7 +2374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        value: function validateRow(rowIndex, isValid) {
 	            var row = this.tbl.rows[rowIndex];
-	            if (!row || _Str2['default'].lower(typeof isValid) !== 'boolean') {
+	            if (!row || typeof isValid !== 'boolean') {
 	                return;
 	            }
 	
@@ -2860,9 +2860,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {Array}          List of row indexes
 	         */
 	        value: function getValidRows(reCalc) {
-	            if (!this._hasGrid) {
-	                return;
-	            }
 	            if (!reCalc) {
 	                return this.validRowsIndex;
 	            }
@@ -2890,9 +2887,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {Number}
 	         */
 	        value: function getFiltersRowIndex() {
-	            if (!this._hasGrid) {
-	                return;
-	            }
 	            return this.filtersRowIndex;
 	        }
 	    }, {
@@ -2903,9 +2897,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {Number}
 	         */
 	        value: function getHeadersRowIndex() {
-	            if (!this._hasGrid) {
-	                return;
-	            }
 	            return this.headersRow;
 	        }
 	    }, {
@@ -2917,9 +2908,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {Number}
 	         */
 	        value: function getStartRowIndex() {
-	            if (!this._hasGrid) {
-	                return;
-	            }
 	            return this.refRow;
 	        }
 	    }, {
@@ -3411,7 +3399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	exports['default'] = {
 	    /**
-	     * Check if argument exists and is an object
+	     * Check if argument is an object or a global object
 	     * @param  {String or Object}  v
 	     * @return {Boolean}
 	     */
@@ -7099,8 +7087,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            var rows = this.tf.tbl.rows;
-	            var i = !idx ? rowIdx : idx;
+	            var i = isNaN(idx) ? rowIdx : idx;
 	            this.removeRowBg(rowIdx);
+	
 	            _Dom2['default'].addClass(rows[rowIdx], i % 2 ? this.evenCss : this.oddCss);
 	        }
 	    }, {
