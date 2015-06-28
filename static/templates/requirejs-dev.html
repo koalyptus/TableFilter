@@ -7,10 +7,6 @@
 <body>
 <h1>{NAME} v{VERSION}</h1>
 <h2>Development workflow with RequireJs</h2>
-<p>
-    To take advantage of a development workflow with RequireJs, you first need
-    to run the <code>grunt dev-modules</code> task.
-</p>
 
 <!-- @import partials/pre.html -->
 
@@ -19,7 +15,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
 <script data-config>
 requirejs(
-    ['../dist/tablefilter/tablefilter', '../libs/sortabletable'],
+    ['../dist/tablefilter/tablefilter'],
     function(mod){
         var TableFilter = mod.TableFilter;
         var tfConfig = {
@@ -36,18 +32,13 @@ requirejs(
             extensions:[
                 {
                     name: 'sort',
-                    path: '../dist/tablefilter/extensions/sort/',
                     types: [
                         'number', 'string', 'string',
                         'US', 'none', 'string'
                     ]
-                }, {
-                    name: 'colsVisibility',
-                    path: '../dist/tablefilter/extensions/colsVisibility/'
-                }, {
-                    name: 'filtersVisibility',
-                    path: '../dist/tablefilter/extensions/filtersVisibility/'
-                }
+                },
+                { name: 'colsVisibility' },
+                { name: 'filtersVisibility' }
             ]
         };
 
