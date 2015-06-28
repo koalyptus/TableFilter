@@ -22,8 +22,6 @@ module.exports = function (grunt) {
         },
 
         qunit: {
-            // files: ['test/**/*.html'],
-            // urls: ['http://localhost:9000/test/test.html']
             all: {
                 options: {
                     urls: getTestFiles(testDir, testHost)
@@ -46,20 +44,20 @@ module.exports = function (grunt) {
             templates: {
                 src: ['**'],
                 cwd: 'static/templates',
-                dest: 'examples',
+                dest: 'demos',
                 expand: true
             },
             assets: {
                 src: ['**'],
-                cwd: 'static/examples-assets',
-                dest: 'examples/assets',
+                cwd: 'static/demos-assets',
+                dest: 'demos/assets',
                 expand: true
             }
         },
 
         'string-replace': {
-            examples: {
-                files: { 'examples/': 'examples/*.html' },
+            demos: {
+                files: { 'demos/': 'demos/*.html' },
                 options: {
                     replacements: [
                         {
@@ -109,7 +107,7 @@ module.exports = function (grunt) {
             },
             templates: {
                 files: ['static/templates/**/*', 'static/partials/**/*'],
-                tasks: ['build-examples'],
+                tasks: ['build-demos'],
                 options: {
                     spawn: false
                 }
@@ -156,10 +154,10 @@ module.exports = function (grunt) {
     grunt.registerTask('build',
         ['jshint', 'webpack:build', 'copy:dist']);
 
-    // Build examples
-    grunt.registerTask('dev-examples', ['build-examples', 'watch:templates']);
-    grunt.registerTask('build-examples',
-        ['copy:templates', 'copy:assets', 'string-replace:examples']);
+    // Build demos
+    grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
+    grunt.registerTask('build-demos',
+        ['copy:templates', 'copy:assets', 'string-replace:demos']);
 
     // Transpile with Babel
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);

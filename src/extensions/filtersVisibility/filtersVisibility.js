@@ -16,7 +16,6 @@ export default class FiltersVisibility{
         this.desc = f.description || 'Filters row visibility manager';
 
         // Path and image filenames
-        this.path = f.path || tf.stylePath;
         this.stylesheet = f.stylesheet || 'filtersVisibility.css';
         this.icnExpand = f.expand_icon_name || 'icn_exp.png';
         this.icnCollapse = f.collapse_icon_name || 'icn_clp.png';
@@ -26,9 +25,9 @@ export default class FiltersVisibility{
         //expand/collapse filters btn element
         this.btnEl = null;
 
-        this.icnExpandHtml = '<img src="'+ this.path + this.icnExpand +
+        this.icnExpandHtml = '<img src="'+ tf.stylePath + this.icnExpand +
             '" alt="Expand filters" >';
-        this.icnCollapseHtml = '<img src="'+ this.path + this.icnCollapse +
+        this.icnCollapseHtml = '<img src="'+ tf.stylePath + this.icnCollapse +
             '" alt="Collapse filters" >';
         this.defaultText = 'Toggle filters';
 
