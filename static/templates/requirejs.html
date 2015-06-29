@@ -1,21 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{NAME} v{VERSION} - Development workflow with RequireJs</title>
+    <title>{NAME} v{VERSION} - RequireJs demo</title>
     <!-- @import partials/style.html -->
 </head>
 <body>
 <h1>{NAME} v{VERSION}</h1>
-<h2>Development workflow with RequireJs</h2>
-<p>
-    To take advantage of the RequireJs development workflow use the
-    <code>grunt dev-modules</code> command.
-</p>
-<p>
-    If you use extensions, you will need to specify the extensions path as per
-    configuration example. Sorting feature also requires the third-party
-    <code>../libs/sortabletable</code> dependency to be imported.
-</p>
+<h2>RequireJs Demo</h2>
 
 <!-- @import partials/pre.html -->
 
@@ -24,7 +15,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
 <script data-config>
 requirejs(
-    ['../dist/tablefilter/tablefilter', '../libs/sortabletable'],
+    ['../dist/tablefilter/tablefilter'],
     function(mod){
         var TableFilter = mod.TableFilter;
         var tfConfig = {
@@ -41,20 +32,13 @@ requirejs(
             extensions:[
                 {
                     name: 'sort',
-                    path: '../dist/tablefilter/extensions/sort/',
                     types: [
                         'number', 'string', 'string',
                         'US', 'none', 'string'
                     ]
                 },
-                {
-                    name: 'colsVisibility',
-                    path: '../dist/tablefilter/extensions/colsVisibility/'
-                },
-                {
-                    name: 'filtersVisibility',
-                    path: '../dist/tablefilter/extensions/filtersVisibility/'
-                }
+                { name: 'colsVisibility' },
+                { name: 'filtersVisibility' }
             ]
         };
 
