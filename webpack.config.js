@@ -13,7 +13,7 @@ module.exports = {
         path: path.join(__dirname, '/dist/tablefilter'),
         filename: 'tablefilter.js',
         // chunkFilename: '[name]-[chunkhash].js',
-        chunkFilename: 'tf[name].js',
+        chunkFilename: 'tf-[chunkhash].js',
         libraryTarget: 'umd'
     },
     resolve: {

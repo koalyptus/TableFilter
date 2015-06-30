@@ -34,6 +34,15 @@ module.exports = function (grunt) {
             }
         },
 
+        connect: {
+            server: {
+                options: {
+                    port: 8080,
+                    base: '.'
+                }
+            }
+        },
+
         copy: {
             dist: {
                 src: ['**'],
@@ -137,11 +146,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-string-replace');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
 
     grunt.registerTask('default',
-        ['jshint', 'webpack:build', 'copy:dist', 'test']);
+        ['jshint', 'webpack:build', 'copy:dist', 'test', 'build-demos']);
 
     // Development server
     grunt.registerTask('server', ['webpack-dev-server:start']);
@@ -163,7 +173,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
 
     // Tests
-    grunt.registerTask('test', ['qunit:all']);
+    grunt.registerTask('test', ['connect', 'qunit:all']);
 
     // Custom task running QUnit tests for specified files.
     // Usage example: grunt test-only:test.html,test-help.html
@@ -182,6 +192,7 @@ module.exports = function (grunt) {
                 res.push(buildTestUrl(testHost, testDir, parts));
             });
 
+            grunt.task.run('connect');
             grunt.config('qunit.only.options.urls', res);
             grunt.task.run('qunit:only');
     });
