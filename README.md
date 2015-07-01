@@ -37,6 +37,11 @@ var tf = new TableFilter('my-table-id', {
 tf.init();
 </script>
 ```
+If the ``base_path`` property is not specified, it will default to ``/tablefilter`` directory:
+```shell
+your-page.html
+ |- tablefilter 
+``` 
 
 ##Development
 If you are not familiar with ``Grunt`` visit this page: [gruntjs.com/getting-started](http://gruntjs.com/getting-started). Once ``Grunt`` is sorted out you can follow the instructions below. 
