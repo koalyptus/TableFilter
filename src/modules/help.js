@@ -25,8 +25,9 @@ export class Help{
             '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
             '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
             '<b>rgx:</b><br/> These operators are described here:<br/>' +
-            '<a href="http://tablefilter.free.fr/#operators" ' +
-            'target="_blank">http://tablefilter.free.fr/#operators</a><hr/>';
+            '<a href="https://github.com/koalyptus/TableFilter/wiki/' +
+            '4.-Filter-operators" target="_blank">https://github.com/' +
+            'koalyptus/TableFilter/wiki/4.-Filter-operators</a><hr/>';
         //defines help innerHtml
         this.instrHtml = f.help_instructions_html || null;
         //defines reset button text
@@ -44,9 +45,9 @@ export class Help{
         this.cont = null;
         this.defaultHtml = '<div class="helpFooter"><h4>TableFilter ' +
             'v. '+ tf.version +'</h4>' +
-            '<a href="http://tablefilter.free.fr" target="_blank">' +
-            'http://tablefilter.free.fr</a><br/>' +
-            '<span>&copy;2009-'+ tf.year +' Max Guglielmi.</span>' +
+            '<a href="https://github.com/koalyptus/TableFilter/" ' +
+            ' target="_blank">https://github.com/koalyptus/TableFilter/</a>' +
+            '<br/><span>&copy;2015-'+ tf.year +' Max Guglielmi.</span>' +
             '<div align="center" style="margin-top:8px;">' +
             '<a href="javascript:void(0);">Close</a></div></div>';
 

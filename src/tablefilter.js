@@ -2779,19 +2779,19 @@ export class TableFilter{
 }
 
 TableFilter.Cookie = Cookie;
-// TableFilter.Store = Store;
-// TableFilter.GridLayout = GridLayout;
-// TableFilter.Loader = Loader;
-// TableFilter.HighlightKeyword = HighlightKeyword;
-// TableFilter.PopupFilter = PopupFilter;
-// TableFilter.Dropdown = Dropdown;
-// TableFilter.CheckList = CheckList;
-// TableFilter.RowsCounter = RowsCounter;
-// TableFilter.StatusBar = StatusBar;
+TableFilter.Store = Store;
+TableFilter.GridLayout = GridLayout;
+TableFilter.Loader = Loader;
+TableFilter.HighlightKeyword = HighlightKeyword;
+TableFilter.PopupFilter = PopupFilter;
+TableFilter.Dropdown = Dropdown;
+TableFilter.CheckList = CheckList;
+TableFilter.RowsCounter = RowsCounter;
+TableFilter.StatusBar = StatusBar;
 TableFilter.Paging = Paging;
-// TableFilter.ClearButton = ClearButton;
-// TableFilter.Help = Help;
-// TableFilter.AlternateRows = AlternateRows;
+TableFilter.ClearButton = ClearButton;
+TableFilter.Help = Help;
+TableFilter.AlternateRows = AlternateRows;
 
 /*====================================================
     - Sets filters grid bar
