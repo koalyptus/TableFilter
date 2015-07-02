@@ -2396,37 +2396,6 @@ export class TableFilter{
     }
 
     /**
-     * Refresh the filters
-     * @param  {Object} config Configuration literal object
-     */
-    // refresh(config){
-    //     let configObj = !config ? this.cfg : config;
-    //     let hasSort = this.sort;
-    //     //sort property is set to false in order to avoid sort object
-    //     //re-instanciation
-    //     if(hasSort){
-    //         this.sort = false;
-    //     }
-    //     this.nbRows = this.getRowsNb(); //in case table is refreshed
-    //     this.remove();
-    //     global['tf_'+this.id] = new TableFilter(
-    //         this.id, this.startRow, configObj);
-    //     this.isFirstLoad = true;
-    //     this.fltIds = [];
-    //     this.init();
-    //     //New tbody content needs to be referenced in sortabletable script
-    //     //with setTBody() method
-    //     if(hasSort){
-    //         //this.st =  SortableTable object
-    //         //Note this is a method of the Sortable Table 1.12 script
-    //         //(Erik Arvidsson)
-    //         this.st.setTBody(this.tbl.tBodies[0]);
-    //         //finally sort property is enabled again
-    //         this.sort = true;
-    //     }
-    // }
-
-    /**
      * Refresh the filters subject to linking ('select', 'multiple',
      * 'checklist' type)
      */
@@ -2777,38 +2746,3 @@ export class TableFilter{
         return this.cfg;
     }
 }
-
-TableFilter.Cookie = Cookie;
-// TableFilter.Store = Store;
-// TableFilter.GridLayout = GridLayout;
-// TableFilter.Loader = Loader;
-// TableFilter.HighlightKeyword = HighlightKeyword;
-// TableFilter.PopupFilter = PopupFilter;
-// TableFilter.Dropdown = Dropdown;
-// TableFilter.CheckList = CheckList;
-// TableFilter.RowsCounter = RowsCounter;
-// TableFilter.StatusBar = StatusBar;
-// TableFilter.Paging = Paging;
-// TableFilter.ClearButton = ClearButton;
-// TableFilter.Help = Help;
-// TableFilter.AlternateRows = AlternateRows;
-
-/*====================================================
-    - Sets filters grid bar
-    - Calls TF Constructor and generates grid bar
-    - Params:
-            - id: table id (string)
-            - refRow (optional): row index (number)
-            - config (optional): configuration
-            object (literal object)
-    - Returns TF object
-=====================================================*/
-// function setFilterGrid(id){
-//     if(arguments.length === 0){
-//         return;
-//     }
-//     let tf = new TableFilter(arguments[0], arguments[1], arguments[2]);
-//     tf.init();
-//     window['tf_'+id] = tf;
-//     return tf;
-// }

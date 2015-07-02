@@ -1,5 +1,13 @@
 
-var Cookie = TableFilter.Cookie;
+function removeCookie(name){
+    var expire = '';
+    var hours = -1;
+    if(hours){
+        expire = new Date((new Date()).getTime() + hours * 3600000);
+        expire = '; expires=' + expire.toGMTString();
+    }
+    document.cookie = name + '=' + expire;
+}
 
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
@@ -11,9 +19,9 @@ var tf = new TableFilter('demo', {
     remember_page_length: true
 });
 
-Cookie.remove(tf.fltsValuesCookie);
-Cookie.remove(tf.pgNbCookie);
-Cookie.remove(tf.pgLenCookie);
+removeCookie(tf.fltsValuesCookie);
+removeCookie(tf.pgNbCookie);
+removeCookie(tf.pgLenCookie);
 
 tf.init();
 tf.clearFilters();
@@ -30,7 +38,7 @@ module('Check page number persistence');
 test('Page number value', function() {
     tf.clearFilters();
     tf.filter();
-    tf.feature('paging')._changePage(1);
+    tf.feature('paging').changePage(1);
     var cookieName = tf.pgNbCookie;
     deepEqual(tf.feature('store').getPageNb(cookieName), '2', 'Page number value');
     tf.clearFilters();
@@ -41,7 +49,7 @@ module('Check page length persistence');
 test('Page length value', function() {
     var paging = tf.feature('paging');
     paging.resultsPerPageSlc.options[2].selected = true;
-    paging._changeResultsPerPage();
+    paging.changeResultsPerPage();
     var cookieName = tf.pgLenCookie;
     deepEqual(tf.feature('store').getPageLength(cookieName), '2', 'Page length value');
     tf.clearFilters();
@@ -56,7 +64,10 @@ test('Filters value', function() {
     var cookieName = tf.fltsValuesCookie;
     deepEqual(tf.feature('store').getFilterValues(cookieName)[0], 'Sydney', 'Filter 0 value');
     deepEqual(tf.feature('store').getFilterValues(cookieName)[3], '1.5', 'Filter 3 value');
-    tf.clearFilters();
-    tf.filter();
+    tf.destroy();
+
+    removeCookie(tf.fltsValuesCookie);
+    removeCookie(tf.pgNbCookie);
+    removeCookie(tf.pgLenCookie);
 });
 

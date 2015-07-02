@@ -2,9 +2,7 @@
 
     var tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
-        extensions:[{
-            name: 'filtersVisibility'
-        }]
+        extensions: [{ name: 'filtersVisibility' }]
     });
     tf.init();
 

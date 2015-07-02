@@ -14,7 +14,7 @@
     tf.init();
 
     module('Sanity checks');
-    test('Active columns', function() {
+    test('Filter type', function() {
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(
             tf.getFilterElement(3).nodeName, 'SELECT', 'Expected filter type');
