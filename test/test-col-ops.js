@@ -21,7 +21,7 @@ tf.init();
 
 module('Sanity checks');
 test('Column operations', function() {
-    var colOps = tf.getExtension('colOps');
+    var colOps = tf.extension('colOps');
     deepEqual(typeof colOps, 'object', 'ColOps instanciated');
     equal(id('sum1').innerHTML, 9911, 'Sum result');
     equal(id('sum2').innerHTML, 1.69, 'Mean result');

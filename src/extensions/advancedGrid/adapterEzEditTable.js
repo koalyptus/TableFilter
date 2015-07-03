@@ -239,7 +239,7 @@ export default class AdapterEzEditTable {
             //Selected row needs to be visible when paging is activated
             if(tf.paging){
                 tf.feature('paging').onAfterChangePage = function(paging){
-                    var advGrid = paging.tf.getExtension('advancedGrid');
+                    var advGrid = paging.tf.extension('advancedGrid');
                     var et = advGrid._ezEditTable;
                     var slc = et.Selection;
                     var row = slc.GetActiveRow();

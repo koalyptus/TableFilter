@@ -1067,7 +1067,7 @@ export class TableFilter{
      * @param  {String} name Name of the extension
      * @return {Object}      Extension instance
      */
-    getExtension(name){
+    extension(name){
         return this.ExtRegistry[name];
     }
 
@@ -1874,7 +1874,7 @@ export class TableFilter{
         }
         //columns operations
         if(this.hasExtension('colOps')){
-            this.getExtension('colOps').calc();
+            this.extension('colOps').calc();
         }
 
         //re-populates drop-down filters
