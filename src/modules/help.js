@@ -24,7 +24,7 @@ export class Help{
             'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
             '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
             '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
-            '<b>rgx:</b><br/> These operators are described here:<br/>' +
+            '<b>rgx:</b><br/> Learn more:<br/>' +
             '<a href="https://github.com/koalyptus/TableFilter/wiki/' +
             '4.-Filter-operators" target="_blank">https://github.com/' +
             'koalyptus/TableFilter/wiki/4.-Filter-operators</a><hr/>';
@@ -49,7 +49,7 @@ export class Help{
             ' target="_blank">https://github.com/koalyptus/TableFilter/</a>' +
             '<br/><span>&copy;2015-'+ tf.year +' Max Guglielmi.</span>' +
             '<div align="center" style="margin-top:8px;">' +
-            '<a href="javascript:void(0);">Close</a></div></div>';
+            '<a href="javascript:void(0);" class="close">Close</a></div></div>';
 
         //id prefix for help elements
         this.prfxHelpSpan = 'helpSpan_';
@@ -124,13 +124,13 @@ export class Help{
         }
         var divDisplay = this.cont.style.display;
         if(divDisplay==='' || divDisplay==='none'){
-            this.cont.style.display = 'block';
+            this.cont.style.display = 'inline';
             // TODO: use CSS instead for element positioning
-            var btnLeft = Dom.position(this.btn).left;
-            if(!this.contTgtId){
-                this.cont.style.left =
-                    (btnLeft - this.cont.clientWidth + 25) + 'px';
-            }
+            // var btnLeft = Dom.position(this.btn).left;
+            // if(!this.contTgtId){
+            //     this.cont.style.left =
+            //         (btnLeft - this.cont.clientWidth + 25) + 'px';
+            // }
         } else {
             this.cont.style.display = 'none';
         }

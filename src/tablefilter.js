@@ -7,7 +7,7 @@ import Arr from './array';
 import DateHelper from './date';
 import Helpers from './helpers';
 
-// Modules
+// Features
 import {Store} from './modules/store';
 import {GridLayout} from './modules/gridLayout';
 import {Loader} from './modules/loader';
@@ -56,8 +56,7 @@ export class TableFilter{
 
         if(!this.tbl || this.tbl.nodeName != 'TABLE' || this.getRowsNb() === 0){
             throw new Error(
-                'Could not instantiate TableFilter class: ' +
-                'HTML table not found.');
+                'Could not instantiate TableFilter: HTML table not found.');
         }
 
         if(arguments.length > 1){
@@ -103,8 +102,6 @@ export class TableFilter{
         this.gridLayout = Boolean(f.grid_layout);
         this.sourceTblHtml = null;
         if(this.gridLayout){
-            //Firefox does not support outerHTML property...
-            // if(this.tbl.outerHTML===undefined){ setOuterHtml(); }
             this.sourceTblHtml = this.tbl.outerHTML;
         }
         /*** ***/

@@ -6,7 +6,7 @@
 <style type="text/css">
     body{
         font-family: Helvetica, arial, nimbussansl, liberationsans, freesans,
-            clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+            clean, sans-serif;
         padding: 0 1em;
     }
     pre{
@@ -25,6 +25,7 @@
         padding: 1em;
     }
 </style>
+    <link rel="stylesheet" type="text/css" href="../dist/tablefilter/style/colsVisibility.css">
 </head>
 <body>
 <h1>TableFilter v0.0.0</h1>
@@ -35,11 +36,11 @@
 
 <p>
 <button onclick="javascript:
-    tf.getExtension('colsVisibility').hideCol(0);">Hide Column 0</button>
+    tf.extension('colsVisibility').hideCol(0);">Hide Column 0</button>
 <button onclick="javascript:
-    tf.getExtension('colsVisibility').showCol(0);">Show Column 0</button>
+    tf.extension('colsVisibility').showCol(0);">Show Column 0</button>
 <button onclick="javascript:
-    tf.getExtension('colsVisibility').toggleCol(2);">Toggle Column 2</button>
+    tf.extension('colsVisibility').toggleCol(2);">Toggle Column 2</button>
 </p>
 <pre></pre>
 

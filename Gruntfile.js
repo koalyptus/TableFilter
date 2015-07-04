@@ -108,7 +108,7 @@ module.exports = function (grunt) {
 
         watch: {
             app: {
-                files: ['src/**/*'],
+                files: ['src/**/*', 'static/style/**/*'],
                 tasks: ['dev'],
                 options: {
                     spawn: false

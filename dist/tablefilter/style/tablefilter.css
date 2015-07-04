@@ -186,22 +186,23 @@ div.cont{ /*table container div*/
 div.head{ width:auto; overflow:hidden; }
 
 /* Help elements */
-.helpBtn{ margin:0 5px 0 5px; padding: 2px 4px 2px 4px; border-left:1px solid #ccc; border-right:1px solid #ccc; } /* help button */
+.helpBtn{
+	margin:0 5px 0 5px;
+	padding: 2px 4px 2px 4px;
+	border-left:1px solid #ccc;
+	border-right:1px solid #ccc;
+} /* help button */
 div.helpCont{ /* help container */
 	position:absolute; display:none;
 	max-width:300px; overflow:auto;
-	padding:7px 7px 7px 7px; margin:15px 0;
-	border:1px solid #CCC; line-height:19px;
+	padding:10px; margin:15px 0;
+	border:1px solid #CCC; line-height:20px;
 	font-size:12px; color:#333;
 	background:#fff; text-align:left;
-	border-radius:4px;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
 	box-shadow:3px 3px 2px #888;
-	-moz-box-shadow:3px 3px 2px #888;
-	-webkit-box-shadow:3px 3px 2px #888;
 }
 div.helpCont a{ color:#cc0000; text-decoration:underline; font-weight:normal; }
+div.helpCont a.close{ color:#333; text-decoration:none; font-weight:bold; }
 div.helpCont a:hover{ text-decoration:none; }
 div.helpCont hr{ border:1px solid #ccc; }
 div.helpFooter{ margin:10px 0 0 0; }

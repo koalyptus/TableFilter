@@ -3,6 +3,7 @@
 <head>
     <title>{NAME} v{VERSION} - Columns Visibility Extension Demo</title>
     <!-- @import partials/style.html -->
+    <link rel="stylesheet" type="text/css" href="../dist/tablefilter/style/colsVisibility.css">
 </head>
 <body>
 <h1>{NAME} v{VERSION}</h1>
@@ -13,11 +14,11 @@
 
 <p>
 <button onclick="javascript:
-    tf.getExtension('colsVisibility').hideCol(0);">Hide Column 0</button>
+    tf.extension('colsVisibility').hideCol(0);">Hide Column 0</button>
 <button onclick="javascript:
-    tf.getExtension('colsVisibility').showCol(0);">Show Column 0</button>
+    tf.extension('colsVisibility').showCol(0);">Show Column 0</button>
 <button onclick="javascript:
-    tf.getExtension('colsVisibility').toggleCol(2);">Toggle Column 2</button>
+    tf.extension('colsVisibility').toggleCol(2);">Toggle Column 2</button>
 </p>
 <!-- @import partials/pre.html -->
 <!-- @import partials/countries-by-continent.html -->

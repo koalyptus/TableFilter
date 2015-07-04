@@ -13,7 +13,7 @@ module.exports = {
         path: path.join(__dirname, '/dist/tablefilter'),
         filename: 'tablefilter.js',
         // chunkFilename: '[name]-[chunkhash].js',
-        chunkFilename: 'tf-[chunkhash].js',
+        chunkFilename: 'tf-[name].js',
         libraryTarget: 'umd'
     },
     resolve: {
@@ -68,7 +68,6 @@ module.exports = {
         devtool: 'sourcemap',
         debug: true,
         plugins: [
-            new Clean(['dist']),
             new webpack.optimize.DedupePlugin(),
             new StringReplacePlugin()
         ]
