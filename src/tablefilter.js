@@ -1049,10 +1049,10 @@ export class TableFilter{
             modulePath = ext.path + name;
         } else {
             name = name.replace('.js', '');
-            modulePath = './extensions/{}/{}'.replace(/{}/g, name);
+            modulePath = 'extensions/{}/{}'.replace(/{}/g, name);
         }
 
-        require([modulePath], (mod)=> {
+        require(['./' + modulePath], (mod)=> {
             let inst = new mod(this, ext);
             inst.init();
             this.ExtRegistry[name] = inst;

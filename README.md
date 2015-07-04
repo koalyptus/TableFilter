@@ -40,7 +40,7 @@ tf.init();
 If the ``base_path`` property is not specified, it will default to ``/tablefilter`` directory:
 ```shell
 your-page.html
- |- tablefilter 
+ |-- tablefilter 
 ``` 
 
 ##Development

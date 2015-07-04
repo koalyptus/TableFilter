@@ -7,7 +7,9 @@ var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 module.exports = {
     cache: true,
-    entry: path.join(__dirname, '/src/tablefilter.js'),
+    entry: {
+        'main': path.join(__dirname, '/src/tablefilter.js')
+    },
     output: {
         publicPath: '/dist/tablefilter/',
         path: path.join(__dirname, '/dist/tablefilter'),
