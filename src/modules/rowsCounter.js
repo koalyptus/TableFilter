@@ -1,6 +1,5 @@
 import Dom from '../dom';
 import Types from '../types';
-import Helpers from '../helpers';
 
 export class RowsCounter{
 
@@ -62,10 +61,6 @@ export class RowsCounter{
         var targetEl = !this.rowsCounterTgtId ?
                 tf.lDiv : Dom.id( this.rowsCounterTgtId );
 
-        //IE only: clears all for sure
-        if(this.rowsCounterDiv && Helpers.isIE()){
-            this.rowsCounterDiv.outerHTML = '';
-        }
         //default container: 'lDiv'
         if(!this.rowsCounterTgtId){
             countDiv.appendChild(countText);
@@ -125,22 +120,14 @@ export class RowsCounter{
 
     destroy(){
         var tf = this.tf;
-        if(!tf.hasGrid()){
-            return;
-        }
-        if(!this.rowsCounterSpan){
+        if(!tf.hasGrid() || !this.rowsCounterSpan){
             return;
         }
 
         if(!this.rowsCounterTgtId && this.rowsCounterDiv){
-            //IE only: clears all for sure
-            if(Helpers.isIE()){
-                this.rowsCounterDiv.outerHTML = '';
-            } else {
-                this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
-            }
+            this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
         } else {
-            Dom.id( this.rowsCounterTgtId ).innerHTML = '';
+            Dom.id(this.rowsCounterTgtId).innerHTML = '';
         }
         this.rowsCounterSpan = null;
         this.rowsCounterDiv = null;

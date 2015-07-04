@@ -5,10 +5,6 @@
 import Str from './string';
 
 export default {
-    isIE(){
-        return (/msie|MSIE/).test(navigator.userAgent);
-    },
-
     removeNbFormat(data, format){
         if(!data){
             return;
@@ -17,7 +13,7 @@ export default {
             format = 'us';
         }
         let n = data;
-        if(Str.lower(format)==='us'){
+        if(Str.lower(format) === 'us'){
             n =+ n.replace(/[^\d\.-]/g,'');
         } else {
             n =+ n.replace(/[^\d\,-]/g,'').replace(',','.');

@@ -72,18 +72,4 @@ module.exports = {
             new StringReplacePlugin()
         ]
     }
-    // ,
-    // plugins: [
-    //     // new webpack.DefinePlugin({
-    //     //     'process.env': {
-    //     //         // This has effect on the react lib size
-    //     //         'NODE_ENV': JSON.stringify('production')
-    //     //     }
-    //     // }),
-    //     // new webpack.IgnorePlugin(/adapterSortabletable$/),
-    //     new Clean(['dist']),
-    //     new webpack.optimize.DedupePlugin(),
-    //     new webpack.optimize.MinChunkSizePlugin({ minChunkSize: 10000 }),
-    //     new webpack.optimize.UglifyJsPlugin()
-    // ]
 };

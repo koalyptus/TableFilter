@@ -1,7 +1,6 @@
 import Dom from '../../dom';
 import Types from '../../types';
 import Event from '../../event';
-import Helpers from '../../helpers';
 import Arr from '../../array';
 
 export default class ColsVisibility{
@@ -113,8 +112,8 @@ export default class ColsVisibility{
         if(tf.gridLayout){
             this.headersTbl = tf.feature('gridLayout').headTbl; //headers table
             this.headersIndex = 0; //headers index
-            // this.onAfterColDisplayed = function(){};
-            // this.onAfterColHidden = function(){};
+            this.onAfterColDisplayed = function(){};
+            this.onAfterColHidden = function(){};
         }
 
         //Loads extension stylesheet
@@ -370,44 +369,33 @@ export default class ColsVisibility{
         var gridColElms;
         if(this.onAfterColHidden && hide){
             //This event is fired just after a column is displayed for
-            //grid_layout compatibility
+            //grid_layout support
+            //TODO: grid layout module should be responsible for those
+            //calculations
             if(tf.gridLayout){
                 gridLayout = tf.feature('gridLayout');
                 headTbl = gridLayout.headTbl;
                 gridColElms = gridLayout.gridColElms;
-                if(Helpers.isIE()){
-                    tbl.style.width = headTbl.clientWidth + 'px';
-                } else {
-                    var ths = headTbl.rows[this.headersIndex].cells;
-                    var hiddenWidth = 0;
-                    for(var i=0; i<tf.nbCells; i++){
-                        if(ths[i].style.display === 'none'){
-                            var w = parseInt(ths[i].style.width, 10);
-                            ths[i].style.width = 0;
-                            hiddenWidth += w;
-                        }
-                    }
-                    var headTblW = parseInt(headTbl.style.width, 10);
+                var hiddenWidth = parseInt(
+                    gridColElms[colIndex].style.width, 10);
 
-                    headTbl.style.width = headTblW - hiddenWidth + 'px';
-                    tbl.style.width = headTbl.style.width;
-                    gridColElms[colIndex].style.display = 'none';
-                }
+                var headTblW = parseInt(headTbl.style.width, 10);
+                headTbl.style.width = headTblW - hiddenWidth + 'px';
+                tbl.style.width = headTbl.style.width;
             }
             this.onAfterColHidden.call(null, this, colIndex);
         }
 
         if(this.onAfterColDisplayed && !hide){
             //This event is fired just after a column is displayed for
-            //grid_layout compatibility
+            //grid_layout support
+            //TODO: grid layout module should be responsible for those
+            //calculations
             if(tf.gridLayout){
                 gridLayout = tf.feature('gridLayout');
                 headTbl = gridLayout.headTbl;
                 gridColElms = gridLayout.gridColElms;
-                gridColElms[colIndex].style.display = '';
                 var width = parseInt(gridColElms[colIndex].style.width, 10);
-                var header = tf.getHeaderElement(colIndex);
-                header.style.width = width +'px';
                 headTbl.style.width =
                     (parseInt(headTbl.style.width, 10) + width) + 'px';
                 tf.tbl.style.width = headTbl.style.width;

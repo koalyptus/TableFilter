@@ -123,14 +123,8 @@ export class Help{
             return;
         }
         var divDisplay = this.cont.style.display;
-        if(divDisplay==='' || divDisplay==='none'){
+        if(divDisplay === '' || divDisplay === 'none'){
             this.cont.style.display = 'inline';
-            // TODO: use CSS instead for element positioning
-            // var btnLeft = Dom.position(this.btn).left;
-            // if(!this.contTgtId){
-            //     this.cont.style.left =
-            //         (btnLeft - this.cont.clientWidth + 25) + 'px';
-            // }
         } else {
             this.cont.style.display = 'none';
         }

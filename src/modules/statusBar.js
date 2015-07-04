@@ -1,6 +1,5 @@
 import Dom from '../dom';
 import Types from '../types';
-// import Helpers from '../helpers';
 
 var global = window;
 
@@ -69,11 +68,6 @@ export class StatusBar{
         }
         var targetEl = (!this.statusBarTgtId) ?
                 tf.lDiv : Dom.id(this.statusBarTgtId);
-
-        // TODO: use alternative to outerHTML
-        // if(this.statusBarDiv && Helpers.isIE()){
-        //     this.statusBarDiv.outerHTML = '';
-        // }
 
         //default container: 'lDiv'
         if(!this.statusBarTgtId){

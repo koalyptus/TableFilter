@@ -1,7 +1,6 @@
 import Types from '../types';
 import Dom from '../dom';
 import Event from '../event';
-import Helpers from '../helpers';
 
 export class PopupFilter{
 
@@ -69,10 +68,6 @@ export class PopupFilter{
             var popUpDiv = this.popUpFltElms[colIndex],
                 header = this.tf.getHeaderElement(colIndex),
                 headerWidth = header.clientWidth * 0.95;
-            if(Helpers.isIE()){
-                var headerLeft = Dom.position(header).left;
-                popUpDiv.style.left = (headerLeft) + 'px';
-            }
             popUpDiv.style.width = parseInt(headerWidth, 10)  + 'px';
         }
         Event.cancel(evt);
