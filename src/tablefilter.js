@@ -802,7 +802,7 @@ export class TableFilter{
                         let inptype = col===this.fltTypeInp ? 'text' : 'hidden';
                         let inp = Dom.create(this.fltTypeInp,
                             ['id',this.prfxFlt+i+'_'+this.id],
-                            ['type',inptype],['ct',i]);
+                            ['type',inptype], ['ct',i]);
                         if(inptype!=='hidden' && this.watermark){
                             inp.setAttribute(
                                 'placeholder',
