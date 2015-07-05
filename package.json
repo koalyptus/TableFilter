@@ -1,6 +1,30 @@
 {
     "name": "TableFilter",
     "version": "0.0.0",
+    "description": "Filter HTML tables data easily",
+    "main": "tablefilter.js",
+    "license": "MIT",
+    "author": {
+        "name": "Max Guglielmi",
+        "url": "https://github.com/koalyptus"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/koalyptus/TableFilter.git"
+    },
+    "keywords": [
+        "filter",
+        "table",
+        "javascript",
+        "filterable",
+        "grid",
+        "datagrid"
+    ],
+    "files": [
+        "README.md",
+        "LICENSE.md",
+        "src/*"
+    ],
     "devDependencies": {
         "babel-core": "^5.1.13",
         "babel-loader": "^5.0.0",

@@ -16,7 +16,6 @@
   "es3": true,
   "esnext": true,
   "unused": true,
-
   "maxlen" : 80,
   "globals": {
     "Object": true,

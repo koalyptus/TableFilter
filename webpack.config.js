@@ -25,8 +25,6 @@ module.exports = {
         }
     },
     module: {
-        // exprContextRegExp: /$^/,
-        // exprContextCritical: true,
         loaders: [
             {
                 test: path.join(__dirname, 'src'),
