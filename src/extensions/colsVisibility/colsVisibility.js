@@ -42,7 +42,7 @@ export default class ColsVisibility{
         this.btnTgtId = f.btn_target_id || null;
         //defines show/hide cols text
         this.btnText = f.btn_text || 'Columns&#9660;';
-            //defines show/hide cols button innerHtml
+        //defines show/hide cols button innerHtml
         this.btnHtml = f.btn_html || null;
         //defines css class for show/hide cols button
         this.btnCssClass = f.btn_css_class || 'colVis';
