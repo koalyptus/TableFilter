@@ -18,7 +18,9 @@
         "javascript",
         "filterable",
         "grid",
-        "datagrid"
+        "datagrid",
+        "sort",
+        "pagination"
     ],
     "files": [
         "README.md",
@@ -43,5 +45,9 @@
         "webpack": "^1.8.10",
         "webpack-dev-server": "^1.8.2"
     },
-    "dependencies": {}
+    "dependencies": {},
+    "bugs": {
+        "url": "https://github.com/koalyptus/TableFilter/issues"
+    },
+    "homepage": "https://github.com/koalyptus/TableFilter"
 }
