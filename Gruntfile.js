@@ -5,7 +5,7 @@ module.exports = function (grunt) {
     var fs = require('fs');
     var path = require('path');
     var testDir = 'test';
-    var testHost = 'http://localhost:8080/';
+    var testHost = 'http://localhost:8000/';
     var pkg = grunt.file.readJSON('package.json');
 
     grunt.initConfig({
