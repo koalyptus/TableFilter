@@ -1,99 +1,244 @@
 module.exports = function (grunt) {
-    // Initializes the Grunt tasks with the following settings
+
+    var webpack = require('webpack');
+    var webpackConfig = require('./webpack.config.js');
+    var fs = require('fs');
+    var path = require('path');
+    var testDir = 'test';
+    var testHost = 'http://localhost:8000/';
+    var pkg = grunt.file.readJSON('package.json');
+
     grunt.initConfig({
 
-        pkg: grunt.file.readJSON('package.json'),
-
-        version: 'v1.0',
-        dist_folder: 'dist/',
-        source_folder: 'src/',
-
-        // A list of files, which will be syntax-checked by JSHint
         jshint: {
-            src: ['Gruntfile.js'/*, '<%= source_folder %>tablefilter_all.js'*/],
+            src: [
+                'Gruntfile.js',
+                'webpack.config.js',
+                'src/**/*.js'
+            ],
             options: {
-                // '-W069': true,           // ['xxx'] is better written in dot notation
-                // '-W099': true,           // Mixed spaces and tabs
-                // '-W004': true,           // 'i' is already defined
-                // '-W014': true,           // Bad line breaking before '&&'
-                // '-W083': true,           // Don't make functions within a loop
-                // '-W086': true,           // Expected a 'break' statement before 'default'
-                // '-W049': true,           // Unexpected escaped character '<' in regular expression
-                // '-W100': true,       // This character may get silently deleted by one or more browsers
-                '-W041': true
+                jshintrc: '.jshintrc'
             }
         },
 
-        concat: {
-            js: {
-                files: [{
-                    src: ['<%= source_folder %>tablefilter_all.js'],
-                    dest: '<%= dist_folder %>tablefilter_all.js'
-                }]
-            },
-            css: {
-                files: [{
-                    src: ['<%= source_folder %>filtergrid.css'],
-                    dest: '<%= dist_folder %>filtergrid.css'
-                }]
-            }
-        },
-
-        // and minified (source and destination files)
-        uglify: {
-
-            options: {
-                banner: '/*------------------------------------------------------------------------ \n' +
-                        '\t- TableFilter <%= version %> by Max Guglielmi \n' +
-                        '\t- build date: <%= grunt.template.today() %> \n' +
-                        '\t- http://tablefilter.free.fr \n' +
-                        '\t- Copyright (c) 2014, Licensed under the MIT License \n' +
-                        '------------------------------------------------------------------------*/ \n'
-            },
-
-            js: {
-                src: ['<%= concat.js.files[0].dest %>'],
-                dest: '<%= concat.js.files[0].dest %>'
-            }
-        },
-
-        cssmin: {
-            combine: {
+        qunit: {
+            all: {
                 options: {
-                    banner: '/*------------------------------------------------------------------------ \n' +
-                            '\t- TableFilter stylesheet by Max Guglielmi \n' +
-                            '\t- (build date: <%= grunt.template.today() %>) \n' +
-                            '\t- Edit below for your projects\' needs  \n' +
-                            '------------------------------------------------------------------------*/ \n'
-                },
-                files: {
-                    '<%= concat.css.files[0].dest %>': ['<%= concat.css.files[0].dest %>']
+                    urls: getTestFiles(testDir, testHost)
+                }
+            },
+            only: {
+                options: {
+                    urls: []
+                }
+            }
+        },
+
+        connect: {
+            server: {
+                options: {
+                    port: 8000,
+                    base: '.'
                 }
             }
         },
 
         copy: {
-            main: {
-                files: [
-                    { src: ['<%= source_folder %>tablefilter_all.js'], dest: '<%= dist_folder %>tablefilter_all-uncompressed.js' },
-                    { src: ['<%= source_folder %>tablefilter.js'], dest: '<%= dist_folder %>tablefilter-uncompressed.js' },
-                    { src: ['<%= source_folder %>filtergrid.css'], dest: '<%= dist_folder %>filtergrid-uncompressed.css' },
-                    { src: ['**'], cwd: '<%= source_folder %>TF_Modules/', dest: '<%= dist_folder %>TF_Modules/', expand: true },
-                    { src: ['**'], cwd: '<%= source_folder %>TF_Themes/', dest: '<%= dist_folder %>TF_Themes/', expand: true }
-                ]
+            dist: {
+                src: ['**'],
+                cwd: 'static/style',
+                dest: 'dist/tablefilter/style',
+                expand: true
+            },
+            templates: {
+                src: ['**'],
+                cwd: 'static/templates',
+                dest: 'demos',
+                expand: true
+            },
+            assets: {
+                src: ['**'],
+                cwd: 'static/demos-assets',
+                dest: 'demos/assets',
+                expand: true
+            }
+        },
+
+        'string-replace': {
+            demos: {
+                files: { 'demos/': 'demos/*.html' },
+                options: {
+                    replacements: [
+                        {
+                            pattern: /{NAME}/ig,
+                            replacement: pkg.name
+                        },{
+                            pattern: /{VERSION}/ig,
+                            replacement: pkg.version
+                        },{
+                            pattern: /<!-- @import (.*?) -->/ig,
+                            replacement: function (match, p1) {
+                                return grunt.file.read('static/' + p1);
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+
+        'webpack-dev-server': {
+            options: {
+                webpack: webpack.dev,
+                publicPath: '/dist/'
+            },
+            start: {
+                keepAlive: true,
+                webpack: {
+                    devtool: 'eval',
+                    debug: true
+                }
+            }
+        },
+
+        webpack: {
+            options: webpackConfig,
+            build: webpackConfig.build,
+            dev: webpackConfig.dev
+        },
+
+        watch: {
+            app: {
+                files: ['src/**/*', 'static/style/**/*'],
+                tasks: ['dev'],
+                options: {
+                    spawn: false
+                }
+            },
+            templates: {
+                files: ['static/templates/**/*', 'static/partials/**/*'],
+                tasks: ['build-demos'],
+                options: {
+                    spawn: false
+                }
+            }
+        },
+
+        babel: {
+            options: {
+                sourceMap: true,
+                modules: 'amd',
+                compact: false
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: 'src',
+                    src: ['**/*.js'],
+                    dest: 'dist/tablefilter'
+                }]
             }
         }
+
     });
 
-    // Load the plugins that provide the tasks we specified in package.json.
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-string-replace');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-webpack');
+    grunt.loadNpmTasks('grunt-babel');
 
-    // This is the default task being executed if Grunt
-    // is called without any further parameter.
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'cssmin', 'copy']);
+    grunt.registerTask('default',
+        ['jshint', 'webpack:build', 'copy:dist', 'test', 'build-demos']);
+
+    // Development server
+    grunt.registerTask('server', ['webpack-dev-server:start']);
+
+    // Dev dev/build/watch cycle
+    grunt.registerTask('dev',
+        ['jshint', 'webpack:dev', 'copy:dist', 'watch:app']);
+
+    // Production build
+    grunt.registerTask('build',
+        ['jshint', 'webpack:build', 'copy:dist']);
+
+    // Build demos
+    grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
+    grunt.registerTask('build-demos',
+        ['copy:templates', 'copy:assets', 'string-replace:demos']);
+
+    // Transpile with Babel
+    grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
+
+    // Tests
+    grunt.registerTask('test', ['connect', 'qunit:all']);
+
+    // Custom task running QUnit tests for specified files.
+    // Usage example: grunt test-only:test.html,test-help.html
+    grunt.registerTask('test-only',
+        'A task that runs only specified tests.',
+        function(tests) {
+            if(!tests) {
+                return;
+            }
+            tests = tests.split(',');
+            var res = [];
+
+            tests.forEach(function(itm) {
+                var filePath = path.resolve(testDir, itm);
+                var parts = filePath.split(path.sep);
+                res.push(buildTestUrl(testHost, testDir, parts));
+            });
+
+            grunt.task.run('connect');
+            grunt.config('qunit.only.options.urls', res);
+            grunt.task.run('qunit:only');
+    });
+
+    function isTestFile(pth) {
+        var allowedExts = ['.html', '.htm'];
+        for(var i=0, len=allowedExts.length; i<len; i++){
+            var ext = allowedExts[i];
+            if(pth.indexOf(ext) !== -1){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function buildTestUrl(host, testDir, parts) {
+        var idx = parts.indexOf(testDir);
+        var fileIdx = parts.length;
+        var relParts = parts.slice(idx, fileIdx);
+        return host.concat(relParts.join('/'));
+    }
+
+    // Returns the list of test files from the test folder for qunit task
+    function getTestFiles(testDir, host) {
+
+        var getFiles = function(dir, host) {
+            var res = [];
+            var items = fs.readdirSync(dir);
+
+            items.forEach(function(itm){
+                var fileOrDir = path.resolve(dir, itm);
+                if(isTestFile(fileOrDir)) {
+                    var parts = fileOrDir.split(path.sep);
+                    res.push(buildTestUrl(host, testDir, parts));
+                } else {
+                    if(fs.lstatSync(fileOrDir).isDirectory()) {
+                        res = res.concat(getFiles(fileOrDir, host));
+                    }
+                }
+            });
+
+            return res;
+        };
+
+        return getFiles(testDir, host);
+    }
 
 };
+

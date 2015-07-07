@@ -1,0 +1,473 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ezEditTable, enhance HTML tables easily, advanced inline editing, selection and keyboard navigation - script by Max Guglielmi</title>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="description" content="ezEditTable is an open source javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation" />
+	<meta name="keywords" content="html table editing, html table inline cell editing, inline cell editor, row selection, script, javascript, max guglielmi" />
+	<meta name="robots" content="index,follow" />
+	<meta name="author" content="Max Guglielmi" />
+	<style type="text/css" media="screen, projection">
+		@import "http://edittable.free.fr/includes/common.css";
+	</style>
+
+	<link href="../ezEditTable.css" rel="stylesheet" type="text/css">
+	<script src="../ezEditTable.js"></script>
+
+	<style type="text/css" media="screen">
+		div#navmenu li a#lnk01{
+			color:#333; font-weight:bold;
+			border-top:2px solid #ff9900;
+			background:#fff;
+		}
+	</style>
+
+</head>
+<body>
+
+<div id="container">
+
+	<div id="banner">
+
+	<div id="navmenu">
+		<ul>
+			<li><a id="lnk01" href="index.html">Home</a></li>
+			<li><a id="lnk02" href="samples.html">Samples</a></li>
+			<li><a id="lnk03" href="doc.html">Documentation</a></li>
+		</ul>
+	</div>
+	</div>
+
+	<!-- BEGIN CONTENT -->
+
+	<div id="content">
+	<h1>ezEditTable</h1>
+	<h2>Description</h2>
+    <p>
+		ezEditTable is a javascript code aimed at enhancing regular
+		HTML tables by adding features such as inline editing components, advanced
+		selection and keyboard navigation. With just a line of code you can easily
+		convert a regular HTML table in an advanced editable and selectable grid control.
+	</p>
+	<h3>Main features</h3>
+    <ul>
+	  <li>Attach to an existing HTML table</li>
+      <li>Advanced selection model</li>
+      <li>Extended keyboard navigation</li>
+      <li>Inline cell or row editing</li>
+      <li>Insert and remove rows</li>
+      <li>Send changes to server via GET or POST form submission, AJAX requests or
+        by script injection in the head section of the document (only GETs)</li>
+	  <li>Integration with any server-side technology as this is a pure client-side solution</li>
+      <li>Callbacks for all events, and delegates for most actions</li>
+      <li>Based on plain javascript and dependent on jQuery only for performing AJAX requests</li>
+      <li>Exhaustive documentation and API</li>
+	  <li>Easy setup and easy customisable themes</li>
+    </ul>
+
+    <h2>Installation
+      <span class="floatRight fontSize12px">
+          <a href="starter.html">Starter</a>
+      </span>
+    </h2>
+    <p>To install <strong>ezEditTable</strong> unzip the download package and then include the following
+    	scripts and stylesheet files in the <code>head</code> section of your page:</p>
+
+    <pre>
+	&lt;link href=&quot;ezEditTable/ezEditTable.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;
+	&lt;script src=&quot;ezEditTable/ezEditTable.js&quot;&gt;&lt;/script&gt;
+	</pre>
+
+    <p>Make sure the table you'd like to make editable or selectable
+      has an unique <code>id</code> and a <code>thead</code> and <code>tbody</code>
+      sections.</p>
+        <p>Here you have an example of a regular html table: </p>
+        <table border="1" cellspacing="0" cellpadding="2" width="80%">
+
+          <thead>
+		  <tr>
+            <th>From</th>
+            <th>Destination</th>
+            <th>Road Distance (km)</th>
+            <th>By Air (hrs)</th>
+            <th width="15%">By Rail (hrs)</th>
+
+          </tr>
+		  </thead>
+		  <tbody>
+          <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Adelaide</td>
+            <td>1412</td>
+            <td>1.4</td>
+
+            <td>25.3</td>
+          </tr>
+          <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Brisbane</td>
+            <td>982</td>
+            <td>1.5</td>
+
+            <td>16</td>
+          </tr>
+          <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Canberra</td>
+            <td>286</td>
+            <td>.6</td>
+
+            <td>4.3</td>
+          </tr>
+          <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Melbourne</td>
+            <td>872</td>
+            <td>1.1</td>
+
+            <td>10.5</td>
+          </tr>
+          <tr>
+            <td><strong>Adelaide</strong></td>
+            <td>Perth</td>
+            <td>2781</td>
+            <td>3.1</td>
+
+            <td>38</td>
+          </tr>
+          <tr>
+            <td><strong>Adelaide</strong></td>
+            <td>Alice Springs</td>
+            <td>1533</td>
+            <td>2</td>
+
+            <td>20.25</td>
+          </tr>
+          <tr>
+            <td><strong>Adelaide</strong></td>
+            <td>Brisbane</td>
+            <td>2045</td>
+            <td>2.15</td>
+
+            <td>40</td>
+          </tr>
+		  </tbody>
+        </table>
+
+    <p>Below the same table enhanced by the script (<code>id=&quot;table1&quot;</code>),
+      click to select a row or use keys to move the selection:</p>
+        <table id="table1" cellspacing="0" cellpadding="0" width="80%">
+
+		<thead>
+          <tr>
+            <th>From</th>
+            <th>Destination</th>
+            <th>Road Distance (km)</th>
+            <th>By Air (hrs)</th>
+            <th width="15%">By Rail (hrs)</th>
+
+          </tr>
+		 </thead>
+          <tbody>
+		  <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Adelaide</td>
+            <td>1412</td>
+            <td>1.4</td>
+
+            <td>25.3</td>
+          </tr>
+          <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Brisbane</td>
+            <td>982</td>
+            <td>1.5</td>
+
+            <td>16</td>
+          </tr>
+          <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Canberra</td>
+            <td>286</td>
+            <td>.6</td>
+
+            <td>4.3</td>
+          </tr>
+          <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Melbourne</td>
+            <td>872</td>
+            <td>1.1</td>
+
+            <td>10.5</td>
+          </tr>
+          <tr>
+            <td><strong>Adelaide</strong></td>
+            <td>Perth</td>
+            <td>2781</td>
+            <td>3.1</td>
+
+            <td>38</td>
+          </tr>
+          <tr>
+            <td><strong>Adelaide</strong></td>
+            <td>Alice Springs</td>
+            <td>1533</td>
+            <td>2</td>
+
+            <td>20.25</td>
+          </tr>
+          <tr>
+            <td><strong>Adelaide</strong></td>
+            <td>Brisbane</td>
+            <td>2045</td>
+            <td>2.15</td>
+
+            <td>40</td>
+          </tr>
+		  </tbody>
+        </table>
+        <script language="javascript" type="text/javascript">
+			var et = new EditTable('table1');
+			et.Init();
+		</script>
+
+    <p>There are 2 different ways to call the script:</p>
+        <ul>
+
+
+      <li>invoke the <code>setEditTable</code> function, which returns a EditTable object: </li>
+        </ul>
+
+    <pre class="brush: js;">&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var et = setEditTable(&quot;table1&quot;);
+&lt;/script&gt; </pre>
+
+    <ul>
+      <li>instanciate the <strong><code>EditTable</code></strong> object: </li>
+    </ul>
+
+    <pre class="brush: js;">&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var et = new EditTable('table1');
+	et.Init();
+&lt;/script&gt; </pre>
+        <p>If your document contains several tables (like this page), it is important
+          to define unique ids, otherwise the script will not work properly. </p>
+
+    <p>The <code>setEditTable()</code> function or the <code>EditTable</code>
+      class accepts 2 additional parameters that will be explained in the next
+      tables. In the example below, by specifing a row number as a &quot;start&quot;
+      row, we tell the script from which row can start the selection, this is
+      helpful when the <code>tbody</code> and <code>thead</code> sections are not defined: </p>
+
+
+    <table id="table2" cellspacing="0" cellpadding="0" >
+      <tr>
+        <td colspan="5"><strong>This is the table caption </strong></td>
+      </tr>
+      <tr>
+        <th>From</th>
+        <th>Destination</th>
+        <th>Road Distance (km)</th>
+
+        <th>By Air (hrs)</th>
+        <th width="15%">By Rail (hrs)</th>
+      </tr>
+      <tr>
+        <td><strong>Sydney</strong></td>
+        <td>Adelaide</td>
+        <td>1412</td>
+
+        <td>1.4</td>
+        <td>25.3</td>
+      </tr>
+      <tr>
+        <td><strong>Sydney</strong></td>
+        <td>Brisbane</td>
+        <td>982</td>
+
+        <td>1.5</td>
+        <td>16</td>
+      </tr>
+      <tr>
+        <td><strong>Sydney</strong></td>
+        <td>Canberra</td>
+        <td>286</td>
+
+        <td>.6</td>
+        <td>4.3</td>
+      </tr>
+      <tr>
+        <td><strong>Sydney</strong></td>
+        <td>Melbourne</td>
+        <td>872</td>
+
+        <td>1.1</td>
+        <td>10.5</td>
+      </tr>
+      <tr>
+        <td><strong>Adelaide</strong></td>
+        <td>Perth</td>
+        <td>2781</td>
+
+        <td>3.1</td>
+        <td>38</td>
+      </tr>
+      <tr>
+        <td><strong>Adelaide</strong></td>
+        <td>Alice Springs</td>
+        <td>1533</td>
+
+        <td>2</td>
+        <td>20.25</td>
+      </tr>
+      <tr>
+        <td><strong>Adelaide</strong></td>
+        <td>Brisbane</td>
+        <td>2045</td>
+
+        <td>2.15</td>
+        <td>40</td>
+      </tr>
+    </table>
+        <script language="javascript" type="text/javascript">
+			var et02 = new EditTable("table2",2);
+			et02.Init();
+		</script>
+
+    <pre class="brush: js;">var et02 = setEditTable(&quot;table2&quot;, 2);</pre>
+
+        <p>or</p>
+
+    <pre class="brush: js;">var et02 = new EditTable("table2", 2);
+et02.Init();</pre>
+    <p>By default, the script adds a single row selection feature to the table.
+      You could decide to also add a cell selection feature and make the cells
+      editable, double-click on a cell to see:</p>
+
+    <table id="table3" cellspacing="0" cellpadding="0">
+      <tr>
+        <td colspan="5"><strong>This is the table caption </strong></td>
+      </tr>
+
+      <tr>
+        <th style="width:100px">From</th>
+        <th style="width:100px">Destination</th>
+        <th style="width:100px">Road Distance (km)</th>
+        <th style="width:100px">By Air (hrs)</th>
+        <th  style="width:80px">By Rail (hrs)</th>
+      </tr>
+
+      <tr>
+        <td>Sydney</td>
+        <td>Adelaide</td>
+        <td>1412</td>
+        <td>1.4</td>
+        <td>25.3</td>
+      </tr>
+
+      <tr>
+        <td>Sydney</td>
+        <td>Brisbane</td>
+        <td>982</td>
+        <td>1.5</td>
+        <td>16</td>
+      </tr>
+
+      <tr>
+        <td>Sydney</td>
+        <td>Canberra</td>
+        <td>286</td>
+        <td>.6</td>
+        <td>4.3</td>
+      </tr>
+
+      <tr>
+        <td>Sydney</td>
+        <td>Melbourne</td>
+        <td>872</td>
+        <td>1.1</td>
+        <td>10.5</td>
+      </tr>
+
+      <tr>
+        <td>Adelaide</td>
+        <td>Perth</td>
+        <td>2781</td>
+        <td>3.1</td>
+        <td>38</td>
+      </tr>
+
+      <tr>
+        <td>Adelaide</td>
+        <td>Alice Springs</td>
+        <td>1533</td>
+        <td>2</td>
+        <td>20.25</td>
+      </tr>
+
+      <tr>
+        <td>Adelaide</td>
+        <td>Brisbane</td>
+        <td>2045</td>
+        <td>2.15</td>
+        <td>40</td>
+      </tr>
+
+    </table>
+        <script language="javascript" type="text/javascript">
+			var table3Config = {
+				default_selection: 'both',
+				editable: true,
+				auto_save: false
+			};
+			var et03 = new EditTable("table3", 2, table3Config);
+			et03.Init();
+		</script>
+        <p>To do that you just need to declare a <em>literal object</em> (configuration
+          object) in which you specify the features you would like to enable:</p>
+
+    <pre class="brush: js;">&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var table3Config = {
+		default_selection: 'both',
+		editable: true,
+		auto_save: false
+	}
+ 	var et03 = setTableEdit(&quot;table3&quot;, 2, table3Config);
+&lt;/script&gt</pre>
+        <p>or</p>
+        <pre class="brush: js;">&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+	var table3Config = {
+		default_selection: 'both',
+		editable: true,
+		auto_save: false
+	}
+	var et03 = new EditTable(&quot;table3&quot;, 2 ,table3Config);
+	et03.Init();
+&lt;/script&gt;</pre>
+
+    <p>You can name the <em>configuration object</em> as you want, but don't forget
+      to add it to the parameters of the <code>setEditTable</code>() function
+      or <code>EditTable</code> class. It is important to respect the syntax and
+      naming convention as shown above. You will find an exhaustive list of properties
+      in the <a href="doc.html">documentation</a> section. </p>
+        <h2>Documentation</h2>
+
+
+    <p>For more information about the script's configuration and API check out
+      the <a href="doc.html">documentation</a> and the
+	  available online <a href="http://edittable.free.fr/demos.php">demos</a>.</p>
+
+    <hr class="clearBoth" />
+
+	</div>
+	<!-- END CONTENT -->
+
+	<div id="footer"></div>
+
+</div>
+
+
+</body>
+</html>

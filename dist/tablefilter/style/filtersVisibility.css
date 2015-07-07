@@ -1,0 +1,23 @@
+/*====================================================
+	- HTML Table Filter Generator
+	- Filters Row Visibility Manager Extension v1.1
+	- do not hesitate to edit classes below to
+	change extension appearance
+=====================================================*/
+
+/* container */
+span.expClpFlt{ }
+
+/* icon */
+span.expClpFlt img{
+	vertical-align:middle;
+    border:0;
+	/*border:1px solid #ccc;*/
+	padding:1px 1px 1px 1px;
+	margin:1px 1px 1px 1px;
+	/*background:#f4f4f4;*/
+}
+span.expClpFlt img:hover{}
+
+/* button */
+.btnExpClpFlt{ margin:0 5px 0 5px; }
