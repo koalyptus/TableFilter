@@ -24,7 +24,7 @@ solution
 * Valuable support provided under a Premium request
 
 ##Setup
-Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the bundle js file in your page:
+Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the main js file in your page:
 ```shell
 <script src="path/to/my/scripts/tablefilter/tablefilter.js"></script>
 ```
