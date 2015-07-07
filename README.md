@@ -83,6 +83,16 @@ grunt test-only:test.html
 grunt test-only:test.html,test-sort.html
 ```
 
+## Demos
+Run the local webserver:
+```shell
+grunt server
+```
+then pick a demo from:
+```shell
+http://local.nearmap.com:8080/demos/
+```
+
 ## Documentation
 Find the complete documentation in the [WIKI](https://github.com/koalyptus/TableFilter/wiki) section.
 
