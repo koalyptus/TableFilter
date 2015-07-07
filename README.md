@@ -90,7 +90,7 @@ grunt server
 ```
 then pick a demo from:
 ```shell
-http://local.nearmap.com:8080/demos/
+http://localhost:8080/demos/
 ```
 
 ## Documentation
