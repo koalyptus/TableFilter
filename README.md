@@ -1,10 +1,10 @@
 TableFilter
 ===========================
 
-Filter HTML tables data easily
+A Javascript library making HTML tables filterable
 
-TableFilter is a modernised version of the [HTML Table Filter generator](http://tablefilter.free.fr) plugin.
-This script adds to any html table a "filter by column" feature that enables
+TableFilter is a modernised version of the [HTML Table Filter generator](http://tablefilter.free.fr) javascript plugin.
+This library adds to any html table a "filter by column" feature that enables
 users to filter and limit the data displayed within a long table. By default, the script automatically adds a filter grid bar at the top of the desired table.
 
 ##Features
