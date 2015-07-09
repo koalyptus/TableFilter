@@ -1,7 +1,7 @@
 TableFilter
 ===========================
 
-A Javascript library making HTML tables filterable
+> A Javascript library making HTML tables filterable
 
 TableFilter is a modernised version of the [HTML Table Filter generator](http://tablefilter.free.fr) javascript plugin.
 This library adds to any html table a "filter by column" feature that enables
@@ -23,7 +23,14 @@ solution
 * Exhaustive documentation and API
 * Valuable support provided under a Premium request
 
-##Setup
+##Getting started
+Clone the repo using Git:
+```shell
+git clone --bare https://github.com/koalyptus/TableFilter.git
+```
+
+Alternatively you can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
+
 Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the main js file in your page:
 ```shell
 <script src="path/to/my/scripts/tablefilter/tablefilter.js"></script>
