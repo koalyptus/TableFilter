@@ -31,6 +31,7 @@ git clone --bare https://github.com/koalyptus/TableFilter.git
 
 Alternatively you can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
 
+##Setup
 Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the main js file in your page:
 ```shell
 <script src="path/to/my/scripts/tablefilter/tablefilter.js"></script>

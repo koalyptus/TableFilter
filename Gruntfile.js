@@ -61,6 +61,10 @@ module.exports = function (grunt) {
                 cwd: 'static/demos-assets',
                 dest: 'demos/assets',
                 expand: true
+            },
+            starter: {
+                src: ['demos/starter.html'],
+                dest: 'dist/starter.html'
             }
         },
 
@@ -151,7 +155,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-babel');
 
     grunt.registerTask('default',
-        ['jshint', 'webpack:build', 'copy:dist', 'test', 'build-demos']);
+        ['build', 'test', 'build-demos', 'copy:starter']);
 
     // Development server
     grunt.registerTask('server', ['webpack-dev-server:start']);
@@ -161,8 +165,7 @@ module.exports = function (grunt) {
         ['jshint', 'webpack:dev', 'copy:dist', 'watch:app']);
 
     // Production build
-    grunt.registerTask('build',
-        ['jshint', 'webpack:build', 'copy:dist']);
+    grunt.registerTask('build', ['jshint', 'webpack:build', 'copy:dist']);
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
