@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master](https://travis-ci.org/koalyptus/TableFilter)
+[![Build Status](https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master)](https://travis-ci.org/koalyptus/TableFilter)
 
 TableFilter
 ===========================
