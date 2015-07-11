@@ -65,10 +65,7 @@ export default class AdapterEzEditTable {
         }
 
         cfg.base_path = cfg.base_path  || tf.basePath + 'ezEditTable/';
-        // var editable = tf.editable;
         var editable = cfg.editable;
-        // cfg.editable = editable;
-        // var selectable = tf.selectable;
         var selectable = cfg.selectable;
         cfg.selection = selectable;
 

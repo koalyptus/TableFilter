@@ -80,6 +80,16 @@ module.exports = function (grunt) {
                             pattern: /{VERSION}/ig,
                             replacement: pkg.version
                         },{
+                            pattern: /{EZEDITTABLE_LINK}/ig,
+                            replacement: '<a href="http://edittable.free.fr/' +
+                                'zip.php?f=ezEditTable.zip&amp;p=1"' +
+                                'target="_blank" title="ezEditTable is a ' +
+                                'javascript code aimed at enhancing regular ' +
+                                'HTML tables by adding features such as ' +
+                                'inline editing components, advanced ' +
+                                'selection and keyboard navigation ' +
+                                '- Developed by Max Guglielmi">ezEditTable</a>'
+                        },{
                             pattern: /<!-- @import (.*?) -->/ig,
                             replacement: function (match, p1) {
                                 return grunt.file.read('static/' + p1);

@@ -283,7 +283,7 @@ div.grd_Cont .odd{ background-color:#DFE8F6; }/*row bg alternating color*/
 
 /* Selection */
 .ezActiveRow{ background-color:#2852A8 !important; color:#fff; }
-.ezSelectedRow{	background-color:#316AC5; color:#fff; }
+.ezSelectedRow{	background-color:#316AC5 !important; color:#fff; }
 .ezActiveCell{
 	background-color:#D9E8FB !important;
 	color:#000 !important; font-weight:bold;

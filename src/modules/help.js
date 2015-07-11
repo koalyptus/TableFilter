@@ -24,10 +24,9 @@ export class Help{
             'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
             '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
             '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
-            '<b>rgx:</b><br/> Learn more:<br/>' +
+            '<b>rgx:</b><br/>' +
             '<a href="https://github.com/koalyptus/TableFilter/wiki/' +
-            '4.-Filter-operators" target="_blank">https://github.com/' +
-            'koalyptus/TableFilter/wiki/4.-Filter-operators</a><hr/>';
+            '4.-Filter-operators" target="_blank">Learn more</a>.<hr/>';
         //defines help innerHtml
         this.instrHtml = f.help_instructions_html || null;
         //defines reset button text
