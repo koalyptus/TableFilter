@@ -1,6 +1,4 @@
 {
-  // ["xxx"] is better written in dot notation
-  "-W069": true,
   // Script URL
   "-W107": true,
   // Eval can be harmful

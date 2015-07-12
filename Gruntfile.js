@@ -186,7 +186,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
 
     // Tests
-    grunt.registerTask('test', ['connect', 'qunit:all']);
+    grunt.registerTask('test', ['jshint', 'connect', 'qunit:all']);
 
     // Custom task running QUnit tests for specified files.
     // Usage example: grunt test-only:test.html,test-help.html

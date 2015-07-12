@@ -1947,7 +1947,7 @@ export class TableFilter{
         if(!flt){
             return '';
         }
-        // let fltColType = this.fltCol[index];
+
         let fltColType = this.getFilterType(index);
         if(fltColType !== this.fltTypeMulti &&
             fltColType !== this.fltTypeCheckList){
@@ -2239,7 +2239,6 @@ export class TableFilter{
             return;
         }
         let slc = this.getFilterElement(index),
-            // execFilter = doFilter===undefined ? true : doFilter,
             fltColType = this.getFilterType(index);
 
         if(fltColType !== this.fltTypeMulti &&
