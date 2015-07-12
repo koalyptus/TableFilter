@@ -1917,7 +1917,7 @@ export class TableFilter{
             if(nchilds === this.nbCells && !isExludedRow){
                 // this loop retrieves cell data
                 for(let j=0; j<nchilds; j++){
-                    if(j != colindex || row[i].style.display != ''){
+                    if(j != colindex || row[i].style.display !== ''){
                         continue;
                     }
                     let cell_data = Str.lower(this.getCellData(j, cell[j])),

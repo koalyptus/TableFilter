@@ -1,29 +1,11 @@
 {
-  // Script URL
-  "-W107": true,
-  // Eval can be harmful
-  "-W061": true,
-  "-W041": true,
-  // Wrap the /regexp/ literal in parens to disambiguate the slash operator
-  "-W092": true,
-  // Reserved words
   "-W024": true,
+  "scripturl": true,
+  "evil": true,
   "curly": true,
   "indent": 4,
-  //"eqeqeq": true,
   "es3": true,
   "esnext": true,
   "unused": true,
-  "maxlen" : 80,
-  "globals": {
-    "Object": true,
-    "module": true,
-    "require": true,
-    "define": true,
-    "window": true,
-    "document": true,
-    "escape": true,
-    "unescape": true,
-    "navigator": true
-  }
+  "maxlen" : 80
 }
