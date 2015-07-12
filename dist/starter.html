@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TableFilter v0.0.0 - Starter</title>
+</head>
+<body>
+<h1>TableFilter v0.0.0</h1>
+
+
+
+<table id="demo">
+    <thead>
+        <tr>
+            <th>country</th>
+            <th>isocode</th>
+            <th align="right">year</th>
+            <th align="right">POP</th>
+            <th align="right">XRAT</th>
+            <th align="right">PPP</th>
+            <th align="right">cgdp</th>
+            <th align="right">cc</th>
+            <th align="right">ci</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Benin</td>
+            <td>BEN</td>
+            <td align="right">1998</td>
+            <td align="right">5950.33</td>
+            <td align="right">589.9517822</td>
+            <td align="right">190.95</td>
+            <td align="right">1178.46</td>
+            <td align="right">90.98</td>
+            <td align="right">7.55</td>
+        </tr>
+        <tr>
+            <td>Benin</td>
+            <td>BEN</td>
+            <td align="right">1999</td>
+            <td align="right">6109.53</td>
+            <td align="right">615.6990967</td>
+            <td align="right">200.19</td>
+            <td align="right">1174.90</td>
+            <td align="right">92.61</td>
+            <td align="right">7.86</td>
+        </tr>
+        <tr>
+            <td>Benin</td>
+            <td>BEN</td>
+            <td align="right">2000</td>
+            <td align="right">6272.00</td>
+            <td align="right">711.9763184</td>
+            <td align="right">200.61</td>
+            <td align="right">1224.74</td>
+            <td align="right">92.27</td>
+            <td align="right">8.25</td>
+        </tr>
+        <tr>
+            <td>Burkina Faso</td>
+            <td>BFA</td>
+            <td align="right">1994</td>
+            <td align="right">9755.03</td>
+            <td align="right">555.2047119</td>
+            <td align="right">125.76</td>
+            <td align="right">838.76</td>
+            <td align="right">79.81</td>
+            <td align="right">6.57</td>
+        </tr>
+        <tr>
+            <td>Burkina Faso</td>
+            <td>BFA</td>
+            <td align="right">1995</td>
+            <td align="right">9988.00</td>
+            <td align="right">499.148407</td>
+            <td align="right">136.65</td>
+            <td align="right">860.89</td>
+            <td align="right">80.41</td>
+            <td align="right">9.29</td>
+        </tr>
+        <tr>
+            <td>Burkina Faso</td>
+            <td>BFA</td>
+            <td align="right">1996</td>
+            <td align="right">10225.00</td>
+            <td align="right">511.5523987</td>
+            <td align="right">144.18</td>
+            <td align="right">881.11</td>
+            <td align="right">80.40</td>
+            <td align="right">12.12</td>
+        </tr>
+        <tr>
+            <td>Burkina Faso</td>
+            <td>BFA</td>
+            <td align="right">1997</td>
+            <td align="right">10473.53</td>
+            <td align="right">583.6693726</td>
+            <td align="right">141.78</td>
+            <td align="right">899.01</td>
+            <td align="right">76.94</td>
+            <td align="right">14.94</td>
+        </tr>
+        <tr>
+            <td>Russia</td>
+            <td>RUS</td>
+            <td align="right">1998</td>
+            <td align="right">146899.01</td>
+            <td align="right">9.705082893</td>
+            <td align="right">2.64</td>
+            <td align="right">7086.39</td>
+            <td align="right">67.73</td>
+            <td align="right">9.20</td>
+        </tr>
+        <tr>
+            <td>Russia</td>
+            <td>RUS</td>
+            <td align="right">1999</td>
+            <td align="right">146308.99</td>
+            <td align="right">24.6199398</td>
+            <td align="right">4.03</td>
+            <td align="right">8074.70</td>
+            <td align="right">57.35</td>
+            <td align="right">8.81</td>
+        </tr>
+        <tr>
+            <td>Russia</td>
+            <td>RUS</td>
+            <td align="right">2000</td>
+            <td align="right">145555.01</td>
+            <td align="right">28.12916946</td>
+            <td align="right">4.85</td>
+            <td align="right">9995.91</td>
+            <td align="right">54.74</td>
+            <td align="right">8.79</td>
+        </tr>
+        <tr>
+            <td>Rwanda</td>
+            <td>RWA</td>
+            <td align="right">1994</td>
+            <td align="right">6230.00</td>
+            <td align="right">194.517</td>
+            <td align="right">50.39</td>
+            <td align="right">529.48</td>
+            <td align="right">132.16</td>
+            <td align="right">4.48</td>
+        </tr>
+        <tr>
+            <td>Rwanda</td>
+            <td>RWA</td>
+            <td align="right">1995</td>
+            <td align="right">6400.00</td>
+            <td align="right">262.1975098</td>
+            <td align="right">70.67</td>
+            <td align="right">746.34</td>
+            <td align="right">92.77</td>
+            <td align="right">3.08</td>
+        </tr>
+        <tr>
+            <td>Rwanda</td>
+            <td>RWA</td>
+            <td align="right">1996</td>
+            <td align="right">6727.00</td>
+            <td align="right">306.8200073</td>
+            <td align="right">77.90</td>
+            <td align="right">823.25</td>
+            <td align="right">89.71</td>
+            <td align="right">3.21</td>
+        </tr>
+        <tr>
+            <td>Rwanda</td>
+            <td>RWA</td>
+            <td align="right">1997</td>
+            <td align="right">7895.18</td>
+            <td align="right">301.5297852</td>
+            <td align="right">84.13</td>
+            <td align="right">847.79</td>
+            <td align="right">91.44</td>
+            <td align="right">3.72</td>
+        </tr>
+        <tr>
+            <td>Rwanda</td>
+            <td>RWA</td>
+            <td align="right">1998</td>
+            <td align="right">8105.00</td>
+            <td align="right">312.3140869</td>
+            <td align="right">85.32</td>
+            <td align="right">914.22</td>
+            <td align="right">89.34</td>
+            <td align="right">4.22</td>
+        </tr>
+        <tr>
+            <td>El Salvador</td>
+            <td>SLV</td>
+            <td align="right">1995</td>
+            <td align="right">5669.00</td>
+            <td align="right">8.754583359</td>
+            <td align="right">3.54</td>
+            <td align="right">4143.59</td>
+            <td align="right">89.31</td>
+            <td align="right">10.35</td>
+        </tr>
+        <tr>
+            <td>El Salvador</td>
+            <td>SLV</td>
+            <td align="right">1996</td>
+            <td align="right">5798.00</td>
+            <td align="right">8.755000114</td>
+            <td align="right">3.69</td>
+            <td align="right">4235.79</td>
+            <td align="right">88.77</td>
+            <td align="right">7.79</td>
+        </tr>
+        <tr>
+            <td>El Salvador</td>
+            <td>SLV</td>
+            <td align="right">1997</td>
+            <td align="right">5911.00</td>
+            <td align="right">8.756250381</td>
+            <td align="right">3.74</td>
+            <td align="right">4408.41</td>
+            <td align="right">87.05</td>
+            <td align="right">7.90</td>
+        </tr>
+        <tr>
+            <td>Slovak Republic</td>
+            <td>SVK</td>
+            <td align="right">2000</td>
+            <td align="right">5401.00</td>
+            <td align="right">46.0352</td>
+            <td align="right">13.02</td>
+            <td align="right">12618.53</td>
+            <td align="right">52.22</td>
+            <td align="right">24.78</td>
+        </tr>
+        <tr>
+            <td>Slovenia</td>
+            <td>SVN</td>
+            <td align="right">1994</td>
+            <td align="right">1988.90</td>
+            <td align="right">128.8085938</td>
+            <td align="right">79.97</td>
+            <td align="right">11662.12</td>
+            <td align="right">53.21</td>
+            <td align="right">19.87</td>
+        </tr>
+        <tr>
+            <td>Slovenia</td>
+            <td>SVN</td>
+            <td align="right">1995</td>
+            <td align="right">1990.00</td>
+            <td align="right">118.5185013</td>
+            <td align="right">89.03</td>
+            <td align="right">12574.96</td>
+            <td align="right">54.46</td>
+            <td align="right">23.11</td>
+        </tr>
+        <tr>
+            <td>Slovenia</td>
+            <td>SVN</td>
+            <td align="right">1996</td>
+            <td align="right">1991.00</td>
+            <td align="right">135.3643036</td>
+            <td align="right">97.27</td>
+            <td align="right">13151.51</td>
+            <td align="right">54.32</td>
+            <td align="right">23.23</td>
+        </tr>
+        <tr>
+            <td>Slovenia</td>
+            <td>SVN</td>
+            <td align="right">1997</td>
+            <td align="right">1985.96</td>
+            <td align="right">159.6882935</td>
+            <td align="right">103.96</td>
+            <td align="right">14143.02</td>
+            <td align="right">53.24</td>
+            <td align="right">24.14</td>
+        </tr>
+        <tr>
+            <td>Slovenia</td>
+            <td>SVN</td>
+            <td align="right">1998</td>
+            <td align="right">1982.60</td>
+            <td align="right">166.134201</td>
+            <td align="right">108.93</td>
+            <td align="right">15067.34</td>
+            <td align="right">52.82</td>
+            <td align="right">25.35</td>
+        </tr>
+        <tr>
+            <td>Zambia</td>
+            <td>ZMB</td>
+            <td align="right">1994</td>
+            <td align="right">8740.72</td>
+            <td align="right">669.3706055</td>
+            <td align="right">307.48</td>
+            <td align="right">834.19</td>
+            <td align="right">75.43</td>
+            <td align="right">9.86</td>
+        </tr>
+        <tr>
+            <td>Zambia</td>
+            <td>ZMB</td>
+            <td align="right">1995</td>
+            <td align="right">8980.00</td>
+            <td align="right">864.1192017</td>
+            <td align="right">402.40</td>
+            <td align="right">829.37</td>
+            <td align="right">76.55</td>
+            <td align="right">10.31</td>
+        </tr>
+        <tr>
+            <td>Zambia</td>
+            <td>ZMB</td>
+            <td align="right">1996</td>
+            <td align="right">9214.40</td>
+            <td align="right">1207.900024</td>
+            <td align="right">515.01</td>
+            <td align="right">838.05</td>
+            <td align="right">78.74</td>
+            <td align="right">10.99</td>
+        </tr>
+        <tr>
+            <td>Zambia</td>
+            <td>ZMB</td>
+            <td align="right">1997</td>
+            <td align="right">9443.21</td>
+            <td align="right">1314.498047</td>
+            <td align="right">596.97</td>
+            <td align="right">851.47</td>
+            <td align="right">77.59</td>
+            <td align="right">12.15</td>
+        </tr>
+        <tr>
+            <td>Zambia</td>
+            <td>ZMB</td>
+            <td align="right">1998</td>
+            <td align="right">9665.71</td>
+            <td align="right">1862.06897</td>
+            <td align="right">744.91</td>
+            <td align="right">800.69</td>
+            <td align="right">85.12</td>
+            <td align="right">13.75</td>
+        </tr>
+        <tr>
+            <td>Zambia</td>
+            <td>ZMB</td>
+            <td align="right">1999</td>
+            <td align="right">9881.21</td>
+            <td align="right">2388.019043</td>
+            <td align="right">941.87</td>
+            <td align="right">765.24</td>
+            <td align="right">91.82</td>
+            <td align="right">15.30</td>
+        </tr>
+        <tr>
+            <td>Zambia</td>
+            <td>ZMB</td>
+            <td align="right">2000</td>
+            <td align="right">10089.00</td>
+            <td align="right">3110.843994</td>
+            <td align="right">1157.63</td>
+            <td align="right">840.97</td>
+            <td align="right">86.33</td>
+            <td align="right">15.38</td>
+        </tr>
+        <tr>
+            <td>Zimbabwe</td>
+            <td>ZWE</td>
+            <td align="right">1994</td>
+            <td align="right">10775.35</td>
+            <td align="right">8.151538849</td>
+            <td align="right">2.01</td>
+            <td align="right">2586.84</td>
+            <td align="right">60.10</td>
+            <td align="right">18.53</td>
+        </tr>
+        <tr>
+            <td>Zimbabwe</td>
+            <td>ZWE</td>
+            <td align="right">1995</td>
+            <td align="right">11011.00</td>
+            <td align="right">8.66537571</td>
+            <td align="right">2.15</td>
+            <td align="right">2603.37</td>
+            <td align="right">66.89</td>
+            <td align="right">15.03</td>
+        </tr>
+        <tr>
+            <td>Zimbabwe</td>
+            <td>ZWE</td>
+            <td align="right">1996</td>
+            <td align="right">11242.16</td>
+            <td align="right">10.00234985</td>
+            <td align="right">2.64</td>
+            <td align="right">2860.23</td>
+            <td align="right">72.06</td>
+            <td align="right">11.32</td>
+        </tr>
+        <tr>
+            <td>Zimbabwe</td>
+            <td>ZWE</td>
+            <td align="right">1997</td>
+            <td align="right">11923.52</td>
+            <td align="right">12.11128998</td>
+            <td align="right">3.17</td>
+            <td align="right">2727.06</td>
+            <td align="right">82.82</td>
+            <td align="right">11.01</td>
+        </tr>
+        <tr>
+            <td>Zimbabwe</td>
+            <td>ZWE</td>
+            <td align="right">1998</td>
+            <td align="right">12153.85</td>
+            <td align="right">23.67910957</td>
+            <td align="right">4.06</td>
+            <td align="right">2799.85</td>
+            <td align="right">77.66</td>
+            <td align="right">10.75</td>
+        </tr>
+        <tr>
+            <td>Zimbabwe</td>
+            <td>ZWE</td>
+            <td align="right">1999</td>
+            <td align="right">12388.32</td>
+            <td align="right">38.30120087</td>
+            <td align="right">6.12</td>
+            <td align="right">2770.48</td>
+            <td align="right">76.89</td>
+            <td align="right">10.73</td>
+        </tr>
+        <tr>
+            <td>Zimbabwe</td>
+            <td>ZWE</td>
+            <td align="right">2000</td>
+            <td align="right">12627.00</td>
+            <td align="right">44.41791916</td>
+            <td align="right">9.48</td>
+            <td align="right">2607.03</td>
+            <td align="right">69.23</td>
+            <td align="right">8.62</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<script src="tablefilter/tablefilter.js"></script>
+
+<script data-config>
+    var filtersConfig = {
+        base_path: 'tablefilter/',
+        col_1: "select",
+        col_2: "select",
+        col_3: "select",
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: true,
+        loader: true,
+        status_bar: true,
+        mark_active_columns: true,
+        col_number_format: [
+            null, null, 'US',
+            'US', 'US', 'US',
+            'US', 'US', 'US'
+        ],
+        custom_options: {
+            cols:[3],
+            texts: [[
+                '0 - 25 000',
+                '100 000 - 1 500 000'
+            ]],
+            values: [[
+                '>0 && <=25000',
+                '>100000 && <=1500000'
+            ]],
+            sorts: [false]
+        },
+        col_widths: [
+            "150px", "100px", "100px",
+            "70px", "70px", "70px",
+            "70px", "60px", "60px"
+        ],
+        extensions:[{ name: 'sort' }]
+    };
+
+    var tf = new TableFilter('demo', filtersConfig);
+    tf.init();
+
+</script>
+
+<pre></pre>
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<script>
+    var configs = document.querySelectorAll('script[data-config]');
+    var pre = document.body.getElementsByTagName('pre')[0];
+
+    [].forEach.call(configs, function(config) {
+        if(pre){
+            pre.innerHTML +=
+                config.innerHTML.replace('<', '&lt;').replace('>', '&gt;');
+        }
+    });
+</script>
+<!-- -->
+
+</body>
+</html>
