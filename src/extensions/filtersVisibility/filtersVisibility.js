@@ -142,23 +142,23 @@ export default class FiltersVisibility{
         let fltRow = tbl.rows[this.filtersRowIndex];
         let fltRowDisplay = fltRow.style.display;
 
-        if(this.onBeforeShow && fltRowDisplay!=''){
+        if(this.onBeforeShow && fltRowDisplay !== ''){
             this.onBeforeShow.call(this, this);
         }
-        if(this.onBeforeHide && fltRowDisplay===''){
+        if(this.onBeforeHide && fltRowDisplay === ''){
             this.onBeforeHide.call(null, this);
         }
 
         fltRow.style.display = fltRowDisplay==='' ? 'none' : '';
         if(this.enableIcon && !this.btnHtml){
-            this.btnEl.innerHTML = fltRowDisplay==='' ?
+            this.btnEl.innerHTML = fltRowDisplay === '' ?
                 this.expandBtnHtml : this.collapseBtnHtml;
         }
 
-        if(this.onAfterShow && fltRowDisplay!=''){
+        if(this.onAfterShow && fltRowDisplay !== ''){
             this.onAfterShow.call(null, this);
         }
-        if(this.onAfterHide && fltRowDisplay===''){
+        if(this.onAfterHide && fltRowDisplay === ''){
             this.onAfterHide.call(null, this);
         }
     }

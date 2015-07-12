@@ -497,7 +497,7 @@ export default class ColsVisibility{
             if(n.nodeType === 3){
                 return n.nodeValue;
             } else if(n.nodeType === 1){
-                if(n['id'] && n.id.indexOf('popUp') !== -1){
+                if(n.id && n.id.indexOf('popUp') !== -1){
                     continue;
                 } else {
                     return Dom.getText(n);

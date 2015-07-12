@@ -1917,7 +1917,7 @@ export class TableFilter{
             if(nchilds === this.nbCells && !isExludedRow){
                 // this loop retrieves cell data
                 for(let j=0; j<nchilds; j++){
-                    if(j != colindex || row[i].style.display != ''){
+                    if(j != colindex || row[i].style.display !== ''){
                         continue;
                     }
                     let cell_data = Str.lower(this.getCellData(j, cell[j])),
@@ -1947,7 +1947,7 @@ export class TableFilter{
         if(!flt){
             return '';
         }
-        // let fltColType = this.fltCol[index];
+
         let fltColType = this.getFilterType(index);
         if(fltColType !== this.fltTypeMulti &&
             fltColType !== this.fltTypeCheckList){
@@ -2239,7 +2239,6 @@ export class TableFilter{
             return;
         }
         let slc = this.getFilterElement(index),
-            // execFilter = doFilter===undefined ? true : doFilter,
             fltColType = this.getFilterType(index);
 
         if(fltColType !== this.fltTypeMulti &&
