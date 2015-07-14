@@ -51,22 +51,6 @@ export default {
         return document.createTextNode(txt);
     },
 
-    /**
-     * Returns offset position of passed element
-     * @param  {object} obj [description]
-     * @return {object}     literal object with left and top values
-     */
-    position(obj){
-        let l = 0, t = 0;
-        if (obj && obj.offsetParent){
-            do {
-                l += obj.offsetLeft;
-                t += obj.offsetTop;
-            } while (obj == obj.offsetParent);
-        }
-        return { 'left': l, 'top': t };
-    },
-
     hasClass(ele, cls){
         if(!ele){ return false; }
 
