@@ -100,6 +100,8 @@ module.exports = function (grunt) {
             }
         },
 
+        clean: ['demos/starter.html'],
+
         'webpack-dev-server': {
             options: {
                 webpack: webpack.dev,
@@ -158,14 +160,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
 
-    grunt.registerTask('default',
-        ['build', 'test', 'build-demos', 'copy:starter']);
+    grunt.registerTask('default', ['build', 'test', 'build-demos']);
 
     // Development server
     grunt.registerTask('server', ['webpack-dev-server:start']);
@@ -179,8 +181,8 @@ module.exports = function (grunt) {
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
-    grunt.registerTask('build-demos',
-        ['copy:templates', 'copy:assets', 'string-replace:demos']);
+    grunt.registerTask('build-demos', ['copy:templates', 'copy:assets',
+        'string-replace:demos', 'copy:starter', 'clean']);
 
     // Transpile with Babel
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
