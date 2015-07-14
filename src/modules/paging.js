@@ -194,8 +194,8 @@ export class Paging{
         }
 
         evt.slcPagesChange = (event) => {
-            this.changePage();
-            event.target.blur();
+            var slc = event.target;
+            this.changePage(slc.selectedIndex);
         };
 
         // Paging drop-down list selector

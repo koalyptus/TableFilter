@@ -59,6 +59,14 @@ test('Set page', function() {
     deepEqual(paging.getPage(), 1, 'Expected page number');
     paging.setPage(3);
     deepEqual(paging.getPage(), 3, 'Expected page number');
+    deepEqual(paging.pagingSlc.selectedIndex, 2,
+        'Expected page number in paging drop-down selector');
+});
+
+
+test('Set page via drop-down page selector', function() {
+    paging.pagingSlc.selectedIndex = 2;
+    deepEqual(paging.getPage(), 3, 'Expected page number');
 });
 
 test('Filter from non starting page', function() {
