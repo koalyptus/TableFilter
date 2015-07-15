@@ -375,7 +375,7 @@ export class Paging{
                 }
 
                 var isRowValid = row.getAttribute('validRow');
-                if(Types.isNull(isRowValid) || Boolean(isRowValid)){
+                if(Types.isNull(isRowValid) || Boolean(isRowValid==='true')){
                     tf.validRowsIndex.push(j);
                 }
             }
@@ -394,13 +394,8 @@ export class Paging{
             mdiv.style.visibility = 'visible';
             if(this.pageSelectorType === tf.fltTypeSlc){
                 for(var z=0; z<this.nbPages; z++){
-                    var currOpt = new Option(
-                        (z+1),
-                        z*this.pagingLength,
-                        false,
-                        false
-                    );
-                    this.pagingSlc.options[z] = currOpt;
+                    var opt = Dom.createOpt(z+1, z*this.pagingLength, false);
+                    this.pagingSlc.options[z] = opt;
                 }
             } else{
                 //input type
@@ -437,9 +432,7 @@ export class Paging{
             var isRowValid = r.getAttribute('validRow');
 
             if(h>=this.startPagingRow && h<endPagingRow){
-                // if(r.getAttribute('validRow')==='true' ||
-                //     !r.getAttribute('validRow')){
-                if(Types.isNull(isRowValid) || Boolean(isRowValid)){
+                if(Types.isNull(isRowValid) || Boolean(isRowValid==='true')){
                     r.style.display = '';
                 }
                 if(tf.alternateBgs && alternateRows){
