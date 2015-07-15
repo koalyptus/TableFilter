@@ -63,10 +63,10 @@ test('Set page', function() {
         'Expected page number in paging drop-down selector');
 });
 
-
 test('Set page via drop-down page selector', function() {
-    paging.pagingSlc.selectedIndex = 2;
-    deepEqual(paging.getPage(), 3, 'Expected page number');
+    paging.pagingSlc.selectedIndex = 3;
+    paging.changePage(paging.pagingSlc.selectedIndex);
+    deepEqual(paging.getPage(), 4, 'Expected page number');
 });
 
 test('Filter from non starting page', function() {
@@ -76,6 +76,13 @@ test('Filter from non starting page', function() {
         1, 'Expected valid rows after page change');
     deepEqual(tf.nbVisibleRows,
         1, 'Expected visible rows after page change');
+});
+
+test('Filter with dummy value', function() {
+    tf.clearFilters();
+    tf.setFilterValue(0, 'dfsdf');
+    tf.filter();
+    deepEqual(tf.validRowsIndex.length, 0, 'Expected valid rows');
 });
 
 test('Set results per page', function() {
@@ -126,6 +133,12 @@ test('Set page', function() {
     deepEqual(paging.getPage(), 3, 'Expected page number');
 });
 
+test('Set page via drop-down page selector', function() {
+    paging.pagingSlc.selectedIndex = 3;
+    paging.changePage(paging.pagingSlc.selectedIndex);
+    deepEqual(paging.getPage(), 4, 'Expected page number');
+});
+
 test('Filter from non starting page', function() {
     tf.setFilterValue(1, 'Perth');
     tf.filter();
@@ -135,7 +148,15 @@ test('Filter from non starting page', function() {
         1, 'Expected visible rows after page change');
 });
 
+test('Filter with dummy value', function() {
+    tf.clearFilters();
+    tf.setFilterValue(0, 'dfsdf');
+    tf.filter();
+    deepEqual(tf.validRowsIndex.length, 0, 'Expected valid rows');
+});
+
 test('Set results per page', function() {
+    tf.clearFilters();
     paging.resultsPerPageSlc.options[1].selected = true;
     paging.changeResultsPerPage();
     deepEqual(paging.pagingLength, 4, 'Expected page length');
