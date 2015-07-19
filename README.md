@@ -9,7 +9,7 @@ TableFilter is a modernised version of the [HTML Table Filter generator](http://
 This library adds to any html table a "filter by column" feature that enables
 users to filter and limit the data displayed within a long table. By default, the script automatically adds a filter grid bar at the top of the desired table.
 
-##Features
+## Features
 * Convert a regular HTML table into an advanced grid component providing:
     * Advanced columns filtering model
     * Sorting and pagination facilities
@@ -25,7 +25,7 @@ solution
 * Exhaustive documentation and API
 * Valuable support provided under a Premium request
 
-##Getting started
+## Getting started
 Clone the repo using Git:
 ```shell
 git clone --bare https://github.com/koalyptus/TableFilter.git
@@ -33,7 +33,7 @@ git clone --bare https://github.com/koalyptus/TableFilter.git
 
 Alternatively you can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
 
-##Setup
+## Setup
 Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the main js file in your page:
 ```shell
 <script src="path/to/my/scripts/tablefilter/tablefilter.js"></script>
@@ -50,11 +50,17 @@ tf.init();
 If the ``base_path`` property is not specified, it will default to ``/tablefilter`` directory:
 ```shell
 your-page.html
- |-- tablefilter 
+ |— tablefilter
 ``` 
 
-##Development
-If you are not familiar with ``Grunt`` visit this page: [gruntjs.com/getting-started](http://gruntjs.com/getting-started). Once ``Grunt`` is sorted out you can follow the instructions below. 
+## Development
+This project requires node.js and Grunt to be installed:
+- install [node.js])(https://nodejs.org/)
+- install [gruntjs.com/getting-started](Grunt) from the command line using npm(comes with node.js):
+```shell
+npm install -g grunt-cli
+```
+Once ``Grunt`` is sorted out you can follow the instructions below.
 Start by installing any dependencies.
 
 ```shell
@@ -73,8 +79,7 @@ Use the ``build`` task to generate a production build:
 grunt build
 ```
 
-The ``default`` Grunt task will create a production build and also run the
-tests:
+The ``default`` Grunt task will create a production build, run the tests and finally generate the demos:
 
 ```shell
 grunt
