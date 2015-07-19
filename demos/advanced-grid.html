@@ -32,7 +32,7 @@
 
 <p>
     To make the grid rows selectable, you need to import the
-    <a href="http://edittable.free.fr/zip.php?f=ezEditTable.zip&amp;p=1"target="_blank" title="ezEditTable is a javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation - Developed by Max Guglielmi">ezEditTable</a> plugin, enable the <code>selectable</code> property
+    <a href="http://edittable.free.fr/zip.php?f=ezEditTable.zip&amp;p=1"target="_blank" title="ezEditTable is a javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation - Developed by Max Guglielmi">ezEditTable</a> plugin, enable the <code>selection</code> property
     and configure the <code>advancedGrid</code> with the <a href="http://edittable.free.fr/zip.php?f=ezEditTable.zip&amp;p=1"target="_blank" title="ezEditTable is a javascript code aimed at enhancing regular HTML tables by adding features such as inline editing components, advanced selection and keyboard navigation - Developed by Max Guglielmi">ezEditTable</a>
     options.
 </p>
@@ -13045,7 +13045,7 @@
                 // Once ezEditTable dependency is installed in your
                 // project import it by pointing to a local path:
                 // vendor_path: 'path/to/ezEditTable'
-                selectable: true,
+                selection: true,
                 default_selection: 'both',
                 on_validate_row: function(o, row){
                     var country = o.Selection.GetActiveRowValues()[0];
