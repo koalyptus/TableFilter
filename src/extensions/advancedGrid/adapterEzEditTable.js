@@ -66,8 +66,7 @@ export default class AdapterEzEditTable {
 
         cfg.base_path = cfg.base_path  || tf.basePath + 'ezEditTable/';
         var editable = cfg.editable;
-        var selectable = cfg.selectable;
-        cfg.selection = selectable;
+        var selectable = cfg.selection;
 
         if(selectable){
             cfg.default_selection = cfg.default_selection || 'row';
@@ -348,7 +347,7 @@ export default class AdapterEzEditTable {
     reset(){
         var ezEditTable = this._ezEditTable;
         if(ezEditTable){
-            if(this.cfg.selectable){
+            if(this.cfg.selection){
                 ezEditTable.Selection.Set();
             }
             if(this.cfg.editable){
@@ -363,7 +362,7 @@ export default class AdapterEzEditTable {
     destroy(){
         var ezEditTable = this._ezEditTable;
         if(ezEditTable){
-            if(this.cfg.selectable){
+            if(this.cfg.selection){
                 ezEditTable.Selection.ClearSelections();
                 ezEditTable.Selection.Remove();
             }

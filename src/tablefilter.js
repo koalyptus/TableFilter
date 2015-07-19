@@ -523,14 +523,18 @@ export class TableFilter{
                     this.isUserTyping = false;
                     global.clearInterval(this.autoFilterTimer);
                 }
-                // if(o.ezEditTable){
-                //     if(o.editable){
-                //         o.ezEditTable.Editable.Set();
-                //     }
-                //     if(o.selectable){
-                //         o.ezEditTable.Selection.Set();
-                //     }
-                // }
+                // TODO: hack to prevent ezEditTable enter key event hijaking.
+                // Needs to be fixed in the vendor's library
+                if(this.hasExtension('advancedGrid')){
+                    var advGrid = this.extension('advancedGrid');
+                    var ezEditTable = advGrid._ezEditTable;
+                    if(advGrid.cfg.editable){
+                        ezEditTable.Editable.Set();
+                    }
+                    if(advGrid.cfg.selection){
+                        ezEditTable.Selection.Set();
+                    }
+                }
             },
             // set focused text-box filter as active
             onInpFocus(e) {
@@ -542,14 +546,18 @@ export class TableFilter{
                     Event.cancel(_ev);
                     Event.stop(_ev);
                 }
-                // if(o.ezEditTable){
-                //     if(o.editable){
-                //         o.ezEditTable.Editable.Remove();
-                //     }
-                //     if(o.selectable){
-                //         o.ezEditTable.Selection.Remove();
-                //     }
-                // }
+                // TODO: hack to prevent ezEditTable enter key event hijaking.
+                // Needs to be fixed in the vendor's library
+                if(this.hasExtension('advancedGrid')){
+                    var advGrid = this.extension('advancedGrid');
+                    var ezEditTable = advGrid._ezEditTable;
+                    if(advGrid.cfg.editable){
+                        ezEditTable.Editable.Remove();
+                    }
+                    if(advGrid.cfg.selection){
+                        ezEditTable.Selection.Remove();
+                    }
+                }
             },
             // set focused drop-down filter as active
             onSlcFocus(e) {

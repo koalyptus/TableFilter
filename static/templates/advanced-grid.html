@@ -10,7 +10,7 @@
 
 <p>
     To make the grid rows selectable, you need to import the
-    {EZEDITTABLE_LINK} plugin, enable the <code>selectable</code> property
+    {EZEDITTABLE_LINK} plugin, enable the <code>selection</code> property
     and configure the <code>advancedGrid</code> with the {EZEDITTABLE_LINK}
     options.
 </p>
@@ -68,7 +68,7 @@
                 // Once ezEditTable dependency is installed in your
                 // project import it by pointing to a local path:
                 // vendor_path: 'path/to/ezEditTable'
-                selectable: true,
+                selection: true,
                 default_selection: 'both',
                 on_validate_row: function(o, row){
                     var country = o.Selection.GetActiveRowValues()[0];
