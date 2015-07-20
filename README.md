@@ -54,7 +54,7 @@ your-page.html
 ## Development
 This project requires node.js and Grunt to be installed:
 - install [node.js](https://nodejs.org/)
-- install [gruntjs.com/getting-started](Grunt) from the command line using npm (comes with node.js):
+- install [Grunt](http://gruntjs.com/getting-started) from the command line using npm (comes with node.js):
 ```shell
 npm install -g grunt-cli
 ```
