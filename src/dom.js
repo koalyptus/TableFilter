@@ -72,7 +72,7 @@ export default {
             ele.className = cls;
         }
         else if(!this.hasClass(ele, cls)){
-            ele.className += " " + cls;
+            ele.className += ' ' + cls;
         }
     },
 

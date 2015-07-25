@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var path = require('path');
 var Clean = require('clean-webpack-plugin');
-var StringReplacePlugin = require("string-replace-webpack-plugin");
+var StringReplacePlugin = require('string-replace-webpack-plugin');
 var fs = require('fs');
 var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
