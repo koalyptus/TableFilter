@@ -12,7 +12,10 @@
         deepEqual(tf.getHeadersRowIndex(), 1, 'Headers row index');
         deepEqual(tf.getCellsNb(), 5, 'cells collection length');
         deepEqual(tf.getRowsNb(), 7, 'rows collection length');
+        deepEqual(tf.getFilterableRowsNb(), 7, 'number of filterable rows');
         deepEqual(tf.getFilterId(0), 'flt0_demo', 'filter DOM element id');
+        deepEqual(tf.getStartRowIndex(), 2, 'Start of filterable rows');
+        deepEqual(tf.getLastRowIndex(), 8, 'Last row index');
     });
 
     module('Public methods');
@@ -79,6 +82,11 @@
         );
         tf.clearFilters();
         tf.filter();
+    });
+
+    test('Destroy', function() {
+        tf.destroy();
+        deepEqual(tf.hasGrid(), false, 'Filters removed');
     });
 
 })(window, TableFilter);
