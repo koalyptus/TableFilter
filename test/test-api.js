@@ -19,13 +19,20 @@
     });
 
     module('Public methods');
+
+    test('Filters DOM elements', function() {
+        deepEqual(tf.getFilterElement(1).nodeName, 'INPUT',
+            'Filter\'s DOM element');
+        deepEqual(tf.getHeaderElement(2).nodeName, 'TH',
+            'Header\'s DOM element');
+    });
+
     test('Get filters values', function() {
         equal(tf.getFilterValue(0), '', 'Column 0 filter value');
         tf.setFilterValue(0, 'Syd');
         tf.setFilterValue(1, 'Ade');
         deepEqual(tf.getFilterValue(0), 'Syd', 'Column 0 filter value');
         deepEqual(tf.getFiltersValue(), ['syd', 'ade', '', '', '']);
-
     });
 
     test('Filter table', function() {
@@ -76,6 +83,17 @@
             'Get filtered table data'
         );
         deepEqual(
+            tf.getFilteredData(true),
+            [
+                [1, ['From','Destination','Road Distance (km)',
+                    'By Air (hrs)','By Rail (hrs)']],
+                [6, ['Adelaide','Perth','2781','3.1','38']],
+                [7, ['Adelaide','Alice Springs','1533','2','20.25']],
+                [8, ['Adelaide','Brisbane','2045','2.15','40']]
+            ],
+            'Get filtered table data including columns headers'
+        );
+        deepEqual(
             tf.getFilteredDataCol(0),
             ['Adelaide','Adelaide','Adelaide'],
             'Get specified column filtered values'
@@ -87,6 +105,31 @@
     test('Destroy', function() {
         tf.destroy();
         deepEqual(tf.hasGrid(), false, 'Filters removed');
+        tf = null;
+    });
+
+    test('Re-instantiate TableFilter with different filter types', function() {
+        tf = null;
+        tf = new TableFilter('demo', {
+            base_path: '../dist/tablefilter/',
+            col_0: 'select',
+            col_1: 'multiple',
+            col_2: 'checklist'
+        });
+        tf.init();
+
+        deepEqual(tf.getFilterType(0), 'select', 'Colmun 0 filter type');
+        deepEqual(tf.getFilterType(1), 'multiple', 'Colmun 1 filter type');
+        deepEqual(tf.getFilterType(2), 'checklist', 'Colmun 2 filter type');
+        deepEqual(tf.getFilterType(3), 'input', 'Colmun 3 filter type');
+        deepEqual(tf.getFiltersByType('select'), ['flt0_demo'],
+            'Get select filter(s)');
+        deepEqual(tf.getFiltersByType('multiple'), ['flt1_demo'],
+            'Get multiple filter(s)');
+        deepEqual(tf.getFiltersByType('checklist'), ['flt2_demo'],
+            'Get checklist filter(s)');
+        deepEqual(tf.getFiltersByType('input'), ['flt3_demo','flt4_demo'],
+            'Get input filter(s)');
     });
 
 })(window, TableFilter);
