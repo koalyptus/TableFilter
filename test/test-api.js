@@ -241,48 +241,49 @@
             ],
             'Get specified column values'
         );
-        // deepEqual(
-        //     tf.getTableData(),
-        //     [
-        //         [0, ['Sydney','Adelaide','1412','1.4','25.3']],
-        //         [1, ['Sydney','Brisbane','982','1.5','16']],
-        //         [2, ['Sydney','Canberra','286','.6','4.3']],
-        //         [3, ['Sydney','Melbourne','872','1.1','10.5']],
-        //         [4, ['Adelaide','Perth','2781','3.1','38']],
-        //         [5, ['Adelaide','Alice Springs','1533','2','20.25']],
-        //         [6, ['Adelaide','Brisbane','2045','2.15','40']]
-        //     ],
-        //     'Get table data'
-        // );
-        // tf.setFilterValue(0, 'Adelaide');
-        // tf.filter();
-        // deepEqual(
-        //     tf.getFilteredData(),
-        //     [
-        //         [6, ['Adelaide','Perth','2781','3.1','38']],
-        //         [7, ['Adelaide','Alice Springs','1533','2','20.25']],
-        //         [8, ['Adelaide','Brisbane','2045','2.15','40']]
-        //     ],
-        //     'Get filtered table data'
-        // );
-        // deepEqual(
-        //     tf.getFilteredData(true),
-        //     [
-        //         [1, ['From','Destination','Road Distance (km)',
-        //             'By Air (hrs)','By Rail (hrs)']],
-        //         [6, ['Adelaide','Perth','2781','3.1','38']],
-        //         [7, ['Adelaide','Alice Springs','1533','2','20.25']],
-        //         [8, ['Adelaide','Brisbane','2045','2.15','40']]
-        //     ],
-        //     'Get filtered table data including columns headers'
-        // );
-        // deepEqual(
-        //     tf.getFilteredDataCol(0),
-        //     ['Adelaide','Adelaide','Adelaide'],
-        //     'Get specified column filtered values'
-        // );
-        // tf.clearFilters();
-        // tf.filter();
+        deepEqual(
+            tf.getTableData(),
+            [
+                [0, ['Sydney','Adelaide','1412','1.4','25.3']],
+                [1, ['Sydney','Brisbane','982','1.5','16']],
+                [2, ['Sydney','Canberra','286','.6','4.3']],
+                [3, ['Sydney','Melbourne','872','1.1','10.5']],
+                [4, ['Adelaide','Perth','2781','3.1','38']],
+                [5, ['Adelaide','Alice Springs','1533','2','20.25']],
+                [6, ['Adelaide','Brisbane','2045','2.15','40']]
+            ],
+            'Get table data'
+        );
+        tf.clearFilters();
+        tf.setFilterValue(0, 'Adelaide');
+        tf.filter();
+        deepEqual(
+            tf.getFilteredData(),
+            [
+                [4, ['Adelaide','Perth','2781','3.1','38']],
+                [5, ['Adelaide','Alice Springs','1533','2','20.25']],
+                [6, ['Adelaide','Brisbane','2045','2.15','40']]
+            ],
+            'Get filtered table data'
+        );
+        deepEqual(
+            tf.getFilteredData(true),
+            [
+                [0, ['From','Destination','Road Distance (km)',
+                    'By Air (hrs)','By Rail (hrs)']],
+                [4, ['Adelaide','Perth','2781','3.1','38']],
+                [5, ['Adelaide','Alice Springs','1533','2','20.25']],
+                [6, ['Adelaide','Brisbane','2045','2.15','40']]
+            ],
+            'Get filtered table data including columns headers'
+        );
+        deepEqual(
+            tf.getFilteredDataCol(0),
+            ['Adelaide','Adelaide','Adelaide'],
+            'Get specified column filtered values'
+        );
+        tf.clearFilters();
+        tf.filter();
     });
 
     test('Destroy', function() {
