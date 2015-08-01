@@ -872,6 +872,9 @@ export class TableFilter{
         }//if this.fltGrid
 
         /* Filter behaviours */
+        if(this.hasVisibleRows){
+            this.enforceVisibility();
+        }
         if(this.rowsCounter){
             Mod.rowsCounter = new RowsCounter(this);
             Mod.rowsCounter.init();
@@ -1824,8 +1827,7 @@ export class TableFilter{
                     Mod.alternateRows.removeRowBg(k);
                 }
                 // always visible rows need to be counted as valid
-                if(this.hasVisibleRows && Arr.has(this.visibleRows, k) &&
-                    !this.paging){
+                if(this.hasVisibleRows && this.visibleRows.indexOf(k) !== -1){
                     this.validRowsIndex.push(k);
                 } else {
                     hiddenrows++;
@@ -1874,7 +1876,7 @@ export class TableFilter{
         let Mod = this.Mod;
 
         //shows rows always visible
-        if(this.visibleRows){
+        if(this.hasVisibleRows){
             this.enforceVisibility();
         }
         //columns operations
@@ -1886,11 +1888,9 @@ export class TableFilter{
         if(this.linkedFilters){
             this.linkFilters();
         }
-        let nr = !this.paging && this.hasVisibleRows ?
-            this.nbVisibleRows - this.visibleRows.length : this.nbVisibleRows;
-        //refreshes rows counter
+
         if(this.rowsCounter){
-            Mod.rowsCounter.refresh(nr);
+            Mod.rowsCounter.refresh(this.nbVisibleRows);
         }
 
         if(this.popUpFilters){
@@ -2208,8 +2208,7 @@ export class TableFilter{
         }
 
         // always visible rows are valid
-        if(this.hasVisibleRows && Arr.has(this.visibleRows, rowIndex) &&
-            !this.paging){
+        if(this.hasVisibleRows && this.visibleRows.indexOf(rowIndex) !== -1){
             isValid = true;
         }
 
@@ -2347,17 +2346,16 @@ export class TableFilter{
 
     /**
      * Makes defined rows always visible
-     *
-     * NOTE: This applies only when paging is disabled
      */
     enforceVisibility(){
-        if(this._hasGrid && this.hasVisibleRows && !this.paging){
-            for(let i=0, len=this.visibleRows.length; i<len; i++){
-                let row = this.visibleRows[i];
-                //row index cannot be > nrows
-                if(row <= this.nbRows){
-                    this.validateRow(row, true);
-                }
+        if(!this.hasVisibleRows){
+            return;
+        }
+        for(let i=0, len=this.visibleRows.length; i<len; i++){
+            let row = this.visibleRows[i];
+            //row index cannot be > nrows
+            if(row <= this.nbRows){
+                this.validateRow(row, true);
             }
         }
     }

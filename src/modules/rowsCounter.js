@@ -94,8 +94,7 @@ export class RowsCounter{
             if(p && p !== ''){
                 totTxt = p;
             } else{
-                totTxt = tf.nbFilterableRows - tf.nbHiddenRows -
-                    (tf.hasVisibleRows ? tf.visibleRows.length : 0);
+                totTxt = tf.nbFilterableRows - tf.nbHiddenRows;
             }
         } else {
             var paging = tf.feature('paging');
@@ -111,6 +110,7 @@ export class RowsCounter{
                     paging_end_row + this.overText + tf.nbVisibleRows;
             }
         }
+
         this.rowsCounterSpan.innerHTML = totTxt;
         if(this.onAfterRefreshCounter){
             this.onAfterRefreshCounter.call(

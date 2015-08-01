@@ -112,8 +112,7 @@ export class Dropdown{
         for(var k=tf.refRow; k<tf.nbRows; k++){
             // always visible rows don't need to appear on selects as always
             // valid
-            if(tf.hasVisibleRows && Arr.has(tf.visibleRows, k) &&
-                !tf.paging){
+            if(tf.hasVisibleRows && tf.visibleRows.indexOf(k) !== -1){
                 continue;
             }
 

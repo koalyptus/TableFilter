@@ -321,8 +321,6 @@ export class Paging{
         targetEl.appendChild(btnLastSpan);
         this.pagingSlc = Dom.id(this.prfxSlcPages+tf.id);
 
-        // if this.rememberGridValues==true this.setPagingInfo() is called
-        // in ResetGridValues() method
         if(!tf.rememberGridValues || this.isPagingRemoved){
             this.setPagingInfo();
         }
