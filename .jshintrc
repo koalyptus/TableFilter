@@ -10,5 +10,8 @@
   "maxlen" : 80,
   "trailing": true,
   "quotmark": "single",
-  "immed": true
+  "immed": true,
+  "maxstatements": 195,
+  "maxdepth": 7,
+  "maxcomplexity": 102
 }

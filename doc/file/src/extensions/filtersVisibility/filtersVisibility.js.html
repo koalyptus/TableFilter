@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/extensions/filtersVisibility/filtersVisibility.js | TableFilter v0.0.0 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/extensions/filtersVisibility/filtersVisibility.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../../dom&apos;;
+import Types from &apos;../../types&apos;;
+import Event from &apos;../../event&apos;;
+
+export default class FiltersVisibility{
+
+    /**
+     * Filters Row Visibility extension
+     * @param {Object} tf TableFilter instance
+     * @param {Object} f Config
+     */
+    constructor(tf, f){
+
+        this.initialized = false;
+        this.name = f.name;
+        this.desc = f.description || &apos;Filters row visibility manager&apos;;
+
+        // Path and image filenames
+        this.stylesheet = f.stylesheet || &apos;filtersVisibility.css&apos;;
+        this.icnExpand = f.expand_icon_name || &apos;icn_exp.png&apos;;
+        this.icnCollapse = f.collapse_icon_name || &apos;icn_clp.png&apos;;
+
+        //expand/collapse filters span element
+        this.contEl = null;
+        //expand/collapse filters btn element
+        this.btnEl = null;
+
+        this.icnExpandHtml = &apos;&lt;img src=&quot;&apos;+ tf.stylePath + this.icnExpand +
+            &apos;&quot; alt=&quot;Expand filters&quot; &gt;&apos;;
+        this.icnCollapseHtml = &apos;&lt;img src=&quot;&apos;+ tf.stylePath + this.icnCollapse +
+            &apos;&quot; alt=&quot;Collapse filters&quot; &gt;&apos;;
+        this.defaultText = &apos;Toggle filters&apos;;
+
+        //id of container element
+        this.targetId =  f.target_id || null;
+        //enables/disables expand/collapse icon
+        this.enableIcon = f.enable_icon===false ? false : true;
+        this.btnText = f.btn_text || &apos;&apos;;
+
+        //defines expand/collapse filters text
+        this.collapseBtnHtml = this.enableIcon ?
+            this.icnCollapseHtml + this.btnText :
+            this.btnText || this.defaultText;
+        this.expandBtnHtml =  this.enableIcon ?
+            this.icnExpandHtml + this.btnText :
+            this.btnText || this.defaultText;
+
+        //defines expand/collapse filters button innerHtml
+        this.btnHtml = f.btn_html || null;
+        //defines css class for expand/collapse filters button
+        this.btnCssClass = f.btn_css_class || &apos;btnExpClpFlt&apos;;
+        //defines css class span containing expand/collapse filters
+        this.contCssClass = f.cont_css_class || &apos;expClpFlt&apos;;
+        this.filtersRowIndex = !Types.isUndef(f.filters_row_index) ?
+                f.filters_row_index : tf.getFiltersRowIndex();
+
+        this.visibleAtStart = !Types.isUndef(f.visible_at_start) ?
+            Boolean(f.visible_at_start) : true;
+
+        // Prefix
+        this.prfx = &apos;fltsVis_&apos;;
+
+        //callback before filters row is shown
+        this.onBeforeShow = Types.isFn(f.on_before_show) ?
+            f.on_before_show : null;
+        //callback after filters row is shown
+        this.onAfterShow = Types.isFn(f.on_after_show) ?
+            f.on_after_show : null;
+        //callback before filters row is hidden
+        this.onBeforeHide = Types.isFn(f.on_before_hide) ?
+            f.on_before_hide : null;
+        //callback after filters row is hidden
+        this.onAfterHide = Types.isFn(f.on_after_hide) ? f.on_after_hide : null;
+
+        //Loads extension stylesheet
+        tf.import(f.name+&apos;Style&apos;, tf.stylePath + this.stylesheet, null, &apos;link&apos;);
+
+        this.tf = tf;
+    }
+
+    /**
+     * Initialise extension
+     */
+    init(){
+        if(this.initialized){
+            return;
+        }
+
+        this.buildUI();
+        this.initialized = true;
+    }
+
+    /**
+     * Build UI elements
+     */
+    buildUI(){
+        let tf = this.tf;
+        let span = Dom.create(&apos;span&apos;,[&apos;id&apos;, this.prfx+tf.id]);
+        span.className = this.contCssClass;
+
+        //Container element (rdiv or custom element)
+        if(!this.targetId){
+            tf.setToolbar();
+        }
+        let targetEl = !this.targetId ? tf.rDiv : Dom.id(this.targetId);
+
+        if(!this.targetId){
+            let firstChild = targetEl.firstChild;
+            firstChild.parentNode.insertBefore(span, firstChild);
+        } else {
+            targetEl.appendChild(span);
+        }
+
+        let btn;
+        if(!this.btnHtml){
+            btn = Dom.create(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
+            btn.className = this.btnCssClass;
+            btn.title = this.btnText || this.defaultText;
+            btn.innerHTML = this.collapseBtnHtml;
+            span.appendChild(btn);
+            Event.add(btn, &apos;click&apos;, ()=&gt; this.toggle());
+        } else { //Custom html
+            span.innerHTML = this.btnHtml;
+            btn = span.firstChild;
+            Event.add(btn, &apos;click&apos;, ()=&gt; this.toggle());
+        }
+
+        this.contEl = span;
+        this.btnEl = btn;
+
+        if(!this.visibleAtStart){
+            this.toggle();
+        }
+    }
+
+    /**
+     * Toggle filters visibility
+     */
+    toggle(){
+        let tf = this.tf;
+        let tbl = tf.gridLayout? tf.feature(&apos;gridLayout&apos;).headTbl : tf.tbl;
+        let fltRow = tbl.rows[this.filtersRowIndex];
+        let fltRowDisplay = fltRow.style.display;
+
+        if(this.onBeforeShow &amp;&amp; fltRowDisplay !== &apos;&apos;){
+            this.onBeforeShow.call(this, this);
+        }
+        if(this.onBeforeHide &amp;&amp; fltRowDisplay === &apos;&apos;){
+            this.onBeforeHide.call(null, this);
+        }
+
+        fltRow.style.display = fltRowDisplay===&apos;&apos; ? &apos;none&apos; : &apos;&apos;;
+        if(this.enableIcon &amp;&amp; !this.btnHtml){
+            this.btnEl.innerHTML = fltRowDisplay === &apos;&apos; ?
+                this.expandBtnHtml : this.collapseBtnHtml;
+        }
+
+        if(this.onAfterShow &amp;&amp; fltRowDisplay !== &apos;&apos;){
+            this.onAfterShow.call(null, this);
+        }
+        if(this.onAfterHide &amp;&amp; fltRowDisplay === &apos;&apos;){
+            this.onAfterHide.call(null, this);
+        }
+    }
+
+    /**
+     * Destroy the UI
+     */
+    destroy(){
+        if(!this.btnEl &amp;&amp; !this.contEl){
+            return;
+        }
+
+        this.btnEl.innerHTML = &apos;&apos;;
+        this.btnEl.parentNode.removeChild(this.btnEl);
+        this.btnEl = null;
+
+        this.contEl.innerHTML = &apos;&apos;;
+        this.contEl.parentNode.removeChild(this.contEl);
+        this.contEl = null;
+        this.initialized = false;
+    }
+
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.4)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
