@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/modules/help.js | TableFilter v0.0.0 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/modules/help.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
+import Event from &apos;../event&apos;;
+
+export class Help{
+
+    /**
+     * Help UI component
+     * @param {Object} tf TableFilter instance
+     */
+    constructor(tf){
+        // Configuration object
+        var f = tf.config();
+
+        //id of custom container element for instructions
+        this.tgtId = f.help_instructions_target_id || null;
+        //id of custom container element for instructions
+        this.contTgtId = f.help_instructions_container_target_id ||
+            null;
+        //defines help text
+        this.instrText = f.help_instructions_text  ?
+            f.help_instructions_text :
+            &apos;Use the filters above each column to filter and limit table &apos; +
+            &apos;data. Avanced searches can be performed by using the following &apos; +
+            &apos;operators: &lt;br /&gt;&lt;b&gt;&amp;lt;&lt;/b&gt;, &lt;b&gt;&amp;lt;=&lt;/b&gt;, &lt;b&gt;&amp;gt;&lt;/b&gt;, &apos; +
+            &apos;&lt;b&gt;&amp;gt;=&lt;/b&gt;, &lt;b&gt;=&lt;/b&gt;, &lt;b&gt;*&lt;/b&gt;, &lt;b&gt;!&lt;/b&gt;, &lt;b&gt;{&lt;/b&gt;, &lt;b&gt;}&lt;/b&gt;, &apos; +
+            &apos;&lt;b&gt;||&lt;/b&gt;,&lt;b&gt;&amp;amp;&amp;amp;&lt;/b&gt;, &lt;b&gt;[empty]&lt;/b&gt;, &lt;b&gt;[nonempty]&lt;/b&gt;, &apos; +
+            &apos;&lt;b&gt;rgx:&lt;/b&gt;&lt;br/&gt;&apos; +
+            &apos;&lt;a href=&quot;https://github.com/koalyptus/TableFilter/wiki/&apos; +
+            &apos;4.-Filter-operators&quot; target=&quot;_blank&quot;&gt;Learn more&lt;/a&gt;.&lt;hr/&gt;&apos;;
+        //defines help innerHtml
+        this.instrHtml = f.help_instructions_html || null;
+        //defines reset button text
+        this.btnText = f.help_instructions_btn_text || &apos;?&apos;;
+        //defines reset button innerHtml
+        this.btnHtml = f.help_instructions_btn_html || null;
+        //defines css class for help button
+        this.btnCssClass = f.help_instructions_btn_css_class || &apos;helpBtn&apos;;
+        //defines css class for help container
+        this.contCssClass = f.help_instructions_container_css_class ||
+            &apos;helpCont&apos;;
+        //help button element
+        this.btn = null;
+         //help content div
+        this.cont = null;
+        this.defaultHtml = &apos;&lt;div class=&quot;helpFooter&quot;&gt;&lt;h4&gt;TableFilter &apos; +
+            &apos;v. &apos;+ tf.version +&apos;&lt;/h4&gt;&apos; +
+            &apos;&lt;a href=&quot;https://github.com/koalyptus/TableFilter/&quot; &apos; +
+            &apos; target=&quot;_blank&quot;&gt;https://github.com/koalyptus/TableFilter/&lt;/a&gt;&apos; +
+            &apos;&lt;br/&gt;&lt;span&gt;&amp;copy;2015-&apos;+ tf.year +&apos; Max Guglielmi.&lt;/span&gt;&apos; +
+            &apos;&lt;div align=&quot;center&quot; style=&quot;margin-top:8px;&quot;&gt;&apos; +
+            &apos;&lt;a href=&quot;javascript:void(0);&quot; class=&quot;close&quot;&gt;Close&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&apos;;
+
+        //id prefix for help elements
+        this.prfxHelpSpan = &apos;helpSpan_&apos;;
+        //id prefix for help elements
+        this.prfxHelpDiv = &apos;helpDiv_&apos;;
+
+        this.tf = tf;
+    }
+
+    init(){
+        if(this.btn){
+            return;
+        }
+
+        var tf = this.tf;
+
+        var helpspan = Dom.create(&apos;span&apos;,[&apos;id&apos;, this.prfxHelpSpan+tf.id]);
+        var helpdiv = Dom.create(&apos;div&apos;,[&apos;id&apos;, this.prfxHelpDiv+tf.id]);
+
+        //help button is added to defined element
+        if(!this.tgtId){
+            tf.setToolbar();
+        }
+        var targetEl = !this.tgtId ?
+            tf.rDiv : Dom.id(this.tgtId);
+        targetEl.appendChild(helpspan);
+
+        var divContainer = !this.contTgtId ?
+                helpspan : Dom.id(this.contTgtId);
+
+        if(!this.btnHtml){
+            divContainer.appendChild(helpdiv);
+            var helplink = Dom.create(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
+            helplink.className = this.btnCssClass;
+            helplink.appendChild(Dom.text(this.btnText));
+            helpspan.appendChild(helplink);
+            Event.add(helplink, &apos;click&apos;, () =&gt; { this.toggle(); });
+        } else {
+            helpspan.innerHTML = this.btnHtml;
+            var helpEl = helpspan.firstChild;
+            Event.add(helpEl, &apos;click&apos;, () =&gt; { this.toggle(); });
+            divContainer.appendChild(helpdiv);
+        }
+
+        if(!this.instrHtml){
+            helpdiv.innerHTML = this.instrText;
+            helpdiv.className = this.contCssClass;
+            Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; { this.toggle(); });
+        } else {
+            if(this.contTgtId){
+                divContainer.appendChild(helpdiv);
+            }
+            helpdiv.innerHTML = this.instrHtml;
+            if(!this.contTgtId){
+                helpdiv.className = this.contCssClass;
+                Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; { this.toggle(); });
+            }
+        }
+        helpdiv.innerHTML += this.defaultHtml;
+        Event.add(helpdiv, &apos;click&apos;, () =&gt; { this.toggle(); });
+
+        this.cont = helpdiv;
+        this.btn = helpspan;
+    }
+
+    /**
+     * Toggle help pop-up
+     */
+    toggle(){
+        if(!this.cont){
+            return;
+        }
+        var divDisplay = this.cont.style.display;
+        if(divDisplay === &apos;&apos; || divDisplay === &apos;none&apos;){
+            this.cont.style.display = &apos;inline&apos;;
+        } else {
+            this.cont.style.display = &apos;none&apos;;
+        }
+    }
+
+    /**
+     * Remove help UI
+     */
+    destroy(){
+        if(!this.btn){
+            return;
+        }
+        this.btn.parentNode.removeChild(this.btn);
+        this.btn = null;
+        if(!this.cont){
+            return;
+        }
+        this.cont.parentNode.removeChild(this.cont);
+        this.cont = null;
+    }
+
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.4)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -153,6 +153,16 @@ module.exports = function (grunt) {
                     dest: 'dist/tablefilter'
                 }]
             }
+        },
+
+        esdoc : {
+            dist : {
+                options: {
+                    source: 'src',
+                    destination: 'doc',
+                    title: pkg.name + ' v' + pkg.version
+                }
+            }
         }
 
     });
@@ -166,8 +176,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
+    grunt.loadNpmTasks('grunt-esdoc');
 
-    grunt.registerTask('default', ['build', 'test', 'build-demos']);
+    grunt.registerTask('default', ['build', 'test', 'build-demos', 'esdoc']);
 
     // Development server
     grunt.registerTask('server', ['webpack-dev-server:start']);

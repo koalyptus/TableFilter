@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/extensions/advancedGrid/adapterEzEditTable.js | TableFilter v0.0.0 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/extensions/advancedGrid/adapterEzEditTable.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../../dom&apos;;
+import Arr from &apos;../../array&apos;;
+
+export default class AdapterEzEditTable {
+    /**
+     * Adapter module for ezEditTable, an external library providing advanced
+     * grid features (selection and edition):
+     * http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus
+     *
+     * @param {Object} tf TableFilter instance
+     */
+    constructor(tf, cfg){
+        // ezEditTable config
+        this.initialized = false;
+        this.desc = cfg.description || &apos;ezEditTable adapter&apos;;
+        this.filename = cfg.filename || &apos;ezEditTable.js&apos;;
+        this.vendorPath = cfg.vendor_path;
+        this.loadStylesheet = Boolean(cfg.load_stylesheet);
+        this.stylesheet = cfg.stylesheet || this.vendorPath + &apos;ezEditTable.css&apos;;
+        this.stylesheetName = cfg.stylesheet_name || &apos;ezEditTableCss&apos;;
+        this.err = &apos;Failed to instantiate EditTable object.\n&quot;ezEditTable&quot; &apos; +
+            &apos;dependency not found.&apos;;
+
+        this._ezEditTable = null;
+        this.cfg = cfg;
+        this.tf = tf;
+    }
+
+    /**
+     * Conditionally load ezEditTable library and set advanced grid
+     * @return {[type]} [description]
+     */
+    init(){
+        var tf = this.tf;
+        if(window.EditTable){
+            this._setAdvancedGrid();
+        } else {
+            var path = this.vendorPath + this.filename;
+            tf.import(this.filename, path, ()=&gt; { this._setAdvancedGrid(); });
+        }
+        if(this.loadStylesheet &amp;&amp; !tf.isImported(this.stylesheet, &apos;link&apos;)){
+            tf.import(this.stylesheetName, this.stylesheet, null, &apos;link&apos;);
+        }
+    }
+
+    /**
+     * Instantiate ezEditTable component for advanced grid features
+     */
+    _setAdvancedGrid(){
+        var tf = this.tf;
+
+        //start row for EditTable constructor needs to be calculated
+        var startRow,
+            cfg = this.cfg,
+            thead = Dom.tag(tf.tbl, &apos;thead&apos;);
+
+        //if thead exists and startRow not specified, startRow is calculated
+        //automatically by EditTable
+        if(thead.length &gt; 0 &amp;&amp; !cfg.startRow){
+            startRow = undefined;
+        }
+        //otherwise startRow config property if any or TableFilter refRow
+        else{
+            startRow = cfg.startRow || tf.refRow;
+        }
+
+        cfg.base_path = cfg.base_path  || tf.basePath + &apos;ezEditTable/&apos;;
+        var editable = cfg.editable;
+        var selectable = cfg.selection;
+
+        if(selectable){
+            cfg.default_selection = cfg.default_selection || &apos;row&apos;;
+        }
+        //CSS Styles
+        cfg.active_cell_css = cfg.active_cell_css || &apos;ezETSelectedCell&apos;;
+
+        var _lastValidRowIndex = 0;
+        var _lastRowIndex = 0;
+
+        if(selectable){
+            //Row navigation needs to be calculated according to TableFilter&apos;s
+            //validRowsIndex array
+            var onAfterSelection = function(et, selectedElm, e){
+                var slc = et.Selection;
+                //Next valid filtered row needs to be selected
+                var doSelect = function(nextRowIndex){
+                    if(et.defaultSelection === &apos;row&apos;){
+                        slc.SelectRowByIndex(nextRowIndex);
+                    } else {
+                        et.ClearSelections();
+                        var cellIndex = selectedElm.cellIndex,
+                            row = tf.tbl.rows[nextRowIndex];
+                        if(et.defaultSelection === &apos;both&apos;){
+                            slc.SelectRowByIndex(nextRowIndex);
+                        }
+                        if(row){
+                            slc.SelectCell(row.cells[cellIndex]);
+                        }
+                    }
+                    //Table is filtered
+                    if(tf.validRowsIndex.length !== tf.getRowsNb()){
+                        var r = tf.tbl.rows[nextRowIndex];
+                        if(r){
+                            r.scrollIntoView(false);
+                        }
+                        if(cell){
+                            if(cell.cellIndex === (tf.getCellsNb()-1) &amp;&amp;
+                                tf.gridLayout){
+                                tf.tblCont.scrollLeft = 100000000;
+                            }
+                            else if(cell.cellIndex===0 &amp;&amp; tf.gridLayout){
+                                tf.tblCont.scrollLeft = 0;
+                            } else {
+                                cell.scrollIntoView(false);
+                            }
+                        }
+                    }
+                };
+
+                //table is not filtered
+                if(!tf.validRowsIndex){
+                    return;
+                }
+                var validIndexes = tf.validRowsIndex,
+                    validIdxLen = validIndexes.length,
+                    row = et.defaultSelection !== &apos;row&apos; ?
+                        selectedElm.parentNode : selectedElm,
+                    //cell for default_selection = &apos;both&apos; or &apos;cell&apos;
+                    cell = selectedElm.nodeName===&apos;TD&apos; ? selectedElm : null,
+                    keyCode = e !== undefined ? et.Event.GetKey(e) : 0,
+                    isRowValid = Arr.has(validIndexes, row.rowIndex),
+                    nextRowIndex,
+                    //pgup/pgdown keys
+                    d = (keyCode === 34 || keyCode === 33 ?
+                        (tf.feature(&apos;paging&apos;).pagingLength ||
+                            et.nbRowsPerPage) : 1);
+
+                //If next row is not valid, next valid filtered row needs to be
+                //calculated
+                if(!isRowValid){
+                    //Selection direction up/down
+                    if(row.rowIndex&gt;_lastRowIndex){
+                        //last row
+                        if(row.rowIndex &gt;= validIndexes[validIdxLen-1]){
+                            nextRowIndex = validIndexes[validIdxLen-1];
+                        } else {
+                            var calcRowIndex = (_lastValidRowIndex + d);
+                            if(calcRowIndex &gt; (validIdxLen-1)){
+                                nextRowIndex = validIndexes[validIdxLen-1];
+                            } else {
+                                nextRowIndex = validIndexes[calcRowIndex];
+                            }
+                        }
+                    } else{
+                        //first row
+                        if(row.rowIndex &lt;= validIndexes[0]){
+                            nextRowIndex = validIndexes[0];
+                        } else {
+                            var v = validIndexes[_lastValidRowIndex - d];
+                            nextRowIndex = v ? v : validIndexes[0];
+                        }
+                    }
+                    _lastRowIndex = row.rowIndex;
+                    doSelect(nextRowIndex);
+                } else {
+                    //If filtered row is valid, special calculation for
+                    //pgup/pgdown keys
+                    if(keyCode!==34 &amp;&amp; keyCode!==33){
+                        _lastValidRowIndex = Arr.indexByValue(validIndexes,
+                            row.rowIndex);
+                        _lastRowIndex = row.rowIndex;
+                    } else {
+                        if(keyCode === 34){ //pgdown
+                            //last row
+                            if((_lastValidRowIndex + d) &lt;= (validIdxLen-1)){
+                                nextRowIndex = validIndexes[
+                                _lastValidRowIndex + d];
+                            } else {
+                                nextRowIndex = [validIdxLen-1];
+                            }
+                        } else { //pgup
+                            //first row
+                            if((_lastValidRowIndex - d) &lt;= validIndexes[0]){
+                                nextRowIndex = validIndexes[0];
+                            } else {
+                                nextRowIndex = validIndexes[
+                                    _lastValidRowIndex - d];
+                            }
+                        }
+                        _lastRowIndex = nextRowIndex;
+                        _lastValidRowIndex = Arr.indexByValue(validIndexes,
+                            nextRowIndex);
+                        doSelect(nextRowIndex);
+                    }
+                }
+            };
+
+            //Page navigation has to be enforced whenever selected row is out of
+            //the current page range
+            var onBeforeSelection = function(et, selectedElm){
+                var row = et.defaultSelection !== &apos;row&apos; ?
+                    selectedElm.parentNode : selectedElm;
+                if(tf.paging){
+                    if(tf.feature(&apos;paging&apos;).nbPages &gt; 1){
+                        var paging = tf.feature(&apos;paging&apos;);
+                        //page length is re-assigned in case it has changed
+                        et.nbRowsPerPage = paging.pagingLength;
+                        var validIndexes = tf.validRowsIndex,
+                            validIdxLen = validIndexes.length,
+                            pagingEndRow = parseInt(paging.startPagingRow, 10) +
+                                parseInt(paging.pagingLength, 10);
+                        var rowIndex = row.rowIndex;
+
+                        if((rowIndex === validIndexes[validIdxLen-1]) &amp;&amp;
+                            paging.currentPageNb!==paging.nbPages){
+                            paging.setPage(&apos;last&apos;);
+                        }
+                        else if((rowIndex == validIndexes[0]) &amp;&amp;
+                            paging.currentPageNb!==1){
+                            paging.setPage(&apos;first&apos;);
+                        }
+                        else if(rowIndex &gt; validIndexes[pagingEndRow-1] &amp;&amp;
+                            rowIndex &lt; validIndexes[validIdxLen-1]){
+                            paging.setPage(&apos;next&apos;);
+                        }
+                        else if(
+                            rowIndex &lt; validIndexes[paging.startPagingRow] &amp;&amp;
+                            rowIndex &gt; validIndexes[0]){
+                            paging.setPage(&apos;previous&apos;);
+                        }
+                    }
+                }
+            };
+
+            //Selected row needs to be visible when paging is activated
+            if(tf.paging){
+                tf.feature(&apos;paging&apos;).onAfterChangePage = function(paging){
+                    var advGrid = paging.tf.extension(&apos;advancedGrid&apos;);
+                    var et = advGrid._ezEditTable;
+                    var slc = et.Selection;
+                    var row = slc.GetActiveRow();
+                    if(row){
+                        row.scrollIntoView(false);
+                    }
+                    var cell = slc.GetActiveCell();
+                    if(cell){
+                        cell.scrollIntoView(false);
+                    }
+                };
+            }
+
+            //Rows navigation when rows are filtered is performed with the
+            //EditTable row selection callback events
+            if(cfg.default_selection===&apos;row&apos;){
+                var fnB = cfg.on_before_selected_row;
+                cfg.on_before_selected_row = function(){
+                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);
+                    if(fnB){
+                        fnB.call(
+                            null, arguments[0], arguments[1], arguments[2]);
+                    }
+                };
+                var fnA = cfg.on_after_selected_row;
+                cfg.on_after_selected_row = function(){
+                    onAfterSelection(arguments[0], arguments[1], arguments[2]);
+                    if(fnA){
+                        fnA.call(
+                            null, arguments[0], arguments[1], arguments[2]);
+                    }
+                };
+            } else {
+                var fnD = cfg.on_before_selected_cell;
+                cfg.on_before_selected_cell = function(){
+                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);
+                    if(fnD){
+                        fnD.call(
+                            null, arguments[0], arguments[1], arguments[2]);
+                    }
+                };
+                var fnC = cfg.on_after_selected_cell;
+                cfg.on_after_selected_cell = function(){
+                    onAfterSelection(arguments[0], arguments[1], arguments[2]);
+                    if(fnC){
+                        fnC.call(
+                            null, arguments[0], arguments[1], arguments[2]);
+                    }
+                };
+            }
+        }
+        if(editable){
+            //Added or removed rows, TF rows number needs to be re-calculated
+            var fnE = cfg.on_added_dom_row;
+            cfg.on_added_dom_row = function(){
+                tf.nbFilterableRows++;
+                if(!tf.paging){
+                    tf.feature(&apos;rowsCounter&apos;).refresh();
+                } else {
+                    tf.nbRows++;
+                    tf.nbVisibleRows++;
+                    tf.nbFilterableRows++;
+                    tf.paging=false;
+                    tf.feature(&apos;paging&apos;).destroy();
+                    tf.feature(&apos;paging&apos;).reset();
+                }
+                if(tf.alternateBgs){
+                    tf.feature(&apos;alternateRows&apos;).init();
+                }
+                if(fnE){
+                    fnE.call(null, arguments[0], arguments[1], arguments[2]);
+                }
+            };
+            if(cfg.actions &amp;&amp; cfg.actions[&apos;delete&apos;]){
+                var fnF = cfg.actions[&apos;delete&apos;].on_after_submit;
+                cfg.actions[&apos;delete&apos;].on_after_submit = function(){
+                    tf.nbFilterableRows--;
+                    if(!tf.paging){
+                        tf.feature(&apos;rowsCounter&apos;).refresh();
+                    } else {
+                        tf.nbRows--;
+                        tf.nbVisibleRows--;
+                        tf.nbFilterableRows--;
+                        tf.paging=false;
+                        tf.feature(&apos;paging&apos;).destroy();
+                        tf.feature(&apos;paging&apos;).reset(false);
+                    }
+                    if(tf.alternateBgs){
+                        tf.feature(&apos;alternateRows&apos;).init();
+                    }
+                    if(fnF){
+                        fnF.call(null, arguments[0], arguments[1]);
+                    }
+                };
+            }
+        }
+
+        try{
+            this._ezEditTable = new EditTable(tf.id, cfg, startRow);
+            this._ezEditTable.Init();
+        } catch(e) { throw new Error(this.err); }
+
+        this.initialized = true;
+    }
+
+    /**
+     * Reset advanced grid when previously removed
+     */
+    reset(){
+        var ezEditTable = this._ezEditTable;
+        if(ezEditTable){
+            if(this.cfg.selection){
+                ezEditTable.Selection.Set();
+            }
+            if(this.cfg.editable){
+                ezEditTable.Editable.Set();
+            }
+        }
+    }
+
+    /**
+     * Remove advanced grid
+     */
+    destroy(){
+        var ezEditTable = this._ezEditTable;
+        if(ezEditTable){
+            if(this.cfg.selection){
+                ezEditTable.Selection.ClearSelections();
+                ezEditTable.Selection.Remove();
+            }
+            if(this.cfg.editable){
+                ezEditTable.Editable.Remove();
+            }
+        }
+        this.initialized = false;
+    }
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.4)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

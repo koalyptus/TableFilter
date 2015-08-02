@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/modules/rowsCounter.js | TableFilter v0.0.0 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/modules/rowsCounter.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
+import Types from &apos;../types&apos;;
+
+export class RowsCounter{
+
+    /**
+     * Rows counter
+     * @param {Object} tf TableFilter instance
+     */
+    constructor(tf){
+        // TableFilter configuration
+        var f = tf.config();
+
+        //id of custom container element
+        this.rowsCounterTgtId = f.rows_counter_target_id || null;
+        //element containing tot nb rows
+        this.rowsCounterDiv = null;
+        //element containing tot nb rows label
+        this.rowsCounterSpan = null;
+        //defines rows counter text
+        this.rowsCounterText = f.rows_counter_text || &apos;Rows: &apos;;
+        this.fromToTextSeparator = f.from_to_text_separator || &apos;-&apos;;
+        this.overText = f.over_text || &apos; / &apos;;
+        //defines css class rows counter
+        this.totRowsCssClass = f.tot_rows_css_class || &apos;tot&apos;;
+        //rows counter div
+        this.prfxCounter = &apos;counter_&apos;;
+        //nb displayed rows label
+        this.prfxTotRows = &apos;totrows_span_&apos;;
+        //label preceding nb rows label
+        this.prfxTotRowsTxt = &apos;totRowsTextSpan_&apos;;
+        //callback raised before counter is refreshed
+        this.onBeforeRefreshCounter = Types.isFn(f.on_before_refresh_counter) ?
+            f.on_before_refresh_counter : null;
+        //callback raised after counter is refreshed
+        this.onAfterRefreshCounter = Types.isFn(f.on_after_refresh_counter) ?
+            f.on_after_refresh_counter : null;
+
+        this.tf = tf;
+    }
+
+    init(){
+        var tf = this.tf;
+
+        if((!tf.hasGrid() &amp;&amp; !tf.isFirstLoad) || this.rowsCounterSpan){
+            return;
+        }
+
+        //rows counter container
+        var countDiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxCounter+tf.id]);
+        countDiv.className = this.totRowsCssClass;
+        //rows counter label
+        var countSpan = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfxTotRows+tf.id]);
+        var countText = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfxTotRowsTxt+tf.id]);
+        countText.appendChild(Dom.text(this.rowsCounterText));
+
+        // counter is added to defined element
+        if(!this.rowsCounterTgtId){
+            tf.setToolbar();
+        }
+        var targetEl = !this.rowsCounterTgtId ?
+                tf.lDiv : Dom.id( this.rowsCounterTgtId );
+
+        //default container: &apos;lDiv&apos;
+        if(!this.rowsCounterTgtId){
+            countDiv.appendChild(countText);
+            countDiv.appendChild(countSpan);
+            targetEl.appendChild(countDiv);
+        }
+        else{
+            //custom container, no need to append statusDiv
+            targetEl.appendChild(countText);
+            targetEl.appendChild(countSpan);
+        }
+        this.rowsCounterDiv = countDiv;
+        this.rowsCounterSpan = countSpan;
+
+        this.refresh();
+    }
+
+    refresh(p){
+        if(!this.rowsCounterSpan){
+            return;
+        }
+
+        var tf = this.tf;
+
+        if(this.onBeforeRefreshCounter){
+            this.onBeforeRefreshCounter.call(null, tf, this.rowsCounterSpan);
+        }
+
+        var totTxt;
+        if(!tf.paging){
+            if(p &amp;&amp; p !== &apos;&apos;){
+                totTxt = p;
+            } else{
+                totTxt = tf.nbFilterableRows - tf.nbHiddenRows;
+            }
+        } else {
+            var paging = tf.feature(&apos;paging&apos;);
+            if(paging){
+                //paging start row
+                var paging_start_row = parseInt(paging.startPagingRow, 10) +
+                        ((tf.nbVisibleRows&gt;0) ? 1 : 0);
+                var paging_end_row = (paging_start_row+paging.pagingLength)-1 &lt;=
+                        tf.nbVisibleRows ?
+                        paging_start_row+paging.pagingLength-1 :
+                        tf.nbVisibleRows;
+                totTxt = paging_start_row + this.fromToTextSeparator +
+                    paging_end_row + this.overText + tf.nbVisibleRows;
+            }
+        }
+
+        this.rowsCounterSpan.innerHTML = totTxt;
+        if(this.onAfterRefreshCounter){
+            this.onAfterRefreshCounter.call(
+                null, tf, this.rowsCounterSpan, totTxt);
+        }
+    }
+
+    destroy(){
+        var tf = this.tf;
+        if(!tf.hasGrid() || !this.rowsCounterSpan){
+            return;
+        }
+
+        if(!this.rowsCounterTgtId &amp;&amp; this.rowsCounterDiv){
+            this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
+        } else {
+            Dom.id(this.rowsCounterTgtId).innerHTML = &apos;&apos;;
+        }
+        this.rowsCounterSpan = null;
+        this.rowsCounterDiv = null;
+    }
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.4)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

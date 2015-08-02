@@ -3,12 +3,12 @@ import Types from '../types';
 
 var global = window;
 
-/**
- * Loading message/spinner
- * @param {Object} tf TableFilter instance
- */
 export class Loader{
 
+    /**
+     * Loading message/spinner
+     * @param {Object} tf TableFilter instance
+     */
     constructor(tf){
 
         // TableFilter configuration
