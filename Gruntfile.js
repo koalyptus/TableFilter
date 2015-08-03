@@ -155,12 +155,30 @@ module.exports = function (grunt) {
             }
         },
 
-        esdoc : {
-            dist : {
+        esdoc: {
+            dist: {
                 options: {
                     source: 'src',
                     destination: 'doc',
                     title: pkg.name + ' v' + pkg.version
+                }
+            }
+        },
+
+        stylus: {
+            compile: {
+                options: {
+                    // relativeDest: 'dist/tablefilter/style'
+                    compress: false
+                },
+                // files: [{
+                //     src: ['static/style/*/*.styl'],
+                //     ext: '.css'
+                // }]
+                files: {
+                    'dist/tablefilter/style/tablefilter_.css': [
+                        'static/style/*.styl'
+                    ]
                 }
             }
         }
@@ -177,6 +195,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-esdoc');
+    grunt.loadNpmTasks('grunt-contrib-stylus');
 
     grunt.registerTask('default', ['build', 'test', 'build-demos', 'esdoc']);
 
