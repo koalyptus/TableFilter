@@ -45,7 +45,11 @@ module.exports = function (grunt) {
 
         copy: {
             dist: {
-                src: ['**'],
+                src: [
+                    '**',
+                    '!*.styl',
+                    '!**/extensions/**'
+                ],
                 cwd: 'static/style',
                 dest: 'dist/tablefilter/style',
                 expand: true
@@ -175,11 +179,18 @@ module.exports = function (grunt) {
                 //     src: ['static/style/*/*.styl'],
                 //     ext: '.css'
                 // }]
-                files: {
-                    'dist/tablefilter/style/tablefilter_.css': [
-                        'static/style/*.styl'
-                    ]
-                }
+                files: [
+                    {
+                        src: ['static/style/*.styl'],
+                        dest: 'dist/tablefilter/style/tablefilter.css'
+                    },{
+                        src: ['static/style/extensions/colsVisibility.styl'],
+                        dest: 'dist/tablefilter/style/colsVisibility.css'
+                    },{
+                        src: ['static/style/extensions/filtersVisibility.styl'],
+                        dest: 'dist/tablefilter/style/filtersVisibility.css'
+                    }
+                ]
             }
         }
 
@@ -204,10 +215,11 @@ module.exports = function (grunt) {
 
     // Dev dev/build/watch cycle
     grunt.registerTask('dev',
-        ['jshint', 'webpack:dev', 'copy:dist', 'watch:app']);
+        ['jshint', 'webpack:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
 
     // Production build
-    grunt.registerTask('build', ['jshint', 'webpack:build', 'copy:dist']);
+    grunt.registerTask('build',
+        ['jshint', 'webpack:build', 'copy:dist', 'stylus:compile']);
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);

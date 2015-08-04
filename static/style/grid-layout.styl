@@ -1,0 +1,87 @@
+/**
+ * Grid layout default style
+ */
+
+@import 'config'
+
+// main container
+div.grd_Cont
+    width                   800px
+    height                  auto
+    overflow                hidden
+    padding                 3px 3px 3px 3px
+    background-color        $grid-layout-bg-color
+    border                  1px solid $grid-layout-border-color
+
+    // filters' row
+    .fltrow
+        background-color    transparent
+
+    // filters
+    .flt
+        border              1px solid $grid-layout-border-color
+        width               97%
+
+        :focus
+            border          1px solid #558DD9
+
+    // alternating background color
+    .even
+        background-color    #fff
+
+    .odd
+        background-color    #DFE8F6
+
+// content table container
+div.grd_tblCont
+    height                  400px
+    width                   800px
+    background              #fff
+    overflow-x              auto
+    overflow-y              scroll
+
+// headers' table container
+div.grd_headTblCont
+    height                  auto
+    width                   800px
+    overflow                hidden
+    border-bottom           1px solid $grid-layout-border-color
+    background-color        $grid-layout-bg-color
+
+// tables
+div.grd_tblCont table,
+div.grd_headTblCont table
+    font-size               12px
+    border-collapse         collapse
+    table-layout            fixed
+
+div.grd_tblCont table
+    border-right            1px solid $grid-layout-border-color
+
+// headers
+div.grd_tblCont table th,
+div.grd_headTblCont table th,
+div.grd_headTblCont table td
+    background-color        $grid-layout-bg-color
+    padding                 2px 2px 2px 2px !important
+    color                   #333
+    border-right            1px solid $grid-layout-border-color !important
+    overflow                hidden
+    text-overflow           ellipsis
+
+div.grd_tblCont table td
+    padding                 2px 2px 2px 2px !important
+    border-bottom           1px solid #ccc !important
+    overflow                hidden
+    text-overflow           ellipsis
+
+// toolbar container
+.grd_inf
+    clear                   both
+    width                   auto
+    height                  25px
+    background-color        $grid-layout-bg-color
+    font-size               11px
+    margin                  0
+    padding                 1px 3px 1px 3px
+    border-top              1px solid $grid-layout-border-color
