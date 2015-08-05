@@ -1,6 +1,5 @@
 node_modules
 npm-debug.log
-build
 *.js.map
 .codio
 .settings

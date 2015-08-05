@@ -48,7 +48,8 @@ module.exports = function (grunt) {
                 src: [
                     '**',
                     '!*.styl',
-                    '!**/extensions/**'
+                    '!**/extensions/**',
+                    '!**/*.styl'
                 ],
                 cwd: 'static/style',
                 dest: 'dist/tablefilter/style',
@@ -172,13 +173,14 @@ module.exports = function (grunt) {
         stylus: {
             compile: {
                 options: {
-                    // relativeDest: 'dist/tablefilter/style'
-                    compress: false
+                    compress: true,
+                    banner: '/** \n' +
+                        ' *\t '+ pkg.name +' v'+ pkg.version +
+                        ' by Max Guglielmi \n' +
+                        ' *\t build date: '+ new Date().toISOString() +' \n' +
+                        ' *\t MIT License  \n' +
+                        ' */ \n'
                 },
-                // files: [{
-                //     src: ['static/style/*/*.styl'],
-                //     ext: '.css'
-                // }]
                 files: [
                     {
                         src: ['static/style/*.styl'],
@@ -189,6 +191,18 @@ module.exports = function (grunt) {
                     },{
                         src: ['static/style/extensions/filtersVisibility.styl'],
                         dest: 'dist/tablefilter/style/filtersVisibility.css'
+                    },{
+                        src: ['static/style/themes/default/*.styl'],
+                        dest:
+                            'dist/tablefilter/style/themes/default/default.css'
+                    },{
+                        src: ['static/style/themes/mytheme/*.styl'],
+                        dest:
+                            'dist/tablefilter/style/themes/mytheme/mytheme.css'
+                    },{
+                        src: ['static/style/themes/skyblue/*.styl'],
+                        dest:
+                            'dist/tablefilter/style/themes/skyblue/skyblue.css'
                     }
                 ]
             }
