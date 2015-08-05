@@ -1,8 +1,2222 @@
-/** 
- *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-08-02T08:18:30.196Z 
- *	 MIT License  
- */ 
+webpackJsonp([1],[
+/* 0 */,
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
 
-webpackJsonp([1],[,function(t,e,s){function i(t){return s(l(t))}function l(t){return a[t]||function(){throw new Error("Cannot find module '"+t+"'.")}()}var a={"./array":7,"./array.js":7,"./cookie":5,"./cookie.js":5,"./date":8,"./date.js":8,"./dom":3,"./dom.js":3,"./event":2,"./event.js":2,"./extensions/advancedGrid/adapterEzEditTable":24,"./extensions/advancedGrid/adapterEzEditTable.js":24,"./extensions/advancedGrid/advancedGrid":25,"./extensions/advancedGrid/advancedGrid.js":25,"./extensions/colOps/colOps":26,"./extensions/colOps/colOps.js":26,"./extensions/colsVisibility/colsVisibility":27,"./extensions/colsVisibility/colsVisibility.js":27,"./extensions/filtersVisibility/filtersVisibility":28,"./extensions/filtersVisibility/filtersVisibility.js":28,"./extensions/sort/adapterSortabletable":29,"./extensions/sort/adapterSortabletable.js":29,"./extensions/sort/sort":30,"./extensions/sort/sort.js":30,"./helpers":9,"./helpers.js":9,"./modules/alternateRows":22,"./modules/alternateRows.js":22,"./modules/checkList":16,"./modules/checkList.js":16,"./modules/clearButton":20,"./modules/clearButton.js":20,"./modules/dropdown":15,"./modules/dropdown.js":15,"./modules/gridLayout":11,"./modules/gridLayout.js":11,"./modules/help":21,"./modules/help.js":21,"./modules/highlightKeywords":13,"./modules/highlightKeywords.js":13,"./modules/loader":12,"./modules/loader.js":12,"./modules/paging":19,"./modules/paging.js":19,"./modules/popupFilter":14,"./modules/popupFilter.js":14,"./modules/rowsCounter":17,"./modules/rowsCounter.js":17,"./modules/statusBar":18,"./modules/statusBar.js":18,"./modules/store":10,"./modules/store.js":10,"./sort":23,"./sort.js":23,"./string":4,"./string.js":4,"./types":6,"./types.js":6};i.keys=function(){return Object.keys(a)},i.resolve=l,t.exports=i,i.id=1},,,,,,,,,,,,,,,,,,,,,,,function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},l=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},a=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var n=s(3),r=i(n),o=s(7),h=i(o),d=function(){function t(e,s){l(this,t),this.initialized=!1,this.desc=s.description||"ezEditTable adapter",this.filename=s.filename||"ezEditTable.js",this.vendorPath=s.vendor_path,this.loadStylesheet=Boolean(s.load_stylesheet),this.stylesheet=s.stylesheet||this.vendorPath+"ezEditTable.css",this.stylesheetName=s.stylesheet_name||"ezEditTableCss",this.err='Failed to instantiate EditTable object.\n"ezEditTable" dependency not found.',this._ezEditTable=null,this.cfg=s,this.tf=e}return a(t,[{key:"init",value:function(){var t=this,e=this.tf;if(window.EditTable)this._setAdvancedGrid();else{var s=this.vendorPath+this.filename;e["import"](this.filename,s,function(){t._setAdvancedGrid()})}this.loadStylesheet&&!e.isImported(this.stylesheet,"link")&&e["import"](this.stylesheetName,this.stylesheet,null,"link")}},{key:"_setAdvancedGrid",value:function(){var t,e=this.tf,s=this.cfg,i=r["default"].tag(e.tbl,"thead");t=i.length>0&&!s.startRow?void 0:s.startRow||e.refRow,s.base_path=s.base_path||e.basePath+"ezEditTable/";var l=s.editable,a=s.selection;a&&(s.default_selection=s.default_selection||"row"),s.active_cell_css=s.active_cell_css||"ezETSelectedCell";var n=0,o=0;if(a){var d=function(t,s,i){var l=t.Selection,a=function(i){if("row"===t.defaultSelection)l.SelectRowByIndex(i);else{t.ClearSelections();var a=s.cellIndex,n=e.tbl.rows[i];"both"===t.defaultSelection&&l.SelectRowByIndex(i),n&&l.SelectCell(n.cells[a])}if(e.validRowsIndex.length!==e.getRowsNb()){var r=e.tbl.rows[i];r&&r.scrollIntoView(!1),f&&(f.cellIndex===e.getCellsNb()-1&&e.gridLayout?e.tblCont.scrollLeft=1e8:0===f.cellIndex&&e.gridLayout?e.tblCont.scrollLeft=0:f.scrollIntoView(!1))}};if(e.validRowsIndex){var r,d=e.validRowsIndex,u=d.length,c="row"!==t.defaultSelection?s.parentNode:s,f="TD"===s.nodeName?s:null,p=void 0!==i?t.Event.GetKey(i):0,g=h["default"].has(d,c.rowIndex),v=34===p||33===p?e.feature("paging").pagingLength||t.nbRowsPerPage:1;if(g)34!==p&&33!==p?(n=h["default"].indexByValue(d,c.rowIndex),o=c.rowIndex):(r=34===p?u-1>=n+v?d[n+v]:[u-1]:n-v<=d[0]?d[0]:d[n-v],o=r,n=h["default"].indexByValue(d,r),a(r));else{if(c.rowIndex>o)if(c.rowIndex>=d[u-1])r=d[u-1];else{var b=n+v;r=b>u-1?d[u-1]:d[b]}else if(c.rowIndex<=d[0])r=d[0];else{var m=d[n-v];r=m?m:d[0]}o=c.rowIndex,a(r)}}},u=function(t,s){var i="row"!==t.defaultSelection?s.parentNode:s;if(e.paging&&e.feature("paging").nbPages>1){var l=e.feature("paging");t.nbRowsPerPage=l.pagingLength;var a=e.validRowsIndex,n=a.length,r=parseInt(l.startPagingRow,10)+parseInt(l.pagingLength,10),o=i.rowIndex;o===a[n-1]&&l.currentPageNb!==l.nbPages?l.setPage("last"):o==a[0]&&1!==l.currentPageNb?l.setPage("first"):o>a[r-1]&&o<a[n-1]?l.setPage("next"):o<a[l.startPagingRow]&&o>a[0]&&l.setPage("previous")}};if(e.paging&&(e.feature("paging").onAfterChangePage=function(t){var e=t.tf.extension("advancedGrid"),s=e._ezEditTable,i=s.Selection,l=i.GetActiveRow();l&&l.scrollIntoView(!1);var a=i.GetActiveCell();a&&a.scrollIntoView(!1)}),"row"===s.default_selection){var c=s.on_before_selected_row;s.on_before_selected_row=function(){u(arguments[0],arguments[1],arguments[2]),c&&c.call(null,arguments[0],arguments[1],arguments[2])};var f=s.on_after_selected_row;s.on_after_selected_row=function(){d(arguments[0],arguments[1],arguments[2]),f&&f.call(null,arguments[0],arguments[1],arguments[2])}}else{var p=s.on_before_selected_cell;s.on_before_selected_cell=function(){u(arguments[0],arguments[1],arguments[2]),p&&p.call(null,arguments[0],arguments[1],arguments[2])};var g=s.on_after_selected_cell;s.on_after_selected_cell=function(){d(arguments[0],arguments[1],arguments[2]),g&&g.call(null,arguments[0],arguments[1],arguments[2])}}}if(l){var v=s.on_added_dom_row;if(s.on_added_dom_row=function(){e.nbFilterableRows++,e.paging?(e.nbRows++,e.nbVisibleRows++,e.nbFilterableRows++,e.paging=!1,e.feature("paging").destroy(),e.feature("paging").reset()):e.feature("rowsCounter").refresh(),e.alternateBgs&&e.feature("alternateRows").init(),v&&v.call(null,arguments[0],arguments[1],arguments[2])},s.actions&&s.actions["delete"]){var b=s.actions["delete"].on_after_submit;s.actions["delete"].on_after_submit=function(){e.nbFilterableRows--,e.paging?(e.nbRows--,e.nbVisibleRows--,e.nbFilterableRows--,e.paging=!1,e.feature("paging").destroy(),e.feature("paging").reset(!1)):e.feature("rowsCounter").refresh(),e.alternateBgs&&e.feature("alternateRows").init(),b&&b.call(null,arguments[0],arguments[1])}}}try{this._ezEditTable=new EditTable(e.id,s,t),this._ezEditTable.Init()}catch(m){throw new Error(this.err)}this.initialized=!0}},{key:"reset",value:function(){var t=this._ezEditTable;t&&(this.cfg.selection&&t.Selection.Set(),this.cfg.editable&&t.Editable.Set())}},{key:"destroy",value:function(){var t=this._ezEditTable;t&&(this.cfg.selection&&(t.Selection.ClearSelections(),t.Selection.Remove()),this.cfg.editable&&t.Editable.Remove()),this.initialized=!1}}]),t}();e["default"]=d,t.exports=e["default"]},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}};Object.defineProperty(e,"__esModule",{value:!0});var l=s(24),a=i(l);e["default"]=a["default"],t.exports=e["default"]},function(module,exports,__webpack_require__){"use strict";var _interopRequireDefault=function(t){return t&&t.__esModule?t:{"default":t}},_classCallCheck=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},_createClass=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(exports,"__esModule",{value:!0});var _Dom=__webpack_require__(3),_Dom2=_interopRequireDefault(_Dom),_Str=__webpack_require__(4),_Str2=_interopRequireDefault(_Str),_Types=__webpack_require__(6),_Types2=_interopRequireDefault(_Types),ColOps=function(){function ColOps(t,e){_classCallCheck(this,ColOps),this.onBeforeOperation=_Types2["default"].isFn(e.on_before_operation)?e.on_before_operation:null,this.onAfterOperation=_Types2["default"].isFn(e.on_after_operation)?e.on_after_operation:null,this.opts=e,this.tf=t}return _createClass(ColOps,[{key:"init",value:function(){this.calc()}},{key:"calc",value:function calc(){var tf=this.tf;if(tf.isFirstLoad||tf.hasGrid()){this.onBeforeOperation&&this.onBeforeOperation.call(null,tf);var opts=this.opts,labelId=opts.id,colIndex=opts.col,operation=opts.operation,outputType=opts.write_method,totRowIndex=opts.tot_row_index,excludeRow=opts.exclude_row,decimalPrecision=_Types2["default"].isUndef(opts.decimal_precision)?2:opts.decimal_precision,ucolIndex=[],ucolMax=0;ucolIndex[ucolMax]=colIndex[0];for(var ii=1;ii<colIndex.length;ii++){for(var saved=0,jj=0;ucolMax>=jj;jj++)ucolIndex[jj]===colIndex[ii]&&(saved=1);0===saved&&(ucolMax++,ucolIndex[ucolMax]=colIndex[ii])}if("object"==_Str2["default"].lower(typeof labelId)&&"object"==_Str2["default"].lower(typeof colIndex)&&"object"==_Str2["default"].lower(typeof operation))for(var rows=tf.tbl.rows,colvalues=[],ucol=0;ucolMax>=ucol;ucol++){colvalues.push(tf.getColValues(ucolIndex[ucol],!0,excludeRow));for(var result,nbvalues=0,temp,meanValue=0,sumValue=0,minValue=null,maxValue=null,q1Value=null,medValue=null,q3Value=null,meanFlag=0,sumFlag=0,minFlag=0,maxFlag=0,q1Flag=0,medFlag=0,q3Flag=0,theList=[],opsThisCol=[],decThisCol=[],labThisCol=[],oTypeThisCol=[],mThisCol=-1,k=0;k<colIndex.length;k++)if(colIndex[k]===ucolIndex[ucol])switch(mThisCol++,opsThisCol[mThisCol]=_Str2["default"].lower(operation[k]),decThisCol[mThisCol]=decimalPrecision[k],labThisCol[mThisCol]=labelId[k],oTypeThisCol=void 0!==outputType&&"object"===_Str2["default"].lower(typeof outputType)?outputType[k]:null,opsThisCol[mThisCol]){case"mean":meanFlag=1;break;case"sum":sumFlag=1;break;case"min":minFlag=1;break;case"max":maxFlag=1;break;case"median":medFlag=1;break;case"q1":q1Flag=1;break;case"q3":q3Flag=1}for(var j=0;j<colvalues[ucol].length;j++){if((1==q1Flag||1==q3Flag||1==medFlag)&&j<colvalues[ucol].length-1)for(k=j+1;k<colvalues[ucol].length;k++)eval(colvalues[ucol][k])<eval(colvalues[ucol][j])&&(temp=colvalues[ucol][j],colvalues[ucol][j]=colvalues[ucol][k],colvalues[ucol][k]=temp);var cvalue=parseFloat(colvalues[ucol][j]);theList[j]=parseFloat(cvalue),isNaN(cvalue)||(nbvalues++,(1===sumFlag||1===meanFlag)&&(sumValue+=parseFloat(cvalue)),1===minFlag&&(minValue=null===minValue?parseFloat(cvalue):parseFloat(cvalue)<minValue?parseFloat(cvalue):minValue),1===maxFlag&&(maxValue=null===maxValue?parseFloat(cvalue):parseFloat(cvalue)>maxValue?parseFloat(cvalue):maxValue))}if(1===meanFlag&&(meanValue=sumValue/nbvalues),1===medFlag){var aux=0;nbvalues%2===1?(aux=Math.floor(nbvalues/2),medValue=theList[aux]):medValue=(theList[nbvalues/2]+theList[nbvalues/2-1])/2}var posa;if(1===q1Flag&&(posa=0,posa=Math.floor(nbvalues/4),q1Value=4*posa==nbvalues?(theList[posa-1]+theList[posa])/2:theList[posa]),1===q3Flag){posa=0;var posb=0;posa=Math.floor(nbvalues/4),4*posa===nbvalues?(posb=3*posa,q3Value=(theList[posb]+theList[posb-1])/2):q3Value=theList[nbvalues-posa-1]}for(var i=0;mThisCol>=i;i++){switch(opsThisCol[i]){case"mean":result=meanValue;break;case"sum":result=sumValue;break;case"min":result=minValue;break;case"max":result=maxValue;break;case"median":result=medValue;break;case"q1":result=q1Value;break;case"q3":result=q3Value}var precision=isNaN(decThisCol[i])?2:decThisCol[i];if(oTypeThisCol&&result){if(result=result.toFixed(precision),_Dom2["default"].id(labThisCol[i]))switch(_Str2["default"].lower(oTypeThisCol)){case"innerhtml":isNaN(result)||!isFinite(result)||0===nbvalues?_Dom2["default"].id(labThisCol[i]).innerHTML=".":_Dom2["default"].id(labThisCol[i]).innerHTML=result;break;case"setvalue":_Dom2["default"].id(labThisCol[i]).value=result;break;case"createtextnode":var oldnode=_Dom2["default"].id(labThisCol[i]).firstChild,txtnode=_Dom2["default"].text(result);_Dom2["default"].id(labThisCol[i]).replaceChild(txtnode,oldnode)}}else try{isNaN(result)||!isFinite(result)||0===nbvalues?_Dom2["default"].id(labThisCol[i]).innerHTML=".":_Dom2["default"].id(labThisCol[i]).innerHTML=result.toFixed(precision)}catch(e){}}var totRow=totRowIndex&&totRowIndex[ucol]?rows[totRowIndex[ucol]]:null;totRow&&(totRow.style.display="")}this.onAfterOperation&&this.onAfterOperation.call(null,tf)}}},{key:"destroy",value:function(){}}]),ColOps}();exports["default"]=ColOps,module.exports=exports["default"]},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},l=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},a=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var n=s(3),r=i(n),o=s(6),h=i(o),d=s(2),u=i(d),c=s(7),f=i(c),p=function(){function t(e,s){l(this,t);var i=e.config();this.initialized=!1,this.name=s.name,this.desc=s.description||"Columns visibility manager",this.spanEl=null,this.btnEl=null,this.contEl=null,this.tickToHide=s.tick_to_hide===!1?!1:!0,this.manager=s.manager===!1?!1:!0,this.headersTbl=s.headers_table||!1,this.headersIndex=s.headers_index||1,this.contElTgtId=s.container_target_id||null,this.headersText=s.headers_text||null,this.btnTgtId=s.btn_target_id||null,this.btnText=s.btn_text||"Columns&#9660;",this.btnHtml=s.btn_html||null,this.btnCssClass=s.btn_css_class||"colVis",this.btnCloseText=s.btn_close_text||"Close",this.btnCloseHtml=s.btn_close_html||null,this.btnCloseCssClass=s.btn_close_css_class||this.btnCssClass,this.stylesheet=s.stylesheet||"colsVisibility.css",this.prfx="colVis_",this.spanCssClass=s.span_css_class||"colVisSpan",this.prfxCont=this.prfx+"Cont_",this.contCssClass=s.cont_css_class||"colVisCont",this.listCssClass=i.list_css_class||"cols_checklist",this.listItemCssClass=i.checklist_item_css_class||"cols_checklist_item",this.listSlcItemCssClass=i.checklist_selected_item_css_class||"cols_checklist_slc_item",this.text=s.text||(this.tickToHide?"Hide: ":"Show: "),this.atStart=s.at_start||null,this.enableHover=Boolean(s.enable_hover),this.enableTickAll=Boolean(s.enable_tick_all),this.tickAllText=s.tick_all_text||"Select all:",this.hiddenCols=[],this.tblHasColTag=r["default"].tag(e.tbl,"col").length>0,this.onLoaded=h["default"].isFn(s.on_loaded)?s.on_loaded:null,this.onBeforeOpen=h["default"].isFn(s.on_before_open)?s.on_before_open:null,this.onAfterOpen=h["default"].isFn(s.on_after_open)?s.on_after_open:null,this.onBeforeClose=h["default"].isFn(s.on_before_close)?s.on_before_close:null,this.onAfterClose=h["default"].isFn(s.on_after_close)?s.on_after_close:null,this.onBeforeColHidden=h["default"].isFn(s.on_before_col_hidden)?s.on_before_col_hidden:null,this.onAfterColHidden=h["default"].isFn(s.on_after_col_hidden)?s.on_after_col_hidden:null,this.onBeforeColDisplayed=h["default"].isFn(s.on_before_col_displayed)?s.on_before_col_displayed:null,this.onAfterColDisplayed=h["default"].isFn(s.on_after_col_displayed)?s.on_after_col_displayed:null,e.gridLayout&&(this.headersTbl=e.feature("gridLayout").headTbl,this.headersIndex=0,this.onAfterColDisplayed=function(){},this.onAfterColHidden=function(){}),e["import"](s.name+"Style",e.stylePath+this.stylesheet,null,"link"),this.tf=e}return a(t,[{key:"toggle",value:function(){var t=this.contEl.style.display,e=this.onBeforeOpen,s=this.onBeforeClose,i=this.onAfterOpen,l=this.onAfterClose;e&&"inline"!==t&&e.call(null,this),s&&"inline"===t&&s.call(null,this),this.contEl.style.display="inline"===t?"none":"inline",i&&"inline"!==t&&i.call(null,this),l&&"inline"===t&&l.call(null,this)}},{key:"checkItem",value:function(t){var e=t.parentNode;if(e&&t){var s=t.firstChild.checked,i=t.firstChild.getAttribute("id").split("_")[1];i=parseInt(i,10),s?r["default"].addClass(e,this.listSlcItemCssClass):r["default"].removeClass(e,this.listSlcItemCssClass);var l=!1;(this.tickToHide&&s||!this.tickToHide&&!s)&&(l=!0),this.setHidden(i,l)}}},{key:"init",value:function(){this.manager&&(this.buildBtn(),this.buildManager(),this.initialized=!0)}},{key:"buildBtn",value:function(){var t=this;if(!this.btnEl){var e=this.tf,s=r["default"].create("span",["id",this.prfx+e.id]);s.className=this.spanCssClass,this.btnTgtId||e.setToolbar();var i=this.btnTgtId?r["default"].id(this.btnTgtId):e.rDiv;if(this.btnTgtId)i.appendChild(s);else{var l=i.firstChild;l.parentNode.insertBefore(s,l)}if(this.btnHtml){s.innerHTML=this.btnHtml;var a=s.firstChild;this.enableHover?u["default"].add(a,"mouseover",function(e){t.toggle(e)}):u["default"].add(a,"click",function(e){t.toggle(e)})}else{var n=r["default"].create("a",["href","javascript:;"]);n.className=this.btnCssClass,n.title=this.desc,n.innerHTML=this.btnText,s.appendChild(n),this.enableHover?u["default"].add(n,"mouseover",function(e){t.toggle(e)}):u["default"].add(n,"click",function(e){t.toggle(e)})}this.spanEl=s,this.btnEl=this.spanEl.firstChild,this.onLoaded&&this.onLoaded.call(null,this)}}},{key:"buildManager",value:function(){var t=this,e=this.tf,s=this.contElTgtId?r["default"].id(this.contElTgtId):r["default"].create("div",["id",this.prfxCont+e.id]);s.className=this.contCssClass;var i=r["default"].create("p");i.innerHTML=this.text,s.appendChild(i);var l=r["default"].create("ul",["id","ul"+this.name+"_"+e.id]);l.className=this.listCssClass;var a=this.headersTbl?this.headersTbl:e.tbl,n=this.headersTbl?this.headersIndex:e.getHeadersRowIndex(),o=a.rows[n];if(this.enableTickAll){var h=r["default"].createCheckItem("col__"+e.id,this.tickAllText,this.tickAllText);r["default"].addClass(h,this.listItemCssClass),l.appendChild(h),h.check.checked=!this.tickToHide,u["default"].add(h.check,"click",function(){for(var t=0;t<o.cells.length;t++){var s=r["default"].id("col_"+t+"_"+e.id);s&&h.check.checked!==s.checked&&(s.click(),s.checked=h.check.checked)}})}for(var d=0;d<o.cells.length;d++){var c=o.cells[d],f=this.headersText&&this.headersText[d]?this.headersText[d]:this._getHeaderText(c),p=r["default"].createCheckItem("col_"+d+"_"+e.id,f,f);r["default"].addClass(p,this.listItemCssClass),this.tickToHide||r["default"].addClass(p,this.listSlcItemCssClass),l.appendChild(p),this.tickToHide||(p.check.checked=!0),u["default"].add(p.check,"click",function(e){var s=u["default"].target(e),i=s.parentNode;t.checkItem(i)})}var g,v=r["default"].create("p",["align","center"]);if(this.btnCloseHtml?(v.innerHTML=this.btnCloseHtml,g=v.firstChild,u["default"].add(g,"click",function(e){t.toggle(e)})):(g=r["default"].create("a",["href","javascript:;"]),g.className=this.btnCloseCssClass,g.innerHTML=this.btnCloseText,u["default"].add(g,"click",function(e){t.toggle(e)}),v.appendChild(g)),s.appendChild(l),s.appendChild(v),this.btnEl.parentNode.insertBefore(s,this.btnEl),this.contEl=s,this.atStart)for(var b=this.atStart,m=0;m<b.length;m++){var _=r["default"].id("col_"+b[m]+"_"+e.id);_&&_.click()}}},{key:"setHidden",value:function(t,e){var s=this.tf,i=s.tbl;this.onBeforeColHidden&&e&&this.onBeforeColHidden.call(null,this,t),this.onBeforeColDisplayed&&!e&&this.onBeforeColDisplayed.call(null,this,t),this._hideCells(i,t,e),this.headersTbl&&this._hideCells(this.headersTbl,t,e);var l=this.hiddenCols;if(e)-1===l.indexOf(t)&&this.hiddenCols.push(t);else{var a=f["default"].indexByValue(l,t,!0);-1!==l.indexOf(t)&&this.hiddenCols.splice(a,1)}var n,r,o;if(this.onAfterColHidden&&e){if(s.gridLayout){n=s.feature("gridLayout"),r=n.headTbl,o=n.gridColElms;var h=parseInt(o[t].style.width,10),d=parseInt(r.style.width,10);r.style.width=d-h+"px",i.style.width=r.style.width}this.onAfterColHidden.call(null,this,t)}if(this.onAfterColDisplayed&&!e){if(s.gridLayout){n=s.feature("gridLayout"),r=n.headTbl,o=n.gridColElms;var u=parseInt(o[t].style.width,10);r.style.width=parseInt(r.style.width,10)+u+"px",s.tbl.style.width=r.style.width}this.onAfterColDisplayed.call(null,this,t)}}},{key:"showCol",value:function(t){if(void 0!==t&&this.isColHidden(t))if(this.manager&&this.contEl){var e=r["default"].id("col_"+t+"_"+this.tf.id);e&&e.click()}else this.setHidden(t,!1)}},{key:"hideCol",value:function(t){if(void 0!==t&&!this.isColHidden(t))if(this.manager&&this.contEl){var e=r["default"].id("col_"+t+"_"+this.tf.id);e&&e.click()}else this.setHidden(t,!0)}},{key:"isColHidden",value:function(t){return-1!==this.hiddenCols.indexOf(t)?!0:!1}},{key:"toggleCol",value:function(t){void 0===t||this.isColHidden(t)?this.showCol(t):this.hideCol(t)}},{key:"getHiddenCols",value:function(){return this.hiddenCols}},{key:"destroy",value:function(){(this.btnEl||this.contEl)&&(r["default"].id(this.contElTgtId)?r["default"].id(this.contElTgtId).innerHTML="":(this.contEl.innerHTML="",this.contEl.parentNode.removeChild(this.contEl),this.contEl=null),this.btnEl.innerHTML="",this.btnEl.parentNode.removeChild(this.btnEl),this.btnEl=null,this.initialized=!1)}},{key:"_getHeaderText",value:function(t){if(!t.hasChildNodes)return"";for(var e=0;e<t.childNodes.length;e++){var s=t.childNodes[e];if(3===s.nodeType)return s.nodeValue;if(1===s.nodeType){if(s.id&&-1!==s.id.indexOf("popUp"))continue;return r["default"].getText(s)}}return""}},{key:"_hideCells",value:function(t,e,s){for(var i=0;i<t.rows.length;i++){var l=t.rows[i],a=l.cells[e];a&&(a.style.display=s?"none":"")}}}]),t}();e["default"]=p,t.exports=e["default"]},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}},l=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},a=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var n=s(3),r=i(n),o=s(6),h=i(o),d=s(2),u=i(d),c=function(){function t(e,s){l(this,t),this.initialized=!1,this.name=s.name,this.desc=s.description||"Filters row visibility manager",this.stylesheet=s.stylesheet||"filtersVisibility.css",this.icnExpand=s.expand_icon_name||"icn_exp.png",this.icnCollapse=s.collapse_icon_name||"icn_clp.png",this.contEl=null,this.btnEl=null,this.icnExpandHtml='<img src="'+e.stylePath+this.icnExpand+'" alt="Expand filters" >',this.icnCollapseHtml='<img src="'+e.stylePath+this.icnCollapse+'" alt="Collapse filters" >',this.defaultText="Toggle filters",this.targetId=s.target_id||null,this.enableIcon=s.enable_icon===!1?!1:!0,this.btnText=s.btn_text||"",this.collapseBtnHtml=this.enableIcon?this.icnCollapseHtml+this.btnText:this.btnText||this.defaultText,this.expandBtnHtml=this.enableIcon?this.icnExpandHtml+this.btnText:this.btnText||this.defaultText,this.btnHtml=s.btn_html||null,this.btnCssClass=s.btn_css_class||"btnExpClpFlt",this.contCssClass=s.cont_css_class||"expClpFlt",this.filtersRowIndex=h["default"].isUndef(s.filters_row_index)?e.getFiltersRowIndex():s.filters_row_index,this.visibleAtStart=h["default"].isUndef(s.visible_at_start)?!0:Boolean(s.visible_at_start),this.prfx="fltsVis_",this.onBeforeShow=h["default"].isFn(s.on_before_show)?s.on_before_show:null,this.onAfterShow=h["default"].isFn(s.on_after_show)?s.on_after_show:null,this.onBeforeHide=h["default"].isFn(s.on_before_hide)?s.on_before_hide:null,this.onAfterHide=h["default"].isFn(s.on_after_hide)?s.on_after_hide:null,e["import"](s.name+"Style",e.stylePath+this.stylesheet,null,"link"),this.tf=e}return a(t,[{key:"init",value:function(){this.initialized||(this.buildUI(),this.initialized=!0)}},{key:"buildUI",value:function(){var t=this,e=this.tf,s=r["default"].create("span",["id",this.prfx+e.id]);s.className=this.contCssClass,this.targetId||e.setToolbar();var i=this.targetId?r["default"].id(this.targetId):e.rDiv;if(this.targetId)i.appendChild(s);else{var l=i.firstChild;l.parentNode.insertBefore(s,l)}var a=void 0;this.btnHtml?(s.innerHTML=this.btnHtml,a=s.firstChild,u["default"].add(a,"click",function(){return t.toggle()})):(a=r["default"].create("a",["href","javascript:void(0);"]),a.className=this.btnCssClass,a.title=this.btnText||this.defaultText,a.innerHTML=this.collapseBtnHtml,s.appendChild(a),u["default"].add(a,"click",function(){return t.toggle()})),this.contEl=s,this.btnEl=a,this.visibleAtStart||this.toggle()}},{key:"toggle",value:function(){var t=this.tf,e=t.gridLayout?t.feature("gridLayout").headTbl:t.tbl,s=e.rows[this.filtersRowIndex],i=s.style.display;this.onBeforeShow&&""!==i&&this.onBeforeShow.call(this,this),this.onBeforeHide&&""===i&&this.onBeforeHide.call(null,this),s.style.display=""===i?"none":"",this.enableIcon&&!this.btnHtml&&(this.btnEl.innerHTML=""===i?this.expandBtnHtml:this.collapseBtnHtml),this.onAfterShow&&""!==i&&this.onAfterShow.call(null,this),this.onAfterHide&&""===i&&this.onAfterHide.call(null,this)}},{key:"destroy",value:function(){(this.btnEl||this.contEl)&&(this.btnEl.innerHTML="",this.btnEl.parentNode.removeChild(this.btnEl),this.btnEl=null,this.contEl.innerHTML="",this.contEl.parentNode.removeChild(this.contEl),this.contEl=null,this.initialized=!1)}}]),t}();e["default"]=c,t.exports=e["default"]},function(t,e,s){"use strict";function i(t){return S["default"].removeNbFormat(t,"us")}function l(t){return S["default"].removeNbFormat(t,"eu")}function a(t,e){return x["default"].format(t,e)}function n(t){return a(t,"DMY")}function r(t){return a(t,"MDY")}function o(t){return a(t,"YMD")}function h(t){return a(t,"DDMMMYYYY")}function d(t){var e=t.split(".");for(var s in e){for(var i=e[s];3>i.length;)i="0"+i;e[s]=i}return e.join(".")}function u(t,e){var s=d(t.value.toLowerCase()),i=d(e.value.toLowerCase());return s==i?0:i>s?-1:1}var c=function(t){return t&&t.__esModule?t:{"default":t}},f=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},p=function(){function t(t,e){for(var s=0;s<e.length;s++){var i=e[s];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,s,i){return s&&t(e.prototype,s),i&&t(e,i),e}}();Object.defineProperty(e,"__esModule",{value:!0});var g=s(6),v=c(g),b=s(3),m=c(b),_=s(7),y=c(_),C=s(2),w=c(C),T=s(8),x=c(T),k=s(9),S=c(k),I=function(){function t(e,s){f(this,t);var i=e.config();this.initialized=!1,this.name=s.name,this.desc=s.description||"Sortable table",this.isPaged=!1,this.sorted=!1,this.sortTypes=v["default"].isArray(s.types)?s.types:[],this.sortColAtStart=v["default"].isArray(s.sort_col_at_start)?s.sort_col_at_start:null,this.asyncSort=Boolean(s.async_sort),this.triggerIds=v["default"].isArray(s.trigger_ids)?s.trigger_ids:[],this.imgPath=s.images_path||e.themesPath,this.imgBlank=s.image_blank||"blank.png",this.imgClassName=s.image_class_name||"sort-arrow",this.imgAscClassName=s.image_asc_class_name||"ascending",this.imgDescClassName=s.image_desc_class_name||"descending",this.customKey=s.custom_key||"data-tf-sortKey",this.onSortLoaded=v["default"].isFn(s.on_sort_loaded)?s.on_sort_loaded:null,this.onBeforeSort=v["default"].isFn(s.on_before_sort)?s.on_before_sort:null,this.onAfterSort=v["default"].isFn(s.on_after_sort)?i.on_after_sort:null,this.tf=e}return p(t,[{key:"init",value:function(){var t=this.tf,e=this;if(v["default"].isUndef(SortableTable))throw new Error("SortableTable class not found.");this.overrideSortableTable(),this.setSortTypes();var s=e.sortColAtStart;s&&this.stt.sort(s[0],s[1]),this.onSortLoaded&&this.onSortLoaded.call(null,t,this),this.stt.onbeforesort=function(){this.onBeforeSort&&this.onBeforeSort.call(null,t,this.stt.sortColumn),t.paging&&(e.isPaged=!0,t.paging=!1,t.feature("paging").destroy())},this.stt.onsort=function(){if(e.sorted=!0,t.alternateBgs)for(var s=t.tbl.rows,i=0,l=function(e,s,i){v["default"].isUndef(i)&&(i=!1);var l=t.feature("alternateRows"),a=l.oddCss,n=l.evenCss;m["default"].removeClass(e,a),m["default"].removeClass(e,n),i||m["default"].addClass(e,s%2?a:n)},a=t.refRow;a<t.nbRows;a++){var n=s[a].getAttribute("validRow");t.paging&&""===s[a].style.display?(l(s[a],i),i++):"true"!==n&&null!==n||""!==s[a].style.display?l(s[a],i,!0):(l(s[a],i),i++)}if(e.isPaged){var r=t.feature("paging");r.reset(!1),r.setPage(r.getPage()),e.isPaged=!1}e.onAfterSort&&e.onAfterSort.call(null,t,t.stt.sortColumn)},this.initialized=!0}},{key:"sortByColumnIndex",value:function(t){this.stt.sort(t)}},{key:"overrideSortableTable",value:function(){var t=this,e=this.tf;SortableTable.prototype.headerOnclick=function(e){if(t.initialized){for(var s=e.target||e.srcElement;"TD"!==s.tagName&&"TH"!==s.tagName;)s=s.parentNode;this.sort(SortableTable.msie?SortableTable.getCellIndex(s):s.cellIndex)}},SortableTable.getCellIndex=function(t){var e=t.parentNode.cells,s=e.length,i=void 0;for(i=0;e[i]!=t&&s>i;i++);return i},SortableTable.prototype.initHeader=function(s){var i=this;if(!i.tHead){if(!e.gridLayout)return;i.tHead=e.feature("gridLayout").headTbl.tHead}i.headersRow=e.headersRow;var l=i.tHead.rows[i.headersRow].cells;i.sortTypes=s||[];for(var a=l.length,n=void 0,r=void 0,o=0;a>o;o++)r=l[o],null!==i.sortTypes[o]&&"None"!==i.sortTypes[o]?(r.style.cursor="pointer",n=m["default"].create("img",["src",t.imgPath+t.imgBlank]),r.appendChild(n),null!==i.sortTypes[o]&&r.setAttribute("_sortType",i.sortTypes[o]),w["default"].add(r,"click",i._headerOnclick)):(r.setAttribute("_sortType",s[o]),r._sortType="None");i.updateHeaderArrows()},SortableTable.prototype.updateHeaderArrows=function(){var e=this,s=void 0,i=void 0,l=void 0;if(t.asyncSort&&t.triggerIds.length>0){var a=t.triggerIds;s=[],i=a.length;for(var n=0;n<a.length;n++)s.push(m["default"].id(a[n]))}else{if(!this.tHead)return;s=e.tHead.rows[e.headersRow].cells,i=s.length}for(var r=0;i>r;r++){var o=s[r].getAttribute("_sortType");null!==o&&"None"!==o&&(l=s[r].lastChild||s[r],"img"!==l.nodeName.toLowerCase()&&(l=m["default"].create("img",["src",t.imgPath+t.imgBlank]),s[r].appendChild(l)),r===e.sortColumn?l.className=t.imgClassName+" "+(this.descending?t.imgDescClassName:t.imgAscClassName):l.className=t.imgClassName)}},SortableTable.prototype.getRowValue=function(t,e,s){var i=this,l=i._sortTypeInfo[e];if(l&&l.getRowValue)return l.getRowValue(t,s);var a=t.cells[s],n=SortableTable.getInnerText(a);return i.getValueFromString(n,e)},SortableTable.getInnerText=function(e){return e?e.getAttribute(t.customKey)?e.getAttribute(t.customKey):m["default"].getText(e):void 0}}},{key:"addSortType",value:function(){var t=arguments;SortableTable.prototype.addSortType(t[0],t[1],t[2],t[3])}},{key:"setSortTypes",value:function(){for(var t=this,e=this.tf,s=this.sortTypes,a=[],c=0;c<e.nbCells;c++){var f=void 0;s[c]?(f=s[c].toLowerCase(),"none"===f&&(f="None")):f=e.hasColNbFormat&&null!==e.colNbFormat[c]?e.colNbFormat[c].toLowerCase():e.hasColDateType&&null!==e.colDateType[c]?e.colDateType[c].toLowerCase()+"date":"String",a.push(f)}this.addSortType("number",Number),this.addSortType("caseinsensitivestring",SortableTable.toUpperCase),this.addSortType("date",SortableTable.toDate),this.addSortType("string"),this.addSortType("us",i),this.addSortType("eu",l),this.addSortType("dmydate",n),this.addSortType("ymddate",o),this.addSortType("mdydate",r),this.addSortType("ddmmmyyyydate",h),this.addSortType("ipaddress",d,u),this.stt=new SortableTable(e.tbl,a),this.asyncSort&&this.triggerIds.length>0&&!function(){for(var e=t.triggerIds,s=0;s<e.length;s++)if(null!==e[s]){var i=m["default"].id(e[s]);i&&(i.style.cursor="pointer",w["default"].add(i,"click",function(s){var i=s.target;t.tf.sort&&t.stt.asyncSort(y["default"].indexByValue(e,i.id,!0))}),i.setAttribute("_sortType",a[s]))}}()}},{key:"destroy",value:function(){var t=this.tf;this.sorted=!1,this.initialized=!1,this.stt.destroy();for(var e=t.getFiltersId(),s=0;s<e.length;s++){
-var i=t.getHeaderElement(s),l=m["default"].tag(i,"img");1===l.length&&i.removeChild(l[0])}}}]),t}();e["default"]=I,t.exports=e["default"]},function(t,e,s){"use strict";var i=function(t){return t&&t.__esModule?t:{"default":t}};Object.defineProperty(e,"__esModule",{value:!0});var l=s(29),a=i(l);window.SortableTable||s(31),e["default"]=a["default"],t.exports=e["default"]},function(t,e,s){s(32)(s(33))},function(t,e,s){t.exports=function(t){"function"==typeof execScript?execScript(t):eval.call(null,t)}},function(t,e,s){t.exports='/*----------------------------------------------------------------------------\\\r\n|                            Sortable Table 1.12                              |\r\n|-----------------------------------------------------------------------------|\r\n|                         Created by Erik Arvidsson                           |\r\n|                  (http://webfx.eae.net/contact.html#erik)                   |\r\n|                      For WebFX (http://webfx.eae.net/)                      |\r\n|-----------------------------------------------------------------------------|\r\n| A DOM 1 based script that allows an ordinary HTML table to be sortable.     |\r\n|-----------------------------------------------------------------------------|\r\n|                  Copyright (c) 1998 - 2006 Erik Arvidsson                   |\r\n|-----------------------------------------------------------------------------|\r\n| Licensed under the Apache License, Version 2.0 (the "License"); you may not |\r\n| use this file except in compliance with the License.  You may obtain a copy |\r\n| of the License at http://www.apache.org/licenses/LICENSE-2.0                |\r\n| - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |\r\n| Unless  required  by  applicable law or  agreed  to  in  writing,  software |\r\n| distributed under the License is distributed on an  "AS IS" BASIS,  WITHOUT |\r\n| WARRANTIES OR  CONDITIONS OF ANY KIND,  either express or implied.  See the |\r\n| License  for the  specific language  governing permissions  and limitations |\r\n| under the License.                                                          |\r\n|-----------------------------------------------------------------------------|\r\n| 2003-01-10 | First version                                                  |\r\n| 2003-01-19 | Minor changes to the date parsing                              |\r\n| 2003-01-28 | JScript 5.0 fixes (no support for \'in\' operator)               |\r\n| 2003-02-01 | Sloppy typo like error fixed in getInnerText                   |\r\n| 2003-07-04 | Added workaround for IE cellIndex bug.                         |\r\n| 2003-11-09 | The bDescending argument to sort was not correctly working     |\r\n|            | Using onclick DOM0 event if no support for addEventListener    |\r\n|            | or attachEvent                                                 |\r\n| 2004-01-13 | Adding addSortType and removeSortType which makes it a lot     |\r\n|            | easier to add new, custom sort types.                          |\r\n| 2004-01-27 | Switch to use descending = false as the default sort order.    |\r\n|            | Change defaultDescending to suit your needs.                   |\r\n| 2004-03-14 | Improved sort type None look and feel a bit                    |\r\n| 2004-08-26 | Made the handling of tBody and tHead more flexible. Now you    |\r\n|            | can use another tHead or no tHead, and you can chose some      |\r\n|            | other tBody.                                                   |\r\n| 2006-04-25 | Changed license to Apache Software License 2.0                 |\r\n|-----------------------------------------------------------------------------|\r\n| Created 2003-01-10 | All changes are in the log above. | Updated 2006-04-25 |\r\n\\----------------------------------------------------------------------------*/\r\n\r\n\r\nfunction SortableTable(oTable, oSortTypes) {\r\n\r\n	this.sortTypes = oSortTypes || [];\r\n\r\n	this.sortColumn = null;\r\n	this.descending = null;\r\n\r\n	var oThis = this;\r\n	this._headerOnclick = function (e) {\r\n		oThis.headerOnclick(e);\r\n	};\r\n\r\n	if (oTable) {\r\n		this.setTable( oTable );\r\n		this.document = oTable.ownerDocument || oTable.document;\r\n	}\r\n	else {\r\n		this.document = document;\r\n	}\r\n\r\n\r\n	// only IE needs this\r\n	var win = this.document.defaultView || this.document.parentWindow;\r\n	this._onunload = function () {\r\n		oThis.destroy();\r\n	};\r\n	if (win && typeof win.attachEvent != "undefined") {\r\n		win.attachEvent("onunload", this._onunload);\r\n	}\r\n}\r\n\r\nSortableTable.gecko = navigator.product == "Gecko";\r\nSortableTable.msie = /msie/i.test(navigator.userAgent);\r\n// Mozilla is faster when doing the DOM manipulations on\r\n// an orphaned element. MSIE is not\r\nSortableTable.removeBeforeSort = SortableTable.gecko;\r\n\r\nSortableTable.prototype.onsort = function () {};\r\n\r\n// default sort order. true -> descending, false -> ascending\r\nSortableTable.prototype.defaultDescending = false;\r\n\r\n// shared between all instances. This is intentional to allow external files\r\n// to modify the prototype\r\nSortableTable.prototype._sortTypeInfo = {};\r\n\r\nSortableTable.prototype.setTable = function (oTable) {\r\n	if ( this.tHead )\r\n		this.uninitHeader();\r\n	this.element = oTable;\r\n	this.setTHead( oTable.tHead );\r\n	this.setTBody( oTable.tBodies[0] );\r\n};\r\n\r\nSortableTable.prototype.setTHead = function (oTHead) {\r\n	if (this.tHead && this.tHead != oTHead )\r\n		this.uninitHeader();\r\n	this.tHead = oTHead;\r\n	this.initHeader( this.sortTypes );\r\n};\r\n\r\nSortableTable.prototype.setTBody = function (oTBody) {\r\n	this.tBody = oTBody;\r\n};\r\n\r\nSortableTable.prototype.setSortTypes = function ( oSortTypes ) {\r\n	if ( this.tHead )\r\n		this.uninitHeader();\r\n	this.sortTypes = oSortTypes || [];\r\n	if ( this.tHead )\r\n		this.initHeader( this.sortTypes );\r\n};\r\n\r\n// adds arrow containers and events\r\n// also binds sort type to the header cells so that reordering columns does\r\n// not break the sort types\r\nSortableTable.prototype.initHeader = function (oSortTypes) {\r\n	if (!this.tHead) return;\r\n	var cells = this.tHead.rows[0].cells;\r\n	var doc = this.tHead.ownerDocument || this.tHead.document;\r\n	this.sortTypes = oSortTypes || [];\r\n	var l = cells.length;\r\n	var img, c;\r\n	for (var i = 0; i < l; i++) {\r\n		c = cells[i];\r\n		if (this.sortTypes[i] != null && this.sortTypes[i] != "None") {\r\n			img = doc.createElement("IMG");\r\n			img.src = "images/blank.png";\r\n			c.appendChild(img);\r\n			if (this.sortTypes[i] != null)\r\n				c._sortType = this.sortTypes[i];\r\n			if (typeof c.addEventListener != "undefined")\r\n				c.addEventListener("click", this._headerOnclick, false);\r\n			else if (typeof c.attachEvent != "undefined")\r\n				c.attachEvent("onclick", this._headerOnclick);\r\n			else\r\n				c.onclick = this._headerOnclick;\r\n		}\r\n		else\r\n		{\r\n			c.setAttribute( "_sortType", oSortTypes[i] );\r\n			c._sortType = "None";\r\n		}\r\n	}\r\n	this.updateHeaderArrows();\r\n};\r\n\r\n// remove arrows and events\r\nSortableTable.prototype.uninitHeader = function () {\r\n	if (!this.tHead) return;\r\n	var cells = this.tHead.rows[0].cells;\r\n	var l = cells.length;\r\n	var c;\r\n	for (var i = 0; i < l; i++) {\r\n		c = cells[i];\r\n		if (c._sortType != null && c._sortType != "None") {\r\n			c.removeChild(c.lastChild);\r\n			if (typeof c.removeEventListener != "undefined")\r\n				c.removeEventListener("click", this._headerOnclick, false);\r\n			else if (typeof c.detachEvent != "undefined")\r\n				c.detachEvent("onclick", this._headerOnclick);\r\n			c._sortType = null;\r\n			c.removeAttribute( "_sortType" );\r\n		}\r\n	}\r\n};\r\n\r\nSortableTable.prototype.updateHeaderArrows = function () {\r\n	if (!this.tHead) return;\r\n	var cells = this.tHead.rows[0].cells;\r\n	var l = cells.length;\r\n	var img;\r\n	for (var i = 0; i < l; i++) {\r\n		if (cells[i]._sortType != null && cells[i]._sortType != "None") {\r\n			img = cells[i].lastChild;\r\n			if (i == this.sortColumn)\r\n				img.className = "sort-arrow " + (this.descending ? "descending" : "ascending");\r\n			else\r\n				img.className = "sort-arrow";\r\n		}\r\n	}\r\n};\r\n\r\nSortableTable.prototype.headerOnclick = function (e) {\r\n	// find TD element\r\n	var el = e.target || e.srcElement;\r\n	while (el.tagName != "TD")\r\n		el = el.parentNode;\r\n\r\n	this.sort(SortableTable.msie ? SortableTable.getCellIndex(el) : el.cellIndex);\r\n};\r\n\r\n// IE returns wrong cellIndex when columns are hidden\r\nSortableTable.getCellIndex = function (oTd) {\r\n	var cells = oTd.parentNode.childNodes\r\n	var l = cells.length;\r\n	var i;\r\n	for (i = 0; cells[i] != oTd && i < l; i++)\r\n		;\r\n	return i;\r\n};\r\n\r\nSortableTable.prototype.getSortType = function (nColumn) {\r\n	return this.sortTypes[nColumn] || "String";\r\n};\r\n\r\n// only nColumn is required\r\n// if bDescending is left out the old value is taken into account\r\n// if sSortType is left out the sort type is found from the sortTypes array\r\n\r\nSortableTable.prototype.sort = function (nColumn, bDescending, sSortType) {\r\n	if (!this.tBody) return;\r\n	if (sSortType == null)\r\n		sSortType = this.getSortType(nColumn);\r\n\r\n	// exit if None\r\n	if (sSortType == "None")\r\n		return;\r\n\r\n	if (bDescending == null) {\r\n		if (this.sortColumn != nColumn)\r\n			this.descending = this.defaultDescending;\r\n		else\r\n			this.descending = !this.descending;\r\n	}\r\n	else\r\n		this.descending = bDescending;\r\n\r\n	this.sortColumn = nColumn;\r\n\r\n	if (typeof this.onbeforesort == "function")\r\n		this.onbeforesort();\r\n\r\n	var f = this.getSortFunction(sSortType, nColumn);\r\n	var a = this.getCache(sSortType, nColumn);\r\n	var tBody = this.tBody;\r\n\r\n	a.sort(f);\r\n\r\n	if (this.descending)\r\n		a.reverse();\r\n\r\n	if (SortableTable.removeBeforeSort) {\r\n		// remove from doc\r\n		var nextSibling = tBody.nextSibling;\r\n		var p = tBody.parentNode;\r\n		p.removeChild(tBody);\r\n	}\r\n\r\n	// insert in the new order\r\n	var l = a.length;\r\n	for (var i = 0; i < l; i++)\r\n		tBody.appendChild(a[i].element);\r\n\r\n	if (SortableTable.removeBeforeSort) {\r\n		// insert into doc\r\n		p.insertBefore(tBody, nextSibling);\r\n	}\r\n\r\n	this.updateHeaderArrows();\r\n\r\n	this.destroyCache(a);\r\n\r\n	if (typeof this.onsort == "function")\r\n		this.onsort();\r\n};\r\n\r\nSortableTable.prototype.asyncSort = function (nColumn, bDescending, sSortType) {\r\n	var oThis = this;\r\n	this._asyncsort = function () {\r\n		oThis.sort(nColumn, bDescending, sSortType);\r\n	};\r\n	window.setTimeout(this._asyncsort, 1);\r\n};\r\n\r\nSortableTable.prototype.getCache = function (sType, nColumn) {\r\n	if (!this.tBody) return [];\r\n	var rows = this.tBody.rows;\r\n	var l = rows.length;\r\n	var a = new Array(l);\r\n	var r;\r\n	for (var i = 0; i < l; i++) {\r\n		r = rows[i];\r\n		a[i] = {\r\n			value:		this.getRowValue(r, sType, nColumn),\r\n			element:	r\r\n		};\r\n	};\r\n	return a;\r\n};\r\n\r\nSortableTable.prototype.destroyCache = function (oArray) {\r\n	var l = oArray.length;\r\n	for (var i = 0; i < l; i++) {\r\n		oArray[i].value = null;\r\n		oArray[i].element = null;\r\n		oArray[i] = null;\r\n	}\r\n};\r\n\r\nSortableTable.prototype.getRowValue = function (oRow, sType, nColumn) {\r\n	// if we have defined a custom getRowValue use that\r\n	if (this._sortTypeInfo[sType] && this._sortTypeInfo[sType].getRowValue)\r\n		return this._sortTypeInfo[sType].getRowValue(oRow, nColumn);\r\n\r\n	var s;\r\n	var c = oRow.cells[nColumn];\r\n	if (typeof c.innerText != "undefined")\r\n		s = c.innerText;\r\n	else\r\n		s = SortableTable.getInnerText(c);\r\n	return this.getValueFromString(s, sType);\r\n};\r\n\r\nSortableTable.getInnerText = function (oNode) {\r\n	var s = "";\r\n	var cs = oNode.childNodes;\r\n	var l = cs.length;\r\n	for (var i = 0; i < l; i++) {\r\n		switch (cs[i].nodeType) {\r\n			case 1: //ELEMENT_NODE\r\n				s += SortableTable.getInnerText(cs[i]);\r\n				break;\r\n			case 3:	//TEXT_NODE\r\n				s += cs[i].nodeValue;\r\n				break;\r\n		}\r\n	}\r\n	return s;\r\n};\r\n\r\nSortableTable.prototype.getValueFromString = function (sText, sType) {\r\n	if (this._sortTypeInfo[sType])\r\n		return this._sortTypeInfo[sType].getValueFromString( sText );\r\n	return sText;\r\n	/*\r\n	switch (sType) {\r\n		case "Number":\r\n			return Number(sText);\r\n		case "CaseInsensitiveString":\r\n			return sText.toUpperCase();\r\n		case "Date":\r\n			var parts = sText.split("-");\r\n			var d = new Date(0);\r\n			d.setFullYear(parts[0]);\r\n			d.setDate(parts[2]);\r\n			d.setMonth(parts[1] - 1);\r\n			return d.valueOf();\r\n	}\r\n	return sText;\r\n	*/\r\n	};\r\n\r\nSortableTable.prototype.getSortFunction = function (sType, nColumn) {\r\n	if (this._sortTypeInfo[sType])\r\n		return this._sortTypeInfo[sType].compare;\r\n	return SortableTable.basicCompare;\r\n};\r\n\r\nSortableTable.prototype.destroy = function () {\r\n	this.uninitHeader();\r\n	var win = this.document.parentWindow;\r\n	if (win && typeof win.detachEvent != "undefined") {	// only IE needs this\r\n		win.detachEvent("onunload", this._onunload);\r\n	}\r\n	this._onunload = null;\r\n	this.element = null;\r\n	this.tHead = null;\r\n	this.tBody = null;\r\n	this.document = null;\r\n	this._headerOnclick = null;\r\n	this.sortTypes = null;\r\n	this._asyncsort = null;\r\n	this.onsort = null;\r\n};\r\n\r\n// Adds a sort type to all instance of SortableTable\r\n// sType : String - the identifier of the sort type\r\n// fGetValueFromString : function ( s : string ) : T - A function that takes a\r\n//    string and casts it to a desired format. If left out the string is just\r\n//    returned\r\n// fCompareFunction : function ( n1 : T, n2 : T ) : Number - A normal JS sort\r\n//    compare function. Takes two values and compares them. If left out less than,\r\n//    <, compare is used\r\n// fGetRowValue : function( oRow : HTMLTRElement, nColumn : int ) : T - A function\r\n//    that takes the row and the column index and returns the value used to compare.\r\n//    If left out then the innerText is first taken for the cell and then the\r\n//    fGetValueFromString is used to convert that string the desired value and type\r\n\r\nSortableTable.prototype.addSortType = function (sType, fGetValueFromString, fCompareFunction, fGetRowValue) {\r\n	this._sortTypeInfo[sType] = {\r\n		type:				sType,\r\n		getValueFromString:	fGetValueFromString || SortableTable.idFunction,\r\n		compare:			fCompareFunction || SortableTable.basicCompare,\r\n		getRowValue:		fGetRowValue\r\n	};\r\n};\r\n\r\n// this removes the sort type from all instances of SortableTable\r\nSortableTable.prototype.removeSortType = function (sType) {\r\n	delete this._sortTypeInfo[sType];\r\n};\r\n\r\nSortableTable.basicCompare = function compare(n1, n2) {\r\n	if (n1.value < n2.value)\r\n		return -1;\r\n	if (n2.value < n1.value)\r\n		return 1;\r\n	return 0;\r\n};\r\n\r\nSortableTable.idFunction = function (x) {\r\n	return x;\r\n};\r\n\r\nSortableTable.toUpperCase = function (s) {\r\n	return s.toUpperCase();\r\n};\r\n\r\nSortableTable.toDate = function (s) {\r\n	var parts = s.split("-");\r\n	var d = new Date(0);\r\n	d.setFullYear(parts[0]);\r\n	d.setDate(parts[2]);\r\n	d.setMonth(parts[1] - 1);\r\n	return d.valueOf();\r\n};\r\n\r\n\r\n// add sort types\r\nSortableTable.prototype.addSortType("Number", Number);\r\nSortableTable.prototype.addSortType("CaseInsensitiveString", SortableTable.toUpperCase);\r\nSortableTable.prototype.addSortType("Date", SortableTable.toDate);\r\nSortableTable.prototype.addSortType("String");\r\n// None is a special case\r\n'}]);
+	var map = {
+		"./array": 7,
+		"./array.js": 7,
+		"./cookie": 5,
+		"./cookie.js": 5,
+		"./date": 8,
+		"./date.js": 8,
+		"./dom": 3,
+		"./dom.js": 3,
+		"./event": 2,
+		"./event.js": 2,
+		"./extensions/advancedGrid/adapterEzEditTable": 24,
+		"./extensions/advancedGrid/adapterEzEditTable.js": 24,
+		"./extensions/advancedGrid/advancedGrid": 25,
+		"./extensions/advancedGrid/advancedGrid.js": 25,
+		"./extensions/colOps/colOps": 26,
+		"./extensions/colOps/colOps.js": 26,
+		"./extensions/colsVisibility/colsVisibility": 27,
+		"./extensions/colsVisibility/colsVisibility.js": 27,
+		"./extensions/filtersVisibility/filtersVisibility": 28,
+		"./extensions/filtersVisibility/filtersVisibility.js": 28,
+		"./extensions/sort/adapterSortabletable": 29,
+		"./extensions/sort/adapterSortabletable.js": 29,
+		"./extensions/sort/sort": 30,
+		"./extensions/sort/sort.js": 30,
+		"./helpers": 9,
+		"./helpers.js": 9,
+		"./modules/alternateRows": 22,
+		"./modules/alternateRows.js": 22,
+		"./modules/checkList": 16,
+		"./modules/checkList.js": 16,
+		"./modules/clearButton": 20,
+		"./modules/clearButton.js": 20,
+		"./modules/dropdown": 15,
+		"./modules/dropdown.js": 15,
+		"./modules/gridLayout": 11,
+		"./modules/gridLayout.js": 11,
+		"./modules/help": 21,
+		"./modules/help.js": 21,
+		"./modules/highlightKeywords": 13,
+		"./modules/highlightKeywords.js": 13,
+		"./modules/loader": 12,
+		"./modules/loader.js": 12,
+		"./modules/paging": 19,
+		"./modules/paging.js": 19,
+		"./modules/popupFilter": 14,
+		"./modules/popupFilter.js": 14,
+		"./modules/rowsCounter": 17,
+		"./modules/rowsCounter.js": 17,
+		"./modules/statusBar": 18,
+		"./modules/statusBar.js": 18,
+		"./modules/store": 10,
+		"./modules/store.js": 10,
+		"./sort": 23,
+		"./sort.js": 23,
+		"./string": 4,
+		"./string.js": 4,
+		"./types": 6,
+		"./types.js": 6
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 1;
+
+
+/***/ },
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Arr = __webpack_require__(7);
+	
+	var _Arr2 = _interopRequireDefault(_Arr);
+	
+	var AdapterEzEditTable = (function () {
+	    /**
+	     * Adapter module for ezEditTable, an external library providing advanced
+	     * grid features (selection and edition):
+	     * http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus
+	     *
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function AdapterEzEditTable(tf, cfg) {
+	        _classCallCheck(this, AdapterEzEditTable);
+	
+	        // ezEditTable config
+	        this.initialized = false;
+	        this.desc = cfg.description || 'ezEditTable adapter';
+	        this.filename = cfg.filename || 'ezEditTable.js';
+	        this.vendorPath = cfg.vendor_path;
+	        this.loadStylesheet = Boolean(cfg.load_stylesheet);
+	        this.stylesheet = cfg.stylesheet || this.vendorPath + 'ezEditTable.css';
+	        this.stylesheetName = cfg.stylesheet_name || 'ezEditTableCss';
+	        this.err = 'Failed to instantiate EditTable object.\n"ezEditTable" ' + 'dependency not found.';
+	
+	        this._ezEditTable = null;
+	        this.cfg = cfg;
+	        this.tf = tf;
+	    }
+	
+	    _createClass(AdapterEzEditTable, [{
+	        key: 'init',
+	
+	        /**
+	         * Conditionally load ezEditTable library and set advanced grid
+	         * @return {[type]} [description]
+	         */
+	        value: function init() {
+	            var _this = this;
+	
+	            var tf = this.tf;
+	            if (window.EditTable) {
+	                this._setAdvancedGrid();
+	            } else {
+	                var path = this.vendorPath + this.filename;
+	                tf['import'](this.filename, path, function () {
+	                    _this._setAdvancedGrid();
+	                });
+	            }
+	            if (this.loadStylesheet && !tf.isImported(this.stylesheet, 'link')) {
+	                tf['import'](this.stylesheetName, this.stylesheet, null, 'link');
+	            }
+	        }
+	    }, {
+	        key: '_setAdvancedGrid',
+	
+	        /**
+	         * Instantiate ezEditTable component for advanced grid features
+	         */
+	        value: function _setAdvancedGrid() {
+	            var tf = this.tf;
+	
+	            //start row for EditTable constructor needs to be calculated
+	            var startRow,
+	                cfg = this.cfg,
+	                thead = _Dom2['default'].tag(tf.tbl, 'thead');
+	
+	            //if thead exists and startRow not specified, startRow is calculated
+	            //automatically by EditTable
+	            if (thead.length > 0 && !cfg.startRow) {
+	                startRow = undefined;
+	            }
+	            //otherwise startRow config property if any or TableFilter refRow
+	            else {
+	                startRow = cfg.startRow || tf.refRow;
+	            }
+	
+	            cfg.base_path = cfg.base_path || tf.basePath + 'ezEditTable/';
+	            var editable = cfg.editable;
+	            var selectable = cfg.selection;
+	
+	            if (selectable) {
+	                cfg.default_selection = cfg.default_selection || 'row';
+	            }
+	            //CSS Styles
+	            cfg.active_cell_css = cfg.active_cell_css || 'ezETSelectedCell';
+	
+	            var _lastValidRowIndex = 0;
+	            var _lastRowIndex = 0;
+	
+	            if (selectable) {
+	                //Row navigation needs to be calculated according to TableFilter's
+	                //validRowsIndex array
+	                var onAfterSelection = function onAfterSelection(et, selectedElm, e) {
+	                    var slc = et.Selection;
+	                    //Next valid filtered row needs to be selected
+	                    var doSelect = function doSelect(nextRowIndex) {
+	                        if (et.defaultSelection === 'row') {
+	                            slc.SelectRowByIndex(nextRowIndex);
+	                        } else {
+	                            et.ClearSelections();
+	                            var cellIndex = selectedElm.cellIndex,
+	                                row = tf.tbl.rows[nextRowIndex];
+	                            if (et.defaultSelection === 'both') {
+	                                slc.SelectRowByIndex(nextRowIndex);
+	                            }
+	                            if (row) {
+	                                slc.SelectCell(row.cells[cellIndex]);
+	                            }
+	                        }
+	                        //Table is filtered
+	                        if (tf.validRowsIndex.length !== tf.getRowsNb()) {
+	                            var r = tf.tbl.rows[nextRowIndex];
+	                            if (r) {
+	                                r.scrollIntoView(false);
+	                            }
+	                            if (cell) {
+	                                if (cell.cellIndex === tf.getCellsNb() - 1 && tf.gridLayout) {
+	                                    tf.tblCont.scrollLeft = 100000000;
+	                                } else if (cell.cellIndex === 0 && tf.gridLayout) {
+	                                    tf.tblCont.scrollLeft = 0;
+	                                } else {
+	                                    cell.scrollIntoView(false);
+	                                }
+	                            }
+	                        }
+	                    };
+	
+	                    //table is not filtered
+	                    if (!tf.validRowsIndex) {
+	                        return;
+	                    }
+	                    var validIndexes = tf.validRowsIndex,
+	                        validIdxLen = validIndexes.length,
+	                        row = et.defaultSelection !== 'row' ? selectedElm.parentNode : selectedElm,
+	
+	                    //cell for default_selection = 'both' or 'cell'
+	                    cell = selectedElm.nodeName === 'TD' ? selectedElm : null,
+	                        keyCode = e !== undefined ? et.Event.GetKey(e) : 0,
+	                        isRowValid = _Arr2['default'].has(validIndexes, row.rowIndex),
+	                        nextRowIndex,
+	
+	                    //pgup/pgdown keys
+	                    d = keyCode === 34 || keyCode === 33 ? tf.feature('paging').pagingLength || et.nbRowsPerPage : 1;
+	
+	                    //If next row is not valid, next valid filtered row needs to be
+	                    //calculated
+	                    if (!isRowValid) {
+	                        //Selection direction up/down
+	                        if (row.rowIndex > _lastRowIndex) {
+	                            //last row
+	                            if (row.rowIndex >= validIndexes[validIdxLen - 1]) {
+	                                nextRowIndex = validIndexes[validIdxLen - 1];
+	                            } else {
+	                                var calcRowIndex = _lastValidRowIndex + d;
+	                                if (calcRowIndex > validIdxLen - 1) {
+	                                    nextRowIndex = validIndexes[validIdxLen - 1];
+	                                } else {
+	                                    nextRowIndex = validIndexes[calcRowIndex];
+	                                }
+	                            }
+	                        } else {
+	                            //first row
+	                            if (row.rowIndex <= validIndexes[0]) {
+	                                nextRowIndex = validIndexes[0];
+	                            } else {
+	                                var v = validIndexes[_lastValidRowIndex - d];
+	                                nextRowIndex = v ? v : validIndexes[0];
+	                            }
+	                        }
+	                        _lastRowIndex = row.rowIndex;
+	                        doSelect(nextRowIndex);
+	                    } else {
+	                        //If filtered row is valid, special calculation for
+	                        //pgup/pgdown keys
+	                        if (keyCode !== 34 && keyCode !== 33) {
+	                            _lastValidRowIndex = _Arr2['default'].indexByValue(validIndexes, row.rowIndex);
+	                            _lastRowIndex = row.rowIndex;
+	                        } else {
+	                            if (keyCode === 34) {
+	                                //pgdown
+	                                //last row
+	                                if (_lastValidRowIndex + d <= validIdxLen - 1) {
+	                                    nextRowIndex = validIndexes[_lastValidRowIndex + d];
+	                                } else {
+	                                    nextRowIndex = [validIdxLen - 1];
+	                                }
+	                            } else {
+	                                //pgup
+	                                //first row
+	                                if (_lastValidRowIndex - d <= validIndexes[0]) {
+	                                    nextRowIndex = validIndexes[0];
+	                                } else {
+	                                    nextRowIndex = validIndexes[_lastValidRowIndex - d];
+	                                }
+	                            }
+	                            _lastRowIndex = nextRowIndex;
+	                            _lastValidRowIndex = _Arr2['default'].indexByValue(validIndexes, nextRowIndex);
+	                            doSelect(nextRowIndex);
+	                        }
+	                    }
+	                };
+	
+	                //Page navigation has to be enforced whenever selected row is out of
+	                //the current page range
+	                var onBeforeSelection = function onBeforeSelection(et, selectedElm) {
+	                    var row = et.defaultSelection !== 'row' ? selectedElm.parentNode : selectedElm;
+	                    if (tf.paging) {
+	                        if (tf.feature('paging').nbPages > 1) {
+	                            var paging = tf.feature('paging');
+	                            //page length is re-assigned in case it has changed
+	                            et.nbRowsPerPage = paging.pagingLength;
+	                            var validIndexes = tf.validRowsIndex,
+	                                validIdxLen = validIndexes.length,
+	                                pagingEndRow = parseInt(paging.startPagingRow, 10) + parseInt(paging.pagingLength, 10);
+	                            var rowIndex = row.rowIndex;
+	
+	                            if (rowIndex === validIndexes[validIdxLen - 1] && paging.currentPageNb !== paging.nbPages) {
+	                                paging.setPage('last');
+	                            } else if (rowIndex == validIndexes[0] && paging.currentPageNb !== 1) {
+	                                paging.setPage('first');
+	                            } else if (rowIndex > validIndexes[pagingEndRow - 1] && rowIndex < validIndexes[validIdxLen - 1]) {
+	                                paging.setPage('next');
+	                            } else if (rowIndex < validIndexes[paging.startPagingRow] && rowIndex > validIndexes[0]) {
+	                                paging.setPage('previous');
+	                            }
+	                        }
+	                    }
+	                };
+	
+	                //Selected row needs to be visible when paging is activated
+	                if (tf.paging) {
+	                    tf.feature('paging').onAfterChangePage = function (paging) {
+	                        var advGrid = paging.tf.extension('advancedGrid');
+	                        var et = advGrid._ezEditTable;
+	                        var slc = et.Selection;
+	                        var row = slc.GetActiveRow();
+	                        if (row) {
+	                            row.scrollIntoView(false);
+	                        }
+	                        var cell = slc.GetActiveCell();
+	                        if (cell) {
+	                            cell.scrollIntoView(false);
+	                        }
+	                    };
+	                }
+	
+	                //Rows navigation when rows are filtered is performed with the
+	                //EditTable row selection callback events
+	                if (cfg.default_selection === 'row') {
+	                    var fnB = cfg.on_before_selected_row;
+	                    cfg.on_before_selected_row = function () {
+	                        onBeforeSelection(arguments[0], arguments[1], arguments[2]);
+	                        if (fnB) {
+	                            fnB.call(null, arguments[0], arguments[1], arguments[2]);
+	                        }
+	                    };
+	                    var fnA = cfg.on_after_selected_row;
+	                    cfg.on_after_selected_row = function () {
+	                        onAfterSelection(arguments[0], arguments[1], arguments[2]);
+	                        if (fnA) {
+	                            fnA.call(null, arguments[0], arguments[1], arguments[2]);
+	                        }
+	                    };
+	                } else {
+	                    var fnD = cfg.on_before_selected_cell;
+	                    cfg.on_before_selected_cell = function () {
+	                        onBeforeSelection(arguments[0], arguments[1], arguments[2]);
+	                        if (fnD) {
+	                            fnD.call(null, arguments[0], arguments[1], arguments[2]);
+	                        }
+	                    };
+	                    var fnC = cfg.on_after_selected_cell;
+	                    cfg.on_after_selected_cell = function () {
+	                        onAfterSelection(arguments[0], arguments[1], arguments[2]);
+	                        if (fnC) {
+	                            fnC.call(null, arguments[0], arguments[1], arguments[2]);
+	                        }
+	                    };
+	                }
+	            }
+	            if (editable) {
+	                //Added or removed rows, TF rows number needs to be re-calculated
+	                var fnE = cfg.on_added_dom_row;
+	                cfg.on_added_dom_row = function () {
+	                    tf.nbFilterableRows++;
+	                    if (!tf.paging) {
+	                        tf.feature('rowsCounter').refresh();
+	                    } else {
+	                        tf.nbRows++;
+	                        tf.nbVisibleRows++;
+	                        tf.nbFilterableRows++;
+	                        tf.paging = false;
+	                        tf.feature('paging').destroy();
+	                        tf.feature('paging').reset();
+	                    }
+	                    if (tf.alternateBgs) {
+	                        tf.feature('alternateRows').init();
+	                    }
+	                    if (fnE) {
+	                        fnE.call(null, arguments[0], arguments[1], arguments[2]);
+	                    }
+	                };
+	                if (cfg.actions && cfg.actions['delete']) {
+	                    var fnF = cfg.actions['delete'].on_after_submit;
+	                    cfg.actions['delete'].on_after_submit = function () {
+	                        tf.nbFilterableRows--;
+	                        if (!tf.paging) {
+	                            tf.feature('rowsCounter').refresh();
+	                        } else {
+	                            tf.nbRows--;
+	                            tf.nbVisibleRows--;
+	                            tf.nbFilterableRows--;
+	                            tf.paging = false;
+	                            tf.feature('paging').destroy();
+	                            tf.feature('paging').reset(false);
+	                        }
+	                        if (tf.alternateBgs) {
+	                            tf.feature('alternateRows').init();
+	                        }
+	                        if (fnF) {
+	                            fnF.call(null, arguments[0], arguments[1]);
+	                        }
+	                    };
+	                }
+	            }
+	
+	            try {
+	                this._ezEditTable = new EditTable(tf.id, cfg, startRow);
+	                this._ezEditTable.Init();
+	            } catch (e) {
+	                throw new Error(this.err);
+	            }
+	
+	            this.initialized = true;
+	        }
+	    }, {
+	        key: 'reset',
+	
+	        /**
+	         * Reset advanced grid when previously removed
+	         */
+	        value: function reset() {
+	            var ezEditTable = this._ezEditTable;
+	            if (ezEditTable) {
+	                if (this.cfg.selection) {
+	                    ezEditTable.Selection.Set();
+	                }
+	                if (this.cfg.editable) {
+	                    ezEditTable.Editable.Set();
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Remove advanced grid
+	         */
+	        value: function destroy() {
+	            var ezEditTable = this._ezEditTable;
+	            if (ezEditTable) {
+	                if (this.cfg.selection) {
+	                    ezEditTable.Selection.ClearSelections();
+	                    ezEditTable.Selection.Remove();
+	                }
+	                if (this.cfg.editable) {
+	                    ezEditTable.Editable.Remove();
+	                }
+	            }
+	            this.initialized = false;
+	        }
+	    }]);
+	
+	    return AdapterEzEditTable;
+	})();
+	
+	exports['default'] = AdapterEzEditTable;
+	module.exports = exports['default'];
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _AdapterEzEditTable = __webpack_require__(24);
+	
+	var _AdapterEzEditTable2 = _interopRequireDefault(_AdapterEzEditTable);
+
+	exports['default'] = _AdapterEzEditTable2['default'];
+	module.exports = exports['default'];
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Str = __webpack_require__(4);
+	
+	var _Str2 = _interopRequireDefault(_Str);
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var ColOps = (function () {
+	
+	    /**
+	     * Column calculations
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function ColOps(tf, opts) {
+	        _classCallCheck(this, ColOps);
+	
+	        //calls function before col operation
+	        this.onBeforeOperation = _Types2['default'].isFn(opts.on_before_operation) ? opts.on_before_operation : null;
+	        //calls function after col operation
+	        this.onAfterOperation = _Types2['default'].isFn(opts.on_after_operation) ? opts.on_after_operation : null;
+	
+	        this.opts = opts;
+	        this.tf = tf;
+	    }
+	
+	    _createClass(ColOps, [{
+	        key: 'init',
+	        value: function init() {
+	            this.calc();
+	        }
+	    }, {
+	        key: 'calc',
+	
+	        /**
+	         * Calculates columns' values
+	         * Configuration options are stored in 'opts' property
+	         * - 'id' contains ids of elements showing result (array)
+	         * - 'col' contains the columns' indexes (array)
+	         * - 'operation' contains operation type (array, values: 'sum', 'mean',
+	         *   'min', 'max', 'median', 'q1', 'q3')
+	         * - 'write_method' array defines which method to use for displaying the
+	         *    result (innerHTML, setValue, createTextNode) - default: 'innerHTML'
+	         * - 'tot_row_index' defines in which row results are displayed
+	         *   (integers array)
+	         *
+	         * - changes made by Nuovella:
+	         * (1) optimized the routine (now it will only process each column once),
+	         * (2) added calculations for the median, lower and upper quartile.
+	         */
+	        value: function calc() {
+	            var tf = this.tf;
+	            if (!tf.isFirstLoad && !tf.hasGrid()) {
+	                return;
+	            }
+	
+	            if (this.onBeforeOperation) {
+	                this.onBeforeOperation.call(null, tf);
+	            }
+	
+	            var opts = this.opts,
+	                labelId = opts.id,
+	                colIndex = opts.col,
+	                operation = opts.operation,
+	                outputType = opts.write_method,
+	                totRowIndex = opts.tot_row_index,
+	                excludeRow = opts.exclude_row,
+	                decimalPrecision = _Types2['default'].isUndef(opts.decimal_precision) ? 2 : opts.decimal_precision;
+	
+	            //nuovella: determine unique list of columns to operate on
+	            var ucolIndex = [],
+	                ucolMax = 0;
+	            ucolIndex[ucolMax] = colIndex[0];
+	
+	            for (var ii = 1; ii < colIndex.length; ii++) {
+	                var saved = 0;
+	                //see if colIndex[ii] is already in the list of unique indexes
+	                for (var jj = 0; jj <= ucolMax; jj++) {
+	                    if (ucolIndex[jj] === colIndex[ii]) {
+	                        saved = 1;
+	                    }
+	                }
+	                //if not saved then, save the index;
+	                if (saved === 0) {
+	                    ucolMax++;
+	                    ucolIndex[ucolMax] = colIndex[ii];
+	                }
+	            }
+	
+	            if (_Str2['default'].lower(typeof labelId) == 'object' && _Str2['default'].lower(typeof colIndex) == 'object' && _Str2['default'].lower(typeof operation) == 'object') {
+	                var rows = tf.tbl.rows,
+	                    colvalues = [];
+	
+	                for (var ucol = 0; ucol <= ucolMax; ucol++) {
+	                    //this retrieves col values
+	                    //use ucolIndex because we only want to pass through this loop
+	                    //once for each column get the values in this unique column
+	                    colvalues.push(tf.getColValues(ucolIndex[ucol], true, excludeRow));
+	
+	                    //next: calculate all operations for this column
+	                    var result,
+	                        nbvalues = 0,
+	                        temp,
+	                        meanValue = 0,
+	                        sumValue = 0,
+	                        minValue = null,
+	                        maxValue = null,
+	                        q1Value = null,
+	                        medValue = null,
+	                        q3Value = null,
+	                        meanFlag = 0,
+	                        sumFlag = 0,
+	                        minFlag = 0,
+	                        maxFlag = 0,
+	                        q1Flag = 0,
+	                        medFlag = 0,
+	                        q3Flag = 0,
+	                        theList = [],
+	                        opsThisCol = [],
+	                        decThisCol = [],
+	                        labThisCol = [],
+	                        oTypeThisCol = [],
+	                        mThisCol = -1;
+	
+	                    for (var k = 0; k < colIndex.length; k++) {
+	                        if (colIndex[k] === ucolIndex[ucol]) {
+	                            mThisCol++;
+	                            opsThisCol[mThisCol] = _Str2['default'].lower(operation[k]);
+	                            decThisCol[mThisCol] = decimalPrecision[k];
+	                            labThisCol[mThisCol] = labelId[k];
+	                            oTypeThisCol = outputType !== undefined && _Str2['default'].lower(typeof outputType) === 'object' ? outputType[k] : null;
+	
+	                            switch (opsThisCol[mThisCol]) {
+	                                case 'mean':
+	                                    meanFlag = 1;
+	                                    break;
+	                                case 'sum':
+	                                    sumFlag = 1;
+	                                    break;
+	                                case 'min':
+	                                    minFlag = 1;
+	                                    break;
+	                                case 'max':
+	                                    maxFlag = 1;
+	                                    break;
+	                                case 'median':
+	                                    medFlag = 1;
+	                                    break;
+	                                case 'q1':
+	                                    q1Flag = 1;
+	                                    break;
+	                                case 'q3':
+	                                    q3Flag = 1;
+	                                    break;
+	                            }
+	                        }
+	                    }
+	
+	                    for (var j = 0; j < colvalues[ucol].length; j++) {
+	                        //sort the list for calculation of median and quartiles
+	                        if (q1Flag == 1 || q3Flag == 1 || medFlag == 1) {
+	                            if (j < colvalues[ucol].length - 1) {
+	                                for (k = j + 1; k < colvalues[ucol].length; k++) {
+	                                    if (eval(colvalues[ucol][k]) < eval(colvalues[ucol][j])) {
+	                                        temp = colvalues[ucol][j];
+	                                        colvalues[ucol][j] = colvalues[ucol][k];
+	                                        colvalues[ucol][k] = temp;
+	                                    }
+	                                }
+	                            }
+	                        }
+	                        var cvalue = parseFloat(colvalues[ucol][j]);
+	                        theList[j] = parseFloat(cvalue);
+	
+	                        if (!isNaN(cvalue)) {
+	                            nbvalues++;
+	                            if (sumFlag === 1 || meanFlag === 1) {
+	                                sumValue += parseFloat(cvalue);
+	                            }
+	                            if (minFlag === 1) {
+	                                if (minValue === null) {
+	                                    minValue = parseFloat(cvalue);
+	                                } else {
+	                                    minValue = parseFloat(cvalue) < minValue ? parseFloat(cvalue) : minValue;
+	                                }
+	                            }
+	                            if (maxFlag === 1) {
+	                                if (maxValue === null) {
+	                                    maxValue = parseFloat(cvalue);
+	                                } else {
+	                                    maxValue = parseFloat(cvalue) > maxValue ? parseFloat(cvalue) : maxValue;
+	                                }
+	                            }
+	                        }
+	                    } //for j
+	                    if (meanFlag === 1) {
+	                        meanValue = sumValue / nbvalues;
+	                    }
+	                    if (medFlag === 1) {
+	                        var aux = 0;
+	                        if (nbvalues % 2 === 1) {
+	                            aux = Math.floor(nbvalues / 2);
+	                            medValue = theList[aux];
+	                        } else {
+	                            medValue = (theList[nbvalues / 2] + theList[nbvalues / 2 - 1]) / 2;
+	                        }
+	                    }
+	                    var posa;
+	                    if (q1Flag === 1) {
+	                        posa = 0;
+	                        posa = Math.floor(nbvalues / 4);
+	                        if (4 * posa == nbvalues) {
+	                            q1Value = (theList[posa - 1] + theList[posa]) / 2;
+	                        } else {
+	                            q1Value = theList[posa];
+	                        }
+	                    }
+	                    if (q3Flag === 1) {
+	                        posa = 0;
+	                        var posb = 0;
+	                        posa = Math.floor(nbvalues / 4);
+	                        if (4 * posa === nbvalues) {
+	                            posb = 3 * posa;
+	                            q3Value = (theList[posb] + theList[posb - 1]) / 2;
+	                        } else {
+	                            q3Value = theList[nbvalues - posa - 1];
+	                        }
+	                    }
+	
+	                    for (var i = 0; i <= mThisCol; i++) {
+	                        switch (opsThisCol[i]) {
+	                            case 'mean':
+	                                result = meanValue;
+	                                break;
+	                            case 'sum':
+	                                result = sumValue;
+	                                break;
+	                            case 'min':
+	                                result = minValue;
+	                                break;
+	                            case 'max':
+	                                result = maxValue;
+	                                break;
+	                            case 'median':
+	                                result = medValue;
+	                                break;
+	                            case 'q1':
+	                                result = q1Value;
+	                                break;
+	                            case 'q3':
+	                                result = q3Value;
+	                                break;
+	                        }
+	
+	                        var precision = !isNaN(decThisCol[i]) ? decThisCol[i] : 2;
+	
+	                        //if outputType is defined
+	                        if (oTypeThisCol && result) {
+	                            result = result.toFixed(precision);
+	
+	                            if (_Dom2['default'].id(labThisCol[i])) {
+	                                switch (_Str2['default'].lower(oTypeThisCol)) {
+	                                    case 'innerhtml':
+	                                        if (isNaN(result) || !isFinite(result) || nbvalues === 0) {
+	                                            _Dom2['default'].id(labThisCol[i]).innerHTML = '.';
+	                                        } else {
+	                                            _Dom2['default'].id(labThisCol[i]).innerHTML = result;
+	                                        }
+	                                        break;
+	                                    case 'setvalue':
+	                                        _Dom2['default'].id(labThisCol[i]).value = result;
+	                                        break;
+	                                    case 'createtextnode':
+	                                        var oldnode = _Dom2['default'].id(labThisCol[i]).firstChild;
+	                                        var txtnode = _Dom2['default'].text(result);
+	                                        _Dom2['default'].id(labThisCol[i]).replaceChild(txtnode, oldnode);
+	                                        break;
+	                                } //switch
+	                            }
+	                        } else {
+	                            try {
+	                                if (isNaN(result) || !isFinite(result) || nbvalues === 0) {
+	                                    _Dom2['default'].id(labThisCol[i]).innerHTML = '.';
+	                                } else {
+	                                    _Dom2['default'].id(labThisCol[i]).innerHTML = result.toFixed(precision);
+	                                }
+	                            } catch (e) {} //catch
+	                        } //else
+	                    } //for i
+	
+	                    // row(s) with result are always visible
+	                    var totRow = totRowIndex && totRowIndex[ucol] ? rows[totRowIndex[ucol]] : null;
+	                    if (totRow) {
+	                        totRow.style.display = '';
+	                    }
+	                } //for ucol
+	            } //if typeof
+	
+	            if (this.onAfterOperation) {
+	                this.onAfterOperation.call(null, tf);
+	            }
+	        }
+	    }, {
+	        key: 'destroy',
+	        value: function destroy() {}
+	    }]);
+	
+	    return ColOps;
+	})();
+	
+	exports['default'] = ColOps;
+	module.exports = exports['default'];
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var _Arr = __webpack_require__(7);
+	
+	var _Arr2 = _interopRequireDefault(_Arr);
+	
+	var ColsVisibility = (function () {
+	
+	    /**
+	     * Columns Visibility extension
+	     * @param {Object} tf TableFilter instance
+	     * @param {Object} f Config
+	     */
+	
+	    function ColsVisibility(tf, f) {
+	        _classCallCheck(this, ColsVisibility);
+	
+	        // Configuration object
+	        var cfg = tf.config();
+	
+	        this.initialized = false;
+	        this.name = f.name;
+	        this.desc = f.description || 'Columns visibility manager';
+	
+	        //show/hide cols span element
+	        this.spanEl = null;
+	        //show/hide cols button element
+	        this.btnEl = null;
+	        //show/hide cols container div element
+	        this.contEl = null;
+	
+	        //tick to hide or show column
+	        this.tickToHide = f.tick_to_hide === false ? false : true;
+	        //enables/disables cols manager generation
+	        this.manager = f.manager === false ? false : true;
+	        //only if external headers
+	        this.headersTbl = f.headers_table || false;
+	        //only if external headers
+	        this.headersIndex = f.headers_index || 1;
+	        //id of container element
+	        this.contElTgtId = f.container_target_id || null;
+	        //alternative headers text
+	        this.headersText = f.headers_text || null;
+	        //id of button container element
+	        this.btnTgtId = f.btn_target_id || null;
+	        //defines show/hide cols text
+	        this.btnText = f.btn_text || 'Columns&#9660;';
+	        //defines show/hide cols button innerHtml
+	        this.btnHtml = f.btn_html || null;
+	        //defines css class for show/hide cols button
+	        this.btnCssClass = f.btn_css_class || 'colVis';
+	        //defines close link text
+	        this.btnCloseText = f.btn_close_text || 'Close';
+	        //defines close button innerHtml
+	        this.btnCloseHtml = f.btn_close_html || null;
+	        //defines css class for close button
+	        this.btnCloseCssClass = f.btn_close_css_class || this.btnCssClass;
+	        this.stylesheet = f.stylesheet || 'colsVisibility.css';
+	        //span containing show/hide cols button
+	        this.prfx = 'colVis_';
+	        //defines css class span containing show/hide cols
+	        this.spanCssClass = f.span_css_class || 'colVisSpan';
+	        this.prfxCont = this.prfx + 'Cont_';
+	        //defines css class div containing show/hide cols
+	        this.contCssClass = f.cont_css_class || 'colVisCont';
+	        //defines css class for cols list (ul)
+	        this.listCssClass = cfg.list_css_class || 'cols_checklist';
+	        //defines css class for list item (li)
+	        this.listItemCssClass = cfg.checklist_item_css_class || 'cols_checklist_item';
+	        //defines css class for selected list item (li)
+	        this.listSlcItemCssClass = cfg.checklist_selected_item_css_class || 'cols_checklist_slc_item';
+	        //text preceding columns list
+	        this.text = f.text || (this.tickToHide ? 'Hide: ' : 'Show: ');
+	        this.atStart = f.at_start || null;
+	        this.enableHover = Boolean(f.enable_hover);
+	        //enables select all option
+	        this.enableTickAll = Boolean(f.enable_tick_all);
+	        //text preceding columns list
+	        this.tickAllText = f.tick_all_text || 'Select all:';
+	
+	        //array containing hidden columns indexes
+	        this.hiddenCols = [];
+	        this.tblHasColTag = _Dom2['default'].tag(tf.tbl, 'col').length > 0;
+	
+	        //callback invoked just after cols manager is loaded
+	        this.onLoaded = _Types2['default'].isFn(f.on_loaded) ? f.on_loaded : null;
+	        //calls function before cols manager is opened
+	        this.onBeforeOpen = _Types2['default'].isFn(f.on_before_open) ? f.on_before_open : null;
+	        //calls function after cols manager is opened
+	        this.onAfterOpen = _Types2['default'].isFn(f.on_after_open) ? f.on_after_open : null;
+	        //calls function before cols manager is closed
+	        this.onBeforeClose = _Types2['default'].isFn(f.on_before_close) ? f.on_before_close : null;
+	        //calls function after cols manager is closed
+	        this.onAfterClose = _Types2['default'].isFn(f.on_after_close) ? f.on_after_close : null;
+	
+	        //callback before col is hidden
+	        this.onBeforeColHidden = _Types2['default'].isFn(f.on_before_col_hidden) ? f.on_before_col_hidden : null;
+	        //callback after col is hidden
+	        this.onAfterColHidden = _Types2['default'].isFn(f.on_after_col_hidden) ? f.on_after_col_hidden : null;
+	        //callback before col is displayed
+	        this.onBeforeColDisplayed = _Types2['default'].isFn(f.on_before_col_displayed) ? f.on_before_col_displayed : null;
+	        //callback after col is displayed
+	        this.onAfterColDisplayed = _Types2['default'].isFn(f.on_after_col_displayed) ? f.on_after_col_displayed : null;
+	
+	        //Grid layout compatibility
+	        if (tf.gridLayout) {
+	            this.headersTbl = tf.feature('gridLayout').headTbl; //headers table
+	            this.headersIndex = 0; //headers index
+	            this.onAfterColDisplayed = function () {};
+	            this.onAfterColHidden = function () {};
+	        }
+	
+	        //Loads extension stylesheet
+	        tf['import'](f.name + 'Style', tf.stylePath + this.stylesheet, null, 'link');
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(ColsVisibility, [{
+	        key: 'toggle',
+	        value: function toggle() {
+	            var contDisplay = this.contEl.style.display;
+	            var onBeforeOpen = this.onBeforeOpen;
+	            var onBeforeClose = this.onBeforeClose;
+	            var onAfterOpen = this.onAfterOpen;
+	            var onAfterClose = this.onAfterClose;
+	
+	            if (onBeforeOpen && contDisplay !== 'inline') {
+	                onBeforeOpen.call(null, this);
+	            }
+	            if (onBeforeClose && contDisplay === 'inline') {
+	                onBeforeClose.call(null, this);
+	            }
+	
+	            this.contEl.style.display = contDisplay === 'inline' ? 'none' : 'inline';
+	
+	            if (onAfterOpen && contDisplay !== 'inline') {
+	                onAfterOpen.call(null, this);
+	            }
+	            if (onAfterClose && contDisplay === 'inline') {
+	                onAfterClose.call(null, this);
+	            }
+	        }
+	    }, {
+	        key: 'checkItem',
+	        value: function checkItem(lbl) {
+	            var li = lbl.parentNode;
+	            if (!li || !lbl) {
+	                return;
+	            }
+	            var isChecked = lbl.firstChild.checked;
+	            var colIndex = lbl.firstChild.getAttribute('id').split('_')[1];
+	            colIndex = parseInt(colIndex, 10);
+	            if (isChecked) {
+	                _Dom2['default'].addClass(li, this.listSlcItemCssClass);
+	            } else {
+	                _Dom2['default'].removeClass(li, this.listSlcItemCssClass);
+	            }
+	
+	            var hide = false;
+	            if (this.tickToHide && isChecked || !this.tickToHide && !isChecked) {
+	                hide = true;
+	            }
+	            this.setHidden(colIndex, hide);
+	        }
+	    }, {
+	        key: 'init',
+	        value: function init() {
+	            if (!this.manager) {
+	                return;
+	            }
+	            this.buildBtn();
+	            this.buildManager();
+	
+	            this.initialized = true;
+	        }
+	    }, {
+	        key: 'buildBtn',
+	
+	        /**
+	         * Build main button UI
+	         */
+	        value: function buildBtn() {
+	            var _this = this;
+	
+	            if (this.btnEl) {
+	                return;
+	            }
+	            var tf = this.tf;
+	            var span = _Dom2['default'].create('span', ['id', this.prfx + tf.id]);
+	            span.className = this.spanCssClass;
+	
+	            //Container element (rdiv or custom element)
+	            if (!this.btnTgtId) {
+	                tf.setToolbar();
+	            }
+	            var targetEl = !this.btnTgtId ? tf.rDiv : _Dom2['default'].id(this.btnTgtId);
+	
+	            if (!this.btnTgtId) {
+	                var firstChild = targetEl.firstChild;
+	                firstChild.parentNode.insertBefore(span, firstChild);
+	            } else {
+	                targetEl.appendChild(span);
+	            }
+	
+	            if (!this.btnHtml) {
+	                var btn = _Dom2['default'].create('a', ['href', 'javascript:;']);
+	                btn.className = this.btnCssClass;
+	                btn.title = this.desc;
+	
+	                btn.innerHTML = this.btnText;
+	                span.appendChild(btn);
+	                if (!this.enableHover) {
+	                    _Event2['default'].add(btn, 'click', function (evt) {
+	                        _this.toggle(evt);
+	                    });
+	                } else {
+	                    _Event2['default'].add(btn, 'mouseover', function (evt) {
+	                        _this.toggle(evt);
+	                    });
+	                }
+	            } else {
+	                //Custom html
+	                span.innerHTML = this.btnHtml;
+	                var colVisEl = span.firstChild;
+	                if (!this.enableHover) {
+	                    _Event2['default'].add(colVisEl, 'click', function (evt) {
+	                        _this.toggle(evt);
+	                    });
+	                } else {
+	                    _Event2['default'].add(colVisEl, 'mouseover', function (evt) {
+	                        _this.toggle(evt);
+	                    });
+	                }
+	            }
+	
+	            this.spanEl = span;
+	            this.btnEl = this.spanEl.firstChild;
+	
+	            if (this.onLoaded) {
+	                this.onLoaded.call(null, this);
+	            }
+	        }
+	    }, {
+	        key: 'buildManager',
+	
+	        /**
+	         * Build columns manager UI
+	         */
+	        value: function buildManager() {
+	            var _this2 = this;
+	
+	            var tf = this.tf;
+	
+	            var container = !this.contElTgtId ? _Dom2['default'].create('div', ['id', this.prfxCont + tf.id]) : _Dom2['default'].id(this.contElTgtId);
+	            container.className = this.contCssClass;
+	
+	            //Extension description
+	            var extNameLabel = _Dom2['default'].create('p');
+	            extNameLabel.innerHTML = this.text;
+	            container.appendChild(extNameLabel);
+	
+	            //Headers list
+	            var ul = _Dom2['default'].create('ul', ['id', 'ul' + this.name + '_' + tf.id]);
+	            ul.className = this.listCssClass;
+	
+	            var tbl = this.headersTbl ? this.headersTbl : tf.tbl;
+	            var headerIndex = this.headersTbl ? this.headersIndex : tf.getHeadersRowIndex();
+	            var headerRow = tbl.rows[headerIndex];
+	
+	            //Tick all option
+	            if (this.enableTickAll) {
+	                var li = _Dom2['default'].createCheckItem('col__' + tf.id, this.tickAllText, this.tickAllText);
+	                _Dom2['default'].addClass(li, this.listItemCssClass);
+	                ul.appendChild(li);
+	                li.check.checked = !this.tickToHide;
+	
+	                _Event2['default'].add(li.check, 'click', function () {
+	                    for (var h = 0; h < headerRow.cells.length; h++) {
+	                        var itm = _Dom2['default'].id('col_' + h + '_' + tf.id);
+	                        if (itm && li.check.checked !== itm.checked) {
+	                            itm.click();
+	                            itm.checked = li.check.checked;
+	                        }
+	                    }
+	                });
+	            }
+	
+	            for (var i = 0; i < headerRow.cells.length; i++) {
+	                var cell = headerRow.cells[i];
+	                var cellText = this.headersText && this.headersText[i] ? this.headersText[i] : this._getHeaderText(cell);
+	                var liElm = _Dom2['default'].createCheckItem('col_' + i + '_' + tf.id, cellText, cellText);
+	                _Dom2['default'].addClass(liElm, this.listItemCssClass);
+	                if (!this.tickToHide) {
+	                    _Dom2['default'].addClass(liElm, this.listSlcItemCssClass);
+	                }
+	                ul.appendChild(liElm);
+	                if (!this.tickToHide) {
+	                    liElm.check.checked = true;
+	                }
+	
+	                _Event2['default'].add(liElm.check, 'click', function (evt) {
+	                    var elm = _Event2['default'].target(evt);
+	                    var lbl = elm.parentNode;
+	                    _this2.checkItem(lbl);
+	                });
+	            }
+	
+	            //separator
+	            var p = _Dom2['default'].create('p', ['align', 'center']);
+	            var btn;
+	            //Close link
+	            if (!this.btnCloseHtml) {
+	                btn = _Dom2['default'].create('a', ['href', 'javascript:;']);
+	                btn.className = this.btnCloseCssClass;
+	                btn.innerHTML = this.btnCloseText;
+	                _Event2['default'].add(btn, 'click', function (evt) {
+	                    _this2.toggle(evt);
+	                });
+	                p.appendChild(btn);
+	            } else {
+	                p.innerHTML = this.btnCloseHtml;
+	                btn = p.firstChild;
+	                _Event2['default'].add(btn, 'click', function (evt) {
+	                    _this2.toggle(evt);
+	                });
+	            }
+	
+	            container.appendChild(ul);
+	            container.appendChild(p);
+	
+	            this.btnEl.parentNode.insertBefore(container, this.btnEl);
+	            this.contEl = container;
+	
+	            if (this.atStart) {
+	                var a = this.atStart;
+	                for (var k = 0; k < a.length; k++) {
+	                    var itm = _Dom2['default'].id('col_' + a[k] + '_' + tf.id);
+	                    if (itm) {
+	                        itm.click();
+	                    }
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'setHidden',
+	
+	        /**
+	         * Hide or show specified columns
+	         * @param {Numner} colIndex Column index
+	         * @param {Boolean} hide    hide column if true or show if false
+	         */
+	        value: function setHidden(colIndex, hide) {
+	            var tf = this.tf;
+	            var tbl = tf.tbl;
+	
+	            if (this.onBeforeColHidden && hide) {
+	                this.onBeforeColHidden.call(null, this, colIndex);
+	            }
+	            if (this.onBeforeColDisplayed && !hide) {
+	                this.onBeforeColDisplayed.call(null, this, colIndex);
+	            }
+	
+	            this._hideCells(tbl, colIndex, hide);
+	            if (this.headersTbl) {
+	                this._hideCells(this.headersTbl, colIndex, hide);
+	            }
+	
+	            var hiddenCols = this.hiddenCols;
+	            if (hide) {
+	                if (hiddenCols.indexOf(colIndex) === -1) {
+	                    this.hiddenCols.push(colIndex);
+	                }
+	            } else {
+	                var itemIndex = _Arr2['default'].indexByValue(hiddenCols, colIndex, true);
+	                if (hiddenCols.indexOf(colIndex) !== -1) {
+	                    this.hiddenCols.splice(itemIndex, 1);
+	                }
+	            }
+	
+	            var gridLayout;
+	            var headTbl;
+	            var gridColElms;
+	            if (this.onAfterColHidden && hide) {
+	                //This event is fired just after a column is displayed for
+	                //grid_layout support
+	                //TODO: grid layout module should be responsible for those
+	                //calculations
+	                if (tf.gridLayout) {
+	                    gridLayout = tf.feature('gridLayout');
+	                    headTbl = gridLayout.headTbl;
+	                    gridColElms = gridLayout.gridColElms;
+	                    var hiddenWidth = parseInt(gridColElms[colIndex].style.width, 10);
+	
+	                    var headTblW = parseInt(headTbl.style.width, 10);
+	                    headTbl.style.width = headTblW - hiddenWidth + 'px';
+	                    tbl.style.width = headTbl.style.width;
+	                }
+	                this.onAfterColHidden.call(null, this, colIndex);
+	            }
+	
+	            if (this.onAfterColDisplayed && !hide) {
+	                //This event is fired just after a column is displayed for
+	                //grid_layout support
+	                //TODO: grid layout module should be responsible for those
+	                //calculations
+	                if (tf.gridLayout) {
+	                    gridLayout = tf.feature('gridLayout');
+	                    headTbl = gridLayout.headTbl;
+	                    gridColElms = gridLayout.gridColElms;
+	                    var width = parseInt(gridColElms[colIndex].style.width, 10);
+	                    headTbl.style.width = parseInt(headTbl.style.width, 10) + width + 'px';
+	                    tf.tbl.style.width = headTbl.style.width;
+	                }
+	                this.onAfterColDisplayed.call(null, this, colIndex);
+	            }
+	        }
+	    }, {
+	        key: 'showCol',
+	
+	        /**
+	         * Show specified column
+	         * @param  {Number} colIndex Column index
+	         */
+	        value: function showCol(colIndex) {
+	            if (colIndex === undefined || !this.isColHidden(colIndex)) {
+	                return;
+	            }
+	            if (this.manager && this.contEl) {
+	                var itm = _Dom2['default'].id('col_' + colIndex + '_' + this.tf.id);
+	                if (itm) {
+	                    itm.click();
+	                }
+	            } else {
+	                this.setHidden(colIndex, false);
+	            }
+	        }
+	    }, {
+	        key: 'hideCol',
+	
+	        /**
+	         * Hide specified column
+	         * @param  {Number} colIndex Column index
+	         */
+	        value: function hideCol(colIndex) {
+	            if (colIndex === undefined || this.isColHidden(colIndex)) {
+	                return;
+	            }
+	            if (this.manager && this.contEl) {
+	                var itm = _Dom2['default'].id('col_' + colIndex + '_' + this.tf.id);
+	                if (itm) {
+	                    itm.click();
+	                }
+	            } else {
+	                this.setHidden(colIndex, true);
+	            }
+	        }
+	    }, {
+	        key: 'isColHidden',
+	
+	        /**
+	         * Determine if specified column is hidden
+	         * @param  {Number} colIndex Column index
+	         */
+	        value: function isColHidden(colIndex) {
+	            if (this.hiddenCols.indexOf(colIndex) !== -1) {
+	                return true;
+	            }
+	            return false;
+	        }
+	    }, {
+	        key: 'toggleCol',
+	
+	        /**
+	         * Toggle visibility of specified column
+	         * @param  {Number} colIndex Column index
+	         */
+	        value: function toggleCol(colIndex) {
+	            if (colIndex === undefined || this.isColHidden(colIndex)) {
+	                this.showCol(colIndex);
+	            } else {
+	                this.hideCol(colIndex);
+	            }
+	        }
+	    }, {
+	        key: 'getHiddenCols',
+	
+	        /**
+	         * Returns the indexes of the columns currently hidden
+	         * @return {Array} column indexes
+	         */
+	        value: function getHiddenCols() {
+	            return this.hiddenCols;
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Remove the columns manager
+	         */
+	        value: function destroy() {
+	            if (!this.btnEl && !this.contEl) {
+	                return;
+	            }
+	            if (_Dom2['default'].id(this.contElTgtId)) {
+	                _Dom2['default'].id(this.contElTgtId).innerHTML = '';
+	            } else {
+	                this.contEl.innerHTML = '';
+	                this.contEl.parentNode.removeChild(this.contEl);
+	                this.contEl = null;
+	            }
+	            this.btnEl.innerHTML = '';
+	            this.btnEl.parentNode.removeChild(this.btnEl);
+	            this.btnEl = null;
+	            this.initialized = false;
+	        }
+	    }, {
+	        key: '_getHeaderText',
+	        value: function _getHeaderText(cell) {
+	            if (!cell.hasChildNodes) {
+	                return '';
+	            }
+	
+	            for (var i = 0; i < cell.childNodes.length; i++) {
+	                var n = cell.childNodes[i];
+	                if (n.nodeType === 3) {
+	                    return n.nodeValue;
+	                } else if (n.nodeType === 1) {
+	                    if (n.id && n.id.indexOf('popUp') !== -1) {
+	                        continue;
+	                    } else {
+	                        return _Dom2['default'].getText(n);
+	                    }
+	                }
+	                continue;
+	            }
+	            return '';
+	        }
+	    }, {
+	        key: '_hideCells',
+	        value: function _hideCells(tbl, colIndex, hide) {
+	            for (var i = 0; i < tbl.rows.length; i++) {
+	                var row = tbl.rows[i];
+	                var cell = row.cells[colIndex];
+	                if (cell) {
+	                    cell.style.display = hide ? 'none' : '';
+	                }
+	            }
+	        }
+	    }]);
+	
+	    return ColsVisibility;
+	})();
+	
+	exports['default'] = ColsVisibility;
+	module.exports = exports['default'];
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var FiltersVisibility = (function () {
+	
+	    /**
+	     * Filters Row Visibility extension
+	     * @param {Object} tf TableFilter instance
+	     * @param {Object} f Config
+	     */
+	
+	    function FiltersVisibility(tf, f) {
+	        _classCallCheck(this, FiltersVisibility);
+	
+	        this.initialized = false;
+	        this.name = f.name;
+	        this.desc = f.description || 'Filters row visibility manager';
+	
+	        // Path and image filenames
+	        this.stylesheet = f.stylesheet || 'filtersVisibility.css';
+	        this.icnExpand = f.expand_icon_name || 'icn_exp.png';
+	        this.icnCollapse = f.collapse_icon_name || 'icn_clp.png';
+	
+	        //expand/collapse filters span element
+	        this.contEl = null;
+	        //expand/collapse filters btn element
+	        this.btnEl = null;
+	
+	        this.icnExpandHtml = '<img src="' + tf.stylePath + this.icnExpand + '" alt="Expand filters" >';
+	        this.icnCollapseHtml = '<img src="' + tf.stylePath + this.icnCollapse + '" alt="Collapse filters" >';
+	        this.defaultText = 'Toggle filters';
+	
+	        //id of container element
+	        this.targetId = f.target_id || null;
+	        //enables/disables expand/collapse icon
+	        this.enableIcon = f.enable_icon === false ? false : true;
+	        this.btnText = f.btn_text || '';
+	
+	        //defines expand/collapse filters text
+	        this.collapseBtnHtml = this.enableIcon ? this.icnCollapseHtml + this.btnText : this.btnText || this.defaultText;
+	        this.expandBtnHtml = this.enableIcon ? this.icnExpandHtml + this.btnText : this.btnText || this.defaultText;
+	
+	        //defines expand/collapse filters button innerHtml
+	        this.btnHtml = f.btn_html || null;
+	        //defines css class for expand/collapse filters button
+	        this.btnCssClass = f.btn_css_class || 'btnExpClpFlt';
+	        //defines css class span containing expand/collapse filters
+	        this.contCssClass = f.cont_css_class || 'expClpFlt';
+	        this.filtersRowIndex = !_Types2['default'].isUndef(f.filters_row_index) ? f.filters_row_index : tf.getFiltersRowIndex();
+	
+	        this.visibleAtStart = !_Types2['default'].isUndef(f.visible_at_start) ? Boolean(f.visible_at_start) : true;
+	
+	        // Prefix
+	        this.prfx = 'fltsVis_';
+	
+	        //callback before filters row is shown
+	        this.onBeforeShow = _Types2['default'].isFn(f.on_before_show) ? f.on_before_show : null;
+	        //callback after filters row is shown
+	        this.onAfterShow = _Types2['default'].isFn(f.on_after_show) ? f.on_after_show : null;
+	        //callback before filters row is hidden
+	        this.onBeforeHide = _Types2['default'].isFn(f.on_before_hide) ? f.on_before_hide : null;
+	        //callback after filters row is hidden
+	        this.onAfterHide = _Types2['default'].isFn(f.on_after_hide) ? f.on_after_hide : null;
+	
+	        //Loads extension stylesheet
+	        tf['import'](f.name + 'Style', tf.stylePath + this.stylesheet, null, 'link');
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(FiltersVisibility, [{
+	        key: 'init',
+	
+	        /**
+	         * Initialise extension
+	         */
+	        value: function init() {
+	            if (this.initialized) {
+	                return;
+	            }
+	
+	            this.buildUI();
+	            this.initialized = true;
+	        }
+	    }, {
+	        key: 'buildUI',
+	
+	        /**
+	         * Build UI elements
+	         */
+	        value: function buildUI() {
+	            var _this = this;
+	
+	            var tf = this.tf;
+	            var span = _Dom2['default'].create('span', ['id', this.prfx + tf.id]);
+	            span.className = this.contCssClass;
+	
+	            //Container element (rdiv or custom element)
+	            if (!this.targetId) {
+	                tf.setToolbar();
+	            }
+	            var targetEl = !this.targetId ? tf.rDiv : _Dom2['default'].id(this.targetId);
+	
+	            if (!this.targetId) {
+	                var firstChild = targetEl.firstChild;
+	                firstChild.parentNode.insertBefore(span, firstChild);
+	            } else {
+	                targetEl.appendChild(span);
+	            }
+	
+	            var btn = undefined;
+	            if (!this.btnHtml) {
+	                btn = _Dom2['default'].create('a', ['href', 'javascript:void(0);']);
+	                btn.className = this.btnCssClass;
+	                btn.title = this.btnText || this.defaultText;
+	                btn.innerHTML = this.collapseBtnHtml;
+	                span.appendChild(btn);
+	                _Event2['default'].add(btn, 'click', function () {
+	                    return _this.toggle();
+	                });
+	            } else {
+	                //Custom html
+	                span.innerHTML = this.btnHtml;
+	                btn = span.firstChild;
+	                _Event2['default'].add(btn, 'click', function () {
+	                    return _this.toggle();
+	                });
+	            }
+	
+	            this.contEl = span;
+	            this.btnEl = btn;
+	
+	            if (!this.visibleAtStart) {
+	                this.toggle();
+	            }
+	        }
+	    }, {
+	        key: 'toggle',
+	
+	        /**
+	         * Toggle filters visibility
+	         */
+	        value: function toggle() {
+	            var tf = this.tf;
+	            var tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
+	            var fltRow = tbl.rows[this.filtersRowIndex];
+	            var fltRowDisplay = fltRow.style.display;
+	
+	            if (this.onBeforeShow && fltRowDisplay !== '') {
+	                this.onBeforeShow.call(this, this);
+	            }
+	            if (this.onBeforeHide && fltRowDisplay === '') {
+	                this.onBeforeHide.call(null, this);
+	            }
+	
+	            fltRow.style.display = fltRowDisplay === '' ? 'none' : '';
+	            if (this.enableIcon && !this.btnHtml) {
+	                this.btnEl.innerHTML = fltRowDisplay === '' ? this.expandBtnHtml : this.collapseBtnHtml;
+	            }
+	
+	            if (this.onAfterShow && fltRowDisplay !== '') {
+	                this.onAfterShow.call(null, this);
+	            }
+	            if (this.onAfterHide && fltRowDisplay === '') {
+	                this.onAfterHide.call(null, this);
+	            }
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Destroy the UI
+	         */
+	        value: function destroy() {
+	            if (!this.btnEl && !this.contEl) {
+	                return;
+	            }
+	
+	            this.btnEl.innerHTML = '';
+	            this.btnEl.parentNode.removeChild(this.btnEl);
+	            this.btnEl = null;
+	
+	            this.contEl.innerHTML = '';
+	            this.contEl.parentNode.removeChild(this.contEl);
+	            this.contEl = null;
+	            this.initialized = false;
+	        }
+	    }]);
+	
+	    return FiltersVisibility;
+	})();
+	
+	exports['default'] = FiltersVisibility;
+	module.exports = exports['default'];
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _Types = __webpack_require__(6);
+	
+	var _Types2 = _interopRequireDefault(_Types);
+	
+	var _Dom = __webpack_require__(3);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Arr = __webpack_require__(7);
+	
+	var _Arr2 = _interopRequireDefault(_Arr);
+	
+	var _Event = __webpack_require__(2);
+	
+	var _Event2 = _interopRequireDefault(_Event);
+	
+	var _DateHelper = __webpack_require__(8);
+	
+	var _DateHelper2 = _interopRequireDefault(_DateHelper);
+	
+	var _Helpers = __webpack_require__(9);
+	
+	var _Helpers2 = _interopRequireDefault(_Helpers);
+	
+	var AdapterSortableTable = (function () {
+	
+	    /**
+	     * SortableTable Adapter module
+	     * @param {Object} tf TableFilter instance
+	     */
+	
+	    function AdapterSortableTable(tf, opts) {
+	        _classCallCheck(this, AdapterSortableTable);
+	
+	        // Configuration object
+	        var f = tf.config();
+	
+	        this.initialized = false;
+	        this.name = opts.name;
+	        this.desc = opts.description || 'Sortable table';
+	
+	        //indicates if paging is enabled
+	        this.isPaged = false;
+	
+	        //indicates if tables was sorted
+	        this.sorted = false;
+	
+	        this.sortTypes = _Types2['default'].isArray(opts.types) ? opts.types : [];
+	        this.sortColAtStart = _Types2['default'].isArray(opts.sort_col_at_start) ? opts.sort_col_at_start : null;
+	        this.asyncSort = Boolean(opts.async_sort);
+	        this.triggerIds = _Types2['default'].isArray(opts.trigger_ids) ? opts.trigger_ids : [];
+	
+	        // edit .sort-arrow.descending / .sort-arrow.ascending in
+	        // tablefilter.css to reflect any path change
+	        this.imgPath = opts.images_path || tf.themesPath;
+	        this.imgBlank = opts.image_blank || 'blank.png';
+	        this.imgClassName = opts.image_class_name || 'sort-arrow';
+	        this.imgAscClassName = opts.image_asc_class_name || 'ascending';
+	        this.imgDescClassName = opts.image_desc_class_name || 'descending';
+	        //cell attribute storing custom key
+	        this.customKey = opts.custom_key || 'data-tf-sortKey';
+	
+	        /*** TF additional events ***/
+	        //additional paging events for alternating background
+	        // o.Evt._Paging.nextEvt = function(){
+	        // if(o.sorted && o.alternateBgs) o.Filter();
+	        // }
+	        // o.Evt._Paging.prevEvt = o.Evt._Paging.nextEvt;
+	        // o.Evt._Paging.firstEvt = o.Evt._Paging.nextEvt;
+	        // o.Evt._Paging.lastEvt = o.Evt._Paging.nextEvt;
+	        // o.Evt._OnSlcPagesChangeEvt = o.Evt._Paging.nextEvt;
+	
+	        // callback invoked after sort is loaded and instanciated
+	        this.onSortLoaded = _Types2['default'].isFn(opts.on_sort_loaded) ? opts.on_sort_loaded : null;
+	        // callback invoked before table is sorted
+	        this.onBeforeSort = _Types2['default'].isFn(opts.on_before_sort) ? opts.on_before_sort : null;
+	        // callback invoked after table is sorted
+	        this.onAfterSort = _Types2['default'].isFn(opts.on_after_sort) ? f.on_after_sort : null;
+	
+	        this.tf = tf;
+	    }
+	
+	    _createClass(AdapterSortableTable, [{
+	        key: 'init',
+	        value: function init() {
+	            var tf = this.tf;
+	            var adpt = this;
+	
+	            // SortableTable class sanity check (sortabletable.js)
+	            if (_Types2['default'].isUndef(SortableTable)) {
+	                throw new Error('SortableTable class not found.');
+	            }
+	
+	            this.overrideSortableTable();
+	            this.setSortTypes();
+	
+	            //Column sort at start
+	            var sortColAtStart = adpt.sortColAtStart;
+	            if (sortColAtStart) {
+	                this.stt.sort(sortColAtStart[0], sortColAtStart[1]);
+	            }
+	
+	            if (this.onSortLoaded) {
+	                this.onSortLoaded.call(null, tf, this);
+	            }
+	
+	            /*** SortableTable callbacks ***/
+	            this.stt.onbeforesort = function () {
+	                if (this.onBeforeSort) {
+	                    this.onBeforeSort.call(null, tf, this.stt.sortColumn);
+	                }
+	
+	                /*** sort behaviour for paging ***/
+	                if (tf.paging) {
+	                    adpt.isPaged = true;
+	                    tf.paging = false;
+	                    tf.feature('paging').destroy();
+	                }
+	            };
+	
+	            this.stt.onsort = function () {
+	                adpt.sorted = true;
+	
+	                //rows alternating bg issue
+	                // TODO: move into AlternateRows component
+	                if (tf.alternateBgs) {
+	                    var rows = tf.tbl.rows,
+	                        c = 0;
+	
+	                    var setClass = function setClass(row, i, removeOnly) {
+	                        if (_Types2['default'].isUndef(removeOnly)) {
+	                            removeOnly = false;
+	                        }
+	                        var altRows = tf.feature('alternateRows'),
+	                            oddCls = altRows.oddCss,
+	                            evenCls = altRows.evenCss;
+	                        _Dom2['default'].removeClass(row, oddCls);
+	                        _Dom2['default'].removeClass(row, evenCls);
+	
+	                        if (!removeOnly) {
+	                            _Dom2['default'].addClass(row, i % 2 ? oddCls : evenCls);
+	                        }
+	                    };
+	
+	                    for (var i = tf.refRow; i < tf.nbRows; i++) {
+	                        var isRowValid = rows[i].getAttribute('validRow');
+	                        if (tf.paging && rows[i].style.display === '') {
+	                            setClass(rows[i], c);
+	                            c++;
+	                        } else {
+	                            if ((isRowValid === 'true' || isRowValid === null) && rows[i].style.display === '') {
+	                                setClass(rows[i], c);
+	                                c++;
+	                            } else {
+	                                setClass(rows[i], c, true);
+	                            }
+	                        }
+	                    }
+	                }
+	                //sort behaviour for paging
+	                if (adpt.isPaged) {
+	                    var paginator = tf.feature('paging');
+	                    paginator.reset(false);
+	                    paginator.setPage(paginator.getPage());
+	                    adpt.isPaged = false;
+	                }
+	
+	                if (adpt.onAfterSort) {
+	                    adpt.onAfterSort.call(null, tf, tf.stt.sortColumn);
+	                }
+	            };
+	
+	            this.initialized = true;
+	        }
+	    }, {
+	        key: 'sortByColumnIndex',
+	
+	        /**
+	         * Sort specified column
+	         * @param  {Number} colIdx Column index
+	         */
+	        value: function sortByColumnIndex(colIdx) {
+	            this.stt.sort(colIdx);
+	        }
+	    }, {
+	        key: 'overrideSortableTable',
+	        value: function overrideSortableTable() {
+	            var adpt = this,
+	                tf = this.tf;
+	
+	            /**
+	             * Overrides headerOnclick method in order to handle th event
+	             * @param  {Object} e [description]
+	             */
+	            SortableTable.prototype.headerOnclick = function (evt) {
+	                if (!adpt.initialized) {
+	                    return;
+	                }
+	
+	                // find Header element
+	                var el = evt.target || evt.srcElement;
+	
+	                while (el.tagName !== 'TD' && el.tagName !== 'TH') {
+	                    el = el.parentNode;
+	                }
+	
+	                this.sort(SortableTable.msie ? SortableTable.getCellIndex(el) : el.cellIndex);
+	            };
+	
+	            /**
+	             * Overrides getCellIndex IE returns wrong cellIndex when columns are
+	             * hidden
+	             * @param  {Object} oTd TD element
+	             * @return {Number}     Cell index
+	             */
+	            SortableTable.getCellIndex = function (oTd) {
+	                var cells = oTd.parentNode.cells,
+	                    l = cells.length,
+	                    i = undefined;
+	                for (i = 0; cells[i] != oTd && i < l; i++) {}
+	                return i;
+	            };
+	
+	            /**
+	             * Overrides initHeader in order to handle filters row position
+	             * @param  {Array} oSortTypes
+	             */
+	            SortableTable.prototype.initHeader = function (oSortTypes) {
+	                var stt = this;
+	                if (!stt.tHead) {
+	                    if (tf.gridLayout) {
+	                        stt.tHead = tf.feature('gridLayout').headTbl.tHead;
+	                    } else {
+	                        return;
+	                    }
+	                }
+	
+	                stt.headersRow = tf.headersRow;
+	                var cells = stt.tHead.rows[stt.headersRow].cells;
+	                stt.sortTypes = oSortTypes || [];
+	                var l = cells.length;
+	                var img = undefined,
+	                    c = undefined;
+	
+	                for (var i = 0; i < l; i++) {
+	                    c = cells[i];
+	                    if (stt.sortTypes[i] !== null && stt.sortTypes[i] !== 'None') {
+	                        c.style.cursor = 'pointer';
+	                        img = _Dom2['default'].create('img', ['src', adpt.imgPath + adpt.imgBlank]);
+	                        c.appendChild(img);
+	                        if (stt.sortTypes[i] !== null) {
+	                            c.setAttribute('_sortType', stt.sortTypes[i]);
+	                        }
+	                        _Event2['default'].add(c, 'click', stt._headerOnclick);
+	                    } else {
+	                        c.setAttribute('_sortType', oSortTypes[i]);
+	                        c._sortType = 'None';
+	                    }
+	                }
+	                stt.updateHeaderArrows();
+	            };
+	
+	            /**
+	             * Overrides updateHeaderArrows in order to handle arrows indicators
+	             */
+	            SortableTable.prototype.updateHeaderArrows = function () {
+	                var stt = this;
+	                var cells = undefined,
+	                    l = undefined,
+	                    img = undefined;
+	
+	                // external headers
+	                if (adpt.asyncSort && adpt.triggerIds.length > 0) {
+	                    var triggers = adpt.triggerIds;
+	                    cells = [];
+	                    l = triggers.length;
+	                    for (var j = 0; j < triggers.length; j++) {
+	                        cells.push(_Dom2['default'].id(triggers[j]));
+	                    }
+	                } else {
+	                    if (!this.tHead) {
+	                        return;
+	                    }
+	                    cells = stt.tHead.rows[stt.headersRow].cells;
+	                    l = cells.length;
+	                }
+	                for (var i = 0; i < l; i++) {
+	                    var cellAttr = cells[i].getAttribute('_sortType');
+	                    if (cellAttr !== null && cellAttr !== 'None') {
+	                        img = cells[i].lastChild || cells[i];
+	                        if (img.nodeName.toLowerCase() !== 'img') {
+	                            img = _Dom2['default'].create('img', ['src', adpt.imgPath + adpt.imgBlank]);
+	                            cells[i].appendChild(img);
+	                        }
+	                        if (i === stt.sortColumn) {
+	                            img.className = adpt.imgClassName + ' ' + (this.descending ? adpt.imgDescClassName : adpt.imgAscClassName);
+	                        } else {
+	                            img.className = adpt.imgClassName;
+	                        }
+	                    }
+	                }
+	            };
+	
+	            /**
+	             * Overrides getRowValue for custom key value feature
+	             * @param  {Object} oRow    Row element
+	             * @param  {String} sType
+	             * @param  {Number} nColumn
+	             * @return {String}
+	             */
+	            SortableTable.prototype.getRowValue = function (oRow, sType, nColumn) {
+	                var stt = this;
+	                // if we have defined a custom getRowValue use that
+	                var sortTypeInfo = stt._sortTypeInfo[sType];
+	                if (sortTypeInfo && sortTypeInfo.getRowValue) {
+	                    return sortTypeInfo.getRowValue(oRow, nColumn);
+	                }
+	                var c = oRow.cells[nColumn];
+	                var s = SortableTable.getInnerText(c);
+	                return stt.getValueFromString(s, sType);
+	            };
+	
+	            /**
+	             * Overrides getInnerText in order to avoid Firefox unexpected sorting
+	             * behaviour with untrimmed text elements
+	             * @param  {Object} oNode DOM element
+	             * @return {String}       DOM element inner text
+	             */
+	            SortableTable.getInnerText = function (oNode) {
+	                if (!oNode) {
+	                    return;
+	                }
+	                if (oNode.getAttribute(adpt.customKey)) {
+	                    return oNode.getAttribute(adpt.customKey);
+	                } else {
+	                    return _Dom2['default'].getText(oNode);
+	                }
+	            };
+	        }
+	    }, {
+	        key: 'addSortType',
+	        value: function addSortType() {
+	            var args = arguments;
+	            SortableTable.prototype.addSortType(args[0], args[1], args[2], args[3]);
+	        }
+	    }, {
+	        key: 'setSortTypes',
+	        value: function setSortTypes() {
+	            var _this = this;
+	
+	            var tf = this.tf,
+	                sortTypes = this.sortTypes,
+	                _sortTypes = [];
+	
+	            for (var i = 0; i < tf.nbCells; i++) {
+	                var colType = undefined;
+	
+	                if (sortTypes[i]) {
+	                    colType = sortTypes[i].toLowerCase();
+	                    if (colType === 'none') {
+	                        colType = 'None';
+	                    }
+	                } else {
+	                    // resolve column types
+	                    if (tf.hasColNbFormat && tf.colNbFormat[i] !== null) {
+	                        colType = tf.colNbFormat[i].toLowerCase();
+	                    } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
+	                        colType = tf.colDateType[i].toLowerCase() + 'date';
+	                    } else {
+	                        colType = 'String';
+	                    }
+	                }
+	                _sortTypes.push(colType);
+	            }
+	
+	            //Public TF method to add sort type
+	
+	            //Custom sort types
+	            this.addSortType('number', Number);
+	            this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
+	            this.addSortType('date', SortableTable.toDate);
+	            this.addSortType('string');
+	            this.addSortType('us', usNumberConverter);
+	            this.addSortType('eu', euNumberConverter);
+	            this.addSortType('dmydate', dmyDateConverter);
+	            this.addSortType('ymddate', ymdDateConverter);
+	            this.addSortType('mdydate', mdyDateConverter);
+	            this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
+	            this.addSortType('ipaddress', ipAddress, sortIP);
+	
+	            this.stt = new SortableTable(tf.tbl, _sortTypes);
+	
+	            /*** external table headers adapter ***/
+	            if (this.asyncSort && this.triggerIds.length > 0) {
+	                (function () {
+	                    var triggers = _this.triggerIds;
+	                    for (var j = 0; j < triggers.length; j++) {
+	                        if (triggers[j] === null) {
+	                            continue;
+	                        }
+	                        var trigger = _Dom2['default'].id(triggers[j]);
+	                        if (trigger) {
+	                            trigger.style.cursor = 'pointer';
+	
+	                            _Event2['default'].add(trigger, 'click', function (evt) {
+	                                var elm = evt.target;
+	                                if (!_this.tf.sort) {
+	                                    return;
+	                                }
+	                                _this.stt.asyncSort(_Arr2['default'].indexByValue(triggers, elm.id, true));
+	                            });
+	                            trigger.setAttribute('_sortType', _sortTypes[j]);
+	                        }
+	                    }
+	                })();
+	            }
+	        }
+	    }, {
+	        key: 'destroy',
+	
+	        /**
+	         * Destroy sort
+	         */
+	        value: function destroy() {
+	            var tf = this.tf;
+	            this.sorted = false;
+	            this.initialized = false;
+	            this.stt.destroy();
+	
+	            var ids = tf.getFiltersId();
+	            for (var idx = 0; idx < ids.length; idx++) {
+	                var header = tf.getHeaderElement(idx);
+	                var img = _Dom2['default'].tag(header, 'img');
+	
+	                if (img.length === 1) {
+	                    header.removeChild(img[0]);
+	                }
+	            }
+	        }
+	    }]);
+	
+	    return AdapterSortableTable;
+	})();
+	
+	exports['default'] = AdapterSortableTable;
+	
+	//Converters
+	function usNumberConverter(s) {
+	    return _Helpers2['default'].removeNbFormat(s, 'us');
+	}
+	function euNumberConverter(s) {
+	    return _Helpers2['default'].removeNbFormat(s, 'eu');
+	}
+	function dateConverter(s, format) {
+	    return _DateHelper2['default'].format(s, format);
+	}
+	function dmyDateConverter(s) {
+	    return dateConverter(s, 'DMY');
+	}
+	function mdyDateConverter(s) {
+	    return dateConverter(s, 'MDY');
+	}
+	function ymdDateConverter(s) {
+	    return dateConverter(s, 'YMD');
+	}
+	function ddmmmyyyyDateConverter(s) {
+	    return dateConverter(s, 'DDMMMYYYY');
+	}
+	
+	function ipAddress(value) {
+	    var vals = value.split('.');
+	    for (var x in vals) {
+	        var val = vals[x];
+	        while (3 > val.length) {
+	            val = '0' + val;
+	        }
+	        vals[x] = val;
+	    }
+	    return vals.join('.');
+	}
+	
+	function sortIP(a, b) {
+	    var aa = ipAddress(a.value.toLowerCase());
+	    var bb = ipAddress(b.value.toLowerCase());
+	    if (aa == bb) {
+	        return 0;
+	    } else if (aa < bb) {
+	        return -1;
+	    } else {
+	        return 1;
+	    }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	// import 'script!sortabletable';
+	
+	var _AdapterSortableTable = __webpack_require__(29);
+	
+	var _AdapterSortableTable2 = _interopRequireDefault(_AdapterSortableTable);
+	
+	if (!window.SortableTable) {
+	    __webpack_require__(31);
+	}
+	
+	exports['default'] = _AdapterSortableTable2['default'];
+	module.exports = exports['default'];
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(32)(__webpack_require__(33)+"\n\n// SCRIPT-LOADER FOOTER\n//# sourceURL=script:///C:/Users/max.guglielmi/Documents/dev/perso/javascript/GitHub/TableFilter/libs/sortabletable.js")
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	module.exports = function(src) {
+		if (typeof execScript === "function")
+			execScript(src);
+		else
+			eval.call(null, src);
+	}
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "/*----------------------------------------------------------------------------\\\r\n|                            Sortable Table 1.12                              |\r\n|-----------------------------------------------------------------------------|\r\n|                         Created by Erik Arvidsson                           |\r\n|                  (http://webfx.eae.net/contact.html#erik)                   |\r\n|                      For WebFX (http://webfx.eae.net/)                      |\r\n|-----------------------------------------------------------------------------|\r\n| A DOM 1 based script that allows an ordinary HTML table to be sortable.     |\r\n|-----------------------------------------------------------------------------|\r\n|                  Copyright (c) 1998 - 2006 Erik Arvidsson                   |\r\n|-----------------------------------------------------------------------------|\r\n| Licensed under the Apache License, Version 2.0 (the \"License\"); you may not |\r\n| use this file except in compliance with the License.  You may obtain a copy |\r\n| of the License at http://www.apache.org/licenses/LICENSE-2.0                |\r\n| - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |\r\n| Unless  required  by  applicable law or  agreed  to  in  writing,  software |\r\n| distributed under the License is distributed on an  \"AS IS\" BASIS,  WITHOUT |\r\n| WARRANTIES OR  CONDITIONS OF ANY KIND,  either express or implied.  See the |\r\n| License  for the  specific language  governing permissions  and limitations |\r\n| under the License.                                                          |\r\n|-----------------------------------------------------------------------------|\r\n| 2003-01-10 | First version                                                  |\r\n| 2003-01-19 | Minor changes to the date parsing                              |\r\n| 2003-01-28 | JScript 5.0 fixes (no support for 'in' operator)               |\r\n| 2003-02-01 | Sloppy typo like error fixed in getInnerText                   |\r\n| 2003-07-04 | Added workaround for IE cellIndex bug.                         |\r\n| 2003-11-09 | The bDescending argument to sort was not correctly working     |\r\n|            | Using onclick DOM0 event if no support for addEventListener    |\r\n|            | or attachEvent                                                 |\r\n| 2004-01-13 | Adding addSortType and removeSortType which makes it a lot     |\r\n|            | easier to add new, custom sort types.                          |\r\n| 2004-01-27 | Switch to use descending = false as the default sort order.    |\r\n|            | Change defaultDescending to suit your needs.                   |\r\n| 2004-03-14 | Improved sort type None look and feel a bit                    |\r\n| 2004-08-26 | Made the handling of tBody and tHead more flexible. Now you    |\r\n|            | can use another tHead or no tHead, and you can chose some      |\r\n|            | other tBody.                                                   |\r\n| 2006-04-25 | Changed license to Apache Software License 2.0                 |\r\n|-----------------------------------------------------------------------------|\r\n| Created 2003-01-10 | All changes are in the log above. | Updated 2006-04-25 |\r\n\\----------------------------------------------------------------------------*/\r\n\r\n\r\nfunction SortableTable(oTable, oSortTypes) {\r\n\r\n\tthis.sortTypes = oSortTypes || [];\r\n\r\n\tthis.sortColumn = null;\r\n\tthis.descending = null;\r\n\r\n\tvar oThis = this;\r\n\tthis._headerOnclick = function (e) {\r\n\t\toThis.headerOnclick(e);\r\n\t};\r\n\r\n\tif (oTable) {\r\n\t\tthis.setTable( oTable );\r\n\t\tthis.document = oTable.ownerDocument || oTable.document;\r\n\t}\r\n\telse {\r\n\t\tthis.document = document;\r\n\t}\r\n\r\n\r\n\t// only IE needs this\r\n\tvar win = this.document.defaultView || this.document.parentWindow;\r\n\tthis._onunload = function () {\r\n\t\toThis.destroy();\r\n\t};\r\n\tif (win && typeof win.attachEvent != \"undefined\") {\r\n\t\twin.attachEvent(\"onunload\", this._onunload);\r\n\t}\r\n}\r\n\r\nSortableTable.gecko = navigator.product == \"Gecko\";\r\nSortableTable.msie = /msie/i.test(navigator.userAgent);\r\n// Mozilla is faster when doing the DOM manipulations on\r\n// an orphaned element. MSIE is not\r\nSortableTable.removeBeforeSort = SortableTable.gecko;\r\n\r\nSortableTable.prototype.onsort = function () {};\r\n\r\n// default sort order. true -> descending, false -> ascending\r\nSortableTable.prototype.defaultDescending = false;\r\n\r\n// shared between all instances. This is intentional to allow external files\r\n// to modify the prototype\r\nSortableTable.prototype._sortTypeInfo = {};\r\n\r\nSortableTable.prototype.setTable = function (oTable) {\r\n\tif ( this.tHead )\r\n\t\tthis.uninitHeader();\r\n\tthis.element = oTable;\r\n\tthis.setTHead( oTable.tHead );\r\n\tthis.setTBody( oTable.tBodies[0] );\r\n};\r\n\r\nSortableTable.prototype.setTHead = function (oTHead) {\r\n\tif (this.tHead && this.tHead != oTHead )\r\n\t\tthis.uninitHeader();\r\n\tthis.tHead = oTHead;\r\n\tthis.initHeader( this.sortTypes );\r\n};\r\n\r\nSortableTable.prototype.setTBody = function (oTBody) {\r\n\tthis.tBody = oTBody;\r\n};\r\n\r\nSortableTable.prototype.setSortTypes = function ( oSortTypes ) {\r\n\tif ( this.tHead )\r\n\t\tthis.uninitHeader();\r\n\tthis.sortTypes = oSortTypes || [];\r\n\tif ( this.tHead )\r\n\t\tthis.initHeader( this.sortTypes );\r\n};\r\n\r\n// adds arrow containers and events\r\n// also binds sort type to the header cells so that reordering columns does\r\n// not break the sort types\r\nSortableTable.prototype.initHeader = function (oSortTypes) {\r\n\tif (!this.tHead) return;\r\n\tvar cells = this.tHead.rows[0].cells;\r\n\tvar doc = this.tHead.ownerDocument || this.tHead.document;\r\n\tthis.sortTypes = oSortTypes || [];\r\n\tvar l = cells.length;\r\n\tvar img, c;\r\n\tfor (var i = 0; i < l; i++) {\r\n\t\tc = cells[i];\r\n\t\tif (this.sortTypes[i] != null && this.sortTypes[i] != \"None\") {\r\n\t\t\timg = doc.createElement(\"IMG\");\r\n\t\t\timg.src = \"images/blank.png\";\r\n\t\t\tc.appendChild(img);\r\n\t\t\tif (this.sortTypes[i] != null)\r\n\t\t\t\tc._sortType = this.sortTypes[i];\r\n\t\t\tif (typeof c.addEventListener != \"undefined\")\r\n\t\t\t\tc.addEventListener(\"click\", this._headerOnclick, false);\r\n\t\t\telse if (typeof c.attachEvent != \"undefined\")\r\n\t\t\t\tc.attachEvent(\"onclick\", this._headerOnclick);\r\n\t\t\telse\r\n\t\t\t\tc.onclick = this._headerOnclick;\r\n\t\t}\r\n\t\telse\r\n\t\t{\r\n\t\t\tc.setAttribute( \"_sortType\", oSortTypes[i] );\r\n\t\t\tc._sortType = \"None\";\r\n\t\t}\r\n\t}\r\n\tthis.updateHeaderArrows();\r\n};\r\n\r\n// remove arrows and events\r\nSortableTable.prototype.uninitHeader = function () {\r\n\tif (!this.tHead) return;\r\n\tvar cells = this.tHead.rows[0].cells;\r\n\tvar l = cells.length;\r\n\tvar c;\r\n\tfor (var i = 0; i < l; i++) {\r\n\t\tc = cells[i];\r\n\t\tif (c._sortType != null && c._sortType != \"None\") {\r\n\t\t\tc.removeChild(c.lastChild);\r\n\t\t\tif (typeof c.removeEventListener != \"undefined\")\r\n\t\t\t\tc.removeEventListener(\"click\", this._headerOnclick, false);\r\n\t\t\telse if (typeof c.detachEvent != \"undefined\")\r\n\t\t\t\tc.detachEvent(\"onclick\", this._headerOnclick);\r\n\t\t\tc._sortType = null;\r\n\t\t\tc.removeAttribute( \"_sortType\" );\r\n\t\t}\r\n\t}\r\n};\r\n\r\nSortableTable.prototype.updateHeaderArrows = function () {\r\n\tif (!this.tHead) return;\r\n\tvar cells = this.tHead.rows[0].cells;\r\n\tvar l = cells.length;\r\n\tvar img;\r\n\tfor (var i = 0; i < l; i++) {\r\n\t\tif (cells[i]._sortType != null && cells[i]._sortType != \"None\") {\r\n\t\t\timg = cells[i].lastChild;\r\n\t\t\tif (i == this.sortColumn)\r\n\t\t\t\timg.className = \"sort-arrow \" + (this.descending ? \"descending\" : \"ascending\");\r\n\t\t\telse\r\n\t\t\t\timg.className = \"sort-arrow\";\r\n\t\t}\r\n\t}\r\n};\r\n\r\nSortableTable.prototype.headerOnclick = function (e) {\r\n\t// find TD element\r\n\tvar el = e.target || e.srcElement;\r\n\twhile (el.tagName != \"TD\")\r\n\t\tel = el.parentNode;\r\n\r\n\tthis.sort(SortableTable.msie ? SortableTable.getCellIndex(el) : el.cellIndex);\r\n};\r\n\r\n// IE returns wrong cellIndex when columns are hidden\r\nSortableTable.getCellIndex = function (oTd) {\r\n\tvar cells = oTd.parentNode.childNodes\r\n\tvar l = cells.length;\r\n\tvar i;\r\n\tfor (i = 0; cells[i] != oTd && i < l; i++)\r\n\t\t;\r\n\treturn i;\r\n};\r\n\r\nSortableTable.prototype.getSortType = function (nColumn) {\r\n\treturn this.sortTypes[nColumn] || \"String\";\r\n};\r\n\r\n// only nColumn is required\r\n// if bDescending is left out the old value is taken into account\r\n// if sSortType is left out the sort type is found from the sortTypes array\r\n\r\nSortableTable.prototype.sort = function (nColumn, bDescending, sSortType) {\r\n\tif (!this.tBody) return;\r\n\tif (sSortType == null)\r\n\t\tsSortType = this.getSortType(nColumn);\r\n\r\n\t// exit if None\r\n\tif (sSortType == \"None\")\r\n\t\treturn;\r\n\r\n\tif (bDescending == null) {\r\n\t\tif (this.sortColumn != nColumn)\r\n\t\t\tthis.descending = this.defaultDescending;\r\n\t\telse\r\n\t\t\tthis.descending = !this.descending;\r\n\t}\r\n\telse\r\n\t\tthis.descending = bDescending;\r\n\r\n\tthis.sortColumn = nColumn;\r\n\r\n\tif (typeof this.onbeforesort == \"function\")\r\n\t\tthis.onbeforesort();\r\n\r\n\tvar f = this.getSortFunction(sSortType, nColumn);\r\n\tvar a = this.getCache(sSortType, nColumn);\r\n\tvar tBody = this.tBody;\r\n\r\n\ta.sort(f);\r\n\r\n\tif (this.descending)\r\n\t\ta.reverse();\r\n\r\n\tif (SortableTable.removeBeforeSort) {\r\n\t\t// remove from doc\r\n\t\tvar nextSibling = tBody.nextSibling;\r\n\t\tvar p = tBody.parentNode;\r\n\t\tp.removeChild(tBody);\r\n\t}\r\n\r\n\t// insert in the new order\r\n\tvar l = a.length;\r\n\tfor (var i = 0; i < l; i++)\r\n\t\ttBody.appendChild(a[i].element);\r\n\r\n\tif (SortableTable.removeBeforeSort) {\r\n\t\t// insert into doc\r\n\t\tp.insertBefore(tBody, nextSibling);\r\n\t}\r\n\r\n\tthis.updateHeaderArrows();\r\n\r\n\tthis.destroyCache(a);\r\n\r\n\tif (typeof this.onsort == \"function\")\r\n\t\tthis.onsort();\r\n};\r\n\r\nSortableTable.prototype.asyncSort = function (nColumn, bDescending, sSortType) {\r\n\tvar oThis = this;\r\n\tthis._asyncsort = function () {\r\n\t\toThis.sort(nColumn, bDescending, sSortType);\r\n\t};\r\n\twindow.setTimeout(this._asyncsort, 1);\r\n};\r\n\r\nSortableTable.prototype.getCache = function (sType, nColumn) {\r\n\tif (!this.tBody) return [];\r\n\tvar rows = this.tBody.rows;\r\n\tvar l = rows.length;\r\n\tvar a = new Array(l);\r\n\tvar r;\r\n\tfor (var i = 0; i < l; i++) {\r\n\t\tr = rows[i];\r\n\t\ta[i] = {\r\n\t\t\tvalue:\t\tthis.getRowValue(r, sType, nColumn),\r\n\t\t\telement:\tr\r\n\t\t};\r\n\t};\r\n\treturn a;\r\n};\r\n\r\nSortableTable.prototype.destroyCache = function (oArray) {\r\n\tvar l = oArray.length;\r\n\tfor (var i = 0; i < l; i++) {\r\n\t\toArray[i].value = null;\r\n\t\toArray[i].element = null;\r\n\t\toArray[i] = null;\r\n\t}\r\n};\r\n\r\nSortableTable.prototype.getRowValue = function (oRow, sType, nColumn) {\r\n\t// if we have defined a custom getRowValue use that\r\n\tif (this._sortTypeInfo[sType] && this._sortTypeInfo[sType].getRowValue)\r\n\t\treturn this._sortTypeInfo[sType].getRowValue(oRow, nColumn);\r\n\r\n\tvar s;\r\n\tvar c = oRow.cells[nColumn];\r\n\tif (typeof c.innerText != \"undefined\")\r\n\t\ts = c.innerText;\r\n\telse\r\n\t\ts = SortableTable.getInnerText(c);\r\n\treturn this.getValueFromString(s, sType);\r\n};\r\n\r\nSortableTable.getInnerText = function (oNode) {\r\n\tvar s = \"\";\r\n\tvar cs = oNode.childNodes;\r\n\tvar l = cs.length;\r\n\tfor (var i = 0; i < l; i++) {\r\n\t\tswitch (cs[i].nodeType) {\r\n\t\t\tcase 1: //ELEMENT_NODE\r\n\t\t\t\ts += SortableTable.getInnerText(cs[i]);\r\n\t\t\t\tbreak;\r\n\t\t\tcase 3:\t//TEXT_NODE\r\n\t\t\t\ts += cs[i].nodeValue;\r\n\t\t\t\tbreak;\r\n\t\t}\r\n\t}\r\n\treturn s;\r\n};\r\n\r\nSortableTable.prototype.getValueFromString = function (sText, sType) {\r\n\tif (this._sortTypeInfo[sType])\r\n\t\treturn this._sortTypeInfo[sType].getValueFromString( sText );\r\n\treturn sText;\r\n\t/*\r\n\tswitch (sType) {\r\n\t\tcase \"Number\":\r\n\t\t\treturn Number(sText);\r\n\t\tcase \"CaseInsensitiveString\":\r\n\t\t\treturn sText.toUpperCase();\r\n\t\tcase \"Date\":\r\n\t\t\tvar parts = sText.split(\"-\");\r\n\t\t\tvar d = new Date(0);\r\n\t\t\td.setFullYear(parts[0]);\r\n\t\t\td.setDate(parts[2]);\r\n\t\t\td.setMonth(parts[1] - 1);\r\n\t\t\treturn d.valueOf();\r\n\t}\r\n\treturn sText;\r\n\t*/\r\n\t};\r\n\r\nSortableTable.prototype.getSortFunction = function (sType, nColumn) {\r\n\tif (this._sortTypeInfo[sType])\r\n\t\treturn this._sortTypeInfo[sType].compare;\r\n\treturn SortableTable.basicCompare;\r\n};\r\n\r\nSortableTable.prototype.destroy = function () {\r\n\tthis.uninitHeader();\r\n\tvar win = this.document.parentWindow;\r\n\tif (win && typeof win.detachEvent != \"undefined\") {\t// only IE needs this\r\n\t\twin.detachEvent(\"onunload\", this._onunload);\r\n\t}\r\n\tthis._onunload = null;\r\n\tthis.element = null;\r\n\tthis.tHead = null;\r\n\tthis.tBody = null;\r\n\tthis.document = null;\r\n\tthis._headerOnclick = null;\r\n\tthis.sortTypes = null;\r\n\tthis._asyncsort = null;\r\n\tthis.onsort = null;\r\n};\r\n\r\n// Adds a sort type to all instance of SortableTable\r\n// sType : String - the identifier of the sort type\r\n// fGetValueFromString : function ( s : string ) : T - A function that takes a\r\n//    string and casts it to a desired format. If left out the string is just\r\n//    returned\r\n// fCompareFunction : function ( n1 : T, n2 : T ) : Number - A normal JS sort\r\n//    compare function. Takes two values and compares them. If left out less than,\r\n//    <, compare is used\r\n// fGetRowValue : function( oRow : HTMLTRElement, nColumn : int ) : T - A function\r\n//    that takes the row and the column index and returns the value used to compare.\r\n//    If left out then the innerText is first taken for the cell and then the\r\n//    fGetValueFromString is used to convert that string the desired value and type\r\n\r\nSortableTable.prototype.addSortType = function (sType, fGetValueFromString, fCompareFunction, fGetRowValue) {\r\n\tthis._sortTypeInfo[sType] = {\r\n\t\ttype:\t\t\t\tsType,\r\n\t\tgetValueFromString:\tfGetValueFromString || SortableTable.idFunction,\r\n\t\tcompare:\t\t\tfCompareFunction || SortableTable.basicCompare,\r\n\t\tgetRowValue:\t\tfGetRowValue\r\n\t};\r\n};\r\n\r\n// this removes the sort type from all instances of SortableTable\r\nSortableTable.prototype.removeSortType = function (sType) {\r\n\tdelete this._sortTypeInfo[sType];\r\n};\r\n\r\nSortableTable.basicCompare = function compare(n1, n2) {\r\n\tif (n1.value < n2.value)\r\n\t\treturn -1;\r\n\tif (n2.value < n1.value)\r\n\t\treturn 1;\r\n\treturn 0;\r\n};\r\n\r\nSortableTable.idFunction = function (x) {\r\n\treturn x;\r\n};\r\n\r\nSortableTable.toUpperCase = function (s) {\r\n\treturn s.toUpperCase();\r\n};\r\n\r\nSortableTable.toDate = function (s) {\r\n\tvar parts = s.split(\"-\");\r\n\tvar d = new Date(0);\r\n\td.setFullYear(parts[0]);\r\n\td.setDate(parts[2]);\r\n\td.setMonth(parts[1] - 1);\r\n\treturn d.valueOf();\r\n};\r\n\r\n\r\n// add sort types\r\nSortableTable.prototype.addSortType(\"Number\", Number);\r\nSortableTable.prototype.addSortType(\"CaseInsensitiveString\", SortableTable.toUpperCase);\r\nSortableTable.prototype.addSortType(\"Date\", SortableTable.toDate);\r\nSortableTable.prototype.addSortType(\"String\");\r\n// None is a special case\r\n"
+
+/***/ }
+]);
+//# sourceMappingURL=tf-1.js.map
