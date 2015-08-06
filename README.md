@@ -107,6 +107,10 @@ http://localhost:8080/demos/
 ```
 
 ## Documentation
+Run this task to generate the documentation in the ``doc`` directory:
+```shell
+grunt esdoc
+```
 Find the complete documentation in the [WIKI](https://github.com/koalyptus/TableFilter/wiki) section.
 
 ## Support
