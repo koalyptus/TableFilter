@@ -25,9 +25,9 @@ export default class FiltersVisibility{
         //expand/collapse filters btn element
         this.btnEl = null;
 
-        this.icnExpandHtml = '<img src="'+ tf.stylePath + this.icnExpand +
+        this.icnExpandHtml = '<img src="'+ tf.themesPath + this.icnExpand +
             '" alt="Expand filters" >';
-        this.icnCollapseHtml = '<img src="'+ tf.stylePath + this.icnCollapse +
+        this.icnCollapseHtml = '<img src="'+ tf.themesPath + this.icnCollapse +
             '" alt="Collapse filters" >';
         this.defaultText = 'Toggle filters';
 

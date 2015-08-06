@@ -4,6 +4,9 @@
 
  @import 'config'
 
+$item-bg-color = #335EA8
+$item-font-color = #fff
+
 // div containing checklist
 .div_checklist
     width               100%
@@ -26,9 +29,9 @@
         font-size       10px !important
         border-bottom   1px solid $filter-border-color !important
 
-        :hover
-            background-color    #335EA8 !important
-            color               $filter-bg-color !important;
+        &:hover
+            background-color    $item-bg-color !important
+            color               $item-font-color !important;
 
     label
         display block !important;
@@ -43,5 +46,5 @@
 
 // selected checklist item
 .flt_checklist_slc_item
-    background-color    #335EA8 !important
-    color:              $filter-bg-color !important
+    background-color    $item-bg-color !important
+    color:              $item-font-color !important
