@@ -1,6 +1,7 @@
-node_modules
-npm-debug.log
 doc
+node_modules
+
+npm-debug.log
 *.js.map
 .codio
 .settings
