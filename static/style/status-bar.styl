@@ -2,15 +2,17 @@
  * Status bar default style
  */
 
+@import 'config'
+
 div.status
-    float           left
-    overflow        hidden
-    width           150px
-    height          15px
-    border-right    1px solid #ccc
-    margin          0 5px 0 2px
-    padding         0 2px 0 2px
+    float               left
+    overflow            hidden
+    width               150px
+    height              100%
+    border-right        1px solid $toolbar-divider-color
+    margin              0
+    padding             0.5em
 
     span
-        font-weight bold
-        font-size   11px
+        font-weight     400
+        font-size       inherit

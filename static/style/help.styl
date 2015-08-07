@@ -11,8 +11,9 @@
     display                 inline-block
     margin                  0
     padding                 10px 15px 10px 15px
-    border-left             1px solid #ccc
-    border-right            1px solid #ccc
+    border-left             1px solid $toolbar-divider-color
+    border-right            1px solid $toolbar-divider-color
+    vertical-align          top
 
     &:hover
         background-color    #F4F4F4
@@ -24,14 +25,12 @@ div.helpCont
     box-shadow(3px 3px 2px #888)
     position            absolute
     display             none
-    width               250px
-    max-width           300px
-    overflow            auto
+    width               300px
     padding             10px
-    margin              35px 0 0 -100px
+    margin              45px 0 0 -150px
     border              1px solid #CCC
     line-height         20px
-    font-size           12px
+    font-size           inherit
     color               #333
     background          #fff
     text-align          left
@@ -56,5 +55,4 @@ div.helpFooter
     margin              10px 0 0 0
     h4
         margin          2px 2px 2px 2px
-        font-size       13px
         color           #333

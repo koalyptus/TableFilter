@@ -7,7 +7,7 @@
  * Filtered column marker default style
  */
 .activeHeader {
-  background: #004080 !important;
+  background-color: #66afe9 !important;
   color: #fff !important;
 }
 
@@ -166,6 +166,7 @@ select[multiple="multiple"].ezSelectEditor {
   border-top: 1px solid #ccc;
   border-left: 1px solid #ccc;
   border-right: 1px solid #f4f4f4;
+  padding: 0.2em !important;
 }
 .btnflt {
   height: 35px;
@@ -192,7 +193,7 @@ select[multiple="multiple"].ezSelectEditor {
   display: block;
   color: #444;
   background-color: #fff;
-  border: 1px solid #f4f4f4;
+  border: 1px inset #f4f4f4;
   margin: 0;
   padding: 0 0 0 0.2em;
   width: 100%;
@@ -354,8 +355,9 @@ div.grd_tblCont table td {
   display: inline-block;
   margin: 0;
   padding: 10px 15px 10px 15px;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
+  border-left: 1px solid #f4f4f4;
+  border-right: 1px solid #f4f4f4;
+  vertical-align: top;
 }
 .helpBtn:hover {
   background-color: #f4f4f4;
@@ -369,14 +371,12 @@ div.helpCont {
   box-shadow: 3px 3px 2px #888;
   position: absolute;
   display: none;
-  width: 250px;
-  max-width: 300px;
-  overflow: auto;
+  width: 300px;
   padding: 10px;
-  margin: 35px 0 0 -100px;
+  margin: 45px 0 0 -150px;
   border: 1px solid #ccc;
   line-height: 20px;
-  font-size: 12px;
+  font-size: inherit;
   color: #333;
   background: #fff;
   text-align: left;
@@ -425,7 +425,6 @@ div.helpFooter {
 }
 div.helpFooter h4 {
   margin: 2px 2px 2px 2px;
-  font-size: 13px;
   color: #333;
 }
 
@@ -441,15 +440,16 @@ span.keyword {
  */
 .loader {
   position: absolute;
-  padding: 5px 10px 5px 10px;
-  margin: 20px 0 0 20px;
+  padding: 0.5em 0.7em;
+  margin: 10em 0 0 3em;
   width: auto;
   z-index: 1000;
-  font-size: 12px;
-  font-weight: bold;
-  border: 1px solid #666;
-  background-color: #f4f4f4;
+  font-weight: 600;
+  background-color: #a7a7a8;
   vertical-align: middle;
+  border-radius: 10px;
+  color: #fff;
+  text-shadow: 1px 1px #333;
 }
 
 /**
@@ -517,15 +517,15 @@ span.rspgSpan {
  * Reset button default style
  */
 input.reset {
+  display: inline-block;
   width: 35px;
   height: 100%;
-  cursor: pointer !important;
   border: 0;
-  vertical-align: middle;
-  background: transparent url("themes/btn_clear_filters.png") center center no-repeat !important;
+  background: transparent url("themes/btn_clear_filters.png") center center no-repeat;
+  vertical-align: top;
 }
 input.reset:hover {
-  background: #f4f4f4 url("themes/btn_clear_filters.png") center center no-repeat !important;
+  background-color: #f4f4f4;
   border-radius: 3px;
 }
 
@@ -535,11 +535,12 @@ input.reset:hover {
 div.tot {
   float: left;
   overflow: hidden;
-  width: 150px;
-  height: 15px;
-  border-right: 1px solid #ccc;
-  margin: 0 5px 0 2px;
-  padding: 0 2px 0 2px;
+  min-width: 150px;
+  height: 100%;
+  border-right: 1px solid #f4f4f4;
+  margin: 0;
+  padding: 0.5em;
+  vertical-align: middle;
 }
 div.tot span {
   font-weight: bold;
@@ -569,14 +570,14 @@ div.status {
   float: left;
   overflow: hidden;
   width: 150px;
-  height: 15px;
-  border-right: 1px solid #ccc;
-  margin: 0 5px 0 2px;
-  padding: 0 2px 0 2px;
+  height: 100%;
+  border-right: 1px solid #f4f4f4;
+  margin: 0;
+  padding: 0.5em;
 }
 div.status span {
-  font-weight: bold;
-  font-size: 11px;
+  font-weight: 400;
+  font-size: inherit;
 }
 
 /**
@@ -612,7 +613,7 @@ table.TF td {
   width: auto;
   height: 35px;
   background-color: transparent;
-  font-size: 12px;
+  font-size: inherit;
   margin: 0;
   padding: 0;
   border-top: 1px solid #ccc;
@@ -629,10 +630,6 @@ table.TF td {
 }
 .inf a:hover {
   text-decoration: underline;
-}
-.inf span {
-  width: 35px;
-  height: 35px;
 }
 .ldiv {
   float: left;

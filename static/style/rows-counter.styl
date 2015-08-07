@@ -2,14 +2,17 @@
  * Rows counter default style
  */
 
+@import 'config'
+
 div.tot
     float               left
     overflow            hidden
-    width               150px
-    height              15px
-    border-right        1px solid #ccc
-    margin              0 5px 0 2px
-    padding             0 2px 0 2px
+    min-width           150px
+    height              100%
+    border-right        1px solid $toolbar-divider-color
+    margin              0
+    padding             0.5em
+    vertical-align      middle
 
     span
         font-weight     bold
