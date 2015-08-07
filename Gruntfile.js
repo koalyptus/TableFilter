@@ -47,9 +47,9 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     '**',
-                    '!*.styl',
+                    '!**/*.styl',
                     '!**/extensions/**',
-                    '!**/*.styl'
+                    '!**/mixins/**'
                 ],
                 cwd: 'static/style',
                 dest: 'dist/tablefilter/style',

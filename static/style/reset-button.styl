@@ -2,13 +2,16 @@
  * Reset button default style
  */
 
+@import 'config'
+
 input.reset
-    width           19px
-    height          19px
-    cursor          pointer !important
-    border          0 !important
-    vertical-align: middle
-    background:     transparent url(themes/btn_clear_filters.png) center center no-repeat !important
+    width                   $min-width
+    height                  100%
+    cursor                  pointer !important
+    border                  0
+    vertical-align          middle
+    background:             transparent url(themes/btn_clear_filters.png) center center no-repeat !important
 
     &:hover
-        background  #CAD1D6 url(themes/btn_clear_filters.png) center center no-repeat !important
+        background          #F4F4F4 url(themes/btn_clear_filters.png) center center no-repeat !important
+        border-radius       3px

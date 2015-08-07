@@ -6,15 +6,19 @@
 
 // left, middle and right divs container (toolbar)
 .inf
-    clear                   both
-    width                   auto
-    height                  25px
-    background-color        $toolbar-bg-color
-    font-size               $toolbar-font-size
-    margin                  0
-    padding                 1px 3px 1px 3px
-    border                  1px solid #ccc
-    overflow                hidden
+    clear                       both
+    width                       auto
+    height                      35px
+    background-color            $toolbar-bg-color
+    font-size                   $toolbar-font-size
+    margin                      0
+    padding                     0
+    border-top                  1px solid $toolbar-border-color
+    border-left                 1px solid $toolbar-border-color
+    border-right                1px solid $toolbar-border-color
+    overflow                    hidden
+    border-top-left-radius      3px
+    border-top-right-radius     3px
 
     // link appearence
     a
@@ -24,24 +28,31 @@
         &:hover
             text-decoration     underline
 
+    span
+        width                   $min-width
+        height                  $min-height
+
 // left div
 .ldiv
-    float           left
-    width           30%
-    position        inherit
-    text-align      left
+    float                       left
+    width                       30%
+    height                      100%
+    position                    inherit
+    text-align                  left
 
 // middle div
 .mdiv
-    float           left
-    width:          38%
-    position        inherit
-    text-align      center
-    padding         1px 0
+    float                       left
+    width                       38%
+    height                      100%
+    position                    inherit
+    text-align                  center
+    padding                     1px 0
 
 // right div
 .rdiv
-    float           right
-    width           30%
-    position        inherit
-    text-align      right
+    float                       right
+    width                       30%
+    height                      100%
+    position                    inherit
+    text-align                  right

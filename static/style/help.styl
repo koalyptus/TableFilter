@@ -2,28 +2,39 @@
  * Help box default style
  */
 
+@import 'config'
+@import 'mixins/arrow'
+@import 'mixins/box-shadow'
+
 // help button
 .helpBtn
-    margin              0 5px 0 5px
-    padding             2px 4px 2px 4px
-    border-left         1px solid #ccc
-    border-right        1px solid #ccc
+    display                 inline-block
+    margin                  0
+    padding                 10px 15px 10px 15px
+    border-left             1px solid #ccc
+    border-right            1px solid #ccc
+
+    &:hover
+        background-color    #F4F4F4
+        border-radius       3px
 
 // help container
 div.helpCont
+    arrow(top, 10px white, 2px #ccc)
+    box-shadow(3px 3px 2px #888)
     position            absolute
     display             none
+    width               250px
     max-width           300px
     overflow            auto
     padding             10px
-    margin              15px 0
+    margin              35px 0 0 -100px
     border              1px solid #CCC
     line-height         20px
     font-size           12px
     color               #333
     background          #fff
     text-align          left
-    box-shadow          3px 3px 2px #888
 
     a
         color           #cc0000

@@ -2,6 +2,9 @@
  * ColsVisibility extension default style
  */
 
+@import '../mixins/arrow'
+@import '../mixins/box-shadow'
+
 $item-bg-color = #335EA8
 $item-font-color = #fff
 
@@ -14,18 +17,19 @@ span.colVisSpan
 
 // container element
 div.colVisCont
+    arrow(top, 10px white, 2px #ccc)
+    box-shadow(3px 3px 2px #888)
     position                absolute
     display                 none
     border                  1px solid #ccc
     height                  auto
     width                   250px
     background-color        #fff
-    margin                  18px 0 0 0
+    margin                  28px 0 0 -100px
     z-index                 10000
     padding                 10px 10px 10px 10px
     text-align              left
     font-size               12px
-    box-shadow              3px 3px 2px #888
 
     p
         margin              6px auto 6px auto
