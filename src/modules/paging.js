@@ -514,7 +514,7 @@ export class Paging{
 
         var slcR = Dom.create(
             tf.fltTypeSlc, ['id', this.prfxSlcResults+tf.id]);
-        slcR.className = tf.resultsSlcCssClass;
+        slcR.className = this.resultsSlcCssClass;
         var slcRText = this.resultsPerPage[0],
             slcROpts = this.resultsPerPage[1];
         var slcRSpan = Dom.create(

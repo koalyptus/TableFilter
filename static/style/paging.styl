@@ -4,26 +4,34 @@
 
  @import 'config'
 
+filter()
+    height                  $filter-height
+    margin                  0
+    border                  1px solid $filter-border-color
+    background-color        $filter-bg-color
+    &:focus
+        border-color        #66AFE9
+        outline             0 none
+        box-shadow          0 1px 1px rgba(0, 0, 0, 0.075) inset,
+                            0 0 8px rgba(102, 175, 233, 0.6)
+
 // paging drop-down list
 select.pgSlc
-    height              20px
-    vertical-align      middle
+    filter()
+    vertical-align          middle
 
 // paging text-box
 input.pgNbInp
-    width               25px
-    height              16px
-    margin              1px
-    vertical-align      middle
+    filter()
+    width                   $min-width
 
 // paging buttons (Next/Previous)
 input.pgInp
-    vertical-align      middle
-    width               19px
-    height              19px
-    cursor              pointer !important
-    border              0 !important
-    font-weight         bold
+    filter()
+    vertical-align          middle
+    width                   $min-width
+    border                  0
+    font-weight             bold
 
 .nextPage
     @extends input.pgInp
@@ -52,13 +60,14 @@ input.pgInp
 
 // paging nb pages
 span.nbpg
-    padding             0 5px 0 0
+    padding                 0 5px
 
 // results per page select
 select.rspg
-    width           50px
-    margin          1px 5px 0 5px
-    vertical-align  middle
+    filter()
+    margin                  0 0 0 5px
+    vertical-align          middle
+
 // results per page select label
 span.rspgSpan
-    font-size:11px;
+    font-size               inherit

@@ -207,9 +207,9 @@ select[multiple="multiple"].ezSelectEditor {
 .single_flt:focus {
   border-color: #66afe9;
   outline: 0 none;
-  -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,0.075) inset, 0px 0px 8px rgba(102,175,233,0.6);
-  -moz-box-shadow: 0px 1px 1px rgba(0,0,0,0.075) inset, 0px 0px 8px rgba(102,175,233,0.6);
-  box-shadow: 0px 1px 1px rgba(0,0,0,0.075) inset, 0px 0px 8px rgba(102,175,233,0.6);
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(102,175,233,0.6);
+  -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(102,175,233,0.6);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(102,175,233,0.6);
 }
 select.flt_multi {
   font-family: inherit;
@@ -456,61 +456,94 @@ span.keyword {
  * Paging default style
  */
 select.pgSlc {
-  height: 20px;
+  height: 35px;
+  margin: 0;
+  border: 1px solid #f4f4f4;
+  background-color: #fff;
   vertical-align: middle;
 }
+select.pgSlc:focus {
+  border-color: #66afe9;
+  outline: 0 none;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(102,175,233,0.6);
+}
 input.pgNbInp {
-  width: 25px;
-  height: 16px;
-  margin: 1px;
-  vertical-align: middle;
+  height: 35px;
+  margin: 0;
+  border: 1px solid #f4f4f4;
+  background-color: #fff;
+  width: 35px;
+}
+input.pgNbInp:focus {
+  border-color: #66afe9;
+  outline: 0 none;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(102,175,233,0.6);
 }
 input.pgInp,
 .nextPage,
 .previousPage,
 .firstPage,
 .lastPage {
+  height: 35px;
+  margin: 0;
+  border: 1px solid #f4f4f4;
+  background-color: #fff;
   vertical-align: middle;
-  width: 19px;
-  height: 19px;
-  cursor: pointer !important;
-  border: 0 !important;
+  width: 35px;
+  border: 0;
   font-weight: bold;
+}
+input.pgInp:focus,
+.nextPage:focus,
+.previousPage:focus,
+.firstPage:focus,
+.lastPage:focus {
+  border-color: #66afe9;
+  outline: 0 none;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(102,175,233,0.6);
 }
 .nextPage {
   background: transparent url("themes/btn_next_page.gif") center center no-repeat !important;
 }
 .nextPage:hover {
-  background-color: #cad1d6 !important;
+  background-color: #f4f4f4 !important;
 }
 .previousPage {
   background: transparent url("themes/btn_previous_page.gif") center center no-repeat !important;
 }
 .previousPage:hover {
-  background-color: #cad1d6 !important;
+  background-color: #f4f4f4 !important;
 }
 .firstPage {
   background: transparent url("themes/btn_first_page.gif") center center no-repeat !important;
 }
 .firstPage:hover {
-  background-color: #cad1d6 !important;
+  background-color: #f4f4f4 !important;
 }
 .lastPage {
   background: transparent url("themes/btn_last_page.gif") center center no-repeat !important;
 }
 .lastPage:hover {
-  background-color: #cad1d6 !important;
+  background-color: #f4f4f4 !important;
 }
 span.nbpg {
-  padding: 0 5px 0 0;
+  padding: 0 5px;
 }
 select.rspg {
-  width: 50px;
-  margin: 1px 5px 0 5px;
+  height: 35px;
+  margin: 0;
+  border: 1px solid #f4f4f4;
+  background-color: #fff;
+  margin: 0 0 0 5px;
   vertical-align: middle;
 }
+select.rspg:focus {
+  border-color: #66afe9;
+  outline: 0 none;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(102,175,233,0.6);
+}
 span.rspgSpan {
-  font-size: 11px;
+  font-size: inherit;
 }
 
 /**
@@ -543,7 +576,7 @@ div.tot {
   vertical-align: middle;
 }
 div.tot span {
-  font-weight: bold;
+  font-weight: 500;
 }
 
 /**
@@ -576,7 +609,7 @@ div.status {
   padding: 0.5em;
 }
 div.status span {
-  font-weight: 400;
+  font-weight: 500;
   font-size: inherit;
 }
 
@@ -644,7 +677,7 @@ table.TF td {
   height: 100%;
   position: inherit;
   text-align: center;
-  padding: 1px 0;
+  padding: 0;
 }
 .rdiv {
   float: right;

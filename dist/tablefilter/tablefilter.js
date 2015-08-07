@@ -6277,7 +6277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 	
 	            var slcR = _Dom2['default'].create(tf.fltTypeSlc, ['id', this.prfxSlcResults + tf.id]);
-	            slcR.className = tf.resultsSlcCssClass;
+	            slcR.className = this.resultsSlcCssClass;
 	            var slcRText = this.resultsPerPage[0],
 	                slcROpts = this.resultsPerPage[1];
 	            var slcRSpan = _Dom2['default'].create('span', ['id', this.prfxSlcResultsTxt + tf.id]);
