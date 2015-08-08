@@ -3,9 +3,11 @@
  */
 
 @import 'config'
+@import 'mixins/box-shadow'
 
 // main container
 div.grd_Cont
+    box-shadow(4px 4px 10px 0px rgba(50, 50, 50, 0.75))
     width                   800px
     height                  auto
     overflow                hidden
@@ -51,37 +53,74 @@ div.grd_headTblCont
 // tables
 div.grd_tblCont table,
 div.grd_headTblCont table
-    font-size               12px
-    border-collapse         collapse
-    table-layout            fixed
+    border-collapse             collapse
+    table-layout                fixed
 
 div.grd_tblCont table
-    border-right            1px solid $grid-layout-border-color
+    border-right                1px solid $grid-layout-border-color
 
 // headers
-div.grd_tblCont table th,
-div.grd_headTblCont table th,
+div.grd_tblCont table th
+div.grd_headTblCont table th
+    height                      $th-height
+    background-color            $grid-layout-bg-color
+    padding                     0.1em 0.5em
+    color                       #333
+    border-right                1px solid $grid-layout-border-color !important
+    overflow                    hidden
+    text-overflow               ellipsis
+
 div.grd_headTblCont table td
-    background-color        $grid-layout-bg-color
-    padding                 2px 2px 2px 2px !important
-    color                   #333
-    border-right            1px solid $grid-layout-border-color !important
-    overflow                hidden
-    text-overflow           ellipsis
+    @extend div.grd_headTblCont table th
+    padding                     0.2em 0.2em
 
 div.grd_tblCont table td
-    padding                 2px 2px 2px 2px !important
-    border-bottom           1px solid #ccc !important
-    overflow                hidden
-    text-overflow           ellipsis
+    padding                     $padding
+    border-bottom               1px solid $grid-layout-border-color
+    overflow                    hidden
+    text-overflow               ellipsis
 
 // toolbar container
 .grd_inf
-    clear                   both
-    width                   auto
-    height                  25px
-    background-color        $grid-layout-bg-color
-    font-size               11px
-    margin                  0
-    padding                 1px 3px 1px 3px
-    border-top              1px solid $grid-layout-border-color
+    clear                       both
+    width                       auto
+    height                      $min-height
+    background-color            $grid-layout-bg-color
+    margin                      0
+    padding                     1px 3px 1px 3px
+    border-top                  1px solid $grid-layout-border-color
+
+    // link appearence
+    a
+        color                   #333
+        text-decoration         none
+        font-weight             bold
+        &:hover
+            text-decoration     underline
+            background-color    transparent
+
+    input.reset
+        &:hover
+            background-color    transparent
+
+.mdiv
+    width                       40% !important
+
+.ldiv
+    div
+        border                  0
+
+.helpBtn
+    border                      0 !important
+
+div.status
+    position                    absolute
+    float                       none !important
+    height                      auto !important
+    margin                      19px 0 !important
+    font-size                   12px
+    color                       #333
+    border                      0 !important
+
+div.tot
+    border                      0 !important
