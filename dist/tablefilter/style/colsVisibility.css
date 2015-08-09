@@ -1,6 +1,6 @@
 /** 
  *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-08-08T07:46:20.939Z 
+ *	 build date: 2015-08-09T02:22:27.647Z 
  *	 MIT License  
  */ 
 /**
@@ -10,7 +10,11 @@ span.colVisSpan {
   text-align: left;
 }
 span.colVisSpan a.colVis {
-  margin: 0 5px 0 5px;
+  display: inline-block;
+  padding: 7px 5px 0;
+  font-size: inherit;
+  font-weight: inherit;
+  vertical-align: top;
 }
 div.colVisCont {
   position: relative;
@@ -24,7 +28,7 @@ div.colVisCont {
   height: auto;
   width: 250px;
   background-color: #fff;
-  margin: 28px 0 0 -100px;
+  margin: 35px 0 0 -100px;
   z-index: 10000;
   padding: 10px 10px 10px 10px;
   text-align: left;
@@ -55,6 +59,10 @@ div.colVisCont:before {
 }
 div.colVisCont p {
   margin: 6px auto 6px auto;
+}
+div.colVisCont a.colVis {
+  display: initial;
+  font-weight: inherit;
 }
 ul.cols_checklist {
   padding: 0;

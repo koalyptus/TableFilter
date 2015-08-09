@@ -1,18 +1,19 @@
 /** 
  *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-08-08T07:46:20.939Z 
+ *	 build date: 2015-08-09T02:22:27.647Z 
  *	 MIT License  
  */ 
 /**
  * Filters visibility extension default style
  */
-span.expClpFlt,
-span.expClpFlt img {
-  vertical-align: middle;
-  border: 0;
-  padding: 1px 1px 1px 1px;
-  margin: 1px 1px 1px 1px;
+span.expClpFlt a.btnExpClpFlt {
+  width: 35px;
+  height: 35px;
+  display: inline-block;
 }
-.btnExpClpFlt {
-  margin: 0 5px 0 5px;
+span.expClpFlt a.btnExpClpFlt :hover {
+  background-color: #f4f4f4;
+}
+span.expClpFlt img {
+  padding: 8px 11px 11px 11px;
 }

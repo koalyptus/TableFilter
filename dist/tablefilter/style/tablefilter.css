@@ -1,6 +1,6 @@
 /** 
  *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-08-08T07:46:20.939Z 
+ *	 build date: 2015-08-09T02:22:27.647Z 
  *	 MIT License  
  */ 
 /**
@@ -364,16 +364,16 @@ div.grd_tblCont table td {
 .grd_inf input.reset:hover {
   background-color: transparent;
 }
-.mdiv {
+.grd_inf .mdiv {
   width: 40% !important;
 }
-.ldiv div {
+.grd_inf .ldiv div {
   border: 0;
 }
-.helpBtn {
+.grd_inf .helpBtn {
   border: 0 !important;
 }
-div.status {
+.grd_inf div.status {
   position: absolute;
   float: none !important;
   height: auto !important;
@@ -382,7 +382,7 @@ div.status {
   color: #333;
   border: 0 !important;
 }
-div.tot {
+.grd_inf div.tot {
   border: 0 !important;
 }
 
@@ -391,16 +391,13 @@ div.tot {
  */
 .helpBtn {
   display: inline-block;
-  height: 35px;
+  height: 27px;
   margin: 0;
-  padding: 8px 15px 8px 15px;
-  border-left: 1px solid #f4f4f4;
-  border-right: 1px solid #f4f4f4;
+  padding: 8px 15px 0 15px;
   vertical-align: top;
 }
 .helpBtn:hover {
   background-color: #f4f4f4;
-  border-radius: 3px;
 }
 div.helpCont {
   position: relative;
@@ -471,7 +468,9 @@ div.helpFooter h4 {
  * Keyword highlighting default style
  */
 span.keyword {
-  background-color: #fc0;
+  font-weight: 700;
+  font-style: italic;
+  border-bottom: 1px dotted #ccc;
 }
 
 /**
@@ -591,14 +590,13 @@ span.rspgSpan {
 input.reset {
   display: inline-block;
   width: 35px;
-  height: 100%;
+  height: 35px;
   border: 0;
   background: transparent url("themes/btn_clear_filters.png") center center no-repeat;
   vertical-align: top;
 }
 input.reset:hover {
   background-color: #f4f4f4;
-  border-radius: 3px;
 }
 
 /**
@@ -609,7 +607,6 @@ div.tot {
   overflow: hidden;
   min-width: 150px;
   height: 100%;
-  border-right: 1px solid #f4f4f4;
   margin: 0;
   padding: 0.5em;
   vertical-align: middle;
@@ -641,14 +638,12 @@ div.tot span {
 div.status {
   float: left;
   overflow: hidden;
-  width: 150px;
+  min-width: 120px;
   height: 100%;
-  border-right: 1px solid #f4f4f4;
   margin: 0;
   padding: 0.5em;
 }
 div.status span {
-  font-weight: 500;
   font-size: inherit;
 }
 
@@ -706,14 +701,12 @@ table.TF td {
 .ldiv {
   float: left;
   width: 30%;
-  height: 100%;
   position: inherit;
   text-align: left;
 }
 .mdiv {
   float: left;
   width: 38%;
-  height: 100%;
   position: inherit;
   text-align: center;
   padding: 0;
@@ -721,7 +714,6 @@ table.TF td {
 .rdiv {
   float: right;
   width: 30%;
-  height: 100%;
   position: inherit;
   text-align: right;
 }

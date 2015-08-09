@@ -2,6 +2,7 @@
  * ColsVisibility extension default style
  */
 
+@import '../config'
 @import '../mixins/arrow'
 @import '../mixins/box-shadow'
 
@@ -9,11 +10,15 @@ $item-bg-color = #335EA8
 $item-font-color = #fff
 
 span.colVisSpan
-    text-align          left
+    text-align              left
 
     // link
     a.colVis
-        margin          0 5px 0 5px
+        display             inline-block
+        padding             7px 5px 0
+        font-size           inherit
+        font-weight         inherit
+        vertical-align      top
 
 // container element
 div.colVisCont
@@ -25,7 +30,7 @@ div.colVisCont
     height                  auto
     width                   250px
     background-color        #fff
-    margin                  28px 0 0 -100px
+    margin                  35px 0 0 -100px
     z-index                 10000
     padding                 10px 10px 10px 10px
     text-align              left
@@ -33,6 +38,10 @@ div.colVisCont
 
     p
         margin              6px auto 6px auto
+
+    a.colVis
+        display             initial
+        font-weight         inherit
 
 // checklist
 ul.cols_checklist
