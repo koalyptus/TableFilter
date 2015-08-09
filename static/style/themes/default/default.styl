@@ -43,49 +43,36 @@ input.flt
 
 // toolbar
 .inf
-    background              #f4f4f4 url(images/bg_infDiv.jpg) 0 0 repeat-x !important
+    height                  $min-height
+    background              #D7D7D7 url(images/bg_infDiv.jpg) 0 0 repeat-x !important
 
 // reset button
 input.reset
-    width                   19px
-    height                  19px
-    cursor                  pointer !important
-    border                  0 !important
-    vertical-align          middle
     background              transparent url(images/btn_eraser.gif) center center no-repeat !important
 
-    :hover
-        background          transparent url(images/btn_over_eraser.gif) center center no-repeat !important
-
-// paging
-input.pgInp
-    width                   19px
-    height                  19px
-    cursor                  pointer !important
-    border                  0 !important
+.helpBtn
+    &:hover
+        background-color    transparent
 
 .nextPage
     background              transparent url(images/btn_next_page.gif) center center no-repeat !important
-    :hover
+    &:hover
         background          transparent url(images/btn_over_next_page.gif) center center no-repeat !important
 
 .previousPage
     background              transparent url(images/btn_previous_page.gif) center center no-repeat !important
-    :hover
+    &:hover
         background          transparent url(images/btn_over_previous_page.gif) center center no-repeat !important
 
 .firstPage
     background              transparent url(images/btn_first_page.gif) center center no-repeat !important
-    :hover
+    &:hover
         background          transparent url(images/btn_over_first_page.gif) center center no-repeat !important
 
 .lastPage
     background              transparent url(images/btn_last_page.gif) center center no-repeat !important
-    :hover
+    &:hover
         background          transparent url(images/btn_over_last_page.gif) center center no-repeat !important
-
-select.rspg
-    font-size               10px
 
 // grid-layout
 
@@ -110,8 +97,8 @@ div.grd_headTblCont
         border-right        none !important
 
 // headers
-div.grd_tblCont table th,
-div.grd_headTblCont table th,
+div.grd_tblCont table th
+div.grd_headTblCont table th
 div.grd_headTblCont table td
     background              #EBECEE url(images/bg_th.jpg) left top repeat-x !important
     border-bottom           1px solid #D0D0D0 !important
@@ -119,15 +106,17 @@ div.grd_headTblCont table td
     border-left             1px solid #fff !important
     border-top              1px solid #fff !important
 
+div.grd_tblCont table td
+    border-bottom           1px solid #999 !important
+
 // toolbar containing left, middle and right divs
 .grd_inf
     background              #D7D7D7 url(images/bg_infDiv.jpg) 0 0 repeat-x !important
     border-top              1px solid #D0D0D0 !important
-    height                  29px !important
 
 // loader
 .loader
-    border                  1px solid #999; background:#fff
+    border                  1px solid #999
 .defaultLoader
     width                   32px
     height                  32px
@@ -138,3 +127,9 @@ div.grd_headTblCont table td
     background-color        #fff
 .odd
     background-color        #D5D5D5
+
+// filters visibility
+span.expClpFlt
+    a.btnExpClpFlt
+        &:hover
+            background-color transparent !important

@@ -2,27 +2,25 @@
  * Table's default style
  */
 
- @import 'config'
+@import 'config'
 
 table.TF
-    border-spacing  0
-    border-top      1px solid $border-color-2
-    border-left     1px solid $border-color-2
-    border-bottom   1px solid $border-color-1
-    border-right    1px solid $border-color-1
+    font-family             $font-family
+    border-spacing          0
+    border                  0
 
     th
+        height              $th-height
         margin              0
         background-color    $th-bg-color
-        border-bottom       1px solid $border-color-2
-        border-right        1px solid $border-color-2
-        border-left         1px solid $border-color-0
-        border-top          1px solid $border-color-0
-        padding             $padding
+        border-bottom       1px solid $th-bottom-border-color
+        border-top          1px solid $th-top-border-color
+        border-left         1px solid $th-left-border-color
+        border-right        1px solid $th-right-border-color
+        padding             0.1em 0.7em
         color               $th-font-color
 
     td
-        margin          0
-        padding         $padding
-        border-bottom   1px solid $border-color-2
-        border-right    1px solid $border-color-2
+        margin              0
+        padding             $padding
+        border-bottom       1px solid $td-border-color

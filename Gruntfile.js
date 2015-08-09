@@ -47,9 +47,9 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     '**',
-                    '!*.styl',
+                    '!**/*.styl',
                     '!**/extensions/**',
-                    '!**/*.styl'
+                    '!**/mixins/**'
                 ],
                 cwd: 'static/style',
                 dest: 'dist/tablefilter/style',
@@ -173,7 +173,6 @@ module.exports = function (grunt) {
         stylus: {
             compile: {
                 options: {
-                    compress: false,
                     banner: '/** \n' +
                         ' *\t '+ pkg.name +' v'+ pkg.version +
                         ' by Max Guglielmi \n' +

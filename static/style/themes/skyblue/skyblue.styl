@@ -15,7 +15,7 @@ table.TF
         margin                  0
         padding                 5px
         color                   inherit
-        background              #D1E5FE url("images/bg_skyblue.gif") 0 0 repeat-x
+        background              #D1E5FE url(images/bg_skyblue.gif) 0 0 repeat-x
         border-color            #FDFDFD #A4BED4 #A4BED4 #FDFDFD
         border-width            1px
         border-style            solid
@@ -53,7 +53,7 @@ input.flt
 .inf
     background-color            #E3EFFF !important
     border                      1px solid #A4BED4
-    height                      25px
+    height                      $min-height
     color                       #004A6F
 
 div.tot,
@@ -62,42 +62,18 @@ div.status
 
 // help
 .helpBtn
-    margin                      0 5px 0 5px
-    padding                     2px 4px 2px 4px
-    color                       #004A6F !important
-    font-size                   13px
-    border                      1px solid transparent !important
-
-    :hover
-        background-color        #FFE4AB
-        border                  1px solid #FFB552 !important
-        text-decoration         none
+    &:hover
+        background-color        transparent
 
 // reset button
 input.reset
-    width                       19px
-    height                      19px
-    cursor                      pointer !important
-    border                      1px solid transparent !important
-    vertical-align              middle
     background                  transparent url(images/icn_clear_filters.png) center center no-repeat !important
-
-    :hover
-        background              #FFE4AB url(images/icn_clear_filters.png) center center no-repeat !important
-        border                  1px solid #FFB552 !important
-
-// paging
-input.pgInp
-    width                       19px
-    height                      19px
-    cursor                      pointer !important
-    border                      0 !important
 
 .nextPage
     background                  transparent url(images/btn_next_page.gif) center center no-repeat !important
     border                      1px solid transparent !important
 
-    :hover
+    &:hover
         background              #FFE4AB url(images/btn_next_page.gif) center center no-repeat !important
         border                  1px solid #FFB552 !important
 
@@ -105,7 +81,7 @@ input.pgInp
     background                  transparent url(images/btn_prev_page.gif) center center no-repeat !important
     border                      1px solid transparent !important
 
-    :hover
+    &:hover
         background              #FFE4AB url(images/btn_prev_page.gif) center center no-repeat !important
         border                  1px solid #FFB552 !important
 
@@ -113,7 +89,7 @@ input.pgInp
     background                  transparent url(images/btn_first_page.gif) center center no-repeat !important
     border                      1px solid transparent !important
 
-    :hover
+    &:hover
         background              #FFE4AB url(images/btn_first_page.gif) center center no-repeat !important
         border                  1px solid #FFB552 !important
 
@@ -121,12 +97,9 @@ input.pgInp
     background                  transparent url(images/btn_last_page.gif) center center no-repeat !important
     border                      1px solid transparent !important
 
-    :hover
+    &:hover
         background              #FFE4AB url(images/btn_last_page.gif) center center no-repeat !important
         border                  1px solid #FFB552 !important
-
-select.rspg
-    font-size                   10px
 
 // active header
 .activeHeader
@@ -157,7 +130,6 @@ div.grd_headTblCont
 
 div.grd_tblCont table
     border-right                none !important
-    font                        12px/13px "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif !important
 
 // headers
 div.grd_tblCont table th,
@@ -168,41 +140,28 @@ div.grd_headTblCont table td
     border-right                1px solid #A4BED4 !important
     border-left                 1px solid #fff !important
     border-top                  1px solid #fff !important
-    padding                     5px 2px 5px 2px !important
 
 div.grd_tblCont table td
     border-bottom               1px solid #A4BED4 !important
     border-right                0 !important
     border-left                 0 !important
     border-top                  0 !important
-    padding                     5px 2px 5px 2px !important
 
 // toolbar containing left, middle and right divs
 .grd_inf
-    background-color            #D9EAED !important
-    height                      25px
+    background-color            #CCE2FE
     color                       #004A6F
     border-top                  1px solid #99CCCC !important
-
-    .rdiv
-        height                  28px
 
     a
         text-decoration         none
         font-weight             bold
 
-    // help button
-    a.helpBtn
-        vertical-align          middle
-        margin-top              2px !important
-        padding-top             1px !important
-
 // loader
 .loader
-    border                      0 !important
-    background                  transparent !important
-    margin-top                  40px
-    margin-left                 0 !important
+    background-color            #2D8EEF
+    border                      1px solid #CCE2FE
+    border-radius               5px
 
 // alternating background colors
 .even
@@ -210,6 +169,12 @@ div.grd_tblCont table td
 
 .odd
     background-color            #E3EFFF
+
+// filters visibility
+span.expClpFlt
+    a.btnExpClpFlt
+        &:hover
+            background-color    transparent !important
 
 // ezedittable
 

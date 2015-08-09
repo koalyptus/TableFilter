@@ -2,16 +2,17 @@
  * Filters visibility extension default style
  */
 
+@import '../config'
+
 // container
 span.expClpFlt
+    a.btnExpClpFlt
+        width                   $min-width
+        height                  $min-height
+        display                 inline-block
 
-// icon
-span.expClpFlt img
-    vertical-align          middle
-    border                  0
-    padding                 1px 1px 1px 1px
-    margin                  1px 1px 1px 1px
+        &:hover
+            background-color    $toolbar-hover-color
 
-// button
-.btnExpClpFlt
-    margin                  0 5px 0 5px
+    img
+        padding                 8px 11px 11px 11px
