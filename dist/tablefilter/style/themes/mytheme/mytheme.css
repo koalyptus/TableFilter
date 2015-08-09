@@ -1,6 +1,6 @@
 /** 
  *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-08-09T02:22:27.647Z 
+ *	 build date: 2015-08-09T12:32:52.610Z 
  *	 MIT License  
  */ 
 /**
@@ -50,61 +50,27 @@ input.flt {
   width: 99% !important;
 }
 .inf {
-  background: #f4f4f4 url("images/bg_infDiv.jpg") left bottom repeat-x !important;
+  background: #d8d8d8;
+  height: $min-height;
 }
 input.reset {
   width: 53px;
-  height: 19px;
-  cursor: pointer !important;
-  border: 0 !important;
-  vertical-align: middle;
   background: transparent url("images/btn_filter.png") center center no-repeat !important;
 }
-input.reset :hover {
-  background: #cad1d6 url("images/btn_filter.png") center center no-repeat !important;
-}
-.ldiv {
-  width: 40% !important;
-}
-.mdiv {
-  width: 34% !important;
-  text-align: left !important;
-}
-.rdiv {
-  width: 20% !important;
-}
-input.pgInp {
-  width: 19px;
-  height: 19px;
-  cursor: pointer !important;
-  border: 0 !important;
+.helpBtn:hover {
+  background-color: transparent;
 }
 .nextPage {
   background: transparent url("images/btn_next_page.gif") center center no-repeat !important;
 }
-.nextPage :hover {
-  background: #cad1d6 url("images/btn_next_page.gif") center center no-repeat !important;
-}
 .previousPage {
   background: transparent url("images/btn_previous_page.gif") center center no-repeat !important;
-}
-.previousPage :hover {
-  background: #cad1d6 url("images/btn_previous_page.gif") center center no-repeat !important;
 }
 .firstPage {
   background: transparent url("images/btn_first_page.gif") center center no-repeat !important;
 }
-.firstPage :hover {
-  background: #cad1d6 url("images/btn_first_page.gif") center center no-repeat !important;
-}
 .lastPage {
   background: transparent url("images/btn_last_page.gif") center center no-repeat !important;
-}
-.lastPage :hover {
-  background: #cad1d6 url("images/btn_last_page.gif") center center no-repeat !important;
-}
-select.rspg {
-  font-size: 10px;
 }
 div.grd_Cont {
   background: #81963b url("images/bg_headers.jpg") left top repeat-x !important;
@@ -123,6 +89,10 @@ div.grd_headTblCont {
 }
 div.grd_tblCont table {
   border-right: none !important;
+}
+div.grd_tblCont table td {
+  border-bottom: 1px dotted #81963b;
+  border-right: 1px dotted #81963b;
 }
 div.grd_tblCont table th,
 div.grd_headTblCont table th {
@@ -145,15 +115,12 @@ div.grd_headTblCont table td {
   padding: 1px 3px 1px 3px !important;
 }
 .grd_inf {
-  background: #f4f4f4 url("images/bg_infDiv.jpg") center bottom repeat-x !important;
+  background-color: #d8d8d8;
   border-top: 1px solid #d0d0d0 !important;
-  height: 29px !important;
-  padding-top: 2px !important;
 }
 .loader {
   border: 0 !important;
-  background: transparent !important;
-  margin: 185px auto !important;
+  background: #81963b !important;
 }
 .defaultLoader {
   width: 32px;
@@ -165,4 +132,7 @@ div.grd_headTblCont table td {
 }
 .odd {
   background-color: #fff;
+}
+span.expClpFlt a.btnExpClpFlt:hover {
+  background-color: transparent !important;
 }

@@ -96,17 +96,13 @@ var tfConfig = {
     },
     extensions:[
         {
-            name: 'sort',
-            types: [
-                'number', 'string', 'string',
-                'US', 'none', 'string'
-            ]
+            name: 'sort'
         },{
             name: 'colOps',
-            id: ["sum1", "sum2"],
+            id: ['sum1', 'sum2'],
             col: [3, 4],
-            operation: ["sum", "sum"],
-            write_method: ["innerhtml", 'innerhtml'],
+            operation: ['sum', 'sum'],
+            write_method: ['innerhtml', 'innerhtml'],
             exclude_row: [totRowIndex],
             decimal_precision: [2, 2],
             tot_row_index: [totRowIndex],

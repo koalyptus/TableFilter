@@ -1,6 +1,6 @@
 /** 
  *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-08-09T02:22:27.647Z 
+ *	 build date: 2015-08-09T12:32:52.610Z 
  *	 MIT License  
  */ 
 /**
@@ -55,48 +55,24 @@ input.flt {
 .inf {
   background-color: #e3efff !important;
   border: 1px solid #a4bed4;
-  height: 25px;
+  height: $min-height;
   color: #004a6f;
 }
 div.tot,
 div.status {
   border-right: 0 !important;
 }
-.helpBtn {
-  margin: 0 5px 0 5px;
-  padding: 2px 4px 2px 4px;
-  color: #004a6f !important;
-  font-size: 13px;
-  border: 1px solid transparent !important;
-}
-.helpBtn :hover {
-  background-color: #ffe4ab;
-  border: 1px solid #ffb552 !important;
-  text-decoration: none;
+.helpBtn:hover {
+  background-color: transparent;
 }
 input.reset {
-  width: 19px;
-  height: 19px;
-  cursor: pointer !important;
-  border: 1px solid transparent !important;
-  vertical-align: middle;
   background: transparent url("images/icn_clear_filters.png") center center no-repeat !important;
-}
-input.reset :hover {
-  background: #ffe4ab url("images/icn_clear_filters.png") center center no-repeat !important;
-  border: 1px solid #ffb552 !important;
-}
-input.pgInp {
-  width: 19px;
-  height: 19px;
-  cursor: pointer !important;
-  border: 0 !important;
 }
 .nextPage {
   background: transparent url("images/btn_next_page.gif") center center no-repeat !important;
   border: 1px solid transparent !important;
 }
-.nextPage :hover {
+.nextPage:hover {
   background: #ffe4ab url("images/btn_next_page.gif") center center no-repeat !important;
   border: 1px solid #ffb552 !important;
 }
@@ -104,7 +80,7 @@ input.pgInp {
   background: transparent url("images/btn_prev_page.gif") center center no-repeat !important;
   border: 1px solid transparent !important;
 }
-.previousPage :hover {
+.previousPage:hover {
   background: #ffe4ab url("images/btn_prev_page.gif") center center no-repeat !important;
   border: 1px solid #ffb552 !important;
 }
@@ -112,7 +88,7 @@ input.pgInp {
   background: transparent url("images/btn_first_page.gif") center center no-repeat !important;
   border: 1px solid transparent !important;
 }
-.firstPage :hover {
+.firstPage:hover {
   background: #ffe4ab url("images/btn_first_page.gif") center center no-repeat !important;
   border: 1px solid #ffb552 !important;
 }
@@ -120,12 +96,9 @@ input.pgInp {
   background: transparent url("images/btn_last_page.gif") center center no-repeat !important;
   border: 1px solid transparent !important;
 }
-.lastPage :hover {
+.lastPage:hover {
   background: #ffe4ab url("images/btn_last_page.gif") center center no-repeat !important;
   border: 1px solid #ffb552 !important;
-}
-select.rspg {
-  font-size: 10px;
 }
 .activeHeader {
   background: #ffe4ab !important;
@@ -149,7 +122,6 @@ div.grd_headTblCont {
 }
 div.grd_tblCont table {
   border-right: none !important;
-  font: 12px/13px "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif !important;
 }
 div.grd_tblCont table th,
 div.grd_headTblCont table th,
@@ -159,44 +131,35 @@ div.grd_headTblCont table td {
   border-right: 1px solid #a4bed4 !important;
   border-left: 1px solid #fff !important;
   border-top: 1px solid #fff !important;
-  padding: 5px 2px 5px 2px !important;
 }
 div.grd_tblCont table td {
   border-bottom: 1px solid #a4bed4 !important;
   border-right: 0 !important;
   border-left: 0 !important;
   border-top: 0 !important;
-  padding: 5px 2px 5px 2px !important;
 }
 .grd_inf {
-  background-color: #d9eaed !important;
-  height: 25px;
+  background-color: #cce2fe;
   color: #004a6f;
   border-top: 1px solid #9cc !important;
-}
-.grd_inf .rdiv {
-  height: 28px;
 }
 .grd_inf a {
   text-decoration: none;
   font-weight: bold;
 }
-.grd_inf a.helpBtn {
-  vertical-align: middle;
-  margin-top: 2px !important;
-  padding-top: 1px !important;
-}
 .loader {
-  border: 0 !important;
-  background: transparent !important;
-  margin-top: 40px;
-  margin-left: 0 !important;
+  background-color: #2d8eef;
+  border: 1px solid #cce2fe;
+  border-radius: 5px;
 }
 .even {
   background-color: #fff;
 }
 .odd {
   background-color: #e3efff;
+}
+span.expClpFlt a.btnExpClpFlt:hover {
+  background-color: transparent !important;
 }
 .ezActiveRow {
   background-color: #ffdc61 !important;

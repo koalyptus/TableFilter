@@ -1,6 +1,6 @@
 /** 
  *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-08-09T02:22:27.647Z 
+ *	 build date: 2015-08-09T12:32:52.610Z 
  *	 MIT License  
  */ 
 /**
@@ -46,51 +46,38 @@ input.flt {
   width: 99% !important;
 }
 .inf {
-  background: #f4f4f4 url("images/bg_infDiv.jpg") 0 0 repeat-x !important;
+  height: $min-height;
+  background: #d7d7d7 url("images/bg_infDiv.jpg") 0 0 repeat-x !important;
 }
 input.reset {
-  width: 19px;
-  height: 19px;
-  cursor: pointer !important;
-  border: 0 !important;
-  vertical-align: middle;
   background: transparent url("images/btn_eraser.gif") center center no-repeat !important;
 }
-input.reset :hover {
-  background: transparent url("images/btn_over_eraser.gif") center center no-repeat !important;
-}
-input.pgInp {
-  width: 19px;
-  height: 19px;
-  cursor: pointer !important;
-  border: 0 !important;
+.helpBtn:hover {
+  background-color: transparent;
 }
 .nextPage {
   background: transparent url("images/btn_next_page.gif") center center no-repeat !important;
 }
-.nextPage :hover {
+.nextPage:hover {
   background: transparent url("images/btn_over_next_page.gif") center center no-repeat !important;
 }
 .previousPage {
   background: transparent url("images/btn_previous_page.gif") center center no-repeat !important;
 }
-.previousPage :hover {
+.previousPage:hover {
   background: transparent url("images/btn_over_previous_page.gif") center center no-repeat !important;
 }
 .firstPage {
   background: transparent url("images/btn_first_page.gif") center center no-repeat !important;
 }
-.firstPage :hover {
+.firstPage:hover {
   background: transparent url("images/btn_over_first_page.gif") center center no-repeat !important;
 }
 .lastPage {
   background: transparent url("images/btn_last_page.gif") center center no-repeat !important;
 }
-.lastPage :hover {
+.lastPage:hover {
   background: transparent url("images/btn_over_last_page.gif") center center no-repeat !important;
-}
-select.rspg {
-  font-size: 10px;
 }
 div.grd_Cont {
   background-color: #ebecee !important;
@@ -119,14 +106,15 @@ div.grd_headTblCont table td {
   border-left: 1px solid #fff !important;
   border-top: 1px solid #fff !important;
 }
+div.grd_tblCont table td {
+  border-bottom: 1px solid #999 !important;
+}
 .grd_inf {
   background: #d7d7d7 url("images/bg_infDiv.jpg") 0 0 repeat-x !important;
   border-top: 1px solid #d0d0d0 !important;
-  height: 29px !important;
 }
 .loader {
   border: 1px solid #999;
-  background: #fff;
 }
 .defaultLoader {
   width: 32px;
@@ -138,4 +126,7 @@ div.grd_headTblCont table td {
 }
 .odd {
   background-color: #d5d5d5;
+}
+span.expClpFlt a.btnExpClpFlt:hover {
+  background-color: transparent !important;
 }

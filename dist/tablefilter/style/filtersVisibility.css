@@ -1,6 +1,6 @@
 /** 
  *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-08-09T02:22:27.647Z 
+ *	 build date: 2015-08-09T12:32:52.610Z 
  *	 MIT License  
  */ 
 /**
@@ -11,7 +11,7 @@ span.expClpFlt a.btnExpClpFlt {
   height: 35px;
   display: inline-block;
 }
-span.expClpFlt a.btnExpClpFlt :hover {
+span.expClpFlt a.btnExpClpFlt:hover {
   background-color: #f4f4f4;
 }
 span.expClpFlt img {
