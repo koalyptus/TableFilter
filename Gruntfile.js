@@ -173,7 +173,6 @@ module.exports = function (grunt) {
         stylus: {
             compile: {
                 options: {
-                    compress: false,
                     banner: '/** \n' +
                         ' *\t '+ pkg.name +' v'+ pkg.version +
                         ' by Max Guglielmi \n' +

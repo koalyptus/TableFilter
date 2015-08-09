@@ -1,19 +1,6 @@
 /** 
  *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-08-09T12:32:52.610Z 
+ *	 build date: 2015-08-09T12:39:08.406Z 
  *	 MIT License  
  */ 
-/**
- * Filters visibility extension default style
- */
-span.expClpFlt a.btnExpClpFlt {
-  width: 35px;
-  height: 35px;
-  display: inline-block;
-}
-span.expClpFlt a.btnExpClpFlt:hover {
-  background-color: #f4f4f4;
-}
-span.expClpFlt img {
-  padding: 8px 11px 11px 11px;
-}
+span.expClpFlt a.btnExpClpFlt{width:35px;height:35px;display:inline-block;}span.expClpFlt a.btnExpClpFlt:hover{background-color:#f4f4f4}span.expClpFlt img{padding:8px 11px 11px 11px}
