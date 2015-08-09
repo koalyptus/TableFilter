@@ -325,7 +325,6 @@ var tfConfig = {
     filters_row_index: 2,
     headers_row_index: 1,
     sort: true,
-    paging: true,
     col_number_format: [
         null, null, 'US',
         null, null, null
@@ -375,8 +374,7 @@ var tfConfig = {
     /* theme */
     themes: [{ name: 'default' }],
 
-    extensions: [{ name: 'sort' },/*{ name: 'colsVisibility'},*/
-        {name:'filtersVisibility'}]
+    extensions: [{ name: 'sort' }]
 };
 
 var tf = new TableFilter('books', tfConfig, 2);
