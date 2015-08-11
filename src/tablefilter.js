@@ -106,9 +106,10 @@ export class TableFilter{
         }
         /*** ***/
 
-        this.filtersRowIndex = f.filters_row_index || 0;
-        this.headersRow = f.headers_row_index ||
-            (this.filtersRowIndex===0 ? 1 : 0);
+        this.filtersRowIndex = isNaN(f.filters_row_index) ?
+            0 : f.filters_row_index;
+        this.headersRow = isNaN(f.headers_row_index) ?
+            (this.filtersRowIndex===0 ? 1 : 0) : f.headers_row_index;
 
         if(this.gridLayout){
             if(this.headersRow > 1){
@@ -217,7 +218,7 @@ export class TableFilter{
         this.onFiltersLoaded = Types.isFn(f.on_filters_loaded) ?
             f.on_filters_loaded : null;
         //enables/disables single filter search
-        this.singleSearchFlt = Boolean(f.single_search_filter);
+        this.singleSearchFlt = Boolean(f.single_filter);
         //calls function after row is validated
         this.onRowValidated = Types.isFn(f.on_row_validated) ?
             f.on_row_validated : null;
@@ -2314,21 +2315,16 @@ export class TableFilter{
             rIndex = rowIndex;
         }
 
-        setWidths.call(this, tbl.rows[rIndex]);
+        setWidths.call(this);
 
-        function setWidths(row){
+        function setWidths(){
             /*jshint validthis:true */
             let nbCols = this.nbCells;
             let colWidths = this.colWidths;
-            if((nbCols != colWidths.length) || (nbCols != row.cells.length)){
-                throw new Error('Columns number mismatch!');
-            }
-
             let colTags = Dom.tag(tbl, 'col');
             let tblHasColTag = colTags.length > 0;
             let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
             for(let k=0; k<nbCols; k++){
-                // row.cells[k].style.width = colWidths[k];
                 let col;
                 if(tblHasColTag){
                     col = colTags[k];
@@ -2388,10 +2384,9 @@ export class TableFilter{
 
     /**
      * Clears filtered columns visual indicator (background color)
-     * @return {[type]} [description]
      */
     clearActiveColumns(){
-        for(let i=0, len=this.fltIds.length; i<len; i++){
+        for(let i=0, len=this.getCellsNb(this.headersRow); i<len; i++){
             Dom.removeClass(
                 this.getHeaderElement(i), this.activeColumnsCssClass);
         }
