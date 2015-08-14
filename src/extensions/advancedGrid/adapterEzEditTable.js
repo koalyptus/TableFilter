@@ -20,7 +20,10 @@ export default class AdapterEzEditTable {
         this.stylesheetName = cfg.stylesheet_name || 'ezEditTableCss';
         this.err = 'Failed to instantiate EditTable object.\n"ezEditTable" ' +
             'dependency not found.';
-
+        // Turn on by default the scroll into view behaviour
+        cfg.scroll_into_view =  cfg.scroll_into_view===false ?
+            false : tf.gridLayout;
+        console.log(cfg.scroll_into_view);
         this._ezEditTable = null;
         this.cfg = cfg;
         this.tf = tf;
