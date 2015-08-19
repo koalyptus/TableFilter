@@ -1064,6 +1064,9 @@ export class TableFilter{
             modulePath = 'extensions/{}/{}'.replace(/{}/g, name);
         }
 
+        // Trick to set publicPath dynamically for Webpack...
+        __webpack_public_path__ = this.basePath;
+
         require(['./' + modulePath], (mod)=> {
             let inst = new mod(this, ext);
             inst.init();
