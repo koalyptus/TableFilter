@@ -7,6 +7,7 @@ module.exports = function (grunt) {
     var testDir = 'test';
     var testHost = 'http://localhost:8000/';
     var pkg = grunt.file.readJSON('package.json');
+    var repo = 'github.com/koalyptus/TableFilter';
 
     grunt.initConfig({
 
@@ -210,11 +211,12 @@ module.exports = function (grunt) {
         'gh-pages': {
             options: {
                 branch: 'gh-pages',
-                base: 'demos'
+                base: 'dist',
+                add: true
             },
             publish: {
                 options: {
-                    repo: 'https://github.com/koalyptus/TableFilter',
+                    repo: 'https://' + repo,
                     message: 'publish gh-pages (cli)'
                 },
                 src: ['**/*']
@@ -224,8 +226,7 @@ module.exports = function (grunt) {
                     user: {
                         name: 'koalyptus'
                     },
-                    repo: 'https://' + process.env.GH_TOKEN +
-                        '@github.com/koalyptus/TableFilter.git',
+                    repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
                     message: 'publish gh-pages (auto)' + getDeployMessage(),
                     silent: true
                 },
@@ -348,13 +349,14 @@ module.exports = function (grunt) {
     }
 
     grunt.registerTask('check-deploy', function() {
+        var env = process.env;
         // need this
         this.requires(['build', 'build-demos']);
 
         // only deploy under these conditions
-        if (process.env.TRAVIS === 'true' &&
-            process.env.TRAVIS_SECURE_ENV_VARS === 'true' &&
-            process.env.TRAVIS_PULL_REQUEST === 'false') {
+        if (env.TRAVIS === 'true' &&
+            env.TRAVIS_SECURE_ENV_VARS === 'true' &&
+            env.TRAVIS_PULL_REQUEST === 'false') {
             grunt.log.writeln('executing deployment');
             // queue deploy
             grunt.task.run('gh-pages:deploy');
@@ -368,15 +370,16 @@ module.exports = function (grunt) {
     // github will turn some of these into clickable links
     function getDeployMessage() {
         var ret = '\n\n';
-        if (process.env.TRAVIS !== 'true') {
+        var env = process.env;
+        if (env.TRAVIS !== 'true') {
             ret += 'missing env vars for travis-ci';
             return ret;
         }
-        ret += 'branch:       ' + process.env.TRAVIS_BRANCH + '\n';
-        ret += 'SHA:          ' + process.env.TRAVIS_COMMIT + '\n';
-        ret += 'range SHA:    ' + process.env.TRAVIS_COMMIT_RANGE + '\n';
-        ret += 'build id:     ' + process.env.TRAVIS_BUILD_ID  + '\n';
-        ret += 'build number: ' + process.env.TRAVIS_BUILD_NUMBER + '\n';
+        ret += 'branch:       ' + env.TRAVIS_BRANCH + '\n';
+        ret += 'SHA:          ' + env.TRAVIS_COMMIT + '\n';
+        ret += 'range SHA:    ' + env.TRAVIS_COMMIT_RANGE + '\n';
+        ret += 'build id:     ' + env.TRAVIS_BUILD_ID  + '\n';
+        ret += 'build number: ' + env.TRAVIS_BUILD_NUMBER + '\n';
         return ret;
     }
 

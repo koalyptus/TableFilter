@@ -11,7 +11,7 @@ module.exports = {
         'main': path.join(__dirname, '/src/tablefilter.js')
     },
     output: {
-        publicPath: '/dist/tablefilter/',
+        // publicPath: '/dist/tablefilter/',
         path: path.join(__dirname, '/dist/tablefilter'),
         filename: 'tablefilter.js',
         // chunkFilename: '[name]-[chunkhash].js',
