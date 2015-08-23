@@ -20,7 +20,7 @@ export class Help{
         this.instrText = f.help_instructions_text  ?
             f.help_instructions_text :
             'Use the filters above each column to filter and limit table ' +
-            'data. Avanced searches can be performed by using the following ' +
+            'data. Advanced searches can be performed by using the following ' +
             'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
             '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
             '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
