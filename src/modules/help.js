@@ -43,10 +43,10 @@ export class Help{
          //help content div
         this.cont = null;
         this.defaultHtml = '<div class="helpFooter"><h4>TableFilter ' +
-            'v. '+ tf.version +'</h4>' +
+            'v'+ tf.version +'</h4>' +
             '<a href="https://github.com/koalyptus/TableFilter/" ' +
             ' target="_blank">https://github.com/koalyptus/TableFilter/</a>' +
-            '<br/><span>&copy;2015-'+ tf.year +' Max Guglielmi.</span>' +
+            '<br/><span>&copy;2015-'+ tf.year +' {AUTHOR}</span>' +
             '<div align="center" style="margin-top:8px;">' +
             '<a href="javascript:void(0);" class="close">Close</a></div></div>';
 
