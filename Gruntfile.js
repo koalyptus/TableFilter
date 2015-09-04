@@ -93,7 +93,8 @@ module.exports = function (grunt) {
                                 'HTML tables by adding features such as ' +
                                 'inline editing components, advanced ' +
                                 'selection and keyboard navigation ' +
-                                '- Developed by Max Guglielmi">ezEditTable</a>'
+                                '- Developed by '+ pkg.author.name +'">' +
+                                'ezEditTable</a>'
                         },{
                             pattern: /<!-- @import (.*?) -->/ig,
                             replacement: function (match, p1) {
@@ -175,7 +176,7 @@ module.exports = function (grunt) {
                 options: {
                     banner: '/** \n' +
                         ' *\t '+ pkg.name +' v'+ pkg.version +
-                        ' by Max Guglielmi \n' +
+                        ' by '+ pkg.author.name +' \n' +
                         ' *\t build date: '+ new Date().toISOString() +' \n' +
                         ' *\t MIT License  \n' +
                         ' */ \n'

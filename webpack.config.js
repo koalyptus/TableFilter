@@ -41,6 +41,11 @@ module.exports = {
                         replacement: function (/*match, p1, offset, string*/) {
                             return pkg.version;
                         }
+                    },{
+                        pattern: /{AUTHOR}/ig,
+                        replacement: function () {
+                            return pkg.author.name;
+                        }
                     }]
                 })
             }
@@ -55,7 +60,7 @@ module.exports = {
             new webpack.optimize.UglifyJsPlugin(),
             new webpack.BannerPlugin(
                 '/** \n' +
-                ' *\t '+ pkg.name +' v'+ pkg.version +' by Max Guglielmi \n' +
+                ' *\t '+pkg.name+' v'+pkg.version+' by '+pkg.author.name+'\n' +
                 ' *\t build date: '+ new Date().toISOString() +' \n' +
                 ' *\t MIT License  \n' +
                 ' */ \n',
