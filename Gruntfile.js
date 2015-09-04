@@ -250,7 +250,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-gh-pages');
 
-    grunt.registerTask('default', ['build', 'test', 'build-demos', 'esdoc']);
+    grunt.registerTask('default',
+        ['build', 'test', 'build-demos', 'esdoc', 'check-deploy']);
 
     // Development server
     grunt.registerTask('server', ['webpack-dev-server:start']);
@@ -361,8 +362,7 @@ module.exports = function (grunt) {
             grunt.log.writeln('executing deployment');
             // queue deploy
             grunt.task.run('gh-pages:deploy');
-        }
-        else {
+        } else {
             grunt.log.writeln('skipped deployment');
         }
     });
