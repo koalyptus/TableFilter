@@ -250,8 +250,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-gh-pages');
 
-    grunt.registerTask('default',
-        ['build', 'test', 'build-demos', 'esdoc', 'check-deploy']);
+    grunt.registerTask('default', ['build', 'test', 'build-demos', 'esdoc']);
 
     // Development server
     grunt.registerTask('server', ['webpack-dev-server:start']);
