@@ -26,7 +26,7 @@ export class Help{
             '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
             '<b>rgx:</b><br/>' +
             '<a href="https://github.com/koalyptus/TableFilter/wiki/' +
-            '4.-Filter-operators" target="_blank">Learn more</a>.<hr/>';
+            '4.-Filter-operators" target="_blank">Learn more</a><hr/>';
         //defines help innerHtml
         this.instrHtml = f.help_instructions_html || null;
         //defines reset button text
