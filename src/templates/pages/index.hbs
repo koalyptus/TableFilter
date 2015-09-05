@@ -1,33 +1,18 @@
 ---
 title: Home
 heading: 'TableFilter'
-lead: Welcome to my blog!
+posts: ['README.md']
 ---
 <div class="jumbotron">
   <h1>{{ heading }}</h1>
   <p>
     A Javascript library making HTML tables filterable and a bit more :)
   </p>
-  <p><a href="blog.html" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+  <p>
+    <a href="blog.html" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a>
+  </p>
 </div>
 
-<h2>Features</h2>
-<ul>
-    <li>Convert a regular HTML table into an advanced grid component providing:
-        <ul>
-            <li>Advanced columns filtering model</li>
-            <li>Sorting and pagination facilities</li>
-            <li>Complete selection model (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
-            <li>Extended keyboard navigation (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
-            <li>Inline cell or row editing (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
-            <li>Row insertion or deleting (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
-            <li>And even more behaviors...</li>
-        </ul>
-    </li>
-    <li>Attach to an existing HTML table</li>
-    <li>Integration with any server-side technology as this is a pure
-    client-side solution</li>
-    <li>Plenty of configuration</li>
-    <li>Callbacks and delegates</li>
-    <li>Exhaustive documentation and API</li>
-</ul>
+{{#each posts}}
+  {{md this}}
+{{/each}}
