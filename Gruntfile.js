@@ -212,26 +212,47 @@ module.exports = function (grunt) {
         'gh-pages': {
             options: {
                 branch: 'gh-pages',
-                base: 'dist',
                 add: true
             },
-            publish: {
+            'publish-lib': {
                 options: {
+                    base: 'dist',
                     repo: 'https://' + repo,
                     message: 'publish gh-pages (cli)'
                 },
                 src: ['**/*']
             },
-            deploy: {
+            'publish-readme': {
+                options: {
+                    base: './',
+                    repo: 'https://' + repo,
+                    message: 'publish gh-pages (cli)'
+                },
+                src: ['README.md']
+            },
+            'deploy-lib': {
                 options: {
                     user: {
                         name: 'koalyptus'
                     },
+                    base: 'dist',
                     repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
                     message: 'publish gh-pages (auto)' + getDeployMessage(),
                     silent: true
                 },
                 src: ['**/*']
+            },
+            'deploy-readme': {
+                options: {
+                    user: {
+                        name: 'koalyptus'
+                    },
+                    base: './',
+                    repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
+                    message: 'publish gh-pages (auto)' + getDeployMessage(),
+                    silent: true
+                },
+                src: ['README.md']
             }
         }
 
@@ -276,7 +297,8 @@ module.exports = function (grunt) {
 
     // Publish
     grunt.registerTask('publish', 'Publish from CLI', [
-        'build', 'build-demos', 'gh-pages:publish'
+        'build', 'build-demos', 'gh-pages:publish-lib',
+        'gh-pages:publish-readme'
     ]);
 
     // Deploy
@@ -360,7 +382,7 @@ module.exports = function (grunt) {
             env.TRAVIS_PULL_REQUEST === 'false') {
             grunt.log.writeln('executing deployment');
             // queue deploy
-            grunt.task.run('gh-pages:deploy');
+            grunt.task.run(['gh-pages:deploy-lib', 'gh-pages:deploy-readme']);
         } else {
             grunt.log.writeln('skipped deployment');
         }
