@@ -7,6 +7,7 @@ module.exports = function (grunt) {
     var testDir = 'test';
     var testHost = 'http://localhost:8000/';
     var pkg = grunt.file.readJSON('package.json');
+    var repo = 'github.com/koalyptus/TableFilter';
 
     grunt.initConfig({
 
@@ -206,6 +207,32 @@ module.exports = function (grunt) {
                     }
                 ]
             }
+        },
+
+        'gh-pages': {
+            options: {
+                branch: 'gh-pages',
+                base: 'dist',
+                add: true
+            },
+            publish: {
+                options: {
+                    repo: 'https://' + repo,
+                    message: 'publish gh-pages (cli)'
+                },
+                src: ['**/*']
+            },
+            deploy: {
+                options: {
+                    user: {
+                        name: 'koalyptus'
+                    },
+                    repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
+                    message: 'publish gh-pages (auto)' + getDeployMessage(),
+                    silent: true
+                },
+                src: ['**/*']
+            }
         }
 
     });
@@ -221,6 +248,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-esdoc');
     grunt.loadNpmTasks('grunt-contrib-stylus');
+    grunt.loadNpmTasks('grunt-gh-pages');
 
     grunt.registerTask('default', ['build', 'test', 'build-demos', 'esdoc']);
 
@@ -245,6 +273,16 @@ module.exports = function (grunt) {
 
     // Tests
     grunt.registerTask('test', ['jshint', 'connect', 'qunit:all']);
+
+    // Publish
+    grunt.registerTask('publish', 'Publish from CLI', [
+        'build', 'build-demos', 'gh-pages:publish'
+    ]);
+
+    // Deploy
+    grunt.registerTask('deploy', 'Publish from Travis', [
+        'build', 'build-demos', 'check-deploy'
+    ]);
 
     // Custom task running QUnit tests for specified files.
     // Usage example: grunt test-only:test.html,test-help.html
@@ -309,6 +347,40 @@ module.exports = function (grunt) {
         };
 
         return getFiles(testDir, host);
+    }
+
+    grunt.registerTask('check-deploy', function() {
+        var env = process.env;
+        // need this
+        this.requires(['build', 'build-demos']);
+
+        // only deploy under these conditions
+        if (env.TRAVIS === 'true' &&
+            env.TRAVIS_SECURE_ENV_VARS === 'true' &&
+            env.TRAVIS_PULL_REQUEST === 'false') {
+            grunt.log.writeln('executing deployment');
+            // queue deploy
+            grunt.task.run('gh-pages:deploy');
+        } else {
+            grunt.log.writeln('skipped deployment');
+        }
+    });
+
+    // Get a formatted commit message to review changes from the commit log
+    // github will turn some of these into clickable links
+    function getDeployMessage() {
+        var ret = '\n\n';
+        var env = process.env;
+        if (env.TRAVIS !== 'true') {
+            ret += 'missing env vars for travis-ci';
+            return ret;
+        }
+        ret += 'branch:       ' + env.TRAVIS_BRANCH + '\n';
+        ret += 'SHA:          ' + env.TRAVIS_COMMIT + '\n';
+        ret += 'range SHA:    ' + env.TRAVIS_COMMIT_RANGE + '\n';
+        ret += 'build id:     ' + env.TRAVIS_BUILD_ID  + '\n';
+        ret += 'build number: ' + env.TRAVIS_BUILD_NUMBER + '\n';
+        return ret;
     }
 
 };
