@@ -4,8 +4,7 @@ node_js:
 before_script:
 - npm install grunt-cli -g
 script:
-- grunt deploy-lib
-- grunt deploy-readme
+- grunt deploy
 branches:
   only:
   - master
