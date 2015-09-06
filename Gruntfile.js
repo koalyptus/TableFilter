@@ -295,13 +295,13 @@ module.exports = function (grunt) {
     // Tests
     grunt.registerTask('test', ['jshint', 'connect', 'qunit:all']);
 
-    // Publish
+    // Publish to gh-pages
     grunt.registerTask('publish', 'Publish from CLI', [
         'build', 'build-demos', 'gh-pages:publish-lib',
         'gh-pages:publish-readme'
     ]);
 
-    // Deploy
+    // Deploy to gh-pages
     grunt.registerTask('deploy', 'Publish from Travis', [
         'build', 'build-demos', 'check-deploy'
     ]);
