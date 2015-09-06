@@ -1,6 +1,6 @@
 /** 
  *	 TableFilter v0.0.0 by Max Guglielmi 
- *	 build date: 2015-09-05T12:16:49.285Z 
+ *	 build date: 2015-09-06T06:09:12.340Z 
  *	 MIT License  
  */ 
 .activeHeader{background-color:#66afe9 !important;color:#fff !important}
@@ -19,4 +19,4 @@ div.tot{float:left;overflow:hidden;min-width:150px;height:100%;margin:0;padding:
 .sort-arrow{width:11px;height:11px;margin:0 2px;background-position:center center;background-repeat:no-repeat}.descending{background-image:url("themes/downsimple.png")}.ascending{background-image:url("themes/upsimple.png")}
 div.status{float:left;overflow:hidden;min-width:120px;height:100%;margin:0;padding:.5em;}div.status span{font-size:inherit}
 table.TF{font-family:inherit;border-spacing:0;border:0;}table.TF th{height:35px;margin:0;background-color:#eaeaea;border-bottom:1px solid #ddd;border-top:1px solid #f4f4f4;border-left:1px solid #ccc;border-right:1px solid #f4f4f4;padding:.1em .7em;color:#333}table.TF td{margin:0;padding:.5em .7em;border-bottom:1px solid #c6c6c6}
-.inf{clear:both;width:auto;height:35px;background-color:#fff;font-size:inherit;margin:0;padding:0;border-top:1px solid #ccc;border-left:1px solid #ccc;border-right:1px solid #ccc;overflow:hidden;border-top-left-radius:3px;border-top-right-radius:3px;}.inf a{color:#333;text-decoration:none;font-weight:bold;}.inf a:hover{text-decoration:underline}.ldiv{float:left;width:30%;position:inherit;text-align:left}.mdiv{float:left;width:38%;position:inherit;text-align:center;padding:0}.rdiv{float:right;width:30%;position:inherit;text-align:right}
+.inf{clear:both;width:auto;height:35px;background-color:#fff;font-size:inherit;margin:0;padding:0;border-top:1px solid #ccc;border-left:1px solid #ccc;border-right:1px solid #ccc;overflow:hidden;border-top-left-radius:3px;border-top-right-radius:3px;}.inf a{color:#333;text-decoration:none;font-weight:bold;box-sizing:initial;}.inf a:hover{text-decoration:underline}.ldiv{float:left;width:30%;position:inherit;text-align:left}.mdiv{float:left;width:38%;position:inherit;text-align:center;padding:0}.rdiv{float:right;width:30%;position:inherit;text-align:right}
