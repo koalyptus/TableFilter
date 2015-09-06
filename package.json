@@ -28,6 +28,7 @@
     "grunt-contrib-connect": "^0.8.0",
     "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-gh-pages": "^0.10.0",
     "load-grunt-tasks": "^0.6.0",
     "time-grunt": "^1.0.0",
     "yo": "^1.4.7"
@@ -35,7 +36,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/koalyptus/tablefilter/blob/master/LICENSE-MIT"
+      "url": "https://github.com/koalyptus/tablefilter/blob/master/LICENSE"
     }
   ],
   "keywords": [

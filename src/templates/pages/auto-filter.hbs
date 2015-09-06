@@ -1,0 +1,38 @@
+---
+title: Auto filter, filter as you type behaviour
+heading: 'Auto filter, filter as you type'
+section: 'examples'
+---
+
+<h1>{{ heading }}</h1>
+
+<p>
+    This demo features the filter as you type behaviour enabled by the
+    <code>auto_filter</code> option.
+</p>
+
+{{> countries-table-tiny }}
+
+{{> tablefilter-script }}
+
+<script data-config>
+    var filtersConfig = {
+        base_path: 'tablefilter/',
+        auto_filter: true,
+        auto_filter_delay: 1100, //milliseconds
+        filters_row_index: 1,
+        remember_grid_values: true,
+        alternate_rows: true,
+        rows_counter: true,
+        rows_counter_text: "Rows: ",
+        btn_reset: true,
+        status_bar: true,
+        msg_filter: 'Filtering...'
+    };
+    var tf = new TableFilter('demo', filtersConfig);
+    tf.init();
+</script>
+
+<p>
+    {{> pre-inline-script }}
+</p>

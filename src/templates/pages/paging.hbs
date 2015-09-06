@@ -1,0 +1,68 @@
+---
+title: Paging
+heading: 'Paging'
+section: 'examples'
+---
+
+<h1>{{ heading }}</h1>
+
+<p>
+    Tabular data can be easily paged with the <code>paging</code> option.
+</p>
+
+{{> countries-table }}
+
+{{> tablefilter-script }}
+
+<script data-config>
+    var filtersConfig = {
+        base_path: 'tablefilter/',
+        paging: true,
+        results_per_page: ['Records: ', [10,25,50,100]],
+        remember_grid_values: true,
+        remember_page_number: true,
+        remember_page_length: true,
+        alternate_rows: true,
+        btn_reset: true,
+        rows_counter: true,
+        loader: true,
+        loader_html: '<div id="lblMsg"></div>',
+        loader_css_class: 'myLoader',
+        status_bar: true,
+        status_bar_target_id: 'lblMsg',
+        status_bar_css_class: 'myStatus',
+        col_0: 'select',
+        col_1: 'select',
+        col_2: 'select',
+        extensions:[{
+            name: 'sort',
+            types: [
+                'string', 'string', 'number',
+                'number', 'number', 'number',
+                'number', 'number', 'number'
+            ]
+        }]
+    };
+    var tf = new TableFilter('demo', filtersConfig);
+    tf.init();
+</script>
+
+<p>
+    {{> pre-inline-script }}
+</p>
+
+<style type="text/css">
+    /**
+     * Custom CSS definitions as per TableFilter configuration
+     */
+    .myLoader{
+        position:absolute; padding: 5px;
+        margin:100px 0 0 5%; width:auto;
+        z-index:1000; font-size:12px; font-weight:bold;
+        border:1px solid #666; background:#ffffcc;
+        vertical-align:middle;
+    }
+    .myStatus{
+        width:auto; display:block;
+    }
+</style>

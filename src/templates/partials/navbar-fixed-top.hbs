@@ -17,11 +17,14 @@ component: navbar
       <ul class="nav navbar-nav">
         <!-- you can exclude pages using \{{#isnt}} helper: \{{#isnt data.title 'Blog'}} -->
         {{#each pages}}
-        <li{{#if this.isCurrentPage}} class="active"{{/if}}>
-          <a href="{{relative dest this.dest}}">{{ data.title }}</a>
-        </li>
+          {{#is data.navbar "true"}}
+          <li{{#if this.isCurrentPage}} class="active"{{/if}}>
+            <a href="{{relative dest this.dest}}">{{ data.title }}</a>
+          </li>
+          {{/is}}
         {{/each}}
       </ul>
+      <!--
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
@@ -32,10 +35,11 @@ component: navbar
             <li class="dropdown-header">Plugins</li>
             <li><a href="https://github.com/assemble/assemble-contrib-anchors">assemble-contrib-anchors</a></li>
             <li><a href="https://github.com/assemble/assemble-contrib-toc">assemble-contrib-toc</a></li>
-            
+
           </ul>
         </li>
       </ul>
+      -->
     </div><!--/.nav-collapse -->
   </div>
 </div>
