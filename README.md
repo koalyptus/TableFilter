@@ -97,7 +97,7 @@ grunt test-only:test.html,test-sort.html
 ```
 
 ## Demos
-Run the local webserver:
+Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) or run the local webserver:
 ```shell
 grunt server
 ```
