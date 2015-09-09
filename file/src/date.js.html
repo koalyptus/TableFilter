@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/date.js | TableFilter v0.0.0 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/date.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">/**
+ * Date utilities
+ */
+
+export default {
+    isValid(dateStr, format){
+        if(!format) {
+            format = &apos;DMY&apos;;
+        }
+        format = format.toUpperCase();
+        if(format.length != 3) {
+            if(format===&apos;DDMMMYYYY&apos;){
+                let d = this.format(dateStr, format);
+                dateStr = d.getDate() +&apos;/&apos;+ (d.getMonth()+1) +&apos;/&apos;+
+                    d.getFullYear();
+                format = &apos;DMY&apos;;
+            }
+        }
+        if((format.indexOf(&apos;M&apos;) === -1) || (format.indexOf(&apos;D&apos;) === -1) ||
+            (format.indexOf(&apos;Y&apos;) === -1)){
+            format = &apos;DMY&apos;;
+        }
+        let reg1, reg2;
+        // If the year is first
+        if(format.substring(0, 1) == &apos;Y&apos;) {
+              reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+              reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+        } else if(format.substring(1, 2) == &apos;Y&apos;) { // If the year is second
+              reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/;
+              reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/;
+        } else { // The year must be third
+              reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
+              reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
+        }
+        // If it doesn&apos;t conform to the right format (with either a 2 digit year
+        // or 4 digit year), fail
+        if(reg1.test(dateStr) === false &amp;&amp; reg2.test(dateStr) === false) {
+            return false;
+        }
+        // Split into 3 parts based on what the divider was
+        let parts = dateStr.split(RegExp.$1);
+        let mm, dd, yy;
+        // Check to see if the 3 parts end up making a valid date
+        if(format.substring(0, 1) === &apos;M&apos;){
+            mm = parts[0];
+        } else if(format.substring(1, 2) === &apos;M&apos;){
+            mm = parts[1];
+        } else {
+            mm = parts[2];
+        }
+        if(format.substring(0, 1) === &apos;D&apos;){
+            dd = parts[0];
+        } else if(format.substring(1, 2) === &apos;D&apos;){
+            dd = parts[1];
+        } else {
+            dd = parts[2];
+        }
+        if(format.substring(0, 1) === &apos;Y&apos;){
+            yy = parts[0];
+        } else if(format.substring(1, 2) === &apos;Y&apos;){
+            yy = parts[1];
+        } else {
+            yy = parts[2];
+        }
+        if(parseInt(yy, 10) &lt;= 50){
+            yy = (parseInt(yy, 10) + 2000).toString();
+        }
+        if(parseInt(yy, 10) &lt;= 99){
+            yy = (parseInt(yy, 10) + 1900).toString();
+        }
+        let dt = new Date(
+            parseInt(yy, 10), parseInt(mm, 10)-1, parseInt(dd, 10),
+            0, 0, 0, 0);
+        if(parseInt(dd, 10) != dt.getDate()){
+            return false;
+        }
+        if(parseInt(mm, 10)-1 != dt.getMonth()){
+            return false;
+        }
+        return true;
+    },
+    format(dateStr, formatStr) {
+        if(!formatStr){
+            formatStr = &apos;DMY&apos;;
+        }
+        if(!dateStr || dateStr === &apos;&apos;){
+            return new Date(1001, 0, 1);
+        }
+        let oDate;
+        let parts;
+
+        switch(formatStr.toUpperCase()){
+            case &apos;DDMMMYYYY&apos;:
+                parts = dateStr.replace(/[- \/.]/g,&apos; &apos;).split(&apos; &apos;);
+                oDate = new Date(y2kDate(parts[2]),mmm2mm(parts[1])-1,parts[0]);
+            break;
+            case &apos;DMY&apos;:
+                /* jshint ignore:start */
+                parts = dateStr.replace(
+                    /^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,&apos;$1 $3 $5&apos;).split(&apos; &apos;);
+                oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
+                /* jshint ignore:end */
+            break;
+            case &apos;MDY&apos;:
+                /* jshint ignore:start */
+                parts = dateStr.replace(
+                    /^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/,&apos;$1 $3 $5&apos;).split(&apos; &apos;);
+                oDate = new Date(y2kDate(parts[2]),parts[0]-1,parts[1]);
+                /* jshint ignore:end */
+            break;
+            case &apos;YMD&apos;:
+                /* jshint ignore:start */
+                parts = dateStr.replace(/^((\d\d)?\d\d)([- \/.])(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])$/,&apos;$1 $4 $6&apos;).split(&apos; &apos;);
+                oDate = new Date(y2kDate(parts[0]),parts[1]-1,parts[2]);
+                /* jshint ignore:end */
+            break;
+            default: //in case format is not correct
+                /* jshint ignore:start */
+                parts = dateStr.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,&apos;$1 $3 $5&apos;).split(&apos; &apos;);
+                oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
+                /* jshint ignore:end */
+            break;
+        }
+        return oDate;
+    }
+};
+
+function y2kDate(yr){
+    if(yr === undefined){
+        return 0;
+    }
+    if(yr.length&gt;2){
+        return yr;
+    }
+    let y;
+    //&gt;50 belong to 1900
+    if(yr &lt;= 99 &amp;&amp; yr&gt;50){
+        y = &apos;19&apos; + yr;
+    }
+    //&lt;50 belong to 2000
+    if(yr&lt;50 || yr === &apos;00&apos;){
+        y = &apos;20&apos; + yr;
+    }
+    return y;
+}
+
+function mmm2mm(mmm){
+    if(mmm === undefined){
+        return 0;
+    }
+    let mondigit;
+    let MONTH_NAMES = [
+        &apos;january&apos;,&apos;february&apos;,&apos;march&apos;,&apos;april&apos;,&apos;may&apos;,&apos;june&apos;,&apos;july&apos;,
+        &apos;august&apos;,&apos;september&apos;,&apos;october&apos;,&apos;november&apos;,&apos;december&apos;,
+        &apos;jan&apos;,&apos;feb&apos;,&apos;mar&apos;,&apos;apr&apos;,&apos;may&apos;,&apos;jun&apos;,&apos;jul&apos;,&apos;aug&apos;,&apos;sep&apos;,&apos;oct&apos;,
+        &apos;nov&apos;,&apos;dec&apos;
+    ];
+    for(let m_i=0; m_i &lt; MONTH_NAMES.length; m_i++){
+            let month_name = MONTH_NAMES[m_i];
+            if (mmm.toLowerCase() === month_name){
+                mondigit = m_i+1;
+                break;
+            }
+    }
+    if(mondigit &gt; 11 || mondigit &lt; 23){
+        mondigit = mondigit - 12;
+    }
+    if(mondigit &lt; 1 || mondigit &gt; 12){
+        return 0;
+    }
+    return mondigit;
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.4)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

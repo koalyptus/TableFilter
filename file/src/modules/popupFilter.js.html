@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/modules/popupFilter.js | TableFilter v0.0.0 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/modules/popupFilter.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Types from &apos;../types&apos;;
+import Dom from &apos;../dom&apos;;
+import Event from &apos;../event&apos;;
+
+export class PopupFilter{
+
+    /**
+     * Pop-up filter component
+     * @param {Object} tf TableFilter instance
+     */
+    constructor(tf){
+        // Configuration object
+        var f = tf.config();
+
+        // Enable external filters behaviour
+        tf.isExternalFlt = true;
+        tf.externalFltTgtIds = [];
+
+        //filter icon path
+        this.popUpImgFlt = f.popup_filters_image ||
+            tf.themesPath+&apos;icn_filter.gif&apos;;
+        //active filter icon path
+        this.popUpImgFltActive = f.popup_filters_image_active ||
+            tf.themesPath+&apos;icn_filterActive.gif&apos;;
+        this.popUpImgFltHtml = f.popup_filters_image_html ||
+            &apos;&lt;img src=&quot;&apos;+ this.popUpImgFlt +&apos;&quot; alt=&quot;Column filter&quot; /&gt;&apos;;
+        //defines css class for popup div containing filter
+        this.popUpDivCssClass = f.popup_div_css_class || &apos;popUpFilter&apos;;
+        //callback function before popup filtes is opened
+        this.onBeforePopUpOpen = Types.isFn(f.on_before_popup_filter_open) ?
+            f.on_before_popup_filter_open : null;
+        //callback function after popup filtes is opened
+        this.onAfterPopUpOpen = Types.isFn(f.on_after_popup_filter_open) ?
+            f.on_after_popup_filter_open : null;
+        //callback function before popup filtes is closed
+        this.onBeforePopUpClose =
+            Types.isFn(f.on_before_popup_filter_close) ?
+            f.on_before_popup_filter_close : null;
+        //callback function after popup filtes is closed
+        this.onAfterPopUpClose = Types.isFn(f.on_after_popup_filter_close) ?
+            f.on_after_popup_filter_close : null;
+
+        //stores filters spans
+        this.popUpFltSpans = [];
+        //stores filters icons
+        this.popUpFltImgs = [];
+        //stores filters containers
+        this.popUpFltElms = this.popUpFltElmCache || [];
+        this.popUpFltAdjustToContainer = true;
+
+        //id prefix for pop-up filter span
+        this.prfxPopUpSpan = &apos;popUpSpan_&apos;;
+        //id prefix for pop-up div containing filter
+        this.prfxPopUpDiv = &apos;popUpDiv_&apos;;
+
+        this.tf = tf;
+    }
+
+    onClick(e){
+        var evt = e || global.event,
+            elm = evt.target.parentNode,
+            colIndex = parseInt(elm.getAttribute(&apos;ci&apos;), 10);
+
+        this.closeAll(colIndex);
+        this.toggle(colIndex);
+
+        if(this.popUpFltAdjustToContainer){
+            var popUpDiv = this.popUpFltElms[colIndex],
+                header = this.tf.getHeaderElement(colIndex),
+                headerWidth = header.clientWidth * 0.95;
+            popUpDiv.style.width = parseInt(headerWidth, 10)  + &apos;px&apos;;
+        }
+        Event.cancel(evt);
+        Event.stop(evt);
+    }
+
+    /**
+     * Initialize DOM elements
+     */
+    init(){
+        var tf = this.tf;
+        for(var i=0; i&lt;tf.nbCells; i++){
+            if(tf[&apos;col&apos;+i] === tf.fltTypeNone){
+                continue;
+            }
+            var popUpSpan = Dom.create(
+                &apos;span&apos;,
+                [&apos;id&apos;, this.prfxPopUpSpan+tf.id+&apos;_&apos;+i],
+                [&apos;ci&apos;, i]
+            );
+            popUpSpan.innerHTML = this.popUpImgFltHtml;
+            var header = tf.getHeaderElement(i);
+            header.appendChild(popUpSpan);
+            Event.add(popUpSpan, &apos;click&apos;, (evt) =&gt; { this.onClick(evt); });
+            this.popUpFltSpans[i] = popUpSpan;
+            this.popUpFltImgs[i] = popUpSpan.firstChild;
+        }
+    }
+
+    /**
+     * Build all pop-up filters elements
+     */
+    buildAll(){
+        for(var i=0; i&lt;this.popUpFltElmCache.length; i++){
+            this.build(i, this.popUpFltElmCache[i]);
+        }
+    }
+
+    /**
+     * Build a specified pop-up filter elements
+     * @param  {Number} colIndex Column index
+     * @param  {Object} div      Optional container DOM element
+     */
+    build(colIndex, div){
+        var tf = this.tf;
+        var popUpDiv = !div ?
+            Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxPopUpDiv+tf.id+&apos;_&apos;+colIndex]) :
+            div;
+        popUpDiv.className = this.popUpDivCssClass;
+        tf.externalFltTgtIds.push(popUpDiv.id);
+        var header = tf.getHeaderElement(colIndex);
+        header.insertBefore(popUpDiv, header.firstChild);
+        Event.add(popUpDiv, &apos;click&apos;, (evt) =&gt; { Event.stop(evt); });
+        this.popUpFltElms[colIndex] = popUpDiv;
+    }
+
+    /**
+     * Toogle visibility of specified filter
+     * @param  {Number} colIndex Column index
+     */
+    toggle(colIndex){
+        var tf = this.tf,
+            popUpFltElm = this.popUpFltElms[colIndex];
+
+        if(popUpFltElm.style.display === &apos;none&apos; ||
+            popUpFltElm.style.display === &apos;&apos;){
+            if(this.onBeforePopUpOpen){
+                this.onBeforePopUpOpen.call(
+                    null, this, this.popUpFltElms[colIndex], colIndex);
+            }
+            popUpFltElm.style.display = &apos;block&apos;;
+            if(tf[&apos;col&apos;+colIndex] === tf.fltTypeInp){
+                var flt = tf.getFilterElement(colIndex);
+                if(flt){
+                    flt.focus();
+                }
+            }
+            if(this.onAfterPopUpOpen){
+                this.onAfterPopUpOpen.call(
+                    null, this, this.popUpFltElms[colIndex], colIndex);
+            }
+        } else {
+            if(this.onBeforePopUpClose){
+                this.onBeforePopUpClose.call(
+                    null, this, this.popUpFltElms[colIndex], colIndex);
+            }
+            popUpFltElm.style.display = &apos;none&apos;;
+            if(this.onAfterPopUpClose){
+                this.onAfterPopUpClose.call(
+                    null, this, this.popUpFltElms[colIndex], colIndex);
+            }
+        }
+    }
+
+    /**
+     * Close all filters excepted for the specified one if any
+     * @param  {Number} exceptIdx Column index of the filter to not close
+     */
+    closeAll(exceptIdx){
+        for(var i=0; i&lt;this.popUpFltElms.length; i++){
+            if(i === exceptIdx){
+                continue;
+            }
+            var popUpFltElm = this.popUpFltElms[i];
+            if(popUpFltElm){
+                popUpFltElm.style.display = &apos;none&apos;;
+            }
+        }
+    }
+
+    /**
+     * Build all the icons representing the pop-up filters
+     */
+    buildIcons(){
+        for(var i=0; i&lt;this.popUpFltImgs.length; i++){
+            this.buildIcon(i, false);
+        }
+    }
+
+    /**
+     * Build specified icon
+     * @param  {Number} colIndex Column index
+     * @param  {Boolean} active   Apply active state
+     */
+    buildIcon(colIndex, active){
+        if(this.popUpFltImgs[colIndex]){
+            this.popUpFltImgs[colIndex].src = active ?
+                this.popUpImgFltActive : this.popUpImgFlt;
+        }
+    }
+
+    /**
+     * Remove pop-up filters
+     */
+    destroy(){
+        this.popUpFltElmCache = [];
+        for(var i=0; i&lt;this.popUpFltElms.length; i++){
+            var popUpFltElm = this.popUpFltElms[i],
+                popUpFltSpan = this.popUpFltSpans[i],
+                popUpFltImg = this.popUpFltImgs[i];
+            if(popUpFltElm){
+                popUpFltElm.parentNode.removeChild(popUpFltElm);
+                this.popUpFltElmCache[i] = popUpFltElm;
+            }
+            popUpFltElm = null;
+            if(popUpFltSpan){
+                popUpFltSpan.parentNode.removeChild(popUpFltSpan);
+            }
+            popUpFltSpan = null;
+            if(popUpFltImg){
+                popUpFltImg.parentNode.removeChild(popUpFltImg);
+            }
+            popUpFltImg = null;
+        }
+        this.popUpFltElms = [];
+        this.popUpFltSpans = [];
+        this.popUpFltImgs = [];
+    }
+
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.4)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

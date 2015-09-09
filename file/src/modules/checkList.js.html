@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/modules/checkList.js | TableFilter v0.0.0 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/modules/checkList.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
+import Arr from &apos;../array&apos;;
+import Str from &apos;../string&apos;;
+import Sort from &apos;../sort&apos;;
+import Event from &apos;../event&apos;;
+
+export class CheckList{
+
+    /**
+     * Checklist UI component
+     * @param {Object} tf TableFilter instance
+     */
+    constructor(tf){
+        // Configuration object
+        var f = tf.config();
+
+        this.checkListDiv = []; //checklist container div
+        //defines css class for div containing checklist filter
+        this.checkListDivCssClass = f.div_checklist_css_class ||
+            &apos;div_checklist&apos;;
+        //defines css class for checklist filters
+        this.checkListCssClass = f.checklist_css_class || &apos;flt_checklist&apos;;
+        //defines css class for checklist item (li)
+        this.checkListItemCssClass = f.checklist_item_css_class ||
+            &apos;flt_checklist_item&apos;;
+        //defines css class for selected checklist item (li)
+        this.checkListSlcItemCssClass = f.checklist_selected_item_css_class ||
+            &apos;flt_checklist_slc_item&apos;;
+        //Load on demand text
+        this.activateCheckListTxt = f.activate_checklist_text ||
+            &apos;Click to load filter data&apos;;
+        //defines css class for checklist filters
+        this.checkListItemDisabledCssClass =
+            f.checklist_item_disabled_css_class ||
+            &apos;flt_checklist_item_disabled&apos;;
+        this.enableCheckListResetFilter =
+            f.enable_checklist_reset_filter===false ? false : true;
+        //checklist filter container div
+        this.prfxCheckListDiv = &apos;chkdiv_&apos;;
+
+        this.isCustom = null;
+        this.opts = null;
+        this.optsTxt = null;
+        this.excludedOpts = null;
+
+        this.tf = tf;
+    }
+
+    // TODO: move event here
+    onChange(evt){
+        let elm = evt.target;
+        this.tf.activeFilterId = elm.getAttribute(&apos;id&apos;);
+        this.tf.activeFlt = Dom.id(this.tf.activeFilterId);
+        this.tf.Evt.onSlcChange.call(this.tf, evt);
+    }
+
+    optionClick(evt){
+        this.setCheckListValues(evt.target);
+        this.onChange(evt);
+    }
+
+    /**
+     * Build checklist UI asynchronously
+     * @param  {Number}  colIndex   Column index
+     * @param  {Boolean} isExternal Render in external container
+     * @param  {String}  extFltId   External container id
+     */
+    build(colIndex, isExternal, extFltId){
+        var tf = this.tf;
+        tf.EvtManager(
+            tf.Evt.name.checklist,
+            { slcIndex:colIndex, slcExternal:isExternal, slcId:extFltId }
+        );
+    }
+
+    /**
+     * Build checklist UI
+     * @param  {Number}  colIndex   Column index
+     * @param  {Boolean} isExternal Render in external container
+     * @param  {String}  extFltId   External container id
+     */
+    _build(colIndex, isExternal=false, extFltId=null){
+        var tf = this.tf;
+        colIndex = parseInt(colIndex, 10);
+
+        this.opts = [];
+        this.optsTxt = [];
+
+        var divFltId = this.prfxCheckListDiv+colIndex+&apos;_&apos;+tf.id;
+        if((!Dom.id(divFltId) &amp;&amp; !isExternal) ||
+            (!Dom.id(extFltId) &amp;&amp; isExternal)){
+            return;
+        }
+
+        var flt = !isExternal ? this.checkListDiv[colIndex] : Dom.id(extFltId);
+        var ul = Dom.create(
+            &apos;ul&apos;, [&apos;id&apos;, tf.fltIds[colIndex]], [&apos;colIndex&apos;, colIndex]);
+        ul.className = this.checkListCssClass;
+        Event.add(ul, &apos;change&apos;, (evt) =&gt; { this.onChange(evt); });
+
+        var rows = tf.tbl.rows;
+        this.isCustom = tf.isCustomOptions(colIndex);
+
+        var activeFlt;
+        if(tf.linkedFilters &amp;&amp; tf.activeFilterId){
+            activeFlt = tf.activeFilterId.split(&apos;_&apos;)[0];
+            activeFlt = activeFlt.split(tf.prfxFlt)[1];
+        }
+
+        var filteredDataCol = [];
+        if(tf.linkedFilters &amp;&amp; tf.disableExcludedOptions){
+            this.excludedOpts = [];
+        }
+
+        for(var k=tf.refRow; k&lt;tf.nbRows; k++){
+            // always visible rows don&apos;t need to appear on selects as always
+            // valid
+            if(tf.hasVisibleRows &amp;&amp; tf.visibleRows.indexOf(k) !== -1){
+                continue;
+            }
+
+            var cells = rows[k].cells;
+            var ncells = cells.length;
+
+            // checks if row has exact cell #
+            if(ncells !== tf.nbCells || this.isCustom){
+                continue;
+            }
+
+            // this loop retrieves cell data
+            for(var j=0; j&lt;ncells; j++){
+                // WTF: cyclomatic complexity hell :)
+                if((colIndex===j &amp;&amp; (!tf.linkedFilters ||
+                    (tf.linkedFilters &amp;&amp; tf.disableExcludedOptions)))||
+                    (colIndex===j &amp;&amp; tf.linkedFilters &amp;&amp;
+                    ((rows[k].style.display === &apos;&apos; &amp;&amp; !tf.paging) ||
+                    (tf.paging &amp;&amp; ((!activeFlt || activeFlt===colIndex )||
+                    (activeFlt!=colIndex &amp;&amp;
+                        Arr.has(tf.validRowsIndex, k))) )))){
+                    var cell_data = tf.getCellData(j, cells[j]);
+                    //Vary Peter&apos;s patch
+                    var cell_string = Str.matchCase(
+                        cell_data, tf.matchCase);
+                    // checks if celldata is already in array
+                    if(!Arr.has(this.opts, cell_string, tf.matchCase)){
+                        this.opts.push(cell_data);
+                    }
+                    var filteredCol = filteredDataCol[j];
+                    if(tf.linkedFilters &amp;&amp; tf.disableExcludedOptions){
+                        if(!filteredCol){
+                            filteredCol = tf.getFilteredDataCol(j);
+                        }
+                        if(!Arr.has(filteredCol,
+                            cell_string, tf.matchCase) &amp;&amp;
+                            !Arr.has(this.excludedOpts,
+                                cell_string, tf.matchCase) &amp;&amp;
+                            !tf.isFirstLoad){
+                            this.excludedOpts.push(cell_data);
+                        }
+                    }
+                }
+            }
+        }
+
+        //Retrieves custom values
+        if(this.isCustom){
+            var customValues = tf.getCustomOptions(colIndex);
+            this.opts = customValues[0];
+            this.optsTxt = customValues[1];
+        }
+
+        if(tf.sortSlc &amp;&amp; !this.isCustom){
+            if (!tf.matchCase){
+                this.opts.sort(Sort.ignoreCase);
+                if(this.excludedOpts){
+                    this.excludedOpts.sort(Sort.ignoreCase);
+                }
+            } else {
+                this.opts.sort();
+                if(this.excludedOpts){
+                    this.excludedOpts.sort();
+                }
+            }
+        }
+        //asc sort
+        if(tf.sortNumAsc &amp;&amp; Arr.has(tf.sortNumAsc, colIndex)){
+            try{
+                this.opts.sort(numSortAsc);
+                if(this.excludedOpts){
+                    this.excludedOpts.sort(numSortAsc);
+                }
+                if(this.isCustom){
+                    this.optsTxt.sort(numSortAsc);
+                }
+            } catch(e) {
+                this.opts.sort();
+                if(this.excludedOpts){
+                    this.excludedOpts.sort();
+                }
+                if(this.isCustom){
+                    this.optsTxt.sort();
+                }
+            }//in case there are alphanumeric values
+        }
+        //desc sort
+        if(tf.sortNumDesc &amp;&amp; Arr.has(tf.sortNumDesc, colIndex)){
+            try{
+                this.opts.sort(numSortDesc);
+                if(this.excludedOpts){
+                    this.excludedOpts.sort(numSortDesc);
+                }
+                if(this.isCustom){
+                    this.optsTxt.sort(numSortDesc);
+                }
+            } catch(e) {
+                this.opts.sort();
+                if(this.excludedOpts){
+                    this.excludedOpts.sort(); }
+                if(this.isCustom){
+                    this.optsTxt.sort();
+                }
+            }//in case there are alphanumeric values
+        }
+
+        this.addChecks(colIndex, ul, tf.separator);
+
+        if(tf.fillSlcOnDemand){
+            flt.innerHTML = &apos;&apos;;
+        }
+        flt.appendChild(ul);
+        flt.setAttribute(&apos;filled&apos;, &apos;1&apos;);
+    }
+
+    /**
+     * Add checklist options
+     * @param {Number} colIndex  Column index
+     * @param {Object} ul        Ul element
+     */
+    addChecks(colIndex, ul){
+        var tf = this.tf;
+        var chkCt = this.addTChecks(colIndex, ul);
+        var fltArr = []; //remember grid values
+        var store = tf.feature(&apos;store&apos;);
+        var tmpVal = store ?
+                store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
+        if(tmpVal &amp;&amp; Str.trim(tmpVal).length &gt; 0){
+            if(tf.hasCustomSlcOptions &amp;&amp;
+                Arr.has(tf.customSlcOptions.cols, colIndex)){
+                fltArr.push(tmpVal);
+            } else {
+                fltArr = tmpVal.split(&apos; &apos;+tf.orOperator+&apos; &apos;);
+            }
+        }
+
+        for(var y=0; y&lt;this.opts.length; y++){
+            var val = this.opts[y]; //item value
+            var lbl = this.isCustom ? this.optsTxt[y] : val; //item text
+            var li = Dom.createCheckItem(
+                        tf.fltIds[colIndex]+&apos;_&apos;+(y+chkCt), val, lbl);
+            li.className = this.checkListItemCssClass;
+            if(tf.linkedFilters &amp;&amp; tf.disableExcludedOptions &amp;&amp;
+                Arr.has(this.excludedOpts,
+                        Str.matchCase(val, tf.matchCase), tf.matchCase)){
+                    Dom.addClass(li, this.checkListItemDisabledCssClass);
+                    li.check.disabled = true;
+                    li.disabled = true;
+            } else {
+                Event.add(li.check, &apos;click&apos;,
+                    (evt) =&gt; { this.optionClick(evt); });
+            }
+            ul.appendChild(li);
+
+            if(val===&apos;&apos;){
+                //item is hidden
+                li.style.display = &apos;none&apos;;
+            }
+
+            /*** remember grid values ***/
+            if(tf.rememberGridValues){
+                if((tf.hasCustomSlcOptions &amp;&amp;
+                    Arr.has(tf.customSlcOptions.cols, colIndex) &amp;&amp;
+                    fltArr.toString().indexOf(val)!= -1) ||
+                    Arr.has(fltArr,
+                        Str.matchCase(val, tf.matchCase), tf.matchCase)){
+                    li.check.checked = true;
+                    this.setCheckListValues(li.check);
+                }
+            }
+        }
+    }
+
+    /**
+     * Add checklist header option
+     * @param {Number} colIndex Column index
+     * @param {Object} ul       Ul element
+     */
+    addTChecks(colIndex, ul){
+        var tf = this.tf;
+        var chkCt = 1;
+        var li0 = Dom.createCheckItem(
+                    tf.fltIds[colIndex]+&apos;_0&apos;, &apos;&apos;, tf.displayAllText);
+        li0.className = this.checkListItemCssClass;
+        ul.appendChild(li0);
+
+        Event.add(li0.check, &apos;click&apos;, (evt) =&gt; {
+            this.optionClick(evt);
+        });
+
+        if(!this.enableCheckListResetFilter){
+            li0.style.display = &apos;none&apos;;
+        }
+
+        if(tf.enableEmptyOption){
+            var li1 = Dom.createCheckItem(
+                    tf.fltIds[colIndex]+&apos;_1&apos;, tf.emOperator, tf.emptyText);
+            li1.className = this.checkListItemCssClass;
+            ul.appendChild(li1);
+            Event.add(li1.check, &apos;click&apos;, (evt) =&gt; {
+                this.optionClick(evt);
+            });
+            chkCt++;
+        }
+
+        if(tf.enableNonEmptyOption){
+            var li2 = Dom.createCheckItem(
+                tf.fltIds[colIndex]+&apos;_2&apos;,
+                tf.nmOperator,
+                tf.nonEmptyText
+            );
+            li2.className = this.checkListItemCssClass;
+            ul.appendChild(li2);
+            Event.add(li2.check, &apos;click&apos;, (evt) =&gt; {
+                this.optionClick(evt);
+            });
+            chkCt++;
+        }
+        return chkCt;
+    }
+
+    /**
+     * Store checked options in DOM element attribute
+     * @param {Object} o checklist option DOM element
+     */
+    setCheckListValues(o){
+        if(!o){
+            return;
+        }
+        var tf = this.tf;
+        var chkValue = o.value; //checked item value
+        var chkIndex = parseInt(o.id.split(&apos;_&apos;)[2], 10);
+        var filterTag = &apos;ul&apos;, itemTag = &apos;li&apos;;
+        var n = o;
+
+        //ul tag search
+        while(Str.lower(n.nodeName)!==filterTag){
+            n = n.parentNode;
+        }
+
+        var li = n.childNodes[chkIndex];
+        var colIndex = n.getAttribute(&apos;colIndex&apos;);
+        var fltValue = n.getAttribute(&apos;value&apos;); //filter value (ul tag)
+        var fltIndexes = n.getAttribute(&apos;indexes&apos;); //selected items (ul tag)
+
+        if(o.checked){
+            //show all item
+            if(chkValue===&apos;&apos;){
+                if((fltIndexes &amp;&amp; fltIndexes!==&apos;&apos;)){
+                    //items indexes
+                    var indSplit = fltIndexes.split(tf.separator);
+                    //checked items loop
+                    for(var u=0; u&lt;indSplit.length; u++){
+                        //checked item
+                        var cChk = Dom.id(tf.fltIds[colIndex]+&apos;_&apos;+indSplit[u]);
+                        if(cChk){
+                            cChk.checked = false;
+                            Dom.removeClass(
+                                n.childNodes[indSplit[u]],
+                                this.checkListSlcItemCssClass
+                            );
+                        }
+                    }
+                }
+                n.setAttribute(&apos;value&apos;, &apos;&apos;);
+                n.setAttribute(&apos;indexes&apos;, &apos;&apos;);
+
+            } else {
+                fltValue = (fltValue) ? fltValue : &apos;&apos;;
+                chkValue = Str.trim(
+                    fltValue+&apos; &apos;+chkValue+&apos; &apos;+tf.orOperator);
+                chkIndex = fltIndexes + chkIndex + tf.separator;
+                n.setAttribute(&apos;value&apos;, chkValue );
+                n.setAttribute(&apos;indexes&apos;, chkIndex);
+                //1st option unchecked
+                if(Dom.id(tf.fltIds[colIndex]+&apos;_0&apos;)){
+                    Dom.id(tf.fltIds[colIndex]+&apos;_0&apos;).checked = false;
+                }
+            }
+
+            if(Str.lower(li.nodeName) === itemTag){
+                Dom.removeClass(
+                    n.childNodes[0], this.checkListSlcItemCssClass);
+                Dom.addClass(li, this.checkListSlcItemCssClass);
+            }
+        } else { //removes values and indexes
+            if(chkValue!==&apos;&apos;){
+                var replaceValue = new RegExp(
+                        Str.rgxEsc(chkValue+&apos; &apos;+tf.orOperator));
+                fltValue = fltValue.replace(replaceValue,&apos;&apos;);
+                n.setAttribute(&apos;value&apos;, Str.trim(fltValue));
+
+                var replaceIndex = new RegExp(
+                        Str.rgxEsc(chkIndex + tf.separator));
+                fltIndexes = fltIndexes.replace(replaceIndex, &apos;&apos;);
+                n.setAttribute(&apos;indexes&apos;, fltIndexes);
+            }
+            if(Str.lower(li.nodeName)===itemTag){
+                Dom.removeClass(li, this.checkListSlcItemCssClass);
+            }
+        }
+    }
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.4)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
