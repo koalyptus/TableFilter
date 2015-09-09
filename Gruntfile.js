@@ -166,7 +166,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     source: 'src',
-                    destination: 'doc',
+                    destination: 'docs',
                     title: pkg.name + ' v' + pkg.version
                 }
             }
@@ -218,7 +218,7 @@ module.exports = function (grunt) {
                 options: {
                     base: 'dist',
                     repo: 'https://' + repo,
-                    message: 'publish gh-pages (cli)'
+                    message: 'publish TableFilter lib to gh-pages (cli)'
                 },
                 src: ['**/*']
             },
@@ -226,9 +226,17 @@ module.exports = function (grunt) {
                 options: {
                     base: './',
                     repo: 'https://' + repo,
-                    message: 'publish gh-pages (cli)'
+                    message: 'publish README to gh-pages (cli)'
                 },
                 src: ['README.md']
+            },
+            'publish-docs': {
+                options: {
+                    base: 'docs',
+                    repo: 'https://' + repo,
+                    message: 'publish Docs to gh-pages (cli)'
+                },
+                src: ['docs/*']
             },
             'deploy-lib': {
                 options: {
@@ -237,7 +245,8 @@ module.exports = function (grunt) {
                     },
                     base: 'dist',
                     repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
-                    message: 'publish gh-pages (auto)' + getDeployMessage(),
+                    message: 'publish TableFilter to gh-pages (auto)' +
+                                getDeployMessage(),
                     silent: true
                 },
                 src: ['**/*']
@@ -249,10 +258,24 @@ module.exports = function (grunt) {
                     },
                     base: './',
                     repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
-                    message: 'publish gh-pages (auto)' + getDeployMessage(),
+                    message: 'publish README to gh-pages (auto)' +
+                                getDeployMessage(),
                     silent: true
                 },
                 src: ['README.md']
+            },
+            'deploy-docs': {
+                options: {
+                    user: {
+                        name: 'koalyptus'
+                    },
+                    base: 'docs',
+                    repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
+                    message: 'publish Docs to gh-pages (auto)' +
+                                getDeployMessage(),
+                    silent: true
+                },
+                src: ['docs/*']
             }
         }
 
@@ -271,7 +294,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-gh-pages');
 
-    grunt.registerTask('default', ['build', 'test', 'build-demos'/*,'esdoc'*/]);
+    grunt.registerTask('default', ['build', 'test', 'build-demos']);
 
     // Development server
     grunt.registerTask('server', ['webpack-dev-server:start']);
@@ -297,13 +320,13 @@ module.exports = function (grunt) {
 
     // Publish to gh-pages
     grunt.registerTask('publish', 'Publish from CLI', [
-        'build', 'build-demos', 'gh-pages:publish-lib',
-        'gh-pages:publish-readme'
+        'build', 'build-demos', 'esdoc', 'gh-pages:publish-lib',
+        'gh-pages:publish-readme', 'gh-pages:publish-docs'
     ]);
 
     // Deploy to gh-pages
     grunt.registerTask('deploy', 'Publish from Travis', [
-        'build', 'build-demos', 'check-deploy'
+        'build', 'build-demos', 'esdoc', 'check-deploy'
     ]);
 
     // Custom task running QUnit tests for specified files.
@@ -374,7 +397,7 @@ module.exports = function (grunt) {
     grunt.registerTask('check-deploy', function() {
         var env = process.env;
         // need this
-        this.requires(['build', 'build-demos']);
+        this.requires(['build', 'build-demos', 'esdoc']);
 
         // only deploy under these conditions
         if (env.TRAVIS === 'true' &&
@@ -382,7 +405,11 @@ module.exports = function (grunt) {
             env.TRAVIS_PULL_REQUEST === 'false') {
             grunt.log.writeln('executing deployment');
             // queue deploy
-            grunt.task.run(['gh-pages:deploy-lib', 'gh-pages:deploy-readme']);
+            grunt.task.run([
+                'gh-pages:deploy-lib',
+                'gh-pages:deploy-readme',
+                'gh-pages:deploy-docs'
+            ]);
         } else {
             grunt.log.writeln('skipped deployment');
         }
