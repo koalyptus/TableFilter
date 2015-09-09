@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home | TableFilter</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- Bootstrap theme -->
+    <link href="assets/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/theme.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    
+<!-- Fixed navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">TableFilter</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <!-- you can exclude pages using {{#isnt}} helper: {{#isnt data.title 'Blog'}} -->
+        
+            
+        
+            
+        
+            
+            <li>
+              <a href="examples.html">Examples</a>
+            </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter">Repo</a>
+            </li>
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter/wiki">Wiki</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <!--
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="https://github.com/assemble/assemble">Assemble</a></li>
+            <li><a href="https://github.com/assemble/generator-assemble">Generator Assemble</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-header">Plugins</li>
+            <li><a href="https://github.com/assemble/assemble-contrib-anchors">assemble-contrib-anchors</a></li>
+            <li><a href="https://github.com/assemble/assemble-contrib-toc">assemble-contrib-toc</a></li>
+
+          </ul>
+        </li>
+      </ul>
+      -->
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+
+    <div class="container theme-showcase" role="main">
+
+      
+<!--
+<div class="jumbotron">
+  <h1>TableFilter</h1>
+  <p>
+    A Javascript library making HTML tables filterable and a bit more :)
+  </p>
+  <p>
+    <a href="blog.html" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a>
+  </p>
+</div>
+-->
+
+
+  <h1 id="tablefilter-build-status-https-api-travis-ci-org-koalyptus-tablefilter-svg-branch-master-https-travis-ci-org-koalyptus-tablefilter-">TableFilter <a href="https://travis-ci.org/koalyptus/TableFilter"><img src="https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master" alt="Build Status"></a></h1>
+<blockquote>
+<p>A Javascript library making HTML tables filterable</p>
+</blockquote>
+<p>TableFilter is a modernised version of the <a href="http://tablefilter.free.fr">HTML Table Filter generator</a> javascript plugin.
+This library adds to any html table a &quot;filter by column&quot; feature that enables
+users to filter and limit the data displayed within a long table. By default, the script automatically adds a filter grid bar at the top of the desired table.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Convert a regular HTML table into an advanced grid component providing:<ul>
+<li>Advanced columns filtering model</li>
+<li>Sorting and pagination facilities</li>
+<li>Complete selection model (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
+<li>Extended keyboard navigation (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
+<li>Inline cell or row editing (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
+<li>Row insertion or deleting (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
+<li>And even more behaviors...</li>
+</ul>
+</li>
+<li>Attach to an existing HTML table</li>
+<li>Integration with any server-side technology as this is a pure client-side
+solution</li>
+<li>Callbacks for all events, and delegates for most actions</li>
+<li>Exhaustive documentation and API</li>
+<li>Valuable support provided under a Premium request</li>
+</ul>
+<h2 id="getting-started">Getting started</h2>
+<p>Clone the repo using Git:</p>
+<pre><code class="language-shell">git clone --bare https://github.com/koalyptus/TableFilter.git</code></pre>
+<p>Alternatively you can <a href="https://github.com/koalyptus/TableFilter/archive/master.zip">download</a> this repository.</p>
+<h2 id="setup">Setup</h2>
+<p>Copy the <code>tablefilter</code> directory under <code>dist</code> and place it at desired location in your project. Then include the main js file in your page:</p>
+<pre><code class="language-shell">&lt;script src=&quot;path/to/my/scripts/tablefilter/tablefilter.js&quot;&gt;&lt;/script&gt;</code></pre>
+<p>Place the following snippet just under the HTML table and always define a <code>base_path</code> property in the configuration object to reflect the path to the script</p>
+<pre><code class="language-shell">&lt;script&gt;
+var tf = new TableFilter(&#39;my-table-id&#39;, {
+    base_path: &#39;path/to/my/scripts/tablefilter/&#39;
+});
+tf.init();
+&lt;/script&gt;</code></pre>
+<p>If the <code>base_path</code> property is not specified, it will default to <code>/tablefilter</code> directory:</p>
+<pre><code class="language-shell">your-page.html
+ |— tablefilter</code></pre>
+<h2 id="development">Development</h2>
+<p>This project requires node.js and Grunt to be installed:</p>
+<ul>
+<li>install <a href="https://nodejs.org/">node.js</a></li>
+<li>install <a href="http://gruntjs.com/getting-started">Grunt</a> from the command line using npm (comes with node.js):<pre><code class="language-shell">npm install -g grunt-cli</code></pre>
+Once <code>Grunt</code> is sorted out you can follow the instructions below.
+Start by installing any dependencies.</li>
+</ul>
+<pre><code class="language-shell">npm install</code></pre>
+<p>Use the Grunt <code>dev</code> task to launch a build / watch cycle and start the local
+sever on port <code>8080</code>:</p>
+<pre><code class="language-shell">grunt dev</code></pre>
+<p>Use the <code>build</code> task to generate a production build:</p>
+<pre><code class="language-shell">grunt build</code></pre>
+<p>The <code>default</code> Grunt task will create a production build, run the tests and finally generate the demos:</p>
+<pre><code class="language-shell">grunt</code></pre>
+<p>To run all the tests:</p>
+<pre><code class="language-shell">grunt test</code></pre>
+<p>and to run specific test(s):</p>
+<pre><code class="language-shell">grunt test-only:test.html
+grunt test-only:test.html,test-sort.html</code></pre>
+<h2 id="demos">Demos</h2>
+<p>Check out the online <a href="http://koalyptus.github.io/TableFilter/examples">examples</a> or run the local webserver:</p>
+<pre><code class="language-shell">grunt server</code></pre>
+<p>then pick a demo from:</p>
+<pre><code class="language-shell">http://localhost:8080/demos/</code></pre>
+<h2 id="documentation">Documentation</h2>
+<p>Run this task to generate the documentation in the <code>doc</code> directory:</p>
+<pre><code class="language-shell">grunt esdoc</code></pre>
+<p>Find the complete documentation in the <a href="https://github.com/koalyptus/TableFilter/wiki">WIKI</a> section.</p>
+<h2 id="support">Support</h2>
+<ul>
+<li>GitHub for reporting bugs and feature requests.</li>
+</ul>
+<h2 id="license">License</h2>
+<p><a href="LICENSE.md">MIT</a></p>
+
+
+
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="assets/js/bootstrap.min.js"></script>
+  </body>
+</html>

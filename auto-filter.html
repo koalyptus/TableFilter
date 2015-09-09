@@ -58,10 +58,21 @@
         
             
         
+            
+        
       </ul>
+
       <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a href="https://github.com/koalyptus/TableFilter/wiki">Wiki</a>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter">Repo</a>
+            </li>
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter/wiki">Wiki</a>
+            </li>
+          </ul>
         </li>
       </ul>
       <!--
@@ -559,21 +570,38 @@
 
 <p>
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!--
     DO NOT COPY: NOT PART OF TABLEFILTER
 -->
 <pre></pre>
-<script>
-    var configs = document.querySelectorAll('script[data-config]');
-    var pre = document.body.getElementsByTagName('pre')[0];
-    [].forEach.call(configs, function(config) {
-        if(pre){
-            pre.innerHTML +=
-                config.innerHTML.replace('<', '&lt;').replace('>', '&gt;');
-        }
-    });
-</script>
+<script src="assets/js/js-code-in-pre.js"></script>
 <!-- -->
+
+
+
+
+
 </p>
 
     </div>
