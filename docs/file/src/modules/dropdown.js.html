@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/modules/dropdown.js | TableFilter v0.0.0 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/modules/dropdown.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
+import Arr from &apos;../array&apos;;
+import Str from &apos;../string&apos;;
+import Sort from &apos;../sort&apos;;
+
+export class Dropdown{
+
+    /**
+     * Dropdown UI component
+     * @param {Object} tf TableFilter instance
+     */
+    constructor(tf){
+        // Configuration object
+        var f = tf.config();
+
+        this.enableSlcResetFilter = f.enable_slc_reset_filter===false ?
+            false : true;
+        //defines empty option text
+        this.nonEmptyText = f.non_empty_text || &apos;(Non empty)&apos;;
+        //sets select filling method: &apos;innerHTML&apos; or &apos;createElement&apos;
+        this.slcFillingMethod = f.slc_filling_method || &apos;createElement&apos;;
+        //IE only, tooltip text appearing on select before it is populated
+        this.activateSlcTooltip =  f.activate_slc_tooltip ||
+            &apos;Click to activate&apos;;
+        //tooltip text appearing on multiple select
+        this.multipleSlcTooltip = f.multiple_slc_tooltip ||
+            &apos;Use Ctrl key for multiple selections&apos;;
+
+        this.isCustom = null;
+        this.opts = null;
+        this.optsTxt = null;
+        this.slcInnerHtml = null;
+
+        this.tf = tf;
+    }
+
+    /**
+     * Build drop-down filter UI asynchronously
+     * @param  {Number}  colIndex   Column index
+     * @param  {Boolean} isLinked Enable linked refresh behaviour
+     * @param  {Boolean} isExternal Render in external container
+     * @param  {String}  extSlcId   External container id
+     */
+    build(colIndex, isLinked, isExternal, extSlcId){
+        var tf = this.tf;
+        tf.EvtManager(
+            tf.Evt.name.dropdown,
+            {
+                slcIndex: colIndex,
+                slcRefreshed: isLinked,
+                slcExternal: isExternal,
+                slcId: extSlcId
+            }
+        );
+    }
+
+    /**
+     * Build drop-down filter UI
+     * @param  {Number}  colIndex    Column index
+     * @param  {Boolean} isLinked Enable linked refresh behaviour
+     * @param  {Boolean} isExternal  Render in external container
+     * @param  {String}  extSlcId    External container id
+     */
+    _build(colIndex, isLinked=false, isExternal=false, extSlcId=null){
+        var tf = this.tf;
+        colIndex = parseInt(colIndex, 10);
+
+        this.opts = [];
+        this.optsTxt = [];
+        this.slcInnerHtml = &apos;&apos;;
+
+        var slcId = tf.fltIds[colIndex];
+        if((!Dom.id(slcId) &amp;&amp; !isExternal) ||
+            (!Dom.id(extSlcId) &amp;&amp; isExternal)){
+            return;
+        }
+        var slc = !isExternal ? Dom.id(slcId) : Dom.id(extSlcId),
+            rows = tf.tbl.rows,
+            matchCase = tf.matchCase;
+
+        //custom select test
+        this.isCustom = tf.isCustomOptions(colIndex);
+
+        //custom selects text
+        var activeFlt;
+        if(isLinked &amp;&amp; tf.activeFilterId){
+            activeFlt = tf.activeFilterId.split(&apos;_&apos;)[0];
+            activeFlt = activeFlt.split(tf.prfxFlt)[1];
+        }
+
+        /*** remember grid values ***/
+        var fltsValues = [], fltArr = [];
+        if(tf.rememberGridValues){
+            fltsValues =
+                tf.feature(&apos;store&apos;).getFilterValues(tf.fltsValuesCookie);
+            if(fltsValues &amp;&amp; !Str.isEmpty(fltsValues.toString())){
+                if(this.isCustom){
+                    fltArr.push(fltsValues[colIndex]);
+                } else {
+                    fltArr = fltsValues[colIndex].split(&apos; &apos;+tf.orOperator+&apos; &apos;);
+                }
+            }
+        }
+
+        var excludedOpts = null,
+            filteredDataCol = null;
+        if(isLinked &amp;&amp; tf.disableExcludedOptions){
+            excludedOpts = [];
+            filteredDataCol = [];
+        }
+
+        for(var k=tf.refRow; k&lt;tf.nbRows; k++){
+            // always visible rows don&apos;t need to appear on selects as always
+            // valid
+            if(tf.hasVisibleRows &amp;&amp; tf.visibleRows.indexOf(k) !== -1){
+                continue;
+            }
+
+            var cell = rows[k].cells,
+                nchilds = cell.length;
+
+            // checks if row has exact cell #
+            if(nchilds !== tf.nbCells || this.isCustom){
+                continue;
+            }
+
+            // this loop retrieves cell data
+            for(var j=0; j&lt;nchilds; j++){
+                // WTF: cyclomatic complexity hell
+                if((colIndex===j &amp;&amp;
+                    (!isLinked ||
+                        (isLinked &amp;&amp; tf.disableExcludedOptions))) ||
+                    (colIndex==j &amp;&amp; isLinked &amp;&amp;
+                        ((rows[k].style.display === &apos;&apos; &amp;&amp; !tf.paging) ||
+                    (tf.paging &amp;&amp; (!tf.validRowsIndex ||
+                        (tf.validRowsIndex &amp;&amp;
+                            Arr.has(tf.validRowsIndex, k))) &amp;&amp;
+                        ((activeFlt===undefined || activeFlt==colIndex)  ||
+                            (activeFlt!=colIndex &amp;&amp;
+                                Arr.has(tf.validRowsIndex, k) ))) ))){
+                    var cell_data = tf.getCellData(j, cell[j]),
+                        //Vary Peter&apos;s patch
+                        cell_string = Str.matchCase(cell_data, matchCase);
+
+                    // checks if celldata is already in array
+                    if(!Arr.has(this.opts, cell_string, matchCase)){
+                        this.opts.push(cell_data);
+                    }
+
+                    if(isLinked &amp;&amp; tf.disableExcludedOptions){
+                        var filteredCol = filteredDataCol[j];
+                        if(!filteredCol){
+                            filteredCol = tf.getFilteredDataCol(j);
+                        }
+                        if(!Arr.has(filteredCol, cell_string, matchCase) &amp;&amp;
+                            !Arr.has(
+                                excludedOpts, cell_string, matchCase) &amp;&amp;
+                            !this.isFirstLoad){
+                            excludedOpts.push(cell_data);
+                        }
+                    }
+                }//if colIndex==j
+            }//for j
+        }//for k
+
+        //Retrieves custom values
+        if(this.isCustom){
+            var customValues = tf.getCustomOptions(colIndex);
+            this.opts = customValues[0];
+            this.optsTxt = customValues[1];
+        }
+
+        if(tf.sortSlc &amp;&amp; !this.isCustom){
+            if (!matchCase){
+                this.opts.sort(Sort.ignoreCase);
+                if(excludedOpts){
+                    excludedOpts.sort(Sort.ignoreCase);
+                }
+            } else {
+                this.opts.sort();
+                if(excludedOpts){ excludedOpts.sort(); }
+            }
+        }
+
+        //asc sort
+        if(tf.sortNumAsc &amp;&amp; Arr.has(tf.sortNumAsc, colIndex)){
+            try{
+                this.opts.sort( numSortAsc );
+                if(excludedOpts){
+                    excludedOpts.sort(numSortAsc);
+                }
+                if(this.isCustom){
+                    this.optsTxt.sort(numSortAsc);
+                }
+            } catch(e) {
+                this.opts.sort();
+                if(excludedOpts){
+                    excludedOpts.sort();
+                }
+                if(this.isCustom){
+                    this.optsTxt.sort();
+                }
+            }//in case there are alphanumeric values
+        }
+        //desc sort
+        if(tf.sortNumDesc &amp;&amp; Arr.has(tf.sortNumDesc, colIndex)){
+            try{
+                this.opts.sort(numSortDesc);
+                if(excludedOpts){
+                    excludedOpts.sort(numSortDesc);
+                }
+                if(this.isCustom){
+                    this.optsTxt.sort(numSortDesc);
+                }
+            } catch(e) {
+                this.opts.sort();
+                if(excludedOpts){
+                    excludedOpts.sort();
+                }
+                if(this.isCustom){
+                    this.optsTxt.sort();
+                }
+            }//in case there are alphanumeric values
+        }
+
+        //populates drop-down
+        this.addOptions(
+            colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr);
+    }
+
+    /**
+     * Add drop-down options
+     * @param {Number} colIndex     Column index
+     * @param {Object} slc          Select Dom element
+     * @param {Boolean} isLinked    Enable linked refresh behaviour
+     * @param {Array} excludedOpts  Array of excluded options
+     * @param {Array} fltsValues    Collection of persisted filter values
+     * @param {Array} fltArr        Collection of persisted filter values
+     */
+    addOptions(colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr){
+        var tf = this.tf,
+            fillMethod = Str.lower(this.slcFillingMethod),
+            slcValue = slc.value;
+
+        slc.innerHTML = &apos;&apos;;
+        slc = this.addFirstOption(slc);
+
+        for(var y=0; y&lt;this.opts.length; y++){
+            if(this.opts[y]===&apos;&apos;){
+                continue;
+            }
+            var val = this.opts[y]; //option value
+            var lbl = this.isCustom ? this.optsTxt[y] : val; //option text
+            var isDisabled = false;
+            if(isLinked &amp;&amp; tf.disableExcludedOptions &amp;&amp;
+                Arr.has(
+                    excludedOpts,
+                    Str.matchCase(val, tf.matchCase),
+                    tf.matchCase
+                )){
+                isDisabled = true;
+            }
+
+            if(fillMethod === &apos;innerhtml&apos;){
+                var slcAttr = &apos;&apos;;
+                if(tf.fillSlcOnDemand &amp;&amp; slcValue===this.opts[y]){
+                    slcAttr = &apos;selected=&quot;selected&quot;&apos;;
+                }
+                this.slcInnerHtml += &apos;&lt;option value=&quot;&apos;+val+&apos;&quot; &apos; + slcAttr +
+                    (isDisabled ? &apos;disabled=&quot;disabled&quot;&apos; : &apos;&apos;)+ &apos;&gt;&apos; +
+                    lbl+&apos;&lt;/option&gt;&apos;;
+            } else {
+                var opt;
+                //fill select on demand
+                if(tf.fillSlcOnDemand &amp;&amp; slcValue===this.opts[y] &amp;&amp;
+                    tf[&apos;col&apos;+colIndex]===tf.fltTypeSlc){
+                    opt = Dom.createOpt(lbl, val, true);
+                } else {
+                    if(tf[&apos;col&apos;+colIndex]!==tf.fltTypeMulti){
+                        opt = Dom.createOpt(
+                            lbl,
+                            val,
+                            (fltsValues[colIndex]!==&apos; &apos; &amp;&amp;
+                                val===fltsValues[colIndex]) ? true : false
+                        );
+                    } else {
+                        opt = Dom.createOpt(
+                            lbl,
+                            val,
+                            (Arr.has(fltArr,
+                                Str.matchCase(this.opts[y], tf.matchCase),
+                                tf.matchCase) ||
+                              fltArr.toString().indexOf(val)!== -1) ?
+                                true : false
+                        );
+                    }
+                }
+                if(isDisabled){
+                    opt.disabled = true;
+                }
+                slc.appendChild(opt);
+            }
+        }// for y
+
+        if(fillMethod === &apos;innerhtml&apos;){
+            slc.innerHTML += this.slcInnerHtml;
+        }
+        slc.setAttribute(&apos;filled&apos;, &apos;1&apos;);
+    }
+
+    /**
+     * Add drop-down header option
+     * @param {Object} slc Select DOM element
+     */
+    addFirstOption(slc){
+        var tf = this.tf,
+            fillMethod = Str.lower(this.slcFillingMethod);
+
+        if(fillMethod === &apos;innerhtml&apos;){
+            this.slcInnerHtml += &apos;&lt;option value=&quot;&quot;&gt;&apos;+ tf.displayAllText +
+                &apos;&lt;/option&gt;&apos;;
+        }
+        else {
+            var opt0 = Dom.createOpt(
+                (!this.enableSlcResetFilter ? &apos;&apos; : tf.displayAllText),&apos;&apos;);
+            if(!this.enableSlcResetFilter){
+                opt0.style.display = &apos;none&apos;;
+            }
+            slc.appendChild(opt0);
+            if(tf.enableEmptyOption){
+                var opt1 = Dom.createOpt(tf.emptyText, tf.emOperator);
+                slc.appendChild(opt1);
+            }
+            if(tf.enableNonEmptyOption){
+                var opt2 = Dom.createOpt(tf.nonEmptyText, tf.nmOperator);
+                slc.appendChild(opt2);
+            }
+        }
+        return slc;
+    }
+
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.4)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
