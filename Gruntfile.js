@@ -166,7 +166,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     source: 'src',
-                    destination: 'docs',
+                    destination: 'docs/docs',
                     title: pkg.name + ' v' + pkg.version
                 }
             }
@@ -236,7 +236,7 @@ module.exports = function (grunt) {
                     repo: 'https://' + repo,
                     message: 'publish Docs to gh-pages (cli)'
                 },
-                src: ['docs/*']
+                src: ['**/*']
             },
             'deploy-lib': {
                 options: {
@@ -275,7 +275,7 @@ module.exports = function (grunt) {
                                 getDeployMessage(),
                     silent: true
                 },
-                src: ['docs/*']
+                src: ['**/*']
             }
         }
 
