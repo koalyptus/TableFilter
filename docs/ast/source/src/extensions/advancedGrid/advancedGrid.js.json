@@ -80,8 +80,8 @@
         "type": "Identifier",
         "name": "AdapterEzEditTable",
         "range": [
-          73,
-          91
+          71,
+          89
         ],
         "loc": {
           "start": {
@@ -97,8 +97,8 @@
         "trailingComments": []
       },
       "range": [
-        58,
-        92
+        56,
+        90
       ],
       "loc": {
         "start": {
@@ -115,7 +115,7 @@
   "sourceType": "module",
   "range": [
     0,
-    92
+    90
   ],
   "loc": {
     "start": {
