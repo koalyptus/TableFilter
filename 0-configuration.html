@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Auto filter, filter as you type behaviour | TableFilter</title>
+    <title>Zero configuration | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -107,11 +107,10 @@
 
       
 
-<h1>Auto filter, filter as you type</h1>
-
+<h1>Zero configuration</h1>
 <p>
-    This demo features the filter as you type behaviour enabled by the
-    <code>auto_filter</code> option.
+    With no configuration, <code>TableFilter</code> adds by default a text-box
+    filter to each column.
 </p>
 
 
@@ -558,20 +557,7 @@
 
 
 <script data-config>
-    var filtersConfig = {
-        base_path: 'tablefilter/',
-        auto_filter: true,
-        auto_filter_delay: 1100, //milliseconds
-        filters_row_index: 1,
-        remember_grid_values: true,
-        alternate_rows: true,
-        rows_counter: true,
-        rows_counter_text: "Rows: ",
-        btn_reset: true,
-        status_bar: true,
-        msg_filter: 'Filtering...'
-    };
-    var tf = new TableFilter('demo', filtersConfig);
+    var tf = new TableFilter('demo');
     tf.init();
 </script>
 
@@ -610,6 +596,17 @@
 
 
 </p>
+
+<div class="alert alert-warning" role="alert">
+    It is recommended to always define the <code>base_path</code> setting in
+    the configuration object. If not specified, the script will default to
+    <code>tablefilter/</code> directory:
+    <pre>
+your-page.html
+    |— tablefilter
+    </pre>
+</div>
+
 
     </div>
 
