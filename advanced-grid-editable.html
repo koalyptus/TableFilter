@@ -51,9 +51,15 @@
             
         
             
+        
+            
             <li>
               <a href="examples.html">Examples</a>
             </li>
+            
+        
+            
+        
             
         
             
@@ -13262,6 +13268,29 @@ ezEditTable</a>
 
 </p>
 
+<h4>Markup</h4>
+<pre>
+&lt;div class="ezCommandEditor"&gt;
+    &lt;button onclick="
+        var advancedGrid = tf.extension('advancedGrid');
+        var ezEditTable = advancedGrid._ezEditTable;
+        ezEditTable.Editable.Edit();"&gt;
+        &lt;img src="http://edittable.free.fr/ezEditTable/themes/icn_edit.gif" alt="Edit record"&gt;
+    &lt;/button&gt;
+    &lt;button onclick="
+        var advancedGrid = tf.extension('advancedGrid');
+        var ezEditTable = advancedGrid._ezEditTable;
+        ezEditTable.Editable.AddNewRow();"&gt;
+        &lt;img src="http://edittable.free.fr/ezEditTable/themes/icn_add.gif" alt="Add record"&gt;
+    &lt;/button&gt;
+    &lt;button onclick="
+        var advancedGrid = tf.extension('advancedGrid');
+        var ezEditTable = advancedGrid._ezEditTable;
+        ezEditTable.Editable.SubmitDeletedRows();"&gt;
+        &lt;img src="http://edittable.free.fr/ezEditTable/themes/icn_del.gif" alt="Delete record"&gt;
+    &lt;/button&gt;
+&lt;/div&gt;
+</pre>
 
     </div>
 

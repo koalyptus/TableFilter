@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Theme roller | TableFilter</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- Bootstrap theme -->
+    <link href="assets/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/theme.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    
+<!-- Fixed navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">TableFilter</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <!-- you can exclude pages using {{#isnt}} helper: {{#isnt data.title 'Blog'}} -->
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <li>
+              <a href="examples.html">Examples</a>
+            </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter">Repo</a>
+            </li>
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter/wiki">Wiki</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="http://koalyptus.github.io/TableFilter/docs" target="_blank">Docs</a>
+        </li>
+      </ul>
+      <!--
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="https://github.com/assemble/assemble">Assemble</a></li>
+            <li><a href="https://github.com/assemble/generator-assemble">Generator Assemble</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-header">Plugins</li>
+            <li><a href="https://github.com/assemble/assemble-contrib-anchors">assemble-contrib-anchors</a></li>
+            <li><a href="https://github.com/assemble/assemble-contrib-toc">assemble-contrib-toc</a></li>
+
+          </ul>
+        </li>
+      </ul>
+      -->
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+
+    <div class="container theme-showcase" role="main">
+
+      
+
+<h1>Theme roller</h1>
+
+<div class="form-inline form-group">
+    <label>Theme:
+        <select onchange="javascript:changeTheme(this.value);" class="form-control">
+            <option value="default" selected="selected">default</option>
+            <option value="mytheme">mytheme</option>
+            <option value="skyblue">skyblue</option>
+        </select>
+    </label>
+</div>
+
+
+<table id="books">
+    <thead>
+        <tr>
+            <th colspan="2">Book</th>
+            <th>Price</th>
+            <th colspan="2">Delivery Items</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <th width="210">Title</th>
+            <th width="150">Author</th>
+            <th width="50">$</th>
+            <th width="30">In store</th>
+            <th width="70">Shipping</th>
+            <th width="100">Publication Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Boris Godunov</td>
+            <td>Alexandr Pushkin</td>
+            <td>
+                <div align="right">7.15</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="1">1 Hour</td>
+            <td>
+                <div align="right">01/01/1999</div>
+            </td>
+        </tr>
+        <tr>
+            <td>The Rainmaker</td>
+            <td>John Grisham</td>
+            <td>
+                <div align="right">7.99</div>
+            </td>
+            <td data-tf-sortKey="0">
+                <input type="checkbox" disabled="disabled" value="" />
+            </td>
+            <td data-tf-sortKey="48">2 Days</td>
+            <td>
+                <div align="right">12/01/2001</div>
+            </td>
+        </tr>
+        <tr>
+            <td>The Green Mile</td>
+            <td>Stephen King</td>
+            <td>
+                <div align="right">11.10</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="24">24 Hours</td>
+            <td>
+                <div align="right">01/01/1992</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Misery</td>
+            <td>Stephen King</td>
+            <td>
+                <div align="right">7.70</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="na">na</td>
+            <td>
+                <div align="right">01/01/2003</div>
+            </td>
+        </tr>
+        <tr>
+            <td>The Dark Half</td>
+            <td>Stephen King</td>
+            <td>
+                <div align="right">0</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="48">2 Days</td>
+            <td>
+                <div align="right">10/30/1999</div>
+            </td>
+        </tr>
+        <tr>
+            <td>The Partner</td>
+            <td>John Grisham</td>
+            <td>
+                <div align="right">12.99</div>
+            </td>
+            <td data-tf-sortKey="0">
+                <input type="checkbox" disabled="disabled" value="" />
+            </td>
+            <td data-tf-sortKey="24">24 Hours</td>
+            <td>
+                <div align="right">01/01/2005</div>
+            </td>
+        </tr>
+        <tr>
+            <td>It</td>
+            <td>Stephen King</td>
+            <td>
+                <div align="right">9.70</div>
+            </td>
+            <td data-tf-sortKey="0">
+                <input type="checkbox" disabled="disabled" value="" />
+            </td>
+            <td data-tf-sortKey="12">12 Hours</td>
+            <td>
+                <div align="right">10/15/2001</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Cousin Bette</td>
+            <td>Honore de Balzac</td>
+            <td>
+                <div align="right">0</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="1">1 Hour</td>
+            <td>
+                <div align="right">12/01/1991</div>
+            </td>
+        </tr>
+        <tr>
+            <td>The Testament</td>
+            <td>John Grisham</td>
+            <td>
+                <div align="right">19.10</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="48">2 Days</td>
+            <td>
+                <div align="right">12/17/1999</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Eugene Onegin</td>
+            <td>Alexandr Pushkin</td>
+            <td>
+                <div align="right">11.20</div>
+            </td>
+            <td data-tf-sortKey="0">
+                <input type="checkbox" disabled="disabled" value="" />
+            </td>
+            <td data-tf-sortKey="24">24 Hours</td>
+            <td>
+                <div align="right">09/27/2005</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Dark Avenues</td>
+            <td>Ivan Bunin</td>
+            <td>
+                <div align="right">14.96</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="1">1 Hour</td>
+            <td>
+                <div align="right">10/01/2008</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Father Goriot</td>
+            <td>Honore de Balzac</td>
+            <td>
+                <div align="right">9.99</div>
+            </td>
+            <td data-tf-sortKey="0">
+                <input type="checkbox" disabled="disabled" value="" />
+            </td>
+            <td data-tf-sortKey="48">2 Days</td>
+            <td>
+                <div align="right">06/06/2010</div>
+            </td>
+        </tr>
+        <tr>
+            <td>The Captain's Daughter</td>
+            <td>Alexandr Pushkin</td>
+            <td>
+                <div align="right">10.21</div>
+            </td>
+            <td data-tf-sortKey="0">
+                <input type="checkbox" disabled="disabled" value="" />
+            </td>
+            <td data-tf-sortKey="48">2 Days</td>
+            <td>
+                <div align="right">03/01/2001</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Hamlet</td>
+            <td>William Shakespeare</td>
+            <td>
+                <div align="right">5.99</div>
+            </td>
+            <td data-tf-sortKey="0">
+                <input type="checkbox" disabled="disabled" value="" />
+            </td>
+            <td data-tf-sortKey="1">1 Hour</td>
+            <td>
+                <div align="right">04/15/2003</div>
+            </td>
+        </tr>
+        <tr>
+            <td>The Village</td>
+            <td>Ivan Bunin</td>
+            <td>
+                <div align="right">11.66</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="24">24 Hours</td>
+            <td>
+                <div align="right">01/02/2010</div>
+            </td>
+        </tr>
+        <tr>
+            <td>The Winter's Tale</td>
+            <td>William Shakespeare</td>
+            <td>
+                <div align="right">19.31</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="1">1 Hour</td>
+            <td>
+                <div align="right">02/12/2010</div>
+            </td>
+        </tr>
+        <tr>
+            <td>The Black Sheep</td>
+            <td>Honore de Balzac</td>
+            <td>
+                <div align="right">16.00</div>
+            </td>
+            <td data-tf-sortKey="0">
+                <input type="checkbox" disabled="disabled" value="" />
+            </td>
+            <td data-tf-sortKey="1">1 Hour</td>
+            <td>
+                <div align="right">08/28/1976</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Lost Illusions</td>
+            <td>Honore de Balzac</td>
+            <td>
+                <div align="right">8.0</div>
+            </td>
+            <td data-tf-sortKey="1">
+                <input type="checkbox" disabled="disabled" value="" checked="checked" />
+            </td>
+            <td data-tf-sortKey="na">na</td>
+            <td>
+                <div align="right">07/10/2010</div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+<script src="tablefilter/tablefilter.js"></script>
+
+
+<script data-config>
+    var tfConfig = {
+        base_path: 'tablefilter/',
+        filters_row_index: 2,
+        headers_row_index: 1,
+        sort: true,
+        col_number_format: [
+            null, null, 'US',
+            null, null, null
+        ],
+        col_date_type: [
+            null, null, null,
+            null, null, 'mdy'
+        ],
+        rows_counter: true,
+        rows_counter_text: 'Books: ',
+        alternate_rows: true,
+        btn_reset: true,
+        mark_active_columns: true,
+
+        /* filter types*/
+        col_3: 'select',
+        col_4: 'select',
+
+        /* delegate for filtering 'In store' column */
+        custom_cell_data_cols: [3],
+        custom_cell_data: function(o, cell, colIndex){
+            if(colIndex === 3){
+                var chk = cell.getElementsByTagName('input')[0];
+                if(!chk){
+                    return '';
+                }
+                if(chk.checked){
+                    return 'yes';
+                } else {
+                    return 'no';
+                }
+            }
+        },
+
+        /* custom options for 'Shipping' column */
+        custom_options: {
+            cols: [4],
+            texts: [
+                ['1 Hour','12 Hours','24 Hours','2 Days','na']
+            ],
+            values: [
+                ['1 Hour','12 Hours','24 Hours','2 Days','na']
+            ],
+            sorts: [false]
+        },
+
+        /* theme */
+        themes: [{ name: 'default' }],
+
+        extensions: [{ name: 'sort' }]
+    };
+
+    var tf = new TableFilter('books', tfConfig, 2);
+    tf.init();
+
+    // TableFilter themes
+    var THEMES = {
+        'default': tf.themesPath + 'default/default.css',
+        'mytheme': tf.themesPath + 'mytheme/mytheme.css',
+        'skyblue': tf.themesPath + 'skyblue/skyblue.css'
+    };
+
+    function changeTheme(name){
+        var stylesheet = tf.getStylesheet('default');
+        stylesheet.href = THEMES[name];
+    }
+</script>
+
+<p>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre></pre>
+<script src="assets/js/js-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+</p>
+
+<h4>Markup</h4>
+<div class="alert alert-warning" role="alert">
+    NOTE: the theme selector is designed using Bootstrap's form classes.
+</div>
+<pre>
+&lt;div class="form-inline form-group"&gt;
+    &lt;label&gt;Theme:
+        &lt;select onchange="javascript:changeTheme(this.value);" class="form-control"&gt;
+            &lt;option value="default" selected="selected"&gt;default&lt;/option&gt;
+            &lt;option value="mytheme"&gt;mytheme&lt;/option&gt;
+            &lt;option value="skyblue"&gt;skyblue&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/label&gt;
+&lt;/div&gt;
+</pre>
+
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <script src="assets/js/github-fork-me.js"></script>
+
+  </body>
+</html>

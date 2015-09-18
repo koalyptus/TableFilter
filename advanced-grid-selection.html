@@ -51,9 +51,15 @@
             
         
             
+        
+            
             <li>
               <a href="examples.html">Examples</a>
             </li>
+            
+        
+            
+        
             
         
             
@@ -13217,7 +13223,24 @@ ezEditTable</a>
 
 
 </p>
+<h4>Markup</h4>
+<pre>
+&lt;div class="ezCommandEditor"&gt;
+    &lt;input onclick="var ezEditTable = tf.extension('advancedGrid')._ezEditTable;
+        if(this.checked){
+            ezEditTable.selectionModel = 'multiple';
+        } else {
+            ezEditTable.selectionModel = 'single';
+        }" name="chkMultipleSlc" id="chkMultipleSlc" type="checkbox"&gt;
+    &lt;label for="chkMultipleSlc"&gt;Multiple selection&lt;/label&gt;
+&lt;/div&gt;
 
+&lt;div class="ezCommandEditor"&gt;
+    &lt;button onclick="alert( tf.extension('advancedGrid')._ezEditTable.Selection.GetActiveRowValues() );"&gt;Active row data&lt;/button&gt;
+    &lt;button onclick="alert( tf.extension('advancedGrid')._ezEditTable.Selection.GetSelectedValues() );"&gt;Selected rows data&lt;/button&gt;
+    &lt;button onclick="tf.extension('advancedGrid')._ezEditTable.Selection.ClearSelections();"&gt;Clear Selection&lt;/button&gt;
+&lt;/div&gt;
+</pre>
 
     </div>
 

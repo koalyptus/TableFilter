@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Filters visibility extension | TableFilter</title>
+    <title>Columns visibility extension | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -117,9 +117,19 @@
 
       
 
-<h1>Filters visibility extension</h1>
+<h1>Columns visibility extension</h1>
 <p>
-    This demo features the filters visibility extension.
+    This demo features the columns visibility extension. This feature allows
+    users to toggle the visibility of a desired column.
+</p>
+
+<p>
+    <button onclick="javascript:
+        tf.extension('colsVisibility').hideCol(0);">Hide Column 0</button>
+    <button onclick="javascript:
+        tf.extension('colsVisibility').showCol(0);">Show Column 0</button>
+    <button onclick="javascript:
+        tf.extension('colsVisibility').toggleCol(2);">Toggle Column 2</button>
 </p>
 
 
@@ -2723,21 +2733,31 @@
 <script data-config>
     var tfConfig = {
         base_path: 'tablefilter/',
-        col_1: 'multiple',
-        col_widths: [
-            '75px', '200px', '120px',
-            '100px', '75px', '350px'
-        ],
         paging: true,
+        remember_grid_values: true,
         alternate_rows: true,
         rows_counter: true,
         btn_reset: true,
-        loader: true,
+        btn_reset_text: 'Clear',
         status_bar: true,
-        extensions: [{
-            name: 'filtersVisibility',
-            visible_at_start: false
-        }]
+        col_1: 'select',
+        col_2: 'select',
+
+        /* columns visibility and sort extension */
+        extensions:[
+            {
+                name: 'colsVisibility',
+                at_start: [3, 5],
+                text: 'Columns: ',
+                enable_tick_all: true
+            }, {
+                name: 'sort',
+                types: [
+                    'number', 'string', 'string',
+                    'US', 'none', 'string'
+                ]
+            }
+        ]
     };
     var tf = new TableFilter('demo', tfConfig);
     tf.init();
@@ -2778,6 +2798,16 @@
 
 
 </p>
+
+<h4>Markup</h4>
+<pre>
+&lt;button onclick="javascript:
+    tf.extension('colsVisibility').hideCol(0);"&gt;Hide Column 0&lt;/button&gt;
+&lt;button onclick="javascript:
+    tf.extension('colsVisibility').showCol(0);"&gt;Show Column 0&lt;/button&gt;
+&lt;button onclick="javascript:
+    tf.extension('colsVisibility').toggleCol(2);"&gt;Toggle Column 2&lt;/button&gt;
+</pre>
 
 
     </div>
