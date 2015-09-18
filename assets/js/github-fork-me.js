@@ -2,11 +2,11 @@
 (function(win, doc){
     win.onresize = displayForkMe;
     function displayForkMe(){
-        var forkMe = doc.getElementById('forkMe');
-        if(forkMe){
-            forkMe.parentNode.removeChild(forkMe);
-        }
-        if(Math.max(doc.documentElement.clientWidth, win.innerWidth || 0) > 1300) {
+        if(Math.max(doc.documentElement.clientWidth, win.innerWidth || 0) > 1350) {
+            var forkMe = doc.getElementById('forkMe');
+            if(forkMe){
+                forkMe.parentNode.removeChild(forkMe);
+            }
             var frag = doc.createDocumentFragment();
             var cont = doc.createElement('div');
             cont.id = 'forkMe';

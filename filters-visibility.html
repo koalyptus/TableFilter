@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Linked filters | TableFilter</title>
+    <title>Filters visibility extension | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -111,11 +111,9 @@
 
       
 
-<h1>Linked filters</h1>
+<h1>Filters visibility extension</h1>
 <p>
-    This demo features the linked filters behaviour. In this mode, the drop-down
-    filters are linked, that is, when a column is filtered only the valid values
-    of the other columns are included in their respective filters.
+    This demo features the filters visibility extension.
 </p>
 
 
@@ -2717,29 +2715,25 @@
 
 
 <script data-config>
-    var filtersConfig = {
+    var tfConfig = {
         base_path: 'tablefilter/',
-        linked_filters: true,
         col_1: 'multiple',
-        col_2: 'checklist',
-        btn_reset: true,
-        display_all_text: '< Clear >',
+        col_widths: [
+            '75px', '200px', '120px',
+            '100px', '75px', '350px'
+        ],
+        paging: true,
         alternate_rows: true,
         rows_counter: true,
-        enable_default_theme: true,
-        col_widths: [
-            '75px', '150px', '200px',
-            '100px', '100px', '350px'
-        ],
-        extensions:[{
-            name: 'sort',
-            types: [
-                'number', 'string', 'string',
-                'US', 'none', 'none'
-            ]
+        btn_reset: true,
+        loader: true,
+        status_bar: true,
+        extensions: [{
+            name: 'filtersVisibility',
+            visible_at_start: false
         }]
     };
-    var tf = new TableFilter('demo', filtersConfig);
+    var tf = new TableFilter('demo', tfConfig);
     tf.init();
 </script>
 
