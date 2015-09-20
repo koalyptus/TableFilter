@@ -1,0 +1,7 @@
+node_modules
+.grunt
+
+npm-debug.log
+*.js.map
+.codio
+.settings
