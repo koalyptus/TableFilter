@@ -3,7 +3,7 @@ var id = function (id){ return document.getElementById(id); };
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
     col_3: 'checklist',
-    fill_slc_on_demand: false
+    load_filters_on_demand: false
 });
 tf.init();
 

@@ -271,8 +271,8 @@ export class TableFilter{
         //enables/disables descending numeric options sorting
         this.isSortNumDesc = Boolean(f.sort_num_desc);
         this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : null;
-        //enabled selects are populated on demand
-        this.fillSlcOnDemand = Boolean(f.fill_slc_on_demand);
+        //Select filters are populated on demand
+        this.loadFltOnDemand = Boolean(f.load_filters_on_demand);
         this.hasCustomOptions = Types.isObj(f.custom_options);
         this.customOptions = f.custom_options;
 
@@ -567,7 +567,7 @@ export class TableFilter{
                 this.activeFilterId = elm.getAttribute('id');
                 this.activeFlt = Dom.id(this.activeFilterId);
                 // select is populated when element has focus
-                if(this.fillSlcOnDemand && elm.getAttribute('filled') === '0'){
+                if(this.loadFltOnDemand && elm.getAttribute('filled') === '0'){
                     let ct = elm.getAttribute('ct');
                     this.Mod.dropdown._build(ct);
                 }
@@ -587,7 +587,7 @@ export class TableFilter{
             onCheckListClick(e) {
                 let _ev = e || global.event;
                 let elm = Event.target(_ev);
-                if(this.fillSlcOnDemand && elm.getAttribute('filled') === '0'){
+                if(this.loadFltOnDemand && elm.getAttribute('filled') === '0'){
                     let ct = elm.getAttribute('ct');
                     this.Mod.checkList._build(ct);
                     this.Mod.checkList.checkListDiv[ct].onclick = null;
@@ -756,7 +756,7 @@ export class TableFilter{
 
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
 
-                        if(!this.fillSlcOnDemand){
+                        if(!this.loadFltOnDemand){
                             dropdown._build(i);
                         }
 
@@ -768,7 +768,7 @@ export class TableFilter{
 
                         //1st option is created here since dropdown.build isn't
                         //invoked
-                        if(this.fillSlcOnDemand){
+                        if(this.loadFltOnDemand){
                             let opt0 = Dom.createOpt(this.displayAllText, '');
                             slc.appendChild(opt0);
                         }
@@ -794,11 +794,11 @@ export class TableFilter{
 
                         checkList.checkListDiv[i] = divCont;
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
-                        if(!this.fillSlcOnDemand){
+                        if(!this.loadFltOnDemand){
                             checkList._build(i);
                         }
 
-                        if(this.fillSlcOnDemand){
+                        if(this.loadFltOnDemand){
                             Event.add(divCont, 'click',
                                 this.Evt.onCheckListClick.bind(this));
                             divCont.appendChild(
@@ -1381,8 +1381,8 @@ export class TableFilter{
      * Reset persisted filter values
      */
     _resetValues(){
-        //only fillSlcOnDemand
-        if(this.rememberGridValues && this.fillSlcOnDemand){
+        //only loadFltOnDemand
+        if(this.rememberGridValues && this.loadFltOnDemand){
             this._resetGridValues(this.fltsValuesCookie);
         }
         if(this.rememberPageLen && this.Mod.paging){
@@ -1399,7 +1399,7 @@ export class TableFilter{
      * @param  {String} name cookie name storing filter values
      */
     _resetGridValues(name){
-        if(!this.fillSlcOnDemand){
+        if(!this.loadFltOnDemand){
             return;
         }
         let fltsValues = this.Mod.store.getFilterValues(name),
@@ -1414,7 +1414,7 @@ export class TableFilter{
                 }
                 let s, opt;
                 let fltType = this.getFilterType(i);
-                // if fillSlcOnDemand, drop-down needs to contain stored
+                // if loadFltOnDemand, drop-down needs to contain stored
                 // value(s) for filtering
                 if(fltType===this.fltTypeSlc || fltType===this.fltTypeMulti){
                     let slc = Dom.id( this.fltIds[i] );
@@ -2432,7 +2432,7 @@ export class TableFilter{
                 }
 
                 //1st option needs to be inserted
-                if(this.fillSlcOnDemand) {
+                if(this.loadFltOnDemand) {
                     let opt0 = Dom.createOpt(this.displayAllText, '');
                     if(curSlc){
                         curSlc.appendChild(opt0);

@@ -263,7 +263,7 @@ export class Dropdown{
 
             if(fillMethod === 'innerhtml'){
                 var slcAttr = '';
-                if(tf.fillSlcOnDemand && slcValue===this.opts[y]){
+                if(tf.loadFltOnDemand && slcValue===this.opts[y]){
                     slcAttr = 'selected="selected"';
                 }
                 this.slcInnerHtml += '<option value="'+val+'" ' + slcAttr +
@@ -272,7 +272,7 @@ export class Dropdown{
             } else {
                 var opt;
                 //fill select on demand
-                if(tf.fillSlcOnDemand && slcValue===this.opts[y] &&
+                if(tf.loadFltOnDemand && slcValue===this.opts[y] &&
                     tf['col'+colIndex]===tf.fltTypeSlc){
                     opt = Dom.createOpt(lbl, val, true);
                 } else {

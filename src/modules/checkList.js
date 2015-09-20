@@ -224,7 +224,7 @@ export class CheckList{
 
         this.addChecks(colIndex, ul, tf.separator);
 
-        if(tf.fillSlcOnDemand){
+        if(tf.loadFltOnDemand){
             flt.innerHTML = '';
         }
         flt.appendChild(ul);
