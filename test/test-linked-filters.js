@@ -16,7 +16,7 @@
         deepEqual(tf.linkedFilters, true, 'Linked filters enabled');
     });
 
-    var option = document.getElementById('flt1_demo_1');
+    var option = id('flt1_demo_1');
     option.click();
 
     function testLinked(tf) {
