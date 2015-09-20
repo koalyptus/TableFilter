@@ -1,6 +1,11 @@
 import Dom from '../dom';
 import Event from '../event';
 
+
+const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
+                    '4.-Filter-operators';
+const WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';
+
 export class Help{
 
     /**
@@ -24,9 +29,8 @@ export class Help{
             'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
             '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
             '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
-            '<b>rgx:</b><br/>' +
-            '<a href="https://github.com/koalyptus/TableFilter/wiki/' +
-            '4.-Filter-operators" target="_blank">Learn more</a><hr/>';
+            '<b>rgx:</b><br/><a href="'+ WIKI_URL +'" target="_blank">' +
+            'Learn more</a><hr/>';
         //defines help innerHtml
         this.instrHtml = f.help_instructions_html || null;
         //defines reset button text
@@ -44,8 +48,7 @@ export class Help{
         this.cont = null;
         this.defaultHtml = '<div class="helpFooter"><h4>TableFilter ' +
             'v'+ tf.version +'</h4>' +
-            '<a href="https://github.com/koalyptus/TableFilter/" ' +
-            ' target="_blank">https://github.com/koalyptus/TableFilter/</a>' +
+            '<a href="'+ WEBSITE_URL +'" target="_blank">'+ WEBSITE_URL +'</a>'+
             '<br/><span>&copy;2015-'+ tf.year +' {AUTHOR}</span>' +
             '<div align="center" style="margin-top:8px;">' +
             '<a href="javascript:void(0);" class="close">Close</a></div></div>';
