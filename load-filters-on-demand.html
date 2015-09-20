@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Editable advanced grid | TableFilter</title>
+    <title>Load filters on demand | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -120,57 +120,17 @@
     <div class="container theme-showcase" role="main">
 
       
-<link rel="stylesheet" type="text/css" href="tablefilter/style/tablefilter.css">
-<h1>Editable advanced grid</h1>
+
+<h1>Load filters on demand</h1>
 
 <p>
-    To make the grid cells editable, you need to import the
-    <a href="http://edittable.free.fr/zip.php?f=ezEditTable.zip&amp;p=1"
-target="_blank"
-title="ezEditTable is a javascript code aimed at enhancing regular HTML
-tables by adding features such as inline editing components, advanced
-selection and keyboard navigation - Developed by Max Guglielmi">
-ezEditTable</a>
- plugin, enable the <code>editable</code> property
-    and configure the <code>advancedGrid</code> extension with the
-    <a href="http://edittable.free.fr/zip.php?f=ezEditTable.zip&amp;p=1"
-target="_blank"
-title="ezEditTable is a javascript code aimed at enhancing regular HTML
-tables by adding features such as inline editing components, advanced
-selection and keyboard navigation - Developed by Max Guglielmi">
-ezEditTable</a>
- options.
+    Drop-down type filter options are loaded only when used the first time.
 </p>
+
 <div class="alert alert-info" role="alert">
-    <p>
-        Instructions: Double-click on a cell or press <code>enter</code> key to
-        trigger the inline editor.
-        <br>
-        NOTE: Data changes are not persisted in this demo.
-    </p>
+    Instructions: click on a drop-down type filter to load its options.
 </div>
 
-
-<div class="ezCommandEditor">
-    <button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.Edit();">
-        <img src="http://edittable.free.fr/ezEditTable/themes/icn_edit.gif" alt="Edit record">
-    </button>
-    <button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.AddNewRow();">
-        <img src="http://edittable.free.fr/ezEditTable/themes/icn_add.gif" alt="Add record">
-    </button>
-    <button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.SubmitDeletedRows();">
-        <img src="http://edittable.free.fr/ezEditTable/themes/icn_del.gif" alt="Delete record">
-    </button>
-</div>
 
 
 <table id="demo">
@@ -13128,111 +13088,29 @@ ezEditTable</a>
 </table>
 
 
-<p></p>
-
-<div class="alert alert-warning" role="alert">
-    <code>TableFilter</code> imports the required stylesheets dynamically.
-    However, if you use <code>grid_layout</code>, it is recommended to
-    import the main stylesheet in your page: <br>
-    <code>
-&lt;link rel="stylesheet" type="text/css" href="{your path to tablefilter}/style/tablefilter.css" /&gt;
-    </code>
-</div>
-
 
 <script src="tablefilter/tablefilter.js"></script>
 
 
 <script data-config>
-    var filtersConfig = {
+    var tfConfig = {
         base_path: 'tablefilter/',
-        grid_layout: true,
-        grid_width: '900px',
-        alternate_rows: true,
-        btn_reset: true,
-        rows_counter: true,
-        loader: true,
-        status_bar: true,
-        col_1: 'select',
-        col_2: 'select',
         col_widths: [
-            '150px', '90px', '70px',
-            '120px', '120px', '100px',
-            '100px', '100px', '100px'
+            "180px", "120px", "120px",
+            null, null, null,
+            null, null, null
         ],
-        extensions:[
-            {
-                name: 'advancedGrid',
-                // For the purpose of this demo, ezEditTable dependency
-                // is loaded from its own website which is not a CDN.
-                // This dependency also requires a licence therefore
-                // DO NOT import it in this way in your projects.
-                filename: 'ezEditTable_min.js',
-                vendor_path: 'http://edittable.free.fr/ezEditTable/',
-                // Once ezEditTable dependency is installed in your
-                // project import it by pointing to a local path:
-                // vendor_path: 'path/to/ezEditTable'
-
-                // Below ezEditTable options for activating:
-                // - row/cells selection
-                // - cell inline edition
-                editable: true,
-                selection: true,
-                default_selection: 'both',
-
-                editor_model: 'cell',
-                cell_editors: [
-                    { type: 'textarea', attributes: [['title', 'Country name']]},
-                    { type: 'input', attributes: [['title', 'ISO code']]},
-                    { type: 'select', attributes: [['title', 'Year']]},
-                    { type: 'input' },
-                    { type: 'input' },
-                    { type: 'input' },
-                    { type: 'input' },
-                    { type: 'input' },
-                    { type: 'input' }
-                ],
-
-                actions:{
-                    'update': {
-                        uri: null,
-                        submit_method: 'form',
-                        form_method: 'POST'
-                    },
-                    'insert': {
-                        uri: null,
-                        submit_method: 'form',
-                        form_method: 'POST',
-                        default_record: [
-                            'Country name',
-                            'ISO code',
-                            'Year',
-                            'Population',
-                            'XRAT',
-                            'PPP',
-                            'cgdp',
-                            'cc',
-                            'ci'
-                        ]
-                    },
-                    'delete': {
-                        uri: null,
-                        submit_method: 'script',
-                        bulk_delete: false
-                    }
-                }
-            }, {
-                name: 'sort',
-                types: [
-                    'string', 'string', 'number',
-                    'number', 'number', 'number',
-                    'number', 'number', 'number'
-                ]
-            }
-        ]
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: true,
+        status_bar: true,
+        paging: true,
+        fill_slc_on_demand: true,
+        col_0: 'multiple',
+        col_1: 'select',
+        col_2: 'checklist'
     };
-
-    var tf = new TableFilter('demo', filtersConfig);
+    var tf = new TableFilter('demo', tfConfig);
     tf.init();
 </script>
 
@@ -13271,30 +13149,6 @@ ezEditTable</a>
 
 
 </p>
-
-<h4>Markup</h4>
-<pre>
-&lt;div class="ezCommandEditor"&gt;
-    &lt;button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.Edit();"&gt;
-        &lt;img src="http://edittable.free.fr/ezEditTable/themes/icn_edit.gif" alt="Edit record"&gt;
-    &lt;/button&gt;
-    &lt;button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.AddNewRow();"&gt;
-        &lt;img src="http://edittable.free.fr/ezEditTable/themes/icn_add.gif" alt="Add record"&gt;
-    &lt;/button&gt;
-    &lt;button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.SubmitDeletedRows();"&gt;
-        &lt;img src="http://edittable.free.fr/ezEditTable/themes/icn_del.gif" alt="Delete record"&gt;
-    &lt;/button&gt;
-&lt;/div&gt;
-</pre>
 
     </div>
 
