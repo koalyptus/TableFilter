@@ -330,7 +330,7 @@ export class Dropdown{
 
             if(fillMethod === &apos;innerhtml&apos;){
                 var slcAttr = &apos;&apos;;
-                if(tf.fillSlcOnDemand &amp;&amp; slcValue===this.opts[y]){
+                if(tf.loadFltOnDemand &amp;&amp; slcValue===this.opts[y]){
                     slcAttr = &apos;selected=&quot;selected&quot;&apos;;
                 }
                 this.slcInnerHtml += &apos;&lt;option value=&quot;&apos;+val+&apos;&quot; &apos; + slcAttr +
@@ -339,7 +339,7 @@ export class Dropdown{
             } else {
                 var opt;
                 //fill select on demand
-                if(tf.fillSlcOnDemand &amp;&amp; slcValue===this.opts[y] &amp;&amp;
+                if(tf.loadFltOnDemand &amp;&amp; slcValue===this.opts[y] &amp;&amp;
                     tf[&apos;col&apos;+colIndex]===tf.fltTypeSlc){
                     opt = Dom.createOpt(lbl, val, true);
                 } else {

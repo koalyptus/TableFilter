@@ -68,6 +68,11 @@
 <pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
 import Event from &apos;../event&apos;;
 
+
+const WIKI_URL = &apos;https://github.com/koalyptus/TableFilter/wiki/&apos; +
+                    &apos;4.-Filter-operators&apos;;
+const WEBSITE_URL = &apos;http://koalyptus.github.io/TableFilter/&apos;;
+
 export class Help{
 
     /**
@@ -91,9 +96,8 @@ export class Help{
             &apos;operators: &lt;br /&gt;&lt;b&gt;&amp;lt;&lt;/b&gt;, &lt;b&gt;&amp;lt;=&lt;/b&gt;, &lt;b&gt;&amp;gt;&lt;/b&gt;, &apos; +
             &apos;&lt;b&gt;&amp;gt;=&lt;/b&gt;, &lt;b&gt;=&lt;/b&gt;, &lt;b&gt;*&lt;/b&gt;, &lt;b&gt;!&lt;/b&gt;, &lt;b&gt;{&lt;/b&gt;, &lt;b&gt;}&lt;/b&gt;, &apos; +
             &apos;&lt;b&gt;||&lt;/b&gt;,&lt;b&gt;&amp;amp;&amp;amp;&lt;/b&gt;, &lt;b&gt;[empty]&lt;/b&gt;, &lt;b&gt;[nonempty]&lt;/b&gt;, &apos; +
-            &apos;&lt;b&gt;rgx:&lt;/b&gt;&lt;br/&gt;&apos; +
-            &apos;&lt;a href=&quot;https://github.com/koalyptus/TableFilter/wiki/&apos; +
-            &apos;4.-Filter-operators&quot; target=&quot;_blank&quot;&gt;Learn more&lt;/a&gt;&lt;hr/&gt;&apos;;
+            &apos;&lt;b&gt;rgx:&lt;/b&gt;&lt;br/&gt;&lt;a href=&quot;&apos;+ WIKI_URL +&apos;&quot; target=&quot;_blank&quot;&gt;&apos; +
+            &apos;Learn more&lt;/a&gt;&lt;hr/&gt;&apos;;
         //defines help innerHtml
         this.instrHtml = f.help_instructions_html || null;
         //defines reset button text
@@ -111,8 +115,7 @@ export class Help{
         this.cont = null;
         this.defaultHtml = &apos;&lt;div class=&quot;helpFooter&quot;&gt;&lt;h4&gt;TableFilter &apos; +
             &apos;v&apos;+ tf.version +&apos;&lt;/h4&gt;&apos; +
-            &apos;&lt;a href=&quot;https://github.com/koalyptus/TableFilter/&quot; &apos; +
-            &apos; target=&quot;_blank&quot;&gt;https://github.com/koalyptus/TableFilter/&lt;/a&gt;&apos; +
+            &apos;&lt;a href=&quot;&apos;+ WEBSITE_URL +&apos;&quot; target=&quot;_blank&quot;&gt;&apos;+ WEBSITE_URL +&apos;&lt;/a&gt;&apos;+
             &apos;&lt;br/&gt;&lt;span&gt;&amp;copy;2015-&apos;+ tf.year +&apos; {AUTHOR}&lt;/span&gt;&apos; +
             &apos;&lt;div align=&quot;center&quot; style=&quot;margin-top:8px;&quot;&gt;&apos; +
             &apos;&lt;a href=&quot;javascript:void(0);&quot; class=&quot;close&quot;&gt;Close&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&apos;;

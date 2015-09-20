@@ -3324,12 +3324,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#fillslcondemand",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fillSlcOnDemand",
-    "src/tablefilter.js~TableFilter#fillSlcOnDemand",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#filter",
     "class/src/tablefilter.js~TableFilter.html#instance-method-filter",
     "src/tablefilter.js~TableFilter#filter",
@@ -3802,6 +3796,12 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-loadExtension",
     "src/tablefilter.js~TableFilter#loadExtension",
     "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#loadfltondemand",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-loadFltOnDemand",
+    "src/tablefilter.js~TableFilter#loadFltOnDemand",
+    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#loadthemes",

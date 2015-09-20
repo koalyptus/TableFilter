@@ -10,8 +10,8 @@
             "type": "Identifier",
             "name": "AdapterSortableTable",
             "range": [
-              41,
-              61
+              42,
+              62
             ],
             "loc": {
               "start": {
@@ -25,8 +25,8 @@
             }
           },
           "range": [
-            41,
-            61
+            42,
+            62
           ],
           "loc": {
             "start": {
@@ -45,8 +45,8 @@
         "value": "./adapterSortabletable",
         "raw": "'./adapterSortabletable'",
         "range": [
-          67,
-          91
+          68,
+          92
         ],
         "loc": {
           "start": {
@@ -60,8 +60,8 @@
         }
       },
       "range": [
-        34,
-        92
+        35,
+        93
       ],
       "loc": {
         "start": {
@@ -106,8 +106,8 @@
             "type": "Identifier",
             "name": "window",
             "range": [
-              98,
-              104
+              101,
+              107
             ],
             "loc": {
               "start": {
@@ -124,8 +124,8 @@
             "type": "Identifier",
             "name": "SortableTable",
             "range": [
-              105,
-              118
+              108,
+              121
             ],
             "loc": {
               "start": {
@@ -139,8 +139,8 @@
             }
           },
           "range": [
-            98,
-            118
+            101,
+            121
           ],
           "loc": {
             "start": {
@@ -155,8 +155,8 @@
         },
         "prefix": true,
         "range": [
-          97,
-          118
+          100,
+          121
         ],
         "loc": {
           "start": {
@@ -180,8 +180,8 @@
                 "type": "Identifier",
                 "name": "require",
                 "range": [
-                  125,
-                  132
+                  129,
+                  136
                 ],
                 "loc": {
                   "start": {
@@ -200,8 +200,8 @@
                   "value": "script!sortabletable",
                   "raw": "'script!sortabletable'",
                   "range": [
-                    133,
-                    155
+                    137,
+                    159
                   ],
                   "loc": {
                     "start": {
@@ -216,8 +216,8 @@
                 }
               ],
               "range": [
-                125,
-                156
+                129,
+                160
               ],
               "loc": {
                 "start": {
@@ -231,8 +231,8 @@
               }
             },
             "range": [
-              125,
-              157
+              129,
+              161
             ],
             "loc": {
               "start": {
@@ -247,8 +247,8 @@
           }
         ],
         "range": [
-          119,
-          159
+          122,
+          164
         ],
         "loc": {
           "start": {
@@ -263,8 +263,8 @@
       },
       "alternate": null,
       "range": [
-        94,
-        159
+        97,
+        164
       ],
       "loc": {
         "start": {
@@ -283,8 +283,8 @@
         "type": "Identifier",
         "name": "AdapterSortableTable",
         "range": [
-          176,
-          196
+          183,
+          203
         ],
         "loc": {
           "start": {
@@ -300,8 +300,8 @@
         "trailingComments": []
       },
       "range": [
-        161,
-        197
+        168,
+        204
       ],
       "loc": {
         "start": {
@@ -317,8 +317,8 @@
   ],
   "sourceType": "module",
   "range": [
-    34,
-    197
+    35,
+    204
   ],
   "loc": {
     "start": {
