@@ -25,7 +25,7 @@ function buildChecklist(tf, colIdx){
 
 
 module('Sanity checks');
-test('Selet type filters exist', function() {
+test('Select type filters exist', function() {
     deepEqual(tf.loadFltOnDemand, true, 'loadFltOnDemand property');
     notEqual(flt1, null, 'Filter 1 element exists');
     notEqual(flt2, null, 'Filter 2 element exists');
