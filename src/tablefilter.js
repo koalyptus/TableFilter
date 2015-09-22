@@ -1346,7 +1346,7 @@ export class TableFilter{
      * @return {Array}
      */
     getCustomOptions(colIndex){
-        if(!colIndex || !this.isCustomOptions(colIndex)){
+        if(Types.isEmpty(colIndex) || !this.isCustomOptions(colIndex)){
             return;
         }
 
