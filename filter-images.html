@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Theme roller | TableFilter</title>
+    <title>Filter and sort column with images | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -123,28 +123,32 @@
 
       
 
-<h1>Theme roller</h1>
+<h1>Filter and sort column with images</h1>
 
-<div class="form-inline form-group">
-    <label>Theme:
-        <select onchange="javascript:changeTheme(this.value);" class="form-control">
-            <option value="default" selected="selected">default</option>
-            <option value="mytheme">mytheme</option>
-            <option value="skyblue">skyblue</option>
-        </select>
-    </label>
+<p>
+    This demo shows how to filter and sort a column containing images by using
+    the <code>custom_cell_data</code> delegate and defining a
+    <code>data-tf-sortKey</code> attribute in the cells of the column.
+</p>
+
+<div class="alert alert-info" role="alert">
+    <code>TableFilter</code> automatically detects the presence of the
+    <code>data-tf-sortKey</code> attibute in a cell. If the <code>sort</code>
+    extension is enabled the sort mechanism will sort based the column on the
+    value specified in the <code>data-tf-sortKey</code> attibute.
 </div>
 
 
-<table id="books">
+<table id="demo">
     <thead>
         <tr>
-            <th colspan="2">Book</th>
+            <th colspan="3">Book</th>
             <th>Price</th>
             <th colspan="2">Delivery Items</th>
             <th>&nbsp;</th>
         </tr>
         <tr>
+            <th width="50">&nbsp;</th>
             <th width="210">Title</th>
             <th width="150">Author</th>
             <th width="50">$</th>
@@ -155,6 +159,9 @@
     </thead>
     <tbody>
         <tr>
+            <td data-tf-sortKey="new edition">
+                <img src="assets/images/img_new-edition.png" alt="new edition" />
+            </td>
             <td>Boris Godunov</td>
             <td>Alexandr Pushkin</td>
             <td>
@@ -169,6 +176,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="sold out">
+                <img src="assets/images/img_sold-out.png" alt="sold out" />
+            </td>
             <td>The Rainmaker</td>
             <td>John Grisham</td>
             <td>
@@ -183,6 +193,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="best price">
+                <img src="assets/images/img_best-price.png" alt="best price" />
+            </td>
             <td>The Green Mile</td>
             <td>Stephen King</td>
             <td>
@@ -197,6 +210,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="great deal">
+                <img src="assets/images/img_great-deal.png" alt="great deal" />
+            </td>
             <td>Misery</td>
             <td>Stephen King</td>
             <td>
@@ -211,6 +227,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="great deal">
+                <img src="assets/images/img_great-deal.png" alt="great deal" />
+            </td>
             <td>The Dark Half</td>
             <td>Stephen King</td>
             <td>
@@ -225,6 +244,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="sold out">
+                <img src="assets/images/img_sold-out.png" alt="sold out" />
+            </td>
             <td>The Partner</td>
             <td>John Grisham</td>
             <td>
@@ -239,6 +261,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="sold out">
+                <img src="assets/images/img_sold-out.png" alt="sold out" />
+            </td>
             <td>It</td>
             <td>Stephen King</td>
             <td>
@@ -253,6 +278,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="great deal">
+                <img src="assets/images/img_great-deal.png" alt="great deal" />
+            </td>
             <td>Cousin Bette</td>
             <td>Honore de Balzac</td>
             <td>
@@ -267,6 +295,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="great deal">
+                <img src="assets/images/img_great-deal.png" alt="great deal" />
+            </td>
             <td>The Testament</td>
             <td>John Grisham</td>
             <td>
@@ -281,6 +312,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="new edition">
+                <img src="assets/images/img_new-edition.png" alt="new edition" />
+            </td>
             <td>Eugene Onegin</td>
             <td>Alexandr Pushkin</td>
             <td>
@@ -295,6 +329,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="best price">
+                <img src="assets/images/img_best-price.png" alt="best price" />
+            </td>
             <td>Dark Avenues</td>
             <td>Ivan Bunin</td>
             <td>
@@ -309,6 +346,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="great deal">
+                <img src="assets/images/img_great-deal.png" alt="great deal" />
+            </td>
             <td>Father Goriot</td>
             <td>Honore de Balzac</td>
             <td>
@@ -323,6 +363,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="sold out">
+                <img src="assets/images/img_sold-out.png" alt="sold out" />
+            </td>
             <td>The Captain's Daughter</td>
             <td>Alexandr Pushkin</td>
             <td>
@@ -337,6 +380,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="sold out">
+                <img src="assets/images/img_sold-out.png" alt="sold out" />
+            </td>
             <td>Hamlet</td>
             <td>William Shakespeare</td>
             <td>
@@ -351,6 +397,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="best price">
+                <img src="assets/images/img_best-price.png" alt="best price" />
+            </td>
             <td>The Village</td>
             <td>Ivan Bunin</td>
             <td>
@@ -365,6 +414,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="new edition">
+                <img src="assets/images/img_new-edition.png" alt="new edition" />
+            </td>
             <td>The Winter's Tale</td>
             <td>William Shakespeare</td>
             <td>
@@ -379,6 +431,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="great deal">
+                <img src="assets/images/img_great-deal.png" alt="great deal" />
+            </td>
             <td>The Black Sheep</td>
             <td>Honore de Balzac</td>
             <td>
@@ -393,6 +448,9 @@
             </td>
         </tr>
         <tr>
+            <td data-tf-sortKey="new edition">
+                <img src="assets/images/img_new-edition.png" alt="new edition" />
+            </td>
             <td>Lost Illusions</td>
             <td>Honore de Balzac</td>
             <td>
@@ -415,77 +473,73 @@
 
 
 <script data-config>
-    var tfConfig = {
-        base_path: 'tablefilter/',
-        filters_row_index: 2,
-        headers_row_index: 1,
-        sort: true,
-        col_number_format: [
-            null, null, 'US',
-            null, null, null
-        ],
-        col_date_type: [
-            null, null, null,
-            null, null, 'mdy'
-        ],
-        rows_counter: true,
-        rows_counter_text: 'Books: ',
-        alternate_rows: true,
-        btn_reset: true,
-        mark_active_columns: true,
+var tfConfig = {
+    base_path: './tablefilter/',
+    filters_row_index: 2,
+    headers_row_index: 1,
+    col_number_format: [
+        null, null, null,
+        'US', null, null, null
+    ],
+    col_date_type: [
+        null, null, null,
+        null, null, null, 'mdy'
+    ],
+    rows_counter: true,
+    rows_counter_text: 'Books: ',
+    alternate_rows: true,
+    btn_reset: true,
 
-        /* filter types*/
-        col_3: 'select',
-        col_4: 'select',
+    /* filter types*/
+    col_0: 'select',
+    col_4: 'select',
+    col_5: 'select',
 
-        /* delegate for filtering 'In store' column */
-        custom_cell_data_cols: [3],
-        custom_cell_data: function(o, cell, colIndex){
-            if(colIndex === 3){
-                var chk = cell.getElementsByTagName('input')[0];
-                if(!chk){
-                    return '';
-                }
-                if(chk.checked){
-                    return 'yes';
-                } else {
-                    return 'no';
-                }
+    /* custom_cell_data delegate used for filtering images in a column */
+    custom_cell_data_cols: [0, 4],
+    custom_cell_data: function(o, cell, colIndex){
+        if(colIndex === 0){
+            var img = cell.getElementsByTagName('img')[0];
+            if(!img){
+                return '';
             }
-        },
+            return img.alt;
+        } else if(colIndex === 4){
+            var chk = cell.getElementsByTagName('input')[0];
+            if(chk.checked){
+                return 'yes';
+            } else {
+                return 'no';
+            }
+        }
+    },
 
-        /* custom options for 'Shipping' column */
-        custom_options: {
-            cols: [4],
-            texts: [
-                ['1 Hour','12 Hours','24 Hours','2 Days','na']
-            ],
-            values: [
-                ['1 Hour','12 Hours','24 Hours','2 Days','na']
-            ],
-            sorts: [false]
-        },
+    /* Custom options for 'Shipping' column */
+    custom_options: {
+        cols: [5],
+        texts: [
+            [
+                '1 Hour', '12 Hours', '24 Hours',
+                '2 Days', 'na'
+            ]
+        ],
+        values: [
+            [
+                '1 Hour', '12 Hours', '24 Hours',
+                '2 Days', 'na'
+            ]
+        ],
+        sorts: [false]
+    },
 
-        /* theme */
-        themes: [{ name: 'default' }],
+    /* SkyBlue theme */
+    themes: [{ name: 'skyblue'}],
 
-        extensions: [{ name: 'sort' }]
-    };
-
-    var tf = new TableFilter('books', tfConfig, 2);
-    tf.init();
-
-    // TableFilter themes
-    var THEMES = {
-        'default': tf.themesPath + 'default/default.css',
-        'mytheme': tf.themesPath + 'mytheme/mytheme.css',
-        'skyblue': tf.themesPath + 'skyblue/skyblue.css'
-    };
-
-    function changeTheme(name){
-        var stylesheet = tf.getStylesheet('default');
-        stylesheet.href = THEMES[name];
-    }
+    /* Sorting feature */
+    extensions: [{ name: 'sort' }]
+};
+var tf = new TableFilter('demo', 2, tfConfig);
+tf.init();
 </script>
 
 <p>
@@ -523,23 +577,6 @@
 
 
 </p>
-
-<h4>Markup</h4>
-<div class="alert alert-warning" role="alert">
-    NOTE: the theme selector is designed using Bootstrap's form classes.
-</div>
-<pre>
-&lt;div class="form-inline form-group"&gt;
-    &lt;label&gt;Theme:
-        &lt;select onchange="javascript:changeTheme(this.value);" class="form-control"&gt;
-            &lt;option value="default" selected="selected"&gt;default&lt;/option&gt;
-            &lt;option value="mytheme"&gt;mytheme&lt;/option&gt;
-            &lt;option value="skyblue"&gt;skyblue&lt;/option&gt;
-        &lt;/select&gt;
-    &lt;/label&gt;
-&lt;/div&gt;
-</pre>
-
 
     </div>
 
