@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>0 configuration | TableFilter</title>
+    <title>Pop-up filters | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -127,10 +127,11 @@
 
       
 
-<h1>Zero configuration</h1>
+<h1>Pop-up filters</h1>
+
 <p>
-    With no configuration, <code>TableFilter</code> adds by default a text-box
-    filter to each column.
+    This demo features the pop-up filter type enabled by the
+    <code>popup_filters</code> option.
 </p>
 
 
@@ -577,7 +578,27 @@
 
 
 <script data-config>
-    var tf = new TableFilter('demo');
+    var filtersConfig = {
+        base_path: 'tablefilter/',
+        col_1: 'select',
+        col_2: 'checklist',
+        col_8: 'none',
+        popup_filters: true,
+        auto_filter: true,
+        auto_filter_delay: 1100, //milliseconds
+        alternate_rows: true,
+        rows_counter: true,
+        rows_counter_text: "Rows: ",
+        btn_reset: true,
+        status_bar: true,
+        msg_filter: 'Filtering...',
+        col_widths:[
+            '125px', '90px', '100px',
+            '90px', '90px', '90px',
+            '90px', '90px', '90px'
+        ]
+    };
+    var tf = new TableFilter('demo', filtersConfig);
     tf.init();
 </script>
 
@@ -616,17 +637,6 @@
 
 
 </p>
-
-<div class="alert alert-warning" role="alert">
-    It is recommended to always define the <code>base_path</code> setting in
-    the configuration object. If not specified, the script will default to
-    <code>tablefilter/</code> directory:
-    <pre>
-your-page.html
-    |— tablefilter
-    </pre>
-</div>
-
 
     </div>
 
