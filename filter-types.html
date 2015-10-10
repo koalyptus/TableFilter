@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pop-up filters | TableFilter</title>
+    <title>Filter types | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -129,11 +129,12 @@
 
       
 
-<h1>Pop-up filters</h1>
+<h1>Filter types</h1>
 
 <p>
-    This demo features the pop-up filter type enabled by the
-    <code>popup_filters</code> option.
+    This demo shows all the type of filters currently available.
+    <code>TableFilter</code> adds by default the <code>input</code> filter type
+    to all the columns.
 </p>
 
 
@@ -582,22 +583,14 @@
 <script data-config>
     var filtersConfig = {
         base_path: 'tablefilter/',
+        col_0: 'checklist',
         col_1: 'select',
-        col_2: 'checklist',
+        col_2: 'multiple',
         col_8: 'none',
-        popup_filters: true,
-        auto_filter: true,
-        auto_filter_delay: 1100, //milliseconds
-        alternate_rows: true,
-        rows_counter: true,
-        rows_counter_text: "Rows: ",
-        btn_reset: true,
-        status_bar: true,
-        msg_filter: 'Filtering...',
-        col_widths:[
-            '125px', '90px', '100px',
-            '90px', '90px', '90px',
-            '90px', '90px', '90px'
+        col_widths: [
+            "180px", "120px", "120px",
+            '100px', '100px', '100px',
+            '100px', '100px', '100px'
         ]
     };
     var tf = new TableFilter('demo', filtersConfig);
