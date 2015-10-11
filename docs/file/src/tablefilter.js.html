@@ -756,9 +756,8 @@ export class TableFilter{
                     }
 
                     fltrow.className = this.fltsRowCssClass;
-                    //Disable for grid_layout
-                    if(this.isExternalFlt &amp;&amp;
-                        (!this.gridLayout || this.popUpFilters)){
+
+                    if(this.isExternalFlt || this.popUpFilters){
                         fltrow.style.display = &apos;none&apos;;
                     }
                 }
