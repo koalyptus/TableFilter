@@ -80,7 +80,7 @@ export class PopupFilter{
     init(){
         var tf = this.tf;
         for(var i=0; i<tf.nbCells; i++){
-            if(tf['col'+i] === tf.fltTypeNone){
+            if(tf.getFilterType(i) === tf.fltTypeNone){
                 continue;
             }
             var popUpSpan = Dom.create(
@@ -139,7 +139,7 @@ export class PopupFilter{
                     null, this, this.popUpFltElms[colIndex], colIndex);
             }
             popUpFltElm.style.display = 'block';
-            if(tf['col'+colIndex] === tf.fltTypeInp){
+            if(tf.getFilterType(colIndex) === tf.fltTypeInp){
                 var flt = tf.getFilterElement(colIndex);
                 if(flt){
                     flt.focus();

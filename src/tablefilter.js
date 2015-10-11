@@ -689,9 +689,8 @@ export class TableFilter{
                     }
 
                     fltrow.className = this.fltsRowCssClass;
-                    //Disable for grid_layout
-                    if(this.isExternalFlt &&
-                        (!this.gridLayout || this.popUpFilters)){
+
+                    if(this.isExternalFlt || this.popUpFilters){
                         fltrow.style.display = 'none';
                     }
                 }

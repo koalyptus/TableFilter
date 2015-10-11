@@ -249,35 +249,6 @@ export class GridLayout{
             sort[0].trigger_ids = sortTriggers;
         }
 
-        // if(this.gridEnableColResizer){
-        //     if(!tf.hasExtensions){
-        //         tf.extensions = {
-        //             name:['ColumnsResizer_'+tf.id],
-        //             src:[this.gridColResizerPath],
-        //             description:['Columns Resizing'],
-        //             initialize:[function(o){
-        //                 o.SetColsResizer('ColumnsResizer_'+o.id);}]
-        //         };
-        //         tf.hasExtensions = true;
-        //     } else {
-        //         if(!tf._containsStr(
-        //             'colsresizer',
-        //             Str.lower(tf.extensions.src.toString())) ){
-        //             tf.extensions.name.push('ColumnsResizer_'+tf.id);
-        //             tf.extensions.src.push(tf.gridColResizerPath);
-        //             tf.extensions.description.push('Columns Resizing');
-        //             tf.extensions.initialize.push(function(o){
-        //                 o.SetColsResizer('ColumnsResizer_'+o.id);});
-        //         }
-        //     }
-        // }
-
-        //Default columns resizer properties for grid layout
-        // f.col_resizer_cols_headers_table = this.headTbl.getAttribute('id');
-        // f.col_resizer_cols_headers_index = this.gridHeadRowIndex;
-        // f.col_resizer_width_adjustment = 0;
-        // f.col_enable_text_ellipsis = false;
-
         //Cols generation for all browsers excepted IE<=7
         this.tblHasColTag = Dom.tag(tbl, 'col').length > 0 ? true : false;
 
@@ -325,6 +296,10 @@ export class GridLayout{
                 afterColResizedFn.call(null,o,colIndex);
             }
         };
+
+        if(tf.popUpFilters){
+            filtersRow.style.display = 'none';
+        }
 
         if(tbl.clientWidth !== this.headTbl.clientWidth){
             tbl.style.width = this.headTbl.clientWidth+'px';
