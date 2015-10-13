@@ -192,6 +192,10 @@ export class TableFilter{
             f.on_after_filter : null;
         //enables/disables case sensitivity
         this.caseSensitive = Boolean(f.case_sensitive);
+        //has exact match per column
+        this.hasExactMatchByCol = Types.isArray(f.columns_exact_match);
+        this.exactMatchByCol = this.hasExactMatchByCol ?
+            f.columns_exact_match : [];
         //enables/disbles exact match for search
         this.exactMatch = Boolean(f.exact_match);
         //refreshes drop-down lists upon validation
@@ -1619,7 +1623,7 @@ export class TableFilter{
                 // searched keyword with * operator doesn't have to be a date
                 else if(re_lk.test(sA)){// like date
                     occurence = this._containsStr(
-                        sA.replace(re_lk,''), cell_data, null, false);
+                        sA.replace(re_lk,''), cell_data, false);
                 }
                 else if(isValidDate(sA,dtType)){
                     dte2 = formatDate(sA,dtType);
@@ -1677,17 +1681,17 @@ export class TableFilter{
                 //different
                 else if(hasDF){
                     occurence = this._containsStr(
-                        sA.replace(re_d, ''),cell_data) ? false : true;
+                        sA.replace(re_d, ''), cell_data) ? false : true;
                 }
                 //like
                 else if(hasLK){
                     occurence = this._containsStr(
-                        sA.replace(re_lk, ''), cell_data, null, false);
+                        sA.replace(re_lk, ''), cell_data, false);
                 }
                 //equal
                 else if(hasEQ){
                     occurence = this._containsStr(
-                        sA.replace(re_eq, ''), cell_data, null, true);
+                        sA.replace(re_eq, ''), cell_data, true);
                 }
                 //starts with
                 else if(hasST){
@@ -1720,10 +1724,9 @@ export class TableFilter{
                         let rgx = new RegExp(srchArg);
                         occurence = rgx.test(cell_data);
                     } catch(e) { occurence = false; }
-                }
-                else{
-                    occurence = this._containsStr(
-                        sA, cell_data, this.getFilterType(j));
+                } else {
+                    occurence = this._containsStr(sA, cell_data,
+                        this.isExactMatch(j));
                 }
 
             }//else
@@ -2518,27 +2521,36 @@ export class TableFilter{
     }
 
     /**
+     * Determines if passed filter column implements exact query match
+     * @param  {Number}  colIndex [description]
+     * @return {Boolean}          [description]
+     */
+    isExactMatch(colIndex){
+        let fltType = this.getFilterType(colIndex);
+        return this.exactMatchByCol[colIndex] || this.exactMatch ||
+            (fltType!==this.fltTypeInp);
+    }
+
+    /**
      * Checks if passed data contains the searched arg
      * @param  {String} arg         Search term
      * @param  {String} data        Data string
-     * @param  {String} fltType     Filter type ('input', 'select')
-     * @param  {Boolean} forceMatch Exact match
+     * @param  {Boolean} exactMatch Exact match
      * @return {Boolean]}
      *
      * TODO: move into string module, remove fltType in order to decouple it
      * from TableFilter module
      */
-    _containsStr(arg, data, fltType, forceMatch){
+    _containsStr(arg, data, exactMatch){
         // Improved by Cedric Wartel (cwl)
         // automatic exact match for selects and special characters are now
         // filtered
         let regexp,
-            modifier = (this.caseSensitive) ? 'g' : 'gi',
-            exactMatch = !forceMatch ? this.exactMatch : forceMatch;
-        if(exactMatch || (fltType!==this.fltTypeInp && fltType)){
+            modifier = this.caseSensitive ? 'g' : 'gi';
+        if(exactMatch){
             regexp = new RegExp(
                 '(^\\s*)'+ Str.rgxEsc(arg) +'(\\s*$)', modifier);
-        } else{
+        } else {
             regexp = new RegExp(Str.rgxEsc(arg), modifier);
         }
         return regexp.test(data);
