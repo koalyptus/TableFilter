@@ -3288,6 +3288,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#exactmatchbycol",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-exactMatchByCol",
+    "src/tablefilter.js~TableFilter#exactMatchByCol",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#execdelay",
     "class/src/tablefilter.js~TableFilter.html#instance-member-execDelay",
     "src/tablefilter.js~TableFilter#execDelay",
@@ -3612,6 +3618,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#hasexactmatchbycol",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-hasExactMatchByCol",
+    "src/tablefilter.js~TableFilter#hasExactMatchByCol",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#hasextension",
     "class/src/tablefilter.js~TableFilter.html#instance-method-hasExtension",
     "src/tablefilter.js~TableFilter#hasExtension",
@@ -3705,6 +3717,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#iscustomoptions",
     "class/src/tablefilter.js~TableFilter.html#instance-method-isCustomOptions",
     "src/tablefilter.js~TableFilter#isCustomOptions",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#isexactmatch",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-isExactMatch",
+    "src/tablefilter.js~TableFilter#isExactMatch",
     "method"
   ],
   [
