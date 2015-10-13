@@ -273,10 +273,10 @@ export class Dropdown{
                 var opt;
                 //fill select on demand
                 if(tf.loadFltOnDemand && slcValue===this.opts[y] &&
-                    tf['col'+colIndex]===tf.fltTypeSlc){
+                    tf.getFilterType(colIndex) === tf.fltTypeSlc){
                     opt = Dom.createOpt(lbl, val, true);
                 } else {
-                    if(tf['col'+colIndex]!==tf.fltTypeMulti){
+                    if(tf.getFilterType(colIndex) !== tf.fltTypeMulti){
                         opt = Dom.createOpt(
                             lbl,
                             val,
