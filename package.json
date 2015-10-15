@@ -1,7 +1,7 @@
 {
   "name": "TableFilter",
   "version": "0.0.1",
-  "description": "A Javascript library making HTML tables filterable and a bit more :)",
+  "description": "A Javascript library making HTML tables filterable and a bit more",
   "main": [
     "dist/tablefilter/tablefilter.js",
     "dist/tablefilter/tf-1.js",
