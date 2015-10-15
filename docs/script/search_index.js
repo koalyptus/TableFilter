@@ -2,115 +2,115 @@ window.esdocSearchIndex = [
   [
     "tablefilter/src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable",
     "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html",
-    "<span>AdapterEzEditTable</span> <span class=\"search-result-import-path\">TableFilter/src/extensions/advancedGrid/adapterEzEditTable.js</span>",
+    "<span>AdapterEzEditTable</span> <span class=\"search-result-import-path\">tablefilter/src/extensions/advancedGrid/adapterEzEditTable.js</span>",
     "class"
   ],
   [
     "tablefilter/src/extensions/sort/adaptersortabletable.js~adaptersortabletable",
     "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html",
-    "<span>AdapterSortableTable</span> <span class=\"search-result-import-path\">TableFilter/src/extensions/sort/adapterSortabletable.js</span>",
+    "<span>AdapterSortableTable</span> <span class=\"search-result-import-path\">tablefilter/src/extensions/sort/adapterSortabletable.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/alternaterows.js~alternaterows",
     "class/src/modules/alternateRows.js~AlternateRows.html",
-    "<span>AlternateRows</span> <span class=\"search-result-import-path\">TableFilter/src/modules/alternateRows.js</span>",
+    "<span>AlternateRows</span> <span class=\"search-result-import-path\">tablefilter/src/modules/alternateRows.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/checklist.js~checklist",
     "class/src/modules/checkList.js~CheckList.html",
-    "<span>CheckList</span> <span class=\"search-result-import-path\">TableFilter/src/modules/checkList.js</span>",
+    "<span>CheckList</span> <span class=\"search-result-import-path\">tablefilter/src/modules/checkList.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/clearbutton.js~clearbutton",
     "class/src/modules/clearButton.js~ClearButton.html",
-    "<span>ClearButton</span> <span class=\"search-result-import-path\">TableFilter/src/modules/clearButton.js</span>",
+    "<span>ClearButton</span> <span class=\"search-result-import-path\">tablefilter/src/modules/clearButton.js</span>",
     "class"
   ],
   [
     "tablefilter/src/extensions/colops/colops.js~colops",
     "class/src/extensions/colOps/colOps.js~ColOps.html",
-    "<span>ColOps</span> <span class=\"search-result-import-path\">TableFilter/src/extensions/colOps/colOps.js</span>",
+    "<span>ColOps</span> <span class=\"search-result-import-path\">tablefilter/src/extensions/colOps/colOps.js</span>",
     "class"
   ],
   [
     "tablefilter/src/extensions/colsvisibility/colsvisibility.js~colsvisibility",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html",
-    "<span>ColsVisibility</span> <span class=\"search-result-import-path\">TableFilter/src/extensions/colsVisibility/colsVisibility.js</span>",
+    "<span>ColsVisibility</span> <span class=\"search-result-import-path\">tablefilter/src/extensions/colsVisibility/colsVisibility.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/dropdown.js~dropdown",
     "class/src/modules/dropdown.js~Dropdown.html",
-    "<span>Dropdown</span> <span class=\"search-result-import-path\">TableFilter/src/modules/dropdown.js</span>",
+    "<span>Dropdown</span> <span class=\"search-result-import-path\">tablefilter/src/modules/dropdown.js</span>",
     "class"
   ],
   [
     "tablefilter/src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html",
-    "<span>FiltersVisibility</span> <span class=\"search-result-import-path\">TableFilter/src/extensions/filtersVisibility/filtersVisibility.js</span>",
+    "<span>FiltersVisibility</span> <span class=\"search-result-import-path\">tablefilter/src/extensions/filtersVisibility/filtersVisibility.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/gridlayout.js~gridlayout",
     "class/src/modules/gridLayout.js~GridLayout.html",
-    "<span>GridLayout</span> <span class=\"search-result-import-path\">TableFilter/src/modules/gridLayout.js</span>",
+    "<span>GridLayout</span> <span class=\"search-result-import-path\">tablefilter/src/modules/gridLayout.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/help.js~help",
     "class/src/modules/help.js~Help.html",
-    "<span>Help</span> <span class=\"search-result-import-path\">TableFilter/src/modules/help.js</span>",
+    "<span>Help</span> <span class=\"search-result-import-path\">tablefilter/src/modules/help.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/highlightkeywords.js~highlightkeyword",
     "class/src/modules/highlightKeywords.js~HighlightKeyword.html",
-    "<span>HighlightKeyword</span> <span class=\"search-result-import-path\">TableFilter/src/modules/highlightKeywords.js</span>",
+    "<span>HighlightKeyword</span> <span class=\"search-result-import-path\">tablefilter/src/modules/highlightKeywords.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/loader.js~loader",
     "class/src/modules/loader.js~Loader.html",
-    "<span>Loader</span> <span class=\"search-result-import-path\">TableFilter/src/modules/loader.js</span>",
+    "<span>Loader</span> <span class=\"search-result-import-path\">tablefilter/src/modules/loader.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/paging.js~paging",
     "class/src/modules/paging.js~Paging.html",
-    "<span>Paging</span> <span class=\"search-result-import-path\">TableFilter/src/modules/paging.js</span>",
+    "<span>Paging</span> <span class=\"search-result-import-path\">tablefilter/src/modules/paging.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/popupfilter.js~popupfilter",
     "class/src/modules/popupFilter.js~PopupFilter.html",
-    "<span>PopupFilter</span> <span class=\"search-result-import-path\">TableFilter/src/modules/popupFilter.js</span>",
+    "<span>PopupFilter</span> <span class=\"search-result-import-path\">tablefilter/src/modules/popupFilter.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/rowscounter.js~rowscounter",
     "class/src/modules/rowsCounter.js~RowsCounter.html",
-    "<span>RowsCounter</span> <span class=\"search-result-import-path\">TableFilter/src/modules/rowsCounter.js</span>",
+    "<span>RowsCounter</span> <span class=\"search-result-import-path\">tablefilter/src/modules/rowsCounter.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/statusbar.js~statusbar",
     "class/src/modules/statusBar.js~StatusBar.html",
-    "<span>StatusBar</span> <span class=\"search-result-import-path\">TableFilter/src/modules/statusBar.js</span>",
+    "<span>StatusBar</span> <span class=\"search-result-import-path\">tablefilter/src/modules/statusBar.js</span>",
     "class"
   ],
   [
     "tablefilter/src/modules/store.js~store",
     "class/src/modules/store.js~Store.html",
-    "<span>Store</span> <span class=\"search-result-import-path\">TableFilter/src/modules/store.js</span>",
+    "<span>Store</span> <span class=\"search-result-import-path\">tablefilter/src/modules/store.js</span>",
     "class"
   ],
   [
     "tablefilter/src/tablefilter.js~tablefilter",
     "class/src/tablefilter.js~TableFilter.html",
-    "<span>TableFilter</span> <span class=\"search-result-import-path\">TableFilter/src/tablefilter.js</span>",
+    "<span>TableFilter</span> <span class=\"search-result-import-path\">tablefilter/src/tablefilter.js</span>",
     "class"
   ],
   [
