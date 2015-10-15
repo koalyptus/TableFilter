@@ -24,12 +24,17 @@ solution
 * Valuable support provided under a Premium request
 
 ## Getting started
-Clone the repo using Git:
+* Clone the repo using Git:
 ```shell
 git clone --bare https://github.com/koalyptus/TableFilter.git
 ```
 
-Alternatively you can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
+* You can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
+
+* Alternatively, install TableFilter files in your npm enabled project using:
+```shell
+npm install tablefilter --save
+``` 
 
 ## Setup
 Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the main js file in your page:
