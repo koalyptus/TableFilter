@@ -1,6 +1,6 @@
 {
   "name": "TableFilter",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Filter HTML tables data easily",
   "main": "tablefilter.js",
   "license": "MIT",
