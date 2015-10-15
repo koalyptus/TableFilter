@@ -1,8 +1,12 @@
 {
   "name": "TableFilter",
   "version": "0.0.1",
-  "description": "Filter HTML tables data easily",
-  "main": "tablefilter.js",
+  "description": "A Javascript library making HTML tables filterable and a bit more :)",
+  "main": [
+    "dist/tablefilter/tablefilter.js",
+    "dist/tablefilter/tf-1.js",
+    "dist/tablefilter/style/tablefilter.css"
+  ],
   "license": "MIT",
   "author": {
     "name": "Max Guglielmi",
