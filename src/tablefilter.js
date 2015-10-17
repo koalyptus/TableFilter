@@ -1067,7 +1067,7 @@ export class TableFilter{
             modulePath = 'extensions/{}/{}'.replace(/{}/g, name);
         }
 
-        // Trick to set publicPath dynamically for Webpack...
+        // Trick to set config's publicPath dynamically for Webpack...
         __webpack_public_path__ = this.basePath;
 
         require(['./' + modulePath], (mod)=> {
@@ -2379,7 +2379,6 @@ export class TableFilter{
             this.setFilterValue(i, '');
         }
         if(this.linkedFilters){
-            this.activeFilterId = '';
             this.linkFilters();
         }
         if(this.rememberPageLen){ Cookie.remove(this.pgLenCookie); }
