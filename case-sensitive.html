@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Exact match | TableFilter</title>
+    <title>Case sensitive match | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -121,15 +121,15 @@
 
       
 
-<h1>Exact match</h1>
+<h1>Case sensitive match</h1>
 <p>
-    With the <code>exact_match</code> option, filtering will only return exact
-    matches instead of the default partial matches.
+    With the <code>case_sensitive</code> option, filtering becomes case
+    sensitive.
 </p>
 
 <div class="alert alert-info" role="alert">
-    Try to search for <code>syd</code> and then for <code>sydney</code> in the
-    first column.
+    In the first column, search for <code>syd</code> and then try
+    <code>Syd</code>.
 </div>
 
 
@@ -204,7 +204,7 @@
 <script data-config>
     var tf = new TableFilter('demo', {
         base_path: 'tablefilter/',
-        exact_match: true
+        case_sensitive: true
     });
     tf.init();
 </script>
