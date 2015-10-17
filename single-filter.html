@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Case sensitive match | TableFilter</title>
+    <title>Single filter | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -123,16 +123,11 @@
 
       
 
-<h1>Case sensitive match</h1>
+<h1>Single filter</h1>
 <p>
-    With the <code>case_sensitive</code> option, filtering becomes case
-    sensitive.
+    Use the <code>single_filter</code> option to generate a single
+    <code>input</code> filter type filtering all the columns of the table.
 </p>
-
-<div class="alert alert-info" role="alert">
-    In the first column, search for <code>syd</code> and then try
-    <code>Syd</code>.
-</div>
 
 
 <table id="demo">
@@ -206,7 +201,7 @@
 <script data-config>
     var tf = new TableFilter('demo', {
         base_path: 'tablefilter/',
-        case_sensitive: true
+        single_filter: true
     });
     tf.init();
 </script>
