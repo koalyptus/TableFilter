@@ -126,7 +126,7 @@ grunt esdoc
 * GitHub for reporting bugs and feature requests.
 
 ## License
-[MIT](LICENSE.md)
+[MIT](LICENSE)
 
 
 
