@@ -226,9 +226,9 @@ module.exports = function (grunt) {
                 options: {
                     base: './',
                     repo: 'https://' + repo,
-                    message: 'publish README to gh-pages (cli)'
+                    message: 'publish README and LICENSE to gh-pages (cli)'
                 },
-                src: ['README.md']
+                src: ['README.md', 'LICENSE']
             },
             'publish-docs': {
                 options: {
