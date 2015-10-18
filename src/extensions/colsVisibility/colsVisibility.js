@@ -1,7 +1,6 @@
 import Dom from '../../dom';
 import Types from '../../types';
 import Event from '../../event';
-import Arr from '../../array';
 
 export default class ColsVisibility{
 
@@ -353,13 +352,13 @@ export default class ColsVisibility{
         }
 
         var hiddenCols = this.hiddenCols;
+        var itemIndex = hiddenCols.indexOf(colIndex);
         if(hide){
-            if(hiddenCols.indexOf(colIndex) === -1){
+            if(itemIndex === -1){
                 this.hiddenCols.push(colIndex);
             }
         } else {
-            var itemIndex = Arr.indexByValue(hiddenCols, colIndex, true);
-            if(hiddenCols.indexOf(colIndex) !== -1){
+            if(itemIndex !== -1){
                 this.hiddenCols.splice(itemIndex, 1);
             }
         }
