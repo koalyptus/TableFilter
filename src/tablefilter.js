@@ -1356,7 +1356,7 @@ export class TableFilter{
         let customOptions = this.customOptions;
         let cols = customOptions.cols;
         let optTxt = [], optArray = [];
-        let index = Arr.indexByValue(cols, colIndex);
+        let index = cols.indexOf(colIndex);
         let slcValues = customOptions.values[index];
         let slcTexts = customOptions.texts[index];
         let slcSort = customOptions.sorts[index];
