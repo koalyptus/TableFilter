@@ -1,5 +1,4 @@
 import Dom from '../../dom';
-import Arr from '../../array';
 
 export default class AdapterEzEditTable {
     /**
@@ -131,12 +130,12 @@ export default class AdapterEzEditTable {
                     //cell for default_selection = 'both' or 'cell'
                     cell = selectedElm.nodeName==='TD' ? selectedElm : null,
                     keyCode = e !== undefined ? et.Event.GetKey(e) : 0,
-                    isRowValid = Arr.has(validIndexes, row.rowIndex),
+                    isRowValid = validIndexes.indexOf(row.rowIndex) !== -1,
                     nextRowIndex,
+                    paging = tf.feature('paging'),
                     //pgup/pgdown keys
                     d = (keyCode === 34 || keyCode === 33 ?
-                        (tf.feature('paging').pagingLength ||
-                            et.nbRowsPerPage) : 1);
+                        (paging && paging.pagingLength || et.nbRowsPerPage) :1);
 
                 //If next row is not valid, next valid filtered row needs to be
                 //calculated
@@ -169,8 +168,7 @@ export default class AdapterEzEditTable {
                     //If filtered row is valid, special calculation for
                     //pgup/pgdown keys
                     if(keyCode!==34 && keyCode!==33){
-                        _lastValidRowIndex = Arr.indexByValue(validIndexes,
-                            row.rowIndex);
+                        _lastValidRowIndex = validIndexes.indexOf(row.rowIndex);
                         _lastRowIndex = row.rowIndex;
                     } else {
                         if(keyCode === 34){ //pgdown
@@ -191,8 +189,7 @@ export default class AdapterEzEditTable {
                             }
                         }
                         _lastRowIndex = nextRowIndex;
-                        _lastValidRowIndex = Arr.indexByValue(validIndexes,
-                            nextRowIndex);
+                        _lastValidRowIndex = validIndexes.indexOf(nextRowIndex);
                         doSelect(nextRowIndex);
                     }
                 }

@@ -98,10 +98,6 @@ webpackJsonp([1],{
 	
 	var _dom2 = _interopRequireDefault(_dom);
 	
-	var _array = __webpack_require__(6);
-	
-	var _array2 = _interopRequireDefault(_array);
-	
 	var AdapterEzEditTable = (function () {
 	    /**
 	     * Adapter module for ezEditTable, an external library providing advanced
@@ -240,11 +236,12 @@ webpackJsonp([1],{
 	                    //cell for default_selection = 'both' or 'cell'
 	                    cell = selectedElm.nodeName === 'TD' ? selectedElm : null,
 	                        keyCode = e !== undefined ? et.Event.GetKey(e) : 0,
-	                        isRowValid = _array2['default'].has(validIndexes, row.rowIndex),
+	                        isRowValid = validIndexes.indexOf(row.rowIndex) !== -1,
 	                        nextRowIndex,
+	                        paging = tf.feature('paging'),
 	
 	                    //pgup/pgdown keys
-	                    d = keyCode === 34 || keyCode === 33 ? tf.feature('paging').pagingLength || et.nbRowsPerPage : 1;
+	                    d = keyCode === 34 || keyCode === 33 ? paging && paging.pagingLength || et.nbRowsPerPage : 1;
 	
 	                    //If next row is not valid, next valid filtered row needs to be
 	                    //calculated
@@ -277,7 +274,7 @@ webpackJsonp([1],{
 	                        //If filtered row is valid, special calculation for
 	                        //pgup/pgdown keys
 	                        if (keyCode !== 34 && keyCode !== 33) {
-	                            _lastValidRowIndex = _array2['default'].indexByValue(validIndexes, row.rowIndex);
+	                            _lastValidRowIndex = validIndexes.indexOf(row.rowIndex);
 	                            _lastRowIndex = row.rowIndex;
 	                        } else {
 	                            if (keyCode === 34) {
@@ -298,7 +295,7 @@ webpackJsonp([1],{
 	                                }
 	                            }
 	                            _lastRowIndex = nextRowIndex;
-	                            _lastValidRowIndex = _array2['default'].indexByValue(validIndexes, nextRowIndex);
+	                            _lastValidRowIndex = validIndexes.indexOf(nextRowIndex);
 	                            doSelect(nextRowIndex);
 	                        }
 	                    }
