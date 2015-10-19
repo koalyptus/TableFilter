@@ -1424,13 +1424,13 @@ export class TableFilter{
                     slc.options[0].selected = false;
 
                     //selects
-                    if(Arr.has(slcFltsIndex, i)){
+                    if(slcFltsIndex.indexOf(i) != -1){
                         opt = Dom.createOpt(fltsValues[i],fltsValues[i],true);
                         slc.appendChild(opt);
                         this.hasStoredValues = true;
                     }
                     //multiple select
-                    if(Arr.has(multiFltsIndex, i)){
+                    if(multiFltsIndex.indexOf(i) != -1){
                         s = fltsValues[i].split(' '+this.orOperator+' ');
                         for(let j=0, len=s.length; j<len; j++){
                             if(s[j]===''){
@@ -1922,7 +1922,7 @@ export class TableFilter{
             let isExludedRow = false;
             // checks if current row index appears in exclude array
             if(exclude && Types.isArray(exclude)){
-                isExludedRow = Arr.has(exclude, i);
+                isExludedRow = exclude.indexOf(i) != -1;
             }
             let cell = row[i].cells,
                 nchilds = cell.length;
@@ -2092,7 +2092,7 @@ export class TableFilter{
             return '';
         }
         //First checks for customCellData event
-        if(this.customCellData && Arr.has(this.customCellDataCols, i)){
+        if(this.customCellData && this.customCellDataCols.indexOf(i) != -1){
             return this.customCellData.call(null, this, cell, i);
         } else {
             return Dom.getText(cell);
@@ -2420,13 +2420,13 @@ export class TableFilter{
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement
             if(activeFlt!==slcIndex[i] ||
-                (this.paging && Arr.has(slcA1, slcIndex[i]) &&
+                (this.paging && slcA1.indexOf(slcIndex[i]) != -1 &&
                     activeFlt === slcIndex[i] ) ||
-                (!this.paging && (Arr.has(slcA3, slcIndex[i]) ||
-                    Arr.has(slcA2, slcIndex[i]))) ||
+                (!this.paging && (slcA3.indexOf(slcIndex[i]) != -1 ||
+                    slcA2.indexOf(slcIndex[i]) != -1)) ||
                 slcSelectedValue === this.displayAllText ){
 
-                if(Arr.has(slcA3, slcIndex[i])){
+                if(slcA3.indexOf(slcIndex[i]) != -1){
                     this.Mod.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
                 } else {
                     curSlc.innerHTML = '';
@@ -2440,7 +2440,7 @@ export class TableFilter{
                     }
                 }
 
-                if(Arr.has(slcA3, slcIndex[i])){
+                if(slcA3.indexOf(slcIndex[i]) != -1){
                     this.Mod.checkList._build(slcIndex[i]);
                 } else {
                     this.Mod.dropdown._build(slcIndex[i], true);

@@ -136,7 +136,7 @@ export class CheckList{
                     ((rows[k].style.display === '' && !tf.paging) ||
                     (tf.paging && ((!activeFlt || activeFlt===colIndex )||
                     (activeFlt!=colIndex &&
-                        Arr.has(tf.validRowsIndex, k))) )))){
+                        tf.validRowsIndex.indexOf(k) != -1)) )))){
                     var cell_data = tf.getCellData(j, cells[j]);
                     //Vary Peter's patch
                     var cell_string = Str.matchCase(
@@ -150,8 +150,7 @@ export class CheckList{
                         if(!filteredCol){
                             filteredCol = tf.getFilteredDataCol(j);
                         }
-                        if(!Arr.has(filteredCol,
-                            cell_string, tf.matchCase) &&
+                        if(!Arr.has(filteredCol, cell_string, tf.matchCase) &&
                             !Arr.has(this.excludedOpts,
                                 cell_string, tf.matchCase) &&
                             !tf.isFirstLoad){
@@ -183,7 +182,7 @@ export class CheckList{
             }
         }
         //asc sort
-        if(tf.sortNumAsc && Arr.has(tf.sortNumAsc, colIndex)){
+        if(tf.sortNumAsc && tf.sortNumAsc.indexOf(colIndex) != -1){
             try{
                 this.opts.sort(numSortAsc);
                 if(this.excludedOpts){
@@ -203,7 +202,7 @@ export class CheckList{
             }//in case there are alphanumeric values
         }
         //desc sort
-        if(tf.sortNumDesc && Arr.has(tf.sortNumDesc, colIndex)){
+        if(tf.sortNumDesc && tf.sortNumDesc.indexOf(colIndex) != -1){
             try{
                 this.opts.sort(numSortDesc);
                 if(this.excludedOpts){
@@ -245,7 +244,7 @@ export class CheckList{
                 store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
         if(tmpVal && Str.trim(tmpVal).length > 0){
             if(tf.hasCustomSlcOptions &&
-                Arr.has(tf.customSlcOptions.cols, colIndex)){
+                tf.customSlcOptions.cols.indexOf(colIndex) != -1){
                 fltArr.push(tmpVal);
             } else {
                 fltArr = tmpVal.split(' '+tf.orOperator+' ');
@@ -278,8 +277,8 @@ export class CheckList{
             /*** remember grid values ***/
             if(tf.rememberGridValues){
                 if((tf.hasCustomSlcOptions &&
-                    Arr.has(tf.customSlcOptions.cols, colIndex) &&
-                    fltArr.toString().indexOf(val)!= -1) ||
+                    tf.customSlcOptions.cols.indexOf(colIndex) != -1 &&
+                    fltArr.toString().indexOf(val) != -1) ||
                     Arr.has(fltArr,
                         Str.matchCase(val, tf.matchCase), tf.matchCase)){
                     li.check.checked = true;

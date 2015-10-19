@@ -19,6 +19,7 @@ test('CheckList UI elements', function() {
     var flt = id(tf.fltIds[3]);
     notEqual(flt, null, 'CheckList UL element');
     deepEqual(flt.firstChild.nodeName, 'LI', 'First CheckList option element name');
+    deepEqual(flt.childNodes.length, 8, 'number of checklist options');
 });
 
 test('TableFilter removed', function() {
