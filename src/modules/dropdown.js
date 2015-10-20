@@ -134,10 +134,10 @@ export class Dropdown{
                         ((rows[k].style.display === '' && !tf.paging) ||
                     (tf.paging && (!tf.validRowsIndex ||
                         (tf.validRowsIndex &&
-                            Arr.has(tf.validRowsIndex, k))) &&
+                            tf.validRowsIndex.indexOf(k) != -1)) &&
                         ((activeFlt===undefined || activeFlt==colIndex)  ||
                             (activeFlt!=colIndex &&
-                                Arr.has(tf.validRowsIndex, k) ))) ))){
+                                tf.validRowsIndex.indexOf(k) != -1 ))) ))){
                     var cell_data = tf.getCellData(j, cell[j]),
                         //Vary Peter's patch
                         cell_string = Str.matchCase(cell_data, matchCase);
@@ -183,7 +183,7 @@ export class Dropdown{
         }
 
         //asc sort
-        if(tf.sortNumAsc && Arr.has(tf.sortNumAsc, colIndex)){
+        if(tf.sortNumAsc && tf.sortNumAsc.indexOf(colIndex) != -1){
             try{
                 this.opts.sort( numSortAsc );
                 if(excludedOpts){
@@ -203,7 +203,7 @@ export class Dropdown{
             }//in case there are alphanumeric values
         }
         //desc sort
-        if(tf.sortNumDesc && Arr.has(tf.sortNumDesc, colIndex)){
+        if(tf.sortNumDesc && tf.sortNumDesc.indexOf(colIndex) != -1){
             try{
                 this.opts.sort(numSortDesc);
                 if(excludedOpts){

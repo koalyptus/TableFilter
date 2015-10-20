@@ -1,6 +1,5 @@
 import Types from '../../types';
 import Dom from '../../dom';
-import Arr from '../../array';
 import Event from '../../event';
 import DateHelper from '../../date';
 import Helpers from '../../helpers';
@@ -385,9 +384,7 @@ export default class AdapterSortableTable{
                         if(!this.tf.sort){
                             return;
                         }
-                        this.stt.asyncSort(
-                            Arr.indexByValue(triggers, elm.id, true)
-                        );
+                        this.stt.asyncSort(triggers.indexOf(elm.id));
                     });
                     trigger.setAttribute('_sortType', _sortTypes[j]);
                 }
