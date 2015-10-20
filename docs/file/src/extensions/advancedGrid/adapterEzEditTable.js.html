@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/advancedGrid/adapterEzEditTable.js | tablefilter v0.0.4 API Document</title>
+  <title data-ice="title">src/extensions/advancedGrid/adapterEzEditTable.js | tablefilter v0.0.5 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -66,7 +66,6 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/extensions/advancedGrid/adapterEzEditTable.js</h1>
 <pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../../dom&apos;;
-import Arr from &apos;../../array&apos;;
 
 export default class AdapterEzEditTable {
     /**
@@ -198,12 +197,12 @@ export default class AdapterEzEditTable {
                     //cell for default_selection = &apos;both&apos; or &apos;cell&apos;
                     cell = selectedElm.nodeName===&apos;TD&apos; ? selectedElm : null,
                     keyCode = e !== undefined ? et.Event.GetKey(e) : 0,
-                    isRowValid = Arr.has(validIndexes, row.rowIndex),
+                    isRowValid = validIndexes.indexOf(row.rowIndex) !== -1,
                     nextRowIndex,
+                    paging = tf.feature(&apos;paging&apos;),
                     //pgup/pgdown keys
                     d = (keyCode === 34 || keyCode === 33 ?
-                        (tf.feature(&apos;paging&apos;).pagingLength ||
-                            et.nbRowsPerPage) : 1);
+                        (paging &amp;&amp; paging.pagingLength || et.nbRowsPerPage) :1);
 
                 //If next row is not valid, next valid filtered row needs to be
                 //calculated
@@ -236,8 +235,7 @@ export default class AdapterEzEditTable {
                     //If filtered row is valid, special calculation for
                     //pgup/pgdown keys
                     if(keyCode!==34 &amp;&amp; keyCode!==33){
-                        _lastValidRowIndex = Arr.indexByValue(validIndexes,
-                            row.rowIndex);
+                        _lastValidRowIndex = validIndexes.indexOf(row.rowIndex);
                         _lastRowIndex = row.rowIndex;
                     } else {
                         if(keyCode === 34){ //pgdown
@@ -258,8 +256,7 @@ export default class AdapterEzEditTable {
                             }
                         }
                         _lastRowIndex = nextRowIndex;
-                        _lastValidRowIndex = Arr.indexByValue(validIndexes,
-                            nextRowIndex);
+                        _lastValidRowIndex = validIndexes.indexOf(nextRowIndex);
                         doSelect(nextRowIndex);
                     }
                 }

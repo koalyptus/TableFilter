@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.0.4 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.0.5 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -1423,7 +1423,7 @@ export class TableFilter{
         let customOptions = this.customOptions;
         let cols = customOptions.cols;
         let optTxt = [], optArray = [];
-        let index = Arr.indexByValue(cols, colIndex);
+        let index = cols.indexOf(colIndex);
         let slcValues = customOptions.values[index];
         let slcTexts = customOptions.texts[index];
         let slcSort = customOptions.sorts[index];
@@ -1491,13 +1491,13 @@ export class TableFilter{
                     slc.options[0].selected = false;
 
                     //selects
-                    if(Arr.has(slcFltsIndex, i)){
+                    if(slcFltsIndex.indexOf(i) != -1){
                         opt = Dom.createOpt(fltsValues[i],fltsValues[i],true);
                         slc.appendChild(opt);
                         this.hasStoredValues = true;
                     }
                     //multiple select
-                    if(Arr.has(multiFltsIndex, i)){
+                    if(multiFltsIndex.indexOf(i) != -1){
                         s = fltsValues[i].split(&apos; &apos;+this.orOperator+&apos; &apos;);
                         for(let j=0, len=s.length; j&lt;len; j++){
                             if(s[j]===&apos;&apos;){
@@ -1989,7 +1989,7 @@ export class TableFilter{
             let isExludedRow = false;
             // checks if current row index appears in exclude array
             if(exclude &amp;&amp; Types.isArray(exclude)){
-                isExludedRow = Arr.has(exclude, i);
+                isExludedRow = exclude.indexOf(i) != -1;
             }
             let cell = row[i].cells,
                 nchilds = cell.length;
@@ -2159,7 +2159,7 @@ export class TableFilter{
             return &apos;&apos;;
         }
         //First checks for customCellData event
-        if(this.customCellData &amp;&amp; Arr.has(this.customCellDataCols, i)){
+        if(this.customCellData &amp;&amp; this.customCellDataCols.indexOf(i) != -1){
             return this.customCellData.call(null, this, cell, i);
         } else {
             return Dom.getText(cell);
@@ -2487,13 +2487,13 @@ export class TableFilter{
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement
             if(activeFlt!==slcIndex[i] ||
-                (this.paging &amp;&amp; Arr.has(slcA1, slcIndex[i]) &amp;&amp;
+                (this.paging &amp;&amp; slcA1.indexOf(slcIndex[i]) != -1 &amp;&amp;
                     activeFlt === slcIndex[i] ) ||
-                (!this.paging &amp;&amp; (Arr.has(slcA3, slcIndex[i]) ||
-                    Arr.has(slcA2, slcIndex[i]))) ||
+                (!this.paging &amp;&amp; (slcA3.indexOf(slcIndex[i]) != -1 ||
+                    slcA2.indexOf(slcIndex[i]) != -1)) ||
                 slcSelectedValue === this.displayAllText ){
 
-                if(Arr.has(slcA3, slcIndex[i])){
+                if(slcA3.indexOf(slcIndex[i]) != -1){
                     this.Mod.checkList.checkListDiv[slcIndex[i]].innerHTML = &apos;&apos;;
                 } else {
                     curSlc.innerHTML = &apos;&apos;;
@@ -2507,7 +2507,7 @@ export class TableFilter{
                     }
                 }
 
-                if(Arr.has(slcA3, slcIndex[i])){
+                if(slcA3.indexOf(slcIndex[i]) != -1){
                     this.Mod.checkList._build(slcIndex[i]);
                 } else {
                     this.Mod.dropdown._build(slcIndex[i], true);
