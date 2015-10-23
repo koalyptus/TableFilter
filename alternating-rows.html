@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Exclude rows | TableFilter</title>
+    <title>Alternating rows | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -131,11 +131,10 @@
 
       
 
-<h1>Exclude rows</h1>
+<h1>Alternating rows</h1>
 <p>
-    To exclude rows from the filtering process, use the
-    <code>rows_always_visible</code> option. Those rows will remain always
-    visible.
+    Enable alternating background rows with the <code>alternate_rows</code>
+    option.
 </p>
 
 
@@ -210,7 +209,7 @@
 <script data-config>
     var tf = new TableFilter('demo', {
         base_path: 'tablefilter/',
-        rows_always_visible: [2, 8]
+        alternate_rows: true
     });
     tf.init();
 </script>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Exclude rows | TableFilter</title>
+    <title>Column widths | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -131,13 +131,17 @@
 
       
 
-<h1>Exclude rows</h1>
+<h1>Column widths</h1>
 <p>
-    To exclude rows from the filtering process, use the
-    <code>rows_always_visible</code> option. Those rows will remain always
-    visible.
+    Set the column widths with the <code>col_widths</code> options.
 </p>
-
+<div class="alert alert-info" role="alert">
+    <p>
+        <code>col_widths</code> accepts the different units used for expressing
+        a length in CSS, ie <code>%, em, pt, rem</code>. It also accepts the
+        <code>null</code> value.
+    </p>
+</div>
 
 <table id="demo">
     <thead>
@@ -210,7 +214,7 @@
 <script data-config>
     var tf = new TableFilter('demo', {
         base_path: 'tablefilter/',
-        rows_always_visible: [2, 8]
+        col_widths: ['200px', '200px', '160px', '105px', '105px']
     });
     tf.init();
 </script>
