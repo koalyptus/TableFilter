@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Watermark | TableFilter</title>
+    <title>Highlight keywords | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -127,10 +127,10 @@
 
       
 
-<h1>Filter watermark</h1>
+<h1>Highlight keywords</h1>
 <p>
-    Use the <code>watermark</code> option to set a short hint in a
-    <code>input</code> filter type.
+    Use the <code>highlight_keywords</code> option to highlight the matched
+    search terms.
 </p>
 
 
@@ -205,7 +205,7 @@
 <script data-config>
     var tf = new TableFilter('demo', {
         base_path: 'tablefilter/',
-        watermark: ['City', 'City', 'Distance', 'Time', 'Time']
+        highlight_keywords: true
     });
     tf.init();
 </script>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Watermark | TableFilter</title>
+    <title>Exclude rows | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -127,10 +127,11 @@
 
       
 
-<h1>Filter watermark</h1>
+<h1>Exclude rows</h1>
 <p>
-    Use the <code>watermark</code> option to set a short hint in a
-    <code>input</code> filter type.
+    To exclude rows from the filtering process, use the
+    <code>rows_always_visible</code> option. Those rows will remain always
+    visible.
 </p>
 
 
@@ -205,7 +206,7 @@
 <script data-config>
     var tf = new TableFilter('demo', {
         base_path: 'tablefilter/',
-        watermark: ['City', 'City', 'Distance', 'Time', 'Time']
+        rows_always_visible: [2, 8]
     });
     tf.init();
 </script>
