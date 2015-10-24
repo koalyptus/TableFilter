@@ -262,7 +262,7 @@ module.exports = function (grunt) {
                                 getDeployMessage(),
                     silent: true
                 },
-                src: ['README.md']
+                src: ['README.md', 'LICENSE']
             },
             'deploy-docs': {
                 options: {

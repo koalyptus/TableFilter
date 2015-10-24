@@ -21,7 +21,6 @@ users to filter and limit the data displayed within a long table. By default, th
 solution
 * Callbacks for all events, and delegates for most actions
 * Exhaustive documentation and API
-* Valuable support provided under a Premium request
 
 ## Getting started
 * Clone the repo using Git:
