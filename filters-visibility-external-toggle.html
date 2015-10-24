@@ -137,7 +137,7 @@
     button.
 </p>
 <p>
-    <button id="filtersToggle"></button>
+    <div id="filtersToggle"></div>
 </p>
 
 
@@ -2756,7 +2756,7 @@
         extensions: [{
             name: 'filtersVisibility',
             target_id: 'filtersToggle',
-            btn_text: ''
+            btn_html: '<button>Toggle filters<\/button>'
         }]
     };
     var tf = new TableFilter('demo', tfConfig);
