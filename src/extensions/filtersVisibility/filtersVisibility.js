@@ -118,12 +118,12 @@ export default class FiltersVisibility{
             btn.title = this.btnText || this.defaultText;
             btn.innerHTML = this.collapseBtnHtml;
             span.appendChild(btn);
-            Event.add(btn, 'click', ()=> this.toggle());
         } else { //Custom html
             span.innerHTML = this.btnHtml;
             btn = span.firstChild;
-            Event.add(btn, 'click', ()=> this.toggle());
         }
+
+        Event.add(btn, 'click', ()=> this.toggle());
 
         this.contEl = span;
         this.btnEl = btn;
