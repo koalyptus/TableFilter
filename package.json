@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -20,11 +20,6 @@
     "datagrid",
     "sort",
     "pagination"
-  ],
-  "files": [
-    "README.md",
-    "LICENSE.md",
-    "dist/*"
   ],
   "scripts": {
     "test": "grunt test"

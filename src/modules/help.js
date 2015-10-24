@@ -75,12 +75,10 @@ export class Help{
         if(!this.tgtId){
             tf.setToolbar();
         }
-        var targetEl = !this.tgtId ?
-            tf.rDiv : Dom.id(this.tgtId);
+        var targetEl = !this.tgtId ? tf.rDiv : Dom.id(this.tgtId);
         targetEl.appendChild(helpspan);
 
-        var divContainer = !this.contTgtId ?
-                helpspan : Dom.id(this.contTgtId);
+        var divContainer = !this.contTgtId ? helpspan : Dom.id(this.contTgtId);
 
         if(!this.btnHtml){
             divContainer.appendChild(helpdiv);
