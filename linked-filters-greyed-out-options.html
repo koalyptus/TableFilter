@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Linked filters | TableFilter</title>
+    <title>Linked filters with greyed-out options | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -133,11 +133,11 @@
 
       
 
-<h1>Linked filters</h1>
+<h1>Linked filters with greyed-out options</h1>
 <p>
     This demo features the linked filters behaviour. In this mode, the drop-down
-    filters are linked, that is, when a column is filtered only the valid values
-    of the other columns are included in their respective filters.
+    filters are linked, that is, when a column is filtered all the invalid
+    values of the other columns are greyed-out in their respective filters.
 </p>
 
 
@@ -2742,6 +2742,7 @@
     var filtersConfig = {
         base_path: 'tablefilter/',
         linked_filters: true,
+        disable_excluded_options: true,
         col_1: 'multiple',
         col_2: 'checklist',
         btn_reset: true,
