@@ -33,12 +33,6 @@ export class GridLayout{
             f.grid_enable_default_filters : true;
         //default col width
         this.gridDefaultColWidth = f.grid_default_col_width || '100px';
-        //enables/disables columns resizer
-        // this.gridEnableColResizer = f.grid_enable_cols_resizer!==undefined ?
-        //     f.grid_enable_cols_resizer : false;
-        // //defines col resizer script path
-        // this.gridColResizerPath = f.grid_cont_col_resizer_path ||
-        //     this.basePath+'TFExt_ColsResizer/TFExt_ColsResizer.js';
 
         this.gridColElms = [];
 
@@ -54,6 +48,8 @@ export class GridLayout{
         this.prfxGridFltTd = '_td_';
         //id of th containing column header if grid_layout true
         this.prfxGridTh = 'tblHeadTh_';
+
+        this.sourceTblHtml = tf.tbl.outerHTML;
 
         this.tf = tf;
     }
@@ -325,7 +321,7 @@ export class GridLayout{
         this.headTbl = null;
         this.tblCont = null;
 
-        tbl.outerHTML = tf.sourceTblHtml;
+        tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element
         tbl = Dom.id(tf.id);
     }

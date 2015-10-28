@@ -71,6 +71,21 @@
             ],
             'Get table data'
         );
+        deepEqual(
+            tf.getTableData(true),
+            [
+                [1, ['From','Destination','Road Distance (km)',
+                    'By Air (hrs)','By Rail (hrs)']],
+                [2, ['Sydney','Adelaide','1412','1.4','25.3']],
+                [3, ['Sydney','Brisbane','982','1.5','16']],
+                [4, ['Sydney','Canberra','286','.6','4.3']],
+                [5, ['Sydney','Melbourne','872','1.1','10.5']],
+                [6, ['Adelaide','Perth','2781','3.1','38']],
+                [7, ['Adelaide','Alice Springs','1533','2','20.25']],
+                [8, ['Adelaide','Brisbane','2045','2.15','40']]
+            ],
+            'Get table data including columns headers'
+        );
         tf.setFilterValue(0, 'Adelaide');
         tf.filter();
         deepEqual(
