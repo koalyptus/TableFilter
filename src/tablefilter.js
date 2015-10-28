@@ -97,14 +97,8 @@ export class TableFilter{
         //enables/disables filter grid
         this.fltGrid = f.grid===false ? false : true;
 
-        /*** Grid layout ***/
         //enables/disables grid layout (fixed headers)
         this.gridLayout = Boolean(f.grid_layout);
-        this.sourceTblHtml = null;
-        if(this.gridLayout){
-            this.sourceTblHtml = this.tbl.outerHTML;
-        }
-        /*** ***/
 
         this.filtersRowIndex = isNaN(f.filters_row_index) ?
             0 : f.filters_row_index;
@@ -130,8 +124,6 @@ export class TableFilter{
         this.fltElms = [];
         //stores filters values
         this.searchArgs = null;
-        //stores table data
-        this.tblData = [];
         //stores valid rows indexes (rows visible upon filtering)
         this.validRowsIndex = null;
         //stores filters row element
@@ -2105,23 +2097,33 @@ export class TableFilter{
      *     [rowIndex, [value0, value1...]],
      *     [rowIndex, [value0, value1...]]
      * ]
+     * @param  {Boolean} includeHeaders  Include headers row
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
      */
-    getTableData(){
-        let row = this.tbl.rows;
+    getTableData(includeHeaders=false){
+        let rows = this.tbl.rows;
+        let tblData = [];
+        if(includeHeaders){
+            let rowData = [this.getHeadersRowIndex(), []];
+            for(let j=0; j<this.nbCells; j++){
+                let header = this.getHeaderElement(j);
+                let headerText = Dom.getText(header);
+                rowData[1].push(headerText);
+            }
+            tblData.push(rowData);
+        }
         for(let k=this.refRow; k<this.nbRows; k++){
             let rowData = [k,[]];
-            let cells = row[k].cells;
-            // this loop retrieves cell data
+            let cells = rows[k].cells;
             for(let j=0, len=cells.length; j<len; j++){
-                let cell_data = this.getCellData(j, cells[j]);
-                rowData[1].push(cell_data);
+                let cellData = this.getCellData(j, cells[j]);
+                rowData[1].push(cellData);
             }
-            this.tblData.push(rowData);
+            tblData.push(rowData);
         }
-        return this.tblData;
+        return tblData;
     }
 
     /**
@@ -2135,19 +2137,17 @@ export class TableFilter{
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredData(includeHeaders){
+    getFilteredData(includeHeaders=false){
         if(!this.validRowsIndex){
             return [];
         }
-        let row = this.tbl.rows,
+        let rows = this.tbl.rows,
             filteredData = [];
         if(includeHeaders){
-            let table = this.gridLayout ?
-                    this.Mod.gridLayout.headTbl : this.tbl,
-                r = table.rows[this.headersRow],
-                rowData = [r.rowIndex, []];
+            let rowData = [this.getHeadersRowIndex(), []];
             for(let j=0; j<this.nbCells; j++){
-                let headerText = this.getCellData(j, r.cells[j]);
+                let header = this.getHeaderElement(j);
+                let headerText = Dom.getText(header);
                 rowData[1].push(headerText);
             }
             filteredData.push(rowData);
@@ -2156,10 +2156,10 @@ export class TableFilter{
         let validRows = this.getValidRows(true);
         for(let i=0; i<validRows.length; i++){
             let rData = [this.validRowsIndex[i],[]],
-                cells = row[this.validRowsIndex[i]].cells;
+                cells = rows[this.validRowsIndex[i]].cells;
             for(let k=0; k<cells.length; k++){
-                let cell_data = this.getCellData(k, cells[k]);
-                rData[1].push(cell_data);
+                let cellData = this.getCellData(k, cells[k]);
+                rData[1].push(cellData);
             }
             filteredData.push(rData);
         }

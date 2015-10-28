@@ -22,4 +22,5 @@ test('Destroy GridLayout component', function() {
     deepEqual(gridLayout.tblCont, null, 'Main HTML table container element removed');
     deepEqual(gridLayout.headTblCont, null, 'Headers container element removed');
     deepEqual(gridLayout.headTbl, null, 'Headers HTML table element removed');
+    notEqual(gridLayout.sourceTblHtml, null, 'Table reference is kept');
 });

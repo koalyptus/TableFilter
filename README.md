@@ -11,10 +11,10 @@ users to filter and limit the data displayed within a long table. By default, th
 * Convert a regular HTML table into an advanced grid component providing:
     * Advanced columns filtering model
     * Sorting and pagination facilities
-    * Complete selection model ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123) extension)
-    * Extended keyboard navigation ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123) extension)
-    * Inline cell or row editing ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123) extension)
-    * Row insertion or deleting ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123) extension)
+    * Complete selection model ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
+    * Extended keyboard navigation ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
+    * Inline cell or row editing ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
+    * Row insertion or deleting ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
     * And even more behaviors...
 * Attach to an existing HTML table
 * Integration with any server-side technology as this is a pure client-side
