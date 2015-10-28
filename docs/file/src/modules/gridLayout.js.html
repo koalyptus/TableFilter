@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.0.6 API Document</title>
+  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.0.7 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -100,12 +100,6 @@ export class GridLayout{
             f.grid_enable_default_filters : true;
         //default col width
         this.gridDefaultColWidth = f.grid_default_col_width || &apos;100px&apos;;
-        //enables/disables columns resizer
-        // this.gridEnableColResizer = f.grid_enable_cols_resizer!==undefined ?
-        //     f.grid_enable_cols_resizer : false;
-        // //defines col resizer script path
-        // this.gridColResizerPath = f.grid_cont_col_resizer_path ||
-        //     this.basePath+&apos;TFExt_ColsResizer/TFExt_ColsResizer.js&apos;;
 
         this.gridColElms = [];
 
@@ -121,6 +115,8 @@ export class GridLayout{
         this.prfxGridFltTd = &apos;_td_&apos;;
         //id of th containing column header if grid_layout true
         this.prfxGridTh = &apos;tblHeadTh_&apos;;
+
+        this.sourceTblHtml = tf.tbl.outerHTML;
 
         this.tf = tf;
     }
@@ -392,7 +388,7 @@ export class GridLayout{
         this.headTbl = null;
         this.tblCont = null;
 
-        tbl.outerHTML = tf.sourceTblHtml;
+        tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element
         tbl = Dom.id(tf.id);
     }

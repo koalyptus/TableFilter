@@ -1842,6 +1842,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/gridlayout.js~gridlayout#sourcetblhtml",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-sourceTblHtml",
+    "src/modules/gridLayout.js~GridLayout#sourceTblHtml",
+    "member"
+  ],
+  [
     "src/modules/gridlayout.js~gridlayout#tblcont",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblCont",
     "src/modules/gridLayout.js~GridLayout#tblCont",
@@ -4254,12 +4260,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#sourcetblhtml",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-sourceTblHtml",
-    "src/tablefilter.js~TableFilter#sourceTblHtml",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#stoperator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-stOperator",
     "src/tablefilter.js~TableFilter#stOperator",
@@ -4299,12 +4299,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#tbl",
     "class/src/tablefilter.js~TableFilter.html#instance-member-tbl",
     "src/tablefilter.js~TableFilter#tbl",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#tbldata",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-tblData",
-    "src/tablefilter.js~TableFilter#tblData",
     "member"
   ],
   [
