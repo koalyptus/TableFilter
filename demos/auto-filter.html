@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>tablefilter v0.0.7 - Auto-filter Demo</title>
+    <title>tablefilter v0.0.8 - Auto-filter Demo</title>
     <link rel="stylesheet" type="text/css" href="../dist/tablefilter/style/tablefilter.css">
 <style type="text/css">
     body{
@@ -27,7 +27,7 @@
 </style>
 </head>
 <body>
-<h1>tablefilter v0.0.7</h1>
+<h1>tablefilter v0.0.8</h1>
 <h2>Auto-filter demo</h2>
 <p>
     This demo features the auto-filter behaviour, the table is filtered as soon
@@ -13002,13 +13002,16 @@
         remember_grid_values: true,
         alternate_rows: true,
         rows_counter: true,
-        rows_counter_text: "Rows: ",
+        rows_counter_text: 'Rows: ',
         btn_reset: true,
         status_bar: true,
         msg_filter: 'Filtering...'
     };
 
-    var tf = new TableFilter('demo', filtersConfig);
+    var tf = new TableFilter(
+        document.querySelector('#demo'),
+        filtersConfig
+    );
     tf.init();
 
 </script>

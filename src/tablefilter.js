@@ -30,20 +30,20 @@ var global = window,
 export class TableFilter{
 
     /**
-     * TF object constructor
+     * TableFilter object constructor
+     * requires `table` or `id` arguments, `row` and `configuration` optional
+     * @param {DOMElement} table Table DOM element
      * @param {String} id Table id
      * @param {Number} row index indicating the 1st row
      * @param {Object} configuration object
-     *
-     * TODO: Accept a TABLE element or query selectors
      */
-    constructor(id) {
-        if(arguments.length === 0){ return; }
+    constructor(...args) {
+        if(args.length === 0){ return; }
 
-        this.id = id;
+        this.id = null;
         this.version = '{VERSION}';
         this.year = new Date().getFullYear();
-        this.tbl = Dom.id(id);
+        this.tbl = null;
         this.startRow = null;
         this.refRow = null;
         this.headersRow = null;
@@ -52,33 +52,33 @@ export class TableFilter{
         this.nbRows = null;
         this.nbCells = null;
         this._hasGrid = false;
-        this.enableModules = false;
+
+        // TODO: use for-of with babel plug-in
+        args.forEach((arg)=> {
+            let argtype = typeof arg;
+            if(argtype === 'object' && arg && arg.nodeName === 'TABLE'){
+                this.tbl = arg;
+                this.id = arg.id || `tf_${new Date().getTime()}_`;
+            } else if(argtype === 'string'){
+                this.id = arg;
+                this.tbl = Dom.id(arg);
+            } else if(argtype === 'number'){
+                this.startRow = arg;
+            } else if(argtype === 'object'){
+                this.cfg = arg;
+            }
+        });
 
         if(!this.tbl || this.tbl.nodeName != 'TABLE' || this.getRowsNb() === 0){
             throw new Error(
                 'Could not instantiate TableFilter: HTML table not found.');
         }
 
-        if(arguments.length > 1){
-            for(let i=0, len=arguments.length; i<len; i++){
-                let arg = arguments[i];
-                let argtype = typeof arg;
-                switch(Str.lower(argtype)){
-                    case 'number':
-                        this.startRow = arg;
-                    break;
-                    case 'object':
-                        this.cfg = arg;
-                    break;
-                }
-            }
-        }
-
         // configuration object
         let f = this.cfg;
 
         //Start row et cols nb
-        this.refRow = this.startRow===null ? 2 : (this.startRow+1);
+        this.refRow = this.startRow === null ? 2 : (this.startRow+1);
         try{ this.nbCells = this.getCellsNb(this.refRow); }
         catch(e){ this.nbCells = this.getCellsNb(0); }
 
@@ -95,7 +95,7 @@ export class TableFilter{
         /*** filters' grid properties ***/
 
         //enables/disables filter grid
-        this.fltGrid = f.grid===false ? false : true;
+        this.fltGrid = f.grid === false ? false : true;
 
         //enables/disables grid layout (fixed headers)
         this.gridLayout = Boolean(f.grid_layout);
@@ -103,7 +103,7 @@ export class TableFilter{
         this.filtersRowIndex = isNaN(f.filters_row_index) ?
             0 : f.filters_row_index;
         this.headersRow = isNaN(f.headers_row_index) ?
-            (this.filtersRowIndex===0 ? 1 : 0) : f.headers_row_index;
+            (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
 
         if(this.gridLayout){
             if(this.headersRow > 1){
