@@ -1,12 +1,20 @@
 
 var tag = function (elm, tag){ return elm.getElementsByTagName(tag); };
+var outputBefore = null;
+var outputAfter = null;
 
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
     extensions:[{
         name: 'sort',
         types: ['string','string','number','number','number'],
-        on_sort_loaded: startSimple
+        on_sort_loaded: startSimple,
+        on_before_sort: function(o, col){
+            outputBefore = [o, col];
+        },
+        on_after_sort: function(o, col){
+            outputAfter = [o, col];
+        }
     }]
 });
 tf.init();
@@ -40,11 +48,36 @@ function startSimple(tf, sort){
         deepEqual(indicator.length, 1, 'Sort indicator in header element');
     });
 
-    test('Sort behaviour', function() {
+    module('Behaviour');
+    test('Sort sanity checks', function() {
         sort.sortByColumnIndex(0);
 
         deepEqual(sort.sorted, true, 'Table column sorted');
         deepEqual(sort.isPaged, false, 'Table is not paged');
+        deepEqual(
+            outputBefore[0] instanceof TableFilter,
+            true,
+            'on_before_sort callback param 0 verified'
+        );
+        deepEqual(outputBefore[1], 0,
+            'on_before_sort callback param 1 verified'
+        );
+        deepEqual(
+            outputAfter[0] instanceof TableFilter,
+            true,
+            'on_after_sort callback param 0 verified'
+        );
+        deepEqual(outputAfter[1], 0,
+            'on_after_sort callback param 1 verified'
+        );
+    });
+
+    test('Sort API', function() {
+        sort.sortByColumnIndex(1, true);
+        deepEqual(tf.getColValues(1)[0], 'perth', 'Descending sort');
+
+        sort.sortByColumnIndex(1, false);
+        deepEqual(tf.getColValues(1)[0], 'adelaide', 'Descending sort');
     });
 
     module('Destroy and re-init');

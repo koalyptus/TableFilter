@@ -11,9 +11,6 @@ export default class AdapterSortableTable{
      * @param {Object} tf TableFilter instance
      */
     constructor(tf, opts){
-        // Configuration object
-        let f = tf.config();
-
         this.initialized = false;
         this.name = opts.name;
         this.desc = opts.description || 'Sortable table';
@@ -59,7 +56,7 @@ export default class AdapterSortableTable{
             opts.on_before_sort : null;
         // callback invoked after table is sorted
         this.onAfterSort = Types.isFn(opts.on_after_sort) ?
-            f.on_after_sort : null;
+            opts.on_after_sort : null;
 
         this.tf = tf;
     }
@@ -88,8 +85,8 @@ export default class AdapterSortableTable{
 
         /*** SortableTable callbacks ***/
         this.stt.onbeforesort = function(){
-            if(this.onBeforeSort){
-                this.onBeforeSort.call(null, tf, this.stt.sortColumn);
+            if(adpt.onBeforeSort){
+                adpt.onBeforeSort.call(null, tf, adpt.stt.sortColumn);
             }
 
             /*** sort behaviour for paging ***/
@@ -148,7 +145,7 @@ export default class AdapterSortableTable{
             }
 
             if(adpt.onAfterSort){
-                adpt.onAfterSort.call(null, tf, tf.stt.sortColumn);
+                adpt.onAfterSort.call(null, tf, adpt.stt.sortColumn);
             }
         };
 
@@ -157,10 +154,11 @@ export default class AdapterSortableTable{
 
     /**
      * Sort specified column
-     * @param  {Number} colIdx Column index
+     * @param {Number} colIdx Column index
+     * @param {Boolean} desc Optional: descending manner
      */
-    sortByColumnIndex(colIdx){
-        this.stt.sort(colIdx);
+    sortByColumnIndex(colIdx, desc){
+        this.stt.sort(colIdx, desc);
     }
 
     overrideSortableTable(){
