@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Auto filter, filter as you type behaviour | TableFilter</title>
+    <title>Sort columns with external command | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -137,12 +137,57 @@
 
       
 
-<h1>Auto filter, filter as you type</h1>
+<h1>Sort columns with external command</h1>
 
 <p>
-    This demo features the filter as you type behaviour enabled by the
-    <code>auto_filter</code> option.
+    Sort a column with an external command.
 </p>
+
+<div class="alert alert-info" role="alert">
+    Instructions: use the drop-down or the buttons to sort the table columns.
+</div>
+
+<div class="row">
+    <div class="btn-group col-md-4">
+        <button type="button" class="btn btn-default dropdown-toggle"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sort <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a id="extSort0" href="#" onclick="sortColumn(0);">Country</a>
+                <a id="extSort1" href="#" onclick="sortColumn(1);">ISO</a>
+                <a id="extSort2" href="#" onclick="sortColumn(2);">Year</a>
+                <a id="extSort3" href="#" onclick="sortColumn(3);">POP</a>
+                <a id="extSort4" href="#" onclick="sortColumn(4);">XRAT</a>
+                <a id="extSort5" href="#" onclick="sortColumn(5);">PPP</a>
+                <a id="extSort6" href="#" onclick="sortColumn(6);">cgdp</a>
+                <a id="extSort7" href="#" onclick="sortColumn(7);">cc</a>
+                <a id="extSort8" href="#" onclick="sortColumn(8);">ci</a>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="btn-group col-md-5" role="group" aria-label="...">
+        <button type="button" class="btn btn-default"
+            onclick="sortColumn(0, false);">Country &uarr;</button>
+        <button type="button" class="btn btn-default"
+            onclick="sortColumn(0, true);">Country &darr;</button>
+        <button type="button" class="btn btn-default"
+            onclick="sortColumn(2, false);">Year &uarr;</button>
+        <button type="button" class="btn btn-default"
+            onclick="sortColumn(2, true);">Year &darr;</button>
+    </div>
+
+    <div class="col-md-3">
+        <div class="pull-right">
+            Sorted column: <span class="badge">None</span>
+        </div>
+    </div>
+</div>
+
+<p></p>
 
 
 
@@ -588,20 +633,47 @@
 
 
 <script data-config>
-    var filtersConfig = {
+    function sortColumn(colIndex, desc) {
+        var sortExt = tf.extension('sort');
+
+        // Sort column programmatically
+        sortExt.sortByColumnIndex(colIndex, desc);
+    }
+
+    var tfConfig = {
         base_path: 'tablefilter/',
-        auto_filter: true,
-        auto_filter_delay: 1100, //milliseconds
-        filters_row_index: 1,
-        remember_grid_values: true,
+        col_widths: [
+            "180px", "120px", "120px",
+            null, null, null,
+            null, null, null
+        ],
         alternate_rows: true,
         rows_counter: true,
-        rows_counter_text: "Rows: ",
         btn_reset: true,
         status_bar: true,
-        msg_filter: 'Filtering...'
+        col_0: 'multiple',
+        col_1: 'select',
+        col_2: 'checklist',
+
+        // sorting extension
+        extensions: [{
+            name: 'sort',
+            types: [
+                'string', 'string', 'number',
+                'number', 'number', 'number',
+                'number', 'number', 'number'
+            ],
+            async_sort: true,
+            on_after_sort: function(o, colIndex){
+                document.querySelector('.badge').innerHTML =
+                    o.getHeaderElement(colIndex).innerHTML;
+            }
+        }]
     };
-    var tf = new TableFilter('demo', filtersConfig);
+    var tf = new TableFilter(
+        document.querySelector('.countries-tiny'),
+        tfConfig
+    );
     tf.init();
 </script>
 
@@ -640,6 +712,54 @@
 
 
 </p>
+
+<h4>Markup</h4>
+<div class="alert alert-warning" role="alert">
+    NOTE: the sorting commands above the table use Bootstrap styles.
+</div>
+
+<pre>
+&lt;div class="row"&gt;
+    &lt;div class="btn-group col-md-4"&gt;
+        &lt;button type="button" class="btn btn-default dropdown-toggle"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;
+            Sort &lt;span class="caret"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;ul class="dropdown-menu"&gt;
+            &lt;li&gt;
+                &lt;a id="extSort0" href="#" onclick="sortColumn(0);"&gt;Country&lt;/a&gt;
+                &lt;a id="extSort1" href="#" onclick="sortColumn(1);"&gt;ISO&lt;/a&gt;
+                &lt;a id="extSort2" href="#" onclick="sortColumn(2);"&gt;Year&lt;/a&gt;
+                &lt;a id="extSort3" href="#" onclick="sortColumn(3);"&gt;POP&lt;/a&gt;
+                &lt;a id="extSort4" href="#" onclick="sortColumn(4);"&gt;XRAT&lt;/a&gt;
+                &lt;a id="extSort5" href="#" onclick="sortColumn(5);"&gt;PPP&lt;/a&gt;
+                &lt;a id="extSort6" href="#" onclick="sortColumn(6);"&gt;cgdp&lt;/a&gt;
+                &lt;a id="extSort7" href="#" onclick="sortColumn(7);"&gt;cc&lt;/a&gt;
+                &lt;a id="extSort8" href="#" onclick="sortColumn(8);"&gt;ci&lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+
+    &lt;/div&gt;
+
+    &lt;div class="btn-group col-md-5" role="group" aria-label="..."&gt;
+        &lt;button type="button" class="btn btn-default"
+            onclick="sortColumn(0, false);"&gt;Country &uarr;&lt;/button&gt;
+        &lt;button type="button" class="btn btn-default"
+            onclick="sortColumn(0, true);"&gt;Country &darr;&lt;/button&gt;
+        &lt;button type="button" class="btn btn-default"
+            onclick="sortColumn(2, false);"&gt;Year &uarr;&lt;/button&gt;
+        &lt;button type="button" class="btn btn-default"
+            onclick="sortColumn(2, true);"&gt;Year &darr;&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div class="col-md-3"&gt;
+        &lt;div class="pull-right"&gt;
+            Sorted column: &lt;span class="badge"&gt;None&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
 
     </div>
 
