@@ -43,7 +43,7 @@ Copy the ``tablefilter`` directory under ``dist`` and place it at desired locati
 Place the following snippet just under the HTML table and always define a ``base_path`` property in the configuration object to reflect the path to the script
 ```shell
 <script>
-var tf = new TableFilter('my-table-id', {
+var tf = new TableFilter(document.querySelector('.my-table'), {
     base_path: 'path/to/my/scripts/tablefilter/'
 });
 tf.init();
