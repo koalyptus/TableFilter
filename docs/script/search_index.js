@@ -3258,12 +3258,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#enablemodules",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-enableModules",
-    "src/tablefilter.js~TableFilter#enableModules",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#enablenonemptyoption",
     "class/src/tablefilter.js~TableFilter.html#instance-member-enableNonEmptyOption",
     "src/tablefilter.js~TableFilter#enableNonEmptyOption",
