@@ -1898,22 +1898,27 @@ export class TableFilter{
 
     /**
      * Return the data of a specified colum
-     * @param  {Number} colindex Column index
-     * @param  {Boolean} num     Return unformatted number
-     * @param  {Array} exclude   List of row indexes to be excluded
+     * @param  {Number} colIndex Column index
+     * @param  {Boolean} includeHeaders  Optional: include headers row
+     * @param  {Boolean} num     Optional: return unformatted number
+     * @param  {Array} exclude   Optional: list of row indexes to be excluded
      * @return {Array}           Flat list of data for a column
      */
-    getColValues(colindex, num=false, exclude=undefined){
+    getColValues(colIndex, includeHeaders=false, num=false, exclude=[]){
         if(!this.fltGrid){
             return;
         }
         let row = this.tbl.rows,
             colValues = [];
 
+        if(includeHeaders){
+            colValues.push(this.getHeadersText()[colIndex]);
+        }
+
         for(let i=this.refRow; i<this.nbRows; i++){
             let isExludedRow = false;
             // checks if current row index appears in exclude array
-            if(exclude && Types.isArray(exclude)){
+            if(exclude.length > 0){
                 isExludedRow = exclude.indexOf(i) != -1;
             }
             let cell = row[i].cells,
@@ -1923,12 +1928,12 @@ export class TableFilter{
             if(nchilds === this.nbCells && !isExludedRow){
                 // this loop retrieves cell data
                 for(let j=0; j<nchilds; j++){
-                    if(j != colindex || row[i].style.display !== ''){
+                    if(j != colIndex || row[i].style.display !== ''){
                         continue;
                     }
                     let cell_data = Str.lower(this.getCellData(cell[j])),
                         nbFormat = this.colNbFormat ?
-                            this.colNbFormat[colindex] : null,
+                            this.colNbFormat[colIndex] : null,
                         data = num ?
                                 Helpers.removeNbFormat(cell_data, nbFormat) :
                                 cell_data;
@@ -2094,7 +2099,7 @@ export class TableFilter{
      *     [rowIndex, [value0, value1...]],
      *     [rowIndex, [value0, value1...]]
      * ]
-     * @param  {Boolean} includeHeaders  Include headers row
+     * @param  {Boolean} includeHeaders  Optional: include headers row
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
@@ -2103,16 +2108,10 @@ export class TableFilter{
         let rows = this.tbl.rows;
         let tblData = [];
         if(includeHeaders){
-            let rowData = [this.getHeadersRowIndex(), []];
-            for(let j=0; j<this.nbCells; j++){
-                let header = this.getHeaderElement(j);
-                let headerText = Dom.getText(header);
-                rowData[1].push(headerText);
-            }
-            tblData.push(rowData);
+            tblData.push([this.getHeadersRowIndex(), this.getHeadersText()]);
         }
         for(let k=this.refRow; k<this.nbRows; k++){
-            let rowData = [k,[]];
+            let rowData = [k, []];
             let cells = rows[k].cells;
             for(let j=0, len=cells.length; j<len; j++){
                 let cellData = this.getCellData(cells[j]);
@@ -2129,7 +2128,7 @@ export class TableFilter{
      *     [rowIndex, [value0, value1...]],
      *     [rowIndex, [value0, value1...]]
      * ]
-     * @param  {Boolean} includeHeaders  Include headers row
+     * @param  {Boolean} includeHeaders  Optional: include headers row
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
@@ -2141,18 +2140,13 @@ export class TableFilter{
         let rows = this.tbl.rows,
             filteredData = [];
         if(includeHeaders){
-            let rowData = [this.getHeadersRowIndex(), []];
-            for(let j=0; j<this.nbCells; j++){
-                let header = this.getHeaderElement(j);
-                let headerText = Dom.getText(header);
-                rowData[1].push(headerText);
-            }
-            filteredData.push(rowData);
+            filteredData.push([this.getHeadersRowIndex(),
+                this.getHeadersText()]);
         }
 
         let validRows = this.getValidRows(true);
         for(let i=0; i<validRows.length; i++){
-            let rData = [this.validRowsIndex[i],[]],
+            let rData = [this.validRowsIndex[i], []],
                 cells = rows[this.validRowsIndex[i]].cells;
             for(let k=0; k<cells.length; k++){
                 let cellData = this.getCellData(cells[k]);
@@ -2166,16 +2160,20 @@ export class TableFilter{
     /**
      * Return the filtered data for a given column index
      * @param  {Number} colIndex Colmun's index
+     * @param  {Boolean} includeHeaders  Optional: include headers row
      * @return {Array}           Flat list of values ['val0','val1','val2'...]
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredDataCol(colIndex){
-        if(colIndex===undefined){
+    getFilteredDataCol(colIndex, includeHeaders=false){
+        if(Types.isUndef(colIndex)){
             return [];
         }
         let data =  this.getFilteredData(),
             colData = [];
+        if(includeHeaders){
+            colData.push(this.getHeadersText()[colIndex]);
+        }
         for(let i=0, len=data.length; i<len; i++){
             let r = data[i],
                 //cols values of current row
@@ -2193,8 +2191,8 @@ export class TableFilter{
      * @return {String}     Usually 'none' or ''
      */
     getRowDisplay(row){
-        if(!this.fltGrid || !Types.isObj(row)){
-            return;
+        if(!Types.isObj(row)){
+            return null;
         }
         return row.style.display;
     }
@@ -2725,6 +2723,20 @@ export class TableFilter{
             break;
         }
         return header;
+    }
+
+    /**
+     * Return the list of headers' text
+     * @return {Array} list of headers' text
+     */
+    getHeadersText(){
+        let headers = [];
+        for(let j=0; j<this.nbCells; j++){
+            let header = this.getHeaderElement(j);
+            let headerText = Dom.getText(header);
+            headers.push(headerText);
+        }
+        return headers;
     }
 
     /**

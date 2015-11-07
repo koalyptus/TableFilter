@@ -17,6 +17,11 @@
         deepEqual(tf.getStartRowIndex(), 2, 'Start of filterable rows');
         deepEqual(tf.getLastRowIndex(), 8, 'Last row index');
         deepEqual(
+            tf.getHeadersText(),
+            ['From','Destination','Road Distance (km)', 'By Air (hrs)',
+            'By Rail (hrs)'],
+            'Headers text');
+        deepEqual(
             tf.getCellData(tf.getHeaderElement(1)),
             'Destination',
             'Column header text'
@@ -62,6 +67,13 @@
                 'sydney','adelaide','adelaide','adelaide'
             ],
             'Get specified column values'
+        );
+        deepEqual(tf.getColValues(0, true),
+            [
+                'From', 'sydney','sydney','sydney',
+                'sydney','adelaide','adelaide','adelaide'
+            ],
+            'Get specified column values including column header'
         );
         deepEqual(
             tf.getTableData(),
@@ -117,6 +129,11 @@
             tf.getFilteredDataCol(0),
             ['Adelaide','Adelaide','Adelaide'],
             'Get specified column filtered values'
+        );
+        deepEqual(
+            tf.getFilteredDataCol(0, true),
+            ['From','Adelaide','Adelaide','Adelaide'],
+            'Get specified column filtered values including header'
         );
         tf.clearFilters();
         tf.filter();
@@ -261,6 +278,13 @@
             ],
             'Get specified column values'
         );
+        deepEqual(tf.getColValues(0, true),
+            [
+                'From', 'sydney','sydney','sydney',
+                'sydney','adelaide','adelaide','adelaide'
+            ],
+            'Get specified column values including column header'
+        );
         deepEqual(
             tf.getTableData(),
             [
@@ -301,6 +325,11 @@
             tf.getFilteredDataCol(0),
             ['Adelaide','Adelaide','Adelaide'],
             'Get specified column filtered values'
+        );
+        deepEqual(
+            tf.getFilteredDataCol(0, true),
+            ['From','Adelaide','Adelaide','Adelaide'],
+            'Get specified column filtered values including header'
         );
         tf.clearFilters();
         tf.filter();
