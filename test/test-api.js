@@ -16,6 +16,16 @@
         deepEqual(tf.getFilterId(0), 'flt0_demo', 'filter DOM element id');
         deepEqual(tf.getStartRowIndex(), 2, 'Start of filterable rows');
         deepEqual(tf.getLastRowIndex(), 8, 'Last row index');
+        deepEqual(
+            tf.getHeadersText(),
+            ['From','Destination','Road Distance (km)', 'By Air (hrs)',
+            'By Rail (hrs)'],
+            'Headers text');
+        deepEqual(
+            tf.getCellData(tf.getHeaderElement(1)),
+            'Destination',
+            'Column header text'
+        );
     });
 
     module('Public methods');
@@ -53,10 +63,17 @@
     test('Get table data', function() {
         deepEqual(tf.getColValues(0),
             [
-                'sydney','sydney','sydney',
-                'sydney','adelaide','adelaide','adelaide'
+                'Sydney','Sydney','Sydney',
+                'Sydney','Adelaide','Adelaide','Adelaide'
             ],
             'Get specified column values'
+        );
+        deepEqual(tf.getColValues(0, true),
+            [
+                'From','Sydney','Sydney','Sydney',
+                'Sydney','Adelaide','Adelaide','Adelaide'
+            ],
+            'Get specified column values including column header'
         );
         deepEqual(
             tf.getTableData(),
@@ -112,6 +129,11 @@
             tf.getFilteredDataCol(0),
             ['Adelaide','Adelaide','Adelaide'],
             'Get specified column filtered values'
+        );
+        deepEqual(
+            tf.getFilteredDataCol(0, true),
+            ['From','Adelaide','Adelaide','Adelaide'],
+            'Get specified column filtered values including header'
         );
         tf.clearFilters();
         tf.filter();
@@ -251,10 +273,17 @@
     test('Get table data', function() {
         deepEqual(tf.getColValues(0),
             [
-                'sydney','sydney','sydney',
-                'sydney','adelaide','adelaide','adelaide'
+                'Sydney','Sydney','Sydney',
+                'Sydney','Adelaide','Adelaide','Adelaide'
             ],
             'Get specified column values'
+        );
+        deepEqual(tf.getColValues(0, true),
+            [
+                'From','Sydney','Sydney','Sydney',
+                'Sydney','Adelaide','Adelaide','Adelaide'
+            ],
+            'Get specified column values including column header'
         );
         deepEqual(
             tf.getTableData(),
@@ -296,6 +325,11 @@
             tf.getFilteredDataCol(0),
             ['Adelaide','Adelaide','Adelaide'],
             'Get specified column filtered values'
+        );
+        deepEqual(
+            tf.getFilteredDataCol(0, true),
+            ['From','Adelaide','Adelaide','Adelaide'],
+            'Get specified column filtered values including header'
         );
         tf.clearFilters();
         tf.filter();

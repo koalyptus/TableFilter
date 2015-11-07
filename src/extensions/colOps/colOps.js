@@ -92,7 +92,7 @@ export default class ColOps{
                 //use ucolIndex because we only want to pass through this loop
                 //once for each column get the values in this unique column
                 colvalues.push(
-                    tf.getColValues(ucolIndex[ucol], true, excludeRow));
+                    tf.getColValues(ucolIndex[ucol], false, true, excludeRow));
 
                 //next: calculate all operations for this column
                 var result,
