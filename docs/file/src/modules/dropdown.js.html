@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/dropdown.js | tablefilter v0.0.9 API Document</title>
+  <title data-ice="title">src/modules/dropdown.js | tablefilter v0.0.10 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -205,7 +205,7 @@ export class Dropdown{
                         ((activeFlt===undefined || activeFlt==colIndex)  ||
                             (activeFlt!=colIndex &amp;&amp;
                                 tf.validRowsIndex.indexOf(k) != -1 ))) ))){
-                    var cell_data = tf.getCellData(j, cell[j]),
+                    var cell_data = tf.getCellData(cell[j]),
                         //Vary Peter&apos;s patch
                         cell_string = Str.matchCase(cell_data, matchCase);
 

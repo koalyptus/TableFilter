@@ -3540,6 +3540,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#getheaderstext",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getHeadersText",
+    "src/tablefilter.js~TableFilter#getHeadersText",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#getlastrowindex",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getLastRowIndex",
     "src/tablefilter.js~TableFilter#getLastRowIndex",
