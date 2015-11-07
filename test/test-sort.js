@@ -74,10 +74,10 @@ function startSimple(tf, sort){
 
     test('Sort API', function() {
         sort.sortByColumnIndex(1, true);
-        deepEqual(tf.getColValues(1)[0], 'perth', 'Descending sort');
+        deepEqual(tf.getColValues(1)[0], 'Perth', 'Descending sort');
 
         sort.sortByColumnIndex(1, false);
-        deepEqual(tf.getColValues(1)[0], 'adelaide', 'Descending sort');
+        deepEqual(tf.getColValues(1)[0], 'Adelaide', 'Descending sort');
     });
 
     module('Destroy and re-init');

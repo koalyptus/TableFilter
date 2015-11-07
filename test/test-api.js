@@ -63,15 +63,15 @@
     test('Get table data', function() {
         deepEqual(tf.getColValues(0),
             [
-                'sydney','sydney','sydney',
-                'sydney','adelaide','adelaide','adelaide'
+                'Sydney','Sydney','Sydney',
+                'Sydney','Adelaide','Adelaide','Adelaide'
             ],
             'Get specified column values'
         );
         deepEqual(tf.getColValues(0, true),
             [
-                'From', 'sydney','sydney','sydney',
-                'sydney','adelaide','adelaide','adelaide'
+                'From','Sydney','Sydney','Sydney',
+                'Sydney','Adelaide','Adelaide','Adelaide'
             ],
             'Get specified column values including column header'
         );
@@ -273,15 +273,15 @@
     test('Get table data', function() {
         deepEqual(tf.getColValues(0),
             [
-                'sydney','sydney','sydney',
-                'sydney','adelaide','adelaide','adelaide'
+                'Sydney','Sydney','Sydney',
+                'Sydney','Adelaide','Adelaide','Adelaide'
             ],
             'Get specified column values'
         );
         deepEqual(tf.getColValues(0, true),
             [
-                'From', 'sydney','sydney','sydney',
-                'sydney','adelaide','adelaide','adelaide'
+                'From','Sydney','Sydney','Sydney',
+                'Sydney','Adelaide','Adelaide','Adelaide'
             ],
             'Get specified column values including column header'
         );

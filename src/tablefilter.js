@@ -1931,7 +1931,7 @@ export class TableFilter{
                     if(j != colIndex || row[i].style.display !== ''){
                         continue;
                     }
-                    let cell_data = Str.lower(this.getCellData(cell[j])),
+                    let cell_data = this.getCellData(cell[j]),
                         nbFormat = this.colNbFormat ?
                             this.colNbFormat[colIndex] : null,
                         data = num ?
