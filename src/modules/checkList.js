@@ -137,10 +137,9 @@ export class CheckList{
                     (tf.paging && ((!activeFlt || activeFlt===colIndex )||
                     (activeFlt!=colIndex &&
                         tf.validRowsIndex.indexOf(k) != -1)) )))){
-                    var cell_data = tf.getCellData(j, cells[j]);
+                    var cell_data = tf.getCellData(cells[j]);
                     //Vary Peter's patch
-                    var cell_string = Str.matchCase(
-                        cell_data, tf.matchCase);
+                    var cell_string = Str.matchCase(cell_data, tf.matchCase);
                     // checks if celldata is already in array
                     if(!Arr.has(this.opts, cell_string, tf.matchCase)){
                         this.opts.push(cell_data);

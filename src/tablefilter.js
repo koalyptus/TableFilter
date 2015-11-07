@@ -1754,8 +1754,8 @@ export class TableFilter{
                     continue;
                 }
 
-                let cell_data = Str.matchCase(
-                    this.getCellData(j, cell[j]), this.caseSensitive);
+                let cell_data = Str.matchCase(this.getCellData(cell[j]),
+                    this.caseSensitive);
 
                 //multiple search parameter operator ||
                 let sAOrSplit = sA.split(this.orOperator),
@@ -1926,7 +1926,7 @@ export class TableFilter{
                     if(j != colindex || row[i].style.display !== ''){
                         continue;
                     }
-                    let cell_data = Str.lower(this.getCellData(j, cell[j])),
+                    let cell_data = Str.lower(this.getCellData(cell[j])),
                         nbFormat = this.colNbFormat ?
                             this.colNbFormat[colindex] : null,
                         data = num ?
@@ -2075,17 +2075,14 @@ export class TableFilter{
 
     /**
      * Return the data of a given cell
-     * @param  {Number} i    Column's index
-     * @param  {Object} cell Cell's DOM object
+     * @param  {DOMElement} cell Cell's DOM object
      * @return {String}
      */
-    getCellData(i, cell){
-        if(Types.isUndef(i) || !cell){
-            return '';
-        }
-        //First checks for customCellData event
-        if(this.customCellData && this.customCellDataCols.indexOf(i) != -1){
-            return this.customCellData.call(null, this, cell, i);
+    getCellData(cell){
+        var idx = cell.cellIndex;
+        //Check for customCellData callback
+        if(this.customCellData && this.customCellDataCols.indexOf(idx) != -1){
+            return this.customCellData.call(null, this, cell, idx);
         } else {
             return Dom.getText(cell);
         }
@@ -2118,7 +2115,7 @@ export class TableFilter{
             let rowData = [k,[]];
             let cells = rows[k].cells;
             for(let j=0, len=cells.length; j<len; j++){
-                let cellData = this.getCellData(j, cells[j]);
+                let cellData = this.getCellData(cells[j]);
                 rowData[1].push(cellData);
             }
             tblData.push(rowData);
@@ -2158,7 +2155,7 @@ export class TableFilter{
             let rData = [this.validRowsIndex[i],[]],
                 cells = rows[this.validRowsIndex[i]].cells;
             for(let k=0; k<cells.length; k++){
-                let cellData = this.getCellData(k, cells[k]);
+                let cellData = this.getCellData(cells[k]);
                 rData[1].push(cellData);
             }
             filteredData.push(rData);

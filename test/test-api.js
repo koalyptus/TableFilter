@@ -16,6 +16,11 @@
         deepEqual(tf.getFilterId(0), 'flt0_demo', 'filter DOM element id');
         deepEqual(tf.getStartRowIndex(), 2, 'Start of filterable rows');
         deepEqual(tf.getLastRowIndex(), 8, 'Last row index');
+        deepEqual(
+            tf.getCellData(tf.getHeaderElement(1)),
+            'Destination',
+            'Column header text'
+        );
     });
 
     module('Public methods');

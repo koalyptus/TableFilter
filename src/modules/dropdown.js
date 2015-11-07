@@ -138,7 +138,7 @@ export class Dropdown{
                         ((activeFlt===undefined || activeFlt==colIndex)  ||
                             (activeFlt!=colIndex &&
                                 tf.validRowsIndex.indexOf(k) != -1 ))) ))){
-                    var cell_data = tf.getCellData(j, cell[j]),
+                    var cell_data = tf.getCellData(cell[j]),
                         //Vary Peter's patch
                         cell_string = Str.matchCase(cell_data, matchCase);
 
