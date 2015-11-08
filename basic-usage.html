@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Auto filter, filter as you type behaviour | TableFilter</title>
+    <title>Basic usage | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -141,12 +141,57 @@
 
       
 
-<h1>Auto filter, filter as you type</h1>
+<h1>Basic usage</h1>
 
 <p>
-    This demo features the filter as you type behaviour enabled by the
-    <code>auto_filter</code> option.
+    <code>TableFilter</code> exposes an exhaustive API allowing to perform most
+    of the actions in a programmatic manner. This example show how to filter
+    the table programmatically with a custom form and how to toggle the features
+    enabled by the configuration object.
 </p>
+
+<div class="navbar navbar-default">
+    <form class="navbar-form navbar-left" onsubmit="filter(event);">
+        <div class="form-group">
+            <label for="slcColumns">Column:</label>
+            <select id="slcColumns" name="slcColumns" class="form-control">
+                <option value="0">Country</option>
+                <option value="1">ISO</option>
+                <option value="2">Year</option>
+                <option value="3">POP</option>
+                <option value="4">XRAT</option>
+                <option value="5">PPP</option>
+                <option value="6">cgdp</option>
+                <option value="7">cc</option>
+                <option value="8">ci</option>
+            </select>
+            <input name="inpSearch" type="text"
+                class="form-control" placeholder="Search">
+
+            <button type="submit" class="btn btn-default">Filter</button>
+            <button type="reset" class="btn btn-link"
+                onclick="tf.clearFilters();">Clear</button>
+        </div>
+    </form>
+
+    <div class="navbar-form navbar-left">
+        <label for="chxPager">Pagination:</label>
+        <input id="chxPager" type="checkbox" checked class="form-control"
+            onclick="togglePagination(event);">
+    </div>
+
+    <div class="navbar-form navbar-left">
+        <label for="chxAlternate">Alternating rows:</label>
+        <input id="chxAlternate" type="checkbox" checked class="form-control"
+            onclick="toggleAlternatingRows(event);">
+    </div>
+
+    <div class="navbar-form navbar-left">
+        <label for="chxCounter">Rows counter:</label>
+        <input id="chxCounter" type="checkbox" checked class="form-control"
+            onclick="toggleRowsCounter(event);">
+    </div>
+</div>
 
 
 
@@ -592,20 +637,83 @@
 
 
 <script data-config>
-    var filtersConfig = {
-        base_path: 'tablefilter/',
-        auto_filter: true,
-        auto_filter_delay: 1100, //milliseconds
-        filters_row_index: 1,
-        remember_grid_values: true,
-        alternate_rows: true,
-        rows_counter: true,
-        rows_counter_text: "Rows: ",
-        btn_reset: true,
-        status_bar: true,
-        msg_filter: 'Filtering...'
-    };
-    var tf = new TableFilter('demo', filtersConfig);
+    // Form submission logic for filtering the table
+    function filter(evt){
+        var frm = document.forms[0];
+        var slc = frm.slcColumns;
+        var inp = frm.inpSearch;
+
+        // Set the column's filter value
+        tf.setFilterValue(slc.value, inp.value);
+
+        // Filter the table
+        tf.filter();
+
+        // Prevent form submission
+        evt.preventDefault();
+    }
+
+    // Toggle pagination
+    function togglePagination(evt){
+        var chx = evt.srcElement;
+        // Get paging feature instance
+        var feature = tf.feature('paging');
+
+        if(chx.checked){
+            feature.reset();
+        } else {
+            feature.destroy();
+            // Display all rows
+            tf.filter();
+        }
+    }
+
+    // Toggle alternating rows
+    function toggleAlternatingRows(evt){
+        var chx = evt.srcElement;
+        // Get alternating rows feature instance
+        var feature = tf.feature('alternateRows');
+
+        if(chx.checked){
+            feature.enable();
+            feature.init();
+        } else {
+            feature.disable();
+            feature.remove();
+        }
+    }
+
+    // Toggle rows counter
+    function toggleRowsCounter(evt){
+        var chx = evt.srcElement;
+        // Get alternating rows feature instance
+        var feature = tf.feature('rowsCounter');
+
+        if(chx.checked){
+            feature.init();
+        } else {
+            feature.destroy();
+        }
+    }
+
+    var tf = new TableFilter(
+        document.querySelector('.countries-tiny'),
+        {
+            base_path: 'tablefilter/',
+            alternate_rows: true,
+            rows_counter: true,
+            paging: true,
+            col_widths: [
+                '120px','120px','120px',
+                '120px','120px','120px',
+                '120px','120px','120px'
+            ],
+            on_filters_loaded: function(o){
+                // hide the filters row
+                o.tbl.rows[o.getFiltersRowIndex()].style.display = 'none';
+            }
+        }
+    );
     tf.init();
 </script>
 
@@ -644,6 +752,57 @@
 
 
 </p>
+
+<h4>Markup</h4>
+<div class="alert alert-info" role="alert">
+    NOTE: this demo relies on Bootstrap's for styling the toolbar above the
+    table.
+</div>
+<pre>
+&lt;div class="navbar navbar-default"&gt;
+    &lt;form class="navbar-form navbar-left" role="search" onsubmit="filter(event);"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label for="slcColumns"&gt;Column:&lt;/label&gt;
+            &lt;select id="slcColumns" name="slcColumns" class="form-control"&gt;
+                &lt;option value="0"&gt;Country&lt;/option&gt;
+                &lt;option value="1"&gt;ISO&lt;/option&gt;
+                &lt;option value="2"&gt;Year&lt;/option&gt;
+                &lt;option value="3"&gt;POP&lt;/option&gt;
+        &lt;option value="4"&gt;XRAT&lt;/option&gt;
+                &lt;option value="5"&gt;PPP&lt;/option&gt;
+                &lt;option value="6"&gt;cgdp&lt;/option&gt;
+                &lt;option value="7"&gt;cc&lt;/option&gt;
+                &lt;option value="8"&gt;ci&lt;/option&gt;
+            &lt;/select&gt;
+            &lt;input name="inpSearch" type="text"
+                class="form-control" placeholder="Search"&gt;
+
+            &lt;button type="submit" class="btn btn-default"&gt;Filter&lt;/button&gt;
+            &lt;button type="reset" class="btn btn-link"
+                onclick="tf.clearFilters();"&gt;Clear&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+
+    &lt;div class="navbar-form navbar-left"&gt;
+        &lt;label for="chxPager"&gt;Pagination:&lt;/label&gt;
+        &lt;input id="chxPager" type="checkbox" checked class="form-control"
+            onclick="togglePagination(event);"&gt;
+    &lt;/div&gt;
+
+    &lt;div class="navbar-form navbar-left"&gt;
+        &lt;label for="chxAlternate"&gt;Alternating rows:&lt;/label&gt;
+        &lt;input id="chxAlternate" type="checkbox" checked class="form-control"
+            onclick="toggleAlternatingRows(event);"&gt;
+    &lt;/div&gt;
+
+    &lt;div class="navbar-form navbar-left"&gt;
+        &lt;label for="chxCounter"&gt;Rows counter:&lt;/label&gt;
+        &lt;input id="chxCounter" type="checkbox" checked class="form-control"
+            onclick="toggleRowsCounter(event);"&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
 
     </div>
 
