@@ -7,6 +7,7 @@
 
     module('Sanity checks');
     test('TableFilter object', function() {
+        deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(tf.id, 'demo', 'id check');
         deepEqual(tf.getFiltersRowIndex(), 0, 'Filters row index');
         deepEqual(tf.getHeadersRowIndex(), 1, 'Headers row index');

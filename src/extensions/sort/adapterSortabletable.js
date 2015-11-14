@@ -41,7 +41,7 @@ export default class AdapterSortableTable{
         /*** TF additional events ***/
         //additional paging events for alternating background
         // o.Evt._Paging.nextEvt = function(){
-        // if(o.sorted && o.alternateBgs) o.Filter();
+        // if(o.sorted && o.alternateRows) o.Filter();
         // }
         // o.Evt._Paging.prevEvt = o.Evt._Paging.nextEvt;
         // o.Evt._Paging.firstEvt = o.Evt._Paging.nextEvt;
@@ -102,7 +102,7 @@ export default class AdapterSortableTable{
 
             //rows alternating bg issue
             // TODO: move into AlternateRows component
-            if(tf.alternateBgs){
+            if(tf.alternateRows){
                 let rows = tf.tbl.rows, c = 0;
 
                 let setClass = function(row, i, removeOnly){

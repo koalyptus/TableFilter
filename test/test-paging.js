@@ -16,6 +16,48 @@ test('Paging component', function() {
     deepEqual(paging.pagingLength, 2, 'Paging length');
     deepEqual(paging.nbPages, 4, 'Number of pages');
 });
+module('Feature interface');
+test('Properties', function() {
+    deepEqual(
+        paging.tf instanceof TableFilter, true, 'TableFilter instance');
+    deepEqual(paging.feature, 'paging', 'Feature name');
+    deepEqual(paging.enabled, true, 'Feature enabled');
+    deepEqual(paging.initialized, true, 'Feature enabled');
+    deepEqual(typeof paging.config, 'object', 'TF configuration object');
+    deepEqual(typeof paging.init, 'function', 'Feature init method');
+    deepEqual(typeof paging.destroy, 'function', 'Feature destroy method');
+    deepEqual(typeof paging.reset, 'function', 'Feature reset method');
+    deepEqual(typeof paging.enable, 'function', 'Feature enable method');
+    deepEqual(typeof paging.disable, 'function', 'Feature enable method');
+    deepEqual(
+        typeof paging.isEnabled, 'function', 'Feature enable method');
+});
+test('Can destroy', function() {
+    paging.destroy();
+    deepEqual(paging.enabled, false, 'disabled');
+});
+test('Can reset', function() {
+    paging.reset();
+    deepEqual(paging.enabled, true, 'enabled');
+});
+test('Can disable', function() {
+    paging.disable();
+    deepEqual(paging.enabled, false, 'disabled');
+});
+test('Can enable', function() {
+    paging.enable();
+    deepEqual(paging.enabled, true, 'enabled');
+});
+test('Can init', function() {
+    paging.destroy();
+    paging.enable();
+    paging.init();
+    deepEqual(paging.enabled, true, 'enabled');
+});
+test('Can check is enabled', function() {
+    paging.isEnabled();
+    deepEqual(paging.enabled, true, 'enabled');
+});
 
 module('UI elements');
 test('Paging UI elements', function() {

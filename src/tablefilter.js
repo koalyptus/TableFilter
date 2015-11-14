@@ -160,7 +160,7 @@ export class TableFilter{
          //enables/disables icons (paging, reset button)
         this.enableIcons = f.enable_icons===false ? false : true;
         //enables/disbles rows alternating bg colors
-        this.alternateBgs = Boolean(f.alternate_rows);
+        this.alternateRows = Boolean(f.alternate_rows);
         //defines widths of columns
         this.hasColWidths = Types.isArray(f.col_widths);
         this.colWidths = this.hasColWidths ? f.col_widths : null;
@@ -904,7 +904,7 @@ export class TableFilter{
         if(this.hasColWidths && !this.gridLayout){
             this.setColWidths();
         }
-        if(this.alternateBgs){
+        if(this.alternateRows){
             Mod.alternateRows = new AlternateRows(this);
             Mod.alternateRows.init();
         }
@@ -1201,7 +1201,7 @@ export class TableFilter{
             }
 
             //removes alternating colors
-            if(this.alternateBgs){
+            if(this.alternateRows){
                 Mod.alternateRows.removeRowBg(j);
             }
 
@@ -1833,7 +1833,7 @@ export class TableFilter{
             } else {
                 this.validateRow(k, true);
                 this.validRowsIndex.push(k);
-                if(this.alternateBgs){
+                if(this.alternateRows){
                     Mod.alternateRows.setRowBg(k, this.validRowsIndex.length);
                 }
                 if(this.onRowValidated){

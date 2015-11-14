@@ -1,17 +1,20 @@
+import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
 import Str from '../string';
 import Event from '../event';
 
-export class Paging{
+export class Paging extends Feature{
 
     /**
      * Pagination component
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
+        super(tf, 'paging');
+
         // Configuration object
-        var f = tf.config();
+        var f = this.config;
 
         //css class for paging buttons (previous,next,etc.)
         this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';
@@ -170,8 +173,6 @@ export class Paging{
             lastEvt: null,
             firstEvt: null
         };
-
-        this.tf = tf;
     }
 
     /**
@@ -181,6 +182,10 @@ export class Paging{
         var slcPages;
         var tf = this.tf;
         var evt = this.evt;
+
+        if(this.initialized){
+            return;
+        }
 
         // Check resultsPerPage is in expected format and initialise the
         // results per page component
@@ -321,7 +326,7 @@ export class Paging{
         targetEl.appendChild(btnLastSpan);
         this.pagingSlc = Dom.id(this.prfxSlcPages+tf.id);
 
-        if(!tf.rememberGridValues || this.isPagingRemoved){
+        if(!tf.rememberGridValues){
             this.setPagingInfo();
         }
         if(!tf.fltGrid){
@@ -329,7 +334,7 @@ export class Paging{
             this.setPagingInfo(tf.validRowsIndex);
         }
 
-        this.isPagingRemoved = false;
+        this.initialized = true;
     }
 
     /**
@@ -338,11 +343,10 @@ export class Paging{
      */
     reset(filterTable=false){
         var tf = this.tf;
-        if(!tf.hasGrid() || tf.paging){
+        if(!tf.hasGrid() || this.isEnabled()){
             return;
         }
-        tf.paging = true;
-        this.isPagingRemoved = true;
+        this.enable();
         this.init();
         tf.resetValues();
         if(filterTable){
@@ -433,12 +437,12 @@ export class Paging{
                 if(Types.isNull(isRowValid) || Boolean(isRowValid==='true')){
                     r.style.display = '';
                 }
-                if(tf.alternateBgs && alternateRows){
+                if(tf.alternateRows && alternateRows){
                     alternateRows.setRowBg(validRowIdx, h);
                 }
             } else {
                 r.style.display = 'none';
-                if(tf.alternateBgs && alternateRows){
+                if(tf.alternateRows && alternateRows){
                     alternateRows.removeRowBg(validRowIdx);
                 }
             }
@@ -464,7 +468,7 @@ export class Paging{
      */
     setPage(cmd){
         var tf = this.tf;
-        if(!tf.hasGrid() || !tf.paging){
+        if(!tf.hasGrid() || !this.isEnabled()){
             return;
         }
         var btnEvt = this.evt,
@@ -609,7 +613,7 @@ export class Paging{
     _changePage(index){
         var tf = this.tf;
 
-        if(!tf.paging){
+        if(!this.isEnabled()){
             return;
         }
         if(index === null){
@@ -648,7 +652,7 @@ export class Paging{
     _changeResultsPerPage(){
         var tf = this.tf;
 
-        if(!tf.paging){
+        if(!this.isEnabled()){
             return;
         }
         var slcR = this.resultsPerPageSlc;
@@ -692,7 +696,7 @@ export class Paging{
      */
     _resetPageLength(name){
         var tf = this.tf;
-        if(!tf.paging){
+        if(!this.isEnabled()){
             return;
         }
         var pglenIndex = tf.feature('store').getPageLength(name);
@@ -774,7 +778,7 @@ export class Paging{
 
         this.pagingSlc = null;
         this.nbPages = 0;
-        this.isPagingRemoved = true;
-        tf.paging = false;
+        this.disable();
+        this.initialized = false;
     }
 }

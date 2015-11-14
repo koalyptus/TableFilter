@@ -5,10 +5,11 @@
     });
     tf.init();
 
-    module("Table 1: sanity checks");
-    test("TableFilter object", function() {
-        equal(tf.id, 'demo', 'id check');
-        equal(tf.filtersRowIndex, 0, 'Filters row index');
+    module('Table 1: sanity checks');
+    test('TableFilter object', function() {
+        deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
+        deepEqual(tf.id, 'demo', 'id check');
+        deepEqual(tf.filtersRowIndex, 0, 'Filters row index');
         deepEqual(tf.getCellsNb(), 5, 'filters type collection length');
     });
 
