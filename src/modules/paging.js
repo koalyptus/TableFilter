@@ -713,7 +713,7 @@ export class Paging extends Feature{
     destroy(){
         var tf = this.tf;
 
-        if(!tf.hasGrid()){
+        if(!this.initialized){
             return;
         }
         // btns containers

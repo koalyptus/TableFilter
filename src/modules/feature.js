@@ -5,7 +5,7 @@ export class Feature {
     constructor(tf, feature) {
         this.tf = tf;
         this.feature = feature;
-        this.enabled = this.tf[feature];
+        this.enabled = tf[feature];
         this.config = tf.config();
         this.initialized = false;
     }

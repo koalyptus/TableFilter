@@ -82,7 +82,7 @@ export class AlternateRows extends Feature {
      * Removes all alternating backgrounds
      */
     destroy() {
-        if(!this.tf.hasGrid()){
+        if(!this.initialized){
             return;
         }
         for(var i=this.tf.refRow; i<this.tf.nbRows; i++){

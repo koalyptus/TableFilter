@@ -5670,7 +5670,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        this.tf = tf;
 	        this.feature = feature;
-	        this.enabled = this.tf[feature];
+	        this.enabled = tf[feature];
 	        this.config = tf.config();
 	        this.initialized = false;
 	    }
@@ -6597,7 +6597,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function destroy() {
 	            var tf = this.tf;
 	
-	            if (!tf.hasGrid()) {
+	            if (!this.initialized) {
 	                return;
 	            }
 	            // btns containers
@@ -6683,9 +6683,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _feature = __webpack_require__(18);
 	
 	var _dom = __webpack_require__(2);
 	
@@ -6695,7 +6701,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _event2 = _interopRequireDefault(_event);
 	
-	var ClearButton = (function () {
+	var ClearButton = (function (_Feature) {
+	    _inherits(ClearButton, _Feature);
 	
 	    /**
 	     * Clear button component
@@ -6705,8 +6712,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function ClearButton(tf) {
 	        _classCallCheck(this, ClearButton);
 	
+	        _get(Object.getPrototypeOf(ClearButton.prototype), 'constructor', this).call(this, tf, 'btnReset');
+	
 	        // Configuration object
-	        var f = tf.config();
+	        var f = this.config;
 	
 	        //id of container element
 	        this.btnResetTgtId = f.btn_reset_target_id || null;
@@ -6720,13 +6729,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.btnResetHtml = f.btn_reset_html || (!tf.enableIcons ? null : '<input type="button" value="" class="' + tf.btnResetCssClass + '" ' + 'title="' + this.btnResetTooltip + '" />');
 	        //span containing reset button
 	        this.prfxResetSpan = 'resetspan_';
-	
-	        this.tf = tf;
 	    }
 	
 	    _createClass(ClearButton, [{
 	        key: 'onClick',
 	        value: function onClick() {
+	            if (!this.isEnabled()) {
+	                return;
+	            }
 	            this.tf.clearFilters();
 	        }
 	
@@ -6740,7 +6750,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var tf = this.tf;
 	
-	            if (!tf.hasGrid() && !tf.isFirstLoad && tf.btnResetEl) {
+	            // if(!tf.hasGrid() && !tf.isFirstLoad && tf.btnResetEl){
+	            if (this.initialized) {
 	                return;
 	            }
 	
@@ -6758,19 +6769,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	                fltreset.className = tf.btnResetCssClass;
 	                fltreset.appendChild(_dom2['default'].text(this.btnResetText));
 	                resetspan.appendChild(fltreset);
-	                // fltreset.onclick = this.Evt._Clear;
 	                _event2['default'].add(fltreset, 'click', function () {
 	                    _this.onClick();
 	                });
 	            } else {
 	                resetspan.innerHTML = this.btnResetHtml;
 	                var resetEl = resetspan.firstChild;
-	                // resetEl.onclick = this.Evt._Clear;
 	                _event2['default'].add(resetEl, 'click', function () {
 	                    _this.onClick();
 	                });
 	            }
 	            this.btnResetEl = resetspan.firstChild;
+	
+	            this.initialized = true;
 	        }
 	
 	        /**
@@ -6781,20 +6792,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function destroy() {
 	            var tf = this.tf;
 	
-	            if (!tf.hasGrid() || !this.btnResetEl) {
+	            if (!this.initialized) {
 	                return;
 	            }
 	
-	            var resetspan = _dom2['default'].id(tf.prfxResetSpan + tf.id);
+	            var resetspan = _dom2['default'].id(this.prfxResetSpan + tf.id);
 	            if (resetspan) {
 	                resetspan.parentNode.removeChild(resetspan);
 	            }
 	            this.btnResetEl = null;
+	            this.disable();
+	            this.initialized = false;
 	        }
 	    }]);
 	
 	    return ClearButton;
-	})();
+	})(_feature.Feature);
 
 	exports.ClearButton = ClearButton;
 
@@ -7092,7 +7105,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'destroy',
 	        value: function destroy() {
-	            if (!this.tf.hasGrid()) {
+	            if (!this.initialized) {
 	                return;
 	            }
 	            for (var i = this.tf.refRow; i < this.tf.nbRows; i++) {
