@@ -44,7 +44,6 @@ export class ClearButton extends Feature{
     init(){
         var tf = this.tf;
 
-        // if(!tf.hasGrid() && !tf.isFirstLoad && tf.btnResetEl){
         if(this.initialized){
             return;
         }

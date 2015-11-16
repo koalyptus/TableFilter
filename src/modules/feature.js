@@ -28,12 +28,12 @@ export class Feature {
 
     enable() {
         this.enabled = true;
-        this.tf[this.feature] = this.enabled;
+        // this.tf[this.feature] = this.enabled;
     }
 
     disable() {
         this.enabled = false;
-        this.tf[this.feature] = this.enabled;
+        // this.tf[this.feature] = this.enabled;
     }
 
     isEnabled() {

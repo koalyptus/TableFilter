@@ -81,12 +81,13 @@ export class Loader{
         if(!this.loaderDiv){
             return;
         }
-        var tf = this.tf,
-            targetEl = !this.loaderTgtId ?
-            (tf.gridLayout ?
-                tf.feature('gridLayout').tblCont : tf.tbl.parentNode):
-            Dom.id(this.loaderTgtId);
-        targetEl.removeChild(this.loaderDiv);
+        // var tf = this.tf,
+        //     targetEl = !this.loaderTgtId ?
+        //         (tf.gridLayout ?
+        //             tf.feature('gridLayout').tblCont : tf.tbl.parentNode) :
+        //         Dom.id(this.loaderTgtId);
+        // targetEl.removeChild(this.loaderDiv);
+        this.loaderDiv.parentNode.removeChild(this.loaderDiv);
         this.loaderDiv = null;
     }
 }

@@ -207,6 +207,10 @@ test('Set results per page', function() {
     paging.changeResultsPerPage();
     deepEqual(paging.pagingLength, 6, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
+});
 
+module('Tear-down');
+test('can destroy TableFilter DOM elements', function() {
     tf.destroy();
+    deepEqual(tf.hasGrid(), false, 'Filters removed');
 });

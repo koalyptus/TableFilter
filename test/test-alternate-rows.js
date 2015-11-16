@@ -141,3 +141,9 @@ test('Grid layout: remove alternating rows', function() {
     deepEqual(tbl.querySelectorAll('tr.odd').length, 0, 'Odd bgs removed');
     deepEqual(tbl.querySelectorAll('tr.even').length, 0, 'Even bg removed');
 });
+
+module('Tear-down');
+test('can destroy TableFilter DOM elements', function() {
+    tf.destroy();
+    deepEqual(tf.hasGrid(), false, 'Filters removed');
+});

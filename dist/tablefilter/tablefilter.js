@@ -155,17 +155,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _modulesGridLayout = __webpack_require__(10);
 	
-	var _modulesLoader = __webpack_require__(11);
+	var _modulesLoader = __webpack_require__(12);
 	
-	var _modulesHighlightKeywords = __webpack_require__(12);
+	var _modulesHighlightKeywords = __webpack_require__(13);
 	
-	var _modulesPopupFilter = __webpack_require__(13);
+	var _modulesPopupFilter = __webpack_require__(14);
 	
-	var _modulesDropdown = __webpack_require__(14);
+	var _modulesDropdown = __webpack_require__(15);
 	
-	var _modulesCheckList = __webpack_require__(16);
+	var _modulesCheckList = __webpack_require__(17);
 	
-	var _modulesRowsCounter = __webpack_require__(17);
+	var _modulesRowsCounter = __webpack_require__(18);
 	
 	var _modulesStatusBar = __webpack_require__(19);
 	
@@ -3780,9 +3780,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _feature = __webpack_require__(11);
 	
 	var _dom = __webpack_require__(2);
 	
@@ -3796,7 +3802,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _event2 = _interopRequireDefault(_event);
 	
-	var GridLayout = (function () {
+	var GridLayout = (function (_Feature) {
+	    _inherits(GridLayout, _Feature);
 	
 	    /**
 	     * Grid layout, table with fixed headers
@@ -3806,7 +3813,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function GridLayout(tf) {
 	        _classCallCheck(this, GridLayout);
 	
-	        var f = tf.config();
+	        _get(Object.getPrototypeOf(GridLayout.prototype), 'constructor', this).call(this, tf, 'gridLayout');
+	
+	        var f = this.config;
 	
 	        //defines grid width
 	        this.gridWidth = f.grid_width || null;
@@ -3845,8 +3854,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.prfxGridTh = 'tblHeadTh_';
 	
 	        this.sourceTblHtml = tf.tbl.outerHTML;
-	
-	        this.tf = tf;
 	    }
 	
 	    /**
@@ -3859,10 +3866,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var _this = this;
 	
 	            var tf = this.tf;
-	            var f = tf.config();
+	            var f = this.config;
 	            var tbl = tf.tbl;
 	
-	            if (!tf.gridLayout) {
+	            if (this.initialized) {
 	                return;
 	            }
 	
@@ -3944,7 +3951,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            //Headers table
 	            this.headTbl = _dom2['default'].create('table', ['id', this.prfxHeadTbl + tf.id]);
-	            var tH = _dom2['default'].create('tHead'); //IE<7 needs it
+	            var tH = _dom2['default'].create('tHead');
 	
 	            //1st row should be headers row, ids are added if not set
 	            //Those ids are used by the sort feature
@@ -4095,6 +4102,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (tbl.clientWidth !== this.headTbl.clientWidth) {
 	                tbl.style.width = this.headTbl.clientWidth + 'px';
 	            }
+	
+	            this.initialized = true;
 	        }
 	
 	        /**
@@ -4106,7 +4115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var tf = this.tf;
 	            var tbl = tf.tbl;
 	
-	            if (!tf.gridLayout) {
+	            if (!this.initialized) {
 	                return;
 	            }
 	            var t = tbl.parentNode.removeChild(tbl);
@@ -4120,17 +4129,89 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            tbl.outerHTML = this.sourceTblHtml;
 	            //needed to keep reference of table element
-	            tbl = _dom2['default'].id(tf.id);
+	            this.tf.tbl = _dom2['default'].id(tf.id); // ???
+	
+	            this.initialized = false;
 	        }
 	    }]);
 	
 	    return GridLayout;
-	})();
+	})(_feature.Feature);
 
 	exports.GridLayout = GridLayout;
 
 /***/ },
 /* 11 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	var NOTIMPLEMENTED = 'Not implemented.';
+	
+	var Feature = (function () {
+	    function Feature(tf, feature) {
+	        _classCallCheck(this, Feature);
+	
+	        this.tf = tf;
+	        this.feature = feature;
+	        this.enabled = tf[feature];
+	        this.config = tf.config();
+	        this.initialized = false;
+	    }
+	
+	    _createClass(Feature, [{
+	        key: 'init',
+	        value: function init() {
+	            throw new Error(NOTIMPLEMENTED);
+	        }
+	    }, {
+	        key: 'reset',
+	        value: function reset() {
+	            if (!this.tf.hasGrid()) {
+	                return;
+	            }
+	            this.enable();
+	            this.init();
+	        }
+	    }, {
+	        key: 'destroy',
+	        value: function destroy() {
+	            throw new Error(NOTIMPLEMENTED);
+	        }
+	    }, {
+	        key: 'enable',
+	        value: function enable() {
+	            this.enabled = true;
+	            // this.tf[this.feature] = this.enabled;
+	        }
+	    }, {
+	        key: 'disable',
+	        value: function disable() {
+	            this.enabled = false;
+	            // this.tf[this.feature] = this.enabled;
+	        }
+	    }, {
+	        key: 'isEnabled',
+	        value: function isEnabled() {
+	            return this.enabled;
+	        }
+	    }]);
+	
+	    return Feature;
+	})();
+
+	exports.Feature = Feature;
+
+/***/ },
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4236,9 +4317,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!this.loaderDiv) {
 	                return;
 	            }
-	            var tf = this.tf,
-	                targetEl = !this.loaderTgtId ? tf.gridLayout ? tf.feature('gridLayout').tblCont : tf.tbl.parentNode : _dom2['default'].id(this.loaderTgtId);
-	            targetEl.removeChild(this.loaderDiv);
+	            // var tf = this.tf,
+	            //     targetEl = !this.loaderTgtId ?
+	            //         (tf.gridLayout ?
+	            //             tf.feature('gridLayout').tblCont : tf.tbl.parentNode) :
+	            //         Dom.id(this.loaderTgtId);
+	            // targetEl.removeChild(this.loaderDiv);
+	            this.loaderDiv.parentNode.removeChild(this.loaderDiv);
 	            this.loaderDiv = null;
 	        }
 	    }]);
@@ -4249,7 +4334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.Loader = Loader;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4395,7 +4480,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.HighlightKeyword = HighlightKeyword;
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -4662,7 +4747,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4689,7 +4774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _string2 = _interopRequireDefault(_string);
 	
-	var _sort = __webpack_require__(15);
+	var _sort = __webpack_require__(16);
 	
 	var _sort2 = _interopRequireDefault(_sort);
 	
@@ -5010,7 +5095,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.Dropdown = Dropdown;
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5035,7 +5120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5062,7 +5147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _string2 = _interopRequireDefault(_string);
 	
-	var _sort = __webpack_require__(15);
+	var _sort = __webpack_require__(16);
 	
 	var _sort2 = _interopRequireDefault(_sort);
 	
@@ -5478,7 +5563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.CheckList = CheckList;
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5497,7 +5582,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _feature = __webpack_require__(18);
+	var _feature = __webpack_require__(11);
 	
 	var _dom = __webpack_require__(2);
 	
@@ -5647,76 +5732,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(_feature.Feature);
 
 	exports.RowsCounter = RowsCounter;
-
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	var NOTIMPLEMENTED = 'Not implemented.';
-	
-	var Feature = (function () {
-	    function Feature(tf, feature) {
-	        _classCallCheck(this, Feature);
-	
-	        this.tf = tf;
-	        this.feature = feature;
-	        this.enabled = tf[feature];
-	        this.config = tf.config();
-	        this.initialized = false;
-	    }
-	
-	    _createClass(Feature, [{
-	        key: 'init',
-	        value: function init() {
-	            throw new Error(NOTIMPLEMENTED);
-	        }
-	    }, {
-	        key: 'reset',
-	        value: function reset() {
-	            if (!this.tf.hasGrid()) {
-	                return;
-	            }
-	            this.enable();
-	            this.init();
-	        }
-	    }, {
-	        key: 'destroy',
-	        value: function destroy() {
-	            throw new Error(NOTIMPLEMENTED);
-	        }
-	    }, {
-	        key: 'enable',
-	        value: function enable() {
-	            this.enabled = true;
-	            this.tf[this.feature] = this.enabled;
-	        }
-	    }, {
-	        key: 'disable',
-	        value: function disable() {
-	            this.enabled = false;
-	            this.tf[this.feature] = this.enabled;
-	        }
-	    }, {
-	        key: 'isEnabled',
-	        value: function isEnabled() {
-	            return this.enabled;
-	        }
-	    }]);
-	
-	    return Feature;
-	})();
-
-	exports.Feature = Feature;
 
 /***/ },
 /* 19 */
@@ -5890,7 +5905,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _feature = __webpack_require__(18);
+	var _feature = __webpack_require__(11);
 	
 	var _dom = __webpack_require__(2);
 	
@@ -6691,7 +6706,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _feature = __webpack_require__(18);
+	var _feature = __webpack_require__(11);
 	
 	var _dom = __webpack_require__(2);
 	
@@ -6750,7 +6765,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var tf = this.tf;
 	
-	            // if(!tf.hasGrid() && !tf.isFirstLoad && tf.btnResetEl){
 	            if (this.initialized) {
 	                return;
 	            }
@@ -7010,7 +7024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _feature = __webpack_require__(18);
+	var _feature = __webpack_require__(11);
 	
 	var _dom = __webpack_require__(2);
 	
