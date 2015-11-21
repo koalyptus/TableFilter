@@ -53,7 +53,6 @@ function startSimple(tf, sort){
         sort.sortByColumnIndex(0);
 
         deepEqual(sort.sorted, true, 'Table column sorted');
-        deepEqual(sort.isPaged, false, 'Table is not paged');
         deepEqual(
             outputBefore[0] instanceof TableFilter,
             true,

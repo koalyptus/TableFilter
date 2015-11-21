@@ -15,9 +15,6 @@ export default class AdapterSortableTable{
         this.name = opts.name;
         this.desc = opts.description || 'Sortable table';
 
-        //indicates if paging is enabled
-        this.isPaged = false;
-
         //indicates if tables was sorted
         this.sorted = false;
 
@@ -91,9 +88,7 @@ export default class AdapterSortableTable{
 
             /*** sort behaviour for paging ***/
             if(tf.paging){
-                adpt.isPaged = true;
-                tf.paging = false;
-                tf.feature('paging').destroy();
+                tf.feature('paging').disable();
             }
         };
 
@@ -137,11 +132,10 @@ export default class AdapterSortableTable{
                 }
             }
             //sort behaviour for paging
-            if(adpt.isPaged){
+            if(tf.paging){
                 let paginator = tf.feature('paging');
-                paginator.reset(false);
+                paginator.enable();
                 paginator.setPage(paginator.getPage());
-                adpt.isPaged = false;
             }
 
             if(adpt.onAfterSort){
