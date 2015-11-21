@@ -1,15 +1,18 @@
+import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
 import Event from '../event';
 
-export class GridLayout{
+export class GridLayout extends Feature{
 
     /**
      * Grid layout, table with fixed headers
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf) {
-        var f = tf.config();
+    constructor(tf){
+        super(tf, 'gridLayout');
+
+        var f = this.config;
 
         //defines grid width
         this.gridWidth = f.grid_width || null;
@@ -50,8 +53,6 @@ export class GridLayout{
         this.prfxGridTh = 'tblHeadTh_';
 
         this.sourceTblHtml = tf.tbl.outerHTML;
-
-        this.tf = tf;
     }
 
     /**
@@ -59,10 +60,10 @@ export class GridLayout{
      */
     init(){
         var tf = this.tf;
-        var f = tf.config();
+        var f = this.config;
         var tbl = tf.tbl;
 
-        if(!tf.gridLayout){
+        if(this.initialized){
             return;
         }
 
@@ -148,7 +149,7 @@ export class GridLayout{
 
         //Headers table
         this.headTbl = Dom.create('table', ['id', this.prfxHeadTbl + tf.id]);
-        var tH = Dom.create('tHead'); //IE<7 needs it
+        var tH = Dom.create('tHead');
 
         //1st row should be headers row, ids are added if not set
         //Those ids are used by the sort feature
@@ -293,13 +294,15 @@ export class GridLayout{
             }
         };
 
-        if(tf.popUpFilters){
+        if(tf.popupFilters){
             filtersRow.style.display = 'none';
         }
 
         if(tbl.clientWidth !== this.headTbl.clientWidth){
             tbl.style.width = this.headTbl.clientWidth+'px';
         }
+
+        this.initialized = true;
     }
 
     /**
@@ -309,7 +312,7 @@ export class GridLayout{
         var tf = this.tf;
         var tbl = tf.tbl;
 
-        if(!tf.gridLayout){
+        if(!this.initialized){
             return;
         }
         var t = tbl.parentNode.removeChild(tbl);
@@ -323,6 +326,8 @@ export class GridLayout{
 
         tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element
-        tbl = Dom.id(tf.id);
+        this.tf.tbl = Dom.id(tf.id); // ???
+
+        this.initialized = false;
     }
 }

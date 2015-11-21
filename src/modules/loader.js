@@ -1,18 +1,21 @@
+import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
 
 var global = window;
 
-export class Loader{
+export class Loader extends Feature{
 
     /**
      * Loading message/spinner
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
+        super(tf, 'loader');
 
         // TableFilter configuration
-        var f = tf.config();
+        var f = this.config;
+
         //id of container element
         this.loaderTgtId = f.loader_target_id || null;
         //div containing loader
@@ -33,8 +36,14 @@ export class Loader{
             f.on_hide_loader : null;
         //loader div
         this.prfxLoader = 'load_';
+    }
 
-        this.tf = tf;
+    init() {
+        if(this.initialized){
+            return;
+        }
+
+        var tf = this.tf;
 
         var containerDiv = Dom.create('div', ['id', this.prfxLoader+tf.id]);
         containerDiv.className = this.loaderCssClass;
@@ -46,17 +55,19 @@ export class Loader{
         } else {
             targetEl.appendChild(containerDiv);
         }
-        this.loaderDiv = Dom.id(this.prfxLoader+tf.id);
+        this.loaderDiv = containerDiv;
         if(!this.loaderHtml){
             this.loaderDiv.appendChild(Dom.text(this.loaderText));
         } else {
             this.loaderDiv.innerHTML = this.loaderHtml;
         }
+
+        this.show('none');
+        this.initialized = true;
     }
 
     show(p) {
-        if(!this.tf.loader || !this.loaderDiv ||
-            this.loaderDiv.style.display===p){
+        if(!this.isEnabled() || this.loaderDiv.style.display === p){
             return;
         }
 
@@ -64,29 +75,28 @@ export class Loader{
             if(!this.loaderDiv){
                 return;
             }
-            if(this.onShowLoader && p!=='none'){
+            if(this.onShowLoader && p !== 'none'){
                 this.onShowLoader.call(null, this);
             }
             this.loaderDiv.style.display = p;
-            if(this.onHideLoader && p==='none'){
+            if(this.onHideLoader && p === 'none'){
                 this.onHideLoader.call(null, this);
             }
         };
 
-        var t = p==='none' ? this.loaderCloseDelay : 1;
+        var t = p === 'none' ? this.loaderCloseDelay : 1;
         global.setTimeout(displayLoader, t);
     }
 
     destroy(){
-        if(!this.loaderDiv){
+        if(!this.initialized){
             return;
         }
-        var tf = this.tf,
-            targetEl = !this.loaderTgtId ?
-            (tf.gridLayout ?
-                tf.feature('gridLayout').tblCont : tf.tbl.parentNode):
-            Dom.id(this.loaderTgtId);
-        targetEl.removeChild(this.loaderDiv);
+
+        this.loaderDiv.parentNode.removeChild(this.loaderDiv);
         this.loaderDiv = null;
+
+        this.disable();
+        this.initialized = false;
     }
 }

@@ -1,17 +1,20 @@
+import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
 
 var global = window;
 
-export class StatusBar{
+export class StatusBar extends Feature{
 
     /**
      * Status bar UI component
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
+        super(tf, 'statusBar');
+
         // Configuration object
-        var f = tf.config();
+        var f = this.config;
 
         //id of custom container element
         this.statusBarTgtId = f.status_bar_target_id || null;
@@ -41,15 +44,14 @@ export class StatusBar{
         this.prfxStatusSpan = 'statusSpan_';
         // text preceding status bar label
         this.prfxStatusTxt = 'statusText_';
-
-        this.tf = tf;
     }
 
     init(){
-        var tf = this.tf;
-        if(!tf.hasGrid() && !tf.isFirstLoad){
+        if(this.initialized){
             return;
         }
+
+        var tf = this.tf;
 
         //status bar container
         var statusDiv = Dom.create('div', ['id', this.prfxStatus+tf.id]);
@@ -84,13 +86,14 @@ export class StatusBar{
         this.statusBarSpan = statusSpan;
         this.statusBarSpanText = statusSpanText;
 
+        this.initialized = true;
     }
 
     message(t=''){
-        var tf = this.tf;
-        if(!tf.statusBar || !this.statusBarSpan){
+        if(!this.isEnabled()){
             return;
         }
+
         if(this.onBeforeShowMsg){
             this.onBeforeShowMsg.call(null, this.tf, t);
         }
@@ -105,8 +108,7 @@ export class StatusBar{
     }
 
     destroy(){
-        var tf = this.tf;
-        if(!tf.hasGrid() || !this.statusBarDiv){
+        if(!this.initialized){
             return;
         }
 
@@ -115,6 +117,9 @@ export class StatusBar{
         this.statusBarSpan = null;
         this.statusBarSpanText = null;
         this.statusBarDiv = null;
+
+        this.disable();
+        this.initialized = false;
     }
 
 }

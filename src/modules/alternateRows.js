@@ -1,29 +1,31 @@
+import {Feature} from './feature';
 import Dom from '../dom';
 
-export class AlternateRows{
+export class AlternateRows extends Feature {
 
     /**
      * Alternating rows color
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
-        var f = tf.config();
-        //defines css class for even rows
-        this.evenCss = f.even_row_css_class || 'even';
-        //defines css class for odd rows
-        this.oddCss = f.odd_row_css_class || 'odd';
+        super(tf, 'alternateRows');
 
-        this.tf = tf;
+        var config = this.config;
+        //defines css class for even rows
+        this.evenCss = config.even_row_css_class || 'even';
+        //defines css class for odd rows
+        this.oddCss = config.odd_row_css_class || 'odd';
     }
 
     /**
      * Sets alternating rows color
      */
     init() {
-        var tf = this.tf;
-        if(!tf.hasGrid() && !tf.isFirstLoad){
+        if(this.initialized){
             return;
         }
+
+        var tf = this.tf;
         var validRowsIndex = tf.validRowsIndex;
         var noValidRowsIndex = validRowsIndex===null;
         //1st index
@@ -40,6 +42,7 @@ export class AlternateRows{
             this.setRowBg(rowIdx, idx);
             idx++;
         }
+        this.initialized = true;
     }
 
     /**
@@ -49,7 +52,7 @@ export class AlternateRows{
      * color
      */
     setRowBg(rowIdx, idx) {
-        if(!this.tf.alternateBgs || isNaN(rowIdx)){
+        if(!this.isEnabled() || isNaN(rowIdx)){
             return;
         }
         var rows = this.tf.tbl.rows;
@@ -78,22 +81,15 @@ export class AlternateRows{
     /**
      * Removes all alternating backgrounds
      */
-    remove() {
-        if(!this.tf.hasGrid()){
+    destroy() {
+        if(!this.initialized){
             return;
         }
         for(var i=this.tf.refRow; i<this.tf.nbRows; i++){
             this.removeRowBg(i);
         }
-    }
-
-    enable() {
-        this.tf.alternateBgs = true;
-    }
-
-    disable() {
-        this.tf.alternateBgs = false;
+        this.disable();
+        this.initialized = false;
     }
 
 }
-

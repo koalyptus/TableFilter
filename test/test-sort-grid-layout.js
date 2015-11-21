@@ -59,6 +59,7 @@ function startPaging(tf, sort){
         deepEqual(sort.stt instanceof SortableTable, true, 'Sort type');
         deepEqual(sort.sorted, false, 'Table not sorted');
         deepEqual(sort.initialized, true, 'Sort initialized');
+        deepEqual(tf.paging, true, 'Table is paged');
     });
 
     module('UI elements');
@@ -71,9 +72,7 @@ function startPaging(tf, sort){
 
     test('Sort behaviour', function() {
         sort.sortByColumnIndex(0);
-
         deepEqual(sort.sorted, true, 'Table column sorted');
-        deepEqual(tf.paging, true, 'Table is paged');
     });
 
     module('Destroy and re-init');

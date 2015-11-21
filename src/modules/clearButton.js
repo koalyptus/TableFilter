@@ -1,15 +1,18 @@
+import {Feature} from './feature';
 import Dom from '../dom';
 import Event from '../event';
 
-export class ClearButton{
+export class ClearButton extends Feature{
 
     /**
      * Clear button component
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
+        super(tf, 'btnReset');
+
         // Configuration object
-        var f = tf.config();
+        var f = this.config;
 
         //id of container element
         this.btnResetTgtId = f.btn_reset_target_id || null;
@@ -26,11 +29,12 @@ export class ClearButton{
             'title="'+this.btnResetTooltip+'" />');
         //span containing reset button
         this.prfxResetSpan = 'resetspan_';
-
-        this.tf = tf;
     }
 
     onClick(){
+        if(!this.isEnabled()){
+            return;
+        }
         this.tf.clearFilters();
     }
 
@@ -40,7 +44,7 @@ export class ClearButton{
     init(){
         var tf = this.tf;
 
-        if(!tf.hasGrid() && !tf.isFirstLoad && tf.btnResetEl){
+        if(this.initialized){
             return;
         }
 
@@ -59,15 +63,15 @@ export class ClearButton{
             fltreset.className = tf.btnResetCssClass;
             fltreset.appendChild(Dom.text(this.btnResetText));
             resetspan.appendChild(fltreset);
-            // fltreset.onclick = this.Evt._Clear;
-            Event.add(fltreset, 'click', () => { this.onClick(); });
+            Event.add(fltreset, 'click', ()=> { this.onClick(); });
         } else {
             resetspan.innerHTML = this.btnResetHtml;
             var resetEl = resetspan.firstChild;
-            // resetEl.onclick = this.Evt._Clear;
-            Event.add(resetEl, 'click', () => { this.onClick(); });
+            Event.add(resetEl, 'click', ()=> { this.onClick(); });
         }
         this.btnResetEl = resetspan.firstChild;
+
+        this.initialized = true;
     }
 
     /**
@@ -76,14 +80,16 @@ export class ClearButton{
     destroy(){
         var tf = this.tf;
 
-        if(!tf.hasGrid() || !this.btnResetEl){
+        if(!this.initialized){
             return;
         }
 
-        var resetspan = Dom.id(tf.prfxResetSpan+tf.id);
+        var resetspan = Dom.id(this.prfxResetSpan+tf.id);
         if(resetspan){
             resetspan.parentNode.removeChild(resetspan);
         }
         this.btnResetEl = null;
+        this.disable();
+        this.initialized = false;
     }
 }

@@ -1,15 +1,18 @@
+import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
 
-export class RowsCounter{
+export class RowsCounter extends Feature{
 
     /**
      * Rows counter
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
+        super(tf, 'rowsCounter');
+
         // TableFilter configuration
-        var f = tf.config();
+        var f = this.config;
 
         //id of custom container element
         this.rowsCounterTgtId = f.rows_counter_target_id || null;
@@ -35,16 +38,14 @@ export class RowsCounter{
         //callback raised after counter is refreshed
         this.onAfterRefreshCounter = Types.isFn(f.on_after_refresh_counter) ?
             f.on_after_refresh_counter : null;
-
-        this.tf = tf;
     }
 
     init(){
-        var tf = this.tf;
-
-        if((!tf.hasGrid() && !tf.isFirstLoad) || this.rowsCounterSpan){
+        if(this.initialized){
             return;
         }
+
+        var tf = this.tf;
 
         //rows counter container
         var countDiv = Dom.create('div', ['id', this.prfxCounter+tf.id]);
@@ -75,6 +76,7 @@ export class RowsCounter{
         this.rowsCounterDiv = countDiv;
         this.rowsCounterSpan = countSpan;
 
+        this.initialized = true;
         this.refresh();
     }
 
@@ -119,8 +121,7 @@ export class RowsCounter{
     }
 
     destroy(){
-        var tf = this.tf;
-        if(!tf.hasGrid() || !this.rowsCounterSpan){
+        if(!this.initialized){
             return;
         }
 
@@ -131,5 +132,8 @@ export class RowsCounter{
         }
         this.rowsCounterSpan = null;
         this.rowsCounterDiv = null;
+
+        this.disable();
+        this.initialized = false;
     }
 }

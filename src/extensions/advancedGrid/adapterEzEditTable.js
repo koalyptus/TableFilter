@@ -302,7 +302,7 @@ export default class AdapterEzEditTable {
                     tf.feature('paging').destroy();
                     tf.feature('paging').reset();
                 }
-                if(tf.alternateBgs){
+                if(tf.alternateRows){
                     tf.feature('alternateRows').init();
                 }
                 if(fnE){
@@ -323,7 +323,7 @@ export default class AdapterEzEditTable {
                         tf.feature('paging').destroy();
                         tf.feature('paging').reset(false);
                     }
-                    if(tf.alternateBgs){
+                    if(tf.alternateRows){
                         tf.feature('alternateRows').init();
                     }
                     if(fnF){
