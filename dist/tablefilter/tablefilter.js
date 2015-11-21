@@ -388,9 +388,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //id of toolbar container element
 	        this.toolBarTgtId = f.toolbar_target_id || null;
 	        //enables/disables help div
-	        this.helpInstructions = _types2['default'].isUndef(f.help_instructions) ? undefined : Boolean(f.help_instructions);
+	        this.help = _types2['default'].isUndef(f.help_instructions) ? undefined : Boolean(f.help_instructions);
 	        //popup filters
-	        this.popUpFilters = Boolean(f.popup_filters);
+	        this.popupFilters = Boolean(f.popup_filters);
 	        //active columns color
 	        this.markActiveColumns = Boolean(f.mark_active_columns);
 	        //defines css class for active column header
@@ -687,7 +687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var elm = _event2['default'].target(_ev);
 	                this.activeFilterId = elm.getAttribute('id');
 	                this.activeFlt = _dom2['default'].id(this.activeFilterId);
-	                if (this.popUpFilters) {
+	                if (this.popupFilters) {
 	                    _event2['default'].cancel(_ev);
 	                    _event2['default'].stop(_ev);
 	                }
@@ -715,7 +715,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var ct = elm.getAttribute('ct');
 	                    this.Mod.dropdown._build(ct);
 	                }
-	                if (this.popUpFilters) {
+	                if (this.popupFilters) {
 	                    _event2['default'].cancel(_ev);
 	                    _event2['default'].stop(_ev);
 	                }
@@ -726,7 +726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    return;
 	                }
 	                var _ev = e || global.event;
-	                if (this.popUpFilters) {
+	                if (this.popupFilters) {
 	                    _event2['default'].stop(_ev);
 	                }
 	                if (this.onSlcChange) {
@@ -769,7 +769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.gridLayout) {
 	                this.refRow = this.startRow === null ? 0 : this.startRow;
 	            }
-	            if (this.popUpFilters && (this.filtersRowIndex === 0 && this.headersRow === 1 || this.gridLayout)) {
+	            if (this.popupFilters && (this.filtersRowIndex === 0 && this.headersRow === 1 || this.gridLayout)) {
 	                this.headersRow = 0;
 	            }
 	
@@ -797,6 +797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.loader) {
 	                if (!Mod.loader) {
 	                    Mod.loader = new _modulesLoader.Loader(this);
+	                    Mod.loader.init();
 	                }
 	            }
 	
@@ -804,7 +805,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                Mod.highlightKeyword = new _modulesHighlightKeywords.HighlightKeyword(this);
 	            }
 	
-	            if (this.popUpFilters) {
+	            if (this.popupFilters) {
 	                if (!Mod.popupFilter) {
 	                    Mod.popupFilter = new _modulesPopupFilter.PopupFilter(this);
 	                }
@@ -831,16 +832,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            fltrow = this.tbl.insertRow(this.filtersRowIndex);
 	                        }
 	
-	                        if (this.headersRow > 1 && this.filtersRowIndex <= this.headersRow && !this.popUpFilters) {
+	                        if (this.headersRow > 1 && this.filtersRowIndex <= this.headersRow && !this.popupFilters) {
 	                            this.headersRow++;
 	                        }
-	                        if (this.popUpFilters) {
+	                        if (this.popupFilters) {
 	                            this.headersRow++;
 	                        }
 	
 	                        fltrow.className = this.fltsRowCssClass;
 	
-	                        if (this.isExternalFlt || this.popUpFilters) {
+	                        if (this.isExternalFlt || this.popupFilters) {
 	                            fltrow.style.display = 'none';
 	                        }
 	                    }
@@ -852,7 +853,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    for (var i = 0; i < n; i++) {
 	                        // this loop adds filters
 	
-	                        if (this.popUpFilters) {
+	                        if (this.popupFilters) {
 	                            Mod.popupFilter.build(i);
 	                        }
 	
@@ -1021,7 +1022,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                Mod.clearButton = new _modulesClearButton.ClearButton(this);
 	                Mod.clearButton.init();
 	            }
-	            if (this.helpInstructions) {
+	            if (this.help) {
 	                if (!Mod.help) {
 	                    Mod.help = new _modulesHelp.Help(this);
 	                }
@@ -1320,7 +1321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var rows = this.tbl.rows,
 	                Mod = this.Mod;
 	
-	            if (this.isExternalFlt && !this.popUpFilters) {
+	            if (this.isExternalFlt && !this.popupFilters) {
 	                this.removeExternalFlts();
 	            }
 	            if (this.infDiv) {
@@ -1423,12 +1424,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            // Enable help instructions by default if topbar is generated and not
 	            // explicitely set to false
-	            if (_types2['default'].isUndef(this.helpInstructions)) {
+	            if (_types2['default'].isUndef(this.help)) {
 	                if (!this.Mod.help) {
 	                    this.Mod.help = new _modulesHelp.Help(this);
 	                }
 	                this.Mod.help.init();
-	                this.helpInstructions = true;
+	                this.help = true;
 	            }
 	        }
 	
@@ -1662,7 +1663,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                Mod.highlightKeyword.unhighlightAll();
 	            }
 	            //removes popup filters active icons
-	            if (this.popUpFilters) {
+	            if (this.popupFilters) {
 	                Mod.popupFilter.buildIcons();
 	            }
 	            //removes active column header class
@@ -1940,7 +1941,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    if (this.singleSearchFlt && occurence[j]) {
 	                        singleFltRowValid = true;
 	                    }
-	                    if (this.popUpFilters) {
+	                    if (this.popupFilters) {
 	                        Mod.popupFilter.buildIcon(j, true);
 	                    }
 	                    if (this.markActiveColumns) {
@@ -2034,7 +2035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                Mod.rowsCounter.refresh(this.nbVisibleRows);
 	            }
 	
-	            if (this.popUpFilters) {
+	            if (this.popupFilters) {
 	                Mod.popupFilter.closeAll();
 	            }
 	        }
@@ -2692,9 +2693,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.nbVisibleRows = this.nbFilterableRows;
 	            this.nbRows = rows.length;
 	
-	            if (this.popUpFilters) {
+	            if (this.popupFilters) {
 	                this.headersRow++;
-	                Mod.popupFilter.buildAll();
+	                Mod.popupFilter.reset();
 	            }
 	
 	            if (!this.gridLayout) {
@@ -4095,7 +4096,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            };
 	
-	            if (tf.popUpFilters) {
+	            if (tf.popupFilters) {
 	                filtersRow.style.display = 'none';
 	            }
 	
@@ -4190,13 +4191,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'enable',
 	        value: function enable() {
 	            this.enabled = true;
-	            // this.tf[this.feature] = this.enabled;
 	        }
 	    }, {
 	        key: 'disable',
 	        value: function disable() {
 	            this.enabled = false;
-	            // this.tf[this.feature] = this.enabled;
 	        }
 	    }, {
 	        key: 'isEnabled',
@@ -4222,9 +4221,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _feature = __webpack_require__(11);
 	
 	var _dom = __webpack_require__(2);
 	
@@ -4236,7 +4241,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var global = window;
 	
-	var Loader = (function () {
+	var Loader = (function (_Feature) {
+	    _inherits(Loader, _Feature);
 	
 	    /**
 	     * Loading message/spinner
@@ -4246,8 +4252,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function Loader(tf) {
 	        _classCallCheck(this, Loader);
 	
+	        _get(Object.getPrototypeOf(Loader.prototype), 'constructor', this).call(this, tf, 'loader');
+	
 	        // TableFilter configuration
-	        var f = tf.config();
+	        var f = this.config;
+	
 	        //id of container element
 	        this.loaderTgtId = f.loader_target_id || null;
 	        //div containing loader
@@ -4266,32 +4275,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.onHideLoader = _types2['default'].isFn(f.on_hide_loader) ? f.on_hide_loader : null;
 	        //loader div
 	        this.prfxLoader = 'load_';
-	
-	        this.tf = tf;
-	
-	        var containerDiv = _dom2['default'].create('div', ['id', this.prfxLoader + tf.id]);
-	        containerDiv.className = this.loaderCssClass;
-	
-	        var targetEl = !this.loaderTgtId ? tf.tbl.parentNode : _dom2['default'].id(this.loaderTgtId);
-	        if (!this.loaderTgtId) {
-	            targetEl.insertBefore(containerDiv, tf.tbl);
-	        } else {
-	            targetEl.appendChild(containerDiv);
-	        }
-	        this.loaderDiv = _dom2['default'].id(this.prfxLoader + tf.id);
-	        if (!this.loaderHtml) {
-	            this.loaderDiv.appendChild(_dom2['default'].text(this.loaderText));
-	        } else {
-	            this.loaderDiv.innerHTML = this.loaderHtml;
-	        }
 	    }
 	
 	    _createClass(Loader, [{
+	        key: 'init',
+	        value: function init() {
+	            if (this.initialized) {
+	                return;
+	            }
+	
+	            var tf = this.tf;
+	
+	            var containerDiv = _dom2['default'].create('div', ['id', this.prfxLoader + tf.id]);
+	            containerDiv.className = this.loaderCssClass;
+	
+	            var targetEl = !this.loaderTgtId ? tf.tbl.parentNode : _dom2['default'].id(this.loaderTgtId);
+	            if (!this.loaderTgtId) {
+	                targetEl.insertBefore(containerDiv, tf.tbl);
+	            } else {
+	                targetEl.appendChild(containerDiv);
+	            }
+	            this.loaderDiv = containerDiv;
+	            if (!this.loaderHtml) {
+	                this.loaderDiv.appendChild(_dom2['default'].text(this.loaderText));
+	            } else {
+	                this.loaderDiv.innerHTML = this.loaderHtml;
+	            }
+	
+	            this.show('none');
+	            this.initialized = true;
+	        }
+	    }, {
 	        key: 'show',
 	        value: function show(p) {
 	            var _this = this;
 	
-	            if (!this.tf.loader || !this.loaderDiv || this.loaderDiv.style.display === p) {
+	            if (!this.isEnabled() || this.loaderDiv.style.display === p) {
 	                return;
 	            }
 	
@@ -4314,22 +4333,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'destroy',
 	        value: function destroy() {
-	            if (!this.loaderDiv) {
+	            if (!this.initialized) {
 	                return;
 	            }
-	            // var tf = this.tf,
-	            //     targetEl = !this.loaderTgtId ?
-	            //         (tf.gridLayout ?
-	            //             tf.feature('gridLayout').tblCont : tf.tbl.parentNode) :
-	            //         Dom.id(this.loaderTgtId);
-	            // targetEl.removeChild(this.loaderDiv);
+	
 	            this.loaderDiv.parentNode.removeChild(this.loaderDiv);
 	            this.loaderDiv = null;
+	
+	            this.disable();
+	            this.initialized = false;
 	        }
 	    }]);
 	
 	    return Loader;
-	})();
+	})(_feature.Feature);
 
 	exports.Loader = Loader;
 
@@ -4491,9 +4508,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _feature = __webpack_require__(11);
 	
 	var _types = __webpack_require__(5);
 	
@@ -4507,7 +4530,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _event2 = _interopRequireDefault(_event);
 	
-	var PopupFilter = (function () {
+	var PopupFilter = (function (_Feature) {
+	    _inherits(PopupFilter, _Feature);
 	
 	    /**
 	     * Pop-up filter component
@@ -4517,8 +4541,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function PopupFilter(tf) {
 	        _classCallCheck(this, PopupFilter);
 	
+	        _get(Object.getPrototypeOf(PopupFilter.prototype), 'constructor', this).call(this, tf, 'popupFilters');
+	
 	        // Configuration object
-	        var f = tf.config();
+	        var f = this.config;
 	
 	        // Enable external filters behaviour
 	        tf.isExternalFlt = true;
@@ -4552,8 +4578,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.prfxPopUpSpan = 'popUpSpan_';
 	        //id prefix for pop-up div containing filter
 	        this.prfxPopUpDiv = 'popUpDiv_';
-	
-	        this.tf = tf;
 	    }
 	
 	    _createClass(PopupFilter, [{
@@ -4584,6 +4608,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function init() {
 	            var _this = this;
 	
+	            if (this.initialized) {
+	                return;
+	            }
+	
 	            var tf = this.tf;
 	            for (var i = 0; i < tf.nbCells; i++) {
 	                if (tf.getFilterType(i) === tf.fltTypeNone) {
@@ -4599,6 +4627,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.popUpFltSpans[i] = popUpSpan;
 	                this.popUpFltImgs[i] = popUpSpan.firstChild;
 	            }
+	
+	            this.initialized = true;
+	        }
+	
+	        /**
+	         * Reset previously destroyed feature
+	         */
+	    }, {
+	        key: 'reset',
+	        value: function reset() {
+	            this.enable();
+	            this.init();
+	            this.buildAll();
 	        }
 	
 	        /**
@@ -4715,6 +4756,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'destroy',
 	        value: function destroy() {
+	            if (!this.initialized) {
+	                return;
+	            }
+	
 	            this.popUpFltElmCache = [];
 	            for (var i = 0; i < this.popUpFltElms.length; i++) {
 	                var popUpFltElm = this.popUpFltElms[i],
@@ -4737,11 +4782,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.popUpFltElms = [];
 	            this.popUpFltSpans = [];
 	            this.popUpFltImgs = [];
+	
+	            this.disable();
+	            this.initialized = false;
 	        }
 	    }]);
 	
 	    return PopupFilter;
-	})();
+	})(_feature.Feature);
 
 	exports.PopupFilter = PopupFilter;
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
@@ -5630,8 +5678,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.onBeforeRefreshCounter = _types2['default'].isFn(f.on_before_refresh_counter) ? f.on_before_refresh_counter : null;
 	        //callback raised after counter is refreshed
 	        this.onAfterRefreshCounter = _types2['default'].isFn(f.on_after_refresh_counter) ? f.on_after_refresh_counter : null;
-	
-	        this.tf = tf;
 	    }
 	
 	    _createClass(RowsCounter, [{
@@ -6419,9 +6465,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            slcRSpan.appendChild(_dom2['default'].text(slcRText));
 	
 	            var help = tf.feature('help');
-	            if (help && help.cont) {
-	                help.cont.parentNode.insertBefore(slcRSpan, help.cont);
-	                help.cont.parentNode.insertBefore(slcR, help.cont);
+	            if (help && help.btn) {
+	                help.btn.parentNode.insertBefore(slcRSpan, help.btn);
+	                help.btn.parentNode.insertBefore(slcR, help.btn);
 	            } else {
 	                targetEl.appendChild(slcRSpan);
 	                targetEl.appendChild(slcR);
@@ -6837,9 +6883,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _feature = __webpack_require__(11);
 	
 	var _dom = __webpack_require__(2);
 	
@@ -6852,7 +6904,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' + '4.-Filter-operators';
 	var WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';
 	
-	var Help = (function () {
+	var Help = (function (_Feature) {
+	    _inherits(Help, _Feature);
 	
 	    /**
 	     * Help UI component
@@ -6862,8 +6915,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function Help(tf) {
 	        _classCallCheck(this, Help);
 	
-	        // Configuration object
-	        var f = tf.config();
+	        _get(Object.getPrototypeOf(Help.prototype), 'constructor', this).call(this, tf, 'help');
+	
+	        var f = this.config;
 	
 	        //id of custom container element for instructions
 	        this.tgtId = f.help_instructions_target_id || null;
@@ -6891,8 +6945,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.prfxHelpSpan = 'helpSpan_';
 	        //id prefix for help elements
 	        this.prfxHelpDiv = 'helpDiv_';
-	
-	        this.tf = tf;
 	    }
 	
 	    _createClass(Help, [{
@@ -6900,7 +6952,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function init() {
 	            var _this = this;
 	
-	            if (this.btn) {
+	            if (this.initialized) {
 	                return;
 	            }
 	
@@ -6961,6 +7013,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            this.cont = helpdiv;
 	            this.btn = helpspan;
+	            this.initialized = true;
 	        }
 	
 	        /**
@@ -6969,7 +7022,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'toggle',
 	        value: function toggle() {
-	            if (!this.cont) {
+	            // check only if explicitily set to false as in this case undefined
+	            // signifies the help feature is enabled by default
+	            if (this.enabled === false) {
 	                return;
 	            }
 	            var divDisplay = this.cont.style.display;
@@ -6986,7 +7041,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'destroy',
 	        value: function destroy() {
-	            if (!this.btn) {
+	            if (!this.initialized) {
 	                return;
 	            }
 	            this.btn.parentNode.removeChild(this.btn);
@@ -6996,11 +7051,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            this.cont.parentNode.removeChild(this.cont);
 	            this.cont = null;
+	
+	            this.disable();
+	            this.initialized = false;
 	        }
 	    }]);
 	
 	    return Help;
-	})();
+	})(_feature.Feature);
 
 	exports.Help = Help;
 

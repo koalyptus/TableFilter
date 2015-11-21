@@ -534,9 +534,9 @@ export class Paging extends Feature{
         slcRSpan.appendChild(Dom.text(slcRText));
 
         var help = tf.feature('help');
-        if(help && help.cont){
-            help.cont.parentNode.insertBefore(slcRSpan, help.cont);
-            help.cont.parentNode.insertBefore(slcR, help.cont);
+        if(help && help.btn){
+            help.btn.parentNode.insertBefore(slcRSpan, help.btn);
+            help.btn.parentNode.insertBefore(slcR, help.btn);
         } else {
             targetEl.appendChild(slcRSpan);
             targetEl.appendChild(slcR);

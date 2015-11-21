@@ -294,7 +294,7 @@ export class GridLayout extends Feature{
             }
         };
 
-        if(tf.popUpFilters){
+        if(tf.popupFilters){
             filtersRow.style.display = 'none';
         }
 

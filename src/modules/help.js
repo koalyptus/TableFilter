@@ -1,3 +1,4 @@
+import {Feature} from './feature';
 import Dom from '../dom';
 import Event from '../event';
 
@@ -6,15 +7,16 @@ const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
                     '4.-Filter-operators';
 const WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';
 
-export class Help{
+export class Help extends Feature{
 
     /**
      * Help UI component
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
-        // Configuration object
-        var f = tf.config();
+        super(tf, 'help');
+
+        var f = this.config;
 
         //id of custom container element for instructions
         this.tgtId = f.help_instructions_target_id || null;
@@ -57,19 +59,17 @@ export class Help{
         this.prfxHelpSpan = 'helpSpan_';
         //id prefix for help elements
         this.prfxHelpDiv = 'helpDiv_';
-
-        this.tf = tf;
     }
 
     init(){
-        if(this.btn){
+        if(this.initialized){
             return;
         }
 
         var tf = this.tf;
 
-        var helpspan = Dom.create('span',['id', this.prfxHelpSpan+tf.id]);
-        var helpdiv = Dom.create('div',['id', this.prfxHelpDiv+tf.id]);
+        var helpspan = Dom.create('span', ['id', this.prfxHelpSpan+tf.id]);
+        var helpdiv = Dom.create('div', ['id', this.prfxHelpDiv+tf.id]);
 
         //help button is added to defined element
         if(!this.tgtId){
@@ -113,13 +113,16 @@ export class Help{
 
         this.cont = helpdiv;
         this.btn = helpspan;
+        this.initialized = true;
     }
 
     /**
      * Toggle help pop-up
      */
     toggle(){
-        if(!this.cont){
+        // check only if explicitily set to false as in this case undefined
+        // signifies the help feature is enabled by default
+        if(this.enabled === false){
             return;
         }
         var divDisplay = this.cont.style.display;
@@ -134,7 +137,7 @@ export class Help{
      * Remove help UI
      */
     destroy(){
-        if(!this.btn){
+        if(!this.initialized){
             return;
         }
         this.btn.parentNode.removeChild(this.btn);
@@ -144,6 +147,9 @@ export class Help{
         }
         this.cont.parentNode.removeChild(this.cont);
         this.cont = null;
+
+        this.disable();
+        this.initialized = false;
     }
 
 }

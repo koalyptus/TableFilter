@@ -230,10 +230,10 @@ export class TableFilter{
         //id of toolbar container element
         this.toolBarTgtId = f.toolbar_target_id || null;
         //enables/disables help div
-        this.helpInstructions = Types.isUndef(f.help_instructions) ?
+        this.help = Types.isUndef(f.help_instructions) ?
             undefined : Boolean(f.help_instructions);
         //popup filters
-        this.popUpFilters = Boolean(f.popup_filters);
+        this.popupFilters = Boolean(f.popup_filters);
         //active columns color
         this.markActiveColumns = Boolean(f.mark_active_columns);
         //defines css class for active column header
@@ -539,7 +539,7 @@ export class TableFilter{
                 let elm = Event.target(_ev);
                 this.activeFilterId = elm.getAttribute('id');
                 this.activeFlt = Dom.id(this.activeFilterId);
-                if(this.popUpFilters){
+                if(this.popupFilters){
                     Event.cancel(_ev);
                     Event.stop(_ev);
                 }
@@ -567,7 +567,7 @@ export class TableFilter{
                     let ct = elm.getAttribute('ct');
                     this.Mod.dropdown._build(ct);
                 }
-                if(this.popUpFilters){
+                if(this.popupFilters){
                     Event.cancel(_ev);
                     Event.stop(_ev);
                 }
@@ -576,7 +576,7 @@ export class TableFilter{
             onSlcChange(e) {
                 if(!this.activeFlt){ return; }
                 let _ev = e || global.event;
-                if(this.popUpFilters){ Event.stop(_ev); }
+                if(this.popupFilters){ Event.stop(_ev); }
                 if(this.onSlcChange){ this.filter(); }
             },
             // fill checklist filter on click if required
@@ -612,7 +612,7 @@ export class TableFilter{
         if(this.gridLayout){
             this.refRow = this.startRow===null ? 0 : this.startRow;
         }
-        if(this.popUpFilters &&
+        if(this.popupFilters &&
             ((this.filtersRowIndex === 0 && this.headersRow === 1) ||
             this.gridLayout)){
             this.headersRow = 0;
@@ -641,6 +641,7 @@ export class TableFilter{
         if(this.loader){
             if(!Mod.loader){
                 Mod.loader = new Loader(this);
+                Mod.loader.init();
             }
         }
 
@@ -648,7 +649,7 @@ export class TableFilter{
             Mod.highlightKeyword = new HighlightKeyword(this);
         }
 
-        if(this.popUpFilters){
+        if(this.popupFilters){
             if(!Mod.popupFilter){
                 Mod.popupFilter = new PopupFilter(this);
             }
@@ -677,16 +678,16 @@ export class TableFilter{
 
                     if(this.headersRow > 1 &&
                         this.filtersRowIndex <= this.headersRow &&
-                        !this.popUpFilters){
+                        !this.popupFilters){
                         this.headersRow++;
                     }
-                    if(this.popUpFilters){
+                    if(this.popupFilters){
                         this.headersRow++;
                     }
 
                     fltrow.className = this.fltsRowCssClass;
 
-                    if(this.isExternalFlt || this.popUpFilters){
+                    if(this.isExternalFlt || this.popupFilters){
                         fltrow.style.display = 'none';
                     }
                 }
@@ -697,7 +698,7 @@ export class TableFilter{
 
                 for(let i=0; i<n; i++){// this loop adds filters
 
-                    if(this.popUpFilters){
+                    if(this.popupFilters){
                         Mod.popupFilter.build(i);
                     }
 
@@ -895,7 +896,7 @@ export class TableFilter{
             Mod.clearButton = new ClearButton(this);
             Mod.clearButton.init();
         }
-        if(this.helpInstructions){
+        if(this.help){
             if(!Mod.help){
                 Mod.help = new Help(this);
             }
@@ -1176,7 +1177,7 @@ export class TableFilter{
         let rows = this.tbl.rows,
             Mod = this.Mod;
 
-        if(this.isExternalFlt && !this.popUpFilters){
+        if(this.isExternalFlt && !this.popupFilters){
             this.removeExternalFlts();
         }
         if(this.infDiv){
@@ -1278,12 +1279,12 @@ export class TableFilter{
 
         // Enable help instructions by default if topbar is generated and not
         // explicitely set to false
-        if(Types.isUndef(this.helpInstructions)){
+        if(Types.isUndef(this.help)){
             if(!this.Mod.help){
                 this.Mod.help = new Help(this);
             }
             this.Mod.help.init();
-            this.helpInstructions = true;
+            this.help = true;
         }
     }
 
@@ -1504,7 +1505,7 @@ export class TableFilter{
             Mod.highlightKeyword.unhighlightAll();
         }
         //removes popup filters active icons
-        if(this.popUpFilters){
+        if(this.popupFilters){
             Mod.popupFilter.buildIcons();
         }
         //removes active column header class
@@ -1797,7 +1798,7 @@ export class TableFilter{
                 if(this.singleSearchFlt && occurence[j]){
                     singleFltRowValid = true;
                 }
-                if(this.popUpFilters){
+                if(this.popupFilters){
                     Mod.popupFilter.buildIcon(j, true);
                 }
                 if(this.markActiveColumns){
@@ -1891,7 +1892,7 @@ export class TableFilter{
             Mod.rowsCounter.refresh(this.nbVisibleRows);
         }
 
-        if(this.popUpFilters){
+        if(this.popupFilters){
             Mod.popupFilter.closeAll();
         }
     }
@@ -2503,9 +2504,9 @@ export class TableFilter{
         this.nbVisibleRows = this.nbFilterableRows;
         this.nbRows = rows.length;
 
-        if(this.popUpFilters){
+        if(this.popupFilters){
             this.headersRow++;
-            Mod.popupFilter.buildAll();
+            Mod.popupFilter.reset();
         }
 
         if(!this.gridLayout){

@@ -1,16 +1,19 @@
+import {Feature} from './feature';
 import Types from '../types';
 import Dom from '../dom';
 import Event from '../event';
 
-export class PopupFilter{
+export class PopupFilter extends Feature{
 
     /**
      * Pop-up filter component
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
+        super(tf, 'popupFilters');
+
         // Configuration object
-        var f = tf.config();
+        var f = this.config;
 
         // Enable external filters behaviour
         tf.isExternalFlt = true;
@@ -52,8 +55,6 @@ export class PopupFilter{
         this.prfxPopUpSpan = 'popUpSpan_';
         //id prefix for pop-up div containing filter
         this.prfxPopUpDiv = 'popUpDiv_';
-
-        this.tf = tf;
     }
 
     onClick(e){
@@ -78,6 +79,10 @@ export class PopupFilter{
      * Initialize DOM elements
      */
     init(){
+        if(this.initialized){
+            return;
+        }
+
         var tf = this.tf;
         for(var i=0; i<tf.nbCells; i++){
             if(tf.getFilterType(i) === tf.fltTypeNone){
@@ -95,6 +100,17 @@ export class PopupFilter{
             this.popUpFltSpans[i] = popUpSpan;
             this.popUpFltImgs[i] = popUpSpan.firstChild;
         }
+
+        this.initialized = true;
+    }
+
+    /**
+     * Reset previously destroyed feature
+     */
+    reset(){
+        this.enable();
+        this.init();
+        this.buildAll();
     }
 
     /**
@@ -203,6 +219,10 @@ export class PopupFilter{
      * Remove pop-up filters
      */
     destroy(){
+        if(!this.initialized){
+            return;
+        }
+
         this.popUpFltElmCache = [];
         for(var i=0; i<this.popUpFltElms.length; i++){
             var popUpFltElm = this.popUpFltElms[i],
@@ -225,6 +245,9 @@ export class PopupFilter{
         this.popUpFltElms = [];
         this.popUpFltSpans = [];
         this.popUpFltImgs = [];
+
+        this.disable();
+        this.initialized = false;
     }
 
 }

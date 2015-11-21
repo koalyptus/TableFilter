@@ -38,8 +38,6 @@ export class RowsCounter extends Feature{
         //callback raised after counter is refreshed
         this.onAfterRefreshCounter = Types.isFn(f.on_after_refresh_counter) ?
             f.on_after_refresh_counter : null;
-
-        this.tf = tf;
     }
 
     init(){

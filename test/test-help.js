@@ -12,6 +12,47 @@ test('Clear button component', function() {
     notEqual(help.btn, null, 'btn property');
 });
 
+module('Feature interface');
+test('Properties', function() {
+    deepEqual(help.tf instanceof TableFilter, true, 'TableFilter instance');
+    deepEqual(help.feature, 'help', 'Feature name');
+    deepEqual(help.enabled, true, 'Feature enabled');
+    deepEqual(help.initialized, true, 'Feature enabled');
+    deepEqual(typeof help.config, 'object', 'TF configuration object');
+    deepEqual(typeof help.init, 'function', 'Feature init method');
+    deepEqual(typeof help.destroy, 'function', 'Feature destroy method');
+    deepEqual(typeof help.reset, 'function', 'Feature reset method');
+    deepEqual(typeof help.enable, 'function', 'Feature enable method');
+    deepEqual(typeof help.disable, 'function', 'Feature enable method');
+    deepEqual(typeof help.isEnabled, 'function', 'Feature enable method');
+});
+test('Can destroy', function() {
+    help.destroy();
+    deepEqual(help.enabled, false, 'disabled');
+});
+test('Can reset', function() {
+    help.reset();
+    deepEqual(help.enabled, true, 'enabled');
+});
+test('Can disable', function() {
+    help.disable();
+    deepEqual(help.enabled, false, 'disabled');
+});
+test('Can enable', function() {
+    help.enable();
+    deepEqual(help.enabled, true, 'enabled');
+});
+test('Can init', function() {
+    help.destroy();
+    help.enable();
+    help.init();
+    deepEqual(help.enabled, true, 'enabled');
+});
+test('Can check is enabled', function() {
+    help.isEnabled();
+    deepEqual(help.enabled, true, 'enabled');
+});
+
 module('UI elements');
 test('Help UI elements', function() {
     var container = help.cont,
@@ -44,4 +85,10 @@ test('Re-set UI', function() {
         'Help pop-up text'
     );
     notEqual(helpBtn.innerHTML.indexOf('→Help←'), -1, 'Help button text');
+});
+
+module('Tear-down');
+test('can destroy TableFilter DOM elements', function() {
+    tf.destroy();
+    deepEqual(tf.hasGrid(), false, 'Filters removed');
 });

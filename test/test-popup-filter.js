@@ -83,9 +83,30 @@ test('Pop-up filter UI elements with grid-layout', function() {
     deepEqual(fltIcn3, undefined, 'Filter icon does not exist for column 4');
 });
 
+module('Feature interface');
+test('Properties', function() {
+    var popupFilter = tf.feature('popupFilter');
+
+    deepEqual(popupFilter.tf instanceof TableFilter,
+        true, 'TableFilter instance');
+    deepEqual(popupFilter.feature, 'popupFilters', 'Feature name');
+    deepEqual(popupFilter.enabled, true, 'Feature enabled');
+    deepEqual(popupFilter.initialized, true, 'Feature enabled');
+    deepEqual(typeof popupFilter.config, 'object', 'TF configuration object');
+    deepEqual(typeof popupFilter.init, 'function', 'Feature init method');
+    deepEqual(typeof popupFilter.destroy, 'function', 'Feature destroy method');
+    deepEqual(typeof popupFilter.reset, 'function', 'Feature reset method');
+    deepEqual(typeof popupFilter.enable, 'function', 'Feature enable method');
+    deepEqual(typeof popupFilter.disable, 'function', 'Feature enable method');
+    deepEqual(typeof popupFilter.isEnabled,
+        'function', 'Feature enable method');
+});
+
+module('Tear-down');
 test('TableFilter removed', function() {
     tf.destroy();
     var fltIcn1 = popupFilter.popUpFltImgs[3];
     deepEqual(fltIcn1, undefined, 'Filter icon is removed');
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
+    deepEqual(tf.hasGrid(), false, 'Filters removed');
 });
