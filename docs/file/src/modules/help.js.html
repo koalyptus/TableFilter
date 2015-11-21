@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/help.js | tablefilter v0.0.10 API Document</title>
+  <title data-ice="title">src/modules/help.js | tablefilter v0.0.11 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
@@ -65,7 +66,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/help.js</h1>
-<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;./feature&apos;;
+import Dom from &apos;../dom&apos;;
 import Event from &apos;../event&apos;;
 
 
@@ -73,15 +75,16 @@ const WIKI_URL = &apos;https://github.com/koalyptus/TableFilter/wiki/&apos; +
                     &apos;4.-Filter-operators&apos;;
 const WEBSITE_URL = &apos;http://koalyptus.github.io/TableFilter/&apos;;
 
-export class Help{
+export class Help extends Feature{
 
     /**
      * Help UI component
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
-        // Configuration object
-        var f = tf.config();
+        super(tf, &apos;help&apos;);
+
+        var f = this.config;
 
         //id of custom container element for instructions
         this.tgtId = f.help_instructions_target_id || null;
@@ -124,19 +127,17 @@ export class Help{
         this.prfxHelpSpan = &apos;helpSpan_&apos;;
         //id prefix for help elements
         this.prfxHelpDiv = &apos;helpDiv_&apos;;
-
-        this.tf = tf;
     }
 
     init(){
-        if(this.btn){
+        if(this.initialized){
             return;
         }
 
         var tf = this.tf;
 
-        var helpspan = Dom.create(&apos;span&apos;,[&apos;id&apos;, this.prfxHelpSpan+tf.id]);
-        var helpdiv = Dom.create(&apos;div&apos;,[&apos;id&apos;, this.prfxHelpDiv+tf.id]);
+        var helpspan = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfxHelpSpan+tf.id]);
+        var helpdiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxHelpDiv+tf.id]);
 
         //help button is added to defined element
         if(!this.tgtId){
@@ -180,13 +181,16 @@ export class Help{
 
         this.cont = helpdiv;
         this.btn = helpspan;
+        this.initialized = true;
     }
 
     /**
      * Toggle help pop-up
      */
     toggle(){
-        if(!this.cont){
+        // check only if explicitily set to false as in this case undefined
+        // signifies the help feature is enabled by default
+        if(this.enabled === false){
             return;
         }
         var divDisplay = this.cont.style.display;
@@ -201,7 +205,7 @@ export class Help{
      * Remove help UI
      */
     destroy(){
-        if(!this.btn){
+        if(!this.initialized){
             return;
         }
         this.btn.parentNode.removeChild(this.btn);
@@ -211,6 +215,9 @@ export class Help{
         }
         this.cont.parentNode.removeChild(this.cont);
         this.cont = null;
+
+        this.disable();
+        this.initialized = false;
     }
 
 }

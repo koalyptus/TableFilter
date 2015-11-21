@@ -1,7 +1,7 @@
 {
-  "coverage": "24.34%",
-  "expectCount": 645,
-  "actualCount": 157,
+  "coverage": "24.08%",
+  "expectCount": 656,
+  "actualCount": 158,
   "files": {
     "src/extensions/advancedGrid/adapterEzEditTable.js": {
       "expectCount": 15,
@@ -12,7 +12,7 @@
       "actualCount": 4
     },
     "src/modules/alternateRows.js": {
-      "expectCount": 11,
+      "expectCount": 9,
       "actualCount": 5
     },
     "src/modules/checkList.js": {
@@ -36,8 +36,12 @@
       "actualCount": 4
     },
     "src/tablefilter.js": {
-      "expectCount": 238,
+      "expectCount": 237,
       "actualCount": 72
+    },
+    "src/modules/feature.js": {
+      "expectCount": 13,
+      "actualCount": 0
     },
     "src/extensions/filtersVisibility/filtersVisibility.js": {
       "expectCount": 33,
@@ -56,16 +60,16 @@
       "actualCount": 4
     },
     "src/modules/loader.js": {
-      "expectCount": 14,
+      "expectCount": 15,
       "actualCount": 1
     },
     "src/modules/paging.js": {
-      "expectCount": 62,
+      "expectCount": 61,
       "actualCount": 14
     },
     "src/modules/popupFilter.js": {
-      "expectCount": 27,
-      "actualCount": 9
+      "expectCount": 28,
+      "actualCount": 10
     },
     "src/modules/rowsCounter.js": {
       "expectCount": 18,

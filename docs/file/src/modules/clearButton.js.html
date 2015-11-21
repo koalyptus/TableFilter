@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/clearButton.js | tablefilter v0.0.10 API Document</title>
+  <title data-ice="title">src/modules/clearButton.js | tablefilter v0.0.11 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
@@ -65,18 +66,21 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/clearButton.js</h1>
-<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;./feature&apos;;
+import Dom from &apos;../dom&apos;;
 import Event from &apos;../event&apos;;
 
-export class ClearButton{
+export class ClearButton extends Feature{
 
     /**
      * Clear button component
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
+        super(tf, &apos;btnReset&apos;);
+
         // Configuration object
-        var f = tf.config();
+        var f = this.config;
 
         //id of container element
         this.btnResetTgtId = f.btn_reset_target_id || null;
@@ -93,11 +97,12 @@ export class ClearButton{
             &apos;title=&quot;&apos;+this.btnResetTooltip+&apos;&quot; /&gt;&apos;);
         //span containing reset button
         this.prfxResetSpan = &apos;resetspan_&apos;;
-
-        this.tf = tf;
     }
 
     onClick(){
+        if(!this.isEnabled()){
+            return;
+        }
         this.tf.clearFilters();
     }
 
@@ -107,7 +112,7 @@ export class ClearButton{
     init(){
         var tf = this.tf;
 
-        if(!tf.hasGrid() &amp;&amp; !tf.isFirstLoad &amp;&amp; tf.btnResetEl){
+        if(this.initialized){
             return;
         }
 
@@ -126,15 +131,15 @@ export class ClearButton{
             fltreset.className = tf.btnResetCssClass;
             fltreset.appendChild(Dom.text(this.btnResetText));
             resetspan.appendChild(fltreset);
-            // fltreset.onclick = this.Evt._Clear;
-            Event.add(fltreset, &apos;click&apos;, () =&gt; { this.onClick(); });
+            Event.add(fltreset, &apos;click&apos;, ()=&gt; { this.onClick(); });
         } else {
             resetspan.innerHTML = this.btnResetHtml;
             var resetEl = resetspan.firstChild;
-            // resetEl.onclick = this.Evt._Clear;
-            Event.add(resetEl, &apos;click&apos;, () =&gt; { this.onClick(); });
+            Event.add(resetEl, &apos;click&apos;, ()=&gt; { this.onClick(); });
         }
         this.btnResetEl = resetspan.firstChild;
+
+        this.initialized = true;
     }
 
     /**
@@ -143,15 +148,17 @@ export class ClearButton{
     destroy(){
         var tf = this.tf;
 
-        if(!tf.hasGrid() || !this.btnResetEl){
+        if(!this.initialized){
             return;
         }
 
-        var resetspan = Dom.id(tf.prfxResetSpan+tf.id);
+        var resetspan = Dom.id(this.prfxResetSpan+tf.id);
         if(resetspan){
             resetspan.parentNode.removeChild(resetspan);
         }
         this.btnResetEl = null;
+        this.disable();
+        this.initialized = false;
     }
 }
 </code></pre>

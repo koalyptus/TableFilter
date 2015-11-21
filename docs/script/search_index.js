@@ -48,6 +48,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/modules/feature.js~feature",
+    "class/src/modules/feature.js~Feature.html",
+    "<span>Feature</span> <span class=\"search-result-import-path\">tablefilter/src/modules/feature.js</span>",
+    "class"
+  ],
+  [
     "tablefilter/src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html",
     "<span>FiltersVisibility</span> <span class=\"search-result-import-path\">tablefilter/src/extensions/filtersVisibility/filtersVisibility.js</span>",
@@ -1356,15 +1362,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/alternaterows.js~alternaterows#disable",
-    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-disable",
-    "src/modules/alternateRows.js~AlternateRows#disable",
-    "method"
-  ],
-  [
-    "src/modules/alternaterows.js~alternaterows#enable",
-    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-enable",
-    "src/modules/alternateRows.js~AlternateRows#enable",
+    "src/modules/alternaterows.js~alternaterows#destroy",
+    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-destroy",
+    "src/modules/alternateRows.js~AlternateRows#destroy",
     "method"
   ],
   [
@@ -1380,16 +1380,16 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/alternaterows.js~alternaterows#initialized",
+    "class/src/modules/alternateRows.js~AlternateRows.html#instance-member-initialized",
+    "src/modules/alternateRows.js~AlternateRows#initialized",
+    "member"
+  ],
+  [
     "src/modules/alternaterows.js~alternaterows#oddcss",
     "class/src/modules/alternateRows.js~AlternateRows.html#instance-member-oddCss",
     "src/modules/alternateRows.js~AlternateRows#oddCss",
     "member"
-  ],
-  [
-    "src/modules/alternaterows.js~alternaterows#remove",
-    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-remove",
-    "src/modules/alternateRows.js~AlternateRows#remove",
-    "method"
   ],
   [
     "src/modules/alternaterows.js~alternaterows#removerowbg",
@@ -1402,12 +1402,6 @@ window.esdocSearchIndex = [
     "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-setRowBg",
     "src/modules/alternateRows.js~AlternateRows#setRowBg",
     "method"
-  ],
-  [
-    "src/modules/alternaterows.js~alternaterows#tf",
-    "class/src/modules/alternateRows.js~AlternateRows.html#instance-member-tf",
-    "src/modules/alternateRows.js~AlternateRows#tf",
-    "member"
   ],
   [
     "src/modules/checklist.js",
@@ -1596,6 +1590,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/clearbutton.js~clearbutton#initialized",
+    "class/src/modules/clearButton.js~ClearButton.html#instance-member-initialized",
+    "src/modules/clearButton.js~ClearButton#initialized",
+    "member"
+  ],
+  [
     "src/modules/clearbutton.js~clearbutton#onclick",
     "class/src/modules/clearButton.js~ClearButton.html#instance-method-onClick",
     "src/modules/clearButton.js~ClearButton#onClick",
@@ -1605,12 +1605,6 @@ window.esdocSearchIndex = [
     "src/modules/clearbutton.js~clearbutton#prfxresetspan",
     "class/src/modules/clearButton.js~ClearButton.html#instance-member-prfxResetSpan",
     "src/modules/clearButton.js~ClearButton#prfxResetSpan",
-    "member"
-  ],
-  [
-    "src/modules/clearbutton.js~clearbutton#tf",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-member-tf",
-    "src/modules/clearButton.js~ClearButton#tf",
     "member"
   ],
   [
@@ -1701,6 +1695,84 @@ window.esdocSearchIndex = [
     "src/modules/dropdown.js~dropdown#tf",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-tf",
     "src/modules/dropdown.js~Dropdown#tf",
+    "member"
+  ],
+  [
+    "src/modules/feature.js",
+    "file/src/modules/feature.js.html",
+    "src/modules/feature.js",
+    "file"
+  ],
+  [
+    "src/modules/feature.js~feature#config",
+    "class/src/modules/feature.js~Feature.html#instance-member-config",
+    "src/modules/feature.js~Feature#config",
+    "member"
+  ],
+  [
+    "src/modules/feature.js~feature#constructor",
+    "class/src/modules/feature.js~Feature.html#instance-constructor-constructor",
+    "src/modules/feature.js~Feature#constructor",
+    "method"
+  ],
+  [
+    "src/modules/feature.js~feature#destroy",
+    "class/src/modules/feature.js~Feature.html#instance-method-destroy",
+    "src/modules/feature.js~Feature#destroy",
+    "method"
+  ],
+  [
+    "src/modules/feature.js~feature#disable",
+    "class/src/modules/feature.js~Feature.html#instance-method-disable",
+    "src/modules/feature.js~Feature#disable",
+    "method"
+  ],
+  [
+    "src/modules/feature.js~feature#enable",
+    "class/src/modules/feature.js~Feature.html#instance-method-enable",
+    "src/modules/feature.js~Feature#enable",
+    "method"
+  ],
+  [
+    "src/modules/feature.js~feature#enabled",
+    "class/src/modules/feature.js~Feature.html#instance-member-enabled",
+    "src/modules/feature.js~Feature#enabled",
+    "member"
+  ],
+  [
+    "src/modules/feature.js~feature#feature",
+    "class/src/modules/feature.js~Feature.html#instance-member-feature",
+    "src/modules/feature.js~Feature#feature",
+    "member"
+  ],
+  [
+    "src/modules/feature.js~feature#init",
+    "class/src/modules/feature.js~Feature.html#instance-method-init",
+    "src/modules/feature.js~Feature#init",
+    "method"
+  ],
+  [
+    "src/modules/feature.js~feature#initialized",
+    "class/src/modules/feature.js~Feature.html#instance-member-initialized",
+    "src/modules/feature.js~Feature#initialized",
+    "member"
+  ],
+  [
+    "src/modules/feature.js~feature#isenabled",
+    "class/src/modules/feature.js~Feature.html#instance-method-isEnabled",
+    "src/modules/feature.js~Feature#isEnabled",
+    "method"
+  ],
+  [
+    "src/modules/feature.js~feature#reset",
+    "class/src/modules/feature.js~Feature.html#instance-method-reset",
+    "src/modules/feature.js~Feature#reset",
+    "method"
+  ],
+  [
+    "src/modules/feature.js~feature#tf",
+    "class/src/modules/feature.js~Feature.html#instance-member-tf",
+    "src/modules/feature.js~Feature#tf",
     "member"
   ],
   [
@@ -1806,6 +1878,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/gridlayout.js~gridlayout#initialized",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-initialized",
+    "src/modules/gridLayout.js~GridLayout#initialized",
+    "member"
+  ],
+  [
     "src/modules/gridlayout.js~gridlayout#prfxgridflttd",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxGridFltTd",
     "src/modules/gridLayout.js~GridLayout#prfxGridFltTd",
@@ -1863,12 +1941,6 @@ window.esdocSearchIndex = [
     "src/modules/gridlayout.js~gridlayout#tblmaincont",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblMainCont",
     "src/modules/gridLayout.js~GridLayout#tblMainCont",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#tf",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tf",
-    "src/modules/gridLayout.js~GridLayout#tf",
     "member"
   ],
   [
@@ -1944,6 +2016,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/help.js~help#initialized",
+    "class/src/modules/help.js~Help.html#instance-member-initialized",
+    "src/modules/help.js~Help#initialized",
+    "member"
+  ],
+  [
     "src/modules/help.js~help#instrhtml",
     "class/src/modules/help.js~Help.html#instance-member-instrHtml",
     "src/modules/help.js~Help#instrHtml",
@@ -1965,12 +2043,6 @@ window.esdocSearchIndex = [
     "src/modules/help.js~help#prfxhelpspan",
     "class/src/modules/help.js~Help.html#instance-member-prfxHelpSpan",
     "src/modules/help.js~Help#prfxHelpSpan",
-    "member"
-  ],
-  [
-    "src/modules/help.js~help#tf",
-    "class/src/modules/help.js~Help.html#instance-member-tf",
-    "src/modules/help.js~Help#tf",
     "member"
   ],
   [
@@ -2052,6 +2124,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/loader.js~loader#init",
+    "class/src/modules/loader.js~Loader.html#instance-method-init",
+    "src/modules/loader.js~Loader#init",
+    "method"
+  ],
+  [
+    "src/modules/loader.js~loader#initialized",
+    "class/src/modules/loader.js~Loader.html#instance-member-initialized",
+    "src/modules/loader.js~Loader#initialized",
+    "member"
+  ],
+  [
     "src/modules/loader.js~loader#loaderclosedelay",
     "class/src/modules/loader.js~Loader.html#instance-member-loaderCloseDelay",
     "src/modules/loader.js~Loader#loaderCloseDelay",
@@ -2110,12 +2194,6 @@ window.esdocSearchIndex = [
     "class/src/modules/loader.js~Loader.html#instance-method-show",
     "src/modules/loader.js~Loader#show",
     "method"
-  ],
-  [
-    "src/modules/loader.js~loader#tf",
-    "class/src/modules/loader.js~Loader.html#instance-member-tf",
-    "src/modules/loader.js~Loader#tf",
-    "member"
   ],
   [
     "src/modules/paging.js",
@@ -2244,9 +2322,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/paging.js~paging#ispagingremoved",
-    "class/src/modules/paging.js~Paging.html#instance-member-isPagingRemoved",
-    "src/modules/paging.js~Paging#isPagingRemoved",
+    "src/modules/paging.js~paging#initialized",
+    "class/src/modules/paging.js~Paging.html#instance-member-initialized",
+    "src/modules/paging.js~Paging#initialized",
     "member"
   ],
   [
@@ -2484,12 +2562,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/paging.js~paging#tf",
-    "class/src/modules/paging.js~Paging.html#instance-member-tf",
-    "src/modules/paging.js~Paging#tf",
-    "member"
-  ],
-  [
     "src/modules/popupfilter.js",
     "file/src/modules/popupFilter.js.html",
     "src/modules/popupFilter.js",
@@ -2542,6 +2614,12 @@ window.esdocSearchIndex = [
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-init",
     "src/modules/popupFilter.js~PopupFilter#init",
     "method"
+  ],
+  [
+    "src/modules/popupfilter.js~popupfilter#initialized",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-initialized",
+    "src/modules/popupFilter.js~PopupFilter#initialized",
+    "member"
   ],
   [
     "src/modules/popupfilter.js~popupfilter#onafterpopupclose",
@@ -2640,10 +2718,10 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/popupfilter.js~popupfilter#tf",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-tf",
-    "src/modules/popupFilter.js~PopupFilter#tf",
-    "member"
+    "src/modules/popupfilter.js~popupfilter#reset",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-reset",
+    "src/modules/popupFilter.js~PopupFilter#reset",
+    "method"
   ],
   [
     "src/modules/popupfilter.js~popupfilter#toggle",
@@ -2680,6 +2758,12 @@ window.esdocSearchIndex = [
     "class/src/modules/rowsCounter.js~RowsCounter.html#instance-method-init",
     "src/modules/rowsCounter.js~RowsCounter#init",
     "method"
+  ],
+  [
+    "src/modules/rowscounter.js~rowscounter#initialized",
+    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-initialized",
+    "src/modules/rowsCounter.js~RowsCounter#initialized",
+    "member"
   ],
   [
     "src/modules/rowscounter.js~rowscounter#onafterrefreshcounter",
@@ -2748,12 +2832,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/rowscounter.js~rowscounter#tf",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-tf",
-    "src/modules/rowsCounter.js~RowsCounter#tf",
-    "member"
-  ],
-  [
     "src/modules/rowscounter.js~rowscounter#totrowscssclass",
     "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-totRowsCssClass",
     "src/modules/rowsCounter.js~RowsCounter#totRowsCssClass",
@@ -2782,6 +2860,12 @@ window.esdocSearchIndex = [
     "class/src/modules/statusBar.js~StatusBar.html#instance-method-init",
     "src/modules/statusBar.js~StatusBar#init",
     "method"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#initialized",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-initialized",
+    "src/modules/statusBar.js~StatusBar#initialized",
+    "member"
   ],
   [
     "src/modules/statusbar.js~statusbar#message",
@@ -2859,12 +2943,6 @@ window.esdocSearchIndex = [
     "src/modules/statusbar.js~statusbar#statusbartgtid",
     "class/src/modules/statusBar.js~StatusBar.html#instance-member-statusBarTgtId",
     "src/modules/statusBar.js~StatusBar#statusBarTgtId",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#tf",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-tf",
-    "src/modules/statusBar.js~StatusBar#tf",
     "member"
   ],
   [
@@ -2988,9 +3066,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#alternatebgs",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-alternateBgs",
-    "src/tablefilter.js~TableFilter#alternateBgs",
+    "src/tablefilter.js~tablefilter#alternaterows",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-alternateRows",
+    "src/tablefilter.js~TableFilter#alternateRows",
     "member"
   ],
   [
@@ -3672,9 +3750,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#helpinstructions",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-helpInstructions",
-    "src/tablefilter.js~TableFilter#helpInstructions",
+    "src/tablefilter.js~tablefilter#help",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-help",
+    "src/tablefilter.js~TableFilter#help",
     "member"
   ],
   [
@@ -3759,12 +3837,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#issortnumdesc",
     "class/src/tablefilter.js~TableFilter.html#instance-member-isSortNumDesc",
     "src/tablefilter.js~TableFilter#isSortNumDesc",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#isstartbgalternate",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isStartBgAlternate",
-    "src/tablefilter.js~TableFilter#isStartBgAlternate",
     "member"
   ],
   [
@@ -4069,8 +4141,8 @@ window.esdocSearchIndex = [
   ],
   [
     "src/tablefilter.js~tablefilter#popupfilters",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-popUpFilters",
-    "src/tablefilter.js~TableFilter#popUpFilters",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-popupFilters",
+    "src/tablefilter.js~TableFilter#popupFilters",
     "member"
   ],
   [

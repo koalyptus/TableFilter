@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.0.10 API Document</title>
+  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.0.11 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
@@ -65,18 +66,21 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/gridLayout.js</h1>
-<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;./feature&apos;;
+import Dom from &apos;../dom&apos;;
 import Types from &apos;../types&apos;;
 import Event from &apos;../event&apos;;
 
-export class GridLayout{
+export class GridLayout extends Feature{
 
     /**
      * Grid layout, table with fixed headers
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf) {
-        var f = tf.config();
+    constructor(tf){
+        super(tf, &apos;gridLayout&apos;);
+
+        var f = this.config;
 
         //defines grid width
         this.gridWidth = f.grid_width || null;
@@ -117,8 +121,6 @@ export class GridLayout{
         this.prfxGridTh = &apos;tblHeadTh_&apos;;
 
         this.sourceTblHtml = tf.tbl.outerHTML;
-
-        this.tf = tf;
     }
 
     /**
@@ -126,10 +128,10 @@ export class GridLayout{
      */
     init(){
         var tf = this.tf;
-        var f = tf.config();
+        var f = this.config;
         var tbl = tf.tbl;
 
-        if(!tf.gridLayout){
+        if(this.initialized){
             return;
         }
 
@@ -215,7 +217,7 @@ export class GridLayout{
 
         //Headers table
         this.headTbl = Dom.create(&apos;table&apos;, [&apos;id&apos;, this.prfxHeadTbl + tf.id]);
-        var tH = Dom.create(&apos;tHead&apos;); //IE&lt;7 needs it
+        var tH = Dom.create(&apos;tHead&apos;);
 
         //1st row should be headers row, ids are added if not set
         //Those ids are used by the sort feature
@@ -360,13 +362,15 @@ export class GridLayout{
             }
         };
 
-        if(tf.popUpFilters){
+        if(tf.popupFilters){
             filtersRow.style.display = &apos;none&apos;;
         }
 
         if(tbl.clientWidth !== this.headTbl.clientWidth){
             tbl.style.width = this.headTbl.clientWidth+&apos;px&apos;;
         }
+
+        this.initialized = true;
     }
 
     /**
@@ -376,7 +380,7 @@ export class GridLayout{
         var tf = this.tf;
         var tbl = tf.tbl;
 
-        if(!tf.gridLayout){
+        if(!this.initialized){
             return;
         }
         var t = tbl.parentNode.removeChild(tbl);
@@ -390,9 +394,12 @@ export class GridLayout{
 
         tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element
-        tbl = Dom.id(tf.id);
+        this.tf.tbl = Dom.id(tf.id); // ???
+
+        this.initialized = false;
     }
-}</code></pre>
+}
+</code></pre>
 </div>
 
 <footer class="footer">

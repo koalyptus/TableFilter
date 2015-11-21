@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.0.10 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.0.11 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
@@ -65,20 +66,23 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/paging.js</h1>
-<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;./feature&apos;;
+import Dom from &apos;../dom&apos;;
 import Types from &apos;../types&apos;;
 import Str from &apos;../string&apos;;
 import Event from &apos;../event&apos;;
 
-export class Paging{
+export class Paging extends Feature{
 
     /**
      * Pagination component
      * @param {Object} tf TableFilter instance
      */
     constructor(tf){
+        super(tf, &apos;paging&apos;);
+
         // Configuration object
-        var f = tf.config();
+        var f = this.config;
 
         //css class for paging buttons (previous,next,etc.)
         this.btnPageCssClass = f.paging_btn_css_class || &apos;pgInp&apos;;
@@ -237,8 +241,6 @@ export class Paging{
             lastEvt: null,
             firstEvt: null
         };
-
-        this.tf = tf;
     }
 
     /**
@@ -248,6 +250,10 @@ export class Paging{
         var slcPages;
         var tf = this.tf;
         var evt = this.evt;
+
+        if(this.initialized){
+            return;
+        }
 
         // Check resultsPerPage is in expected format and initialise the
         // results per page component
@@ -388,7 +394,7 @@ export class Paging{
         targetEl.appendChild(btnLastSpan);
         this.pagingSlc = Dom.id(this.prfxSlcPages+tf.id);
 
-        if(!tf.rememberGridValues || this.isPagingRemoved){
+        if(!tf.rememberGridValues){
             this.setPagingInfo();
         }
         if(!tf.fltGrid){
@@ -396,7 +402,7 @@ export class Paging{
             this.setPagingInfo(tf.validRowsIndex);
         }
 
-        this.isPagingRemoved = false;
+        this.initialized = true;
     }
 
     /**
@@ -405,11 +411,10 @@ export class Paging{
      */
     reset(filterTable=false){
         var tf = this.tf;
-        if(!tf.hasGrid() || tf.paging){
+        if(!tf.hasGrid() || this.isEnabled()){
             return;
         }
-        tf.paging = true;
-        this.isPagingRemoved = true;
+        this.enable();
         this.init();
         tf.resetValues();
         if(filterTable){
@@ -500,12 +505,12 @@ export class Paging{
                 if(Types.isNull(isRowValid) || Boolean(isRowValid===&apos;true&apos;)){
                     r.style.display = &apos;&apos;;
                 }
-                if(tf.alternateBgs &amp;&amp; alternateRows){
+                if(tf.alternateRows &amp;&amp; alternateRows){
                     alternateRows.setRowBg(validRowIdx, h);
                 }
             } else {
                 r.style.display = &apos;none&apos;;
-                if(tf.alternateBgs &amp;&amp; alternateRows){
+                if(tf.alternateRows &amp;&amp; alternateRows){
                     alternateRows.removeRowBg(validRowIdx);
                 }
             }
@@ -531,7 +536,7 @@ export class Paging{
      */
     setPage(cmd){
         var tf = this.tf;
-        if(!tf.hasGrid() || !tf.paging){
+        if(!tf.hasGrid() || !this.isEnabled()){
             return;
         }
         var btnEvt = this.evt,
@@ -597,9 +602,9 @@ export class Paging{
         slcRSpan.appendChild(Dom.text(slcRText));
 
         var help = tf.feature(&apos;help&apos;);
-        if(help &amp;&amp; help.cont){
-            help.cont.parentNode.insertBefore(slcRSpan, help.cont);
-            help.cont.parentNode.insertBefore(slcR, help.cont);
+        if(help &amp;&amp; help.btn){
+            help.btn.parentNode.insertBefore(slcRSpan, help.btn);
+            help.btn.parentNode.insertBefore(slcR, help.btn);
         } else {
             targetEl.appendChild(slcRSpan);
             targetEl.appendChild(slcR);
@@ -676,7 +681,7 @@ export class Paging{
     _changePage(index){
         var tf = this.tf;
 
-        if(!tf.paging){
+        if(!this.isEnabled()){
             return;
         }
         if(index === null){
@@ -715,7 +720,7 @@ export class Paging{
     _changeResultsPerPage(){
         var tf = this.tf;
 
-        if(!tf.paging){
+        if(!this.isEnabled()){
             return;
         }
         var slcR = this.resultsPerPageSlc;
@@ -759,7 +764,7 @@ export class Paging{
      */
     _resetPageLength(name){
         var tf = this.tf;
-        if(!tf.paging){
+        if(!this.isEnabled()){
             return;
         }
         var pglenIndex = tf.feature(&apos;store&apos;).getPageLength(name);
@@ -776,7 +781,7 @@ export class Paging{
     destroy(){
         var tf = this.tf;
 
-        if(!tf.hasGrid()){
+        if(!this.initialized){
             return;
         }
         // btns containers
@@ -841,8 +846,8 @@ export class Paging{
 
         this.pagingSlc = null;
         this.nbPages = 0;
-        this.isPagingRemoved = true;
-        tf.paging = false;
+        this.disable();
+        this.initialized = false;
     }
 }
 </code></pre>

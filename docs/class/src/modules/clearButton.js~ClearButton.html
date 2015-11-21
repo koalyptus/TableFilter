@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">ClearButton | tablefilter v0.0.10 API Document</title>
+  <title data-ice="title">ClearButton | tablefilter v0.0.11 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
@@ -65,13 +66,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ClearButton} from &apos;<span><a href="file/src/modules/clearButton.js.html#lineNumber4">tablefilter/src/modules/clearButton.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ClearButton} from &apos;<span><a href="file/src/modules/clearButton.js.html#lineNumber5">tablefilter/src/modules/clearButton.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/clearButton.js.html#lineNumber4">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/clearButton.js.html#lineNumber5">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -81,7 +82,7 @@
 
   
   
-  
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>src/modules/feature~Feature</span> &#x2192; ClearButton</div></div>
   
   
   
@@ -277,7 +278,7 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html#instance-member-prfxResetSpan">prfxResetSpan</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+           <span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html#instance-member-initialized">initialized</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -302,7 +303,7 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html#instance-member-tf">tf</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html#instance-member-prfxResetSpan">prfxResetSpan</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
       <div>
@@ -421,7 +422,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber10">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber11">source</a></span></span>
     </span>
   </h3>
 
@@ -482,7 +483,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber17">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber20">source</a></span></span>
     </span>
   </h3>
 
@@ -522,7 +523,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber23">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber26">source</a></span></span>
     </span>
   </h3>
 
@@ -562,7 +563,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber19">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber22">source</a></span></span>
     </span>
   </h3>
 
@@ -602,7 +603,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber15">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber18">source</a></span></span>
     </span>
   </h3>
 
@@ -642,7 +643,47 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber24">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-initialized">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">initialized</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -682,47 +723,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber28">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-tf">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">tf</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -765,7 +766,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber80">source</a></span></span>
     </span>
   </h3>
 
@@ -806,7 +807,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber40">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
@@ -847,7 +848,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/clearButton.js.html#lineNumber34">source</a></span></span>
     </span>
   </h3>
 
