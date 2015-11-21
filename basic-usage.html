@@ -667,8 +667,10 @@
         var feature = tf.feature('paging');
 
         if(chx.checked){
+            tf.paging = true;
             feature.reset();
         } else {
+            tf.paging = false;
             feature.destroy();
             // Display all rows
             tf.filter();
@@ -682,8 +684,10 @@
         var feature = tf.feature('alternateRows');
 
         if(chx.checked){
+            tf.alternateRows = true;
             feature.reset();
         } else {
+            tf.alternateRows = false;
             feature.destroy();
         }
     }
@@ -695,8 +699,10 @@
         var feature = tf.feature('rowsCounter');
 
         if(chx.checked){
+            tf.rowsCounter = true;
             feature.init();
         } else {
+            tf.rowsCounter = false;
             feature.destroy();
         }
     }
