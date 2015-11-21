@@ -15,9 +15,6 @@ export class Feature {
     }
 
     reset() {
-        if(!this.tf.hasGrid()){
-            return;
-        }
         this.enable();
         this.init();
     }

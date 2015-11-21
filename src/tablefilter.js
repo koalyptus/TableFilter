@@ -1177,6 +1177,8 @@ export class TableFilter{
         let rows = this.tbl.rows,
             Mod = this.Mod;
 
+        this._clearFilters();
+
         if(this.isExternalFlt && !this.popupFilters){
             this.removeExternalFlts();
         }
@@ -1193,13 +1195,9 @@ export class TableFilter{
             this.destroyExtensions();
         }
 
-        //this loop shows all rows and removes validRow attribute
         for(let j=this.refRow; j<this.nbRows; j++){
-            rows[j].style.display = '';
-
-            if(rows[j].hasAttribute('validRow')){
-                rows[j].removeAttribute('validRow');
-            }
+            // validate row
+            this.validateRow(j, true);
 
             //removes alternating colors
             if(this.alternateRows){
@@ -1222,6 +1220,8 @@ export class TableFilter{
         });
 
         Dom.removeClass(this.tbl, this.prfxTf);
+        this.nbHiddenRows = 0;
+        this.validRowsIndex = null;
         this.activeFlt = null;
         this._hasGrid = false;
         this.tbl = null;

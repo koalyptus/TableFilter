@@ -121,8 +121,7 @@ export class RowsCounter extends Feature{
     }
 
     destroy(){
-        var tf = this.tf;
-        if(!tf.hasGrid() || !this.rowsCounterSpan){
+        if(!this.initialized){
             return;
         }
 
@@ -133,6 +132,7 @@ export class RowsCounter extends Feature{
         }
         this.rowsCounterSpan = null;
         this.rowsCounterDiv = null;
+
         this.disable();
         this.initialized = false;
     }
