@@ -634,6 +634,11 @@
 </table>
 
 
+<p> </p>
+<div class="alert alert-info" role="alert">
+    NOTE: Toolbar above the HTML table is styled with Bootstrap.
+</div>
+
 
 <script src="tablefilter/tablefilter.js"></script>
 
@@ -677,18 +682,16 @@
         var feature = tf.feature('alternateRows');
 
         if(chx.checked){
-            feature.enable();
-            feature.init();
+            feature.reset();
         } else {
-            feature.disable();
-            feature.remove();
+            feature.destroy();
         }
     }
 
     // Toggle rows counter
     function toggleRowsCounter(evt){
         var chx = evt.target;
-        // Get alternating rows feature instance
+        // Get rows counter feature instance
         var feature = tf.feature('rowsCounter');
 
         if(chx.checked){
@@ -719,8 +722,18 @@
     tf.init();
 </script>
 
-<p>
-    
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -753,14 +766,9 @@
 
 
 
-</p>
-
-<h4>Markup</h4>
-<div class="alert alert-info" role="alert">
-    NOTE: this demo relies on Bootstrap's for styling the toolbar above the
-    table.
-</div>
-<pre>
+    </div>
+    <div id="html" class="tab-pane fade">
+        <pre>
 &lt;div class="navbar navbar-default"&gt;
     &lt;form class="navbar-form navbar-left" role="search" onsubmit="filter(event);"&gt;
         &lt;div class="form-group"&gt;
@@ -770,7 +778,7 @@
                 &lt;option value="1"&gt;ISO&lt;/option&gt;
                 &lt;option value="2"&gt;Year&lt;/option&gt;
                 &lt;option value="3"&gt;POP&lt;/option&gt;
-        &lt;option value="4"&gt;XRAT&lt;/option&gt;
+                &lt;option value="4"&gt;XRAT&lt;/option&gt;
                 &lt;option value="5"&gt;PPP&lt;/option&gt;
                 &lt;option value="6"&gt;cgdp&lt;/option&gt;
                 &lt;option value="7"&gt;cc&lt;/option&gt;
@@ -803,7 +811,9 @@
             onclick="toggleRowsCounter(event);"&gt;
     &lt;/div&gt;
 &lt;/div&gt;
-</pre>
+        </pre>
+    </div>
+</div>
 
 
     </div>
