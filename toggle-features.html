@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>External filters generation | TableFilter</title>
+    <title>Toggle features | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -145,79 +145,59 @@
 
       
 
-<h1>External filters generation</h1>
+<h1>Toggle features</h1>
+
 <p>
-    <code>TableFilter</code> can also generate the filters in the desired
-    elements of your page.
+    <code>TableFilter</code> exposes an exhaustive API allowing to perform most
+    of the actions in a programmatic manner. This example show how to filter
+    the table programmatically with a custom form and how to toggle the features
+    enabled by the configuration object.
 </p>
 
-<div id="extGrid" class="panel panel-info pull-left">
-    <div class="panel-heading">Filters</div>
+<div class="navbar navbar-default">
+    <form class="navbar-form navbar-left" onsubmit="filter(event);">
+        <div class="form-group">
+            <label for="slcColumns">Column:</label>
+            <select id="slcColumns" name="slcColumns" class="form-control">
+                <option value="0">Country</option>
+                <option value="1">ISO</option>
+                <option value="2">Year</option>
+                <option value="3">POP</option>
+                <option value="4">XRAT</option>
+                <option value="5">PPP</option>
+                <option value="6">cgdp</option>
+                <option value="7">cc</option>
+                <option value="8">ci</option>
+            </select>
+            <input name="inpSearch" type="text"
+                class="form-control" placeholder="Search">
 
-    <div class="panel-body bg-info">
-        <label>Choose Country:</label><br>
-        <span id="slcCountry"></span><br>
+            <button type="submit" class="btn btn-default">Filter</button>
+            <button type="reset" class="btn btn-link"
+                onclick="tf.clearFilters();">Clear</button>
+        </div>
+    </form>
 
-        <span>Keep Ctrl/Cmd key pressed for multiple selections</span><br><br>
-        <label>Choose Country code:</label><br>
-        <span id="slcCode"></span><br><br>
-
-        <label>Choose year:</label><br>
-        <span id="slcYear"></span><br><br>
-
-        <label for="inpPop">POP:</label><br>
-        <span id="inpPop"></span><br><br>
-
-        <form id="frmRadioInps" name="frmRadioInps">
-            <label for="rdoXRat">XRAT:</label><br>
-            <input type="checkbox" id="rdoXRat" name="rdoXRat" value="!NA"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(4, this.value);
-                    } else tf.setFilterValue(4, '');
-                    tf.filter();"  >Not NA
-
-            <br><br>
-
-            <label for="chkCI">CI:</label><br>
-            <input type="radio" id="chkCI" name="chkCI" value=">0 && <=10"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" > 0 - 10
-            <input type="radio" id="chkCI" name="chkCI" value=">10 && <=20"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" > 10 - 20
-            <input type="radio" id="chkCI" name="chkCI" value=">20 && <=30"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" > 20 - 30
-        </form>
+    <div class="navbar-form navbar-left">
+        <label for="chxPager">Pagination:</label>
+        <input id="chxPager" type="checkbox" checked class="form-control"
+            onclick="togglePagination(event);">
     </div>
-    <div class="panel-footer">
-        <input id="btnFlt" value="Filter" type="button" class="btn btn-default"
-            onclick="tf.filter();" >&nbsp;
-        <input id="btnClr" value="Clear" type="button" class="btn btn-link"
-            onclick="tf.clearFilters();
-                //clears radio btns
-                for( var o=frmRadioInps.elements, p=o.length - 1; p > -1; p--) {
-                    if ( o[p].type ){
-                        o[p].checked = false;
-                    }
-                }
-            " >
-        <div id="statusDiv" class="pull-right"></div>
+
+    <div class="navbar-form navbar-left">
+        <label for="chxAlternate">Alternating rows:</label>
+        <input id="chxAlternate" type="checkbox" checked class="form-control"
+            onclick="toggleAlternatingRows(event);">
+    </div>
+
+    <div class="navbar-form navbar-left">
+        <label for="chxCounter">Rows counter:</label>
+        <input id="chxCounter" type="checkbox" checked class="form-control"
+            onclick="toggleRowsCounter(event);">
     </div>
 </div>
 
-<div class="pull-left" style="margin-left: 0.5em;">
-    
+
 
 <table id="demo" class="countries-tiny">
     <thead>
@@ -655,6 +635,10 @@
     </tbody>
 </table>
 
+
+<p> </p>
+<div class="alert alert-info" role="alert">
+    NOTE: Toolbar above the HTML table is styled with Bootstrap.
 </div>
 
 
@@ -662,44 +646,102 @@
 
 
 <script data-config>
-    var tfConfig = {
-        base_path: 'tablefilter/',
-        alternate_rows: true,
-        rows_counter: true,
-        rows_counter_text: "Displayed rows: ",
-        loader: true,
-        status_bar: true,
-        status_bar_target_id: 'statusDiv',
-        col_number_format: [
-            null, null, 'US',
-            'US', 'US', 'US',
-            'US', 'US', 'US'
-        ],
-        display_all_text: " [ Show all ] ",
-        col_0: "multiple",
-        col_1: "select",
-        col_2: "checklist",
-        col_4: "none",
-        col_8: "none",
+    // Form submission logic for filtering the table
+    function filter(evt){
+        var frm = document.forms[0];
+        var slc = frm.slcColumns;
+        var inp = frm.inpSearch;
 
-        /* external filters */
-        external_flt_grid: true,
-        external_flt_grid_ids: [
-            'slcCountry',
-            'slcCode',
-            'slcYear',
-            'inpPop'
-        ],
+        // Set the column's filter value
+        tf.setFilterValue(slc.value, inp.value);
 
-        /* sorting feature */
-        extensions: [{ name: 'sort' }]
-    };
-    var tf = new TableFilter('demo', tfConfig);
+        // Filter the table
+        tf.filter();
+
+        // Prevent form submission
+        evt.preventDefault();
+    }
+
+    // Toggle pagination
+    function togglePagination(evt){
+        var chx = evt.target;
+        // Get paging feature instance
+        var feature = tf.feature('paging');
+
+        if(chx.checked){
+            tf.paging = true;
+            feature.reset();
+        } else {
+            tf.paging = false;
+            feature.destroy();
+            // Display all rows
+            tf.filter();
+        }
+    }
+
+    // Toggle alternating rows
+    function toggleAlternatingRows(evt){
+        var chx = evt.target;
+        // Get alternating rows feature instance
+        var feature = tf.feature('alternateRows');
+
+        if(chx.checked){
+            tf.alternateRows = true;
+            feature.reset();
+        } else {
+            tf.alternateRows = false;
+            feature.destroy();
+        }
+    }
+
+    // Toggle rows counter
+    function toggleRowsCounter(evt){
+        var chx = evt.target;
+        // Get rows counter feature instance
+        var feature = tf.feature('rowsCounter');
+
+        if(chx.checked){
+            tf.rowsCounter = true;
+            feature.init();
+        } else {
+            tf.rowsCounter = false;
+            feature.destroy();
+        }
+    }
+
+    var tf = new TableFilter(
+        document.querySelector('.countries-tiny'),
+        {
+            base_path: 'tablefilter/',
+            alternate_rows: true,
+            rows_counter: true,
+            paging: true,
+            col_widths: [
+                '120px','120px','120px',
+                '120px','120px','120px',
+                '120px','120px','120px'
+            ],
+            on_filters_loaded: function(o){
+                // hide the filters row
+                o.tbl.rows[o.getFiltersRowIndex()].style.display = 'none';
+            }
+        }
+    );
     tf.init();
 </script>
 
-<p class="clearfix">
-    
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -732,79 +774,54 @@
 
 
 
-</p>
+    </div>
+    <div id="html" class="tab-pane fade">
+        <pre>
+&lt;div class="navbar navbar-default"&gt;
+    &lt;form class="navbar-form navbar-left" role="search" onsubmit="filter(event);"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label for="slcColumns"&gt;Column:&lt;/label&gt;
+            &lt;select id="slcColumns" name="slcColumns" class="form-control"&gt;
+                &lt;option value="0"&gt;Country&lt;/option&gt;
+                &lt;option value="1"&gt;ISO&lt;/option&gt;
+                &lt;option value="2"&gt;Year&lt;/option&gt;
+                &lt;option value="3"&gt;POP&lt;/option&gt;
+                &lt;option value="4"&gt;XRAT&lt;/option&gt;
+                &lt;option value="5"&gt;PPP&lt;/option&gt;
+                &lt;option value="6"&gt;cgdp&lt;/option&gt;
+                &lt;option value="7"&gt;cc&lt;/option&gt;
+                &lt;option value="8"&gt;ci&lt;/option&gt;
+            &lt;/select&gt;
+            &lt;input name="inpSearch" type="text"
+                class="form-control" placeholder="Search"&gt;
 
-<h4>Markup</h4>
-<div class="alert alert-warning" role="alert">
-    NOTE: the filters panel on the left is designed using Bootstrap's
-    panel classes.
-</div>
-<pre>
-&lt;div id="extGrid" class="panel panel-info pull-left"&gt;
-    &lt;div class="panel-heading"&gt;Filters&lt;/div&gt;
+            &lt;button type="submit" class="btn btn-default"&gt;Filter&lt;/button&gt;
+            &lt;button type="reset" class="btn btn-link"
+                onclick="tf.clearFilters();"&gt;Clear&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
 
-    &lt;div class="panel-body bg-info"&gt;
-        &lt;label&gt;Choose Country:&lt;/label&gt;&lt;br&gt;
-        &lt;span id="slcCountry"&gt;&lt;/span&gt;&lt;br&gt;
-
-        &lt;span&gt;Keep Ctrl/Cmd key pressed for multiple selections&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-        &lt;label&gt;Choose Country code:&lt;/label&gt;&lt;br&gt;
-        &lt;span id="slcCode"&gt;&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-
-        &lt;label&gt;Choose year:&lt;/label&gt;&lt;br&gt;
-        &lt;span id="slcYear"&gt;&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-
-        &lt;label for="inpPop"&gt;POP:&lt;/label&gt;&lt;br&gt;
-        &lt;span id="inpPop"&gt;&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-
-        &lt;form id="frmRadioInps" name="frmRadioInps"&gt;
-            &lt;label for="rdoXRat"&gt;XRAT:&lt;/label&gt;&lt;br&gt;
-            &lt;input type="checkbox" id="rdoXRat" name="rdoXRat" value="!NA"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(4, this.value);
-                    } else tf.setFilterValue(4, '');
-                    tf.filter();"  &gt;Not NA
-
-            &lt;br&gt;&lt;br&gt;
-
-            &lt;label for="chkCI"&gt;CI:&lt;/label&gt;&lt;br&gt;
-            &lt;input type="radio" id="chkCI" name="chkCI" value="&gt;0 && &lt;=10"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" &gt; 0 - 10
-            &lt;input type="radio" id="chkCI" name="chkCI" value="&gt;10 && &lt;=20"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" &gt; 10 - 20
-            &lt;input type="radio" id="chkCI" name="chkCI" value="&gt;20 && &lt;=30"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" &gt; 20 - 30
-        &lt;/form&gt;
+    &lt;div class="navbar-form navbar-left"&gt;
+        &lt;label for="chxPager"&gt;Pagination:&lt;/label&gt;
+        &lt;input id="chxPager" type="checkbox" checked class="form-control"
+            onclick="togglePagination(event);"&gt;
     &lt;/div&gt;
-    &lt;div class="panel-footer"&gt;
-        &lt;input id="btnFlt" value="Filter" type="button"
-            onclick="tf.filter();" &gt;&nbsp;
-        &lt;input id="btnClr" value="Clear" type="button"
-            onclick="tf.clearFilters();
-                //clears radio btns
-                for( var o=frmRadioInps.elements, p=o.length - 1; p &gt; -1; p--) {
-                    if ( o[p].type ){
-                        o[p].checked = false;
-                    }
-                }
-            " &gt;
-        &lt;div id="statusDiv" class="pull-right"&gt;&lt;/div&gt;
+
+    &lt;div class="navbar-form navbar-left"&gt;
+        &lt;label for="chxAlternate"&gt;Alternating rows:&lt;/label&gt;
+        &lt;input id="chxAlternate" type="checkbox" checked class="form-control"
+            onclick="toggleAlternatingRows(event);"&gt;
+    &lt;/div&gt;
+
+    &lt;div class="navbar-form navbar-left"&gt;
+        &lt;label for="chxCounter"&gt;Rows counter:&lt;/label&gt;
+        &lt;input id="chxCounter" type="checkbox" checked class="form-control"
+            onclick="toggleRowsCounter(event);"&gt;
     &lt;/div&gt;
 &lt;/div&gt;
-</pre>
+        </pre>
+    </div>
+</div>
 
 
     </div>
