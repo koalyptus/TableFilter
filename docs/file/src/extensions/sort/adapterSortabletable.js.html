@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/sort/adapterSortabletable.js | tablefilter v0.0.11 API Document</title>
+  <title data-ice="title">src/extensions/sort/adapterSortabletable.js | tablefilter v0.0.12 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -83,9 +83,6 @@ export default class AdapterSortableTable{
         this.name = opts.name;
         this.desc = opts.description || &apos;Sortable table&apos;;
 
-        //indicates if paging is enabled
-        this.isPaged = false;
-
         //indicates if tables was sorted
         this.sorted = false;
 
@@ -159,9 +156,7 @@ export default class AdapterSortableTable{
 
             /*** sort behaviour for paging ***/
             if(tf.paging){
-                adpt.isPaged = true;
-                tf.paging = false;
-                tf.feature(&apos;paging&apos;).destroy();
+                tf.feature(&apos;paging&apos;).disable();
             }
         };
 
@@ -205,11 +200,10 @@ export default class AdapterSortableTable{
                 }
             }
             //sort behaviour for paging
-            if(adpt.isPaged){
+            if(tf.paging){
                 let paginator = tf.feature(&apos;paging&apos;);
-                paginator.reset(false);
+                paginator.enable();
                 paginator.setPage(paginator.getPage());
-                adpt.isPaged = false;
             }
 
             if(adpt.onAfterSort){

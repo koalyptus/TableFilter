@@ -1,6 +1,6 @@
 {
-  "coverage": "24.08%",
-  "expectCount": 656,
+  "coverage": "24.12%",
+  "expectCount": 655,
   "actualCount": 158,
   "files": {
     "src/extensions/advancedGrid/adapterEzEditTable.js": {
@@ -8,7 +8,7 @@
       "actualCount": 4
     },
     "src/extensions/sort/adapterSortabletable.js": {
-      "expectCount": 28,
+      "expectCount": 27,
       "actualCount": 4
     },
     "src/modules/alternateRows.js": {

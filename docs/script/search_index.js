@@ -1254,12 +1254,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#ispaged",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-isPaged",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#isPaged",
-    "member"
-  ],
-  [
     "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#name",
     "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-name",
     "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#name",

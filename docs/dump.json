@@ -2613,7 +2613,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import Types from '../../types';\nimport Dom from '../../dom';\nimport Event from '../../event';\nimport DateHelper from '../../date';\nimport Helpers from '../../helpers';\n\nexport default class AdapterSortableTable{\n\n    /**\n     * SortableTable Adapter module\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf, opts){\n        this.initialized = false;\n        this.name = opts.name;\n        this.desc = opts.description || 'Sortable table';\n\n        //indicates if paging is enabled\n        this.isPaged = false;\n\n        //indicates if tables was sorted\n        this.sorted = false;\n\n        this.sortTypes = Types.isArray(opts.types) ? opts.types : [];\n        this.sortColAtStart = Types.isArray(opts.sort_col_at_start) ?\n            opts.sort_col_at_start : null;\n        this.asyncSort = Boolean(opts.async_sort);\n        this.triggerIds = Types.isArray(opts.trigger_ids) ?\n            opts.trigger_ids : [];\n\n        // edit .sort-arrow.descending / .sort-arrow.ascending in\n        // tablefilter.css to reflect any path change\n        this.imgPath = opts.images_path || tf.themesPath;\n        this.imgBlank = opts.image_blank || 'blank.png';\n        this.imgClassName = opts.image_class_name || 'sort-arrow';\n        this.imgAscClassName = opts.image_asc_class_name || 'ascending';\n        this.imgDescClassName = opts.image_desc_class_name ||'descending';\n        //cell attribute storing custom key\n        this.customKey = opts.custom_key || 'data-tf-sortKey';\n\n        /*** TF additional events ***/\n        //additional paging events for alternating background\n        // o.Evt._Paging.nextEvt = function(){\n        // if(o.sorted && o.alternateRows) o.Filter();\n        // }\n        // o.Evt._Paging.prevEvt = o.Evt._Paging.nextEvt;\n        // o.Evt._Paging.firstEvt = o.Evt._Paging.nextEvt;\n        // o.Evt._Paging.lastEvt = o.Evt._Paging.nextEvt;\n        // o.Evt._OnSlcPagesChangeEvt = o.Evt._Paging.nextEvt;\n\n        // callback invoked after sort is loaded and instanciated\n        this.onSortLoaded = Types.isFn(opts.on_sort_loaded) ?\n            opts.on_sort_loaded : null;\n        // callback invoked before table is sorted\n        this.onBeforeSort = Types.isFn(opts.on_before_sort) ?\n            opts.on_before_sort : null;\n        // callback invoked after table is sorted\n        this.onAfterSort = Types.isFn(opts.on_after_sort) ?\n            opts.on_after_sort : null;\n\n        this.tf = tf;\n    }\n\n    init(){\n        let tf = this.tf;\n        let adpt = this;\n\n        // SortableTable class sanity check (sortabletable.js)\n        if(Types.isUndef(SortableTable)){\n            throw new Error('SortableTable class not found.');\n        }\n\n        this.overrideSortableTable();\n        this.setSortTypes();\n\n        //Column sort at start\n        let sortColAtStart = adpt.sortColAtStart;\n        if(sortColAtStart){\n            this.stt.sort(sortColAtStart[0], sortColAtStart[1]);\n        }\n\n        if(this.onSortLoaded){\n            this.onSortLoaded.call(null, tf, this);\n        }\n\n        /*** SortableTable callbacks ***/\n        this.stt.onbeforesort = function(){\n            if(adpt.onBeforeSort){\n                adpt.onBeforeSort.call(null, tf, adpt.stt.sortColumn);\n            }\n\n            /*** sort behaviour for paging ***/\n            if(tf.paging){\n                adpt.isPaged = true;\n                tf.paging = false;\n                tf.feature('paging').destroy();\n            }\n        };\n\n        this.stt.onsort = function(){\n            adpt.sorted = true;\n\n            //rows alternating bg issue\n            // TODO: move into AlternateRows component\n            if(tf.alternateRows){\n                let rows = tf.tbl.rows, c = 0;\n\n                let setClass = function(row, i, removeOnly){\n                    if(Types.isUndef(removeOnly)){\n                        removeOnly = false;\n                    }\n                    let altRows = tf.feature('alternateRows'),\n                        oddCls = altRows.oddCss,\n                        evenCls = altRows.evenCss;\n                    Dom.removeClass(row, oddCls);\n                    Dom.removeClass(row, evenCls);\n\n                    if(!removeOnly){\n                        Dom.addClass(row, i % 2 ? oddCls : evenCls);\n                    }\n                };\n\n                for (let i = tf.refRow; i < tf.nbRows; i++){\n                    let isRowValid = rows[i].getAttribute('validRow');\n                    if(tf.paging && rows[i].style.display === ''){\n                        setClass(rows[i], c);\n                        c++;\n                    } else {\n                        if((isRowValid==='true' || isRowValid===null) &&\n                            rows[i].style.display === ''){\n                            setClass(rows[i], c);\n                            c++;\n                        } else {\n                            setClass(rows[i], c, true);\n                        }\n                    }\n                }\n            }\n            //sort behaviour for paging\n            if(adpt.isPaged){\n                let paginator = tf.feature('paging');\n                paginator.reset(false);\n                paginator.setPage(paginator.getPage());\n                adpt.isPaged = false;\n            }\n\n            if(adpt.onAfterSort){\n                adpt.onAfterSort.call(null, tf, adpt.stt.sortColumn);\n            }\n        };\n\n        this.initialized = true;\n    }\n\n    /**\n     * Sort specified column\n     * @param {Number} colIdx Column index\n     * @param {Boolean} desc Optional: descending manner\n     */\n    sortByColumnIndex(colIdx, desc){\n        this.stt.sort(colIdx, desc);\n    }\n\n    overrideSortableTable(){\n        let adpt = this,\n            tf = this.tf;\n\n        /**\n         * Overrides headerOnclick method in order to handle th event\n         * @param  {Object} e [description]\n         */\n        SortableTable.prototype.headerOnclick = function(evt){\n            if(!adpt.initialized){\n                return;\n            }\n\n            // find Header element\n            let el = evt.target || evt.srcElement;\n\n            while(el.tagName !== 'TD' && el.tagName !== 'TH'){\n                el = el.parentNode;\n            }\n\n            this.sort(\n                SortableTable.msie ?\n                    SortableTable.getCellIndex(el) : el.cellIndex\n            );\n        };\n\n        /**\n         * Overrides getCellIndex IE returns wrong cellIndex when columns are\n         * hidden\n         * @param  {Object} oTd TD element\n         * @return {Number}     Cell index\n         */\n        SortableTable.getCellIndex = function(oTd){\n            let cells = oTd.parentNode.cells,\n                l = cells.length, i;\n            for (i = 0; cells[i] != oTd && i < l; i++){}\n            return i;\n        };\n\n        /**\n         * Overrides initHeader in order to handle filters row position\n         * @param  {Array} oSortTypes\n         */\n        SortableTable.prototype.initHeader = function(oSortTypes){\n            let stt = this;\n            if (!stt.tHead){\n                if(tf.gridLayout){\n                    stt.tHead = tf.feature('gridLayout').headTbl.tHead;\n                } else {\n                    return;\n                }\n            }\n\n            stt.headersRow = tf.headersRow;\n            let cells = stt.tHead.rows[stt.headersRow].cells;\n            stt.sortTypes = oSortTypes || [];\n            let l = cells.length;\n            let img, c;\n\n            for (let i = 0; i < l; i++) {\n                c = cells[i];\n                if (stt.sortTypes[i] !== null && stt.sortTypes[i] !== 'None'){\n                    c.style.cursor = 'pointer';\n                    img = Dom.create('img',\n                        ['src', adpt.imgPath + adpt.imgBlank]);\n                    c.appendChild(img);\n                    if (stt.sortTypes[i] !== null){\n                        c.setAttribute( '_sortType', stt.sortTypes[i]);\n                    }\n                    Event.add(c, 'click', stt._headerOnclick);\n                } else {\n                    c.setAttribute('_sortType', oSortTypes[i]);\n                    c._sortType = 'None';\n                }\n            }\n            stt.updateHeaderArrows();\n        };\n\n        /**\n         * Overrides updateHeaderArrows in order to handle arrows indicators\n         */\n        SortableTable.prototype.updateHeaderArrows = function(){\n            let stt = this;\n            let cells, l, img;\n\n            // external headers\n            if(adpt.asyncSort && adpt.triggerIds.length > 0){\n                let triggers = adpt.triggerIds;\n                cells = [];\n                l = triggers.length;\n                for(let j=0; j<triggers.length; j++){\n                    cells.push(Dom.id(triggers[j]));\n                }\n            } else {\n                if(!this.tHead){\n                    return;\n                }\n                cells = stt.tHead.rows[stt.headersRow].cells;\n                l = cells.length;\n            }\n            for(let i = 0; i < l; i++){\n                let cellAttr = cells[i].getAttribute('_sortType');\n                if(cellAttr !== null && cellAttr !== 'None'){\n                    img = cells[i].lastChild || cells[i];\n                    if(img.nodeName.toLowerCase() !== 'img'){\n                        img = Dom.create('img',\n                            ['src', adpt.imgPath + adpt.imgBlank]);\n                        cells[i].appendChild(img);\n                    }\n                    if (i === stt.sortColumn){\n                        img.className = adpt.imgClassName +' '+\n                            (this.descending ?\n                                adpt.imgDescClassName :\n                                adpt.imgAscClassName);\n                    } else{\n                        img.className = adpt.imgClassName;\n                    }\n                }\n            }\n        };\n\n        /**\n         * Overrides getRowValue for custom key value feature\n         * @param  {Object} oRow    Row element\n         * @param  {String} sType\n         * @param  {Number} nColumn\n         * @return {String}\n         */\n        SortableTable.prototype.getRowValue = function(oRow, sType, nColumn){\n            let stt = this;\n            // if we have defined a custom getRowValue use that\n            let sortTypeInfo = stt._sortTypeInfo[sType];\n            if (sortTypeInfo && sortTypeInfo.getRowValue){\n                return sortTypeInfo.getRowValue(oRow, nColumn);\n            }\n            let c = oRow.cells[nColumn];\n            let s = SortableTable.getInnerText(c);\n            return stt.getValueFromString(s, sType);\n        };\n\n        /**\n         * Overrides getInnerText in order to avoid Firefox unexpected sorting\n         * behaviour with untrimmed text elements\n         * @param  {Object} oNode DOM element\n         * @return {String}       DOM element inner text\n         */\n        SortableTable.getInnerText = function(oNode){\n            if(!oNode){\n                return;\n            }\n            if(oNode.getAttribute(adpt.customKey)){\n                return oNode.getAttribute(adpt.customKey);\n            } else {\n                return Dom.getText(oNode);\n            }\n        };\n    }\n\n    addSortType(){\n        var args = arguments;\n        SortableTable.prototype.addSortType(args[0], args[1], args[2], args[3]);\n    }\n\n    setSortTypes(){\n        let tf = this.tf,\n            sortTypes = this.sortTypes,\n            _sortTypes = [];\n\n        for(let i=0; i<tf.nbCells; i++){\n            let colType;\n\n            if(sortTypes[i]){\n                colType = sortTypes[i].toLowerCase();\n                if(colType === 'none'){\n                    colType = 'None';\n                }\n            } else { // resolve column types\n                if(tf.hasColNbFormat && tf.colNbFormat[i] !== null){\n                    colType = tf.colNbFormat[i].toLowerCase();\n                } else if(tf.hasColDateType && tf.colDateType[i] !== null){\n                    colType = tf.colDateType[i].toLowerCase()+'date';\n                } else {\n                    colType = 'String';\n                }\n            }\n            _sortTypes.push(colType);\n        }\n\n        //Public TF method to add sort type\n\n        //Custom sort types\n        this.addSortType('number', Number);\n        this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);\n        this.addSortType('date', SortableTable.toDate);\n        this.addSortType('string');\n        this.addSortType('us', usNumberConverter);\n        this.addSortType('eu', euNumberConverter);\n        this.addSortType('dmydate', dmyDateConverter );\n        this.addSortType('ymddate', ymdDateConverter);\n        this.addSortType('mdydate', mdyDateConverter);\n        this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);\n        this.addSortType('ipaddress', ipAddress, sortIP);\n\n        this.stt = new SortableTable(tf.tbl, _sortTypes);\n\n        /*** external table headers adapter ***/\n        if(this.asyncSort && this.triggerIds.length > 0){\n            let triggers = this.triggerIds;\n            for(let j=0; j<triggers.length; j++){\n                if(triggers[j] === null){\n                    continue;\n                }\n                let trigger = Dom.id(triggers[j]);\n                if(trigger){\n                    trigger.style.cursor = 'pointer';\n\n                    Event.add(trigger, 'click', (evt) => {\n                        let elm = evt.target;\n                        if(!this.tf.sort){\n                            return;\n                        }\n                        this.stt.asyncSort(triggers.indexOf(elm.id));\n                    });\n                    trigger.setAttribute('_sortType', _sortTypes[j]);\n                }\n            }\n        }\n    }\n\n    /**\n     * Destroy sort\n     */\n    destroy(){\n        let tf = this.tf;\n        this.sorted = false;\n        this.initialized = false;\n        this.stt.destroy();\n\n        let ids = tf.getFiltersId();\n        for (let idx = 0; idx < ids.length; idx++){\n            let header = tf.getHeaderElement(idx);\n            let img = Dom.tag(header, 'img');\n\n            if(img.length === 1){\n                header.removeChild(img[0]);\n            }\n        }\n    }\n\n}\n\n//Converters\nfunction usNumberConverter(s){\n    return Helpers.removeNbFormat(s, 'us');\n}\nfunction euNumberConverter(s){\n    return Helpers.removeNbFormat(s, 'eu');\n}\nfunction dateConverter(s, format){\n    return DateHelper.format(s, format);\n}\nfunction dmyDateConverter(s){\n    return dateConverter(s, 'DMY');\n}\nfunction mdyDateConverter(s){\n    return dateConverter(s, 'MDY');\n}\nfunction ymdDateConverter(s){\n    return dateConverter(s, 'YMD');\n}\nfunction ddmmmyyyyDateConverter(s){\n    return dateConverter(s, 'DDMMMYYYY');\n}\n\nfunction ipAddress(value){\n    let vals = value.split('.');\n    for (let x in vals) {\n        let val = vals[x];\n        while (3 > val.length){\n            val = '0'+val;\n        }\n        vals[x] = val;\n    }\n    return vals.join('.');\n}\n\nfunction sortIP(a,b){\n    let aa = ipAddress(a.value.toLowerCase());\n    let bb = ipAddress(b.value.toLowerCase());\n    if (aa==bb){\n        return 0;\n    } else if (aa<bb){\n        return -1;\n    } else {\n        return 1;\n    }\n}\n"
+    "content": "import Types from '../../types';\nimport Dom from '../../dom';\nimport Event from '../../event';\nimport DateHelper from '../../date';\nimport Helpers from '../../helpers';\n\nexport default class AdapterSortableTable{\n\n    /**\n     * SortableTable Adapter module\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf, opts){\n        this.initialized = false;\n        this.name = opts.name;\n        this.desc = opts.description || 'Sortable table';\n\n        //indicates if tables was sorted\n        this.sorted = false;\n\n        this.sortTypes = Types.isArray(opts.types) ? opts.types : [];\n        this.sortColAtStart = Types.isArray(opts.sort_col_at_start) ?\n            opts.sort_col_at_start : null;\n        this.asyncSort = Boolean(opts.async_sort);\n        this.triggerIds = Types.isArray(opts.trigger_ids) ?\n            opts.trigger_ids : [];\n\n        // edit .sort-arrow.descending / .sort-arrow.ascending in\n        // tablefilter.css to reflect any path change\n        this.imgPath = opts.images_path || tf.themesPath;\n        this.imgBlank = opts.image_blank || 'blank.png';\n        this.imgClassName = opts.image_class_name || 'sort-arrow';\n        this.imgAscClassName = opts.image_asc_class_name || 'ascending';\n        this.imgDescClassName = opts.image_desc_class_name ||'descending';\n        //cell attribute storing custom key\n        this.customKey = opts.custom_key || 'data-tf-sortKey';\n\n        /*** TF additional events ***/\n        //additional paging events for alternating background\n        // o.Evt._Paging.nextEvt = function(){\n        // if(o.sorted && o.alternateRows) o.Filter();\n        // }\n        // o.Evt._Paging.prevEvt = o.Evt._Paging.nextEvt;\n        // o.Evt._Paging.firstEvt = o.Evt._Paging.nextEvt;\n        // o.Evt._Paging.lastEvt = o.Evt._Paging.nextEvt;\n        // o.Evt._OnSlcPagesChangeEvt = o.Evt._Paging.nextEvt;\n\n        // callback invoked after sort is loaded and instanciated\n        this.onSortLoaded = Types.isFn(opts.on_sort_loaded) ?\n            opts.on_sort_loaded : null;\n        // callback invoked before table is sorted\n        this.onBeforeSort = Types.isFn(opts.on_before_sort) ?\n            opts.on_before_sort : null;\n        // callback invoked after table is sorted\n        this.onAfterSort = Types.isFn(opts.on_after_sort) ?\n            opts.on_after_sort : null;\n\n        this.tf = tf;\n    }\n\n    init(){\n        let tf = this.tf;\n        let adpt = this;\n\n        // SortableTable class sanity check (sortabletable.js)\n        if(Types.isUndef(SortableTable)){\n            throw new Error('SortableTable class not found.');\n        }\n\n        this.overrideSortableTable();\n        this.setSortTypes();\n\n        //Column sort at start\n        let sortColAtStart = adpt.sortColAtStart;\n        if(sortColAtStart){\n            this.stt.sort(sortColAtStart[0], sortColAtStart[1]);\n        }\n\n        if(this.onSortLoaded){\n            this.onSortLoaded.call(null, tf, this);\n        }\n\n        /*** SortableTable callbacks ***/\n        this.stt.onbeforesort = function(){\n            if(adpt.onBeforeSort){\n                adpt.onBeforeSort.call(null, tf, adpt.stt.sortColumn);\n            }\n\n            /*** sort behaviour for paging ***/\n            if(tf.paging){\n                tf.feature('paging').disable();\n            }\n        };\n\n        this.stt.onsort = function(){\n            adpt.sorted = true;\n\n            //rows alternating bg issue\n            // TODO: move into AlternateRows component\n            if(tf.alternateRows){\n                let rows = tf.tbl.rows, c = 0;\n\n                let setClass = function(row, i, removeOnly){\n                    if(Types.isUndef(removeOnly)){\n                        removeOnly = false;\n                    }\n                    let altRows = tf.feature('alternateRows'),\n                        oddCls = altRows.oddCss,\n                        evenCls = altRows.evenCss;\n                    Dom.removeClass(row, oddCls);\n                    Dom.removeClass(row, evenCls);\n\n                    if(!removeOnly){\n                        Dom.addClass(row, i % 2 ? oddCls : evenCls);\n                    }\n                };\n\n                for (let i = tf.refRow; i < tf.nbRows; i++){\n                    let isRowValid = rows[i].getAttribute('validRow');\n                    if(tf.paging && rows[i].style.display === ''){\n                        setClass(rows[i], c);\n                        c++;\n                    } else {\n                        if((isRowValid==='true' || isRowValid===null) &&\n                            rows[i].style.display === ''){\n                            setClass(rows[i], c);\n                            c++;\n                        } else {\n                            setClass(rows[i], c, true);\n                        }\n                    }\n                }\n            }\n            //sort behaviour for paging\n            if(tf.paging){\n                let paginator = tf.feature('paging');\n                paginator.enable();\n                paginator.setPage(paginator.getPage());\n            }\n\n            if(adpt.onAfterSort){\n                adpt.onAfterSort.call(null, tf, adpt.stt.sortColumn);\n            }\n        };\n\n        this.initialized = true;\n    }\n\n    /**\n     * Sort specified column\n     * @param {Number} colIdx Column index\n     * @param {Boolean} desc Optional: descending manner\n     */\n    sortByColumnIndex(colIdx, desc){\n        this.stt.sort(colIdx, desc);\n    }\n\n    overrideSortableTable(){\n        let adpt = this,\n            tf = this.tf;\n\n        /**\n         * Overrides headerOnclick method in order to handle th event\n         * @param  {Object} e [description]\n         */\n        SortableTable.prototype.headerOnclick = function(evt){\n            if(!adpt.initialized){\n                return;\n            }\n\n            // find Header element\n            let el = evt.target || evt.srcElement;\n\n            while(el.tagName !== 'TD' && el.tagName !== 'TH'){\n                el = el.parentNode;\n            }\n\n            this.sort(\n                SortableTable.msie ?\n                    SortableTable.getCellIndex(el) : el.cellIndex\n            );\n        };\n\n        /**\n         * Overrides getCellIndex IE returns wrong cellIndex when columns are\n         * hidden\n         * @param  {Object} oTd TD element\n         * @return {Number}     Cell index\n         */\n        SortableTable.getCellIndex = function(oTd){\n            let cells = oTd.parentNode.cells,\n                l = cells.length, i;\n            for (i = 0; cells[i] != oTd && i < l; i++){}\n            return i;\n        };\n\n        /**\n         * Overrides initHeader in order to handle filters row position\n         * @param  {Array} oSortTypes\n         */\n        SortableTable.prototype.initHeader = function(oSortTypes){\n            let stt = this;\n            if (!stt.tHead){\n                if(tf.gridLayout){\n                    stt.tHead = tf.feature('gridLayout').headTbl.tHead;\n                } else {\n                    return;\n                }\n            }\n\n            stt.headersRow = tf.headersRow;\n            let cells = stt.tHead.rows[stt.headersRow].cells;\n            stt.sortTypes = oSortTypes || [];\n            let l = cells.length;\n            let img, c;\n\n            for (let i = 0; i < l; i++) {\n                c = cells[i];\n                if (stt.sortTypes[i] !== null && stt.sortTypes[i] !== 'None'){\n                    c.style.cursor = 'pointer';\n                    img = Dom.create('img',\n                        ['src', adpt.imgPath + adpt.imgBlank]);\n                    c.appendChild(img);\n                    if (stt.sortTypes[i] !== null){\n                        c.setAttribute( '_sortType', stt.sortTypes[i]);\n                    }\n                    Event.add(c, 'click', stt._headerOnclick);\n                } else {\n                    c.setAttribute('_sortType', oSortTypes[i]);\n                    c._sortType = 'None';\n                }\n            }\n            stt.updateHeaderArrows();\n        };\n\n        /**\n         * Overrides updateHeaderArrows in order to handle arrows indicators\n         */\n        SortableTable.prototype.updateHeaderArrows = function(){\n            let stt = this;\n            let cells, l, img;\n\n            // external headers\n            if(adpt.asyncSort && adpt.triggerIds.length > 0){\n                let triggers = adpt.triggerIds;\n                cells = [];\n                l = triggers.length;\n                for(let j=0; j<triggers.length; j++){\n                    cells.push(Dom.id(triggers[j]));\n                }\n            } else {\n                if(!this.tHead){\n                    return;\n                }\n                cells = stt.tHead.rows[stt.headersRow].cells;\n                l = cells.length;\n            }\n            for(let i = 0; i < l; i++){\n                let cellAttr = cells[i].getAttribute('_sortType');\n                if(cellAttr !== null && cellAttr !== 'None'){\n                    img = cells[i].lastChild || cells[i];\n                    if(img.nodeName.toLowerCase() !== 'img'){\n                        img = Dom.create('img',\n                            ['src', adpt.imgPath + adpt.imgBlank]);\n                        cells[i].appendChild(img);\n                    }\n                    if (i === stt.sortColumn){\n                        img.className = adpt.imgClassName +' '+\n                            (this.descending ?\n                                adpt.imgDescClassName :\n                                adpt.imgAscClassName);\n                    } else{\n                        img.className = adpt.imgClassName;\n                    }\n                }\n            }\n        };\n\n        /**\n         * Overrides getRowValue for custom key value feature\n         * @param  {Object} oRow    Row element\n         * @param  {String} sType\n         * @param  {Number} nColumn\n         * @return {String}\n         */\n        SortableTable.prototype.getRowValue = function(oRow, sType, nColumn){\n            let stt = this;\n            // if we have defined a custom getRowValue use that\n            let sortTypeInfo = stt._sortTypeInfo[sType];\n            if (sortTypeInfo && sortTypeInfo.getRowValue){\n                return sortTypeInfo.getRowValue(oRow, nColumn);\n            }\n            let c = oRow.cells[nColumn];\n            let s = SortableTable.getInnerText(c);\n            return stt.getValueFromString(s, sType);\n        };\n\n        /**\n         * Overrides getInnerText in order to avoid Firefox unexpected sorting\n         * behaviour with untrimmed text elements\n         * @param  {Object} oNode DOM element\n         * @return {String}       DOM element inner text\n         */\n        SortableTable.getInnerText = function(oNode){\n            if(!oNode){\n                return;\n            }\n            if(oNode.getAttribute(adpt.customKey)){\n                return oNode.getAttribute(adpt.customKey);\n            } else {\n                return Dom.getText(oNode);\n            }\n        };\n    }\n\n    addSortType(){\n        var args = arguments;\n        SortableTable.prototype.addSortType(args[0], args[1], args[2], args[3]);\n    }\n\n    setSortTypes(){\n        let tf = this.tf,\n            sortTypes = this.sortTypes,\n            _sortTypes = [];\n\n        for(let i=0; i<tf.nbCells; i++){\n            let colType;\n\n            if(sortTypes[i]){\n                colType = sortTypes[i].toLowerCase();\n                if(colType === 'none'){\n                    colType = 'None';\n                }\n            } else { // resolve column types\n                if(tf.hasColNbFormat && tf.colNbFormat[i] !== null){\n                    colType = tf.colNbFormat[i].toLowerCase();\n                } else if(tf.hasColDateType && tf.colDateType[i] !== null){\n                    colType = tf.colDateType[i].toLowerCase()+'date';\n                } else {\n                    colType = 'String';\n                }\n            }\n            _sortTypes.push(colType);\n        }\n\n        //Public TF method to add sort type\n\n        //Custom sort types\n        this.addSortType('number', Number);\n        this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);\n        this.addSortType('date', SortableTable.toDate);\n        this.addSortType('string');\n        this.addSortType('us', usNumberConverter);\n        this.addSortType('eu', euNumberConverter);\n        this.addSortType('dmydate', dmyDateConverter );\n        this.addSortType('ymddate', ymdDateConverter);\n        this.addSortType('mdydate', mdyDateConverter);\n        this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);\n        this.addSortType('ipaddress', ipAddress, sortIP);\n\n        this.stt = new SortableTable(tf.tbl, _sortTypes);\n\n        /*** external table headers adapter ***/\n        if(this.asyncSort && this.triggerIds.length > 0){\n            let triggers = this.triggerIds;\n            for(let j=0; j<triggers.length; j++){\n                if(triggers[j] === null){\n                    continue;\n                }\n                let trigger = Dom.id(triggers[j]);\n                if(trigger){\n                    trigger.style.cursor = 'pointer';\n\n                    Event.add(trigger, 'click', (evt) => {\n                        let elm = evt.target;\n                        if(!this.tf.sort){\n                            return;\n                        }\n                        this.stt.asyncSort(triggers.indexOf(elm.id));\n                    });\n                    trigger.setAttribute('_sortType', _sortTypes[j]);\n                }\n            }\n        }\n    }\n\n    /**\n     * Destroy sort\n     */\n    destroy(){\n        let tf = this.tf;\n        this.sorted = false;\n        this.initialized = false;\n        this.stt.destroy();\n\n        let ids = tf.getFiltersId();\n        for (let idx = 0; idx < ids.length; idx++){\n            let header = tf.getHeaderElement(idx);\n            let img = Dom.tag(header, 'img');\n\n            if(img.length === 1){\n                header.removeChild(img[0]);\n            }\n        }\n    }\n\n}\n\n//Converters\nfunction usNumberConverter(s){\n    return Helpers.removeNbFormat(s, 'us');\n}\nfunction euNumberConverter(s){\n    return Helpers.removeNbFormat(s, 'eu');\n}\nfunction dateConverter(s, format){\n    return DateHelper.format(s, format);\n}\nfunction dmyDateConverter(s){\n    return dateConverter(s, 'DMY');\n}\nfunction mdyDateConverter(s){\n    return dateConverter(s, 'MDY');\n}\nfunction ymdDateConverter(s){\n    return dateConverter(s, 'YMD');\n}\nfunction ddmmmyyyyDateConverter(s){\n    return dateConverter(s, 'DDMMMYYYY');\n}\n\nfunction ipAddress(value){\n    let vals = value.split('.');\n    for (let x in vals) {\n        let val = vals[x];\n        while (3 > val.length){\n            val = '0'+val;\n        }\n        vals[x] = val;\n    }\n    return vals.join('.');\n}\n\nfunction sortIP(a,b){\n    let aa = ipAddress(a.value.toLowerCase());\n    let bb = ipAddress(b.value.toLowerCase());\n    if (aa==bb){\n        return 0;\n    } else if (aa<bb){\n        return -1;\n    } else {\n        return 1;\n    }\n}\n"
   },
   {
     "kind": "class",
@@ -2710,29 +2710,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "isPaged",
-    "memberof": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable",
-    "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#isPaged",
-    "access": null,
-    "description": null,
-    "lineNumber": 19,
-    "undocument": true,
-    "type": {
-      "types": [
-        "boolean"
-      ]
-    }
-  },
-  {
-    "kind": "member",
-    "static": false,
-    "variation": null,
     "name": "sorted",
     "memberof": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable",
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sorted",
     "access": null,
     "description": null,
-    "lineNumber": 22,
+    "lineNumber": 19,
     "undocument": true,
     "type": {
       "types": [
@@ -2749,7 +2732,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sortTypes",
     "access": null,
     "description": null,
-    "lineNumber": 24,
+    "lineNumber": 21,
     "undocument": true,
     "type": {
       "types": [
@@ -2766,7 +2749,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sortColAtStart",
     "access": null,
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 22,
     "undocument": true,
     "type": {
       "types": [
@@ -2783,7 +2766,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#asyncSort",
     "access": null,
     "description": null,
-    "lineNumber": 27,
+    "lineNumber": 24,
     "undocument": true,
     "type": {
       "types": [
@@ -2800,7 +2783,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#triggerIds",
     "access": null,
     "description": null,
-    "lineNumber": 28,
+    "lineNumber": 25,
     "undocument": true,
     "type": {
       "types": [
@@ -2817,7 +2800,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#imgPath",
     "access": null,
     "description": null,
-    "lineNumber": 33,
+    "lineNumber": 30,
     "undocument": true,
     "type": {
       "types": [
@@ -2834,7 +2817,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#imgBlank",
     "access": null,
     "description": null,
-    "lineNumber": 34,
+    "lineNumber": 31,
     "undocument": true,
     "type": {
       "types": [
@@ -2851,7 +2834,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#imgClassName",
     "access": null,
     "description": null,
-    "lineNumber": 35,
+    "lineNumber": 32,
     "undocument": true,
     "type": {
       "types": [
@@ -2868,7 +2851,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#imgAscClassName",
     "access": null,
     "description": null,
-    "lineNumber": 36,
+    "lineNumber": 33,
     "undocument": true,
     "type": {
       "types": [
@@ -2885,7 +2868,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#imgDescClassName",
     "access": null,
     "description": null,
-    "lineNumber": 37,
+    "lineNumber": 34,
     "undocument": true,
     "type": {
       "types": [
@@ -2902,7 +2885,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#customKey",
     "access": null,
     "description": null,
-    "lineNumber": 39,
+    "lineNumber": 36,
     "undocument": true,
     "type": {
       "types": [
@@ -2919,7 +2902,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#onSortLoaded",
     "access": null,
     "description": "TF additional events **",
-    "lineNumber": 52,
+    "lineNumber": 49,
     "type": {
       "types": [
         "*"
@@ -2935,7 +2918,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#onBeforeSort",
     "access": null,
     "description": null,
-    "lineNumber": 55,
+    "lineNumber": 52,
     "undocument": true,
     "type": {
       "types": [
@@ -2952,7 +2935,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#onAfterSort",
     "access": null,
     "description": null,
-    "lineNumber": 58,
+    "lineNumber": 55,
     "undocument": true,
     "type": {
       "types": [
@@ -2969,7 +2952,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#tf",
     "access": null,
     "description": null,
-    "lineNumber": 61,
+    "lineNumber": 58,
     "undocument": true,
     "type": {
       "types": [
@@ -2986,7 +2969,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#init",
     "access": null,
     "description": null,
-    "lineNumber": 64,
+    "lineNumber": 61,
     "undocument": true,
     "params": [],
     "generator": false
@@ -3000,7 +2983,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 152,
+    "lineNumber": 146,
     "undocument": true,
     "type": {
       "types": [
@@ -3017,7 +3000,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sortByColumnIndex",
     "access": null,
     "description": "Sort specified column",
-    "lineNumber": 160,
+    "lineNumber": 154,
     "params": [
       {
         "nullable": null,
@@ -3051,7 +3034,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#overrideSortableTable",
     "access": null,
     "description": null,
-    "lineNumber": 164,
+    "lineNumber": 158,
     "undocument": true,
     "params": [],
     "generator": false
@@ -3065,7 +3048,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#addSortType",
     "access": null,
     "description": null,
-    "lineNumber": 322,
+    "lineNumber": 316,
     "undocument": true,
     "params": [],
     "generator": false
@@ -3079,7 +3062,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#setSortTypes",
     "access": null,
     "description": null,
-    "lineNumber": 327,
+    "lineNumber": 321,
     "undocument": true,
     "params": [],
     "generator": false
@@ -3093,7 +3076,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#stt",
     "access": null,
     "description": null,
-    "lineNumber": 367,
+    "lineNumber": 361,
     "undocument": true,
     "type": {
       "types": [
@@ -3110,7 +3093,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#destroy",
     "access": null,
     "description": "Destroy sort",
-    "lineNumber": 396,
+    "lineNumber": 390,
     "params": [],
     "generator": false
   },
@@ -3123,7 +3106,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sorted",
     "access": null,
     "description": null,
-    "lineNumber": 398,
+    "lineNumber": 392,
     "undocument": true,
     "type": {
       "types": [
@@ -3140,7 +3123,7 @@
     "longname": "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 399,
+    "lineNumber": 393,
     "undocument": true,
     "type": {
       "types": [
@@ -3160,7 +3143,7 @@
     "importPath": "tablefilter/src/extensions/sort/adapterSortabletable.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 416,
+    "lineNumber": 410,
     "undocument": true,
     "params": [
       {
@@ -3189,7 +3172,7 @@
     "importPath": "tablefilter/src/extensions/sort/adapterSortabletable.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 419,
+    "lineNumber": 413,
     "undocument": true,
     "params": [
       {
@@ -3218,7 +3201,7 @@
     "importPath": "tablefilter/src/extensions/sort/adapterSortabletable.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 422,
+    "lineNumber": 416,
     "undocument": true,
     "params": [
       {
@@ -3253,7 +3236,7 @@
     "importPath": "tablefilter/src/extensions/sort/adapterSortabletable.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 425,
+    "lineNumber": 419,
     "undocument": true,
     "params": [
       {
@@ -3282,7 +3265,7 @@
     "importPath": "tablefilter/src/extensions/sort/adapterSortabletable.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 428,
+    "lineNumber": 422,
     "undocument": true,
     "params": [
       {
@@ -3311,7 +3294,7 @@
     "importPath": "tablefilter/src/extensions/sort/adapterSortabletable.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 431,
+    "lineNumber": 425,
     "undocument": true,
     "params": [
       {
@@ -3340,7 +3323,7 @@
     "importPath": "tablefilter/src/extensions/sort/adapterSortabletable.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 434,
+    "lineNumber": 428,
     "undocument": true,
     "params": [
       {
@@ -3369,7 +3352,7 @@
     "importPath": "tablefilter/src/extensions/sort/adapterSortabletable.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 438,
+    "lineNumber": 432,
     "undocument": true,
     "params": [
       {
@@ -3398,7 +3381,7 @@
     "importPath": "tablefilter/src/extensions/sort/adapterSortabletable.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 450,
+    "lineNumber": 444,
     "undocument": true,
     "params": [
       {
