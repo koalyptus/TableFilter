@@ -1223,7 +1223,6 @@ export class TableFilter{
 
         Dom.removeClass(this.tbl, this.prfxTf);
         this.activeFlt = null;
-        this.isStartBgAlternate = true;
         this._hasGrid = false;
         this.tbl = null;
     }
