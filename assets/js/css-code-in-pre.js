@@ -4,9 +4,11 @@
     var pre = doc.querySelector('pre.css');
     [].forEach.call(configs, function(config) {
         if(pre){
+            var lt = new RegExp('<', 'g');
+            var gt = new RegExp('>', 'g');
             pre.innerHTML += config.innerHTML
-                                .replace('<', '&lt;')
-                                .replace('>', '&gt;');
+                                .replace(lt, '&lt;')
+                                .replace(gt, '&gt;');
         }
     });
 })(document);

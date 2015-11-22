@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pop-up filters | TableFilter</title>
+    <title>Extracting data APIs | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -147,14 +147,157 @@
 
       
 
-<h1>Pop-up filters</h1>
-
+<h1>APIs for extracting data</h1>
 <p>
-    This demo features the pop-up filter type enabled by the
-    <code>popup_filters</code> option.
+    This demo features some of the APIs available for extracting data from the
+    working table.
 </p>
 
+<div class="alert alert-warning" role="alert">
+    Instructions: filter a column before trying a button out as some of
+    the commands require the table to be filtered.
+</div>
 
+<div class="panel panel-info pull-left">
+    <div class="panel-heading">APIs</div>
+    <div class="panel-body bg-info" data-config>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getFiltersValue());">
+                Filters values
+            </button>
+
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getFiltersValue()</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getTableData());">
+                Table data
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getTableData()</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getFilteredData());">
+                Table filtered data
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getFilteredData()</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getColValues(0));">
+                Country column data
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getColValues(columnIndex)</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getFilteredDataCol(0));">
+                Country column filtered data
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getFilteredDataCol(columnIndex)</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getValidRows());">
+                Valid rows indexes
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getValidRows()</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getHeadersText());">
+                Headers text
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getHeadersText()</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getStartRowIndex());">
+                First filterable row index
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getStartRowIndex()</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getLastRowIndex());">
+                Last filterable row index
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getLastRowIndex()</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getFiltersRowIndex());">
+                Filters row index
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getFiltersRowIndex()</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getHeadersRowIndex());">
+                Headers row index
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getHeadersRowIndex()</code>
+        </p>
+    </div>
+</div>
+
+<div class="pull-left" style="margin-left: 0.5em; width: 50%;">
+    
 
 <table id="demo" class="countries-tiny">
     <thead>
@@ -592,38 +735,47 @@
     </tbody>
 </table>
 
+</div>
 
 
 <script src="tablefilter/tablefilter.js"></script>
 
 
 <script data-config>
-    var filtersConfig = {
+    var tfConfig = {
         base_path: 'tablefilter/',
-        col_1: 'select',
-        col_2: 'checklist',
-        col_8: 'none',
-        popup_filters: true,
-        auto_filter: true,
-        auto_filter_delay: 1100, //milliseconds
         alternate_rows: true,
         rows_counter: true,
-        rows_counter_text: "Rows: ",
+        rows_counter_text: 'Records: ',
         btn_reset: true,
-        status_bar: true,
-        msg_filter: 'Filtering...',
-        col_widths:[
-            '125px', '90px', '100px',
-            '90px', '90px', '90px',
-            '90px', '90px', '90px'
-        ]
+        loader: true,
+        col_number_format: [
+            null, null, 'US',
+            'US', 'US', 'US',
+            'US', 'US', 'US'
+        ],
+
+        /* sorting feature */
+        extensions: [{ name: 'sort' }]
     };
-    var tf = new TableFilter('demo', filtersConfig);
+    var tf = new TableFilter('demo', tfConfig);
     tf.init();
 </script>
 
-<p>
-    
+<p class="clearfix"></p>
+
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -656,7 +808,44 @@
 
 
 
-</p>
+    </div>
+    <div id="html" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html"></pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+</div>
+
 
     </div>
 
