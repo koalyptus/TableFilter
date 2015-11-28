@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>External toolbar | TableFilter</title>
+    <title>External filter operators | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -148,15 +148,59 @@
     <div class="container theme-showcase" role="main">
 
       
+<link rel="stylesheet" type="text/css" href="tablefilter/style/tablefilter.css">
 
-<h1>Generate an external toolbar</h1>
+<h1>External filter operators</h1>
 
 <p>
-    This demo features shows how to generate the toolbar in a specified
-    container element.
+    This example shows how to take advantage of the filter operators to
+    implement an advanced search feature.
 </p>
 
-<div id="externalToolbar" class="navbar navbar-default navbar-form"></div>
+<div class="navbar navbar-default" data-config>
+    <form class="navbar-form navbar-left" onsubmit="filter(event);">
+        <div class="form-group">
+            <label for="slcColumns">Search:</label>
+            <select id="slcColumns" name="slcColumns" class="form-control">
+                <option value="0">Country</option>
+                <option value="1">ISO</option>
+                <option value="2">Year</option>
+                <option value="3">POP</option>
+                <option value="4">XRAT</option>
+                <option value="5">PPP</option>
+                <option value="6">cgdp</option>
+                <option value="7">cc</option>
+                <option value="8">ci</option>
+            </select>
+
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <select id="slcOperators" name="slcOperators"
+                        class="form-control">
+                        <option value="*">Containing</option>
+                        <option value="=">Exactly matching</option>
+                        <option value="!">Excluding</option>
+                        <option value="rgx:">Matching RegEx</option>
+                        <option value="{">Starts with</option>
+                        <option value="}">Ends with</option>
+                        <option value="<">Less than</option>
+                        <option value="<=">Less than or equal to</option>
+                        <option value=">">Greater than</option>
+                        <option value=">=">Greater than or equal to</option>
+                        <option value="[empty]">Only empty</option>
+                        <option value="[nonempty]">Only non-empty</option>
+                    </select>
+                </div>
+                <input name="inpSearch" type="text"
+                    class="form-control" placeholder="Search">
+            </div>
+
+            <button type="submit" class="btn btn-default">Filter</button>
+            <button type="reset" class="btn btn-link"
+                onclick="tf.clearFilters();">Clear</button>
+        </div>
+    </form>
+</div>
 
 
 
@@ -13115,50 +13159,70 @@
 </table>
 
 
+<p> </p>
+<div class="alert alert-info" role="alert">
+    <p>NOTE: the operators themselves can be configured with the following
+    properties:
+    <code>regexp_operator, empty_operator, nonempty_operator, or_operator,
+    and_operator, greater_operator, lower_operator, lower_equal_operator,
+    greater_equal_operator, different_operator, like_operator, equal_operator,
+    start_with_operator, end_with_operator</code>, ie:
+    <code>
+var tfConfig = {
+    base_path: 'tablefilter/',
+    different_operator: '<>'
+};
+    </code>
+</div>
+
 
 <script src="tablefilter/tablefilter.js"></script>
 
 
-<style data-config>
-    /* toolbar override */
-    .inf{
-        margin-top: 10px;
-        background-color: transparent;
-        border: 0;
-    }
-</style>
-
 <script data-config>
-    var tfConfig = {
-        base_path: 'tablefilter/',
-        toolbar_target_id: 'externalToolbar',
-        paging: true,
-        results_per_page: ['Records: ', [10,25,50,100]],
-        remember_grid_values: true,
-        remember_page_number: true,
-        remember_page_length: true,
-        alternate_rows: true,
-        btn_reset: true,
-        rows_counter: true,
-        loader: true,
-        status_bar: true,
-        col_0: 'select',
-        col_1: 'select',
-        col_2: 'select',
-        extensions:[{
-            name: 'sort',
-            types: [
-                'string', 'string', 'number',
-                'number', 'number', 'number',
-                'number', 'number', 'number'
-            ]
-        }]
-    };
-    var tf = new TableFilter(document.querySelector('#demo'), tfConfig);
+    // Form submission logic for filtering the table
+    function filter(evt){
+        var frm = document.forms[0];
+        var slcCols = frm.slcColumns;
+        var slcOperators = frm.slcOperators;
+        var inp = frm.inpSearch;
+        var query = frm.slcOperators.value + inp.value;
+
+        // Set the column's filter value
+        tf.setFilterValue(slcCols.value, query);
+
+        // Filter the table
+        tf.filter();
+
+        // Prevent form submission
+        evt.preventDefault();
+    }
+
+    var tf = new TableFilter(
+        document.querySelector('.countries'),
+        {
+            base_path: 'tablefilter/',
+            alternate_rows: true,
+            rows_counter: true,
+            highlight_keywords: true,
+            grid_layout: true,
+            grid_width: '100%',
+            col_widths: [
+                '120px','120px','120px',
+                '120px','120px','120px',
+                '120px','120px','120px'
+            ],
+            on_filters_loaded: function(o){
+                // hide the filters row
+                var gridLayout = o.feature('gridLayout');
+                var headersTable = gridLayout.headTbl;
+                headersTable.rows[o.getFiltersRowIndex()]
+                    .style.display = 'none';
+            }
+        }
+    );
     tf.init();
 </script>
-
-<p></p>
 
 <ul class="nav nav-pills">
     <li class="active">
@@ -13166,9 +13230,6 @@
     </li>
     <li>
         <a data-toggle="tab" href="#html">HTML</a>
-    </li>
-    <li>
-        <a data-toggle="tab" href="#css">CSS</a>
     </li>
 </ul>
 
@@ -13209,11 +13270,6 @@
 
     </div>
     <div id="html" class="tab-pane fade">
-    <pre>
-&lt;div id="externalToolbar" class="navbar navbar-default navbar-form"&gt;&lt;/div&gt;
-    </pre>
-    </div>
-    <div id="css" class="tab-pane fade">
         
 
 
@@ -13239,8 +13295,8 @@
 <!--
     DO NOT COPY: NOT PART OF TABLEFILTER
 -->
-<pre class="css"></pre>
-<script src="assets/js/css-code-in-pre.js"></script>
+<pre class="html"></pre>
+<script src="assets/js/html-code-in-pre.js"></script>
 <!-- -->
 
 
@@ -13249,6 +13305,14 @@
 
     </div>
 </div>
+
+<div class="alert alert-warning" role="alert">
+    <p>ENHANCEMENT: Provide via a configuration property an easy way to hide the
+    filters row.</p>
+    <p>ENHANCEMENT: Show a 'no results' message when search yields no
+    results.</p>
+</div>
+
 
     </div>
 
