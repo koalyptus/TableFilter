@@ -41,7 +41,7 @@ test('Can select a page', function() {
     sort.sortByColumnIndex(1);
     paging.setPage(3);
 
-    deepEqual(paging.pagingSlc.selectedIndex, 2, 'Expected options number');
+    deepEqual(paging.pagingSlc.selectedIndex, 2, 'Expected selected option');
 });
 
 module('Tear-down');
