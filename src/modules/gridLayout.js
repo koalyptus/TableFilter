@@ -112,7 +112,6 @@ export class GridLayout extends Feature{
         this.tblCont.className = this.gridContCssClass;
         if(this.gridWidth){
             if(this.gridWidth.indexOf('%') != -1){
-                console.log(this.gridWidth);
                 this.tblCont.style.width = '100%';
             } else {
                 this.tblCont.style.width = this.gridWidth;
@@ -140,7 +139,6 @@ export class GridLayout extends Feature{
         this.headTblCont.className = this.gridHeadContCssClass;
         if(this.gridWidth){
             if(this.gridWidth.indexOf('%') != -1){
-                console.log(this.gridWidth);
                 this.headTblCont.style.width = '100%';
             } else {
                 this.headTblCont.style.width = this.gridWidth;

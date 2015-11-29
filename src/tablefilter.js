@@ -589,10 +589,6 @@ export class TableFilter{
                     this.Mod.checkList.checkListDiv[ct].onclick = null;
                     this.Mod.checkList.checkListDiv[ct].title = '';
                 }
-            },
-            // filter when validation button clicked
-            onBtnClick() {
-                this.filter();
             }
         };
     }
@@ -846,8 +842,8 @@ export class TableFilter{
                     // this adds submit button
                     if(i==n-1 && this.displayBtn){
                         let btn = Dom.create(this.fltTypeInp,
-                            ['id',this.prfxValButton+i+'_'+this.id],
-                            ['type','button'], ['value',this.btnText]);
+                            ['id', this.prfxValButton+i+'_'+this.id],
+                            ['type', 'button'], ['value', this.btnText]);
                         btn.className = this.btnCssClass;
 
                         //filter is appended in desired element
@@ -857,7 +853,7 @@ export class TableFilter{
                             fltcell.appendChild(btn);
                         }
 
-                        Event.add(btn, 'click', this.Evt.onBtnClick.bind(this));
+                        Event.add(btn, 'click', ()=> this.filter());
                     }//if
 
                 }// for i

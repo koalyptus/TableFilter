@@ -24,13 +24,15 @@
         document.querySelector('.test'),
         {
             base_path: '../dist/tablefilter/',
-            filters_row_index: 1
+            filters_row_index: 1,
+            btn: true
         }
     );
     tf1.init();
+    var btn = document.querySelector('#'+tf1.prfxValButton+'4_'+tf1.id);
 
-    module("Table 2: sanity checks");
-    test("TableFilter object", function() {
+    module('Table 2: sanity checks');
+    test('TableFilter object', function() {
         notEqual(tf1.id, null, 'id check');
         equal(tf1.filtersRowIndex, 1, 'Filters row index');
         deepEqual(tf1.getCellsNb(), 5, 'filters type collection length');
@@ -44,6 +46,15 @@
             'Filters row CSS class name'
         );
         equal(tf1.getFilterElement(0).nodeName, 'INPUT', 'Filter DOM element');
+    });
+    test('Filter button', function(){
+        notEqual(btn, null, 'Button exists');
+        deepEqual(btn.nodeName, 'INPUT', 'Expected element');
+    });
+    test('Filter button click event', function(){
+        tf1.setFilterValue(4, '>30');
+        btn.click();
+        deepEqual(tf1.getValidRows().length, 2, 'Filter button event result');
     });
 
 })(window, TableFilter);
