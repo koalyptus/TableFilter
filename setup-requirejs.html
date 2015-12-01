@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home | TableFilter</title>
+    <title>Setup RequireJS | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -153,96 +153,154 @@
 
       
 
+<h1>Setup with RequireJS</h1>
 
-  <h1 id="tablefilter-build-status-https-api-travis-ci-org-koalyptus-tablefilter-svg-branch-master-https-travis-ci-org-koalyptus-tablefilter-">TableFilter <a href="https://travis-ci.org/koalyptus/TableFilter"><img src="https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master" alt="Build Status"></a></h1>
-<blockquote>
-<p>A Javascript library making HTML tables filterable</p>
-</blockquote>
-<p>TableFilter is a modernised version of the <a href="http://tablefilter.free.fr">HTML Table Filter generator</a> javascript plugin.
-This library adds to any html table a &quot;filter by column&quot; feature that enables
-users to filter and limit the data displayed within a long table. By default, the script automatically adds a filter grid bar at the top of the desired table.</p>
-<h2 id="features">Features</h2>
-<ul>
-<li>Convert a regular HTML table into an advanced grid component providing:<ul>
-<li>Advanced columns filtering model</li>
-<li>Sorting and pagination facilities</li>
-<li>Complete selection model (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
-<li>Extended keyboard navigation (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
-<li>Inline cell or row editing (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
-<li>Row insertion or deleting (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123">ezEditTable</a> extension)</li>
-<li>And even more behaviors...</li>
-</ul>
-</li>
-<li>Attach to an existing HTML table</li>
-<li>Integration with any server-side technology as this is a pure client-side
-solution</li>
-<li>Callbacks for all events, and delegates for most actions</li>
-<li>Exhaustive documentation and API</li>
-<li>Valuable support provided under a Premium request</li>
-</ul>
-<h2 id="getting-started">Getting started</h2>
-<ul>
-<li><p>Clone the repo using Git:</p>
-<pre><code class="language-shell">git clone --bare https://github.com/koalyptus/TableFilter.git</code></pre>
-</li>
-<li><p>You can <a href="https://github.com/koalyptus/TableFilter/archive/master.zip">download</a> this repository.</p>
-</li>
-<li><p>Alternatively, install TableFilter files in your npm enabled project using:</p>
-<pre><code class="language-shell">npm install tablefilter --save</code></pre>
-</li>
-</ul>
-<h2 id="setup">Setup</h2>
-<p>Copy the <code>tablefilter</code> directory under <code>dist</code> and place it at desired location in your project. Then include the main js file in your page:</p>
-<pre><code class="language-shell">&lt;script src=&quot;path/to/my/scripts/tablefilter/tablefilter.js&quot;&gt;&lt;/script&gt;</code></pre>
-<p>Place the following snippet just under the HTML table and always define a <code>base_path</code> property in the configuration object to reflect the path to the script</p>
-<pre><code class="language-shell">&lt;script&gt;
-var tf = new TableFilter(&#39;my-table-id&#39;, {
-    base_path: &#39;path/to/my/scripts/tablefilter/&#39;
-});
-tf.init();
-&lt;/script&gt;</code></pre>
-<p>If the <code>base_path</code> property is not specified, it will default to <code>/tablefilter</code> directory:</p>
-<pre><code class="language-shell">your-page.html
- |— tablefilter</code></pre>
-<h2 id="development">Development</h2>
-<p>This project requires node.js and Grunt to be installed:</p>
-<ul>
-<li>install <a href="https://nodejs.org/">node.js</a></li>
-<li>install <a href="http://gruntjs.com/getting-started">Grunt</a> from the command line using npm (comes with node.js):<pre><code class="language-shell">npm install -g grunt-cli</code></pre>
-Once <code>Grunt</code> is sorted out you can follow the instructions below.
-Start by installing any dependencies.</li>
-</ul>
-<pre><code class="language-shell">npm install</code></pre>
-<p>Use the Grunt <code>dev</code> task to launch a build / watch cycle and start the local
-sever on port <code>8080</code>:</p>
-<pre><code class="language-shell">grunt dev</code></pre>
-<p>Use the <code>build</code> task to generate a production build:</p>
-<pre><code class="language-shell">grunt build</code></pre>
-<p>The <code>default</code> Grunt task will create a production build, run the tests and finally generate the demos:</p>
-<pre><code class="language-shell">grunt</code></pre>
-<p>To run all the tests:</p>
-<pre><code class="language-shell">grunt test</code></pre>
-<p>and to run specific test(s):</p>
-<pre><code class="language-shell">grunt test-only:test.html
-grunt test-only:test.html,test-sort.html</code></pre>
-<h2 id="demos">Demos</h2>
-<p>Check out the online <a href="http://koalyptus.github.io/TableFilter/examples">examples</a> or run the local webserver:</p>
-<pre><code class="language-shell">grunt server</code></pre>
-<p>then pick a demo from:</p>
-<pre><code class="language-shell">http://localhost:8080/demos/</code></pre>
-<h2 id="documentation">Documentation</h2>
-<p>Find exhaustive documentation on the configuration options in the <a href="https://github.com/koalyptus/TableFilter/wiki">WIKI</a> section.</p>
-<p>Autogenerated documentation of the ES6 javascript modules is available on the website: <a href="http://koalyptus.github.io/TableFilter/docs">docs</a></p>
-<p>Run this task to generate the documentation in the <code>docs/docs</code> directory:</p>
-<pre><code class="language-shell">grunt esdoc</code></pre>
-<h2 id="support">Support</h2>
-<ul>
-<li>GitHub for reporting bugs and feature requests.</li>
-</ul>
-<h2 id="license">License</h2>
-<p><a href="LICENSE">MIT</a></p>
+<p>
+    For those projects enforcing the AMD pattern, this example shows how to load
+    the <code>TableFilter</code> module asynchronously with RequireJS.
+</p>
 
 
+<table id="demo" class="cities">
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>Destination</th>
+            <th>Road Distance (km)</th>
+            <th>By Air (hrs)</th>
+            <th>By Rail (hrs)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Sydney</td>
+            <td>Adelaide</td>
+            <td>1412</td>
+            <td>1.4</td>
+            <td>25.3</td>
+        </tr>
+        <tr>
+            <td>Sydney</td>
+            <td>Brisbane</td>
+            <td>982</td>
+            <td>1.5</td>
+            <td>16</td>
+        </tr>
+        <tr>
+            <td>Sydney</td>
+            <td>Canberra</td>
+            <td>286</td>
+            <td>.6</td>
+            <td>4.3</td>
+        </tr>
+        <tr>
+            <td>Sydney</td>
+            <td>Melbourne</td>
+            <td>872</td>
+            <td>1.1</td>
+            <td>10.5</td>
+        </tr>
+        <tr>
+            <td>Adelaide</td>
+            <td>Perth</td>
+            <td>2781</td>
+            <td>3.1</td>
+            <td>38</td>
+        </tr>
+        <tr>
+            <td>Adelaide</td>
+            <td>Alice Springs</td>
+            <td>1533</td>
+            <td>2</td>
+            <td>20.25</td>
+        </tr>
+        <tr>
+            <td>Adelaide</td>
+            <td>Brisbane</td>
+            <td>2045</td>
+            <td>2.15</td>
+            <td>40</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<!-- RequiresJS -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
+
+<script data-config>
+// AMD example
+requirejs(['./tablefilter/tablefilter'], function(mod) {
+        var TableFilter = mod.TableFilter;
+        var tfConfig = {
+            base_path: 'tablefilter/',
+            alternate_rows: true,
+            rows_counter: true,
+            btn_reset: true
+        };
+        var tf = new TableFilter(
+            document.querySelector('.cities'),
+            tfConfig
+        );
+        tf.init();
+    }
+);
+</script>
+
+<p></p>
+
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre></pre>
+<script src="assets/js/js-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="html" class="tab-pane fade">
+<pre>
+&lt;!-- RequiresJS --&gt;
+&lt;script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"&gt;&lt;/script&gt;
+</pre>
+    </div>
+</div>
 
 
     </div>
