@@ -126,7 +126,7 @@ export class RowsCounter extends Feature{
         }
 
         if(!this.rowsCounterTgtId && this.rowsCounterDiv){
-            this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
+            Dom.remove(this.rowsCounterDiv);
         } else {
             Dom.id(this.rowsCounterTgtId).innerHTML = '';
         }

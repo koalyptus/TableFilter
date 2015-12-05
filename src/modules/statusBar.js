@@ -113,7 +113,7 @@ export class StatusBar extends Feature{
         }
 
         this.statusBarDiv.innerHTML = '';
-        this.statusBarDiv.parentNode.removeChild(this.statusBarDiv);
+        Dom.remove(this.statusBarDiv);
         this.statusBarSpan = null;
         this.statusBarSpanText = null;
         this.statusBarDiv = null;

@@ -477,11 +477,11 @@ export default class ColsVisibility{
             Dom.id(this.contElTgtId).innerHTML = '';
         } else {
             this.contEl.innerHTML = '';
-            this.contEl.parentNode.removeChild(this.contEl);
+            Dom.remove(this.contEl);
             this.contEl = null;
         }
         this.btnEl.innerHTML = '';
-        this.btnEl.parentNode.removeChild(this.btnEl);
+        Dom.remove(this.btnEl);
         this.btnEl = null;
         this.initialized = false;
     }

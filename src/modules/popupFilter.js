@@ -229,16 +229,16 @@ export class PopupFilter extends Feature{
                 popUpFltSpan = this.popUpFltSpans[i],
                 popUpFltImg = this.popUpFltImgs[i];
             if(popUpFltElm){
-                popUpFltElm.parentNode.removeChild(popUpFltElm);
+                Dom.remove(popUpFltElm);
                 this.popUpFltElmCache[i] = popUpFltElm;
             }
             popUpFltElm = null;
             if(popUpFltSpan){
-                popUpFltSpan.parentNode.removeChild(popUpFltSpan);
+                Dom.remove(popUpFltSpan);
             }
             popUpFltSpan = null;
             if(popUpFltImg){
-                popUpFltImg.parentNode.removeChild(popUpFltImg);
+                Dom.remove(popUpFltImg);
             }
             popUpFltImg = null;
         }

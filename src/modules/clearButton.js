@@ -86,7 +86,7 @@ export class ClearButton extends Feature{
 
         var resetspan = Dom.id(this.prfxResetSpan+tf.id);
         if(resetspan){
-            resetspan.parentNode.removeChild(resetspan);
+            Dom.remove(resetspan);
         }
         this.btnResetEl = null;
         this.disable();

@@ -561,10 +561,10 @@ export class Paging extends Feature{
         var slcR = this.resultsPerPageSlc,
             slcRSpan = Dom.id(this.prfxSlcResultsTxt+tf.id);
         if(slcR){
-            slcR.parentNode.removeChild(slcR);
+            Dom.remove(slcR);
         }
         if(slcRSpan){
-            slcRSpan.parentNode.removeChild(slcRSpan);
+            Dom.remove(slcRSpan);
         }
         this.resultsPerPageSlc = null;
     }
@@ -737,39 +737,39 @@ export class Paging extends Feature{
             else if(this.pageSelectorType === tf.fltTypeInp){
                 Event.remove(this.pagingSlc, 'keypress', evt._detectKey);
             }
-            this.pagingSlc.parentNode.removeChild(this.pagingSlc);
+            Dom.remove(this.pagingSlc);
         }
 
         if(btnNextSpan){
             Event.remove(btnNextSpan, 'click', evt.next);
-            btnNextSpan.parentNode.removeChild(btnNextSpan);
+            Dom.remove(btnNextSpan);
         }
 
         if(btnPrevSpan){
             Event.remove(btnPrevSpan, 'click', evt.prev);
-            btnPrevSpan.parentNode.removeChild(btnPrevSpan);
+            Dom.remove(btnPrevSpan);
         }
 
         if(btnLastSpan){
             Event.remove(btnLastSpan, 'click', evt.last);
-            btnLastSpan.parentNode.removeChild(btnLastSpan);
+            Dom.remove(btnLastSpan);
         }
 
         if(btnFirstSpan){
             Event.remove(btnFirstSpan, 'click', evt.first);
-            btnFirstSpan.parentNode.removeChild(btnFirstSpan);
+            Dom.remove(btnFirstSpan);
         }
 
         if(pgBeforeSpan){
-            pgBeforeSpan.parentNode.removeChild(pgBeforeSpan);
+            Dom.remove(pgBeforeSpan);
         }
 
         if(pgAfterSpan){
-            pgAfterSpan.parentNode.removeChild(pgAfterSpan);
+            Dom.remove(pgAfterSpan);
         }
 
         if(pgspan){
-            pgspan.parentNode.removeChild(pgspan);
+            Dom.remove(pgspan);
         }
 
         if(this.hasResultsPerPage){
