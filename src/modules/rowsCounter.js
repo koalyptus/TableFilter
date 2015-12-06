@@ -81,7 +81,7 @@ export class RowsCounter extends Feature{
     }
 
     refresh(p){
-        if(!this.rowsCounterSpan){
+        if(!this.initialized || !this.isEnabled()){
             return;
         }
 
@@ -132,8 +132,6 @@ export class RowsCounter extends Feature{
         }
         this.rowsCounterSpan = null;
         this.rowsCounterDiv = null;
-
-        this.disable();
         this.initialized = false;
     }
 }

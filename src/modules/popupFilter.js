@@ -245,8 +245,6 @@ export class PopupFilter extends Feature{
         this.popUpFltElms = [];
         this.popUpFltSpans = [];
         this.popUpFltImgs = [];
-
-        this.disable();
         this.initialized = false;
     }
 

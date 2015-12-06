@@ -89,7 +89,6 @@ export class ClearButton extends Feature{
             Dom.remove(resetspan);
         }
         this.btnResetEl = null;
-        this.disable();
         this.initialized = false;
     }
 }

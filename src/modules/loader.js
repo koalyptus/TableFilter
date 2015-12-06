@@ -95,8 +95,6 @@ export class Loader extends Feature{
 
         Dom.remove(this.loaderDiv);
         this.loaderDiv = null;
-
-        this.disable();
         this.initialized = false;
     }
 }

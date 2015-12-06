@@ -117,8 +117,6 @@ export class StatusBar extends Feature{
         this.statusBarSpan = null;
         this.statusBarSpanText = null;
         this.statusBarDiv = null;
-
-        this.disable();
         this.initialized = false;
     }
 

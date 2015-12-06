@@ -29,7 +29,7 @@ test('Properties', function() {
 });
 test('Can destroy', function() {
     rowsCounter.destroy();
-    deepEqual(rowsCounter.enabled, false, 'disabled');
+    deepEqual(rowsCounter.initialized, false, 'not initialised');
 });
 test('Can reset', function() {
     rowsCounter.reset();

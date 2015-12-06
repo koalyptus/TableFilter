@@ -147,8 +147,6 @@ export class Help extends Feature{
         }
         Dom.remove(this.cont);
         this.cont = null;
-
-        this.disable();
         this.initialized = false;
     }
 

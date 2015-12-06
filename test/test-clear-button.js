@@ -30,7 +30,7 @@ test('Properties', function() {
 });
 test('Can destroy', function() {
     clearButton.destroy();
-    deepEqual(clearButton.enabled, false, 'disabled');
+    deepEqual(clearButton.initialized, false, 'not initialised');
 });
 test('Can reset', function() {
     clearButton.reset();

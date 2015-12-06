@@ -637,8 +637,8 @@ export class TableFilter{
         if(this.loader){
             if(!Mod.loader){
                 Mod.loader = new Loader(this);
-                Mod.loader.init();
             }
+            Mod.loader.init();
         }
 
         if(this.highlightKeywords){
