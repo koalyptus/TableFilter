@@ -81,7 +81,7 @@ export class RowsCounter extends Feature{
     }
 
     refresh(p){
-        if(!this.rowsCounterSpan){
+        if(!this.initialized || !this.isEnabled()){
             return;
         }
 
@@ -126,14 +126,12 @@ export class RowsCounter extends Feature{
         }
 
         if(!this.rowsCounterTgtId && this.rowsCounterDiv){
-            this.rowsCounterDiv.parentNode.removeChild(this.rowsCounterDiv);
+            Dom.remove(this.rowsCounterDiv);
         } else {
             Dom.id(this.rowsCounterTgtId).innerHTML = '';
         }
         this.rowsCounterSpan = null;
         this.rowsCounterDiv = null;
-
-        this.disable();
         this.initialized = false;
     }
 }

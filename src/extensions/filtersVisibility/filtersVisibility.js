@@ -172,11 +172,11 @@ export default class FiltersVisibility{
         }
 
         this.btnEl.innerHTML = '';
-        this.btnEl.parentNode.removeChild(this.btnEl);
+        Dom.remove(this.btnEl);
         this.btnEl = null;
 
         this.contEl.innerHTML = '';
-        this.contEl.parentNode.removeChild(this.contEl);
+        Dom.remove(this.contEl);
         this.contEl = null;
         this.initialized = false;
     }

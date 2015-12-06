@@ -28,7 +28,7 @@ test('Properties', function() {
 });
 test('Can destroy', function() {
     statusBar.destroy();
-    deepEqual(statusBar.enabled, false, 'disabled');
+    deepEqual(statusBar.initialized, false, 'not initialised');
 });
 test('Can reset', function() {
     statusBar.reset();

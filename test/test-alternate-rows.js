@@ -32,7 +32,7 @@ test('Properties', function() {
 });
 test('Can destroy', function() {
     altRows.destroy();
-    deepEqual(altRows.enabled, false, 'disabled');
+    deepEqual(altRows.initialized, false, 'not initialised');
 });
 test('Can reset', function() {
     altRows.reset();

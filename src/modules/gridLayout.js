@@ -2,6 +2,7 @@ import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
 import Event from '../event';
+import Str from '../string';
 
 export class GridLayout extends Feature{
 
@@ -121,16 +122,16 @@ export class GridLayout extends Feature{
             this.tblCont.style.height = this.gridHeight;
         }
         tbl.parentNode.insertBefore(this.tblCont, tbl);
-        var t = tbl.parentNode.removeChild(tbl);
+        var t = Dom.remove(tbl);
         this.tblCont.appendChild(t);
 
         //In case table width is expressed in %
         if(tbl.style.width === ''){
-            tbl.style.width = (tf._containsStr('%', tblW) ?
+            tbl.style.width = (Str.contains('%', tblW) ?
                 tbl.clientWidth : tblW) + 'px';
         }
 
-        var d = this.tblCont.parentNode.removeChild(this.tblCont);
+        var d = Dom.remove(this.tblCont);
         this.tblMainCont.appendChild(d);
 
         //Headers table container: div wrapping headers table
@@ -288,7 +289,7 @@ export class GridLayout extends Feature{
             }
 
             if(afterColResizedFn){
-                afterColResizedFn.call(null,o,colIndex);
+                afterColResizedFn.call(null, o, colIndex);
             }
         };
 
@@ -313,9 +314,9 @@ export class GridLayout extends Feature{
         if(!this.initialized){
             return;
         }
-        var t = tbl.parentNode.removeChild(tbl);
+        var t = Dom.remove(tbl);
         this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);
-        this.tblMainCont.parentNode.removeChild(this.tblMainCont);
+        Dom.remove(this.tblMainCont);
 
         this.tblMainCont = null;
         this.headTblCont = null;
@@ -324,7 +325,7 @@ export class GridLayout extends Feature{
 
         tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element
-        this.tf.tbl = Dom.id(tf.id); // ???
+        this.tf.tbl = t;/*Dom.id(tf.id);*/ // ???
 
         this.initialized = false;
     }

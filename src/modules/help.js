@@ -140,15 +140,13 @@ export class Help extends Feature{
         if(!this.initialized){
             return;
         }
-        this.btn.parentNode.removeChild(this.btn);
+        Dom.remove(this.btn);
         this.btn = null;
         if(!this.cont){
             return;
         }
-        this.cont.parentNode.removeChild(this.cont);
+        Dom.remove(this.cont);
         this.cont = null;
-
-        this.disable();
         this.initialized = false;
     }
 

@@ -637,8 +637,8 @@ export class TableFilter{
         if(this.loader){
             if(!Mod.loader){
                 Mod.loader = new Loader(this);
-                Mod.loader.init();
             }
+            Mod.loader.init();
         }
 
         if(this.highlightKeywords){
@@ -735,8 +735,8 @@ export class TableFilter{
                             slc.multiple = this.fltTypeMulti;
                             slc.title = dropdown.multipleSlcTooltip;
                         }
-                        slc.className = Str.lower(col)===this.fltTypeSlc ?
-                            inpclass : this.fltMultiCssClass;// for ie<=6
+                        slc.className = Str.lower(col) === this.fltTypeSlc ?
+                            inpclass : this.fltMultiCssClass;
 
                         //filter is appended in desired external element
                         if(externalFltTgtId){
@@ -1285,7 +1285,7 @@ export class TableFilter{
         if(!this.infDiv){
             return;
         }
-        this.infDiv.parentNode.removeChild(this.infDiv);
+        Dom.remove(this.infDiv);
         this.infDiv = null;
 
         let tbl = this.tbl;
@@ -1505,7 +1505,7 @@ export class TableFilter{
         // search args re-init
         this.searchArgs = this.getFiltersValue();
 
-        var num_cell_data, nbFormat;
+        var numCellData, nbFormat;
         var re_le = new RegExp(this.leOperator),
             re_ge = new RegExp(this.geOperator),
             re_l = new RegExp(this.lwOperator),
@@ -1542,7 +1542,7 @@ export class TableFilter{
         }
 
         //looks for search argument in current row
-        function hasArg(sA, cell_data, j){
+        function hasArg(sA, cellData, j){
             /*jshint validthis:true */
             let occurence,
                 removeNbFormat = Helpers.removeNbFormat;
@@ -1571,8 +1571,8 @@ export class TableFilter{
 
             let dte1, dte2;
             //dates
-            if(isValidDate(cell_data,dtType)){
-                dte1 = formatDate(cell_data,dtType);
+            if(isValidDate(cellData, dtType)){
+                dte1 = formatDate(cellData, dtType);
                 // lower date
                 if(isLDate){
                     dte2 = formatDate(sA.replace(re_l,''), dtType);
@@ -1605,36 +1605,36 @@ export class TableFilter{
                 }
                 // searched keyword with * operator doesn't have to be a date
                 else if(re_lk.test(sA)){// like date
-                    occurence = this._containsStr(
-                        sA.replace(re_lk,''), cell_data, false);
+                    occurence = Str.contains(sA.replace(re_lk,''), cellData,
+                        false, this.caseSensitive);
                 }
                 else if(isValidDate(sA,dtType)){
                     dte2 = formatDate(sA,dtType);
-                    occurence = dte1.toString() == dte2.toString();
+                    occurence = dte1.toString() === dte2.toString();
                 }
                 //empty
                 else if(hasEM){
-                    occurence = Str.isEmpty(cell_data);
+                    occurence = Str.isEmpty(cellData);
                 }
                 //non-empty
                 else if(hasNM){
-                    occurence = !Str.isEmpty(cell_data);
+                    occurence = !Str.isEmpty(cellData);
                 }
             }
 
             else{
                 //first numbers need to be formated
                 if(this.hasColNbFormat && this.colNbFormat[j]){
-                    num_cell_data = removeNbFormat(
-                        cell_data, this.colNbFormat[j]);
+                    numCellData = removeNbFormat(
+                        cellData, this.colNbFormat[j]);
                     nbFormat = this.colNbFormat[j];
                 } else {
                     if(this.thousandsSeparator === ',' &&
                         this.decimalSeparator === '.'){
-                        num_cell_data = removeNbFormat(cell_data, 'us');
+                        numCellData = removeNbFormat(cellData, 'us');
                         nbFormat = 'us';
                     } else {
-                        num_cell_data = removeNbFormat(cell_data, 'eu');
+                        numCellData = removeNbFormat(cellData, 'eu');
                         nbFormat = 'eu';
                     }
                 }
@@ -1643,60 +1643,60 @@ export class TableFilter{
                 // rgx:)
                 // lower equal
                 if(hasLE){
-                    occurence = num_cell_data <= removeNbFormat(
+                    occurence = numCellData <= removeNbFormat(
                         sA.replace(re_le, ''), nbFormat);
                 }
                 //greater equal
                 else if(hasGE){
-                    occurence = num_cell_data >= removeNbFormat(
+                    occurence = numCellData >= removeNbFormat(
                         sA.replace(re_ge, ''), nbFormat);
                 }
                 //lower
                 else if(hasLO){
-                    occurence = num_cell_data < removeNbFormat(
+                    occurence = numCellData < removeNbFormat(
                         sA.replace(re_l, ''), nbFormat);
                 }
                 //greater
                 else if(hasGR){
-                    occurence = num_cell_data > removeNbFormat(
+                    occurence = numCellData > removeNbFormat(
                         sA.replace(re_g, ''), nbFormat);
                 }
                 //different
                 else if(hasDF){
-                    occurence = this._containsStr(
-                        sA.replace(re_d, ''), cell_data) ? false : true;
+                    occurence = Str.contains(sA.replace(re_d, ''), cellData,
+                        false, this.caseSensitive) ? false : true;
                 }
                 //like
                 else if(hasLK){
-                    occurence = this._containsStr(
-                        sA.replace(re_lk, ''), cell_data, false);
+                    occurence = Str.contains(sA.replace(re_lk, ''), cellData,
+                        false, this.caseSensitive);
                 }
                 //equal
                 else if(hasEQ){
-                    occurence = this._containsStr(
-                        sA.replace(re_eq, ''), cell_data, true);
+                    occurence = Str.contains(sA.replace(re_eq, ''), cellData,
+                        true, this.caseSensitive);
                 }
                 //starts with
                 else if(hasST){
-                    occurence = cell_data.indexOf(sA.replace(re_st, ''))===0 ?
+                    occurence = cellData.indexOf(sA.replace(re_st, '')) === 0 ?
                         true : false;
                 }
                 //ends with
                 else if(hasEN){
                     let searchArg = sA.replace(re_en, '');
                     occurence =
-                        cell_data.lastIndexOf(searchArg,cell_data.length-1) ===
-                        (cell_data.length-1)-(searchArg.length-1) &&
-                        cell_data.lastIndexOf(
-                            searchArg, cell_data.length-1) > -1 ? true : false;
+                        cellData.lastIndexOf(searchArg, cellData.length-1) ===
+                        (cellData.length-1)-(searchArg.length-1) &&
+                        cellData.lastIndexOf(
+                            searchArg, cellData.length-1) > -1 ? true : false;
                 }
                 //empty
                 else if(hasEM){
-                    occurence = Str.isEmpty(cell_data);
+                    occurence = Str.isEmpty(cellData);
                 }
                 //non-empty
                 else if(hasNM){
-                    occurence = !Str.isEmpty(cell_data);
+                    occurence = !Str.isEmpty(cellData);
                 }
                 //regexp
                 else if(hasRE){
@@ -1705,11 +1705,11 @@ export class TableFilter{
                         //operator is removed
                         let srchArg = sA.replace(re_re,'');
                         let rgx = new RegExp(srchArg);
-                        occurence = rgx.test(cell_data);
+                        occurence = rgx.test(cellData);
                     } catch(e) { occurence = false; }
                 } else {
-                    occurence = this._containsStr(sA, cell_data,
-                        this.isExactMatch(j));
+                    occurence = Str.contains(sA, cellData, this.isExactMatch(j),
+                        this.caseSensitive);
                 }
 
             }//else
@@ -1745,7 +1745,7 @@ export class TableFilter{
                     continue;
                 }
 
-                let cell_data = Str.matchCase(this.getCellData(cell[j]),
+                let cellData = Str.matchCase(this.getCellData(cell[j]),
                     this.caseSensitive);
 
                 //multiple search parameter operator ||
@@ -1764,7 +1764,7 @@ export class TableFilter{
                         s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
                     for(let w=0, len=s.length; w<len; w++){
                         cS = Str.trim(s[w]);
-                        occur = hasArg.call(this, cS, cell_data, j);
+                        occur = hasArg.call(this, cS, cellData, j);
                         highlight.call(this, cS, occur, cell[j]);
                         if(hasMultiOrSA && occur){
                             break;
@@ -1777,8 +1777,7 @@ export class TableFilter{
                 }
                 //single search parameter
                 else {
-                    occurence[j] =
-                        hasArg.call(this, Str.trim(sA), cell_data, j);
+                    occurence[j] = hasArg.call(this, Str.trim(sA), cellData, j);
                     highlight.call(this, sA, occurence[j], cell[j]);
                 }//else single param
 
@@ -1922,12 +1921,12 @@ export class TableFilter{
                     if(j != colIndex || row[i].style.display !== ''){
                         continue;
                     }
-                    let cell_data = this.getCellData(cell[j]),
+                    let cellData = this.getCellData(cell[j]),
                         nbFormat = this.colNbFormat ?
                             this.colNbFormat[colIndex] : null,
                         data = num ?
-                                Helpers.removeNbFormat(cell_data, nbFormat) :
-                                cell_data;
+                                Helpers.removeNbFormat(cellData, nbFormat) :
+                                cellData;
                     colValues.push(data);
                 }
             }
@@ -2513,32 +2512,7 @@ export class TableFilter{
     isExactMatch(colIndex){
         let fltType = this.getFilterType(colIndex);
         return this.exactMatchByCol[colIndex] || this.exactMatch ||
-            (fltType!==this.fltTypeInp);
-    }
-
-    /**
-     * Checks if passed data contains the searched arg
-     * @param  {String} arg         Search term
-     * @param  {String} data        Data string
-     * @param  {Boolean} exactMatch Exact match
-     * @return {Boolean]}
-     *
-     * TODO: move into string module, remove fltType in order to decouple it
-     * from TableFilter module
-     */
-    _containsStr(arg, data, exactMatch){
-        // Improved by Cedric Wartel (cwl)
-        // automatic exact match for selects and special characters are now
-        // filtered
-        let regexp,
-            modifier = this.caseSensitive ? 'g' : 'gi';
-        if(exactMatch){
-            regexp = new RegExp(
-                '(^\\s*)'+ Str.rgxEsc(arg) +'(\\s*$)', modifier);
-        } else {
-            regexp = new RegExp(Str.rgxEsc(arg), modifier);
-        }
-        return regexp.test(data);
+            (fltType !== this.fltTypeInp);
     }
 
     /**

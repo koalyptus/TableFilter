@@ -43,6 +43,15 @@ export default {
     },
 
     /**
+     * Removes passed node from DOM
+     * @param  {DOMElement} node
+     * @return {DOMElement} old node reference
+     */
+    remove(node){
+        return node.parentNode.removeChild(node);
+    },
+
+    /**
      * Returns a text node with given text
      * @param  {String} txt
      * @return {Object}
@@ -127,8 +136,8 @@ export default {
         return li;
     },
 
-    id(_id){
-        return document.getElementById(_id);
+    id(key){
+        return document.getElementById(key);
     },
 
     tag(o, tagname){

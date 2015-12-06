@@ -33,7 +33,7 @@ test('Properties', function() {
 });
 test('Can destroy', function() {
     loader.destroy();
-    deepEqual(loader.enabled, false, 'disabled');
+    deepEqual(loader.initialized, false, 'not initialised');
 });
 test('Can reset', function() {
     loader.reset();

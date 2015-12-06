@@ -28,7 +28,7 @@ test('Properties', function() {
 });
 test('Can destroy', function() {
     help.destroy();
-    deepEqual(help.enabled, false, 'disabled');
+    deepEqual(help.initialized, false, 'not initialised');
 });
 test('Can reset', function() {
     help.reset();

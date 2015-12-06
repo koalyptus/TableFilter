@@ -93,10 +93,8 @@ export class Loader extends Feature{
             return;
         }
 
-        this.loaderDiv.parentNode.removeChild(this.loaderDiv);
+        Dom.remove(this.loaderDiv);
         this.loaderDiv = null;
-
-        this.disable();
         this.initialized = false;
     }
 }
