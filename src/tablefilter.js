@@ -344,7 +344,7 @@ export class TableFilter{
         this.highlightKeywords = Boolean(f.highlight_keywords);
 
         /*** No results feature ***/
-        this.hasNoResults = Types.isObj(f.no_results_message) ||
+        this.noResults = Types.isObj(f.no_results_message) ||
             Boolean(f.no_results_message);
 
         /*** data types ***/
@@ -905,7 +905,7 @@ export class TableFilter{
             Mod.alternateRows = new AlternateRows(this);
             Mod.alternateRows.init();
         }
-        if(this.hasNoResults){
+        if(this.noResults){
             if(!Mod.noResults){
                 Mod.noResults = new NoResults(this);
             }
@@ -1896,7 +1896,7 @@ export class TableFilter{
             Mod.popupFilter.closeAll();
         }
 
-        if(this.hasNoResults){
+        if(this.noResults){
             if(this.nbVisibleRows > 0){
                 Mod.noResults.hide();
             } else {

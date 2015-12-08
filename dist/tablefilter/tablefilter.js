@@ -495,7 +495,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.highlightKeywords = Boolean(f.highlight_keywords);
 	
 	        /*** No results feature ***/
-	        this.hasNoResults = _types2['default'].isObj(f.no_results_message) || Boolean(f.no_results_message);
+	        this.noResults = _types2['default'].isObj(f.no_results_message) || Boolean(f.no_results_message);
 	
 	        /*** data types ***/
 	        //defines default date type (european DMY)
@@ -1035,7 +1035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                Mod.alternateRows = new _modulesAlternateRows.AlternateRows(this);
 	                Mod.alternateRows.init();
 	            }
-	            if (this.hasNoResults) {
+	            if (this.noResults) {
 	                if (!Mod.noResults) {
 	                    Mod.noResults = new _modulesNoResults.NoResults(this);
 	                }
@@ -2044,7 +2044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                Mod.popupFilter.closeAll();
 	            }
 	
-	            if (this.hasNoResults) {
+	            if (this.noResults) {
 	                if (this.nbVisibleRows > 0) {
 	                    Mod.noResults.hide();
 	                } else {
@@ -7270,6 +7270,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.onBeforeShowMsg = _types2['default'].isFn(f.on_before_show_msg) ? f.on_before_show_msg : null;
 	        //callback after message is displayed
 	        this.onAfterShowMsg = _types2['default'].isFn(f.on_after_show_msg) ? f.on_after_show_msg : null;
+	        //callback before message is hidden
+	        this.onBeforeHideMsg = _types2['default'].isFn(f.on_before_hide_msg) ? f.on_before_hide_msg : null;
+	        //callback after message is hidden
+	        this.onAfterHideMsg = _types2['default'].isFn(f.on_after_hide_msg) ? f.on_after_hide_msg : null;
 	
 	        this.prfxNoResults = 'nores_';
 	    }
@@ -7297,19 +7301,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'show',
 	        value: function show() {
+	            if (!this.initialized || !this.isEnabled()) {
+	                return;
+	            }
+	
+	            if (this.onBeforeShowMsg) {
+	                this.onBeforeShowMsg.call(null, this.tf, this);
+	            }
+	
 	            this.setWidth();
 	            this.cont.style.display = '';
+	
+	            if (this.onAfterShowMsg) {
+	                this.onAfterShowMsg.call(null, this.tf, this);
+	            }
 	        }
 	    }, {
 	        key: 'hide',
 	        value: function hide() {
+	            if (!this.initialized || !this.isEnabled()) {
+	                return;
+	            }
+	
+	            if (this.onBeforeHideMsg) {
+	                this.onBeforeHideMsg.call(null, this.tf, this);
+	            }
+	
 	            this.setWidth();
 	            this.cont.style.display = 'none';
+	
+	            if (this.onBeforeHideMsg) {
+	                this.onBeforeHideMsg.call(null, this.tf, this);
+	            }
 	        }
 	    }, {
 	        key: 'setWidth',
 	        value: function setWidth() {
-	            if (this.isExternal) {
+	            if (!this.initialized || this.isExternal || !this.isEnabled()) {
 	                return;
 	            }
 	            this.cont.style.width = this.tf.tbl.clientWidth + 'px';

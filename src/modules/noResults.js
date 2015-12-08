@@ -29,6 +29,12 @@ export class NoResults extends Feature{
         //callback after message is displayed
         this.onAfterShowMsg = Types.isFn(f.on_after_show_msg) ?
             f.on_after_show_msg : null;
+        //callback before message is hidden
+        this.onBeforeHideMsg = Types.isFn(f.on_before_hide_msg) ?
+            f.on_before_hide_msg : null;
+        //callback after message is hidden
+        this.onAfterHideMsg = Types.isFn(f.on_after_hide_msg) ?
+            f.on_after_hide_msg : null;
 
         this.prfxNoResults = 'nores_';
     }
@@ -54,17 +60,41 @@ export class NoResults extends Feature{
     }
 
     show(){
+        if(!this.initialized || !this.isEnabled()){
+            return;
+        }
+
+        if(this.onBeforeShowMsg){
+            this.onBeforeShowMsg.call(null, this.tf, this);
+        }
+
         this.setWidth();
         this.cont.style.display = '';
+
+        if(this.onAfterShowMsg){
+            this.onAfterShowMsg.call(null, this.tf, this);
+        }
     }
 
     hide(){
+        if(!this.initialized || !this.isEnabled()){
+            return;
+        }
+
+        if(this.onBeforeHideMsg){
+            this.onBeforeHideMsg.call(null, this.tf, this);
+        }
+
         this.setWidth();
         this.cont.style.display = 'none';
+
+        if(this.onBeforeHideMsg){
+            this.onBeforeHideMsg.call(null, this.tf, this);
+        }
     }
 
     setWidth(){
-        if(this.isExternal){
+        if(!this.initialized || this.isExternal || !this.isEnabled()){
             return;
         }
         this.cont.style.width = this.tf.tbl.clientWidth + 'px';
