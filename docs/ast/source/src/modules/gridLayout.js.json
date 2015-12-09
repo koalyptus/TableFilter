@@ -29390,10 +29390,10 @@
                       "trailingComments": [
                         {
                           "type": "Line",
-                          "value": "needed to keep reference of table element",
+                          "value": "needed to keep reference of table element for future usage",
                           "range": [
                             11410,
-                            11453
+                            11470
                           ],
                           "loc": {
                             "start": {
@@ -29402,7 +29402,7 @@
                             },
                             "end": {
                               "line": 327,
-                              "column": 51
+                              "column": 68
                             }
                           }
                         }
@@ -29422,8 +29422,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                11462,
-                                11466
+                                11479,
+                                11483
                               ],
                               "loc": {
                                 "start": {
@@ -29440,8 +29440,8 @@
                               "type": "Identifier",
                               "name": "tf",
                               "range": [
-                                11467,
-                                11469
+                                11484,
+                                11486
                               ],
                               "loc": {
                                 "start": {
@@ -29455,8 +29455,8 @@
                               }
                             },
                             "range": [
-                              11462,
-                              11469
+                              11479,
+                              11486
                             ],
                             "loc": {
                               "start": {
@@ -29473,8 +29473,8 @@
                             "type": "Identifier",
                             "name": "tbl",
                             "range": [
-                              11470,
-                              11473
+                              11487,
+                              11490
                             ],
                             "loc": {
                               "start": {
@@ -29488,8 +29488,8 @@
                             }
                           },
                           "range": [
-                            11462,
-                            11473
+                            11479,
+                            11490
                           ],
                           "loc": {
                             "start": {
@@ -29506,8 +29506,8 @@
                           "type": "Identifier",
                           "name": "t",
                           "range": [
-                            11476,
-                            11477
+                            11493,
+                            11494
                           ],
                           "loc": {
                             "start": {
@@ -29521,8 +29521,8 @@
                           }
                         },
                         "range": [
-                          11462,
-                          11477
+                          11479,
+                          11494
                         ],
                         "loc": {
                           "start": {
@@ -29536,8 +29536,8 @@
                         }
                       },
                       "range": [
-                        11462,
-                        11478
+                        11479,
+                        11495
                       ],
                       "loc": {
                         "start": {
@@ -29552,10 +29552,10 @@
                       "leadingComments": [
                         {
                           "type": "Line",
-                          "value": "needed to keep reference of table element",
+                          "value": "needed to keep reference of table element for future usage",
                           "range": [
                             11410,
-                            11453
+                            11470
                           ],
                           "loc": {
                             "start": {
@@ -29564,45 +29564,7 @@
                             },
                             "end": {
                               "line": 327,
-                              "column": 51
-                            }
-                          }
-                        }
-                      ],
-                      "trailingComments": [
-                        {
-                          "type": "Block",
-                          "value": "Dom.id(tf.id);",
-                          "range": [
-                            11478,
-                            11496
-                          ],
-                          "loc": {
-                            "start": {
-                              "line": 328,
-                              "column": 24
-                            },
-                            "end": {
-                              "line": 328,
-                              "column": 42
-                            }
-                          }
-                        },
-                        {
-                          "type": "Line",
-                          "value": " ???",
-                          "range": [
-                            11497,
-                            11503
-                          ],
-                          "loc": {
-                            "start": {
-                              "line": 328,
-                              "column": 43
-                            },
-                            "end": {
-                              "line": 328,
-                              "column": 49
+                              "column": 68
                             }
                           }
                         }
@@ -29619,8 +29581,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              11513,
-                              11517
+                              11505,
+                              11509
                             ],
                             "loc": {
                               "start": {
@@ -29637,8 +29599,8 @@
                             "type": "Identifier",
                             "name": "initialized",
                             "range": [
-                              11518,
-                              11529
+                              11510,
+                              11521
                             ],
                             "loc": {
                               "start": {
@@ -29652,8 +29614,8 @@
                             }
                           },
                           "range": [
-                            11513,
-                            11529
+                            11505,
+                            11521
                           ],
                           "loc": {
                             "start": {
@@ -29671,8 +29633,8 @@
                           "value": false,
                           "raw": "false",
                           "range": [
-                            11532,
-                            11537
+                            11524,
+                            11529
                           ],
                           "loc": {
                             "start": {
@@ -29686,8 +29648,8 @@
                           }
                         },
                         "range": [
-                          11513,
-                          11537
+                          11505,
+                          11529
                         ],
                         "loc": {
                           "start": {
@@ -29701,8 +29663,8 @@
                         }
                       },
                       "range": [
-                        11513,
-                        11538
+                        11505,
+                        11530
                       ],
                       "loc": {
                         "start": {
@@ -29713,50 +29675,12 @@
                           "line": 330,
                           "column": 33
                         }
-                      },
-                      "leadingComments": [
-                        {
-                          "type": "Block",
-                          "value": "Dom.id(tf.id);",
-                          "range": [
-                            11478,
-                            11496
-                          ],
-                          "loc": {
-                            "start": {
-                              "line": 328,
-                              "column": 24
-                            },
-                            "end": {
-                              "line": 328,
-                              "column": 42
-                            }
-                          }
-                        },
-                        {
-                          "type": "Line",
-                          "value": " ???",
-                          "range": [
-                            11497,
-                            11503
-                          ],
-                          "loc": {
-                            "start": {
-                              "line": 328,
-                              "column": 43
-                            },
-                            "end": {
-                              "line": 328,
-                              "column": 49
-                            }
-                          }
-                        }
-                      ]
+                      }
                     }
                   ],
                   "range": [
                     10974,
-                    11544
+                    11536
                   ],
                   "loc": {
                     "start": {
@@ -29773,7 +29697,7 @@
                 "expression": false,
                 "range": [
                   10972,
-                  11544
+                  11536
                 ],
                 "loc": {
                   "start": {
@@ -29790,7 +29714,7 @@
               "computed": false,
               "range": [
                 10965,
-                11544
+                11536
               ],
               "loc": {
                 "start": {
@@ -29827,7 +29751,7 @@
           ],
           "range": [
             190,
-            11546
+            11538
           ],
           "loc": {
             "start": {
@@ -29842,7 +29766,7 @@
         },
         "range": [
           158,
-          11546
+          11538
         ],
         "loc": {
           "start": {
@@ -29861,7 +29785,7 @@
       "source": null,
       "range": [
         151,
-        11546
+        11538
       ],
       "loc": {
         "start": {
@@ -29878,7 +29802,7 @@
   "sourceType": "module",
   "range": [
     0,
-    11546
+    11538
   ],
   "loc": {
     "start": {
@@ -30937,10 +30861,10 @@
     },
     {
       "type": "Line",
-      "value": "needed to keep reference of table element",
+      "value": "needed to keep reference of table element for future usage",
       "range": [
         11410,
-        11453
+        11470
       ],
       "loc": {
         "start": {
@@ -30949,43 +30873,7 @@
         },
         "end": {
           "line": 327,
-          "column": 51
-        }
-      }
-    },
-    {
-      "type": "Block",
-      "value": "Dom.id(tf.id);",
-      "range": [
-        11478,
-        11496
-      ],
-      "loc": {
-        "start": {
-          "line": 328,
-          "column": 24
-        },
-        "end": {
-          "line": 328,
-          "column": 42
-        }
-      }
-    },
-    {
-      "type": "Line",
-      "value": " ???",
-      "range": [
-        11497,
-        11503
-      ],
-      "loc": {
-        "start": {
-          "line": 328,
-          "column": 43
-        },
-        "end": {
-          "line": 328,
-          "column": 49
+          "column": 68
         }
       }
     }

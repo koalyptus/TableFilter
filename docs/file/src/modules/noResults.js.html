@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/modules/noResults.js | tablefilter v0.0.15 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/noResults.js~NoResults.html">NoResults</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/modules/noResults.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;./feature&apos;;
+import Dom from &apos;../dom&apos;;
+import Types from &apos;../types&apos;;
+
+export class NoResults extends Feature{
+
+    /**
+     * No results message UI component
+     * @param {Object} tf TableFilter instance
+     */
+    constructor(tf){
+        super(tf, &apos;noResults&apos;);
+
+        //configuration object
+        let f = this.config.no_results_message;
+
+        this.content = f.content || &apos;No results&apos;;
+        this.customContainer = f.custom_container || null;
+        this.customContainerId = f.custom_container_id || null;
+        this.isExternal = !Types.isEmpty(this.customContainer) ||
+            !Types.isEmpty(this.customContainerId);
+        this.cssClass = f.css_class || &apos;no-results&apos;;
+
+        this.cont = null;
+
+        //callback before message is displayed
+        this.onBeforeShowMsg = Types.isFn(f.on_before_show_msg) ?
+            f.on_before_show_msg : null;
+        //callback after message is displayed
+        this.onAfterShowMsg = Types.isFn(f.on_after_show_msg) ?
+            f.on_after_show_msg : null;
+        //callback before message is hidden
+        this.onBeforeHideMsg = Types.isFn(f.on_before_hide_msg) ?
+            f.on_before_hide_msg : null;
+        //callback after message is hidden
+        this.onAfterHideMsg = Types.isFn(f.on_after_hide_msg) ?
+            f.on_after_hide_msg : null;
+
+        this.prfxNoResults = &apos;nores_&apos;;
+    }
+
+    init(){
+        if(this.initialized){
+            return;
+        }
+        let tf = this.tf;
+        let target = this.customContainer || Dom.id(this.customContainerId) ||
+            tf.tbl;
+
+        //container
+        let cont = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxNoResults+tf.id]);
+        cont.className = this.cssClass;
+        cont.innerHTML = this.content;
+        target.appendChild(cont);
+
+        this.cont = cont;
+        this.initialized = true;
+        this.hide();
+    }
+
+    show(){
+        if(!this.initialized || !this.isEnabled()){
+            return;
+        }
+
+        if(this.onBeforeShowMsg){
+            this.onBeforeShowMsg.call(null, this.tf, this);
+        }
+
+        this.setWidth();
+        this.cont.style.display = &apos;block&apos;;
+
+        if(this.onAfterShowMsg){
+            this.onAfterShowMsg.call(null, this.tf, this);
+        }
+    }
+
+    hide(){
+        if(!this.initialized || !this.isEnabled()){
+            return;
+        }
+
+        if(this.onBeforeHideMsg){
+            this.onBeforeHideMsg.call(null, this.tf, this);
+        }
+
+        this.cont.style.display = &apos;none&apos;;
+
+        if(this.onBeforeHideMsg){
+            this.onBeforeHideMsg.call(null, this.tf, this);
+        }
+    }
+
+    setWidth(){
+        if(!this.initialized || this.isExternal || !this.isEnabled()){
+            return;
+        }
+        if(this.tf.gridLayout){
+            let gridLayout = this.tf.feature(&apos;gridLayout&apos;);
+            this.cont.style.width = gridLayout.tblCont.clientWidth + &apos;px&apos;;
+        } else {
+            this.cont.style.width = this.tf.tbl.clientWidth + &apos;px&apos;;
+        }
+
+    }
+
+    destroy(){
+        if(!this.initialized){
+            return;
+        }
+        Dom.remove(this.cont);
+        this.cont = null;
+        this.initialized = false;
+    }
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.4)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

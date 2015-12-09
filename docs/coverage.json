@@ -1,7 +1,7 @@
 {
-  "coverage": "24.12%",
-  "expectCount": 655,
-  "actualCount": 158,
+  "coverage": "23.7%",
+  "expectCount": 675,
+  "actualCount": 160,
   "files": {
     "src/extensions/advancedGrid/adapterEzEditTable.js": {
       "expectCount": 15,
@@ -36,8 +36,8 @@
       "actualCount": 4
     },
     "src/tablefilter.js": {
-      "expectCount": 237,
-      "actualCount": 72
+      "expectCount": 238,
+      "actualCount": 73
     },
     "src/modules/feature.js": {
       "expectCount": 13,
@@ -61,6 +61,10 @@
     },
     "src/modules/loader.js": {
       "expectCount": 15,
+      "actualCount": 1
+    },
+    "src/modules/noResults.js": {
+      "expectCount": 19,
       "actualCount": 1
     },
     "src/modules/paging.js": {
