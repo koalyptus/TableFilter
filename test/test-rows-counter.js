@@ -84,8 +84,4 @@ test('RowsCounter component with paging', function() {
         '1-7 / 7', 'Counter value with paging');
 });
 
-module('Tear-down');
-test('can destroy TableFilter DOM elements', function() {
-    tf.destroy();
-    deepEqual(tf.hasGrid(), false, 'Filters removed');
-});
+

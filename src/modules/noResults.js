@@ -14,7 +14,7 @@ export class NoResults extends Feature{
         //configuration object
         let f = this.config.no_results_message;
 
-        this.text = f.text || 'No results';
+        this.content = f.content || 'No results';
         this.customContainer = f.custom_container || null;
         this.customContainerId = f.custom_container_id || null;
         this.isExternal = !Types.isEmpty(this.customContainer) ||
@@ -50,13 +50,12 @@ export class NoResults extends Feature{
         //container
         var cont = Dom.create('div', ['id', this.prfxNoResults+tf.id]);
         cont.className = this.cssClass;
-        cont.appendChild(Dom.text(this.text));
+        cont.innerHTML = this.content;
         target.appendChild(cont);
 
         this.cont = cont;
-
-        this.hide();
         this.initialized = true;
+        this.hide();
     }
 
     show(){
@@ -69,7 +68,7 @@ export class NoResults extends Feature{
         }
 
         this.setWidth();
-        this.cont.style.display = '';
+        this.cont.style.display = 'block';
 
         if(this.onAfterShowMsg){
             this.onAfterShowMsg.call(null, this.tf, this);
@@ -85,7 +84,6 @@ export class NoResults extends Feature{
             this.onBeforeHideMsg.call(null, this.tf, this);
         }
 
-        this.setWidth();
         this.cont.style.display = 'none';
 
         if(this.onBeforeHideMsg){
@@ -97,7 +95,13 @@ export class NoResults extends Feature{
         if(!this.initialized || this.isExternal || !this.isEnabled()){
             return;
         }
-        this.cont.style.width = this.tf.tbl.clientWidth + 'px';
+        if(this.tf.gridLayout){
+            let gridLayout = this.tf.feature('gridLayout');
+            this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';
+        } else {
+            this.cont.style.width = this.tf.tbl.clientWidth + 'px';
+        }
+
     }
 
     destroy(){
