@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>tablefilter v0.0.14 - Demo</title>
+    <title>tablefilter v0.0.15 - Demo</title>
     <link rel="stylesheet" type="text/css" href="../dist/tablefilter/style/tablefilter.css">
 <style type="text/css">
     body{
@@ -27,8 +27,7 @@
 </style>
 </head>
 <body>
-<h1>tablefilter v0.0.14</h1>
-
+<h1>tablefilter v0.0.15</h1>
 
 <pre></pre>
 
@@ -37,7 +36,7 @@
     <thead>
         <tr>
             <th>country</th>
-            <th>isocode</th>
+            <th>iso</th>
             <th align="right">year</th>
             <th align="right">POP</th>
             <th align="right">XRAT</th>
@@ -13001,6 +13000,7 @@
         loader: true,
         status_bar: true,
         mark_active_columns: true,
+        no_results_message: true,
         col_number_format: [
             null, null, 'US',
             'US', 'US', 'US',

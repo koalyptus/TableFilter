@@ -21,6 +21,7 @@ import {Paging} from './modules/paging';
 import {ClearButton} from './modules/clearButton';
 import {Help} from './modules/help';
 import {AlternateRows} from './modules/alternateRows';
+import {NoResults} from './modules/noResults';
 
 var global = window,
     isValidDate = DateHelper.isValid,
@@ -341,6 +342,10 @@ export class TableFilter{
         /*** keyword highlighting ***/
         //enables/disables keyword highlighting
         this.highlightKeywords = Boolean(f.highlight_keywords);
+
+        /*** No results feature ***/
+        this.noResults = Types.isObj(f.no_results_message) ||
+            Boolean(f.no_results_message);
 
         /*** data types ***/
         //defines default date type (european DMY)
@@ -864,7 +869,7 @@ export class TableFilter{
 
         }//if this.fltGrid
 
-        /* Filter behaviours */
+        /* Features */
         if(this.hasVisibleRows){
             this.enforceVisibility();
         }
@@ -899,6 +904,12 @@ export class TableFilter{
         if(this.alternateRows){
             Mod.alternateRows = new AlternateRows(this);
             Mod.alternateRows.init();
+        }
+        if(this.noResults){
+            if(!Mod.noResults){
+                Mod.noResults = new NoResults(this);
+            }
+            Mod.noResults.init();
         }
 
         this.isFirstLoad = false;
@@ -1883,6 +1894,14 @@ export class TableFilter{
 
         if(this.popupFilters){
             Mod.popupFilter.closeAll();
+        }
+
+        if(this.noResults){
+            if(this.nbVisibleRows > 0){
+                Mod.noResults.hide();
+            } else {
+                Mod.noResults.show();
+            }
         }
     }
 

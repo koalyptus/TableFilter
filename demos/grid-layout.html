@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>tablefilter v0.0.14 - Grid Layout Demo</title>
+    <title>tablefilter v0.0.15 - Grid Layout Demo</title>
     <link rel="stylesheet" type="text/css" href="../dist/tablefilter/style/tablefilter.css">
 <style type="text/css">
     body{
@@ -27,7 +27,7 @@
 </style>
 </head>
 <body>
-<h1>tablefilter v0.0.14</h1>
+<h1>tablefilter v0.0.15</h1>
 <h2>Grid layout demo</h2>
 
 <pre></pre>
@@ -37,7 +37,7 @@
     <thead>
         <tr>
             <th>country</th>
-            <th>isocode</th>
+            <th>iso</th>
             <th align="right">year</th>
             <th align="right">POP</th>
             <th align="right">XRAT</th>
@@ -12998,12 +12998,13 @@
         rows_counter: true,
         loader: true,
         status_bar: true,
+        no_results_message: true,
         col_1: 'select',
         col_2: 'select',
         col_widths: [
-            "150px", "70px", "70px",
-            "120px", "120px", "100px",
-            "100px", "100px", "100px"
+            '150px', '70px', '70px',
+            '120px', '120px', '100px',
+            '100px', '100px', '100px'
         ],
         extensions:[{
             name: 'sort',
