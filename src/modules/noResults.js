@@ -48,7 +48,7 @@ export class NoResults extends Feature{
             tf.tbl;
 
         //container
-        var cont = Dom.create('div', ['id', this.prfxNoResults+tf.id]);
+        let cont = Dom.create('div', ['id', this.prfxNoResults+tf.id]);
         cont.className = this.cssClass;
         cont.innerHTML = this.content;
         target.appendChild(cont);
