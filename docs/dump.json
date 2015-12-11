@@ -6986,7 +6986,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from './feature';\nimport Dom from '../dom';\nimport Types from '../types';\n\nexport class NoResults extends Feature{\n\n    /**\n     * No results message UI component\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf){\n        super(tf, 'noResults');\n\n        //configuration object\n        let f = this.config.no_results_message;\n\n        this.content = f.content || 'No results';\n        this.customContainer = f.custom_container || null;\n        this.customContainerId = f.custom_container_id || null;\n        this.isExternal = !Types.isEmpty(this.customContainer) ||\n            !Types.isEmpty(this.customContainerId);\n        this.cssClass = f.css_class || 'no-results';\n\n        this.cont = null;\n\n        //callback before message is displayed\n        this.onBeforeShowMsg = Types.isFn(f.on_before_show_msg) ?\n            f.on_before_show_msg : null;\n        //callback after message is displayed\n        this.onAfterShowMsg = Types.isFn(f.on_after_show_msg) ?\n            f.on_after_show_msg : null;\n        //callback before message is hidden\n        this.onBeforeHideMsg = Types.isFn(f.on_before_hide_msg) ?\n            f.on_before_hide_msg : null;\n        //callback after message is hidden\n        this.onAfterHideMsg = Types.isFn(f.on_after_hide_msg) ?\n            f.on_after_hide_msg : null;\n\n        this.prfxNoResults = 'nores_';\n    }\n\n    init(){\n        if(this.initialized){\n            return;\n        }\n        let tf = this.tf;\n        let target = this.customContainer || Dom.id(this.customContainerId) ||\n            tf.tbl;\n\n        //container\n        let cont = Dom.create('div', ['id', this.prfxNoResults+tf.id]);\n        cont.className = this.cssClass;\n        cont.innerHTML = this.content;\n        target.appendChild(cont);\n\n        this.cont = cont;\n        this.initialized = true;\n        this.hide();\n    }\n\n    show(){\n        if(!this.initialized || !this.isEnabled()){\n            return;\n        }\n\n        if(this.onBeforeShowMsg){\n            this.onBeforeShowMsg.call(null, this.tf, this);\n        }\n\n        this.setWidth();\n        this.cont.style.display = 'block';\n\n        if(this.onAfterShowMsg){\n            this.onAfterShowMsg.call(null, this.tf, this);\n        }\n    }\n\n    hide(){\n        if(!this.initialized || !this.isEnabled()){\n            return;\n        }\n\n        if(this.onBeforeHideMsg){\n            this.onBeforeHideMsg.call(null, this.tf, this);\n        }\n\n        this.cont.style.display = 'none';\n\n        if(this.onBeforeHideMsg){\n            this.onBeforeHideMsg.call(null, this.tf, this);\n        }\n    }\n\n    setWidth(){\n        if(!this.initialized || this.isExternal || !this.isEnabled()){\n            return;\n        }\n        if(this.tf.gridLayout){\n            let gridLayout = this.tf.feature('gridLayout');\n            this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';\n        } else {\n            this.cont.style.width = this.tf.tbl.clientWidth + 'px';\n        }\n\n    }\n\n    destroy(){\n        if(!this.initialized){\n            return;\n        }\n        Dom.remove(this.cont);\n        this.cont = null;\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from './feature';\nimport Dom from '../dom';\nimport Types from '../types';\n\nexport class NoResults extends Feature{\n\n    /**\n     * No results message UI component\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf){\n        super(tf, 'noResults');\n\n        //configuration object\n        let f = this.config.no_results_message;\n\n        this.content = f.content || 'No results';\n        this.customContainer = f.custom_container || null;\n        this.customContainerId = f.custom_container_id || null;\n        this.isExternal = !Types.isEmpty(this.customContainer) ||\n            !Types.isEmpty(this.customContainerId);\n        this.cssClass = f.css_class || 'no-results';\n\n        this.cont = null;\n\n        //callback before message is displayed\n        this.onBeforeShowMsg = Types.isFn(f.on_before_show_msg) ?\n            f.on_before_show_msg : null;\n        //callback after message is displayed\n        this.onAfterShowMsg = Types.isFn(f.on_after_show_msg) ?\n            f.on_after_show_msg : null;\n        //callback before message is hidden\n        this.onBeforeHideMsg = Types.isFn(f.on_before_hide_msg) ?\n            f.on_before_hide_msg : null;\n        //callback after message is hidden\n        this.onAfterHideMsg = Types.isFn(f.on_after_hide_msg) ?\n            f.on_after_hide_msg : null;\n\n        this.prfxNoResults = 'nores_';\n    }\n\n    init(){\n        if(this.initialized){\n            return;\n        }\n        let tf = this.tf;\n        let target = this.customContainer || Dom.id(this.customContainerId) ||\n            tf.tbl;\n\n        //container\n        let cont = Dom.create('div', ['id', this.prfxNoResults+tf.id]);\n        cont.className = this.cssClass;\n        cont.innerHTML = this.content;\n\n        if(this.isExternal){\n            target.appendChild(cont);\n        } else {\n            target.parentNode.insertBefore(cont, target.nextSibling);\n        }\n\n        this.cont = cont;\n        this.initialized = true;\n        this.hide();\n    }\n\n    show(){\n        if(!this.initialized || !this.isEnabled()){\n            return;\n        }\n\n        if(this.onBeforeShowMsg){\n            this.onBeforeShowMsg.call(null, this.tf, this);\n        }\n\n        this.setWidth();\n        this.cont.style.display = 'block';\n\n        if(this.onAfterShowMsg){\n            this.onAfterShowMsg.call(null, this.tf, this);\n        }\n    }\n\n    hide(){\n        if(!this.initialized || !this.isEnabled()){\n            return;\n        }\n\n        if(this.onBeforeHideMsg){\n            this.onBeforeHideMsg.call(null, this.tf, this);\n        }\n\n        this.cont.style.display = 'none';\n\n        if(this.onBeforeHideMsg){\n            this.onBeforeHideMsg.call(null, this.tf, this);\n        }\n    }\n\n    setWidth(){\n        if(!this.initialized || this.isExternal || !this.isEnabled()){\n            return;\n        }\n        if(this.tf.gridLayout){\n            let gridLayout = this.tf.feature('gridLayout');\n            this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';\n        } else {\n            this.cont.style.width = this.tf.tbl.clientWidth + 'px';\n        }\n\n    }\n\n    destroy(){\n        if(!this.initialized){\n            return;\n        }\n        Dom.remove(this.cont);\n        this.cont = null;\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "kind": "class",
@@ -7241,7 +7241,7 @@
     "longname": "src/modules/noResults.js~NoResults#cont",
     "access": null,
     "description": null,
-    "lineNumber": 56,
+    "lineNumber": 61,
     "undocument": true,
     "type": {
       "types": [
@@ -7258,7 +7258,7 @@
     "longname": "src/modules/noResults.js~NoResults#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 57,
+    "lineNumber": 62,
     "undocument": true,
     "type": {
       "types": [
@@ -7275,7 +7275,7 @@
     "longname": "src/modules/noResults.js~NoResults#show",
     "access": null,
     "description": null,
-    "lineNumber": 61,
+    "lineNumber": 66,
     "undocument": true,
     "params": [],
     "generator": false
@@ -7289,7 +7289,7 @@
     "longname": "src/modules/noResults.js~NoResults#hide",
     "access": null,
     "description": null,
-    "lineNumber": 78,
+    "lineNumber": 83,
     "undocument": true,
     "params": [],
     "generator": false
@@ -7303,7 +7303,7 @@
     "longname": "src/modules/noResults.js~NoResults#setWidth",
     "access": null,
     "description": null,
-    "lineNumber": 94,
+    "lineNumber": 99,
     "undocument": true,
     "params": [],
     "generator": false
@@ -7317,7 +7317,7 @@
     "longname": "src/modules/noResults.js~NoResults#destroy",
     "access": null,
     "description": null,
-    "lineNumber": 107,
+    "lineNumber": 112,
     "undocument": true,
     "params": [],
     "generator": false
@@ -7331,7 +7331,7 @@
     "longname": "src/modules/noResults.js~NoResults#cont",
     "access": null,
     "description": null,
-    "lineNumber": 112,
+    "lineNumber": 117,
     "undocument": true,
     "type": {
       "types": [
@@ -7348,7 +7348,7 @@
     "longname": "src/modules/noResults.js~NoResults#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 113,
+    "lineNumber": 118,
     "undocument": true,
     "type": {
       "types": [
