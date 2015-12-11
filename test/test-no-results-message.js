@@ -211,4 +211,10 @@ test('External container sanity checks', function() {
                 'Second argument type');
         });
     }
+
+    test('can destroy TableFilter DOM elements', function() {
+        tfCall.destroy();
+        deepEqual(tfCall.hasGrid(), false, 'Filters removed');
+        tfCall = null;
+    });
 });

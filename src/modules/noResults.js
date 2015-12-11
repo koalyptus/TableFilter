@@ -51,7 +51,12 @@ export class NoResults extends Feature{
         let cont = Dom.create('div', ['id', this.prfxNoResults+tf.id]);
         cont.className = this.cssClass;
         cont.innerHTML = this.content;
-        target.appendChild(cont);
+
+        if(this.isExternal){
+            target.appendChild(cont);
+        } else {
+            target.parentNode.insertBefore(cont, target.nextSibling);
+        }
 
         this.cont = cont;
         this.initialized = true;
