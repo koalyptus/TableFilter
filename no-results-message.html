@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Watermark | TableFilter</title>
+    <title>No results message | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -155,11 +155,15 @@
 
       
 
-<h1>Filter watermark</h1>
+<h1>No results message</h1>
 <p>
-    Use the <code>watermark</code> option to set a short hint in a
-    <code>input</code> filter type.
+    Enable a specific message for searches yielding no matches with the
+    <code>no_results_message</code> configuration option.
 </p>
+
+<div class="alert alert-info" role="alert">
+    Search for <code>foo</code> in any column to get a no results message.
+</div>
 
 
 <table id="demo" class="cities">
@@ -233,7 +237,7 @@
 <script data-config>
     var tf = new TableFilter('demo', {
         base_path: 'tablefilter/',
-        watermark: ['City', 'City', 'Distance', 'Time', 'Time']
+        no_results_message: true
     });
     tf.init();
 </script>
