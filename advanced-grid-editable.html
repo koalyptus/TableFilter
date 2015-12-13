@@ -185,26 +185,29 @@ ezEditTable</a>
 </div>
 
 
-<div class="ezCommandEditor">
-    <button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.Edit();">
-        <img src="http://edittable.free.fr/ezEditTable/themes/icn_edit.gif" alt="Edit record">
-    </button>
-    <button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.AddNewRow();">
-        <img src="http://edittable.free.fr/ezEditTable/themes/icn_add.gif" alt="Add record">
-    </button>
-    <button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.SubmitDeletedRows();">
-        <img src="http://edittable.free.fr/ezEditTable/themes/icn_del.gif" alt="Delete record">
-    </button>
+<div data-config>
+    <div class="ezCommandEditor">
+        <button onclick="
+            var advancedGrid = tf.extension('advancedGrid');
+            var ezEditTable = advancedGrid._ezEditTable;
+            ezEditTable.Editable.Edit();">
+            <img src="http://edittable.free.fr/ezEditTable/themes/icn_edit.gif" alt="Edit record">
+        </button>
+        <button onclick="
+            var advancedGrid = tf.extension('advancedGrid');
+            var ezEditTable = advancedGrid._ezEditTable;
+            ezEditTable.Editable.AddNewRow();">
+            <img src="http://edittable.free.fr/ezEditTable/themes/icn_add.gif" alt="Add record">
+        </button>
+        <button onclick="
+            var advancedGrid = tf.extension('advancedGrid');
+            var ezEditTable = advancedGrid._ezEditTable;
+            ezEditTable.Editable.SubmitDeletedRows();">
+            <img src="http://edittable.free.fr/ezEditTable/themes/icn_del.gif" alt="Delete record">
+        </button>
+    </div>
 </div>
+
 
 
 <table id="demo" class="countries">
@@ -13270,8 +13273,22 @@ ezEditTable</a>
     tf.init();
 </script>
 
-<p>
-    
+<hr>
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -13304,31 +13321,80 @@ ezEditTable</a>
 
 
 
-</p>
+    </div>
+    <div id="html" class="tab-pane fade">
+        
 
-<h4>Markup</h4>
-<pre>
-&lt;div class="ezCommandEditor"&gt;
-    &lt;button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.Edit();"&gt;
-        &lt;img src="http://edittable.free.fr/ezEditTable/themes/icn_edit.gif" alt="Edit record"&gt;
-    &lt;/button&gt;
-    &lt;button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.AddNewRow();"&gt;
-        &lt;img src="http://edittable.free.fr/ezEditTable/themes/icn_add.gif" alt="Add record"&gt;
-    &lt;/button&gt;
-    &lt;button onclick="
-        var advancedGrid = tf.extension('advancedGrid');
-        var ezEditTable = advancedGrid._ezEditTable;
-        ezEditTable.Editable.SubmitDeletedRows();"&gt;
-        &lt;img src="http://edittable.free.fr/ezEditTable/themes/icn_del.gif" alt="Delete record"&gt;
-    &lt;/button&gt;
-&lt;/div&gt;
-</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html"></pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css"></pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+</div>
+
+
 
     </div>
 

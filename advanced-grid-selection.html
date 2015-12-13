@@ -158,7 +158,7 @@
 <h1>Selectable grid</h1>
 
 <p>
-    To enable the row(s)/cell(s) selection, import the <a href="http://edittable.free.fr/zip.php?f=ezEditTable.zip&amp;p=1"
+    To enable the selection capabilities, import the <a href="http://edittable.free.fr/zip.php?f=ezEditTable.zip&amp;p=1"
 target="_blank"
 title="ezEditTable is a javascript code aimed at enhancing regular HTML
 tables by adding features such as inline editing components, advanced
@@ -188,14 +188,16 @@ ezEditTable</a>
 </div>
 
 
-<div class="ezCommandEditor">
-    <input onclick="var ezEditTable = tf.extension('advancedGrid')._ezEditTable;
-        if(this.checked){
-            ezEditTable.selectionModel = 'multiple';
-        } else {
-            ezEditTable.selectionModel = 'single';
-        }" name="chkMultipleSlc" id="chkMultipleSlc" type="checkbox">
-    <label for="chkMultipleSlc">Multiple selection</label>
+<div data-config>
+    <div class="ezCommandEditor">
+        <input onclick="var ezEditTable = tf.extension('advancedGrid')._ezEditTable;
+            if(this.checked){
+                ezEditTable.selectionModel = 'multiple';
+            } else {
+                ezEditTable.selectionModel = 'single';
+            }" name="chkMultipleSlc" id="chkMultipleSlc" type="checkbox">
+        <label for="chkMultipleSlc">Multiple selection</label>
+    </div>
 </div>
 
 
@@ -13155,10 +13157,12 @@ ezEditTable</a>
 
 
 <p></p>
-<div class="ezCommandEditor">
-    <button onclick="alert( tf.extension('advancedGrid')._ezEditTable.Selection.GetActiveRowValues() );">Active row data</button>
-    <button onclick="alert( tf.extension('advancedGrid')._ezEditTable.Selection.GetSelectedValues() );">Selected rows data</button>
-    <button onclick="tf.extension('advancedGrid')._ezEditTable.Selection.ClearSelections();">Clear Selection</button>
+<div data-config>
+    <div class="ezCommandEditor">
+        <button onclick="alert( tf.extension('advancedGrid')._ezEditTable.Selection.GetActiveRowValues() );">Active row data</button>
+        <button onclick="alert( tf.extension('advancedGrid')._ezEditTable.Selection.GetSelectedValues() );">Selected rows data</button>
+        <button onclick="tf.extension('advancedGrid')._ezEditTable.Selection.ClearSelections();">Clear Selection</button>
+    </div>
 </div>
 
 <div class="alert alert-warning" role="alert">
@@ -13226,8 +13230,22 @@ ezEditTable</a>
     tf.init();
 </script>
 
-<p>
-    
+<hr>
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -13260,25 +13278,80 @@ ezEditTable</a>
 
 
 
-</p>
-<h4>Markup</h4>
-<pre>
-&lt;div class="ezCommandEditor"&gt;
-    &lt;input onclick="var ezEditTable = tf.extension('advancedGrid')._ezEditTable;
-        if(this.checked){
-            ezEditTable.selectionModel = 'multiple';
-        } else {
-            ezEditTable.selectionModel = 'single';
-        }" name="chkMultipleSlc" id="chkMultipleSlc" type="checkbox"&gt;
-    &lt;label for="chkMultipleSlc"&gt;Multiple selection&lt;/label&gt;
-&lt;/div&gt;
+    </div>
+    <div id="html" class="tab-pane fade">
+        
 
-&lt;div class="ezCommandEditor"&gt;
-    &lt;button onclick="alert( tf.extension('advancedGrid')._ezEditTable.Selection.GetActiveRowValues() );"&gt;Active row data&lt;/button&gt;
-    &lt;button onclick="alert( tf.extension('advancedGrid')._ezEditTable.Selection.GetSelectedValues() );"&gt;Selected rows data&lt;/button&gt;
-    &lt;button onclick="tf.extension('advancedGrid')._ezEditTable.Selection.ClearSelections();"&gt;Clear Selection&lt;/button&gt;
-&lt;/div&gt;
-</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html"></pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css"></pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+</div>
+
+
 
     </div>
 
