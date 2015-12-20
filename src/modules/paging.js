@@ -417,10 +417,10 @@ export class Paging extends Feature{
      */
     groupByPage(validRows){
         var tf = this.tf;
-        var alternateRows =  tf.feature('alternateRows');
+        var alternateRows = tf.feature('alternateRows');
         var rows = tf.tbl.rows;
-        var endPagingRow = parseInt(this.startPagingRow, 10) +
-            parseInt(this.pagingLength, 10);
+        var startPagingRow = parseInt(this.startPagingRow, 10);
+        var endPagingRow = startPagingRow + parseInt(this.pagingLength, 10);
 
         //store valid rows indexes
         if(validRows){
@@ -433,7 +433,7 @@ export class Paging extends Feature{
             var r = rows[validRowIdx];
             var isRowValid = r.getAttribute('validRow');
 
-            if(h>=this.startPagingRow && h<endPagingRow){
+            if(h>=startPagingRow && h<endPagingRow){
                 if(Types.isNull(isRowValid) || Boolean(isRowValid==='true')){
                     r.style.display = '';
                 }
@@ -473,7 +473,7 @@ export class Paging extends Feature{
         }
         var btnEvt = this.evt,
             cmdtype = typeof cmd;
-        if(cmdtype==='string'){
+        if(cmdtype === 'string'){
             switch(Str.lower(cmd)){
                 case 'next':
                     btnEvt.next();
@@ -492,7 +492,7 @@ export class Paging extends Feature{
                 break;
             }
         }
-        else if(cmdtype==='number'){
+        else if(cmdtype === 'number'){
             this.changePage(cmd-1);
         }
     }
