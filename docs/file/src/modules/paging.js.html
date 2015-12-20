@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.0.16 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.0.17 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -486,10 +486,10 @@ export class Paging extends Feature{
      */
     groupByPage(validRows){
         var tf = this.tf;
-        var alternateRows =  tf.feature(&apos;alternateRows&apos;);
+        var alternateRows = tf.feature(&apos;alternateRows&apos;);
         var rows = tf.tbl.rows;
-        var endPagingRow = parseInt(this.startPagingRow, 10) +
-            parseInt(this.pagingLength, 10);
+        var startPagingRow = parseInt(this.startPagingRow, 10);
+        var endPagingRow = startPagingRow + parseInt(this.pagingLength, 10);
 
         //store valid rows indexes
         if(validRows){
@@ -502,7 +502,7 @@ export class Paging extends Feature{
             var r = rows[validRowIdx];
             var isRowValid = r.getAttribute(&apos;validRow&apos;);
 
-            if(h&gt;=this.startPagingRow &amp;&amp; h&lt;endPagingRow){
+            if(h&gt;=startPagingRow &amp;&amp; h&lt;endPagingRow){
                 if(Types.isNull(isRowValid) || Boolean(isRowValid===&apos;true&apos;)){
                     r.style.display = &apos;&apos;;
                 }
@@ -542,7 +542,7 @@ export class Paging extends Feature{
         }
         var btnEvt = this.evt,
             cmdtype = typeof cmd;
-        if(cmdtype===&apos;string&apos;){
+        if(cmdtype === &apos;string&apos;){
             switch(Str.lower(cmd)){
                 case &apos;next&apos;:
                     btnEvt.next();
@@ -561,7 +561,7 @@ export class Paging extends Feature{
                 break;
             }
         }
-        else if(cmdtype===&apos;number&apos;){
+        else if(cmdtype === &apos;number&apos;){
             this.changePage(cmd-1);
         }
     }
