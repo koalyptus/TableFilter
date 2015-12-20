@@ -35,16 +35,6 @@ export default class AdapterSortableTable{
         //cell attribute storing custom key
         this.customKey = opts.custom_key || 'data-tf-sortKey';
 
-        /*** TF additional events ***/
-        //additional paging events for alternating background
-        // o.Evt._Paging.nextEvt = function(){
-        // if(o.sorted && o.alternateRows) o.Filter();
-        // }
-        // o.Evt._Paging.prevEvt = o.Evt._Paging.nextEvt;
-        // o.Evt._Paging.firstEvt = o.Evt._Paging.nextEvt;
-        // o.Evt._Paging.lastEvt = o.Evt._Paging.nextEvt;
-        // o.Evt._OnSlcPagesChangeEvt = o.Evt._Paging.nextEvt;
-
         // callback invoked after sort is loaded and instanciated
         this.onSortLoaded = Types.isFn(opts.on_sort_loaded) ?
             opts.on_sort_loaded : null;
@@ -134,6 +124,8 @@ export default class AdapterSortableTable{
             //sort behaviour for paging
             if(tf.paging){
                 let paginator = tf.feature('paging');
+                // recalculate valid rows index as sorting may have change it
+                tf.getValidRows(true);
                 paginator.enable();
                 paginator.setPage(paginator.getPage());
             }

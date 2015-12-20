@@ -9,7 +9,10 @@ var tf = new TableFilter('demo', {
     remember_page_number: true,
     remember_page_length: true,
     results_per_page: ['Results per page ', [2,4,6]],
-    extensions: [{ name: 'sort' }]
+    extensions: [{
+        name: 'sort',
+        types: ['string', 'string', 'number', 'number', 'number']
+    }]
 });
 tf.init();
 
@@ -42,6 +45,17 @@ test('Can select a page', function() {
     paging.setPage(3);
 
     deepEqual(paging.pagingSlc.selectedIndex, 2, 'Expected selected option');
+});
+
+module('Changing pages when column is sorted (issue #70)');
+test('It can change page', function() {
+    var sort = tf.extension('sort');
+    tf.setFilterValue(2, '>400');
+    sort.sortByColumnIndex(1);
+    sort.sortByColumnIndex(1);
+    paging.setPage(3);
+
+    deepEqual(paging.getPage(), 3, 'Expected page number');
 });
 
 module('Tear-down');

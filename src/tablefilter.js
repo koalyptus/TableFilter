@@ -1857,7 +1857,6 @@ export class TableFilter{
             // TODO: provide a method in paging module
             Mod.paging.startPagingRow = 0;
             Mod.paging.currentPageNb = 1;
-            //
             Mod.paging.setPagingInfo(this.validRowsIndex);
         }
         //invokes onafter callback
