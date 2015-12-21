@@ -1630,6 +1630,9 @@ export class TableFilter{
                 //non-empty
                 else if(hasNM){
                     occurence = !Str.isEmpty(cellData);
+                } else {
+                    occurence = Str.contains(sA, cellData, this.isExactMatch(j),
+                        this.caseSensitive);
                 }
             }
 
