@@ -1064,7 +1064,7 @@ export class TableFilter{
         __webpack_public_path__ = this.basePath;
 
         require(['./' + modulePath], (mod)=> {
-            let inst = new mod(this, ext);
+            let inst = new mod.default(this, ext);
             inst.init();
             this.ExtRegistry[name] = inst;
         });

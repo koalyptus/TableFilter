@@ -150,7 +150,8 @@ module.exports = function (grunt) {
             options: {
                 sourceMap: true,
                 modules: 'amd',
-                compact: false
+                compact: false,
+                presets: ['es2015']
             },
             dist: {
                 files: [{
