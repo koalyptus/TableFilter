@@ -23,9 +23,7 @@ import {Help} from './modules/help';
 import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
 
-var global = window,
-    isValidDate = DateHelper.isValid,
-    formatDate = DateHelper.format,
+let global = window,
     doc = global.document;
 
 export class TableFilter{
@@ -1557,6 +1555,7 @@ export class TableFilter{
             /*jshint validthis:true */
             let occurence,
                 removeNbFormat = Helpers.removeNbFormat;
+
             //Search arg operator tests
             let hasLO = re_l.test(sA),
                 hasLE = re_le.test(sA),
@@ -1573,45 +1572,51 @@ export class TableFilter{
                 hasRE = re_re.test(sA);
 
             //Search arg dates tests
-            let isLDate = hasLO && isValidDate(sA.replace(re_l,''), dtType);
-            let isLEDate = hasLE && isValidDate(sA.replace(re_le,''), dtType);
-            let isGDate = hasGR && isValidDate(sA.replace(re_g,''), dtType);
-            let isGEDate = hasGE && isValidDate(sA.replace(re_ge,''), dtType);
-            let isDFDate = hasDF && isValidDate(sA.replace(re_d,''), dtType);
-            let isEQDate = hasEQ && isValidDate(sA.replace(re_eq,''), dtType);
+            let isLDate = hasLO &&
+                DateHelper.isValid(sA.replace(re_l,''), dtType);
+            let isLEDate = hasLE &&
+                DateHelper.isValid(sA.replace(re_le,''), dtType);
+            let isGDate = hasGR &&
+                DateHelper.isValid(sA.replace(re_g,''), dtType);
+            let isGEDate = hasGE &&
+                DateHelper.isValid(sA.replace(re_ge,''), dtType);
+            let isDFDate = hasDF &&
+                DateHelper.isValid(sA.replace(re_d,''), dtType);
+            let isEQDate = hasEQ &&
+                DateHelper.isValid(sA.replace(re_eq,''), dtType);
 
             let dte1, dte2;
             //dates
-            if(isValidDate(cellData, dtType)){
-                dte1 = formatDate(cellData, dtType);
+            if(DateHelper.isValid(cellData, dtType)){
+                dte1 = DateHelper.format(cellData, dtType);
                 // lower date
                 if(isLDate){
-                    dte2 = formatDate(sA.replace(re_l,''), dtType);
+                    dte2 = DateHelper.format(sA.replace(re_l,''), dtType);
                     occurence = dte1 < dte2;
                 }
                 // lower equal date
                 else if(isLEDate){
-                    dte2 = formatDate(sA.replace(re_le,''), dtType);
+                    dte2 = DateHelper.format(sA.replace(re_le,''), dtType);
                     occurence = dte1 <= dte2;
                 }
                 // greater equal date
                 else if(isGEDate){
-                    dte2 = formatDate(sA.replace(re_ge,''), dtType);
+                    dte2 = DateHelper.format(sA.replace(re_ge,''), dtType);
                     occurence = dte1 >= dte2;
                 }
                 // greater date
                 else if(isGDate){
-                    dte2 = formatDate(sA.replace(re_g,''), dtType);
+                    dte2 = DateHelper.format(sA.replace(re_g,''), dtType);
                     occurence = dte1 > dte2;
                 }
                 // different date
                 else if(isDFDate){
-                    dte2 = formatDate(sA.replace(re_d,''), dtType);
+                    dte2 = DateHelper.format(sA.replace(re_d,''), dtType);
                     occurence = dte1.toString() != dte2.toString();
                 }
                 // equal date
                 else if(isEQDate){
-                    dte2 = formatDate(sA.replace(re_eq,''), dtType);
+                    dte2 = DateHelper.format(sA.replace(re_eq,''), dtType);
                     occurence = dte1.toString() == dte2.toString();
                 }
                 // searched keyword with * operator doesn't have to be a date
@@ -1619,8 +1624,8 @@ export class TableFilter{
                     occurence = Str.contains(sA.replace(re_lk,''), cellData,
                         false, this.caseSensitive);
                 }
-                else if(isValidDate(sA,dtType)){
-                    dte2 = formatDate(sA,dtType);
+                else if(DateHelper.isValid(sA,dtType)){
+                    dte2 = DateHelper.format(sA,dtType);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 //empty
