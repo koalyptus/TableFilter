@@ -9,7 +9,7 @@ export default {
         }
         format = format.toUpperCase();
         if(format.length != 3) {
-            if(format==='DDMMMYYYY'){
+            if(format === 'DDMMMYYYY'){
                 let d = this.format(dateStr, format);
                 dateStr = d.getDate() +'/'+ (d.getMonth()+1) +'/'+
                     d.getFullYear();
@@ -22,15 +22,15 @@ export default {
         }
         let reg1, reg2;
         // If the year is first
-        if(format.substring(0, 1) == 'Y') {
-              reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
-              reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
-        } else if(format.substring(1, 2) == 'Y') { // If the year is second
-              reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/;
-              reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/;
+        if(format.substring(0, 1) === 'Y') {
+            reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+            reg2 = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+        } else if(format.substring(1, 2) === 'Y') { // If the year is second
+            reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/;
+            reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/;
         } else { // The year must be third
-              reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
-              reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
+            reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/;
+            reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/;
         }
         // If it doesn't conform to the right format (with either a 2 digit year
         // or 4 digit year), fail
