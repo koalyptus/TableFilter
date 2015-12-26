@@ -29,7 +29,8 @@ module.exports = {
                 test: path.join(__dirname, 'src'),
                 exclude: /node_modules/,
                 query: {
-                    compact: false
+                    compact: false,
+                    presets: ['es2015']
                 },
                 loader: 'babel-loader'
             },
@@ -55,9 +56,14 @@ module.exports = {
         plugins: [
             new Clean(['dist']),
             new webpack.optimize.DedupePlugin(),
+            new webpack.optimize.AggressiveMergingPlugin(),
             new StringReplacePlugin(),
             new webpack.optimize.MinChunkSizePlugin({ minChunkSize: 10000 }),
-            new webpack.optimize.UglifyJsPlugin(),
+            new webpack.optimize.UglifyJsPlugin({
+                compress: {
+                    warnings: false
+                }
+            }),
             new webpack.BannerPlugin(
                 '/** \n' +
                 ' *\t '+pkg.name+' v'+pkg.version+' by '+pkg.author.name+'\n' +
