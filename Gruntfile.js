@@ -327,7 +327,7 @@ module.exports = function (grunt) {
 
     // Deploy to gh-pages
     grunt.registerTask('deploy', 'Publish from Travis', [
-        'build', 'build-demos', 'esdoc', 'check-deploy'
+        'build', 'esdoc', 'check-deploy'
     ]);
 
     // Custom task running QUnit tests for specified files.
@@ -398,7 +398,7 @@ module.exports = function (grunt) {
     grunt.registerTask('check-deploy', function() {
         var env = process.env;
         // need this
-        this.requires(['build', 'build-demos', 'esdoc']);
+        this.requires(['build', 'esdoc']);
 
         // only deploy under these conditions
         if (env.TRAVIS === 'true' &&
