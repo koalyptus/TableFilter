@@ -27,7 +27,7 @@ module.exports = {
         loaders: [
             {
                 test: path.join(__dirname, 'src'),
-                exclude: /node_modules/,
+                exclude: /tablefilter\/node_modules/,
                 query: {
                     compact: false,
                     presets: ['es2015']
