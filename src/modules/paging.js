@@ -451,6 +451,9 @@ export class Paging extends Feature{
         tf.nbVisibleRows = tf.validRowsIndex.length;
         //re-applies filter behaviours after filtering process
         tf.applyProps();
+
+        // broadcast grouping by page
+        this.emitter.emit('grouped-by-page', tf, this);
     }
 
     /**

@@ -6,6 +6,7 @@ import Types from './types';
 import Arr from './array';
 import DateHelper from './date';
 import Helpers from './helpers';
+import {Emitter} from './emitter';
 
 // Features
 import {Store} from './modules/store';
@@ -26,7 +27,7 @@ import {NoResults} from './modules/noResults';
 let global = window,
     doc = global.document;
 
-export class TableFilter{
+export class TableFilter {
 
     /**
      * TableFilter object constructor
@@ -54,6 +55,7 @@ export class TableFilter{
 
         // TODO: use for-of with babel plug-in
         args.forEach((arg)=> {
+        // for (let arg of args) {
             let argtype = typeof arg;
             if(argtype === 'object' && arg && arg.nodeName === 'TABLE'){
                 this.tbl = arg;
@@ -66,6 +68,7 @@ export class TableFilter{
             } else if(argtype === 'object'){
                 this.cfg = arg;
             }
+        // }
         });
 
         if(!this.tbl || this.tbl.nodeName != 'TABLE' || this.getRowsNb() === 0){
@@ -75,6 +78,8 @@ export class TableFilter{
 
         // configuration object
         let f = this.cfg;
+
+        this.emitter = new Emitter();
 
         //Start row et cols nb
         this.refRow = this.startRow === null ? 2 : (this.startRow+1);
@@ -935,6 +940,8 @@ export class TableFilter{
         if(this.onFiltersLoaded){
             this.onFiltersLoaded.call(null, this);
         }
+
+        this.emitter.emit('initialized', this);
     }
 
     /**
@@ -1492,6 +1499,7 @@ export class TableFilter{
         if(this.onBeforeFilter){
             this.onBeforeFilter.call(null, this);
         }
+        this.emitter.emit('before-filtering', this);
 
         let row = this.tbl.rows,
             Mod = this.Mod,
@@ -1857,7 +1865,9 @@ export class TableFilter{
         if(this.rememberGridValues){
             Mod.store.saveFilterValues(this.fltsValuesCookie);
         }
+
         //applies filter props after filtering process
+        // TODO remove below if statement when custom events in place
         if(!this.paging){
             this.applyProps();
         } else {
@@ -1867,10 +1877,11 @@ export class TableFilter{
             Mod.paging.currentPageNb = 1;
             Mod.paging.setPagingInfo(this.validRowsIndex);
         }
-        //invokes onafter callback
+        //invokes onafterfilter callback
         if(this.onAfterFilter){
-            this.onAfterFilter.call(null,this);
+            this.onAfterFilter.call(null, this);
         }
+        this.emitter.emit('after-filtering', this);
     }
 
     /**
@@ -1895,9 +1906,9 @@ export class TableFilter{
             this.linkFilters();
         }
 
-        if(this.rowsCounter){
-            Mod.rowsCounter.refresh(this.nbVisibleRows);
-        }
+        // if(this.rowsCounter){
+        //     Mod.rowsCounter.refresh(this.nbVisibleRows);
+        // }
 
         if(this.popupFilters){
             Mod.popupFilter.closeAll();

@@ -293,7 +293,8 @@ export default class AdapterEzEditTable {
             cfg.on_added_dom_row = function(){
                 tf.nbFilterableRows++;
                 if(!tf.paging){
-                    tf.feature('rowsCounter').refresh();
+                    tf.emitter.emit('rows-changed', tf, this);
+                    //tf.feature('rowsCounter').refresh();
                 } else {
                     tf.nbRows++;
                     tf.nbVisibleRows++;
@@ -314,7 +315,8 @@ export default class AdapterEzEditTable {
                 cfg.actions['delete'].on_after_submit = function(){
                     tf.nbFilterableRows--;
                     if(!tf.paging){
-                        tf.feature('rowsCounter').refresh();
+                        // tf.feature('rowsCounter').refresh();
+                        tf.emitter.emit('rows-changed', tf, this);
                     } else {
                         tf.nbRows--;
                         tf.nbVisibleRows--;
