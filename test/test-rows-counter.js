@@ -18,6 +18,8 @@ test('Properties', function() {
     deepEqual(rowsCounter.feature, 'rowsCounter', 'Feature name');
     deepEqual(rowsCounter.enabled, true, 'Feature enabled');
     deepEqual(rowsCounter.initialized, true, 'Feature enabled');
+    deepEqual(typeof rowsCounter.emitter, 'object',
+        'Feature has emitter instance');
     deepEqual(typeof rowsCounter.config, 'object', 'TF configuration object');
     deepEqual(typeof rowsCounter.init, 'function', 'Feature init method');
     deepEqual(typeof rowsCounter.destroy, 'function', 'Feature destroy method');

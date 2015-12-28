@@ -19,6 +19,8 @@ test('No Results Feature', function() {
         deepEqual(noResults.feature, 'noResults', 'Feature name');
         deepEqual(noResults.enabled, true, 'Feature enabled');
         deepEqual(noResults.initialized, true, 'Feature initialized');
+        deepEqual(typeof noResults.emitter, 'object',
+            'Feature has emitter instance');
         deepEqual(typeof noResults.config, 'object', 'TF configuration object');
         deepEqual(typeof noResults.init, 'function', 'Feature init method');
         deepEqual(typeof noResults.destroy, 'function',

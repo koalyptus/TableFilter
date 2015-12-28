@@ -23,6 +23,7 @@ test('Properties', function() {
     deepEqual(paging.feature, 'paging', 'Feature name');
     deepEqual(paging.enabled, true, 'Feature enabled');
     deepEqual(paging.initialized, true, 'Feature enabled');
+    deepEqual(typeof paging.emitter, 'object', 'Feature has emitter instance');
     deepEqual(typeof paging.config, 'object', 'TF configuration object');
     deepEqual(typeof paging.init, 'function', 'Feature init method');
     deepEqual(typeof paging.destroy, 'function', 'Feature destroy method');

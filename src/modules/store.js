@@ -8,13 +8,19 @@ export class Store{
      *
      * TODO: use localStorage and fallback to cookie persistence
      */
-    constructor(tf) {
+    constructor(tf){
         var f = tf.config();
 
         this.duration = !isNaN(f.set_cookie_duration) ?
             parseInt(f.set_cookie_duration, 10) : 100000;
 
         this.tf = tf;
+        this.emitter = tf.emitter;
+    }
+
+    init(){
+        this.emitter.on('after-filtering',
+            ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
     }
 
     /**
@@ -97,4 +103,8 @@ export class Store{
         return Cookie.read(name);
     }
 
+    destroy(){
+        this.emitter.off('after-filtering',
+            ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
+    }
 }
