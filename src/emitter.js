@@ -9,11 +9,9 @@ export class Emitter {
     }
 
     off(evt, fn) {
-        if(evt in this.events === false) {
-            return;
+        if(evt in this.events) {
+            this.events[evt].splice(this.events[evt].indexOf(fn), 1);
         }
-
-        this.events[evt].splice(this.events[evt].indexOf(fn), 1);
     }
 
     emit(evt /*, args...*/) {

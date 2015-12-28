@@ -21,6 +21,7 @@ test('Properties', function() {
     deepEqual(altRows.feature, 'alternateRows', 'Feature name');
     deepEqual(altRows.enabled, true, 'Feature enabled');
     deepEqual(altRows.initialized, true, 'Feature enabled');
+    deepEqual(typeof altRows.emitter, 'object', 'Feature has emitter instance');
     deepEqual(typeof altRows.config, 'object', 'TF configuration object');
     deepEqual(typeof altRows.init, 'function', 'Feature init method');
     deepEqual(typeof altRows.destroy, 'function', 'Feature destroy method');

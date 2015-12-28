@@ -92,6 +92,8 @@ test('Properties', function() {
     deepEqual(popupFilter.feature, 'popupFilters', 'Feature name');
     deepEqual(popupFilter.enabled, true, 'Feature enabled');
     deepEqual(popupFilter.initialized, true, 'Feature enabled');
+    deepEqual(typeof popupFilter.emitter, 'object',
+        'Feature has emitter instance');
     deepEqual(typeof popupFilter.config, 'object', 'TF configuration object');
     deepEqual(typeof popupFilter.init, 'function', 'Feature init method');
     deepEqual(typeof popupFilter.destroy, 'function', 'Feature destroy method');
