@@ -635,6 +635,7 @@ export class TableFilter {
         if(this.rememberGridValues || this.rememberPageNb ||
             this.rememberPageLen){
             Mod.store = new Store(this);
+            Mod.store.init();
         }
 
         if(this.gridLayout){
@@ -874,6 +875,7 @@ export class TableFilter {
 
         /* Features */
         if(this.hasVisibleRows){
+            this.emitter.on('after-filtering', ()=> this.enforceVisibility());
             this.enforceVisibility();
         }
         if(this.rowsCounter){
@@ -935,6 +937,11 @@ export class TableFilter {
         /* Loads extensions */
         if(this.hasExtensions){
             this.initExtensions();
+        }
+
+        // Subscribe to event
+        if(this.linkedFilters){
+            this.emitter.on('after-filtering', ()=> this.linkFilters());
         }
 
         if(this.onFiltersLoaded){
@@ -1219,12 +1226,20 @@ export class TableFilter {
         }
 
         // Destroy modules
-        Object.keys(Mod).forEach(function(key) {
+        Object.keys(Mod).forEach(function(key){
             var feature = Mod[key];
             if(feature && Types.isFn(feature.destroy)){
                 feature.destroy();
             }
         });
+
+        // unsubscribe to events
+        if(this.hasVisibleRows){
+            this.emitter.off('after-filtering', ()=> this.enforceVisibility());
+        }
+        if(this.linkedFilters){
+            this.emitter.off('after-filtering', ()=> this.linkFilters());
+        }
 
         Dom.removeClass(this.tbl, this.prfxTf);
         this.nbHiddenRows = 0;
@@ -1512,9 +1527,9 @@ export class TableFilter {
             Mod.highlightKeyword.unhighlightAll();
         }
         //removes popup filters active icons
-        if(this.popupFilters){
-            Mod.popupFilter.buildIcons();
-        }
+        // if(this.popupFilters){
+        //     Mod.popupFilter.buildIcons();
+        // }
         //removes active column header class
         if(this.markActiveColumns){
             this.clearActiveColumns();
@@ -1862,65 +1877,12 @@ export class TableFilter {
         this.nbVisibleRows = this.validRowsIndex.length;
         this.nbHiddenRows = hiddenrows;
 
-        if(this.rememberGridValues){
-            Mod.store.saveFilterValues(this.fltsValuesCookie);
-        }
-
-        //applies filter props after filtering process
-        // TODO remove below if statement when custom events in place
-        if(!this.paging){
-            this.applyProps();
-        } else {
-            // Shouldn't need to care of that here...
-            // TODO: provide a method in paging module
-            Mod.paging.startPagingRow = 0;
-            Mod.paging.currentPageNb = 1;
-            Mod.paging.setPagingInfo(this.validRowsIndex);
-        }
         //invokes onafterfilter callback
         if(this.onAfterFilter){
             this.onAfterFilter.call(null, this);
         }
+
         this.emitter.emit('after-filtering', this);
-    }
-
-    /**
-     * Re-apply the features/behaviour concerned by filtering/paging operation
-     *
-     * NOTE: this will disappear whenever custom events in place
-     */
-    applyProps(){
-        let Mod = this.Mod;
-
-        //shows rows always visible
-        if(this.hasVisibleRows){
-            this.enforceVisibility();
-        }
-        //columns operations
-        if(this.hasExtension('colOps')){
-            this.extension('colOps').calc();
-        }
-
-        //re-populates drop-down filters
-        if(this.linkedFilters){
-            this.linkFilters();
-        }
-
-        // if(this.rowsCounter){
-        //     Mod.rowsCounter.refresh(this.nbVisibleRows);
-        // }
-
-        if(this.popupFilters){
-            Mod.popupFilter.closeAll();
-        }
-
-        if(this.noResults){
-            if(this.nbVisibleRows > 0){
-                Mod.noResults.hide();
-            } else {
-                Mod.noResults.show();
-            }
-        }
     }
 
     /**
@@ -2400,12 +2362,14 @@ export class TableFilter {
         for(let i=0, len=this.fltIds.length; i<len; i++){
             this.setFilterValue(i, '');
         }
-        if(this.linkedFilters){
-            this.linkFilters();
-        }
+        // if(this.linkedFilters){
+        //     this.linkFilters();
+        // }
         if(this.rememberPageLen){ Cookie.remove(this.pgLenCookie); }
         if(this.rememberPageNb){ Cookie.remove(this.pgNbCookie); }
         if(this.onAfterReset){ this.onAfterReset.call(null, this); }
+
+        this.emitter.emit('cleared-filters', this);
     }
 
     /**
@@ -2423,7 +2387,7 @@ export class TableFilter {
      * 'checklist' type)
      */
     linkFilters(){
-        if(!this.activeFilterId){
+        if(!this.linkedFilters || !this.activeFilterId){
             return;
         }
         let slcA1 = this.getFiltersByType(this.fltTypeSlc, true),

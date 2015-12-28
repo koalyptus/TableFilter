@@ -334,6 +334,8 @@ export class Paging extends Feature{
             this.setPagingInfo(tf.validRowsIndex);
         }
 
+        this.emitter.on('after-filtering', ()=> this.resetPagingInfo());
+
         this.initialized = true;
     }
 
@@ -352,6 +354,15 @@ export class Paging extends Feature{
         if(filterTable){
             tf.filter();
         }
+    }
+
+    /**
+     * Reset paging info from scratch after a filtering process
+     */
+    resetPagingInfo(){
+        this.startPagingRow = 0;
+        this.currentPageNb = 1;
+        this.setPagingInfo(this.tf.validRowsIndex);
     }
 
     /**
@@ -449,8 +460,6 @@ export class Paging extends Feature{
         }
 
         tf.nbVisibleRows = tf.validRowsIndex.length;
-        //re-applies filter behaviours after filtering process
-        tf.applyProps();
 
         // broadcast grouping by page
         this.emitter.emit('grouped-by-page', tf, this);
@@ -778,6 +787,8 @@ export class Paging extends Feature{
         if(this.hasResultsPerPage){
             this.removeResultsPerPage();
         }
+
+        this.emitter.off('after-filtering', ()=> this.resetPagingInfo());
 
         this.pagingSlc = null;
         this.nbPages = 0;

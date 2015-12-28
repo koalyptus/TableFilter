@@ -101,6 +101,10 @@ export class PopupFilter extends Feature{
             this.popUpFltImgs[i] = popUpSpan.firstChild;
         }
 
+        // subscribe to events
+        this.emitter.on('before-filtering', ()=> this.buildIcons());
+        this.emitter.on('after-filtering', ()=> this.closeAll());
+
         this.initialized = true;
     }
 
@@ -245,6 +249,11 @@ export class PopupFilter extends Feature{
         this.popUpFltElms = [];
         this.popUpFltSpans = [];
         this.popUpFltImgs = [];
+
+        // unsubscribe to events
+        this.emitter.off('before-filtering', ()=> this.buildIcons());
+        this.emitter.off('after-filtering', ()=> this.closeAll());
+
         this.initialized = false;
     }
 
