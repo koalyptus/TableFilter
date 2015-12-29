@@ -652,6 +652,7 @@ export class TableFilter {
 
         if(this.highlightKeywords){
             Mod.highlightKeyword = new HighlightKeyword(this);
+            Mod.highlightKeyword.init();
         }
 
         if(this.popupFilters){
@@ -1523,9 +1524,9 @@ export class TableFilter {
         this.validRowsIndex = [];
 
         // removes keyword highlighting
-        if(this.highlightKeywords){
-            Mod.highlightKeyword.unhighlightAll();
-        }
+        // if(this.highlightKeywords){
+        //     Mod.highlightKeyword.unhighlightAll();
+        // }
         //removes popup filters active icons
         // if(this.popupFilters){
         //     Mod.popupFilter.buildIcons();
