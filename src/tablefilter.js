@@ -940,7 +940,10 @@ export class TableFilter {
             this.initExtensions();
         }
 
-        // Subscribe to event
+        // Subscribe to events
+        if(this.markActiveColumns){
+            this.emitter.on('before-filtering', ()=> this.clearActiveColumns());
+        }
         if(this.linkedFilters){
             this.emitter.on('after-filtering', ()=> this.linkFilters());
         }
@@ -1205,6 +1208,8 @@ export class TableFilter {
         }
         if(this.markActiveColumns){
             this.clearActiveColumns();
+            this.emitter.off('before-filtering',
+                ()=> this.clearActiveColumns());
         }
         if(this.hasExtensions){
             this.destroyExtensions();
@@ -1522,19 +1527,6 @@ export class TableFilter {
             hiddenrows = 0;
 
         this.validRowsIndex = [];
-
-        // removes keyword highlighting
-        // if(this.highlightKeywords){
-        //     Mod.highlightKeyword.unhighlightAll();
-        // }
-        //removes popup filters active icons
-        // if(this.popupFilters){
-        //     Mod.popupFilter.buildIcons();
-        // }
-        //removes active column header class
-        if(this.markActiveColumns){
-            this.clearActiveColumns();
-        }
         // search args re-init
         this.searchArgs = this.getFiltersValue();
 
@@ -2074,7 +2066,7 @@ export class TableFilter {
      * @return {String}
      */
     getCellData(cell){
-        var idx = cell.cellIndex;
+        let idx = cell.cellIndex;
         //Check for customCellData callback
         if(this.customCellData && this.customCellDataCols.indexOf(idx) != -1){
             return this.customCellData.call(null, this, cell, idx);
