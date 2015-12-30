@@ -42,7 +42,19 @@ export class AlternateRows extends Feature {
             this.setRowBg(rowIdx, idx);
             idx++;
         }
+
+        this.emitter.on('row-processed',
+            (tf, rowIndex, isValid)=> this.processRow(tf, rowIndex, isValid));
+
         this.initialized = true;
+    }
+
+    processRow(tf, rowIdx, isValid) { console.log(arguments);
+        if(isValid){
+            this.setRowBg(rowIdx, tf.validRowsIndex.length);
+        } else {
+            this.removeRowBg(rowIdx);
+        }
     }
 
     /**
@@ -88,6 +100,10 @@ export class AlternateRows extends Feature {
         for(var i=this.tf.refRow; i<this.tf.nbRows; i++){
             this.removeRowBg(i);
         }
+
+        this.emitter.off('row-processed',
+            (tf, rowIndex, isValid)=> this.processRow(tf, rowIndex, isValid));
+
         this.initialized = false;
     }
 

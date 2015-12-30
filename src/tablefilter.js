@@ -1846,9 +1846,9 @@ export class TableFilter {
 
             if(!isRowValid){
                 this.validateRow(k, false);
-                if(Mod.alternateRows){
-                    Mod.alternateRows.removeRowBg(k);
-                }
+                // if(Mod.alternateRows){
+                //     Mod.alternateRows.removeRowBg(k);
+                // }
                 // always visible rows need to be counted as valid
                 if(this.hasVisibleRows && this.visibleRows.indexOf(k) !== -1){
                     this.validRowsIndex.push(k);
@@ -1858,13 +1858,15 @@ export class TableFilter {
             } else {
                 this.validateRow(k, true);
                 this.validRowsIndex.push(k);
-                if(this.alternateRows){
-                    Mod.alternateRows.setRowBg(k, this.validRowsIndex.length);
-                }
+                // if(this.alternateRows){
+                //    Mod.alternateRows.setRowBg(k, this.validRowsIndex.length);
+                // }
                 if(this.onRowValidated){
                     this.onRowValidated.call(null, this, k);
                 }
+                this.emitter.emit('row-validated', this, k);
             }
+            this.emitter.emit('row-processed', this, k, isRowValid);
         }// for k
 
         this.nbVisibleRows = this.validRowsIndex.length;
