@@ -44,14 +44,19 @@ export class AlternateRows extends Feature {
         }
 
         this.emitter.on('row-processed',
-            (tf, rowIndex, isValid)=> this.processRow(tf, rowIndex, isValid));
+            (tf, rowIndex, isValid)=> this.processRow(rowIndex, isValid));
 
         this.initialized = true;
     }
 
-    processRow(tf, rowIdx, isValid) { console.log(arguments);
+    /**
+     * Set/remove row background based on row validation
+     * @param  {Number}  rowIdx  Row index
+     * @param  {Boolean} isValid Valid row flag
+     */
+    processRow(rowIdx, isValid) {
         if(isValid){
-            this.setRowBg(rowIdx, tf.validRowsIndex.length);
+            this.setRowBg(rowIdx, this.tf.validRowsIndex.length);
         } else {
             this.removeRowBg(rowIdx);
         }
@@ -102,7 +107,7 @@ export class AlternateRows extends Feature {
         }
 
         this.emitter.off('row-processed',
-            (tf, rowIndex, isValid)=> this.processRow(tf, rowIndex, isValid));
+            (tf, rowIndex, isValid)=> this.processRow(rowIndex, isValid));
 
         this.initialized = false;
     }

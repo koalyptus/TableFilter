@@ -108,7 +108,7 @@
                 'Row display for alwaysVisibleRow2'
             );
 
-            tf.destroy();
+            //tf.destroy();
         });
     }
 

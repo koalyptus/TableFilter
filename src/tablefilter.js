@@ -129,7 +129,7 @@ export class TableFilter {
         //stores filters values
         this.searchArgs = null;
         //stores valid rows indexes (rows visible upon filtering)
-        this.validRowsIndex = null;
+        this.validRowsIndex = [];
         //stores filters row element
         this.fltGridEl = null;
         //is first load boolean
@@ -1249,7 +1249,7 @@ export class TableFilter {
 
         Dom.removeClass(this.tbl, this.prfxTf);
         this.nbHiddenRows = 0;
-        this.validRowsIndex = null;
+        this.validRowsIndex = [];
         this.activeFlt = null;
         this._hasGrid = false;
         this.tbl = null;
@@ -1850,21 +1850,21 @@ export class TableFilter {
                 //     Mod.alternateRows.removeRowBg(k);
                 // }
                 // always visible rows need to be counted as valid
-                if(this.hasVisibleRows && this.visibleRows.indexOf(k) !== -1){
-                    this.validRowsIndex.push(k);
-                } else {
-                    hiddenrows++;
-                }
+                // if(this.hasVisibleRows && this.visibleRows.indexOf(k) !==-1){
+                //     this.validRowsIndex.push(k);
+                // } else {
+                //     hiddenrows++;
+                // }
+                hiddenrows++;
             } else {
                 this.validateRow(k, true);
-                this.validRowsIndex.push(k);
+                // this.validRowsIndex.push(k);
                 // if(this.alternateRows){
                 //    Mod.alternateRows.setRowBg(k, this.validRowsIndex.length);
                 // }
-                if(this.onRowValidated){
-                    this.onRowValidated.call(null, this, k);
-                }
-                this.emitter.emit('row-validated', this, k);
+                // if(this.onRowValidated){
+                //     this.onRowValidated.call(null, this, k);
+                // }
             }
             this.emitter.emit('row-processed', this, k, isRowValid);
         }// for k
@@ -2204,6 +2204,18 @@ export class TableFilter {
         if(this.paging){
             row.setAttribute('validRow', validFlag);
         }
+
+        if(isValid){
+            if(this.validRowsIndex.indexOf(rowIndex) === -1){
+                this.validRowsIndex.push(rowIndex);
+            }
+
+            if(this.onRowValidated){
+                this.onRowValidated.call(null, this, rowIndex);
+            }
+
+            this.emitter.emit('row-validated', this, rowIndex);
+        }
     }
 
     /**
@@ -2216,7 +2228,7 @@ export class TableFilter {
         this.validRowsIndex = [];
         for(let k=this.refRow; k<this.nbFilterableRows; k++){
             this.validateRow(k, true);
-            this.validRowsIndex.push(k);
+            // this.validRowsIndex.push(k);
         }
     }
 
