@@ -32,11 +32,11 @@ git clone --bare https://github.com/koalyptus/TableFilter.git
 
 * Alternatively, install TableFilter files in your npm enabled project using:
 ```shell
-npm install tablefilter
+npm install tablefilter --save
 ``` 
 * or get the future features from the ``next`` release channel:
 ```shell
-npm install tablefilter@next
+npm install tablefilter@next --save
 ```
 
 ## Setup

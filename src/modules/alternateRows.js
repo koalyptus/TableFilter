@@ -27,7 +27,7 @@ export class AlternateRows extends Feature {
 
         var tf = this.tf;
         var validRowsIndex = tf.validRowsIndex;
-        var noValidRowsIndex = validRowsIndex===null;
+        var noValidRowsIndex = validRowsIndex.length === 0;
         //1st index
         var beginIndex = noValidRowsIndex ? tf.refRow : 0;
         // nb indexes
@@ -42,7 +42,24 @@ export class AlternateRows extends Feature {
             this.setRowBg(rowIdx, idx);
             idx++;
         }
+
+        this.emitter.on('row-processed',
+            (tf, rowIndex, isValid)=> this.processRow(rowIndex, isValid));
+
         this.initialized = true;
+    }
+
+    /**
+     * Set/remove row background based on row validation
+     * @param  {Number}  rowIdx  Row index
+     * @param  {Boolean} isValid Valid row flag
+     */
+    processRow(rowIdx, isValid) {
+        if(isValid){
+            this.setRowBg(rowIdx, this.tf.validRowsIndex.length);
+        } else {
+            this.removeRowBg(rowIdx);
+        }
     }
 
     /**
@@ -88,6 +105,10 @@ export class AlternateRows extends Feature {
         for(var i=this.tf.refRow; i<this.tf.nbRows; i++){
             this.removeRowBg(i);
         }
+
+        this.emitter.off('row-processed',
+            (tf, rowIndex, isValid)=> this.processRow(rowIndex, isValid));
+
         this.initialized = false;
     }
 
