@@ -1846,25 +1846,9 @@ export class TableFilter {
 
             if(!isRowValid){
                 this.validateRow(k, false);
-                // if(Mod.alternateRows){
-                //     Mod.alternateRows.removeRowBg(k);
-                // }
-                // always visible rows need to be counted as valid
-                // if(this.hasVisibleRows && this.visibleRows.indexOf(k) !==-1){
-                //     this.validRowsIndex.push(k);
-                // } else {
-                //     hiddenrows++;
-                // }
                 hiddenrows++;
             } else {
                 this.validateRow(k, true);
-                // this.validRowsIndex.push(k);
-                // if(this.alternateRows){
-                //    Mod.alternateRows.setRowBg(k, this.validRowsIndex.length);
-                // }
-                // if(this.onRowValidated){
-                //     this.onRowValidated.call(null, this, k);
-                // }
             }
             this.emitter.emit('row-processed', this, k, isRowValid);
         }// for k
@@ -2228,7 +2212,6 @@ export class TableFilter {
         this.validRowsIndex = [];
         for(let k=this.refRow; k<this.nbFilterableRows; k++){
             this.validateRow(k, true);
-            // this.validRowsIndex.push(k);
         }
     }
 

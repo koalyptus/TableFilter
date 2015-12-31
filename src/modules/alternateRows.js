@@ -27,7 +27,7 @@ export class AlternateRows extends Feature {
 
         var tf = this.tf;
         var validRowsIndex = tf.validRowsIndex;
-        var noValidRowsIndex = validRowsIndex===null;
+        var noValidRowsIndex = validRowsIndex.length === 0;
         //1st index
         var beginIndex = noValidRowsIndex ? tf.refRow : 0;
         // nb indexes
