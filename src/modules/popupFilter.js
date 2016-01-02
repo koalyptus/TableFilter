@@ -104,6 +104,8 @@ export class PopupFilter extends Feature{
         // subscribe to events
         this.emitter.on('before-filtering', ()=> this.buildIcons());
         this.emitter.on('after-filtering', ()=> this.closeAll());
+        this.emitter.on('cell-processed',
+            (tf, cellIndex)=> this.buildIcon(cellIndex, true));
 
         this.initialized = true;
     }
@@ -208,7 +210,7 @@ export class PopupFilter extends Feature{
     }
 
     /**
-     * Build specified icon
+     * Apply specified icon state
      * @param  {Number} colIndex Column index
      * @param  {Boolean} active   Apply active state
      */
@@ -253,6 +255,8 @@ export class PopupFilter extends Feature{
         // unsubscribe to events
         this.emitter.off('before-filtering', ()=> this.buildIcons());
         this.emitter.off('after-filtering', ()=> this.closeAll());
+        this.emitter.off('cell-processed',
+            (tf, cellIndex)=> this.buildIcon(cellIndex, true));
 
         this.initialized = false;
     }

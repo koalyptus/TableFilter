@@ -370,29 +370,13 @@ export class Paging extends Feature{
      * Refresh paging select according to number of pages
      * @param {Array} validRows Collection of valid rows
      */
-    setPagingInfo(validRows=[]){
+    setPagingInfo(validRows){
         var tf = this.tf;
-        var rows = tf.tbl.rows;
         var mdiv = !this.pagingTgtId ? tf.mDiv : Dom.id(this.pagingTgtId);
         var pgspan = Dom.id(this.prfxPgSpan+tf.id);
 
         //store valid rows indexes
-        tf.validRowsIndex = validRows;
-
-        if(validRows.length === 0){
-            //counts rows to be grouped
-            for(var j=tf.refRow; j<tf.nbRows; j++){
-                var row = rows[j];
-                if(!row){
-                    continue;
-                }
-
-                var isRowValid = row.getAttribute('validRow');
-                if(Types.isNull(isRowValid) || Boolean(isRowValid==='true')){
-                    tf.validRowsIndex.push(j);
-                }
-            }
-        }
+        tf.validRowsIndex = validRows || tf.getValidRows(true);
 
         //calculate nb of pages
         this.nbPages = Math.ceil(tf.validRowsIndex.length/this.pagingLength);
@@ -428,7 +412,6 @@ export class Paging extends Feature{
      */
     groupByPage(validRows){
         var tf = this.tf;
-        var alternateRows = tf.feature('alternateRows');
         var rows = tf.tbl.rows;
         var startPagingRow = parseInt(this.startPagingRow, 10);
         var endPagingRow = startPagingRow + parseInt(this.pagingLength, 10);
@@ -443,20 +426,17 @@ export class Paging extends Feature{
             var validRowIdx = tf.validRowsIndex[h];
             var r = rows[validRowIdx];
             var isRowValid = r.getAttribute('validRow');
+            var rowDisplayed = false;
 
             if(h>=startPagingRow && h<endPagingRow){
                 if(Types.isNull(isRowValid) || Boolean(isRowValid==='true')){
                     r.style.display = '';
-                }
-                if(tf.alternateRows && alternateRows){
-                    alternateRows.setRowBg(validRowIdx, h);
+                    rowDisplayed = true;
                 }
             } else {
                 r.style.display = 'none';
-                if(tf.alternateRows && alternateRows){
-                    alternateRows.removeRowBg(validRowIdx);
-                }
             }
+            this.emitter.emit('row-paged', tf, validRowIdx, h, rowDisplayed);
         }
 
         tf.nbVisibleRows = tf.validRowsIndex.length;

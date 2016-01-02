@@ -25,8 +25,23 @@ export class AlternateRows extends Feature {
             return;
         }
 
+        this.processAll();
+
+        this.emitter.on('row-processed', (tf, rowIndex, arrIndex, isValid)=>
+            this.processRow(rowIndex, arrIndex, isValid));
+        this.emitter.on('row-paged', (tf, rowIndex, arrIndex, isValid)=>
+            this.processRow(rowIndex, arrIndex, isValid));
+        this.emitter.on('column-sorted', ()=> this.processAll());
+
+        this.initialized = true;
+    }
+
+    processAll() {
+        if(!this.isEnabled()){
+            return;
+        }
         var tf = this.tf;
-        var validRowsIndex = tf.validRowsIndex;
+        var validRowsIndex = tf.getValidRows(true);
         var noValidRowsIndex = validRowsIndex.length === 0;
         //1st index
         var beginIndex = noValidRowsIndex ? tf.refRow : 0;
@@ -42,11 +57,6 @@ export class AlternateRows extends Feature {
             this.setRowBg(rowIdx, idx);
             idx++;
         }
-
-        this.emitter.on('row-processed',
-            (tf, rowIndex, isValid)=> this.processRow(rowIndex, isValid));
-
-        this.initialized = true;
     }
 
     /**
@@ -54,9 +64,9 @@ export class AlternateRows extends Feature {
      * @param  {Number}  rowIdx  Row index
      * @param  {Boolean} isValid Valid row flag
      */
-    processRow(rowIdx, isValid) {
+    processRow(rowIdx, arrIdx, isValid) {
         if(isValid){
-            this.setRowBg(rowIdx, this.tf.validRowsIndex.length);
+            this.setRowBg(rowIdx, arrIdx);
         } else {
             this.removeRowBg(rowIdx);
         }
@@ -106,8 +116,11 @@ export class AlternateRows extends Feature {
             this.removeRowBg(i);
         }
 
-        this.emitter.off('row-processed',
-            (tf, rowIndex, isValid)=> this.processRow(rowIndex, isValid));
+        this.emitter.off('row-processed', (tf, rowIndex, arrIndex, isValid)=>
+            this.processRow(rowIndex, arrIndex, isValid));
+        this.emitter.off('row-paged', (tf, rowIndex, arrIndex, isValid)=>
+            this.processRow(rowIndex, arrIndex, isValid));
+        this.emitter.off('column-sorted', ()=> this.processAll());
 
         this.initialized = false;
     }
