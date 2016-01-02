@@ -258,10 +258,10 @@ export class CheckList{
             li.className = this.checkListItemCssClass;
             if(tf.linkedFilters && tf.disableExcludedOptions &&
                 Arr.has(this.excludedOpts,
-                        Str.matchCase(val, tf.matchCase), tf.matchCase)){
-                    Dom.addClass(li, this.checkListItemDisabledCssClass);
-                    li.check.disabled = true;
-                    li.disabled = true;
+                    Str.matchCase(val, tf.matchCase), tf.matchCase)){
+                Dom.addClass(li, this.checkListItemDisabledCssClass);
+                li.check.disabled = true;
+                li.disabled = true;
             } else {
                 Event.add(li.check, 'click',
                     (evt) => { this.optionClick(evt); });

@@ -2457,6 +2457,8 @@ export class TableFilter {
             } else {
                 filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
             }
+
+            Dom.addClass(tbl, this.prfxTf);
         }
 
         // filters are appended in external placeholders elements
@@ -2495,9 +2497,9 @@ export class TableFilter {
             Mod.popupFilter.reset();
         }
 
-        if(!this.gridLayout){
-            Dom.addClass(this.tbl, this.prfxTf);
-        }
+        // if(!this.gridLayout){
+        //     Dom.addClass(this.tbl, this.prfxTf);
+        // }
         this._hasGrid = true;
     }
 
