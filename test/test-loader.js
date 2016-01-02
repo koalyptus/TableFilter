@@ -63,10 +63,6 @@ test('Can show loader', function() {
     loader.show('');
     deepEqual(loader.loaderDiv.style.display, '', 'Loader is displayed');
 });
-test('Can show loader', function() {
-    loader.show('');
-    deepEqual(loader.loaderDiv.style.display, '', 'Loader is displayed');
-});
 
 module('Tear-down');
 test('can destroy TableFilter DOM elements', function() {

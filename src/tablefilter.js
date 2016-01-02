@@ -931,10 +931,6 @@ export class TableFilter {
             Dom.addClass(this.tbl, this.prfxTf);
         }
 
-        if(this.loader){
-            Mod.loader.show('none');
-        }
-
         /* Loads extensions */
         if(this.hasExtensions){
             this.initExtensions();
@@ -943,6 +939,8 @@ export class TableFilter {
         // Subscribe to events
         if(this.markActiveColumns){
             this.emitter.on('before-filtering', ()=> this.clearActiveColumns());
+            this.emitter.on('cell-processed',
+                (tf, colIndex)=> this.markActiveColumn(colIndex));
         }
         if(this.linkedFilters){
             this.emitter.on('after-filtering', ()=> this.linkFilters());
@@ -1210,6 +1208,8 @@ export class TableFilter {
             this.clearActiveColumns();
             this.emitter.off('before-filtering',
                 ()=> this.clearActiveColumns());
+            this.emitter.off('cell-processed',
+                (tf, colIndex)=> this.markActiveColumn(colIndex));
         }
         if(this.hasExtensions){
             this.destroyExtensions();
@@ -1753,7 +1753,7 @@ export class TableFilter {
 
         for(let k=this.refRow; k<this.nbRows; k++){
             /*** if table already filtered some rows are not visible ***/
-            if(row[k].style.display === 'none'){
+            if(this.getRowDisplay(row[k]) === 'none'){
                 row[k].style.display = '';
             }
 
@@ -1822,22 +1822,8 @@ export class TableFilter {
                 if(this.singleSearchFlt && occurence[j]){
                     singleFltRowValid = true;
                 }
-                if(this.popupFilters){
-                    Mod.popupFilter.buildIcon(j, true);
-                }
-                if(this.markActiveColumns){
-                    if(k === this.refRow){
-                        if(this.onBeforeActiveColumn){
-                            this.onBeforeActiveColumn.call(null, this, j);
-                        }
-                        Dom.addClass(
-                            this.getHeaderElement(j),
-                            this.activeColumnsCssClass);
-                        if(this.onAfterActiveColumn){
-                            this.onAfterActiveColumn.call(null, this, j);
-                        }
-                    }
-                }
+
+                this.emitter.emit('cell-processed', this, j, cell[j]);
             }//for j
 
             if(this.singleSearchFlt && singleFltRowValid){
@@ -1850,7 +1836,9 @@ export class TableFilter {
             } else {
                 this.validateRow(k, true);
             }
-            this.emitter.emit('row-processed', this, k, isRowValid);
+
+            this.emitter.emit('row-processed', this, k,
+                this.validRowsIndex.length, isRowValid);
         }// for k
 
         this.nbVisibleRows = this.validRowsIndex.length;
@@ -2369,6 +2357,24 @@ export class TableFilter {
         for(let i=0, len=this.getCellsNb(this.headersRow); i<len; i++){
             Dom.removeClass(
                 this.getHeaderElement(i), this.activeColumnsCssClass);
+        }
+    }
+
+    /**
+     * Mark currently filtered column
+     * @param  {Number} colIndex Column index
+     */
+    markActiveColumn(colIndex){
+        let header = this.getHeaderElement(colIndex);
+        if(Dom.hasClass(header, this.activeColumnsCssClass)){
+            return;
+        }
+        if(this.onBeforeActiveColumn){
+            this.onBeforeActiveColumn.call(null, this, colIndex);
+        }
+        Dom.addClass(header, this.activeColumnsCssClass);
+        if(this.onAfterActiveColumn){
+            this.onAfterActiveColumn.call(null, this, colIndex);
         }
     }
 
