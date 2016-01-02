@@ -2,7 +2,7 @@ import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
 
-var global = window;
+let global = window;
 
 export class StatusBar extends Feature{
 
@@ -14,7 +14,7 @@ export class StatusBar extends Feature{
         super(tf, 'statusBar');
 
         // Configuration object
-        var f = this.config;
+        let f = this.config;
 
         //id of custom container element
         this.statusBarTgtId = f.status_bar_target_id || null;
@@ -38,6 +38,36 @@ export class StatusBar extends Feature{
         this.onAfterShowMsg = Types.isFn(f.on_after_show_msg) ?
             f.on_after_show_msg : null;
 
+        //status messages
+        this.msgFilter = f.msg_filter || 'Filtering data...';
+        //populating drop-downs
+        this.msgPopulate = f.msg_populate || 'Populating filter...';
+        //populating drop-downs
+        this.msgPopulateCheckList = f.msg_populate_checklist ||
+            'Populating list...';
+        //changing paging page
+        this.msgChangePage = f.msg_change_page || 'Collecting paging data...';
+        //clearing filters
+        this.msgClear = f.msg_clear || 'Clearing filters...';
+        //changing nb results/page
+        this.msgChangeResults = f.msg_change_results ||
+            'Changing results per page...';
+        //re-setting grid values
+        // this.msgResetValues = f.msg_reset_grid_values ||
+        //     'Re-setting filters values...';
+        //re-setting page
+        this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
+        //re-setting page length
+        this.msgResetPageLength = f.msg_reset_page_length ||
+            'Re-setting page length...';
+        //table sorting
+        this.msgSort = f.msg_sort || 'Sorting data...';
+        //extensions loading
+        this.msgLoadExtensions = f.msg_load_extensions ||
+            'Loading extensions...';
+        //themes loading
+        this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
+
         // status bar div
         this.prfxStatus = 'status_';
         // status bar label
@@ -51,16 +81,17 @@ export class StatusBar extends Feature{
             return;
         }
 
-        var tf = this.tf;
+        let tf = this.tf;
+        let emitter = this.emitter;
 
         //status bar container
-        var statusDiv = Dom.create('div', ['id', this.prfxStatus+tf.id]);
+        let statusDiv = Dom.create('div', ['id', this.prfxStatus+tf.id]);
         statusDiv.className = this.statusBarCssClass;
 
         //status bar label
-        var statusSpan = Dom.create('span', ['id', this.prfxStatusSpan+tf.id]);
+        let statusSpan = Dom.create('span', ['id', this.prfxStatusSpan+tf.id]);
         //preceding text
-        var statusSpanText = Dom.create('span',
+        let statusSpanText = Dom.create('span',
             ['id', this.prfxStatusTxt+tf.id]);
         statusSpanText.appendChild(Dom.text(this.statusBarText));
 
@@ -68,7 +99,7 @@ export class StatusBar extends Feature{
         if(!this.statusBarTgtId){
             tf.setToolbar();
         }
-        var targetEl = (!this.statusBarTgtId) ?
+        let targetEl = (!this.statusBarTgtId) ?
                 tf.lDiv : Dom.id(this.statusBarTgtId);
 
         //default container: 'lDiv'
@@ -86,6 +117,32 @@ export class StatusBar extends Feature{
         this.statusBarSpan = statusSpan;
         this.statusBarSpanText = statusSpanText;
 
+        // Subscribe to events
+        emitter.on('before-filtering', ()=> this.message(this.msgFilter));
+        emitter.on('after-filtering', ()=> this.message(''));
+        emitter.on('before-populating-filter',
+            ()=> this.message(this.msgPopulate));
+        emitter.on('after-populating-filter', ()=> this.message(''));
+        emitter.on('before-changing-page',
+            ()=> this.message(this.msgChangePage));
+        emitter.on('after-changing-page', ()=> this.message(''));
+        emitter.on('before-clearing-filters', ()=> this.message(this.msgClear));
+        emitter.on('after-clearing-filters', ()=> this.message(''));
+        emitter.on('before-changing-results-per-page',
+            ()=> this.message(this.msgChangeResults));
+        emitter.on('after-changing-results-per-page', ()=> this.message(''));
+        emitter.on('before-reset-page', ()=> this.message(this.msgResetPage));
+        emitter.on('after-reset-page', ()=> this.message(''));
+        emitter.on('before-reset-page-length',
+            ()=> this.message(this.msgResetPageLength));
+        emitter.on('after-reset-page-length', ()=> this.message(''));
+        emitter.on('before-loading-extensions',
+            ()=> this.message(this.msgLoadExtensions));
+        emitter.on('after-loading-extensions', ()=> this.message(''));
+        emitter.on('before-loading-themes',
+            ()=> this.message(this.msgLoadThemes));
+        emitter.on('after-loading-themes',  ()=> this.message(''));
+
         this.initialized = true;
     }
 
@@ -98,8 +155,11 @@ export class StatusBar extends Feature{
             this.onBeforeShowMsg.call(null, this.tf, t);
         }
 
-        var d = t==='' ? this.statusBarCloseDelay : 1;
+        let d = t==='' ? this.statusBarCloseDelay : 1;
         global.setTimeout(() => {
+            if(!this.initialized){
+                return;
+            }
             this.statusBarSpan.innerHTML = t;
             if(this.onAfterShowMsg){
                 this.onAfterShowMsg.call(null, this.tf, t);
@@ -112,11 +172,41 @@ export class StatusBar extends Feature{
             return;
         }
 
+        let emitter = this.emitter;
+
         this.statusBarDiv.innerHTML = '';
         Dom.remove(this.statusBarDiv);
         this.statusBarSpan = null;
         this.statusBarSpanText = null;
         this.statusBarDiv = null;
+
+        // Unsubscribe to events
+        emitter.off('before-filtering', ()=> this.message(this.msgFilter));
+        emitter.off('after-filtering', ()=> this.message(''));
+        emitter.off('before-populating-filter',
+            ()=> this.message(this.msgPopulate));
+        emitter.off('after-populating-filter', ()=> this.message(''));
+        emitter.off('before-changing-page',
+            ()=> this.message(this.msgChangePage));
+        emitter.off('after-changing-page', ()=> this.message(''));
+        emitter.off('before-clearing-filters',
+            ()=> this.message(this.msgClear));
+        emitter.off('after-clearing-filters', ()=> this.message(''));
+        emitter.off('before-changing-results-per-page',
+            ()=> this.message(this.msgChangeResults));
+        emitter.off('after-changing-results-per-page', ()=> this.message(''));
+        emitter.off('before-reset-page', ()=> this.message(this.msgResetPage));
+        emitter.off('after-reset-page', ()=> this.message(''));
+        emitter.off('before-reset-page-length',
+            ()=> this.message(this.msgResetPageLength));
+        emitter.off('after-reset-page-length', ()=> this.message(''));
+        emitter.off('before-loading-extensions',
+            ()=> this.message(this.msgLoadExtensions));
+        emitter.off('after-loading-extensions', ()=> this.message(''));
+        emitter.off('before-loading-themes',
+            ()=> this.message(this.msgLoadThemes));
+        emitter.off('after-loading-themes',  ()=> this.message(''));
+
         this.initialized = false;
     }
 

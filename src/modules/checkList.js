@@ -44,6 +44,7 @@ export class CheckList{
         this.excludedOpts = null;
 
         this.tf = tf;
+        this.emitter = tf.emitter;
     }
 
     // TODO: move event here
@@ -65,13 +66,13 @@ export class CheckList{
      * @param  {Boolean} isExternal Render in external container
      * @param  {String}  extFltId   External container id
      */
-    build(colIndex, isExternal, extFltId){
-        var tf = this.tf;
-        tf.EvtManager(
-            tf.Evt.name.checklist,
-            { slcIndex:colIndex, slcExternal:isExternal, slcId:extFltId }
-        );
-    }
+    // build(colIndex, isExternal, extFltId){
+    //     var tf = this.tf;
+    //     tf.EvtManager(
+    //         tf.Evt.name.checklist,
+    //         { slcIndex:colIndex, slcExternal:isExternal, slcId:extFltId }
+    //     );
+    // }
 
     /**
      * Build checklist UI
@@ -79,9 +80,11 @@ export class CheckList{
      * @param  {Boolean} isExternal Render in external container
      * @param  {String}  extFltId   External container id
      */
-    _build(colIndex, isExternal=false, extFltId=null){
+    build(colIndex, isExternal=false, extFltId=null){
         var tf = this.tf;
         colIndex = parseInt(colIndex, 10);
+
+        this.emitter.emit('before-populating-filter', tf, colIndex);
 
         this.opts = [];
         this.optsTxt = [];
@@ -227,6 +230,8 @@ export class CheckList{
         }
         flt.appendChild(ul);
         flt.setAttribute('filled', '1');
+
+        this.emitter.emit('after-populating-filter', tf, colIndex);
     }
 
     /**

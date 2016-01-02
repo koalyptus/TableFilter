@@ -370,34 +370,34 @@ export class TableFilter {
 
         /*** status messages ***/
         //filtering
-        this.msgFilter = f.msg_filter || 'Filtering data...';
-        //populating drop-downs
-        this.msgPopulate = f.msg_populate || 'Populating filter...';
-        //populating drop-downs
-        this.msgPopulateCheckList = f.msg_populate_checklist ||
-            'Populating list...';
-        //changing paging page
-        this.msgChangePage = f.msg_change_page || 'Collecting paging data...';
-        //clearing filters
-        this.msgClear = f.msg_clear || 'Clearing filters...';
-        //changing nb results/page
-        this.msgChangeResults = f.msg_change_results ||
-            'Changing results per page...';
-        //re-setting grid values
-        this.msgResetValues = f.msg_reset_grid_values ||
-            'Re-setting filters values...';
-        //re-setting page
-        this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
-        //re-setting page length
-        this.msgResetPageLength = f.msg_reset_page_length ||
-            'Re-setting page length...';
-        //table sorting
-        this.msgSort = f.msg_sort || 'Sorting data...';
-        //extensions loading
-        this.msgLoadExtensions = f.msg_load_extensions ||
-            'Loading extensions...';
-        //themes loading
-        this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
+        // this.msgFilter = f.msg_filter || 'Filtering data...';
+        // //populating drop-downs
+        // this.msgPopulate = f.msg_populate || 'Populating filter...';
+        // //populating drop-downs
+        // this.msgPopulateCheckList = f.msg_populate_checklist ||
+        //     'Populating list...';
+        // //changing paging page
+        //this.msgChangePage = f.msg_change_page || 'Collecting paging data...';
+        // //clearing filters
+        // this.msgClear = f.msg_clear || 'Clearing filters...';
+        // //changing nb results/page
+        // this.msgChangeResults = f.msg_change_results ||
+        //     'Changing results per page...';
+        // //re-setting grid values
+        // this.msgResetValues = f.msg_reset_grid_values ||
+        //     'Re-setting filters values...';
+        // //re-setting page
+        // this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
+        // //re-setting page length
+        // this.msgResetPageLength = f.msg_reset_page_length ||
+        //     'Re-setting page length...';
+        // //table sorting
+        // this.msgSort = f.msg_sort || 'Sorting data...';
+        // //extensions loading
+        // this.msgLoadExtensions = f.msg_load_extensions ||
+        //     'Loading extensions...';
+        // //themes loading
+        // this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
 
         /*** ids prefixes ***/
         //css class name added to table
@@ -457,19 +457,19 @@ export class TableFilter {
 
         /*** TF events ***/
         this.Evt = {
-            name: {
-                filter: 'Filter',
-                dropdown: 'DropDown',
-                checklist: 'CheckList',
-                changepage: 'ChangePage',
-                clear: 'Clear',
-                changeresultsperpage: 'ChangeResults',
-                resetvalues: 'ResetValues',
-                resetpage: 'ResetPage',
-                resetpagelength: 'ResetPageLength',
-                loadextensions: 'LoadExtensions',
-                loadthemes: 'LoadThemes'
-            },
+            // name: {
+            //     //filter: 'Filter',
+            //     //dropdown: 'DropDown',
+            //     // checklist: 'CheckList',
+            //     // changepage: 'ChangePage',
+            //     // clear: 'Clear',
+            //     // changeresultsperpage: 'ChangeResults',
+            //     // resetvalues: 'ResetValues',
+            //     // resetpage: 'ResetPage',
+            //     // resetpagelength: 'ResetPageLength',
+            //     // loadextensions: 'LoadExtensions',
+            //     // loadthemes: 'LoadThemes'
+            // },
 
             // Detect <enter> key
             detectKey(e) {
@@ -573,7 +573,7 @@ export class TableFilter {
                 // select is populated when element has focus
                 if(this.loadFltOnDemand && elm.getAttribute('filled') === '0'){
                     let ct = elm.getAttribute('ct');
-                    this.Mod.dropdown._build(ct);
+                    this.Mod.dropdown.build(ct);
                 }
                 if(this.popupFilters){
                     Event.cancel(_ev);
@@ -593,7 +593,7 @@ export class TableFilter {
                 let elm = Event.target(_ev);
                 if(this.loadFltOnDemand && elm.getAttribute('filled') === '0'){
                     let ct = elm.getAttribute('ct');
-                    this.Mod.checkList._build(ct);
+                    this.Mod.checkList.build(ct);
                     this.Mod.checkList.checkListDiv[ct].onclick = null;
                     this.Mod.checkList.checkListDiv[ct].title = '';
                 }
@@ -759,7 +759,7 @@ export class TableFilter {
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
 
                         if(!this.loadFltOnDemand){
-                            dropdown._build(i);
+                            dropdown.build(i);
                         }
 
                         Event.add(slc, 'keypress',
@@ -797,7 +797,7 @@ export class TableFilter {
                         checkList.checkListDiv[i] = divCont;
                         this.fltIds.push(this.prfxFlt+i+'_'+this.id);
                         if(!this.loadFltOnDemand){
-                            checkList._build(i);
+                            checkList.build(i);
                         }
 
                         if(this.loadFltOnDemand){
@@ -958,80 +958,81 @@ export class TableFilter {
      * @param {String} evt Event name
      * @param {Object} cfg Config object
      */
-    EvtManager(evt,
-        cfg={ slcIndex: null, slcExternal: false, slcId: null, pgIndex: null }){
-        let slcIndex = cfg.slcIndex;
-        let slcExternal = cfg.slcExternal;
-        let slcId = cfg.slcId;
-        let pgIndex = cfg.pgIndex;
-        let cpt = this.Mod;
+    // EvtManager(evt/*,
+    //    cfg={ slcIndex: null, slcExternal: false, slcId: null, pgIndex: null }
+    //     */){
+    //     // let slcIndex = cfg.slcIndex;
+    //     // let slcExternal = cfg.slcExternal;
+    //     // let slcId = cfg.slcId;
+    //     // let pgIndex = cfg.pgIndex;
+    //     let cpt = this.Mod;
 
-        function efx(){
-            /*jshint validthis:true */
-            let ev = this.Evt.name;
+    //     function efx(){
+    //         /*jshint validthis:true */
+    //         // let ev = this.Evt.name;
 
-            switch(evt){
-                case ev.filter:
-                    this._filter();
-                break;
-                case ev.dropdown:
-                    if(this.linkedFilters){
-                        cpt.dropdown._build(slcIndex, true);
-                    } else {
-                        cpt.dropdown._build(
-                            slcIndex, false, slcExternal, slcId);
-                    }
-                break;
-                case ev.checklist:
-                    cpt.checkList._build(slcIndex, slcExternal, slcId);
-                break;
-                case ev.changepage:
-                    cpt.paging._changePage(pgIndex);
-                break;
-                case ev.clear:
-                    this._clearFilters();
-                    this._filter();
-                break;
-                case ev.changeresultsperpage:
-                    cpt.paging._changeResultsPerPage();
-                break;
-                case ev.resetvalues:
-                    this._resetValues();
-                    this._filter();
-                break;
-                case ev.resetpage:
-                    cpt.paging._resetPage(this.pgNbCookie);
-                break;
-                case ev.resetpagelength:
-                    cpt.paging._resetPageLength(this.pgLenCookie);
-                break;
-                case ev.loadextensions:
-                    this._loadExtensions();
-                break;
-                case ev.loadthemes:
-                    this._loadThemes();
-                break;
-            }
-            if(this.statusBar){
-                cpt.statusBar.message('');
-            }
-            if(this.loader){
-                cpt.loader.show('none');
-            }
-        }
+    //         // switch(evt){
+    //             // case ev.filter:
+    //             //     this._filter();
+    //             // break;
+    //             // case ev.dropdown:
+    //             //     if(this.linkedFilters){
+    //             //         cpt.dropdown._build(slcIndex, true);
+    //             //     } else {
+    //             //         cpt.dropdown._build(
+    //             //             slcIndex, false, slcExternal, slcId);
+    //             //     }
+    //             // break;
+    //             // case ev.checklist:
+    //             //     cpt.checkList._build(slcIndex, slcExternal, slcId);
+    //             // break;
+    //             // case ev.changepage:
+    //             //     cpt.paging._changePage(pgIndex);
+    //             // break;
+    //             // case ev.clear:
+    //             //     this._clearFilters();
+    //             //     this.filter();
+    //             // break;
+    //             // case ev.changeresultsperpage:
+    //             //     cpt.paging._changeResultsPerPage();
+    //             // break;
+    //             // case ev.resetvalues:
+    //             //     this._resetValues();
+    //             //     this.filter();
+    //             // break;
+    //             // case ev.resetpage:
+    //             //     cpt.paging._resetPage(this.pgNbCookie);
+    //             // break;
+    //             // case ev.resetpagelength:
+    //             //     cpt.paging._resetPageLength(this.pgLenCookie);
+    //             // break;
+    //             // case ev.loadextensions:
+    //             //     this._loadExtensions();
+    //             // break;
+    //             // case ev.loadthemes:
+    //             //     this._loadThemes();
+    //             // break;
+    //         // }
+    //         if(this.statusBar){
+    //             cpt.statusBar.message('');
+    //         }
+    //         if(this.loader){
+    //             cpt.loader.show('none');
+    //         }
+    //     }
 
-        if(!this.loader && !this.statusBar && !this.linkedFilters) {
-            efx.call(this);
-        } else {
-            if(this.loader){
-                cpt.loader.show('');
-            }
-            if(this.statusBar){
-                cpt.statusBar.message(this['msg'+evt]);
-            }
-            global.setTimeout(efx.bind(this), this.execDelay);
-        }
-    }
+    //     if(!this.loader && !this.statusBar && !this.linkedFilters) {
+    //         efx.call(this);
+    //     } else {
+    //         if(this.loader){
+    //             cpt.loader.show('');
+    //         }
+    //         if(this.statusBar){
+    //             cpt.statusBar.message(this['msg'+evt]);
+    //         }
+    //         global.setTimeout(efx.bind(this), this.execDelay);
+    //     }
+    // }
 
     /**
      * Return a feature instance for a given name
@@ -1048,12 +1049,14 @@ export class TableFilter {
     initExtensions(){
         let exts = this.extensions;
 
+        this.emitter.emit('before-loading-extensions', this);
         for(let i=0, len=exts.length; i<len; i++){
             let ext = exts[i];
             if(!this.ExtRegistry[ext.name]){
                 this.loadExtension(ext);
             }
         }
+        this.emitter.emit('after-loading-extensions', this);
     }
 
     /**
@@ -1120,15 +1123,17 @@ export class TableFilter {
         }
     }
 
-    loadThemes(){
-        this.EvtManager(this.Evt.name.loadthemes);
-    }
+    // loadThemes(){
+    //     this.EvtManager(this.Evt.name.loadthemes);
+    // }
 
     /**
      * Load themes defined in the configuration object
      */
-    _loadThemes(){
+    loadThemes(){
         let themes = this.themes;
+        this.emitter.emit('before-loading-themes', this);
+
         //Default theme config
         if(this.enableDefaultTheme){
             let defaultTheme = { name: 'default' };
@@ -1173,6 +1178,8 @@ export class TableFilter {
         this.loader = true;
         this.loaderHtml = '<div class="defaultLoader"></div>';
         this.loaderText = null;
+
+        this.emitter.emit('after-loading-themes', this);
     }
 
     /**
@@ -1193,7 +1200,7 @@ export class TableFilter {
         let rows = this.tbl.rows,
             Mod = this.Mod;
 
-        this._clearFilters();
+        this.clearFilters();
 
         if(this.isExternalFlt && !this.popupFilters){
             this.removeExternalFlts();
@@ -1396,24 +1403,25 @@ export class TableFilter {
         return [optArray, optTxt];
     }
 
-    resetValues(){
-        this.EvtManager(this.Evt.name.resetvalues);
-    }
+    // resetValues(){
+    //     this.EvtManager(this.Evt.name.resetvalues);
+    // }
 
     /**
      * Reset persisted filter values
      */
-    _resetValues(){
+    resetValues(){
         //only loadFltOnDemand
         if(this.rememberGridValues && this.loadFltOnDemand){
             this._resetGridValues(this.fltsValuesCookie);
         }
-        if(this.rememberPageLen && this.Mod.paging){
-            this.Mod.paging.resetPageLength(this.pgLenCookie);
-        }
-        if(this.rememberPageNb && this.Mod.paging){
-            this.Mod.paging.resetPage(this.pgNbCookie);
-        }
+        // if(this.rememberPageLen && this.Mod.paging){
+        //     this.Mod.paging.resetPageLength(this.pgLenCookie);
+        // }
+        // if(this.rememberPageNb && this.Mod.paging){
+        //     this.Mod.paging.resetPage(this.pgNbCookie);
+        // }
+        this.filter();
     }
 
     /**
@@ -1501,9 +1509,9 @@ export class TableFilter {
         }//end if
     }
 
-    filter(){
-        this.EvtManager(this.Evt.name.filter);
-    }
+    // filter(){
+    //     this.EvtManager(this.Evt.name.filter);
+    // }
 
     /**
      * Filter the table by retrieving the data from each cell in every single
@@ -1512,7 +1520,7 @@ export class TableFilter {
      *
      * TODO: Reduce complexity of this massive method
      */
-    _filter(){
+    filter(){
         if(!this.fltGrid || (!this._hasGrid && !this.isFirstLoad)){
             return;
         }
@@ -2323,17 +2331,20 @@ export class TableFilter {
         }
     }
 
-    clearFilters(){
-        this.EvtManager(this.Evt.name.clear);
-    }
+    // clearFilters(){
+    //     // this.EvtManager(this.Evt.name.clear);
+    // }
 
     /**
      * Clear all the filters' values
      */
-    _clearFilters(){
+    clearFilters(){
         if(!this.fltGrid){
             return;
         }
+
+        this.emitter.emit('before-clearing-filters', this);
+
         if(this.onBeforeReset){
             this.onBeforeReset.call(null, this, this.getFiltersValue());
         }
@@ -2347,7 +2358,9 @@ export class TableFilter {
         if(this.rememberPageNb){ Cookie.remove(this.pgNbCookie); }
         if(this.onAfterReset){ this.onAfterReset.call(null, this); }
 
-        this.emitter.emit('cleared-filters', this);
+        this.filter();
+
+        this.emitter.emit('after-clearing-filters', this);
     }
 
     /**
@@ -2423,9 +2436,9 @@ export class TableFilter {
                 }
 
                 if(slcA3.indexOf(slcIndex[i]) != -1){
-                    this.Mod.checkList._build(slcIndex[i]);
+                    this.Mod.checkList.build(slcIndex[i]);
                 } else {
-                    this.Mod.dropdown._build(slcIndex[i], true);
+                    this.Mod.dropdown.build(slcIndex[i], true);
                 }
 
                 this.setFilterValue(slcIndex[i], slcSelectedValue);
