@@ -66,24 +66,32 @@ export class Loader extends Feature{
         this.show('none');
 
         // Subscribe to events
-        emitter.on('before-filtering', ()=> this.show(''));
-        emitter.on('after-filtering', ()=> this.show('none'));
-        emitter.on('before-populating-filter', ()=> this.show(''));
-        emitter.on('after-populating-filter', ()=> this.show('none'));
-        emitter.on('before-changing-page', ()=> this.show(''));
-        emitter.on('after-changing-page', ()=> this.show('none'));
-        emitter.on('before-clearing-filters', ()=> this.show(''));
-        emitter.on('after-clearing-filters', ()=> this.show('none'));
-        emitter.on('before-changing-results-per-page', ()=> this.show(''));
-        emitter.on('after-changing-results-per-page', ()=> this.show('none'));
-        emitter.on('before-reset-page', ()=> this.show(''));
-        emitter.on('after-reset-page', ()=> this.show('none'));
-        emitter.on('before-reset-page-length', ()=> this.show(''));
-        emitter.on('after-reset-page-length', ()=> this.show('none'));
-        emitter.on('before-loading-extensions', ()=> this.show(''));
-        emitter.on('after-loading-extensions', ()=> this.show('none'));
-        emitter.on('before-loading-themes',  ()=> this.show(''));
-        emitter.on('after-loading-themes',  ()=> this.show('none'));
+        emitter.on([
+                'before-filtering',
+                'before-populating-filter',
+                'before-changing-page',
+                'before-clearing-filters',
+                'before-changing-results-per-page',
+                'before-reset-page',
+                'before-reset-page-length',
+                'before-loading-extensions',
+                'before-loading-themes'
+            ],
+            ()=> this.show('')
+        );
+        emitter.on([
+                'after-filtering',
+                'after-populating-filter',
+                'after-changing-page',
+                'after-clearing-filters',
+                'after-changing-results-per-page',
+                'after-reset-page',
+                'after-reset-page-length',
+                'after-loading-extensions',
+                'after-loading-themes'
+            ],
+            ()=> this.show('none')
+        );
 
         this.initialized = true;
     }
@@ -121,24 +129,32 @@ export class Loader extends Feature{
         this.loaderDiv = null;
 
         // Unsubscribe to events
-        emitter.off('before-filtering', ()=> this.show(''));
-        emitter.off('after-filtering', ()=> this.show('none'));
-        emitter.off('before-populating-filter', ()=> this.show(''));
-        emitter.off('after-populating-filter', ()=> this.show('none'));
-        emitter.off('before-changing-page', ()=> this.show(''));
-        emitter.off('after-changing-page', ()=> this.show('none'));
-        emitter.off('before-clearing-filters', ()=> this.show(''));
-        emitter.off('after-clearing-filters', ()=> this.show('none'));
-        emitter.off('before-changing-results-per-page', ()=> this.show(''));
-        emitter.off('after-changing-results-per-page', ()=> this.show('none'));
-        emitter.off('before-reset-page', ()=> this.show(''));
-        emitter.off('after-reset-page', ()=> this.show('none'));
-        emitter.off('before-reset-page-length', ()=> this.show(''));
-        emitter.off('after-reset-page-length', ()=> this.show('none'));
-        emitter.off('before-loading-extensions', ()=> this.show(''));
-        emitter.off('after-loading-extensions', ()=> this.show('none'));
-        emitter.off('before-loading-themes',  ()=> this.show(''));
-        emitter.off('after-loading-themes',  ()=> this.show('none'));
+        emitter.off([
+                'before-filtering',
+                'before-populating-filter',
+                'before-changing-page',
+                'before-clearing-filters',
+                'before-changing-results-per-page',
+                'before-reset-page',
+                'before-reset-page-length',
+                'before-loading-extensions',
+                'before-loading-themes'
+            ],
+            ()=> this.show('')
+        );
+        emitter.off([
+                'after-filtering',
+                'after-populating-filter',
+                'after-changing-page',
+                'after-clearing-filters',
+                'after-changing-results-per-page',
+                'after-reset-page',
+                'after-reset-page-length',
+                'after-loading-extensions',
+                'after-loading-themes'
+            ],
+            ()=> this.show('none')
+        );
 
         this.initialized = false;
     }

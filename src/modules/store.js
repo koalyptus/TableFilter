@@ -19,7 +19,7 @@ export class Store{
     }
 
     init(){
-        this.emitter.on('after-filtering',
+        this.emitter.on(['after-filtering'],
             ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
     }
 
@@ -104,7 +104,7 @@ export class Store{
     }
 
     destroy(){
-        this.emitter.off('after-filtering',
+        this.emitter.off(['after-filtering'],
             ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
     }
 }

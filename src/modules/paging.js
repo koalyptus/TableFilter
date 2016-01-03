@@ -334,8 +334,8 @@ export class Paging extends Feature{
             this.setPagingInfo(tf.validRowsIndex);
         }
 
-        this.emitter.on('after-filtering', ()=> this.resetPagingInfo());
-        this.emitter.on('initialized', ()=> this.resetValues());
+        this.emitter.on(['after-filtering'], ()=> this.resetPagingInfo());
+        this.emitter.on(['initialized'], ()=> this.resetValues());
 
         this.initialized = true;
     }
@@ -563,43 +563,6 @@ export class Paging extends Feature{
     }
 
     /**
-     * Change the page asynchronously according to passed index
-     * @param  {Number} index Index of the page (0-n)
-     */
-    // changePage(index){
-    //     var tf = this.tf;
-    //     var evt = tf.Evt;
-    //     tf.EvtManager(evt.name.changepage, { pgIndex:index });
-    // }
-
-    /**
-     * Change rows asynchronously according to page results
-     */
-    // changeResultsPerPage(){
-    //     var tf = this.tf;
-    //     var evt = tf.Evt;
-    //     tf.EvtManager(evt.name.changeresultsperpage);
-    // }
-
-    /**
-     * Re-set asynchronously page nb at page re-load
-     */
-    // resetPage(){
-    //     var tf = this.tf;
-    //     var evt = tf.Evt;
-    //     tf.EvtManager(evt.name.resetpage);
-    // }
-
-    /**
-     * Re-set asynchronously page length at page re-load
-     */
-    // resetPageLength(){
-    //     var tf = this.tf;
-    //     var evt = tf.Evt;
-    //     tf.EvtManager(evt.name.resetpagelength);
-    // }
-
-    /**
      * Change the page according to passed index
      * @param  {Number} index Index of the page (0-n)
      */
@@ -799,8 +762,8 @@ export class Paging extends Feature{
             this.removeResultsPerPage();
         }
 
-        this.emitter.off('after-filtering', ()=> this.resetPagingInfo());
-        this.emitter.off('initialized', ()=> this.resetValues());
+        this.emitter.off(['after-filtering'], ()=> this.resetPagingInfo());
+        this.emitter.off(['initialized'], ()=> this.resetValues());
 
         this.pagingSlc = null;
         this.nbPages = 0;

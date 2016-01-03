@@ -61,20 +61,6 @@ export class CheckList{
     }
 
     /**
-     * Build checklist UI asynchronously
-     * @param  {Number}  colIndex   Column index
-     * @param  {Boolean} isExternal Render in external container
-     * @param  {String}  extFltId   External container id
-     */
-    // build(colIndex, isExternal, extFltId){
-    //     var tf = this.tf;
-    //     tf.EvtManager(
-    //         tf.Evt.name.checklist,
-    //         { slcIndex:colIndex, slcExternal:isExternal, slcId:extFltId }
-    //     );
-    // }
-
-    /**
      * Build checklist UI
      * @param  {Number}  colIndex   Column index
      * @param  {Boolean} isExternal Render in external container

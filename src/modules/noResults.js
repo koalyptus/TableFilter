@@ -61,7 +61,7 @@ export class NoResults extends Feature{
         this.cont = cont;
 
         // subscribe to after-filtering event
-        this.emitter.on('after-filtering', ()=> this.toggle());
+        this.emitter.on(['after-filtering'], ()=> this.toggle());
 
         this.initialized = true;
         this.hide();
@@ -128,7 +128,8 @@ export class NoResults extends Feature{
         Dom.remove(this.cont);
         this.cont = null;
         // unsubscribe to after-filtering event
-        this.emitter.off('after-filtering', ()=> this.toggle());
+        this.emitter.off(['after-filtering'], ()=> this.toggle());
+
         this.initialized = false;
     }
 }

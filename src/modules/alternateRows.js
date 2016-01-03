@@ -27,11 +27,11 @@ export class AlternateRows extends Feature {
 
         this.processAll();
 
-        this.emitter.on('row-processed', (tf, rowIndex, arrIndex, isValid)=>
-            this.processRow(rowIndex, arrIndex, isValid));
-        this.emitter.on('row-paged', (tf, rowIndex, arrIndex, isValid)=>
-            this.processRow(rowIndex, arrIndex, isValid));
-        this.emitter.on('column-sorted', ()=> this.processAll());
+        // Subscribe to events
+        this.emitter.on(['row-processed', 'row-paged'],
+            (tf, rowIndex, arrIndex, isValid)=>
+                this.processRow(rowIndex, arrIndex, isValid));
+        this.emitter.on(['column-sorted'], ()=> this.processAll());
 
         this.initialized = true;
     }
@@ -116,11 +116,11 @@ export class AlternateRows extends Feature {
             this.removeRowBg(i);
         }
 
-        this.emitter.off('row-processed', (tf, rowIndex, arrIndex, isValid)=>
-            this.processRow(rowIndex, arrIndex, isValid));
-        this.emitter.off('row-paged', (tf, rowIndex, arrIndex, isValid)=>
-            this.processRow(rowIndex, arrIndex, isValid));
-        this.emitter.off('column-sorted', ()=> this.processAll());
+        // Unsubscribe to events
+        this.emitter.off(['row-processed', 'row-paged'],
+            (tf, rowIndex, arrIndex, isValid)=>
+                this.processRow(rowIndex, arrIndex, isValid));
+        this.emitter.off(['column-sorted'], ()=> this.processAll());
 
         this.initialized = false;
     }

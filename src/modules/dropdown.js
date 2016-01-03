@@ -36,26 +36,6 @@ export class Dropdown{
     }
 
     /**
-     * Build drop-down filter UI asynchronously
-     * @param  {Number}  colIndex   Column index
-     * @param  {Boolean} isLinked Enable linked refresh behaviour
-     * @param  {Boolean} isExternal Render in external container
-     * @param  {String}  extSlcId   External container id
-     */
-    // build(colIndex, isLinked, isExternal, extSlcId){
-    //     var tf = this.tf;
-    //     tf.EvtManager(
-    //         tf.Evt.name.dropdown,
-    //         {
-    //             slcIndex: colIndex,
-    //             slcRefreshed: isLinked,
-    //             slcExternal: isExternal,
-    //             slcId: extSlcId
-    //         }
-    //     );
-    // }
-
-    /**
      * Build drop-down filter UI
      * @param  {Number}  colIndex    Column index
      * @param  {Boolean} isLinked Enable linked refresh behaviour

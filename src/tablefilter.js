@@ -368,37 +368,6 @@ export class TableFilter {
         //array containing columns date type
         this.colDateType = this.hasColDateType ? f.col_date_type : null;
 
-        /*** status messages ***/
-        //filtering
-        // this.msgFilter = f.msg_filter || 'Filtering data...';
-        // //populating drop-downs
-        // this.msgPopulate = f.msg_populate || 'Populating filter...';
-        // //populating drop-downs
-        // this.msgPopulateCheckList = f.msg_populate_checklist ||
-        //     'Populating list...';
-        // //changing paging page
-        //this.msgChangePage = f.msg_change_page || 'Collecting paging data...';
-        // //clearing filters
-        // this.msgClear = f.msg_clear || 'Clearing filters...';
-        // //changing nb results/page
-        // this.msgChangeResults = f.msg_change_results ||
-        //     'Changing results per page...';
-        // //re-setting grid values
-        // this.msgResetValues = f.msg_reset_grid_values ||
-        //     'Re-setting filters values...';
-        // //re-setting page
-        // this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
-        // //re-setting page length
-        // this.msgResetPageLength = f.msg_reset_page_length ||
-        //     'Re-setting page length...';
-        // //table sorting
-        // this.msgSort = f.msg_sort || 'Sorting data...';
-        // //extensions loading
-        // this.msgLoadExtensions = f.msg_load_extensions ||
-        //     'Loading extensions...';
-        // //themes loading
-        // this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
-
         /*** ids prefixes ***/
         //css class name added to table
         this.prfxTf = 'TF';
@@ -457,20 +426,6 @@ export class TableFilter {
 
         /*** TF events ***/
         this.Evt = {
-            // name: {
-            //     //filter: 'Filter',
-            //     //dropdown: 'DropDown',
-            //     // checklist: 'CheckList',
-            //     // changepage: 'ChangePage',
-            //     // clear: 'Clear',
-            //     // changeresultsperpage: 'ChangeResults',
-            //     // resetvalues: 'ResetValues',
-            //     // resetpage: 'ResetPage',
-            //     // resetpagelength: 'ResetPageLength',
-            //     // loadextensions: 'LoadExtensions',
-            //     // loadthemes: 'LoadThemes'
-            // },
-
             // Detect <enter> key
             detectKey(e) {
                 if(!this.enterKey){ return; }
@@ -630,7 +585,7 @@ export class TableFilter {
         this.import(this.stylesheetId, this.stylesheet, null, 'link');
 
         //loads theme
-        if(this.hasThemes){ this._loadThemes(); }
+        if(this.hasThemes){ this.loadThemes(); }
 
         if(this.rememberGridValues || this.rememberPageNb ||
             this.rememberPageLen){
@@ -876,7 +831,7 @@ export class TableFilter {
 
         /* Features */
         if(this.hasVisibleRows){
-            this.emitter.on('after-filtering', ()=> this.enforceVisibility());
+            this.emitter.on(['after-filtering'], ()=> this.enforceVisibility());
             this.enforceVisibility();
         }
         if(this.rowsCounter){
@@ -938,12 +893,13 @@ export class TableFilter {
 
         // Subscribe to events
         if(this.markActiveColumns){
-            this.emitter.on('before-filtering', ()=> this.clearActiveColumns());
-            this.emitter.on('cell-processed',
+            this.emitter.on(['before-filtering'],
+                ()=> this.clearActiveColumns());
+            this.emitter.on(['cell-processed'],
                 (tf, colIndex)=> this.markActiveColumn(colIndex));
         }
         if(this.linkedFilters){
-            this.emitter.on('after-filtering', ()=> this.linkFilters());
+            this.emitter.on(['after-filtering'], ()=> this.linkFilters());
         }
 
         if(this.onFiltersLoaded){
@@ -952,87 +908,6 @@ export class TableFilter {
 
         this.emitter.emit('initialized', this);
     }
-
-    /**
-     * Manages state messages
-     * @param {String} evt Event name
-     * @param {Object} cfg Config object
-     */
-    // EvtManager(evt/*,
-    //    cfg={ slcIndex: null, slcExternal: false, slcId: null, pgIndex: null }
-    //     */){
-    //     // let slcIndex = cfg.slcIndex;
-    //     // let slcExternal = cfg.slcExternal;
-    //     // let slcId = cfg.slcId;
-    //     // let pgIndex = cfg.pgIndex;
-    //     let cpt = this.Mod;
-
-    //     function efx(){
-    //         /*jshint validthis:true */
-    //         // let ev = this.Evt.name;
-
-    //         // switch(evt){
-    //             // case ev.filter:
-    //             //     this._filter();
-    //             // break;
-    //             // case ev.dropdown:
-    //             //     if(this.linkedFilters){
-    //             //         cpt.dropdown._build(slcIndex, true);
-    //             //     } else {
-    //             //         cpt.dropdown._build(
-    //             //             slcIndex, false, slcExternal, slcId);
-    //             //     }
-    //             // break;
-    //             // case ev.checklist:
-    //             //     cpt.checkList._build(slcIndex, slcExternal, slcId);
-    //             // break;
-    //             // case ev.changepage:
-    //             //     cpt.paging._changePage(pgIndex);
-    //             // break;
-    //             // case ev.clear:
-    //             //     this._clearFilters();
-    //             //     this.filter();
-    //             // break;
-    //             // case ev.changeresultsperpage:
-    //             //     cpt.paging._changeResultsPerPage();
-    //             // break;
-    //             // case ev.resetvalues:
-    //             //     this._resetValues();
-    //             //     this.filter();
-    //             // break;
-    //             // case ev.resetpage:
-    //             //     cpt.paging._resetPage(this.pgNbCookie);
-    //             // break;
-    //             // case ev.resetpagelength:
-    //             //     cpt.paging._resetPageLength(this.pgLenCookie);
-    //             // break;
-    //             // case ev.loadextensions:
-    //             //     this._loadExtensions();
-    //             // break;
-    //             // case ev.loadthemes:
-    //             //     this._loadThemes();
-    //             // break;
-    //         // }
-    //         if(this.statusBar){
-    //             cpt.statusBar.message('');
-    //         }
-    //         if(this.loader){
-    //             cpt.loader.show('none');
-    //         }
-    //     }
-
-    //     if(!this.loader && !this.statusBar && !this.linkedFilters) {
-    //         efx.call(this);
-    //     } else {
-    //         if(this.loader){
-    //             cpt.loader.show('');
-    //         }
-    //         if(this.statusBar){
-    //             cpt.statusBar.message(this['msg'+evt]);
-    //         }
-    //         global.setTimeout(efx.bind(this), this.execDelay);
-    //     }
-    // }
 
     /**
      * Return a feature instance for a given name
@@ -1123,10 +998,6 @@ export class TableFilter {
         }
     }
 
-    // loadThemes(){
-    //     this.EvtManager(this.Evt.name.loadthemes);
-    // }
-
     /**
      * Load themes defined in the configuration object
      */
@@ -1213,9 +1084,9 @@ export class TableFilter {
         }
         if(this.markActiveColumns){
             this.clearActiveColumns();
-            this.emitter.off('before-filtering',
+            this.emitter.off(['before-filtering'],
                 ()=> this.clearActiveColumns());
-            this.emitter.off('cell-processed',
+            this.emitter.off(['cell-processed'],
                 (tf, colIndex)=> this.markActiveColumn(colIndex));
         }
         if(this.hasExtensions){
@@ -1248,10 +1119,11 @@ export class TableFilter {
 
         // unsubscribe to events
         if(this.hasVisibleRows){
-            this.emitter.off('after-filtering', ()=> this.enforceVisibility());
+            this.emitter.off(['after-filtering'],
+                ()=> this.enforceVisibility());
         }
         if(this.linkedFilters){
-            this.emitter.off('after-filtering', ()=> this.linkFilters());
+            this.emitter.off(['after-filtering'], ()=> this.linkFilters());
         }
 
         Dom.removeClass(this.tbl, this.prfxTf);
@@ -1403,10 +1275,6 @@ export class TableFilter {
         return [optArray, optTxt];
     }
 
-    // resetValues(){
-    //     this.EvtManager(this.Evt.name.resetvalues);
-    // }
-
     /**
      * Reset persisted filter values
      */
@@ -1415,12 +1283,6 @@ export class TableFilter {
         if(this.rememberGridValues && this.loadFltOnDemand){
             this._resetGridValues(this.fltsValuesCookie);
         }
-        // if(this.rememberPageLen && this.Mod.paging){
-        //     this.Mod.paging.resetPageLength(this.pgLenCookie);
-        // }
-        // if(this.rememberPageNb && this.Mod.paging){
-        //     this.Mod.paging.resetPage(this.pgNbCookie);
-        // }
         this.filter();
     }
 
@@ -1508,10 +1370,6 @@ export class TableFilter {
             }
         }//end if
     }
-
-    // filter(){
-    //     this.EvtManager(this.Evt.name.filter);
-    // }
 
     /**
      * Filter the table by retrieving the data from each cell in every single
@@ -2331,10 +2189,6 @@ export class TableFilter {
         }
     }
 
-    // clearFilters(){
-    //     // this.EvtManager(this.Evt.name.clear);
-    // }
-
     /**
      * Clear all the filters' values
      */
@@ -2510,9 +2364,6 @@ export class TableFilter {
             Mod.popupFilter.reset();
         }
 
-        // if(!this.gridLayout){
-        //     Dom.addClass(this.tbl, this.prfxTf);
-        // }
         this._hasGrid = true;
     }
 

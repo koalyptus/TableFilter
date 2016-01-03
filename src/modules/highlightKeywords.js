@@ -18,7 +18,7 @@ export class HighlightKeyword{
     }
 
     init(){
-        this.emitter.on('before-filtering', ()=> this.unhighlightAll());
+        this.emitter.on(['before-filtering'], ()=> this.unhighlightAll());
     }
 
     /**
@@ -112,6 +112,6 @@ export class HighlightKeyword{
     }
 
     destroy(){
-        this.emitter.off('before-filtering', ()=> this.unhighlightAll());
+        this.emitter.off(['before-filtering'], ()=> this.unhighlightAll());
     }
 }

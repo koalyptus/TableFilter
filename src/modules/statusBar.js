@@ -52,9 +52,6 @@ export class StatusBar extends Feature{
         //changing nb results/page
         this.msgChangeResults = f.msg_change_results ||
             'Changing results per page...';
-        //re-setting grid values
-        // this.msgResetValues = f.msg_reset_grid_values ||
-        //     'Re-setting filters values...';
         //re-setting page
         this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
         //re-setting page length
@@ -118,30 +115,36 @@ export class StatusBar extends Feature{
         this.statusBarSpanText = statusSpanText;
 
         // Subscribe to events
-        emitter.on('before-filtering', ()=> this.message(this.msgFilter));
-        emitter.on('after-filtering', ()=> this.message(''));
-        emitter.on('before-populating-filter',
+        emitter.on(['before-filtering'], ()=> this.message(this.msgFilter));
+        emitter.on(['before-populating-filter'],
             ()=> this.message(this.msgPopulate));
-        emitter.on('after-populating-filter', ()=> this.message(''));
-        emitter.on('before-changing-page',
+        emitter.on(['before-changing-page'],
             ()=> this.message(this.msgChangePage));
-        emitter.on('after-changing-page', ()=> this.message(''));
-        emitter.on('before-clearing-filters', ()=> this.message(this.msgClear));
-        emitter.on('after-clearing-filters', ()=> this.message(''));
-        emitter.on('before-changing-results-per-page',
+        emitter.on(['before-clearing-filters'], ()=>
+            this.message(this.msgClear));
+        emitter.on(['before-changing-results-per-page'],
             ()=> this.message(this.msgChangeResults));
-        emitter.on('after-changing-results-per-page', ()=> this.message(''));
-        emitter.on('before-reset-page', ()=> this.message(this.msgResetPage));
-        emitter.on('after-reset-page', ()=> this.message(''));
-        emitter.on('before-reset-page-length',
+        emitter.on(['before-reset-page'], ()=> this.message(this.msgResetPage));
+        emitter.on(['before-reset-page-length'],
             ()=> this.message(this.msgResetPageLength));
-        emitter.on('after-reset-page-length', ()=> this.message(''));
-        emitter.on('before-loading-extensions',
+        emitter.on(['before-loading-extensions'],
             ()=> this.message(this.msgLoadExtensions));
-        emitter.on('after-loading-extensions', ()=> this.message(''));
-        emitter.on('before-loading-themes',
+        emitter.on(['before-loading-themes'],
             ()=> this.message(this.msgLoadThemes));
-        emitter.on('after-loading-themes',  ()=> this.message(''));
+
+        emitter.on([
+                'after-filtering',
+                'after-populating-filter',
+                'after-changing-page',
+                'after-clearing-filters',
+                'after-changing-results-per-page',
+                'after-reset-page',
+                'after-reset-page-length',
+                'after-loading-extensions',
+                'after-loading-themes'
+            ],
+            ()=> this.message('')
+        );
 
         this.initialized = true;
     }
@@ -181,31 +184,37 @@ export class StatusBar extends Feature{
         this.statusBarDiv = null;
 
         // Unsubscribe to events
-        emitter.off('before-filtering', ()=> this.message(this.msgFilter));
-        emitter.off('after-filtering', ()=> this.message(''));
-        emitter.off('before-populating-filter',
+        emitter.off(['before-filtering'], ()=> this.message(this.msgFilter));
+        emitter.off(['before-populating-filter'],
             ()=> this.message(this.msgPopulate));
-        emitter.off('after-populating-filter', ()=> this.message(''));
-        emitter.off('before-changing-page',
+        emitter.off(['before-changing-page'],
             ()=> this.message(this.msgChangePage));
-        emitter.off('after-changing-page', ()=> this.message(''));
-        emitter.off('before-clearing-filters',
+        emitter.off(['before-clearing-filters'],
             ()=> this.message(this.msgClear));
-        emitter.off('after-clearing-filters', ()=> this.message(''));
-        emitter.off('before-changing-results-per-page',
+        emitter.off(['before-changing-results-per-page'],
             ()=> this.message(this.msgChangeResults));
-        emitter.off('after-changing-results-per-page', ()=> this.message(''));
-        emitter.off('before-reset-page', ()=> this.message(this.msgResetPage));
-        emitter.off('after-reset-page', ()=> this.message(''));
-        emitter.off('before-reset-page-length',
+        emitter.off(['before-reset-page'], ()=>
+            this.message(this.msgResetPage));
+        emitter.off(['before-reset-page-length'],
             ()=> this.message(this.msgResetPageLength));
-        emitter.off('after-reset-page-length', ()=> this.message(''));
-        emitter.off('before-loading-extensions',
+        emitter.off(['before-loading-extensions'],
             ()=> this.message(this.msgLoadExtensions));
-        emitter.off('after-loading-extensions', ()=> this.message(''));
-        emitter.off('before-loading-themes',
+        emitter.off(['before-loading-themes'],
             ()=> this.message(this.msgLoadThemes));
-        emitter.off('after-loading-themes',  ()=> this.message(''));
+
+        emitter.off([
+                'after-filtering',
+                'after-populating-filter',
+                'after-changing-page',
+                'after-clearing-filters',
+                'after-changing-results-per-page',
+                'after-reset-page',
+                'after-reset-page-length',
+                'after-loading-extensions',
+                'after-loading-themes'
+            ],
+            ()=> this.message('')
+        );
 
         this.initialized = false;
     }

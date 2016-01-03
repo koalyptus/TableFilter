@@ -23,7 +23,7 @@ export default class ColOps{
 
     init(){
         // subscribe to events
-        this.tf.emitter.on('after-filtering', ()=> this.calc());
+        this.tf.emitter.on(['after-filtering'], ()=> this.calc());
 
         this.calc();
     }
@@ -315,7 +315,7 @@ export default class ColOps{
 
     destroy(){
         // unsubscribe to events
-        this.tf.emitter.off('after-filtering', ()=> this.calc());
+        this.tf.emitter.off(['after-filtering'], ()=> this.calc());
     }
 
 }
