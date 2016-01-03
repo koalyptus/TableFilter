@@ -12,14 +12,14 @@
     tf.init();
     tf.setFilterValue(0, 'Sydney');
     tf.getFilterElement(0).focus();
-    tf._filter();
+    tf.filter();
 
     module('Sanity checks');
     test('Linked filters feature', function() {
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instantiated');
         deepEqual(tf.linkedFilters, true, 'Linked filters enabled');
 
-        tf._clearFilters();
+        tf.clearFilters();
         tf.onAfterFilter = null;
         tf.destroy();
         tf = null;
@@ -54,7 +54,7 @@
         tf.init();
         tf.setFilterValue(0, 'Sydney');
         tf.getFilterElement(0).focus();
-        tf._filter();
+        tf.filter();
     }
 
     function testExcludedOptions(tf){
@@ -75,7 +75,7 @@
         });
 
         tf.onAfterFilter = null;
-        tf.clearFilters();
+        setTimeout(tf.clearFilters, 0);
     }
 
     // Tests for https://github.com/koalyptus/TableFilter/pull/42 issue

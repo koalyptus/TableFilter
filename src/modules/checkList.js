@@ -44,6 +44,7 @@ export class CheckList{
         this.excludedOpts = null;
 
         this.tf = tf;
+        this.emitter = tf.emitter;
     }
 
     // TODO: move event here
@@ -60,28 +61,16 @@ export class CheckList{
     }
 
     /**
-     * Build checklist UI asynchronously
-     * @param  {Number}  colIndex   Column index
-     * @param  {Boolean} isExternal Render in external container
-     * @param  {String}  extFltId   External container id
-     */
-    build(colIndex, isExternal, extFltId){
-        var tf = this.tf;
-        tf.EvtManager(
-            tf.Evt.name.checklist,
-            { slcIndex:colIndex, slcExternal:isExternal, slcId:extFltId }
-        );
-    }
-
-    /**
      * Build checklist UI
      * @param  {Number}  colIndex   Column index
      * @param  {Boolean} isExternal Render in external container
      * @param  {String}  extFltId   External container id
      */
-    _build(colIndex, isExternal=false, extFltId=null){
+    build(colIndex, isExternal=false, extFltId=null){
         var tf = this.tf;
         colIndex = parseInt(colIndex, 10);
+
+        this.emitter.emit('before-populating-filter', tf, colIndex);
 
         this.opts = [];
         this.optsTxt = [];
@@ -227,6 +216,8 @@ export class CheckList{
         }
         flt.appendChild(ul);
         flt.setAttribute('filled', '1');
+
+        this.emitter.emit('after-populating-filter', tf, colIndex);
     }
 
     /**
@@ -258,10 +249,10 @@ export class CheckList{
             li.className = this.checkListItemCssClass;
             if(tf.linkedFilters && tf.disableExcludedOptions &&
                 Arr.has(this.excludedOpts,
-                        Str.matchCase(val, tf.matchCase), tf.matchCase)){
-                    Dom.addClass(li, this.checkListItemDisabledCssClass);
-                    li.check.disabled = true;
-                    li.disabled = true;
+                    Str.matchCase(val, tf.matchCase), tf.matchCase)){
+                Dom.addClass(li, this.checkListItemDisabledCssClass);
+                li.check.disabled = true;
+                li.disabled = true;
             } else {
                 Event.add(li.check, 'click',
                     (evt) => { this.optionClick(evt); });

@@ -32,26 +32,7 @@ export class Dropdown{
         this.slcInnerHtml = null;
 
         this.tf = tf;
-    }
-
-    /**
-     * Build drop-down filter UI asynchronously
-     * @param  {Number}  colIndex   Column index
-     * @param  {Boolean} isLinked Enable linked refresh behaviour
-     * @param  {Boolean} isExternal Render in external container
-     * @param  {String}  extSlcId   External container id
-     */
-    build(colIndex, isLinked, isExternal, extSlcId){
-        var tf = this.tf;
-        tf.EvtManager(
-            tf.Evt.name.dropdown,
-            {
-                slcIndex: colIndex,
-                slcRefreshed: isLinked,
-                slcExternal: isExternal,
-                slcId: extSlcId
-            }
-        );
+        this.emitter = tf.emitter;
     }
 
     /**
@@ -61,9 +42,11 @@ export class Dropdown{
      * @param  {Boolean} isExternal  Render in external container
      * @param  {String}  extSlcId    External container id
      */
-    _build(colIndex, isLinked=false, isExternal=false, extSlcId=null){
+    build(colIndex, isLinked=false, isExternal=false, extSlcId=null){
         var tf = this.tf;
         colIndex = parseInt(colIndex, 10);
+
+        this.emitter.emit('before-populating-filter', tf, colIndex);
 
         this.opts = [];
         this.optsTxt = [];
@@ -226,6 +209,8 @@ export class Dropdown{
         //populates drop-down
         this.addOptions(
             colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr);
+
+        this.emitter.emit('after-populating-filter', tf, colIndex);
     }
 
     /**

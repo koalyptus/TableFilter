@@ -17,7 +17,8 @@ module('Behaviour');
 test('Can subscribe', function(){
     var emitter = tf.emitter;
     var output = null;
-    emitter.on('before-filtering', function(){ output = 'before-filtering'; });
+    emitter.on(['before-filtering'],
+        function(){ output = 'before-filtering'; });
 
     tf.filter();
 
@@ -29,7 +30,8 @@ test('Can subscribe', function(){
 test('Can unsubscribe', function(){
     var emitter = tf.emitter;
     var output = null;
-    emitter.off('before-filtering', function(){ output = 'before-filtering'; });
+    emitter.off(['before-filtering'],
+        function(){ output = 'before-filtering'; });
 
     tf.filter();
 
@@ -41,7 +43,7 @@ test('Can unsubscribe', function(){
 test('Can emit', function(){
     var emitter = tf.emitter;
     var output = null;
-    emitter.on('hello', function(arg){ output = arg; });
+    emitter.on(['hello'], function(arg){ output = arg; });
 
     emitter.emit('hello', 'world');
 

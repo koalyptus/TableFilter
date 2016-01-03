@@ -102,9 +102,9 @@ export class PopupFilter extends Feature{
         }
 
         // subscribe to events
-        this.emitter.on('before-filtering', ()=> this.buildIcons());
-        this.emitter.on('after-filtering', ()=> this.closeAll());
-        this.emitter.on('cell-processed',
+        this.emitter.on(['before-filtering'], ()=> this.buildIcons());
+        this.emitter.on(['after-filtering'], ()=> this.closeAll());
+        this.emitter.on(['cell-processed'],
             (tf, cellIndex)=> this.buildIcon(cellIndex, true));
 
         this.initialized = true;
@@ -253,9 +253,9 @@ export class PopupFilter extends Feature{
         this.popUpFltImgs = [];
 
         // unsubscribe to events
-        this.emitter.off('before-filtering', ()=> this.buildIcons());
-        this.emitter.off('after-filtering', ()=> this.closeAll());
-        this.emitter.off('cell-processed',
+        this.emitter.off(['before-filtering'], ()=> this.buildIcons());
+        this.emitter.off(['after-filtering'], ()=> this.closeAll());
+        this.emitter.off(['cell-processed'],
             (tf, cellIndex)=> this.buildIcon(cellIndex, true));
 
         this.initialized = false;

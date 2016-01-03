@@ -62,7 +62,7 @@ test('No Results Feature', function() {
     module('Behaviour');
     test('Can display no results message', function() {
         tf.setFilterValue(0, 'sadasd');
-        tf._filter();
+        tf.filter();
         deepEqual(tf.getValidRows().length, 0, 'Filtered rows number');
         deepEqual(noResults.cont.innerHTML, 'No results', 'No results message');
         deepEqual(noResults.cont.style.display, 'block',
@@ -107,7 +107,7 @@ test('External container sanity checks', function() {
 
     test('Can display external no results message', function() {
         tfCustom.setFilterValue(0, 'sadasd');
-        tfCustom._filter();
+        tfCustom.filter();
         deepEqual(noResultsCustom.cont.innerHTML, '<h3>No results found</h3>',
             'No results message markup');
         deepEqual(noResultsCustom.cont.style.display, 'block',
@@ -147,7 +147,7 @@ test('Sanity checks', function() {
 
     test('Can display no results message in grid layout', function() {
         tfGl.setFilterValue(0, 'sadasd');
-        tfGl._filter();
+        tfGl.filter();
         deepEqual(noResultsGl.cont.innerHTML, 'No results',
             'No results message');
         deepEqual(noResultsGl.cont.style.display, 'block',

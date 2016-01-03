@@ -46,7 +46,7 @@ export default class AdapterSortableTable{
             opts.on_after_sort : null;
 
         this.tf = tf;
-        this.emitter = this.tf.emitter;
+        this.emitter = tf.emitter;
     }
 
     init(){
