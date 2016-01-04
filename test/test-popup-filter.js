@@ -16,6 +16,7 @@ test('Pop-up filter component', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
     deepEqual(popupFilter.popUpFltElms instanceof Array,
         true, 'Type of popUpFltElms property');
+    deepEqual(tf.headersRow, 1, 'Headers row index');
 });
 
 module('UI elements');
@@ -91,6 +92,7 @@ test('Re-instantiated with grid-layout', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
     deepEqual(popupFilter.popUpFltElms instanceof Array,
         true, 'Type of popUpFltElms property');
+    deepEqual(tf.headersRow, 0, 'Headers row index');
 });
 
 test('Pop-up filter UI elements with grid-layout', function() {
@@ -158,11 +160,11 @@ test('Properties', function() {
         'function', 'Feature enable method');
 });
 
-module('Tear-down');
-test('TableFilter removed', function() {
-    tf.destroy();
-    var fltIcn1 = popupFilter.popUpFltImgs[3];
-    deepEqual(fltIcn1, undefined, 'Filter icon is removed');
-    deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
-    deepEqual(tf.hasGrid(), false, 'Filters removed');
-});
+// module('Tear-down');
+// test('TableFilter removed', function() {
+//     tf.destroy();
+//     var fltIcn1 = popupFilter.popUpFltImgs[3];
+//     deepEqual(fltIcn1, undefined, 'Filter icon is removed');
+//     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
+//     deepEqual(tf.hasGrid(), false, 'Filters removed');
+// });

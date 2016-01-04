@@ -109,14 +109,14 @@ export class TableFilter {
         this.headersRow = isNaN(f.headers_row_index) ?
             (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
 
-        if(this.gridLayout){
-            if(this.headersRow > 1){
-                this.filtersRowIndex = this.headersRow+1;
-            } else {
-                this.filtersRowIndex = 1;
-                this.headersRow = 0;
-            }
-        }
+        // if(this.gridLayout){
+        //     if(this.headersRow > 1){
+        //         this.filtersRowIndex = this.headersRow+1;
+        //     } else {
+        //         this.filtersRowIndex = 1;
+        //         this.headersRow = 0;
+        //     }
+        // }
 
         //defines tag of the cells containing filters (td/th)
         this.fltCellTag = f.filters_cell_tag!=='th' ||
@@ -568,14 +568,14 @@ export class TableFilter {
         if(!this.tbl){
             this.tbl = Dom.id(this.id);
         }
-        if(this.gridLayout){
-            this.refRow = this.startRow===null ? 0 : this.startRow;
-        }
-        if(this.popupFilters &&
-            ((this.filtersRowIndex === 0 && this.headersRow === 1) ||
-            this.gridLayout)){
-            this.headersRow = 0;
-        }
+        // if(this.gridLayout){
+        //     this.refRow = this.startRow===null ? 0 : this.startRow;
+        // }
+        // if(this.popupFilters &&
+        //     ((this.filtersRowIndex === 0 && this.headersRow === 1) ||
+        //     this.gridLayout)){
+        //     this.headersRow = 0;
+        // }
 
         let Mod = this.Mod;
         let n = this.singleSearchFlt ? 1 : this.nbCells,
@@ -619,39 +619,33 @@ export class TableFilter {
 
         //filters grid is not generated
         if(!this.fltGrid){
-            this.refRow = this.refRow-1;
-            if(this.gridLayout){
-                this.refRow = 0;
-            }
-            this.nbFilterableRows = this.getRowsNb();
-            this.nbVisibleRows = this.nbFilterableRows;
-            this.nbRows = this.nbFilterableRows + this.refRow;
+            this._initNoFilters();
         } else {
             if(this.isFirstLoad){
-                let fltrow;
-                if(!this.gridLayout){
-                    let thead = Dom.tag(this.tbl, 'thead');
-                    if(thead.length > 0){
-                        fltrow = thead[0].insertRow(this.filtersRowIndex);
-                    } else {
-                        fltrow = this.tbl.insertRow(this.filtersRowIndex);
-                    }
+                let fltrow = this._insertFiltersRow();
+                // if(!this.gridLayout){
+                //     let thead = Dom.tag(this.tbl, 'thead');
+                //     if(thead.length > 0){
+                //         fltrow = thead[0].insertRow(this.filtersRowIndex);
+                //     } else {
+                //         fltrow = this.tbl.insertRow(this.filtersRowIndex);
+                //     }
 
-                    if(this.headersRow > 1 &&
-                        this.filtersRowIndex <= this.headersRow &&
-                        !this.popupFilters){
-                        this.headersRow++;
-                    }
-                    if(this.popupFilters){
-                        this.headersRow++;
-                    }
+                //     if(this.headersRow > 1 &&
+                //         this.filtersRowIndex <= this.headersRow &&
+                //         !this.popupFilters){
+                //         this.headersRow++;
+                //     }
+                //     if(this.popupFilters){
+                //         this.headersRow++;
+                //     }
 
-                    fltrow.className = this.fltsRowCssClass;
+                //     fltrow.className = this.fltsRowCssClass;
 
-                    if(this.isExternalFlt || this.popupFilters){
-                        fltrow.style.display = 'none';
-                    }
-                }
+                //     if(this.isExternalFlt || this.popupFilters){
+                //         fltrow.style.display = 'none';
+                //     }
+                // }
 
                 this.nbFilterableRows = this.getRowsNb();
                 this.nbVisibleRows = this.nbFilterableRows;
@@ -907,6 +901,48 @@ export class TableFilter {
         }
 
         this.emitter.emit('initialized', this);
+    }
+
+    _insertFiltersRow() {
+        if(this.gridLayout){
+            return;
+        }
+        let fltrow;
+
+        let thead = Dom.tag(this.tbl, 'thead');
+        if(thead.length > 0){
+            fltrow = thead[0].insertRow(this.filtersRowIndex);
+        } else {
+            fltrow = this.tbl.insertRow(this.filtersRowIndex);
+        }
+
+        if(this.headersRow > 1 && this.filtersRowIndex <= this.headersRow /*&&
+            !this.popupFilters*/){
+            this.headersRow++;
+        }
+
+        fltrow.className = this.fltsRowCssClass;
+
+        if(this.isExternalFlt){
+            fltrow.style.display = 'none';
+        }
+
+        this.emitter.emit('filters-row-inserted', this, fltrow);
+
+        return fltrow;
+    }
+
+    _initNoFilters(){
+        if(this.fltGrid){
+            return;
+        }
+        this.refRow = this.refRow > 0 ? this.refRow-1 : 0;
+        // if(this.gridLayout){
+        //     this.refRow = 0;
+        // }
+        this.nbFilterableRows = this.getRowsNb();
+        this.nbVisibleRows = this.nbFilterableRows;
+        this.nbRows = this.nbFilterableRows + this.refRow;
     }
 
     /**
