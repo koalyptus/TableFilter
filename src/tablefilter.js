@@ -209,7 +209,7 @@ export class TableFilter {
         //enables/disables external filters generation
         this.isExternalFlt = Boolean(f.external_flt_grid);
         //array containing ids of external elements containing filters
-        this.externalFltTgtIds = f.external_flt_grid_ids || null;
+        this.externalFltTgtIds = f.external_flt_grid_ids || [];
         //stores filters elements if isExternalFlt is true
         this.externalFltEls = [];
         //delays any filtering process if loader true
@@ -541,7 +541,7 @@ export class TableFilter {
                 let _ev = e || global.event;
                 if(this.popupFilters){ Event.stop(_ev); }
                 if(this.onSlcChange){ this.filter(); }
-            },
+            }/*,
             // fill checklist filter on click if required
             onCheckListClick(e) {
                 let _ev = e || global.event;
@@ -552,7 +552,7 @@ export class TableFilter {
                     this.Mod.checkList.checkListDiv[ct].onclick = null;
                     this.Mod.checkList.checkListDiv[ct].title = '';
                 }
-            }
+            }*/
         };
     }
 
@@ -651,16 +651,17 @@ export class TableFilter {
                 this.nbVisibleRows = this.nbFilterableRows;
                 this.nbRows = this.tbl.rows.length;
 
-                for(let i=0; i<n; i++){// this loop adds filters
+                // Generate filters
+                for(let i=0; i<n; i++){
 
-                    if(this.popupFilters){
-                        Mod.popupFilter.build(i);
-                    }
+                    // if(this.popupFilters){
+                    //     Mod.popupFilter.build(i);
+                    // }
+                    this.emitter.emit('before-filter-init', this, i);
 
                     let fltcell = Dom.create(this.fltCellTag),
                         col = this.getFilterType(i),
-                        externalFltTgtId =
-                            this.isExternalFlt && this.externalFltTgtIds ?
+                        externalFltTgtId = this.isExternalFlt ?
                             this.externalFltTgtIds[i] : null;
 
                     if(this.singleSearchFlt){
@@ -683,78 +684,84 @@ export class TableFilter {
                         if(!Mod.dropdown){
                             Mod.dropdown = new Dropdown(this);
                         }
-                        let dropdown = Mod.dropdown;
+                        Mod.dropdown.init(i, this.isExternalFlt, fltcell);
+                        // let dropdown = Mod.dropdown;
 
-                        let slc = Dom.create(this.fltTypeSlc,
-                                ['id', this.prfxFlt+i+'_'+this.id],
-                                ['ct', i], ['filled', '0']
-                            );
+                        // let slc = Dom.create(this.fltTypeSlc,
+                        //         ['id', this.prfxFlt+i+'_'+this.id],
+                        //         ['ct', i], ['filled', '0']
+                        //     );
 
-                        if(col===this.fltTypeMulti){
-                            slc.multiple = this.fltTypeMulti;
-                            slc.title = dropdown.multipleSlcTooltip;
-                        }
-                        slc.className = Str.lower(col) === this.fltTypeSlc ?
-                            inpclass : this.fltMultiCssClass;
+                        // if(col===this.fltTypeMulti){
+                        //     slc.multiple = this.fltTypeMulti;
+                        //     slc.title = dropdown.multipleSlcTooltip;
+                        // }
+                        // slc.className = Str.lower(col) === this.fltTypeSlc ?
+                        //     inpclass : this.fltMultiCssClass;
 
-                        //filter is appended in desired external element
-                        if(externalFltTgtId){
-                            Dom.id(externalFltTgtId).appendChild(slc);
-                            this.externalFltEls.push(slc);
-                        } else {
-                            fltcell.appendChild(slc);
-                        }
+                        // //filter is appended in desired external element
+                        // if(externalFltTgtId){
+                        //     Dom.id(externalFltTgtId).appendChild(slc);
+                        //     this.externalFltEls.push(slc);
+                        // } else {
+                        //     fltcell.appendChild(slc);
+                        // }
 
-                        this.fltIds.push(this.prfxFlt+i+'_'+this.id);
+                        // this.fltIds.push(this.prfxFlt+i+'_'+this.id);
 
-                        if(!this.loadFltOnDemand){
-                            dropdown.build(i);
-                        }
+                        // if(!this.loadFltOnDemand){
+                        //     dropdown.build(i);
+                        // }
 
-                        Event.add(slc, 'keypress',
-                            this.Evt.detectKey.bind(this));
-                        Event.add(slc, 'change',
-                            this.Evt.onSlcChange.bind(this));
-                        Event.add(slc, 'focus', this.Evt.onSlcFocus.bind(this));
+                        // Event.add(slc, 'keypress',
+                        //     this.Evt.detectKey.bind(this));
+                        // Event.add(slc, 'change',
+                        //     this.Evt.onSlcChange.bind(this));
+                        // Event.add(slc, 'focus',
+                        // this.Evt.onSlcFocus.bind(this));
 
-                        //1st option is created here since dropdown.build isn't
-                        //invoked
-                        if(this.loadFltOnDemand){
-                            let opt0 = Dom.createOpt(this.displayAllText, '');
-                            slc.appendChild(opt0);
-                        }
+                        // 1st option is created here since dropdown.build isn't
+                        // invoked
+                        // if(this.loadFltOnDemand){
+                        //    let opt0 = Dom.createOpt(this.displayAllText, '');
+                        //     slc.appendChild(opt0);
+                        // }
                     }
                     // checklist
                     else if(col===this.fltTypeCheckList){
-                        let checkList;
-                        Mod.checkList = new CheckList(this);
-                        checkList = Mod.checkList;
-
-                        let divCont = Dom.create('div',
-                            ['id', checkList.prfxCheckListDiv+i+'_'+this.id],
-                            ['ct', i], ['filled', '0']);
-                        divCont.className = checkList.checkListDivCssClass;
-
-                        //filter is appended in desired element
-                        if(externalFltTgtId){
-                            Dom.id(externalFltTgtId).appendChild(divCont);
-                            this.externalFltEls.push(divCont);
-                        } else {
-                            fltcell.appendChild(divCont);
+                        // let checkList;
+                        // Mod.checkList = new CheckList(this);
+                        // checkList = Mod.checkList;
+                        if(!Mod.checkList){
+                            Mod.checkList = new CheckList(this);
                         }
+                        Mod.checkList.init(i, this.isExternalFlt, fltcell);
 
-                        checkList.checkListDiv[i] = divCont;
-                        this.fltIds.push(this.prfxFlt+i+'_'+this.id);
-                        if(!this.loadFltOnDemand){
-                            checkList.build(i);
-                        }
+                        // let divCont = Dom.create('div',
+                        //     ['id', checkList.prfxCheckListDiv+i+'_'+this.id],
+                        //     ['ct', i], ['filled', '0']);
+                        // divCont.className = checkList.checkListDivCssClass;
 
-                        if(this.loadFltOnDemand){
-                            Event.add(divCont, 'click',
-                                this.Evt.onCheckListClick.bind(this));
-                            divCont.appendChild(
-                                Dom.text(checkList.activateCheckListTxt));
-                        }
+                        // //filter is appended in desired element
+                        // if(externalFltTgtId){
+                        //     Dom.id(externalFltTgtId).appendChild(divCont);
+                        //     this.externalFltEls.push(divCont);
+                        // } else {
+                        //     fltcell.appendChild(divCont);
+                        // }
+
+                        // checkList.checkListDiv[i] = divCont;
+                        // this.fltIds.push(this.prfxFlt+i+'_'+this.id);
+                        // if(!this.loadFltOnDemand){
+                        //     checkList.build(i);
+                        // }
+
+                        // if(this.loadFltOnDemand){
+                        //     Event.add(divCont, 'click',
+                        //         this.Evt.onCheckListClick.bind(this));
+                        //     divCont.appendChild(
+                        //         Dom.text(checkList.activateCheckListTxt));
+                        // }
                     }
 
                     else{
@@ -815,6 +822,7 @@ export class TableFilter {
                         Event.add(btn, 'click', ()=> this.filter());
                     }//if
 
+                    this.emitter.emit('after-filter-init', this, i);
                 }// for i
 
             } else {
@@ -1253,7 +1261,7 @@ export class TableFilter {
      * Remove all the external column filters
      */
     removeExternalFlts(){
-        if(!this.isExternalFlt || !this.externalFltTgtIds){
+        if(!this.isExternalFlt){
             return;
         }
         let ids = this.externalFltTgtIds,

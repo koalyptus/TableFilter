@@ -15,7 +15,7 @@ export class PopupFilter extends Feature{
         // Configuration object
         var f = this.config;
 
-        // Enable external filters behaviour
+        // Enable external filters
         tf.isExternalFlt = true;
         tf.externalFltTgtIds = [];
 
@@ -113,6 +113,8 @@ export class PopupFilter extends Feature{
         this.emitter.on(['cell-processed'],
             (tf, cellIndex)=> this.buildIcon(cellIndex, true));
         this.emitter.on(['filters-row-inserted'], ()=> this.tf.headersRow++);
+        this.emitter.on(['before-filter-init'],
+            (tf, colIndex)=> this.build(colIndex));
 
         this.initialized = true;
     }
@@ -265,6 +267,8 @@ export class PopupFilter extends Feature{
         this.emitter.off(['cell-processed'],
             (tf, cellIndex)=> this.buildIcon(cellIndex, true));
         this.emitter.off(['filters-row-inserted'], ()=> this.tf.headersRow++);
+        this.emitter.off(['before-filter-init'],
+            (tf, colIndex)=> this.build(colIndex));
 
         this.initialized = false;
     }
