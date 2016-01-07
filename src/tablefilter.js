@@ -1922,20 +1922,27 @@ export class TableFilter {
      *     [rowIndex, [value0, value1...]]
      * ]
      * @param  {Boolean} includeHeaders  Optional: include headers row
+     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
      */
-    getTableData(includeHeaders=false){
+    getTableData(includeHeaders=false, excludeHiddenCols=false){
         let rows = this.tbl.rows;
         let tblData = [];
         if(includeHeaders){
-            tblData.push([this.getHeadersRowIndex(), this.getHeadersText()]);
+            let headers = this.getHeadersText(excludeHiddenCols);
+            tblData.push([this.getHeadersRowIndex(), headers]);
         }
         for(let k=this.refRow; k<this.nbRows; k++){
             let rowData = [k, []];
             let cells = rows[k].cells;
             for(let j=0, len=cells.length; j<len; j++){
+                if(excludeHiddenCols && this.hasExtension('colsVisibility')){
+                    if(this.extension('colsVisibility').isColHidden(j)){
+                        continue;
+                    }
+                }
                 let cellData = this.getCellData(cells[j]);
                 rowData[1].push(cellData);
             }
@@ -1951,19 +1958,20 @@ export class TableFilter {
      *     [rowIndex, [value0, value1...]]
      * ]
      * @param  {Boolean} includeHeaders  Optional: include headers row
+     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredData(includeHeaders=false){
+    getFilteredData(includeHeaders=false, excludeHiddenCols=false){
         if(!this.validRowsIndex){
             return [];
         }
         let rows = this.tbl.rows,
             filteredData = [];
         if(includeHeaders){
-            filteredData.push([this.getHeadersRowIndex(),
-                this.getHeadersText()]);
+            let headers = this.getHeadersText(excludeHiddenCols);
+            filteredData.push([this.getHeadersRowIndex(), headers]);
         }
 
         let validRows = this.getValidRows(true);
@@ -1971,6 +1979,11 @@ export class TableFilter {
             let rData = [this.validRowsIndex[i], []],
                 cells = rows[this.validRowsIndex[i]].cells;
             for(let k=0; k<cells.length; k++){
+                if(excludeHiddenCols && this.hasExtension('colsVisibility')){
+                    if(this.extension('colsVisibility').isColHidden(k)){
+                        continue;
+                    }
+                }
                 let cellData = this.getCellData(cells[k]);
                 rData[1].push(cellData);
             }
@@ -2555,11 +2568,17 @@ export class TableFilter {
 
     /**
      * Return the list of headers' text
+     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
      * @return {Array} list of headers' text
      */
-    getHeadersText(){
+    getHeadersText(excludeHiddenCols=false){
         let headers = [];
         for(let j=0; j<this.nbCells; j++){
+            if(excludeHiddenCols && this.hasExtension('colsVisibility')){
+                if(this.extension('colsVisibility').isColHidden(j)){
+                    continue;
+                }
+            }
             let header = this.getHeaderElement(j);
             let headerText = Dom.getText(header);
             headers.push(headerText);
