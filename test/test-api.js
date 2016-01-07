@@ -5,6 +5,16 @@
     });
     tf.init();
 
+    var tf1 = new TableFilter('demo1', {
+        base_path: '../dist/tablefilter/',
+        extensions: [{
+             name: 'colsVisibility',
+             at_start: [1, 2],
+             on_loaded: colsVisibilityTests
+        }]
+    });
+    tf1.init();
+
     module('Sanity checks');
     test('TableFilter object', function() {
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
@@ -341,5 +351,85 @@
         deepEqual(tf.hasGrid(), false, 'Filters removed');
         tf = null;
     });
+
+    function colsVisibilityTests() { // issue 94
+        module('Public methods with columns visibility extension');
+        test('Sanity checks', function() {
+
+            tf1.setFilterValue(0, 'Adelaide');
+            tf1.filter();
+
+            deepEqual(
+                tf1.getFilteredData(false, true),
+                [
+                    [6, ['Adelaide','3.1','38']],
+                    [7, ['Adelaide','2','20.25']],
+                    [8, ['Adelaide','2.15','40']]
+                ],
+                'Get filtered table data with excluded columns'
+            );
+
+            deepEqual(
+                tf1.getFilteredData(true, true),
+                [
+                    [1, ['From','By Air (hrs)','By Rail (hrs)']],
+                    [6, ['Adelaide','3.1','38']],
+                    [7, ['Adelaide','2','20.25']],
+                    [8, ['Adelaide','2.15','40']]
+                ],
+                'Get filtered table data with headers and excluded columns'
+            );
+
+            deepEqual(
+                tf1.getTableData(false, true),
+                [
+                    [2, ['Sydney','1.4','25.3']],
+                    [3, ['Sydney','1.5','16']],
+                    [4, ['Sydney','.6','4.3']],
+                    [5, ['Sydney','1.1','10.5']],
+                    [6, ['Adelaide','3.1','38']],
+                    [7, ['Adelaide','2','20.25']],
+                    [8, ['Adelaide','2.15','40']]
+                ],
+                'Get table data with excluded columns'
+            );
+
+            deepEqual(
+                tf1.getTableData(true, true),
+                [
+                    [1, ['From','By Air (hrs)','By Rail (hrs)']],
+                    [2, ['Sydney','1.4','25.3']],
+                    [3, ['Sydney','1.5','16']],
+                    [4, ['Sydney','.6','4.3']],
+                    [5, ['Sydney','1.1','10.5']],
+                    [6, ['Adelaide','3.1','38']],
+                    [7, ['Adelaide','2','20.25']],
+                    [8, ['Adelaide','2.15','40']]
+                ],
+                'Get table data with headers and excluded columns'
+            );
+
+            deepEqual(
+                tf1.getHeadersText(false),
+                ['From','Destination','Road Distance (km)', 'By Air (hrs)',
+                'By Rail (hrs)'],
+                'Headers text'
+            );
+
+            deepEqual(
+                tf1.getHeadersText(true),
+                ['From', 'By Air (hrs)','By Rail (hrs)'],
+                'Headers text with excluded columns'
+            );
+
+        });
+
+        test('Destroy', function() {
+            tf1.destroy();
+            deepEqual(tf1.hasGrid(), false, 'Filters removed');
+            tf1 = null;
+        });
+    }
+
 
 })(window, TableFilter);
