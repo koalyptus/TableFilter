@@ -123,17 +123,17 @@ export class Dropdown extends Feature{
 
         /*** remember grid values ***/
         let fltsValues = [], fltArr = [];
-        if(tf.rememberGridValues){
-            fltsValues =
-                tf.feature('store').getFilterValues(tf.fltsValuesCookie);
-            if(fltsValues && !Str.isEmpty(fltsValues.toString())){
-                if(this.isCustom){
-                    fltArr.push(fltsValues[colIndex]);
-                } else {
-                    fltArr = fltsValues[colIndex].split(' '+tf.orOperator+' ');
-                }
-            }
-        }
+        // if(tf.rememberGridValues){
+        //     fltsValues = tf.feature('store').getFilterValues(
+        //         tf.fltsValuesCookie);
+        //     if(fltsValues && !Str.isEmpty(fltsValues.toString())){
+        //         if(this.isCustom){
+        //             fltArr.push(fltsValues[colIndex]);
+        //         } else {
+        //           fltArr = fltsValues[colIndex].split(' '+tf.orOperator+' ');
+        //         }
+        //     }
+        // }
 
         let excludedOpts = null,
             filteredDataCol = null;
@@ -260,7 +260,7 @@ export class Dropdown extends Feature{
         this.addOptions(
             colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr);
 
-        this.emitter.emit('after-populating-filter', tf, colIndex);
+        this.emitter.emit('after-populating-filter', tf, colIndex, slc);
     }
 
     /**

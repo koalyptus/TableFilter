@@ -741,9 +741,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this._hasGrid) {
 	                return;
 	            }
-	            if (!this.tbl) {
-	                this.tbl = _dom2.default.id(this.id);
-	            }
+	            // if(!this.tbl){
+	            //     this.tbl = Dom.id(this.id);
+	            // }
 	            // if(this.gridLayout){
 	            //     this.refRow = this.startRow===null ? 0 : this.startRow;
 	            // }
@@ -938,36 +938,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                //         Dom.text(checkList.activateCheckListTxt));
 	                                // }
 	                            } else {
+	                                    this._buildInputFilter(i, inpclass, fltcell);
 	                                    //show/hide input
-	                                    var inptype = col === this.fltTypeInp ? 'text' : 'hidden';
-	                                    var inp = _dom2.default.create(this.fltTypeInp, ['id', this.prfxFlt + i + '_' + this.id], ['type', inptype], ['ct', i]);
-	                                    if (inptype !== 'hidden' && this.watermark) {
-	                                        inp.setAttribute('placeholder', this.isWatermarkArray ? this.watermark[i] || '' : this.watermark);
-	                                    }
-	                                    inp.className = inpclass;
-	                                    _event2.default.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
+	                                    //let inptype = col===this.fltTypeInp ? 'text' :
+	                                    //'hidden';
+	                                    // let inp = Dom.create(this.fltTypeInp,
+	                                    //     ['id',this.prfxFlt+i+'_'+this.id],
+	                                    //     ['type',inptype], ['ct',i]);
+	                                    // if(inptype!=='hidden' && this.watermark){
+	                                    //     inp.setAttribute(
+	                                    //         'placeholder',
+	                                    //         this.isWatermarkArray ?
+	                                    //            (this.watermark[i] || '') : this.watermark
+	                                    //     );
+	                                    // }
+	                                    // inp.className = inpclass;
+	                                    //Event.add(inp, 'focus',
+	                                    //this.Evt.onInpFocus.bind(this));
 	
-	                                    //filter is appended in desired element
-	                                    if (externalFltTgtId) {
-	                                        _dom2.default.id(externalFltTgtId).appendChild(inp);
-	                                        this.externalFltEls.push(inp);
-	                                    } else {
-	                                        fltcell.appendChild(inp);
-	                                    }
+	                                    // //filter is appended in desired element
+	                                    // if(externalFltTgtId){
+	                                    //     Dom.id(externalFltTgtId).appendChild(inp);
+	                                    //     this.externalFltEls.push(inp);
+	                                    // } else {
+	                                    //     fltcell.appendChild(inp);
+	                                    // }
 	
-	                                    this.fltIds.push(this.prfxFlt + i + '_' + this.id);
+	                                    // this.fltIds.push(this.prfxFlt+i+'_'+this.id);
 	
-	                                    _event2.default.add(inp, 'keypress', this.Evt.detectKey.bind(this));
-	                                    _event2.default.add(inp, 'keydown', this.Evt.onKeyDown.bind(this));
-	                                    _event2.default.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
-	                                    _event2.default.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
+	                                    // Event.add(inp, 'keypress',
+	                                    //     this.Evt.detectKey.bind(this));
+	                                    // Event.add(inp, 'keydown',
+	                                    //     this.Evt.onKeyDown.bind(this));
+	                                    // Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
+	                                    //Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
 	
-	                                    if (this.rememberGridValues) {
-	                                        var flts_values = this.Mod.store.getFilterValues(this.fltsValuesCookie);
-	                                        if (flts_values[i] != ' ') {
-	                                            this.setFilterValue(i, flts_values[i], false);
-	                                        }
-	                                    }
+	                                    // if(this.rememberGridValues){
+	                                    //     let flts_values = this.Mod.store.getFilterValues(
+	                                    //         this.fltsValuesCookie);
+	                                    //     if(flts_values[i]!=' '){
+	                                    //        this.setFilterValue(i, flts_values[i], false);
+	                                    //     }
+	                                    // }
 	                                }
 	                        // this adds submit button
 	                        if (i == n - 1 && this.displayBtn) {
@@ -1120,6 +1132,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.nbFilterableRows = this.getRowsNb();
 	            this.nbVisibleRows = this.nbFilterableRows;
 	            this.nbRows = this.nbFilterableRows + this.refRow;
+	        }
+	    }, {
+	        key: '_buildInputFilter',
+	        value: function _buildInputFilter(colIndex, cssClass, container) {
+	            var col = this.getFilterType(colIndex);
+	            var externalFltTgtId = this.isExternalFlt ? this.externalFltTgtIds[colIndex] : null;
+	            var inptype = col === this.fltTypeInp ? 'text' : 'hidden';
+	            var inp = _dom2.default.create(this.fltTypeInp, ['id', this.prfxFlt + colIndex + '_' + this.id], ['type', inptype], ['ct', colIndex]);
+	            if (inptype !== 'hidden' && this.watermark) {
+	                inp.setAttribute('placeholder', this.isWatermarkArray ? this.watermark[colIndex] || '' : this.watermark);
+	            }
+	            inp.className = cssClass || this.fltCssClass;
+	            _event2.default.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
+	
+	            //filter is appended in desired element
+	            if (externalFltTgtId) {
+	                _dom2.default.id(externalFltTgtId).appendChild(inp);
+	                this.externalFltEls.push(inp);
+	            } else {
+	                container.appendChild(inp);
+	            }
+	
+	            this.fltIds.push( /*this.prfxFlt+i+'_'+this.id*/inp.id);
+	
+	            _event2.default.add(inp, 'keypress', this.Evt.detectKey.bind(this));
+	            _event2.default.add(inp, 'keydown', this.Evt.onKeyDown.bind(this));
+	            _event2.default.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
+	            _event2.default.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
+	
+	            // if(this.rememberGridValues){
+	            //     let fltValues = this.Mod.store.getFilterValues(
+	            //         this.fltsValuesCookie);
+	            //     if(fltValues[colIndex]!=' '){
+	            //         this.setFilterValue(colIndex, fltValues[colIndex], false);
+	            //     }
+	            // }
 	        }
 	
 	        /**
@@ -1375,7 +1423,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.validRowsIndex = [];
 	            this.activeFlt = null;
 	            this._hasGrid = false;
-	            this.tbl = null;
+	            // this.tbl = null;
 	        }
 	
 	        /**
@@ -1541,9 +1589,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resetValues',
 	        value: function resetValues() {
+	            var _this5 = this;
+	
 	            //only loadFltOnDemand
-	            if (this.rememberGridValues && this.loadFltOnDemand) {
-	                this._resetGridValues(this.fltsValuesCookie);
+	            if (this.rememberGridValues) {
+	                if (this.loadFltOnDemand) {
+	                    this._resetGridValues(this.fltsValuesCookie);
+	                } else {
+	                    var fltValues = this.Mod.store.getFilterValues(this.fltsValuesCookie);
+	                    fltValues.forEach(function (val, idx) {
+	                        if (val !== ' ') {
+	                            _this5.setFilterValue(idx, val);
+	                        }
+	                    });
+	                }
 	            }
 	            this.filter();
 	        }
@@ -1624,6 +1683,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                checkList.setCheckListValues(li.check);
 	                                this.hasStoredValues = true;
 	                            }
+	                        } else if (fltType === this.fltTypeInp) {
+	                            this.setFilterValue(i, fltsValues[i]);
 	                        }
 	                } //end for
 	
@@ -2190,6 +2251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         *     [rowIndex, [value0, value1...]]
 	         * ]
 	         * @param  {Boolean} includeHeaders  Optional: include headers row
+	         * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
 	         * @return {Array}
 	         *
 	         * TODO: provide an API returning data in JSON format
@@ -2199,16 +2261,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'getTableData',
 	        value: function getTableData() {
 	            var includeHeaders = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+	            var excludeHiddenCols = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 	
 	            var rows = this.tbl.rows;
 	            var tblData = [];
 	            if (includeHeaders) {
-	                tblData.push([this.getHeadersRowIndex(), this.getHeadersText()]);
+	                var headers = this.getHeadersText(excludeHiddenCols);
+	                tblData.push([this.getHeadersRowIndex(), headers]);
 	            }
 	            for (var k = this.refRow; k < this.nbRows; k++) {
 	                var rowData = [k, []];
 	                var cells = rows[k].cells;
 	                for (var j = 0, len = cells.length; j < len; j++) {
+	                    if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
+	                        if (this.extension('colsVisibility').isColHidden(j)) {
+	                            continue;
+	                        }
+	                    }
 	                    var cellData = this.getCellData(cells[j]);
 	                    rowData[1].push(cellData);
 	                }
@@ -2224,6 +2293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         *     [rowIndex, [value0, value1...]]
 	         * ]
 	         * @param  {Boolean} includeHeaders  Optional: include headers row
+	         * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
 	         * @return {Array}
 	         *
 	         * TODO: provide an API returning data in JSON format
@@ -2233,6 +2303,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'getFilteredData',
 	        value: function getFilteredData() {
 	            var includeHeaders = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+	            var excludeHiddenCols = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 	
 	            if (!this.validRowsIndex) {
 	                return [];
@@ -2240,7 +2311,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var rows = this.tbl.rows,
 	                filteredData = [];
 	            if (includeHeaders) {
-	                filteredData.push([this.getHeadersRowIndex(), this.getHeadersText()]);
+	                var headers = this.getHeadersText(excludeHiddenCols);
+	                filteredData.push([this.getHeadersRowIndex(), headers]);
 	            }
 	
 	            var validRows = this.getValidRows(true);
@@ -2248,6 +2320,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var rData = [this.validRowsIndex[i], []],
 	                    cells = rows[this.validRowsIndex[i]].cells;
 	                for (var k = 0; k < cells.length; k++) {
+	                    if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
+	                        if (this.extension('colsVisibility').isColHidden(k)) {
+	                            continue;
+	                        }
+	                    }
 	                    var cellData = this.getCellData(cells[k]);
 	                    rData[1].push(cellData);
 	                }
@@ -2890,14 +2967,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        /**
 	         * Return the list of headers' text
+	         * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
 	         * @return {Array} list of headers' text
 	         */
 	
 	    }, {
 	        key: 'getHeadersText',
 	        value: function getHeadersText() {
+	            var excludeHiddenCols = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+	
 	            var headers = [];
 	            for (var j = 0; j < this.nbCells; j++) {
+	                if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
+	                    if (this.extension('colsVisibility').isColHidden(j)) {
+	                        continue;
+	                    }
+	                }
 	                var header = this.getHeaderElement(j);
 	                var headerText = _dom2.default.getText(header);
 	                headers.push(headerText);
@@ -5146,16 +5231,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            /*** remember grid values ***/
 	            var fltsValues = [],
 	                fltArr = [];
-	            if (tf.rememberGridValues) {
-	                fltsValues = tf.feature('store').getFilterValues(tf.fltsValuesCookie);
-	                if (fltsValues && !_string2.default.isEmpty(fltsValues.toString())) {
-	                    if (this.isCustom) {
-	                        fltArr.push(fltsValues[colIndex]);
-	                    } else {
-	                        fltArr = fltsValues[colIndex].split(' ' + tf.orOperator + ' ');
-	                    }
-	                }
-	            }
+	            // if(tf.rememberGridValues){
+	            //     fltsValues = tf.feature('store').getFilterValues(
+	            //         tf.fltsValuesCookie);
+	            //     if(fltsValues && !Str.isEmpty(fltsValues.toString())){
+	            //         if(this.isCustom){
+	            //             fltArr.push(fltsValues[colIndex]);
+	            //         } else {
+	            //           fltArr = fltsValues[colIndex].split(' '+tf.orOperator+' ');
+	            //         }
+	            //     }
+	            // }
 	
 	            var excludedOpts = null,
 	                filteredDataCol = null;
@@ -5271,7 +5357,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //populates drop-down
 	            this.addOptions(colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr);
 	
-	            this.emitter.emit('after-populating-filter', tf, colIndex);
+	            this.emitter.emit('after-populating-filter', tf, colIndex, slc);
 	        }
 	
 	        /**
@@ -5712,7 +5798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            flt.appendChild(ul);
 	            flt.setAttribute('filled', '1');
 	
-	            this.emitter.emit('after-populating-filter', tf, colIndex);
+	            this.emitter.emit('after-populating-filter', tf, colIndex, flt);
 	        }
 	
 	        /**
@@ -5729,15 +5815,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var tf = this.tf;
 	            var chkCt = this.addTChecks(colIndex, ul);
 	            var fltArr = []; //remember grid values
-	            var store = tf.feature('store');
-	            var tmpVal = store ? store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
-	            if (tmpVal && _string2.default.trim(tmpVal).length > 0) {
-	                if (tf.hasCustomSlcOptions && tf.customSlcOptions.cols.indexOf(colIndex) != -1) {
-	                    fltArr.push(tmpVal);
-	                } else {
-	                    fltArr = tmpVal.split(' ' + tf.orOperator + ' ');
-	                }
-	            }
+	            // let store = tf.feature('store');
+	            // let tmpVal = store ?
+	            //         store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
+	            // if(tmpVal && Str.trim(tmpVal).length > 0){
+	            //     if(tf.hasCustomSlcOptions &&
+	            //         tf.customSlcOptions.cols.indexOf(colIndex) != -1){
+	            //         fltArr.push(tmpVal);
+	            //     } else {
+	            //         fltArr = tmpVal.split(' '+tf.orOperator+' ');
+	            //     }
+	            // }
 	
 	            for (var y = 0; y < this.opts.length; y++) {
 	                var val = this.opts[y]; //item value

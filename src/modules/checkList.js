@@ -264,7 +264,7 @@ export class CheckList extends Feature{
         flt.appendChild(ul);
         flt.setAttribute('filled', '1');
 
-        this.emitter.emit('after-populating-filter', tf, colIndex);
+        this.emitter.emit('after-populating-filter', tf, colIndex, flt);
     }
 
     /**
@@ -276,17 +276,17 @@ export class CheckList extends Feature{
         let tf = this.tf;
         let chkCt = this.addTChecks(colIndex, ul);
         let fltArr = []; //remember grid values
-        let store = tf.feature('store');
-        let tmpVal = store ?
-                store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
-        if(tmpVal && Str.trim(tmpVal).length > 0){
-            if(tf.hasCustomSlcOptions &&
-                tf.customSlcOptions.cols.indexOf(colIndex) != -1){
-                fltArr.push(tmpVal);
-            } else {
-                fltArr = tmpVal.split(' '+tf.orOperator+' ');
-            }
-        }
+        // let store = tf.feature('store');
+        // let tmpVal = store ?
+        //         store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
+        // if(tmpVal && Str.trim(tmpVal).length > 0){
+        //     if(tf.hasCustomSlcOptions &&
+        //         tf.customSlcOptions.cols.indexOf(colIndex) != -1){
+        //         fltArr.push(tmpVal);
+        //     } else {
+        //         fltArr = tmpVal.split(' '+tf.orOperator+' ');
+        //     }
+        // }
 
         for(let y=0; y<this.opts.length; y++){
             let val = this.opts[y]; //item value

@@ -565,9 +565,9 @@ export class TableFilter {
         if(this._hasGrid){
             return;
         }
-        if(!this.tbl){
-            this.tbl = Dom.id(this.id);
-        }
+        // if(!this.tbl){
+        //     this.tbl = Dom.id(this.id);
+        // }
         // if(this.gridLayout){
         //     this.refRow = this.startRow===null ? 0 : this.startRow;
         // }
@@ -762,48 +762,49 @@ export class TableFilter {
                         //     divCont.appendChild(
                         //         Dom.text(checkList.activateCheckListTxt));
                         // }
-                    }
-
-                    else{
+                    } else {
+                        this._buildInputFilter(i, inpclass, fltcell);
                         //show/hide input
-                        let inptype = col===this.fltTypeInp ? 'text' : 'hidden';
-                        let inp = Dom.create(this.fltTypeInp,
-                            ['id',this.prfxFlt+i+'_'+this.id],
-                            ['type',inptype], ['ct',i]);
-                        if(inptype!=='hidden' && this.watermark){
-                            inp.setAttribute(
-                                'placeholder',
-                                this.isWatermarkArray ?
-                                    (this.watermark[i] || '') : this.watermark
-                            );
-                        }
-                        inp.className = inpclass;
-                        Event.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
+                        //let inptype = col===this.fltTypeInp ? 'text' :
+                        //'hidden';
+                        // let inp = Dom.create(this.fltTypeInp,
+                        //     ['id',this.prfxFlt+i+'_'+this.id],
+                        //     ['type',inptype], ['ct',i]);
+                        // if(inptype!=='hidden' && this.watermark){
+                        //     inp.setAttribute(
+                        //         'placeholder',
+                        //         this.isWatermarkArray ?
+                        //            (this.watermark[i] || '') : this.watermark
+                        //     );
+                        // }
+                        // inp.className = inpclass;
+                        //Event.add(inp, 'focus',
+                        //this.Evt.onInpFocus.bind(this));
 
-                        //filter is appended in desired element
-                        if(externalFltTgtId){
-                            Dom.id(externalFltTgtId).appendChild(inp);
-                            this.externalFltEls.push(inp);
-                        } else {
-                            fltcell.appendChild(inp);
-                        }
+                        // //filter is appended in desired element
+                        // if(externalFltTgtId){
+                        //     Dom.id(externalFltTgtId).appendChild(inp);
+                        //     this.externalFltEls.push(inp);
+                        // } else {
+                        //     fltcell.appendChild(inp);
+                        // }
 
-                        this.fltIds.push(this.prfxFlt+i+'_'+this.id);
+                        // this.fltIds.push(this.prfxFlt+i+'_'+this.id);
 
-                        Event.add(inp, 'keypress',
-                            this.Evt.detectKey.bind(this));
-                        Event.add(inp, 'keydown',
-                            this.Evt.onKeyDown.bind(this));
-                        Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
-                        Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
+                        // Event.add(inp, 'keypress',
+                        //     this.Evt.detectKey.bind(this));
+                        // Event.add(inp, 'keydown',
+                        //     this.Evt.onKeyDown.bind(this));
+                        // Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
+                        //Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
 
-                        if(this.rememberGridValues){
-                            let flts_values = this.Mod.store.getFilterValues(
-                                this.fltsValuesCookie);
-                            if(flts_values[i]!=' '){
-                                this.setFilterValue(i, flts_values[i], false);
-                            }
-                        }
+                        // if(this.rememberGridValues){
+                        //     let flts_values = this.Mod.store.getFilterValues(
+                        //         this.fltsValuesCookie);
+                        //     if(flts_values[i]!=' '){
+                        //        this.setFilterValue(i, flts_values[i], false);
+                        //     }
+                        // }
                     }
                     // this adds submit button
                     if(i==n-1 && this.displayBtn){
@@ -951,6 +952,47 @@ export class TableFilter {
         this.nbFilterableRows = this.getRowsNb();
         this.nbVisibleRows = this.nbFilterableRows;
         this.nbRows = this.nbFilterableRows + this.refRow;
+    }
+
+    _buildInputFilter(colIndex, cssClass, container){
+        let col = this.getFilterType(colIndex);
+        let externalFltTgtId = this.isExternalFlt ?
+            this.externalFltTgtIds[colIndex] : null;
+        let inptype = col===this.fltTypeInp ? 'text' : 'hidden';
+        let inp = Dom.create(this.fltTypeInp,
+            ['id', this.prfxFlt+colIndex+'_'+this.id],
+            ['type', inptype], ['ct', colIndex]);
+        if(inptype !== 'hidden' && this.watermark){
+            inp.setAttribute('placeholder',
+                this.isWatermarkArray ? (this.watermark[colIndex] || '') :
+                    this.watermark
+            );
+        }
+        inp.className = cssClass || this.fltCssClass;
+        Event.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
+
+        //filter is appended in desired element
+        if(externalFltTgtId){
+            Dom.id(externalFltTgtId).appendChild(inp);
+            this.externalFltEls.push(inp);
+        } else {
+            container.appendChild(inp);
+        }
+
+        this.fltIds.push(/*this.prfxFlt+i+'_'+this.id*/inp.id);
+
+        Event.add(inp, 'keypress', this.Evt.detectKey.bind(this));
+        Event.add(inp, 'keydown', this.Evt.onKeyDown.bind(this));
+        Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
+        Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
+
+        // if(this.rememberGridValues){
+        //     let fltValues = this.Mod.store.getFilterValues(
+        //         this.fltsValuesCookie);
+        //     if(fltValues[colIndex]!=' '){
+        //         this.setFilterValue(colIndex, fltValues[colIndex], false);
+        //     }
+        // }
     }
 
     /**
@@ -1175,7 +1217,7 @@ export class TableFilter {
         this.validRowsIndex = [];
         this.activeFlt = null;
         this._hasGrid = false;
-        this.tbl = null;
+        // this.tbl = null;
     }
 
     /**
@@ -1324,8 +1366,18 @@ export class TableFilter {
      */
     resetValues(){
         //only loadFltOnDemand
-        if(this.rememberGridValues && this.loadFltOnDemand){
-            this._resetGridValues(this.fltsValuesCookie);
+        if(this.rememberGridValues){
+            if(this.loadFltOnDemand){
+                this._resetGridValues(this.fltsValuesCookie);
+            } else {
+                let fltValues = this.Mod.store.getFilterValues(
+                    this.fltsValuesCookie);
+                fltValues.forEach((val, idx)=> {
+                    if(val !== ' '){
+                        this.setFilterValue(idx, val);
+                    }
+                });
+            }
         }
         this.filter();
     }
@@ -1359,7 +1411,7 @@ export class TableFilter {
 
                     //selects
                     if(slcFltsIndex.indexOf(i) != -1){
-                        opt = Dom.createOpt(fltsValues[i],fltsValues[i],true);
+                        opt = Dom.createOpt(fltsValues[i], fltsValues[i], true);
                         slc.appendChild(opt);
                         this.hasStoredValues = true;
                     }
@@ -1376,7 +1428,7 @@ export class TableFilter {
                         }
                     }// if multiFltsIndex
                 }
-                else if(fltType===this.fltTypeCheckList){
+                else if(fltType === this.fltTypeCheckList){
                     let checkList = this.Mod.checkList;
                     let divChk = checkList.checkListDiv[i];
                     divChk.title = divChk.innerHTML;
@@ -1406,6 +1458,9 @@ export class TableFilter {
                         checkList.setCheckListValues(li.check);
                         this.hasStoredValues = true;
                     }
+                }
+                else if(fltType === this.fltTypeInp){
+                    this.setFilterValue(i, fltsValues[i]);
                 }
             }//end for
 
