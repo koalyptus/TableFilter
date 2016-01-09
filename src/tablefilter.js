@@ -660,9 +660,9 @@ export class TableFilter {
                     this.emitter.emit('before-filter-init', this, i);
 
                     let fltcell = Dom.create(this.fltCellTag),
-                        col = this.getFilterType(i),
+                        col = this.getFilterType(i)/*,
                         externalFltTgtId = this.isExternalFlt ?
-                            this.externalFltTgtIds[i] : null;
+                            this.externalFltTgtIds[i] : null*/;
 
                     if(this.singleSearchFlt){
                         fltcell.colSpan = this.nbCells;
@@ -808,19 +808,20 @@ export class TableFilter {
                     }
                     // this adds submit button
                     if(i==n-1 && this.displayBtn){
-                        let btn = Dom.create(this.fltTypeInp,
-                            ['id', this.prfxValButton+i+'_'+this.id],
-                            ['type', 'button'], ['value', this.btnText]);
-                        btn.className = this.btnCssClass;
+                        this._buildSubmitButton(i, fltcell);
+                        // let btn = Dom.create(this.fltTypeInp,
+                        //     ['id', this.prfxValButton+i+'_'+this.id],
+                        //     ['type', 'button'], ['value', this.btnText]);
+                        // btn.className = this.btnCssClass;
 
-                        //filter is appended in desired element
-                        if(externalFltTgtId){
-                            Dom.id(externalFltTgtId).appendChild(btn);
-                        } else{
-                            fltcell.appendChild(btn);
-                        }
+                        // //filter is appended in desired element
+                        // if(externalFltTgtId){
+                        //     Dom.id(externalFltTgtId).appendChild(btn);
+                        // } else{
+                        //     fltcell.appendChild(btn);
+                        // }
 
-                        Event.add(btn, 'click', ()=> this.filter());
+                        // Event.add(btn, 'click', ()=> this.filter());
                     }//if
 
                     this.emitter.emit('after-filter-init', this, i);
@@ -912,6 +913,9 @@ export class TableFilter {
         this.emitter.emit('initialized', this);
     }
 
+    /**
+     * Insert filters row at initialization
+     */
     _insertFiltersRow() {
         if(this.gridLayout){
             return;
@@ -941,6 +945,9 @@ export class TableFilter {
         return fltrow;
     }
 
+    /**
+     * Initialize filtersless table
+     */
     _initNoFilters(){
         if(this.fltGrid){
             return;
@@ -954,6 +961,12 @@ export class TableFilter {
         this.nbRows = this.nbFilterableRows + this.refRow;
     }
 
+    /**
+     * Build input filter type
+     * @param  {Number} colIndex      Column index
+     * @param  {String} cssClass      Css class applied to filter
+     * @param  {DOMElement} container Container DOM element
+     */
     _buildInputFilter(colIndex, cssClass, container){
         let col = this.getFilterType(colIndex);
         let externalFltTgtId = this.isExternalFlt ?
@@ -993,6 +1006,29 @@ export class TableFilter {
         //         this.setFilterValue(colIndex, fltValues[colIndex], false);
         //     }
         // }
+    }
+
+    /**
+     * Build submit button
+     * @param  {Number} colIndex      Column index
+     * @param  {DOMElement} container Container DOM element
+     */
+    _buildSubmitButton(colIndex, container){
+        let externalFltTgtId = this.isExternalFlt ?
+            this.externalFltTgtIds[colIndex] : null;
+        let btn = Dom.create(this.fltTypeInp,
+            ['id', this.prfxValButton+colIndex+'_'+this.id],
+            ['type', 'button'], ['value', this.btnText]);
+        btn.className = this.btnCssClass;
+
+        //filter is appended in desired element
+        if(externalFltTgtId){
+            Dom.id(externalFltTgtId).appendChild(btn);
+        } else{
+            container.appendChild(btn);
+        }
+
+        Event.add(btn, 'click', ()=> this.filter());
     }
 
     /**
@@ -1157,7 +1193,7 @@ export class TableFilter {
         let rows = this.tbl.rows,
             Mod = this.Mod;
 
-        this.clearFilters();
+        // this.clearFilters();
 
         if(this.isExternalFlt && !this.popupFilters){
             this.removeExternalFlts();

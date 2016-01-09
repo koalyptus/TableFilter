@@ -122,7 +122,7 @@ export class Dropdown extends Feature{
         }
 
         /*** remember grid values ***/
-        let fltsValues = [], fltArr = [];
+        // let fltsValues = [], fltArr = [];
         // if(tf.rememberGridValues){
         //     fltsValues = tf.feature('store').getFilterValues(
         //         tf.fltsValuesCookie);
@@ -258,7 +258,7 @@ export class Dropdown extends Feature{
 
         //populates drop-down
         this.addOptions(
-            colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr);
+            colIndex, slc, isLinked, excludedOpts/*, fltsValues, fltArr*/);
 
         this.emitter.emit('after-populating-filter', tf, colIndex, slc);
     }
@@ -272,7 +272,7 @@ export class Dropdown extends Feature{
      * @param {Array} fltsValues    Collection of persisted filter values
      * @param {Array} fltArr        Collection of persisted filter values
      */
-    addOptions(colIndex, slc, isLinked, excludedOpts, fltsValues, fltArr){
+    addOptions(colIndex, slc, isLinked, excludedOpts/*, fltsValues, fltArr*/){
         let tf = this.tf,
             fillMethod = Str.lower(this.slcFillingMethod),
             slcValue = slc.value;
@@ -311,24 +311,25 @@ export class Dropdown extends Feature{
                     tf.getFilterType(colIndex) === tf.fltTypeSlc){
                     opt = Dom.createOpt(lbl, val, true);
                 } else {
-                    if(tf.getFilterType(colIndex) !== tf.fltTypeMulti){
-                        opt = Dom.createOpt(
-                            lbl,
-                            val,
-                            (fltsValues[colIndex]!==' ' &&
-                                val===fltsValues[colIndex]) ? true : false
-                        );
-                    } else {
-                        opt = Dom.createOpt(
-                            lbl,
-                            val,
-                            (Arr.has(fltArr,
-                                Str.matchCase(this.opts[y], tf.matchCase),
-                                tf.matchCase) ||
-                              fltArr.toString().indexOf(val)!== -1) ?
-                                true : false
-                        );
-                    }
+                    opt = Dom.createOpt(lbl, val, false);
+                    // if(tf.getFilterType(colIndex) !== tf.fltTypeMulti){
+                    //     opt = Dom.createOpt(
+                    //         lbl,
+                    //         val,
+                    //         (fltsValues[colIndex]!==' ' &&
+                    //             val===fltsValues[colIndex]) ? true : false
+                    //     );
+                    // } else {
+                    //     opt = Dom.createOpt(
+                    //         lbl,
+                    //         val,
+                    //         (Arr.has(fltArr,
+                    //             Str.matchCase(this.opts[y], tf.matchCase),
+                    //             tf.matchCase) ||
+                    //           fltArr.toString().indexOf(val)!== -1) ?
+                    //             true : false
+                    //     );
+                    // }
                 }
                 if(isDisabled){
                     opt.disabled = true;

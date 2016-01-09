@@ -275,7 +275,7 @@ export class CheckList extends Feature{
     addChecks(colIndex, ul){
         let tf = this.tf;
         let chkCt = this.addTChecks(colIndex, ul);
-        let fltArr = []; //remember grid values
+        // let fltArr = []; //remember grid values
         // let store = tf.feature('store');
         // let tmpVal = store ?
         //         store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
@@ -312,16 +312,16 @@ export class CheckList extends Feature{
             }
 
             /*** remember grid values ***/
-            if(tf.rememberGridValues){
-                if((tf.hasCustomSlcOptions &&
-                    tf.customSlcOptions.cols.indexOf(colIndex) != -1 &&
-                    fltArr.toString().indexOf(val) != -1) ||
-                    Arr.has(fltArr,
-                        Str.matchCase(val, tf.matchCase), tf.matchCase)){
-                    li.check.checked = true;
-                    this.setCheckListValues(li.check);
-                }
-            }
+            // if(tf.rememberGridValues){
+            //     if((tf.hasCustomSlcOptions &&
+            //         tf.customSlcOptions.cols.indexOf(colIndex) != -1 &&
+            //         fltArr.toString().indexOf(val) != -1) ||
+            //         Arr.has(fltArr,
+            //             Str.matchCase(val, tf.matchCase), tf.matchCase)){
+            //         li.check.checked = true;
+            //         this.setCheckListValues(li.check);
+            //     }
+            // }
         }
     }
 
