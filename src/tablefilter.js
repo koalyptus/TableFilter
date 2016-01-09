@@ -429,13 +429,13 @@ export class TableFilter {
             // Detect <enter> key
             detectKey(e) {
                 if(!this.enterKey){ return; }
-                let _ev = e || global.event;
-                if(_ev){
-                    let key = Event.keyCode(_ev);
+                // let _ev = e || global.event;
+                if(e){
+                    let key = Event.keyCode(e);
                     if(key===13){
                         this.filter();
-                        Event.cancel(_ev);
-                        Event.stop(_ev);
+                        Event.cancel(e);
+                        Event.stop(e);
                     } else {
                         this.isUserTyping = true;
                         global.clearInterval(this.autoFilterTimer);
@@ -448,8 +448,8 @@ export class TableFilter {
                 if(!this.autoFilter){
                     return;
                 }
-                let _ev = e || global.event;
-                let key = Event.keyCode(_ev);
+                // let _ev = e || global.event;
+                let key = Event.keyCode(e);
                 this.isUserTyping = false;
 
                 function filter() {
@@ -498,13 +498,13 @@ export class TableFilter {
             },
             // set focused text-box filter as active
             onInpFocus(e) {
-                let _ev = e || global.event;
-                let elm = Event.target(_ev);
+                // let _ev = e || global.event;
+                let elm = Event.target(e);
                 this.activeFilterId = elm.getAttribute('id');
                 this.activeFlt = Dom.id(this.activeFilterId);
                 if(this.popupFilters){
-                    Event.cancel(_ev);
-                    Event.stop(_ev);
+                    Event.cancel(e);
+                    Event.stop(e);
                 }
                 // TODO: hack to prevent ezEditTable enter key event hijaking.
                 // Needs to be fixed in the vendor's library
@@ -521,8 +521,8 @@ export class TableFilter {
             },
             // set focused drop-down filter as active
             onSlcFocus(e) {
-                let _ev = e || global.event;
-                let elm = Event.target(_ev);
+                // let _ev = e || global.event;
+                let elm = Event.target(e);
                 this.activeFilterId = elm.getAttribute('id');
                 this.activeFlt = Dom.id(this.activeFilterId);
                 // select is populated when element has focus
@@ -531,15 +531,15 @@ export class TableFilter {
                     this.Mod.dropdown.build(ct);
                 }
                 if(this.popupFilters){
-                    Event.cancel(_ev);
-                    Event.stop(_ev);
+                    Event.cancel(e);
+                    Event.stop(e);
                 }
             },
             // filter columns on drop-down filter change
-            onSlcChange(e) {
+            onSlcChange(/*e*/) {
                 if(!this.activeFlt){ return; }
-                let _ev = e || global.event;
-                if(this.popupFilters){ Event.stop(_ev); }
+                // let _ev = e || global.event;
+                // if(this.popupFilters){ Event.stop(e); }
                 if(this.onSlcChange){ this.filter(); }
             }/*,
             // fill checklist filter on click if required
