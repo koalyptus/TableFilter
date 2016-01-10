@@ -536,10 +536,10 @@ export class TableFilter {
                 }
             },
             // filter columns on drop-down filter change
-            onSlcChange(/*e*/) {
+            onSlcChange(e) {
                 if(!this.activeFlt){ return; }
                 // let _ev = e || global.event;
-                // if(this.popupFilters){ Event.stop(e); }
+                if(this.popupFilters){ Event.stop(e); }
                 if(this.onSlcChange){ this.filter(); }
             }/*,
             // fill checklist filter on click if required
