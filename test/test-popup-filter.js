@@ -16,6 +16,7 @@ test('Pop-up filter component', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
     deepEqual(popupFilter.popUpFltElms instanceof Array,
         true, 'Type of popUpFltElms property');
+    deepEqual(tf.headersRow, 1, 'Headers row index');
 });
 
 module('UI elements');
@@ -91,6 +92,7 @@ test('Re-instantiated with grid-layout', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
     deepEqual(popupFilter.popUpFltElms instanceof Array,
         true, 'Type of popUpFltElms property');
+    deepEqual(tf.headersRow, 0, 'Headers row index');
 });
 
 test('Pop-up filter UI elements with grid-layout', function() {

@@ -57,17 +57,32 @@ test('Page length value', function() {
 });
 
 module('Check filters persistence');
-test('Filters value', function() {
+test('Filters value in cookie', function() {
     tf.setFilterValue(0, 'Sydney');
     tf.setFilterValue(3, '1.5');
     tf.filter();
     var cookieName = tf.fltsValuesCookie;
     deepEqual(tf.feature('store').getFilterValues(cookieName)[0], 'Sydney', 'Filter 0 value');
     deepEqual(tf.feature('store').getFilterValues(cookieName)[3], '1.5', 'Filter 3 value');
-    tf.destroy();
+});
 
+test('Apply cookie filters value', function() {
+    tf.setFilterValue(0, 'Adelaide');
+    tf.setFilterValue(3, '>=2');
+    tf.filter();
+    tf.destroy();
+    tf.init();
+
+    deepEqual(tf.getFilterValue(0), 'Adelaide', 'Applied filter value');
+    deepEqual(tf.getFilterValue(3), '>=2', 'Applied filter value');
+});
+
+module('Tear-down');
+test('TableFilter removed', function() {
+    tf.destroy();
     removeCookie(tf.fltsValuesCookie);
     removeCookie(tf.pgNbCookie);
     removeCookie(tf.pgLenCookie);
-});
 
+    deepEqual(tf.hasGrid(), false, 'Filters removed');
+});

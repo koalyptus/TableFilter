@@ -30,6 +30,11 @@ export class Store{
     saveFilterValues(name){
         var tf = this.tf;
         var fltValues = [];
+
+        if(!tf.rememberGridValues){
+            return;
+        }
+
         //store filters' values
         for(var i=0; i<tf.fltIds.length; i++){
             var value = tf.getFilterValue(i);
@@ -66,6 +71,9 @@ export class Store{
      * @param {String} cookie name
      */
     savePageNb(name){
+        if(!this.tf.rememberPageNb){
+            return;
+        }
         Cookie.write(
             name,
             this.tf.feature('paging').currentPageNb,
@@ -87,6 +95,9 @@ export class Store{
      * @param {String} cookie name
      */
     savePageLength(name){
+        if(!this.tf.rememberPageLen){
+            return;
+        }
         Cookie.write(
             name,
             this.tf.feature('paging').resultsPerPageSlc.selectedIndex,

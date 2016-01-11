@@ -109,15 +109,6 @@ export class TableFilter {
         this.headersRow = isNaN(f.headers_row_index) ?
             (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
 
-        if(this.gridLayout){
-            if(this.headersRow > 1){
-                this.filtersRowIndex = this.headersRow+1;
-            } else {
-                this.filtersRowIndex = 1;
-                this.headersRow = 0;
-            }
-        }
-
         //defines tag of the cells containing filters (td/th)
         this.fltCellTag = f.filters_cell_tag!=='th' ||
             f.filters_cell_tag!=='td' ? 'td' : f.filters_cell_tag;
@@ -209,7 +200,7 @@ export class TableFilter {
         //enables/disables external filters generation
         this.isExternalFlt = Boolean(f.external_flt_grid);
         //array containing ids of external elements containing filters
-        this.externalFltTgtIds = f.external_flt_grid_ids || null;
+        this.externalFltTgtIds = f.external_flt_grid_ids || [];
         //stores filters elements if isExternalFlt is true
         this.externalFltEls = [];
         //delays any filtering process if loader true
@@ -429,13 +420,12 @@ export class TableFilter {
             // Detect <enter> key
             detectKey(e) {
                 if(!this.enterKey){ return; }
-                let _ev = e || global.event;
-                if(_ev){
-                    let key = Event.keyCode(_ev);
+                if(e){
+                    let key = Event.keyCode(e);
                     if(key===13){
                         this.filter();
-                        Event.cancel(_ev);
-                        Event.stop(_ev);
+                        Event.cancel(e);
+                        Event.stop(e);
                     } else {
                         this.isUserTyping = true;
                         global.clearInterval(this.autoFilterTimer);
@@ -448,8 +438,7 @@ export class TableFilter {
                 if(!this.autoFilter){
                     return;
                 }
-                let _ev = e || global.event;
-                let key = Event.keyCode(_ev);
+                let key = Event.keyCode(e);
                 this.isUserTyping = false;
 
                 function filter() {
@@ -498,13 +487,12 @@ export class TableFilter {
             },
             // set focused text-box filter as active
             onInpFocus(e) {
-                let _ev = e || global.event;
-                let elm = Event.target(_ev);
+                let elm = Event.target(e);
                 this.activeFilterId = elm.getAttribute('id');
                 this.activeFlt = Dom.id(this.activeFilterId);
                 if(this.popupFilters){
-                    Event.cancel(_ev);
-                    Event.stop(_ev);
+                    Event.cancel(e);
+                    Event.stop(e);
                 }
                 // TODO: hack to prevent ezEditTable enter key event hijaking.
                 // Needs to be fixed in the vendor's library
@@ -521,8 +509,8 @@ export class TableFilter {
             },
             // set focused drop-down filter as active
             onSlcFocus(e) {
-                let _ev = e || global.event;
-                let elm = Event.target(_ev);
+                // let _ev = e || global.event;
+                let elm = Event.target(e);
                 this.activeFilterId = elm.getAttribute('id');
                 this.activeFlt = Dom.id(this.activeFilterId);
                 // select is populated when element has focus
@@ -531,27 +519,15 @@ export class TableFilter {
                     this.Mod.dropdown.build(ct);
                 }
                 if(this.popupFilters){
-                    Event.cancel(_ev);
-                    Event.stop(_ev);
+                    Event.cancel(e);
+                    Event.stop(e);
                 }
             },
             // filter columns on drop-down filter change
             onSlcChange(e) {
                 if(!this.activeFlt){ return; }
-                let _ev = e || global.event;
-                if(this.popupFilters){ Event.stop(_ev); }
+                if(this.popupFilters){ Event.stop(e); }
                 if(this.onSlcChange){ this.filter(); }
-            },
-            // fill checklist filter on click if required
-            onCheckListClick(e) {
-                let _ev = e || global.event;
-                let elm = Event.target(_ev);
-                if(this.loadFltOnDemand && elm.getAttribute('filled') === '0'){
-                    let ct = elm.getAttribute('ct');
-                    this.Mod.checkList.build(ct);
-                    this.Mod.checkList.checkListDiv[ct].onclick = null;
-                    this.Mod.checkList.checkListDiv[ct].title = '';
-                }
             }
         };
     }
@@ -564,17 +540,6 @@ export class TableFilter {
     init(){
         if(this._hasGrid){
             return;
-        }
-        if(!this.tbl){
-            this.tbl = Dom.id(this.id);
-        }
-        if(this.gridLayout){
-            this.refRow = this.startRow===null ? 0 : this.startRow;
-        }
-        if(this.popupFilters &&
-            ((this.filtersRowIndex === 0 && this.headersRow === 1) ||
-            this.gridLayout)){
-            this.headersRow = 0;
         }
 
         let Mod = this.Mod;
@@ -619,55 +584,21 @@ export class TableFilter {
 
         //filters grid is not generated
         if(!this.fltGrid){
-            this.refRow = this.refRow-1;
-            if(this.gridLayout){
-                this.refRow = 0;
-            }
-            this.nbFilterableRows = this.getRowsNb();
-            this.nbVisibleRows = this.nbFilterableRows;
-            this.nbRows = this.nbFilterableRows + this.refRow;
+            this._initNoFilters();
         } else {
             if(this.isFirstLoad){
-                let fltrow;
-                if(!this.gridLayout){
-                    let thead = Dom.tag(this.tbl, 'thead');
-                    if(thead.length > 0){
-                        fltrow = thead[0].insertRow(this.filtersRowIndex);
-                    } else {
-                        fltrow = this.tbl.insertRow(this.filtersRowIndex);
-                    }
-
-                    if(this.headersRow > 1 &&
-                        this.filtersRowIndex <= this.headersRow &&
-                        !this.popupFilters){
-                        this.headersRow++;
-                    }
-                    if(this.popupFilters){
-                        this.headersRow++;
-                    }
-
-                    fltrow.className = this.fltsRowCssClass;
-
-                    if(this.isExternalFlt || this.popupFilters){
-                        fltrow.style.display = 'none';
-                    }
-                }
+                let fltrow = this._insertFiltersRow();
 
                 this.nbFilterableRows = this.getRowsNb();
                 this.nbVisibleRows = this.nbFilterableRows;
                 this.nbRows = this.tbl.rows.length;
 
-                for(let i=0; i<n; i++){// this loop adds filters
-
-                    if(this.popupFilters){
-                        Mod.popupFilter.build(i);
-                    }
+                // Generate filters
+                for(let i=0; i<n; i++){
+                    this.emitter.emit('before-filter-init', this, i);
 
                     let fltcell = Dom.create(this.fltCellTag),
-                        col = this.getFilterType(i),
-                        externalFltTgtId =
-                            this.isExternalFlt && this.externalFltTgtIds ?
-                            this.externalFltTgtIds[i] : null;
+                        col = this.getFilterType(i);
 
                     if(this.singleSearchFlt){
                         fltcell.colSpan = this.nbCells;
@@ -689,138 +620,24 @@ export class TableFilter {
                         if(!Mod.dropdown){
                             Mod.dropdown = new Dropdown(this);
                         }
-                        let dropdown = Mod.dropdown;
-
-                        let slc = Dom.create(this.fltTypeSlc,
-                                ['id', this.prfxFlt+i+'_'+this.id],
-                                ['ct', i], ['filled', '0']
-                            );
-
-                        if(col===this.fltTypeMulti){
-                            slc.multiple = this.fltTypeMulti;
-                            slc.title = dropdown.multipleSlcTooltip;
-                        }
-                        slc.className = Str.lower(col) === this.fltTypeSlc ?
-                            inpclass : this.fltMultiCssClass;
-
-                        //filter is appended in desired external element
-                        if(externalFltTgtId){
-                            Dom.id(externalFltTgtId).appendChild(slc);
-                            this.externalFltEls.push(slc);
-                        } else {
-                            fltcell.appendChild(slc);
-                        }
-
-                        this.fltIds.push(this.prfxFlt+i+'_'+this.id);
-
-                        if(!this.loadFltOnDemand){
-                            dropdown.build(i);
-                        }
-
-                        Event.add(slc, 'keypress',
-                            this.Evt.detectKey.bind(this));
-                        Event.add(slc, 'change',
-                            this.Evt.onSlcChange.bind(this));
-                        Event.add(slc, 'focus', this.Evt.onSlcFocus.bind(this));
-
-                        //1st option is created here since dropdown.build isn't
-                        //invoked
-                        if(this.loadFltOnDemand){
-                            let opt0 = Dom.createOpt(this.displayAllText, '');
-                            slc.appendChild(opt0);
-                        }
+                        Mod.dropdown.init(i, this.isExternalFlt, fltcell);
                     }
                     // checklist
                     else if(col===this.fltTypeCheckList){
-                        let checkList;
-                        Mod.checkList = new CheckList(this);
-                        checkList = Mod.checkList;
-
-                        let divCont = Dom.create('div',
-                            ['id', checkList.prfxCheckListDiv+i+'_'+this.id],
-                            ['ct', i], ['filled', '0']);
-                        divCont.className = checkList.checkListDivCssClass;
-
-                        //filter is appended in desired element
-                        if(externalFltTgtId){
-                            Dom.id(externalFltTgtId).appendChild(divCont);
-                            this.externalFltEls.push(divCont);
-                        } else {
-                            fltcell.appendChild(divCont);
+                        if(!Mod.checkList){
+                            Mod.checkList = new CheckList(this);
                         }
-
-                        checkList.checkListDiv[i] = divCont;
-                        this.fltIds.push(this.prfxFlt+i+'_'+this.id);
-                        if(!this.loadFltOnDemand){
-                            checkList.build(i);
-                        }
-
-                        if(this.loadFltOnDemand){
-                            Event.add(divCont, 'click',
-                                this.Evt.onCheckListClick.bind(this));
-                            divCont.appendChild(
-                                Dom.text(checkList.activateCheckListTxt));
-                        }
+                        Mod.checkList.init(i, this.isExternalFlt, fltcell);
+                    } else {
+                        this._buildInputFilter(i, inpclass, fltcell);
                     }
 
-                    else{
-                        //show/hide input
-                        let inptype = col===this.fltTypeInp ? 'text' : 'hidden';
-                        let inp = Dom.create(this.fltTypeInp,
-                            ['id',this.prfxFlt+i+'_'+this.id],
-                            ['type',inptype], ['ct',i]);
-                        if(inptype!=='hidden' && this.watermark){
-                            inp.setAttribute(
-                                'placeholder',
-                                this.isWatermarkArray ?
-                                    (this.watermark[i] || '') : this.watermark
-                            );
-                        }
-                        inp.className = inpclass;
-                        Event.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
-
-                        //filter is appended in desired element
-                        if(externalFltTgtId){
-                            Dom.id(externalFltTgtId).appendChild(inp);
-                            this.externalFltEls.push(inp);
-                        } else {
-                            fltcell.appendChild(inp);
-                        }
-
-                        this.fltIds.push(this.prfxFlt+i+'_'+this.id);
-
-                        Event.add(inp, 'keypress',
-                            this.Evt.detectKey.bind(this));
-                        Event.add(inp, 'keydown',
-                            this.Evt.onKeyDown.bind(this));
-                        Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
-                        Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
-
-                        if(this.rememberGridValues){
-                            let flts_values = this.Mod.store.getFilterValues(
-                                this.fltsValuesCookie);
-                            if(flts_values[i]!=' '){
-                                this.setFilterValue(i, flts_values[i], false);
-                            }
-                        }
-                    }
                     // this adds submit button
                     if(i==n-1 && this.displayBtn){
-                        let btn = Dom.create(this.fltTypeInp,
-                            ['id', this.prfxValButton+i+'_'+this.id],
-                            ['type', 'button'], ['value', this.btnText]);
-                        btn.className = this.btnCssClass;
+                        this._buildSubmitButton(i, fltcell);
+                    }
 
-                        //filter is appended in desired element
-                        if(externalFltTgtId){
-                            Dom.id(externalFltTgtId).appendChild(btn);
-                        } else{
-                            fltcell.appendChild(btn);
-                        }
-
-                        Event.add(btn, 'click', ()=> this.filter());
-                    }//if
-
+                    this.emitter.emit('after-filter-init', this, i);
                 }// for i
 
             } else {
@@ -910,6 +727,112 @@ export class TableFilter {
     }
 
     /**
+     * Insert filters row at initialization
+     */
+    _insertFiltersRow() {
+        if(this.gridLayout){
+            return;
+        }
+        let fltrow;
+
+        let thead = Dom.tag(this.tbl, 'thead');
+        if(thead.length > 0){
+            fltrow = thead[0].insertRow(this.filtersRowIndex);
+        } else {
+            fltrow = this.tbl.insertRow(this.filtersRowIndex);
+        }
+
+        if(this.headersRow > 1 && this.filtersRowIndex <= this.headersRow){
+            this.headersRow++;
+        }
+
+        fltrow.className = this.fltsRowCssClass;
+
+        if(this.isExternalFlt){
+            fltrow.style.display = 'none';
+        }
+
+        this.emitter.emit('filters-row-inserted', this, fltrow);
+        return fltrow;
+    }
+
+    /**
+     * Initialize filtersless table
+     */
+    _initNoFilters(){
+        if(this.fltGrid){
+            return;
+        }
+        this.refRow = this.refRow > 0 ? this.refRow-1 : 0;
+        this.nbFilterableRows = this.getRowsNb();
+        this.nbVisibleRows = this.nbFilterableRows;
+        this.nbRows = this.nbFilterableRows + this.refRow;
+    }
+
+    /**
+     * Build input filter type
+     * @param  {Number} colIndex      Column index
+     * @param  {String} cssClass      Css class applied to filter
+     * @param  {DOMElement} container Container DOM element
+     */
+    _buildInputFilter(colIndex, cssClass, container){
+        let col = this.getFilterType(colIndex);
+        let externalFltTgtId = this.isExternalFlt ?
+            this.externalFltTgtIds[colIndex] : null;
+        let inptype = col===this.fltTypeInp ? 'text' : 'hidden';
+        let inp = Dom.create(this.fltTypeInp,
+            ['id', this.prfxFlt+colIndex+'_'+this.id],
+            ['type', inptype], ['ct', colIndex]);
+
+        if(inptype !== 'hidden' && this.watermark){
+            inp.setAttribute('placeholder',
+                this.isWatermarkArray ? (this.watermark[colIndex] || '') :
+                    this.watermark
+            );
+        }
+        inp.className = cssClass || this.fltCssClass;
+        Event.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
+
+        //filter is appended in custom element
+        if(externalFltTgtId){
+            Dom.id(externalFltTgtId).appendChild(inp);
+            this.externalFltEls.push(inp);
+        } else {
+            container.appendChild(inp);
+        }
+
+        this.fltIds.push(inp.id);
+
+        Event.add(inp, 'keypress', this.Evt.detectKey.bind(this));
+        Event.add(inp, 'keydown', this.Evt.onKeyDown.bind(this));
+        Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
+        Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
+    }
+
+    /**
+     * Build submit button
+     * @param  {Number} colIndex      Column index
+     * @param  {DOMElement} container Container DOM element
+     */
+    _buildSubmitButton(colIndex, container){
+        let externalFltTgtId = this.isExternalFlt ?
+            this.externalFltTgtIds[colIndex] : null;
+        let btn = Dom.create(this.fltTypeInp,
+            ['id', this.prfxValButton+colIndex+'_'+this.id],
+            ['type', 'button'], ['value', this.btnText]);
+        btn.className = this.btnCssClass;
+
+        //filter is appended in custom element
+        if(externalFltTgtId){
+            Dom.id(externalFltTgtId).appendChild(btn);
+        } else{
+            container.appendChild(btn);
+        }
+
+        Event.add(btn, 'click', ()=> this.filter());
+    }
+
+    /**
      * Return a feature instance for a given name
      * @param  {String} name Name of the feature
      * @return {Object}
@@ -923,6 +846,8 @@ export class TableFilter {
      */
     initExtensions(){
         let exts = this.extensions;
+        // Set config's publicPath dynamically for Webpack...
+        __webpack_public_path__ = this.basePath;
 
         this.emitter.emit('before-loading-extensions', this);
         for(let i=0, len=exts.length; i<len; i++){
@@ -954,9 +879,7 @@ export class TableFilter {
             modulePath = 'extensions/{}/{}'.replace(/{}/g, name);
         }
 
-        // Trick to set config's publicPath dynamically for Webpack...
-        __webpack_public_path__ = this.basePath;
-
+        // Require pattern for Webpack
         require(['./' + modulePath], (mod)=> {
             let inst = new mod.default(this, ext);
             inst.init();
@@ -1071,8 +994,6 @@ export class TableFilter {
         let rows = this.tbl.rows,
             Mod = this.Mod;
 
-        this.clearFilters();
-
         if(this.isExternalFlt && !this.popupFilters){
             this.removeExternalFlts();
         }
@@ -1131,7 +1052,6 @@ export class TableFilter {
         this.validRowsIndex = [];
         this.activeFlt = null;
         this._hasGrid = false;
-        this.tbl = null;
     }
 
     /**
@@ -1217,7 +1137,7 @@ export class TableFilter {
      * Remove all the external column filters
      */
     removeExternalFlts(){
-        if(!this.isExternalFlt || !this.externalFltTgtIds){
+        if(!this.isExternalFlt){
             return;
         }
         let ids = this.externalFltTgtIds,
@@ -1280,8 +1200,18 @@ export class TableFilter {
      */
     resetValues(){
         //only loadFltOnDemand
-        if(this.rememberGridValues && this.loadFltOnDemand){
-            this._resetGridValues(this.fltsValuesCookie);
+        if(this.rememberGridValues){
+            if(this.loadFltOnDemand){
+                this._resetGridValues(this.fltsValuesCookie);
+            } else {
+                let fltValues = this.Mod.store.getFilterValues(
+                    this.fltsValuesCookie);
+                fltValues.forEach((val, idx)=> {
+                    if(val !== ' '){
+                        this.setFilterValue(idx, val);
+                    }
+                });
+            }
         }
         this.filter();
     }
@@ -1315,7 +1245,7 @@ export class TableFilter {
 
                     //selects
                     if(slcFltsIndex.indexOf(i) != -1){
-                        opt = Dom.createOpt(fltsValues[i],fltsValues[i],true);
+                        opt = Dom.createOpt(fltsValues[i], fltsValues[i], true);
                         slc.appendChild(opt);
                         this.hasStoredValues = true;
                     }
@@ -1332,7 +1262,7 @@ export class TableFilter {
                         }
                     }// if multiFltsIndex
                 }
-                else if(fltType===this.fltTypeCheckList){
+                else if(fltType === this.fltTypeCheckList){
                     let checkList = this.Mod.checkList;
                     let divChk = checkList.checkListDiv[i];
                     divChk.title = divChk.innerHTML;
@@ -1362,6 +1292,9 @@ export class TableFilter {
                         checkList.setCheckListValues(li.check);
                         this.hasStoredValues = true;
                     }
+                }
+                else if(fltType === this.fltTypeInp){
+                    this.setFilterValue(i, fltsValues[i]);
                 }
             }//end for
 
@@ -1922,20 +1855,27 @@ export class TableFilter {
      *     [rowIndex, [value0, value1...]]
      * ]
      * @param  {Boolean} includeHeaders  Optional: include headers row
+     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
      */
-    getTableData(includeHeaders=false){
+    getTableData(includeHeaders=false, excludeHiddenCols=false){
         let rows = this.tbl.rows;
         let tblData = [];
         if(includeHeaders){
-            tblData.push([this.getHeadersRowIndex(), this.getHeadersText()]);
+            let headers = this.getHeadersText(excludeHiddenCols);
+            tblData.push([this.getHeadersRowIndex(), headers]);
         }
         for(let k=this.refRow; k<this.nbRows; k++){
             let rowData = [k, []];
             let cells = rows[k].cells;
             for(let j=0, len=cells.length; j<len; j++){
+                if(excludeHiddenCols && this.hasExtension('colsVisibility')){
+                    if(this.extension('colsVisibility').isColHidden(j)){
+                        continue;
+                    }
+                }
                 let cellData = this.getCellData(cells[j]);
                 rowData[1].push(cellData);
             }
@@ -1951,19 +1891,20 @@ export class TableFilter {
      *     [rowIndex, [value0, value1...]]
      * ]
      * @param  {Boolean} includeHeaders  Optional: include headers row
+     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredData(includeHeaders=false){
+    getFilteredData(includeHeaders=false, excludeHiddenCols=false){
         if(!this.validRowsIndex){
             return [];
         }
         let rows = this.tbl.rows,
             filteredData = [];
         if(includeHeaders){
-            filteredData.push([this.getHeadersRowIndex(),
-                this.getHeadersText()]);
+            let headers = this.getHeadersText(excludeHiddenCols);
+            filteredData.push([this.getHeadersRowIndex(), headers]);
         }
 
         let validRows = this.getValidRows(true);
@@ -1971,6 +1912,11 @@ export class TableFilter {
             let rData = [this.validRowsIndex[i], []],
                 cells = rows[this.validRowsIndex[i]].cells;
             for(let k=0; k<cells.length; k++){
+                if(excludeHiddenCols && this.hasExtension('colsVisibility')){
+                    if(this.extension('colsVisibility').isColHidden(k)){
+                        continue;
+                    }
+                }
                 let cellData = this.getCellData(cells[k]);
                 rData[1].push(cellData);
             }
@@ -2555,11 +2501,17 @@ export class TableFilter {
 
     /**
      * Return the list of headers' text
+     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
      * @return {Array} list of headers' text
      */
-    getHeadersText(){
+    getHeadersText(excludeHiddenCols=false){
         let headers = [];
         for(let j=0; j<this.nbCells; j++){
+            if(excludeHiddenCols && this.hasExtension('colsVisibility')){
+                if(this.extension('colsVisibility').isColHidden(j)){
+                    continue;
+                }
+            }
             let header = this.getHeaderElement(j);
             let headerText = Dom.getText(header);
             headers.push(headerText);
