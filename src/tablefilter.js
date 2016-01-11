@@ -472,18 +472,7 @@ export class TableFilter {
                     this.isUserTyping = false;
                     global.clearInterval(this.autoFilterTimer);
                 }
-                // TODO: hack to prevent ezEditTable enter key event hijaking.
-                // Needs to be fixed in the vendor's library
-                if(this.hasExtension('advancedGrid')){
-                    var advGrid = this.extension('advancedGrid');
-                    var ezEditTable = advGrid._ezEditTable;
-                    if(advGrid.cfg.editable){
-                        ezEditTable.Editable.Set();
-                    }
-                    if(advGrid.cfg.selection){
-                        ezEditTable.Selection.Set();
-                    }
-                }
+                this.emitter.emit('filter-blur', this);
             },
             // set focused text-box filter as active
             onInpFocus(e) {
@@ -494,35 +483,25 @@ export class TableFilter {
                     Event.cancel(e);
                     Event.stop(e);
                 }
-                // TODO: hack to prevent ezEditTable enter key event hijaking.
-                // Needs to be fixed in the vendor's library
-                if(this.hasExtension('advancedGrid')){
-                    var advGrid = this.extension('advancedGrid');
-                    var ezEditTable = advGrid._ezEditTable;
-                    if(advGrid.cfg.editable){
-                        ezEditTable.Editable.Remove();
-                    }
-                    if(advGrid.cfg.selection){
-                        ezEditTable.Selection.Remove();
-                    }
-                }
+                this.emitter.emit('filter-focus', this);
             },
             // set focused drop-down filter as active
-            onSlcFocus(e) {
-                // let _ev = e || global.event;
-                let elm = Event.target(e);
-                this.activeFilterId = elm.getAttribute('id');
-                this.activeFlt = Dom.id(this.activeFilterId);
-                // select is populated when element has focus
-                if(this.loadFltOnDemand && elm.getAttribute('filled') === '0'){
-                    let ct = elm.getAttribute('ct');
-                    this.Mod.dropdown.build(ct);
-                }
-                if(this.popupFilters){
-                    Event.cancel(e);
-                    Event.stop(e);
-                }
-            },
+            // onSlcFocus(e) {
+            //     let elm = Event.target(e);
+            //     this.activeFilterId = elm.getAttribute('id');
+            //     this.activeFlt = Dom.id(this.activeFilterId);
+            //     // select is populated when element has focus
+            //     if(this.loadFltOnDemand && elm.getAttribute('filled')==='0'){
+            //         let ct = elm.getAttribute('ct');
+            //         console.log('onSlcFocus');
+            //         this.Mod.dropdown.build(ct);
+            //     }
+            //     if(this.popupFilters){
+            //         Event.cancel(e);
+            //         Event.stop(e);
+            //     }
+            //     this.emitter.emit('filter-focus', this);
+            // },
             // filter columns on drop-down filter change
             onSlcChange(e) {
                 if(!this.activeFlt){ return; }

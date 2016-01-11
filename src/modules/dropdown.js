@@ -36,6 +36,23 @@ export class Dropdown extends Feature{
         this.slcInnerHtml = null;
     }
 
+    onSlcFocus(e) {
+        let elm = Event.target(e);
+        let tf = this.tf;
+        tf.activeFilterId = elm.getAttribute('id');
+        tf.activeFlt = Dom.id(tf.activeFilterId);
+        // select is populated when element has focus
+        if(tf.loadFltOnDemand && elm.getAttribute('filled') === '0'){
+            let ct = elm.getAttribute('ct');
+            this.build(ct);
+        }
+        // if(tf.popupFilters){
+        //     Event.cancel(e);
+        //     Event.stop(e);
+        // }
+        this.emitter.emit('filter-focus', tf, this);
+    }
+
     /**
      * Initialize drop-down filter
      * @param  {Number}     colIndex   Column index
@@ -80,7 +97,7 @@ export class Dropdown extends Feature{
 
         Event.add(slc, 'keypress', tf.Evt.detectKey.bind(tf));
         Event.add(slc, 'change', tf.Evt.onSlcChange.bind(tf));
-        Event.add(slc, 'focus', tf.Evt.onSlcFocus.bind(tf));
+        Event.add(slc, 'focus', (e)=> this.onSlcFocus(e));
 
         this.initialized = true;
     }

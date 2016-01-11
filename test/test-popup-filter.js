@@ -160,11 +160,11 @@ test('Properties', function() {
         'function', 'Feature enable method');
 });
 
-module('Tear-down');
-test('TableFilter removed', function() {
-    tf.destroy();
-    var fltIcn1 = popupFilter.popUpFltImgs[3];
-    deepEqual(fltIcn1, undefined, 'Filter icon is removed');
-    deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
-    deepEqual(tf.hasGrid(), false, 'Filters removed');
-});
+// module('Tear-down');
+// test('TableFilter removed', function() {
+//     tf.destroy();
+//     var fltIcn1 = popupFilter.popUpFltImgs[3];
+//     deepEqual(fltIcn1, undefined, 'Filter icon is removed');
+//     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
+//     deepEqual(tf.hasGrid(), false, 'Filters removed');
+// });
