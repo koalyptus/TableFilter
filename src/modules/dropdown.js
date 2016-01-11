@@ -68,7 +68,7 @@ export class Dropdown extends Feature{
             container.appendChild(slc);
         }
 
-        tf.fltIds.push(/*this.prfxFlt+i+'_'+this.id*/slc.id);
+        tf.fltIds.push(slc.id);
 
         if(!tf.loadFltOnDemand){
             this.build(colIndex);
@@ -120,20 +120,6 @@ export class Dropdown extends Feature{
             activeFlt = tf.activeFilterId.split('_')[0];
             activeFlt = activeFlt.split(tf.prfxFlt)[1];
         }
-
-        /*** remember grid values ***/
-        // let fltsValues = [], fltArr = [];
-        // if(tf.rememberGridValues){
-        //     fltsValues = tf.feature('store').getFilterValues(
-        //         tf.fltsValuesCookie);
-        //     if(fltsValues && !Str.isEmpty(fltsValues.toString())){
-        //         if(this.isCustom){
-        //             fltArr.push(fltsValues[colIndex]);
-        //         } else {
-        //           fltArr = fltsValues[colIndex].split(' '+tf.orOperator+' ');
-        //         }
-        //     }
-        // }
 
         let excludedOpts = null,
             filteredDataCol = null;
@@ -257,8 +243,7 @@ export class Dropdown extends Feature{
         }
 
         //populates drop-down
-        this.addOptions(
-            colIndex, slc, isLinked, excludedOpts/*, fltsValues, fltArr*/);
+        this.addOptions(colIndex, slc, isLinked, excludedOpts);
 
         this.emitter.emit('after-populating-filter', tf, colIndex, slc);
     }
@@ -312,24 +297,6 @@ export class Dropdown extends Feature{
                     opt = Dom.createOpt(lbl, val, true);
                 } else {
                     opt = Dom.createOpt(lbl, val, false);
-                    // if(tf.getFilterType(colIndex) !== tf.fltTypeMulti){
-                    //     opt = Dom.createOpt(
-                    //         lbl,
-                    //         val,
-                    //         (fltsValues[colIndex]!==' ' &&
-                    //             val===fltsValues[colIndex]) ? true : false
-                    //     );
-                    // } else {
-                    //     opt = Dom.createOpt(
-                    //         lbl,
-                    //         val,
-                    //         (Arr.has(fltArr,
-                    //             Str.matchCase(this.opts[y], tf.matchCase),
-                    //             tf.matchCase) ||
-                    //           fltArr.toString().indexOf(val)!== -1) ?
-                    //             true : false
-                    //     );
-                    // }
                 }
                 if(isDisabled){
                     opt.disabled = true;

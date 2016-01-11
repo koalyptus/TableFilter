@@ -109,15 +109,6 @@ export class TableFilter {
         this.headersRow = isNaN(f.headers_row_index) ?
             (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
 
-        // if(this.gridLayout){
-        //     if(this.headersRow > 1){
-        //         this.filtersRowIndex = this.headersRow+1;
-        //     } else {
-        //         this.filtersRowIndex = 1;
-        //         this.headersRow = 0;
-        //     }
-        // }
-
         //defines tag of the cells containing filters (td/th)
         this.fltCellTag = f.filters_cell_tag!=='th' ||
             f.filters_cell_tag!=='td' ? 'td' : f.filters_cell_tag;
@@ -429,7 +420,6 @@ export class TableFilter {
             // Detect <enter> key
             detectKey(e) {
                 if(!this.enterKey){ return; }
-                // let _ev = e || global.event;
                 if(e){
                     let key = Event.keyCode(e);
                     if(key===13){
@@ -448,7 +438,6 @@ export class TableFilter {
                 if(!this.autoFilter){
                     return;
                 }
-                // let _ev = e || global.event;
                 let key = Event.keyCode(e);
                 this.isUserTyping = false;
 
@@ -498,7 +487,6 @@ export class TableFilter {
             },
             // set focused text-box filter as active
             onInpFocus(e) {
-                // let _ev = e || global.event;
                 let elm = Event.target(e);
                 this.activeFilterId = elm.getAttribute('id');
                 this.activeFlt = Dom.id(this.activeFilterId);
@@ -538,21 +526,9 @@ export class TableFilter {
             // filter columns on drop-down filter change
             onSlcChange(e) {
                 if(!this.activeFlt){ return; }
-                // let _ev = e || global.event;
                 if(this.popupFilters){ Event.stop(e); }
                 if(this.onSlcChange){ this.filter(); }
-            }/*,
-            // fill checklist filter on click if required
-            onCheckListClick(e) {
-                let _ev = e || global.event;
-                let elm = Event.target(_ev);
-                if(this.loadFltOnDemand && elm.getAttribute('filled') === '0'){
-                    let ct = elm.getAttribute('ct');
-                    this.Mod.checkList.build(ct);
-                    this.Mod.checkList.checkListDiv[ct].onclick = null;
-                    this.Mod.checkList.checkListDiv[ct].title = '';
-                }
-            }*/
+            }
         };
     }
 
@@ -565,17 +541,6 @@ export class TableFilter {
         if(this._hasGrid){
             return;
         }
-        // if(!this.tbl){
-        //     this.tbl = Dom.id(this.id);
-        // }
-        // if(this.gridLayout){
-        //     this.refRow = this.startRow===null ? 0 : this.startRow;
-        // }
-        // if(this.popupFilters &&
-        //     ((this.filtersRowIndex === 0 && this.headersRow === 1) ||
-        //     this.gridLayout)){
-        //     this.headersRow = 0;
-        // }
 
         let Mod = this.Mod;
         let n = this.singleSearchFlt ? 1 : this.nbCells,
@@ -623,29 +588,6 @@ export class TableFilter {
         } else {
             if(this.isFirstLoad){
                 let fltrow = this._insertFiltersRow();
-                // if(!this.gridLayout){
-                //     let thead = Dom.tag(this.tbl, 'thead');
-                //     if(thead.length > 0){
-                //         fltrow = thead[0].insertRow(this.filtersRowIndex);
-                //     } else {
-                //         fltrow = this.tbl.insertRow(this.filtersRowIndex);
-                //     }
-
-                //     if(this.headersRow > 1 &&
-                //         this.filtersRowIndex <= this.headersRow &&
-                //         !this.popupFilters){
-                //         this.headersRow++;
-                //     }
-                //     if(this.popupFilters){
-                //         this.headersRow++;
-                //     }
-
-                //     fltrow.className = this.fltsRowCssClass;
-
-                //     if(this.isExternalFlt || this.popupFilters){
-                //         fltrow.style.display = 'none';
-                //     }
-                // }
 
                 this.nbFilterableRows = this.getRowsNb();
                 this.nbVisibleRows = this.nbFilterableRows;
@@ -653,16 +595,10 @@ export class TableFilter {
 
                 // Generate filters
                 for(let i=0; i<n; i++){
-
-                    // if(this.popupFilters){
-                    //     Mod.popupFilter.build(i);
-                    // }
                     this.emitter.emit('before-filter-init', this, i);
 
                     let fltcell = Dom.create(this.fltCellTag),
-                        col = this.getFilterType(i)/*,
-                        externalFltTgtId = this.isExternalFlt ?
-                            this.externalFltTgtIds[i] : null*/;
+                        col = this.getFilterType(i);
 
                     if(this.singleSearchFlt){
                         fltcell.colSpan = this.nbCells;
@@ -685,144 +621,21 @@ export class TableFilter {
                             Mod.dropdown = new Dropdown(this);
                         }
                         Mod.dropdown.init(i, this.isExternalFlt, fltcell);
-                        // let dropdown = Mod.dropdown;
-
-                        // let slc = Dom.create(this.fltTypeSlc,
-                        //         ['id', this.prfxFlt+i+'_'+this.id],
-                        //         ['ct', i], ['filled', '0']
-                        //     );
-
-                        // if(col===this.fltTypeMulti){
-                        //     slc.multiple = this.fltTypeMulti;
-                        //     slc.title = dropdown.multipleSlcTooltip;
-                        // }
-                        // slc.className = Str.lower(col) === this.fltTypeSlc ?
-                        //     inpclass : this.fltMultiCssClass;
-
-                        // //filter is appended in desired external element
-                        // if(externalFltTgtId){
-                        //     Dom.id(externalFltTgtId).appendChild(slc);
-                        //     this.externalFltEls.push(slc);
-                        // } else {
-                        //     fltcell.appendChild(slc);
-                        // }
-
-                        // this.fltIds.push(this.prfxFlt+i+'_'+this.id);
-
-                        // if(!this.loadFltOnDemand){
-                        //     dropdown.build(i);
-                        // }
-
-                        // Event.add(slc, 'keypress',
-                        //     this.Evt.detectKey.bind(this));
-                        // Event.add(slc, 'change',
-                        //     this.Evt.onSlcChange.bind(this));
-                        // Event.add(slc, 'focus',
-                        // this.Evt.onSlcFocus.bind(this));
-
-                        // 1st option is created here since dropdown.build isn't
-                        // invoked
-                        // if(this.loadFltOnDemand){
-                        //    let opt0 = Dom.createOpt(this.displayAllText, '');
-                        //     slc.appendChild(opt0);
-                        // }
                     }
                     // checklist
                     else if(col===this.fltTypeCheckList){
-                        // let checkList;
-                        // Mod.checkList = new CheckList(this);
-                        // checkList = Mod.checkList;
                         if(!Mod.checkList){
                             Mod.checkList = new CheckList(this);
                         }
                         Mod.checkList.init(i, this.isExternalFlt, fltcell);
-
-                        // let divCont = Dom.create('div',
-                        //     ['id', checkList.prfxCheckListDiv+i+'_'+this.id],
-                        //     ['ct', i], ['filled', '0']);
-                        // divCont.className = checkList.checkListDivCssClass;
-
-                        // //filter is appended in desired element
-                        // if(externalFltTgtId){
-                        //     Dom.id(externalFltTgtId).appendChild(divCont);
-                        //     this.externalFltEls.push(divCont);
-                        // } else {
-                        //     fltcell.appendChild(divCont);
-                        // }
-
-                        // checkList.checkListDiv[i] = divCont;
-                        // this.fltIds.push(this.prfxFlt+i+'_'+this.id);
-                        // if(!this.loadFltOnDemand){
-                        //     checkList.build(i);
-                        // }
-
-                        // if(this.loadFltOnDemand){
-                        //     Event.add(divCont, 'click',
-                        //         this.Evt.onCheckListClick.bind(this));
-                        //     divCont.appendChild(
-                        //         Dom.text(checkList.activateCheckListTxt));
-                        // }
                     } else {
                         this._buildInputFilter(i, inpclass, fltcell);
-                        //show/hide input
-                        //let inptype = col===this.fltTypeInp ? 'text' :
-                        //'hidden';
-                        // let inp = Dom.create(this.fltTypeInp,
-                        //     ['id',this.prfxFlt+i+'_'+this.id],
-                        //     ['type',inptype], ['ct',i]);
-                        // if(inptype!=='hidden' && this.watermark){
-                        //     inp.setAttribute(
-                        //         'placeholder',
-                        //         this.isWatermarkArray ?
-                        //            (this.watermark[i] || '') : this.watermark
-                        //     );
-                        // }
-                        // inp.className = inpclass;
-                        //Event.add(inp, 'focus',
-                        //this.Evt.onInpFocus.bind(this));
-
-                        // //filter is appended in desired element
-                        // if(externalFltTgtId){
-                        //     Dom.id(externalFltTgtId).appendChild(inp);
-                        //     this.externalFltEls.push(inp);
-                        // } else {
-                        //     fltcell.appendChild(inp);
-                        // }
-
-                        // this.fltIds.push(this.prfxFlt+i+'_'+this.id);
-
-                        // Event.add(inp, 'keypress',
-                        //     this.Evt.detectKey.bind(this));
-                        // Event.add(inp, 'keydown',
-                        //     this.Evt.onKeyDown.bind(this));
-                        // Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
-                        //Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
-
-                        // if(this.rememberGridValues){
-                        //     let flts_values = this.Mod.store.getFilterValues(
-                        //         this.fltsValuesCookie);
-                        //     if(flts_values[i]!=' '){
-                        //        this.setFilterValue(i, flts_values[i], false);
-                        //     }
-                        // }
                     }
+
                     // this adds submit button
                     if(i==n-1 && this.displayBtn){
                         this._buildSubmitButton(i, fltcell);
-                        // let btn = Dom.create(this.fltTypeInp,
-                        //     ['id', this.prfxValButton+i+'_'+this.id],
-                        //     ['type', 'button'], ['value', this.btnText]);
-                        // btn.className = this.btnCssClass;
-
-                        // //filter is appended in desired element
-                        // if(externalFltTgtId){
-                        //     Dom.id(externalFltTgtId).appendChild(btn);
-                        // } else{
-                        //     fltcell.appendChild(btn);
-                        // }
-
-                        // Event.add(btn, 'click', ()=> this.filter());
-                    }//if
+                    }
 
                     this.emitter.emit('after-filter-init', this, i);
                 }// for i
@@ -929,8 +742,7 @@ export class TableFilter {
             fltrow = this.tbl.insertRow(this.filtersRowIndex);
         }
 
-        if(this.headersRow > 1 && this.filtersRowIndex <= this.headersRow /*&&
-            !this.popupFilters*/){
+        if(this.headersRow > 1 && this.filtersRowIndex <= this.headersRow){
             this.headersRow++;
         }
 
@@ -941,7 +753,6 @@ export class TableFilter {
         }
 
         this.emitter.emit('filters-row-inserted', this, fltrow);
-
         return fltrow;
     }
 
@@ -953,9 +764,6 @@ export class TableFilter {
             return;
         }
         this.refRow = this.refRow > 0 ? this.refRow-1 : 0;
-        // if(this.gridLayout){
-        //     this.refRow = 0;
-        // }
         this.nbFilterableRows = this.getRowsNb();
         this.nbVisibleRows = this.nbFilterableRows;
         this.nbRows = this.nbFilterableRows + this.refRow;
@@ -975,6 +783,7 @@ export class TableFilter {
         let inp = Dom.create(this.fltTypeInp,
             ['id', this.prfxFlt+colIndex+'_'+this.id],
             ['type', inptype], ['ct', colIndex]);
+
         if(inptype !== 'hidden' && this.watermark){
             inp.setAttribute('placeholder',
                 this.isWatermarkArray ? (this.watermark[colIndex] || '') :
@@ -984,7 +793,7 @@ export class TableFilter {
         inp.className = cssClass || this.fltCssClass;
         Event.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
 
-        //filter is appended in desired element
+        //filter is appended in custom element
         if(externalFltTgtId){
             Dom.id(externalFltTgtId).appendChild(inp);
             this.externalFltEls.push(inp);
@@ -992,20 +801,12 @@ export class TableFilter {
             container.appendChild(inp);
         }
 
-        this.fltIds.push(/*this.prfxFlt+i+'_'+this.id*/inp.id);
+        this.fltIds.push(inp.id);
 
         Event.add(inp, 'keypress', this.Evt.detectKey.bind(this));
         Event.add(inp, 'keydown', this.Evt.onKeyDown.bind(this));
         Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
         Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
-
-        // if(this.rememberGridValues){
-        //     let fltValues = this.Mod.store.getFilterValues(
-        //         this.fltsValuesCookie);
-        //     if(fltValues[colIndex]!=' '){
-        //         this.setFilterValue(colIndex, fltValues[colIndex], false);
-        //     }
-        // }
     }
 
     /**
@@ -1021,7 +822,7 @@ export class TableFilter {
             ['type', 'button'], ['value', this.btnText]);
         btn.className = this.btnCssClass;
 
-        //filter is appended in desired element
+        //filter is appended in custom element
         if(externalFltTgtId){
             Dom.id(externalFltTgtId).appendChild(btn);
         } else{
@@ -1045,6 +846,8 @@ export class TableFilter {
      */
     initExtensions(){
         let exts = this.extensions;
+        // Set config's publicPath dynamically for Webpack...
+        __webpack_public_path__ = this.basePath;
 
         this.emitter.emit('before-loading-extensions', this);
         for(let i=0, len=exts.length; i<len; i++){
@@ -1076,9 +879,7 @@ export class TableFilter {
             modulePath = 'extensions/{}/{}'.replace(/{}/g, name);
         }
 
-        // Trick to set config's publicPath dynamically for Webpack...
-        __webpack_public_path__ = this.basePath;
-
+        // Require pattern for Webpack
         require(['./' + modulePath], (mod)=> {
             let inst = new mod.default(this, ext);
             inst.init();
@@ -1193,8 +994,6 @@ export class TableFilter {
         let rows = this.tbl.rows,
             Mod = this.Mod;
 
-        // this.clearFilters();
-
         if(this.isExternalFlt && !this.popupFilters){
             this.removeExternalFlts();
         }
@@ -1253,7 +1052,6 @@ export class TableFilter {
         this.validRowsIndex = [];
         this.activeFlt = null;
         this._hasGrid = false;
-        // this.tbl = null;
     }
 
     /**

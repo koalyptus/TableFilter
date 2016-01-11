@@ -132,7 +132,7 @@ export class CheckList extends Feature{
         let ul = Dom.create(
             'ul', ['id', tf.fltIds[colIndex]], ['colIndex', colIndex]);
         ul.className = this.checkListCssClass;
-        Event.add(ul, 'change', (evt) => { this.onChange(evt); });
+        Event.add(ul, 'change', (evt) => this.onChange(evt));
 
         let rows = tf.tbl.rows;
         this.isCustom = tf.isCustomOptions(colIndex);
@@ -275,18 +275,6 @@ export class CheckList extends Feature{
     addChecks(colIndex, ul){
         let tf = this.tf;
         let chkCt = this.addTChecks(colIndex, ul);
-        // let fltArr = []; //remember grid values
-        // let store = tf.feature('store');
-        // let tmpVal = store ?
-        //         store.getFilterValues(tf.fltsValuesCookie)[colIndex] : null;
-        // if(tmpVal && Str.trim(tmpVal).length > 0){
-        //     if(tf.hasCustomSlcOptions &&
-        //         tf.customSlcOptions.cols.indexOf(colIndex) != -1){
-        //         fltArr.push(tmpVal);
-        //     } else {
-        //         fltArr = tmpVal.split(' '+tf.orOperator+' ');
-        //     }
-        // }
 
         for(let y=0; y<this.opts.length; y++){
             let val = this.opts[y]; //item value
@@ -301,8 +289,7 @@ export class CheckList extends Feature{
                 li.check.disabled = true;
                 li.disabled = true;
             } else {
-                Event.add(li.check, 'click',
-                    (evt) => { this.optionClick(evt); });
+                Event.add(li.check, 'click', (evt) => this.optionClick(evt));
             }
             ul.appendChild(li);
 
@@ -310,18 +297,6 @@ export class CheckList extends Feature{
                 //item is hidden
                 li.style.display = 'none';
             }
-
-            /*** remember grid values ***/
-            // if(tf.rememberGridValues){
-            //     if((tf.hasCustomSlcOptions &&
-            //         tf.customSlcOptions.cols.indexOf(colIndex) != -1 &&
-            //         fltArr.toString().indexOf(val) != -1) ||
-            //         Arr.has(fltArr,
-            //             Str.matchCase(val, tf.matchCase), tf.matchCase)){
-            //         li.check.checked = true;
-            //         this.setCheckListValues(li.check);
-            //     }
-            // }
         }
     }
 
@@ -351,9 +326,7 @@ export class CheckList extends Feature{
                     tf.fltIds[colIndex]+'_1', tf.emOperator, tf.emptyText);
             li1.className = this.checkListItemCssClass;
             ul.appendChild(li1);
-            Event.add(li1.check, 'click', (evt) => {
-                this.optionClick(evt);
-            });
+            Event.add(li1.check, 'click', (evt) => this.optionClick(evt));
             chkCt++;
         }
 
@@ -365,9 +338,7 @@ export class CheckList extends Feature{
             );
             li2.className = this.checkListItemCssClass;
             ul.appendChild(li2);
-            Event.add(li2.check, 'click', (evt) => {
-                this.optionClick(evt);
-            });
+            Event.add(li2.check, 'click', (evt) => this.optionClick(evt));
             chkCt++;
         }
         return chkCt;
