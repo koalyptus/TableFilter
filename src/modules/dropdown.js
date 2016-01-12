@@ -53,6 +53,14 @@ export class Dropdown extends Feature{
         this.emitter.emit('filter-focus', tf, this);
     }
 
+    onSlcChange() {
+        // if(!this.activeFlt){ return; }
+        // if(this.popupFilters){ Event.stop(e); }
+        if(this.tf.onSlcChange){
+            this.tf.filter();
+        }
+    }
+
     /**
      * Initialize drop-down filter
      * @param  {Number}     colIndex   Column index
@@ -95,8 +103,9 @@ export class Dropdown extends Feature{
             slc.appendChild(opt0);
         }
 
-        Event.add(slc, 'keypress', tf.Evt.detectKey.bind(tf));
-        Event.add(slc, 'change', tf.Evt.onSlcChange.bind(tf));
+        //Event.add(slc, 'keypress', tf.Evt.detectKey.bind(tf));
+        Event.add(slc, 'change', ()=> this.onSlcChange());
+        // Event.add(slc, 'change', tf.Evt.onSlcChange.bind(tf));
         Event.add(slc, 'focus', (e)=> this.onSlcFocus(e));
 
         this.initialized = true;

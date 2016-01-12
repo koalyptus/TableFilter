@@ -484,29 +484,6 @@ export class TableFilter {
                     Event.stop(e);
                 }
                 this.emitter.emit('filter-focus', this);
-            },
-            // set focused drop-down filter as active
-            // onSlcFocus(e) {
-            //     let elm = Event.target(e);
-            //     this.activeFilterId = elm.getAttribute('id');
-            //     this.activeFlt = Dom.id(this.activeFilterId);
-            //     // select is populated when element has focus
-            //     if(this.loadFltOnDemand && elm.getAttribute('filled')==='0'){
-            //         let ct = elm.getAttribute('ct');
-            //         console.log('onSlcFocus');
-            //         this.Mod.dropdown.build(ct);
-            //     }
-            //     if(this.popupFilters){
-            //         Event.cancel(e);
-            //         Event.stop(e);
-            //     }
-            //     this.emitter.emit('filter-focus', this);
-            // },
-            // filter columns on drop-down filter change
-            onSlcChange(e) {
-                if(!this.activeFlt){ return; }
-                if(this.popupFilters){ Event.stop(e); }
-                if(this.onSlcChange){ this.filter(); }
             }
         };
     }
