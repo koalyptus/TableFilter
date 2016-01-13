@@ -47,7 +47,6 @@ export class CheckList extends Feature{
         this.excludedOpts = null;
     }
 
-    // TODO: move event here
     onChange(evt){
         let elm = evt.target;
         let tf = this.tf;

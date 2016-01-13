@@ -479,19 +479,17 @@ export class TableFilter {
                 let elm = Event.target(e);
                 this.activeFilterId = elm.getAttribute('id');
                 this.activeFlt = Dom.id(this.activeFilterId);
-                if(this.popupFilters){
-                    Event.cancel(e);
-                    Event.stop(e);
-                }
+                // if(this.popupFilters){
+                //     Event.cancel(e);
+                //     Event.stop(e);
+                // }
                 this.emitter.emit('filter-focus', this);
             }
         };
     }
 
     /**
-     * Initialise filtering grid bar behaviours and layout
-     *
-     * TODO: decompose in smaller methods
+     * Initialise features and layout
      */
     init(){
         if(this._hasGrid){
