@@ -676,12 +676,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            if (this.rememberGridValues || this.rememberPageNb || this.rememberPageLen) {
-	                Mod.store = new _store.Store(this);
+	                if (!Mod.store) {
+	                    Mod.store = new _store.Store(this);
+	                }
 	                Mod.store.init();
 	            }
 	
 	            if (this.gridLayout) {
-	                Mod.gridLayout = new _gridLayout.GridLayout(this);
+	                if (!Mod.gridLayout) {
+	                    Mod.gridLayout = new _gridLayout.GridLayout(this);
+	                }
 	                Mod.gridLayout.init();
 	            }
 	
@@ -708,61 +712,62 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!this.fltGrid) {
 	                this._initNoFilters();
 	            } else {
-	                if (this.isFirstLoad) {
-	                    var fltrow = this._insertFiltersRow();
+	                // if(this.isFirstLoad){
+	                var fltrow = this._insertFiltersRow();
 	
-	                    this.nbFilterableRows = this.getRowsNb();
-	                    this.nbVisibleRows = this.nbFilterableRows;
-	                    this.nbRows = this.tbl.rows.length;
+	                this.nbFilterableRows = this.getRowsNb();
+	                this.nbVisibleRows = this.nbFilterableRows;
+	                this.nbRows = this.tbl.rows.length;
 	
-	                    // Generate filters
-	                    for (var i = 0; i < n; i++) {
-	                        this.emitter.emit('before-filter-init', this, i);
+	                // Generate filters
+	                for (var i = 0; i < n; i++) {
+	                    this.emitter.emit('before-filter-init', this, i);
 	
-	                        var fltcell = _dom2.default.create(this.fltCellTag),
-	                            col = this.getFilterType(i);
+	                    var fltcell = _dom2.default.create(this.fltCellTag),
+	                        col = this.getFilterType(i);
 	
-	                        if (this.singleSearchFlt) {
-	                            fltcell.colSpan = this.nbCells;
+	                    if (this.singleSearchFlt) {
+	                        fltcell.colSpan = this.nbCells;
+	                    }
+	                    if (!this.gridLayout) {
+	                        fltrow.appendChild(fltcell);
+	                    }
+	                    inpclass = i == n - 1 && this.displayBtn ? this.fltSmallCssClass : this.fltCssClass;
+	
+	                    //only 1 input for single search
+	                    if (this.singleSearchFlt) {
+	                        col = this.fltTypeInp;
+	                        inpclass = this.singleFltCssClass;
+	                    }
+	
+	                    //drop-down filters
+	                    if (col === this.fltTypeSlc || col === this.fltTypeMulti) {
+	                        if (!Mod.dropdown) {
+	                            Mod.dropdown = new _dropdown.Dropdown(this);
 	                        }
-	                        if (!this.gridLayout) {
-	                            fltrow.appendChild(fltcell);
-	                        }
-	                        inpclass = i == n - 1 && this.displayBtn ? this.fltSmallCssClass : this.fltCssClass;
-	
-	                        //only 1 input for single search
-	                        if (this.singleSearchFlt) {
-	                            col = this.fltTypeInp;
-	                            inpclass = this.singleFltCssClass;
-	                        }
-	
-	                        //drop-down filters
-	                        if (col === this.fltTypeSlc || col === this.fltTypeMulti) {
-	                            if (!Mod.dropdown) {
-	                                Mod.dropdown = new _dropdown.Dropdown(this);
+	                        Mod.dropdown.init(i, this.isExternalFlt, fltcell);
+	                    }
+	                    // checklist
+	                    else if (col === this.fltTypeCheckList) {
+	                            if (!Mod.checkList) {
+	                                Mod.checkList = new _checkList.CheckList(this);
 	                            }
-	                            Mod.dropdown.init(i, this.isExternalFlt, fltcell);
-	                        }
-	                        // checklist
-	                        else if (col === this.fltTypeCheckList) {
-	                                if (!Mod.checkList) {
-	                                    Mod.checkList = new _checkList.CheckList(this);
-	                                }
-	                                Mod.checkList.init(i, this.isExternalFlt, fltcell);
-	                            } else {
-	                                this._buildInputFilter(i, inpclass, fltcell);
-	                            }
-	
-	                        // this adds submit button
-	                        if (i == n - 1 && this.displayBtn) {
-	                            this._buildSubmitButton(i, fltcell);
+	                            Mod.checkList.init(i, this.isExternalFlt, fltcell);
+	                        } else {
+	                            this._buildInputFilter(i, inpclass, fltcell);
 	                        }
 	
-	                        this.emitter.emit('after-filter-init', this, i);
-	                    } // for i
-	                } else {
-	                        this._resetGrid();
-	                    } //if isFirstLoad
+	                    // this adds submit button
+	                    if (i == n - 1 && this.displayBtn) {
+	                        this._buildSubmitButton(i, fltcell);
+	                    }
+	
+	                    this.emitter.emit('after-filter-init', this, i);
+	                } // for i
+	
+	                // } else {
+	                //     this._resetGrid();
+	                // }//if isFirstLoad
 	            } //if this.fltGrid
 	
 	            /* Features */
@@ -3652,7 +3657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                fltValues.push(value);
 	            }
 	            //adds array size
-	            fltValues.push(tf.fltIds.length);
+	            //fltValues.push(tf.fltIds.length);
 	
 	            //writes cookie
 	            _cookie2.default.write(name, fltValues.join(tf.separator), this.duration);
@@ -3889,7 +3894,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.tblMainCont.className = this.gridMainContCssClass;
 	            if (this.gridWidth) {
 	                this.tblMainCont.style.width = this.gridWidth;
-	            }
+	            }console.log(tbl, tbl.parentNode);
 	            tbl.parentNode.insertBefore(this.tblMainCont, tbl);
 	
 	            //Table container: div wrapping content table

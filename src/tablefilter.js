@@ -508,12 +508,16 @@ export class TableFilter {
 
         if(this.rememberGridValues || this.rememberPageNb ||
             this.rememberPageLen){
-            Mod.store = new Store(this);
+            if(!Mod.store){
+                Mod.store = new Store(this);
+            }
             Mod.store.init();
         }
 
         if(this.gridLayout){
-            Mod.gridLayout = new GridLayout(this);
+            if(!Mod.gridLayout){
+                Mod.gridLayout = new GridLayout(this);
+            }
             Mod.gridLayout.init();
         }
 
@@ -540,7 +544,7 @@ export class TableFilter {
         if(!this.fltGrid){
             this._initNoFilters();
         } else {
-            if(this.isFirstLoad){
+            // if(this.isFirstLoad){
                 let fltrow = this._insertFiltersRow();
 
                 this.nbFilterableRows = this.getRowsNb();
@@ -594,9 +598,9 @@ export class TableFilter {
                     this.emitter.emit('after-filter-init', this, i);
                 }// for i
 
-            } else {
-                this._resetGrid();
-            }//if isFirstLoad
+            // } else {
+            //     this._resetGrid();
+            // }//if isFirstLoad
 
         }//if this.fltGrid
 

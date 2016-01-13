@@ -110,7 +110,7 @@ export class GridLayout extends Feature{
         this.tblMainCont.className = this.gridMainContCssClass;
         if(this.gridWidth){
             this.tblMainCont.style.width = this.gridWidth;
-        }
+        }console.log(tbl, tbl.parentNode);
         tbl.parentNode.insertBefore(this.tblMainCont, tbl);
 
         //Table container: div wrapping content table
