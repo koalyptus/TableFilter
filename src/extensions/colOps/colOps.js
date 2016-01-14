@@ -46,7 +46,7 @@ export default class ColOps{
      */
     calc() {
         var tf = this.tf;
-        if(!tf.isFirstLoad && !tf.hasGrid()){
+        if(!tf.hasGrid()){
             return;
         }
 

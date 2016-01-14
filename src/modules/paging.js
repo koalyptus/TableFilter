@@ -497,9 +497,6 @@ export class Paging extends Feature{
         var tf = this.tf;
         var evt = this.evt;
 
-        // if(!tf.hasGrid() && !tf.isFirstLoad){
-        //     return;
-        // }
         if(this.resultsPerPageSlc || !this.resultsPerPage){
             return;
         }

@@ -123,8 +123,6 @@ export class TableFilter {
         this.validRowsIndex = [];
         //stores filters row element
         this.fltGridEl = null;
-        //is first load boolean
-        this.isFirstLoad = true;
         //container div for paging elements, reset btn etc.
         this.infDiv = null;
         //div for rows counter
@@ -544,63 +542,58 @@ export class TableFilter {
         if(!this.fltGrid){
             this._initNoFilters();
         } else {
-            // if(this.isFirstLoad){
-                let fltrow = this._insertFiltersRow();
+            let fltrow = this._insertFiltersRow();
 
-                this.nbFilterableRows = this.getRowsNb();
-                this.nbVisibleRows = this.nbFilterableRows;
-                this.nbRows = this.tbl.rows.length;
+            this.nbFilterableRows = this.getRowsNb();
+            this.nbVisibleRows = this.nbFilterableRows;
+            this.nbRows = this.tbl.rows.length;
 
-                // Generate filters
-                for(let i=0; i<n; i++){
-                    this.emitter.emit('before-filter-init', this, i);
+            // Generate filters
+            for(let i=0; i<n; i++){
+                this.emitter.emit('before-filter-init', this, i);
 
-                    let fltcell = Dom.create(this.fltCellTag),
-                        col = this.getFilterType(i);
+                let fltcell = Dom.create(this.fltCellTag),
+                    col = this.getFilterType(i);
 
-                    if(this.singleSearchFlt){
-                        fltcell.colSpan = this.nbCells;
+                if(this.singleSearchFlt){
+                    fltcell.colSpan = this.nbCells;
+                }
+                if(!this.gridLayout){
+                    fltrow.appendChild(fltcell);
+                }
+                inpclass = (i==n-1 && this.displayBtn) ?
+                    this.fltSmallCssClass : this.fltCssClass;
+
+                //only 1 input for single search
+                if(this.singleSearchFlt){
+                    col = this.fltTypeInp;
+                    inpclass = this.singleFltCssClass;
+                }
+
+                //drop-down filters
+                if(col===this.fltTypeSlc || col===this.fltTypeMulti){
+                    if(!Mod.dropdown){
+                        Mod.dropdown = new Dropdown(this);
                     }
-                    if(!this.gridLayout){
-                        fltrow.appendChild(fltcell);
+                    Mod.dropdown.init(i, this.isExternalFlt, fltcell);
+                }
+                // checklist
+                else if(col===this.fltTypeCheckList){
+                    if(!Mod.checkList){
+                        Mod.checkList = new CheckList(this);
                     }
-                    inpclass = (i==n-1 && this.displayBtn) ?
-                        this.fltSmallCssClass : this.fltCssClass;
+                    Mod.checkList.init(i, this.isExternalFlt, fltcell);
+                } else {
+                    this._buildInputFilter(i, inpclass, fltcell);
+                }
 
-                    //only 1 input for single search
-                    if(this.singleSearchFlt){
-                        col = this.fltTypeInp;
-                        inpclass = this.singleFltCssClass;
-                    }
+                // this adds submit button
+                if(i==n-1 && this.displayBtn){
+                    this._buildSubmitButton(i, fltcell);
+                }
 
-                    //drop-down filters
-                    if(col===this.fltTypeSlc || col===this.fltTypeMulti){
-                        if(!Mod.dropdown){
-                            Mod.dropdown = new Dropdown(this);
-                        }
-                        Mod.dropdown.init(i, this.isExternalFlt, fltcell);
-                    }
-                    // checklist
-                    else if(col===this.fltTypeCheckList){
-                        if(!Mod.checkList){
-                            Mod.checkList = new CheckList(this);
-                        }
-                        Mod.checkList.init(i, this.isExternalFlt, fltcell);
-                    } else {
-                        this._buildInputFilter(i, inpclass, fltcell);
-                    }
-
-                    // this adds submit button
-                    if(i==n-1 && this.displayBtn){
-                        this._buildSubmitButton(i, fltcell);
-                    }
-
-                    this.emitter.emit('after-filter-init', this, i);
-                }// for i
-
-            // } else {
-            //     this._resetGrid();
-            // }//if isFirstLoad
+                this.emitter.emit('after-filter-init', this, i);
+            }
 
         }//if this.fltGrid
 
@@ -649,7 +642,6 @@ export class TableFilter {
             Mod.noResults.init();
         }
 
-        this.isFirstLoad = false;
         this._hasGrid = true;
 
         if(this.rememberGridValues || this.rememberPageLen ||
@@ -951,7 +943,8 @@ export class TableFilter {
             return;
         }
         let rows = this.tbl.rows,
-            Mod = this.Mod;
+            Mod = this.Mod,
+            emitter = this.emitter;
 
         if(this.isExternalFlt && !this.popupFilters){
             this.removeExternalFlts();
@@ -959,35 +952,38 @@ export class TableFilter {
         if(this.infDiv){
             this.removeToolbar();
         }
-        if(this.highlightKeywords){
-            Mod.highlightKeyword.unhighlightAll();
-        }
+        // if(this.highlightKeywords){
+        //     Mod.highlightKeyword.unhighlightAll();
+        // }
         if(this.markActiveColumns){
             this.clearActiveColumns();
-            this.emitter.off(['before-filtering'],
-                ()=> this.clearActiveColumns());
-            this.emitter.off(['cell-processed'],
+            emitter.off(['before-filtering'], ()=> this.clearActiveColumns());
+            emitter.off(['cell-processed'],
                 (tf, colIndex)=> this.markActiveColumn(colIndex));
         }
         if(this.hasExtensions){
             this.destroyExtensions();
         }
 
-        for(let j=this.refRow; j<this.nbRows; j++){
-            // validate row
-            this.validateRow(j, true);
+        // for(let j=this.refRow; j<this.nbRows; j++){
+        //     // validate row
+        //     this.validateRow(j, true);
 
-            //removes alternating colors
-            if(this.alternateRows){
-                Mod.alternateRows.removeRowBg(j);
-            }
+        //     //removes alternating colors
+        //     if(this.alternateRows){
+        //         Mod.alternateRows.removeRowBg(j);
+        //     }
 
-        }//for j
+        // }//for j
+        this.validateAllRows();
 
         if(this.fltGrid && !this.gridLayout){
             this.fltGridEl = rows[this.filtersRowIndex];
             this.tbl.deleteRow(this.filtersRowIndex);
         }
+
+        // broadcast destroy event
+        emitter.emit('destroy', this);
 
         // Destroy modules
         Object.keys(Mod).forEach(function(key){
@@ -999,11 +995,10 @@ export class TableFilter {
 
         // unsubscribe to events
         if(this.hasVisibleRows){
-            this.emitter.off(['after-filtering'],
-                ()=> this.enforceVisibility());
+            emitter.off(['after-filtering'], ()=> this.enforceVisibility());
         }
         if(this.linkedFilters){
-            this.emitter.off(['after-filtering'], ()=> this.linkFilters());
+            emitter.off(['after-filtering'], ()=> this.linkFilters());
         }
 
         Dom.removeClass(this.tbl, this.prfxTf);
@@ -1272,7 +1267,7 @@ export class TableFilter {
      * TODO: Reduce complexity of this massive method
      */
     filter(){
-        if(!this.fltGrid || (!this._hasGrid && !this.isFirstLoad)){
+        if(!this.fltGrid || !this._hasGrid){
             return;
         }
         //invoke onbefore callback
@@ -1981,8 +1976,7 @@ export class TableFilter {
      * @param {String} searcharg Search term
      */
     setFilterValue(index, searcharg=''){
-        if((!this.fltGrid && !this.isFirstLoad) ||
-            !this.getFilterElement(index)){
+        if(!this.fltGrid || !this.getFilterElement(index)){
             return;
         }
         let slc = this.getFilterElement(index),

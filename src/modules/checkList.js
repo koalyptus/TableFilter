@@ -188,8 +188,7 @@ export class CheckList extends Feature{
                         }
                         if(!Arr.has(filteredCol, cell_string, tf.matchCase) &&
                             !Arr.has(this.excludedOpts,
-                                cell_string, tf.matchCase) &&
-                            !tf.isFirstLoad){
+                                cell_string, tf.matchCase)){
                             this.excludedOpts.push(cell_data);
                         }
                     }

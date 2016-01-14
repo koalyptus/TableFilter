@@ -199,8 +199,7 @@ export class Dropdown extends Feature{
                         }
                         if(!Arr.has(filteredCol, cell_string, matchCase) &&
                             !Arr.has(
-                                excludedOpts, cell_string, matchCase) &&
-                            !this.isFirstLoad){
+                                excludedOpts, cell_string, matchCase)){
                             excludedOpts.push(cell_data);
                         }
                     }
