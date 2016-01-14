@@ -617,12 +617,13 @@ export class TableFilter {
             Mod.statusBar = new StatusBar(this);
             Mod.statusBar.init();
         }
-        if(this.paging || Mod.paging){
+        if(this.paging){
             if(!Mod.paging){
                 Mod.paging = new Paging(this);
                 Mod.paging.init();
+            } else{
+               Mod.paging.reset();
             }
-            Mod.paging.reset();
         }
         if(this.btnReset){
             Mod.clearButton = new ClearButton(this);
@@ -1008,6 +1009,7 @@ export class TableFilter {
         Dom.removeClass(this.tbl, this.prfxTf);
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
+        this.fltIds = [];
         this.activeFlt = null;
         this._hasGrid = false;
     }
@@ -2207,69 +2209,69 @@ export class TableFilter {
     /**
      * Re-generate the filters grid bar when previously removed
      */
-    _resetGrid(){
-        if(this.isFirstLoad){
-            return;
-        }
+    // _resetGrid(){
+    //     if(this.isFirstLoad){
+    //         return;
+    //     }
 
-        let Mod = this.Mod;
-        let tbl = this.tbl;
-        let rows = tbl.rows;
-        let filtersRowIndex = this.filtersRowIndex;
-        let filtersRow = rows[filtersRowIndex];
+    //     let Mod = this.Mod;
+    //     let tbl = this.tbl;
+    //     let rows = tbl.rows;
+    //     let filtersRowIndex = this.filtersRowIndex;
+    //     let filtersRow = rows[filtersRowIndex];
 
-        // grid was removed, grid row element is stored in fltGridEl property
-        if(!this.gridLayout){
-            // If table has a thead ensure the filters row is appended in the
-            // thead element
-            if(tbl.tHead){
-                var tempRow = tbl.tHead.insertRow(this.filtersRowIndex);
-                tbl.tHead.replaceChild(this.fltGridEl, tempRow);
-            } else {
-                filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
-            }
+    //     // grid was removed, grid row element is stored in fltGridEl property
+    //     if(!this.gridLayout){
+    //         // If table has a thead ensure the filters row is appended in the
+    //         // thead element
+    //         if(tbl.tHead){
+    //             var tempRow = tbl.tHead.insertRow(this.filtersRowIndex);
+    //             tbl.tHead.replaceChild(this.fltGridEl, tempRow);
+    //         } else {
+    //           filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
+    //         }
 
-            Dom.addClass(tbl, this.prfxTf);
-        }
+    //         Dom.addClass(tbl, this.prfxTf);
+    //     }
 
-        // filters are appended in external placeholders elements
-        if(this.isExternalFlt){
-            let externalFltTgtIds = this.externalFltTgtIds;
-            for(let ct=0, len=externalFltTgtIds.length; ct<len; ct++){
-                let extFlt = Dom.id(externalFltTgtIds[ct]);
+    //     // filters are appended in external placeholders elements
+    //     if(this.isExternalFlt){
+    //         let externalFltTgtIds = this.externalFltTgtIds;
+    //         for(let ct=0, len=externalFltTgtIds.length; ct<len; ct++){
+    //             let extFlt = Dom.id(externalFltTgtIds[ct]);
 
-                if(!extFlt){ continue; }
+    //             if(!extFlt){ continue; }
 
-                let externalFltEl = this.externalFltEls[ct];
-                extFlt.appendChild(externalFltEl);
-                let colFltType = this.getFilterType(ct);
-                //IE special treatment for gridLayout, appended filters are
-                //empty
-                if(this.gridLayout &&
-                    externalFltEl.innerHTML === '' &&
-                    colFltType !== this.fltTypeInp){
-                    if(colFltType === this.fltTypeSlc ||
-                        colFltType === this.fltTypeMulti){
-                        Mod.dropdown.build(ct);
-                    }
-                    if(colFltType === this.fltTypeCheckList){
-                        Mod.checkList.build(ct);
-                    }
-                }
-            }
-        }
+    //             let externalFltEl = this.externalFltEls[ct];
+    //             extFlt.appendChild(externalFltEl);
+    //             let colFltType = this.getFilterType(ct);
+    //             //IE special treatment for gridLayout, appended filters are
+    //             //empty
+    //             if(this.gridLayout &&
+    //                 externalFltEl.innerHTML === '' &&
+    //                 colFltType !== this.fltTypeInp){
+    //                 if(colFltType === this.fltTypeSlc ||
+    //                     colFltType === this.fltTypeMulti){
+    //                     Mod.dropdown.build(ct);
+    //                 }
+    //                 if(colFltType === this.fltTypeCheckList){
+    //                     Mod.checkList.build(ct);
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        this.nbFilterableRows = this.getRowsNb();
-        this.nbVisibleRows = this.nbFilterableRows;
-        this.nbRows = rows.length;
+    //     this.nbFilterableRows = this.getRowsNb();
+    //     this.nbVisibleRows = this.nbFilterableRows;
+    //     this.nbRows = rows.length;
 
-        if(this.popupFilters){
-            this.headersRow++;
-            Mod.popupFilter.reset();
-        }
+    //     if(this.popupFilters){
+    //         this.headersRow++;
+    //         Mod.popupFilter.reset();
+    //     }
 
-        this._hasGrid = true;
-    }
+    //     this._hasGrid = true;
+    // }
 
     /**
      * Determines if passed filter column implements exact query match

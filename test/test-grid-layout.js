@@ -19,11 +19,18 @@ test('GridLayout component', function() {
     deepEqual(tf.filtersRowIndex, 1, 'Filters row index');
 });
 
-// test('Destroy GridLayout component', function() {
-//     gridLayout.destroy();
-//     deepEqual(gridLayout.tblMainCont, null, 'Main container element removed');
-//     deepEqual(gridLayout.tblCont, null, 'Main HTML table container element removed');
-//     deepEqual(gridLayout.headTblCont, null, 'Headers container element removed');
-//     deepEqual(gridLayout.headTbl, null, 'Headers HTML table element removed');
-//     notEqual(gridLayout.sourceTblHtml, null, 'Table reference is kept');
-// });
+test('Destroy TableFilter', function() {
+    gridLayout.destroy();
+    deepEqual(gridLayout.tblMainCont, null, 'Main container element removed');
+    deepEqual(gridLayout.tblCont, null, 'Main HTML table container element removed');
+    deepEqual(gridLayout.headTblCont, null, 'Headers container element removed');
+    deepEqual(gridLayout.headTbl, null, 'Headers HTML table element removed');
+    notEqual(gridLayout.sourceTblHtml, null, 'Table reference is kept');
+});
+
+test('Reset TableFilter', function() {
+    tf.destroy();
+    tf.init();
+    deepEqual(tf instanceof TableFilter, true, 'TableFilter type');
+    deepEqual(typeof gridLayout, 'object', 'GridLayout instanciated');
+});
