@@ -2743,7 +2743,7 @@ export class TableFilter{
                 }
             }
             let header = this.getHeaderElement(j);
-            let headerText = Dom.getText(header);
+            let headerText = Dom.getFirstTextNode(header);
             headers.push(headerText);
         }
         return headers;
