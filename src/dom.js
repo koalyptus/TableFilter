@@ -17,6 +17,20 @@ export default {
     },
 
     /**
+     * Returns the first text node contained in the supplied node
+     * @param  {NodeElement} node node
+     * @return {String}
+     */
+    getFirstTextNode(node){
+        for(let i=0; i<node.childNodes.length; i++){
+            let n = node.childNodes[i];
+            if(n.nodeType === 3){
+                return n.data;
+            }
+        }
+    },
+
+    /**
      * Creates an html element with given collection of attributes
      * @param  {String} tag a string of the html tag to create
      * @param  {Array} an undetermined number of arrays containing the with 2
