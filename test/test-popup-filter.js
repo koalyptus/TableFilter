@@ -17,6 +17,17 @@ test('Pop-up filter component', function() {
     deepEqual(popupFilter.popUpFltElms instanceof Array,
         true, 'Type of popUpFltElms property');
     deepEqual(tf.headersRow, 1, 'Headers row index');
+    // issue 99: getHeadersText for pick-list filter types
+    deepEqual(
+        tf.getHeadersText()[2],
+        'Road Distance (km)',
+        'Expected header text for multiple filter type'
+    );
+    deepEqual(
+        tf.getHeadersText()[3],
+        'By Air (hrs)',
+        'Expected header text for multiple filter type'
+    );
 });
 
 module('UI elements');
@@ -93,6 +104,17 @@ test('Re-instantiated with grid-layout', function() {
     deepEqual(popupFilter.popUpFltElms instanceof Array,
         true, 'Type of popUpFltElms property');
     deepEqual(tf.headersRow, 0, 'Headers row index');
+    // issue 99: getHeadersText for pick-list filter types
+    deepEqual(
+        tf.getHeadersText()[2],
+        'Road Distance (km)',
+        'Expected header text for multiple filter type'
+    );
+    deepEqual(
+        tf.getHeadersText()[3],
+        'By Air (hrs)',
+        'Expected header text for multiple filter type'
+    );
 });
 
 test('Pop-up filter UI elements with grid-layout', function() {
