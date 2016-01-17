@@ -18,6 +18,7 @@ test('Properties', function() {
     deepEqual(help.feature, 'help', 'Feature name');
     deepEqual(help.enabled, true, 'Feature enabled');
     deepEqual(help.initialized, true, 'Feature enabled');
+    deepEqual(typeof help.emitter, 'object', 'Feature has emitter instance');
     deepEqual(typeof help.config, 'object', 'TF configuration object');
     deepEqual(typeof help.init, 'function', 'Feature init method');
     deepEqual(typeof help.destroy, 'function', 'Feature destroy method');

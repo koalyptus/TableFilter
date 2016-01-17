@@ -19,14 +19,16 @@ test('Properties', function() {
     deepEqual(clearButton.feature, 'btnReset', 'Feature name');
     deepEqual(clearButton.enabled, true, 'Feature enabled');
     deepEqual(clearButton.initialized, true, 'Feature enabled');
+    deepEqual(typeof clearButton.emitter, 'object',
+        'Feature has emitter instance');
     deepEqual(typeof clearButton.config, 'object', 'TF configuration object');
     deepEqual(typeof clearButton.init, 'function', 'Feature init method');
     deepEqual(typeof clearButton.destroy, 'function', 'Feature destroy method');
     deepEqual(typeof clearButton.reset, 'function', 'Feature reset method');
     deepEqual(typeof clearButton.enable, 'function', 'Feature enable method');
     deepEqual(typeof clearButton.disable, 'function', 'Feature enable method');
-    deepEqual(
-        typeof clearButton.isEnabled, 'function', 'Feature enable method');
+    deepEqual(typeof clearButton.isEnabled, 'function',
+        'Feature enable method');
 });
 test('Can destroy', function() {
     clearButton.destroy();

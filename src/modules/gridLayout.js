@@ -13,7 +13,7 @@ export class GridLayout extends Feature{
     constructor(tf){
         super(tf, 'gridLayout');
 
-        var f = this.config;
+        let f = this.config;
 
         //defines grid width
         this.gridWidth = f.grid_width || null;
@@ -60,21 +60,26 @@ export class GridLayout extends Feature{
      * Generates a grid with fixed headers
      */
     init(){
-        var tf = this.tf;
-        var f = this.config;
-        var tbl = tf.tbl;
+        let tf = this.tf;
+        let f = this.config;
+        let tbl = tf.tbl;
 
         if(this.initialized){
             return;
         }
+
+        // Override reference rows indexes
+        tf.refRow = Types.isNull(tf.startRow) ? 0 : tf.startRow;
+        tf.headersRow = 0;
+        tf.filtersRowIndex = 1;
 
         tf.isExternalFlt = true;
 
         // default width of 100px if column widths not set
         if(!tf.hasColWidths){
             tf.colWidths = [];
-            for(var k=0; k<tf.nbCells; k++){
-                var colW,
+            for(let k=0; k<tf.nbCells; k++){
+                let colW,
                     cell = tbl.rows[this.gridHeadRowIndex].cells[k];
                 if(cell.width !== ''){
                     colW = cell.width;
@@ -89,7 +94,7 @@ export class GridLayout extends Feature{
         }
         tf.setColWidths(this.gridHeadRowIndex);
 
-        var tblW;//initial table width
+        let tblW;//initial table width
         if(tbl.width !== ''){
             tblW = tbl.width;
         }
@@ -122,7 +127,7 @@ export class GridLayout extends Feature{
             this.tblCont.style.height = this.gridHeight;
         }
         tbl.parentNode.insertBefore(this.tblCont, tbl);
-        var t = Dom.remove(tbl);
+        let t = Dom.remove(tbl);
         this.tblCont.appendChild(t);
 
         //In case table width is expressed in %
@@ -131,7 +136,7 @@ export class GridLayout extends Feature{
                 tbl.clientWidth : tblW) + 'px';
         }
 
-        var d = Dom.remove(this.tblCont);
+        let d = Dom.remove(this.tblCont);
         this.tblMainCont.appendChild(d);
 
         //Headers table container: div wrapping headers table
@@ -148,15 +153,15 @@ export class GridLayout extends Feature{
 
         //Headers table
         this.headTbl = Dom.create('table', ['id', this.prfxHeadTbl + tf.id]);
-        var tH = Dom.create('tHead');
+        let tH = Dom.create('tHead');
 
         //1st row should be headers row, ids are added if not set
         //Those ids are used by the sort feature
-        var hRow = tbl.rows[this.gridHeadRowIndex];
-        var sortTriggers = [];
-        for(var n=0; n<tf.nbCells; n++){
-            var c = hRow.cells[n];
-            var thId = c.getAttribute('id');
+        let hRow = tbl.rows[this.gridHeadRowIndex];
+        let sortTriggers = [];
+        for(let n=0; n<tf.nbCells; n++){
+            let c = hRow.cells[n];
+            let thId = c.getAttribute('id');
             if(!thId || thId===''){
                 thId = this.prfxGridTh+n+'_'+tf.id;
                 c.setAttribute('id', thId);
@@ -165,24 +170,24 @@ export class GridLayout extends Feature{
         }
 
         //Filters row is created
-        var filtersRow = Dom.create('tr');
+        let filtersRow = Dom.create('tr');
         if(this.gridEnableFilters && tf.fltGrid){
             tf.externalFltTgtIds = [];
-            for(var j=0; j<tf.nbCells; j++){
-                var fltTdId = tf.prfxFlt+j+ this.prfxGridFltTd +tf.id;
-                var cl = Dom.create(tf.fltCellTag, ['id', fltTdId]);
+            for(let j=0; j<tf.nbCells; j++){
+                let fltTdId = tf.prfxFlt+j+ this.prfxGridFltTd +tf.id;
+                let cl = Dom.create(tf.fltCellTag, ['id', fltTdId]);
                 filtersRow.appendChild(cl);
                 tf.externalFltTgtIds[j] = fltTdId;
             }
         }
         //Headers row are moved from content table to headers table
-        for(var i=0; i<this.gridHeadRows.length; i++){
-            var headRow = tbl.rows[this.gridHeadRows[0]];
+        for(let i=0; i<this.gridHeadRows.length; i++){
+            let headRow = tbl.rows[this.gridHeadRows[0]];
             tH.appendChild(headRow);
         }
         this.headTbl.appendChild(tH);
         if(tf.filtersRowIndex === 0){
-            tH.insertBefore(filtersRow,hRow);
+            tH.insertBefore(filtersRow, hRow);
         } else {
             tH.appendChild(filtersRow);
         }
@@ -191,7 +196,7 @@ export class GridLayout extends Feature{
         this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);
 
         //THead needs to be removed in content table for sort feature
-        var thead = Dom.tag(tbl, 'thead');
+        let thead = Dom.tag(tbl, 'thead');
         if(thead.length>0){
             tbl.removeChild(thead[0]);
         }
@@ -216,15 +221,15 @@ export class GridLayout extends Feature{
 
         //scroll synchronisation
         Event.add(this.tblCont, 'scroll', (evt)=> {
-            var elm = Event.target(evt);
-            var scrollLeft = elm.scrollLeft;
+            let elm = Event.target(evt);
+            let scrollLeft = elm.scrollLeft;
             this.headTblCont.scrollLeft = scrollLeft;
             //New pointerX calc taking into account scrollLeft
             // if(!o.isPointerXOverwritten){
             //     try{
             //         o.Evt.pointerX = function(evt){
-            //             var e = evt || global.event;
-            //             var bdScrollLeft = tf_StandardBody().scrollLeft +
+            //             let e = evt || global.event;
+            //             let bdScrollLeft = tf_StandardBody().scrollLeft +
             //                 scrollLeft;
             //             return (e.pageX + scrollLeft) ||
             //                 (e.clientX + bdScrollLeft);
@@ -237,7 +242,7 @@ export class GridLayout extends Feature{
         });
 
         //Configure sort extension if any
-        var sort = (f.extensions || []).filter(function(itm){
+        let sort = (f.extensions || []).filter(function(itm){
             return itm.name === 'sort';
         });
         if(sort.length === 1){
@@ -250,9 +255,9 @@ export class GridLayout extends Feature{
 
         //Col elements are enough to keep column widths after sorting and
         //filtering
-        var createColTags = function(){
-            for(var k=(tf.nbCells-1); k>=0; k--){
-                var col = Dom.create('col', ['id', tf.id+'_col_'+k]);
+        let createColTags = function(){
+            for(let k=(tf.nbCells-1); k>=0; k--){
+                let col = Dom.create('col', ['id', tf.id+'_col_'+k]);
                 tbl.insertBefore(col, tbl.firstChild);
                 col.style.width = tf.colWidths[k];
                 this.gridColElms[k] = col;
@@ -263,26 +268,26 @@ export class GridLayout extends Feature{
         if(!this.tblHasColTag){
             createColTags.call(this);
         } else {
-            var cols = Dom.tag(tbl, 'col');
-            for(var ii=0; ii<tf.nbCells; ii++){
+            let cols = Dom.tag(tbl, 'col');
+            for(let ii=0; ii<tf.nbCells; ii++){
                 cols[ii].setAttribute('id', tf.id+'_col_'+ii);
                 cols[ii].style.width = tf.colWidths[ii];
                 this.gridColElms.push(cols[ii]);
             }
         }
 
-        var afterColResizedFn = Types.isFn(f.on_after_col_resized) ?
+        let afterColResizedFn = Types.isFn(f.on_after_col_resized) ?
             f.on_after_col_resized : null;
         f.on_after_col_resized = function(o, colIndex){
             if(!colIndex){
                 return;
             }
-            var w = o.crWColsRow.cells[colIndex].style.width;
-            var col = o.gridColElms[colIndex];
+            let w = o.crWColsRow.cells[colIndex].style.width;
+            let col = o.gridColElms[colIndex];
             col.style.width = w;
 
-            var thCW = o.crWColsRow.cells[colIndex].clientWidth;
-            var tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
+            let thCW = o.crWColsRow.cells[colIndex].clientWidth;
+            let tdCW = o.crWRowDataTbl.cells[colIndex].clientWidth;
 
             if(thCW != tdCW){
                 o.headTbl.style.width = tbl.clientWidth+'px';
@@ -308,13 +313,13 @@ export class GridLayout extends Feature{
      * Removes the grid layout
      */
     destroy(){
-        var tf = this.tf;
-        var tbl = tf.tbl;
+        let tf = this.tf;
+        let tbl = tf.tbl;
 
         if(!this.initialized){
             return;
         }
-        var t = Dom.remove(tbl);
+        let t = Dom.remove(tbl);
         this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);
         Dom.remove(this.tblMainCont);
 
@@ -325,7 +330,7 @@ export class GridLayout extends Feature{
 
         tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element for future usage
-        this.tf.tbl = t;
+        this.tf.tbl = Dom.id(tf.id);
 
         this.initialized = false;
     }

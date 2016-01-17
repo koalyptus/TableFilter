@@ -26,6 +26,7 @@ export default class AdapterEzEditTable {
         this._ezEditTable = null;
         this.cfg = cfg;
         this.tf = tf;
+        this.emitter = tf.emitter;
     }
 
     /**
@@ -43,6 +44,10 @@ export default class AdapterEzEditTable {
         if(this.loadStylesheet && !tf.isImported(this.stylesheet, 'link')){
             tf.import(this.stylesheetName, this.stylesheet, null, 'link');
         }
+
+        // TODO: hack to prevent ezEditTable enter key event hijaking.
+        // Needs to be fixed in the vendor's library
+        this.emitter.on(['filter-focus', 'filter-blur'], ()=> this.toggle());
     }
 
     /**
@@ -293,7 +298,8 @@ export default class AdapterEzEditTable {
             cfg.on_added_dom_row = function(){
                 tf.nbFilterableRows++;
                 if(!tf.paging){
-                    tf.feature('rowsCounter').refresh();
+                    tf.emitter.emit('rows-changed', tf, this);
+                    //tf.feature('rowsCounter').refresh();
                 } else {
                     tf.nbRows++;
                     tf.nbVisibleRows++;
@@ -314,7 +320,8 @@ export default class AdapterEzEditTable {
                 cfg.actions['delete'].on_after_submit = function(){
                     tf.nbFilterableRows--;
                     if(!tf.paging){
-                        tf.feature('rowsCounter').refresh();
+                        // tf.feature('rowsCounter').refresh();
+                        tf.emitter.emit('rows-changed', tf, this);
                     } else {
                         tf.nbRows--;
                         tf.nbVisibleRows--;
@@ -357,6 +364,23 @@ export default class AdapterEzEditTable {
     }
 
     /**
+     * Toggle behaviour
+     */
+    toggle(){
+        var ezEditTable = this._ezEditTable;
+        if(ezEditTable.editable){
+            ezEditTable.Editable.Remove();
+        } else {
+            ezEditTable.Editable.Set();
+        }
+        if(ezEditTable.selection){
+            ezEditTable.Selection.Remove();
+        } else {
+            ezEditTable.Selection.Set();
+        }
+    }
+
+    /**
      * Remove advanced grid
      */
     destroy(){
@@ -370,6 +394,8 @@ export default class AdapterEzEditTable {
                 ezEditTable.Editable.Remove();
             }
         }
+
+        this.emitter.off(['filter-focus', 'filter-blur'], ()=> this.toggle());
         this.initialized = false;
     }
 }

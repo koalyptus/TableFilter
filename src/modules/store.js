@@ -8,13 +8,19 @@ export class Store{
      *
      * TODO: use localStorage and fallback to cookie persistence
      */
-    constructor(tf) {
+    constructor(tf){
         var f = tf.config();
 
         this.duration = !isNaN(f.set_cookie_duration) ?
             parseInt(f.set_cookie_duration, 10) : 100000;
 
         this.tf = tf;
+        this.emitter = tf.emitter;
+    }
+
+    init(){
+        this.emitter.on(['after-filtering'],
+            ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
     }
 
     /**
@@ -24,6 +30,11 @@ export class Store{
     saveFilterValues(name){
         var tf = this.tf;
         var fltValues = [];
+
+        if(!tf.rememberGridValues){
+            return;
+        }
+
         //store filters' values
         for(var i=0; i<tf.fltIds.length; i++){
             var value = tf.getFilterValue(i);
@@ -33,7 +44,7 @@ export class Store{
             fltValues.push(value);
         }
         //adds array size
-        fltValues.push(tf.fltIds.length);
+        //fltValues.push(tf.fltIds.length);
 
         //writes cookie
         Cookie.write(
@@ -60,6 +71,9 @@ export class Store{
      * @param {String} cookie name
      */
     savePageNb(name){
+        if(!this.tf.rememberPageNb){
+            return;
+        }
         Cookie.write(
             name,
             this.tf.feature('paging').currentPageNb,
@@ -81,6 +95,9 @@ export class Store{
      * @param {String} cookie name
      */
     savePageLength(name){
+        if(!this.tf.rememberPageLen){
+            return;
+        }
         Cookie.write(
             name,
             this.tf.feature('paging').resultsPerPageSlc.selectedIndex,
@@ -97,4 +114,8 @@ export class Store{
         return Cookie.read(name);
     }
 
+    destroy(){
+        this.emitter.off(['after-filtering'],
+            ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
+    }
 }

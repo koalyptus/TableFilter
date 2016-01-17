@@ -14,25 +14,25 @@
     module('Behaviour');
     test('After filtering with `sydney`', function() {
         tf.setFilterValue(0, 'sydney');
-        tf._filter();
+        tf.filter();
         deepEqual(tf.getValidRows().length, 0, 'No matches');
     });
 
     test('After filtering with `Sydney`', function() {
         tf.setFilterValue(0, 'Sydney');
-        tf._filter();
+        tf.filter();
         deepEqual(tf.getValidRows().length>0, true, 'Matches');
     });
 
     test('After filtering with `ade`', function() {
         tf.setFilterValue(0, 'ade');
-        tf._filter();
+        tf.filter();
         deepEqual(tf.getValidRows().length, 0, 'No matches');
     });
 
     test('After filtering with `Ade`', function() {
         tf.setFilterValue(0, 'Ade');
-        tf._filter();
+        tf.filter();
         deepEqual(tf.getValidRows().length>0, true, 'Matches');
     });
 

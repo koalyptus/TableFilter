@@ -14,6 +14,14 @@ export class HighlightKeyword{
         this.highlightedNodes = [];
 
         this.tf = tf;
+        this.emitter = tf.emitter;
+    }
+
+    init(){
+        this.emitter.on(
+            ['before-filtering', 'destroy'],
+            ()=> this.unhighlightAll()
+        );
     }
 
     /**
@@ -104,5 +112,12 @@ export class HighlightKeyword{
                 this.tf.searchArgs[y], this.highlightCssClass);
         }
         this.highlightedNodes = [];
+    }
+
+    destroy(){
+        this.emitter.off(
+            ['before-filtering', 'destroy'],
+            ()=> this.unhighlightAll()
+        );
     }
 }

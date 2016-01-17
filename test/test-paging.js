@@ -23,6 +23,7 @@ test('Properties', function() {
     deepEqual(paging.feature, 'paging', 'Feature name');
     deepEqual(paging.enabled, true, 'Feature enabled');
     deepEqual(paging.initialized, true, 'Feature enabled');
+    deepEqual(typeof paging.emitter, 'object', 'Feature has emitter instance');
     deepEqual(typeof paging.config, 'object', 'TF configuration object');
     deepEqual(typeof paging.init, 'function', 'Feature init method');
     deepEqual(typeof paging.destroy, 'function', 'Feature destroy method');
@@ -207,6 +208,15 @@ test('Set results per page', function() {
     paging.changeResultsPerPage();
     deepEqual(paging.pagingLength, 6, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
+});
+
+module('Reset feature');
+test('can destroy and init TableFilter', function() {
+    tf.destroy();
+    tf.init();
+    notEqual(paging, null, 'Paging instanciated');
+    deepEqual(paging.pagingLength, 2, 'Paging length');
+    deepEqual(paging.nbPages, 4, 'Number of pages');
 });
 
 module('Tear-down');

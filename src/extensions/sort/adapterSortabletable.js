@@ -46,6 +46,7 @@ export default class AdapterSortableTable{
             opts.on_after_sort : null;
 
         this.tf = tf;
+        this.emitter = tf.emitter;
     }
 
     init(){
@@ -85,42 +86,6 @@ export default class AdapterSortableTable{
         this.stt.onsort = function(){
             adpt.sorted = true;
 
-            //rows alternating bg issue
-            // TODO: move into AlternateRows component
-            if(tf.alternateRows){
-                let rows = tf.tbl.rows, c = 0;
-
-                let setClass = function(row, i, removeOnly){
-                    if(Types.isUndef(removeOnly)){
-                        removeOnly = false;
-                    }
-                    let altRows = tf.feature('alternateRows'),
-                        oddCls = altRows.oddCss,
-                        evenCls = altRows.evenCss;
-                    Dom.removeClass(row, oddCls);
-                    Dom.removeClass(row, evenCls);
-
-                    if(!removeOnly){
-                        Dom.addClass(row, i % 2 ? oddCls : evenCls);
-                    }
-                };
-
-                for (let i = tf.refRow; i < tf.nbRows; i++){
-                    let isRowValid = rows[i].getAttribute('validRow');
-                    if(tf.paging && rows[i].style.display === ''){
-                        setClass(rows[i], c);
-                        c++;
-                    } else {
-                        if((isRowValid==='true' || isRowValid===null) &&
-                            rows[i].style.display === ''){
-                            setClass(rows[i], c);
-                            c++;
-                        } else {
-                            setClass(rows[i], c, true);
-                        }
-                    }
-                }
-            }
             //sort behaviour for paging
             if(tf.paging){
                 let paginator = tf.feature('paging');
@@ -133,6 +98,8 @@ export default class AdapterSortableTable{
             if(adpt.onAfterSort){
                 adpt.onAfterSort.call(null, tf, adpt.stt.sortColumn);
             }
+
+            adpt.emitter.emit('column-sorted', tf, adpt.stt.sortColumn);
         };
 
         this.initialized = true;
