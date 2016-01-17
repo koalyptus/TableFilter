@@ -46,16 +46,10 @@ export class Dropdown extends Feature{
             let ct = elm.getAttribute('ct');
             this.build(ct);
         }
-        // if(tf.popupFilters){
-        //     Event.cancel(e);
-        //     Event.stop(e);
-        // }
         this.emitter.emit('filter-focus', tf, this);
     }
 
     onSlcChange() {
-        // if(!this.activeFlt){ return; }
-        // if(this.popupFilters){ Event.stop(e); }
         if(this.tf.onSlcChange){
             this.tf.filter();
         }
@@ -103,9 +97,7 @@ export class Dropdown extends Feature{
             slc.appendChild(opt0);
         }
 
-        //Event.add(slc, 'keypress', tf.Evt.detectKey.bind(tf));
         Event.add(slc, 'change', ()=> this.onSlcChange());
-        // Event.add(slc, 'change', tf.Evt.onSlcChange.bind(tf));
         Event.add(slc, 'focus', (e)=> this.onSlcFocus(e));
 
         this.emitter.on(
@@ -285,10 +277,8 @@ export class Dropdown extends Feature{
      * @param {Object} slc          Select Dom element
      * @param {Boolean} isLinked    Enable linked refresh behaviour
      * @param {Array} excludedOpts  Array of excluded options
-     * @param {Array} fltsValues    Collection of persisted filter values
-     * @param {Array} fltArr        Collection of persisted filter values
      */
-    addOptions(colIndex, slc, isLinked, excludedOpts/*, fltsValues, fltArr*/){
+    addOptions(colIndex, slc, isLinked, excludedOpts){
         let tf = this.tf,
             fillMethod = Str.lower(this.slcFillingMethod),
             slcValue = slc.value;

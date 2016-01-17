@@ -477,10 +477,6 @@ export class TableFilter {
                 let elm = Event.target(e);
                 this.activeFilterId = elm.getAttribute('id');
                 this.activeFlt = Dom.id(this.activeFilterId);
-                // if(this.popupFilters){
-                //     Event.cancel(e);
-                //     Event.stop(e);
-                // }
                 this.emitter.emit('filter-focus', this);
             }
         };
@@ -953,9 +949,6 @@ export class TableFilter {
         if(this.infDiv){
             this.removeToolbar();
         }
-        // if(this.highlightKeywords){
-        //     Mod.highlightKeyword.unhighlightAll();
-        // }
         if(this.markActiveColumns){
             this.clearActiveColumns();
             emitter.off(['before-filtering'], ()=> this.clearActiveColumns());
@@ -965,15 +958,6 @@ export class TableFilter {
         if(this.hasExtensions){
             this.destroyExtensions();
         }
-
-        // for(let j=this.refRow; j<this.nbRows; j++){
-        //     // validate row
-        //     this.validateRow(j, true);
-
-        //     //removes alternating colors
-        //     if(this.alternateRows){
-        //         Mod.alternateRows.removeRowBg(j);
-        //     }
 
         // }//for j
         this.validateAllRows();
@@ -1157,117 +1141,23 @@ export class TableFilter {
      * Reset persisted filter values
      */
     resetValues(){
-        if(this.rememberGridValues){
-            // if(this.loadFltOnDemand){
-                // this._resetGridValues(this.fltsValuesCookie);
-            // } else {
-                let fltValues = this.Mod.store.getFilterValues(
-                    this.fltsValuesCookie);
-                fltValues.forEach((val, idx)=> {
-                    if(val !== ' '){
-                        this.setFilterValue(idx, val);
-                    }
-                });
-            // }
+        if(!this.rememberGridValues){
+            return;
         }
+
+        let fltValues = this.Mod.store.getFilterValues(this.fltsValuesCookie);
+        fltValues.forEach((val, idx)=> {
+            if(val !== ' '){
+                this.setFilterValue(idx, val);
+            }
+        });
         this.filter();
     }
-
-    /**
-     * Reset persisted filter values when load filters on demand feature is
-     * enabled
-     * @param  {String} name cookie name storing filter values
-     */
-//     _resetGridValues(name){
-//         if(!this.loadFltOnDemand){
-//             return;
-//         }
-//         let fltsValues = this.Mod.store.getFilterValues(name),
-//             slcFltsIndex = this.getFiltersByType(this.fltTypeSlc, true),
-//             multiFltsIndex = this.getFiltersByType(this.fltTypeMulti, true);
-// console.log(fltsValues, Number(fltsValues[(fltsValues.length-1)]),
-//     this.fltIds.length);
-//         if the number of columns is the same as before page reload
-//         if(Number(fltsValues[(fltsValues.length-1)]) === this.fltIds.length){
-//             for(let i=0; i<(fltsValues.length - 1); i++){
-//                 if(fltsValues[i]===' '){
-//                     continue;
-//                 }
-//                 let s, opt;
-//                 let fltType = this.getFilterType(i);
-//                 // if loadFltOnDemand, drop-down needs to contain stored
-//                 // value(s) for filtering
-//                 if(fltType===this.fltTypeSlc || fltType===this.fltTypeMulti){
-//                     let slc = Dom.id( this.fltIds[i] );
-//                     slc.options[0].selected = false;
-
-//                     //selects
-//                     if(slcFltsIndex.indexOf(i) != -1){
-//                      opt = Dom.createOpt(fltsValues[i], fltsValues[i], true);
-//                         slc.appendChild(opt);
-//                         this.hasStoredValues = true;
-//                     }
-//                     //multiple select
-//                     if(multiFltsIndex.indexOf(i) != -1){
-//                         s = fltsValues[i].split(' '+this.orOperator+' ');
-//                         for(let j=0, len=s.length; j<len; j++){
-//                             if(s[j]===''){
-//                                 continue;
-//                             }
-//                             opt = Dom.createOpt(s[j],s[j],true);
-//                             slc.appendChild(opt);
-//                             this.hasStoredValues = true;
-//                         }
-//                     }// if multiFltsIndex
-//                 }
-//                 else if(fltType === this.fltTypeCheckList){
-//                     let checkList = this.Mod.checkList;
-//                     let divChk = checkList.checkListDiv[i];
-//                     divChk.title = divChk.innerHTML;
-//                     divChk.innerHTML = '';
-
-//                     let ul = Dom.create(
-//                         'ul',['id',this.fltIds[i]],['colIndex',i]);
-//                     ul.className = checkList.checkListCssClass;
-
-//                     let li0 = Dom.createCheckItem(
-//                         this.fltIds[i]+'_0', '', this.displayAllText);
-//                     li0.className = checkList.checkListItemCssClass;
-//                     ul.appendChild(li0);
-
-//                     divChk.appendChild(ul);
-
-//                     s = fltsValues[i].split(' '+this.orOperator+' ');
-//                     for(let j=0, len=s.length; j<len; j++){
-//                         if(s[j]===''){
-//                             continue;
-//                         }
-//                         let li = Dom.createCheckItem(
-//                             this.fltIds[i]+'_'+(j+1), s[j], s[j]);
-//                         li.className = checkList.checkListItemCssClass;
-//                         ul.appendChild(li);
-//                         li.check.checked = true;
-//                         checkList.setCheckListValues(li.check);
-//                         this.hasStoredValues = true;
-//                     }
-//                 }
-//                 else if(fltType === this.fltTypeInp){
-//                     this.setFilterValue(i, fltsValues[i]);
-//                 }
-//             }//end for
-
-//             if(!this.hasStoredValues && this.paging){
-//                 this.Mod.paging.setPagingInfo();
-//             }
-//         }//end if
-//     }
 
     /**
      * Filter the table by retrieving the data from each cell in every single
      * row and comparing it to the search term for current column. A row is
      * hidden when all the search terms are not found in inspected row.
-     *
-     * TODO: Reduce complexity of this massive method
      */
     filter(){
         if(!this.fltGrid || !this._hasGrid){
@@ -2222,73 +2112,6 @@ export class TableFilter {
             }
         }// for i
     }
-
-    /**
-     * Re-generate the filters grid bar when previously removed
-     */
-    // _resetGrid(){
-    //     if(this.isFirstLoad){
-    //         return;
-    //     }
-
-    //     let Mod = this.Mod;
-    //     let tbl = this.tbl;
-    //     let rows = tbl.rows;
-    //     let filtersRowIndex = this.filtersRowIndex;
-    //     let filtersRow = rows[filtersRowIndex];
-
-    //     // grid was removed, grid row element is stored in fltGridEl property
-    //     if(!this.gridLayout){
-    //         // If table has a thead ensure the filters row is appended in the
-    //         // thead element
-    //         if(tbl.tHead){
-    //             var tempRow = tbl.tHead.insertRow(this.filtersRowIndex);
-    //             tbl.tHead.replaceChild(this.fltGridEl, tempRow);
-    //         } else {
-    //           filtersRow.parentNode.insertBefore(this.fltGridEl, filtersRow);
-    //         }
-
-    //         Dom.addClass(tbl, this.prfxTf);
-    //     }
-
-    //     // filters are appended in external placeholders elements
-    //     if(this.isExternalFlt){
-    //         let externalFltTgtIds = this.externalFltTgtIds;
-    //         for(let ct=0, len=externalFltTgtIds.length; ct<len; ct++){
-    //             let extFlt = Dom.id(externalFltTgtIds[ct]);
-
-    //             if(!extFlt){ continue; }
-
-    //             let externalFltEl = this.externalFltEls[ct];
-    //             extFlt.appendChild(externalFltEl);
-    //             let colFltType = this.getFilterType(ct);
-    //             //IE special treatment for gridLayout, appended filters are
-    //             //empty
-    //             if(this.gridLayout &&
-    //                 externalFltEl.innerHTML === '' &&
-    //                 colFltType !== this.fltTypeInp){
-    //                 if(colFltType === this.fltTypeSlc ||
-    //                     colFltType === this.fltTypeMulti){
-    //                     Mod.dropdown.build(ct);
-    //                 }
-    //                 if(colFltType === this.fltTypeCheckList){
-    //                     Mod.checkList.build(ct);
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     this.nbFilterableRows = this.getRowsNb();
-    //     this.nbVisibleRows = this.nbFilterableRows;
-    //     this.nbRows = rows.length;
-
-    //     if(this.popupFilters){
-    //         this.headersRow++;
-    //         Mod.popupFilter.reset();
-    //     }
-
-    //     this._hasGrid = true;
-    // }
 
     /**
      * Determines if passed filter column implements exact query match

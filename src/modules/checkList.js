@@ -53,7 +53,6 @@ export class CheckList extends Feature{
         tf.activeFilterId = elm.getAttribute('id');
         tf.activeFlt = Dom.id(tf.activeFilterId);
         tf.filter();
-        // this.tf.Evt.onSlcChange.call(this.tf, evt);
     }
 
     optionClick(evt){
@@ -261,7 +260,7 @@ export class CheckList extends Feature{
             }//in case there are alphanumeric values
         }
 
-        this.addChecks(colIndex, ul, tf.separator);
+        this.addChecks(colIndex, ul);
 
         if(tf.loadFltOnDemand){
             flt.innerHTML = '';
