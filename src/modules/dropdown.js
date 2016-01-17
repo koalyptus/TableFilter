@@ -108,13 +108,19 @@ export class Dropdown extends Feature{
         // Event.add(slc, 'change', tf.Evt.onSlcChange.bind(tf));
         Event.add(slc, 'focus', (e)=> this.onSlcFocus(e));
 
+        this.emitter.on(
+            ['build-select-filter'],
+            (tf, colIndex, isLinked, isExternal)=>
+                this.build(colIndex, isLinked, isExternal)
+        );
+
         this.initialized = true;
     }
 
     /**
      * Build drop-down filter UI
      * @param  {Number}  colIndex    Column index
-     * @param  {Boolean} isLinked Enable linked refresh behaviour
+     * @param  {Boolean} isLinked    Enable linked refresh behaviour
      * @param  {Boolean} isExternal  Render in external container
      * @param  {String}  extSlcId    External container id
      */
@@ -367,5 +373,11 @@ export class Dropdown extends Feature{
         return slc;
     }
 
-    destroy(){}
+    destroy(){
+        this.emitter.off(
+            ['build-select-filter'],
+            (colIndex, isLinked, isExternal)=>
+                this.build(colIndex, isLinked, isExternal)
+        );
+    }
 }

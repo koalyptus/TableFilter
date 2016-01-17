@@ -674,6 +674,7 @@ export class TableFilter {
             this.onFiltersLoaded.call(null, this);
         }
 
+        this.initialized = true;
         this.emitter.emit('initialized', this);
     }
 
@@ -986,6 +987,7 @@ export class TableFilter {
         emitter.emit('destroy', this);
 
         // Destroy modules
+        // TODO: subcribe modules to destroy event instead
         Object.keys(Mod).forEach(function(key){
             var feature = Mod[key];
             if(feature && Types.isFn(feature.destroy)){
@@ -1007,6 +1009,7 @@ export class TableFilter {
         this.fltIds = [];
         this.activeFlt = null;
         this._hasGrid = false;
+        this.initialized = false;
     }
 
     /**
@@ -1154,11 +1157,10 @@ export class TableFilter {
      * Reset persisted filter values
      */
     resetValues(){
-        //only loadFltOnDemand
         if(this.rememberGridValues){
-            if(this.loadFltOnDemand){
-                this._resetGridValues(this.fltsValuesCookie);
-            } else {
+            // if(this.loadFltOnDemand){
+                // this._resetGridValues(this.fltsValuesCookie);
+            // } else {
                 let fltValues = this.Mod.store.getFilterValues(
                     this.fltsValuesCookie);
                 fltValues.forEach((val, idx)=> {
@@ -1166,7 +1168,7 @@ export class TableFilter {
                         this.setFilterValue(idx, val);
                     }
                 });
-            }
+            // }
         }
         this.filter();
     }
@@ -1176,88 +1178,89 @@ export class TableFilter {
      * enabled
      * @param  {String} name cookie name storing filter values
      */
-    _resetGridValues(name){
-        if(!this.loadFltOnDemand){
-            return;
-        }
-        let fltsValues = this.Mod.store.getFilterValues(name),
-            slcFltsIndex = this.getFiltersByType(this.fltTypeSlc, true),
-            multiFltsIndex = this.getFiltersByType(this.fltTypeMulti, true);
+//     _resetGridValues(name){
+//         if(!this.loadFltOnDemand){
+//             return;
+//         }
+//         let fltsValues = this.Mod.store.getFilterValues(name),
+//             slcFltsIndex = this.getFiltersByType(this.fltTypeSlc, true),
+//             multiFltsIndex = this.getFiltersByType(this.fltTypeMulti, true);
+// console.log(fltsValues, Number(fltsValues[(fltsValues.length-1)]),
+//     this.fltIds.length);
+//         if the number of columns is the same as before page reload
+//         if(Number(fltsValues[(fltsValues.length-1)]) === this.fltIds.length){
+//             for(let i=0; i<(fltsValues.length - 1); i++){
+//                 if(fltsValues[i]===' '){
+//                     continue;
+//                 }
+//                 let s, opt;
+//                 let fltType = this.getFilterType(i);
+//                 // if loadFltOnDemand, drop-down needs to contain stored
+//                 // value(s) for filtering
+//                 if(fltType===this.fltTypeSlc || fltType===this.fltTypeMulti){
+//                     let slc = Dom.id( this.fltIds[i] );
+//                     slc.options[0].selected = false;
 
-        //if the number of columns is the same as before page reload
-        if(Number(fltsValues[(fltsValues.length-1)]) === this.fltIds.length){
-            for(let i=0; i<(fltsValues.length - 1); i++){
-                if(fltsValues[i]===' '){
-                    continue;
-                }
-                let s, opt;
-                let fltType = this.getFilterType(i);
-                // if loadFltOnDemand, drop-down needs to contain stored
-                // value(s) for filtering
-                if(fltType===this.fltTypeSlc || fltType===this.fltTypeMulti){
-                    let slc = Dom.id( this.fltIds[i] );
-                    slc.options[0].selected = false;
+//                     //selects
+//                     if(slcFltsIndex.indexOf(i) != -1){
+//                      opt = Dom.createOpt(fltsValues[i], fltsValues[i], true);
+//                         slc.appendChild(opt);
+//                         this.hasStoredValues = true;
+//                     }
+//                     //multiple select
+//                     if(multiFltsIndex.indexOf(i) != -1){
+//                         s = fltsValues[i].split(' '+this.orOperator+' ');
+//                         for(let j=0, len=s.length; j<len; j++){
+//                             if(s[j]===''){
+//                                 continue;
+//                             }
+//                             opt = Dom.createOpt(s[j],s[j],true);
+//                             slc.appendChild(opt);
+//                             this.hasStoredValues = true;
+//                         }
+//                     }// if multiFltsIndex
+//                 }
+//                 else if(fltType === this.fltTypeCheckList){
+//                     let checkList = this.Mod.checkList;
+//                     let divChk = checkList.checkListDiv[i];
+//                     divChk.title = divChk.innerHTML;
+//                     divChk.innerHTML = '';
 
-                    //selects
-                    if(slcFltsIndex.indexOf(i) != -1){
-                        opt = Dom.createOpt(fltsValues[i], fltsValues[i], true);
-                        slc.appendChild(opt);
-                        this.hasStoredValues = true;
-                    }
-                    //multiple select
-                    if(multiFltsIndex.indexOf(i) != -1){
-                        s = fltsValues[i].split(' '+this.orOperator+' ');
-                        for(let j=0, len=s.length; j<len; j++){
-                            if(s[j]===''){
-                                continue;
-                            }
-                            opt = Dom.createOpt(s[j],s[j],true);
-                            slc.appendChild(opt);
-                            this.hasStoredValues = true;
-                        }
-                    }// if multiFltsIndex
-                }
-                else if(fltType === this.fltTypeCheckList){
-                    let checkList = this.Mod.checkList;
-                    let divChk = checkList.checkListDiv[i];
-                    divChk.title = divChk.innerHTML;
-                    divChk.innerHTML = '';
+//                     let ul = Dom.create(
+//                         'ul',['id',this.fltIds[i]],['colIndex',i]);
+//                     ul.className = checkList.checkListCssClass;
 
-                    let ul = Dom.create(
-                        'ul',['id',this.fltIds[i]],['colIndex',i]);
-                    ul.className = checkList.checkListCssClass;
+//                     let li0 = Dom.createCheckItem(
+//                         this.fltIds[i]+'_0', '', this.displayAllText);
+//                     li0.className = checkList.checkListItemCssClass;
+//                     ul.appendChild(li0);
 
-                    let li0 = Dom.createCheckItem(
-                        this.fltIds[i]+'_0', '', this.displayAllText);
-                    li0.className = checkList.checkListItemCssClass;
-                    ul.appendChild(li0);
+//                     divChk.appendChild(ul);
 
-                    divChk.appendChild(ul);
+//                     s = fltsValues[i].split(' '+this.orOperator+' ');
+//                     for(let j=0, len=s.length; j<len; j++){
+//                         if(s[j]===''){
+//                             continue;
+//                         }
+//                         let li = Dom.createCheckItem(
+//                             this.fltIds[i]+'_'+(j+1), s[j], s[j]);
+//                         li.className = checkList.checkListItemCssClass;
+//                         ul.appendChild(li);
+//                         li.check.checked = true;
+//                         checkList.setCheckListValues(li.check);
+//                         this.hasStoredValues = true;
+//                     }
+//                 }
+//                 else if(fltType === this.fltTypeInp){
+//                     this.setFilterValue(i, fltsValues[i]);
+//                 }
+//             }//end for
 
-                    s = fltsValues[i].split(' '+this.orOperator+' ');
-                    for(let j=0, len=s.length; j<len; j++){
-                        if(s[j]===''){
-                            continue;
-                        }
-                        let li = Dom.createCheckItem(
-                            this.fltIds[i]+'_'+(j+1), s[j], s[j]);
-                        li.className = checkList.checkListItemCssClass;
-                        ul.appendChild(li);
-                        li.check.checked = true;
-                        checkList.setCheckListValues(li.check);
-                        this.hasStoredValues = true;
-                    }
-                }
-                else if(fltType === this.fltTypeInp){
-                    this.setFilterValue(i, fltsValues[i]);
-                }
-            }//end for
-
-            if(!this.hasStoredValues && this.paging){
-                this.Mod.paging.setPagingInfo();
-            }
-        }//end if
-    }
+//             if(!this.hasStoredValues && this.paging){
+//                 this.Mod.paging.setPagingInfo();
+//             }
+//         }//end if
+//     }
 
     /**
      * Filter the table by retrieving the data from each cell in every single
@@ -1976,7 +1979,7 @@ export class TableFilter {
      * @param {String} searcharg Search term
      */
     setFilterValue(index, searcharg=''){
-        if(!this.fltGrid || !this.getFilterElement(index)){
+        if(!this.fltGrid){
             return;
         }
         let slc = this.getFilterElement(index),
@@ -1984,12 +1987,22 @@ export class TableFilter {
 
         if(fltColType !== this.fltTypeMulti &&
             fltColType != this.fltTypeCheckList){
+            if(this.loadFltOnDemand && !this.initialized){
+                this.emitter.emit('build-select-filter', this, index,
+                    this.linkedFilters, this.isExternalFlt);
+            }
             slc.value = searcharg;
         }
         //multiple selects
         else if(fltColType === this.fltTypeMulti){
             let s = searcharg.split(' '+this.orOperator+' ');
-            // let ct = 0; //keywords counter
+
+            if(this.loadFltOnDemand && !this.initialized){
+                this.emitter.emit('build-select-filter', this, index,
+                    this.linkedFilters, this.isExternalFlt);
+            }
+
+            // TODO: provide a select option helper method in dropdown module
             for(let j=0, len=slc.options.length; j<len; j++){
                 let option = slc.options[j];
                 if(s==='' || s[0]===''){
@@ -2007,16 +2020,26 @@ export class TableFilter {
         //checklist
         else if(fltColType === this.fltTypeCheckList){
             searcharg = Str.matchCase(searcharg, this.caseSensitive);
+
+            if(this.loadFltOnDemand && !this.initialized){
+                this.emitter.emit('build-checklist-filter', this, index,
+                    this.isExternalFlt);
+                if(!slc){
+                    slc = this.getFilterElement(index);
+                }
+            }
+
             let sarg = searcharg.split(' '+this.orOperator+' ');
-            let lisNb = Dom.tag(slc,'li').length;
+            let lisNb = Dom.tag(slc, 'li').length;
 
             slc.setAttribute('value', '');
             slc.setAttribute('indexes', '');
 
+            // TODO: provide a select option helper method in checklist module
             for(let k=0; k<lisNb; k++){
-                let li = Dom.tag(slc,'li')[k],
-                    lbl = Dom.tag(li,'label')[0],
-                    chk = Dom.tag(li,'input')[0],
+                let li = Dom.tag(slc, 'li')[k],
+                    lbl = Dom.tag(li, 'label')[0],
+                    chk = Dom.tag(li, 'input')[0],
                     lblTxt = Str.matchCase(
                         Dom.getText(lbl), this.caseSensitive);
                 if(lblTxt !== '' && Arr.has(sarg, lblTxt, true)){

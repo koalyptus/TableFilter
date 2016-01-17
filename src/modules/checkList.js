@@ -105,6 +105,11 @@ export class CheckList extends Feature{
             divCont.appendChild(Dom.text(this.activateCheckListTxt));
         }
 
+        this.emitter.on(
+            ['build-checklist-filter'],
+            (tf, colIndex, isExternal)=> this.build(colIndex, isExternal)
+        );
+
         this.initialized = true;
     }
 
@@ -424,5 +429,10 @@ export class CheckList extends Feature{
         }
     }
 
-    destroy(){}
+    destroy(){
+        this.emitter.off(
+            ['build-checklist-filter'],
+            (tf, colIndex, isExternal)=> this.build(colIndex, isExternal)
+        );
+    }
 }
