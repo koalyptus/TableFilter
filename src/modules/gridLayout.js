@@ -330,7 +330,7 @@ export class GridLayout extends Feature{
 
         tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element for future usage
-        this.tf.tbl = t;
+        this.tf.tbl = Dom.id(tf.id);
 
         this.initialized = false;
     }

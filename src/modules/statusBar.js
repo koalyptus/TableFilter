@@ -178,7 +178,9 @@ export class StatusBar extends Feature{
         let emitter = this.emitter;
 
         this.statusBarDiv.innerHTML = '';
-        Dom.remove(this.statusBarDiv);
+        if(!this.statusBarTgtId){
+            Dom.remove(this.statusBarDiv);
+        }
         this.statusBarSpan = null;
         this.statusBarSpanText = null;
         this.statusBarDiv = null;

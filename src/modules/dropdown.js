@@ -36,6 +36,25 @@ export class Dropdown extends Feature{
         this.slcInnerHtml = null;
     }
 
+    onSlcFocus(e) {
+        let elm = Event.target(e);
+        let tf = this.tf;
+        tf.activeFilterId = elm.getAttribute('id');
+        tf.activeFlt = Dom.id(tf.activeFilterId);
+        // select is populated when element has focus
+        if(tf.loadFltOnDemand && elm.getAttribute('filled') === '0'){
+            let ct = elm.getAttribute('ct');
+            this.build(ct);
+        }
+        this.emitter.emit('filter-focus', tf, this);
+    }
+
+    onSlcChange() {
+        if(this.tf.onSlcChange){
+            this.tf.filter();
+        }
+    }
+
     /**
      * Initialize drop-down filter
      * @param  {Number}     colIndex   Column index
@@ -78,9 +97,14 @@ export class Dropdown extends Feature{
             slc.appendChild(opt0);
         }
 
-        Event.add(slc, 'keypress', tf.Evt.detectKey.bind(tf));
-        Event.add(slc, 'change', tf.Evt.onSlcChange.bind(tf));
-        Event.add(slc, 'focus', tf.Evt.onSlcFocus.bind(tf));
+        Event.add(slc, 'change', ()=> this.onSlcChange());
+        Event.add(slc, 'focus', (e)=> this.onSlcFocus(e));
+
+        this.emitter.on(
+            ['build-select-filter'],
+            (tf, colIndex, isLinked, isExternal)=>
+                this.build(colIndex, isLinked, isExternal)
+        );
 
         this.initialized = true;
     }
@@ -88,7 +112,7 @@ export class Dropdown extends Feature{
     /**
      * Build drop-down filter UI
      * @param  {Number}  colIndex    Column index
-     * @param  {Boolean} isLinked Enable linked refresh behaviour
+     * @param  {Boolean} isLinked    Enable linked refresh behaviour
      * @param  {Boolean} isExternal  Render in external container
      * @param  {String}  extSlcId    External container id
      */
@@ -173,8 +197,7 @@ export class Dropdown extends Feature{
                         }
                         if(!Arr.has(filteredCol, cell_string, matchCase) &&
                             !Arr.has(
-                                excludedOpts, cell_string, matchCase) &&
-                            !this.isFirstLoad){
+                                excludedOpts, cell_string, matchCase)){
                             excludedOpts.push(cell_data);
                         }
                     }
@@ -254,10 +277,8 @@ export class Dropdown extends Feature{
      * @param {Object} slc          Select Dom element
      * @param {Boolean} isLinked    Enable linked refresh behaviour
      * @param {Array} excludedOpts  Array of excluded options
-     * @param {Array} fltsValues    Collection of persisted filter values
-     * @param {Array} fltArr        Collection of persisted filter values
      */
-    addOptions(colIndex, slc, isLinked, excludedOpts/*, fltsValues, fltArr*/){
+    addOptions(colIndex, slc, isLinked, excludedOpts){
         let tf = this.tf,
             fillMethod = Str.lower(this.slcFillingMethod),
             slcValue = slc.value;
@@ -342,5 +363,11 @@ export class Dropdown extends Feature{
         return slc;
     }
 
-    destroy(){}
+    destroy(){
+        this.emitter.off(
+            ['build-select-filter'],
+            (colIndex, isLinked, isExternal)=>
+                this.build(colIndex, isLinked, isExternal)
+        );
+    }
 }

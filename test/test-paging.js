@@ -210,6 +210,15 @@ test('Set results per page', function() {
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
 });
 
+module('Reset feature');
+test('can destroy and init TableFilter', function() {
+    tf.destroy();
+    tf.init();
+    notEqual(paging, null, 'Paging instanciated');
+    deepEqual(paging.pagingLength, 2, 'Paging length');
+    deepEqual(paging.nbPages, 4, 'Number of pages');
+});
+
 module('Tear-down');
 test('can destroy TableFilter DOM elements', function() {
     tf.destroy();

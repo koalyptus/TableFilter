@@ -47,12 +47,12 @@ export class CheckList extends Feature{
         this.excludedOpts = null;
     }
 
-    // TODO: move event here
     onChange(evt){
         let elm = evt.target;
-        this.tf.activeFilterId = elm.getAttribute('id');
-        this.tf.activeFlt = Dom.id(this.tf.activeFilterId);
-        this.tf.Evt.onSlcChange.call(this.tf, evt);
+        let tf = this.tf;
+        tf.activeFilterId = elm.getAttribute('id');
+        tf.activeFlt = Dom.id(tf.activeFilterId);
+        tf.filter();
     }
 
     optionClick(evt){
@@ -104,6 +104,11 @@ export class CheckList extends Feature{
             divCont.appendChild(Dom.text(this.activateCheckListTxt));
         }
 
+        this.emitter.on(
+            ['build-checklist-filter'],
+            (tf, colIndex, isExternal)=> this.build(colIndex, isExternal)
+        );
+
         this.initialized = true;
     }
 
@@ -132,7 +137,7 @@ export class CheckList extends Feature{
         let ul = Dom.create(
             'ul', ['id', tf.fltIds[colIndex]], ['colIndex', colIndex]);
         ul.className = this.checkListCssClass;
-        Event.add(ul, 'change', (evt) => this.onChange(evt));
+        Event.add(ul, 'change', (evt)=> this.onChange(evt));
 
         let rows = tf.tbl.rows;
         this.isCustom = tf.isCustomOptions(colIndex);
@@ -187,8 +192,7 @@ export class CheckList extends Feature{
                         }
                         if(!Arr.has(filteredCol, cell_string, tf.matchCase) &&
                             !Arr.has(this.excludedOpts,
-                                cell_string, tf.matchCase) &&
-                            !tf.isFirstLoad){
+                                cell_string, tf.matchCase)){
                             this.excludedOpts.push(cell_data);
                         }
                     }
@@ -256,7 +260,7 @@ export class CheckList extends Feature{
             }//in case there are alphanumeric values
         }
 
-        this.addChecks(colIndex, ul, tf.separator);
+        this.addChecks(colIndex, ul);
 
         if(tf.loadFltOnDemand){
             flt.innerHTML = '';
@@ -289,7 +293,7 @@ export class CheckList extends Feature{
                 li.check.disabled = true;
                 li.disabled = true;
             } else {
-                Event.add(li.check, 'click', (evt) => this.optionClick(evt));
+                Event.add(li.check, 'click', (evt)=> this.optionClick(evt));
             }
             ul.appendChild(li);
 
@@ -313,9 +317,7 @@ export class CheckList extends Feature{
         li0.className = this.checkListItemCssClass;
         ul.appendChild(li0);
 
-        Event.add(li0.check, 'click', (evt) => {
-            this.optionClick(evt);
-        });
+        Event.add(li0.check, 'click', (evt)=> this.optionClick(evt));
 
         if(!this.enableCheckListResetFilter){
             li0.style.display = 'none';
@@ -326,7 +328,7 @@ export class CheckList extends Feature{
                     tf.fltIds[colIndex]+'_1', tf.emOperator, tf.emptyText);
             li1.className = this.checkListItemCssClass;
             ul.appendChild(li1);
-            Event.add(li1.check, 'click', (evt) => this.optionClick(evt));
+            Event.add(li1.check, 'click', (evt)=> this.optionClick(evt));
             chkCt++;
         }
 
@@ -338,7 +340,7 @@ export class CheckList extends Feature{
             );
             li2.className = this.checkListItemCssClass;
             ul.appendChild(li2);
-            Event.add(li2.check, 'click', (evt) => this.optionClick(evt));
+            Event.add(li2.check, 'click', (evt)=> this.optionClick(evt));
             chkCt++;
         }
         return chkCt;
@@ -426,5 +428,10 @@ export class CheckList extends Feature{
         }
     }
 
-    destroy(){}
+    destroy(){
+        this.emitter.off(
+            ['build-checklist-filter'],
+            (tf, colIndex, isExternal)=> this.build(colIndex, isExternal)
+        );
+    }
 }

@@ -26,8 +26,18 @@ test('Highlighted keywords', function() {
         0, 'Number of highlighted words');
 });
 
+module('Reset feature');
+test('can destroy and init TableFilter', function() {
+    tf.destroy();
+    tf.init();
+    deepEqual(typeof highlightKeyword, 'object', 'Instanciated');
+    deepEqual(highlightKeyword.highlightedNodes instanceof Array,
+        true, 'Property check');
+});
+
 module('Tear-down');
-test('can destroy TableFilter DOM elements', function() {
+test('can destroy TableFilter DOM elements and clean highlighted words',
+    function() {
     tf.setFilterValue(1, 'Perth');
     tf.filter();
     tf.destroy();

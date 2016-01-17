@@ -44,7 +44,7 @@ export class Store{
             fltValues.push(value);
         }
         //adds array size
-        fltValues.push(tf.fltIds.length);
+        //fltValues.push(tf.fltIds.length);
 
         //writes cookie
         Cookie.write(
