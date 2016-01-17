@@ -11,7 +11,7 @@
   "trailing": true,
   "quotmark": "single",
   "immed": true,
-  "maxstatements": 178,
+  "maxstatements": 172,
   "maxdepth": 7,
-  "maxcomplexity": 87
+  "maxcomplexity": 85
 }
