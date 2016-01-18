@@ -21,6 +21,7 @@ export class Store{
     init(){
         this.emitter.on(['after-filtering'],
             ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
+        this.emitter.on(['after-clearing-filters'], ()=> this.clearCookies());
     }
 
     /**
@@ -43,8 +44,6 @@ export class Store{
             }
             fltValues.push(value);
         }
-        //adds array size
-        //fltValues.push(tf.fltIds.length);
 
         //writes cookie
         Cookie.write(
@@ -114,8 +113,18 @@ export class Store{
         return Cookie.read(name);
     }
 
+    /**
+     * Remove all cookies
+     */
+    clearCookies(){
+        Cookie.remove(this.tf.fltsValuesCookie);
+        Cookie.remove(this.tf.pgLenCookie);
+        Cookie.remove(this.tf.pgNbCookie);
+    }
+
     destroy(){
         this.emitter.off(['after-filtering'],
             ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
+        this.emitter.off(['after-clearing-filters'], ()=> this.clearCookies());
     }
 }

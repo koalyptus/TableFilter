@@ -1,7 +1,7 @@
 import Event from './event';
 import Dom from './dom';
 import Str from './string';
-import Cookie from './cookie';
+// import Cookie from './cookie';
 import Types from './types';
 import Arr from './array';
 import DateHelper from './date';
@@ -380,7 +380,7 @@ export class TableFilter {
         this.prfxCookiePageLen = 'tf_pglen_';
 
         /*** cookies ***/
-        this.hasStoredValues = false;
+        // this.hasStoredValues = false;
         //remembers filters values on page load
         this.rememberGridValues = Boolean(f.remember_grid_values);
         //cookie storing filter values
@@ -1500,7 +1500,7 @@ export class TableFilter {
     }
 
     /**
-     * Return the data of a specified colum
+     * Return the data of a specified column
      * @param  {Number} colIndex Column index
      * @param  {Boolean} includeHeaders  Optional: include headers row
      * @param  {Boolean} num     Optional: return unformatted number
@@ -2021,12 +2021,12 @@ export class TableFilter {
         // if(this.linkedFilters){
         //     this.linkFilters();
         // }
-        if(this.rememberPageLen){ Cookie.remove(this.pgLenCookie); }
-        if(this.rememberPageNb){ Cookie.remove(this.pgNbCookie); }
-        if(this.onAfterReset){ this.onAfterReset.call(null, this); }
+        // if(this.rememberPageLen){ Cookie.remove(this.pgLenCookie); }
+        // if(this.rememberPageNb){ Cookie.remove(this.pgNbCookie); }
 
         this.filter();
 
+        if(this.onAfterReset){ this.onAfterReset.call(null, this); }
         this.emitter.emit('after-clearing-filters', this);
     }
 
