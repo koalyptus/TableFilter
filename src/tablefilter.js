@@ -1170,7 +1170,7 @@ export class TableFilter {
         this.emitter.emit('before-filtering', this);
 
         let row = this.tbl.rows,
-            Mod = this.Mod,
+            //Mod = this.Mod,
             hiddenrows = 0;
 
         this.validRowsIndex = [];
@@ -1207,8 +1207,9 @@ export class TableFilter {
                     w = Dom.getText(cell);
                 }
                 if(w !== ''){
-                    Mod.highlightKeyword.highlight(
-                        cell, w, Mod.highlightKeyword.highlightCssClass);
+                    // Mod.highlightKeyword.highlight(
+                    //     cell, w, Mod.highlightKeyword.highlightCssClass);
+                    this.emitter.emit('highlight-keyword', this, cell, w);
                 }
             }
         }

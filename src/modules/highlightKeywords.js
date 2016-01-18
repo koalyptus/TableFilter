@@ -22,6 +22,11 @@ export class HighlightKeyword{
             ['before-filtering', 'destroy'],
             ()=> this.unhighlightAll()
         );
+        this.emitter.on(
+            ['highlight-keyword'],
+            (tf, cell, word)=>
+                this.highlight(cell, word, this.highlightCssClass)
+        );
     }
 
     /**
@@ -118,6 +123,11 @@ export class HighlightKeyword{
         this.emitter.off(
             ['before-filtering', 'destroy'],
             ()=> this.unhighlightAll()
+        );
+        this.emitter.off(
+            ['highlight-keyword'],
+            (tf, cell, word)=>
+                this.highlight(cell, word, this.highlightCssClass)
         );
     }
 }

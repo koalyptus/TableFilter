@@ -19,11 +19,16 @@ test('Highlighted keywords', function() {
     tf.filter();
     deepEqual(highlightKeyword.highlightedNodes.length,
         2, 'Number of highlighted words');
+    deepEqual(tf.tbl.querySelectorAll('.keyword').length, 2,
+        'Number of applied CSS classes');
 
     tf.clearFilters();
     tf.filter();
     deepEqual(highlightKeyword.highlightedNodes.length,
         0, 'Number of highlighted words');
+    // TODO: uncomment when fixed
+    // deepEqual(tf.tbl.querySelectorAll('.keyword').length, 0,
+    //     'Number of applied CSS classes');
 });
 
 module('Reset feature');
