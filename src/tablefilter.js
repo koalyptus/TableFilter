@@ -380,7 +380,6 @@ export class TableFilter {
         this.prfxCookiePageLen = 'tf_pglen_';
 
         /*** cookies ***/
-        // this.hasStoredValues = false;
         //remembers filters values on page load
         this.rememberGridValues = Boolean(f.remember_grid_values);
         //cookie storing filter values
@@ -500,6 +499,14 @@ export class TableFilter {
         //loads theme
         if(this.hasThemes){ this.loadThemes(); }
 
+        // Instantiate help feature and initialise only if set true
+        if(!Mod.help){
+            Mod.help = new Help(this);
+        }
+        if(this.help){
+            Mod.help.init();
+        }
+
         if(this.rememberGridValues || this.rememberPageNb ||
             this.rememberPageLen){
             if(!Mod.store){
@@ -618,12 +625,7 @@ export class TableFilter {
             Mod.clearButton = new ClearButton(this);
             Mod.clearButton.init();
         }
-        if(this.help){
-            if(!Mod.help){
-                Mod.help = new Help(this);
-            }
-            Mod.help.init();
-        }
+
         if(this.hasColWidths && !this.gridLayout){
             this.setColWidths();
         }
@@ -1045,14 +1047,9 @@ export class TableFilter {
         infdiv.appendChild(mdiv);
         this.mDiv = Dom.id(this.prfxMDiv+this.id);
 
-        // Enable help instructions by default if topbar is generated and not
-        // explicitely set to false
+        // emit help initialisation only if undefined
         if(Types.isUndef(this.help)){
-            if(!this.Mod.help){
-                this.Mod.help = new Help(this);
-            }
-            this.Mod.help.init();
-            this.help = true;
+            this.emitter.emit('init-help', this);
         }
     }
 
@@ -1207,8 +1204,6 @@ export class TableFilter {
                     w = Dom.getText(cell);
                 }
                 if(w !== ''){
-                    // Mod.highlightKeyword.highlight(
-                    //     cell, w, Mod.highlightKeyword.highlightCssClass);
                     this.emitter.emit('highlight-keyword', this, cell, w);
                 }
             }
@@ -2022,8 +2017,6 @@ export class TableFilter {
         // if(this.linkedFilters){
         //     this.linkFilters();
         // }
-        // if(this.rememberPageLen){ Cookie.remove(this.pgLenCookie); }
-        // if(this.rememberPageNb){ Cookie.remove(this.pgNbCookie); }
 
         this.filter();
 
@@ -2104,9 +2097,11 @@ export class TableFilter {
                 }
 
                 if(slcA3.indexOf(slcIndex[i]) != -1){
-                    this.Mod.checkList.build(slcIndex[i]);
+                    this.emitter.emit('build-checklist-filter', this,
+                        slcIndex[i], this.isExternalFlt);
                 } else {
-                    this.Mod.dropdown.build(slcIndex[i], true);
+                    this.emitter.emit('build-select-filter', this, slcIndex[i],
+                        true, this.isExternalFlt);
                 }
 
                 this.setFilterValue(slcIndex[i], slcSelectedValue);

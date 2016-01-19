@@ -23,7 +23,6 @@ test('Highlighted keywords', function() {
         'Number of applied CSS classes');
 
     tf.clearFilters();
-    tf.filter();
     deepEqual(highlightKeyword.highlightedNodes.length,
         0, 'Number of highlighted words');
     // TODO: uncomment when fixed
