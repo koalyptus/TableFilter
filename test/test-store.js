@@ -9,6 +9,24 @@ function removeCookie(name){
     document.cookie = name + '=' + expire;
 }
 
+function readCookie(name){
+    var cookieValue = '',
+        search = name + '=';
+    if(document.cookie.length > 0){
+        var cookie = document.cookie,
+            offset = cookie.indexOf(search);
+        if(offset !== -1){
+            offset += search.length;
+            var end = cookie.indexOf(';', offset);
+            if(end === -1){
+                end = cookie.length;
+            }
+            cookieValue = unescape(cookie.substring(offset, end));
+        }
+    }
+    return cookieValue;
+}
+
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
     paging: true,
@@ -42,7 +60,6 @@ test('Page number value', function() {
     var cookieName = tf.pgNbCookie;
     deepEqual(tf.feature('store').getPageNb(cookieName), '2', 'Page number value');
     tf.clearFilters();
-    tf.filter();
 });
 
 module('Check page length persistence');
@@ -53,7 +70,6 @@ test('Page length value', function() {
     var cookieName = tf.pgLenCookie;
     deepEqual(tf.feature('store').getPageLength(cookieName), '2', 'Page length value');
     tf.clearFilters();
-    tf.filter();
 });
 
 module('Check filters persistence');
@@ -75,6 +91,15 @@ test('Apply cookie filters value', function() {
 
     deepEqual(tf.getFilterValue(0), 'Adelaide', 'Applied filter value');
     deepEqual(tf.getFilterValue(3), '>=2', 'Applied filter value');
+});
+
+test('Can remove cookies on clearFilters', function() {
+    tf.clearFilters();
+
+    deepEqual(readCookie(tf.fltsValuesCookie), '',
+        'fltsValuesCookie cookie removed');
+    deepEqual(readCookie(tf.pgLenCookie), '', 'pgLenCookie cookie removed');
+    deepEqual(readCookie(tf.pgNbCookie), '', 'pgNbCookie cookie removed');
 });
 
 module('Tear-down');

@@ -47,7 +47,8 @@ export default class AdapterEzEditTable {
 
         // TODO: hack to prevent ezEditTable enter key event hijaking.
         // Needs to be fixed in the vendor's library
-        this.emitter.on(['filter-focus', 'filter-blur'], ()=> this.toggle());
+        this.emitter.on(['filter-focus', 'filter-blur'],
+            ()=> this._toggleForInputFilter());
     }
 
     /**
@@ -380,6 +381,18 @@ export default class AdapterEzEditTable {
         }
     }
 
+    _toggleForInputFilter(){
+        var tf = this.tf;
+        if(!tf.activeFlt){
+            return;
+        }
+        var colIndex = tf.activeFlt.getAttribute('ct');
+        var filterType = tf.getFilterType(colIndex);
+        if(filterType === tf.fltTypeInp){
+            this.toggle();
+        }
+    }
+
     /**
      * Remove advanced grid
      */
@@ -395,7 +408,8 @@ export default class AdapterEzEditTable {
             }
         }
 
-        this.emitter.off(['filter-focus', 'filter-blur'], ()=> this.toggle());
+        this.emitter.off(['filter-focus', 'filter-blur'],
+            ()=> this._toggleForInputFilter());
         this.initialized = false;
     }
 }
