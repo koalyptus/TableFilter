@@ -1,7 +1,6 @@
 import Event from './event';
 import Dom from './dom';
 import Str from './string';
-// import Cookie from './cookie';
 import Types from './types';
 import Arr from './array';
 import DateHelper from './date';
@@ -1167,7 +1166,6 @@ export class TableFilter {
         this.emitter.emit('before-filtering', this);
 
         let row = this.tbl.rows,
-            //Mod = this.Mod,
             hiddenrows = 0;
 
         this.validRowsIndex = [];
