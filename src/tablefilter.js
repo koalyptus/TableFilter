@@ -2,7 +2,7 @@ import Event from './event';
 import Dom from './dom';
 import Str from './string';
 import Types from './types';
-import Arr from './array';
+// import Arr from './array';
 import DateHelper from './date';
 import Helpers from './helpers';
 import {Emitter} from './emitter';
@@ -1065,9 +1065,7 @@ export class TableFilter {
         let tbl = this.tbl;
         let captions = Dom.tag(tbl, 'caption');
         if(captions.length > 0){
-            [].forEach.call(captions, function(elm) {
-                tbl.removeChild(elm);
-            });
+            [].forEach.call(captions, (elm)=> tbl.removeChild(elm));
         }
     }
 
@@ -1886,20 +1884,21 @@ export class TableFilter {
                     this.linkedFilters, this.isExternalFlt);
             }
 
+            this.emitter.emit('select-options', this, index, s);
             // TODO: provide a select option helper method in dropdown module
-            for(let j=0, len=slc.options.length; j<len; j++){
-                let option = slc.options[j];
-                if(s==='' || s[0]===''){
-                    option.selected = false;
-                }
-                if(option.value===''){
-                    option.selected = false;
-                }
-                if(option.value!=='' &&
-                    Arr.has(s, option.value, true)){
-                    option.selected = true;
-                }//if
-            }//for j
+            // for(let j=0, len=slc.options.length; j<len; j++){
+            //     let option = slc.options[j];
+            //     if(s==='' || s[0]===''){
+            //         option.selected = false;
+            //     }
+            //     if(option.value===''){
+            //         option.selected = false;
+            //     }
+            //     if(option.value!=='' &&
+            //         Arr.has(s, option.value, true)){
+            //         option.selected = true;
+            //     }//if
+            // }//for j
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
@@ -1913,28 +1912,30 @@ export class TableFilter {
                 }
             }
 
-            let sarg = searcharg.split(' '+this.orOperator+' ');
-            let lisNb = Dom.tag(slc, 'li').length;
+            let values = searcharg.split(' '+this.orOperator+' ');
 
-            slc.setAttribute('value', '');
-            slc.setAttribute('indexes', '');
+            this.emitter.emit('select-checklist-options', this, index, values);
+            // let lisNb = Dom.tag(slc, 'li').length;
+
+            // slc.setAttribute('value', '');
+            // slc.setAttribute('indexes', '');
 
             // TODO: provide a select option helper method in checklist module
-            for(let k=0; k<lisNb; k++){
-                let li = Dom.tag(slc, 'li')[k],
-                    lbl = Dom.tag(li, 'label')[0],
-                    chk = Dom.tag(li, 'input')[0],
-                    lblTxt = Str.matchCase(
-                        Dom.getText(lbl), this.caseSensitive);
-                if(lblTxt !== '' && Arr.has(sarg, lblTxt, true)){
-                    chk.checked = true;
-                    this.Mod.checkList.setCheckListValues(chk);
-                }
-                else{
-                    chk.checked = false;
-                    this.Mod.checkList.setCheckListValues(chk);
-                }
-            }
+            // for(let k=0; k<lisNb; k++){
+            //     let li = Dom.tag(slc, 'li')[k],
+            //         lbl = Dom.tag(li, 'label')[0],
+            //         chk = Dom.tag(li, 'input')[0],
+            //         lblTxt = Str.matchCase(
+            //             Dom.getText(lbl), this.caseSensitive);
+            //     if(lblTxt !== '' && Arr.has(sarg, lblTxt, true)){
+            //         chk.checked = true;
+            //         this.Mod.checkList.setCheckListValues(chk);
+            //     }
+            //     else{
+            //         chk.checked = false;
+            //         this.Mod.checkList.setCheckListValues(chk);
+            //     }
+            // }
         }
     }
 

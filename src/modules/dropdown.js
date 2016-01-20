@@ -105,6 +105,10 @@ export class Dropdown extends Feature{
             (tf, colIndex, isLinked, isExternal)=>
                 this.build(colIndex, isLinked, isExternal)
         );
+        this.emitter.on(
+            ['select-options'],
+            (tf, colIndex, values)=> this.selectOptions(colIndex, values)
+        );
 
         this.initialized = true;
     }
@@ -363,11 +367,37 @@ export class Dropdown extends Feature{
         return slc;
     }
 
+    selectOptions(colIndex, values=[]){
+        let tf = this.tf;
+        if(tf.getFilterType(colIndex) !== tf.fltTypeMulti ||
+            values.length === 0){
+            return false;
+        }
+        let slc = tf.getFilterElement(colIndex);
+        [].forEach.call(slc.options, (option)=> {
+            // Empty value means clear all selections and first option is the
+            // clear all option
+            if(values[0] === '' || option.value === ''){
+                option.selected = false;
+            }
+
+            if(option.value !== '' &&
+                Arr.has(values, option.value, true)){
+                option.selected = true;
+            }//if
+        });
+        return true;
+    }
+
     destroy(){
         this.emitter.off(
             ['build-select-filter'],
             (colIndex, isLinked, isExternal)=>
                 this.build(colIndex, isLinked, isExternal)
+        );
+        this.emitter.off(
+            ['select-options'],
+            (tf, colIndex, values)=> this.selectOptions(colIndex, values)
         );
     }
 }
