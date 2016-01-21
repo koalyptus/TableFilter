@@ -433,11 +433,16 @@ export class CheckList extends Feature{
         }
     }
 
+    /**
+     * Select filter options programmatically
+     * @param  {Number} colIndex Column index
+     * @param  {Array}  values   Array of option values to select
+     */
     selectOptions(colIndex, values=[]){
         let tf = this.tf;
         if(tf.getFilterType(colIndex) !== tf.fltTypeCheckList ||
             values.length === 0){
-            return false;
+            return;
         }
         let flt = tf.getFilterElement(colIndex);
 
@@ -450,8 +455,7 @@ export class CheckList extends Feature{
             let li = Dom.tag(flt, 'li')[k],
                 lbl = Dom.tag(li, 'label')[0],
                 chk = Dom.tag(li, 'input')[0],
-                lblTxt = Str.matchCase(
-                    Dom.getText(lbl), tf.caseSensitive);
+                lblTxt = Str.matchCase(Dom.getText(lbl), tf.caseSensitive);
             if(lblTxt !== '' && Arr.has(values, lblTxt, true)){
                 chk.checked = true;
                 this.setCheckListValues(chk);
@@ -461,7 +465,6 @@ export class CheckList extends Feature{
                 this.setCheckListValues(chk);
             }
         }
-        return true;
     }
 
     destroy(){

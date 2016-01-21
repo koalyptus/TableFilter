@@ -1877,28 +1877,14 @@ export class TableFilter {
         }
         //multiple selects
         else if(fltColType === this.fltTypeMulti){
-            let s = searcharg.split(' '+this.orOperator+' ');
+            let values = searcharg.split(' '+this.orOperator+' ');
 
             if(this.loadFltOnDemand && !this.initialized){
                 this.emitter.emit('build-select-filter', this, index,
                     this.linkedFilters, this.isExternalFlt);
             }
 
-            this.emitter.emit('select-options', this, index, s);
-            // TODO: provide a select option helper method in dropdown module
-            // for(let j=0, len=slc.options.length; j<len; j++){
-            //     let option = slc.options[j];
-            //     if(s==='' || s[0]===''){
-            //         option.selected = false;
-            //     }
-            //     if(option.value===''){
-            //         option.selected = false;
-            //     }
-            //     if(option.value!=='' &&
-            //         Arr.has(s, option.value, true)){
-            //         option.selected = true;
-            //     }//if
-            // }//for j
+            this.emitter.emit('select-options', this, index, values);
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
@@ -1907,35 +1893,10 @@ export class TableFilter {
             if(this.loadFltOnDemand && !this.initialized){
                 this.emitter.emit('build-checklist-filter', this, index,
                     this.isExternalFlt);
-                if(!slc){
-                    slc = this.getFilterElement(index);
-                }
             }
 
             let values = searcharg.split(' '+this.orOperator+' ');
-
             this.emitter.emit('select-checklist-options', this, index, values);
-            // let lisNb = Dom.tag(slc, 'li').length;
-
-            // slc.setAttribute('value', '');
-            // slc.setAttribute('indexes', '');
-
-            // TODO: provide a select option helper method in checklist module
-            // for(let k=0; k<lisNb; k++){
-            //     let li = Dom.tag(slc, 'li')[k],
-            //         lbl = Dom.tag(li, 'label')[0],
-            //         chk = Dom.tag(li, 'input')[0],
-            //         lblTxt = Str.matchCase(
-            //             Dom.getText(lbl), this.caseSensitive);
-            //     if(lblTxt !== '' && Arr.has(sarg, lblTxt, true)){
-            //         chk.checked = true;
-            //         this.Mod.checkList.setCheckListValues(chk);
-            //     }
-            //     else{
-            //         chk.checked = false;
-            //         this.Mod.checkList.setCheckListValues(chk);
-            //     }
-            // }
         }
     }
 
@@ -1950,7 +1911,7 @@ export class TableFilter {
         }
         tbl = tbl || this.tbl;
         let rIndex;
-        if(rowIndex===undefined){
+        if(rowIndex === undefined){
             rIndex = tbl.rows[0].style.display!='none' ? 0 : 1;
         } else{
             rIndex = rowIndex;

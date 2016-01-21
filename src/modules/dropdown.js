@@ -367,11 +367,16 @@ export class Dropdown extends Feature{
         return slc;
     }
 
+    /**
+     * Select filter options programmatically
+     * @param  {Number} colIndex Column index
+     * @param  {Array}  values   Array of option values to select
+     */
     selectOptions(colIndex, values=[]){
         let tf = this.tf;
         if(tf.getFilterType(colIndex) !== tf.fltTypeMulti ||
             values.length === 0){
-            return false;
+            return;
         }
         let slc = tf.getFilterElement(colIndex);
         [].forEach.call(slc.options, (option)=> {
@@ -386,7 +391,6 @@ export class Dropdown extends Feature{
                 option.selected = true;
             }//if
         });
-        return true;
     }
 
     destroy(){
