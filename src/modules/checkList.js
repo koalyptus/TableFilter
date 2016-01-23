@@ -402,7 +402,7 @@ export class CheckList extends Feature{
                 chkValue = Str.trim(
                     fltValue+' '+chkValue+' '+tf.orOperator);
                 chkIndex = fltIndexes + chkIndex + tf.separator;
-                n.setAttribute('value', chkValue );
+                n.setAttribute('value', chkValue);
                 n.setAttribute('indexes', chkIndex);
                 //1st option unchecked
                 if(Dom.id(tf.fltIds[colIndex]+'_0')){
@@ -456,7 +456,7 @@ export class CheckList extends Feature{
                 lbl = Dom.tag(li, 'label')[0],
                 chk = Dom.tag(li, 'input')[0],
                 lblTxt = Str.matchCase(Dom.getText(lbl), tf.caseSensitive);
-            if(lblTxt !== '' && Arr.has(values, lblTxt, true)){
+            if(lblTxt !== '' && Arr.has(values, lblTxt, tf.caseSensitive)){
                 chk.checked = true;
                 this.setCheckListValues(chk);
             }

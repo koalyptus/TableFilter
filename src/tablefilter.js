@@ -1392,9 +1392,10 @@ export class TableFilter {
 
         for(let k=this.refRow; k<this.nbRows; k++){
             /*** if table already filtered some rows are not visible ***/
-            if(this.getRowDisplay(row[k]) === 'none'){
-                row[k].style.display = '';
-            }
+            // if(this.getRowDisplay(row[k]) === 'none'){
+            //     row[k].style.display = '';
+            // }
+            row[k].style.display = '';
 
             let cell = row[k].cells,
                 nchilds = cell.length;
@@ -1415,6 +1416,7 @@ export class TableFilter {
                 let sA = this.searchArgs[this.singleSearchFlt ? 0 : j];
                 var dtType = this.hasColDateType ?
                         this.colDateType[j] : this.defaultDateType;
+
                 if(sA === ''){
                     continue;
                 }
@@ -1423,31 +1425,38 @@ export class TableFilter {
                     this.caseSensitive);
 
                 //multiple search parameter operator ||
-                let sAOrSplit = sA.split(this.orOperator),
+                let sAOrSplit = sA.toString().split(this.orOperator),
                 //multiple search || parameter boolean
-                hasMultiOrSA = (sAOrSplit.length>1) ? true : false,
+                hasMultiOrSA = sAOrSplit.length > 1,
                 //multiple search parameter operator &&
-                sAAndSplit = sA.split(this.anOperator),
+                sAAndSplit = sA.toString().split(this.anOperator),
                 //multiple search && parameter boolean
-                hasMultiAndSA = sAAndSplit.length>1 ? true : false;
+                hasMultiAndSA = sAAndSplit.length > 1;
 
                 //multiple sarch parameters
-                if(hasMultiOrSA || hasMultiAndSA){
+                if(Types.isArray(sA) || hasMultiOrSA || hasMultiAndSA){
                     let cS,
-                        occur = false,
+                        s,
+                        occur = false;
+                    if(Types.isArray(sA)){
+                        s = sA;
+                    } else {
                         s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
+                    }
                     for(let w=0, len=s.length; w<len; w++){
                         cS = Str.trim(s[w]);
                         occur = hasArg.call(this, cS, cellData, j);
                         highlight.call(this, cS, occur, cell[j]);
-                        if(hasMultiOrSA && occur){
+                        if((hasMultiOrSA && occur) ||
+                            (hasMultiAndSA && !occur)){
                             break;
                         }
-                        if(hasMultiAndSA && !occur){
+                        if(Types.isArray(s) && occur){
                             break;
                         }
                     }
                     occurence[j] = occur;
+
                 }
                 //single search parameter
                 else {
@@ -1548,7 +1557,8 @@ export class TableFilter {
         if(!this.fltGrid){
             return;
         }
-        let fltValue,
+        let fltValue = '',
+            fltValues = [],
             flt = this.getFilterElement(index);
         if(!flt){
             return '';
@@ -1561,27 +1571,33 @@ export class TableFilter {
         }
         //mutiple select
         else if(fltColType === this.fltTypeMulti){
-            fltValue = '';
             for(let j=0, len=flt.options.length; j<len; j++){
                 if(flt.options[j].selected){
-                    fltValue = fltValue.concat(
-                        flt.options[j].value+' ' +
-                        this.orOperator + ' '
-                    );
+                    // fltValue = fltValue.concat(
+                    //     flt.options[j].value + ' ' + this.orOperator + ' '
+                    // );
+                    fltValues.push(flt.options[j].value);
                 }
             }
             //removes last operator ||
-            fltValue = fltValue.substr(0, fltValue.length-4);
+            // fltValue = fltValue.substr(0, fltValue.length-4);
+            fltValue = fltValues.length > 0 ? fltValues : '';
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
             if(flt.getAttribute('value') !== null){
-                fltValue = flt.getAttribute('value');
+                fltValues = flt.getAttribute('value');
                 //removes last operator ||
-                fltValue = fltValue.substr(0, fltValue.length-3);
-            } else{
+                fltValues = fltValues.substr(0, fltValues.length-3);
+                fltValues = fltValues.split(' ' + this.orOperator + ' ');
+            } /*else{
                 fltValue = '';
-            }
+            }*/
+            fltValue = fltValues.length > 0 ? fltValues : '';
+        }
+        if(Types.isArray(fltValue) && fltValue.length === 1 &&
+            fltValue[0] === ''){
+            fltValue = '';
         }
         return fltValue;
     }
@@ -1596,10 +1612,15 @@ export class TableFilter {
         }
         let searchArgs = [];
         for(let i=0, len=this.fltIds.length; i<len; i++){
-            searchArgs.push(
-                Str.trim(
-                    Str.matchCase(this.getFilterValue(i), this.caseSensitive))
-            );
+            let fltValue = this.getFilterValue(i);
+            if(Types.isArray(fltValue)){
+                searchArgs.push(fltValue);
+            } else {
+                searchArgs.push(
+                    // Str.trim(Str.matchCase(fltValue, this.caseSensitive))
+                    Str.trim(fltValue)
+                );
+            }
         }
         return searchArgs;
     }
@@ -1858,9 +1879,9 @@ export class TableFilter {
     /**
      * Set search value to a given filter
      * @param {Number} index     Column's index
-     * @param {String} searcharg Search term
+     * @param {String or Array}  searcharg Search term
      */
-    setFilterValue(index, searcharg=''){
+    setFilterValue(index, query=''){
         if(!this.fltGrid){
             return;
         }
@@ -1873,11 +1894,12 @@ export class TableFilter {
                 this.emitter.emit('build-select-filter', this, index,
                     this.linkedFilters, this.isExternalFlt);
             }
-            slc.value = searcharg;
+            slc.value = query;
         }
         //multiple selects
         else if(fltColType === this.fltTypeMulti){
-            let values = searcharg.split(' '+this.orOperator+' ');
+            let values = Types.isArray(query) ? query :
+                query.split(' '+this.orOperator+' ');
 
             if(this.loadFltOnDemand && !this.initialized){
                 this.emitter.emit('build-select-filter', this, index,
@@ -1888,14 +1910,18 @@ export class TableFilter {
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
-            searcharg = Str.matchCase(searcharg, this.caseSensitive);
-
+            let values = [];
             if(this.loadFltOnDemand && !this.initialized){
                 this.emitter.emit('build-checklist-filter', this, index,
                     this.isExternalFlt);
             }
+            if(Types.isArray(query)){
+                values = query;
+            } else {
+                query = Str.matchCase(query, this.caseSensitive);
+                values = query.split(' '+this.orOperator+' ');
+            }
 
-            let values = searcharg.split(' '+this.orOperator+' ');
             this.emitter.emit('select-checklist-options', this, index, values);
         }
     }

@@ -1,5 +1,6 @@
 import Dom from '../dom';
 import Str from '../string';
+import Types from '../types';
 
 export class HighlightKeyword{
 
@@ -109,13 +110,22 @@ export class HighlightKeyword{
      * Clear all occurrences of highlighted nodes
      */
     unhighlightAll(){
-        if(!this.tf.highlightKeywords || !this.tf.searchArgs){
+        if(!this.tf.highlightKeywords){
             return;
         }
-        for(var y=0; y<this.tf.searchArgs.length; y++){
-            this.unhighlight(
-                this.tf.searchArgs[y], this.highlightCssClass);
-        }
+        // for(var y=0; y<this.tf.getFiltersValue().length; y++){
+        //     console.log();
+        //     this.unhighlight(
+        //         this.tf.searchArgs[y], this.highlightCssClass);
+        // }
+        this.tf.getFiltersValue().forEach((val)=> {
+            if(Types.isArray(val)){
+                val.forEach((item)=>
+                    this.unhighlight(item, this.highlightCssClass));
+            } else {
+                this.unhighlight(val, this.highlightCssClass);
+            }
+        });
         this.highlightedNodes = [];
     }
 
