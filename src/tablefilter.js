@@ -2,7 +2,6 @@ import Event from './event';
 import Dom from './dom';
 import Str from './string';
 import Types from './types';
-import Arr from './array';
 import DateHelper from './date';
 import Helpers from './helpers';
 import {Emitter} from './emitter';
@@ -960,7 +959,6 @@ export class TableFilter {
             this.destroyExtensions();
         }
 
-        // }//for j
         this.validateAllRows();
 
         if(this.fltGrid && !this.gridLayout){
@@ -1065,9 +1063,7 @@ export class TableFilter {
         let tbl = this.tbl;
         let captions = Dom.tag(tbl, 'caption');
         if(captions.length > 0){
-            [].forEach.call(captions, function(elm) {
-                tbl.removeChild(elm);
-            });
+            [].forEach.call(captions, (elm)=> tbl.removeChild(elm));
         }
     }
 
@@ -1393,10 +1389,8 @@ export class TableFilter {
         }//fn
 
         for(let k=this.refRow; k<this.nbRows; k++){
-            /*** if table already filtered some rows are not visible ***/
-            if(this.getRowDisplay(row[k]) === 'none'){
-                row[k].style.display = '';
-            }
+            // already filtered rows display re-init
+            row[k].style.display = '';
 
             let cell = row[k].cells,
                 nchilds = cell.length;
@@ -1417,6 +1411,7 @@ export class TableFilter {
                 let sA = this.searchArgs[this.singleSearchFlt ? 0 : j];
                 var dtType = this.hasColDateType ?
                         this.colDateType[j] : this.defaultDateType;
+
                 if(sA === ''){
                     continue;
                 }
@@ -1425,31 +1420,39 @@ export class TableFilter {
                     this.caseSensitive);
 
                 //multiple search parameter operator ||
-                let sAOrSplit = sA.split(this.orOperator),
+                let sAOrSplit = sA.toString().split(this.orOperator),
                 //multiple search || parameter boolean
-                hasMultiOrSA = (sAOrSplit.length>1) ? true : false,
+                hasMultiOrSA = sAOrSplit.length > 1,
                 //multiple search parameter operator &&
-                sAAndSplit = sA.split(this.anOperator),
+                sAAndSplit = sA.toString().split(this.anOperator),
                 //multiple search && parameter boolean
-                hasMultiAndSA = sAAndSplit.length>1 ? true : false;
+                hasMultiAndSA = sAAndSplit.length > 1;
 
-                //multiple sarch parameters
-                if(hasMultiOrSA || hasMultiAndSA){
+                //detect operators or array query
+                if(Types.isArray(sA) || hasMultiOrSA || hasMultiAndSA){
                     let cS,
-                        occur = false,
+                        s,
+                        occur = false;
+                    if(Types.isArray(sA)){
+                        s = sA;
+                    } else {
                         s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
+                    }
+                    // TODO: improve clarity/readability of this block
                     for(let w=0, len=s.length; w<len; w++){
                         cS = Str.trim(s[w]);
                         occur = hasArg.call(this, cS, cellData, j);
                         highlight.call(this, cS, occur, cell[j]);
-                        if(hasMultiOrSA && occur){
+                        if((hasMultiOrSA && occur) ||
+                            (hasMultiAndSA && !occur)){
                             break;
                         }
-                        if(hasMultiAndSA && !occur){
+                        if(Types.isArray(sA) && occur){
                             break;
                         }
                     }
                     occurence[j] = occur;
+
                 }
                 //single search parameter
                 else {
@@ -1550,7 +1553,8 @@ export class TableFilter {
         if(!this.fltGrid){
             return;
         }
-        let fltValue,
+        let fltValue = '',
+            fltValues = [],
             flt = this.getFilterElement(index);
         if(!flt){
             return '';
@@ -1563,27 +1567,32 @@ export class TableFilter {
         }
         //mutiple select
         else if(fltColType === this.fltTypeMulti){
-            fltValue = '';
+            // TODO: extract a method in dropdown module from below
             for(let j=0, len=flt.options.length; j<len; j++){
                 if(flt.options[j].selected){
-                    fltValue = fltValue.concat(
-                        flt.options[j].value+' ' +
-                        this.orOperator + ' '
-                    );
+                    fltValues.push(flt.options[j].value);
                 }
             }
-            //removes last operator ||
-            fltValue = fltValue.substr(0, fltValue.length-4);
+            //return empty string if collection is empty
+            fltValue = fltValues.length > 0 ? fltValues : '';
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
+            // TODO: extract a method in checklist module from below
             if(flt.getAttribute('value') !== null){
-                fltValue = flt.getAttribute('value');
+                fltValues = flt.getAttribute('value');
                 //removes last operator ||
-                fltValue = fltValue.substr(0, fltValue.length-3);
-            } else{
-                fltValue = '';
+                fltValues = fltValues.substr(0, fltValues.length-3);
+                //convert || separated values into array
+                fltValues = fltValues.split(' ' + this.orOperator + ' ');
             }
+            //return empty string if collection is empty
+            fltValue = fltValues.length > 0 ? fltValues : '';
+        }
+        //return an empty string if collection contains a single empty string
+        if(Types.isArray(fltValue) && fltValue.length === 1 &&
+            fltValue[0] === ''){
+            fltValue = '';
         }
         return fltValue;
     }
@@ -1598,10 +1607,12 @@ export class TableFilter {
         }
         let searchArgs = [];
         for(let i=0, len=this.fltIds.length; i<len; i++){
-            searchArgs.push(
-                Str.trim(
-                    Str.matchCase(this.getFilterValue(i), this.caseSensitive))
-            );
+            let fltValue = this.getFilterValue(i);
+            if(Types.isArray(fltValue)){
+                searchArgs.push(fltValue);
+            } else {
+                searchArgs.push(Str.trim(fltValue));
+            }
         }
         return searchArgs;
     }
@@ -1860,9 +1871,9 @@ export class TableFilter {
     /**
      * Set search value to a given filter
      * @param {Number} index     Column's index
-     * @param {String} searcharg Search term
+     * @param {String or Array}  searcharg Search term
      */
-    setFilterValue(index, searcharg=''){
+    setFilterValue(index, query=''){
         if(!this.fltGrid){
             return;
         }
@@ -1875,66 +1886,35 @@ export class TableFilter {
                 this.emitter.emit('build-select-filter', this, index,
                     this.linkedFilters, this.isExternalFlt);
             }
-            slc.value = searcharg;
+            slc.value = query;
         }
         //multiple selects
         else if(fltColType === this.fltTypeMulti){
-            let s = searcharg.split(' '+this.orOperator+' ');
+            let values = Types.isArray(query) ? query :
+                query.split(' '+this.orOperator+' ');
 
             if(this.loadFltOnDemand && !this.initialized){
                 this.emitter.emit('build-select-filter', this, index,
                     this.linkedFilters, this.isExternalFlt);
             }
 
-            // TODO: provide a select option helper method in dropdown module
-            for(let j=0, len=slc.options.length; j<len; j++){
-                let option = slc.options[j];
-                if(s==='' || s[0]===''){
-                    option.selected = false;
-                }
-                if(option.value===''){
-                    option.selected = false;
-                }
-                if(option.value!=='' &&
-                    Arr.has(s, option.value, true)){
-                    option.selected = true;
-                }//if
-            }//for j
+            this.emitter.emit('select-options', this, index, values);
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
-            searcharg = Str.matchCase(searcharg, this.caseSensitive);
-
+            let values = [];
             if(this.loadFltOnDemand && !this.initialized){
                 this.emitter.emit('build-checklist-filter', this, index,
                     this.isExternalFlt);
-                if(!slc){
-                    slc = this.getFilterElement(index);
-                }
+            }
+            if(Types.isArray(query)){
+                values = query;
+            } else {
+                query = Str.matchCase(query, this.caseSensitive);
+                values = query.split(' '+this.orOperator+' ');
             }
 
-            let sarg = searcharg.split(' '+this.orOperator+' ');
-            let lisNb = Dom.tag(slc, 'li').length;
-
-            slc.setAttribute('value', '');
-            slc.setAttribute('indexes', '');
-
-            // TODO: provide a select option helper method in checklist module
-            for(let k=0; k<lisNb; k++){
-                let li = Dom.tag(slc, 'li')[k],
-                    lbl = Dom.tag(li, 'label')[0],
-                    chk = Dom.tag(li, 'input')[0],
-                    lblTxt = Str.matchCase(
-                        Dom.getText(lbl), this.caseSensitive);
-                if(lblTxt !== '' && Arr.has(sarg, lblTxt, true)){
-                    chk.checked = true;
-                    this.Mod.checkList.setCheckListValues(chk);
-                }
-                else{
-                    chk.checked = false;
-                    this.Mod.checkList.setCheckListValues(chk);
-                }
-            }
+            this.emitter.emit('select-checklist-options', this, index, values);
         }
     }
 
@@ -1949,7 +1929,7 @@ export class TableFilter {
         }
         tbl = tbl || this.tbl;
         let rIndex;
-        if(rowIndex===undefined){
+        if(rowIndex === undefined){
             rIndex = tbl.rows[0].style.display!='none' ? 0 : 1;
         } else{
             rIndex = rowIndex;

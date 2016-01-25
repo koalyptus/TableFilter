@@ -82,6 +82,28 @@ test('Filters value in cookie', function() {
     deepEqual(tf.feature('store').getFilterValues(cookieName)[3], '1.5', 'Filter 3 value');
 });
 
+test('Filters value in cookie', function() {
+    tf.setFilterValue(0, 'Sydney');
+    tf.setFilterValue(3, '1.5');
+    tf.filter();
+    var cookieName = tf.fltsValuesCookie;
+    deepEqual(tf.feature('store').getFilterValues(cookieName)[0], 'Sydney', 'Filter 0 value');
+    deepEqual(tf.feature('store').getFilterValues(cookieName)[3], '1.5', 'Filter 3 value');
+});
+
+test('Filters value with operators in cookie', function() {
+    tf.setFilterValue(0, '');
+    tf.setFilterValue(1, 'Canberra || Perth');
+    tf.setFilterValue(3, '>.6');
+    tf.filter();
+    var cookieName = tf.fltsValuesCookie;
+
+    deepEqual(tf.feature('store').getFilterValues(cookieName)[0], ' ', 'Filter 0 value');
+    deepEqual(tf.feature('store').getFilterValues(cookieName)[1], 'Canberra || Perth', 'Filter 1 value');
+    deepEqual(tf.feature('store').getFilterValues(cookieName)[3], '>.6', 'Filter 3 value');
+    deepEqual(tf.getValidRows().length, 1, 'Expected nb of filtered rows');
+});
+
 test('Apply cookie filters value', function() {
     tf.setFilterValue(0, 'Adelaide');
     tf.setFilterValue(3, '>=2');
@@ -100,6 +122,26 @@ test('Can remove cookies on clearFilters', function() {
         'fltsValuesCookie cookie removed');
     deepEqual(readCookie(tf.pgLenCookie), '', 'pgLenCookie cookie removed');
     deepEqual(readCookie(tf.pgNbCookie), '', 'pgNbCookie cookie removed');
+});
+
+module('Multiple and checklist filters persistence');
+test('Filters value in cookie', function() {
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        remember_grid_values: true,
+        col_0: 'multiple',
+        col_1: 'checklist'
+    });
+    tf.init();
+
+    tf.setFilterValue(0, ['Sydney', 'Adelaide']);
+    tf.setFilterValue(1, ['Alice Springs', 'Brisbane']);
+    tf.filter();
+    var cookieName = tf.fltsValuesCookie;
+    deepEqual(tf.feature('store').getFilterValues(cookieName)[0], 'Adelaide || Sydney', 'Filter 0 value');
+    deepEqual(tf.feature('store').getFilterValues(cookieName)[1], 'Alice Springs || Brisbane', 'Filter 1 value');
+    deepEqual(tf.getValidRows().length, 3, 'Expected nb of filtered rows');
 });
 
 module('Tear-down');

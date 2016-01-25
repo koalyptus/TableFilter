@@ -109,6 +109,11 @@ export class CheckList extends Feature{
             (tf, colIndex, isExternal)=> this.build(colIndex, isExternal)
         );
 
+        this.emitter.on(
+            ['select-checklist-options'],
+            (tf, colIndex, values)=> this.selectOptions(colIndex, values)
+        );
+
         this.initialized = true;
     }
 
@@ -297,7 +302,7 @@ export class CheckList extends Feature{
             }
             ul.appendChild(li);
 
-            if(val===''){
+            if(val === ''){
                 //item is hidden
                 li.style.display = 'none';
             }
@@ -397,7 +402,7 @@ export class CheckList extends Feature{
                 chkValue = Str.trim(
                     fltValue+' '+chkValue+' '+tf.orOperator);
                 chkIndex = fltIndexes + chkIndex + tf.separator;
-                n.setAttribute('value', chkValue );
+                n.setAttribute('value', chkValue);
                 n.setAttribute('indexes', chkIndex);
                 //1st option unchecked
                 if(Dom.id(tf.fltIds[colIndex]+'_0')){
@@ -428,10 +433,48 @@ export class CheckList extends Feature{
         }
     }
 
+    /**
+     * Select filter options programmatically
+     * @param  {Number} colIndex Column index
+     * @param  {Array}  values   Array of option values to select
+     */
+    selectOptions(colIndex, values=[]){
+        let tf = this.tf;
+        if(tf.getFilterType(colIndex) !== tf.fltTypeCheckList ||
+            values.length === 0){
+            return;
+        }
+        let flt = tf.getFilterElement(colIndex);
+
+        let lisNb = Dom.tag(flt, 'li').length;
+
+        flt.setAttribute('value', '');
+        flt.setAttribute('indexes', '');
+
+        for(let k=0; k<lisNb; k++){
+            let li = Dom.tag(flt, 'li')[k],
+                lbl = Dom.tag(li, 'label')[0],
+                chk = Dom.tag(li, 'input')[0],
+                lblTxt = Str.matchCase(Dom.getText(lbl), tf.caseSensitive);
+            if(lblTxt !== '' && Arr.has(values, lblTxt, tf.caseSensitive)){
+                chk.checked = true;
+                this.setCheckListValues(chk);
+            }
+            else{
+                chk.checked = false;
+                this.setCheckListValues(chk);
+            }
+        }
+    }
+
     destroy(){
         this.emitter.off(
             ['build-checklist-filter'],
             (tf, colIndex, isExternal)=> this.build(colIndex, isExternal)
+        );
+        this.emitter.off(
+            ['select-checklist-options'],
+            (tf, colIndex, values)=> this.selectOptions(colIndex, values)
         );
     }
 }

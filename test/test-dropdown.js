@@ -38,6 +38,16 @@ test('Can filter on drop-down change', function() {
     deepEqual(tf.getFilteredData()[0][1][3], '1.1', 'Matched value');
 });
 
+test('Can select options', function() {
+    tf.clearFilters();
+    var flt1 = id(tf.fltIds[2]);
+
+    dropdown.selectOptions(2, ['872', '286']);
+
+    deepEqual(flt1.options[5].selected, true, 'Option selected');
+    deepEqual(flt1.options[6].selected, true, 'Option selected');
+});
+
 test('TableFilter removed', function() {
     tf.destroy();
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
