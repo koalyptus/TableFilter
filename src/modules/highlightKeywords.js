@@ -113,11 +113,7 @@ export class HighlightKeyword{
         if(!this.tf.highlightKeywords){
             return;
         }
-        // for(var y=0; y<this.tf.getFiltersValue().length; y++){
-        //     console.log();
-        //     this.unhighlight(
-        //         this.tf.searchArgs[y], this.highlightCssClass);
-        // }
+        // iterate filters values to unhighlight all values
         this.tf.getFiltersValue().forEach((val)=> {
             if(Types.isArray(val)){
                 val.forEach((item)=>

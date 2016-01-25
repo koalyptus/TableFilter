@@ -1,4 +1,4 @@
-// (function(win, TableFilter) {
+(function(win, TableFilter) {
 
     var tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/'
@@ -63,6 +63,13 @@
         tf.setFilterValue(0, 'Syd');
         tf.filter();
         deepEqual(tf.getValidRows().length, 4, 'Filtered rows number');
+    });
+
+    test('Filter table with range', function() {
+        tf.clearFilters();
+        tf.setFilterValue(2, '>1500 && <=2871');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 3, 'Filtered rows number');
     });
 
     test('Clear filters', function() {
@@ -241,9 +248,7 @@
             'Column 2 filter values');
     });
 
-
-
-    module('TableFilter with pop-up filtes');
+    module('TableFilter with pop-up filters');
     test('Sanity checks', function() {
         tf.destroy();
         tf = null;
@@ -480,4 +485,4 @@
     }
 
 
-// })(window, TableFilter);
+})(window, TableFilter);

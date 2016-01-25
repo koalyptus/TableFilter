@@ -1,4 +1,5 @@
 import Cookie from '../cookie';
+import Types from '../types';
 
 export class Store{
 
@@ -9,7 +10,7 @@ export class Store{
      * TODO: use localStorage and fallback to cookie persistence
      */
     constructor(tf){
-        var f = tf.config();
+        let f = tf.config();
 
         this.duration = !isNaN(f.set_cookie_duration) ?
             parseInt(f.set_cookie_duration, 10) : 100000;
@@ -29,23 +30,29 @@ export class Store{
      * @param {String} cookie name
      */
     saveFilterValues(name){
-        var tf = this.tf;
-        var fltValues = [];
+        let tf = this.tf;
+        let fltValues = [];
 
         if(!tf.rememberGridValues){
             return;
         }
 
         //store filters' values
-        for(var i=0; i<tf.fltIds.length; i++){
-            var value = tf.getFilterValue(i);
+        for(let i=0; i<tf.fltIds.length; i++){
+            let value = tf.getFilterValue(i);
+            //convert array to a || separated values
+            if(Types.isArray(value)){
+                let rgx = new RegExp(tf.separator, 'g');
+                value = value.toString()
+                    .replace(rgx, ' ' + tf.orOperator + ' ');
+            }
             if (value === ''){
                 value = ' ';
             }
             fltValues.push(value);
         }
 
-        //writes cookie
+        //write cookie
         Cookie.write(
             name,
             fltValues.join(tf.separator),
@@ -59,8 +66,8 @@ export class Store{
      * @return {Array}
      */
     getFilterValues(name){
-        var flts = Cookie.read(name);
-        var rgx = new RegExp(this.tf.separator, 'g');
+        let flts = Cookie.read(name);
+        let rgx = new RegExp(this.tf.separator, 'g');
         // filters' values array
         return flts.split(rgx);
     }

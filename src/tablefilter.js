@@ -2,7 +2,6 @@ import Event from './event';
 import Dom from './dom';
 import Str from './string';
 import Types from './types';
-// import Arr from './array';
 import DateHelper from './date';
 import Helpers from './helpers';
 import {Emitter} from './emitter';
@@ -960,7 +959,6 @@ export class TableFilter {
             this.destroyExtensions();
         }
 
-        // }//for j
         this.validateAllRows();
 
         if(this.fltGrid && !this.gridLayout){
@@ -1391,10 +1389,7 @@ export class TableFilter {
         }//fn
 
         for(let k=this.refRow; k<this.nbRows; k++){
-            /*** if table already filtered some rows are not visible ***/
-            // if(this.getRowDisplay(row[k]) === 'none'){
-            //     row[k].style.display = '';
-            // }
+            // already filtered rows display re-init
             row[k].style.display = '';
 
             let cell = row[k].cells,
@@ -1433,7 +1428,7 @@ export class TableFilter {
                 //multiple search && parameter boolean
                 hasMultiAndSA = sAAndSplit.length > 1;
 
-                //multiple sarch parameters
+                //detect operators or array query
                 if(Types.isArray(sA) || hasMultiOrSA || hasMultiAndSA){
                     let cS,
                         s,
@@ -1443,6 +1438,7 @@ export class TableFilter {
                     } else {
                         s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
                     }
+                    // TODO: improve clarity/readability of this block
                     for(let w=0, len=s.length; w<len; w++){
                         cS = Str.trim(s[w]);
                         occur = hasArg.call(this, cS, cellData, j);
@@ -1451,7 +1447,7 @@ export class TableFilter {
                             (hasMultiAndSA && !occur)){
                             break;
                         }
-                        if(Types.isArray(s) && occur){
+                        if(Types.isArray(sA) && occur){
                             break;
                         }
                     }
@@ -1571,30 +1567,29 @@ export class TableFilter {
         }
         //mutiple select
         else if(fltColType === this.fltTypeMulti){
+            // TODO: extract a method in dropdown module from below
             for(let j=0, len=flt.options.length; j<len; j++){
                 if(flt.options[j].selected){
-                    // fltValue = fltValue.concat(
-                    //     flt.options[j].value + ' ' + this.orOperator + ' '
-                    // );
                     fltValues.push(flt.options[j].value);
                 }
             }
-            //removes last operator ||
-            // fltValue = fltValue.substr(0, fltValue.length-4);
+            //return empty string if collection is empty
             fltValue = fltValues.length > 0 ? fltValues : '';
         }
         //checklist
         else if(fltColType === this.fltTypeCheckList){
+            // TODO: extract a method in checklist module from below
             if(flt.getAttribute('value') !== null){
                 fltValues = flt.getAttribute('value');
                 //removes last operator ||
                 fltValues = fltValues.substr(0, fltValues.length-3);
+                //convert || separated values into array
                 fltValues = fltValues.split(' ' + this.orOperator + ' ');
-            } /*else{
-                fltValue = '';
-            }*/
+            }
+            //return empty string if collection is empty
             fltValue = fltValues.length > 0 ? fltValues : '';
         }
+        //return an empty string if collection contains a single empty string
         if(Types.isArray(fltValue) && fltValue.length === 1 &&
             fltValue[0] === ''){
             fltValue = '';
@@ -1616,10 +1611,7 @@ export class TableFilter {
             if(Types.isArray(fltValue)){
                 searchArgs.push(fltValue);
             } else {
-                searchArgs.push(
-                    // Str.trim(Str.matchCase(fltValue, this.caseSensitive))
-                    Str.trim(fltValue)
-                );
+                searchArgs.push(Str.trim(fltValue));
             }
         }
         return searchArgs;
