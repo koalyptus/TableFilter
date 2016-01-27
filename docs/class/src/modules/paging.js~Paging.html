@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">Paging | tablefilter v0.0.23 API Document</title>
+  <title data-ice="title">Paging | tablefilter v0.1.9 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
@@ -1317,7 +1318,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Change the page asynchronously according to passed index</p>
+        <div data-ice="description"><p>Change the page according to passed index</p>
 </div>
       </div>
     </td>
@@ -1343,8 +1344,8 @@
       <div>
         
         
-        <div data-ice="description"><p>Change rows asynchronously according to page results</p>
-</div>
+        <div data-ice="description"><p>Change rows according to page results drop-down
+</p></div>
       </div>
     </td>
     <td>
@@ -1519,13 +1520,13 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html#instance-method-resetPage">resetPage</a></span></span><span data-ice="signature">()</span>
+           <span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html#instance-method-resetPage">resetPage</a></span></span><span data-ice="signature">(name: <span>*</span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Re-set asynchronously page nb at page re-load</p>
+        <div data-ice="description"><p>Re-set page nb at page re-load</p>
 </div>
       </div>
     </td>
@@ -1545,13 +1546,65 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html#instance-method-resetPageLength">resetPageLength</a></span></span><span data-ice="signature">()</span>
+           <span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html#instance-method-resetPageLength">resetPageLength</a></span></span><span data-ice="signature">(name: <span>*</span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Re-set asynchronously page length at page re-load</p>
+        <div data-ice="description"><p>Re-set page length value at page re-load</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html#instance-method-resetPagingInfo">resetPagingInfo</a></span></span><span data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Reset paging info from scratch after a filtering process</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html#instance-method-resetValues">resetValues</a></span></span><span data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Re-set persisted pagination info</p>
 </div>
       </div>
     </td>
@@ -2240,7 +2293,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber337">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber340">source</a></span></span>
     </span>
   </h3>
 
@@ -3563,14 +3616,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber576">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber566">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Change the page asynchronously according to passed index</p>
+  <div data-ice="description"><p>Change the page according to passed index</p>
 </div>
 
   
@@ -3621,14 +3674,15 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber585">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber610">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Change rows asynchronously according to page results</p>
+  <div data-ice="description"><p>Change rows according to page results drop-down
+TODO: accept a parameter setting the results per page length</p>
 </div>
 
   
@@ -3662,7 +3716,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber713">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber696">source</a></span></span>
     </span>
   </h3>
 
@@ -3703,7 +3757,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber460">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber453">source</a></span></span>
     </span>
   </h3>
 
@@ -3755,7 +3809,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber418">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber414">source</a></span></span>
     </span>
   </h3>
 
@@ -3854,7 +3908,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber556">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber546">source</a></span></span>
     </span>
   </h3>
 
@@ -3895,7 +3949,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber344">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber347">source</a></span></span>
     </span>
   </h3>
 
@@ -3949,23 +4003,39 @@
     
     
     
-    <span data-ice="name">resetPage</span><span data-ice="signature">()</span>
+    <span data-ice="name">resetPage</span><span data-ice="signature">(name: <span>*</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber594">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber662">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Re-set asynchronously page nb at page re-load</p>
+  <div data-ice="description"><p>Re-set page nb at page re-load</p>
 </div>
 
   
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">name</td>
+      <td data-ice="type"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   
@@ -3990,18 +4060,116 @@
     
     
     
-    <span data-ice="name">resetPageLength</span><span data-ice="signature">()</span>
+    <span data-ice="name">resetPageLength</span><span data-ice="signature">(name: <span>*</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber603">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber678">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Re-set asynchronously page length at page re-load</p>
+  <div data-ice="description"><p>Re-set page length value at page re-load</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">name</td>
+      <td data-ice="type"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-resetPagingInfo">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">resetPagingInfo</span><span data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber363">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Reset paging info from scratch after a filtering process</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-resetValues">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">resetValues</span><span data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber649">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Re-set persisted pagination info</p>
 </div>
 
   
@@ -4035,7 +4203,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber469">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber462">source</a></span></span>
     </span>
   </h3>
 
@@ -4094,7 +4262,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber362">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber374">source</a></span></span>
     </span>
   </h3>
 
@@ -4153,7 +4321,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber503">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 

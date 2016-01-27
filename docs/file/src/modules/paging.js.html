@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.0.23 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.1.9 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
@@ -189,8 +190,8 @@ export class Paging extends Feature{
         //span following pages select (contains &apos; of &apos;)
         this.prfxPgAfterSpan = &apos;pgafterspan_&apos;;
 
-        var start_row = this.refRow;
-        var nrows = this.nbRows;
+        var start_row = tf.refRow;
+        var nrows = tf.nbRows;
         //calculates page nb
         this.nbPages = Math.ceil((nrows-start_row)/this.pagingLength);
 
@@ -403,6 +404,9 @@ export class Paging extends Feature{
             this.setPagingInfo(tf.validRowsIndex);
         }
 
+        this.emitter.on([&apos;after-filtering&apos;], ()=&gt; this.resetPagingInfo());
+        this.emitter.on([&apos;initialized&apos;], ()=&gt; this.resetValues());
+
         this.initialized = true;
     }
 
@@ -412,15 +416,24 @@ export class Paging extends Feature{
      */
     reset(filterTable=false){
         var tf = this.tf;
-        if(!tf.hasGrid() || this.isEnabled()){
+        if(this.isEnabled()){
             return;
         }
         this.enable();
         this.init();
-        tf.resetValues();
+        // tf.resetValues();
         if(filterTable){
             tf.filter();
         }
+    }
+
+    /**
+     * Reset paging info from scratch after a filtering process
+     */
+    resetPagingInfo(){
+        this.startPagingRow = 0;
+        this.currentPageNb = 1;
+        this.setPagingInfo(this.tf.validRowsIndex);
     }
 
     /**
@@ -428,29 +441,13 @@ export class Paging extends Feature{
      * Refresh paging select according to number of pages
      * @param {Array} validRows Collection of valid rows
      */
-    setPagingInfo(validRows=[]){
+    setPagingInfo(validRows){
         var tf = this.tf;
-        var rows = tf.tbl.rows;
         var mdiv = !this.pagingTgtId ? tf.mDiv : Dom.id(this.pagingTgtId);
         var pgspan = Dom.id(this.prfxPgSpan+tf.id);
 
         //store valid rows indexes
-        tf.validRowsIndex = validRows;
-
-        if(validRows.length === 0){
-            //counts rows to be grouped
-            for(var j=tf.refRow; j&lt;tf.nbRows; j++){
-                var row = rows[j];
-                if(!row){
-                    continue;
-                }
-
-                var isRowValid = row.getAttribute(&apos;validRow&apos;);
-                if(Types.isNull(isRowValid) || Boolean(isRowValid===&apos;true&apos;)){
-                    tf.validRowsIndex.push(j);
-                }
-            }
-        }
+        tf.validRowsIndex = validRows || tf.getValidRows(true);
 
         //calculate nb of pages
         this.nbPages = Math.ceil(tf.validRowsIndex.length/this.pagingLength);
@@ -486,7 +483,6 @@ export class Paging extends Feature{
      */
     groupByPage(validRows){
         var tf = this.tf;
-        var alternateRows = tf.feature(&apos;alternateRows&apos;);
         var rows = tf.tbl.rows;
         var startPagingRow = parseInt(this.startPagingRow, 10);
         var endPagingRow = startPagingRow + parseInt(this.pagingLength, 10);
@@ -501,25 +497,23 @@ export class Paging extends Feature{
             var validRowIdx = tf.validRowsIndex[h];
             var r = rows[validRowIdx];
             var isRowValid = r.getAttribute(&apos;validRow&apos;);
+            var rowDisplayed = false;
 
             if(h&gt;=startPagingRow &amp;&amp; h&lt;endPagingRow){
                 if(Types.isNull(isRowValid) || Boolean(isRowValid===&apos;true&apos;)){
                     r.style.display = &apos;&apos;;
-                }
-                if(tf.alternateRows &amp;&amp; alternateRows){
-                    alternateRows.setRowBg(validRowIdx, h);
+                    rowDisplayed = true;
                 }
             } else {
                 r.style.display = &apos;none&apos;;
-                if(tf.alternateRows &amp;&amp; alternateRows){
-                    alternateRows.removeRowBg(validRowIdx);
-                }
             }
+            this.emitter.emit(&apos;row-paged&apos;, tf, validRowIdx, h, rowDisplayed);
         }
 
         tf.nbVisibleRows = tf.validRowsIndex.length;
-        //re-applies filter behaviours after filtering process
-        tf.applyProps();
+
+        // broadcast grouping by page
+        this.emitter.emit(&apos;grouped-by-page&apos;, tf, this);
     }
 
     /**
@@ -573,9 +567,6 @@ export class Paging extends Feature{
         var tf = this.tf;
         var evt = this.evt;
 
-        if(!tf.hasGrid() &amp;&amp; !tf.isFirstLoad){
-            return;
-        }
         if(this.resultsPerPageSlc || !this.resultsPerPage){
             return;
         }
@@ -639,52 +630,18 @@ export class Paging extends Feature{
     }
 
     /**
-     * Change the page asynchronously according to passed index
-     * @param  {Number} index Index of the page (0-n)
-     */
-    changePage(index){
-        var tf = this.tf;
-        var evt = tf.Evt;
-        tf.EvtManager(evt.name.changepage, { pgIndex:index });
-    }
-
-    /**
-     * Change rows asynchronously according to page results
-     */
-    changeResultsPerPage(){
-        var tf = this.tf;
-        var evt = tf.Evt;
-        tf.EvtManager(evt.name.changeresultsperpage);
-    }
-
-    /**
-     * Re-set asynchronously page nb at page re-load
-     */
-    resetPage(){
-        var tf = this.tf;
-        var evt = tf.Evt;
-        tf.EvtManager(evt.name.resetpage);
-    }
-
-    /**
-     * Re-set asynchronously page length at page re-load
-     */
-    resetPageLength(){
-        var tf = this.tf;
-        var evt = tf.Evt;
-        tf.EvtManager(evt.name.resetpagelength);
-    }
-
-    /**
      * Change the page according to passed index
      * @param  {Number} index Index of the page (0-n)
      */
-    _changePage(index){
+    changePage(index){
         var tf = this.tf;
 
         if(!this.isEnabled()){
             return;
         }
+
+        this.emitter.emit(&apos;before-changing-page&apos;, tf, index);
+
         if(index === null){
             index = this.pageSelectorType===tf.fltTypeSlc ?
                 this.pagingSlc.options.selectedIndex : (this.pagingSlc.value-1);
@@ -712,18 +669,23 @@ export class Paging extends Feature{
                 this.onAfterChangePage.call(null, this, index);
             }
         }
+
+        this.emitter.emit(&apos;after-changing-page&apos;, tf, index);
     }
 
     /**
      * Change rows according to page results drop-down
      * TODO: accept a parameter setting the results per page length
      */
-    _changeResultsPerPage(){
+    changeResultsPerPage(){
         var tf = this.tf;
 
         if(!this.isEnabled()){
             return;
         }
+
+        this.emitter.emit(&apos;before-changing-results-per-page&apos;, tf);
+
         var slcR = this.resultsPerPageSlc;
         var slcPagesSelIndex = (this.pageSelectorType===tf.fltTypeSlc) ?
                 this.pagingSlc.selectedIndex :
@@ -747,33 +709,55 @@ export class Paging extends Feature{
                 tf.feature(&apos;store&apos;).savePageLength(tf.pgLenCookie);
             }
         }
+
+        this.emitter.emit(&apos;after-changing-results-per-page&apos;, tf);
+    }
+
+    /**
+     * Re-set persisted pagination info
+     */
+    resetValues(){
+        var tf = this.tf;
+        if(tf.rememberPageLen){
+            this.resetPageLength(tf.pgLenCookie);
+        }
+        if(tf.rememberPageNb){
+            this.resetPage(tf.pgNbCookie);
+        }
     }
 
     /**
      * Re-set page nb at page re-load
      */
-    _resetPage(name){
+    resetPage(name){
         var tf = this.tf;
+        if(!this.isEnabled()){
+            return;
+        }
+        this.emitter.emit(&apos;before-reset-page&apos;, tf);
         var pgnb = tf.feature(&apos;store&apos;).getPageNb(name);
-        if(pgnb!==&apos;&apos;){
+        if(pgnb !== &apos;&apos;){
             this.changePage((pgnb-1));
         }
+        this.emitter.emit(&apos;after-reset-page&apos;, tf, pgnb);
     }
 
     /**
      * Re-set page length value at page re-load
      */
-    _resetPageLength(name){
+    resetPageLength(name){
         var tf = this.tf;
         if(!this.isEnabled()){
             return;
         }
+        this.emitter.emit(&apos;before-reset-page-length&apos;, tf);
         var pglenIndex = tf.feature(&apos;store&apos;).getPageLength(name);
 
         if(pglenIndex!==&apos;&apos;){
             this.resultsPerPageSlc.options[pglenIndex].selected = true;
             this.changeResultsPerPage();
         }
+        this.emitter.emit(&apos;after-reset-page-length&apos;, tf, pglenIndex);
     }
 
     /**
@@ -844,6 +828,9 @@ export class Paging extends Feature{
         if(this.hasResultsPerPage){
             this.removeResultsPerPage();
         }
+
+        this.emitter.off([&apos;after-filtering&apos;], ()=&gt; this.resetPagingInfo());
+        this.emitter.off([&apos;initialized&apos;], ()=&gt; this.resetValues());
 
         this.pagingSlc = null;
         this.nbPages = 0;

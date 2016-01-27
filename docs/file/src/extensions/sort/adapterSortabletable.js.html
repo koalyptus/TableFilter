@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/sort/adapterSortabletable.js | tablefilter v0.0.23 API Document</title>
+  <title data-ice="title">src/extensions/sort/adapterSortabletable.js | tablefilter v0.1.9 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
@@ -115,6 +116,7 @@ export default class AdapterSortableTable{
             opts.on_after_sort : null;
 
         this.tf = tf;
+        this.emitter = tf.emitter;
     }
 
     init(){
@@ -154,42 +156,6 @@ export default class AdapterSortableTable{
         this.stt.onsort = function(){
             adpt.sorted = true;
 
-            //rows alternating bg issue
-            // TODO: move into AlternateRows component
-            if(tf.alternateRows){
-                let rows = tf.tbl.rows, c = 0;
-
-                let setClass = function(row, i, removeOnly){
-                    if(Types.isUndef(removeOnly)){
-                        removeOnly = false;
-                    }
-                    let altRows = tf.feature(&apos;alternateRows&apos;),
-                        oddCls = altRows.oddCss,
-                        evenCls = altRows.evenCss;
-                    Dom.removeClass(row, oddCls);
-                    Dom.removeClass(row, evenCls);
-
-                    if(!removeOnly){
-                        Dom.addClass(row, i % 2 ? oddCls : evenCls);
-                    }
-                };
-
-                for (let i = tf.refRow; i &lt; tf.nbRows; i++){
-                    let isRowValid = rows[i].getAttribute(&apos;validRow&apos;);
-                    if(tf.paging &amp;&amp; rows[i].style.display === &apos;&apos;){
-                        setClass(rows[i], c);
-                        c++;
-                    } else {
-                        if((isRowValid===&apos;true&apos; || isRowValid===null) &amp;&amp;
-                            rows[i].style.display === &apos;&apos;){
-                            setClass(rows[i], c);
-                            c++;
-                        } else {
-                            setClass(rows[i], c, true);
-                        }
-                    }
-                }
-            }
             //sort behaviour for paging
             if(tf.paging){
                 let paginator = tf.feature(&apos;paging&apos;);
@@ -202,6 +168,8 @@ export default class AdapterSortableTable{
             if(adpt.onAfterSort){
                 adpt.onAfterSort.call(null, tf, adpt.stt.sortColumn);
             }
+
+            adpt.emitter.emit(&apos;column-sorted&apos;, tf, adpt.stt.sortColumn);
         };
 
         this.initialized = true;

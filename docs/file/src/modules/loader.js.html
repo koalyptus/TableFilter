@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/loader.js | tablefilter v0.0.23 API Document</title>
+  <title data-ice="title">src/modules/loader.js | tablefilter v0.1.9 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
@@ -71,7 +72,7 @@
 import Dom from &apos;../dom&apos;;
 import Types from &apos;../types&apos;;
 
-var global = window;
+let global = window;
 
 export class Loader extends Feature{
 
@@ -79,11 +80,11 @@ export class Loader extends Feature{
      * Loading message/spinner
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, &apos;loader&apos;);
 
         // TableFilter configuration
-        var f = this.config;
+        let f = this.config;
 
         //id of container element
         this.loaderTgtId = f.loader_target_id || null;
@@ -96,7 +97,7 @@ export class Loader extends Feature{
         //defines css class for loader div
         this.loaderCssClass = f.loader_css_class || &apos;loader&apos;;
         //delay for hiding loader
-        this.loaderCloseDelay = 200;
+        this.loaderCloseDelay = 250;
         //callback function before loader is displayed
         this.onShowLoader = Types.isFn(f.on_show_loader) ?
             f.on_show_loader : null;
@@ -112,12 +113,13 @@ export class Loader extends Feature{
             return;
         }
 
-        var tf = this.tf;
+        let tf = this.tf;
+        let emitter = this.emitter;
 
-        var containerDiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxLoader+tf.id]);
+        let containerDiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxLoader+tf.id]);
         containerDiv.className = this.loaderCssClass;
 
-        var targetEl = !this.loaderTgtId ?
+        let targetEl = !this.loaderTgtId ?
             tf.tbl.parentNode : Dom.id(this.loaderTgtId);
         if(!this.loaderTgtId){
             targetEl.insertBefore(containerDiv, tf.tbl);
@@ -132,15 +134,44 @@ export class Loader extends Feature{
         }
 
         this.show(&apos;none&apos;);
+
+        // Subscribe to events
+        emitter.on([
+                &apos;before-filtering&apos;,
+                &apos;before-populating-filter&apos;,
+                &apos;before-changing-page&apos;,
+                &apos;before-clearing-filters&apos;,
+                &apos;before-changing-results-per-page&apos;,
+                &apos;before-reset-page&apos;,
+                &apos;before-reset-page-length&apos;,
+                &apos;before-loading-extensions&apos;,
+                &apos;before-loading-themes&apos;
+            ],
+            ()=&gt; this.show(&apos;&apos;)
+        );
+        emitter.on([
+                &apos;after-filtering&apos;,
+                &apos;after-populating-filter&apos;,
+                &apos;after-changing-page&apos;,
+                &apos;after-clearing-filters&apos;,
+                &apos;after-changing-results-per-page&apos;,
+                &apos;after-reset-page&apos;,
+                &apos;after-reset-page-length&apos;,
+                &apos;after-loading-extensions&apos;,
+                &apos;after-loading-themes&apos;
+            ],
+            ()=&gt; this.show(&apos;none&apos;)
+        );
+
         this.initialized = true;
     }
 
     show(p) {
-        if(!this.isEnabled() || this.loaderDiv.style.display === p){
+        if(!this.isEnabled() /*|| this.loaderDiv.style.display === p*/){
             return;
         }
 
-        var displayLoader = () =&gt; {
+        let displayLoader = () =&gt; {
             if(!this.loaderDiv){
                 return;
             }
@@ -153,17 +184,48 @@ export class Loader extends Feature{
             }
         };
 
-        var t = p === &apos;none&apos; ? this.loaderCloseDelay : 1;
+        let t = p === &apos;none&apos; ? this.loaderCloseDelay : 1;
         global.setTimeout(displayLoader, t);
     }
 
-    destroy(){
+    destroy() {
         if(!this.initialized){
             return;
         }
 
+        let emitter = this.emitter;
+
         Dom.remove(this.loaderDiv);
         this.loaderDiv = null;
+
+        // Unsubscribe to events
+        emitter.off([
+                &apos;before-filtering&apos;,
+                &apos;before-populating-filter&apos;,
+                &apos;before-changing-page&apos;,
+                &apos;before-clearing-filters&apos;,
+                &apos;before-changing-results-per-page&apos;,
+                &apos;before-reset-page&apos;,
+                &apos;before-reset-page-length&apos;,
+                &apos;before-loading-extensions&apos;,
+                &apos;before-loading-themes&apos;
+            ],
+            ()=&gt; this.show(&apos;&apos;)
+        );
+        emitter.off([
+                &apos;after-filtering&apos;,
+                &apos;after-populating-filter&apos;,
+                &apos;after-changing-page&apos;,
+                &apos;after-clearing-filters&apos;,
+                &apos;after-changing-results-per-page&apos;,
+                &apos;after-reset-page&apos;,
+                &apos;after-reset-page-length&apos;,
+                &apos;after-loading-extensions&apos;,
+                &apos;after-loading-themes&apos;
+            ],
+            ()=&gt; this.show(&apos;none&apos;)
+        );
+
         this.initialized = false;
     }
 }

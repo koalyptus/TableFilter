@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/advancedGrid/adapterEzEditTable.js | tablefilter v0.0.23 API Document</title>
+  <title data-ice="title">src/extensions/advancedGrid/adapterEzEditTable.js | tablefilter v0.1.9 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
@@ -95,6 +96,7 @@ export default class AdapterEzEditTable {
         this._ezEditTable = null;
         this.cfg = cfg;
         this.tf = tf;
+        this.emitter = tf.emitter;
     }
 
     /**
@@ -112,6 +114,11 @@ export default class AdapterEzEditTable {
         if(this.loadStylesheet &amp;&amp; !tf.isImported(this.stylesheet, &apos;link&apos;)){
             tf.import(this.stylesheetName, this.stylesheet, null, &apos;link&apos;);
         }
+
+        // TODO: hack to prevent ezEditTable enter key event hijaking.
+        // Needs to be fixed in the vendor&apos;s library
+        this.emitter.on([&apos;filter-focus&apos;, &apos;filter-blur&apos;],
+            ()=&gt; this._toggleForInputFilter());
     }
 
     /**
@@ -362,7 +369,8 @@ export default class AdapterEzEditTable {
             cfg.on_added_dom_row = function(){
                 tf.nbFilterableRows++;
                 if(!tf.paging){
-                    tf.feature(&apos;rowsCounter&apos;).refresh();
+                    tf.emitter.emit(&apos;rows-changed&apos;, tf, this);
+                    //tf.feature(&apos;rowsCounter&apos;).refresh();
                 } else {
                     tf.nbRows++;
                     tf.nbVisibleRows++;
@@ -383,7 +391,8 @@ export default class AdapterEzEditTable {
                 cfg.actions[&apos;delete&apos;].on_after_submit = function(){
                     tf.nbFilterableRows--;
                     if(!tf.paging){
-                        tf.feature(&apos;rowsCounter&apos;).refresh();
+                        // tf.feature(&apos;rowsCounter&apos;).refresh();
+                        tf.emitter.emit(&apos;rows-changed&apos;, tf, this);
                     } else {
                         tf.nbRows--;
                         tf.nbVisibleRows--;
@@ -426,6 +435,35 @@ export default class AdapterEzEditTable {
     }
 
     /**
+     * Toggle behaviour
+     */
+    toggle(){
+        var ezEditTable = this._ezEditTable;
+        if(ezEditTable.editable){
+            ezEditTable.Editable.Remove();
+        } else {
+            ezEditTable.Editable.Set();
+        }
+        if(ezEditTable.selection){
+            ezEditTable.Selection.Remove();
+        } else {
+            ezEditTable.Selection.Set();
+        }
+    }
+
+    _toggleForInputFilter(){
+        var tf = this.tf;
+        if(!tf.activeFlt){
+            return;
+        }
+        var colIndex = tf.activeFlt.getAttribute(&apos;ct&apos;);
+        var filterType = tf.getFilterType(colIndex);
+        if(filterType === tf.fltTypeInp){
+            this.toggle();
+        }
+    }
+
+    /**
      * Remove advanced grid
      */
     destroy(){
@@ -439,6 +477,9 @@ export default class AdapterEzEditTable {
                 ezEditTable.Editable.Remove();
             }
         }
+
+        this.emitter.off([&apos;filter-focus&apos;, &apos;filter-blur&apos;],
+            ()=&gt; this._toggleForInputFilter());
         this.initialized = false;
     }
 }

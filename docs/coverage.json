@@ -1,23 +1,23 @@
 {
-  "coverage": "23.55%",
-  "expectCount": 675,
-  "actualCount": 159,
+  "coverage": "24.85%",
+  "expectCount": 704,
+  "actualCount": 175,
   "files": {
     "src/extensions/advancedGrid/adapterEzEditTable.js": {
-      "expectCount": 15,
-      "actualCount": 4
+      "expectCount": 17,
+      "actualCount": 5
     },
     "src/extensions/sort/adapterSortabletable.js": {
-      "expectCount": 27,
+      "expectCount": 28,
       "actualCount": 3
     },
     "src/modules/alternateRows.js": {
-      "expectCount": 9,
-      "actualCount": 5
+      "expectCount": 11,
+      "actualCount": 6
     },
     "src/modules/checkList.js": {
-      "expectCount": 22,
-      "actualCount": 5
+      "expectCount": 26,
+      "actualCount": 7
     },
     "src/modules/clearButton.js": {
       "expectCount": 12,
@@ -32,15 +32,19 @@
       "actualCount": 10
     },
     "src/modules/dropdown.js": {
-      "expectCount": 15,
-      "actualCount": 4
+      "expectCount": 20,
+      "actualCount": 6
+    },
+    "src/emitter.js": {
+      "expectCount": 6,
+      "actualCount": 5
     },
     "src/tablefilter.js": {
-      "expectCount": 238,
-      "actualCount": 73
+      "expectCount": 225,
+      "actualCount": 75
     },
     "src/modules/feature.js": {
-      "expectCount": 13,
+      "expectCount": 14,
       "actualCount": 0
     },
     "src/extensions/filtersVisibility/filtersVisibility.js": {
@@ -56,7 +60,7 @@
       "actualCount": 3
     },
     "src/modules/highlightKeywords.js": {
-      "expectCount": 8,
+      "expectCount": 11,
       "actualCount": 4
     },
     "src/modules/loader.js": {
@@ -64,12 +68,12 @@
       "actualCount": 1
     },
     "src/modules/noResults.js": {
-      "expectCount": 19,
+      "expectCount": 20,
       "actualCount": 1
     },
     "src/modules/paging.js": {
-      "expectCount": 61,
-      "actualCount": 14
+      "expectCount": 63,
+      "actualCount": 16
     },
     "src/modules/popupFilter.js": {
       "expectCount": 28,
@@ -80,12 +84,12 @@
       "actualCount": 1
     },
     "src/modules/statusBar.js": {
-      "expectCount": 18,
+      "expectCount": 29,
       "actualCount": 1
     },
     "src/modules/store.js": {
-      "expectCount": 10,
-      "actualCount": 7
+      "expectCount": 14,
+      "actualCount": 8
     }
   }
 }

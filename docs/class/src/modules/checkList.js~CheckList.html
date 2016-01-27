@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">CheckList | tablefilter v0.0.23 API Document</title>
+  <title data-ice="title">CheckList | tablefilter v0.1.9 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
@@ -67,13 +68,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CheckList} from &apos;<span><a href="file/src/modules/checkList.js.html#lineNumber7">tablefilter/src/modules/checkList.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CheckList} from &apos;<span><a href="file/src/modules/checkList.js.html#lineNumber8">tablefilter/src/modules/checkList.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/checkList.js.html#lineNumber7">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/checkList.js.html#lineNumber8">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -83,7 +84,7 @@
 
   
   
-  
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>src/modules/feature~Feature</span> &#x2192; CheckList</div></div>
   
   
   
@@ -379,6 +380,31 @@
     <td>
       <div>
         <p>
+           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-member-initialized">initialized</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
            <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-member-isCustom">isCustom</a></span></span><span data-ice="signature">: <span>*</span></span>
         </p>
       </div>
@@ -468,31 +494,6 @@
       
     </td>
   </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-member-tf">tf</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
 </tbody>
 </table>
 </div>
@@ -569,7 +570,58 @@
       <div>
         
         
-        <div data-ice="description"><p>Build checklist UI asynchronously</p>
+        <div data-ice="description"><p>Build checklist UI</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-method-destroy">destroy</a></span></span><span data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-method-init">init</a></span></span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, isExternal: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, container: <span>DOMElement</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Initialize checklist filter</p>
 </div>
       </div>
     </td>
@@ -614,6 +666,31 @@
     <td>
       <div>
         <p>
+           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-method-onCheckListClick">onCheckListClick</a></span></span><span data-ice="signature">(evt: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
            <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-method-optionClick">optionClick</a></span></span><span data-ice="signature">(evt: <span>*</span>)</span>
         </p>
       </div>
@@ -621,6 +698,32 @@
         
         
         
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-method-selectOptions">selectOptions</a></span></span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, values: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Select filter options programmatically</p>
+</div>
       </div>
     </td>
     <td>
@@ -675,7 +778,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber13">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber14">source</a></span></span>
     </span>
   </h3>
 
@@ -736,7 +839,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber33">source</a></span></span>
     </span>
   </h3>
 
@@ -776,7 +879,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber22">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber25">source</a></span></span>
     </span>
   </h3>
 
@@ -816,7 +919,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber17">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber20">source</a></span></span>
     </span>
   </h3>
 
@@ -856,7 +959,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber19">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber22">source</a></span></span>
     </span>
   </h3>
 
@@ -896,7 +999,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber27">source</a></span></span>
     </span>
   </h3>
 
@@ -936,7 +1039,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber36">source</a></span></span>
     </span>
   </h3>
 
@@ -976,7 +1079,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber27">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber30">source</a></span></span>
     </span>
   </h3>
 
@@ -1016,7 +1119,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber39">source</a></span></span>
     </span>
   </h3>
 
@@ -1056,7 +1159,47 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber44">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber47">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-initialized">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">initialized</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber117">source</a></span></span>
     </span>
   </h3>
 
@@ -1096,7 +1239,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
@@ -1136,7 +1279,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber42">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
@@ -1176,7 +1319,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber43">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -1216,47 +1359,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber39">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-tf">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">tf</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber46">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber42">source</a></span></span>
     </span>
   </h3>
 
@@ -1299,7 +1402,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber237">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber284">source</a></span></span>
     </span>
   </h3>
 
@@ -1364,7 +1467,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber295">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber317">source</a></span></span>
     </span>
   </h3>
 
@@ -1439,14 +1542,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber68">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber126">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Build checklist UI asynchronously</p>
+  <div data-ice="description"><p>Build checklist UI</p>
 </div>
 
   
@@ -1478,6 +1581,118 @@
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>External container id</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-destroy">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">destroy</span><span data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber470">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-init">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">init</span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, isExternal: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, container: <span>DOMElement</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber79">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Initialize checklist filter</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">colIndex</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Column index</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">isExternal</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>External filter flag</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">container</td>
+      <td data-ice="type"><span>DOMElement</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Dom element containing the filter</p>
 </td>
     </tr>
 </tbody>
@@ -1557,17 +1772,17 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-optionClick">
+  <h3 data-ice="anchor" id="instance-method-onCheckListClick">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">optionClick</span><span data-ice="signature">(evt: <span>*</span>)</span>
+    <span data-ice="name">onCheckListClick</span><span data-ice="signature">(evt: <span>*</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber57">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 
@@ -1613,6 +1828,127 @@
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-optionClick">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">optionClick</span><span data-ice="signature">(evt: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber58">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">evt</td>
+      <td data-ice="type"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-selectOptions">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">selectOptions</span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, values: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber441">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Select filter options programmatically</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">colIndex</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Column index</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">values</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Array of option values to select</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-setCheckListValues">
     <span class="access" data-ice="access">public</span>
     
@@ -1623,7 +1959,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber342">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber358">source</a></span></span>
     </span>
   </h3>
 

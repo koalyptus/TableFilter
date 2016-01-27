@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/highlightKeywords.js | tablefilter v0.0.23 API Document</title>
+  <title data-ice="title">src/modules/highlightKeywords.js | tablefilter v0.1.9 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,6 +39,7 @@
 <li data-ice="classDoc"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></li>
 <li data-ice="classDoc"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></li>
@@ -69,6 +70,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/highlightKeywords.js</h1>
 <pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">import Dom from &apos;../dom&apos;;
 import Str from &apos;../string&apos;;
+import Types from &apos;../types&apos;;
 
 export class HighlightKeyword{
 
@@ -83,6 +85,19 @@ export class HighlightKeyword{
         this.highlightedNodes = [];
 
         this.tf = tf;
+        this.emitter = tf.emitter;
+    }
+
+    init(){
+        this.emitter.on(
+            [&apos;before-filtering&apos;, &apos;destroy&apos;],
+            ()=&gt; this.unhighlightAll()
+        );
+        this.emitter.on(
+            [&apos;highlight-keyword&apos;],
+            (tf, cell, word)=&gt;
+                this.highlight(cell, word, this.highlightCssClass)
+        );
     }
 
     /**
@@ -165,14 +180,31 @@ export class HighlightKeyword{
      * Clear all occurrences of highlighted nodes
      */
     unhighlightAll(){
-        if(!this.tf.highlightKeywords || !this.tf.searchArgs){
+        if(!this.tf.highlightKeywords){
             return;
         }
-        for(var y=0; y&lt;this.tf.searchArgs.length; y++){
-            this.unhighlight(
-                this.tf.searchArgs[y], this.highlightCssClass);
-        }
+        // iterate filters values to unhighlight all values
+        this.tf.getFiltersValue().forEach((val)=&gt; {
+            if(Types.isArray(val)){
+                val.forEach((item)=&gt;
+                    this.unhighlight(item, this.highlightCssClass));
+            } else {
+                this.unhighlight(val, this.highlightCssClass);
+            }
+        });
         this.highlightedNodes = [];
+    }
+
+    destroy(){
+        this.emitter.off(
+            [&apos;before-filtering&apos;, &apos;destroy&apos;],
+            ()=&gt; this.unhighlightAll()
+        );
+        this.emitter.off(
+            [&apos;highlight-keyword&apos;],
+            (tf, cell, word)=&gt;
+                this.highlight(cell, word, this.highlightCssClass)
+        );
     }
 }</code></pre>
 </div>

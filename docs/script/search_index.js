@@ -48,6 +48,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/emitter.js~emitter",
+    "class/src/emitter.js~Emitter.html",
+    "<span>Emitter</span> <span class=\"search-result-import-path\">tablefilter/src/emitter.js</span>",
+    "class"
+  ],
+  [
     "tablefilter/src/modules/feature.js~feature",
     "class/src/modules/feature.js~Feature.html",
     "<span>Feature</span> <span class=\"search-result-import-path\">tablefilter/src/modules/feature.js</span>",
@@ -474,6 +480,42 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/emitter.js",
+    "file/src/emitter.js.html",
+    "src/emitter.js",
+    "file"
+  ],
+  [
+    "src/emitter.js~emitter#constructor",
+    "class/src/emitter.js~Emitter.html#instance-constructor-constructor",
+    "src/emitter.js~Emitter#constructor",
+    "method"
+  ],
+  [
+    "src/emitter.js~emitter#emit",
+    "class/src/emitter.js~Emitter.html#instance-method-emit",
+    "src/emitter.js~Emitter#emit",
+    "method"
+  ],
+  [
+    "src/emitter.js~emitter#events",
+    "class/src/emitter.js~Emitter.html#instance-member-events",
+    "src/emitter.js~Emitter#events",
+    "member"
+  ],
+  [
+    "src/emitter.js~emitter#off",
+    "class/src/emitter.js~Emitter.html#instance-method-off",
+    "src/emitter.js~Emitter#off",
+    "method"
+  ],
+  [
+    "src/emitter.js~emitter#on",
+    "class/src/emitter.js~Emitter.html#instance-method-on",
+    "src/emitter.js~Emitter#on",
+    "method"
+  ],
+  [
     "src/event.js",
     "file/src/event.js.html",
     "src/event.js",
@@ -508,6 +550,12 @@ window.esdocSearchIndex = [
     "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-method-destroy",
     "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#destroy",
     "method"
+  ],
+  [
+    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#emitter",
+    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-emitter",
+    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#emitter",
+    "member"
   ],
   [
     "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#err",
@@ -562,6 +610,12 @@ window.esdocSearchIndex = [
     "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-tf",
     "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#tf",
     "member"
+  ],
+  [
+    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#toggle",
+    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-method-toggle",
+    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#toggle",
+    "method"
   ],
   [
     "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#vendorpath",
@@ -1218,6 +1272,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#emitter",
+    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-emitter",
+    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#emitter",
+    "member"
+  ],
+  [
     "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#imgascclassname",
     "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-imgAscClassName",
     "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#imgAscClassName",
@@ -1392,6 +1452,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/alternaterows.js~alternaterows#processall",
+    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-processAll",
+    "src/modules/alternateRows.js~AlternateRows#processAll",
+    "method"
+  ],
+  [
+    "src/modules/alternaterows.js~alternaterows#processrow",
+    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-processRow",
+    "src/modules/alternateRows.js~AlternateRows#processRow",
+    "method"
+  ],
+  [
     "src/modules/alternaterows.js~alternaterows#removerowbg",
     "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-removeRowBg",
     "src/modules/alternateRows.js~AlternateRows#removeRowBg",
@@ -1476,6 +1548,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/checklist.js~checklist#destroy",
+    "class/src/modules/checkList.js~CheckList.html#instance-method-destroy",
+    "src/modules/checkList.js~CheckList#destroy",
+    "method"
+  ],
+  [
     "src/modules/checklist.js~checklist#enablechecklistresetfilter",
     "class/src/modules/checkList.js~CheckList.html#instance-member-enableCheckListResetFilter",
     "src/modules/checkList.js~CheckList#enableCheckListResetFilter",
@@ -1488,6 +1566,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/checklist.js~checklist#init",
+    "class/src/modules/checkList.js~CheckList.html#instance-method-init",
+    "src/modules/checkList.js~CheckList#init",
+    "method"
+  ],
+  [
+    "src/modules/checklist.js~checklist#initialized",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-initialized",
+    "src/modules/checkList.js~CheckList#initialized",
+    "member"
+  ],
+  [
     "src/modules/checklist.js~checklist#iscustom",
     "class/src/modules/checkList.js~CheckList.html#instance-member-isCustom",
     "src/modules/checkList.js~CheckList#isCustom",
@@ -1497,6 +1587,12 @@ window.esdocSearchIndex = [
     "src/modules/checklist.js~checklist#onchange",
     "class/src/modules/checkList.js~CheckList.html#instance-method-onChange",
     "src/modules/checkList.js~CheckList#onChange",
+    "method"
+  ],
+  [
+    "src/modules/checklist.js~checklist#onchecklistclick",
+    "class/src/modules/checkList.js~CheckList.html#instance-method-onCheckListClick",
+    "src/modules/checkList.js~CheckList#onCheckListClick",
     "method"
   ],
   [
@@ -1524,16 +1620,16 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/checklist.js~checklist#selectoptions",
+    "class/src/modules/checkList.js~CheckList.html#instance-method-selectOptions",
+    "src/modules/checkList.js~CheckList#selectOptions",
+    "method"
+  ],
+  [
     "src/modules/checklist.js~checklist#setchecklistvalues",
     "class/src/modules/checkList.js~CheckList.html#instance-method-setCheckListValues",
     "src/modules/checkList.js~CheckList#setCheckListValues",
     "method"
-  ],
-  [
-    "src/modules/checklist.js~checklist#tf",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-tf",
-    "src/modules/checkList.js~CheckList#tf",
-    "member"
   ],
   [
     "src/modules/clearbutton.js",
@@ -1644,9 +1740,27 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/dropdown.js~dropdown#destroy",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-method-destroy",
+    "src/modules/dropdown.js~Dropdown#destroy",
+    "method"
+  ],
+  [
     "src/modules/dropdown.js~dropdown#enableslcresetfilter",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-enableSlcResetFilter",
     "src/modules/dropdown.js~Dropdown#enableSlcResetFilter",
+    "member"
+  ],
+  [
+    "src/modules/dropdown.js~dropdown#init",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-method-init",
+    "src/modules/dropdown.js~Dropdown#init",
+    "method"
+  ],
+  [
+    "src/modules/dropdown.js~dropdown#initialized",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-member-initialized",
+    "src/modules/dropdown.js~Dropdown#initialized",
     "member"
   ],
   [
@@ -1668,6 +1782,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/dropdown.js~dropdown#onslcchange",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-method-onSlcChange",
+    "src/modules/dropdown.js~Dropdown#onSlcChange",
+    "method"
+  ],
+  [
+    "src/modules/dropdown.js~dropdown#onslcfocus",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-method-onSlcFocus",
+    "src/modules/dropdown.js~Dropdown#onSlcFocus",
+    "method"
+  ],
+  [
     "src/modules/dropdown.js~dropdown#opts",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-opts",
     "src/modules/dropdown.js~Dropdown#opts",
@@ -1680,6 +1806,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/dropdown.js~dropdown#selectoptions",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-method-selectOptions",
+    "src/modules/dropdown.js~Dropdown#selectOptions",
+    "method"
+  ],
+  [
     "src/modules/dropdown.js~dropdown#slcfillingmethod",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-slcFillingMethod",
     "src/modules/dropdown.js~Dropdown#slcFillingMethod",
@@ -1689,12 +1821,6 @@ window.esdocSearchIndex = [
     "src/modules/dropdown.js~dropdown#slcinnerhtml",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-slcInnerHtml",
     "src/modules/dropdown.js~Dropdown#slcInnerHtml",
-    "member"
-  ],
-  [
-    "src/modules/dropdown.js~dropdown#tf",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-member-tf",
-    "src/modules/dropdown.js~Dropdown#tf",
     "member"
   ],
   [
@@ -1726,6 +1852,12 @@ window.esdocSearchIndex = [
     "class/src/modules/feature.js~Feature.html#instance-method-disable",
     "src/modules/feature.js~Feature#disable",
     "method"
+  ],
+  [
+    "src/modules/feature.js~feature#emitter",
+    "class/src/modules/feature.js~Feature.html#instance-member-emitter",
+    "src/modules/feature.js~Feature#emitter",
+    "member"
   ],
   [
     "src/modules/feature.js~feature#enable",
@@ -2070,6 +2202,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/highlightkeywords.js~highlightkeyword#destroy",
+    "class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-method-destroy",
+    "src/modules/highlightKeywords.js~HighlightKeyword#destroy",
+    "method"
+  ],
+  [
+    "src/modules/highlightkeywords.js~highlightkeyword#emitter",
+    "class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-member-emitter",
+    "src/modules/highlightKeywords.js~HighlightKeyword#emitter",
+    "member"
+  ],
+  [
     "src/modules/highlightkeywords.js~highlightkeyword#highlight",
     "class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-method-highlight",
     "src/modules/highlightKeywords.js~HighlightKeyword#highlight",
@@ -2086,6 +2230,12 @@ window.esdocSearchIndex = [
     "class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-member-highlightedNodes",
     "src/modules/highlightKeywords.js~HighlightKeyword#highlightedNodes",
     "member"
+  ],
+  [
+    "src/modules/highlightkeywords.js~highlightkeyword#init",
+    "class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-method-init",
+    "src/modules/highlightKeywords.js~HighlightKeyword#init",
+    "method"
   ],
   [
     "src/modules/highlightkeywords.js~highlightkeyword#tf",
@@ -2307,6 +2457,12 @@ window.esdocSearchIndex = [
     "src/modules/noresults.js~noresults#show",
     "class/src/modules/noResults.js~NoResults.html#instance-method-show",
     "src/modules/noResults.js~NoResults#show",
+    "method"
+  ],
+  [
+    "src/modules/noresults.js~noresults#toggle",
+    "class/src/modules/noResults.js~NoResults.html#instance-method-toggle",
+    "src/modules/noResults.js~NoResults#toggle",
     "method"
   ],
   [
@@ -2619,6 +2775,18 @@ window.esdocSearchIndex = [
     "src/modules/paging.js~paging#resetpagelength",
     "class/src/modules/paging.js~Paging.html#instance-method-resetPageLength",
     "src/modules/paging.js~Paging#resetPageLength",
+    "method"
+  ],
+  [
+    "src/modules/paging.js~paging#resetpaginginfo",
+    "class/src/modules/paging.js~Paging.html#instance-method-resetPagingInfo",
+    "src/modules/paging.js~Paging#resetPagingInfo",
+    "method"
+  ],
+  [
+    "src/modules/paging.js~paging#resetvalues",
+    "class/src/modules/paging.js~Paging.html#instance-method-resetValues",
+    "src/modules/paging.js~Paging#resetValues",
     "method"
   ],
   [
@@ -2988,6 +3156,72 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/statusbar.js~statusbar#msgchangepage",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgChangePage",
+    "src/modules/statusBar.js~StatusBar#msgChangePage",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgchangeresults",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgChangeResults",
+    "src/modules/statusBar.js~StatusBar#msgChangeResults",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgclear",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgClear",
+    "src/modules/statusBar.js~StatusBar#msgClear",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgfilter",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgFilter",
+    "src/modules/statusBar.js~StatusBar#msgFilter",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgloadextensions",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgLoadExtensions",
+    "src/modules/statusBar.js~StatusBar#msgLoadExtensions",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgloadthemes",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgLoadThemes",
+    "src/modules/statusBar.js~StatusBar#msgLoadThemes",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgpopulate",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgPopulate",
+    "src/modules/statusBar.js~StatusBar#msgPopulate",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgpopulatechecklist",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgPopulateCheckList",
+    "src/modules/statusBar.js~StatusBar#msgPopulateCheckList",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgresetpage",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgResetPage",
+    "src/modules/statusBar.js~StatusBar#msgResetPage",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgresetpagelength",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgResetPageLength",
+    "src/modules/statusBar.js~StatusBar#msgResetPageLength",
+    "member"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#msgsort",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgSort",
+    "src/modules/statusBar.js~StatusBar#msgSort",
+    "member"
+  ],
+  [
     "src/modules/statusbar.js~statusbar#onaftershowmsg",
     "class/src/modules/statusBar.js~StatusBar.html#instance-member-onAfterShowMsg",
     "src/modules/statusBar.js~StatusBar#onAfterShowMsg",
@@ -3066,15 +3300,33 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/modules/store.js~store#clearcookies",
+    "class/src/modules/store.js~Store.html#instance-method-clearCookies",
+    "src/modules/store.js~Store#clearCookies",
+    "method"
+  ],
+  [
     "src/modules/store.js~store#constructor",
     "class/src/modules/store.js~Store.html#instance-constructor-constructor",
     "src/modules/store.js~Store#constructor",
     "method"
   ],
   [
+    "src/modules/store.js~store#destroy",
+    "class/src/modules/store.js~Store.html#instance-method-destroy",
+    "src/modules/store.js~Store#destroy",
+    "method"
+  ],
+  [
     "src/modules/store.js~store#duration",
     "class/src/modules/store.js~Store.html#instance-member-duration",
     "src/modules/store.js~Store#duration",
+    "member"
+  ],
+  [
+    "src/modules/store.js~store#emitter",
+    "class/src/modules/store.js~Store.html#instance-member-emitter",
+    "src/modules/store.js~Store#emitter",
     "member"
   ],
   [
@@ -3093,6 +3345,12 @@ window.esdocSearchIndex = [
     "src/modules/store.js~store#getpagenb",
     "class/src/modules/store.js~Store.html#instance-method-getPageNb",
     "src/modules/store.js~Store#getPageNb",
+    "method"
+  ],
+  [
+    "src/modules/store.js~store#init",
+    "class/src/modules/store.js~Store.html#instance-method-init",
+    "src/modules/store.js~Store#init",
     "method"
   ],
   [
@@ -3144,12 +3402,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#evtmanager",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-EvtManager",
-    "src/tablefilter.js~TableFilter#EvtManager",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#extregistry",
     "class/src/tablefilter.js~TableFilter.html#instance-member-ExtRegistry",
     "src/tablefilter.js~TableFilter#ExtRegistry",
@@ -3190,12 +3442,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-member-anOperator",
     "src/tablefilter.js~TableFilter#anOperator",
     "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#applyprops",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-applyProps",
-    "src/tablefilter.js~TableFilter#applyProps",
-    "method"
   ],
   [
     "src/tablefilter.js~tablefilter#autofilter",
@@ -3417,6 +3663,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#emoperator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-emOperator",
     "src/tablefilter.js~TableFilter#emOperator",
+    "member"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#emitter",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-emitter",
+    "src/tablefilter.js~TableFilter#emitter",
     "member"
   ],
   [
@@ -3840,12 +4092,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#hasstoredvalues",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasStoredValues",
-    "src/tablefilter.js~TableFilter#hasStoredValues",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#hasthemes",
     "class/src/tablefilter.js~TableFilter.html#instance-member-hasThemes",
     "src/tablefilter.js~TableFilter#hasThemes",
@@ -3912,6 +4158,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#initialized",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-initialized",
+    "src/tablefilter.js~TableFilter#initialized",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#iscustomoptions",
     "class/src/tablefilter.js~TableFilter.html#instance-method-isCustomOptions",
     "src/tablefilter.js~TableFilter#isCustomOptions",
@@ -3927,12 +4179,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#isexternalflt",
     "class/src/tablefilter.js~TableFilter.html#instance-member-isExternalFlt",
     "src/tablefilter.js~TableFilter#isExternalFlt",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#isfirstload",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isFirstLoad",
-    "src/tablefilter.js~TableFilter#isFirstLoad",
     "member"
   ],
   [
@@ -4056,81 +4302,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#markactivecolumn",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-markActiveColumn",
+    "src/tablefilter.js~TableFilter#markActiveColumn",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#markactivecolumns",
     "class/src/tablefilter.js~TableFilter.html#instance-member-markActiveColumns",
     "src/tablefilter.js~TableFilter#markActiveColumns",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgchangepage",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgChangePage",
-    "src/tablefilter.js~TableFilter#msgChangePage",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgchangeresults",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgChangeResults",
-    "src/tablefilter.js~TableFilter#msgChangeResults",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgclear",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgClear",
-    "src/tablefilter.js~TableFilter#msgClear",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgfilter",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgFilter",
-    "src/tablefilter.js~TableFilter#msgFilter",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgloadextensions",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgLoadExtensions",
-    "src/tablefilter.js~TableFilter#msgLoadExtensions",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgloadthemes",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgLoadThemes",
-    "src/tablefilter.js~TableFilter#msgLoadThemes",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgpopulate",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgPopulate",
-    "src/tablefilter.js~TableFilter#msgPopulate",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgpopulatechecklist",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgPopulateCheckList",
-    "src/tablefilter.js~TableFilter#msgPopulateCheckList",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgresetpage",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgResetPage",
-    "src/tablefilter.js~TableFilter#msgResetPage",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgresetpagelength",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgResetPageLength",
-    "src/tablefilter.js~TableFilter#msgResetPageLength",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgresetvalues",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgResetValues",
-    "src/tablefilter.js~TableFilter#msgResetValues",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#msgsort",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-msgSort",
-    "src/tablefilter.js~TableFilter#msgSort",
     "member"
   ],
   [
