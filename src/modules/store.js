@@ -1,4 +1,5 @@
 import Cookie from '../cookie';
+import Types from '../types';
 
 export class Store{
 
@@ -8,13 +9,20 @@ export class Store{
      *
      * TODO: use localStorage and fallback to cookie persistence
      */
-    constructor(tf) {
-        var f = tf.config();
+    constructor(tf){
+        let f = tf.config();
 
         this.duration = !isNaN(f.set_cookie_duration) ?
             parseInt(f.set_cookie_duration, 10) : 100000;
 
         this.tf = tf;
+        this.emitter = tf.emitter;
+    }
+
+    init(){
+        this.emitter.on(['after-filtering'],
+            ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
+        this.emitter.on(['after-clearing-filters'], ()=> this.clearCookies());
     }
 
     /**
@@ -22,20 +30,29 @@ export class Store{
      * @param {String} cookie name
      */
     saveFilterValues(name){
-        var tf = this.tf;
-        var fltValues = [];
+        let tf = this.tf;
+        let fltValues = [];
+
+        if(!tf.rememberGridValues){
+            return;
+        }
+
         //store filters' values
-        for(var i=0; i<tf.fltIds.length; i++){
-            var value = tf.getFilterValue(i);
+        for(let i=0; i<tf.fltIds.length; i++){
+            let value = tf.getFilterValue(i);
+            //convert array to a || separated values
+            if(Types.isArray(value)){
+                let rgx = new RegExp(tf.separator, 'g');
+                value = value.toString()
+                    .replace(rgx, ' ' + tf.orOperator + ' ');
+            }
             if (value === ''){
                 value = ' ';
             }
             fltValues.push(value);
         }
-        //adds array size
-        fltValues.push(tf.fltIds.length);
 
-        //writes cookie
+        //write cookie
         Cookie.write(
             name,
             fltValues.join(tf.separator),
@@ -49,8 +66,8 @@ export class Store{
      * @return {Array}
      */
     getFilterValues(name){
-        var flts = Cookie.read(name);
-        var rgx = new RegExp(this.tf.separator, 'g');
+        let flts = Cookie.read(name);
+        let rgx = new RegExp(this.tf.separator, 'g');
         // filters' values array
         return flts.split(rgx);
     }
@@ -60,6 +77,9 @@ export class Store{
      * @param {String} cookie name
      */
     savePageNb(name){
+        if(!this.tf.rememberPageNb){
+            return;
+        }
         Cookie.write(
             name,
             this.tf.feature('paging').currentPageNb,
@@ -81,6 +101,9 @@ export class Store{
      * @param {String} cookie name
      */
     savePageLength(name){
+        if(!this.tf.rememberPageLen){
+            return;
+        }
         Cookie.write(
             name,
             this.tf.feature('paging').resultsPerPageSlc.selectedIndex,
@@ -97,4 +120,18 @@ export class Store{
         return Cookie.read(name);
     }
 
+    /**
+     * Remove all cookies
+     */
+    clearCookies(){
+        Cookie.remove(this.tf.fltsValuesCookie);
+        Cookie.remove(this.tf.pgLenCookie);
+        Cookie.remove(this.tf.pgNbCookie);
+    }
+
+    destroy(){
+        this.emitter.off(['after-filtering'],
+            ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
+        this.emitter.off(['after-clearing-filters'], ()=> this.clearCookies());
+    }
 }

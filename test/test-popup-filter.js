@@ -16,6 +16,7 @@ test('Pop-up filter component', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
     deepEqual(popupFilter.popUpFltElms instanceof Array,
         true, 'Type of popUpFltElms property');
+    deepEqual(tf.headersRow, 1, 'Headers row index');
     // issue 99: getHeadersText for pick-list filter types
     deepEqual(
         tf.getHeadersText()[2],
@@ -43,6 +44,32 @@ test('Pop-up filter UI elements', function() {
     deepEqual(fltIcn1.nodeName, 'IMG', 'Filter icon exists');
     deepEqual(fltIcn2.nodeName, 'IMG', 'Filter icon exists');
     deepEqual(fltIcn3, undefined, 'Filter icon does not exist for column 4');
+});
+
+test('Pop-up filter state after filtering', function(){
+    var fltIcn0 = popupFilter.popUpFltImgs[0];
+    tf.setFilterValue(0, 'syd');
+    tf.filter();
+
+    deepEqual(fltIcn0.src.indexOf('icn_filterActive') !== -1,
+        true, 'Icon state');
+});
+
+test('Pop-up filter state after clearing', function(){
+    var fltIcn0 = popupFilter.popUpFltImgs[0];
+    var fltIcn1 = popupFilter.popUpFltImgs[1];
+    var fltIcn2 = popupFilter.popUpFltImgs[2];
+    var fltIcn3 = popupFilter.popUpFltImgs[3];
+    tf.clearFilters();
+
+    deepEqual(fltIcn0.src.indexOf('icn_filterActive') === -1,
+        true, 'Icon state');
+    deepEqual(fltIcn1.src.indexOf('icn_filterActive') === -1,
+        true, 'Icon state');
+    deepEqual(fltIcn2.src.indexOf('icn_filterActive') === -1,
+        true, 'Icon state');
+    deepEqual(fltIcn3.src.indexOf('icn_filterActive') === -1,
+        true, 'Icon state');
 });
 
 test('TableFilter removed', function() {
@@ -76,6 +103,7 @@ test('Re-instantiated with grid-layout', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
     deepEqual(popupFilter.popUpFltElms instanceof Array,
         true, 'Type of popUpFltElms property');
+    deepEqual(tf.headersRow, 0, 'Headers row index');
     // issue 99: getHeadersText for pick-list filter types
     deepEqual(
         tf.getHeadersText()[2],
@@ -105,6 +133,34 @@ test('Pop-up filter UI elements with grid-layout', function() {
     deepEqual(fltIcn3, undefined, 'Filter icon does not exist for column 4');
 });
 
+test('Pop-up filter state after filtering', function(){
+    var popupFilter = tf.feature('popupFilter');
+    var fltIcn0 = popupFilter.popUpFltImgs[0];
+    tf.setFilterValue(0, 'syd');
+    tf.filter();
+
+    deepEqual(fltIcn0.src.indexOf('icn_filterActive') !== -1,
+        true, 'Icon state');
+});
+
+test('Pop-up filter state after clearing', function(){
+    var popupFilter = tf.feature('popupFilter');
+    var fltIcn0 = popupFilter.popUpFltImgs[0];
+    var fltIcn1 = popupFilter.popUpFltImgs[1];
+    var fltIcn2 = popupFilter.popUpFltImgs[2];
+    var fltIcn3 = popupFilter.popUpFltImgs[3];
+    tf.clearFilters();
+
+    deepEqual(fltIcn0.src.indexOf('icn_filterActive') === -1,
+        true, 'Icon state');
+    deepEqual(fltIcn1.src.indexOf('icn_filterActive') === -1,
+        true, 'Icon state');
+    deepEqual(fltIcn2.src.indexOf('icn_filterActive') === -1,
+        true, 'Icon state');
+    deepEqual(fltIcn3.src.indexOf('icn_filterActive') === -1,
+        true, 'Icon state');
+});
+
 module('Feature interface');
 test('Properties', function() {
     var popupFilter = tf.feature('popupFilter');
@@ -114,6 +170,8 @@ test('Properties', function() {
     deepEqual(popupFilter.feature, 'popupFilters', 'Feature name');
     deepEqual(popupFilter.enabled, true, 'Feature enabled');
     deepEqual(popupFilter.initialized, true, 'Feature enabled');
+    deepEqual(typeof popupFilter.emitter, 'object',
+        'Feature has emitter instance');
     deepEqual(typeof popupFilter.config, 'object', 'TF configuration object');
     deepEqual(typeof popupFilter.init, 'function', 'Feature init method');
     deepEqual(typeof popupFilter.destroy, 'function', 'Feature destroy method');

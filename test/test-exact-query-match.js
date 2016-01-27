@@ -14,13 +14,13 @@
     module('Behaviour');
     test('After filtering with `syd`', function() {
         tf.setFilterValue(0, 'syd');
-        tf._filter();
+        tf.filter();
         deepEqual(tf.getValidRows().length, 0, 'No matches');
     });
 
     test('After filtering with `sydney`', function() {
         tf.setFilterValue(0, 'sydney');
-        tf._filter();
+        tf.filter();
         deepEqual(tf.getValidRows().length>0, true, 'Matches');
     });
 
@@ -42,14 +42,14 @@
     test('After filtering with `syd`', function() {
         tf.setFilterValue(0, 'syd');
         tf.setFilterValue(1, 'bris');
-        tf._filter();
+        tf.filter();
         deepEqual(tf.getValidRows().length, 0, 'No matches');
     });
 
     test('After filtering with `sydney`', function() {
         tf.clearFilters();
         tf.setFilterValue(0, 'sydney');
-        tf._filter();
+        tf.filter();
         deepEqual(tf.getValidRows().length>0, true, 'Matches');
     });
 

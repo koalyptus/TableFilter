@@ -1,5 +1,6 @@
 import Dom from '../dom';
 import Str from '../string';
+import Types from '../types';
 
 export class HighlightKeyword{
 
@@ -14,6 +15,19 @@ export class HighlightKeyword{
         this.highlightedNodes = [];
 
         this.tf = tf;
+        this.emitter = tf.emitter;
+    }
+
+    init(){
+        this.emitter.on(
+            ['before-filtering', 'destroy'],
+            ()=> this.unhighlightAll()
+        );
+        this.emitter.on(
+            ['highlight-keyword'],
+            (tf, cell, word)=>
+                this.highlight(cell, word, this.highlightCssClass)
+        );
     }
 
     /**
@@ -96,13 +110,30 @@ export class HighlightKeyword{
      * Clear all occurrences of highlighted nodes
      */
     unhighlightAll(){
-        if(!this.tf.highlightKeywords || !this.tf.searchArgs){
+        if(!this.tf.highlightKeywords){
             return;
         }
-        for(var y=0; y<this.tf.searchArgs.length; y++){
-            this.unhighlight(
-                this.tf.searchArgs[y], this.highlightCssClass);
-        }
+        // iterate filters values to unhighlight all values
+        this.tf.getFiltersValue().forEach((val)=> {
+            if(Types.isArray(val)){
+                val.forEach((item)=>
+                    this.unhighlight(item, this.highlightCssClass));
+            } else {
+                this.unhighlight(val, this.highlightCssClass);
+            }
+        });
         this.highlightedNodes = [];
+    }
+
+    destroy(){
+        this.emitter.off(
+            ['before-filtering', 'destroy'],
+            ()=> this.unhighlightAll()
+        );
+        this.emitter.off(
+            ['highlight-keyword'],
+            (tf, cell, word)=>
+                this.highlight(cell, word, this.highlightCssClass)
+        );
     }
 }

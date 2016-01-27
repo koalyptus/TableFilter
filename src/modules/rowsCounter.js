@@ -76,6 +76,11 @@ export class RowsCounter extends Feature{
         this.rowsCounterDiv = countDiv;
         this.rowsCounterSpan = countSpan;
 
+        // subscribe to events
+        this.emitter.on(['after-filtering', 'grouped-by-page'],
+            ()=> this.refresh(tf.nbVisibleRows));
+        this.emitter.on(['rows-changed'], ()=> this.refresh());
+
         this.initialized = true;
         this.refresh();
     }
@@ -132,6 +137,12 @@ export class RowsCounter extends Feature{
         }
         this.rowsCounterSpan = null;
         this.rowsCounterDiv = null;
+
+        // unsubscribe to events
+        this.emitter.off(['after-filtering', 'grouped-by-page'],
+            ()=> this.refresh(tf.nbVisibleRows));
+        this.emitter.off(['rows-changed'], ()=> this.refresh());
+
         this.initialized = false;
     }
 }

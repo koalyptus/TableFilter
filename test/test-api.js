@@ -53,7 +53,7 @@
         tf.setFilterValue(0, 'Syd');
         tf.setFilterValue(1, 'Ade');
         deepEqual(tf.getFilterValue(0), 'Syd', 'Column 0 filter value');
-        deepEqual(tf.getFiltersValue(), ['syd', 'ade', '', '', '']);
+        deepEqual(tf.getFiltersValue(), ['Syd', 'Ade', '', '', '']);
     });
 
     test('Filter table', function() {
@@ -63,6 +63,20 @@
         tf.setFilterValue(0, 'Syd');
         tf.filter();
         deepEqual(tf.getValidRows().length, 4, 'Filtered rows number');
+    });
+
+    test('Filter table with range', function() {
+        tf.clearFilters();
+        tf.setFilterValue(2, '>1500 && <=2871');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 3, 'Filtered rows number');
+    });
+
+    test('Filter table with operator', function() {
+        tf.clearFilters();
+        tf.setFilterValue(1, '{Bri');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 2, 'Filtered rows number');
     });
 
     test('Clear filters', function() {
@@ -185,17 +199,63 @@
         tf.setFilterValue(0, 'Sydney');
         tf.setFilterValue(1, 'Adelaide');
         deepEqual(tf.getFilterValue(0), 'Sydney', 'Column 0 filter value');
-        deepEqual(tf.getFiltersValue(), ['sydney', 'adelaide', '', '', '']);
+        deepEqual(tf.getFiltersValue(),
+            ['Sydney', ['Adelaide'], '', '', '']);
     });
 
     test('Filter table', function() {
         tf.clearFilters();
-        tf.setFilterValue(1, 'Adelaide');
+        tf.setFilterValue(1, 'Alice Springs');
         tf.filter();
         deepEqual(tf.getValidRows().length, 1, 'Filtered rows number');
     });
 
-    module('TableFilter with pop-up filtes');
+    test('Can filter table with multiple filter', function() {
+        tf.clearFilters();
+        tf.setFilterValue(1, ['Alice Springs', 'Canberra']);
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 2, 'Filtered rows number');
+    });
+
+    test('Can filter table with checklist filter', function() {
+        tf.clearFilters();
+        tf.setFilterValue(2, ['2045', '2781']);
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 2, 'Filtered rows number');
+    });
+
+    test('Can select dropdown options with or operator', function() {
+        tf.setFilterValue(1, '');
+        tf.setFilterValue(1, 'Brisbane || Melbourne');
+
+        deepEqual(tf.getFilterValue(1), ['Brisbane', 'Melbourne'],
+            'Column 2 filter values');
+    });
+
+    test('Can select dropdown options with array', function() {
+        tf.setFilterValue(1, '');
+        tf.setFilterValue(1, ['Canberra', 'Perth']);
+
+        deepEqual(tf.getFilterValue(1), ['Canberra', 'Perth'],
+            'Column 2 filter values');
+    });
+
+    test('Can select checklist options', function() {
+        tf.setFilterValue(2, '2045 || 2781');
+
+        deepEqual(tf.getFilterValue(2), ['2045', '2781'],
+            'Column 2 filter values');
+    });
+
+    test('Can select checklist options with array', function() {
+        tf.setFilterValue(2, '');
+        tf.setFilterValue(2, ['1412', '982']);
+
+        deepEqual(tf.getFilterValue(2), ['1412', '982'],
+            'Column 2 filter values');
+    });
+
+    module('TableFilter with pop-up filters');
     test('Sanity checks', function() {
         tf.destroy();
         tf = null;
@@ -217,7 +277,7 @@
         tf.setFilterValue(0, 'Sydney');
         tf.setFilterValue(1, 'Adelaide');
         deepEqual(tf.getFilterValue(0), 'Sydney', 'Column 0 filter value');
-        deepEqual(tf.getFiltersValue(), ['sydney', 'adelaide', '', '', '']);
+        deepEqual(tf.getFiltersValue(), ['Sydney', 'Adelaide', '', '', '']);
     });
 
     test('Filter table', function() {
@@ -265,7 +325,7 @@
         tf.setFilterValue(0, 'Sydney');
         tf.setFilterValue(1, 'Adelaide');
         deepEqual(tf.getFilterValue(0), 'Sydney', 'Column 0 filter value');
-        deepEqual(tf.getFiltersValue(), ['sydney', 'adelaide', '', '', '']);
+        deepEqual(tf.getFiltersValue(), ['Sydney', ['Adelaide'], '', '', '']);
     });
 
     test('Filter table', function() {

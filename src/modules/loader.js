@@ -2,7 +2,7 @@ import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
 
-var global = window;
+let global = window;
 
 export class Loader extends Feature{
 
@@ -10,11 +10,11 @@ export class Loader extends Feature{
      * Loading message/spinner
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, 'loader');
 
         // TableFilter configuration
-        var f = this.config;
+        let f = this.config;
 
         //id of container element
         this.loaderTgtId = f.loader_target_id || null;
@@ -27,7 +27,7 @@ export class Loader extends Feature{
         //defines css class for loader div
         this.loaderCssClass = f.loader_css_class || 'loader';
         //delay for hiding loader
-        this.loaderCloseDelay = 200;
+        this.loaderCloseDelay = 250;
         //callback function before loader is displayed
         this.onShowLoader = Types.isFn(f.on_show_loader) ?
             f.on_show_loader : null;
@@ -43,12 +43,13 @@ export class Loader extends Feature{
             return;
         }
 
-        var tf = this.tf;
+        let tf = this.tf;
+        let emitter = this.emitter;
 
-        var containerDiv = Dom.create('div', ['id', this.prfxLoader+tf.id]);
+        let containerDiv = Dom.create('div', ['id', this.prfxLoader+tf.id]);
         containerDiv.className = this.loaderCssClass;
 
-        var targetEl = !this.loaderTgtId ?
+        let targetEl = !this.loaderTgtId ?
             tf.tbl.parentNode : Dom.id(this.loaderTgtId);
         if(!this.loaderTgtId){
             targetEl.insertBefore(containerDiv, tf.tbl);
@@ -63,15 +64,44 @@ export class Loader extends Feature{
         }
 
         this.show('none');
+
+        // Subscribe to events
+        emitter.on([
+                'before-filtering',
+                'before-populating-filter',
+                'before-changing-page',
+                'before-clearing-filters',
+                'before-changing-results-per-page',
+                'before-reset-page',
+                'before-reset-page-length',
+                'before-loading-extensions',
+                'before-loading-themes'
+            ],
+            ()=> this.show('')
+        );
+        emitter.on([
+                'after-filtering',
+                'after-populating-filter',
+                'after-changing-page',
+                'after-clearing-filters',
+                'after-changing-results-per-page',
+                'after-reset-page',
+                'after-reset-page-length',
+                'after-loading-extensions',
+                'after-loading-themes'
+            ],
+            ()=> this.show('none')
+        );
+
         this.initialized = true;
     }
 
     show(p) {
-        if(!this.isEnabled() || this.loaderDiv.style.display === p){
+        if(!this.isEnabled() /*|| this.loaderDiv.style.display === p*/){
             return;
         }
 
-        var displayLoader = () => {
+        let displayLoader = () => {
             if(!this.loaderDiv){
                 return;
             }
@@ -84,17 +114,48 @@ export class Loader extends Feature{
             }
         };
 
-        var t = p === 'none' ? this.loaderCloseDelay : 1;
+        let t = p === 'none' ? this.loaderCloseDelay : 1;
         global.setTimeout(displayLoader, t);
     }
 
-    destroy(){
+    destroy() {
         if(!this.initialized){
             return;
         }
 
+        let emitter = this.emitter;
+
         Dom.remove(this.loaderDiv);
         this.loaderDiv = null;
+
+        // Unsubscribe to events
+        emitter.off([
+                'before-filtering',
+                'before-populating-filter',
+                'before-changing-page',
+                'before-clearing-filters',
+                'before-changing-results-per-page',
+                'before-reset-page',
+                'before-reset-page-length',
+                'before-loading-extensions',
+                'before-loading-themes'
+            ],
+            ()=> this.show('')
+        );
+        emitter.off([
+                'after-filtering',
+                'after-populating-filter',
+                'after-changing-page',
+                'after-clearing-filters',
+                'after-changing-results-per-page',
+                'after-reset-page',
+                'after-reset-page-length',
+                'after-loading-extensions',
+                'after-loading-themes'
+            ],
+            ()=> this.show('none')
+        );
+
         this.initialized = false;
     }
 }

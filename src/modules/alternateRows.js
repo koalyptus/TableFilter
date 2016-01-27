@@ -25,9 +25,24 @@ export class AlternateRows extends Feature {
             return;
         }
 
+        this.processAll();
+
+        // Subscribe to events
+        this.emitter.on(['row-processed', 'row-paged'],
+            (tf, rowIndex, arrIndex, isValid)=>
+                this.processRow(rowIndex, arrIndex, isValid));
+        this.emitter.on(['column-sorted'], ()=> this.processAll());
+
+        this.initialized = true;
+    }
+
+    processAll() {
+        if(!this.isEnabled()){
+            return;
+        }
         var tf = this.tf;
-        var validRowsIndex = tf.validRowsIndex;
-        var noValidRowsIndex = validRowsIndex===null;
+        var validRowsIndex = tf.getValidRows(true);
+        var noValidRowsIndex = validRowsIndex.length === 0;
         //1st index
         var beginIndex = noValidRowsIndex ? tf.refRow : 0;
         // nb indexes
@@ -42,7 +57,19 @@ export class AlternateRows extends Feature {
             this.setRowBg(rowIdx, idx);
             idx++;
         }
-        this.initialized = true;
+    }
+
+    /**
+     * Set/remove row background based on row validation
+     * @param  {Number}  rowIdx  Row index
+     * @param  {Boolean} isValid Valid row flag
+     */
+    processRow(rowIdx, arrIdx, isValid) {
+        if(isValid){
+            this.setRowBg(rowIdx, arrIdx);
+        } else {
+            this.removeRowBg(rowIdx);
+        }
     }
 
     /**
@@ -85,9 +112,16 @@ export class AlternateRows extends Feature {
         if(!this.initialized){
             return;
         }
-        for(var i=this.tf.refRow; i<this.tf.nbRows; i++){
+        for(var i=0; i<this.tf.nbRows; i++){
             this.removeRowBg(i);
         }
+
+        // Unsubscribe to events
+        this.emitter.off(['row-processed', 'row-paged'],
+            (tf, rowIndex, arrIndex, isValid)=>
+                this.processRow(rowIndex, arrIndex, isValid));
+        this.emitter.off(['column-sorted'], ()=> this.processAll());
+
         this.initialized = false;
     }
 

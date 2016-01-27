@@ -22,6 +22,9 @@ export default class ColOps{
     }
 
     init(){
+        // subscribe to events
+        this.tf.emitter.on(['after-filtering'], ()=> this.calc());
+
         this.calc();
     }
 
@@ -43,7 +46,7 @@ export default class ColOps{
      */
     calc() {
         var tf = this.tf;
-        if(!tf.isFirstLoad && !tf.hasGrid()){
+        if(!tf.hasGrid()){
             return;
         }
 
@@ -310,6 +313,9 @@ export default class ColOps{
         }
     }
 
-    destroy(){}
+    destroy(){
+        // unsubscribe to events
+        this.tf.emitter.off(['after-filtering'], ()=> this.calc());
+    }
 
 }

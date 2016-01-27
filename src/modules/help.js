@@ -59,6 +59,8 @@ export class Help extends Feature{
         this.prfxHelpSpan = 'helpSpan_';
         //id prefix for help elements
         this.prfxHelpDiv = 'helpDiv_';
+
+        this.emitter.on(['init-help'], ()=> this.init());
     }
 
     init(){

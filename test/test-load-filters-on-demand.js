@@ -18,7 +18,7 @@ var flt3Cont = id(flt3ContId);
 
 function buildChecklist(tf, colIdx){
     var checkList = tf.feature('checkList');
-    checkList._build(colIdx);
+    checkList.build(colIdx);
     checkList.checkListDiv[colIdx].onclick = null;
     checkList.checkListDiv[colIdx].title = '';
 }

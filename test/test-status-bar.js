@@ -18,6 +18,8 @@ test('Properties', function() {
     deepEqual(statusBar.feature, 'statusBar', 'Feature name');
     deepEqual(statusBar.enabled, true, 'Feature enabled');
     deepEqual(statusBar.initialized, true, 'Feature enabled');
+    deepEqual(typeof statusBar.emitter, 'object',
+        'Feature has emitter instance');
     deepEqual(typeof statusBar.config, 'object', 'TF configuration object');
     deepEqual(typeof statusBar.init, 'function', 'Feature init method');
     deepEqual(typeof statusBar.destroy, 'function', 'Feature destroy method');

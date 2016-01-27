@@ -7,6 +7,7 @@ export class Feature {
         this.feature = feature;
         this.enabled = tf[feature];
         this.config = tf.config();
+        this.emitter = tf.emitter;
         this.initialized = false;
     }
 

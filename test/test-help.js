@@ -18,6 +18,7 @@ test('Properties', function() {
     deepEqual(help.feature, 'help', 'Feature name');
     deepEqual(help.enabled, true, 'Feature enabled');
     deepEqual(help.initialized, true, 'Feature enabled');
+    deepEqual(typeof help.emitter, 'object', 'Feature has emitter instance');
     deepEqual(typeof help.config, 'object', 'TF configuration object');
     deepEqual(typeof help.init, 'function', 'Feature init method');
     deepEqual(typeof help.destroy, 'function', 'Feature destroy method');
@@ -85,6 +86,19 @@ test('Re-set UI', function() {
         'Help pop-up text'
     );
     notEqual(helpBtn.innerHTML.indexOf('→Help←'), -1, 'Help button text');
+});
+
+
+module('Destroy and re-init with help property undefined');
+test('Can init help when property is undefined and toolbar is set', function(){
+    tf.destroy();
+    tf.help = undefined;
+    tf.rowsCounter = true;
+    var help = tf.feature('help');
+    help.btnText = '?';
+    tf.init();
+
+    notEqual(help.btn, null, 'btn property');
 });
 
 module('Tear-down');
