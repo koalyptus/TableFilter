@@ -54,6 +54,9 @@ export class GridLayout extends Feature{
         this.prfxGridTh = 'tblHeadTh_';
 
         this.sourceTblHtml = tf.tbl.outerHTML;
+
+        // filters flag at TF level
+        tf.fltGrid = this.gridEnableFilters;
     }
 
     /**

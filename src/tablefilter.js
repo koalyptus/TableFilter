@@ -1206,6 +1206,8 @@ export class TableFilter {
         //looks for search argument in current row
         function hasArg(sA, cellData, j){
             /*jshint validthis:true */
+            sA = Str.matchCase(sA, this.caseSensitive);
+
             let occurence,
                 removeNbFormat = Helpers.removeNbFormat;
 
@@ -1924,7 +1926,7 @@ export class TableFilter {
      * @param {Element} tbl DOM element
      */
     setColWidths(rowIndex, tbl){
-        if(!this.fltGrid || !this.hasColWidths){
+        if(!this.hasColWidths){
             return;
         }
         tbl = tbl || this.tbl;

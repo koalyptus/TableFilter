@@ -72,6 +72,13 @@
         deepEqual(tf.getValidRows().length, 3, 'Filtered rows number');
     });
 
+    test('Filter table with operator', function() {
+        tf.clearFilters();
+        tf.setFilterValue(1, '{Bri');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 2, 'Filtered rows number');
+    });
+
     test('Clear filters', function() {
         tf.clearFilters();
         deepEqual(tf.nbVisibleRows, 7, 'Filtered rows number');
