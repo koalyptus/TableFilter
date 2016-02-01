@@ -115,8 +115,6 @@ export class TableFilter {
         this.fltIds = [];
         //stores filters DOM elements
         this.fltElms = [];
-        //stores filters values
-        this.searchArgs = null;
         //stores valid rows indexes (rows visible upon filtering)
         this.validRowsIndex = [];
         //stores filters row element
@@ -1166,7 +1164,7 @@ export class TableFilter {
 
         this.validRowsIndex = [];
         // search args re-init
-        this.searchArgs = this.getFiltersValue();
+        let searchArgs = this.getFiltersValue();
 
         var numCellData, nbFormat;
         var re_le = new RegExp(this.leOperator),
@@ -1410,7 +1408,7 @@ export class TableFilter {
             // this loop retrieves cell data
             for(let j=0; j<nchilds; j++){
                 //searched keyword
-                let sA = this.searchArgs[this.singleSearchFlt ? 0 : j];
+                let sA = searchArgs[this.singleSearchFlt ? 0 : j];
                 var dtType = this.hasColDateType ?
                         this.colDateType[j] : this.defaultDateType;
 
@@ -2244,9 +2242,6 @@ export class TableFilter {
      * @return {Number}
      */
     getLastRowIndex(){
-        if(!this._hasGrid){
-            return;
-        }
         return (this.nbRows-1);
     }
 
