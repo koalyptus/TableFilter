@@ -4572,12 +4572,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#searchargs",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-searchArgs",
-    "src/tablefilter.js~TableFilter#searchArgs",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#separator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-separator",
     "src/tablefilter.js~TableFilter#separator",
