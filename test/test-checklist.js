@@ -45,6 +45,57 @@ test('Can select options', function() {
     notEqual(flt1.getAttribute('value').indexOf('.6'), -1, 'Option selected');
 });
 
+// Issue 113, addressing option sorting for numeric values
+module('Options sorting');
+test('Can sort options', function() {
+    tf.clearFilters();
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        col_2: 'checklist',
+        col_3: 'checklist',
+        col_4: 'checklist',
+        sort_num_asc: [2, 3],
+        sort_num_desc: [4]
+    });
+    tf.init();
+
+    var flt2 = id(tf.fltIds[2]);
+    var flt3 = id(tf.fltIds[3]);
+    var flt4 = id(tf.fltIds[4]);
+
+    deepEqual(
+        flt2.getElementsByTagName('li')[1].firstChild.firstChild.value,
+        '286',
+        'First option value for column 2'
+    );
+    deepEqual(
+        flt2.getElementsByTagName('li')[7].firstChild.firstChild.value,
+        '2781',
+        'Last option value for column 2'
+    );
+    deepEqual(
+        flt3.getElementsByTagName('li')[1].firstChild.firstChild.value,
+        '.6',
+        'First option value for column 3'
+    );
+    deepEqual(
+        flt3.getElementsByTagName('li')[7].firstChild.firstChild.value,
+        '3.1',
+        'Last option value for column 3'
+    );
+    deepEqual(
+        flt4.getElementsByTagName('li')[1].firstChild.firstChild.value,
+        '40',
+        'First option value for column 4'
+    );
+    deepEqual(
+        flt4.getElementsByTagName('li')[7].firstChild.firstChild.value,
+        '4.3',
+        'Last option value for column 4'
+    );
+});
+
 test('TableFilter removed', function() {
     tf.destroy();
     deepEqual(id(tf.fltIds[3]), null, 'CheckList UL element');

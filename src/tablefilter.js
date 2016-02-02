@@ -252,10 +252,10 @@ export class TableFilter {
         this.sortSlc = f.sort_select===false ? false : true;
         //enables/disables ascending numeric options sorting
         this.isSortNumAsc = Boolean(f.sort_num_asc);
-        this.sortNumAsc = this.isSortNumAsc ? f.sort_num_asc : null;
+        this.sortNumAsc = this.isSortNumAsc ? f.sort_num_asc : [];
         //enables/disables descending numeric options sorting
         this.isSortNumDesc = Boolean(f.sort_num_desc);
-        this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : null;
+        this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : [];
         //Select filters are populated on demand
         this.loadFltOnDemand = Boolean(f.load_filters_on_demand);
         this.hasCustomOptions = Types.isObj(f.custom_options);

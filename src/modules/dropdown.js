@@ -5,6 +5,9 @@ import Str from '../string';
 import Sort from '../sort';
 import Event from '../event';
 
+const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
+    '{1} manner.';
+
 export class Dropdown extends Feature{
 
     /**
@@ -229,43 +232,33 @@ export class Dropdown extends Feature{
         }
 
         //asc sort
-        if(tf.sortNumAsc && tf.sortNumAsc.indexOf(colIndex) != -1){
+        if(tf.sortNumAsc.indexOf(colIndex) != -1){
             try{
-                this.opts.sort( numSortAsc );
+                this.opts.sort(Sort.numSortAsc);
                 if(excludedOpts){
-                    excludedOpts.sort(numSortAsc);
+                    excludedOpts.sort(Sort.numSortAsc);
                 }
                 if(this.isCustom){
-                    this.optsTxt.sort(numSortAsc);
+                    this.optsTxt.sort(Sort.numSortAsc);
                 }
             } catch(e) {
-                this.opts.sort();
-                if(excludedOpts){
-                    excludedOpts.sort();
-                }
-                if(this.isCustom){
-                    this.optsTxt.sort();
-                }
+                throw new Error(SORT_ERROR.replace('{0}', colIndex)
+                    .replace('{1}', 'ascending'));
             }//in case there are alphanumeric values
         }
         //desc sort
-        if(tf.sortNumDesc && tf.sortNumDesc.indexOf(colIndex) != -1){
+        if(tf.sortNumDesc.indexOf(colIndex) != -1){
             try{
-                this.opts.sort(numSortDesc);
+                this.opts.sort(Sort.numSortDesc);
                 if(excludedOpts){
-                    excludedOpts.sort(numSortDesc);
+                    excludedOpts.sort(Sort.numSortDesc);
                 }
                 if(this.isCustom){
-                    this.optsTxt.sort(numSortDesc);
+                    this.optsTxt.sort(Sort.numSortDesc);
                 }
             } catch(e) {
-                this.opts.sort();
-                if(excludedOpts){
-                    excludedOpts.sort();
-                }
-                if(this.isCustom){
-                    this.optsTxt.sort();
-                }
+                throw new Error(SORT_ERROR.replace('{0}', colIndex)
+                    .replace('{1}', 'ascending'));
             }//in case there are alphanumeric values
         }
 
