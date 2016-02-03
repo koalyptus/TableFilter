@@ -1812,12 +1812,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/dropdown.js~dropdown#slcfillingmethod",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-member-slcFillingMethod",
-    "src/modules/dropdown.js~Dropdown#slcFillingMethod",
-    "member"
-  ],
-  [
     "src/modules/dropdown.js~dropdown#slcinnerhtml",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-slcInnerHtml",
     "src/modules/dropdown.js~Dropdown#slcInnerHtml",

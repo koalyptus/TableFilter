@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/dropdown.js | tablefilter v0.1.11 API Document</title>
+  <title data-ice="title">src/modules/dropdown.js | tablefilter v0.1.12 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -94,8 +94,6 @@ export class Dropdown extends Feature{
             false : true;
         //defines empty option text
         this.nonEmptyText = f.non_empty_text || &apos;(Non empty)&apos;;
-        //sets select filling method: &apos;innerHTML&apos; or &apos;createElement&apos;
-        this.slcFillingMethod = f.slc_filling_method || &apos;createElement&apos;;
         //IE only, tooltip text appearing on select before it is populated
         this.activateSlcTooltip =  f.activate_slc_tooltip ||
             &apos;Click to activate&apos;;
@@ -347,7 +345,6 @@ export class Dropdown extends Feature{
      */
     addOptions(colIndex, slc, isLinked, excludedOpts){
         let tf = this.tf,
-            fillMethod = Str.lower(this.slcFillingMethod),
             slcValue = slc.value;
 
         slc.innerHTML = &apos;&apos;;
@@ -369,33 +366,20 @@ export class Dropdown extends Feature{
                 isDisabled = true;
             }
 
-            if(fillMethod === &apos;innerhtml&apos;){
-                let slcAttr = &apos;&apos;;
-                if(tf.loadFltOnDemand &amp;&amp; slcValue===this.opts[y]){
-                    slcAttr = &apos;selected=&quot;selected&quot;&apos;;
-                }
-                this.slcInnerHtml += &apos;&lt;option value=&quot;&apos;+val+&apos;&quot; &apos; + slcAttr +
-                    (isDisabled ? &apos;disabled=&quot;disabled&quot;&apos; : &apos;&apos;)+ &apos;&gt;&apos; +
-                    lbl+&apos;&lt;/option&gt;&apos;;
+            let opt;
+            //fill select on demand
+            if(tf.loadFltOnDemand &amp;&amp; slcValue===this.opts[y] &amp;&amp;
+                tf.getFilterType(colIndex) === tf.fltTypeSlc){
+                opt = Dom.createOpt(lbl, val, true);
             } else {
-                let opt;
-                //fill select on demand
-                if(tf.loadFltOnDemand &amp;&amp; slcValue===this.opts[y] &amp;&amp;
-                    tf.getFilterType(colIndex) === tf.fltTypeSlc){
-                    opt = Dom.createOpt(lbl, val, true);
-                } else {
-                    opt = Dom.createOpt(lbl, val, false);
-                }
-                if(isDisabled){
-                    opt.disabled = true;
-                }
-                slc.appendChild(opt);
+                opt = Dom.createOpt(lbl, val, false);
             }
+            if(isDisabled){
+                opt.disabled = true;
+            }
+            slc.appendChild(opt);
         }// for y
 
-        if(fillMethod === &apos;innerhtml&apos;){
-            slc.innerHTML += this.slcInnerHtml;
-        }
         slc.setAttribute(&apos;filled&apos;, &apos;1&apos;);
     }
 
@@ -404,28 +388,21 @@ export class Dropdown extends Feature{
      * @param {Object} slc Select DOM element
      */
     addFirstOption(slc){
-        let tf = this.tf,
-            fillMethod = Str.lower(this.slcFillingMethod);
+        let tf = this.tf;
 
-        if(fillMethod === &apos;innerhtml&apos;){
-            this.slcInnerHtml += &apos;&lt;option value=&quot;&quot;&gt;&apos;+ tf.displayAllText +
-                &apos;&lt;/option&gt;&apos;;
+        let opt0 = Dom.createOpt(
+            (!this.enableSlcResetFilter ? &apos;&apos; : tf.displayAllText),&apos;&apos;);
+        if(!this.enableSlcResetFilter){
+            opt0.style.display = &apos;none&apos;;
         }
-        else {
-            let opt0 = Dom.createOpt(
-                (!this.enableSlcResetFilter ? &apos;&apos; : tf.displayAllText),&apos;&apos;);
-            if(!this.enableSlcResetFilter){
-                opt0.style.display = &apos;none&apos;;
-            }
-            slc.appendChild(opt0);
-            if(tf.enableEmptyOption){
-                let opt1 = Dom.createOpt(tf.emptyText, tf.emOperator);
-                slc.appendChild(opt1);
-            }
-            if(tf.enableNonEmptyOption){
-                let opt2 = Dom.createOpt(tf.nonEmptyText, tf.nmOperator);
-                slc.appendChild(opt2);
-            }
+        slc.appendChild(opt0);
+        if(tf.enableEmptyOption){
+            let opt1 = Dom.createOpt(tf.emptyText, tf.emOperator);
+            slc.appendChild(opt1);
+        }
+        if(tf.enableNonEmptyOption){
+            let opt2 = Dom.createOpt(tf.nonEmptyText, tf.nmOperator);
+            slc.appendChild(opt2);
         }
         return slc;
     }
