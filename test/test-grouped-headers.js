@@ -8,7 +8,7 @@
     tf.init();
 
     module('Sanity checks');
-    test('No headers', function() {
+    test('Grouped headers', function() {
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(tf.getFiltersRowIndex(), 3, 'Filters row index');
         deepEqual(tf.getHeadersRowIndex(), 2, 'Headers row index');
@@ -77,5 +77,12 @@
     });
 
     //Grid-layout currently does not support grouped headers
+
+    module('Tear-down');
+    test('TableFilter removed', function() {
+        tf.clearFilters();
+        tf.destroy();
+        deepEqual(tf.hasGrid(), false, 'Filters removed');
+    });
 
 })(window, TableFilter);
