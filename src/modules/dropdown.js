@@ -24,8 +24,6 @@ export class Dropdown extends Feature{
             false : true;
         //defines empty option text
         this.nonEmptyText = f.non_empty_text || '(Non empty)';
-        //sets select filling method: 'innerHTML' or 'createElement'
-        this.slcFillingMethod = f.slc_filling_method || 'createElement';
         //IE only, tooltip text appearing on select before it is populated
         this.activateSlcTooltip =  f.activate_slc_tooltip ||
             'Click to activate';
@@ -277,7 +275,6 @@ export class Dropdown extends Feature{
      */
     addOptions(colIndex, slc, isLinked, excludedOpts){
         let tf = this.tf,
-            fillMethod = Str.lower(this.slcFillingMethod),
             slcValue = slc.value;
 
         slc.innerHTML = '';
@@ -299,33 +296,20 @@ export class Dropdown extends Feature{
                 isDisabled = true;
             }
 
-            if(fillMethod === 'innerhtml'){
-                let slcAttr = '';
-                if(tf.loadFltOnDemand && slcValue===this.opts[y]){
-                    slcAttr = 'selected="selected"';
-                }
-                this.slcInnerHtml += '<option value="'+val+'" ' + slcAttr +
-                    (isDisabled ? 'disabled="disabled"' : '')+ '>' +
-                    lbl+'</option>';
+            let opt;
+            //fill select on demand
+            if(tf.loadFltOnDemand && slcValue===this.opts[y] &&
+                tf.getFilterType(colIndex) === tf.fltTypeSlc){
+                opt = Dom.createOpt(lbl, val, true);
             } else {
-                let opt;
-                //fill select on demand
-                if(tf.loadFltOnDemand && slcValue===this.opts[y] &&
-                    tf.getFilterType(colIndex) === tf.fltTypeSlc){
-                    opt = Dom.createOpt(lbl, val, true);
-                } else {
-                    opt = Dom.createOpt(lbl, val, false);
-                }
-                if(isDisabled){
-                    opt.disabled = true;
-                }
-                slc.appendChild(opt);
+                opt = Dom.createOpt(lbl, val, false);
             }
+            if(isDisabled){
+                opt.disabled = true;
+            }
+            slc.appendChild(opt);
         }// for y
 
-        if(fillMethod === 'innerhtml'){
-            slc.innerHTML += this.slcInnerHtml;
-        }
         slc.setAttribute('filled', '1');
     }
 
@@ -334,28 +318,21 @@ export class Dropdown extends Feature{
      * @param {Object} slc Select DOM element
      */
     addFirstOption(slc){
-        let tf = this.tf,
-            fillMethod = Str.lower(this.slcFillingMethod);
+        let tf = this.tf;
 
-        if(fillMethod === 'innerhtml'){
-            this.slcInnerHtml += '<option value="">'+ tf.displayAllText +
-                '</option>';
+        let opt0 = Dom.createOpt(
+            (!this.enableSlcResetFilter ? '' : tf.displayAllText),'');
+        if(!this.enableSlcResetFilter){
+            opt0.style.display = 'none';
         }
-        else {
-            let opt0 = Dom.createOpt(
-                (!this.enableSlcResetFilter ? '' : tf.displayAllText),'');
-            if(!this.enableSlcResetFilter){
-                opt0.style.display = 'none';
-            }
-            slc.appendChild(opt0);
-            if(tf.enableEmptyOption){
-                let opt1 = Dom.createOpt(tf.emptyText, tf.emOperator);
-                slc.appendChild(opt1);
-            }
-            if(tf.enableNonEmptyOption){
-                let opt2 = Dom.createOpt(tf.nonEmptyText, tf.nmOperator);
-                slc.appendChild(opt2);
-            }
+        slc.appendChild(opt0);
+        if(tf.enableEmptyOption){
+            let opt1 = Dom.createOpt(tf.emptyText, tf.emOperator);
+            slc.appendChild(opt1);
+        }
+        if(tf.enableNonEmptyOption){
+            let opt2 = Dom.createOpt(tf.nonEmptyText, tf.nmOperator);
+            slc.appendChild(opt2);
         }
         return slc;
     }

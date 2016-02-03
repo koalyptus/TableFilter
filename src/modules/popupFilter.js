@@ -151,7 +151,7 @@ export class PopupFilter extends Feature{
         tf.externalFltTgtIds.push(popUpDiv.id);
         var header = tf.getHeaderElement(colIndex);
         header.insertBefore(popUpDiv, header.firstChild);
-        Event.add(popUpDiv, 'click', (evt) => { Event.stop(evt); });
+        Event.add(popUpDiv, 'click', (evt) => Event.stop(evt));
         this.popUpFltElms[colIndex] = popUpDiv;
     }
 
