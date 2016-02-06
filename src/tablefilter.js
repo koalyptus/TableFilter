@@ -640,7 +640,7 @@ export class TableFilter {
 
         if(this.rememberGridValues || this.rememberPageLen ||
             this.rememberPageNb){
-            this.resetValues();
+            this.resetFilterValues();
         }
 
         //TF css class is added to table
@@ -1130,13 +1130,13 @@ export class TableFilter {
     /**
      * Reset persisted filter values
      */
-    resetValues(){
+    resetFilterValues(){
         if(!this.rememberGridValues){
             return;
         }
 
-        let fltValues = this.Mod.store.getFilterValues(this.fltsValuesCookie);
-        fltValues.forEach((val, idx)=> {
+        let storeValues = this.Mod.store.getFilterValues();
+        storeValues.forEach((val, idx)=> {
             if(val !== ' '){
                 this.setFilterValue(idx, val);
             }
@@ -1992,9 +1992,6 @@ export class TableFilter {
         for(let i=0, len=this.fltIds.length; i<len; i++){
             this.setFilterValue(i, '');
         }
-        // if(this.linkedFilters){
-        //     this.linkFilters();
-        // }
 
         this.filter();
 

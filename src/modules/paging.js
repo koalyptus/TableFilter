@@ -351,7 +351,7 @@ export class Paging extends Feature{
         }
         this.enable();
         this.init();
-        // tf.resetValues();
+
         if(filterTable){
             tf.filter();
         }
@@ -573,7 +573,7 @@ export class Paging extends Feature{
         this.emitter.emit('before-changing-page', tf, index);
 
         if(index === null){
-            index = this.pageSelectorType===tf.fltTypeSlc ?
+            index = this.pageSelectorType === tf.fltTypeSlc ?
                 this.pagingSlc.options.selectedIndex : (this.pagingSlc.value-1);
         }
         if( index>=0 && index<=(this.nbPages-1) ){
@@ -587,10 +587,7 @@ export class Paging extends Feature{
                 this.pagingSlc.value = this.currentPageNb;
             }
 
-            if(tf.rememberPageNb){
-                tf.feature('store').savePageNb(tf.pgNbCookie);
-            }
-            this.startPagingRow = (this.pageSelectorType===tf.fltTypeSlc) ?
+            this.startPagingRow = (this.pageSelectorType === tf.fltTypeSlc) ?
                 this.pagingSlc.value : (index*this.pagingLength);
 
             this.groupByPage();
@@ -617,10 +614,11 @@ export class Paging extends Feature{
         this.emitter.emit('before-changing-results-per-page', tf);
 
         var slcR = this.resultsPerPageSlc;
-        var slcPagesSelIndex = (this.pageSelectorType===tf.fltTypeSlc) ?
+        var slcIndex = slcR.selectedIndex;
+        var slcPagesSelIndex = (this.pageSelectorType === tf.fltTypeSlc) ?
                 this.pagingSlc.selectedIndex :
                 parseInt(this.pagingSlc.value-1, 10);
-        this.pagingLength = parseInt(slcR.options[slcR.selectedIndex].value,10);
+        this.pagingLength = parseInt(slcR.options[slcIndex].value, 10);
         this.startPagingRow = this.pagingLength*slcPagesSelIndex;
 
         if(!isNaN(this.pagingLength)){
@@ -629,18 +627,15 @@ export class Paging extends Feature{
             }
             this.setPagingInfo();
 
-            if(this.pageSelectorType===tf.fltTypeSlc){
-                var slcIndex =
-                    (this.pagingSlc.options.length-1<=slcPagesSelIndex ) ?
+            if(this.pageSelectorType === tf.fltTypeSlc){
+                var slcIdx =
+                    (this.pagingSlc.options.length-1<=slcPagesSelIndex) ?
                     (this.pagingSlc.options.length-1) : slcPagesSelIndex;
-                this.pagingSlc.options[slcIndex].selected = true;
-            }
-            if(tf.rememberPageLen){
-                tf.feature('store').savePageLength(tf.pgLenCookie);
+                this.pagingSlc.options[slcIdx].selected = true;
             }
         }
 
-        this.emitter.emit('after-changing-results-per-page', tf);
+        this.emitter.emit('after-changing-results-per-page', tf, slcIndex);
     }
 
     /**
@@ -649,39 +644,39 @@ export class Paging extends Feature{
     resetValues(){
         var tf = this.tf;
         if(tf.rememberPageLen){
-            this.resetPageLength(tf.pgLenCookie);
+            this.resetPageLength();
         }
         if(tf.rememberPageNb){
-            this.resetPage(tf.pgNbCookie);
+            this.resetPage();
         }
     }
 
     /**
      * Re-set page nb at page re-load
      */
-    resetPage(name){
+    resetPage(){
         var tf = this.tf;
         if(!this.isEnabled()){
             return;
         }
         this.emitter.emit('before-reset-page', tf);
-        var pgnb = tf.feature('store').getPageNb(name);
-        if(pgnb !== ''){
-            this.changePage((pgnb-1));
+        var pgNb = tf.feature('store').getPageNb();
+        if(pgNb !== ''){
+            this.changePage((pgNb-1));
         }
-        this.emitter.emit('after-reset-page', tf, pgnb);
+        this.emitter.emit('after-reset-page', tf, pgNb);
     }
 
     /**
      * Re-set page length value at page re-load
      */
-    resetPageLength(name){
+    resetPageLength(){
         var tf = this.tf;
         if(!this.isEnabled()){
             return;
         }
         this.emitter.emit('before-reset-page-length', tf);
-        var pglenIndex = tf.feature('store').getPageLength(name);
+        var pglenIndex = tf.feature('store').getPageLength();
 
         if(pglenIndex!==''){
             this.resultsPerPageSlc.options[pglenIndex].selected = true;

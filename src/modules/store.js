@@ -20,16 +20,18 @@ export class Store{
     }
 
     init(){
-        this.emitter.on(['after-filtering'],
-            ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
+        this.emitter.on(['after-filtering'], ()=> this.saveFilterValues());
         this.emitter.on(['after-clearing-filters'], ()=> this.clearCookies());
+        this.emitter.on(['after-changing-page'],
+            (tf, index)=> this.savePageNb(index));
+        this.emitter.on(['after-changing-results-per-page'],
+            (tf, index)=> this.savePageLength(index));
     }
 
     /**
      * Store filters' values in cookie
-     * @param {String} cookie name
      */
-    saveFilterValues(name){
+    saveFilterValues(){
         let tf = this.tf;
         let fltValues = [];
 
@@ -54,7 +56,7 @@ export class Store{
 
         //write cookie
         Cookie.write(
-            name,
+            tf.fltsValuesCookie,
             fltValues.join(tf.separator),
             this.duration
         );
@@ -62,11 +64,10 @@ export class Store{
 
     /**
      * Retrieve filters' values from cookie
-     * @param {String} cookie name
      * @return {Array}
      */
-    getFilterValues(name){
-        let flts = Cookie.read(name);
+    getFilterValues(){
+        let flts = Cookie.read(this.tf.fltsValuesCookie);
         let rgx = new RegExp(this.tf.separator, 'g');
         // filters' values array
         return flts.split(rgx);
@@ -74,50 +75,48 @@ export class Store{
 
     /**
      * Store page number in cookie
-     * @param {String} cookie name
+     * @param {Number} index page index to persist
      */
-    savePageNb(name){
+    savePageNb(index){
         if(!this.tf.rememberPageNb){
             return;
         }
         Cookie.write(
-            name,
-            this.tf.feature('paging').currentPageNb,
+            this.tf.pgNbCookie,
+            (index+1),
             this.duration
         );
     }
 
     /**
      * Retrieve page number from cookie
-     * @param {String} cookie name
      * @return {String}
      */
-    getPageNb(name){
-        return Cookie.read(name);
+    getPageNb(){
+        return Cookie.read(this.tf.pgNbCookie);
     }
 
     /**
      * Store page length in cookie
-     * @param {String} cookie name
+     * @param {Number} index page length index to persist
      */
-    savePageLength(name){
+    savePageLength(index){
         if(!this.tf.rememberPageLen){
             return;
         }
         Cookie.write(
-            name,
-            this.tf.feature('paging').resultsPerPageSlc.selectedIndex,
+            this.tf.pgLenCookie,
+            index,
             this.duration
         );
     }
 
     /**
      * Retrieve page length from cookie
-     * @param {String} cookie name
      * @return {String}
      */
-    getPageLength(name){
-        return Cookie.read(name);
+    getPageLength(){
+        return Cookie.read(this.tf.pgLenCookie);
     }
 
     /**
@@ -130,8 +129,11 @@ export class Store{
     }
 
     destroy(){
-        this.emitter.off(['after-filtering'],
-            ()=> this.saveFilterValues(this.tf.fltsValuesCookie));
+        this.emitter.off(['after-filtering'], ()=> this.saveFilterValues());
         this.emitter.off(['after-clearing-filters'], ()=> this.clearCookies());
+        this.emitter.off(['after-changing-page'],
+            (tf, index)=> this.savePageNb(index));
+        this.emitter.off(['after-changing-results-per-page'],
+            (tf, index)=> this.savePageLength(index));
     }
 }
