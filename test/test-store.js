@@ -27,11 +27,11 @@ function readCookie(name){
     return cookieValue;
 }
 
-var tf = new TableFilter('demo', {
+var tf = new TableFilter('store', {
     base_path: '../dist/tablefilter/',
     paging: true,
     paging_length: 2,
-    results_per_page: ['Results per page', [2,4,6]],
+    results_per_page: ['Results per page', [2, 4, 6]],
     remember_grid_values: true,
     remember_page_number: true,
     remember_page_length: true
@@ -57,8 +57,8 @@ test('Page number value', function() {
     tf.clearFilters();
     tf.filter();
     tf.feature('paging').changePage(1);
-    var cookieName = tf.pgNbCookie;
-    deepEqual(tf.feature('store').getPageNb(cookieName), '2', 'Page number value');
+
+    deepEqual(tf.feature('store').getPageNb(), '2', 'Page number value');
     tf.clearFilters();
 });
 
@@ -67,8 +67,8 @@ test('Page length value', function() {
     var paging = tf.feature('paging');
     paging.resultsPerPageSlc.options[2].selected = true;
     paging.changeResultsPerPage();
-    var cookieName = tf.pgLenCookie;
-    deepEqual(tf.feature('store').getPageLength(cookieName), '2', 'Page length value');
+
+    deepEqual(tf.feature('store').getPageLength(), '2', 'Page length value');
     tf.clearFilters();
 });
 
@@ -77,18 +77,18 @@ test('Filters value in cookie', function() {
     tf.setFilterValue(0, 'Sydney');
     tf.setFilterValue(3, '1.5');
     tf.filter();
-    var cookieName = tf.fltsValuesCookie;
-    deepEqual(tf.feature('store').getFilterValues(cookieName)[0], 'Sydney', 'Filter 0 value');
-    deepEqual(tf.feature('store').getFilterValues(cookieName)[3], '1.5', 'Filter 3 value');
+
+    deepEqual(tf.feature('store').getFilterValues()[0], 'Sydney', 'Filter 0 value');
+    deepEqual(tf.feature('store').getFilterValues()[3], '1.5', 'Filter 3 value');
 });
 
 test('Filters value in cookie', function() {
     tf.setFilterValue(0, 'Sydney');
     tf.setFilterValue(3, '1.5');
+
     tf.filter();
-    var cookieName = tf.fltsValuesCookie;
-    deepEqual(tf.feature('store').getFilterValues(cookieName)[0], 'Sydney', 'Filter 0 value');
-    deepEqual(tf.feature('store').getFilterValues(cookieName)[3], '1.5', 'Filter 3 value');
+    deepEqual(tf.feature('store').getFilterValues()[0], 'Sydney', 'Filter 0 value');
+    deepEqual(tf.feature('store').getFilterValues()[3], '1.5', 'Filter 3 value');
 });
 
 test('Filters value with operators in cookie', function() {
@@ -96,11 +96,10 @@ test('Filters value with operators in cookie', function() {
     tf.setFilterValue(1, 'Canberra || Perth');
     tf.setFilterValue(3, '>.6');
     tf.filter();
-    var cookieName = tf.fltsValuesCookie;
 
-    deepEqual(tf.feature('store').getFilterValues(cookieName)[0], ' ', 'Filter 0 value');
-    deepEqual(tf.feature('store').getFilterValues(cookieName)[1], 'Canberra || Perth', 'Filter 1 value');
-    deepEqual(tf.feature('store').getFilterValues(cookieName)[3], '>.6', 'Filter 3 value');
+    deepEqual(tf.feature('store').getFilterValues()[0], ' ', 'Filter 0 value');
+    deepEqual(tf.feature('store').getFilterValues()[1], 'Canberra || Perth', 'Filter 1 value');
+    deepEqual(tf.feature('store').getFilterValues()[3], '>.6', 'Filter 3 value');
     deepEqual(tf.getValidRows().length, 1, 'Expected nb of filtered rows');
 });
 
@@ -127,7 +126,7 @@ test('Can remove cookies on clearFilters', function() {
 module('Multiple and checklist filters persistence');
 test('Filters value in cookie', function() {
     tf.destroy();
-    tf = new TableFilter('demo', {
+    tf = new TableFilter('store', {
         base_path: '../dist/tablefilter/',
         remember_grid_values: true,
         col_0: 'multiple',
@@ -138,9 +137,9 @@ test('Filters value in cookie', function() {
     tf.setFilterValue(0, ['Sydney', 'Adelaide']);
     tf.setFilterValue(1, ['Alice Springs', 'Brisbane']);
     tf.filter();
-    var cookieName = tf.fltsValuesCookie;
-    deepEqual(tf.feature('store').getFilterValues(cookieName)[0], 'Adelaide || Sydney', 'Filter 0 value');
-    deepEqual(tf.feature('store').getFilterValues(cookieName)[1], 'Alice Springs || Brisbane', 'Filter 1 value');
+
+    deepEqual(tf.feature('store').getFilterValues()[0], 'Adelaide || Sydney', 'Filter 0 value');
+    deepEqual(tf.feature('store').getFilterValues()[1], 'Alice Springs || Brisbane', 'Filter 1 value');
     deepEqual(tf.getValidRows().length, 3, 'Expected nb of filtered rows');
 });
 
