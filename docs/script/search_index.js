@@ -4548,9 +4548,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#resetvalues",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-resetValues",
-    "src/tablefilter.js~TableFilter#resetValues",
+    "src/tablefilter.js~tablefilter#resetfiltervalues",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-resetFilterValues",
+    "src/tablefilter.js~TableFilter#resetFilterValues",
     "method"
   ],
   [

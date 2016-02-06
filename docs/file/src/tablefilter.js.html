@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.1.12 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.1.13 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -710,7 +710,7 @@ export class TableFilter {
 
         if(this.rememberGridValues || this.rememberPageLen ||
             this.rememberPageNb){
-            this.resetValues();
+            this.resetFilterValues();
         }
 
         //TF css class is added to table
@@ -1200,13 +1200,13 @@ export class TableFilter {
     /**
      * Reset persisted filter values
      */
-    resetValues(){
+    resetFilterValues(){
         if(!this.rememberGridValues){
             return;
         }
 
-        let fltValues = this.Mod.store.getFilterValues(this.fltsValuesCookie);
-        fltValues.forEach((val, idx)=&gt; {
+        let storeValues = this.Mod.store.getFilterValues();
+        storeValues.forEach((val, idx)=&gt; {
             if(val !== &apos; &apos;){
                 this.setFilterValue(idx, val);
             }
@@ -2062,9 +2062,6 @@ export class TableFilter {
         for(let i=0, len=this.fltIds.length; i&lt;len; i++){
             this.setFilterValue(i, &apos;&apos;);
         }
-        // if(this.linkedFilters){
-        //     this.linkFilters();
-        // }
 
         this.filter();
 
