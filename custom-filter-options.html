@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>External toolbar | TableFilter</title>
+    <title>Custom filter options | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -165,14 +165,12 @@
 
       
 
-<h1>Generate an external toolbar</h1>
+<h1>Custom filter options</h1>
 
 <p>
-    This demo features shows how to generate the toolbar in a specified
-    container element.
+    This demo shows how to use the <code>custom_options</code> option to assign
+    custom options to a <code>select</code> filter type.
 </p>
-
-<div id="externalToolbar" class="navbar navbar-default navbar-form"></div>
 
 
 
@@ -13135,32 +13133,49 @@
 <script src="tablefilter/tablefilter.js"></script>
 
 
-<style data-config>
-    /* toolbar override */
-    .inf{
-        margin-top: 10px;
-        background-color: transparent;
-        border: 0;
-    }
-</style>
+<p><p>
+
+<div class="alert alert-danger" role="alert">
+    Known limitation: <code>multiple</code> and <code>checklist</code> filter
+    types currently do not support the <code>custom_options</code>
+    functionality.
+</div>
 
 <script data-config>
-    var tfConfig = {
+    var filtersConfig = {
         base_path: 'tablefilter/',
-        toolbar_target_id: 'externalToolbar',
-        paging: true,
-        results_per_page: ['Records: ', [10,25,50,100]],
-        remember_grid_values: true,
-        remember_page_number: true,
-        remember_page_length: true,
-        alternate_rows: true,
-        btn_reset: true,
-        rows_counter: true,
-        loader: true,
-        status_bar: true,
-        col_0: 'select',
         col_1: 'select',
         col_2: 'select',
+        col_3: 'select',
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: true,
+        loader: true,
+        status_bar: true,
+        no_results_message: true,
+        custom_options: {
+            cols:[3],
+            texts: [
+                [
+                    'na', '0 - 50', '50 - 500',
+                    '500 - 15 000', '15 000 - 25 000', '25 000 - 100 000',
+                    '100 000 - 1 500 000', 'not na'
+                ]
+            ],
+            values: [
+                [
+                    'na', '>0 && <=50', '>50 && <=500',
+                    '>500 && <=15000', '>15000 && <=25000',
+                    '>25000 && <=100000', '>100000 && <=1500000', '!na'
+                ]
+            ],
+            sorts: [false]
+        },
+        col_widths: [
+            '150px', '100px', '100px',
+            '70px', '70px', '70px',
+            '70px', '60px', '60px'
+        ],
         extensions:[{
             name: 'sort',
             types: [
@@ -13170,12 +13185,11 @@
             ]
         }]
     };
-    var tf = new TableFilter(document.querySelector('#demo'), tfConfig);
+    var tf = new TableFilter('demo', filtersConfig);
     tf.init();
 </script>
 
-<p></p>
-
+<hr>
 <ul class="nav nav-pills">
     <li class="active">
         <a data-toggle="tab" href="#js">JS</a>
@@ -13225,9 +13239,39 @@
 
     </div>
     <div id="html" class="tab-pane fade">
-    <pre>
-&lt;div id="externalToolbar" class="navbar navbar-default navbar-form"&gt;&lt;/div&gt;
-    </pre>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html"></pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
     </div>
     <div id="css" class="tab-pane fade">
         
@@ -13265,6 +13309,8 @@
 
     </div>
 </div>
+
+
 
     </div>
 
