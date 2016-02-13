@@ -3324,6 +3324,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/store.js~store#fltsvaluescookie",
+    "class/src/modules/store.js~Store.html#instance-member-fltsValuesCookie",
+    "src/modules/store.js~Store#fltsValuesCookie",
+    "member"
+  ],
+  [
     "src/modules/store.js~store#getfiltervalues",
     "class/src/modules/store.js~Store.html#instance-method-getFilterValues",
     "src/modules/store.js~Store#getFilterValues",
@@ -3346,6 +3352,18 @@ window.esdocSearchIndex = [
     "class/src/modules/store.js~Store.html#instance-method-init",
     "src/modules/store.js~Store#init",
     "method"
+  ],
+  [
+    "src/modules/store.js~store#pglencookie",
+    "class/src/modules/store.js~Store.html#instance-member-pgLenCookie",
+    "src/modules/store.js~Store#pgLenCookie",
+    "member"
+  ],
+  [
+    "src/modules/store.js~store#pgnbcookie",
+    "class/src/modules/store.js~Store.html#instance-member-pgNbCookie",
+    "src/modules/store.js~Store#pgNbCookie",
+    "member"
   ],
   [
     "src/modules/store.js~store#savefiltervalues",
@@ -3864,12 +3882,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#fltsvaluescookie",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fltsValuesCookie",
-    "src/tablefilter.js~TableFilter#fltsValuesCookie",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#geoperator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-geOperator",
     "src/tablefilter.js~TableFilter#geOperator",
@@ -4084,6 +4096,12 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-hasGrid",
     "src/tablefilter.js~TableFilter#hasGrid",
     "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#haspersistence",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-hasPersistence",
+    "src/tablefilter.js~TableFilter#hasPersistence",
+    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#hasthemes",
@@ -4419,18 +4437,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#paging",
     "class/src/tablefilter.js~TableFilter.html#instance-member-paging",
     "src/tablefilter.js~TableFilter#paging",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#pglencookie",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-pgLenCookie",
-    "src/tablefilter.js~TableFilter#pgLenCookie",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#pgnbcookie",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-pgNbCookie",
-    "src/tablefilter.js~TableFilter#pgNbCookie",
     "member"
   ],
   [
