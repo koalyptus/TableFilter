@@ -47,6 +47,7 @@ tf.clearFilters();
 module('Sanity checks');
 test('Store module', function() {
     var store = tf.feature('store');
+    deepEqual(tf.hasPersistence, true, 'Requires persistence');
     deepEqual(typeof store, 'object', 'Store type');
     notEqual(store, null, 'Store instanciated');
     deepEqual(store.duration, 100000, 'Store duration');

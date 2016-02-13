@@ -13,5 +13,5 @@
   "immed": true,
   "maxstatements": 172,
   "maxdepth": 7,
-  "maxcomplexity": 85
+  "maxcomplexity": 87
 }
