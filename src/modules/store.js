@@ -12,6 +12,13 @@ export class Store{
     constructor(tf){
         let f = tf.config();
 
+        //cookie storing filter values
+        this.fltsValuesCookie = tf.prfxCookieFltsValues + tf.id;
+        //cookie storing page nb
+        this.pgNbCookie = tf.prfxCookiePageNb + tf.id;
+        //cookie storing page length
+        this.pgLenCookie = tf.prfxCookiePageLen + tf.id;
+
         this.duration = !isNaN(f.set_cookie_duration) ?
             parseInt(f.set_cookie_duration, 10) : 100000;
 
@@ -56,7 +63,7 @@ export class Store{
 
         //write cookie
         Cookie.write(
-            tf.fltsValuesCookie,
+            this.fltsValuesCookie,
             fltValues.join(tf.separator),
             this.duration
         );
@@ -67,7 +74,7 @@ export class Store{
      * @return {Array}
      */
     getFilterValues(){
-        let flts = Cookie.read(this.tf.fltsValuesCookie);
+        let flts = Cookie.read(this.fltsValuesCookie);
         let rgx = new RegExp(this.tf.separator, 'g');
         // filters' values array
         return flts.split(rgx);
@@ -82,7 +89,7 @@ export class Store{
             return;
         }
         Cookie.write(
-            this.tf.pgNbCookie,
+            this.pgNbCookie,
             (index+1),
             this.duration
         );
@@ -93,7 +100,7 @@ export class Store{
      * @return {String}
      */
     getPageNb(){
-        return Cookie.read(this.tf.pgNbCookie);
+        return Cookie.read(this.pgNbCookie);
     }
 
     /**
@@ -105,7 +112,7 @@ export class Store{
             return;
         }
         Cookie.write(
-            this.tf.pgLenCookie,
+            this.pgLenCookie,
             index,
             this.duration
         );
@@ -116,16 +123,16 @@ export class Store{
      * @return {String}
      */
     getPageLength(){
-        return Cookie.read(this.tf.pgLenCookie);
+        return Cookie.read(this.pgLenCookie);
     }
 
     /**
      * Remove all cookies
      */
     clearCookies(){
-        Cookie.remove(this.tf.fltsValuesCookie);
-        Cookie.remove(this.tf.pgLenCookie);
-        Cookie.remove(this.tf.pgNbCookie);
+        Cookie.remove(this.fltsValuesCookie);
+        Cookie.remove(this.pgLenCookie);
+        Cookie.remove(this.pgNbCookie);
     }
 
     destroy(){

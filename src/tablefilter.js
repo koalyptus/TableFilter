@@ -378,16 +378,12 @@ export class TableFilter {
         /*** cookies ***/
         //remembers filters values on page load
         this.rememberGridValues = Boolean(f.remember_grid_values);
-        //cookie storing filter values
-        this.fltsValuesCookie = this.prfxCookieFltsValues + this.id;
         //remembers page nb on page load
         this.rememberPageNb = this.paging && f.remember_page_number;
-        //cookie storing page nb
-        this.pgNbCookie = this.prfxCookiePageNb + this.id;
         //remembers page length on page load
         this.rememberPageLen = this.paging && f.remember_page_length;
-        //cookie storing page length
-        this.pgLenCookie = this.prfxCookiePageLen + this.id;
+        this.hasPersistence = this.rememberGridValues || this.rememberPageNb ||
+            this.rememberPageLen;
 
         /*** extensions ***/
         //imports external script
@@ -503,8 +499,7 @@ export class TableFilter {
             Mod.help.init();
         }
 
-        if(this.rememberGridValues || this.rememberPageNb ||
-            this.rememberPageLen){
+        if(this.hasPersistence){
             if(!Mod.store){
                 Mod.store = new Store(this);
             }
@@ -638,8 +633,7 @@ export class TableFilter {
 
         this._hasGrid = true;
 
-        if(this.rememberGridValues || this.rememberPageLen ||
-            this.rememberPageNb){
+        if(this.hasPersistence){
             this.resetFilterValues();
         }
 
