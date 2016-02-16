@@ -25,7 +25,7 @@ export class Dropdown extends Feature{
         //defines empty option text
         this.nonEmptyText = f.non_empty_text || '(Non empty)';
         //IE only, tooltip text appearing on select before it is populated
-        this.activateSlcTooltip =  f.activate_slc_tooltip ||
+        this.activateSlcTooltip = f.activate_slc_tooltip ||
             'Click to activate';
         //tooltip text appearing on multiple select
         this.multipleSlcTooltip = f.multiple_slc_tooltip ||
@@ -183,7 +183,7 @@ export class Dropdown extends Feature{
                     (tf.paging && (!tf.validRowsIndex ||
                         (tf.validRowsIndex &&
                             tf.validRowsIndex.indexOf(k) != -1)) &&
-                        ((activeFlt===undefined || activeFlt==colIndex)  ||
+                        ((activeFlt===undefined || activeFlt==colIndex) ||
                             (activeFlt!=colIndex &&
                                 tf.validRowsIndex.indexOf(k) != -1 ))) ))){
                     let cell_data = tf.getCellData(cell[j]),

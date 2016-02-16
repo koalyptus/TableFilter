@@ -55,7 +55,7 @@ export default class ColsVisibility{
         //span containing show/hide cols button
         this.prfx = 'colVis_';
         //defines css class span containing show/hide cols
-        this.spanCssClass =  f.span_css_class || 'colVisSpan';
+        this.spanCssClass = f.span_css_class || 'colVisSpan';
         this.prfxCont = this.prfx + 'Cont_';
         //defines css class div containing show/hide cols
         this.contCssClass = f.cont_css_class || 'colVisCont';

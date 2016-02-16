@@ -24,7 +24,7 @@ export class Help extends Feature{
         this.contTgtId = f.help_instructions_container_target_id ||
             null;
         //defines help text
-        this.instrText = f.help_instructions_text  ?
+        this.instrText = f.help_instructions_text ?
             f.help_instructions_text :
             'Use the filters above each column to filter and limit table ' +
             'data. Advanced searches can be performed by using the following ' +

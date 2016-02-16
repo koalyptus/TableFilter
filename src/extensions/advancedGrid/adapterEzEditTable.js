@@ -20,7 +20,7 @@ export default class AdapterEzEditTable {
         this.err = 'Failed to instantiate EditTable object.\n"ezEditTable" ' +
             'dependency not found.';
         // Enable the ezEditTable's scroll into view behaviour if grid layout on
-        cfg.scroll_into_view =  cfg.scroll_into_view===false ?
+        cfg.scroll_into_view = cfg.scroll_into_view===false ?
             false : tf.gridLayout;
 
         this._ezEditTable = null;
@@ -72,7 +72,7 @@ export default class AdapterEzEditTable {
             startRow = cfg.startRow || tf.refRow;
         }
 
-        cfg.base_path = cfg.base_path  || tf.basePath + 'ezEditTable/';
+        cfg.base_path = cfg.base_path || tf.basePath + 'ezEditTable/';
         var editable = cfg.editable;
         var selectable = cfg.selection;
 

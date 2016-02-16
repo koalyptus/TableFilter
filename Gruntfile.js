@@ -11,15 +11,15 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
 
-        jshint: {
-            src: [
+        eslint: {
+            options: {
+                configFile: '.eslintrc'
+            },
+            target: [
                 'Gruntfile.js',
                 'webpack.config.js',
                 'src/**/*.js'
-            ],
-            options: {
-                jshintrc: '.jshintrc'
-            }
+            ]
         },
 
         qunit: {
@@ -282,7 +282,7 @@ module.exports = function (grunt) {
 
     });
 
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -302,11 +302,11 @@ module.exports = function (grunt) {
 
     // Dev dev/build/watch cycle
     grunt.registerTask('dev',
-        ['jshint', 'webpack:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
+        ['eslint', 'webpack:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
 
     // Production build
     grunt.registerTask('build',
-        ['jshint', 'webpack:build', 'copy:dist', 'stylus:compile']);
+        ['eslint', 'webpack:build', 'copy:dist', 'stylus:compile']);
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
@@ -317,7 +317,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
 
     // Tests
-    grunt.registerTask('test', ['jshint', 'connect', 'qunit:all']);
+    grunt.registerTask('test', ['eslint', 'connect', 'qunit:all']);
 
     // Publish to gh-pages
     grunt.registerTask('publish', 'Publish from CLI', [
@@ -428,7 +428,7 @@ module.exports = function (grunt) {
         ret += 'branch:       ' + env.TRAVIS_BRANCH + '\n';
         ret += 'SHA:          ' + env.TRAVIS_COMMIT + '\n';
         ret += 'range SHA:    ' + env.TRAVIS_COMMIT_RANGE + '\n';
-        ret += 'build id:     ' + env.TRAVIS_BUILD_ID  + '\n';
+        ret += 'build id:     ' + env.TRAVIS_BUILD_ID + '\n';
         ret += 'build number: ' + env.TRAVIS_BUILD_NUMBER + '\n';
         return ret;
     }

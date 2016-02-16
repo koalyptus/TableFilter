@@ -133,7 +133,7 @@ export class TableFilter {
         //defines css class for left div
         this.lDivCssClass = f.left_div_css_class || 'ldiv';
         //defines css class for right div
-        this.rDivCssClass =  f.right_div_css_class || 'rdiv';
+        this.rDivCssClass = f.right_div_css_class || 'rdiv';
         //defines css class for mid div
         this.mDivCssClass = f.middle_div_css_class || 'mdiv';
         //table container div css class
@@ -1784,7 +1784,7 @@ export class TableFilter {
         if(Types.isUndef(colIndex)){
             return [];
         }
-        let data =  this.getFilteredData(),
+        let data = this.getFilteredData(),
             colData = [];
         if(includeHeaders){
             colData.push(this.getHeadersText()[colIndex]);

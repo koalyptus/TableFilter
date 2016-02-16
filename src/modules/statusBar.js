@@ -29,7 +29,7 @@ export class StatusBar extends Feature{
         //defines css class status bar
         this.statusBarCssClass = f.status_bar_css_class || 'status';
         //delay for status bar clearing
-        this.statusBarCloseDelay =  250;
+        this.statusBarCloseDelay = 250;
 
         //calls function before message is displayed
         this.onBeforeShowMsg = Types.isFn(f.on_before_show_msg) ?
