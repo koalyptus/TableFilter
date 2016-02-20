@@ -10,8 +10,8 @@
     //"indent": [2, 4],
     "no-trailing-spaces": 2,
     "no-multi-spaces": 2,
-    "array-bracket-spacing": 2,
-    "new-cap": 2
+    "array-bracket-spacing": 2/*,
+    "new-cap": 2*/
     //"camelcase": [2, {"properties": "always"}]
 
 

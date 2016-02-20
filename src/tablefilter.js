@@ -2051,18 +2051,17 @@ export class TableFilter {
                     slcA2.indexOf(slcIndex[i]) != -1)) ||
                 slcSelectedValue === this.displayAllText ){
 
-                if(slcA3.indexOf(slcIndex[i]) != -1){
-                    this.Mod.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
-                } else {
-                    curSlc.innerHTML = '';
-                }
+                // if(slcA3.indexOf(slcIndex[i]) != -1){
+                // this.Mod.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
+                // } else {
+                //     curSlc.innerHTML = '';
+                // }
 
                 //1st option needs to be inserted
                 if(this.loadFltOnDemand) {
                     let opt0 = Dom.createOpt(this.displayAllText, '');
-                    if(curSlc){
-                        curSlc.appendChild(opt0);
-                    }
+                    curSlc.innerHTML = '';
+                    curSlc.appendChild(opt0);
                 }
 
                 if(slcA3.indexOf(slcIndex[i]) != -1){

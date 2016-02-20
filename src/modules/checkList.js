@@ -161,6 +161,8 @@ export class CheckList extends Feature{
             this.excludedOpts = [];
         }
 
+        flt.innerHTML = '';
+
         for(let k=tf.refRow; k<tf.nbRows; k++){
             // always visible rows don't need to appear on selects as always
             // valid
