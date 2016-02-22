@@ -1916,25 +1916,17 @@ export class TableFilter {
 
     /**
      * Set them columns' widths as per configuration
-     * @param {Number} rowIndex Optional row index to apply the widths to
      * @param {Element} tbl DOM element
      */
-    setColWidths(rowIndex, tbl){
+    setColWidths(tbl){
         if(!this.hasColWidths){
             return;
         }
         tbl = tbl || this.tbl;
-        // let rIndex;
-        // if(rowIndex === undefined){
-        //     rIndex = tbl.rows[0].style.display!='none' ? 0 : 1;
-        // } else{
-        //     rIndex = rowIndex;
-        // }
 
         setWidths.call(this);
 
         function setWidths(){
-            /*jshint validthis:true */
             let nbCols = this.nbCells;
             let colWidths = this.colWidths;
             let colTags = Dom.tag(tbl, 'col');
