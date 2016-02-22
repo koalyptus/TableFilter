@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.1.14 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.1.15 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -540,19 +540,19 @@ export class Paging extends Feature{
             switch(Str.lower(cmd)){
                 case &apos;next&apos;:
                     btnEvt.next();
-                break;
+                    break;
                 case &apos;previous&apos;:
                     btnEvt.prev();
-                break;
+                    break;
                 case &apos;last&apos;:
                     btnEvt.last();
-                break;
+                    break;
                 case &apos;first&apos;:
                     btnEvt.first();
-                break;
+                    break;
                 default:
                     btnEvt.next();
-                break;
+                    break;
             }
         }
         else if(cmdtype === &apos;number&apos;){

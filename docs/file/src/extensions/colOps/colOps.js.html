@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/colOps/colOps.js | tablefilter v0.1.14 API Document</title>
+  <title data-ice="title">src/extensions/colOps/colOps.js | tablefilter v0.1.15 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -193,7 +193,7 @@ export default class ColOps{
                     mThisCol=-1;
 
                 for(var k=0; k&lt;colIndex.length; k++){
-                     if(colIndex[k] === ucolIndex[ucol]){
+                    if(colIndex[k] === ucolIndex[ucol]){
                         mThisCol++;
                         opsThisCol[mThisCol]=Str.lower(operation[k]);
                         decThisCol[mThisCol]=decimalPrecision[k];
@@ -205,25 +205,25 @@ export default class ColOps{
                         switch(opsThisCol[mThisCol]){
                             case &apos;mean&apos;:
                                 meanFlag=1;
-                            break;
+                                break;
                             case &apos;sum&apos;:
                                 sumFlag=1;
-                            break;
+                                break;
                             case &apos;min&apos;:
                                 minFlag=1;
-                            break;
+                                break;
                             case &apos;max&apos;:
                                 maxFlag=1;
-                            break;
+                                break;
                             case &apos;median&apos;:
                                 medFlag=1;
                                 break;
                             case &apos;q1&apos;:
                                 q1Flag=1;
-                            break;
+                                break;
                             case &apos;q3&apos;:
                                 q3Flag=1;
-                            break;
+                                break;
                         }
                     }
                 }
@@ -233,8 +233,10 @@ export default class ColOps{
                     if((q1Flag==1)|| (q3Flag==1) || (medFlag==1)){
                         if (j&lt;colvalues[ucol].length -1){
                             for(k=j+1; k&lt;colvalues[ucol].length; k++) {
+                                /* eslint-disable */
                                 if(eval(colvalues[ucol][k]) &lt;
                                     eval(colvalues[ucol][j])){
+                                /* eslint-enable */
                                     temp = colvalues[ucol][j];
                                     colvalues[ucol][j] = colvalues[ucol][k];
                                     colvalues[ucol][k] = temp;
@@ -307,25 +309,25 @@ export default class ColOps{
                     switch( opsThisCol[i] ){
                         case &apos;mean&apos;:
                             result=meanValue;
-                        break;
+                            break;
                         case &apos;sum&apos;:
                             result=sumValue;
-                        break;
+                            break;
                         case &apos;min&apos;:
                             result=minValue;
-                        break;
+                            break;
                         case &apos;max&apos;:
                             result=maxValue;
-                        break;
+                            break;
                         case &apos;median&apos;:
                             result=medValue;
                             break;
                         case &apos;q1&apos;:
                             result=q1Value;
-                        break;
+                            break;
                         case &apos;q3&apos;:
                             result=q3Value;
-                        break;
+                            break;
                     }
 
                     var precision = !isNaN(decThisCol[i]) ? decThisCol[i] : 2;
@@ -343,17 +345,17 @@ export default class ColOps{
                                     } else{
                                         Dom.id(labThisCol[i]).innerHTML= result;
                                     }
-                                break;
+                                    break;
                                 case &apos;setvalue&apos;:
                                     Dom.id( labThisCol[i] ).value = result;
-                                break;
+                                    break;
                                 case &apos;createtextnode&apos;:
                                     var oldnode = Dom.id(labThisCol[i])
                                         .firstChild;
                                     var txtnode = Dom.text(result);
                                     Dom.id(labThisCol[i])
                                         .replaceChild(txtnode, oldnode);
-                                break;
+                                    break;
                             }//switch
                         }
                     } else {
