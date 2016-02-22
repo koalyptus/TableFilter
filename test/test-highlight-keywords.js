@@ -42,10 +42,11 @@ test('can destroy and init TableFilter', function() {
 module('Tear-down');
 test('can destroy TableFilter DOM elements and clean highlighted words',
     function() {
-    tf.setFilterValue(1, 'Perth');
-    tf.filter();
-    tf.destroy();
-    deepEqual(tf.hasGrid(), false, 'Filters removed');
-    deepEqual(highlightKeyword.highlightedNodes.length,
-        0, 'Number of highlighted words');
-});
+        tf.setFilterValue(1, 'Perth');
+        tf.filter();
+        tf.destroy();
+        deepEqual(tf.hasGrid(), false, 'Filters removed');
+        deepEqual(highlightKeyword.highlightedNodes.length,
+            0, 'Number of highlighted words');
+    }
+);

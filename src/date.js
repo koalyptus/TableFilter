@@ -93,33 +93,33 @@ export default {
             case 'DDMMMYYYY':
                 parts = dateStr.replace(/[- \/.]/g,' ').split(' ');
                 oDate = new Date(y2kDate(parts[2]),mmm2mm(parts[1])-1,parts[0]);
-            break;
+                break;
             case 'DMY':
-                /* jshint ignore:start */
+                /* eslint-disable */
                 parts = dateStr.replace(
                     /^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
                 oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
-                /* jshint ignore:end */
-            break;
+                /* eslint-enable */
+                break;
             case 'MDY':
-                /* jshint ignore:start */
+                /* eslint-disable */
                 parts = dateStr.replace(
                     /^(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
                 oDate = new Date(y2kDate(parts[2]),parts[0]-1,parts[1]);
-                /* jshint ignore:end */
-            break;
+                /* eslint-enable */
+                break;
             case 'YMD':
-                /* jshint ignore:start */
+                /* eslint-disable */
                 parts = dateStr.replace(/^((\d\d)?\d\d)([- \/.])(0?[1-9]|1[012])([- \/.])(0?[1-9]|[12][0-9]|3[01])$/,'$1 $4 $6').split(' ');
                 oDate = new Date(y2kDate(parts[0]),parts[1]-1,parts[2]);
-                /* jshint ignore:end */
-            break;
+                /* eslint-enable */
+                break;
             default: //in case format is not correct
-                /* jshint ignore:start */
+                /* eslint-disable */
                 parts = dateStr.replace(/^(0?[1-9]|[12][0-9]|3[01])([- \/.])(0?[1-9]|1[012])([- \/.])((\d\d)?\d\d)$/,'$1 $3 $5').split(' ');
                 oDate = new Date(y2kDate(parts[2]),parts[1]-1,parts[0]);
-                /* jshint ignore:end */
-            break;
+                /* eslint-enable */
+                break;
         }
         return oDate;
     }
@@ -156,11 +156,11 @@ function mmm2mm(mmm){
         'nov','dec'
     ];
     for(let m_i=0; m_i < MONTH_NAMES.length; m_i++){
-            let month_name = MONTH_NAMES[m_i];
-            if (mmm.toLowerCase() === month_name){
-                mondigit = m_i+1;
-                break;
-            }
+        let month_name = MONTH_NAMES[m_i];
+        if (mmm.toLowerCase() === month_name){
+            mondigit = m_i+1;
+            break;
+        }
     }
     if(mondigit > 11 || mondigit < 23){
         mondigit = mondigit - 12;

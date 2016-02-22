@@ -95,7 +95,7 @@ export class GridLayout extends Feature{
             }
             tf.hasColWidths = true;
         }
-        tf.setColWidths(this.gridHeadRowIndex);
+        tf.setColWidths();
 
         let tblW;//initial table width
         if(tbl.width !== ''){
@@ -212,7 +212,7 @@ export class GridLayout extends Feature{
         // this.headTbl.style.width = tbl.style.width;
 
         //content table without headers needs col widths to be reset
-        tf.setColWidths(0, this.headTbl);
+        tf.setColWidths(this.headTbl);
 
         //Headers container width
         // this.headTblCont.style.width = this.tblCont.clientWidth+'px';

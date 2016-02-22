@@ -29,7 +29,7 @@ export class StatusBar extends Feature{
         //defines css class status bar
         this.statusBarCssClass = f.status_bar_css_class || 'status';
         //delay for status bar clearing
-        this.statusBarCloseDelay =  250;
+        this.statusBarCloseDelay = 250;
 
         //calls function before message is displayed
         this.onBeforeShowMsg = Types.isFn(f.on_before_show_msg) ?
@@ -133,16 +133,15 @@ export class StatusBar extends Feature{
             ()=> this.message(this.msgLoadThemes));
 
         emitter.on([
-                'after-filtering',
-                'after-populating-filter',
-                'after-changing-page',
-                'after-clearing-filters',
-                'after-changing-results-per-page',
-                'after-reset-page',
-                'after-reset-page-length',
-                'after-loading-extensions',
-                'after-loading-themes'
-            ],
+            'after-filtering',
+            'after-populating-filter',
+            'after-changing-page',
+            'after-clearing-filters',
+            'after-changing-results-per-page',
+            'after-reset-page',
+            'after-reset-page-length',
+            'after-loading-extensions',
+            'after-loading-themes'],
             ()=> this.message('')
         );
 
@@ -205,16 +204,15 @@ export class StatusBar extends Feature{
             ()=> this.message(this.msgLoadThemes));
 
         emitter.off([
-                'after-filtering',
-                'after-populating-filter',
-                'after-changing-page',
-                'after-clearing-filters',
-                'after-changing-results-per-page',
-                'after-reset-page',
-                'after-reset-page-length',
-                'after-loading-extensions',
-                'after-loading-themes'
-            ],
+            'after-filtering',
+            'after-populating-filter',
+            'after-changing-page',
+            'after-clearing-filters',
+            'after-changing-results-per-page',
+            'after-reset-page',
+            'after-reset-page-length',
+            'after-loading-extensions',
+            'after-loading-themes'],
             ()=> this.message('')
         );
 

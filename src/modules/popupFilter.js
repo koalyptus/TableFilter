@@ -69,7 +69,7 @@ export class PopupFilter extends Feature{
             var popUpDiv = this.popUpFltElms[colIndex],
                 header = this.tf.getHeaderElement(colIndex),
                 headerWidth = header.clientWidth * 0.95;
-            popUpDiv.style.width = parseInt(headerWidth, 10)  + 'px';
+            popUpDiv.style.width = parseInt(headerWidth, 10) + 'px';
         }
         Event.cancel(evt);
         Event.stop(evt);

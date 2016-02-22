@@ -32,7 +32,7 @@ export default class FiltersVisibility{
         this.defaultText = 'Toggle filters';
 
         //id of container element
-        this.targetId =  f.target_id || null;
+        this.targetId = f.target_id || null;
         //enables/disables expand/collapse icon
         this.enableIcon = f.enable_icon===false ? false : true;
         this.btnText = f.btn_text || '';
@@ -41,7 +41,7 @@ export default class FiltersVisibility{
         this.collapseBtnHtml = this.enableIcon ?
             this.icnCollapseHtml + this.btnText :
             this.btnText || this.defaultText;
-        this.expandBtnHtml =  this.enableIcon ?
+        this.expandBtnHtml = this.enableIcon ?
             this.icnExpandHtml + this.btnText :
             this.btnText || this.defaultText;
 

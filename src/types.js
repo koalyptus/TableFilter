@@ -48,7 +48,7 @@ export default {
      * @return {Boolean}
      */
     isUndef(o){
-        return  o === UNDEFINED;
+        return o === UNDEFINED;
     },
 
     /**

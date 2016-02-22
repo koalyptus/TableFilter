@@ -133,7 +133,7 @@ export class TableFilter {
         //defines css class for left div
         this.lDivCssClass = f.left_div_css_class || 'ldiv';
         //defines css class for right div
-        this.rDivCssClass =  f.right_div_css_class || 'rdiv';
+        this.rDivCssClass = f.right_div_css_class || 'rdiv';
         //defines css class for mid div
         this.mDivCssClass = f.middle_div_css_class || 'mdiv';
         //table container div css class
@@ -609,7 +609,7 @@ export class TableFilter {
                 Mod.paging = new Paging(this);
                 Mod.paging.init();
             } else{
-               Mod.paging.reset();
+                Mod.paging.reset();
             }
         }
         if(this.btnReset){
@@ -821,7 +821,9 @@ export class TableFilter {
 
         // Require pattern for Webpack
         require(['./' + modulePath], (mod)=> {
+            /* eslint-disable */
             let inst = new mod.default(this, ext);
+            /* eslint-enable */
             inst.init();
             this.ExtRegistry[name] = inst;
         });
@@ -1415,12 +1417,12 @@ export class TableFilter {
 
                 //multiple search parameter operator ||
                 let sAOrSplit = sA.toString().split(this.orOperator),
-                //multiple search || parameter boolean
-                hasMultiOrSA = sAOrSplit.length > 1,
-                //multiple search parameter operator &&
-                sAAndSplit = sA.toString().split(this.anOperator),
-                //multiple search && parameter boolean
-                hasMultiAndSA = sAAndSplit.length > 1;
+                    //multiple search || parameter boolean
+                    hasMultiOrSA = sAOrSplit.length > 1,
+                    //multiple search parameter operator &&
+                    sAAndSplit = sA.toString().split(this.anOperator),
+                    //multiple search && parameter boolean
+                    hasMultiAndSA = sAAndSplit.length > 1;
 
                 //detect operators or array query
                 if(Types.isArray(sA) || hasMultiOrSA || hasMultiAndSA){
@@ -1784,7 +1786,7 @@ export class TableFilter {
         if(Types.isUndef(colIndex)){
             return [];
         }
-        let data =  this.getFilteredData(),
+        let data = this.getFilteredData(),
             colData = [];
         if(includeHeaders){
             colData.push(this.getHeadersText()[colIndex]);
@@ -1914,25 +1916,17 @@ export class TableFilter {
 
     /**
      * Set them columns' widths as per configuration
-     * @param {Number} rowIndex Optional row index to apply the widths to
      * @param {Element} tbl DOM element
      */
-    setColWidths(rowIndex, tbl){
+    setColWidths(tbl){
         if(!this.hasColWidths){
             return;
         }
         tbl = tbl || this.tbl;
-        let rIndex;
-        if(rowIndex === undefined){
-            rIndex = tbl.rows[0].style.display!='none' ? 0 : 1;
-        } else{
-            rIndex = rowIndex;
-        }
 
         setWidths.call(this);
 
         function setWidths(){
-            /*jshint validthis:true */
             let nbCols = this.nbCells;
             let colWidths = this.colWidths;
             let colTags = Dom.tag(tbl, 'col');
@@ -2051,18 +2045,17 @@ export class TableFilter {
                     slcA2.indexOf(slcIndex[i]) != -1)) ||
                 slcSelectedValue === this.displayAllText ){
 
-                if(slcA3.indexOf(slcIndex[i]) != -1){
-                    this.Mod.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
-                } else {
-                    curSlc.innerHTML = '';
-                }
+                // if(slcA3.indexOf(slcIndex[i]) != -1){
+                // this.Mod.checkList.checkListDiv[slcIndex[i]].innerHTML = '';
+                // } else {
+                //     curSlc.innerHTML = '';
+                // }
 
                 //1st option needs to be inserted
                 if(this.loadFltOnDemand) {
                     let opt0 = Dom.createOpt(this.displayAllText, '');
-                    if(curSlc){
-                        curSlc.appendChild(opt0);
-                    }
+                    curSlc.innerHTML = '';
+                    curSlc.appendChild(opt0);
                 }
 
                 if(slcA3.indexOf(slcIndex[i]) != -1){
