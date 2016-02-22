@@ -93,16 +93,24 @@ export default class AdapterEzEditTable {
                 //Next valid filtered row needs to be selected
                 var doSelect = function(nextRowIndex){
                     if(et.defaultSelection === 'row'){
+                        /* eslint-disable */
                         slc.SelectRowByIndex(nextRowIndex);
+                        /* eslint-enable */
                     } else {
+                        /* eslint-disable */
                         et.ClearSelections();
+                        /* eslint-enable */
                         var cellIndex = selectedElm.cellIndex,
                             row = tf.tbl.rows[nextRowIndex];
                         if(et.defaultSelection === 'both'){
+                            /* eslint-disable */
                             slc.SelectRowByIndex(nextRowIndex);
+                            /* eslint-enable */
                         }
                         if(row){
+                            /* eslint-disable */
                             slc.SelectCell(row.cells[cellIndex]);
+                            /* eslint-enable */
                         }
                     }
                     //Table is filtered
@@ -135,7 +143,9 @@ export default class AdapterEzEditTable {
                         selectedElm.parentNode : selectedElm,
                     //cell for default_selection = 'both' or 'cell'
                     cell = selectedElm.nodeName==='TD' ? selectedElm : null,
+                    /* eslint-disable */
                     keyCode = e !== undefined ? et.Event.GetKey(e) : 0,
+                    /* eslint-enable */
                     isRowValid = validIndexes.indexOf(row.rowIndex) !== -1,
                     nextRowIndex,
                     paging = tf.feature('paging'),
@@ -244,11 +254,15 @@ export default class AdapterEzEditTable {
                     var advGrid = paging.tf.extension('advancedGrid');
                     var et = advGrid._ezEditTable;
                     var slc = et.Selection;
+                    /* eslint-disable */
                     var row = slc.GetActiveRow();
+                    /* eslint-enable */
                     if(row){
                         row.scrollIntoView(false);
                     }
+                    /* eslint-disable */
                     var cell = slc.GetActiveCell();
+                    /* eslint-enable */
                     if(cell){
                         cell.scrollIntoView(false);
                     }
@@ -342,8 +356,10 @@ export default class AdapterEzEditTable {
         }
 
         try{
+            /* eslint-disable */
             this._ezEditTable = new EditTable(tf.id, cfg, startRow);
             this._ezEditTable.Init();
+            /* eslint-enable */
         } catch(e) { throw new Error(this.err); }
 
         this.initialized = true;
@@ -356,10 +372,14 @@ export default class AdapterEzEditTable {
         var ezEditTable = this._ezEditTable;
         if(ezEditTable){
             if(this.cfg.selection){
+                /* eslint-disable */
                 ezEditTable.Selection.Set();
+                /* eslint-enable */
             }
             if(this.cfg.editable){
+                /* eslint-disable */
                 ezEditTable.Editable.Set();
+                /* eslint-enable */
             }
         }
     }
@@ -370,14 +390,22 @@ export default class AdapterEzEditTable {
     toggle(){
         var ezEditTable = this._ezEditTable;
         if(ezEditTable.editable){
+            /* eslint-disable */
             ezEditTable.Editable.Remove();
+            /* eslint-enable */
         } else {
+            /* eslint-disable */
             ezEditTable.Editable.Set();
+            /* eslint-enable */
         }
         if(ezEditTable.selection){
+            /* eslint-disable */
             ezEditTable.Selection.Remove();
+            /* eslint-enable */
         } else {
+            /* eslint-disable */
             ezEditTable.Selection.Set();
+            /* eslint-enable */
         }
     }
 
@@ -400,11 +428,15 @@ export default class AdapterEzEditTable {
         var ezEditTable = this._ezEditTable;
         if(ezEditTable){
             if(this.cfg.selection){
+                /* eslint-disable */
                 ezEditTable.Selection.ClearSelections();
                 ezEditTable.Selection.Remove();
+                /* eslint-enable */
             }
             if(this.cfg.editable){
+                /* eslint-disable */
                 ezEditTable.Editable.Remove();
+                /* eslint-enable */
             }
         }
 

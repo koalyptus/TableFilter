@@ -470,19 +470,19 @@ export class Paging extends Feature{
             switch(Str.lower(cmd)){
                 case 'next':
                     btnEvt.next();
-                break;
+                    break;
                 case 'previous':
                     btnEvt.prev();
-                break;
+                    break;
                 case 'last':
                     btnEvt.last();
-                break;
+                    break;
                 case 'first':
                     btnEvt.first();
-                break;
+                    break;
                 default:
                     btnEvt.next();
-                break;
+                    break;
             }
         }
         else if(cmdtype === 'number'){

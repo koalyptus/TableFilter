@@ -22,15 +22,21 @@
     test('External filters', function() {
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(tf.isExternalFlt, true, 'Has external filters');
-        deepEqual(tf.externalFltTgtIds.length, 5, 'External filters ids length');
+        deepEqual(tf.externalFltTgtIds.length, 5,
+            'External filters ids length');
         deepEqual(tf.getFiltersRowIndex(), 0, 'Filters row index');
         deepEqual(tf.getHeadersRowIndex(), 1, 'Headers row index');
         deepEqual(tf.getStartRowIndex(), 2, 'Reference row index');
-        deepEqual(id('extFrom').childNodes.length>0, true, 'Col0 filter is external');
-        deepEqual(id('extDestination').childNodes.length>0, true, 'Col1 filter is external');
-        deepEqual(id('extRoadDistance').childNodes.length>0, true, 'Col2 filter is external');
-        deepEqual(id('extAirDistance').childNodes.length>0, true, 'Col3 filter is external');
-        deepEqual(id('extRailDistance').childNodes.length>0, true, 'Col4 filter is external');
+        deepEqual(id('extFrom').childNodes.length>0, true,
+            'Col0 filter is external');
+        deepEqual(id('extDestination').childNodes.length>0, true,
+            'Col1 filter is external');
+        deepEqual(id('extRoadDistance').childNodes.length>0, true,
+            'Col2 filter is external');
+        deepEqual(id('extAirDistance').childNodes.length>0, true,
+            'Col3 filter is external');
+        deepEqual(id('extRailDistance').childNodes.length>0, true,
+            'Col4 filter is external');
     });
 
     module('Filter columns');
@@ -90,15 +96,21 @@
 
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(tf.isExternalFlt, true, 'Has external filters');
-        deepEqual(tf.externalFltTgtIds.length, 5, 'External filters ids length');
+        deepEqual(tf.externalFltTgtIds.length, 5,
+            'External filters ids length');
         deepEqual(tf.getFiltersRowIndex(), 1, 'Filters row index');
         deepEqual(tf.getHeadersRowIndex(), 0, 'Headers row index');
         deepEqual(tf.getStartRowIndex(), 0, 'Reference row index');
-        deepEqual(id('extFrom').childNodes.length, 0, 'Col0 filter is external');
-        deepEqual(id('extDestination').childNodes.length, 0, 'Col1 filter is external');
-        deepEqual(id('extRoadDistance').childNodes.length, 0, 'Col2 filter is external');
-        deepEqual(id('extAirDistance').childNodes.length, 0, 'Col3 filter is external');
-        deepEqual(id('extRailDistance').childNodes.length, 0, 'Col4 filter is external');
+        deepEqual(id('extFrom').childNodes.length, 0,
+            'Col0 filter is external');
+        deepEqual(id('extDestination').childNodes.length, 0,
+            'Col1 filter is external');
+        deepEqual(id('extRoadDistance').childNodes.length, 0,
+            'Col2 filter is external');
+        deepEqual(id('extAirDistance').childNodes.length, 0,
+            'Col3 filter is external');
+        deepEqual(id('extRailDistance').childNodes.length, 0,
+            'Col4 filter is external');
     });
     test('Can filter column 0', function() {
         tf.setFilterValue(0, 'Syd');
@@ -156,15 +168,21 @@
 
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(tf.isExternalFlt, true, 'Has external filters');
-        deepEqual(tf.externalFltTgtIds.length, 5, 'External filters ids length');
+        deepEqual(tf.externalFltTgtIds.length, 5,
+            'External filters ids length');
         deepEqual(tf.getFiltersRowIndex(), 0, 'Filters row index');
         deepEqual(tf.getHeadersRowIndex(), 1, 'Headers row index');
         deepEqual(tf.getStartRowIndex(), 2, 'Reference row index');
-        deepEqual(id('extFrom').childNodes.length, 0, 'Col0 filter is external');
-        deepEqual(id('extDestination').childNodes.length, 0, 'Col1 filter is external');
-        deepEqual(id('extRoadDistance').childNodes.length, 0, 'Col2 filter is external');
-        deepEqual(id('extAirDistance').childNodes.length, 0, 'Col3 filter is external');
-        deepEqual(id('extRailDistance').childNodes.length, 0, 'Col4 filter is external');
+        deepEqual(id('extFrom').childNodes.length, 0,
+            'Col0 filter is external');
+        deepEqual(id('extDestination').childNodes.length, 0,
+            'Col1 filter is external');
+        deepEqual(id('extRoadDistance').childNodes.length, 0,
+            'Col2 filter is external');
+        deepEqual(id('extAirDistance').childNodes.length, 0,
+            'Col3 filter is external');
+        deepEqual(id('extRailDistance').childNodes.length, 0,
+            'Col4 filter is external');
     });
     test('Can filter column 0', function() {
         tf.setFilterValue(0, 'Syd');

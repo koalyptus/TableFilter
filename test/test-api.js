@@ -8,9 +8,9 @@
     var tf1 = new TableFilter('demo1', {
         base_path: '../dist/tablefilter/',
         extensions: [{
-             name: 'colsVisibility',
-             at_start: [1, 2],
-             on_loaded: colsVisibilityTests
+            name: 'colsVisibility',
+            at_start: [1, 2],
+            on_loaded: colsVisibilityTests
         }]
     });
     tf1.init();

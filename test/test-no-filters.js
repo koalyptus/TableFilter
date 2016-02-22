@@ -44,7 +44,8 @@
         deepEqual(tf.refRow, 0, 'Reference row index');
 
         tf.setFilterValue(1, 'Bris');
-        deepEqual(tf.getValidRows().length, 0, 'does not fail on setFilterValue');
+        deepEqual(tf.getValidRows().length, 0,
+            'does not fail on setFilterValue');
     });
 
     module('Tear-down');

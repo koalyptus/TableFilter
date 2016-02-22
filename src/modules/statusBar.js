@@ -133,16 +133,15 @@ export class StatusBar extends Feature{
             ()=> this.message(this.msgLoadThemes));
 
         emitter.on([
-                'after-filtering',
-                'after-populating-filter',
-                'after-changing-page',
-                'after-clearing-filters',
-                'after-changing-results-per-page',
-                'after-reset-page',
-                'after-reset-page-length',
-                'after-loading-extensions',
-                'after-loading-themes'
-            ],
+            'after-filtering',
+            'after-populating-filter',
+            'after-changing-page',
+            'after-clearing-filters',
+            'after-changing-results-per-page',
+            'after-reset-page',
+            'after-reset-page-length',
+            'after-loading-extensions',
+            'after-loading-themes'],
             ()=> this.message('')
         );
 
@@ -205,16 +204,15 @@ export class StatusBar extends Feature{
             ()=> this.message(this.msgLoadThemes));
 
         emitter.off([
-                'after-filtering',
-                'after-populating-filter',
-                'after-changing-page',
-                'after-clearing-filters',
-                'after-changing-results-per-page',
-                'after-reset-page',
-                'after-reset-page-length',
-                'after-loading-extensions',
-                'after-loading-themes'
-            ],
+            'after-filtering',
+            'after-populating-filter',
+            'after-changing-page',
+            'after-clearing-filters',
+            'after-changing-results-per-page',
+            'after-reset-page',
+            'after-reset-page-length',
+            'after-loading-extensions',
+            'after-loading-themes'],
             ()=> this.message('')
         );
 

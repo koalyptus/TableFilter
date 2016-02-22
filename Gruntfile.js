@@ -18,7 +18,8 @@ module.exports = function (grunt) {
             target: [
                 'Gruntfile.js',
                 'webpack.config.js',
-                'src/**/*.js'
+                'src/**/*.js',
+                'test/*.js'
             ]
         },
 
@@ -350,7 +351,8 @@ module.exports = function (grunt) {
             grunt.task.run('connect');
             grunt.config('qunit.only.options.urls', res);
             grunt.task.run('qunit:only');
-    });
+        }
+    );
 
     function isTestFile(pth) {
         var allowedExts = ['.html', '.htm'];

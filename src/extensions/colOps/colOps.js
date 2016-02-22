@@ -123,7 +123,7 @@ export default class ColOps{
                     mThisCol=-1;
 
                 for(var k=0; k<colIndex.length; k++){
-                     if(colIndex[k] === ucolIndex[ucol]){
+                    if(colIndex[k] === ucolIndex[ucol]){
                         mThisCol++;
                         opsThisCol[mThisCol]=Str.lower(operation[k]);
                         decThisCol[mThisCol]=decimalPrecision[k];
@@ -135,25 +135,25 @@ export default class ColOps{
                         switch(opsThisCol[mThisCol]){
                             case 'mean':
                                 meanFlag=1;
-                            break;
+                                break;
                             case 'sum':
                                 sumFlag=1;
-                            break;
+                                break;
                             case 'min':
                                 minFlag=1;
-                            break;
+                                break;
                             case 'max':
                                 maxFlag=1;
-                            break;
+                                break;
                             case 'median':
                                 medFlag=1;
                                 break;
                             case 'q1':
                                 q1Flag=1;
-                            break;
+                                break;
                             case 'q3':
                                 q3Flag=1;
-                            break;
+                                break;
                         }
                     }
                 }
@@ -163,8 +163,10 @@ export default class ColOps{
                     if((q1Flag==1)|| (q3Flag==1) || (medFlag==1)){
                         if (j<colvalues[ucol].length -1){
                             for(k=j+1; k<colvalues[ucol].length; k++) {
+                                /* eslint-disable */
                                 if(eval(colvalues[ucol][k]) <
                                     eval(colvalues[ucol][j])){
+                                /* eslint-enable */
                                     temp = colvalues[ucol][j];
                                     colvalues[ucol][j] = colvalues[ucol][k];
                                     colvalues[ucol][k] = temp;
@@ -237,25 +239,25 @@ export default class ColOps{
                     switch( opsThisCol[i] ){
                         case 'mean':
                             result=meanValue;
-                        break;
+                            break;
                         case 'sum':
                             result=sumValue;
-                        break;
+                            break;
                         case 'min':
                             result=minValue;
-                        break;
+                            break;
                         case 'max':
                             result=maxValue;
-                        break;
+                            break;
                         case 'median':
                             result=medValue;
                             break;
                         case 'q1':
                             result=q1Value;
-                        break;
+                            break;
                         case 'q3':
                             result=q3Value;
-                        break;
+                            break;
                     }
 
                     var precision = !isNaN(decThisCol[i]) ? decThisCol[i] : 2;
@@ -273,17 +275,17 @@ export default class ColOps{
                                     } else{
                                         Dom.id(labThisCol[i]).innerHTML= result;
                                     }
-                                break;
+                                    break;
                                 case 'setvalue':
                                     Dom.id( labThisCol[i] ).value = result;
-                                break;
+                                    break;
                                 case 'createtextnode':
                                     var oldnode = Dom.id(labThisCol[i])
                                         .firstChild;
                                     var txtnode = Dom.text(result);
                                     Dom.id(labThisCol[i])
                                         .replaceChild(txtnode, oldnode);
-                                break;
+                                    break;
                             }//switch
                         }
                     } else {

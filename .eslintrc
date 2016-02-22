@@ -3,40 +3,24 @@
   "rules": {
     "max-len": [2, 80, 2, {"ignoreUrls": true}],
     "max-depth": [2, 7],
+    "no-unused-vars": 2,
+    "no-eval": 2,
     "no-underscore-dangle": 0,
     "no-loop-func": 2,
     "curly": 2,
     "quotes": [2, "single"],
-    //"indent": [2, 4],
+    "indent": [2, 4, {"SwitchCase": 1}],
     "no-trailing-spaces": 2,
     "no-multi-spaces": 2,
-    "array-bracket-spacing": 2/*,
-    "new-cap": 2*/
-    //"camelcase": [2, {"properties": "always"}]
-
-
-    /*"-W024": true,
-    "scripturl": true,
-    "evil": true,
-    "curly": true,
-    "indent": 4,
-    "es3": true,
-    "esnext": true,
-    "unused": true,
-    "maxlen" : 80,
-    "trailing": true,
-    "quotmark": "single",
-    "immed": true,
-    "maxstatements": 172,
-    "maxdepth": 7,
-    "maxcomplexity": 87,*/
+    "array-bracket-spacing": 2,
+    "new-cap": 2
   },
   "ecmaFeatures": {
     "modules": true
   },
   "env": {
-        "es6": true,
-        "browser": true,
-        "node": false
+    "es6": true,
+    "browser": true,
+    "node": false
   }
 }

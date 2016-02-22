@@ -45,7 +45,7 @@ function start(tf, sort){
     });
 
     test('Sort behaviour', function() {
-            validRows = tf.getValidRows();
+        validRows = tf.getValidRows();
         sort.sortByColumnIndex(1);
 
         deepEqual(sort.sorted, true, 'Table column sorted');
