@@ -11,13 +11,15 @@ html
   font-family: 'Roboto', sans-serif;
   overflow: auto;
   font-size: 14px;
-  color: #4d4e53;
-  background-color: #F9F9F9;
+  /*color: #4d4e53;*/
+  color: rgba(0, 0, 0, .68);
+  background-color: #fff;
 }
 
 a {
   /*color: #0095dd;*/
-  color:rgb(37, 138, 175);
+  /*color:rgb(37, 138, 175);*/
+  color: #039BE5;
 }
 
 code a:hover {
@@ -61,26 +63,47 @@ h3 {
   font-weight: 300;
 }
 
-p {
-  margin-bottom: 15px;
-  line-height: 19px;
+del {
+  text-decoration: line-through;
 }
 
-pre.prettyprint {
+p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+p > code {
+  background-color: #f5f5f5;
+  border-radius: 3px;
+}
+
+pre > code {
+  display: block;
+}
+
+pre.prettyprint, pre > code {
   padding: 4px;
-  border: solid 1px #ddd;
-  margin: 4px 0;
+  margin: 1em 0;
+  background-color: #f5f5f5;
+  border-radius: 3px;
+}
+
+pre.prettyprint > code {
+  margin: 0;
 }
 
 p > code,
 li > code {
   padding: 0 4px;
-  background: #ddd;
+  border-radius: 3px;
 }
 
-.import-path pre.prettyprint {
-  border: none;
+.import-path pre.prettyprint,
+.import-path pre.prettyprint code {
+  margin: 0;
   padding: 0;
+  border: none;
+  background: white;
 }
 
 .layout-container {
@@ -99,7 +122,7 @@ li > code {
   position: fixed;
   width: 100%;
   z-index: 1;
-  background-color: #F9F9F9;
+  background-color: white;
   top: 0;
   border-bottom: solid 1px #E02130;
 }
@@ -122,29 +145,15 @@ li > code {
   top: 0;
   left: 0;
   box-sizing: border-box;
-  width: 200px;
+  width: 250px;
   height: 100%;
   padding-top: 40px;
   padding-left: 15px;
-  padding-bottom: 20px;
+  padding-bottom: 2em;
+  margin-top:1em;
   overflow-x: scroll;
   box-shadow: rgba(255, 255, 255, 1) -1px 0 0 inset;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.navigation h1 {
-  border: none;
-  font-size: 18px;
-}
-
-.navigation h2 {
-  margin: 15px 0 4px;
-  font-size: 16px;
-  border: none;
-}
-
-.navigation h2 a {
-  color: inherit;
 }
 
 .navigation ul {
@@ -154,6 +163,60 @@ li > code {
 .navigation li {
   list-style: none;
   margin: 4px 0;
+  white-space: nowrap;
+}
+
+.navigation .nav-dir-path {
+  margin-top: 0.7em;
+  margin-bottom: 0.25em;
+  font-size: 0.8em;
+  color: #aaa;
+}
+
+.kind-class,
+.kind-interface,
+.kind-function,
+.kind-typedef,
+.kind-variable,
+.kind-external {
+  margin-left: 0.75em;
+  width: 1.2em;
+  height: 1.2em;
+  display: inline-block;
+  text-align: center;
+  border-radius: 0.2em;
+  margin-right: 0.2em;
+  font-weight: bold;
+}
+
+.kind-class {
+  color: #009800;
+  background-color: #bfe5bf;
+}
+
+.kind-interface {
+  color: #fbca04;
+  background-color: #fef2c0;
+}
+
+.kind-function {
+  color: #6b0090;
+  background-color: #d6bdde;
+}
+
+.kind-variable {
+  color: #eb6420;
+  background-color: #fad8c7;
+}
+
+.kind-typedef {
+  color: #db001e;
+  background-color: #edbec3;
+}
+
+.kind-external {
+  color: #0738c3;
+  background-color: #bbcbea;
 }
 
 h1 .version,
@@ -164,7 +227,7 @@ h1 .url a {
 
 .content {
   margin-top: 40px;
-  margin-left: 200px;
+  margin-left: 250px;
   padding: 10px 50px 10px 20px;
 }
 
@@ -414,15 +477,17 @@ h3 .right-info {
   bottom: -1px;
   display: inline-block;
   padding: 4px;
-  border: solid 1px #ddd;
-  border-bottom: none;
   font-style: italic;
-  background-color: #eee;
+  background-color: #f5f5f5;
   font-weight: bold;
+  border-radius: 3px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .example-caption + pre.source-code {
   margin-top: 0;
+  border-top-left-radius: 0;
 }
 
 footer, .file-footer {
@@ -431,7 +496,7 @@ footer, .file-footer {
   font-weight: 100;
   font-size: 13px;
   margin-right: 50px;
-  margin-left: 220px;
+  margin-left: 270px;
   border-top: 1px solid #ddd;
   padding-top: 30px;
   margin-top: 20px;
@@ -439,9 +504,13 @@ footer, .file-footer {
 }
 
 pre.source-code {
-  background: white;
-  border: solid 1px #ddd;
+  background: #f5f5f5;
   padding: 4px;
+}
+
+pre.raw-source-code > code {
+  padding: 0;
+  margin: 0;
 }
 
 pre.source-code.line-number {
@@ -462,6 +531,10 @@ pre.source-code li {
 
 pre.source-code.line-number li.active {
   background: rgb(255, 255, 150);
+}
+
+pre.source-code.line-number li.error-line {
+  background: #ffb8bf;
 }
 
 table.files-summary {
@@ -513,6 +586,8 @@ table.files-summary .coverage-count {
 }
 
 .total-coverage-count {
+  position: relative;
+  bottom: 2px;
   font-size: 12px;
   color: #666;
   font-weight: 500;
@@ -712,4 +787,158 @@ h1 .esdoc-coverage {
 
 .esdoc-coverage-high {
   background: linear-gradient(to bottom, #4fc921 0%,#3eb810 100%);
+}
+
+.github-markdown .manual-toc {
+  padding-left: 0;
+}
+
+/** manual */
+
+.manual-root .navigation {
+  padding-left: 0;
+}
+
+.navigation .manual-toc-title {
+  margin: 0;
+  padding: 0.5em 0 0.5em 1em;
+  border: none;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.navigation .manual-toc-title:first-child {
+  margin-top: 0;
+}
+
+.navigation .manual-toc {
+  display: none;
+  margin-left: 0.5em;
+  margin-top: -0.25em;
+}
+
+.github-markdown .manual-toc-title a {
+  color: inherit;
+}
+
+.manual-breadcrumb-list {
+  font-size: 0.8em;
+  margin-bottom: 1em;
+}
+
+.manual-toc-title a:hover {
+  color: #039BE5;
+}
+
+.manual-toc li {
+  margin: 0.75em 0;
+  list-style-type: none;
+}
+
+.manual-toc .indent-h1 {
+  margin-left: 0;
+}
+.manual-toc .indent-h2 {
+  margin-left: 1em;
+}
+.manual-toc .indent-h3 {
+  margin-left: 3em;
+}
+.manual-toc .indent-h4 {
+  margin-left: 4em;
+}
+.manual-toc .indent-h5 {
+  margin-left: 5em;
+}
+
+.manual-nav li {
+  margin: 0.75em 0;
+}
+
+.manual-dot {
+  margin-left: 0.75em;
+  width: 0.6em;
+  height: 0.6em;
+  display: inline-block;
+  border-radius: 0.3em;
+  margin-right: 0.3em;
+  background-color: #bfe5bf;
+}
+
+/* github markdown */
+.github-markdown {
+  font-size: 16px;
+}
+
+.github-markdown h1,
+.github-markdown h2,
+.github-markdown h3,
+.github-markdown h4,
+.github-markdown h5 {
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  padding: 0;
+}
+
+.github-markdown h1:nth-of-type(1) {
+  margin-top: 0;
+}
+
+.github-markdown h1 {
+  font-size: 2em;
+  padding-bottom: 0.3em;
+}
+
+.github-markdown h2 {
+  font-size: 1.75em;
+  padding-bottom: 0.3em;
+}
+
+.github-markdown h3 {
+  font-size: 1.5em;
+  background-color: transparent;
+}
+
+.github-markdown h4 {
+  font-size: 1.25em;
+}
+
+.github-markdown h5 {
+  font-size: 1em;
+}
+
+.github-markdown ul, .github-markdown ol {
+  padding-left: 2em;
+}
+
+.github-markdown pre > code {
+  font-size: 0.85em;
+}
+
+.github-markdown table {
+  margin-bottom: 1em;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.github-markdown table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.github-markdown table th,
+.github-markdown table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.github-markdown table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/** badge(.svg) does not have border */
+.github-markdown img:not([src*=".svg"]) {
+  max-width: 100%;
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.5);
 }
