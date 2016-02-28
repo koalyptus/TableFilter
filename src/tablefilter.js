@@ -431,7 +431,6 @@ export class TableFilter {
                 this.isUserTyping = false;
 
                 function filter() {
-                    /*jshint validthis:true */
                     global.clearInterval(this.autoFilterTimer);
                     this.autoFilterTimer = null;
                     if(!this.isUserTyping){
