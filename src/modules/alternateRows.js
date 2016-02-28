@@ -62,6 +62,7 @@ export class AlternateRows extends Feature {
     /**
      * Set/remove row background based on row validation
      * @param  {Number}  rowIdx  Row index
+     * @param  {Number}  arrIdx  Array index
      * @param  {Boolean} isValid Valid row flag
      */
     processRow(rowIdx, arrIdx, isValid) {
