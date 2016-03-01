@@ -456,8 +456,8 @@ export class Paging extends Feature{
 
     /**
      * Show page based on passed param value (string or number):
-     * @param {String} or {Number} cmd possible string values: 'next',
-     * 'previous', 'last', 'first' or page number as per param
+     * @param {String}/{Number} cmd possible string values: 'next',
+     *   'previous', 'last', 'first' or page number as per param
      */
     setPage(cmd){
         var tf = this.tf;

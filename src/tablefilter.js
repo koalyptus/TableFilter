@@ -431,7 +431,6 @@ export class TableFilter {
                 this.isUserTyping = false;
 
                 function filter() {
-                    /*jshint validthis:true */
                     global.clearInterval(this.autoFilterTimer);
                     this.autoFilterTimer = null;
                     if(!this.isUserTyping){
@@ -1804,7 +1803,7 @@ export class TableFilter {
 
     /**
      * Get the display value of a row
-     * @param  {RowElement} DOM element of the row
+     * @param  {RowElement} row DOM element of the row
      * @return {String}     Usually 'none' or ''
      */
     getRowDisplay(row){
@@ -1867,7 +1866,7 @@ export class TableFilter {
     /**
      * Set search value to a given filter
      * @param {Number} index     Column's index
-     * @param {String or Array}  searcharg Search term
+     * @param {String or Array} query  searcharg Search term
      */
     setFilterValue(index, query=''){
         if(!this.fltGrid){
