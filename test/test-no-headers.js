@@ -50,7 +50,8 @@
         tf.destroy();
         tf = new TableFilter('demo', {
             base_path: '../dist/tablefilter/',
-            grid_layout: true
+            grid_layout: true,
+            grid_no_headers: true
         });
         tf.init();
 
@@ -58,6 +59,13 @@
         deepEqual(tf.getFiltersRowIndex(), 1, 'Filters row index');
         deepEqual(tf.refRow, 0, 'Reference row index');
         notEqual(tf.getFilterElement(0), null, 'Filter element for column 0');
+        deepEqual(tf.getRowsNb(), 7, 'Filterable rows number');
+    });
+    test('Can perform a search', function() {
+        tf.setFilterValue(2, '<900');
+        tf.filter();
+
+        deepEqual(tf.getValidRows(), [2,3], 'Filtered row');
     });
 
     // With no toolbar cannot clear filters :)
