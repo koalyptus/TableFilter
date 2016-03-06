@@ -2016,6 +2016,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/gridlayout.js~gridlayout#noheaders",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-noHeaders",
+    "src/modules/gridLayout.js~GridLayout#noHeaders",
+    "member"
+  ],
+  [
     "src/modules/gridlayout.js~gridlayout#prfxgridflttd",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxGridFltTd",
     "src/modules/gridLayout.js~GridLayout#prfxGridFltTd",

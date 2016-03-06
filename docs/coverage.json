@@ -1,6 +1,6 @@
 {
-  "coverage": "24.89%",
-  "expectCount": 703,
+  "coverage": "24.85%",
+  "expectCount": 704,
   "actualCount": 175,
   "files": {
     "src/extensions/advancedGrid/adapterEzEditTable.js": {
@@ -404,13 +404,13 @@
       ]
     },
     "src/modules/gridLayout.js": {
-      "expectCount": 28,
+      "expectCount": 29,
       "actualCount": 3,
       "undocumentLines": [
         7,
-        41,
+        42,
         25,
-        39,
+        40,
         36,
         27,
         32,
@@ -419,19 +419,20 @@
         30,
         23,
         19,
-        158,
-        146,
-        312,
-        52,
-        54,
-        50,
-        48,
-        44,
-        46,
-        56,
-        120,
-        257,
-        111
+        159,
+        147,
+        321,
+        38,
+        53,
+        55,
+        51,
+        49,
+        45,
+        47,
+        57,
+        121,
+        266,
+        112
       ]
     },
     "src/modules/help.js": {
