@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/checkList.js | tablefilter v0.1.17 API Document</title>
+  <title data-ice="title">src/modules/checkList.js | tablefilter v0.1.18 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -416,17 +416,15 @@ export class CheckList extends Feature{
         if(!o){
             return;
         }
+
         let tf = this.tf;
         let chkValue = o.value; //checked item value
         let chkIndex = parseInt(o.id.split(&apos;_&apos;)[2], 10);
-        let filterTag = &apos;ul&apos;, itemTag = &apos;li&apos;;
-        let n = o;
+        // TODO: provide helper to extract column index, ugly!
+        let colIdx = o.id.split(&apos;_&apos;)[0].replace(tf.prfxFlt, &apos;&apos;);
+        let itemTag = &apos;LI&apos;;
 
-        //ul tag search
-        while(Str.lower(n.nodeName)!==filterTag){
-            n = n.parentNode;
-        }
-
+        let n = tf.getFilterElement(parseInt(colIdx, 10));
         let li = n.childNodes[chkIndex];
         let colIndex = n.getAttribute(&apos;colIndex&apos;);
         let fltValue = n.getAttribute(&apos;value&apos;); //filter value (ul tag)
@@ -434,7 +432,7 @@ export class CheckList extends Feature{
 
         if(o.checked){
             //show all item
-            if(chkValue===&apos;&apos;){
+            if(chkValue === &apos;&apos;){
                 if((fltIndexes &amp;&amp; fltIndexes!==&apos;&apos;)){
                     //items indexes
                     let indSplit = fltIndexes.split(tf.separator);
@@ -467,13 +465,13 @@ export class CheckList extends Feature{
                 }
             }
 
-            if(Str.lower(li.nodeName) === itemTag){
+            if(li.nodeName === itemTag){
                 Dom.removeClass(
                     n.childNodes[0], this.checkListSlcItemCssClass);
                 Dom.addClass(li, this.checkListSlcItemCssClass);
             }
         } else { //removes values and indexes
-            if(chkValue!==&apos;&apos;){
+            if(chkValue !== &apos;&apos;){
                 let replaceValue = new RegExp(
                         Str.rgxEsc(chkValue+&apos; &apos;+tf.orOperator));
                 fltValue = fltValue.replace(replaceValue,&apos;&apos;);
@@ -484,7 +482,7 @@ export class CheckList extends Feature{
                 fltIndexes = fltIndexes.replace(replaceIndex, &apos;&apos;);
                 n.setAttribute(&apos;indexes&apos;, fltIndexes);
             }
-            if(Str.lower(li.nodeName)===itemTag){
+            if(li.nodeName === itemTag){
                 Dom.removeClass(li, this.checkListSlcItemCssClass);
             }
         }
