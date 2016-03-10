@@ -681,10 +681,6 @@ export class TableFilter {
             fltrow = this.tbl.insertRow(this.filtersRowIndex);
         }
 
-        // if(this.headersRow > 1 && this.filtersRowIndex <= this.headersRow){
-        //     this.headersRow++;
-        // }
-
         fltrow.className = this.fltsRowCssClass;
 
         if(this.isExternalFlt){
