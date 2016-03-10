@@ -355,17 +355,15 @@ export class CheckList extends Feature{
         if(!o){
             return;
         }
+
         let tf = this.tf;
         let chkValue = o.value; //checked item value
         let chkIndex = parseInt(o.id.split('_')[2], 10);
-        let filterTag = 'ul', itemTag = 'li';
-        let n = o;
+        // TODO: provide helper to extract column index, ugly!
+        let colIdx = o.id.split('_')[0].replace(tf.prfxFlt, '');
+        let itemTag = 'LI';
 
-        //ul tag search
-        while(Str.lower(n.nodeName)!==filterTag){
-            n = n.parentNode;
-        }
-
+        let n = tf.getFilterElement(parseInt(colIdx, 10));
         let li = n.childNodes[chkIndex];
         let colIndex = n.getAttribute('colIndex');
         let fltValue = n.getAttribute('value'); //filter value (ul tag)
@@ -373,7 +371,7 @@ export class CheckList extends Feature{
 
         if(o.checked){
             //show all item
-            if(chkValue===''){
+            if(chkValue === ''){
                 if((fltIndexes && fltIndexes!=='')){
                     //items indexes
                     let indSplit = fltIndexes.split(tf.separator);
@@ -406,13 +404,13 @@ export class CheckList extends Feature{
                 }
             }
 
-            if(Str.lower(li.nodeName) === itemTag){
+            if(li.nodeName === itemTag){
                 Dom.removeClass(
                     n.childNodes[0], this.checkListSlcItemCssClass);
                 Dom.addClass(li, this.checkListSlcItemCssClass);
             }
         } else { //removes values and indexes
-            if(chkValue!==''){
+            if(chkValue !== ''){
                 let replaceValue = new RegExp(
                         Str.rgxEsc(chkValue+' '+tf.orOperator));
                 fltValue = fltValue.replace(replaceValue,'');
@@ -423,7 +421,7 @@ export class CheckList extends Feature{
                 fltIndexes = fltIndexes.replace(replaceIndex, '');
                 n.setAttribute('indexes', fltIndexes);
             }
-            if(Str.lower(li.nodeName)===itemTag){
+            if(li.nodeName === itemTag){
                 Dom.removeClass(li, this.checkListSlcItemCssClass);
             }
         }
