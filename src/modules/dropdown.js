@@ -118,10 +118,8 @@ export class Dropdown extends Feature{
      * Build drop-down filter UI
      * @param  {Number}  colIndex    Column index
      * @param  {Boolean} isLinked    Enable linked refresh behaviour
-     * @param  {Boolean} isExternal  Render in external container
-     * @param  {String}  extSlcId    External container id
      */
-    build(colIndex, isLinked=false, isExternal=false, extSlcId=null){
+    build(colIndex, isLinked=false){
         let tf = this.tf;
         colIndex = parseInt(colIndex, 10);
 
@@ -132,11 +130,7 @@ export class Dropdown extends Feature{
         this.slcInnerHtml = '';
 
         let slcId = tf.fltIds[colIndex];
-        if((!Dom.id(slcId) && !isExternal) ||
-            (!Dom.id(extSlcId) && isExternal)){
-            return;
-        }
-        let slc = !isExternal ? Dom.id(slcId) : Dom.id(extSlcId),
+        let slc = Dom.id(slcId),
             rows = tf.tbl.rows,
             matchCase = tf.matchCase;
 
@@ -175,24 +169,24 @@ export class Dropdown extends Feature{
             // this loop retrieves cell data
             for(let j=0; j<nchilds; j++){
                 // WTF: cyclomatic complexity hell
-                if((colIndex===j &&
+                if((colIndex === j &&
                     (!isLinked ||
                         (isLinked && tf.disableExcludedOptions))) ||
-                    (colIndex==j && isLinked &&
+                    (colIndex === j && isLinked &&
                         ((rows[k].style.display === '' && !tf.paging) ||
                     (tf.paging && (!tf.validRowsIndex ||
                         (tf.validRowsIndex &&
                             tf.validRowsIndex.indexOf(k) != -1)) &&
-                        ((activeFlt===undefined || activeFlt==colIndex) ||
-                            (activeFlt!=colIndex &&
+                        ((activeFlt === undefined || activeFlt === colIndex) ||
+                            (activeFlt != colIndex &&
                                 tf.validRowsIndex.indexOf(k) != -1 ))) ))){
-                    let cell_data = tf.getCellData(cell[j]),
+                    let cellData = tf.getCellData(cell[j]),
                         //Vary Peter's patch
-                        cell_string = Str.matchCase(cell_data, matchCase);
+                        cellString = Str.matchCase(cellData, matchCase);
 
                     // checks if celldata is already in array
-                    if(!Arr.has(this.opts, cell_string, matchCase)){
-                        this.opts.push(cell_data);
+                    if(!Arr.has(this.opts, cellString, matchCase)){
+                        this.opts.push(cellData);
                     }
 
                     if(isLinked && tf.disableExcludedOptions){
@@ -200,10 +194,10 @@ export class Dropdown extends Feature{
                         if(!filteredCol){
                             filteredCol = tf.getFilteredDataCol(j);
                         }
-                        if(!Arr.has(filteredCol, cell_string, matchCase) &&
+                        if(!Arr.has(filteredCol, cellString, matchCase) &&
                             !Arr.has(
-                                excludedOpts, cell_string, matchCase)){
-                            excludedOpts.push(cell_data);
+                                excludedOpts, cellString, matchCase)){
+                            excludedOpts.push(cellData);
                         }
                     }
                 }//if colIndex==j
@@ -298,7 +292,7 @@ export class Dropdown extends Feature{
 
             let opt;
             //fill select on demand
-            if(tf.loadFltOnDemand && slcValue===this.opts[y] &&
+            if(tf.loadFltOnDemand && slcValue === this.opts[y] &&
                 tf.getFilterType(colIndex) === tf.fltTypeSlc){
                 opt = Dom.createOpt(lbl, val, true);
             } else {

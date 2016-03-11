@@ -123,10 +123,8 @@ export class CheckList extends Feature{
     /**
      * Build checklist UI
      * @param  {Number}  colIndex   Column index
-     * @param  {Boolean} isExternal Render in external container
-     * @param  {String}  extFltId   External container id
      */
-    build(colIndex, isExternal=false, extFltId=null){
+    build(colIndex){
         let tf = this.tf;
         colIndex = parseInt(colIndex, 10);
 
@@ -135,13 +133,7 @@ export class CheckList extends Feature{
         this.opts = [];
         this.optsTxt = [];
 
-        let divFltId = this.prfxCheckListDiv+colIndex+'_'+tf.id;
-        if((!Dom.id(divFltId) && !isExternal) ||
-            (!Dom.id(extFltId) && isExternal)){
-            return;
-        }
-
-        let flt = !isExternal ? this.checkListDiv[colIndex] : Dom.id(extFltId);
+        let flt = this.checkListDiv[colIndex];
         let ul = Dom.create(
             'ul', ['id', tf.fltIds[colIndex]], ['colIndex', colIndex]);
         ul.className = this.checkListCssClass;
@@ -181,29 +173,30 @@ export class CheckList extends Feature{
             // this loop retrieves cell data
             for(let j=0; j<ncells; j++){
                 // WTF: cyclomatic complexity hell :)
-                if((colIndex===j && (!tf.linkedFilters ||
+                if((colIndex === j && (!tf.linkedFilters ||
                     (tf.linkedFilters && tf.disableExcludedOptions)))||
-                    (colIndex===j && tf.linkedFilters &&
+                    (colIndex === j && tf.linkedFilters &&
                     ((rows[k].style.display === '' && !tf.paging) ||
-                    (tf.paging && ((!activeFlt || activeFlt===colIndex )||
-                    (activeFlt!=colIndex &&
+                    (tf.paging && ((!activeFlt || activeFlt === colIndex )||
+                    (activeFlt != colIndex &&
                         tf.validRowsIndex.indexOf(k) != -1)) )))){
-                    let cell_data = tf.getCellData(cells[j]);
+
+                    let cellData = tf.getCellData(cells[j]);
                     //Vary Peter's patch
-                    let cell_string = Str.matchCase(cell_data, tf.matchCase);
+                    let cellString = Str.matchCase(cellData, tf.matchCase);
                     // checks if celldata is already in array
-                    if(!Arr.has(this.opts, cell_string, tf.matchCase)){
-                        this.opts.push(cell_data);
+                    if(!Arr.has(this.opts, cellString, tf.matchCase)){
+                        this.opts.push(cellData);
                     }
                     let filteredCol = filteredDataCol[j];
                     if(tf.linkedFilters && tf.disableExcludedOptions){
                         if(!filteredCol){
                             filteredCol = tf.getFilteredDataCol(j);
                         }
-                        if(!Arr.has(filteredCol, cell_string, tf.matchCase) &&
+                        if(!Arr.has(filteredCol, cellString, tf.matchCase) &&
                             !Arr.has(this.excludedOpts,
-                                cell_string, tf.matchCase)){
-                            this.excludedOpts.push(cell_data);
+                                cellString, tf.matchCase)){
+                            this.excludedOpts.push(cellData);
                         }
                     }
                 }
