@@ -2033,7 +2033,7 @@ export class TableFilter {
 
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement
-            if(activeFlt!==slcIndex[i] ||
+            if(activeFlt !== slcIndex[i] ||
                 (this.paging && slcA1.indexOf(slcIndex[i]) != -1 &&
                     activeFlt === slcIndex[i] ) ||
                 (!this.paging && (slcA3.indexOf(slcIndex[i]) != -1 ||
@@ -2049,10 +2049,10 @@ export class TableFilter {
 
                 if(slcA3.indexOf(slcIndex[i]) != -1){
                     this.emitter.emit('build-checklist-filter', this,
-                        slcIndex[i], this.isExternalFlt);
+                        slcIndex[i]);
                 } else {
                     this.emitter.emit('build-select-filter', this, slcIndex[i],
-                        true, this.isExternalFlt);
+                        true);
                 }
 
                 this.setFilterValue(slcIndex[i], slcSelectedValue);
