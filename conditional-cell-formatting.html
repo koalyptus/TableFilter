@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Editable grid | TableFilter</title>
+    <title>Conditional cell formatting | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -166,59 +166,13 @@
     <div class="container theme-showcase" role="main">
 
       
-<link rel="stylesheet" type="text/css" href="tablefilter/style/tablefilter.css">
-<h1>Editable grid</h1>
+
+<h1>Conditional cell formatting</h1>
 
 <p>
-    To make the grid cells editable, you need to import the
-    <a href="http://edittable.free.fr/zip.php?f=ezEditTable.zip&amp;p=1"
-target="_blank"
-title="ezEditTable is a javascript code aimed at enhancing regular HTML
-tables by adding features such as inline editing components, advanced
-selection and keyboard navigation - Developed by Max Guglielmi">
-ezEditTable</a>
- plugin, enable the <code>editable</code> property
-    and configure the <code>advancedGrid</code> extension with the
-    <a href="http://edittable.free.fr/zip.php?f=ezEditTable.zip&amp;p=1"
-target="_blank"
-title="ezEditTable is a javascript code aimed at enhancing regular HTML
-tables by adding features such as inline editing components, advanced
-selection and keyboard navigation - Developed by Max Guglielmi">
-ezEditTable</a>
- options.
+    This demo shows how to conditionally format a cell by subscribing
+    to <code>TableFilter</code> events.
 </p>
-<div class="alert alert-info" role="alert">
-    <p>
-        Instructions: Double-click on a cell or press <code>enter</code> key to
-        trigger the inline editor.
-        <br>
-        NOTE: Data changes are not persisted in this demo.
-    </p>
-</div>
-
-
-<div data-config>
-    <div class="ezCommandEditor">
-        <button onclick="
-            var advancedGrid = tf.extension('advancedGrid');
-            var ezEditTable = advancedGrid._ezEditTable;
-            ezEditTable.Editable.Edit();">
-            <img src="http://edittable.free.fr/ezEditTable/themes/icn_edit.gif" alt="Edit record">
-        </button>
-        <button onclick="
-            var advancedGrid = tf.extension('advancedGrid');
-            var ezEditTable = advancedGrid._ezEditTable;
-            ezEditTable.Editable.AddNewRow();">
-            <img src="http://edittable.free.fr/ezEditTable/themes/icn_add.gif" alt="Add record">
-        </button>
-        <button onclick="
-            var advancedGrid = tf.extension('advancedGrid');
-            var ezEditTable = advancedGrid._ezEditTable;
-            ezEditTable.Editable.SubmitDeletedRows();">
-            <img src="http://edittable.free.fr/ezEditTable/themes/icn_del.gif" alt="Delete record">
-        </button>
-    </div>
-</div>
 
 
 
@@ -13177,113 +13131,74 @@ ezEditTable</a>
 </table>
 
 
-<p></p>
-
-<div class="alert alert-warning" role="alert">
-    <code>TableFilter</code> imports the required stylesheets dynamically.
-    However, if you use <code>grid_layout</code>, it is recommended to
-    import the main stylesheet in your page: <br>
-    <code>
-&lt;link rel="stylesheet" type="text/css" href="{your path to tablefilter}/style/tablefilter.css" /&gt;
-    </code>
-</div>
-
 
 <script src="tablefilter/tablefilter.js"></script>
 
 
 <script data-config>
-    var filtersConfig = {
+    var tfConfig = {
         base_path: 'tablefilter/',
-        grid_layout: true,
-        grid_width: '900px',
         alternate_rows: true,
         btn_reset: true,
         rows_counter: true,
         loader: true,
         status_bar: true,
+        col_0: 'select',
         col_1: 'select',
         col_2: 'select',
-        col_widths: [
-            '150px', '90px', '70px',
-            '120px', '120px', '100px',
-            '100px', '100px', '100px'
-        ],
-        extensions:[
-            {
-                name: 'advancedGrid',
-                // For the purpose of this demo, ezEditTable dependency
-                // is loaded from its own website which is not a CDN.
-                // This dependency also requires a licence therefore
-                // DO NOT import it in this way in your projects.
-                filename: 'ezEditTable_min.js',
-                vendor_path: 'http://edittable.free.fr/ezEditTable/',
-                // Once ezEditTable dependency is installed in your
-                // project import it by pointing to a local path:
-                // vendor_path: 'path/to/ezEditTable'
-
-                // Below ezEditTable options for activating:
-                // - row/cells selection
-                // - cell inline edition
-                editable: true,
-                selection: true,
-                default_selection: 'both',
-
-                editor_model: 'cell',
-                cell_editors: [
-                    { type: 'textarea', attributes: [['title', 'Country name']]},
-                    { type: 'input', attributes: [['title', 'ISO code']]},
-                    { type: 'select', attributes: [['title', 'Year']]},
-                    { type: 'input' },
-                    { type: 'input' },
-                    { type: 'input' },
-                    { type: 'input' },
-                    { type: 'input' },
-                    { type: 'input' }
-                ],
-
-                actions:{
-                    'update': {
-                        uri: null,
-                        submit_method: 'form',
-                        form_method: 'POST'
-                    },
-                    'insert': {
-                        uri: null,
-                        submit_method: 'form',
-                        form_method: 'POST',
-                        default_record: [
-                            'Country name',
-                            'ISO code',
-                            'Year',
-                            'Population',
-                            'XRAT',
-                            'PPP',
-                            'cgdp',
-                            'cc',
-                            'ci'
-                        ]
-                    },
-                    'delete': {
-                        uri: null,
-                        submit_method: 'script',
-                        bulk_delete: false
-                    }
-                }
-            }, {
-                name: 'sort',
-                types: [
-                    'string', 'string', 'number',
-                    'number', 'number', 'number',
-                    'number', 'number', 'number'
-                ]
-            }
-        ]
+        extensions:[{
+            name: 'sort',
+            types: [
+                'string', 'string', 'number',
+                'number', 'number', 'number',
+                'number', 'number', 'number'
+            ]
+        }]
     };
+    var tf = new TableFilter(document.querySelector('#demo'), tfConfig);
 
-    var tf = new TableFilter('demo', filtersConfig);
+    // Subscribe to events
+    // Format cell at initialization
+    tf.emitter.on(['initialized'], parseRows);
+    // Format cell upon filtering
+    tf.emitter.on(['cell-processed'], formatCell);
+
     tf.init();
+
+    // Process all rows on start-up
+    function parseRows(tf){
+        var cellIndex = 3; // POP column
+        var rowsIdx = tf.getValidRows();
+        rowsIdx.forEach(function(idx){
+            var row = tf.tbl.rows[idx];
+            var cell = row.cells[cellIndex];
+            formatCell(tf, cellIndex, cell);
+        });
+    }
+
+    // Format passed cell with custom logic
+    function formatCell(tf, cellIndex, cell){
+        if(cellIndex !== 3){
+            return;
+        }
+        var cellData = parseInt(cell.innerHTML, 10);
+
+        // some rows do not contain a numeric value
+        if(isNaN(cellData)){
+            return;
+        }
+
+        if(cellData >= 100000){
+            cell.style.backgroundColor = '#ff0000';
+        } else if(cellData < 100000 && cellData >= 50000) {
+            cell.style.backgroundColor = '#3399ff';
+        } else {
+            cell.style.backgroundColor = '#cfff33';
+        }
+    }
 </script>
+
+<p></p>
 
 <hr>
 <ul class="nav nav-pills">
@@ -13405,7 +13320,6 @@ ezEditTable</a>
 
     </div>
 </div>
-
 
 
     </div>
