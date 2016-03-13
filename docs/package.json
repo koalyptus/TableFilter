@@ -28,7 +28,7 @@
     "tag": "next"
   },
   "devDependencies": {
-    "babel-core": "^6.7.0",
+    "babel-core": "^6.7.2",
     "babel-eslint": "5.0.0",
     "babel-loader": "^6.0.1",
     "babel-preset-es2015": "^6.5.0",
