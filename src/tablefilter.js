@@ -21,6 +21,7 @@ import {ClearButton} from './modules/clearButton';
 import {Help} from './modules/help';
 import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
+import {State} from './modules/state';
 
 let global = window,
     doc = global.document;
@@ -335,6 +336,9 @@ export class TableFilter {
         this.noResults = Types.isObj(f.no_results_message) ||
             Boolean(f.no_results_message);
 
+        // stateful
+        this.isStateful = Types.isObj(f.stateful) || Boolean(f.stateful);
+
         /*** data types ***/
         //defines default date type (european DMY)
         this.defaultDateType = f.default_date_type || 'DMY';
@@ -496,6 +500,13 @@ export class TableFilter {
         }
         if(this.help){
             Mod.help.init();
+        }
+
+        if(this.isStateful){
+            if(!Mod.state){
+                Mod.state = new State(tf);
+            }
+            Mod.state.init();
         }
 
         if(this.hasPersistence){
