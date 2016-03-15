@@ -173,7 +173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _noResults = __webpack_require__(25);
 	
-	var _state = __webpack_require__(26);
+	var _stateful = __webpack_require__(26);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -668,10 +668,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            if (this.isStateful) {
-	                if (!Mod.state) {
-	                    Mod.state = new _state.State(tf);
+	                if (!Mod.stateful) {
+	                    Mod.stateful = new _stateful.Stateful(tf);
 	                }
-	                Mod.state.init();
+	                Mod.stateful.init();
 	            }
 	
 	            if (this.hasPersistence) {
@@ -7695,11 +7695,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.State = undefined;
+	exports.Stateful = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _feature = __webpack_require__(11);
+	
+	var _string = __webpack_require__(3);
+	
+	var _string2 = _interopRequireDefault(_string);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -7708,36 +7714,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var global = window;
+	var JSON = global.JSON;
+	var location = global.location;
 	var hasHashChange = function hasHashChange() {
 	    var docMode = global.documentMode;
 	    return 'onhashchange' in global && (docMode === undefined || docMode > 7);
 	};
 	
-	var State = exports.State = function (_Feature) {
-	    _inherits(State, _Feature);
+	var Stateful = exports.Stateful = function (_Feature) {
+	    _inherits(Stateful, _Feature);
 	
 	    /**
-	     * Makes selected features stateful via URL hash
+	     * Makes features stateful via URL hash
 	     * @param {Object} tf TableFilter instance
 	     */
 	
-	    function State(tf) {
-	        _classCallCheck(this, State);
+	    function Stateful(tf) {
+	        _classCallCheck(this, Stateful);
 	
-	        //configuration object
-	
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(State).call(this, tf, 'state'));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Stateful).call(this, tf, 'stateful'));
 	
 	        var cfg = _this.config.stateful;
 	
-	        _this.filters = cfg.filters === false ? false : true;
+	        _this.persistFilters = cfg.filters === false ? false : true;
+	        _this.persistPageNumber = Boolean(cfg.page_number);
 	
+	        _this.pageNb = null;
 	        _this.lastHash = null;
-	        _this.hashObj = {};
+	        _this.state = {};
+	        _this.prfxCol = 'col_';
+	        _this.prfxPageNb = 'page';
 	        return _this;
 	    }
 	
-	    _createClass(State, [{
+	    _createClass(Stateful, [{
 	        key: 'init',
 	        value: function init() {
 	            var _this2 = this;
@@ -7746,59 +7756,117 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	
-	            // subscribe to after-filtering event
+	            this.emitter.on(['initialized'], function () {
+	                return _this2.sync();
+	            });
 	            this.emitter.on(['after-filtering'], function () {
+	                return _this2.update();
+	            });
+	            this.emitter.on(['after-changing-page'], function () {
 	                return _this2.update();
 	            });
 	
 	            this.initialized = true;
 	        }
 	    }, {
-	        key: 'formatHash',
-	        value: function formatHash() {
+	        key: 'format',
+	        value: function format() {
 	            var _this3 = this;
 	
-	            if (this.filters) {
-	                var filterValues = this.tf.getFiltersValue();
+	            var tf = this.tf;
+	
+	            if (this.persistFilters) {
+	                var filterValues = tf.getFiltersValue();
 	
 	                filterValues.forEach(function (val, idx) {
-	                    _this3.hashObj['col_' + idx] = _this3.hashObj['col_' + idx] || {};
-	                    _this3.hashObj['col_' + idx]['flt'] = val;
+	                    var key = '' + _this3.prfxCol + idx;
+	
+	                    if (_string2.default.isEmpty(val)) {
+	                        if (_this3.state.hasOwnProperty(key)) {
+	                            _this3.state[key] = undefined;
+	                        }
+	                    } else {
+	                        _this3.state[key] = _this3.state[key] || {};
+	                        _this3.state[key].flt = val;
+	                    }
 	                });
 	            }
 	
-	            return '#' + JSON.stringify(this.hashObj);
+	            if (this.persistPageNumber) {
+	                var pageNumber = tf.feature('paging').getPage();
+	                this.state[this.prfxPageNb] = pageNumber;
+	            }
+	
+	            return '#' + JSON.stringify(this.state);
+	        }
+	    }, {
+	        key: 'parse',
+	        value: function parse(hash) {
+	            if (hash.indexOf('#') === 0) {
+	                hash = hash.substr(1);
+	            } else {
+	                hash = '{}';
+	            }
+	            return JSON.parse(hash);
 	        }
 	    }, {
 	        key: 'update',
 	        value: function update() {
-	            var hash = this.formatHash();
+	            var hash = this.format();
 	            console.log(hash, this.lastHash, this.lastHash === hash);
 	            if (this.lastHash === hash) {
 	                return;
 	            }
 	
-	            global.location.hash = hash;
+	            location.hash = hash;
 	            this.lastHash = hash;
+	        }
+	    }, {
+	        key: 'sync',
+	        value: function sync() {
+	            var _this4 = this;
+	
+	            var state = this.parse(location.hash);
+	            var tf = this.tf;
+	
+	            if (this.persistFilters) {
+	                Object.keys(state).forEach(function (key) {
+	                    if (key.indexOf(_this4.prfxCol) !== -1) {
+	                        var colIdx = parseInt(key.replace(_this4.prfxCol, ''));
+	                        var val = state[key].flt;
+	                        tf.setFilterValue(colIdx, val);
+	                    }
+	                });
+	
+	                tf.filter();
+	            }
+	
+	            if (this.persistPageNumber) {
+	                var pageNumber = state[this.prfxPageNb];
+	                tf.feature('paging').setPage(pageNumber);
+	            }
 	        }
 	    }, {
 	        key: 'destroy',
 	        value: function destroy() {
-	            var _this4 = this;
+	            var _this5 = this;
 	
 	            if (!this.initialized) {
 	                return;
 	            }
 	
+	            this.emitter.on(['initialized'], function () {
+	                return _this5.sync();
+	            });
 	            this.emitter.off(['after-filtering'], function () {
-	                return _this4.update();
+	                return _this5.update();
 	            });
 	
 	            this.initialized = false;
 	        }
 	    }]);
 	
-	    return State;
+	    return Stateful;
 	}(_feature.Feature);
 
 /***/ }
