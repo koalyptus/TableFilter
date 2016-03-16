@@ -570,7 +570,7 @@ export class Paging extends Feature{
             return;
         }
 
-        this.emitter.emit('before-changing-page', tf, index);
+        this.emitter.emit('before-page-change', tf, index);
 
         if(index === null){
             index = this.pageSelectorType === tf.fltTypeSlc ?
@@ -597,7 +597,7 @@ export class Paging extends Feature{
             }
         }
 
-        this.emitter.emit('after-changing-page', tf, index);
+        this.emitter.emit('after-page-change', tf, index);
     }
 
     /**
@@ -611,7 +611,7 @@ export class Paging extends Feature{
             return;
         }
 
-        this.emitter.emit('before-changing-results-per-page', tf);
+        this.emitter.emit('before-page-length-change', tf);
 
         var slcR = this.resultsPerPageSlc;
         var slcIndex = slcR.selectedIndex;
@@ -635,7 +635,7 @@ export class Paging extends Feature{
             }
         }
 
-        this.emitter.emit('after-changing-results-per-page', tf, slcIndex);
+        this.emitter.emit('after-page-length-change', tf, slcIndex);
     }
 
     /**

@@ -17,7 +17,8 @@
     "no-trailing-spaces": 2,
     "no-multi-spaces": 2,
     "array-bracket-spacing": 2,
-    "new-cap": 2
+    "new-cap": 2,
+    "radix": [2, "always"]
   },
   "ecmaFeatures": {
     "modules": true

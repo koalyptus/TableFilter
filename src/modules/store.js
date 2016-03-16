@@ -29,9 +29,9 @@ export class Store{
     init(){
         this.emitter.on(['after-filtering'], ()=> this.saveFilterValues());
         this.emitter.on(['after-clearing-filters'], ()=> this.clearCookies());
-        this.emitter.on(['after-changing-page'],
+        this.emitter.on(['after-page-change'],
             (tf, index)=> this.savePageNb(index));
-        this.emitter.on(['after-changing-results-per-page'],
+        this.emitter.on(['after-page-length-change'],
             (tf, index)=> this.savePageLength(index));
     }
 
@@ -138,9 +138,9 @@ export class Store{
     destroy(){
         this.emitter.off(['after-filtering'], ()=> this.saveFilterValues());
         this.emitter.off(['after-clearing-filters'], ()=> this.clearCookies());
-        this.emitter.off(['after-changing-page'],
+        this.emitter.off(['after-page-change'],
             (tf, index)=> this.savePageNb(index));
-        this.emitter.off(['after-changing-results-per-page'],
+        this.emitter.off(['after-page-length-change'],
             (tf, index)=> this.savePageLength(index));
     }
 }
