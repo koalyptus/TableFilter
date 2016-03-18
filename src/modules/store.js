@@ -82,15 +82,15 @@ export class Store{
 
     /**
      * Store page number in cookie
-     * @param {Number} index page index to persist
+     * @param {Number} pageIndex page index to persist
      */
-    savePageNb(index){
+    savePageNb(pageIndex){
         if(!this.tf.rememberPageNb){
             return;
         }
         Cookie.write(
             this.pgNbCookie,
-            (index+1),
+            pageIndex,
             this.duration
         );
     }

@@ -1495,7 +1495,7 @@ export class TableFilter {
             this.onAfterFilter.call(null, this);
         }
 
-        this.emitter.emit('after-filtering', this);
+        this.emitter.emit('after-filtering', this, searchArgs);
     }
 
     /**

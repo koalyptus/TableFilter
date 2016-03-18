@@ -1,6 +1,7 @@
 import {Feature} from './feature';
 import Str from '../string';
 import Event from '../event';
+import Types from '../types';
 
 const global = window;
 const JSON = global.JSON;
@@ -13,8 +14,9 @@ const hasHashChange = () => {
 export class Stateful extends Feature {
 
     /**
-     * Makes features stateful via URL hash
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of Stateful.
+     *
+     * @param tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'stateful');
@@ -26,11 +28,13 @@ export class Stateful extends Feature {
         this.persistPageLength = Boolean(cfg.page_length);
 
         this.pageNb = null;
+        this.pageLength = null;
         this.lastHash = null;
+
         this.state = {};
         this.prfxCol = 'col_';
         this.pageNbKey = 'page';
-        this.pageResultsKey = 'results';
+        this.pageLengthKey = 'results';
     }
 
     init() {
@@ -39,14 +43,15 @@ export class Stateful extends Feature {
         }
 
         this.emitter.on(['initialized'], () => this.sync());
-        this.emitter.on([
-            'after-filtering',
-            'after-page-change',
-            'after-page-length-change'
-        ], () => this.update());
+        this.emitter.on(['after-filtering'], () => this.update());
+        this.emitter.on(['after-page-change'],
+            (tf, pageNb) => this.updatePage(pageNb));
+        this.emitter.on(['after-page-length-change'],
+            (tf, index) => this.updatePageLength(index));
 
         Event.add(global, 'hashchange', () => this.sync());
 
+        this.lastHash = location.hash;
         this.initialized = true;
     }
 
@@ -72,12 +77,19 @@ export class Stateful extends Feature {
         }
 
         if (this.persistPageNumber) {
-            let pageNumber = tf.feature('paging').getPage();
-            this.state[this.pageNbKey] = pageNumber;
+            if(Types.isNull(this.pageNb)){
+                this.state[this.pageNbKey] = undefined;
+            } else {
+                this.state[this.pageNbKey] = this.pageNb;
+            }
         }
 
         if (this.persistPageLength) {
-
+            if(Types.isNull(this.pageLength)){
+                this.state[this.pageLengthKey] = undefined;
+            } else {
+                this.state[this.pageLengthKey] = this.pageLength;
+            }
         }
 
         return `#${JSON.stringify(this.state)}`;
@@ -103,8 +115,19 @@ export class Stateful extends Feature {
         this.lastHash = hash;
     }
 
+    updatePage(pageNb){
+        this.pageNb = pageNb;
+        this.update();
+    }
+
+    updatePageLength(pageLength){
+        this.pageLength = pageLength;
+        this.update();
+    }
+
     sync() {
         let state = this.parse(location.hash);
+        console.log('sync',state);
         let tf = this.tf;
 
         if (this.persistFilters) {
@@ -121,7 +144,12 @@ export class Stateful extends Feature {
 
         if (this.persistPageNumber) {
             let pageNumber = state[this.pageNbKey];
-            tf.feature('paging').setPage(pageNumber);
+            this.emitter.emit('change-page', this.tf, pageNumber);
+        }
+
+        if(this.persistPageLength){
+            let pageLength = state[this.pageLengthKey];
+            this.emitter.emit('change-page-results', this.tf, pageLength);
         }
     }
 
@@ -130,15 +158,14 @@ export class Stateful extends Feature {
             return;
         }
 
-        this.emitter.on(['initialized'], () => this.sync());
-        this.emitter.off([
-            'after-filtering',
-            'after-page-change',
-            'after-page-length-change'
-        ], () => this.update());
+        this.emitter.off(['initialized'], () => this.sync());
+        this.emitter.off(['after-filtering'], () => this.update());
+        this.emitter.off(['after-page-change'],
+            (tf, pageNb) => this.updatePage(pageNb));
+        this.emitter.off(['after-page-length-change'],
+            (tf, index) => this.updatePageLength(index));
 
         Event.remove(global, 'hashchange', () => this.sync());
-
         this.initialized = false;
     }
 }
