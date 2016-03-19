@@ -1,35 +1,28 @@
 import {Feature} from './feature';
+import {Hash} from './hash';
 import Str from '../string';
-import Event from '../event';
 import Types from '../types';
 
-const global = window;
-const JSON = global.JSON;
-const location = global.location;
-const hasHashChange = () => {
-    var docMode = global.documentMode;
-    return ('onhashchange' in global) && (docMode === undefined || docMode > 7);
-};
-
-export class Stateful extends Feature {
+export class State extends Feature {
 
     /**
-     * Creates an instance of Stateful.
+     * Creates an instance of State
      *
      * @param tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'stateful');
+        super(tf, 'state');
 
-        let cfg = this.config.stateful;
+        let cfg = this.config.state;
 
+        this.enableHash = cfg.type.indexOf('hash') !== -1;
         this.persistFilters = cfg.filters === false ? false : true;
         this.persistPageNumber = Boolean(cfg.page_number);
         this.persistPageLength = Boolean(cfg.page_length);
 
+        this.hash = null;
         this.pageNb = null;
         this.pageLength = null;
-        this.lastHash = null;
 
         this.state = {};
         this.prfxCol = 'col_';
@@ -38,24 +31,24 @@ export class Stateful extends Feature {
     }
 
     init() {
-        if (this.initialized || !hasHashChange()) {
+        if (this.initialized) {
             return;
         }
 
-        this.emitter.on(['initialized'], () => this.sync());
         this.emitter.on(['after-filtering'], () => this.update());
         this.emitter.on(['after-page-change'],
             (tf, pageNb) => this.updatePage(pageNb));
         this.emitter.on(['after-page-length-change'],
             (tf, index) => this.updatePageLength(index));
 
-        Event.add(global, 'hashchange', () => this.sync());
-
-        this.lastHash = location.hash;
+        if(this.enableHash){
+            this.hash = new Hash(this);
+            this.hash.init();
+        }
         this.initialized = true;
     }
 
-    format() {
+    update() {
         let tf = this.tf;
 
         if (this.persistFilters) {
@@ -91,28 +84,7 @@ export class Stateful extends Feature {
                 this.state[this.pageLengthKey] = this.pageLength;
             }
         }
-
-        return `#${JSON.stringify(this.state)}`;
-    }
-
-    parse(hash) {
-        if (hash.indexOf('#') === 0) {
-            hash = hash.substr(1);
-        } else {
-            hash = '{}';
-        }
-        return JSON.parse(hash);
-    }
-
-    update() {
-        let hash = this.format();
-        console.log(hash, this.lastHash, this.lastHash === hash);
-        if (this.lastHash === hash) {
-            return;
-        }
-
-        location.hash = hash;
-        this.lastHash = hash;
+        this.emitter.emit('state-changed', tf, this.state);
     }
 
     updatePage(pageNb){
@@ -126,8 +98,8 @@ export class Stateful extends Feature {
     }
 
     sync() {
-        let state = this.parse(location.hash);
-        console.log('sync',state);
+        let state = this.state;
+        console.log('sync', state);
         let tf = this.tf;
 
         if (this.persistFilters) {
@@ -158,14 +130,17 @@ export class Stateful extends Feature {
             return;
         }
 
-        this.emitter.off(['initialized'], () => this.sync());
         this.emitter.off(['after-filtering'], () => this.update());
         this.emitter.off(['after-page-change'],
             (tf, pageNb) => this.updatePage(pageNb));
         this.emitter.off(['after-page-length-change'],
             (tf, index) => this.updatePageLength(index));
 
-        Event.remove(global, 'hashchange', () => this.sync());
+        if(this.enableHash){
+            this.hash.destroy();
+            this.hash = null;
+        }
+
         this.initialized = false;
     }
 }

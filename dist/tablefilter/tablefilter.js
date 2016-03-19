@@ -173,7 +173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _noResults = __webpack_require__(25);
 	
-	var _stateful = __webpack_require__(26);
+	var _state = __webpack_require__(26);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -487,7 +487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.noResults = _types2.default.isObj(f.no_results_message) || Boolean(f.no_results_message);
 	
 	        // stateful
-	        this.isStateful = _types2.default.isObj(f.stateful) || Boolean(f.stateful);
+	        this.hasState = _types2.default.isObj(f.state) || Boolean(f.state);
 	
 	        /*** data types ***/
 	        //defines default date type (european DMY)
@@ -667,11 +667,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                Mod.help.init();
 	            }
 	
-	            if (this.isStateful) {
-	                if (!Mod.stateful) {
-	                    Mod.stateful = new _stateful.Stateful(tf);
+	            if (this.hasState) {
+	                if (!Mod.state) {
+	                    Mod.state = new _state.State(this);
 	                }
-	                Mod.stateful.init();
+	                Mod.state.init();
 	            }
 	
 	            if (this.hasPersistence) {
@@ -1013,7 +1013,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            // Require pattern for Webpack
-	            __webpack_require__.e/* require */(1, function(__webpack_require__) { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(27)("./" + modulePath)]; (function (mod) {
+	            __webpack_require__.e/* require */(1, function(__webpack_require__) { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(28)("./" + modulePath)]; (function (mod) {
 	                /* eslint-disable */
 	                var inst = new mod.default(_this4, ext);
 	                /* eslint-enable */
@@ -7716,19 +7716,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Stateful = undefined;
+	exports.State = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _feature = __webpack_require__(11);
 	
+	var _hash = __webpack_require__(27);
+	
 	var _string = __webpack_require__(3);
 	
 	var _string2 = _interopRequireDefault(_string);
-	
-	var _event = __webpack_require__(1);
-	
-	var _event2 = _interopRequireDefault(_event);
 	
 	var _types = __webpack_require__(4);
 	
@@ -7742,37 +7740,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var global = window;
-	var JSON = global.JSON;
-	var location = global.location;
-	var hasHashChange = function hasHashChange() {
-	    var docMode = global.documentMode;
-	    return 'onhashchange' in global && (docMode === undefined || docMode > 7);
-	};
-	
-	var Stateful = exports.Stateful = function (_Feature) {
-	    _inherits(Stateful, _Feature);
+	var State = exports.State = function (_Feature) {
+	    _inherits(State, _Feature);
 	
 	    /**
-	     * Creates an instance of Stateful.
+	     * Creates an instance of State
 	     *
 	     * @param tf TableFilter instance
 	     */
 	
-	    function Stateful(tf) {
-	        _classCallCheck(this, Stateful);
+	    function State(tf) {
+	        _classCallCheck(this, State);
 	
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Stateful).call(this, tf, 'stateful'));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(State).call(this, tf, 'state'));
 	
-	        var cfg = _this.config.stateful;
+	        var cfg = _this.config.state;
 	
+	        _this.enableHash = cfg.type.indexOf('hash') !== -1;
 	        _this.persistFilters = cfg.filters === false ? false : true;
 	        _this.persistPageNumber = Boolean(cfg.page_number);
 	        _this.persistPageLength = Boolean(cfg.page_length);
 	
+	        _this.hash = null;
 	        _this.pageNb = null;
 	        _this.pageLength = null;
-	        _this.lastHash = null;
 	
 	        _this.state = {};
 	        _this.prfxCol = 'col_';
@@ -7781,18 +7772,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _this;
 	    }
 	
-	    _createClass(Stateful, [{
+	    _createClass(State, [{
 	        key: 'init',
 	        value: function init() {
 	            var _this2 = this;
 	
-	            if (this.initialized || !hasHashChange()) {
+	            if (this.initialized) {
 	                return;
 	            }
 	
-	            this.emitter.on(['initialized'], function () {
-	                return _this2.sync();
-	            });
 	            this.emitter.on(['after-filtering'], function () {
 	                return _this2.update();
 	            });
@@ -7803,16 +7791,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return _this2.updatePageLength(index);
 	            });
 	
-	            _event2.default.add(global, 'hashchange', function () {
-	                return _this2.sync();
-	            });
-	
-	            this.lastHash = location.hash;
+	            if (this.enableHash) {
+	                this.hash = new _hash.Hash(this);
+	                this.hash.init();
+	            }
 	            this.initialized = true;
 	        }
 	    }, {
-	        key: 'format',
-	        value: function format() {
+	        key: 'update',
+	        value: function update() {
 	            var _this3 = this;
 	
 	            var tf = this.tf;
@@ -7849,30 +7836,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.state[this.pageLengthKey] = this.pageLength;
 	                }
 	            }
-	
-	            return '#' + JSON.stringify(this.state);
-	        }
-	    }, {
-	        key: 'parse',
-	        value: function parse(hash) {
-	            if (hash.indexOf('#') === 0) {
-	                hash = hash.substr(1);
-	            } else {
-	                hash = '{}';
-	            }
-	            return JSON.parse(hash);
-	        }
-	    }, {
-	        key: 'update',
-	        value: function update() {
-	            var hash = this.format();
-	            console.log(hash, this.lastHash, this.lastHash === hash);
-	            if (this.lastHash === hash) {
-	                return;
-	            }
-	
-	            location.hash = hash;
-	            this.lastHash = hash;
+	            this.emitter.emit('state-changed', tf, this.state);
 	        }
 	    }, {
 	        key: 'updatePage',
@@ -7891,7 +7855,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function sync() {
 	            var _this4 = this;
 	
-	            var state = this.parse(location.hash);
+	            var state = this.state;
 	            console.log('sync', state);
 	            var tf = this.tf;
 	
@@ -7926,9 +7890,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	
-	            this.emitter.off(['initialized'], function () {
-	                return _this5.sync();
-	            });
 	            this.emitter.off(['after-filtering'], function () {
 	                return _this5.update();
 	            });
@@ -7939,15 +7900,127 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return _this5.updatePageLength(index);
 	            });
 	
-	            _event2.default.remove(global, 'hashchange', function () {
-	                return _this5.sync();
-	            });
+	            if (this.enableHash) {
+	                this.hash.destroy();
+	                this.hash = null;
+	            }
+	
 	            this.initialized = false;
 	        }
 	    }]);
 	
-	    return Stateful;
+	    return State;
 	}(_feature.Feature);
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Hash = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // import Str from '../string';
+	
+	
+	var _event = __webpack_require__(1);
+	
+	var _event2 = _interopRequireDefault(_event);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	// import Types from '../types';
+	
+	var global = window;
+	var JSON = global.JSON;
+	var location = global.location;
+	var hasHashChange = function hasHashChange() {
+	    var docMode = global.documentMode;
+	    return 'onhashchange' in global && (docMode === undefined || docMode > 7);
+	};
+	
+	var Hash = exports.Hash = function () {
+	    function Hash(state) {
+	        _classCallCheck(this, Hash);
+	
+	        this.state = state;
+	        this.lastHash = location.hash;
+	        this.emitter = state.emitter;
+	    }
+	
+	    _createClass(Hash, [{
+	        key: 'init',
+	        value: function init() {
+	            var _this = this;
+	
+	            if (!hasHashChange()) {
+	                return;
+	            }
+	            this.emitter.on(['state-changed'], function (tf, state) {
+	                return _this.update(state);
+	            });
+	            this.emitter.on(['initialized'], function () {
+	                return _this.sync();
+	            });
+	            _event2.default.add(global, 'hashchange', function () {
+	                return _this.sync();
+	            });
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update(state) {
+	            var hash = '#' + JSON.stringify(state);
+	            console.log(hash, this.lastHash, this.lastHash === hash);
+	            if (this.lastHash === hash) {
+	                return;
+	            }
+	
+	            location.hash = hash;
+	            this.lastHash = hash;
+	        }
+	    }, {
+	        key: 'parse',
+	        value: function parse(hash) {
+	            if (hash.indexOf('#') === -1) {
+	                return null;
+	            }
+	            hash = hash.substr(1);
+	            return JSON.parse(hash);
+	        }
+	    }, {
+	        key: 'sync',
+	        value: function sync() {
+	            var hash = this.parse(location.hash);
+	            if (!hash) {
+	                return;
+	            }
+	            this.state.state = hash;
+	            this.state.sync();
+	        }
+	    }, {
+	        key: 'destroy',
+	        value: function destroy() {
+	            var _this2 = this;
+	
+	            this.emitter.off(['state-changed'], function (tf, state) {
+	                return _this2.update(state);
+	            });
+	            this.emitter.off(['initialized'], function () {
+	                return _this2.sync();
+	            });
+	            _event2.default.aremove(global, 'hashchange', function () {
+	                return _this2.sync();
+	            });
+	        }
+	    }]);
+	
+	    return Hash;
+	}();
 
 /***/ }
 /******/ ])
