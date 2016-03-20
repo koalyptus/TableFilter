@@ -1,6 +1,4 @@
-// import Str from '../string';
 import Event from '../event';
-// import Types from '../types';
 
 const global = window;
 const JSON = global.JSON;
