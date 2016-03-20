@@ -50,7 +50,6 @@ export class Hash {
      */
     update(state) {
         let hash = `#${JSON.stringify(state)}`;
-        // console.log(hash, this.lastHash, this.lastHash === hash);
         if (this.lastHash === hash) {
             return;
         }
@@ -60,7 +59,7 @@ export class Hash {
     }
 
     /**
-     * Converts a URL hash into a JSON object
+     * Converts a URL hash into a state JSON object
      *
      * @param {String} hash URL hash fragment
      * @returns {Object} JSON object
