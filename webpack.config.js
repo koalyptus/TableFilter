@@ -30,7 +30,8 @@ module.exports = {
                 exclude: /tablefilter\/node_modules/,
                 query: {
                     compact: false,
-                    presets: ['es2015']
+                    presets: ['es2015'],
+                    plugins: [['transform-es2015-classes', {loose: true}]]
                 },
                 loader: 'babel-loader'
             },

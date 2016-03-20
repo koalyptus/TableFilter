@@ -3,7 +3,8 @@ import Event from '../event';
 const global = window;
 const JSON = global.JSON;
 const location = global.location;
-const hasHashChange = () => {
+
+export const hasHashChange = () => {
     var docMode = global.documentMode;
     return ('onhashchange' in global) && (docMode === undefined || docMode > 7);
 };
@@ -12,7 +13,7 @@ export class Hash {
 
     constructor(state){
         this.state = state;
-        this.lastHash = location.hash;
+        this.lastHash = null;
         this.emitter = state.emitter;
     }
 
@@ -20,6 +21,9 @@ export class Hash {
         if(!hasHashChange()){
             return;
         }
+
+        this.lastHash = location.hash;
+
         this.emitter.on(['state-changed'], (tf, state) => this.update(state));
         this.emitter.on(['initialized'], () => this.sync());
         Event.add(global, 'hashchange', () => this.sync());
@@ -45,17 +49,24 @@ export class Hash {
     }
 
     sync(){
-        let hash = this.parse(location.hash);
-        if(!hash){
+        let state = this.parse(location.hash);
+        if(!state){
             return;
         }
-        this.state.state = hash;
+
+        this.state.disable();
+        this.state.override(state);
         this.state.sync();
+        this.state.enable();
     }
 
     destroy() {
+        this.state = null;
+        this.lastHash = null;
+        this.emitter = null;
+
         this.emitter.off(['state-changed'], (tf, state) => this.update(state));
         this.emitter.off(['initialized'], () => this.sync());
-        Event.aremove(global, 'hashchange', () => this.sync());
+        Event.remove(global, 'hashchange', () => this.sync());
     }
 }

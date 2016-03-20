@@ -207,7 +207,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        this.id = null;
-	        this.version = '0.2.0';
+	        this.version = '0.2.1';
 	        this.year = new Date().getFullYear();
 	        this.tbl = null;
 	        this.startRow = null;
@@ -7756,7 +7756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var cfg = _this.config.state;
 	
-	        _this.enableHash = cfg.type.indexOf('hash') !== -1;
+	        _this.enableHash = cfg.type && cfg.type.indexOf('hash') !== -1;
 	        _this.persistFilters = cfg.filters === false ? false : true;
 	        _this.persistPageNumber = Boolean(cfg.page_number);
 	        _this.persistPageLength = Boolean(cfg.page_length);
@@ -7768,7 +7768,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.state = {};
 	        _this.prfxCol = 'col_';
 	        _this.pageNbKey = 'page';
-	        _this.pageLengthKey = 'results';
+	        _this.pageLengthKey = 'page_length';
 	        return _this;
 	    }
 	
@@ -7802,6 +7802,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function update() {
 	            var _this3 = this;
 	
+	            if (!this.isEnabled()) {
+	                return;
+	            }
 	            var tf = this.tf;
 	
 	            if (this.persistFilters) {
@@ -7836,6 +7839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.state[this.pageLengthKey] = this.pageLength;
 	                }
 	            }
+	
 	            this.emitter.emit('state-changed', tf, this.state);
 	        }
 	    }, {
@@ -7849,6 +7853,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function updatePageLength(pageLength) {
 	            this.pageLength = pageLength;
 	            this.update();
+	        }
+	    }, {
+	        key: 'override',
+	        value: function override(state) {
+	            this.state = state;
 	        }
 	    }, {
 	        key: 'sync',
@@ -7873,6 +7882,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            if (this.persistPageNumber) {
 	                var pageNumber = state[this.pageNbKey];
+	                console.log('pageNumber', pageNumber);
 	                this.emitter.emit('change-page', this.tf, pageNumber);
 	            }
 	
@@ -7880,6 +7890,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var pageLength = state[this.pageLengthKey];
 	                this.emitter.emit('change-page-results', this.tf, pageLength);
 	            }
+	
+	            this.emitter.emit('state-synced', tf, this.state);
 	        }
 	    }, {
 	        key: 'destroy',
@@ -7921,10 +7933,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Hash = undefined;
+	exports.Hash = exports.hasHashChange = undefined;
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // import Str from '../string';
-	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _event = __webpack_require__(1);
 	
@@ -7934,12 +7945,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	// import Types from '../types';
-	
 	var global = window;
 	var JSON = global.JSON;
 	var location = global.location;
-	var hasHashChange = function hasHashChange() {
+	
+	var hasHashChange = exports.hasHashChange = function hasHashChange() {
 	    var docMode = global.documentMode;
 	    return 'onhashchange' in global && (docMode === undefined || docMode > 7);
 	};
@@ -7949,7 +7959,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Hash);
 	
 	        this.state = state;
-	        this.lastHash = location.hash;
+	        this.lastHash = null;
 	        this.emitter = state.emitter;
 	    }
 	
@@ -7961,6 +7971,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!hasHashChange()) {
 	                return;
 	            }
+	
+	            this.lastHash = location.hash;
+	
 	            this.emitter.on(['state-changed'], function (tf, state) {
 	                return _this.update(state);
 	            });
@@ -7995,17 +8008,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'sync',
 	        value: function sync() {
-	            var hash = this.parse(location.hash);
-	            if (!hash) {
+	            var state = this.parse(location.hash);
+	            if (!state) {
 	                return;
 	            }
-	            this.state.state = hash;
+	
+	            this.state.disable();
+	            this.state.override(state);
 	            this.state.sync();
+	            this.state.enable();
 	        }
 	    }, {
 	        key: 'destroy',
 	        value: function destroy() {
 	            var _this2 = this;
+	
+	            this.state = null;
+	            this.lastHash = null;
+	            this.emitter = null;
 	
 	            this.emitter.off(['state-changed'], function (tf, state) {
 	                return _this2.update(state);
@@ -8013,7 +8033,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.emitter.off(['initialized'], function () {
 	                return _this2.sync();
 	            });
-	            _event2.default.aremove(global, 'hashchange', function () {
+	            _event2.default.remove(global, 'hashchange', function () {
 	                return _this2.sync();
 	            });
 	        }
