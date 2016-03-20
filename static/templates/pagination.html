@@ -30,17 +30,11 @@
 <script data-config>
     var filtersConfig = {
         base_path: '../dist/tablefilter/',
-        state: {
-            type: ['hash'],
-            filters: true,
-            page_number: true,
-            page_length: true
-        },
         paging: true,
         results_per_page: ['Records: ', [10,25,50,100]],
-        // remember_grid_values: true,
-        // remember_page_number: true,
-        // remember_page_length: true,
+        remember_grid_values: true,
+        remember_page_number: true,
+        remember_page_length: true,
         alternate_rows: true,
         btn_reset: true,
         rows_counter: true,
