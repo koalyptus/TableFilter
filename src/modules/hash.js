@@ -9,16 +9,30 @@ export const hasHashChange = () => {
     return ('onhashchange' in global) && (docMode === undefined || docMode > 7);
 };
 
+/**
+ * Manages the URL hash reflecting the features state to be persisted
+ *
+ * @export
+ * @class Hash
+ */
 export class Hash {
 
-    constructor(state){
+    /**
+     * Creates an instance of Hash
+     *
+     * @param {State} state Instance of State
+     */
+    constructor(state) {
         this.state = state;
         this.lastHash = null;
         this.emitter = state.emitter;
     }
 
+    /**
+     * Initializes the Hash object
+     */
     init() {
-        if(!hasHashChange()){
+        if (!hasHashChange()) {
             return;
         }
 
@@ -29,9 +43,14 @@ export class Hash {
         Event.add(global, 'hashchange', () => this.sync());
     }
 
+    /**
+     * Updates the URL hash based on a state change
+     *
+     * @param {State} state Instance of State
+     */
     update(state) {
         let hash = `#${JSON.stringify(state)}`;
-        console.log(hash, this.lastHash, this.lastHash === hash);
+        // console.log(hash, this.lastHash, this.lastHash === hash);
         if (this.lastHash === hash) {
             return;
         }
@@ -40,6 +59,12 @@ export class Hash {
         this.lastHash = hash;
     }
 
+    /**
+     * Converts a URL hash into a JSON object
+     *
+     * @param {String} hash URL hash fragment
+     * @returns {Object} JSON object
+     */
     parse(hash) {
         if (hash.indexOf('#') === -1) {
             return null;
@@ -48,18 +73,29 @@ export class Hash {
         return JSON.parse(hash);
     }
 
-    sync(){
+    /**
+     * Applies current hash state to features
+     */
+    sync() {
         let state = this.parse(location.hash);
-        if(!state){
+        if (!state) {
             return;
         }
 
+        // To prevent state to react to features changes, state is temporarily
+        // disabled
         this.state.disable();
+        // State is overriden with hash state object
         this.state.override(state);
+        // New hash state is applied to features
         this.state.sync();
+        // State is re-enabled
         this.state.enable();
     }
 
+    /**
+     * Destroy Hash instance
+     */
     destroy() {
         this.state = null;
         this.lastHash = null;

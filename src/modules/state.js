@@ -3,7 +3,6 @@ import {Hash} from './hash';
 import Str from '../string';
 import Types from '../types';
 
-
 /**
  * Reflects the state of features to be persisted via hash, localStorage or
  * cookie
@@ -17,7 +16,7 @@ export class State extends Feature {
     /**
      * Creates an instance of State
      *
-     * @param tf TableFilter instance
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'state');
@@ -40,7 +39,7 @@ export class State extends Feature {
     }
 
     /**
-     * Initialize features state
+     * Initializes the State object
      */
     init() {
         if (this.initialized) {

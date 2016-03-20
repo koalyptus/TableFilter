@@ -7541,7 +7541,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Creates an instance of State
 	     *
-	     * @param tf TableFilter instance
+	     * @param {TableFilter} tf TableFilter instance
 	     */
 	
 	    function State(tf) {
@@ -7568,7 +7568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
-	     * Initialize features state
+	     * Initializes the State object
 	     */
 	
 	
@@ -7777,7 +7777,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return 'onhashchange' in global && (docMode === undefined || docMode > 7);
 	};
 	
+	/**
+	 * Manages the URL hash reflecting the features state to be persisted
+	 *
+	 * @export
+	 * @class Hash
+	 */
+	
 	var Hash = exports.Hash = function () {
+	
+	    /**
+	     * Creates an instance of Hash
+	     *
+	     * @param {State} state Instance of State
+	     */
+	
 	    function Hash(state) {
 	        _classCallCheck(this, Hash);
 	
@@ -7785,6 +7799,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.lastHash = null;
 	        this.emitter = state.emitter;
 	    }
+	
+	    /**
+	     * Initializes the Hash object
+	     */
+	
 	
 	    Hash.prototype.init = function init() {
 	        var _this = this;
@@ -7806,9 +7825,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	
+	    /**
+	     * Updates the URL hash based on a state change
+	     *
+	     * @param {State} state Instance of State
+	     */
+	
+	
 	    Hash.prototype.update = function update(state) {
 	        var hash = '#' + JSON.stringify(state);
-	        console.log(hash, this.lastHash, this.lastHash === hash);
+	        // console.log(hash, this.lastHash, this.lastHash === hash);
 	        if (this.lastHash === hash) {
 	            return;
 	        }
@@ -7816,6 +7842,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        location.hash = hash;
 	        this.lastHash = hash;
 	    };
+	
+	    /**
+	     * Converts a URL hash into a JSON object
+	     *
+	     * @param {String} hash URL hash fragment
+	     * @returns {Object} JSON object
+	     */
+	
 	
 	    Hash.prototype.parse = function parse(hash) {
 	        if (hash.indexOf('#') === -1) {
@@ -7825,17 +7859,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return JSON.parse(hash);
 	    };
 	
+	    /**
+	     * Applies current hash state to features
+	     */
+	
+	
 	    Hash.prototype.sync = function sync() {
 	        var state = this.parse(location.hash);
 	        if (!state) {
 	            return;
 	        }
 	
+	        // To prevent state to react to features changes, state is temporarily
+	        // disabled
 	        this.state.disable();
+	        // State is overriden with hash state object
 	        this.state.override(state);
+	        // New hash state is applied to features
 	        this.state.sync();
+	        // State is re-enabled
 	        this.state.enable();
 	    };
+	
+	    /**
+	     * Destroy Hash instance
+	     */
+	
 	
 	    Hash.prototype.destroy = function destroy() {
 	        var _this2 = this;
