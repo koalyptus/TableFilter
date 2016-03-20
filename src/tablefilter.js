@@ -337,7 +337,7 @@ export class TableFilter {
             Boolean(f.no_results_message);
 
         // stateful
-        this.hasState = Types.isObj(f.state) || Boolean(f.state);
+        this.state = Types.isObj(f.state) || Boolean(f.state);
 
         /*** data types ***/
         //defines default date type (european DMY)
@@ -492,7 +492,9 @@ export class TableFilter {
         this.import(this.stylesheetId, this.stylesheet, null, 'link');
 
         //loads theme
-        if(this.hasThemes){ this.loadThemes(); }
+        if(this.hasThemes){
+            this.loadThemes();
+        }
 
         // Instantiate help feature and initialise only if set true
         if(!Mod.help){
@@ -502,7 +504,7 @@ export class TableFilter {
             Mod.help.init();
         }
 
-        if(this.hasState){
+        if(this.state){
             if(!Mod.state){
                 Mod.state = new State(this);
             }

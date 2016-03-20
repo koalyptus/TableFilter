@@ -3,6 +3,15 @@ import {Hash} from './hash';
 import Str from '../string';
 import Types from '../types';
 
+
+/**
+ * Reflects the state of features to be persisted via hash, localStorage or
+ * cookie
+ *
+ * @export
+ * @class State
+ * @extends {Feature}
+ */
 export class State extends Feature {
 
     /**
@@ -30,6 +39,9 @@ export class State extends Feature {
         this.pageLengthKey = 'page_length';
     }
 
+    /**
+     * Initialize features state
+     */
     init() {
         if (this.initialized) {
             return;
@@ -48,6 +60,10 @@ export class State extends Feature {
         this.initialized = true;
     }
 
+
+    /**
+     * Update state field based on current features state
+     */
     update() {
         if(!this.isEnabled()){
             return;
@@ -60,7 +76,7 @@ export class State extends Feature {
             filterValues.forEach((val, idx) => {
                 let key = `${this.prfxCol}${idx}`;
 
-                if (Str.isEmpty(val)) {
+                if (Types.isString(val) && Str.isEmpty(val)) {
                     if (this.state.hasOwnProperty(key)) {
                         this.state[key] = undefined;
                     }
@@ -91,23 +107,40 @@ export class State extends Feature {
         this.emitter.emit('state-changed', tf, this.state);
     }
 
+    /**
+     * Refresh page number field on page number change
+     *
+     * @param pageNb Current page number
+     */
     updatePage(pageNb){
         this.pageNb = pageNb;
         this.update();
     }
 
+    /**
+     * Refresh page length field on page length change
+     *
+     * @param pageLength Current page length value
+     */
     updatePageLength(pageLength){
         this.pageLength = pageLength;
         this.update();
     }
 
+    /**
+     * Override state field
+     *
+     * @param state State object
+     */
     override(state){
         this.state = state;
     }
 
+    /**
+     * Apply current features state
+     */
     sync() {
         let state = this.state;
-        console.log('sync', state);
         let tf = this.tf;
 
         if (this.persistFilters) {
@@ -124,7 +157,6 @@ export class State extends Feature {
 
         if (this.persistPageNumber) {
             let pageNumber = state[this.pageNbKey];
-            console.log('pageNumber',pageNumber);
             this.emitter.emit('change-page', this.tf, pageNumber);
         }
 
@@ -132,14 +164,17 @@ export class State extends Feature {
             let pageLength = state[this.pageLengthKey];
             this.emitter.emit('change-page-results', this.tf, pageLength);
         }
-
-        this.emitter.emit('state-synced', tf, this.state);
     }
 
+    /**
+     * Destroy State instance
+     */
     destroy() {
         if (!this.initialized) {
             return;
         }
+
+        this.state = {};
 
         this.emitter.off(['after-filtering'], () => this.update());
         this.emitter.off(['after-page-change'],
