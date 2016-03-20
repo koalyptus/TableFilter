@@ -66,7 +66,6 @@ test('Page number value', function() {
 module('Check page length persistence');
 test('Page length value', function() {
     var paging = tf.feature('paging');
-    // paging.resultsPerPageSlc.options[2].selected = true;
     paging.changeResultsPerPage('2');
 
     deepEqual(tf.feature('store').getPageLength(), '2', 'Page length value');
