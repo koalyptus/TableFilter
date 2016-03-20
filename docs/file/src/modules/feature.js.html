@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/feature.js | tablefilter v0.2.1 API Document</title>
+  <title data-ice="title">src/modules/feature.js | tablefilter v0.2.2 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -69,7 +69,7 @@ export class Feature {
     constructor(tf, feature) {
         this.tf = tf;
         this.feature = feature;
-        this.enabled = Boolean(tf[feature]);
+        this.enabled = tf[feature];
         this.config = tf.config();
         this.emitter = tf.emitter;
         this.initialized = false;
