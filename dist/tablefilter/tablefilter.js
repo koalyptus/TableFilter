@@ -7551,7 +7551,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var cfg = _this.config.state;
 	
-	        _this.enableHash = cfg.type && cfg.type.indexOf('hash') !== -1;
+	        // hash enabled by default if state setting is simply set true
+	        _this.enableHash = cfg.type && cfg.type.indexOf('hash') !== -1 || tf.state === true;
 	        _this.persistFilters = cfg.filters === false ? false : true;
 	        _this.persistPageNumber = Boolean(cfg.page_number);
 	        _this.persistPageLength = Boolean(cfg.page_length);
@@ -7889,10 +7890,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Hash.prototype.destroy = function destroy() {
 	        var _this2 = this;
 	
-	        this.state = null;
-	        this.lastHash = null;
-	        this.emitter = null;
-	
 	        this.emitter.off(['state-changed'], function (tf, state) {
 	            return _this2.update(state);
 	        });
@@ -7902,6 +7899,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _event2.default.remove(global, 'hashchange', function () {
 	            return _this2.sync();
 	        });
+	
+	        this.state = null;
+	        this.lastHash = null;
+	        this.emitter = null;
 	    };
 	
 	    return Hash;

@@ -97,12 +97,12 @@ export class Hash {
      * Destroy Hash instance
      */
     destroy() {
-        this.state = null;
-        this.lastHash = null;
-        this.emitter = null;
-
         this.emitter.off(['state-changed'], (tf, state) => this.update(state));
         this.emitter.off(['initialized'], () => this.sync());
         Event.remove(global, 'hashchange', () => this.sync());
+
+        this.state = null;
+        this.lastHash = null;
+        this.emitter = null;
     }
 }

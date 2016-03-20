@@ -95,7 +95,7 @@ test('Can update page length', function() {
 });
 
 module('Tear-down');
-test('can destroy TF', function() {
+test('Can destroy TF', function() {
     // setup
     location.hash = null;
 

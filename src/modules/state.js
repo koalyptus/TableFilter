@@ -23,7 +23,9 @@ export class State extends Feature {
 
         let cfg = this.config.state;
 
-        this.enableHash = cfg.type && cfg.type.indexOf('hash') !== -1;
+        // hash enabled by default if state setting is simply set true
+        this.enableHash = (cfg.type && cfg.type.indexOf('hash') !== -1) ||
+            tf.state === true;
         this.persistFilters = cfg.filters === false ? false : true;
         this.persistPageNumber = Boolean(cfg.page_number);
         this.persistPageLength = Boolean(cfg.page_length);
@@ -52,7 +54,7 @@ export class State extends Feature {
         this.emitter.on(['after-page-length-change'],
             (tf, index) => this.updatePageLength(index));
 
-        if(this.enableHash){
+        if (this.enableHash) {
             this.hash = new Hash(this);
             this.hash.init();
         }
@@ -64,7 +66,7 @@ export class State extends Feature {
      * Update state field based on current features state
      */
     update() {
-        if(!this.isEnabled()){
+        if (!this.isEnabled()) {
             return;
         }
         let tf = this.tf;
@@ -88,7 +90,7 @@ export class State extends Feature {
         }
 
         if (this.persistPageNumber) {
-            if(Types.isNull(this.pageNb)){
+            if (Types.isNull(this.pageNb)) {
                 this.state[this.pageNbKey] = undefined;
             } else {
                 this.state[this.pageNbKey] = this.pageNb;
@@ -96,7 +98,7 @@ export class State extends Feature {
         }
 
         if (this.persistPageLength) {
-            if(Types.isNull(this.pageLength)){
+            if (Types.isNull(this.pageLength)) {
                 this.state[this.pageLengthKey] = undefined;
             } else {
                 this.state[this.pageLengthKey] = this.pageLength;
@@ -111,7 +113,7 @@ export class State extends Feature {
      *
      * @param pageNb Current page number
      */
-    updatePage(pageNb){
+    updatePage(pageNb) {
         this.pageNb = pageNb;
         this.update();
     }
@@ -121,7 +123,7 @@ export class State extends Feature {
      *
      * @param pageLength Current page length value
      */
-    updatePageLength(pageLength){
+    updatePageLength(pageLength) {
         this.pageLength = pageLength;
         this.update();
     }
@@ -131,7 +133,7 @@ export class State extends Feature {
      *
      * @param state State object
      */
-    override(state){
+    override(state) {
         this.state = state;
     }
 
@@ -159,7 +161,7 @@ export class State extends Feature {
             this.emitter.emit('change-page', this.tf, pageNumber);
         }
 
-        if(this.persistPageLength){
+        if (this.persistPageLength) {
             let pageLength = state[this.pageLengthKey];
             this.emitter.emit('change-page-results', this.tf, pageLength);
         }
@@ -181,7 +183,7 @@ export class State extends Feature {
         this.emitter.off(['after-page-length-change'],
             (tf, index) => this.updatePageLength(index));
 
-        if(this.enableHash){
+        if (this.enableHash) {
             this.hash.destroy();
             this.hash = null;
         }
