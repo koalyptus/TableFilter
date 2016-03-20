@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/store.js | tablefilter v0.1.20 API Document</title>
+  <title data-ice="title">src/modules/store.js | tablefilter v0.2.1 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -45,6 +45,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/hash.js~Hash.html">Hash</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></span></li>
@@ -52,8 +53,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasHashChange">hasHashChange</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -90,9 +93,9 @@ export class Store{
     init(){
         this.emitter.on([&apos;after-filtering&apos;], ()=&gt; this.saveFilterValues());
         this.emitter.on([&apos;after-clearing-filters&apos;], ()=&gt; this.clearCookies());
-        this.emitter.on([&apos;after-changing-page&apos;],
+        this.emitter.on([&apos;after-page-change&apos;],
             (tf, index)=&gt; this.savePageNb(index));
-        this.emitter.on([&apos;after-changing-results-per-page&apos;],
+        this.emitter.on([&apos;after-page-length-change&apos;],
             (tf, index)=&gt; this.savePageLength(index));
     }
 
@@ -143,15 +146,15 @@ export class Store{
 
     /**
      * Store page number in cookie
-     * @param {Number} index page index to persist
+     * @param {Number} pageIndex page index to persist
      */
-    savePageNb(index){
+    savePageNb(pageIndex){
         if(!this.tf.rememberPageNb){
             return;
         }
         Cookie.write(
             this.pgNbCookie,
-            (index+1),
+            pageIndex,
             this.duration
         );
     }
@@ -199,9 +202,9 @@ export class Store{
     destroy(){
         this.emitter.off([&apos;after-filtering&apos;], ()=&gt; this.saveFilterValues());
         this.emitter.off([&apos;after-clearing-filters&apos;], ()=&gt; this.clearCookies());
-        this.emitter.off([&apos;after-changing-page&apos;],
+        this.emitter.off([&apos;after-page-change&apos;],
             (tf, index)=&gt; this.savePageNb(index));
-        this.emitter.off([&apos;after-changing-results-per-page&apos;],
+        this.emitter.off([&apos;after-page-length-change&apos;],
             (tf, index)=&gt; this.savePageLength(index));
     }
 }

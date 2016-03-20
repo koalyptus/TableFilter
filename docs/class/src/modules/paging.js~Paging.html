@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">Paging | tablefilter v0.1.20 API Document</title>
+  <title data-ice="title">Paging | tablefilter v0.2.1 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -45,6 +45,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/feature.js~Feature.html">Feature</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/hash.js~Hash.html">Hash</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></span></li>
@@ -52,8 +53,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasHashChange">hasHashChange</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -1329,15 +1332,13 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html#instance-method-changeResultsPerPage">changeResultsPerPage</a></span></span><span data-ice="signature">()</span>
+           <span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html#instance-method-changeResultsPerPage">changeResultsPerPage</a></span></span><span data-ice="signature">(val: <span>*</span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Change rows according to page results drop-down
-TODO: accept a parameter setting the results per page length</p>
-</div>
+        
       </div>
     </td>
     <td>
@@ -1441,6 +1442,32 @@ TODO: accept a parameter setting the results per page length</p>
         
         
         <div data-ice="description"><p>Initialize DOM elements</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html#instance-method-onChangeResultsPerPage">onChangeResultsPerPage</a></span></span><span data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Change rows according to page results drop-down</p>
 </div>
       </div>
     </td>
@@ -2592,7 +2619,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber340">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber344">source</a></span></span>
     </span>
   </h3>
 
@@ -3915,7 +3942,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber566">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber570">source</a></span></span>
     </span>
   </h3>
 
@@ -3969,7 +3996,7 @@ Refresh paging select according to number of pages</p>
     
     
     
-    <span data-ice="name">changeResultsPerPage</span><span data-ice="signature">()</span>
+    <span data-ice="name">changeResultsPerPage</span><span data-ice="signature">(val: <span>*</span>)</span>
     <span class="right-info">
       
       
@@ -3980,13 +4007,27 @@ Refresh paging select according to number of pages</p>
   
   
   
-  <div data-ice="description"><p>Change rows according to page results drop-down
-TODO: accept a parameter setting the results per page length</p>
-</div>
+  
 
   
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">val</td>
+      <td data-ice="type"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   
@@ -4015,7 +4056,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber691">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber703">source</a></span></span>
     </span>
   </h3>
 
@@ -4056,7 +4097,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber453">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber457">source</a></span></span>
     </span>
   </h3>
 
@@ -4108,7 +4149,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber414">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber418">source</a></span></span>
     </span>
   </h3>
 
@@ -4197,6 +4238,47 @@ TODO: accept a parameter setting the results per page length</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-onChangeResultsPerPage">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">onChangeResultsPerPage</span><span data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber619">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Change rows according to page results drop-down</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-removeResultsPerPage">
     <span class="access" data-ice="access">public</span>
     
@@ -4207,7 +4289,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber546">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber550">source</a></span></span>
     </span>
   </h3>
 
@@ -4248,7 +4330,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber347">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber351">source</a></span></span>
     </span>
   </h3>
 
@@ -4306,7 +4388,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber657">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber669">source</a></span></span>
     </span>
   </h3>
 
@@ -4347,7 +4429,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber673">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber685">source</a></span></span>
     </span>
   </h3>
 
@@ -4388,7 +4470,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber363">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber367">source</a></span></span>
     </span>
   </h3>
 
@@ -4429,7 +4511,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber644">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber656">source</a></span></span>
     </span>
   </h3>
 
@@ -4470,7 +4552,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber462">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber466">source</a></span></span>
     </span>
   </h3>
 
@@ -4529,7 +4611,7 @@ TODO: accept a parameter setting the results per page length</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber374">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber378">source</a></span></span>
     </span>
   </h3>
 
@@ -4588,7 +4670,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber496">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber500">source</a></span></span>
     </span>
   </h3>
 

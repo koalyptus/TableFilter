@@ -72,6 +72,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/modules/hash.js~hash",
+    "class/src/modules/hash.js~Hash.html",
+    "<span>Hash</span> <span class=\"search-result-import-path\">tablefilter/src/modules/hash.js</span>",
+    "class"
+  ],
+  [
     "tablefilter/src/modules/help.js~help",
     "class/src/modules/help.js~Help.html",
     "<span>Help</span> <span class=\"search-result-import-path\">tablefilter/src/modules/help.js</span>",
@@ -114,6 +120,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/modules/state.js~state",
+    "class/src/modules/state.js~State.html",
+    "<span>State</span> <span class=\"search-result-import-path\">tablefilter/src/modules/state.js</span>",
+    "class"
+  ],
+  [
     "tablefilter/src/modules/statusbar.js~statusbar",
     "class/src/modules/statusBar.js~StatusBar.html",
     "<span>StatusBar</span> <span class=\"search-result-import-path\">tablefilter/src/modules/statusBar.js</span>",
@@ -130,6 +142,12 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html",
     "<span>TableFilter</span> <span class=\"search-result-import-path\">tablefilter/src/tablefilter.js</span>",
     "class"
+  ],
+  [
+    "tablefilter/src/modules/hash.js~hashashchange",
+    "variable/index.html#static-variable-hasHashChange",
+    "<span>hasHashChange</span> <span class=\"search-result-import-path\">tablefilter/src/modules/hash.js</span>",
+    "variable"
   ],
   [
     "builtinexternal/ecmascriptexternal.js~array",
@@ -2082,6 +2100,66 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/hash.js",
+    "file/src/modules/hash.js.html",
+    "src/modules/hash.js",
+    "file"
+  ],
+  [
+    "src/modules/hash.js~hash#constructor",
+    "class/src/modules/hash.js~Hash.html#instance-constructor-constructor",
+    "src/modules/hash.js~Hash#constructor",
+    "method"
+  ],
+  [
+    "src/modules/hash.js~hash#destroy",
+    "class/src/modules/hash.js~Hash.html#instance-method-destroy",
+    "src/modules/hash.js~Hash#destroy",
+    "method"
+  ],
+  [
+    "src/modules/hash.js~hash#emitter",
+    "class/src/modules/hash.js~Hash.html#instance-member-emitter",
+    "src/modules/hash.js~Hash#emitter",
+    "member"
+  ],
+  [
+    "src/modules/hash.js~hash#init",
+    "class/src/modules/hash.js~Hash.html#instance-method-init",
+    "src/modules/hash.js~Hash#init",
+    "method"
+  ],
+  [
+    "src/modules/hash.js~hash#lasthash",
+    "class/src/modules/hash.js~Hash.html#instance-member-lastHash",
+    "src/modules/hash.js~Hash#lastHash",
+    "member"
+  ],
+  [
+    "src/modules/hash.js~hash#parse",
+    "class/src/modules/hash.js~Hash.html#instance-method-parse",
+    "src/modules/hash.js~Hash#parse",
+    "method"
+  ],
+  [
+    "src/modules/hash.js~hash#state",
+    "class/src/modules/hash.js~Hash.html#instance-member-state",
+    "src/modules/hash.js~Hash#state",
+    "member"
+  ],
+  [
+    "src/modules/hash.js~hash#sync",
+    "class/src/modules/hash.js~Hash.html#instance-method-sync",
+    "src/modules/hash.js~Hash#sync",
+    "method"
+  ],
+  [
+    "src/modules/hash.js~hash#update",
+    "class/src/modules/hash.js~Hash.html#instance-method-update",
+    "src/modules/hash.js~Hash#update",
+    "method"
+  ],
+  [
     "src/modules/help.js",
     "file/src/modules/help.js.html",
     "src/modules/help.js",
@@ -2634,6 +2712,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/paging.js~paging#onchangeresultsperpage",
+    "class/src/modules/paging.js~Paging.html#instance-method-onChangeResultsPerPage",
+    "src/modules/paging.js~Paging#onChangeResultsPerPage",
+    "method"
+  ],
+  [
     "src/modules/paging.js~paging#pageselectortype",
     "class/src/modules/paging.js~Paging.html#instance-member-pageSelectorType",
     "src/modules/paging.js~Paging#pageSelectorType",
@@ -3124,6 +3208,132 @@ window.esdocSearchIndex = [
     "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-totRowsCssClass",
     "src/modules/rowsCounter.js~RowsCounter#totRowsCssClass",
     "member"
+  ],
+  [
+    "src/modules/state.js",
+    "file/src/modules/state.js.html",
+    "src/modules/state.js",
+    "file"
+  ],
+  [
+    "src/modules/state.js~state#constructor",
+    "class/src/modules/state.js~State.html#instance-constructor-constructor",
+    "src/modules/state.js~State#constructor",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#destroy",
+    "class/src/modules/state.js~State.html#instance-method-destroy",
+    "src/modules/state.js~State#destroy",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#enablehash",
+    "class/src/modules/state.js~State.html#instance-member-enableHash",
+    "src/modules/state.js~State#enableHash",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#hash",
+    "class/src/modules/state.js~State.html#instance-member-hash",
+    "src/modules/state.js~State#hash",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#init",
+    "class/src/modules/state.js~State.html#instance-method-init",
+    "src/modules/state.js~State#init",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#initialized",
+    "class/src/modules/state.js~State.html#instance-member-initialized",
+    "src/modules/state.js~State#initialized",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#override",
+    "class/src/modules/state.js~State.html#instance-method-override",
+    "src/modules/state.js~State#override",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#pagelength",
+    "class/src/modules/state.js~State.html#instance-member-pageLength",
+    "src/modules/state.js~State#pageLength",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#pagelengthkey",
+    "class/src/modules/state.js~State.html#instance-member-pageLengthKey",
+    "src/modules/state.js~State#pageLengthKey",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#pagenb",
+    "class/src/modules/state.js~State.html#instance-member-pageNb",
+    "src/modules/state.js~State#pageNb",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#pagenbkey",
+    "class/src/modules/state.js~State.html#instance-member-pageNbKey",
+    "src/modules/state.js~State#pageNbKey",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#persistfilters",
+    "class/src/modules/state.js~State.html#instance-member-persistFilters",
+    "src/modules/state.js~State#persistFilters",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#persistpagelength",
+    "class/src/modules/state.js~State.html#instance-member-persistPageLength",
+    "src/modules/state.js~State#persistPageLength",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#persistpagenumber",
+    "class/src/modules/state.js~State.html#instance-member-persistPageNumber",
+    "src/modules/state.js~State#persistPageNumber",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#prfxcol",
+    "class/src/modules/state.js~State.html#instance-member-prfxCol",
+    "src/modules/state.js~State#prfxCol",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#state",
+    "class/src/modules/state.js~State.html#instance-member-state",
+    "src/modules/state.js~State#state",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#sync",
+    "class/src/modules/state.js~State.html#instance-method-sync",
+    "src/modules/state.js~State#sync",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#update",
+    "class/src/modules/state.js~State.html#instance-method-update",
+    "src/modules/state.js~State#update",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#updatepage",
+    "class/src/modules/state.js~State.html#instance-method-updatePage",
+    "src/modules/state.js~State#updatePage",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#updatepagelength",
+    "class/src/modules/state.js~State.html#instance-method-updatePageLength",
+    "src/modules/state.js~State#updatePageLength",
+    "method"
   ],
   [
     "src/modules/statusbar.js",
@@ -4647,6 +4857,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#startrow",
     "class/src/tablefilter.js~TableFilter.html#instance-member-startRow",
     "src/tablefilter.js~TableFilter#startRow",
+    "member"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#state",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-state",
+    "src/tablefilter.js~TableFilter#state",
     "member"
   ],
   [
