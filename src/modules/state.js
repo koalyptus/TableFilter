@@ -24,7 +24,7 @@ export class State extends Feature {
         let cfg = this.config.state;
 
         // hash enabled by default if state setting is simply set true
-        this.enableHash = (cfg.type && cfg.type.indexOf('hash') !== -1) ||
+        this.enableHash = (cfg.types && cfg.types.indexOf('hash') !== -1) ||
             tf.state === true;
         this.persistFilters = cfg.filters === false ? false : true;
         this.persistPageNumber = Boolean(cfg.page_number);
