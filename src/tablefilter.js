@@ -1048,6 +1048,9 @@ export class TableFilter {
 
         // emit help initialisation only if undefined
         if(Types.isUndef(this.help)){
+            // explicitily set enabled field to true to initialise help by
+            // default, only if setting is undefined
+            this.Mod.help.enabled = true;
             this.emitter.emit('init-help', this);
         }
     }
