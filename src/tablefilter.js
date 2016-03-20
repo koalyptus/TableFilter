@@ -21,6 +21,7 @@ import {ClearButton} from './modules/clearButton';
 import {Help} from './modules/help';
 import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
+import {State} from './modules/state';
 
 let global = window,
     doc = global.document;
@@ -335,6 +336,9 @@ export class TableFilter {
         this.noResults = Types.isObj(f.no_results_message) ||
             Boolean(f.no_results_message);
 
+        // stateful
+        this.state = Types.isObj(f.state) || Boolean(f.state);
+
         /*** data types ***/
         //defines default date type (european DMY)
         this.defaultDateType = f.default_date_type || 'DMY';
@@ -488,7 +492,9 @@ export class TableFilter {
         this.import(this.stylesheetId, this.stylesheet, null, 'link');
 
         //loads theme
-        if(this.hasThemes){ this.loadThemes(); }
+        if(this.hasThemes){
+            this.loadThemes();
+        }
 
         // Instantiate help feature and initialise only if set true
         if(!Mod.help){
@@ -496,6 +502,13 @@ export class TableFilter {
         }
         if(this.help){
             Mod.help.init();
+        }
+
+        if(this.state){
+            if(!Mod.state){
+                Mod.state = new State(this);
+            }
+            Mod.state.init();
         }
 
         if(this.hasPersistence){
@@ -1484,7 +1497,7 @@ export class TableFilter {
             this.onAfterFilter.call(null, this);
         }
 
-        this.emitter.emit('after-filtering', this);
+        this.emitter.emit('after-filtering', this, searchArgs);
     }
 
     /**

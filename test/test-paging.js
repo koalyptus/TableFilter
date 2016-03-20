@@ -130,12 +130,10 @@ test('Filter with dummy value', function() {
 
 test('Set results per page', function() {
     tf.clearFilters();
-    paging.resultsPerPageSlc.options[1].selected = true;
-    paging.changeResultsPerPage();
+    paging.changeResultsPerPage('4');
     deepEqual(paging.pagingLength, 4, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
-    paging.resultsPerPageSlc.options[2].selected = true;
-    paging.changeResultsPerPage();
+    paging.changeResultsPerPage('6');
     deepEqual(paging.pagingLength, 6, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
 });
@@ -200,12 +198,10 @@ test('Filter with dummy value', function() {
 
 test('Set results per page', function() {
     tf.clearFilters();
-    paging.resultsPerPageSlc.options[1].selected = true;
-    paging.changeResultsPerPage();
+    paging.changeResultsPerPage('4');
     deepEqual(paging.pagingLength, 4, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
-    paging.resultsPerPageSlc.options[2].selected = true;
-    paging.changeResultsPerPage();
+    paging.changeResultsPerPage('6');
     deepEqual(paging.pagingLength, 6, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
 });

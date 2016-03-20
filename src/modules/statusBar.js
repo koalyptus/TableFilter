@@ -118,11 +118,11 @@ export class StatusBar extends Feature{
         emitter.on(['before-filtering'], ()=> this.message(this.msgFilter));
         emitter.on(['before-populating-filter'],
             ()=> this.message(this.msgPopulate));
-        emitter.on(['before-changing-page'],
+        emitter.on(['before-page-change'],
             ()=> this.message(this.msgChangePage));
         emitter.on(['before-clearing-filters'], ()=>
             this.message(this.msgClear));
-        emitter.on(['before-changing-results-per-page'],
+        emitter.on(['before-page-length-change'],
             ()=> this.message(this.msgChangeResults));
         emitter.on(['before-reset-page'], ()=> this.message(this.msgResetPage));
         emitter.on(['before-reset-page-length'],
@@ -135,9 +135,9 @@ export class StatusBar extends Feature{
         emitter.on([
             'after-filtering',
             'after-populating-filter',
-            'after-changing-page',
+            'after-page-change',
             'after-clearing-filters',
-            'after-changing-results-per-page',
+            'after-page-length-change',
             'after-reset-page',
             'after-reset-page-length',
             'after-loading-extensions',
@@ -188,11 +188,11 @@ export class StatusBar extends Feature{
         emitter.off(['before-filtering'], ()=> this.message(this.msgFilter));
         emitter.off(['before-populating-filter'],
             ()=> this.message(this.msgPopulate));
-        emitter.off(['before-changing-page'],
+        emitter.off(['before-page-change'],
             ()=> this.message(this.msgChangePage));
         emitter.off(['before-clearing-filters'],
             ()=> this.message(this.msgClear));
-        emitter.off(['before-changing-results-per-page'],
+        emitter.off(['before-page-length-change'],
             ()=> this.message(this.msgChangeResults));
         emitter.off(['before-reset-page'], ()=>
             this.message(this.msgResetPage));
@@ -206,9 +206,9 @@ export class StatusBar extends Feature{
         emitter.off([
             'after-filtering',
             'after-populating-filter',
-            'after-changing-page',
+            'after-page-change',
             'after-clearing-filters',
-            'after-changing-results-per-page',
+            'after-page-length-change',
             'after-reset-page',
             'after-reset-page-length',
             'after-loading-extensions',

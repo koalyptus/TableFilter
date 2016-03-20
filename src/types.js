@@ -43,6 +43,15 @@ export default {
     },
 
     /**
+     * Check argument is a string
+     * @param {String} val Value
+     * @returns {Boolean}
+     */
+    isString(val){
+        return Object.prototype.toString.call(val) === '[object String]';
+    },
+
+    /**
      * Determine if argument is undefined
      * @param  {Any}  o
      * @return {Boolean}
