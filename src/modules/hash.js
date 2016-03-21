@@ -3,6 +3,7 @@ import Event from '../event';
 const global = window;
 const JSON = global.JSON;
 const location = global.location;
+const decodeURIComponent = global.decodeURIComponent;
 
 export const hasHashChange = () => {
     var docMode = global.documentMode;
@@ -69,7 +70,7 @@ export class Hash {
             return null;
         }
         hash = hash.substr(1);
-        return JSON.parse(hash);
+        return JSON.parse(decodeURIComponent(hash));
     }
 
     /**
