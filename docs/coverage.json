@@ -440,10 +440,10 @@
       "expectCount": 11,
       "actualCount": 7,
       "undocumentLines": [
+        29,
+        8,
         28,
-        7,
-        27,
-        26
+        27
       ]
     },
     "src/modules/help.js": {
