@@ -111,7 +111,6 @@ test('Can toggle help when property is undefined and toolbar is set',
             // creates toolbar
             rows_counter: true
         });
-        // tf.emitter.on(['initialized'], testToggle);
         tf.init();
         var help = tf.feature('help');
 
