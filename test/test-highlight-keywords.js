@@ -20,7 +20,7 @@ test('Highlighted keywords', function() {
         'Number of applied CSS classes');
 
     tf.clearFilters();
-    // FIXED with issue 155 :)
+    // issue 155
     deepEqual(tf.tbl.querySelectorAll('.keyword').length, 0,
         'Number of applied CSS classes');
 });
