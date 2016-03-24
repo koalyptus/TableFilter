@@ -336,6 +336,10 @@ export class Paging extends Feature{
 
         this.emitter.on(['after-filtering'], ()=> this.resetPagingInfo());
         this.emitter.on(['initialized'], ()=> this.resetValues());
+        this.emitter.on(['change-page'],
+            (tf, pageNumber) => this.setPage(pageNumber));
+        this.emitter.on(['change-page-results'],
+            (tf, pageLength) => this.changeResultsPerPage(pageLength));
 
         this.initialized = true;
     }
@@ -502,7 +506,7 @@ export class Paging extends Feature{
         }
 
         evt.slcResultsChange = (ev) => {
-            this.changeResultsPerPage();
+            this.onChangeResultsPerPage();
             ev.target.blur();
         };
 
@@ -570,7 +574,7 @@ export class Paging extends Feature{
             return;
         }
 
-        this.emitter.emit('before-changing-page', tf, index);
+        this.emitter.emit('before-page-change', tf, (index + 1));
 
         if(index === null){
             index = this.pageSelectorType === tf.fltTypeSlc ?
@@ -578,7 +582,7 @@ export class Paging extends Feature{
         }
         if( index>=0 && index<=(this.nbPages-1) ){
             if(this.onBeforeChangePage){
-                this.onBeforeChangePage.call(null, this, index);
+                this.onBeforeChangePage.call(null, this, (index + 1));
             }
             this.currentPageNb = parseInt(index, 10)+1;
             if(this.pageSelectorType===tf.fltTypeSlc){
@@ -593,25 +597,33 @@ export class Paging extends Feature{
             this.groupByPage();
 
             if(this.onAfterChangePage){
-                this.onAfterChangePage.call(null, this, index);
+                this.onAfterChangePage.call(null, this, (index + 1));
             }
         }
 
-        this.emitter.emit('after-changing-page', tf, index);
+        this.emitter.emit('after-page-change', tf, (index + 1));
+    }
+
+    changeResultsPerPage(val){
+        if(!this.isEnabled() || isNaN(val)){
+            return;
+        }
+
+        this.resultsPerPageSlc.value = val;
+        this.onChangeResultsPerPage();
     }
 
     /**
      * Change rows according to page results drop-down
-     * TODO: accept a parameter setting the results per page length
      */
-    changeResultsPerPage(){
+    onChangeResultsPerPage(){
         var tf = this.tf;
 
         if(!this.isEnabled()){
             return;
         }
 
-        this.emitter.emit('before-changing-results-per-page', tf);
+        this.emitter.emit('before-page-length-change', tf);
 
         var slcR = this.resultsPerPageSlc;
         var slcIndex = slcR.selectedIndex;
@@ -635,7 +647,7 @@ export class Paging extends Feature{
             }
         }
 
-        this.emitter.emit('after-changing-results-per-page', tf, slcIndex);
+        this.emitter.emit('after-page-length-change', tf, this.pagingLength);
     }
 
     /**
@@ -756,6 +768,10 @@ export class Paging extends Feature{
 
         this.emitter.off(['after-filtering'], ()=> this.resetPagingInfo());
         this.emitter.off(['initialized'], ()=> this.resetValues());
+        this.emitter.off(['change-page'],
+            (tf, pageNumber) => this.setPage(pageNumber));
+        this.emitter.off(['change-page-results'],
+            (tf, pageLength) => this.changeResultsPerPage(pageLength));
 
         this.pagingSlc = null;
         this.nbPages = 0;
