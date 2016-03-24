@@ -90,16 +90,38 @@ test('Re-set UI', function() {
 
 
 module('Destroy and re-init with help property undefined');
-test('Can init help when property is undefined and toolbar is set', function(){
-    tf.destroy();
-    tf.help = undefined;
-    tf.rowsCounter = true;
-    var help = tf.feature('help');
-    help.btnText = '?';
-    tf.init();
+test('Can init help when property is undefined and toolbar is set',
+    function() {
+        tf.destroy();
+        tf.help = undefined;
+        tf.rowsCounter = true;
+        var help = tf.feature('help');
+        help.btnText = '?';
+        tf.init();
 
-    notEqual(help.btn, null, 'btn property');
-});
+        notEqual(help.btn, null, 'btn property');
+    }
+);
+
+test('Can toggle help when property is undefined and toolbar is set',
+    function() {
+        tf.destroy();
+        tf = new TableFilter('demo', {
+            base_path: '../dist/tablefilter/',
+            // creates toolbar
+            rows_counter: true
+        });
+        tf.init();
+        var help = tf.feature('help');
+
+        // Pull 157, help button regression when setting is undefined
+        help.toggle();
+
+        notEqual(help, null, 'help instantiated');
+        deepEqual(help.enabled, true, 'help enabled');
+        deepEqual(help.cont.style.display, 'inline', 'Container is open');
+    }
+);
 
 module('Tear-down');
 test('can destroy TableFilter DOM elements', function() {
