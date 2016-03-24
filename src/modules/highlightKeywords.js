@@ -34,6 +34,8 @@ export class HighlightKeyword {
      * @param  {Node} node
      * @param  {String} word     Searched term
      * @param  {String} cssClass Css class name
+     *
+     * TODO: refactor this method
      */
     highlight(node, word, cssClass) {
         // Iterate into this nodes childNodes
