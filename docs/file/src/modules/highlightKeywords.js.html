@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/highlightKeywords.js | tablefilter v0.2.3 API Document</title>
+  <title data-ice="title">src/modules/highlightKeywords.js | tablefilter v0.2.4 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -66,30 +66,29 @@
 import Str from &apos;../string&apos;;
 import Types from &apos;../types&apos;;
 
-export class HighlightKeyword{
+export class HighlightKeyword {
 
     /**
      * HighlightKeyword, highlight matched keyword
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
-        var f = tf.config();
+        let f = tf.config();
         //defines css class for highlighting
         this.highlightCssClass = f.highlight_css_class || &apos;keyword&apos;;
-        this.highlightedNodes = [];
 
         this.tf = tf;
         this.emitter = tf.emitter;
     }
 
-    init(){
+    init() {
         this.emitter.on(
             [&apos;before-filtering&apos;, &apos;destroy&apos;],
-            ()=&gt; this.unhighlightAll()
+            () =&gt; this.unhighlightAll()
         );
         this.emitter.on(
             [&apos;highlight-keyword&apos;],
-            (tf, cell, word)=&gt;
+            (tf, cell, word) =&gt;
                 this.highlight(cell, word, this.highlightCssClass)
         );
     }
@@ -99,38 +98,39 @@ export class HighlightKeyword{
      * @param  {Node} node
      * @param  {String} word     Searched term
      * @param  {String} cssClass Css class name
+     *
+     * TODO: refactor this method
      */
-    highlight(node, word, cssClass){
+    highlight(node, word, cssClass) {
         // Iterate into this nodes childNodes
-        if(node.hasChildNodes){
-            var children = node.childNodes;
-            for(var i=0; i&lt;children.length; i++){
+        if (node.hasChildNodes) {
+            let children = node.childNodes;
+            for (let i = 0; i &lt; children.length; i++) {
                 this.highlight(children[i], word, cssClass);
             }
         }
 
-        if(node.nodeType === 3){
-            var tempNodeVal = Str.lower(node.nodeValue);
-            var tempWordVal = Str.lower(word);
-            if(tempNodeVal.indexOf(tempWordVal) != -1){
-                var pn = node.parentNode;
-                if(pn &amp;&amp; pn.className != cssClass){
+        if (node.nodeType === 3) {
+            let tempNodeVal = Str.lower(node.nodeValue);
+            let tempWordVal = Str.lower(word);
+            if (tempNodeVal.indexOf(tempWordVal) !== -1) {
+                let pn = node.parentNode;
+                if (pn &amp;&amp; pn.className !== cssClass) {
                     // word not highlighted yet
-                    var nv = node.nodeValue,
+                    let nv = node.nodeValue,
                         ni = tempNodeVal.indexOf(tempWordVal),
                         // Create a load of replacement nodes
                         before = Dom.text(nv.substr(0, ni)),
-                        docWordVal = nv.substr(ni,word.length),
-                        after = Dom.text(nv.substr(ni+word.length)),
+                        docWordVal = nv.substr(ni, word.length),
+                        after = Dom.text(nv.substr(ni + word.length)),
                         hiwordtext = Dom.text(docWordVal),
                         hiword = Dom.create(&apos;span&apos;);
                     hiword.className = cssClass;
                     hiword.appendChild(hiwordtext);
-                    pn.insertBefore(before,node);
-                    pn.insertBefore(hiword,node);
-                    pn.insertBefore(after,node);
+                    pn.insertBefore(before, node);
+                    pn.insertBefore(hiword, node);
+                    pn.insertBefore(after, node);
                     pn.removeChild(node);
-                    this.highlightedNodes.push(hiword.firstChild);
                 }
             }
         }
@@ -141,66 +141,51 @@ export class HighlightKeyword{
      * @param  {String} word
      * @param  {String} cssClass Css class to remove
      */
-    unhighlight(word, cssClass){
-        var arrRemove = [];
-        var highlightedNodes = this.highlightedNodes;
-        for(var i=0; i&lt;highlightedNodes.length; i++){
-            var n = highlightedNodes[i];
-            if(!n){
-                continue;
-            }
-            var tempNodeVal = Str.lower(n.nodeValue),
+    unhighlight(word, cssClass) {
+        let highlightedNodes = this.tf.tbl.querySelectorAll(`.${cssClass}`);
+        for (let i = 0; i &lt; highlightedNodes.length; i++) {
+            let n = highlightedNodes[i];
+            let nodeVal = Dom.getText(n),
+                tempNodeVal = Str.lower(nodeVal),
                 tempWordVal = Str.lower(word);
-            if(tempNodeVal.indexOf(tempWordVal) !== -1){
-                var pn = n.parentNode;
-                if(pn &amp;&amp; pn.className === cssClass){
-                    var prevSib = pn.previousSibling,
-                        nextSib = pn.nextSibling;
-                    if(!prevSib || !nextSib){ continue; }
-                    nextSib.nodeValue = prevSib.nodeValue + n.nodeValue +
-                        nextSib.nodeValue;
-                    prevSib.nodeValue = &apos;&apos;;
-                    n.nodeValue = &apos;&apos;;
-                    arrRemove.push(i);
-                }
+
+            if (tempNodeVal.indexOf(tempWordVal) !== -1) {
+                n.parentNode.replaceChild(Dom.text(nodeVal), n);
             }
-        }
-        for(var k=0; k&lt;arrRemove.length; k++){
-            highlightedNodes.splice(arrRemove[k], 1);
         }
     }
 
     /**
      * Clear all occurrences of highlighted nodes
      */
-    unhighlightAll(){
-        if(!this.tf.highlightKeywords){
+    unhighlightAll() {
+        if (!this.tf.highlightKeywords) {
             return;
         }
         // iterate filters values to unhighlight all values
-        this.tf.getFiltersValue().forEach((val)=&gt; {
-            if(Types.isArray(val)){
-                val.forEach((item)=&gt;
+        this.tf.getFiltersValue().forEach((val) =&gt; {
+            if (Types.isArray(val)) {
+                val.forEach((item) =&gt;
                     this.unhighlight(item, this.highlightCssClass));
             } else {
                 this.unhighlight(val, this.highlightCssClass);
             }
         });
-        this.highlightedNodes = [];
     }
 
-    destroy(){
+    destroy() {
         this.emitter.off(
             [&apos;before-filtering&apos;, &apos;destroy&apos;],
-            ()=&gt; this.unhighlightAll()
+            () =&gt; this.unhighlightAll()
         );
         this.emitter.off(
             [&apos;highlight-keyword&apos;],
-            (tf, cell, word)=&gt;
+            (tf, cell, word) =&gt;
                 this.highlight(cell, word, this.highlightCssClass)
         );
     }
-}</code></pre>
+}
+</code></pre>
 
 </div>
 

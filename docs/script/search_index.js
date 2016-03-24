@@ -2310,12 +2310,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/highlightkeywords.js~highlightkeyword#highlightednodes",
-    "class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-member-highlightedNodes",
-    "src/modules/highlightKeywords.js~HighlightKeyword#highlightedNodes",
-    "member"
-  ],
-  [
     "src/modules/highlightkeywords.js~highlightkeyword#init",
     "class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-method-init",
     "src/modules/highlightKeywords.js~HighlightKeyword#init",
