@@ -280,6 +280,19 @@
         deepEqual(tf.getFiltersValue(), ['Sydney', 'Adelaide', '', '', '']);
     });
 
+    // Test case for issue 165
+    test('Test getCellData with white spaces', function() {
+        // setup
+        var cell = document.createElement('td');
+        cell.textContent ='\t\thello world\t\t\t';
+
+        // act
+        var result = tf.getCellData(cell);
+
+        //assert
+        deepEqual(result, 'hello world', 'Expected text with no white spaces');
+    });
+
     test('Filter table', function() {
         tf.clearFilters();
         tf.setFilterValue(1, 'Adelaide');

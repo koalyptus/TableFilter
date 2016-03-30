@@ -386,8 +386,7 @@ export class CheckList extends Feature{
 
             } else {
                 fltValue = (fltValue) ? fltValue : '';
-                chkValue = Str.trim(
-                    fltValue+' '+chkValue+' '+tf.orOperator);
+                chkValue = Str.trim(fltValue+' '+chkValue+' '+tf.orOperator);
                 chkIndex = fltIndexes + chkIndex + tf.separator;
                 n.setAttribute('value', chkValue);
                 n.setAttribute('indexes', chkIndex);
