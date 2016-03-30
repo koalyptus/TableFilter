@@ -1,4 +1,5 @@
 import Types from './types';
+import Str from './string';
 
 /**
  * DOM utilities
@@ -13,9 +14,9 @@ export default {
      */
     getText(node){
         if(Types.isUndef(node.textContent)) {
-            return node.innerText;
+            return Str.trim(node.innerText);
         }
-        return node.textContent;
+        return Str.trim(node.textContent);
     },
 
     /**
