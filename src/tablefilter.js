@@ -378,6 +378,7 @@ export class TableFilter {
         this.prfxCookiePageNb = 'tf_pgnb_';
         //page length cookie
         this.prfxCookiePageLen = 'tf_pglen_';
+        this.prfxResponsive = 'resp';
 
         /*** cookies ***/
         //remembers filters values on page load
@@ -401,6 +402,9 @@ export class TableFilter {
         this.themes = f.themes || [];
         //themes path
         this.themesPath = f.themes_path || this.stylePath + 'themes/';
+
+        //responsive table
+        this.responsive = Boolean(f.responsive);
 
         // Features registry
         this.Mod = {};
@@ -652,6 +656,9 @@ export class TableFilter {
         //TF css class is added to table
         if(!this.gridLayout){
             Dom.addClass(this.tbl, this.prfxTf);
+            if(this.responsive){
+                Dom.addClass(this.tbl, this.prfxResponsive);
+            }
         }
 
         /* Loads extensions */
@@ -989,6 +996,8 @@ export class TableFilter {
         }
 
         Dom.removeClass(this.tbl, this.prfxTf);
+        Dom.removeClass(this.tbl, this.prfxResponsive);
+
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
         this.fltIds = [];
