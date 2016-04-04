@@ -4710,6 +4710,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#prfxresponsive",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxResponsive",
+    "src/tablefilter.js~TableFilter#prfxResponsive",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#prfxtf",
     "class/src/tablefilter.js~TableFilter.html#instance-member-prfxTf",
     "src/tablefilter.js~TableFilter#prfxTf",
@@ -4774,6 +4780,12 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-resetFilterValues",
     "src/tablefilter.js~TableFilter#resetFilterValues",
     "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#responsive",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-responsive",
+    "src/tablefilter.js~TableFilter#responsive",
+    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#rgxoperator",
