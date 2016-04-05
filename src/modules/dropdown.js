@@ -40,8 +40,6 @@ export class Dropdown extends Feature{
     onSlcFocus(e) {
         let elm = Event.target(e);
         let tf = this.tf;
-        // tf.activeFilterId = elm.getAttribute('id');
-        // tf.activeFlt = Dom.id(tf.activeFilterId);
         // select is populated when element has focus
         if(tf.loadFltOnDemand && elm.getAttribute('filled') === '0'){
             let ct = elm.getAttribute('ct');
@@ -138,10 +136,10 @@ export class Dropdown extends Feature{
         this.isCustom = tf.isCustomOptions(colIndex);
 
         //custom selects text
-        let activeFlt;
-        if(isLinked && tf.activeFilterId){
-            activeFlt = tf.activeFilterId.split('_')[0];
-            activeFlt = activeFlt.split(tf.prfxFlt)[1];
+        let activeIdx;
+        let activeFilterId = tf.getActiveFilterId();
+        if(isLinked && activeFilterId){
+            activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
         }
 
         let excludedOpts = null,
@@ -177,8 +175,8 @@ export class Dropdown extends Feature{
                     (tf.paging && (!tf.validRowsIndex ||
                         (tf.validRowsIndex &&
                             tf.validRowsIndex.indexOf(k) != -1)) &&
-                        ((activeFlt === undefined || activeFlt === colIndex) ||
-                            (activeFlt != colIndex &&
+                        ((activeIdx === undefined || activeIdx === colIndex) ||
+                            (activeIdx != colIndex &&
                                 tf.validRowsIndex.indexOf(k) != -1 ))) ))){
                     let cellData = tf.getCellData(cell[j]),
                         //Vary Peter's patch

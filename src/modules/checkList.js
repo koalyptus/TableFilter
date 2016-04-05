@@ -53,8 +53,6 @@ export class CheckList extends Feature{
     onChange(evt){
         let elm = Event.target(evt);
         let tf = this.tf;
-        // tf.activeFilterId = elm.getAttribute('id');
-        // tf.activeFlt = Dom.id(tf.activeFilterId);
         this.emitter.emit('filter-focus', tf, elm);
         tf.filter();
     }
@@ -143,10 +141,10 @@ export class CheckList extends Feature{
         let rows = tf.tbl.rows;
         this.isCustom = tf.isCustomOptions(colIndex);
 
-        let activeFlt;
-        if(tf.linkedFilters && tf.activeFilterId){
-            activeFlt = tf.activeFilterId.split('_')[0];
-            activeFlt = activeFlt.split(tf.prfxFlt)[1];
+        let activeIdx;
+        let activeFilterId = tf.getActiveFilterId();
+        if(tf.linkedFilters && activeFilterId){
+            activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
         }
 
         let filteredDataCol = [];
@@ -178,8 +176,8 @@ export class CheckList extends Feature{
                     (tf.linkedFilters && tf.disableExcludedOptions)))||
                     (colIndex === j && tf.linkedFilters &&
                     ((rows[k].style.display === '' && !tf.paging) ||
-                    (tf.paging && ((!activeFlt || activeFlt === colIndex )||
-                    (activeFlt != colIndex &&
+                    (tf.paging && ((!activeIdx || activeIdx === colIndex )||
+                    (activeIdx != colIndex &&
                         tf.validRowsIndex.indexOf(k) != -1)) )))){
 
                     let cellData = tf.getCellData(cells[j]);
@@ -352,9 +350,9 @@ export class CheckList extends Feature{
 
         let tf = this.tf;
         let chkValue = o.value; //checked item value
-        let chkIndex = parseInt(o.id.split('_')[2], 10);
         // TODO: provide helper to extract column index, ugly!
-        let colIdx = o.id.split('_')[0].replace(tf.prfxFlt, '');
+        let chkIndex = parseInt(o.id.split('_')[2], 10);
+        let colIdx = tf.getColumnIndexFromFilterId(o.id);
         let itemTag = 'LI';
 
         let n = tf.getFilterElement(parseInt(colIdx, 10));

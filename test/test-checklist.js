@@ -30,7 +30,7 @@ test('Can filter on checkList change', function() {
 
     var evObj = document.createEvent('HTMLEvents');
     evObj.initEvent('change', true, true);
-    tf.activeFlt = flt1;
+    // tf.activeFlt = flt1;
     tf.setFilterValue(3, '1.1');
     flt1.dispatchEvent(evObj);
 
