@@ -51,10 +51,11 @@ export class CheckList extends Feature{
     }
 
     onChange(evt){
-        let elm = evt.target;
+        let elm = Event.target(evt);
         let tf = this.tf;
-        tf.activeFilterId = elm.getAttribute('id');
-        tf.activeFlt = Dom.id(tf.activeFilterId);
+        // tf.activeFilterId = elm.getAttribute('id');
+        // tf.activeFlt = Dom.id(tf.activeFilterId);
+        this.emitter.emit('filter-focus', tf, elm);
         tf.filter();
     }
 

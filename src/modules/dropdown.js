@@ -40,14 +40,14 @@ export class Dropdown extends Feature{
     onSlcFocus(e) {
         let elm = Event.target(e);
         let tf = this.tf;
-        tf.activeFilterId = elm.getAttribute('id');
-        tf.activeFlt = Dom.id(tf.activeFilterId);
+        // tf.activeFilterId = elm.getAttribute('id');
+        // tf.activeFlt = Dom.id(tf.activeFilterId);
         // select is populated when element has focus
         if(tf.loadFltOnDemand && elm.getAttribute('filled') === '0'){
             let ct = elm.getAttribute('ct');
             this.build(ct);
         }
-        this.emitter.emit('filter-focus', tf, this);
+        this.emitter.emit('filter-focus', tf, elm);
     }
 
     onSlcChange() {

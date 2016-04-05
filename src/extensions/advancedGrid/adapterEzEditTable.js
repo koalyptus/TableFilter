@@ -411,10 +411,10 @@ export default class AdapterEzEditTable {
 
     _toggleForInputFilter(){
         var tf = this.tf;
-        if(!tf.activeFlt){
+        if(!tf.getActiveFilter()/*tf.activeFlt*/){
             return;
         }
-        var colIndex = tf.activeFlt.getAttribute('ct');
+        var colIndex = tf.getActiveFilter().getAttribute('ct');
         var filterType = tf.getFilterType(colIndex);
         if(filterType === tf.fltTypeInp){
             this.toggle();

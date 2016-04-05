@@ -185,7 +185,7 @@ export class TableFilter {
         //wheter excluded options are disabled
         this.disableExcludedOptions = Boolean(f.disable_excluded_options);
         //stores active filter element
-        this.activeFlt = null;
+        // this.activeFlt = null;
         //id of active filter
         this.activeFilterId = null;
         //enables always visible rows
@@ -473,9 +473,9 @@ export class TableFilter {
             // set focused text-box filter as active
             onInpFocus(e) {
                 let elm = Event.target(e);
-                this.activeFilterId = elm.getAttribute('id');
-                this.activeFlt = Dom.id(this.activeFilterId);
-                this.emitter.emit('filter-focus', this);
+                // this.activeFilterId = elm.getAttribute('id');
+                // this.activeFlt = Dom.id(this.activeFilterId);
+                this.emitter.emit('filter-focus', this, elm);
             }
         };
     }
@@ -604,6 +604,9 @@ export class TableFilter {
 
                 this.emitter.emit('after-filter-init', this, i);
             }
+
+            this.emitter.on(['filter-focus'],
+                (tf, filter)=> this.setActiveFilterId(filter.id));
 
         }//if this.fltGrid
 
@@ -994,6 +997,8 @@ export class TableFilter {
         if(this.linkedFilters){
             emitter.off(['after-filtering'], ()=> this.linkFilters());
         }
+        this.emitter.off(['filter-focus'],
+            (tf, filter)=> this.setActiveFilterId(filter.id));
 
         Dom.removeClass(this.tbl, this.prfxTf);
         Dom.removeClass(this.tbl, this.prfxResponsive);
@@ -1001,7 +1006,7 @@ export class TableFilter {
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
         this.fltIds = [];
-        this.activeFlt = null;
+        // this.activeFlt = null;
         this._hasGrid = false;
         this.initialized = false;
     }
@@ -2003,7 +2008,9 @@ export class TableFilter {
 
         this.filter();
 
-        if(this.onAfterReset){ this.onAfterReset.call(null, this); }
+        if(this.onAfterReset){
+            this.onAfterReset.call(null, this);
+        }
         this.emitter.emit('after-clearing-filters', this);
     }
 
@@ -2035,6 +2042,14 @@ export class TableFilter {
         }
     }
 
+    getActiveFilterId(){
+        return this.activeFilterId;
+    }
+
+    setActiveFilterId(filterId){console.log(filterId);
+        this.activeFilterId = filterId;
+    }
+
     /**
      * Refresh the filters subject to linking ('select', 'multiple',
      * 'checklist' type)
@@ -2049,8 +2064,8 @@ export class TableFilter {
             slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
 
-        let activeFlt = this.activeFilterId.split('_')[0];
-        activeFlt = activeFlt.split(this.prfxFlt)[1];
+        let activeFltIdx = this.activeFilterId.split('_')[0];
+        activeFltIdx = activeFltIdx.split(this.prfxFlt)[1];
         let slcSelectedValue;
         for(let i=0, len=slcIndex.length; i<len; i++){
             let curSlc = Dom.id(this.fltIds[slcIndex[i]]);
@@ -2058,9 +2073,9 @@ export class TableFilter {
 
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement
-            if(activeFlt !== slcIndex[i] ||
+            if(activeFltIdx !== slcIndex[i] ||
                 (this.paging && slcA1.indexOf(slcIndex[i]) != -1 &&
-                    activeFlt === slcIndex[i] ) ||
+                    activeFltIdx === slcIndex[i] ) ||
                 (!this.paging && (slcA3.indexOf(slcIndex[i]) != -1 ||
                     slcA2.indexOf(slcIndex[i]) != -1)) ||
                 slcSelectedValue === this.displayAllText ){
@@ -2304,6 +2319,10 @@ export class TableFilter {
      */
     getFilterableRowsNb(){
         return this.getRowsNb(false);
+    }
+
+    getActiveFilter(){
+        return Dom.id(this.getActiveFilterId());
     }
 
     /**
