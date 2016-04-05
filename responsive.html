@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Auto filter, filter as you type behaviour | TableFilter</title>
+    <title>Responsive table | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -171,12 +171,16 @@
 
       
 
-<h1>Auto filter, filter as you type</h1>
-
+<h1>Responsive table</h1>
 <p>
-    This demo features the filter as you type behaviour enabled by the
-    <code>auto_filter</code> option.
+    Easily turn your tabular data into a responsive data table with the
+    <code>responsive</code> option.
 </p>
+
+<div class="alert alert-info" role="alert">
+  Instructions: resize the browser's window or choose a device in the browser's
+  developer tools.
+</div>
 
 
 
@@ -622,25 +626,29 @@
 
 
 <script data-config>
-    var filtersConfig = {
-        base_path: 'tablefilter/',
-        auto_filter: true,
-        auto_filter_delay: 1100, //milliseconds
-        filters_row_index: 1,
-        remember_grid_values: true,
-        alternate_rows: true,
-        rows_counter: true,
-        rows_counter_text: "Rows: ",
-        btn_reset: true,
-        status_bar: true,
-        msg_filter: 'Filtering...'
-    };
-    var tf = new TableFilter('demo', filtersConfig);
+    var tf = new TableFilter('demo', {
+      base_path: 'tablefilter/',
+      responsive: true
+    });
     tf.init();
 </script>
 
-<p>
-    
+<hr>
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -673,7 +681,81 @@
 
 
 
-</p>
+    </div>
+    <div id="html" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html"></pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css"></pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+</div>
+
+
+
 
     </div>
 
