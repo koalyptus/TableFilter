@@ -3654,12 +3654,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#activeflt",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-activeFlt",
-    "src/tablefilter.js~TableFilter#activeFlt",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#alternaterows",
     "class/src/tablefilter.js~TableFilter.html#instance-member-alternateRows",
     "src/tablefilter.js~TableFilter#alternateRows",
@@ -4104,6 +4098,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#getactivefilterid",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getActiveFilterId",
+    "src/tablefilter.js~TableFilter#getActiveFilterId",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#getcelldata",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getCellData",
     "src/tablefilter.js~TableFilter#getCellData",
@@ -4119,6 +4119,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#getcolvalues",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getColValues",
     "src/tablefilter.js~TableFilter#getColValues",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#getcolumnindexfromfilterid",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getColumnIndexFromFilterId",
+    "src/tablefilter.js~TableFilter#getColumnIndexFromFilterId",
     "method"
   ],
   [
@@ -4804,6 +4810,12 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-member-separator",
     "src/tablefilter.js~TableFilter#separator",
     "member"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#setactivefilterid",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-setActiveFilterId",
+    "src/tablefilter.js~TableFilter#setActiveFilterId",
+    "method"
   ],
   [
     "src/tablefilter.js~tablefilter#setcolwidths",

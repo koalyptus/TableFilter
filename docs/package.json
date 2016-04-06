@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
