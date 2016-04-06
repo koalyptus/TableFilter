@@ -184,8 +184,6 @@ export class TableFilter {
         this.linkedFilters = Boolean(f.linked_filters);
         //wheter excluded options are disabled
         this.disableExcludedOptions = Boolean(f.disable_excluded_options);
-        //stores active filter element
-        this.activeFlt = null;
         //id of active filter
         this.activeFilterId = null;
         //enables always visible rows
@@ -473,9 +471,7 @@ export class TableFilter {
             // set focused text-box filter as active
             onInpFocus(e) {
                 let elm = Event.target(e);
-                this.activeFilterId = elm.getAttribute('id');
-                this.activeFlt = Dom.id(this.activeFilterId);
-                this.emitter.emit('filter-focus', this);
+                this.emitter.emit('filter-focus', this, elm);
             }
         };
     }
@@ -604,6 +600,9 @@ export class TableFilter {
 
                 this.emitter.emit('after-filter-init', this, i);
             }
+
+            this.emitter.on(['filter-focus'],
+                (tf, filter)=> this.setActiveFilterId(filter.id));
 
         }//if this.fltGrid
 
@@ -994,6 +993,8 @@ export class TableFilter {
         if(this.linkedFilters){
             emitter.off(['after-filtering'], ()=> this.linkFilters());
         }
+        this.emitter.off(['filter-focus'],
+            (tf, filter)=> this.setActiveFilterId(filter.id));
 
         Dom.removeClass(this.tbl, this.prfxTf);
         Dom.removeClass(this.tbl, this.prfxResponsive);
@@ -1001,7 +1002,6 @@ export class TableFilter {
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
         this.fltIds = [];
-        this.activeFlt = null;
         this._hasGrid = false;
         this.initialized = false;
     }
@@ -2003,7 +2003,9 @@ export class TableFilter {
 
         this.filter();
 
-        if(this.onAfterReset){ this.onAfterReset.call(null, this); }
+        if(this.onAfterReset){
+            this.onAfterReset.call(null, this);
+        }
         this.emitter.emit('after-clearing-filters', this);
     }
 
@@ -2036,6 +2038,33 @@ export class TableFilter {
     }
 
     /**
+     * Return the ID of the current active filter
+     * @returns {String}
+     */
+    getActiveFilterId(){
+        return this.activeFilterId;
+    }
+
+    /**
+     * Set the ID of the current active filter
+     * @param {String} filterId Element ID
+     */
+    setActiveFilterId(filterId){
+        this.activeFilterId = filterId;
+    }
+
+    /**
+     * Return the column index for a given filter ID
+     * @param {string} [filterId=''] Filter ID
+     * @returns {Number} Column index
+     */
+    getColumnIndexFromFilterId(filterId=''){
+        let idx = filterId.split('_')[0];
+        idx = idx.split(this.prfxFlt)[1];
+        return parseInt(idx, 10);
+    }
+
+    /**
      * Refresh the filters subject to linking ('select', 'multiple',
      * 'checklist' type)
      */
@@ -2049,8 +2078,7 @@ export class TableFilter {
             slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
 
-        let activeFlt = this.activeFilterId.split('_')[0];
-        activeFlt = activeFlt.split(this.prfxFlt)[1];
+        let activeIdx = this.getColumnIndexFromFilterId(this.activeFilterId);
         let slcSelectedValue;
         for(let i=0, len=slcIndex.length; i<len; i++){
             let curSlc = Dom.id(this.fltIds[slcIndex[i]]);
@@ -2058,9 +2086,9 @@ export class TableFilter {
 
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement
-            if(activeFlt !== slcIndex[i] ||
+            if(activeIdx !== slcIndex[i] ||
                 (this.paging && slcA1.indexOf(slcIndex[i]) != -1 &&
-                    activeFlt === slcIndex[i] ) ||
+                    activeIdx === slcIndex[i] ) ||
                 (!this.paging && (slcA3.indexOf(slcIndex[i]) != -1 ||
                     slcA2.indexOf(slcIndex[i]) != -1)) ||
                 slcSelectedValue === this.displayAllText ){
@@ -2246,7 +2274,7 @@ export class TableFilter {
     /**
      * Get the header DOM element for a given column index
      * @param  {Number} colIndex Column index
-     * @return {Object}
+     * @return {Element}
      */
     getHeaderElement(colIndex){
         let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl;

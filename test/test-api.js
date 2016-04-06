@@ -40,7 +40,6 @@
     });
 
     module('Public methods');
-
     test('Filters DOM elements', function() {
         deepEqual(tf.getFilterElement(1).nodeName, 'INPUT',
             'Filter\'s DOM element');
@@ -77,6 +76,36 @@
         tf.setFilterValue(1, '{Bri');
         tf.filter();
         deepEqual(tf.getValidRows().length, 2, 'Filtered rows number');
+    });
+
+    test('Get active filter ID', function() {
+        //setup
+        tf.getFilterElement(0).focus();
+
+        //act
+        var id = tf.getActiveFilterId();
+
+        //assert
+        deepEqual(id, 'flt0_demo', 'Active filter ID');
+    });
+
+    test('Set active filter ID', function() {
+        //act
+        tf.setActiveFilterId('hello');
+
+        //assert
+        deepEqual(tf.getActiveFilterId(), 'hello', 'Active filter ID');
+    });
+
+    test('Get column index from filter ID', function() {
+        //set
+        var filterId = 'flt3_demo';
+
+        //act
+        var colIndex = tf.getColumnIndexFromFilterId(filterId);
+
+        //assert
+        deepEqual(colIndex, 3, 'Column index');
     });
 
     test('Clear filters', function() {
