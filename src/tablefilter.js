@@ -2079,10 +2079,10 @@ export class TableFilter {
         slcIndex = slcIndex.concat(slcA3);
 
         let activeIdx = this.getColumnIndexFromFilterId(this.activeFilterId);
-        let slcSelectedValue;
+
         for(let i=0, len=slcIndex.length; i<len; i++){
             let curSlc = Dom.id(this.fltIds[slcIndex[i]]);
-            slcSelectedValue = this.getFilterValue(slcIndex[i]);
+            let slcSelectedValue = this.getFilterValue(slcIndex[i]);
 
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement
