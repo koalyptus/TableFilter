@@ -7592,8 +7592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var cfg = _this.config.state;
 	
-	        // hash enabled by default if state setting is simply set true
-	        _this.enableHash = cfg.types && cfg.types.indexOf('hash') !== -1 || tf.state === true;
+	        _this.enableHash = cfg.types && cfg.types.indexOf('hash') !== -1;
 	        _this.enableLocalStorage = cfg.types && cfg.types.indexOf('local_storage') !== -1;
 	        _this.enableCookie = cfg.types && cfg.types.indexOf('cookie') !== -1;
 	        _this.persistFilters = cfg.filters === false ? false : true;
@@ -7973,7 +7972,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var global = window;
-	// const JSON = global.JSON;
+	var JSON = global.JSON;
+	var localStorage = global.localStorage;
 	
 	var hasStorage = exports.hasStorage = function hasStorage() {
 	    return 'Storage' in global;
@@ -7984,28 +7984,77 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Storage);
 	
 	        this.state = state;
+	        this.tf = state.tf;
 	        this.enableLocalStorage = state.enableLocalStorage && hasStorage();
 	        this.enableCookie = state.enableCookie;
 	        this.emitter = state.emitter;
+	
+	        this.prxStorage = 'store';
 	    }
 	
 	    Storage.prototype.init = function init() {
 	        var _this = this;
 	
 	        this.emitter.on(['state-changed'], function (tf, state) {
-	            return _this.update(state);
+	            return _this.save(state);
 	        });
-	        // this.emitter.on(['initialized'], () => this.sync());
+	        this.emitter.on(['initialized'], function () {
+	            return _this.sync();
+	        });
 	    };
 	
-	    Storage.prototype.update = function update(state) {
-	        console.log(this.enableLocalStorage, this.enableCookie, state);
-	    };
-	
-	    // save(state){
-	
+	    // update(state){
+	    //     console.log(this.enableLocalStorage, this.enableCookie, state);
 	    // }
 	
+	    Storage.prototype.save = function save(state) {
+	        if (this.enableLocalStorage) {
+	            localStorage[this.getKey()] = JSON.stringify(state);
+	        }
+	    };
+	
+	    Storage.prototype.delete = function _delete() {
+	        if (this.enableLocalStorage) {
+	            localStorage.removeItem(this.getKey());
+	        }
+	    };
+	
+	    Storage.prototype.sync = function sync() {
+	        var state = JSON.parse(localStorage[this.getKey()]);
+	        if (!state) {
+	            return;
+	        }
+	
+	        // To prevent state to react to features changes, state is temporarily
+	        // disabled
+	        this.state.disable();
+	        // State is overriden with hash state object
+	        this.state.override(state);
+	        // New hash state is applied to features
+	        this.state.sync();
+	        // State is re-enabled
+	        this.state.enable();
+	    };
+	
+	    Storage.prototype.getKey = function getKey() {
+	        return this.tf.prfxTf + '_' + this.tf.id;
+	    };
+	
+	    Storage.prototype.destroy = function destroy() {
+	        var _this2 = this;
+	
+	        this.emitter.off(['state-changed'], function (tf, state) {
+	            return _this2.save(state);
+	        });
+	        this.emitter.off(['initialized'], function () {
+	            return _this2.sync();
+	        });
+	
+	        this.delete();
+	
+	        this.state = null;
+	        this.emitter = null;
+	    };
 	
 	    return Storage;
 	}();

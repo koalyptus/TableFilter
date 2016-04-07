@@ -24,9 +24,7 @@ export class State extends Feature {
 
         let cfg = this.config.state;
 
-        // hash enabled by default if state setting is simply set true
-        this.enableHash = (cfg.types && cfg.types.indexOf('hash') !== -1) ||
-            tf.state === true;
+        this.enableHash = cfg.types && cfg.types.indexOf('hash') !== -1;
         this.enableLocalStorage = cfg.types &&
             cfg.types.indexOf('local_storage') !== -1;
         this.enableCookie = cfg.types && cfg.types.indexOf('cookie') !== -1;
