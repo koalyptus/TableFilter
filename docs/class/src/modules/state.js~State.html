@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">State | tablefilter v0.2.8 API Document</title>
+  <title data-ice="title">State | tablefilter v0.2.9 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -55,20 +55,22 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/storage.js~Storage.html">Storage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/store.js~Store.html">Store</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasHashChange">hasHashChange</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasStorage">hasStorage</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {State} from &apos;<span><a href="file/src/modules/state.js.html#lineNumber14">tablefilter/src/modules/state.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {State} from &apos;<span><a href="file/src/modules/state.js.html#lineNumber15">tablefilter/src/modules/state.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/state.js.html#lineNumber14">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/state.js.html#lineNumber15">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -151,7 +153,82 @@ cookie</p>
     <td>
       <div>
         <p>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-cookieDuration">cookieDuration</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableCookie">enableCookie</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
            <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableHash">enableHash</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableLocalStorage">enableLocalStorage</a></span></span><span data-ice="signature">: <span>*</span></span>
         </p>
       </div>
       <div>
@@ -440,6 +517,31 @@ cookie</p>
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-storage">storage</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -517,6 +619,32 @@ cookie</p>
         
         
         <div data-ice="description"><p>Override state field</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-method-overrideAndSync">overrideAndSync</a></span></span><span data-ice="signature">(state: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Override current state with passed one and sync features</p>
 </div>
       </div>
     </td>
@@ -956,7 +1084,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber22">source</a></span></span>
     </span>
   </h3>
 
@@ -1007,6 +1135,86 @@ cookie</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-cookieDuration">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">cookieDuration</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber36">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-enableCookie">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">enableCookie</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber31">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-enableHash">
     <span class="access" data-ice="access">public</span>
     
@@ -1047,6 +1255,46 @@ cookie</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-enableLocalStorage">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">enableLocalStorage</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber29">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-hash">
     <span class="access" data-ice="access">public</span>
     
@@ -1057,7 +1305,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber39">source</a></span></span>
     </span>
   </h3>
 
@@ -1097,7 +1345,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber61">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber71">source</a></span></span>
     </span>
   </h3>
 
@@ -1137,7 +1385,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber35">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
@@ -1177,7 +1425,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber40">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -1217,7 +1465,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber34">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber40">source</a></span></span>
     </span>
   </h3>
 
@@ -1257,7 +1505,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber39">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
@@ -1297,7 +1545,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber29">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber33">source</a></span></span>
     </span>
   </h3>
 
@@ -1337,7 +1585,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber35">source</a></span></span>
     </span>
   </h3>
 
@@ -1377,7 +1625,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber34">source</a></span></span>
     </span>
   </h3>
 
@@ -1417,7 +1665,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber38">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
@@ -1457,7 +1705,47 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber37">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber43">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-storage">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">storage</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
@@ -1500,7 +1788,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber173">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber200">source</a></span></span>
     </span>
   </h3>
 
@@ -1541,7 +1829,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber46">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber52">source</a></span></span>
     </span>
   </h3>
 
@@ -1582,7 +1870,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber146">source</a></span></span>
     </span>
   </h3>
 
@@ -1590,6 +1878,64 @@ cookie</p>
   
   
   <div data-ice="description"><p>Override state field</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">state</td>
+      <td data-ice="type"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>State object</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-overrideAndSync">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">overrideAndSync</span><span data-ice="signature">(state: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber185">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Override current state with passed one and sync features</p>
 </div>
 
   
@@ -1640,7 +1986,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber143">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber153">source</a></span></span>
     </span>
   </h3>
 
@@ -1681,7 +2027,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber68">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber78">source</a></span></span>
     </span>
   </h3>
 
@@ -1722,7 +2068,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber116">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber126">source</a></span></span>
     </span>
   </h3>
 
@@ -1780,7 +2126,7 @@ cookie</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber126">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber136">source</a></span></span>
     </span>
   </h3>
 

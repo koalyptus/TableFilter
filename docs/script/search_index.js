@@ -132,6 +132,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/modules/storage.js~storage",
+    "class/src/modules/storage.js~Storage.html",
+    "<span>Storage</span> <span class=\"search-result-import-path\">tablefilter/src/modules/storage.js</span>",
+    "class"
+  ],
+  [
     "tablefilter/src/modules/store.js~store",
     "class/src/modules/store.js~Store.html",
     "<span>Store</span> <span class=\"search-result-import-path\">tablefilter/src/modules/store.js</span>",
@@ -147,6 +153,12 @@ window.esdocSearchIndex = [
     "tablefilter/src/modules/hash.js~hashashchange",
     "variable/index.html#static-variable-hasHashChange",
     "<span>hasHashChange</span> <span class=\"search-result-import-path\">tablefilter/src/modules/hash.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/modules/storage.js~hasstorage",
+    "variable/index.html#static-variable-hasStorage",
+    "<span>hasStorage</span> <span class=\"search-result-import-path\">tablefilter/src/modules/storage.js</span>",
     "variable"
   ],
   [
@@ -3216,15 +3228,33 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/state.js~state#cookieduration",
+    "class/src/modules/state.js~State.html#instance-member-cookieDuration",
+    "src/modules/state.js~State#cookieDuration",
+    "member"
+  ],
+  [
     "src/modules/state.js~state#destroy",
     "class/src/modules/state.js~State.html#instance-method-destroy",
     "src/modules/state.js~State#destroy",
     "method"
   ],
   [
+    "src/modules/state.js~state#enablecookie",
+    "class/src/modules/state.js~State.html#instance-member-enableCookie",
+    "src/modules/state.js~State#enableCookie",
+    "member"
+  ],
+  [
     "src/modules/state.js~state#enablehash",
     "class/src/modules/state.js~State.html#instance-member-enableHash",
     "src/modules/state.js~State#enableHash",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#enablelocalstorage",
+    "class/src/modules/state.js~State.html#instance-member-enableLocalStorage",
+    "src/modules/state.js~State#enableLocalStorage",
     "member"
   ],
   [
@@ -3249,6 +3279,12 @@ window.esdocSearchIndex = [
     "src/modules/state.js~state#override",
     "class/src/modules/state.js~State.html#instance-method-override",
     "src/modules/state.js~State#override",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#overrideandsync",
+    "class/src/modules/state.js~State.html#instance-method-overrideAndSync",
+    "src/modules/state.js~State#overrideAndSync",
     "method"
   ],
   [
@@ -3303,6 +3339,12 @@ window.esdocSearchIndex = [
     "src/modules/state.js~state#state",
     "class/src/modules/state.js~State.html#instance-member-state",
     "src/modules/state.js~State#state",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#storage",
+    "class/src/modules/state.js~State.html#instance-member-storage",
+    "src/modules/state.js~State#storage",
     "member"
   ],
   [
@@ -3504,6 +3546,96 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/storage.js",
+    "file/src/modules/storage.js.html",
+    "src/modules/storage.js",
+    "file"
+  ],
+  [
+    "src/modules/storage.js~storage#constructor",
+    "class/src/modules/storage.js~Storage.html#instance-constructor-constructor",
+    "src/modules/storage.js~Storage#constructor",
+    "method"
+  ],
+  [
+    "src/modules/storage.js~storage#destroy",
+    "class/src/modules/storage.js~Storage.html#instance-method-destroy",
+    "src/modules/storage.js~Storage#destroy",
+    "method"
+  ],
+  [
+    "src/modules/storage.js~storage#duration",
+    "class/src/modules/storage.js~Storage.html#instance-member-duration",
+    "src/modules/storage.js~Storage#duration",
+    "member"
+  ],
+  [
+    "src/modules/storage.js~storage#emitter",
+    "class/src/modules/storage.js~Storage.html#instance-member-emitter",
+    "src/modules/storage.js~Storage#emitter",
+    "member"
+  ],
+  [
+    "src/modules/storage.js~storage#enablecookie",
+    "class/src/modules/storage.js~Storage.html#instance-member-enableCookie",
+    "src/modules/storage.js~Storage#enableCookie",
+    "member"
+  ],
+  [
+    "src/modules/storage.js~storage#enablelocalstorage",
+    "class/src/modules/storage.js~Storage.html#instance-member-enableLocalStorage",
+    "src/modules/storage.js~Storage#enableLocalStorage",
+    "member"
+  ],
+  [
+    "src/modules/storage.js~storage#getkey",
+    "class/src/modules/storage.js~Storage.html#instance-method-getKey",
+    "src/modules/storage.js~Storage#getKey",
+    "method"
+  ],
+  [
+    "src/modules/storage.js~storage#init",
+    "class/src/modules/storage.js~Storage.html#instance-method-init",
+    "src/modules/storage.js~Storage#init",
+    "method"
+  ],
+  [
+    "src/modules/storage.js~storage#remove",
+    "class/src/modules/storage.js~Storage.html#instance-method-remove",
+    "src/modules/storage.js~Storage#remove",
+    "method"
+  ],
+  [
+    "src/modules/storage.js~storage#retrieve",
+    "class/src/modules/storage.js~Storage.html#instance-method-retrieve",
+    "src/modules/storage.js~Storage#retrieve",
+    "method"
+  ],
+  [
+    "src/modules/storage.js~storage#save",
+    "class/src/modules/storage.js~Storage.html#instance-method-save",
+    "src/modules/storage.js~Storage#save",
+    "method"
+  ],
+  [
+    "src/modules/storage.js~storage#state",
+    "class/src/modules/storage.js~Storage.html#instance-member-state",
+    "src/modules/storage.js~Storage#state",
+    "member"
+  ],
+  [
+    "src/modules/storage.js~storage#sync",
+    "class/src/modules/storage.js~Storage.html#instance-method-sync",
+    "src/modules/storage.js~Storage#sync",
+    "method"
+  ],
+  [
+    "src/modules/storage.js~storage#tf",
+    "class/src/modules/storage.js~Storage.html#instance-member-tf",
+    "src/modules/storage.js~Storage#tf",
+    "member"
+  ],
+  [
     "src/modules/store.js",
     "file/src/modules/store.js.html",
     "src/modules/store.js",
@@ -3640,6 +3772,12 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-member-Mod",
     "src/tablefilter.js~TableFilter#Mod",
     "member"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#activatefilter",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-activateFilter",
+    "src/tablefilter.js~TableFilter#activateFilter",
+    "method"
   ],
   [
     "src/tablefilter.js~tablefilter#activecolumnscssclass",

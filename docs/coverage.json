@@ -1,7 +1,7 @@
 {
-  "coverage": "26.18%",
-  "expectCount": 741,
-  "actualCount": 194,
+  "coverage": "26.86%",
+  "expectCount": 763,
+  "actualCount": 205,
   "files": {
     "src/extensions/advancedGrid/adapterEzEditTable.js": {
       "expectCount": 17,
@@ -197,8 +197,8 @@
       ]
     },
     "src/tablefilter.js": {
-      "expectCount": 227,
-      "actualCount": 78,
+      "expectCount": 228,
+      "actualCount": 79,
       "undocumentLines": [
         411,
         408,
@@ -628,21 +628,25 @@
       ]
     },
     "src/modules/state.js": {
-      "expectCount": 21,
-      "actualCount": 9,
+      "expectCount": 26,
+      "actualCount": 10,
       "undocumentLines": [
-        27,
-        33,
-        61,
-        35,
-        40,
-        34,
-        39,
-        29,
+        36,
         31,
-        30,
-        38,
-        37
+        27,
+        29,
+        39,
+        71,
+        41,
+        46,
+        40,
+        45,
+        33,
+        35,
+        34,
+        44,
+        43,
+        68
       ]
     },
     "src/modules/statusBar.js": {
@@ -677,6 +681,19 @@
         26,
         28,
         20
+      ]
+    },
+    "src/modules/storage.js": {
+      "expectCount": 16,
+      "actualCount": 9,
+      "undocumentLines": [
+        32,
+        31,
+        30,
+        29,
+        9,
+        27,
+        28
       ]
     },
     "src/modules/store.js": {
