@@ -1634,7 +1634,7 @@ export class TableFilter {
     }
 
     /**
-     * Return the ID of the filter of a specified column
+     * Return the ID of a specified column's filter
      * @param  {Number} index Column's index
      * @return {String}       ID of the filter element
      */
@@ -2065,6 +2065,17 @@ export class TableFilter {
     }
 
     /**
+     * Make specified column's filter active
+     * @param colIndex Index of a column
+     */
+    activateFilter(colIndex){
+        if(Types.isUndef(colIndex)){
+            return;
+        }
+        this.setActiveFilterId(this.getFilterId(colIndex));
+    }
+
+    /**
      * Refresh the filters subject to linking ('select', 'multiple',
      * 'checklist' type)
      */
@@ -2079,10 +2090,10 @@ export class TableFilter {
         slcIndex = slcIndex.concat(slcA3);
 
         let activeIdx = this.getColumnIndexFromFilterId(this.activeFilterId);
-        let slcSelectedValue;
+
         for(let i=0, len=slcIndex.length; i<len; i++){
             let curSlc = Dom.id(this.fltIds[slcIndex[i]]);
-            slcSelectedValue = this.getFilterValue(slcIndex[i]);
+            let slcSelectedValue = this.getFilterValue(slcIndex[i]);
 
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement

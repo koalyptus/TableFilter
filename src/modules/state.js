@@ -1,5 +1,6 @@
 import {Feature} from './feature';
 import {Hash} from './hash';
+import {Storage} from './storage';
 import Str from '../string';
 import Types from '../types';
 
@@ -23,12 +24,17 @@ export class State extends Feature {
 
         let cfg = this.config.state;
 
-        // hash enabled by default if state setting is simply set true
-        this.enableHash = (cfg.types && cfg.types.indexOf('hash') !== -1) ||
-            tf.state === true;
+        this.enableHash = cfg === true ||
+            (Types.isObj(cfg.types) && cfg.types.indexOf('hash') !== -1);
+        this.enableLocalStorage = Types.isObj(cfg.types) &&
+            cfg.types.indexOf('local_storage') !== -1;
+        this.enableCookie = Types.isObj(cfg.types) &&
+            cfg.types.indexOf('cookie') !== -1;
         this.persistFilters = cfg.filters === false ? false : true;
         this.persistPageNumber = Boolean(cfg.page_number);
         this.persistPageLength = Boolean(cfg.page_length);
+        this.cookieDuration = !isNaN(cfg.cookie_duration) ?
+            parseInt(cfg.cookie_duration, 10) : 87600;
 
         this.hash = null;
         this.pageNb = null;
@@ -57,6 +63,10 @@ export class State extends Feature {
         if (this.enableHash) {
             this.hash = new Hash(this);
             this.hash.init();
+        }
+        if (this.enableLocalStorage || this.enableCookie) {
+            this.storage = new Storage(this);
+            this.storage.init();
         }
         this.initialized = true;
     }
@@ -168,6 +178,23 @@ export class State extends Feature {
     }
 
     /**
+     * Override current state with passed one and sync features
+     *
+     * @param state State object
+     */
+    overrideAndSync(state) {
+        // To prevent state to react to features changes, state is temporarily
+        // disabled
+        this.disable();
+        // State is overriden with passed state object
+        this.override(state);
+        // New hash state is applied to features
+        this.sync();
+        // State is re-enabled
+        this.enable();
+    }
+
+    /**
      * Destroy State instance
      */
     destroy() {
@@ -186,6 +213,11 @@ export class State extends Feature {
         if (this.enableHash) {
             this.hash.destroy();
             this.hash = null;
+        }
+
+        if (this.enableLocalStorage || this.enableCookie) {
+            this.storage.destroy();
+            this.storage = null;
         }
 
         this.initialized = false;
