@@ -24,10 +24,12 @@ export class State extends Feature {
 
         let cfg = this.config.state;
 
-        this.enableHash = cfg.types && cfg.types.indexOf('hash') !== -1;
-        this.enableLocalStorage = cfg.types &&
+        this.enableHash = cfg === true ||
+            (Types.isObj(cfg.types) && cfg.types.indexOf('hash') !== -1);
+        this.enableLocalStorage = Types.isObj(cfg.types) &&
             cfg.types.indexOf('local_storage') !== -1;
-        this.enableCookie = cfg.types && cfg.types.indexOf('cookie') !== -1;
+        this.enableCookie = Types.isObj(cfg.types) &&
+            cfg.types.indexOf('cookie') !== -1;
         this.persistFilters = cfg.filters === false ? false : true;
         this.persistPageNumber = Boolean(cfg.page_number);
         this.persistPageLength = Boolean(cfg.page_length);
@@ -173,6 +175,23 @@ export class State extends Feature {
             let pageLength = state[this.pageLengthKey];
             this.emitter.emit('change-page-results', this.tf, pageLength);
         }
+    }
+
+    /**
+     * Override current state with passed one and sync features
+     *
+     * @param state State object
+     */
+    overrideAndSync(state) {
+        // To prevent state to react to features changes, state is temporarily
+        // disabled
+        this.disable();
+        // State is overriden with passed state object
+        this.override(state);
+        // New hash state is applied to features
+        this.sync();
+        // State is re-enabled
+        this.enable();
     }
 
     /**

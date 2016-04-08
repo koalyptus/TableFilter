@@ -81,20 +81,12 @@ export class Hash {
         if (!state) {
             return;
         }
-
-        // To prevent state to react to features changes, state is temporarily
-        // disabled
-        this.state.disable();
-        // State is overriden with hash state object
-        this.state.override(state);
-        // New hash state is applied to features
-        this.state.sync();
-        // State is re-enabled
-        this.state.enable();
+        // override current state with persisted one and sync features
+        this.state.overrideAndSync(state);
     }
 
     /**
-     * Destroy Hash instance
+     * Release Hash event subscriptions and clear fields
      */
     destroy() {
         this.emitter.off(['state-changed'], (tf, state) => this.update(state));

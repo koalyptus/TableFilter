@@ -4,14 +4,26 @@ import Cookie from '../cookie';
 const global = window;
 const JSON = global.JSON;
 const localStorage = global.localStorage;
+const location = global.location;
 
 export const hasStorage = () => {
     return 'Storage' in global;
 };
 
+/**
+ * Stores the features state in browser's local storage or cookie
+ *
+ * @export
+ * @class Storage
+ */
 export class Storage {
 
-    constructor(state){
+    /**
+     * Creates an instance of Storage
+     *
+     * @param {State} state Instance of State
+     */
+    constructor(state) {
         this.state = state;
         this.tf = state.tf;
         this.enableLocalStorage = state.enableLocalStorage && hasStorage();
@@ -21,63 +33,85 @@ export class Storage {
     }
 
 
-    init(){
+    /**
+     * Initializes the Storage object
+     */
+    init() {
         this.emitter.on(['state-changed'], (tf, state) => this.save(state));
         this.emitter.on(['initialized'], () => this.sync());
     }
 
-    save(state){
-        if(this.enableLocalStorage) {
+    /**
+     * Persists the features state on state changes
+     *
+      * @param {State} state Instance of State
+     */
+    save(state) {
+        if (this.enableLocalStorage) {
             localStorage[this.getKey()] = JSON.stringify(state);
         } else {
             Cookie.write(this.getKey(), JSON.stringify(state), this.duration);
         }
     }
 
-    parse(){
+    /**
+     * Turns stored string into a State JSON object
+     *
+     *  @returns {Object} JSON object
+     */
+    retrieve() {
         let state = null;
-        if(this.enableLocalStorage) {
+        if (this.enableLocalStorage) {
             state = localStorage[this.getKey()];
         } else {
             state = Cookie.read(this.getKey());
         }
 
-        if(!state){
+        if (!state) {
             return null;
         }
         return JSON.parse(state);
     }
 
-    remove(){
-        if(this.enableLocalStorage) {
+    /**
+     * Removes persisted state from storage
+     */
+    remove() {
+        if (this.enableLocalStorage) {
             localStorage.removeItem(this.getKey());
         } else {
             Cookie.remove(this.getKey());
         }
     }
 
+    /**
+     * Applies persisted state to features
+     */
     sync() {
-        let state = this.parse();
+        let state = this.retrieve();
         if (!state) {
             return;
         }
-
-        // To prevent state to react to features changes, state is temporarily
-        // disabled
-        this.state.disable();
-        // State is overriden with hash state object
-        this.state.override(state);
-        // New hash state is applied to features
-        this.state.sync();
-        // State is re-enabled
-        this.state.enable();
+        // override current state with persisted one and sync features
+        this.state.overrideAndSync(state);
     }
 
-    getKey(){
-        return `${this.tf.prfxTf}_${this.tf.id}`;
+    /**
+     * Returns the storage key
+     *
+     * @returns {String} Key
+     */
+    getKey() {
+        return JSON.stringify({
+            key: `${this.tf.prfxTf}_${this.tf.id}`,
+            path: location.pathname
+        });
     }
 
-    destroy(){
+    /**
+     * Release Storage event subscriptions and clear fields
+     */
+    destroy() {
         this.emitter.off(['state-changed'], (tf, state) => this.save(state));
         this.emitter.off(['initialized'], () => this.sync());
 

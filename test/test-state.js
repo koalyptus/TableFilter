@@ -66,6 +66,19 @@ test('Can override state', function() {
         'State field overriden');
 });
 
+test('Can override and sync state', function() {
+    // setup
+    state.state = {};
+
+    // act
+    state.overrideAndSync({ 'col_1': { 'flt': 'Ade' } });
+
+    // assert
+    deepEqual(state.state, { 'col_1': { 'flt': 'Ade' } },
+        'State field overriden');
+    deepEqual(tf.getValidRows(), [2], 'Table filters are synced');
+});
+
 test('Can update page number', function() {
     // setup
     state.persistPageNumber = true;

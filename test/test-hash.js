@@ -2,7 +2,7 @@
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
     state: {
-        type: ['hash'],
+        types: ['hash'],
         filters: true,
         page_number: true,
         page_length: true

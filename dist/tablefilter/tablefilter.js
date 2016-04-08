@@ -7592,9 +7592,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var cfg = _this.config.state;
 	
-	        _this.enableHash = cfg.types && cfg.types.indexOf('hash') !== -1;
-	        _this.enableLocalStorage = cfg.types && cfg.types.indexOf('local_storage') !== -1;
-	        _this.enableCookie = cfg.types && cfg.types.indexOf('cookie') !== -1;
+	        _this.enableHash = cfg === true || _types2.default.isObj(cfg.types) && cfg.types.indexOf('hash') !== -1;
+	        _this.enableLocalStorage = _types2.default.isObj(cfg.types) && cfg.types.indexOf('local_storage') !== -1;
+	        _this.enableCookie = _types2.default.isObj(cfg.types) && cfg.types.indexOf('cookie') !== -1;
 	        _this.persistFilters = cfg.filters === false ? false : true;
 	        _this.persistPageNumber = Boolean(cfg.page_number);
 	        _this.persistPageLength = Boolean(cfg.page_length);
@@ -7763,6 +7763,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    /**
+	     * Override current state with passed one and sync features
+	     *
+	     * @param state State object
+	     */
+	
+	
+	    State.prototype.overrideAndSync = function overrideAndSync(state) {
+	        // To prevent state to react to features changes, state is temporarily
+	        // disabled
+	        this.disable();
+	        // State is overriden with passed state object
+	        this.override(state);
+	        // New hash state is applied to features
+	        this.sync();
+	        // State is re-enabled
+	        this.enable();
+	    };
+	
+	    /**
 	     * Destroy State instance
 	     */
 	
@@ -7922,20 +7941,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!state) {
 	            return;
 	        }
-	
-	        // To prevent state to react to features changes, state is temporarily
-	        // disabled
-	        this.state.disable();
-	        // State is overriden with hash state object
-	        this.state.override(state);
-	        // New hash state is applied to features
-	        this.state.sync();
-	        // State is re-enabled
-	        this.state.enable();
+	        // override current state with persisted one and sync features
+	        this.state.overrideAndSync(state);
 	    };
 	
 	    /**
-	     * Destroy Hash instance
+	     * Release Hash event subscriptions and clear fields
 	     */
 	
 	
@@ -7982,12 +7993,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	var global = window;
 	var JSON = global.JSON;
 	var localStorage = global.localStorage;
+	var location = global.location;
 	
 	var hasStorage = exports.hasStorage = function hasStorage() {
 	    return 'Storage' in global;
 	};
 	
+	/**
+	 * Stores the features state in browser's local storage or cookie
+	 *
+	 * @export
+	 * @class Storage
+	 */
+	
 	var Storage = exports.Storage = function () {
+	
+	    /**
+	     * Creates an instance of Storage
+	     *
+	     * @param {State} state Instance of State
+	     */
+	
 	    function Storage(state) {
 	        _classCallCheck(this, Storage);
 	
@@ -7998,6 +8024,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.emitter = state.emitter;
 	        this.duration = state.cookieDuration;
 	    }
+	
+	    /**
+	     * Initializes the Storage object
+	     */
+	
 	
 	    Storage.prototype.init = function init() {
 	        var _this = this;
@@ -8010,6 +8041,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	
+	    /**
+	     * Persists the features state on state changes
+	     *
+	      * @param {State} state Instance of State
+	     */
+	
+	
 	    Storage.prototype.save = function save(state) {
 	        if (this.enableLocalStorage) {
 	            localStorage[this.getKey()] = JSON.stringify(state);
@@ -8018,7 +8056,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 	
-	    Storage.prototype.parse = function parse() {
+	    /**
+	     * Turns stored string into a State JSON object
+	     *
+	     *  @returns {Object} JSON object
+	     */
+	
+	
+	    Storage.prototype.retrieve = function retrieve() {
 	        var state = null;
 	        if (this.enableLocalStorage) {
 	            state = localStorage[this.getKey()];
@@ -8032,6 +8077,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return JSON.parse(state);
 	    };
 	
+	    /**
+	     * Removes persisted state from storage
+	     */
+	
+	
 	    Storage.prototype.remove = function remove() {
 	        if (this.enableLocalStorage) {
 	            localStorage.removeItem(this.getKey());
@@ -8040,26 +8090,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 	
+	    /**
+	     * Applies persisted state to features
+	     */
+	
+	
 	    Storage.prototype.sync = function sync() {
-	        var state = this.parse();
+	        var state = this.retrieve();
 	        if (!state) {
 	            return;
 	        }
-	
-	        // To prevent state to react to features changes, state is temporarily
-	        // disabled
-	        this.state.disable();
-	        // State is overriden with hash state object
-	        this.state.override(state);
-	        // New hash state is applied to features
-	        this.state.sync();
-	        // State is re-enabled
-	        this.state.enable();
+	        // override current state with persisted one and sync features
+	        this.state.overrideAndSync(state);
 	    };
+	
+	    /**
+	     * Returns the storage key
+	     *
+	     * @returns {String} Key
+	     */
+	
 	
 	    Storage.prototype.getKey = function getKey() {
-	        return this.tf.prfxTf + '_' + this.tf.id;
+	        return JSON.stringify({
+	            key: this.tf.prfxTf + '_' + this.tf.id,
+	            path: location.pathname
+	        });
 	    };
+	
+	    /**
+	     * Release Storage event subscriptions and clear fields
+	     */
+	
 	
 	    Storage.prototype.destroy = function destroy() {
 	        var _this2 = this;
