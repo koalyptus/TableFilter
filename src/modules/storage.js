@@ -1,4 +1,6 @@
 
+import Cookie from '../cookie';
+
 const global = window;
 const JSON = global.JSON;
 const localStorage = global.localStorage;
@@ -13,10 +15,9 @@ export class Storage {
         this.state = state;
         this.tf = state.tf;
         this.enableLocalStorage = state.enableLocalStorage && hasStorage();
-        this.enableCookie = state.enableCookie;
+        this.enableCookie = state.enableCookie && !this.enableLocalStorage;
         this.emitter = state.emitter;
-
-        this.prxStorage = 'store';
+        this.duration = state.cookieDuration;
     }
 
 
@@ -25,24 +26,38 @@ export class Storage {
         this.emitter.on(['initialized'], () => this.sync());
     }
 
-    // update(state){
-    //     console.log(this.enableLocalStorage, this.enableCookie, state);
-    // }
-
     save(state){
         if(this.enableLocalStorage) {
             localStorage[this.getKey()] = JSON.stringify(state);
+        } else {
+            Cookie.write(this.getKey(), JSON.stringify(state), this.duration);
         }
     }
 
-    delete(){
+    parse(){
+        let state = null;
+        if(this.enableLocalStorage) {
+            state = localStorage[this.getKey()];
+        } else {
+            state = Cookie.read(this.getKey());
+        }
+
+        if(!state){
+            return null;
+        }
+        return JSON.parse(state);
+    }
+
+    remove(){
         if(this.enableLocalStorage) {
             localStorage.removeItem(this.getKey());
+        } else {
+            Cookie.remove(this.getKey());
         }
     }
 
     sync() {
-        let state = JSON.parse(localStorage[this.getKey()]);
+        let state = this.parse();
         if (!state) {
             return;
         }
@@ -66,7 +81,7 @@ export class Storage {
         this.emitter.off(['state-changed'], (tf, state) => this.save(state));
         this.emitter.off(['initialized'], () => this.sync());
 
-        this.delete();
+        this.remove();
 
         this.state = null;
         this.emitter = null;

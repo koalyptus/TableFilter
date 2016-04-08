@@ -31,6 +31,8 @@ export class State extends Feature {
         this.persistFilters = cfg.filters === false ? false : true;
         this.persistPageNumber = Boolean(cfg.page_number);
         this.persistPageLength = Boolean(cfg.page_length);
+        this.cookieDuration = !isNaN(cfg.cookie_duration) ?
+            parseInt(cfg.cookie_duration, 10) : 87600;
 
         this.hash = null;
         this.pageNb = null;

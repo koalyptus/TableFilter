@@ -7598,6 +7598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.persistFilters = cfg.filters === false ? false : true;
 	        _this.persistPageNumber = Boolean(cfg.page_number);
 	        _this.persistPageLength = Boolean(cfg.page_length);
+	        _this.cookieDuration = !isNaN(cfg.cookie_duration) ? parseInt(cfg.cookie_duration, 10) : 87600;
 	
 	        _this.hash = null;
 	        _this.pageNb = null;
@@ -7961,13 +7962,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 28 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.Storage = exports.hasStorage = undefined;
+	
+	var _cookie = __webpack_require__(9);
+	
+	var _cookie2 = _interopRequireDefault(_cookie);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -7986,10 +7994,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.state = state;
 	        this.tf = state.tf;
 	        this.enableLocalStorage = state.enableLocalStorage && hasStorage();
-	        this.enableCookie = state.enableCookie;
+	        this.enableCookie = state.enableCookie && !this.enableLocalStorage;
 	        this.emitter = state.emitter;
-	
-	        this.prxStorage = 'store';
+	        this.duration = state.cookieDuration;
 	    }
 	
 	    Storage.prototype.init = function init() {
@@ -8003,24 +8010,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	
-	    // update(state){
-	    //     console.log(this.enableLocalStorage, this.enableCookie, state);
-	    // }
-	
 	    Storage.prototype.save = function save(state) {
 	        if (this.enableLocalStorage) {
 	            localStorage[this.getKey()] = JSON.stringify(state);
+	        } else {
+	            _cookie2.default.write(this.getKey(), JSON.stringify(state), this.duration);
 	        }
 	    };
 	
-	    Storage.prototype.delete = function _delete() {
+	    Storage.prototype.parse = function parse() {
+	        var state = null;
+	        if (this.enableLocalStorage) {
+	            state = localStorage[this.getKey()];
+	        } else {
+	            state = _cookie2.default.read(this.getKey());
+	        }
+	
+	        if (!state) {
+	            return null;
+	        }
+	        return JSON.parse(state);
+	    };
+	
+	    Storage.prototype.remove = function remove() {
 	        if (this.enableLocalStorage) {
 	            localStorage.removeItem(this.getKey());
+	        } else {
+	            _cookie2.default.remove(this.getKey());
 	        }
 	    };
 	
 	    Storage.prototype.sync = function sync() {
-	        var state = JSON.parse(localStorage[this.getKey()]);
+	        var state = this.parse();
 	        if (!state) {
 	            return;
 	        }
@@ -8050,7 +8071,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return _this2.sync();
 	        });
 	
-	        this.delete();
+	        this.remove();
 	
 	        this.state = null;
 	        this.emitter = null;
