@@ -108,6 +108,17 @@
         deepEqual(colIndex, 3, 'Column index');
     });
 
+    test('Activate filter for a specified column', function() {
+        //set
+        var filterId = 'flt3_demo';
+
+        //act
+        tf.activateFilter(3);
+
+        //assert
+        deepEqual(tf.getActiveFilterId(), filterId, 'Filter active');
+    });
+
     test('Clear filters', function() {
         tf.clearFilters();
         deepEqual(tf.nbVisibleRows, 7, 'Filtered rows number');

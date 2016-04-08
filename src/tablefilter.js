@@ -1634,7 +1634,7 @@ export class TableFilter {
     }
 
     /**
-     * Return the ID of the filter of a specified column
+     * Return the ID of a specified column's filter
      * @param  {Number} index Column's index
      * @return {String}       ID of the filter element
      */
@@ -2062,6 +2062,17 @@ export class TableFilter {
         let idx = filterId.split('_')[0];
         idx = idx.split(this.prfxFlt)[1];
         return parseInt(idx, 10);
+    }
+
+    /**
+     * Make specified column's filter active
+     * @param colIndex Index of a column
+     */
+    activateFilter(colIndex){
+        if(Types.isUndef(colIndex)){
+            return;
+        }
+        this.setActiveFilterId(this.getFilterId(colIndex));
     }
 
     /**

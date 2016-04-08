@@ -71,10 +71,10 @@ test('Can override and sync state', function() {
     state.state = {};
 
     // act
-    state.overrideAndSync({ 'col_1': { 'flt': 'Ade' } });
+    state.overrideAndSync({ 'col_2': { 'flt': '1412' } });
 
     // assert
-    deepEqual(state.state, { 'col_1': { 'flt': 'Ade' } },
+    deepEqual(state.state, { 'col_2': { 'flt': '1412' } },
         'State field overriden');
     deepEqual(tf.getValidRows(), [2], 'Table filters are synced');
 });
