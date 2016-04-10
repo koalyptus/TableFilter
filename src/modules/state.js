@@ -55,7 +55,7 @@ export class State extends Feature {
         }
 
         this.emitter.on(['after-filtering'], () => this.update());
-        this.emitter.on(['after-page-change'],
+        this.emitter.on(['after-page-change', 'after-clearing-filters'],
             (tf, pageNb) => this.updatePage(pageNb));
         this.emitter.on(['after-page-length-change'],
             (tf, index) => this.updatePageLength(index));
@@ -205,7 +205,7 @@ export class State extends Feature {
         this.state = {};
 
         this.emitter.off(['after-filtering'], () => this.update());
-        this.emitter.off(['after-page-change'],
+        this.emitter.off(['after-page-change', 'after-clearing-filters'],
             (tf, pageNb) => this.updatePage(pageNb));
         this.emitter.off(['after-page-length-change'],
             (tf, index) => this.updatePageLength(index));
