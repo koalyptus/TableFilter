@@ -13157,10 +13157,13 @@
         base_path: 'tablefilter/',
         toolbar_target_id: 'externalToolbar',
         paging: true,
-        results_per_page: ['Records: ', [10,25,50,100]],
-        remember_grid_values: true,
-        remember_page_number: true,
-        remember_page_length: true,
+        results_per_page: ['Records: ', [10, 25, 50, 100]],
+        state: {
+          types: ['local_storage'],
+          filters: true,
+          page_number: true,
+          page_length: true
+        },
         alternate_rows: true,
         btn_reset: true,
         rows_counter: true,
@@ -13273,6 +13276,7 @@
 
     </div>
 </div>
+
 
     </div>
 

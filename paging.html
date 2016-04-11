@@ -13144,10 +13144,13 @@
     var filtersConfig = {
         base_path: 'tablefilter/',
         paging: true,
-        results_per_page: ['Records: ', [10,25,50,100]],
-        remember_grid_values: true,
-        remember_page_number: true,
-        remember_page_length: true,
+        state: {
+          types: ['local_storage'],
+          filters: true,
+          page_number: true,
+          page_length: true
+        },
+        results_per_page: ['Records: ', [10, 25, 50, 100]],
         alternate_rows: true,
         btn_reset: true,
         rows_counter: true,
@@ -13173,8 +13176,40 @@
     tf.init();
 </script>
 
-<p>
-    
+<p></p>
+
+<style type="text/css" data-config>
+    /**
+     * Custom CSS definitions as per TableFilter configuration
+     */
+    .myLoader{
+        position:absolute; padding: 5px;
+        margin:100px 0 0 5%; width:auto;
+        z-index:1000; font-size:12px; font-weight:bold;
+        border:1px solid #666; background:#ffffcc;
+        vertical-align:middle;
+    }
+    .myStatus{
+        width:auto; display:block;
+    }
+</style>
+
+<hr>
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -13207,23 +13242,80 @@
 
 
 
-</p>
+    </div>
+    <div id="html" class="tab-pane fade">
+        
 
-<style type="text/css">
-    /**
-     * Custom CSS definitions as per TableFilter configuration
-     */
-    .myLoader{
-        position:absolute; padding: 5px;
-        margin:100px 0 0 5%; width:auto;
-        z-index:1000; font-size:12px; font-weight:bold;
-        border:1px solid #666; background:#ffffcc;
-        vertical-align:middle;
-    }
-    .myStatus{
-        width:auto; display:block;
-    }
-</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html"></pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css"></pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+</div>
+
+
 
     </div>
 
