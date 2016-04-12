@@ -96,10 +96,12 @@ export default class AdapterSortableTable{
             }
 
             if(adpt.onAfterSort){
-                adpt.onAfterSort.call(null, tf, adpt.stt.sortColumn);
+                adpt.onAfterSort.call(null, tf, adpt.stt.sortColumn,
+                adpt.stt.descending);
             }
 
-            adpt.emitter.emit('column-sorted', tf, adpt.stt.sortColumn);
+            adpt.emitter.emit('column-sorted', tf, adpt.stt.sortColumn,
+                adpt.stt.descending);
         };
 
         this.initialized = true;

@@ -779,7 +779,7 @@ export class TableFilter {
         //filter is appended in custom element
         if(externalFltTgtId){
             Dom.id(externalFltTgtId).appendChild(btn);
-        } else{
+        } else {
             container.appendChild(btn);
         }
 
@@ -1408,8 +1408,8 @@ export class TableFilter {
             // already filtered rows display re-init
             row[k].style.display = '';
 
-            let cell = row[k].cells,
-                nchilds = cell.length;
+            let cells = row[k].cells,
+                nchilds = cells.length;
 
             // checks if row has exact cell #
             if(nchilds !== this.nbCells){
@@ -1432,7 +1432,7 @@ export class TableFilter {
                     continue;
                 }
 
-                let cellData = Str.matchCase(this.getCellData(cell[j]),
+                let cellData = Str.matchCase(this.getCellData(cells[j]),
                     this.caseSensitive);
 
                 //multiple search parameter operator ||
@@ -1458,7 +1458,7 @@ export class TableFilter {
                     for(let w=0, len=s.length; w<len; w++){
                         cS = Str.trim(s[w]);
                         occur = hasArg.call(this, cS, cellData, j);
-                        highlight.call(this, cS, occur, cell[j]);
+                        highlight.call(this, cS, occur, cells[j]);
                         if((hasMultiOrSA && occur) ||
                             (hasMultiAndSA && !occur)){
                             break;
@@ -1473,7 +1473,7 @@ export class TableFilter {
                 //single search parameter
                 else {
                     occurence[j] = hasArg.call(this, Str.trim(sA), cellData, j);
-                    highlight.call(this, sA, occurence[j], cell[j]);
+                    highlight.call(this, sA, occurence[j], cells[j]);
                 }//else single param
 
                 if(!occurence[j]){
@@ -1483,7 +1483,7 @@ export class TableFilter {
                     singleFltRowValid = true;
                 }
 
-                this.emitter.emit('cell-processed', this, j, cell[j]);
+                this.emitter.emit('cell-processed', this, j, cells[j]);
             }//for j
 
             if(this.singleSearchFlt && singleFltRowValid){

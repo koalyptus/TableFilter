@@ -47,7 +47,13 @@ var tfConfig = {
     ],
     filters_row_index: 3,
     headers_row_index: 2,
-    remember_grid_values: true,
+    state: {
+        types: ['local_storage'],
+        filters: true,
+        page_number: true,
+        page_length: true,
+        sort: true
+    },
     highlight_keywords: true,
     alternate_rows: true,
     rows_counter: true,
