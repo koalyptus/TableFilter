@@ -33,12 +33,14 @@ export class State extends Feature {
         this.persistFilters = cfg.filters === false ? false : true;
         this.persistPageNumber = Boolean(cfg.page_number);
         this.persistPageLength = Boolean(cfg.page_length);
+        this.persistSort = Boolean(cfg.sort);
         this.cookieDuration = !isNaN(cfg.cookie_duration) ?
             parseInt(cfg.cookie_duration, 10) : 87600;
 
         this.hash = null;
         this.pageNb = null;
         this.pageLength = null;
+        this.sortIndex = null;
 
         this.state = {};
         this.prfxCol = 'col_';
@@ -59,6 +61,8 @@ export class State extends Feature {
             (tf, pageNb) => this.updatePage(pageNb));
         this.emitter.on(['after-page-length-change'],
             (tf, index) => this.updatePageLength(index));
+        this.emitter.on(['column-sorted'],
+            (tf, index) => this.updateSort(index));
 
         if (this.enableHash) {
             this.hash = new Hash(this);
@@ -115,6 +119,10 @@ export class State extends Feature {
             }
         }
 
+        if(this.persistSort){
+            let key = `${this.prfxCol}${this.sortIndex}`;
+        }
+
         this.emitter.emit('state-changed', tf, this.state);
     }
 
@@ -135,6 +143,11 @@ export class State extends Feature {
      */
     updatePageLength(pageLength) {
         this.pageLength = pageLength;
+        this.update();
+    }
+
+    updateSort(index){
+        this.sortIndex = index;
         this.update();
     }
 
@@ -209,6 +222,8 @@ export class State extends Feature {
             (tf, pageNb) => this.updatePage(pageNb));
         this.emitter.off(['after-page-length-change'],
             (tf, index) => this.updatePageLength(index));
+        this.emitter.off(['column-sorted'],
+            (tf, index) => this.updateSort(index));
 
         if (this.enableHash) {
             this.hash.destroy();
