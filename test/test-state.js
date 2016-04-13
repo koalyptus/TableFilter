@@ -86,11 +86,10 @@ test('Can update page number', function() {
 
     // act
     state.updatePage('2');
+    state.persistPageNumber = false;
 
     // assert
     deepEqual(state.state.page, '2', 'Page number updated');
-
-    state.persistPageNumber = false;
 });
 
 test('Can update page length', function() {
@@ -100,11 +99,24 @@ test('Can update page length', function() {
 
     // act
     state.updatePageLength('10');
+    state.persistPageLength = false;
 
     // assert
     deepEqual(state.state.page_length, '10', 'Page length updated');
+});
 
-    state.persistPageLength = false;
+test('Can update sort', function() {
+    // setup
+    state.persistSort = true;
+    state.state = {};
+
+    // act
+    state.updateSort(1, true);
+    state.persistSort = false;
+
+    // assert
+    deepEqual(state.state.col_1,
+        { 'sort': { 'descending': true } }, 'Sort updated');
 });
 
 module('Tear-down');
