@@ -37,6 +37,7 @@ export class State extends Feature {
         this.cookieDuration = !isNaN(cfg.cookie_duration) ?
             parseInt(cfg.cookie_duration, 10) : 87600;
 
+        this.enableStorage = this.enableLocalStorage || this.enableCookie;
         this.hash = null;
         this.pageNb = null;
         this.pageLength = null;
@@ -63,12 +64,13 @@ export class State extends Feature {
             (tf, pageLength) => this.updatePageLength(pageLength));
         this.emitter.on(['column-sorted'],
             (tf, index, descending) => this.updateSort(index, descending));
+        this.emitter.on(['sort-initialized'], () => this._syncSort());
 
         if (this.enableHash) {
             this.hash = new Hash(this);
             this.hash.init();
         }
-        if (this.enableLocalStorage || this.enableCookie) {
+        if (this.enableStorage) {
             this.storage = new Storage(this);
             this.storage.init();
         }
@@ -83,6 +85,7 @@ export class State extends Feature {
         if (!this.isEnabled()) {
             return;
         }
+        let state = this.state;
         let tf = this.tf;
 
         if (this.persistFilters) {
@@ -92,49 +95,48 @@ export class State extends Feature {
                 let key = `${this.prfxCol}${idx}`;
 
                 if (Types.isString(val) && Str.isEmpty(val)) {
-                    if (this.state.hasOwnProperty(key)) {
-                        this.state[key] = undefined;
+                    if (state.hasOwnProperty(key)) {
+                        state[key] = undefined;
                     }
                 } else {
-                    this.state[key] = this.state[key] || {};
-                    this.state[key].flt = val;
+                    state[key] = state[key] || {};
+                    state[key].flt = val;
                 }
-
             });
         }
 
         if (this.persistPageNumber) {
             if (Types.isNull(this.pageNb)) {
-                this.state[this.pageNbKey] = undefined;
+                state[this.pageNbKey] = undefined;
             } else {
-                this.state[this.pageNbKey] = this.pageNb;
+                state[this.pageNbKey] = this.pageNb;
             }
         }
 
         if (this.persistPageLength) {
             if (Types.isNull(this.pageLength)) {
-                this.state[this.pageLengthKey] = undefined;
+                state[this.pageLengthKey] = undefined;
             } else {
-                this.state[this.pageLengthKey] = this.pageLength;
+                state[this.pageLengthKey] = this.pageLength;
             }
         }
 
-        if(this.persistSort){
-            if(!Types.isNull(this.sort)) {
-                // Remove any sorted column
-                Object.keys(this.state).forEach((key) => {
-                    if (key.indexOf(this.prfxCol) !== -1 &&
-                        this.state[key]) {
-                        this.state[key].sort = undefined;
+        if (this.persistSort) {
+            if (!Types.isNull(this.sort)) {
+                // Remove previuosly sorted column
+                Object.keys(state).forEach((key) => {
+                    if (key.indexOf(this.prfxCol) !== -1 && state[key]) {
+                        state[key].sort = undefined;
                     }
                 });
+
                 let key = `${this.prfxCol}${this.sort.column}`;
-                this.state[key] = this.state[key] || {};
-                this.state[key].sort = { descending: this.sort.descending };
+                state[key] = state[key] || {};
+                state[key].sort = { descending: this.sort.descending };
             }
         }
 
-        this.emitter.emit('state-changed', tf, this.state);
+        this.emitter.emit('state-changed', tf, state);
     }
 
     /**
@@ -157,7 +159,13 @@ export class State extends Feature {
         this.update();
     }
 
-    updateSort(index, descending){
+    /**
+     * Refresh column sorting information on sort change
+     *
+     * @param index {Number} Column index
+     * @param descending {Boolean} Descending manner
+     */
+    updateSort(index, descending) {
         this.sort = {
             column: index,
             descending: descending
@@ -175,48 +183,25 @@ export class State extends Feature {
     }
 
     /**
-     * Apply current features state
+     * Sync stored features state
      */
     sync() {
         let state = this.state;
         let tf = this.tf;
 
-        // if (this.persistFilters) {
-        Object.keys(state).forEach((key) => {
-            if (key.indexOf(this.prfxCol) !== -1) {
-                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);
-                if (this.persistFilters) {
-                    let val = state[key].flt;
-                    tf.setFilterValue(colIdx, val);
-                }
-                if(this.persistSort){
-                    if(state[key].hasOwnProperty('sort')){
-
-                    }
-                    let val = state[key].sort;
-                    let sort = tf.extension('sort');
-                    sort.sortByColumnIndex(colIdx, val.descending);
-                }
-            }
-        });
-
-        if (this.persistFilters) {
-            tf.filter();
-        }
+        this._syncFilters();
 
         if (this.persistPageNumber) {
             let pageNumber = state[this.pageNbKey];
-            this.emitter.emit('change-page', this.tf, pageNumber);
+            this.emitter.emit('change-page', tf, pageNumber);
         }
 
         if (this.persistPageLength) {
             let pageLength = state[this.pageLengthKey];
-            this.emitter.emit('change-page-results', this.tf, pageLength);
+            this.emitter.emit('change-page-results', tf, pageLength);
         }
 
-        if(this.persistSort){
-
-        }
+        this._syncSort();
     }
 
     /**
@@ -237,6 +222,52 @@ export class State extends Feature {
     }
 
     /**
+     * Sync filters with stored values and filter table
+     *
+     * @private
+     */
+    _syncFilters() {
+        if (!this.persistFilters) {
+            return;
+        }
+        let state = this.state;
+        let tf = this.tf;
+
+        Object.keys(state).forEach((key) => {
+            if (key.indexOf(this.prfxCol) !== -1) {
+                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);
+                let val = state[key].flt;
+                tf.setFilterValue(colIdx, val);
+            }
+        });
+
+        tf.filter();
+    }
+
+    /**
+     * Sync sorted column with stored sorting information and sort table
+     *
+     * @private
+     */
+    _syncSort() {
+        if (!this.persistSort) {
+            return;
+        }
+        let state = this.state;
+        let tf = this.tf;
+
+        Object.keys(state).forEach((key) => {
+            if (key.indexOf(this.prfxCol) !== -1) {
+                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);
+                if (!Types.isUndef(state[key].sort)) {
+                    let sort = state[key].sort;
+                    this.emitter.emit('sort', tf, colIdx, sort.descending);
+                }
+            }
+        });
+    }
+
+    /**
      * Destroy State instance
      */
     destroy() {
@@ -253,13 +284,14 @@ export class State extends Feature {
             (tf, index) => this.updatePageLength(index));
         this.emitter.off(['column-sorted'],
             (tf, index, descending) => this.updateSort(index, descending));
+        this.emitter.off(['sort-initialized'], () => this._syncSort());
 
         if (this.enableHash) {
             this.hash.destroy();
             this.hash = null;
         }
 
-        if (this.enableLocalStorage || this.enableCookie) {
+        if (this.enableStorage) {
             this.storage.destroy();
             this.storage = null;
         }

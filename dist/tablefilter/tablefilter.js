@@ -7614,6 +7614,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.persistSort = Boolean(cfg.sort);
 	        _this.cookieDuration = !isNaN(cfg.cookie_duration) ? parseInt(cfg.cookie_duration, 10) : 87600;
 	
+	        _this.enableStorage = _this.enableLocalStorage || _this.enableCookie;
 	        _this.hash = null;
 	        _this.pageNb = null;
 	        _this.pageLength = null;
@@ -7650,12 +7651,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.emitter.on(['column-sorted'], function (tf, index, descending) {
 	            return _this2.updateSort(index, descending);
 	        });
+	        this.emitter.on(['sort-initialized'], function () {
+	            return _this2._syncSort();
+	        });
 	
 	        if (this.enableHash) {
 	            this.hash = new _hash.Hash(this);
 	            this.hash.init();
 	        }
-	        if (this.enableLocalStorage || this.enableCookie) {
+	        if (this.enableStorage) {
 	            this.storage = new _storage.Storage(this);
 	            this.storage.init();
 	        }
@@ -7673,6 +7677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!this.isEnabled()) {
 	            return;
 	        }
+	        var state = this.state;
 	        var tf = this.tf;
 	
 	        if (this.persistFilters) {
@@ -7682,47 +7687,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var key = '' + _this3.prfxCol + idx;
 	
 	                if (_types2.default.isString(val) && _string2.default.isEmpty(val)) {
-	                    if (_this3.state.hasOwnProperty(key)) {
-	                        _this3.state[key] = undefined;
+	                    if (state.hasOwnProperty(key)) {
+	                        state[key] = undefined;
 	                    }
 	                } else {
-	                    _this3.state[key] = _this3.state[key] || {};
-	                    _this3.state[key].flt = val;
+	                    state[key] = state[key] || {};
+	                    state[key].flt = val;
 	                }
 	            });
 	        }
 	
 	        if (this.persistPageNumber) {
 	            if (_types2.default.isNull(this.pageNb)) {
-	                this.state[this.pageNbKey] = undefined;
+	                state[this.pageNbKey] = undefined;
 	            } else {
-	                this.state[this.pageNbKey] = this.pageNb;
+	                state[this.pageNbKey] = this.pageNb;
 	            }
 	        }
 	
 	        if (this.persistPageLength) {
 	            if (_types2.default.isNull(this.pageLength)) {
-	                this.state[this.pageLengthKey] = undefined;
+	                state[this.pageLengthKey] = undefined;
 	            } else {
-	                this.state[this.pageLengthKey] = this.pageLength;
+	                state[this.pageLengthKey] = this.pageLength;
 	            }
 	        }
 	
 	        if (this.persistSort) {
 	            if (!_types2.default.isNull(this.sort)) {
-	                // Remove any sorted column
-	                Object.keys(this.state).forEach(function (key) {
-	                    if (key.indexOf(_this3.prfxCol) !== -1 && _this3.state[key]) {
-	                        _this3.state[key].sort = undefined;
+	                // Remove previuosly sorted column
+	                Object.keys(state).forEach(function (key) {
+	                    if (key.indexOf(_this3.prfxCol) !== -1 && state[key]) {
+	                        state[key].sort = undefined;
 	                    }
 	                });
+	
 	                var key = '' + this.prfxCol + this.sort.column;
-	                this.state[key] = this.state[key] || {};
-	                this.state[key].sort = { descending: this.sort.descending };
+	                state[key] = state[key] || {};
+	                state[key].sort = { descending: this.sort.descending };
 	            }
 	        }
 	
-	        this.emitter.emit('state-changed', tf, this.state);
+	        this.emitter.emit('state-changed', tf, state);
 	    };
 	
 	    /**
@@ -7749,6 +7755,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.update();
 	    };
 	
+	    /**
+	     * Refresh column sorting information on sort change
+	     *
+	     * @param index {Number} Column index
+	     * @param descending {Boolean} Descending manner
+	     */
+	
+	
 	    State.prototype.updateSort = function updateSort(index, descending) {
 	        this.sort = {
 	            column: index,
@@ -7769,48 +7783,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    /**
-	     * Apply current features state
+	     * Sync stored features state
 	     */
 	
 	
 	    State.prototype.sync = function sync() {
-	        var _this4 = this;
-	
 	        var state = this.state;
 	        var tf = this.tf;
 	
-	        // if (this.persistFilters) {
-	        Object.keys(state).forEach(function (key) {
-	            if (key.indexOf(_this4.prfxCol) !== -1) {
-	                var colIdx = parseInt(key.replace(_this4.prfxCol, ''), 10);
-	                if (_this4.persistFilters) {
-	                    var val = state[key].flt;
-	                    tf.setFilterValue(colIdx, val);
-	                }
-	                if (_this4.persistSort) {
-	                    if (state[key].hasOwnProperty('sort')) {}
-	                    var _val = state[key].sort;
-	                    var sort = tf.extension('sort');
-	                    sort.sortByColumnIndex(colIdx, _val.descending);
-	                }
-	            }
-	        });
-	
-	        if (this.persistFilters) {
-	            tf.filter();
-	        }
+	        this._syncFilters();
 	
 	        if (this.persistPageNumber) {
 	            var pageNumber = state[this.pageNbKey];
-	            this.emitter.emit('change-page', this.tf, pageNumber);
+	            this.emitter.emit('change-page', tf, pageNumber);
 	        }
 	
 	        if (this.persistPageLength) {
 	            var pageLength = state[this.pageLengthKey];
-	            this.emitter.emit('change-page-results', this.tf, pageLength);
+	            this.emitter.emit('change-page-results', tf, pageLength);
 	        }
 	
-	        if (this.persistSort) {}
+	        this._syncSort();
 	    };
 	
 	    /**
@@ -7833,12 +7826,66 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    /**
+	     * Sync filters with stored values and filter table
+	     *
+	     * @private
+	     */
+	
+	
+	    State.prototype._syncFilters = function _syncFilters() {
+	        var _this4 = this;
+	
+	        if (!this.persistFilters) {
+	            return;
+	        }
+	        var state = this.state;
+	        var tf = this.tf;
+	
+	        Object.keys(state).forEach(function (key) {
+	            if (key.indexOf(_this4.prfxCol) !== -1) {
+	                var colIdx = parseInt(key.replace(_this4.prfxCol, ''), 10);
+	                var val = state[key].flt;
+	                tf.setFilterValue(colIdx, val);
+	            }
+	        });
+	
+	        tf.filter();
+	    };
+	
+	    /**
+	     * Sync sorted column with stored sorting information and sort table
+	     *
+	     * @private
+	     */
+	
+	
+	    State.prototype._syncSort = function _syncSort() {
+	        var _this5 = this;
+	
+	        if (!this.persistSort) {
+	            return;
+	        }
+	        var state = this.state;
+	        var tf = this.tf;
+	
+	        Object.keys(state).forEach(function (key) {
+	            if (key.indexOf(_this5.prfxCol) !== -1) {
+	                var colIdx = parseInt(key.replace(_this5.prfxCol, ''), 10);
+	                if (!_types2.default.isUndef(state[key].sort)) {
+	                    var sort = state[key].sort;
+	                    _this5.emitter.emit('sort', tf, colIdx, sort.descending);
+	                }
+	            }
+	        });
+	    };
+	
+	    /**
 	     * Destroy State instance
 	     */
 	
 	
 	    State.prototype.destroy = function destroy() {
-	        var _this5 = this;
+	        var _this6 = this;
 	
 	        if (!this.initialized) {
 	            return;
@@ -7847,16 +7894,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.state = {};
 	
 	        this.emitter.off(['after-filtering'], function () {
-	            return _this5.update();
+	            return _this6.update();
 	        });
 	        this.emitter.off(['after-page-change', 'after-clearing-filters'], function (tf, pageNb) {
-	            return _this5.updatePage(pageNb);
+	            return _this6.updatePage(pageNb);
 	        });
 	        this.emitter.off(['after-page-length-change'], function (tf, index) {
-	            return _this5.updatePageLength(index);
+	            return _this6.updatePageLength(index);
 	        });
 	        this.emitter.off(['column-sorted'], function (tf, index, descending) {
-	            return _this5.updateSort(index, descending);
+	            return _this6.updateSort(index, descending);
+	        });
+	        this.emitter.off(['sort-initialized'], function () {
+	            return _this6._syncSort();
 	        });
 	
 	        if (this.enableHash) {
@@ -7864,7 +7914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.hash = null;
 	        }
 	
-	        if (this.enableLocalStorage || this.enableCookie) {
+	        if (this.enableStorage) {
 	            this.storage.destroy();
 	            this.storage = null;
 	        }

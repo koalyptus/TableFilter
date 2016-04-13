@@ -1793,6 +1793,8 @@ webpackJsonp([1],{
 	    }
 	
 	    AdapterSortableTable.prototype.init = function init() {
+	        var _this = this;
+	
 	        var tf = this.tf;
 	        var adpt = this;
 	
@@ -1845,7 +1847,12 @@ webpackJsonp([1],{
 	            adpt.emitter.emit('column-sorted', tf, adpt.stt.sortColumn, adpt.stt.descending);
 	        };
 	
+	        this.emitter.on(['sort'], function (tf, colIdx, desc) {
+	            return _this.sortByColumnIndex(colIdx, desc);
+	        });
+	
 	        this.initialized = true;
+	        this.emitter.emit('sort-initialized', tf, this);
 	    };
 	
 	    /**
@@ -2019,7 +2026,7 @@ webpackJsonp([1],{
 	    };
 	
 	    AdapterSortableTable.prototype.setSortTypes = function setSortTypes() {
-	        var _this = this;
+	        var _this2 = this;
 	
 	        var tf = this.tf,
 	            sortTypes = this.sortTypes,
@@ -2066,7 +2073,7 @@ webpackJsonp([1],{
 	        /*** external table headers adapter ***/
 	        if (this.asyncSort && this.triggerIds.length > 0) {
 	            (function () {
-	                var triggers = _this.triggerIds;
+	                var triggers = _this2.triggerIds;
 	                for (var j = 0; j < triggers.length; j++) {
 	                    if (triggers[j] === null) {
 	                        continue;
@@ -2077,10 +2084,10 @@ webpackJsonp([1],{
 	
 	                        _event2.default.add(trigger, 'click', function (evt) {
 	                            var elm = evt.target;
-	                            if (!_this.tf.sort) {
+	                            if (!_this2.tf.sort) {
 	                                return;
 	                            }
-	                            _this.stt.asyncSort(triggers.indexOf(elm.id));
+	                            _this2.stt.asyncSort(triggers.indexOf(elm.id));
 	                        });
 	                        trigger.setAttribute('_sortType', _sortTypes[j]);
 	                    }
@@ -2095,7 +2102,12 @@ webpackJsonp([1],{
 	
 	
 	    AdapterSortableTable.prototype.destroy = function destroy() {
+	        var _this3 = this;
+	
 	        var tf = this.tf;
+	        this.emitter.off(['sort'], function (tf, colIdx, desc) {
+	            return _this3.sortByColumnIndex(colIdx, desc);
+	        });
 	        this.sorted = false;
 	        this.initialized = false;
 	        this.stt.destroy();
