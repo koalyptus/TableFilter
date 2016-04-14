@@ -28,7 +28,10 @@
 var tfConfig = {
     base_path: '../dist/tablefilter/',
     paging: true,
-    remember_grid_values: true,
+    state: {
+        types: ['cookie'],
+        filters: true
+    },
     alternate_rows: true,
     rows_counter: true,
     btn_reset: true,
