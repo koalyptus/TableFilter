@@ -3258,6 +3258,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/state.js~state#enablestorage",
+    "class/src/modules/state.js~State.html#instance-member-enableStorage",
+    "src/modules/state.js~State#enableStorage",
+    "member"
+  ],
+  [
     "src/modules/state.js~state#hash",
     "class/src/modules/state.js~State.html#instance-member-hash",
     "src/modules/state.js~State#hash",
@@ -3330,9 +3336,21 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/state.js~state#persistsort",
+    "class/src/modules/state.js~State.html#instance-member-persistSort",
+    "src/modules/state.js~State#persistSort",
+    "member"
+  ],
+  [
     "src/modules/state.js~state#prfxcol",
     "class/src/modules/state.js~State.html#instance-member-prfxCol",
     "src/modules/state.js~State#prfxCol",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#sort",
+    "class/src/modules/state.js~State.html#instance-member-sort",
+    "src/modules/state.js~State#sort",
     "member"
   ],
   [
@@ -3369,6 +3387,12 @@ window.esdocSearchIndex = [
     "src/modules/state.js~state#updatepagelength",
     "class/src/modules/state.js~State.html#instance-method-updatePageLength",
     "src/modules/state.js~State#updatePageLength",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#updatesort",
+    "class/src/modules/state.js~State.html#instance-method-updateSort",
+    "src/modules/state.js~State#updateSort",
     "method"
   ],
   [
