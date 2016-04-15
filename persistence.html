@@ -176,8 +176,15 @@
 <h1>Persistence</h1>
 
 <p>
-    Filter values and pagination features state can be persisted across page
-    loads with the <code>state</code> option.
+    Features state can be persisted across page loads with the
+    <code>state</code> option. The following features can currently be
+    persisted:
+    <ul>
+      <li>filters' values</li>
+      <li>current page number when <code>paging</code> in on</li>
+      <li>current page length when <code>paging</code> in on</li>
+      <li>current sorted column when <code>sort</code> extension is enabled</li>
+    </ul>
 </p>
 
 
@@ -13148,7 +13155,8 @@
           types: ['local_storage'],
           filters: true,
           page_number: true,
-          page_length: true
+          page_length: true,
+          sort: true
         },
         paging: true,
         results_per_page: ['Records: ', [10, 25, 50, 100]],
