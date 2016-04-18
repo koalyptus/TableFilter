@@ -178,6 +178,8 @@ export default class ColsVisibility {
         this.buildManager();
 
         this.initialized = true;
+        this.emitter.on(['hide-column'],
+            (tf, colIndex)=> this.hideCol(colIndex));
         this.emitter.emit('colsVisibility-initialized', tf, this);
     }
 
@@ -339,7 +341,7 @@ export default class ColsVisibility {
      * @param {Numner} colIndex Column index
      * @param {Boolean} hide    Hide column if true or show if false
      */
-    setHidden(colIndex, hide) {
+    setHidden(colIndex, hide) {console.log('extension:', colIndex, hide);
         let tf = this.tf;
         let tbl = tf.tbl;
 
@@ -370,7 +372,7 @@ export default class ColsVisibility {
         let gridLayout;
         let headTbl;
         let gridColElms;
-        if (this.onAfterColHidden && hide) {
+        if (hide) {
             //This event is fired just after a column is displayed for
             //grid_layout support
             //TODO: grid layout module should be responsible for those
@@ -386,11 +388,14 @@ export default class ColsVisibility {
                 headTbl.style.width = headTblW - hiddenWidth + 'px';
                 tbl.style.width = headTbl.style.width;
             }
-            this.onAfterColHidden.call(null, this, colIndex);
-            this.emitter.emit('hide-column', tf, this, colIndex);
+            if(this.onAfterColHidden){
+                this.onAfterColHidden.call(null, this, colIndex);
+            }
+            this.emitter.emit('column-hidden', tf, this, colIndex,
+                this.hiddenCols);
         }
 
-        if (this.onAfterColDisplayed && !hide) {
+        if (!hide) {
             //This event is fired just after a column is displayed for
             //grid_layout support
             //TODO: grid layout module should be responsible for those
@@ -404,8 +409,11 @@ export default class ColsVisibility {
                     (parseInt(headTbl.style.width, 10) + width) + 'px';
                 tf.tbl.style.width = headTbl.style.width;
             }
-            this.onAfterColDisplayed.call(null, this, colIndex);
-            this.emitter.emit('show-column', tf, this, colIndex);
+            if(this.onAfterColDisplayed){
+                this.onAfterColDisplayed.call(null, this, colIndex);
+            }
+            this.emitter.emit('column-shown', tf, this, colIndex,
+                this.hiddenCols);
         }
     }
 
@@ -493,6 +501,9 @@ export default class ColsVisibility {
         this.btnEl.innerHTML = '';
         Dom.remove(this.btnEl);
         this.btnEl = null;
+
+        this.emitter.off(['hide-column'],
+            (tf, colIndex)=> this.hideCol(colIndex));
         this.initialized = false;
     }
 

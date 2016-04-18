@@ -30,7 +30,8 @@ var tfConfig = {
     paging: true,
     state: {
         types: ['cookie'],
-        filters: true
+        filters: true,
+        columns_visibility: true
     },
     alternate_rows: true,
     rows_counter: true,
@@ -44,7 +45,7 @@ var tfConfig = {
     extensions:[
         {
             name: 'colsVisibility',
-            at_start: [3, 5],
+            //at_start: [3, 5],
             text: 'Columns: ',
             enable_tick_all: true
         }, {
