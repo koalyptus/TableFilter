@@ -178,9 +178,12 @@ export default class ColsVisibility {
         this.buildManager();
 
         this.initialized = true;
+
         this.emitter.on(['hide-column'],
-            (tf, colIndex)=> this.hideCol(colIndex));
-        this.emitter.emit('colsVisibility-initialized', tf, this);
+            (tf, colIndex) => this.hideCol(colIndex));
+        this.emitter.on(['set-hidden-columns'],
+            (tf, hiddenCols) => this.setHiddenCols(hiddenCols));
+        this.emitter.emit('columns-visibility-initialized', tf, this);
     }
 
     /**
@@ -328,10 +331,11 @@ export default class ColsVisibility {
         if (this.atStart) {
             let a = this.atStart;
             for (let k = 0; k < a.length; k++) {
-                let itm = Dom.id('col_' + a[k] + '_' + tf.id);
-                if (itm) {
-                    itm.click();
-                }
+                // let itm = Dom.id('col_' + a[k] + '_' + tf.id);
+                // if (itm) {
+                //     itm.click();
+                // }
+                this.hideCol(a[k]);
             }
         }
     }
@@ -341,7 +345,7 @@ export default class ColsVisibility {
      * @param {Numner} colIndex Column index
      * @param {Boolean} hide    Hide column if true or show if false
      */
-    setHidden(colIndex, hide) {console.log('extension:', colIndex, hide);
+    setHidden(colIndex, hide) {
         let tf = this.tf;
         let tbl = tf.tbl;
 
@@ -388,7 +392,7 @@ export default class ColsVisibility {
                 headTbl.style.width = headTblW - hiddenWidth + 'px';
                 tbl.style.width = headTbl.style.width;
             }
-            if(this.onAfterColHidden){
+            if (this.onAfterColHidden) {
                 this.onAfterColHidden.call(null, this, colIndex);
             }
             this.emitter.emit('column-hidden', tf, this, colIndex,
@@ -409,7 +413,7 @@ export default class ColsVisibility {
                     (parseInt(headTbl.style.width, 10) + width) + 'px';
                 tf.tbl.style.width = headTbl.style.width;
             }
-            if(this.onAfterColDisplayed){
+            if (this.onAfterColDisplayed) {
                 this.onAfterColDisplayed.call(null, this, colIndex);
             }
             this.emitter.emit('column-shown', tf, this, colIndex,
@@ -439,7 +443,7 @@ export default class ColsVisibility {
      * Hide specified column
      * @param  {Number} colIndex Column index
      */
-    hideCol(colIndex) {
+    hideCol(colIndex) {console.log(colIndex);
         if (colIndex === undefined || this.isColHidden(colIndex)) {
             return;
         }
@@ -449,6 +453,7 @@ export default class ColsVisibility {
                 itm.click();
             }
         } else {
+            console.log(colIndex, this.isColHidden(colIndex));
             this.setHidden(colIndex, true);
         }
     }
@@ -484,6 +489,10 @@ export default class ColsVisibility {
         return this.hiddenCols;
     }
 
+    setHiddenCols(hiddenCols=[]){
+        this.hiddenCols = hiddenCols;
+    }
+
     /**
      * Remove the columns manager
      */
@@ -503,7 +512,10 @@ export default class ColsVisibility {
         this.btnEl = null;
 
         this.emitter.off(['hide-column'],
-            (tf, colIndex)=> this.hideCol(colIndex));
+            (tf, colIndex) => this.hideCol(colIndex));
+        this.emitter.off(['set-hidden-columns'],
+            (tf, hiddenCols) => this.setHiddenCols(hiddenCols));
+
         this.initialized = false;
     }
 

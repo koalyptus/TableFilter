@@ -1125,10 +1125,14 @@ webpackJsonp([1],{
 	        this.buildManager();
 	
 	        this.initialized = true;
+	
 	        this.emitter.on(['hide-column'], function (tf, colIndex) {
 	            return _this.hideCol(colIndex);
 	        });
-	        this.emitter.emit('colsVisibility-initialized', tf, this);
+	        this.emitter.on(['set-hidden-columns'], function (tf, hiddenCols) {
+	            return _this.setHiddenCols(hiddenCols);
+	        });
+	        this.emitter.emit('columns-visibility-initialized', tf, this);
 	    };
 	
 	    /**
@@ -1293,10 +1297,11 @@ webpackJsonp([1],{
 	        if (this.atStart) {
 	            var a = this.atStart;
 	            for (var k = 0; k < a.length; k++) {
-	                var itm = _dom2.default.id('col_' + a[k] + '_' + tf.id);
-	                if (itm) {
-	                    itm.click();
-	                }
+	                // let itm = Dom.id('col_' + a[k] + '_' + tf.id);
+	                // if (itm) {
+	                //     itm.click();
+	                // }
+	                this.hideCol(a[k]);
 	            }
 	        }
 	    };
@@ -1309,7 +1314,6 @@ webpackJsonp([1],{
 	
 	
 	    ColsVisibility.prototype.setHidden = function setHidden(colIndex, hide) {
-	        console.log('extension:', colIndex, hide);
 	        var tf = this.tf;
 	        var tbl = tf.tbl;
 	
@@ -1408,6 +1412,7 @@ webpackJsonp([1],{
 	
 	
 	    ColsVisibility.prototype.hideCol = function hideCol(colIndex) {
+	        console.log(colIndex);
 	        if (colIndex === undefined || this.isColHidden(colIndex)) {
 	            return;
 	        }
@@ -1417,6 +1422,7 @@ webpackJsonp([1],{
 	                itm.click();
 	            }
 	        } else {
+	            console.log(colIndex, this.isColHidden(colIndex));
 	            this.setHidden(colIndex, true);
 	        }
 	    };
@@ -1458,6 +1464,12 @@ webpackJsonp([1],{
 	        return this.hiddenCols;
 	    };
 	
+	    ColsVisibility.prototype.setHiddenCols = function setHiddenCols() {
+	        var hiddenCols = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	
+	        this.hiddenCols = hiddenCols;
+	    };
+	
 	    /**
 	     * Remove the columns manager
 	     */
@@ -1483,6 +1495,10 @@ webpackJsonp([1],{
 	        this.emitter.off(['hide-column'], function (tf, colIndex) {
 	            return _this4.hideCol(colIndex);
 	        });
+	        this.emitter.off(['set-hidden-columns'], function (tf, hiddenCols) {
+	            return _this4.setHiddenCols(hiddenCols);
+	        });
+	
 	        this.initialized = false;
 	    };
 	

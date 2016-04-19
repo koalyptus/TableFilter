@@ -7656,7 +7656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.emitter.on(['sort-initialized'], function () {
 	            return _this2._syncSort();
 	        });
-	        this.emitter.on(['colsVisibility-initialized'], function () {
+	        this.emitter.on(['columns-visibility-initialized'], function () {
 	            return _this2._syncColsVisibility();
 	        });
 	        this.emitter.on(['column-shown', 'column-hidden'], function (tf, feature, colIndex, hiddenCols) {
@@ -7738,8 +7738,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        if (this.persistColsVisibility) {
 	            if (!_types2.default.isNull(this.hiddenCols)) {
-	                console.log(this.hiddenCols);
-	                // Remove previuosly hidden columns
+	                // Clear previuosly hidden columns
 	                Object.keys(state).forEach(function (key) {
 	                    if (key.indexOf(_this3.prfxCol) !== -1 && state[key]) {
 	                        state[key].hidden = undefined;
@@ -7751,7 +7750,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    state[key] = state[key] || {};
 	                    state[key].hidden = true;
 	                });
-	                console.log(state);
 	            }
 	        }
 	
@@ -7759,7 +7757,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    /**
-	     * Refresh page number field on page number change
+	     * Refresh page number field on page number changes
 	     *
 	     * @param pageNb Current page number
 	     */
@@ -7771,7 +7769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    /**
-	     * Refresh page length field on page length change
+	     * Refresh page length field on page length changes
 	     *
 	     * @param pageLength Current page length value
 	     */
@@ -7783,7 +7781,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    /**
-	     * Refresh column sorting information on sort change
+	     * Refresh column sorting information on sort changes
 	     *
 	     * @param index {Number} Column index
 	     * @param descending {Boolean} Descending manner
@@ -7798,8 +7796,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.update();
 	    };
 	
+	    /**
+	     * Refresh hidden columns information on columns visibility changes
+	     *
+	     * @param hiddenCols {Array} Columns indexes
+	     */
+	
+	
 	    State.prototype.updateColsVisibility = function updateColsVisibility(hiddenCols) {
-	        console.log(hiddenCols);
 	        this.hiddenCols = hiddenCols;
 	        this.update();
 	    };
@@ -7913,28 +7917,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	
+	    /**
+	     * Sync hidden columns with stored information
+	     *
+	     * @private
+	     */
+	
+	
 	    State.prototype._syncColsVisibility = function _syncColsVisibility() {
 	        var _this6 = this;
 	
-	        console.log('init', this.state);
 	        if (!this.persistColsVisibility) {
 	            return;
 	        }
 	        var state = this.state;
 	        var tf = this.tf;
+	        var hiddenCols = [];
 	
 	        Object.keys(state).forEach(function (key) {
 	            if (key.indexOf(_this6.prfxCol) !== -1) {
 	                var colIdx = parseInt(key.replace(_this6.prfxCol, ''), 10);
 	                if (!_types2.default.isUndef(state[key].hidden)) {
-	                    var feature = tf.extension('colsVisibility');
-	                    console.log(feature);
-	                    // feature.hiddenCols.push(colIdx);
-	                    // let hidden = state[key].hidden;
-	                    console.log('hide', colIdx);
-	                    _this6.emitter.emit('hide-column', tf, colIdx);
+	                    hiddenCols.push(colIdx);
 	                }
 	            }
+	        });
+	
+	        console.log(hiddenCols);
+	        this.emitter.emit('set-hidden-columns', tf, hiddenCols);
+	
+	        hiddenCols.forEach(function (colIdx) {
+	            console.log('hide', colIdx);
+	            _this6.emitter.emit('hide-column', tf, colIdx);
 	        });
 	    };
 	
@@ -7967,7 +7981,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.emitter.off(['sort-initialized'], function () {
 	            return _this7._syncSort();
 	        });
-	        this.emitter.off(['colsVisibility-initialized'], function () {
+	        this.emitter.off(['columns-visibility-initialized'], function () {
 	            return _this7._syncColsVisibility();
 	        });
 	        this.emitter.off(['column-shown', 'column-hidden'], function (tf, feature, colIndex, hiddenCols) {

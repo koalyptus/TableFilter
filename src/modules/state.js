@@ -67,7 +67,7 @@ export class State extends Feature {
         this.emitter.on(['column-sorted'],
             (tf, index, descending) => this.updateSort(index, descending));
         this.emitter.on(['sort-initialized'], () => this._syncSort());
-        this.emitter.on(['colsVisibility-initialized'],
+        this.emitter.on(['columns-visibility-initialized'],
             () => this._syncColsVisibility());
         this.emitter.on(['column-shown', 'column-hidden'], (tf, feature,
             colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));
@@ -142,10 +142,9 @@ export class State extends Feature {
             }
         }
 
-        if(this.persistColsVisibility){
+        if (this.persistColsVisibility) {
             if (!Types.isNull(this.hiddenCols)) {
-                console.log(this.hiddenCols);
-                // Remove previuosly hidden columns
+                // Clear previuosly hidden columns
                 Object.keys(state).forEach((key) => {
                     if (key.indexOf(this.prfxCol) !== -1 && state[key]) {
                         state[key].hidden = undefined;
@@ -157,7 +156,6 @@ export class State extends Feature {
                     state[key] = state[key] || {};
                     state[key].hidden = true;
                 });
-                console.log(state);
             }
         }
 
@@ -165,7 +163,7 @@ export class State extends Feature {
     }
 
     /**
-     * Refresh page number field on page number change
+     * Refresh page number field on page number changes
      *
      * @param pageNb Current page number
      */
@@ -175,7 +173,7 @@ export class State extends Feature {
     }
 
     /**
-     * Refresh page length field on page length change
+     * Refresh page length field on page length changes
      *
      * @param pageLength Current page length value
      */
@@ -185,7 +183,7 @@ export class State extends Feature {
     }
 
     /**
-     * Refresh column sorting information on sort change
+     * Refresh column sorting information on sort changes
      *
      * @param index {Number} Column index
      * @param descending {Boolean} Descending manner
@@ -198,7 +196,12 @@ export class State extends Feature {
         this.update();
     }
 
-    updateColsVisibility(hiddenCols){console.log(hiddenCols);
+    /**
+     * Refresh hidden columns information on columns visibility changes
+     *
+     * @param hiddenCols {Array} Columns indexes
+     */
+    updateColsVisibility(hiddenCols) {
         this.hiddenCols = hiddenCols;
         this.update();
     }
@@ -298,25 +301,34 @@ export class State extends Feature {
         });
     }
 
-    _syncColsVisibility(){console.log('init', this.state);
-        if(!this.persistColsVisibility){
+    /**
+     * Sync hidden columns with stored information
+     *
+     * @private
+     */
+    _syncColsVisibility() {
+        if (!this.persistColsVisibility) {
             return;
         }
         let state = this.state;
         let tf = this.tf;
+        let hiddenCols = [];
 
         Object.keys(state).forEach((key) => {
             if (key.indexOf(this.prfxCol) !== -1) {
                 let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);
                 if (!Types.isUndef(state[key].hidden)) {
-                    let feature = tf.extension('colsVisibility');
-                    console.log(feature);
-                    // feature.hiddenCols.push(colIdx);
-                    // let hidden = state[key].hidden;
-                    console.log('hide', colIdx);
-                    this.emitter.emit('hide-column', tf, colIdx);
+                    hiddenCols.push(colIdx);
                 }
             }
+        });
+
+        console.log(hiddenCols);
+        this.emitter.emit('set-hidden-columns', tf, hiddenCols);
+
+        hiddenCols.forEach((colIdx) => {
+            console.log('hide', colIdx);
+            this.emitter.emit('hide-column', tf, colIdx);
         });
     }
 
@@ -338,7 +350,7 @@ export class State extends Feature {
         this.emitter.off(['column-sorted'],
             (tf, index, descending) => this.updateSort(index, descending));
         this.emitter.off(['sort-initialized'], () => this._syncSort());
-        this.emitter.off(['colsVisibility-initialized'],
+        this.emitter.off(['columns-visibility-initialized'],
             () => this._syncColsVisibility());
         this.emitter.off(['column-shown', 'column-hidden'], (tf, feature,
             colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));
