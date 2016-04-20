@@ -1121,19 +1121,19 @@ webpackJsonp([1],{
 	        if (!this.manager) {
 	            return;
 	        }
-	        this.buildBtn();
-	        this.buildManager();
-	
-	        this.initialized = true;
 	
 	        this.emitter.on(['hide-column'], function (tf, colIndex) {
 	            return _this.hideCol(colIndex);
 	        });
+	
+	        this.buildBtn();
+	        this.buildManager();
+	
+	        this.initialized = true;
 	        this.emitter.emit('columns-visibility-initialized', tf, this);
 	
 	        // Hide columns at start at very end of initialization
-	        // TODO: re-evaluate this as conceptually wrong
-	        this.hideAtStart();
+	        this._hideAtStart();
 	    };
 	
 	    /**
@@ -1294,17 +1294,6 @@ webpackJsonp([1],{
 	
 	        this.btnEl.parentNode.insertBefore(container, this.btnEl);
 	        this.contEl = container;
-	
-	        // if (this.atStart) {
-	        //     let a = this.atStart;
-	        //     for (let k = 0; k < a.length; k++) {
-	        //         // let itm = Dom.id('col_' + a[k] + '_' + tf.id);
-	        //         // if (itm) {
-	        //         //     itm.click();
-	        //         // }
-	        //         this.hideCol(a[k]);
-	        //     }
-	        // }
 	    };
 	
 	    /**
@@ -1464,21 +1453,6 @@ webpackJsonp([1],{
 	    };
 	
 	    /**
-	     * Hide columns at start
-	     */
-	
-	
-	    ColsVisibility.prototype.hideAtStart = function hideAtStart() {
-	        if (!this.atStart) {
-	            return;
-	        }
-	        var a = this.atStart;
-	        for (var k = 0; k < a.length; k++) {
-	            this.hideCol(a[k]);
-	        }
-	    };
-	
-	    /**
 	     * Remove the columns manager
 	     */
 	
@@ -1536,6 +1510,17 @@ webpackJsonp([1],{
 	                cell.style.display = hide ? 'none' : '';
 	            }
 	        }
+	    };
+	
+	    ColsVisibility.prototype._hideAtStart = function _hideAtStart() {
+	        var _this5 = this;
+	
+	        if (!this.atStart) {
+	            return;
+	        }
+	        this.atStart.forEach(function (colIdx) {
+	            _this5.hideCol(colIdx);
+	        });
 	    };
 	
 	    return ColsVisibility;

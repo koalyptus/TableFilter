@@ -119,6 +119,20 @@ test('Can update sort', function() {
         { 'sort': { 'descending': true } }, 'Sort updated');
 });
 
+test('Can update columns visibility', function() {
+    // setup
+    state.persistColsVisibility = true;
+    state.state = {};
+
+    // act
+    state.updateColsVisibility([0, 2]);
+    state.persistColsVisibility = false;
+
+    // assert
+    deepEqual(state.state.col_0.hidden, true, 'Column 0 visibility updated');
+    deepEqual(state.state.col_2.hidden, true, 'Column 2 visibility updated');
+});
+
 module('Tear-down');
 test('Can destroy TF', function() {
     // setup
