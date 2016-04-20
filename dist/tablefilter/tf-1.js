@@ -1129,10 +1129,11 @@ webpackJsonp([1],{
 	        this.emitter.on(['hide-column'], function (tf, colIndex) {
 	            return _this.hideCol(colIndex);
 	        });
-	        this.emitter.on(['set-hidden-columns'], function (tf, hiddenCols) {
-	            return _this.setHiddenCols(hiddenCols);
-	        });
 	        this.emitter.emit('columns-visibility-initialized', tf, this);
+	
+	        // Hide columns at start at very end of initialization
+	        // TODO: re-evaluate this as conceptually wrong
+	        this.hideAtStart();
 	    };
 	
 	    /**
@@ -1294,16 +1295,16 @@ webpackJsonp([1],{
 	        this.btnEl.parentNode.insertBefore(container, this.btnEl);
 	        this.contEl = container;
 	
-	        if (this.atStart) {
-	            var a = this.atStart;
-	            for (var k = 0; k < a.length; k++) {
-	                // let itm = Dom.id('col_' + a[k] + '_' + tf.id);
-	                // if (itm) {
-	                //     itm.click();
-	                // }
-	                this.hideCol(a[k]);
-	            }
-	        }
+	        // if (this.atStart) {
+	        //     let a = this.atStart;
+	        //     for (let k = 0; k < a.length; k++) {
+	        //         // let itm = Dom.id('col_' + a[k] + '_' + tf.id);
+	        //         // if (itm) {
+	        //         //     itm.click();
+	        //         // }
+	        //         this.hideCol(a[k]);
+	        //     }
+	        // }
 	    };
 	
 	    /**
@@ -1412,7 +1413,6 @@ webpackJsonp([1],{
 	
 	
 	    ColsVisibility.prototype.hideCol = function hideCol(colIndex) {
-	        console.log(colIndex);
 	        if (colIndex === undefined || this.isColHidden(colIndex)) {
 	            return;
 	        }
@@ -1422,7 +1422,6 @@ webpackJsonp([1],{
 	                itm.click();
 	            }
 	        } else {
-	            console.log(colIndex, this.isColHidden(colIndex));
 	            this.setHidden(colIndex, true);
 	        }
 	    };
@@ -1455,7 +1454,7 @@ webpackJsonp([1],{
 	    };
 	
 	    /**
-	     * Returns the indexes of the columns currently hidden
+	     * Return the indexes of the columns currently hidden
 	     * @return {Array} column indexes
 	     */
 	
@@ -1464,10 +1463,19 @@ webpackJsonp([1],{
 	        return this.hiddenCols;
 	    };
 	
-	    ColsVisibility.prototype.setHiddenCols = function setHiddenCols() {
-	        var hiddenCols = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    /**
+	     * Hide columns at start
+	     */
 	
-	        this.hiddenCols = hiddenCols;
+	
+	    ColsVisibility.prototype.hideAtStart = function hideAtStart() {
+	        if (!this.atStart) {
+	            return;
+	        }
+	        var a = this.atStart;
+	        for (var k = 0; k < a.length; k++) {
+	            this.hideCol(a[k]);
+	        }
 	    };
 	
 	    /**
@@ -1494,9 +1502,6 @@ webpackJsonp([1],{
 	
 	        this.emitter.off(['hide-column'], function (tf, colIndex) {
 	            return _this4.hideCol(colIndex);
-	        });
-	        this.emitter.off(['set-hidden-columns'], function (tf, hiddenCols) {
-	            return _this4.setHiddenCols(hiddenCols);
 	        });
 	
 	        this.initialized = false;

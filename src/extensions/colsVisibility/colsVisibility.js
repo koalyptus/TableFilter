@@ -181,9 +181,11 @@ export default class ColsVisibility {
 
         this.emitter.on(['hide-column'],
             (tf, colIndex) => this.hideCol(colIndex));
-        this.emitter.on(['set-hidden-columns'],
-            (tf, hiddenCols) => this.setHiddenCols(hiddenCols));
         this.emitter.emit('columns-visibility-initialized', tf, this);
+
+        // Hide columns at start at very end of initialization
+        // TODO: re-evaluate this as conceptually wrong
+        this.hideAtStart();
     }
 
     /**
@@ -328,16 +330,16 @@ export default class ColsVisibility {
         this.btnEl.parentNode.insertBefore(container, this.btnEl);
         this.contEl = container;
 
-        if (this.atStart) {
-            let a = this.atStart;
-            for (let k = 0; k < a.length; k++) {
-                // let itm = Dom.id('col_' + a[k] + '_' + tf.id);
-                // if (itm) {
-                //     itm.click();
-                // }
-                this.hideCol(a[k]);
-            }
-        }
+        // if (this.atStart) {
+        //     let a = this.atStart;
+        //     for (let k = 0; k < a.length; k++) {
+        //         // let itm = Dom.id('col_' + a[k] + '_' + tf.id);
+        //         // if (itm) {
+        //         //     itm.click();
+        //         // }
+        //         this.hideCol(a[k]);
+        //     }
+        // }
     }
 
     /**
@@ -443,7 +445,7 @@ export default class ColsVisibility {
      * Hide specified column
      * @param  {Number} colIndex Column index
      */
-    hideCol(colIndex) {console.log(colIndex);
+    hideCol(colIndex) {
         if (colIndex === undefined || this.isColHidden(colIndex)) {
             return;
         }
@@ -453,7 +455,6 @@ export default class ColsVisibility {
                 itm.click();
             }
         } else {
-            console.log(colIndex, this.isColHidden(colIndex));
             this.setHidden(colIndex, true);
         }
     }
@@ -482,15 +483,24 @@ export default class ColsVisibility {
     }
 
     /**
-     * Returns the indexes of the columns currently hidden
+     * Return the indexes of the columns currently hidden
      * @return {Array} column indexes
      */
     getHiddenCols() {
         return this.hiddenCols;
     }
 
-    setHiddenCols(hiddenCols=[]){
-        this.hiddenCols = hiddenCols;
+    /**
+     * Hide columns at start
+     */
+    hideAtStart() {
+        if (!this.atStart) {
+            return;
+        }
+        let a = this.atStart;
+        for (let k = 0; k < a.length; k++) {
+            this.hideCol(a[k]);
+        }
     }
 
     /**
@@ -513,8 +523,6 @@ export default class ColsVisibility {
 
         this.emitter.off(['hide-column'],
             (tf, colIndex) => this.hideCol(colIndex));
-        this.emitter.off(['set-hidden-columns'],
-            (tf, hiddenCols) => this.setHiddenCols(hiddenCols));
 
         this.initialized = false;
     }

@@ -7943,11 +7943,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 	
-	        console.log(hiddenCols);
-	        this.emitter.emit('set-hidden-columns', tf, hiddenCols);
-	
 	        hiddenCols.forEach(function (colIdx) {
-	            console.log('hide', colIdx);
 	            _this6.emitter.emit('hide-column', tf, colIdx);
 	        });
 	    };

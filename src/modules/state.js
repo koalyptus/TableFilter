@@ -323,11 +323,7 @@ export class State extends Feature {
             }
         });
 
-        console.log(hiddenCols);
-        this.emitter.emit('set-hidden-columns', tf, hiddenCols);
-
         hiddenCols.forEach((colIdx) => {
-            console.log('hide', colIdx);
             this.emitter.emit('hide-column', tf, colIdx);
         });
     }
