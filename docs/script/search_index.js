@@ -834,6 +834,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#emitter",
+    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-emitter",
+    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#emitter",
+    "member"
+  ],
+  [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#enablehover",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-enableHover",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#enableHover",
@@ -3270,6 +3276,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/state.js~state#hiddencols",
+    "class/src/modules/state.js~State.html#instance-member-hiddenCols",
+    "src/modules/state.js~State#hiddenCols",
+    "member"
+  ],
+  [
     "src/modules/state.js~state#init",
     "class/src/modules/state.js~State.html#instance-method-init",
     "src/modules/state.js~State#init",
@@ -3315,6 +3327,12 @@ window.esdocSearchIndex = [
     "src/modules/state.js~state#pagenbkey",
     "class/src/modules/state.js~State.html#instance-member-pageNbKey",
     "src/modules/state.js~State#pageNbKey",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#persistcolsvisibility",
+    "class/src/modules/state.js~State.html#instance-member-persistColsVisibility",
+    "src/modules/state.js~State#persistColsVisibility",
     "member"
   ],
   [
@@ -3375,6 +3393,12 @@ window.esdocSearchIndex = [
     "src/modules/state.js~state#update",
     "class/src/modules/state.js~State.html#instance-method-update",
     "src/modules/state.js~State#update",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#updatecolsvisibility",
+    "class/src/modules/state.js~State.html#instance-method-updateColsVisibility",
+    "src/modules/state.js~State#updateColsVisibility",
     "method"
   ],
   [
