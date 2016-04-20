@@ -34,6 +34,7 @@ export class State extends Feature {
         this.persistPageNumber = Boolean(cfg.page_number);
         this.persistPageLength = Boolean(cfg.page_length);
         this.persistSort = Boolean(cfg.sort);
+        this.persistColsVisibility = Boolean(cfg.columns_visibility);
         this.cookieDuration = !isNaN(cfg.cookie_duration) ?
             parseInt(cfg.cookie_duration, 10) : 87600;
 
@@ -42,6 +43,7 @@ export class State extends Feature {
         this.pageNb = null;
         this.pageLength = null;
         this.sort = null;
+        this.hiddenCols = null;
 
         this.state = {};
         this.prfxCol = 'col_';
@@ -65,6 +67,10 @@ export class State extends Feature {
         this.emitter.on(['column-sorted'],
             (tf, index, descending) => this.updateSort(index, descending));
         this.emitter.on(['sort-initialized'], () => this._syncSort());
+        this.emitter.on(['columns-visibility-initialized'],
+            () => this._syncColsVisibility());
+        this.emitter.on(['column-shown', 'column-hidden'], (tf, feature,
+            colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));
 
         if (this.enableHash) {
             this.hash = new Hash(this);
@@ -79,7 +85,7 @@ export class State extends Feature {
 
 
     /**
-     * Update state field based on current features state
+     * Update state object based on current features state
      */
     update() {
         if (!this.isEnabled()) {
@@ -96,7 +102,7 @@ export class State extends Feature {
 
                 if (Types.isString(val) && Str.isEmpty(val)) {
                     if (state.hasOwnProperty(key)) {
-                        state[key] = undefined;
+                        state[key].flt = undefined;
                     }
                 } else {
                     state[key] = state[key] || {};
@@ -136,11 +142,28 @@ export class State extends Feature {
             }
         }
 
+        if (this.persistColsVisibility) {
+            if (!Types.isNull(this.hiddenCols)) {
+                // Clear previuosly hidden columns
+                Object.keys(state).forEach((key) => {
+                    if (key.indexOf(this.prfxCol) !== -1 && state[key]) {
+                        state[key].hidden = undefined;
+                    }
+                });
+
+                this.hiddenCols.forEach((colIdx) => {
+                    let key = `${this.prfxCol}${colIdx}`;
+                    state[key] = state[key] || {};
+                    state[key].hidden = true;
+                });
+            }
+        }
+
         this.emitter.emit('state-changed', tf, state);
     }
 
     /**
-     * Refresh page number field on page number change
+     * Refresh page number field on page number changes
      *
      * @param pageNb Current page number
      */
@@ -150,7 +173,7 @@ export class State extends Feature {
     }
 
     /**
-     * Refresh page length field on page length change
+     * Refresh page length field on page length changes
      *
      * @param pageLength Current page length value
      */
@@ -160,7 +183,7 @@ export class State extends Feature {
     }
 
     /**
-     * Refresh column sorting information on sort change
+     * Refresh column sorting information on sort changes
      *
      * @param index {Number} Column index
      * @param descending {Boolean} Descending manner
@@ -170,6 +193,16 @@ export class State extends Feature {
             column: index,
             descending: descending
         };
+        this.update();
+    }
+
+    /**
+     * Refresh hidden columns information on columns visibility changes
+     *
+     * @param hiddenCols {Array} Columns indexes
+     */
+    updateColsVisibility(hiddenCols) {
+        this.hiddenCols = hiddenCols;
         this.update();
     }
 
@@ -202,6 +235,7 @@ export class State extends Feature {
         }
 
         this._syncSort();
+        this._syncColsVisibility();
     }
 
     /**
@@ -268,6 +302,33 @@ export class State extends Feature {
     }
 
     /**
+     * Sync hidden columns with stored information
+     *
+     * @private
+     */
+    _syncColsVisibility() {
+        if (!this.persistColsVisibility) {
+            return;
+        }
+        let state = this.state;
+        let tf = this.tf;
+        let hiddenCols = [];
+
+        Object.keys(state).forEach((key) => {
+            if (key.indexOf(this.prfxCol) !== -1) {
+                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);
+                if (!Types.isUndef(state[key].hidden)) {
+                    hiddenCols.push(colIdx);
+                }
+            }
+        });
+
+        hiddenCols.forEach((colIdx) => {
+            this.emitter.emit('hide-column', tf, colIdx);
+        });
+    }
+
+    /**
      * Destroy State instance
      */
     destroy() {
@@ -285,6 +346,10 @@ export class State extends Feature {
         this.emitter.off(['column-sorted'],
             (tf, index, descending) => this.updateSort(index, descending));
         this.emitter.off(['sort-initialized'], () => this._syncSort());
+        this.emitter.off(['columns-visibility-initialized'],
+            () => this._syncColsVisibility());
+        this.emitter.off(['column-shown', 'column-hidden'], (tf, feature,
+            colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));
 
         if (this.enableHash) {
             this.hash.destroy();
