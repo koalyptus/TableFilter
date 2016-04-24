@@ -180,7 +180,7 @@ export class State extends Feature {
     /**
      * Refresh page number field on page number changes
      *
-     * @param pageNb Current page number
+     * @param {Number} pageNb Current page number
      */
     updatePage(pageNb) {
         this.pageNb = pageNb;
@@ -190,7 +190,7 @@ export class State extends Feature {
     /**
      * Refresh page length field on page length changes
      *
-     * @param pageLength Current page length value
+     * @param {Number} pageLength Current page length value
      */
     updatePageLength(pageLength) {
         this.pageLength = pageLength;
@@ -201,7 +201,7 @@ export class State extends Feature {
      * Refresh column sorting information on sort changes
      *
      * @param index {Number} Column index
-     * @param descending {Boolean} Descending manner
+     * @param {Boolean} descending Descending manner
      */
     updateSort(index, descending) {
         this.sort = {
@@ -214,15 +214,19 @@ export class State extends Feature {
     /**
      * Refresh hidden columns information on columns visibility changes
      *
-     * @param hiddenCols {Array} Columns indexes
+     * @param {Array} hiddenCols Columns indexes
      */
     updateColsVisibility(hiddenCols) {
         this.hiddenCols = hiddenCols;
         this.update();
     }
 
+    /**
+     * Refresh filters visibility on filters visibility change
+     *
+     * @param {Boolean} visible Visibility flad
+     */
     updateFiltersVisibility(visible) {
-        console.log('updateFiltersVisibility', visible);
         this.filtersVisibility = visible;
         this.update();
     }
@@ -254,11 +258,6 @@ export class State extends Feature {
             let pageLength = state[this.pageLengthKey];
             this.emitter.emit('change-page-results', tf, pageLength);
         }
-
-        // if (this.persistFiltersVisibility) { console.log('sync');
-        //     let filtersVisibility = state[this.filtersVisKey];
-        //     this.emitter.emit('toggle-filters', tf, filtersVisibility);
-        // }
 
         this._syncSort();
         this._syncColsVisibility();
@@ -355,6 +354,11 @@ export class State extends Feature {
         });
     }
 
+    /**
+     * Sync filters visibility with stored information
+     *
+     * @private
+     */
     _syncFiltersVisibility(){
         if (!this.persistFiltersVisibility) {
             return;
@@ -363,7 +367,7 @@ export class State extends Feature {
         let tf = this.tf;
         let filtersVisibility = state[this.filtersVisKey];
 
-        this.emitter.emit('toggle-filters', tf, filtersVisibility);
+        this.emitter.emit('show-filters', tf, filtersVisibility);
     }
 
     /**

@@ -90,7 +90,7 @@ export default class FiltersVisibility {
 
         this.buildUI();
         this.initialized = true;
-        this.emitter.on(['toggle-filters'], () => this.toggle());
+        this.emitter.on(['show-filters'], (tf, visible) => this.show(visible));
         this.emitter.emit('filters-visibility-initialized', tf, this);
     }
 
@@ -140,33 +140,45 @@ export default class FiltersVisibility {
     /**
      * Toggle filters visibility
      */
-    toggle() {console.log('toggle', arguments);
+    toggle() {
         let tf = this.tf;
         let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
         let fltRow = tbl.rows[this.filtersRowIndex];
-        let fltRowDisplay = fltRow.style.display;
-        let isDisplayed = fltRowDisplay === '';
+        let isDisplayed = fltRow.style.display === '';
 
-        if (this.onBeforeShow && !isDisplayed) {
+        this.show(!isDisplayed);
+        this.emitter.emit('filters-toggled', tf, this, !isDisplayed);
+    }
+
+    /**
+     * Show or hide filters
+     *
+     * @param {boolean} [visible=true] Visibility flag
+     */
+    show(visible = true) {
+        let tf = this.tf;
+        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
+        let fltRow = tbl.rows[this.filtersRowIndex];
+
+        if (this.onBeforeShow && visible) {
             this.onBeforeShow.call(this, this);
         }
-        if (this.onBeforeHide && isDisplayed) {
+        if (this.onBeforeHide && !visible) {
             this.onBeforeHide.call(null, this);
         }
 
-        fltRow.style.display = isDisplayed ? 'none' : '';
+        fltRow.style.display = visible ? '' : 'none';
         if (this.enableIcon && !this.btnHtml) {
-            this.btnEl.innerHTML = isDisplayed ?
-                this.expandBtnHtml : this.collapseBtnHtml;
+            this.btnEl.innerHTML = visible ?
+                this.collapseBtnHtml : this.expandBtnHtml;
         }
 
-        if (this.onAfterShow && !isDisplayed) {
+        if (this.onAfterShow && visible) {
             this.onAfterShow.call(null, this);
         }
-        if (this.onAfterHide && isDisplayed) {
+        if (this.onAfterHide && !visible) {
             this.onAfterHide.call(null, this);
         }
-        this.emitter.emit('filters-toggled', tf, this, !isDisplayed);
     }
 
     /**
@@ -177,7 +189,7 @@ export default class FiltersVisibility {
             return;
         }
 
-        this.emitter.off(['toggle-filters'], () => this.toggle());
+        this.emitter.off(['show-filters'], (tf, visible) => this.show(visible));
 
         this.btnEl.innerHTML = '';
         Dom.remove(this.btnEl);

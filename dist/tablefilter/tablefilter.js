@@ -7776,7 +7776,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Refresh page number field on page number changes
 	     *
-	     * @param pageNb Current page number
+	     * @param {Number} pageNb Current page number
 	     */
 	
 	
@@ -7788,7 +7788,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Refresh page length field on page length changes
 	     *
-	     * @param pageLength Current page length value
+	     * @param {Number} pageLength Current page length value
 	     */
 	
 	
@@ -7801,7 +7801,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Refresh column sorting information on sort changes
 	     *
 	     * @param index {Number} Column index
-	     * @param descending {Boolean} Descending manner
+	     * @param {Boolean} descending Descending manner
 	     */
 	
 	
@@ -7816,7 +7816,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Refresh hidden columns information on columns visibility changes
 	     *
-	     * @param hiddenCols {Array} Columns indexes
+	     * @param {Array} hiddenCols Columns indexes
 	     */
 	
 	
@@ -7825,8 +7825,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.update();
 	    };
 	
+	    /**
+	     * Refresh filters visibility on filters visibility change
+	     *
+	     * @param {Boolean} visible Visibility flad
+	     */
+	
+	
 	    State.prototype.updateFiltersVisibility = function updateFiltersVisibility(visible) {
-	        console.log('updateFiltersVisibility', visible);
 	        this.filtersVisibility = visible;
 	        this.update();
 	    };
@@ -7862,11 +7868,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var pageLength = state[this.pageLengthKey];
 	            this.emitter.emit('change-page-results', tf, pageLength);
 	        }
-	
-	        // if (this.persistFiltersVisibility) { console.log('sync');
-	        //     let filtersVisibility = state[this.filtersVisKey];
-	        //     this.emitter.emit('toggle-filters', tf, filtersVisibility);
-	        // }
 	
 	        this._syncSort();
 	        this._syncColsVisibility();
@@ -7977,6 +7978,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	
+	    /**
+	     * Sync filters visibility with stored information
+	     *
+	     * @private
+	     */
+	
+	
 	    State.prototype._syncFiltersVisibility = function _syncFiltersVisibility() {
 	        if (!this.persistFiltersVisibility) {
 	            return;
@@ -7985,7 +7993,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var tf = this.tf;
 	        var filtersVisibility = state[this.filtersVisKey];
 	
-	        this.emitter.emit('toggle-filters', tf, filtersVisibility);
+	        this.emitter.emit('show-filters', tf, filtersVisibility);
 	    };
 	
 	    /**

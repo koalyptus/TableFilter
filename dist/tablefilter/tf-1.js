@@ -1637,8 +1637,8 @@ webpackJsonp([1],{
 	
 	        this.buildUI();
 	        this.initialized = true;
-	        this.emitter.on(['toggle-filters'], function () {
-	            return _this.toggle();
+	        this.emitter.on(['show-filters'], function (tf, visible) {
+	            return _this.show(visible);
 	        });
 	        this.emitter.emit('filters-visibility-initialized', tf, this);
 	    };
@@ -1699,32 +1699,47 @@ webpackJsonp([1],{
 	
 	
 	    FiltersVisibility.prototype.toggle = function toggle() {
-	        console.log('toggle', arguments);
 	        var tf = this.tf;
 	        var tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
 	        var fltRow = tbl.rows[this.filtersRowIndex];
-	        var fltRowDisplay = fltRow.style.display;
-	        var isDisplayed = fltRowDisplay === '';
+	        var isDisplayed = fltRow.style.display === '';
 	
-	        if (this.onBeforeShow && !isDisplayed) {
+	        this.show(!isDisplayed);
+	        this.emitter.emit('filters-toggled', tf, this, !isDisplayed);
+	    };
+	
+	    /**
+	     * Show or hide filters
+	     *
+	     * @param {boolean} [visible=true] Visibility flag
+	     */
+	
+	
+	    FiltersVisibility.prototype.show = function show() {
+	        var visible = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+	
+	        var tf = this.tf;
+	        var tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
+	        var fltRow = tbl.rows[this.filtersRowIndex];
+	
+	        if (this.onBeforeShow && visible) {
 	            this.onBeforeShow.call(this, this);
 	        }
-	        if (this.onBeforeHide && isDisplayed) {
+	        if (this.onBeforeHide && !visible) {
 	            this.onBeforeHide.call(null, this);
 	        }
 	
-	        fltRow.style.display = isDisplayed ? 'none' : '';
+	        fltRow.style.display = visible ? '' : 'none';
 	        if (this.enableIcon && !this.btnHtml) {
-	            this.btnEl.innerHTML = isDisplayed ? this.expandBtnHtml : this.collapseBtnHtml;
+	            this.btnEl.innerHTML = visible ? this.collapseBtnHtml : this.expandBtnHtml;
 	        }
 	
-	        if (this.onAfterShow && !isDisplayed) {
+	        if (this.onAfterShow && visible) {
 	            this.onAfterShow.call(null, this);
 	        }
-	        if (this.onAfterHide && isDisplayed) {
+	        if (this.onAfterHide && !visible) {
 	            this.onAfterHide.call(null, this);
 	        }
-	        this.emitter.emit('filters-toggled', tf, this, !isDisplayed);
 	    };
 	
 	    /**
@@ -1739,8 +1754,8 @@ webpackJsonp([1],{
 	            return;
 	        }
 	
-	        this.emitter.off(['toggle-filters'], function () {
-	            return _this3.toggle();
+	        this.emitter.off(['show-filters'], function (tf, visible) {
+	            return _this3.show(visible);
 	        });
 	
 	        this.btnEl.innerHTML = '';
