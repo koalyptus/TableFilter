@@ -267,7 +267,7 @@ export class State extends Feature {
     /**
      * Override current state with passed one and sync features
      *
-     * @param state State object
+     * @param {Object} state State object
      */
     overrideAndSync(state) {
         // To prevent state to react to features changes, state is temporarily
