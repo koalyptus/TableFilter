@@ -1152,6 +1152,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#emitter",
+    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-emitter",
+    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#emitter",
+    "member"
+  ],
+  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#enableicon",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-enableIcon",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#enableIcon",
@@ -1240,6 +1246,12 @@ window.esdocSearchIndex = [
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-prfx",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#prfx",
     "member"
+  ],
+  [
+    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#show",
+    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-method-show",
+    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#show",
+    "method"
   ],
   [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#stylesheet",
@@ -3270,6 +3282,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/state.js~state#filtersviskey",
+    "class/src/modules/state.js~State.html#instance-member-filtersVisKey",
+    "src/modules/state.js~State#filtersVisKey",
+    "member"
+  ],
+  [
+    "src/modules/state.js~state#filtersvisibility",
+    "class/src/modules/state.js~State.html#instance-member-filtersVisibility",
+    "src/modules/state.js~State#filtersVisibility",
+    "member"
+  ],
+  [
     "src/modules/state.js~state#hash",
     "class/src/modules/state.js~State.html#instance-member-hash",
     "src/modules/state.js~State#hash",
@@ -3342,6 +3366,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/state.js~state#persistfiltersvisibility",
+    "class/src/modules/state.js~State.html#instance-member-persistFiltersVisibility",
+    "src/modules/state.js~State#persistFiltersVisibility",
+    "member"
+  ],
+  [
     "src/modules/state.js~state#persistpagelength",
     "class/src/modules/state.js~State.html#instance-member-persistPageLength",
     "src/modules/state.js~State#persistPageLength",
@@ -3399,6 +3429,12 @@ window.esdocSearchIndex = [
     "src/modules/state.js~state#updatecolsvisibility",
     "class/src/modules/state.js~State.html#instance-method-updateColsVisibility",
     "src/modules/state.js~State#updateColsVisibility",
+    "method"
+  ],
+  [
+    "src/modules/state.js~state#updatefiltersvisibility",
+    "class/src/modules/state.js~State.html#instance-method-updateFiltersVisibility",
+    "src/modules/state.js~State#updateFiltersVisibility",
     "method"
   ],
   [

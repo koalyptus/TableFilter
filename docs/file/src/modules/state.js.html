@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/state.js | tablefilter v0.2.12 API Document</title>
+  <title data-ice="title">src/modules/state.js | tablefilter v0.2.13 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -101,6 +101,7 @@ export class State extends Feature {
         this.persistPageLength = Boolean(cfg.page_length);
         this.persistSort = Boolean(cfg.sort);
         this.persistColsVisibility = Boolean(cfg.columns_visibility);
+        this.persistFiltersVisibility = Boolean(cfg.filters_visibility);
         this.cookieDuration = !isNaN(cfg.cookie_duration) ?
             parseInt(cfg.cookie_duration, 10) : 87600;
 
@@ -110,11 +111,13 @@ export class State extends Feature {
         this.pageLength = null;
         this.sort = null;
         this.hiddenCols = null;
+        this.filtersVisibility = null;
 
         this.state = {};
         this.prfxCol = &apos;col_&apos;;
         this.pageNbKey = &apos;page&apos;;
         this.pageLengthKey = &apos;page_length&apos;;
+        this.filtersVisKey = &apos;filters_visibility&apos;;
     }
 
     /**
@@ -137,6 +140,10 @@ export class State extends Feature {
             () =&gt; this._syncColsVisibility());
         this.emitter.on([&apos;column-shown&apos;, &apos;column-hidden&apos;], (tf, feature,
             colIndex, hiddenCols) =&gt; this.updateColsVisibility(hiddenCols));
+        this.emitter.on([&apos;filters-visibility-initialized&apos;],
+            () =&gt; this._syncFiltersVisibility());
+        this.emitter.on([&apos;filters-toggled&apos;],
+            (tf, extension, visible) =&gt; this.updateFiltersVisibility(visible));
 
         if (this.enableHash) {
             this.hash = new Hash(this);
@@ -225,13 +232,21 @@ export class State extends Feature {
             }
         }
 
+        if (this.persistFiltersVisibility) {
+            if (Types.isNull(this.filtersVisibility)) {
+                state[this.filtersVisKey] = undefined;
+            } else {
+                state[this.filtersVisKey] = this.filtersVisibility;
+            }
+        }
+
         this.emitter.emit(&apos;state-changed&apos;, tf, state);
     }
 
     /**
      * Refresh page number field on page number changes
      *
-     * @param pageNb Current page number
+     * @param {Number} pageNb Current page number
      */
     updatePage(pageNb) {
         this.pageNb = pageNb;
@@ -241,7 +256,7 @@ export class State extends Feature {
     /**
      * Refresh page length field on page length changes
      *
-     * @param pageLength Current page length value
+     * @param {Number} pageLength Current page length value
      */
     updatePageLength(pageLength) {
         this.pageLength = pageLength;
@@ -252,7 +267,7 @@ export class State extends Feature {
      * Refresh column sorting information on sort changes
      *
      * @param index {Number} Column index
-     * @param descending {Boolean} Descending manner
+     * @param {Boolean} descending Descending manner
      */
     updateSort(index, descending) {
         this.sort = {
@@ -265,10 +280,20 @@ export class State extends Feature {
     /**
      * Refresh hidden columns information on columns visibility changes
      *
-     * @param hiddenCols {Array} Columns indexes
+     * @param {Array} hiddenCols Columns indexes
      */
     updateColsVisibility(hiddenCols) {
         this.hiddenCols = hiddenCols;
+        this.update();
+    }
+
+    /**
+     * Refresh filters visibility on filters visibility change
+     *
+     * @param {Boolean} visible Visibility flad
+     */
+    updateFiltersVisibility(visible) {
+        this.filtersVisibility = visible;
         this.update();
     }
 
@@ -302,12 +327,13 @@ export class State extends Feature {
 
         this._syncSort();
         this._syncColsVisibility();
+        this._syncFiltersVisibility();
     }
 
     /**
      * Override current state with passed one and sync features
      *
-     * @param state State object
+     * @param {Object} state State object
      */
     overrideAndSync(state) {
         // To prevent state to react to features changes, state is temporarily
@@ -395,6 +421,22 @@ export class State extends Feature {
     }
 
     /**
+     * Sync filters visibility with stored information
+     *
+     * @private
+     */
+    _syncFiltersVisibility(){
+        if (!this.persistFiltersVisibility) {
+            return;
+        }
+        let state = this.state;
+        let tf = this.tf;
+        let filtersVisibility = state[this.filtersVisKey];
+
+        this.emitter.emit(&apos;show-filters&apos;, tf, filtersVisibility);
+    }
+
+    /**
      * Destroy State instance
      */
     destroy() {
@@ -416,6 +458,10 @@ export class State extends Feature {
             () =&gt; this._syncColsVisibility());
         this.emitter.off([&apos;column-shown&apos;, &apos;column-hidden&apos;], (tf, feature,
             colIndex, hiddenCols) =&gt; this.updateColsVisibility(hiddenCols));
+        this.emitter.off([&apos;filters-visibility-initialized&apos;],
+            () =&gt; this._syncFiltersVisibility());
+        this.emitter.off([&apos;filters-toggled&apos;],
+            (tf, extension, visible) =&gt; this.updateFiltersVisibility(visible));
 
         if (this.enableHash) {
             this.hash.destroy();
