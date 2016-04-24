@@ -133,6 +133,20 @@ test('Can update columns visibility', function() {
     deepEqual(state.state.col_2.hidden, true, 'Column 2 visibility updated');
 });
 
+test('Can update filters visibility', function() {
+    // setup
+    state.persistFiltersVisibility = true;
+    state.state = {};
+
+    // act
+    state.updateFiltersVisibility(false);
+    state.persistFiltersVisibility = false;
+
+    // assert
+    deepEqual(state.state.filters_visibility, false,
+        'Filters visibility updated');
+});
+
 module('Tear-down');
 test('Can destroy TF', function() {
     // setup

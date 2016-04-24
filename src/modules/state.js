@@ -35,6 +35,7 @@ export class State extends Feature {
         this.persistPageLength = Boolean(cfg.page_length);
         this.persistSort = Boolean(cfg.sort);
         this.persistColsVisibility = Boolean(cfg.columns_visibility);
+        this.persistFiltersVisibility = Boolean(cfg.filters_visibility);
         this.cookieDuration = !isNaN(cfg.cookie_duration) ?
             parseInt(cfg.cookie_duration, 10) : 87600;
 
@@ -44,11 +45,13 @@ export class State extends Feature {
         this.pageLength = null;
         this.sort = null;
         this.hiddenCols = null;
+        this.filtersVisibility = null;
 
         this.state = {};
         this.prfxCol = 'col_';
         this.pageNbKey = 'page';
         this.pageLengthKey = 'page_length';
+        this.filtersVisKey = 'filters_visibility';
     }
 
     /**
@@ -71,6 +74,10 @@ export class State extends Feature {
             () => this._syncColsVisibility());
         this.emitter.on(['column-shown', 'column-hidden'], (tf, feature,
             colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));
+        this.emitter.on(['filters-visibility-initialized'],
+            () => this._syncFiltersVisibility());
+        this.emitter.on(['filters-toggled'],
+            (tf, extension, visible) => this.updateFiltersVisibility(visible));
 
         if (this.enableHash) {
             this.hash = new Hash(this);
@@ -159,13 +166,21 @@ export class State extends Feature {
             }
         }
 
+        if (this.persistFiltersVisibility) {
+            if (Types.isNull(this.filtersVisibility)) {
+                state[this.filtersVisKey] = undefined;
+            } else {
+                state[this.filtersVisKey] = this.filtersVisibility;
+            }
+        }
+
         this.emitter.emit('state-changed', tf, state);
     }
 
     /**
      * Refresh page number field on page number changes
      *
-     * @param pageNb Current page number
+     * @param {Number} pageNb Current page number
      */
     updatePage(pageNb) {
         this.pageNb = pageNb;
@@ -175,7 +190,7 @@ export class State extends Feature {
     /**
      * Refresh page length field on page length changes
      *
-     * @param pageLength Current page length value
+     * @param {Number} pageLength Current page length value
      */
     updatePageLength(pageLength) {
         this.pageLength = pageLength;
@@ -186,7 +201,7 @@ export class State extends Feature {
      * Refresh column sorting information on sort changes
      *
      * @param index {Number} Column index
-     * @param descending {Boolean} Descending manner
+     * @param {Boolean} descending Descending manner
      */
     updateSort(index, descending) {
         this.sort = {
@@ -199,10 +214,20 @@ export class State extends Feature {
     /**
      * Refresh hidden columns information on columns visibility changes
      *
-     * @param hiddenCols {Array} Columns indexes
+     * @param {Array} hiddenCols Columns indexes
      */
     updateColsVisibility(hiddenCols) {
         this.hiddenCols = hiddenCols;
+        this.update();
+    }
+
+    /**
+     * Refresh filters visibility on filters visibility change
+     *
+     * @param {Boolean} visible Visibility flad
+     */
+    updateFiltersVisibility(visible) {
+        this.filtersVisibility = visible;
         this.update();
     }
 
@@ -236,12 +261,13 @@ export class State extends Feature {
 
         this._syncSort();
         this._syncColsVisibility();
+        this._syncFiltersVisibility();
     }
 
     /**
      * Override current state with passed one and sync features
      *
-     * @param state State object
+     * @param {Object} state State object
      */
     overrideAndSync(state) {
         // To prevent state to react to features changes, state is temporarily
@@ -329,6 +355,22 @@ export class State extends Feature {
     }
 
     /**
+     * Sync filters visibility with stored information
+     *
+     * @private
+     */
+    _syncFiltersVisibility(){
+        if (!this.persistFiltersVisibility) {
+            return;
+        }
+        let state = this.state;
+        let tf = this.tf;
+        let filtersVisibility = state[this.filtersVisKey];
+
+        this.emitter.emit('show-filters', tf, filtersVisibility);
+    }
+
+    /**
      * Destroy State instance
      */
     destroy() {
@@ -350,6 +392,10 @@ export class State extends Feature {
             () => this._syncColsVisibility());
         this.emitter.off(['column-shown', 'column-hidden'], (tf, feature,
             colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));
+        this.emitter.off(['filters-visibility-initialized'],
+            () => this._syncFiltersVisibility());
+        this.emitter.off(['filters-toggled'],
+            (tf, extension, visible) => this.updateFiltersVisibility(visible));
 
         if (this.enableHash) {
             this.hash.destroy();
