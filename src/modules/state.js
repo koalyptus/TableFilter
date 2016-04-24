@@ -35,6 +35,7 @@ export class State extends Feature {
         this.persistPageLength = Boolean(cfg.page_length);
         this.persistSort = Boolean(cfg.sort);
         this.persistColsVisibility = Boolean(cfg.columns_visibility);
+        this.persistFiltersVisibility = Boolean(cfg.filters_visibility);
         this.cookieDuration = !isNaN(cfg.cookie_duration) ?
             parseInt(cfg.cookie_duration, 10) : 87600;
 
@@ -44,11 +45,13 @@ export class State extends Feature {
         this.pageLength = null;
         this.sort = null;
         this.hiddenCols = null;
+        this.filtersVisibility = null;
 
         this.state = {};
         this.prfxCol = 'col_';
         this.pageNbKey = 'page';
         this.pageLengthKey = 'page_length';
+        this.filtersVisKey = 'filters_visibility';
     }
 
     /**
@@ -71,6 +74,10 @@ export class State extends Feature {
             () => this._syncColsVisibility());
         this.emitter.on(['column-shown', 'column-hidden'], (tf, feature,
             colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));
+        this.emitter.on(['filters-visibility-initialized'],
+            () => this._syncFiltersVisibility());
+        this.emitter.on(['filters-toggled'],
+            (tf, extension, visible) => this.updateFiltersVisibility(visible));
 
         if (this.enableHash) {
             this.hash = new Hash(this);
@@ -159,6 +166,14 @@ export class State extends Feature {
             }
         }
 
+        if (this.persistFiltersVisibility) {
+            if (Types.isNull(this.filtersVisibility)) {
+                state[this.filtersVisKey] = undefined;
+            } else {
+                state[this.filtersVisKey] = this.filtersVisibility;
+            }
+        }
+
         this.emitter.emit('state-changed', tf, state);
     }
 
@@ -206,6 +221,12 @@ export class State extends Feature {
         this.update();
     }
 
+    updateFiltersVisibility(visible) {
+        console.log('updateFiltersVisibility', visible);
+        this.filtersVisibility = visible;
+        this.update();
+    }
+
     /**
      * Override state field
      *
@@ -234,8 +255,14 @@ export class State extends Feature {
             this.emitter.emit('change-page-results', tf, pageLength);
         }
 
+        // if (this.persistFiltersVisibility) { console.log('sync');
+        //     let filtersVisibility = state[this.filtersVisKey];
+        //     this.emitter.emit('toggle-filters', tf, filtersVisibility);
+        // }
+
         this._syncSort();
         this._syncColsVisibility();
+        this._syncFiltersVisibility();
     }
 
     /**
@@ -328,6 +355,17 @@ export class State extends Feature {
         });
     }
 
+    _syncFiltersVisibility(){
+        if (!this.persistFiltersVisibility) {
+            return;
+        }
+        let state = this.state;
+        let tf = this.tf;
+        let filtersVisibility = state[this.filtersVisKey];
+
+        this.emitter.emit('toggle-filters', tf, filtersVisibility);
+    }
+
     /**
      * Destroy State instance
      */
@@ -350,6 +388,10 @@ export class State extends Feature {
             () => this._syncColsVisibility());
         this.emitter.off(['column-shown', 'column-hidden'], (tf, feature,
             colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));
+        this.emitter.off(['filters-visibility-initialized'],
+            () => this._syncFiltersVisibility());
+        this.emitter.off(['filters-toggled'],
+            (tf, extension, visible) => this.updateFiltersVisibility(visible));
 
         if (this.enableHash) {
             this.hash.destroy();
