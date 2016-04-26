@@ -188,11 +188,16 @@
         hidden columns when <code>colsVisibility</code> extension is
         enabled
       </li>
+      <li>
+        filters visibility when <code>filtersVisibility</code> extension is
+        enabled
+      </li>
     </ul>
 </p>
 
 
 <div class="btn-group" data-config>
+  <span id="fltsBtn"></span>
   <span id="colsBtn"></span>
 </div>
 
@@ -13166,7 +13171,8 @@
           page_number: true,
           page_length: true,
           sort: true,
-          columns_visibility: true
+          columns_visibility: true,
+          filters_visibility: true
         },
         paging: true,
         results_per_page: ['Records: ', [10, 25, 50, 100]],
@@ -13195,6 +13201,9 @@
             text: 'Hide columns:',
             enable_tick_all: true,
             btn_target_id: 'colsBtn'
+        }, {
+            name: 'filtersVisibility',
+            target_id: 'fltsBtn'
         }]
     };
     var tf = new TableFilter('demo', filtersConfig);
@@ -13205,7 +13214,7 @@
 
 <div class="alert alert-info" role="info">
   The <code>types</code> property in <code>state</code> object accepts the
-  following values: <code>'hash'</code>, <code>'local_storgae'</code> and
+  following values: <code>'hash'</code>, <code>'local_storage'</code> and
   <code>'cookie'</code>.
 </div>
 
