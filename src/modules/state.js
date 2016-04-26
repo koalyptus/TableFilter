@@ -359,7 +359,7 @@ export class State extends Feature {
      *
      * @private
      */
-    _syncFiltersVisibility(){
+    _syncFiltersVisibility() {
         if (!this.persistFiltersVisibility) {
             return;
         }
@@ -367,6 +367,7 @@ export class State extends Feature {
         let tf = this.tf;
         let filtersVisibility = state[this.filtersVisKey];
 
+        this.filtersVisibility = filtersVisibility;
         this.emitter.emit('show-filters', tf, filtersVisibility);
     }
 

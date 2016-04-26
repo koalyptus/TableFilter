@@ -147,7 +147,6 @@ export default class FiltersVisibility {
         let isDisplayed = fltRow.style.display === '';
 
         this.show(!isDisplayed);
-        this.emitter.emit('filters-toggled', tf, this, !isDisplayed);
     }
 
     /**
@@ -179,6 +178,8 @@ export default class FiltersVisibility {
         if (this.onAfterHide && !visible) {
             this.onAfterHide.call(null, this);
         }
+
+        this.emitter.emit('filters-toggled', tf, this, visible);
     }
 
     /**
