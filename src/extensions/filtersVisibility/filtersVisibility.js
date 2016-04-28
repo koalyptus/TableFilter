@@ -91,7 +91,7 @@ export default class FiltersVisibility {
         this.buildUI();
         this.initialized = true;
         this.emitter.on(['show-filters'], (tf, visible) => this.show(visible));
-        this.emitter.emit('filters-visibility-initialized', tf, this);
+        this.emitter.emit('filters-visibility-initialized', this.tf, this);
     }
 
     /**

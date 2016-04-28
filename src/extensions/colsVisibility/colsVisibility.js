@@ -182,7 +182,7 @@ export default class ColsVisibility {
         this.buildManager();
 
         this.initialized = true;
-        this.emitter.emit('columns-visibility-initialized', tf, this);
+        this.emitter.emit('columns-visibility-initialized', this.tf, this);
 
         // Hide columns at start at very end of initialization
         this._hideAtStart();
