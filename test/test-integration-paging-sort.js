@@ -2,9 +2,6 @@ var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
     paging: true,
     paging_length: 2,
-    remember_grid_values: true,
-    remember_page_number: true,
-    remember_page_length: true,
     results_per_page: ['Results per page ', [2,4,6]],
     extensions: [{
         name: 'sort',
@@ -29,7 +26,7 @@ test('Sort extension', function() {
     deepEqual(sort.initialized, true, 'Sort initialized');
 });
 
-module('Paging with persistence when a column is sorted');
+module('Paging when a column is sorted');
 test('It contains options', function() {
     var sort = tf.extension('sort');
     sort.sortByColumnIndex(0);
@@ -45,7 +42,7 @@ test('Can select a page', function() {
 });
 
 module('Changing pages when column is sorted (issue #70)');
-test('It can change page', function() {
+test('Can change page', function() {
     var sort = tf.extension('sort');
     tf.setFilterValue(2, '>400');
     sort.sortByColumnIndex(1);

@@ -4,10 +4,8 @@ import Str from './string';
 import Types from './types';
 import DateHelper from './date';
 import Helpers from './helpers';
-import {Emitter} from './emitter';
 
-// Features
-import {Store} from './modules/store';
+import {Emitter} from './emitter';
 import {GridLayout} from './modules/gridLayout';
 import {Loader} from './modules/loader';
 import {HighlightKeyword} from './modules/highlightKeywords';
@@ -378,16 +376,6 @@ export class TableFilter {
         this.prfxCookiePageLen = 'tf_pglen_';
         this.prfxResponsive = 'resp';
 
-        /*** cookies ***/
-        //remembers filters values on page load
-        this.rememberGridValues = Boolean(f.remember_grid_values);
-        //remembers page nb on page load
-        this.rememberPageNb = this.paging && f.remember_page_number;
-        //remembers page length on page load
-        this.rememberPageLen = this.paging && f.remember_page_length;
-        this.hasPersistence = this.rememberGridValues || this.rememberPageNb ||
-            this.rememberPageLen;
-
         /*** extensions ***/
         //imports external script
         this.extensions = f.extensions;
@@ -509,13 +497,6 @@ export class TableFilter {
                 Mod.state = new State(this);
             }
             Mod.state.init();
-        }
-
-        if(this.hasPersistence){
-            if(!Mod.store){
-                Mod.store = new Store(this);
-            }
-            Mod.store.init();
         }
 
         if(this.gridLayout){
@@ -648,10 +629,6 @@ export class TableFilter {
 
         this._hasGrid = true;
 
-        if(this.hasPersistence){
-            this.resetFilterValues();
-        }
-
         //TF css class is added to table
         if(!this.gridLayout){
             Dom.addClass(this.tbl, this.prfxTf);
@@ -687,7 +664,7 @@ export class TableFilter {
     /**
      * Insert filters row at initialization
      */
-    _insertFiltersRow() {
+    _insertFiltersRow(){
         if(this.gridLayout){
             return;
         }
@@ -1141,23 +1118,6 @@ export class TableFilter {
             optTxt.sort();
         }
         return [optArray, optTxt];
-    }
-
-    /**
-     * Reset persisted filter values
-     */
-    resetFilterValues(){
-        if(!this.rememberGridValues){
-            return;
-        }
-
-        let storeValues = this.Mod.store.getFilterValues();
-        storeValues.forEach((val, idx)=> {
-            if(val !== ' '){
-                this.setFilterValue(idx, val);
-            }
-        });
-        this.filter();
     }
 
     /**
@@ -2121,7 +2081,7 @@ export class TableFilter {
 
                 this.setFilterValue(slcIndex[i], slcSelectedValue);
             }
-        }// for i
+        }
     }
 
     /**
@@ -2177,14 +2137,13 @@ export class TableFilter {
             head = Dom.tag(doc, 'head')[0];
 
         if(Str.lower(ftype) === 'link'){
-            file = Dom.create(
-                'link',
+            file = Dom.create('link',
                 ['id', fileId], ['type', 'text/css'],
                 ['rel', 'stylesheet'], ['href', filePath]
             );
         } else {
-            file = Dom.create(
-                'script', ['id', fileId],
+            file = Dom.create('script',
+                ['id', fileId],
                 ['type', 'text/javascript'], ['src', filePath]
             );
         }
@@ -2201,7 +2160,7 @@ export class TableFilter {
             }
         };
         file.onerror = function(){
-            throw new Error('TF script could not load: ' + filePath);
+            throw new Error('TableFilter could not load: ' + filePath);
         };
         head.appendChild(file);
     }
