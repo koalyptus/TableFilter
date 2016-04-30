@@ -27,5 +27,8 @@
     "es6": true,
     "browser": true,
     "node": false
+  },
+  "globals": {
+    "__webpack_public_path__": false
   }
 }
