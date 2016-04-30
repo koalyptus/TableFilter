@@ -35,7 +35,7 @@ export class TableFilter {
      * @param {Object} configuration object
      */
     constructor(...args) {
-        if(args.length === 0){ return; }
+        if (args.length === 0) { return; }
 
         this.id = null;
         this.version = '{VERSION}';
@@ -51,24 +51,25 @@ export class TableFilter {
         this._hasGrid = false;
 
         // TODO: use for-of with babel plug-in
-        args.forEach((arg)=> {
-        // for (let arg of args) {
+        args.forEach((arg) => {
+            // for (let arg of args) {
             let argtype = typeof arg;
-            if(argtype === 'object' && arg && arg.nodeName === 'TABLE'){
+            if (argtype === 'object' && arg && arg.nodeName === 'TABLE') {
                 this.tbl = arg;
                 this.id = arg.id || `tf_${new Date().getTime()}_`;
-            } else if(argtype === 'string'){
+            } else if (argtype === 'string') {
                 this.id = arg;
                 this.tbl = Dom.id(arg);
-            } else if(argtype === 'number'){
+            } else if (argtype === 'number') {
                 this.startRow = arg;
-            } else if(argtype === 'object'){
+            } else if (argtype === 'object') {
                 this.cfg = arg;
             }
-        // }
+            // }
         });
 
-        if(!this.tbl || this.tbl.nodeName != 'TABLE' || this.getRowsNb() === 0){
+        if (!this.tbl || this.tbl.nodeName != 'TABLE' ||
+            this.getRowsNb() === 0) {
             throw new Error(
                 'Could not instantiate TableFilter: HTML table not found.');
         }
@@ -79,9 +80,9 @@ export class TableFilter {
         this.emitter = new Emitter();
 
         //Start row et cols nb
-        this.refRow = this.startRow === null ? 2 : (this.startRow+1);
-        try{ this.nbCells = this.getCellsNb(this.refRow); }
-        catch(e){ this.nbCells = this.getCellsNb(0); }
+        this.refRow = this.startRow === null ? 2 : (this.startRow + 1);
+        try { this.nbCells = this.getCellsNb(this.refRow); }
+        catch (e) { this.nbCells = this.getCellsNb(0); }
 
         //default script base path
         this.basePath = f.base_path || 'tablefilter/';
@@ -107,8 +108,8 @@ export class TableFilter {
             (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
 
         //defines tag of the cells containing filters (td/th)
-        this.fltCellTag = f.filters_cell_tag!=='th' ||
-            f.filters_cell_tag!=='td' ? 'td' : f.filters_cell_tag;
+        this.fltCellTag = f.filters_cell_tag !== 'th' ||
+            f.filters_cell_tag !== 'td' ? 'td' : f.filters_cell_tag;
 
         //stores filters ids
         this.fltIds = [];
@@ -141,12 +142,12 @@ export class TableFilter {
         /*** filters' grid appearance ***/
         //stylesheet file
         this.stylePath = f.style_path || this.basePath + 'style/';
-        this.stylesheet = f.stylesheet || this.stylePath+'tablefilter.css';
+        this.stylesheet = f.stylesheet || this.stylePath + 'tablefilter.css';
         this.stylesheetId = this.id + '_style';
         //defines css class for filters row
         this.fltsRowCssClass = f.flts_row_css_class || 'fltrow';
-         //enables/disables icons (paging, reset button)
-        this.enableIcons = f.enable_icons===false ? false : true;
+        //enables/disables icons (paging, reset button)
+        this.enableIcons = f.enable_icons === false ? false : true;
         //enables/disbles rows alternating bg colors
         this.alternateRows = Boolean(f.alternate_rows);
         //defines widths of columns
@@ -163,7 +164,7 @@ export class TableFilter {
 
         /*** filters' grid behaviours ***/
         //enables/disables enter key
-        this.enterKey = f.enter_key===false ? false : true;
+        this.enterKey = f.enter_key === false ? false : true;
         //calls function before filtering starts
         this.onBeforeFilter = Types.isFn(f.on_before_filter) ?
             f.on_before_filter : null;
@@ -195,7 +196,8 @@ export class TableFilter {
         //stores filters elements if isExternalFlt is true
         this.externalFltEls = [];
         //delays any filtering process if loader true
-        this.execDelay = !isNaN(f.exec_delay) ? parseInt(f.exec_delay,10) : 100;
+        this.execDelay = !isNaN(f.exec_delay) ? parseInt(f.exec_delay, 10) :
+            100;
         //calls function when filters grid loaded
         this.onFiltersLoaded = Types.isFn(f.on_filters_loaded) ?
             f.on_filters_loaded : null;
@@ -244,9 +246,9 @@ export class TableFilter {
         //defines empty option text
         this.nonEmptyText = f.non_empty_text || '(Non empty)';
         //enables/disables onChange event on combo-box
-        this.onSlcChange = f.on_change===false ? false : true;
+        this.onSlcChange = f.on_change === false ? false : true;
         //enables/disables select options sorting
-        this.sortSlc = f.sort_select===false ? false : true;
+        this.sortSlc = f.sort_select === false ? false : true;
         //enables/disables ascending numeric options sorting
         this.isSortNumAsc = Boolean(f.sort_num_asc);
         this.sortNumAsc = this.isSortNumAsc ? f.sort_num_asc : [];
@@ -314,8 +316,7 @@ export class TableFilter {
         this.nbHiddenRows = 0; //nb hidden rows
 
         /*** autofilter on typing ***/
-        //enables/disables auto filtering, table is filtered when user stops
-        //typing
+        //Auto filtering, table is filtered when user stops typing
         this.autoFilter = Boolean(f.auto_filter);
         //onkeyup delay timer (msecs)
         this.autoFilterDelay = !isNaN(f.auto_filter_delay) ?
@@ -402,10 +403,10 @@ export class TableFilter {
         this.Evt = {
             // Detect <enter> key
             detectKey(e) {
-                if(!this.enterKey){ return; }
-                if(e){
+                if (!this.enterKey) { return; }
+                if (e) {
                     let key = Event.keyCode(e);
-                    if(key===13){
+                    if (key === 13) {
                         this.filter();
                         Event.cancel(e);
                         Event.stop(e);
@@ -418,7 +419,7 @@ export class TableFilter {
             },
             // if auto-filter on, detect user is typing and filter columns
             onKeyUp(e) {
-                if(!this.autoFilter){
+                if (!this.autoFilter) {
                     return;
                 }
                 let key = Event.keyCode(e);
@@ -427,14 +428,15 @@ export class TableFilter {
                 function filter() {
                     global.clearInterval(this.autoFilterTimer);
                     this.autoFilterTimer = null;
-                    if(!this.isUserTyping){
+                    if (!this.isUserTyping) {
                         this.filter();
                         this.isUserTyping = null;
                     }
                 }
-
-                if(key!==13 && key!==9 && key!==27 && key!==38 && key!==40) {
-                    if(this.autoFilterTimer === null){
+                // TODO: define constants for keys
+                if (key !== 13 && key !== 9 && key !== 27 && key !== 38 &&
+                    key !== 40) {
+                    if (this.autoFilterTimer === null) {
                         this.autoFilterTimer = global.setInterval(
                             filter.bind(this), this.autoFilterDelay);
                     }
@@ -445,12 +447,12 @@ export class TableFilter {
             },
             // if auto-filter on, detect user is typing
             onKeyDown() {
-                if(!this.autoFilter) { return; }
+                if (!this.autoFilter) { return; }
                 this.isUserTyping = true;
             },
             // if auto-filter on, clear interval on filter blur
             onInpBlur() {
-                if(this.autoFilter){
+                if (this.autoFilter) {
                     this.isUserTyping = false;
                     global.clearInterval(this.autoFilterTimer);
                 }
@@ -467,8 +469,8 @@ export class TableFilter {
     /**
      * Initialise features and layout
      */
-    init(){
-        if(this._hasGrid){
+    init() {
+        if (this._hasGrid) {
             return;
         }
 
@@ -480,53 +482,53 @@ export class TableFilter {
         this.import(this.stylesheetId, this.stylesheet, null, 'link');
 
         //loads theme
-        if(this.hasThemes){
+        if (this.hasThemes) {
             this.loadThemes();
         }
 
         // Instantiate help feature and initialise only if set true
-        if(!Mod.help){
+        if (!Mod.help) {
             Mod.help = new Help(this);
         }
-        if(this.help){
+        if (this.help) {
             Mod.help.init();
         }
 
-        if(this.state){
-            if(!Mod.state){
+        if (this.state) {
+            if (!Mod.state) {
                 Mod.state = new State(this);
             }
             Mod.state.init();
         }
 
-        if(this.gridLayout){
-            if(!Mod.gridLayout){
+        if (this.gridLayout) {
+            if (!Mod.gridLayout) {
                 Mod.gridLayout = new GridLayout(this);
             }
             Mod.gridLayout.init();
         }
 
-        if(this.loader){
-            if(!Mod.loader){
+        if (this.loader) {
+            if (!Mod.loader) {
                 Mod.loader = new Loader(this);
             }
             Mod.loader.init();
         }
 
-        if(this.highlightKeywords){
+        if (this.highlightKeywords) {
             Mod.highlightKeyword = new HighlightKeyword(this);
             Mod.highlightKeyword.init();
         }
 
-        if(this.popupFilters){
-            if(!Mod.popupFilter){
+        if (this.popupFilters) {
+            if (!Mod.popupFilter) {
                 Mod.popupFilter = new PopupFilter(this);
             }
             Mod.popupFilter.init();
         }
 
         //filters grid is not generated
-        if(!this.fltGrid){
+        if (!this.fltGrid) {
             this._initNoFilters();
         } else {
             let fltrow = this._insertFiltersRow();
@@ -536,37 +538,37 @@ export class TableFilter {
             this.nbRows = this.tbl.rows.length;
 
             // Generate filters
-            for(let i=0; i<n; i++){
+            for (let i = 0; i < n; i++) {
                 this.emitter.emit('before-filter-init', this, i);
 
                 let fltcell = Dom.create(this.fltCellTag),
                     col = this.getFilterType(i);
 
-                if(this.singleSearchFlt){
+                if (this.singleSearchFlt) {
                     fltcell.colSpan = this.nbCells;
                 }
-                if(!this.gridLayout){
+                if (!this.gridLayout) {
                     fltrow.appendChild(fltcell);
                 }
-                inpclass = (i==n-1 && this.displayBtn) ?
+                inpclass = (i == n - 1 && this.displayBtn) ?
                     this.fltSmallCssClass : this.fltCssClass;
 
                 //only 1 input for single search
-                if(this.singleSearchFlt){
+                if (this.singleSearchFlt) {
                     col = this.fltTypeInp;
                     inpclass = this.singleFltCssClass;
                 }
 
                 //drop-down filters
-                if(col===this.fltTypeSlc || col===this.fltTypeMulti){
-                    if(!Mod.dropdown){
+                if (col === this.fltTypeSlc || col === this.fltTypeMulti) {
+                    if (!Mod.dropdown) {
                         Mod.dropdown = new Dropdown(this);
                     }
                     Mod.dropdown.init(i, this.isExternalFlt, fltcell);
                 }
                 // checklist
-                else if(col===this.fltTypeCheckList){
-                    if(!Mod.checkList){
+                else if (col === this.fltTypeCheckList) {
+                    if (!Mod.checkList) {
                         Mod.checkList = new CheckList(this);
                     }
                     Mod.checkList.init(i, this.isExternalFlt, fltcell);
@@ -575,7 +577,7 @@ export class TableFilter {
                 }
 
                 // this adds submit button
-                if(i==n-1 && this.displayBtn){
+                if (i == n - 1 && this.displayBtn) {
                     this._buildSubmitButton(i, fltcell);
                 }
 
@@ -583,45 +585,46 @@ export class TableFilter {
             }
 
             this.emitter.on(['filter-focus'],
-                (tf, filter)=> this.setActiveFilterId(filter.id));
+                (tf, filter) => this.setActiveFilterId(filter.id));
 
         }//if this.fltGrid
 
         /* Features */
-        if(this.hasVisibleRows){
-            this.emitter.on(['after-filtering'], ()=> this.enforceVisibility());
+        if (this.hasVisibleRows) {
+            this.emitter.on(['after-filtering'],
+                () => this.enforceVisibility());
             this.enforceVisibility();
         }
-        if(this.rowsCounter){
+        if (this.rowsCounter) {
             Mod.rowsCounter = new RowsCounter(this);
             Mod.rowsCounter.init();
         }
-        if(this.statusBar){
+        if (this.statusBar) {
             Mod.statusBar = new StatusBar(this);
             Mod.statusBar.init();
         }
-        if(this.paging){
-            if(!Mod.paging){
+        if (this.paging) {
+            if (!Mod.paging) {
                 Mod.paging = new Paging(this);
                 Mod.paging.init();
-            } else{
+            } else {
                 Mod.paging.reset();
             }
         }
-        if(this.btnReset){
+        if (this.btnReset) {
             Mod.clearButton = new ClearButton(this);
             Mod.clearButton.init();
         }
 
-        if(this.hasColWidths && !this.gridLayout){
+        if (this.hasColWidths && !this.gridLayout) {
             this.setColWidths();
         }
-        if(this.alternateRows){
+        if (this.alternateRows) {
             Mod.alternateRows = new AlternateRows(this);
             Mod.alternateRows.init();
         }
-        if(this.noResults){
-            if(!Mod.noResults){
+        if (this.noResults) {
+            if (!Mod.noResults) {
                 Mod.noResults = new NoResults(this);
             }
             Mod.noResults.init();
@@ -630,30 +633,30 @@ export class TableFilter {
         this._hasGrid = true;
 
         //TF css class is added to table
-        if(!this.gridLayout){
+        if (!this.gridLayout) {
             Dom.addClass(this.tbl, this.prfxTf);
-            if(this.responsive){
+            if (this.responsive) {
                 Dom.addClass(this.tbl, this.prfxResponsive);
             }
         }
 
         /* Loads extensions */
-        if(this.hasExtensions){
+        if (this.hasExtensions) {
             this.initExtensions();
         }
 
         // Subscribe to events
-        if(this.markActiveColumns){
+        if (this.markActiveColumns) {
             this.emitter.on(['before-filtering'],
-                ()=> this.clearActiveColumns());
+                () => this.clearActiveColumns());
             this.emitter.on(['cell-processed'],
-                (tf, colIndex)=> this.markActiveColumn(colIndex));
+                (tf, colIndex) => this.markActiveColumn(colIndex));
         }
-        if(this.linkedFilters){
-            this.emitter.on(['after-filtering'], ()=> this.linkFilters());
+        if (this.linkedFilters) {
+            this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
 
-        if(this.onFiltersLoaded){
+        if (this.onFiltersLoaded) {
             this.onFiltersLoaded.call(null, this);
         }
 
@@ -664,14 +667,14 @@ export class TableFilter {
     /**
      * Insert filters row at initialization
      */
-    _insertFiltersRow(){
-        if(this.gridLayout){
+    _insertFiltersRow() {
+        if (this.gridLayout) {
             return;
         }
         let fltrow;
 
         let thead = Dom.tag(this.tbl, 'thead');
-        if(thead.length > 0){
+        if (thead.length > 0) {
             fltrow = thead[0].insertRow(this.filtersRowIndex);
         } else {
             fltrow = this.tbl.insertRow(this.filtersRowIndex);
@@ -679,7 +682,7 @@ export class TableFilter {
 
         fltrow.className = this.fltsRowCssClass;
 
-        if(this.isExternalFlt){
+        if (this.isExternalFlt) {
             fltrow.style.display = 'none';
         }
 
@@ -690,11 +693,11 @@ export class TableFilter {
     /**
      * Initialize filtersless table
      */
-    _initNoFilters(){
-        if(this.fltGrid){
+    _initNoFilters() {
+        if (this.fltGrid) {
             return;
         }
-        this.refRow = this.refRow > 0 ? this.refRow-1 : 0;
+        this.refRow = this.refRow > 0 ? this.refRow - 1 : 0;
         this.nbFilterableRows = this.getRowsNb();
         this.nbVisibleRows = this.nbFilterableRows;
         this.nbRows = this.nbFilterableRows + this.refRow;
@@ -706,16 +709,16 @@ export class TableFilter {
      * @param  {String} cssClass      Css class applied to filter
      * @param  {DOMElement} container Container DOM element
      */
-    _buildInputFilter(colIndex, cssClass, container){
+    _buildInputFilter(colIndex, cssClass, container) {
         let col = this.getFilterType(colIndex);
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
-        let inptype = col===this.fltTypeInp ? 'text' : 'hidden';
+        let inptype = col === this.fltTypeInp ? 'text' : 'hidden';
         let inp = Dom.create(this.fltTypeInp,
-            ['id', this.prfxFlt+colIndex+'_'+this.id],
+            ['id', this.prfxFlt + colIndex + '_' + this.id],
             ['type', inptype], ['ct', colIndex]);
 
-        if(inptype !== 'hidden' && this.watermark){
+        if (inptype !== 'hidden' && this.watermark) {
             inp.setAttribute('placeholder',
                 this.isWatermarkArray ? (this.watermark[colIndex] || '') :
                     this.watermark
@@ -725,7 +728,7 @@ export class TableFilter {
         Event.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
 
         //filter is appended in custom element
-        if(externalFltTgtId){
+        if (externalFltTgtId) {
             Dom.id(externalFltTgtId).appendChild(inp);
             this.externalFltEls.push(inp);
         } else {
@@ -745,22 +748,22 @@ export class TableFilter {
      * @param  {Number} colIndex      Column index
      * @param  {DOMElement} container Container DOM element
      */
-    _buildSubmitButton(colIndex, container){
+    _buildSubmitButton(colIndex, container) {
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
         let btn = Dom.create(this.fltTypeInp,
-            ['id', this.prfxValButton+colIndex+'_'+this.id],
+            ['id', this.prfxValButton + colIndex + '_' + this.id],
             ['type', 'button'], ['value', this.btnText]);
         btn.className = this.btnCssClass;
 
         //filter is appended in custom element
-        if(externalFltTgtId){
+        if (externalFltTgtId) {
             Dom.id(externalFltTgtId).appendChild(btn);
         } else {
             container.appendChild(btn);
         }
 
-        Event.add(btn, 'click', ()=> this.filter());
+        Event.add(btn, 'click', () => this.filter());
     }
 
     /**
@@ -768,22 +771,22 @@ export class TableFilter {
      * @param  {String} name Name of the feature
      * @return {Object}
      */
-    feature(name){
+    feature(name) {
         return this.Mod[name];
     }
 
     /**
      * Initialise all the extensions defined in the configuration object
      */
-    initExtensions(){
+    initExtensions() {
         let exts = this.extensions;
         // Set config's publicPath dynamically for Webpack...
         __webpack_public_path__ = this.basePath;
 
         this.emitter.emit('before-loading-extensions', this);
-        for(let i=0, len=exts.length; i<len; i++){
+        for (let i = 0, len = exts.length; i < len; i++) {
             let ext = exts[i];
-            if(!this.ExtRegistry[ext.name]){
+            if (!this.ExtRegistry[ext.name]) {
                 this.loadExtension(ext);
             }
         }
@@ -794,8 +797,8 @@ export class TableFilter {
      * Load an extension module
      * @param  {Object} ext Extension config object
      */
-    loadExtension(ext){
-        if(!ext || !ext.name){
+    loadExtension(ext) {
+        if (!ext || !ext.name) {
             return;
         }
 
@@ -803,7 +806,7 @@ export class TableFilter {
         let path = ext.path;
         let modulePath;
 
-        if(name && path){
+        if (name && path) {
             modulePath = ext.path + name;
         } else {
             name = name.replace('.js', '');
@@ -811,7 +814,7 @@ export class TableFilter {
         }
 
         // Require pattern for Webpack
-        require(['./' + modulePath], (mod)=> {
+        require(['./' + modulePath], (mod) => {
             /* eslint-disable */
             let inst = new mod.default(this, ext);
             /* eslint-enable */
@@ -825,7 +828,7 @@ export class TableFilter {
      * @param  {String} name Name of the extension
      * @return {Object}      Extension instance
      */
-    extension(name){
+    extension(name) {
         return this.ExtRegistry[name];
     }
 
@@ -834,20 +837,20 @@ export class TableFilter {
      * @param  {String}  name Name of the extension
      * @return {Boolean}
      */
-    hasExtension(name){
+    hasExtension(name) {
         return !Types.isEmpty(this.ExtRegistry[name]);
     }
 
     /**
      * Destroy all the extensions defined in the configuration object
      */
-    destroyExtensions(){
+    destroyExtensions() {
         let exts = this.extensions;
 
-        for(let i=0, len=exts.length; i<len; i++){
+        for (let i = 0, len = exts.length; i < len; i++) {
             let ext = exts[i];
             let extInstance = this.ExtRegistry[ext.name];
-            if(extInstance){
+            if (extInstance) {
                 extInstance.destroy();
                 this.ExtRegistry[ext.name] = null;
             }
@@ -857,29 +860,29 @@ export class TableFilter {
     /**
      * Load themes defined in the configuration object
      */
-    loadThemes(){
+    loadThemes() {
         let themes = this.themes;
         this.emitter.emit('before-loading-themes', this);
 
         //Default theme config
-        if(this.enableDefaultTheme){
+        if (this.enableDefaultTheme) {
             let defaultTheme = { name: 'default' };
             this.themes.push(defaultTheme);
         }
-        if(Types.isArray(themes)){
-            for(let i=0, len=themes.length; i<len; i++){
+        if (Types.isArray(themes)) {
+            for (let i = 0, len = themes.length; i < len; i++) {
                 let theme = themes[i];
                 let name = theme.name;
                 let path = theme.path;
                 let styleId = this.prfxTf + name;
-                if(name && !path){
+                if (name && !path) {
                     path = this.themesPath + name + '/' + name + '.css';
                 }
-                else if(!name && theme.path){
+                else if (!name && theme.path) {
                     name = 'theme{0}'.replace('{0}', i);
                 }
 
-                if(!this.isImported(path, 'link')){
+                if (!this.isImported(path, 'link')) {
                     this.import(styleId, path, null, 'link');
                 }
             }
@@ -889,17 +892,17 @@ export class TableFilter {
         //Reset button
         this.btnResetText = null;
         this.btnResetHtml = '<input type="button" value="" class="' +
-            this.btnResetCssClass+'" title="Clear filters" />';
+            this.btnResetCssClass + '" title="Clear filters" />';
 
         //Paging buttons
         this.btnPrevPageHtml = '<input type="button" value="" class="' +
-            this.btnPageCssClass+' previousPage" title="Previous page" />';
+            this.btnPageCssClass + ' previousPage" title="Previous page" />';
         this.btnNextPageHtml = '<input type="button" value="" class="' +
-            this.btnPageCssClass+' nextPage" title="Next page" />';
+            this.btnPageCssClass + ' nextPage" title="Next page" />';
         this.btnFirstPageHtml = '<input type="button" value="" class="' +
-            this.btnPageCssClass+' firstPage" title="First page" />';
+            this.btnPageCssClass + ' firstPage" title="First page" />';
         this.btnLastPageHtml = '<input type="button" value="" class="' +
-            this.btnPageCssClass+' lastPage" title="Last page" />';
+            this.btnPageCssClass + ' lastPage" title="Last page" />';
 
         //Loader
         this.loader = true;
@@ -913,40 +916,40 @@ export class TableFilter {
      * Return stylesheet DOM element for a given theme name
      * @return {DOMElement} stylesheet element
      */
-    getStylesheet(name='default'){
+    getStylesheet(name = 'default') {
         return Dom.id(this.prfxTf + name);
     }
 
     /**
      * Destroy filter grid
      */
-    destroy(){
-        if(!this._hasGrid){
+    destroy() {
+        if (!this._hasGrid) {
             return;
         }
         let rows = this.tbl.rows,
             Mod = this.Mod,
             emitter = this.emitter;
 
-        if(this.isExternalFlt && !this.popupFilters){
+        if (this.isExternalFlt && !this.popupFilters) {
             this.removeExternalFlts();
         }
-        if(this.infDiv){
+        if (this.infDiv) {
             this.removeToolbar();
         }
-        if(this.markActiveColumns){
+        if (this.markActiveColumns) {
             this.clearActiveColumns();
-            emitter.off(['before-filtering'], ()=> this.clearActiveColumns());
+            emitter.off(['before-filtering'], () => this.clearActiveColumns());
             emitter.off(['cell-processed'],
-                (tf, colIndex)=> this.markActiveColumn(colIndex));
+                (tf, colIndex) => this.markActiveColumn(colIndex));
         }
-        if(this.hasExtensions){
+        if (this.hasExtensions) {
             this.destroyExtensions();
         }
 
         this.validateAllRows();
 
-        if(this.fltGrid && !this.gridLayout){
+        if (this.fltGrid && !this.gridLayout) {
             this.fltGridEl = rows[this.filtersRowIndex];
             this.tbl.deleteRow(this.filtersRowIndex);
         }
@@ -956,22 +959,22 @@ export class TableFilter {
 
         // Destroy modules
         // TODO: subcribe modules to destroy event instead
-        Object.keys(Mod).forEach(function(key){
+        Object.keys(Mod).forEach(function (key) {
             var feature = Mod[key];
-            if(feature && Types.isFn(feature.destroy)){
+            if (feature && Types.isFn(feature.destroy)) {
                 feature.destroy();
             }
         });
 
         // unsubscribe to events
-        if(this.hasVisibleRows){
-            emitter.off(['after-filtering'], ()=> this.enforceVisibility());
+        if (this.hasVisibleRows) {
+            emitter.off(['after-filtering'], () => this.enforceVisibility());
         }
-        if(this.linkedFilters){
-            emitter.off(['after-filtering'], ()=> this.linkFilters());
+        if (this.linkedFilters) {
+            emitter.off(['after-filtering'], () => this.linkFilters());
         }
         this.emitter.off(['filter-focus'],
-            (tf, filter)=> this.setActiveFilterId(filter.id));
+            (tf, filter) => this.setActiveFilterId(filter.id));
 
         Dom.removeClass(this.tbl, this.prfxTf);
         Dom.removeClass(this.tbl, this.prfxResponsive);
@@ -986,54 +989,54 @@ export class TableFilter {
     /**
      * Generate container element for paging, reset button, rows counter etc.
      */
-    setToolbar(){
-        if(this.infDiv){
+    setToolbar() {
+        if (this.infDiv) {
             return;
         }
 
         /*** container div ***/
-        let infdiv = Dom.create('div', ['id', this.prfxInfDiv+this.id]);
+        let infdiv = Dom.create('div', ['id', this.prfxInfDiv + this.id]);
         infdiv.className = this.infDivCssClass;
 
         //custom container
-        if(this.toolBarTgtId){
+        if (this.toolBarTgtId) {
             Dom.id(this.toolBarTgtId).appendChild(infdiv);
         }
         //grid-layout
-        else if(this.gridLayout){
+        else if (this.gridLayout) {
             let gridLayout = this.Mod.gridLayout;
             gridLayout.tblMainCont.appendChild(infdiv);
             infdiv.className = gridLayout.gridInfDivCssClass;
         }
         //default location: just above the table
-        else{
+        else {
             var cont = Dom.create('caption');
             cont.appendChild(infdiv);
             this.tbl.insertBefore(cont, this.tbl.firstChild);
         }
-        this.infDiv = Dom.id(this.prfxInfDiv+this.id);
+        this.infDiv = Dom.id(this.prfxInfDiv + this.id);
 
         /*** left div containing rows # displayer ***/
-        let ldiv = Dom.create('div', ['id', this.prfxLDiv+this.id]);
+        let ldiv = Dom.create('div', ['id', this.prfxLDiv + this.id]);
         ldiv.className = this.lDivCssClass;
         infdiv.appendChild(ldiv);
-        this.lDiv = Dom.id(this.prfxLDiv+this.id);
+        this.lDiv = Dom.id(this.prfxLDiv + this.id);
 
         /***    right div containing reset button
                 + nb results per page select    ***/
-        let rdiv = Dom.create('div', ['id', this.prfxRDiv+this.id]);
+        let rdiv = Dom.create('div', ['id', this.prfxRDiv + this.id]);
         rdiv.className = this.rDivCssClass;
         infdiv.appendChild(rdiv);
-        this.rDiv = Dom.id(this.prfxRDiv+this.id);
+        this.rDiv = Dom.id(this.prfxRDiv + this.id);
 
         /*** mid div containing paging elements ***/
-        let mdiv = Dom.create('div', ['id', this.prfxMDiv+this.id]);
+        let mdiv = Dom.create('div', ['id', this.prfxMDiv + this.id]);
         mdiv.className = this.mDivCssClass;
         infdiv.appendChild(mdiv);
-        this.mDiv = Dom.id(this.prfxMDiv+this.id);
+        this.mDiv = Dom.id(this.prfxMDiv + this.id);
 
         // emit help initialisation only if undefined
-        if(Types.isUndef(this.help)){
+        if (Types.isUndef(this.help)) {
             // explicitily set enabled field to true to initialise help by
             // default, only if setting is undefined
             this.Mod.help.enabled = true;
@@ -1044,8 +1047,8 @@ export class TableFilter {
     /**
      * Remove toolbar container element
      */
-    removeToolbar(){
-        if(!this.infDiv){
+    removeToolbar() {
+        if (!this.infDiv) {
             return;
         }
         Dom.remove(this.infDiv);
@@ -1053,24 +1056,24 @@ export class TableFilter {
 
         let tbl = this.tbl;
         let captions = Dom.tag(tbl, 'caption');
-        if(captions.length > 0){
-            [].forEach.call(captions, (elm)=> tbl.removeChild(elm));
+        if (captions.length > 0) {
+            [].forEach.call(captions, (elm) => tbl.removeChild(elm));
         }
     }
 
     /**
      * Remove all the external column filters
      */
-    removeExternalFlts(){
-        if(!this.isExternalFlt){
+    removeExternalFlts() {
+        if (!this.isExternalFlt) {
             return;
         }
         let ids = this.externalFltTgtIds,
             len = ids.length;
-        for(let ct=0; ct<len; ct++){
+        for (let ct = 0; ct < len; ct++) {
             let externalFltTgtId = ids[ct],
                 externalFlt = Dom.id(externalFltTgtId);
-            if(externalFlt){
+            if (externalFlt) {
                 externalFlt.innerHTML = '';
             }
         }
@@ -1092,8 +1095,8 @@ export class TableFilter {
      * @param  {Number} colIndex Column's index
      * @return {Array}
      */
-    getCustomOptions(colIndex){
-        if(Types.isEmpty(colIndex) || !this.isCustomOptions(colIndex)){
+    getCustomOptions(colIndex) {
+        if (Types.isEmpty(colIndex) || !this.isCustomOptions(colIndex)) {
             return;
         }
 
@@ -1105,15 +1108,15 @@ export class TableFilter {
         let slcTexts = customOptions.texts[index];
         let slcSort = customOptions.sorts[index];
 
-        for(let r=0, len=slcValues.length; r<len; r++){
+        for (let r = 0, len = slcValues.length; r < len; r++) {
             optArray.push(slcValues[r]);
-            if(slcTexts[r]){
+            if (slcTexts[r]) {
                 optTxt.push(slcTexts[r]);
             } else {
                 optTxt.push(slcValues[r]);
             }
         }
-        if(slcSort){
+        if (slcSort) {
             optArray.sort();
             optTxt.sort();
         }
@@ -1125,12 +1128,12 @@ export class TableFilter {
      * row and comparing it to the search term for current column. A row is
      * hidden when all the search terms are not found in inspected row.
      */
-    filter(){
-        if(!this.fltGrid || !this._hasGrid){
+    filter() {
+        if (!this.fltGrid || !this._hasGrid) {
             return;
         }
         //invoke onbefore callback
-        if(this.onBeforeFilter){
+        if (this.onBeforeFilter) {
             this.onBeforeFilter.call(null, this);
         }
         this.emitter.emit('before-filtering', this);
@@ -1159,26 +1162,26 @@ export class TableFilter {
             re_re = new RegExp(Str.rgxEsc(this.rgxOperator));
 
         //keyword highlighting
-        function highlight(str, ok, cell){
+        function highlight(str, ok, cell) {
             /*jshint validthis:true */
-            if(this.highlightKeywords && ok){
+            if (this.highlightKeywords && ok) {
                 str = str.replace(re_lk, '');
                 str = str.replace(re_eq, '');
                 str = str.replace(re_st, '');
                 str = str.replace(re_en, '');
                 let w = str;
-                if(re_le.test(str) || re_ge.test(str) || re_l.test(str) ||
-                    re_g.test(str) || re_d.test(str)){
+                if (re_le.test(str) || re_ge.test(str) || re_l.test(str) ||
+                    re_g.test(str) || re_d.test(str)) {
                     w = Dom.getText(cell);
                 }
-                if(w !== ''){
+                if (w !== '') {
                     this.emitter.emit('highlight-keyword', this, cell, w);
                 }
             }
         }
 
         //looks for search argument in current row
-        function hasArg(sA, cellData, j){
+        function hasArg(sA, cellData, j) {
             /*jshint validthis:true */
             sA = Str.matchCase(sA, this.caseSensitive);
 
@@ -1202,67 +1205,67 @@ export class TableFilter {
 
             //Search arg dates tests
             let isLDate = hasLO &&
-                DateHelper.isValid(sA.replace(re_l,''), dtType);
+                DateHelper.isValid(sA.replace(re_l, ''), dtType);
             let isLEDate = hasLE &&
-                DateHelper.isValid(sA.replace(re_le,''), dtType);
+                DateHelper.isValid(sA.replace(re_le, ''), dtType);
             let isGDate = hasGR &&
-                DateHelper.isValid(sA.replace(re_g,''), dtType);
+                DateHelper.isValid(sA.replace(re_g, ''), dtType);
             let isGEDate = hasGE &&
-                DateHelper.isValid(sA.replace(re_ge,''), dtType);
+                DateHelper.isValid(sA.replace(re_ge, ''), dtType);
             let isDFDate = hasDF &&
-                DateHelper.isValid(sA.replace(re_d,''), dtType);
+                DateHelper.isValid(sA.replace(re_d, ''), dtType);
             let isEQDate = hasEQ &&
-                DateHelper.isValid(sA.replace(re_eq,''), dtType);
+                DateHelper.isValid(sA.replace(re_eq, ''), dtType);
 
             let dte1, dte2;
             //dates
-            if(DateHelper.isValid(cellData, dtType)){
+            if (DateHelper.isValid(cellData, dtType)) {
                 dte1 = DateHelper.format(cellData, dtType);
                 // lower date
-                if(isLDate){
-                    dte2 = DateHelper.format(sA.replace(re_l,''), dtType);
+                if (isLDate) {
+                    dte2 = DateHelper.format(sA.replace(re_l, ''), dtType);
                     occurence = dte1 < dte2;
                 }
                 // lower equal date
-                else if(isLEDate){
-                    dte2 = DateHelper.format(sA.replace(re_le,''), dtType);
+                else if (isLEDate) {
+                    dte2 = DateHelper.format(sA.replace(re_le, ''), dtType);
                     occurence = dte1 <= dte2;
                 }
                 // greater equal date
-                else if(isGEDate){
-                    dte2 = DateHelper.format(sA.replace(re_ge,''), dtType);
+                else if (isGEDate) {
+                    dte2 = DateHelper.format(sA.replace(re_ge, ''), dtType);
                     occurence = dte1 >= dte2;
                 }
                 // greater date
-                else if(isGDate){
-                    dte2 = DateHelper.format(sA.replace(re_g,''), dtType);
+                else if (isGDate) {
+                    dte2 = DateHelper.format(sA.replace(re_g, ''), dtType);
                     occurence = dte1 > dte2;
                 }
                 // different date
-                else if(isDFDate){
-                    dte2 = DateHelper.format(sA.replace(re_d,''), dtType);
+                else if (isDFDate) {
+                    dte2 = DateHelper.format(sA.replace(re_d, ''), dtType);
                     occurence = dte1.toString() != dte2.toString();
                 }
                 // equal date
-                else if(isEQDate){
-                    dte2 = DateHelper.format(sA.replace(re_eq,''), dtType);
+                else if (isEQDate) {
+                    dte2 = DateHelper.format(sA.replace(re_eq, ''), dtType);
                     occurence = dte1.toString() == dte2.toString();
                 }
                 // searched keyword with * operator doesn't have to be a date
-                else if(re_lk.test(sA)){// like date
-                    occurence = Str.contains(sA.replace(re_lk,''), cellData,
+                else if (re_lk.test(sA)) {// like date
+                    occurence = Str.contains(sA.replace(re_lk, ''), cellData,
                         false, this.caseSensitive);
                 }
-                else if(DateHelper.isValid(sA,dtType)){
-                    dte2 = DateHelper.format(sA,dtType);
+                else if (DateHelper.isValid(sA, dtType)) {
+                    dte2 = DateHelper.format(sA, dtType);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 //empty
-                else if(hasEM){
+                else if (hasEM) {
                     occurence = Str.isEmpty(cellData);
                 }
                 //non-empty
-                else if(hasNM){
+                else if (hasNM) {
                     occurence = !Str.isEmpty(cellData);
                 } else {
                     occurence = Str.contains(sA, cellData, this.isExactMatch(j),
@@ -1270,15 +1273,15 @@ export class TableFilter {
                 }
             }
 
-            else{
+            else {
                 //first numbers need to be formated
-                if(this.hasColNbFormat && this.colNbFormat[j]){
+                if (this.hasColNbFormat && this.colNbFormat[j]) {
                     numCellData = removeNbFormat(
                         cellData, this.colNbFormat[j]);
                     nbFormat = this.colNbFormat[j];
                 } else {
-                    if(this.thousandsSeparator === ',' &&
-                        this.decimalSeparator === '.'){
+                    if (this.thousandsSeparator === ',' &&
+                        this.decimalSeparator === '.') {
                         numCellData = removeNbFormat(cellData, 'us');
                         nbFormat = 'us';
                     } else {
@@ -1290,71 +1293,71 @@ export class TableFilter {
                 // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
                 // rgx:)
                 // lower equal
-                if(hasLE){
+                if (hasLE) {
                     occurence = numCellData <= removeNbFormat(
                         sA.replace(re_le, ''), nbFormat);
                 }
                 //greater equal
-                else if(hasGE){
+                else if (hasGE) {
                     occurence = numCellData >= removeNbFormat(
                         sA.replace(re_ge, ''), nbFormat);
                 }
                 //lower
-                else if(hasLO){
+                else if (hasLO) {
                     occurence = numCellData < removeNbFormat(
                         sA.replace(re_l, ''), nbFormat);
                 }
                 //greater
-                else if(hasGR){
+                else if (hasGR) {
                     occurence = numCellData > removeNbFormat(
                         sA.replace(re_g, ''), nbFormat);
                 }
                 //different
-                else if(hasDF){
+                else if (hasDF) {
                     occurence = Str.contains(sA.replace(re_d, ''), cellData,
                         false, this.caseSensitive) ? false : true;
                 }
                 //like
-                else if(hasLK){
+                else if (hasLK) {
                     occurence = Str.contains(sA.replace(re_lk, ''), cellData,
                         false, this.caseSensitive);
                 }
                 //equal
-                else if(hasEQ){
+                else if (hasEQ) {
                     occurence = Str.contains(sA.replace(re_eq, ''), cellData,
                         true, this.caseSensitive);
                 }
                 //starts with
-                else if(hasST){
+                else if (hasST) {
                     occurence = cellData.indexOf(sA.replace(re_st, '')) === 0 ?
                         true : false;
                 }
                 //ends with
-                else if(hasEN){
+                else if (hasEN) {
                     let searchArg = sA.replace(re_en, '');
                     occurence =
-                        cellData.lastIndexOf(searchArg, cellData.length-1) ===
-                        (cellData.length-1)-(searchArg.length-1) &&
-                        cellData.lastIndexOf(
-                            searchArg, cellData.length-1) > -1 ? true : false;
+                        cellData.lastIndexOf(searchArg, cellData.length - 1) ===
+                            (cellData.length - 1) - (searchArg.length - 1) &&
+                            cellData.lastIndexOf(searchArg, cellData.length - 1)
+                                > -1 ? true : false;
                 }
                 //empty
-                else if(hasEM){
+                else if (hasEM) {
                     occurence = Str.isEmpty(cellData);
                 }
                 //non-empty
-                else if(hasNM){
+                else if (hasNM) {
                     occurence = !Str.isEmpty(cellData);
                 }
                 //regexp
-                else if(hasRE){
+                else if (hasRE) {
                     //in case regexp fires an exception
-                    try{
+                    try {
                         //operator is removed
-                        let srchArg = sA.replace(re_re,'');
+                        let srchArg = sA.replace(re_re, '');
                         let rgx = new RegExp(srchArg);
                         occurence = rgx.test(cellData);
-                    } catch(e) { occurence = false; }
+                    } catch (e) { occurence = false; }
                 } else {
                     occurence = Str.contains(sA, cellData, this.isExactMatch(j),
                         this.caseSensitive);
@@ -1364,7 +1367,7 @@ export class TableFilter {
             return occurence;
         }//fn
 
-        for(let k=this.refRow; k<this.nbRows; k++){
+        for (let k = this.refRow; k < this.nbRows; k++) {
             // already filtered rows display re-init
             row[k].style.display = '';
 
@@ -1372,7 +1375,7 @@ export class TableFilter {
                 nchilds = cells.length;
 
             // checks if row has exact cell #
-            if(nchilds !== this.nbCells){
+            if (nchilds !== this.nbCells) {
                 continue;
             }
 
@@ -1382,13 +1385,13 @@ export class TableFilter {
                 singleFltRowValid = false;
 
             // this loop retrieves cell data
-            for(let j=0; j<nchilds; j++){
+            for (let j = 0; j < nchilds; j++) {
                 //searched keyword
                 let sA = searchArgs[this.singleSearchFlt ? 0 : j];
                 var dtType = this.hasColDateType ?
-                        this.colDateType[j] : this.defaultDateType;
+                    this.colDateType[j] : this.defaultDateType;
 
-                if(sA === ''){
+                if (sA === '') {
                     continue;
                 }
 
@@ -1405,25 +1408,25 @@ export class TableFilter {
                     hasMultiAndSA = sAAndSplit.length > 1;
 
                 //detect operators or array query
-                if(Types.isArray(sA) || hasMultiOrSA || hasMultiAndSA){
+                if (Types.isArray(sA) || hasMultiOrSA || hasMultiAndSA) {
                     let cS,
                         s,
                         occur = false;
-                    if(Types.isArray(sA)){
+                    if (Types.isArray(sA)) {
                         s = sA;
                     } else {
                         s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
                     }
                     // TODO: improve clarity/readability of this block
-                    for(let w=0, len=s.length; w<len; w++){
+                    for (let w = 0, len = s.length; w < len; w++) {
                         cS = Str.trim(s[w]);
                         occur = hasArg.call(this, cS, cellData, j);
                         highlight.call(this, cS, occur, cells[j]);
-                        if((hasMultiOrSA && occur) ||
-                            (hasMultiAndSA && !occur)){
+                        if ((hasMultiOrSA && occur) ||
+                            (hasMultiAndSA && !occur)) {
                             break;
                         }
-                        if(Types.isArray(sA) && occur){
+                        if (Types.isArray(sA) && occur) {
                             break;
                         }
                     }
@@ -1436,21 +1439,21 @@ export class TableFilter {
                     highlight.call(this, sA, occurence[j], cells[j]);
                 }//else single param
 
-                if(!occurence[j]){
+                if (!occurence[j]) {
                     isRowValid = false;
                 }
-                if(this.singleSearchFlt && occurence[j]){
+                if (this.singleSearchFlt && occurence[j]) {
                     singleFltRowValid = true;
                 }
 
                 this.emitter.emit('cell-processed', this, j, cells[j]);
             }//for j
 
-            if(this.singleSearchFlt && singleFltRowValid){
+            if (this.singleSearchFlt && singleFltRowValid) {
                 isRowValid = true;
             }
 
-            if(!isRowValid){
+            if (!isRowValid) {
                 this.validateRow(k, false);
                 hiddenrows++;
             } else {
@@ -1465,7 +1468,7 @@ export class TableFilter {
         this.nbHiddenRows = hiddenrows;
 
         //invokes onafterfilter callback
-        if(this.onAfterFilter){
+        if (this.onAfterFilter) {
             this.onAfterFilter.call(null, this);
         }
 
@@ -1480,39 +1483,39 @@ export class TableFilter {
      * @param  {Array} exclude   Optional: list of row indexes to be excluded
      * @return {Array}           Flat list of data for a column
      */
-    getColValues(colIndex, includeHeaders=false, num=false, exclude=[]){
-        if(!this.fltGrid){
+    getColValues(colIndex, includeHeaders = false, num = false, exclude = []) {
+        if (!this.fltGrid) {
             return;
         }
         let row = this.tbl.rows,
             colValues = [];
 
-        if(includeHeaders){
+        if (includeHeaders) {
             colValues.push(this.getHeadersText()[colIndex]);
         }
 
-        for(let i=this.refRow; i<this.nbRows; i++){
+        for (let i = this.refRow; i < this.nbRows; i++) {
             let isExludedRow = false;
             // checks if current row index appears in exclude array
-            if(exclude.length > 0){
+            if (exclude.length > 0) {
                 isExludedRow = exclude.indexOf(i) != -1;
             }
             let cell = row[i].cells,
                 nchilds = cell.length;
 
             // checks if row has exact cell # and is not excluded
-            if(nchilds === this.nbCells && !isExludedRow){
+            if (nchilds === this.nbCells && !isExludedRow) {
                 // this loop retrieves cell data
-                for(let j=0; j<nchilds; j++){
-                    if(j != colIndex || row[i].style.display !== ''){
+                for (let j = 0; j < nchilds; j++) {
+                    if (j != colIndex || row[i].style.display !== '') {
                         continue;
                     }
                     let cellData = this.getCellData(cell[j]),
                         nbFormat = this.colNbFormat ?
                             this.colNbFormat[colIndex] : null,
                         data = num ?
-                                Helpers.removeNbFormat(cellData, nbFormat) :
-                                cellData;
+                            Helpers.removeNbFormat(cellData, nbFormat) :
+                            cellData;
                     colValues.push(data);
                 }
             }
@@ -1525,27 +1528,27 @@ export class TableFilter {
      * @param  {Number} index Column index
      * @return {String}       Filter value
      */
-    getFilterValue(index){
-        if(!this.fltGrid){
+    getFilterValue(index) {
+        if (!this.fltGrid) {
             return;
         }
         let fltValue = '',
             fltValues = [],
             flt = this.getFilterElement(index);
-        if(!flt){
+        if (!flt) {
             return '';
         }
 
         let fltColType = this.getFilterType(index);
-        if(fltColType !== this.fltTypeMulti &&
-            fltColType !== this.fltTypeCheckList){
+        if (fltColType !== this.fltTypeMulti &&
+            fltColType !== this.fltTypeCheckList) {
             fltValue = flt.value;
         }
         //mutiple select
-        else if(fltColType === this.fltTypeMulti){
+        else if (fltColType === this.fltTypeMulti) {
             // TODO: extract a method in dropdown module from below
-            for(let j=0, len=flt.options.length; j<len; j++){
-                if(flt.options[j].selected){
+            for (let j = 0, len = flt.options.length; j < len; j++) {
+                if (flt.options[j].selected) {
                     fltValues.push(flt.options[j].value);
                 }
             }
@@ -1553,12 +1556,12 @@ export class TableFilter {
             fltValue = fltValues.length > 0 ? fltValues : '';
         }
         //checklist
-        else if(fltColType === this.fltTypeCheckList){
+        else if (fltColType === this.fltTypeCheckList) {
             // TODO: extract a method in checklist module from below
-            if(flt.getAttribute('value') !== null){
+            if (flt.getAttribute('value') !== null) {
                 fltValues = flt.getAttribute('value');
                 //removes last operator ||
-                fltValues = fltValues.substr(0, fltValues.length-3);
+                fltValues = fltValues.substr(0, fltValues.length - 3);
                 //convert || separated values into array
                 fltValues = fltValues.split(' ' + this.orOperator + ' ');
             }
@@ -1566,8 +1569,8 @@ export class TableFilter {
             fltValue = fltValues.length > 0 ? fltValues : '';
         }
         //return an empty string if collection contains a single empty string
-        if(Types.isArray(fltValue) && fltValue.length === 1 &&
-            fltValue[0] === ''){
+        if (Types.isArray(fltValue) && fltValue.length === 1 &&
+            fltValue[0] === '') {
             fltValue = '';
         }
         return fltValue;
@@ -1577,14 +1580,14 @@ export class TableFilter {
      * Return the filters' values
      * @return {Array} List of filters' values
      */
-    getFiltersValue(){
-        if(!this.fltGrid){
+    getFiltersValue() {
+        if (!this.fltGrid) {
             return;
         }
         let searchArgs = [];
-        for(let i=0, len=this.fltIds.length; i<len; i++){
+        for (let i = 0, len = this.fltIds.length; i < len; i++) {
             let fltValue = this.getFilterValue(i);
-            if(Types.isArray(fltValue)){
+            if (Types.isArray(fltValue)) {
                 searchArgs.push(fltValue);
             } else {
                 searchArgs.push(Str.trim(fltValue));
@@ -1598,8 +1601,8 @@ export class TableFilter {
      * @param  {Number} index Column's index
      * @return {String}       ID of the filter element
      */
-    getFilterId(index){
-        if(!this.fltGrid){
+    getFilterId(index) {
+        if (!this.fltGrid) {
             return;
         }
         return this.fltIds[index];
@@ -1614,14 +1617,14 @@ export class TableFilter {
      * @param  {Boolean} bool If true returns columns indexes instead of IDs
      * @return {[type]}       List of element IDs or column indexes
      */
-    getFiltersByType(type, bool){
-        if(!this.fltGrid){
+    getFiltersByType(type, bool) {
+        if (!this.fltGrid) {
             return;
         }
         let arr = [];
-        for(let i=0, len=this.fltIds.length; i<len; i++){
+        for (let i = 0, len = this.fltIds.length; i < len; i++) {
             let fltType = this.getFilterType(i);
-            if(fltType === Str.lower(type)){
+            if (fltType === Str.lower(type)) {
                 let a = bool ? i : this.fltIds[i];
                 arr.push(a);
             }
@@ -1634,7 +1637,7 @@ export class TableFilter {
      * @param  {Number} index     Column's index
      * @return {DOMElement}
      */
-    getFilterElement(index){
+    getFilterElement(index) {
         let fltId = this.fltIds[index];
         return Dom.id(fltId);
     }
@@ -1644,7 +1647,7 @@ export class TableFilter {
      * @param  {Number} rowIndex Index of the row
      * @return {Number}          Number of cells
      */
-    getCellsNb(rowIndex=0){
+    getCellsNb(rowIndex = 0) {
         let tr = this.tbl.rows[rowIndex];
         return tr.cells.length;
     }
@@ -1655,11 +1658,11 @@ export class TableFilter {
      * @param  {Boolean} includeHeaders Include the headers row
      * @return {Number}                 Number of filterable rows
      */
-    getRowsNb(includeHeaders){
+    getRowsNb(includeHeaders) {
         let s = Types.isUndef(this.refRow) ? 0 : this.refRow,
             ntrs = this.tbl.rows.length;
-        if(includeHeaders){ s = 0; }
-        return parseInt(ntrs-s, 10);
+        if (includeHeaders) { s = 0; }
+        return parseInt(ntrs - s, 10);
     }
 
     /**
@@ -1667,10 +1670,10 @@ export class TableFilter {
      * @param  {DOMElement} cell Cell's DOM object
      * @return {String}
      */
-    getCellData(cell){
+    getCellData(cell) {
         let idx = cell.cellIndex;
         //Check for customCellData callback
-        if(this.customCellData && this.customCellDataCols.indexOf(idx) != -1){
+        if (this.customCellData && this.customCellDataCols.indexOf(idx) != -1) {
             return this.customCellData.call(null, this, cell, idx);
         } else {
             return Dom.getText(cell);
@@ -1689,19 +1692,19 @@ export class TableFilter {
      *
      * TODO: provide an API returning data in JSON format
      */
-    getTableData(includeHeaders=false, excludeHiddenCols=false){
+    getTableData(includeHeaders = false, excludeHiddenCols = false) {
         let rows = this.tbl.rows;
         let tblData = [];
-        if(includeHeaders){
+        if (includeHeaders) {
             let headers = this.getHeadersText(excludeHiddenCols);
             tblData.push([this.getHeadersRowIndex(), headers]);
         }
-        for(let k=this.refRow; k<this.nbRows; k++){
+        for (let k = this.refRow; k < this.nbRows; k++) {
             let rowData = [k, []];
             let cells = rows[k].cells;
-            for(let j=0, len=cells.length; j<len; j++){
-                if(excludeHiddenCols && this.hasExtension('colsVisibility')){
-                    if(this.extension('colsVisibility').isColHidden(j)){
+            for (let j = 0, len = cells.length; j < len; j++) {
+                if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
+                    if (this.extension('colsVisibility').isColHidden(j)) {
                         continue;
                     }
                 }
@@ -1725,24 +1728,24 @@ export class TableFilter {
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredData(includeHeaders=false, excludeHiddenCols=false){
-        if(!this.validRowsIndex){
+    getFilteredData(includeHeaders = false, excludeHiddenCols = false) {
+        if (!this.validRowsIndex) {
             return [];
         }
         let rows = this.tbl.rows,
             filteredData = [];
-        if(includeHeaders){
+        if (includeHeaders) {
             let headers = this.getHeadersText(excludeHiddenCols);
             filteredData.push([this.getHeadersRowIndex(), headers]);
         }
 
         let validRows = this.getValidRows(true);
-        for(let i=0; i<validRows.length; i++){
+        for (let i = 0; i < validRows.length; i++) {
             let rData = [this.validRowsIndex[i], []],
                 cells = rows[this.validRowsIndex[i]].cells;
-            for(let k=0; k<cells.length; k++){
-                if(excludeHiddenCols && this.hasExtension('colsVisibility')){
-                    if(this.extension('colsVisibility').isColHidden(k)){
+            for (let k = 0; k < cells.length; k++) {
+                if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
+                    if (this.extension('colsVisibility').isColHidden(k)) {
                         continue;
                     }
                 }
@@ -1762,16 +1765,16 @@ export class TableFilter {
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredDataCol(colIndex, includeHeaders=false){
-        if(Types.isUndef(colIndex)){
+    getFilteredDataCol(colIndex, includeHeaders = false) {
+        if (Types.isUndef(colIndex)) {
             return [];
         }
         let data = this.getFilteredData(),
             colData = [];
-        if(includeHeaders){
+        if (includeHeaders) {
             colData.push(this.getHeadersText()[colIndex]);
         }
-        for(let i=0, len=data.length; i<len; i++){
+        for (let i = 0, len = data.length; i < len; i++) {
             let r = data[i],
                 //cols values of current row
                 d = r[1],
@@ -1787,8 +1790,8 @@ export class TableFilter {
      * @param  {RowElement} row DOM element of the row
      * @return {String}     Usually 'none' or ''
      */
-    getRowDisplay(row){
-        if(!Types.isObj(row)){
+    getRowDisplay(row) {
+        if (!Types.isObj(row)) {
             return null;
         }
         return row.style.display;
@@ -1799,14 +1802,14 @@ export class TableFilter {
      * @param  {Number}  rowIndex Index of the row
      * @param  {Boolean} isValid
      */
-    validateRow(rowIndex, isValid){
+    validateRow(rowIndex, isValid) {
         let row = this.tbl.rows[rowIndex];
-        if(!row || typeof isValid !== 'boolean'){
+        if (!row || typeof isValid !== 'boolean') {
             return;
         }
 
         // always visible rows are valid
-        if(this.hasVisibleRows && this.visibleRows.indexOf(rowIndex) !== -1){
+        if (this.hasVisibleRows && this.visibleRows.indexOf(rowIndex) !== -1) {
             isValid = true;
         }
 
@@ -1814,16 +1817,16 @@ export class TableFilter {
             validFlag = isValid ? 'true' : 'false';
         row.style.display = displayFlag;
 
-        if(this.paging){
+        if (this.paging) {
             row.setAttribute('validRow', validFlag);
         }
 
-        if(isValid){
-            if(this.validRowsIndex.indexOf(rowIndex) === -1){
+        if (isValid) {
+            if (this.validRowsIndex.indexOf(rowIndex) === -1) {
                 this.validRowsIndex.push(rowIndex);
             }
 
-            if(this.onRowValidated){
+            if (this.onRowValidated) {
                 this.onRowValidated.call(null, this, rowIndex);
             }
 
@@ -1834,12 +1837,12 @@ export class TableFilter {
     /**
      * Validate all filterable rows
      */
-    validateAllRows(){
-        if(!this._hasGrid){
+    validateAllRows() {
+        if (!this._hasGrid) {
             return;
         }
         this.validRowsIndex = [];
-        for(let k=this.refRow; k<this.nbFilterableRows; k++){
+        for (let k = this.refRow; k < this.nbFilterableRows; k++) {
             this.validateRow(k, true);
         }
     }
@@ -1849,27 +1852,27 @@ export class TableFilter {
      * @param {Number} index     Column's index
      * @param {String or Array} query  searcharg Search term
      */
-    setFilterValue(index, query=''){
-        if(!this.fltGrid){
+    setFilterValue(index, query = '') {
+        if (!this.fltGrid) {
             return;
         }
         let slc = this.getFilterElement(index),
             fltColType = this.getFilterType(index);
 
-        if(fltColType !== this.fltTypeMulti &&
-            fltColType != this.fltTypeCheckList){
-            if(this.loadFltOnDemand && !this.initialized){
+        if (fltColType !== this.fltTypeMulti &&
+            fltColType != this.fltTypeCheckList) {
+            if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-select-filter', this, index,
                     this.linkedFilters, this.isExternalFlt);
             }
             slc.value = query;
         }
         //multiple selects
-        else if(fltColType === this.fltTypeMulti){
+        else if (fltColType === this.fltTypeMulti) {
             let values = Types.isArray(query) ? query :
-                query.split(' '+this.orOperator+' ');
+                query.split(' ' + this.orOperator + ' ');
 
-            if(this.loadFltOnDemand && !this.initialized){
+            if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-select-filter', this, index,
                     this.linkedFilters, this.isExternalFlt);
             }
@@ -1877,17 +1880,17 @@ export class TableFilter {
             this.emitter.emit('select-options', this, index, values);
         }
         //checklist
-        else if(fltColType === this.fltTypeCheckList){
+        else if (fltColType === this.fltTypeCheckList) {
             let values = [];
-            if(this.loadFltOnDemand && !this.initialized){
+            if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-checklist-filter', this, index,
                     this.isExternalFlt);
             }
-            if(Types.isArray(query)){
+            if (Types.isArray(query)) {
                 values = query;
             } else {
                 query = Str.matchCase(query, this.caseSensitive);
-                values = query.split(' '+this.orOperator+' ');
+                values = query.split(' ' + this.orOperator + ' ');
             }
 
             this.emitter.emit('select-checklist-options', this, index, values);
@@ -1898,31 +1901,31 @@ export class TableFilter {
      * Set them columns' widths as per configuration
      * @param {Element} tbl DOM element
      */
-    setColWidths(tbl){
-        if(!this.hasColWidths){
+    setColWidths(tbl) {
+        if (!this.hasColWidths) {
             return;
         }
         tbl = tbl || this.tbl;
 
         setWidths.call(this);
 
-        function setWidths(){
+        function setWidths() {
             let nbCols = this.nbCells;
             let colWidths = this.colWidths;
             let colTags = Dom.tag(tbl, 'col');
             let tblHasColTag = colTags.length > 0;
             let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
-            for(let k=0; k<nbCols; k++){
+            for (let k = 0; k < nbCols; k++) {
                 let col;
-                if(tblHasColTag){
+                if (tblHasColTag) {
                     col = colTags[k];
                 } else {
-                    col = Dom.create('col', ['id', this.id+'_col_'+k]);
+                    col = Dom.create('col', ['id', this.id + '_col_' + k]);
                     frag.appendChild(col);
                 }
                 col.style.width = colWidths[k];
             }
-            if(!tblHasColTag){
+            if (!tblHasColTag) {
                 tbl.insertBefore(frag, tbl.firstChild);
             }
         }
@@ -1931,14 +1934,14 @@ export class TableFilter {
     /**
      * Makes defined rows always visible
      */
-    enforceVisibility(){
-        if(!this.hasVisibleRows){
+    enforceVisibility() {
+        if (!this.hasVisibleRows) {
             return;
         }
-        for(let i=0, len=this.visibleRows.length; i<len; i++){
+        for (let i = 0, len = this.visibleRows.length; i < len; i++) {
             let row = this.visibleRows[i];
             //row index cannot be > nrows
-            if(row <= this.nbRows){
+            if (row <= this.nbRows) {
                 this.validateRow(row, true);
             }
         }
@@ -1947,23 +1950,23 @@ export class TableFilter {
     /**
      * Clear all the filters' values
      */
-    clearFilters(){
-        if(!this.fltGrid){
+    clearFilters() {
+        if (!this.fltGrid) {
             return;
         }
 
         this.emitter.emit('before-clearing-filters', this);
 
-        if(this.onBeforeReset){
+        if (this.onBeforeReset) {
             this.onBeforeReset.call(null, this, this.getFiltersValue());
         }
-        for(let i=0, len=this.fltIds.length; i<len; i++){
+        for (let i = 0, len = this.fltIds.length; i < len; i++) {
             this.setFilterValue(i, '');
         }
 
         this.filter();
 
-        if(this.onAfterReset){
+        if (this.onAfterReset) {
             this.onAfterReset.call(null, this);
         }
         this.emitter.emit('after-clearing-filters', this);
@@ -1972,8 +1975,8 @@ export class TableFilter {
     /**
      * Clears filtered columns visual indicator (background color)
      */
-    clearActiveColumns(){
-        for(let i=0, len=this.getCellsNb(this.headersRow); i<len; i++){
+    clearActiveColumns() {
+        for (let i = 0, len = this.getCellsNb(this.headersRow); i < len; i++) {
             Dom.removeClass(
                 this.getHeaderElement(i), this.activeColumnsCssClass);
         }
@@ -1983,16 +1986,16 @@ export class TableFilter {
      * Mark currently filtered column
      * @param  {Number} colIndex Column index
      */
-    markActiveColumn(colIndex){
+    markActiveColumn(colIndex) {
         let header = this.getHeaderElement(colIndex);
-        if(Dom.hasClass(header, this.activeColumnsCssClass)){
+        if (Dom.hasClass(header, this.activeColumnsCssClass)) {
             return;
         }
-        if(this.onBeforeActiveColumn){
+        if (this.onBeforeActiveColumn) {
             this.onBeforeActiveColumn.call(null, this, colIndex);
         }
         Dom.addClass(header, this.activeColumnsCssClass);
-        if(this.onAfterActiveColumn){
+        if (this.onAfterActiveColumn) {
             this.onAfterActiveColumn.call(null, this, colIndex);
         }
     }
@@ -2001,7 +2004,7 @@ export class TableFilter {
      * Return the ID of the current active filter
      * @returns {String}
      */
-    getActiveFilterId(){
+    getActiveFilterId() {
         return this.activeFilterId;
     }
 
@@ -2009,7 +2012,7 @@ export class TableFilter {
      * Set the ID of the current active filter
      * @param {String} filterId Element ID
      */
-    setActiveFilterId(filterId){
+    setActiveFilterId(filterId) {
         this.activeFilterId = filterId;
     }
 
@@ -2018,7 +2021,7 @@ export class TableFilter {
      * @param {string} [filterId=''] Filter ID
      * @returns {Number} Column index
      */
-    getColumnIndexFromFilterId(filterId=''){
+    getColumnIndexFromFilterId(filterId = '') {
         let idx = filterId.split('_')[0];
         idx = idx.split(this.prfxFlt)[1];
         return parseInt(idx, 10);
@@ -2028,8 +2031,8 @@ export class TableFilter {
      * Make specified column's filter active
      * @param colIndex Index of a column
      */
-    activateFilter(colIndex){
-        if(Types.isUndef(colIndex)){
+    activateFilter(colIndex) {
+        if (Types.isUndef(colIndex)) {
             return;
         }
         this.setActiveFilterId(this.getFilterId(colIndex));
@@ -2039,8 +2042,8 @@ export class TableFilter {
      * Refresh the filters subject to linking ('select', 'multiple',
      * 'checklist' type)
      */
-    linkFilters(){
-        if(!this.linkedFilters || !this.activeFilterId){
+    linkFilters() {
+        if (!this.linkedFilters || !this.activeFilterId) {
             return;
         }
         let slcA1 = this.getFiltersByType(this.fltTypeSlc, true),
@@ -2051,27 +2054,27 @@ export class TableFilter {
 
         let activeIdx = this.getColumnIndexFromFilterId(this.activeFilterId);
 
-        for(let i=0, len=slcIndex.length; i<len; i++){
+        for (let i = 0, len = slcIndex.length; i < len; i++) {
             let curSlc = Dom.id(this.fltIds[slcIndex[i]]);
             let slcSelectedValue = this.getFilterValue(slcIndex[i]);
 
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement
-            if(activeIdx !== slcIndex[i] ||
+            if (activeIdx !== slcIndex[i] ||
                 (this.paging && slcA1.indexOf(slcIndex[i]) != -1 &&
-                    activeIdx === slcIndex[i] ) ||
+                    activeIdx === slcIndex[i]) ||
                 (!this.paging && (slcA3.indexOf(slcIndex[i]) != -1 ||
                     slcA2.indexOf(slcIndex[i]) != -1)) ||
-                slcSelectedValue === this.displayAllText ){
+                slcSelectedValue === this.displayAllText) {
 
                 //1st option needs to be inserted
-                if(this.loadFltOnDemand) {
+                if (this.loadFltOnDemand) {
                     let opt0 = Dom.createOpt(this.displayAllText, '');
                     curSlc.innerHTML = '';
                     curSlc.appendChild(opt0);
                 }
 
-                if(slcA3.indexOf(slcIndex[i]) != -1){
+                if (slcA3.indexOf(slcIndex[i]) != -1) {
                     this.emitter.emit('build-checklist-filter', this,
                         slcIndex[i]);
                 } else {
@@ -2089,7 +2092,7 @@ export class TableFilter {
      * @param  {Number}  colIndex [description]
      * @return {Boolean}          [description]
      */
-    isExactMatch(colIndex){
+    isExactMatch(colIndex) {
         let fltType = this.getFilterType(colIndex);
         return this.exactMatchByCol[colIndex] || this.exactMatch ||
             (fltType !== this.fltTypeInp);
@@ -2101,16 +2104,16 @@ export class TableFilter {
      * @param  {String}  type     Possible values: 'script' or 'link'
      * @return {Boolean}
      */
-    isImported(filePath, type){
+    isImported(filePath, type) {
         let imported = false,
             importType = !type ? 'script' : type,
             attr = importType == 'script' ? 'src' : 'href',
             files = Dom.tag(doc, importType);
-        for (let i=0, len=files.length; i<len; i++){
-            if(files[i][attr] === undefined){
+        for (let i = 0, len = files.length; i < len; i++) {
+            if (files[i][attr] === undefined) {
                 continue;
             }
-            if(files[i][attr].match(filePath)){
+            if (files[i][attr].match(filePath)) {
                 imported = true;
                 break;
             }
@@ -2125,10 +2128,10 @@ export class TableFilter {
      * @param  {Function} callback Callback
      * @param  {String}   type     Possible values: 'script' or 'link'
      */
-    import(fileId, filePath, callback, type){
+    import(fileId, filePath, callback, type) {
         let ftype = !type ? 'script' : type,
             imported = this.isImported(filePath, ftype);
-        if(imported){
+        if (imported) {
             return;
         }
         let o = this,
@@ -2136,7 +2139,7 @@ export class TableFilter {
             file,
             head = Dom.tag(doc, 'head')[0];
 
-        if(Str.lower(ftype) === 'link'){
+        if (Str.lower(ftype) === 'link') {
             file = Dom.create('link',
                 ['id', fileId], ['type', 'text/css'],
                 ['rel', 'stylesheet'], ['href', filePath]
@@ -2149,17 +2152,17 @@ export class TableFilter {
         }
 
         //Browser <> IE onload event works only for scripts, not for stylesheets
-        file.onload = file.onreadystatechange = function(){
-            if(!isLoaded &&
+        file.onload = file.onreadystatechange = function () {
+            if (!isLoaded &&
                 (!this.readyState || this.readyState === 'loaded' ||
-                    this.readyState === 'complete')){
+                    this.readyState === 'complete')) {
                 isLoaded = true;
-                if(typeof callback === 'function'){
+                if (typeof callback === 'function') {
                     callback.call(null, o);
                 }
             }
         };
-        file.onerror = function(){
+        file.onerror = function () {
             throw new Error('TableFilter could not load: ' + filePath);
         };
         head.appendChild(file);
@@ -2169,7 +2172,7 @@ export class TableFilter {
      * Check if table has filters grid
      * @return {Boolean}
      */
-    hasGrid(){
+    hasGrid() {
         return this._hasGrid;
     }
 
@@ -2177,7 +2180,7 @@ export class TableFilter {
      * Get list of filter IDs
      * @return {[type]} [description]
      */
-    getFiltersId(){
+    getFiltersId() {
         return this.fltIds || [];
     }
 
@@ -2186,21 +2189,21 @@ export class TableFilter {
      * @param  {Boolean} reCalc Force calculation of filtered rows list
      * @return {Array}          List of row indexes
      */
-    getValidRows(reCalc){
-        if(!reCalc){
+    getValidRows(reCalc) {
+        if (!reCalc) {
             return this.validRowsIndex;
         }
 
         this.validRowsIndex = [];
-        for(let k=this.refRow; k<this.getRowsNb(true); k++){
+        for (let k = this.refRow; k < this.getRowsNb(true); k++) {
             let r = this.tbl.rows[k];
-            if(!this.paging){
-                if(this.getRowDisplay(r) !== 'none'){
+            if (!this.paging) {
+                if (this.getRowDisplay(r) !== 'none') {
                     this.validRowsIndex.push(r.rowIndex);
                 }
             } else {
-                if(r.getAttribute('validRow') === 'true' ||
-                    r.getAttribute('validRow') === null){
+                if (r.getAttribute('validRow') === 'true' ||
+                    r.getAttribute('validRow') === null) {
                     this.validRowsIndex.push(r.rowIndex);
                 }
             }
@@ -2212,7 +2215,7 @@ export class TableFilter {
      * Get the index of the row containing the filters
      * @return {Number}
      */
-    getFiltersRowIndex(){
+    getFiltersRowIndex() {
         return this.filtersRowIndex;
     }
 
@@ -2220,7 +2223,7 @@ export class TableFilter {
      * Get the index of the headers row
      * @return {Number}
      */
-    getHeadersRowIndex(){
+    getHeadersRowIndex() {
         return this.headersRow;
     }
 
@@ -2229,7 +2232,7 @@ export class TableFilter {
      * row)
      * @return {Number}
      */
-    getStartRowIndex(){
+    getStartRowIndex() {
         return this.refRow;
     }
 
@@ -2237,8 +2240,8 @@ export class TableFilter {
      * Get the index of the last row
      * @return {Number}
      */
-    getLastRowIndex(){
-        return (this.nbRows-1);
+    getLastRowIndex() {
+        return (this.nbRows - 1);
     }
 
     /**
@@ -2246,19 +2249,19 @@ export class TableFilter {
      * @param  {Number} colIndex Column index
      * @return {Element}
      */
-    getHeaderElement(colIndex){
+    getHeaderElement(colIndex) {
         let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl;
         let tHead = Dom.tag(table, 'thead');
         let headersRow = this.headersRow;
         let header;
-        for(let i=0; i<this.nbCells; i++){
-            if(i !== colIndex){
+        for (let i = 0; i < this.nbCells; i++) {
+            if (i !== colIndex) {
                 continue;
             }
-            if(tHead.length === 0){
+            if (tHead.length === 0) {
                 header = table.rows[headersRow].cells[i];
             }
-            if(tHead.length === 1){
+            if (tHead.length === 1) {
                 header = tHead[0].rows[headersRow].cells[i];
             }
             break;
@@ -2271,11 +2274,11 @@ export class TableFilter {
      * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
      * @return {Array} list of headers' text
      */
-    getHeadersText(excludeHiddenCols=false){
+    getHeadersText(excludeHiddenCols = false) {
         let headers = [];
-        for(let j=0; j<this.nbCells; j++){
-            if(excludeHiddenCols && this.hasExtension('colsVisibility')){
-                if(this.extension('colsVisibility').isColHidden(j)){
+        for (let j = 0; j < this.nbCells; j++) {
+            if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
+                if (this.extension('colsVisibility').isColHidden(j)) {
                     continue;
                 }
             }
@@ -2291,8 +2294,8 @@ export class TableFilter {
      * @param  {Number} colIndex Column's index
      * @return {String}
      */
-    getFilterType(colIndex){
-        let colType = this.cfg['col_'+colIndex];
+    getFilterType(colIndex) {
+        let colType = this.cfg['col_' + colIndex];
         return !colType ? this.fltTypeInp : Str.lower(colType);
     }
 
@@ -2300,7 +2303,7 @@ export class TableFilter {
      * Get the total number of filterable rows
      * @return {Number}
      */
-    getFilterableRowsNb(){
+    getFilterableRowsNb() {
         return this.getRowsNb(false);
     }
 
@@ -2308,7 +2311,7 @@ export class TableFilter {
      * Get the configuration object (literal object)
      * @return {Object}
      */
-    config(){
+    config() {
         return this.cfg;
     }
 }
