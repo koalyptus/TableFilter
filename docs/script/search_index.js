@@ -138,12 +138,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "tablefilter/src/modules/store.js~store",
-    "class/src/modules/store.js~Store.html",
-    "<span>Store</span> <span class=\"search-result-import-path\">tablefilter/src/modules/store.js</span>",
-    "class"
-  ],
-  [
     "tablefilter/src/tablefilter.js~tablefilter",
     "class/src/tablefilter.js~TableFilter.html",
     "<span>TableFilter</span> <span class=\"search-result-import-path\">tablefilter/src/tablefilter.js</span>",
@@ -2898,12 +2892,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/paging.js~paging#resetvalues",
-    "class/src/modules/paging.js~Paging.html#instance-method-resetValues",
-    "src/modules/paging.js~Paging#resetValues",
-    "method"
-  ],
-  [
     "src/modules/paging.js~paging#resultsperpage",
     "class/src/modules/paging.js~Paging.html#instance-member-resultsPerPage",
     "src/modules/paging.js~Paging#resultsPerPage",
@@ -3720,108 +3708,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/store.js",
-    "file/src/modules/store.js.html",
-    "src/modules/store.js",
-    "file"
-  ],
-  [
-    "src/modules/store.js~store#clearcookies",
-    "class/src/modules/store.js~Store.html#instance-method-clearCookies",
-    "src/modules/store.js~Store#clearCookies",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#constructor",
-    "class/src/modules/store.js~Store.html#instance-constructor-constructor",
-    "src/modules/store.js~Store#constructor",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#destroy",
-    "class/src/modules/store.js~Store.html#instance-method-destroy",
-    "src/modules/store.js~Store#destroy",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#duration",
-    "class/src/modules/store.js~Store.html#instance-member-duration",
-    "src/modules/store.js~Store#duration",
-    "member"
-  ],
-  [
-    "src/modules/store.js~store#emitter",
-    "class/src/modules/store.js~Store.html#instance-member-emitter",
-    "src/modules/store.js~Store#emitter",
-    "member"
-  ],
-  [
-    "src/modules/store.js~store#fltsvaluescookie",
-    "class/src/modules/store.js~Store.html#instance-member-fltsValuesCookie",
-    "src/modules/store.js~Store#fltsValuesCookie",
-    "member"
-  ],
-  [
-    "src/modules/store.js~store#getfiltervalues",
-    "class/src/modules/store.js~Store.html#instance-method-getFilterValues",
-    "src/modules/store.js~Store#getFilterValues",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#getpagelength",
-    "class/src/modules/store.js~Store.html#instance-method-getPageLength",
-    "src/modules/store.js~Store#getPageLength",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#getpagenb",
-    "class/src/modules/store.js~Store.html#instance-method-getPageNb",
-    "src/modules/store.js~Store#getPageNb",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#init",
-    "class/src/modules/store.js~Store.html#instance-method-init",
-    "src/modules/store.js~Store#init",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#pglencookie",
-    "class/src/modules/store.js~Store.html#instance-member-pgLenCookie",
-    "src/modules/store.js~Store#pgLenCookie",
-    "member"
-  ],
-  [
-    "src/modules/store.js~store#pgnbcookie",
-    "class/src/modules/store.js~Store.html#instance-member-pgNbCookie",
-    "src/modules/store.js~Store#pgNbCookie",
-    "member"
-  ],
-  [
-    "src/modules/store.js~store#savefiltervalues",
-    "class/src/modules/store.js~Store.html#instance-method-saveFilterValues",
-    "src/modules/store.js~Store#saveFilterValues",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#savepagelength",
-    "class/src/modules/store.js~Store.html#instance-method-savePageLength",
-    "src/modules/store.js~Store#savePageLength",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#savepagenb",
-    "class/src/modules/store.js~Store.html#instance-method-savePageNb",
-    "src/modules/store.js~Store#savePageNb",
-    "method"
-  ],
-  [
-    "src/modules/store.js~store#tf",
-    "class/src/modules/store.js~Store.html#instance-member-tf",
-    "src/modules/store.js~Store#tf",
-    "member"
-  ],
-  [
     "src/sort.js",
     "file/src/sort.js.html",
     "src/sort.js",
@@ -4542,12 +4428,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#haspersistence",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasPersistence",
-    "src/tablefilter.js~TableFilter#hasPersistence",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#hasthemes",
     "class/src/tablefilter.js~TableFilter.html#instance-member-hasThemes",
     "src/tablefilter.js~TableFilter#hasThemes",
@@ -4974,24 +4854,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#remembergridvalues",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-rememberGridValues",
-    "src/tablefilter.js~TableFilter#rememberGridValues",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#rememberpagelen",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-rememberPageLen",
-    "src/tablefilter.js~TableFilter#rememberPageLen",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#rememberpagenb",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-rememberPageNb",
-    "src/tablefilter.js~TableFilter#rememberPageNb",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#removeexternalflts",
     "class/src/tablefilter.js~TableFilter.html#instance-method-removeExternalFlts",
     "src/tablefilter.js~TableFilter#removeExternalFlts",
@@ -5001,12 +4863,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#removetoolbar",
     "class/src/tablefilter.js~TableFilter.html#instance-method-removeToolbar",
     "src/tablefilter.js~TableFilter#removeToolbar",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#resetfiltervalues",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-resetFilterValues",
-    "src/tablefilter.js~TableFilter#resetFilterValues",
     "method"
   ],
   [
