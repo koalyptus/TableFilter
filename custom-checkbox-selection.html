@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Responsive table | TableFilter</title>
+    <title>Custom checkbox selection | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -175,22 +175,28 @@
 
       
 
-<h1>Responsive table</h1>
+<h1>Custom checkbox selection</h1>
+
 <p>
-    Easily turn your tabular data into a responsive data table with the
-    <code>responsive</code> option.
+    This demo shows how to implement a custom checkbox selection by using the
+    <code>TableFilter</code>'s API.
 </p>
 
-<div class="alert alert-info" role="alert">
-  Instructions: resize the browser's window or choose a device in the browser's
-  developer tools.
-</div>
+<div data-config>
 
+  <p>
+    <button class="btn btn-default" onclick="alert(selectedRows);">
+      Selected rows indexes</button>
+  </p>
 
+  
 
-<table id="demo" class="countries-tiny">
+<table id="demo" class="countries-checkboxes">
     <thead>
         <tr>
+            <th>
+                <input type="checkbox">
+            </th>
             <th>Country</th>
             <th>ISO</th>
             <th>Year</th>
@@ -204,6 +210,9 @@
     </thead>
     <tbody>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Benin</td>
             <td>BEN</td>
             <td>1998</td>
@@ -215,6 +224,9 @@
             <td>7.55</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Benin</td>
             <td>BEN</td>
             <td>1999</td>
@@ -226,6 +238,9 @@
             <td>7.86</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Benin</td>
             <td>BEN</td>
             <td>2000</td>
@@ -237,6 +252,9 @@
             <td>8.25</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Burkina Faso</td>
             <td>BFA</td>
             <td>1994</td>
@@ -248,6 +266,9 @@
             <td>6.57</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Burkina Faso</td>
             <td>BFA</td>
             <td>1995</td>
@@ -259,6 +280,9 @@
             <td>9.29</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Burkina Faso</td>
             <td>BFA</td>
             <td>1996</td>
@@ -270,6 +294,9 @@
             <td>12.12</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Burkina Faso</td>
             <td>BFA</td>
             <td>1997</td>
@@ -281,6 +308,9 @@
             <td>14.94</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Russia</td>
             <td>RUS</td>
             <td>1998</td>
@@ -292,6 +322,9 @@
             <td>9.20</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Russia</td>
             <td>RUS</td>
             <td>1999</td>
@@ -303,6 +336,9 @@
             <td>8.81</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Russia</td>
             <td>RUS</td>
             <td>2000</td>
@@ -314,6 +350,9 @@
             <td>8.79</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Rwanda</td>
             <td>RWA</td>
             <td>1994</td>
@@ -325,6 +364,9 @@
             <td>4.48</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Rwanda</td>
             <td>RWA</td>
             <td>1995</td>
@@ -336,6 +378,9 @@
             <td>3.08</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Rwanda</td>
             <td>RWA</td>
             <td>1996</td>
@@ -347,6 +392,9 @@
             <td>3.21</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Rwanda</td>
             <td>RWA</td>
             <td>1997</td>
@@ -358,6 +406,9 @@
             <td>3.72</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Rwanda</td>
             <td>RWA</td>
             <td>1998</td>
@@ -369,6 +420,9 @@
             <td>4.22</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>El Salvador</td>
             <td>SLV</td>
             <td>1995</td>
@@ -380,6 +434,9 @@
             <td>10.35</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>El Salvador</td>
             <td>SLV</td>
             <td>1996</td>
@@ -391,6 +448,9 @@
             <td>7.79</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>El Salvador</td>
             <td>SLV</td>
             <td>1997</td>
@@ -402,6 +462,9 @@
             <td>7.90</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Slovak Republic</td>
             <td>SVK</td>
             <td>2000</td>
@@ -413,6 +476,9 @@
             <td>24.78</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Slovenia</td>
             <td>SVN</td>
             <td>1994</td>
@@ -424,6 +490,9 @@
             <td>19.87</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Slovenia</td>
             <td>SVN</td>
             <td>1995</td>
@@ -435,6 +504,9 @@
             <td>23.11</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Slovenia</td>
             <td>SVN</td>
             <td>1996</td>
@@ -446,6 +518,9 @@
             <td>23.23</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Slovenia</td>
             <td>SVN</td>
             <td>1997</td>
@@ -457,6 +532,9 @@
             <td>24.14</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Slovenia</td>
             <td>SVN</td>
             <td>1998</td>
@@ -468,6 +546,9 @@
             <td>25.35</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zambia</td>
             <td>ZMB</td>
             <td>1994</td>
@@ -479,6 +560,9 @@
             <td>9.86</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zambia</td>
             <td>ZMB</td>
             <td>1995</td>
@@ -490,6 +574,9 @@
             <td>10.31</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zambia</td>
             <td>ZMB</td>
             <td>1996</td>
@@ -501,6 +588,9 @@
             <td>10.99</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zambia</td>
             <td>ZMB</td>
             <td>1997</td>
@@ -512,6 +602,9 @@
             <td>12.15</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zambia</td>
             <td>ZMB</td>
             <td>1998</td>
@@ -523,6 +616,9 @@
             <td>13.75</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zambia</td>
             <td>ZMB</td>
             <td>1999</td>
@@ -534,6 +630,9 @@
             <td>15.30</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zambia</td>
             <td>ZMB</td>
             <td>2000</td>
@@ -545,6 +644,9 @@
             <td>15.38</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zimbabwe</td>
             <td>ZWE</td>
             <td>1994</td>
@@ -556,6 +658,9 @@
             <td>18.53</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zimbabwe</td>
             <td>ZWE</td>
             <td>1995</td>
@@ -567,6 +672,9 @@
             <td>15.03</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zimbabwe</td>
             <td>ZWE</td>
             <td>1996</td>
@@ -578,6 +686,9 @@
             <td>11.32</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zimbabwe</td>
             <td>ZWE</td>
             <td>1997</td>
@@ -589,6 +700,9 @@
             <td>11.01</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zimbabwe</td>
             <td>ZWE</td>
             <td>1998</td>
@@ -600,6 +714,9 @@
             <td>10.75</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zimbabwe</td>
             <td>ZWE</td>
             <td>1999</td>
@@ -611,6 +728,9 @@
             <td>10.73</td>
         </tr>
         <tr>
+            <td>
+                <input type="checkbox">
+            </td>
             <td>Zimbabwe</td>
             <td>ZWE</td>
             <td>2000</td>
@@ -625,16 +745,148 @@
 </table>
 
 
+</div>
+
 
 <script src="tablefilter/tablefilter.js"></script>
 
 
+<style data-config>
+
+  .selected{
+    background-color: #316AC5;
+    color: #FFFFFF;
+  }
+
+</style>
+
 <script data-config>
-    var tf = new TableFilter('demo', {
+    var tfConfig = {
       base_path: 'tablefilter/',
-      responsive: true
-    });
+      col_0: 'none',
+      col_1: 'multiple',
+      col_3: 'checklist',
+      auto_filter: true,
+      auto_filter_delay: 500,
+      alternate_rows: true,
+      rows_counter: true,
+      rows_counter_text: "Records: ",
+      btn_reset: true,
+      status_bar: true,
+      msg_filter: 'Filtering...',
+      col_widths: [
+        '10px', '150px', '75px',
+        '100px', null, null, null,
+        null, null, null
+      ]
+    };
+
+    var tf = new TableFilter(
+      document.querySelector('.countries-checkboxes'),
+      tfConfig
+    );
+
+    // Subscribe to 'initialized' event to initialize selection
+    tf.emitter.on(['initialized'], initSelectionListeners);
+
     tf.init();
+
+    // Store selected rows indexes
+    var selectedRows = [];
+
+    var selectedCss = 'selected';
+
+    // Initialize checkboxes listeners
+    function initSelectionListeners(tf){
+      var headerCheckbox = tf.getHeaderElement(0).querySelector('input');
+      var checkboxes = getBodyCheckboxes(tf.tbl);
+
+      // Add event listener to checkbox in table head
+      headerCheckbox.addEventListener('change', toggleAll.bind(tf));
+
+      // Add event listener to all checkboxes in table body
+      [].forEach.call(checkboxes, function(checkbox){
+        checkbox.addEventListener('change', changeHandler);
+      });
+    }
+
+    // Toggle all checkboxes in valid rows
+    function toggleAll(evt){
+      var tf = this;
+      var headerCheckbox = evt.target;
+      var isChecked = headerCheckbox.checked;
+      var checkboxes = getBodyCheckboxes(tf.tbl);
+      var filteredRows = tf.getValidRows();
+
+      [].forEach.call(checkboxes, function(checkbox){
+        var row = getRowElement(checkbox);
+        var rowIndex = row.rowIndex;
+        if(isChecked){
+          if(filteredRows.indexOf(rowIndex) !== -1){
+            checkbox.checked = true;
+            selectRow(selectedRows, row, selectedCss);
+          }
+        } else {
+          checkbox.checked = false;
+          deselectRow(selectedRows, row, selectedCss)
+        }
+      });
+    }
+
+    // Checkbox change event handler
+    function changeHandler(evt){
+      var checkbox = evt.target;
+      var row = getRowElement(checkbox);
+      var isChecked = checkbox.checked;
+
+      if(isChecked){
+        selectRow(selectedRows, row, selectedCss);
+      } else {
+        deselectRow(selectedRows, row, selectedCss);
+      }
+    }
+
+    // Select row
+    function selectRow(selectedRows, row, cssClass){
+      row.classList.add(cssClass);
+      storeRowIndex(selectedRows, row.rowIndex);
+    }
+
+    // Deselect row
+    function deselectRow(selectedRows, row, cssClass){
+      row.classList.remove(cssClass);
+      removeRowIndex(selectedRows, row.rowIndex);
+    }
+
+    // Store selected row index
+    function storeRowIndex(selectedRows, rowIndex){
+      if(selectedRows.indexOf(rowIndex) === -1){
+        selectedRows.push(rowIndex);
+      }
+    }
+
+    // Remove selected row index previously selected
+    function removeRowIndex(selectedRows, rowIndex){
+      selectedRows.splice(selectedRows.indexOf(rowIndex), 1);
+    }
+
+    // Get all checkboxes in table body
+    function getBodyCheckboxes(table){
+      var tBody = table.tBodies[0];
+      return tBody.getElementsByTagName('input');
+    }
+
+    // Get the parent row element
+    function getRowElement(element){
+      while(element !== null){
+        if(element.nodeName === 'TR'){
+          return element;
+        }
+        element = element.parentNode;
+      }
+      return null;
+    }
+
 </script>
 
 <hr>
@@ -757,7 +1009,6 @@
 
     </div>
 </div>
-
 
 
 
