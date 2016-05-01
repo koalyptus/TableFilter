@@ -1,7 +1,7 @@
 
 (function(doc){
     var configs = doc.querySelectorAll('style[data-config]');
-    var pre = doc.querySelector('pre.css');
+    var pre = doc.querySelector('pre.css>code');
     pre.innerHTML = configs.length===0 ? 'N/A' : '';
 
     [].forEach.call(configs, function(config) {
