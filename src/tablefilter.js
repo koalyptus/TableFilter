@@ -398,72 +398,6 @@ export class TableFilter {
 
         // Extensions registry
         this.ExtRegistry = {};
-
-        /*** TF events ***/
-        this.Evt = {
-            // Detect <enter> key
-            detectKey(e) {
-                if (!this.enterKey) { return; }
-                if (e) {
-                    let key = Event.keyCode(e);
-                    if (key === 13) {
-                        this.filter();
-                        Event.cancel(e);
-                        Event.stop(e);
-                    } else {
-                        this.isUserTyping = true;
-                        global.clearInterval(this.autoFilterTimer);
-                        this.autoFilterTimer = null;
-                    }
-                }
-            },
-            // if auto-filter on, detect user is typing and filter columns
-            onKeyUp(e) {
-                if (!this.autoFilter) {
-                    return;
-                }
-                let key = Event.keyCode(e);
-                this.isUserTyping = false;
-
-                function filter() {
-                    global.clearInterval(this.autoFilterTimer);
-                    this.autoFilterTimer = null;
-                    if (!this.isUserTyping) {
-                        this.filter();
-                        this.isUserTyping = null;
-                    }
-                }
-                // TODO: define constants for keys
-                if (key !== 13 && key !== 9 && key !== 27 && key !== 38 &&
-                    key !== 40) {
-                    if (this.autoFilterTimer === null) {
-                        this.autoFilterTimer = global.setInterval(
-                            filter.bind(this), this.autoFilterDelay);
-                    }
-                } else {
-                    global.clearInterval(this.autoFilterTimer);
-                    this.autoFilterTimer = null;
-                }
-            },
-            // if auto-filter on, detect user is typing
-            onKeyDown() {
-                if (!this.autoFilter) { return; }
-                this.isUserTyping = true;
-            },
-            // if auto-filter on, clear interval on filter blur
-            onInpBlur() {
-                if (this.autoFilter) {
-                    this.isUserTyping = false;
-                    global.clearInterval(this.autoFilterTimer);
-                }
-                this.emitter.emit('filter-blur', this);
-            },
-            // set focused text-box filter as active
-            onInpFocus(e) {
-                let elm = Event.target(e);
-                this.emitter.emit('filter-focus', this, elm);
-            }
-        };
     }
 
     /**
@@ -475,8 +409,8 @@ export class TableFilter {
         }
 
         let Mod = this.Mod;
-        let n = this.singleSearchFlt ? 1 : this.nbCells,
-            inpclass;
+        let n = this.singleSearchFlt ? 1 : this.nbCells;
+        let inpclass;
 
         //loads stylesheet if not imported
         this.import(this.stylesheetId, this.stylesheet, null, 'link');
@@ -665,6 +599,89 @@ export class TableFilter {
     }
 
     /**
+     * Detect <enter> key
+     * @param {Event} evt
+     */
+    detectKey(evt) {
+        if (!this.enterKey) {
+            return;
+        }
+        if (evt) {
+            let key = Event.keyCode(evt);
+            if (key === 13) {
+                this.filter();
+                Event.cancel(evt);
+                Event.stop(evt);
+            } else {
+                this.isUserTyping = true;
+                global.clearInterval(this.autoFilterTimer);
+                this.autoFilterTimer = null;
+            }
+        }
+    }
+
+    /**
+     * Filter's keyup event: if auto-filter on, detect user is typing and filter
+     * columns
+     * @param {Event} evt
+     */
+    onKeyUp(evt) {
+        if (!this.autoFilter) {
+            return;
+        }
+        let key = Event.keyCode(evt);
+        this.isUserTyping = false;
+
+        function filter() {
+            global.clearInterval(this.autoFilterTimer);
+            this.autoFilterTimer = null;
+            if (!this.isUserTyping) {
+                this.filter();
+                this.isUserTyping = null;
+            }
+        }
+        // TODO: define constants for keys
+        if (key !== 13 && key !== 9 && key !== 27 && key !== 38 && key !== 40) {
+            if (this.autoFilterTimer === null) {
+                this.autoFilterTimer = global.setInterval(filter.bind(this),
+                    this.autoFilterDelay);
+            }
+        } else {
+            global.clearInterval(this.autoFilterTimer);
+            this.autoFilterTimer = null;
+        }
+    }
+
+    /**
+     * Filter's keydown event: if auto-filter on, detect user is typing
+     */
+    onKeyDown() {
+        if (this.autoFilter) {
+            this.isUserTyping = true;
+        }
+    }
+
+    /**
+     * Filter's focus event
+     * @param {Event} evt
+     */
+    onInpFocus(evt) {
+        let elm = Event.target(evt);
+        this.emitter.emit('filter-focus', this, elm);
+    }
+
+    /**
+     * Filter's blur event: if auto-filter on, clear interval on filter blur
+     */
+    onInpBlur() {
+        if (this.autoFilter) {
+            this.isUserTyping = false;
+            global.clearInterval(this.autoFilterTimer);
+        }
+        this.emitter.emit('filter-blur', this);
+    }
+
+    /**
      * Insert filters row at initialization
      */
     _insertFiltersRow() {
@@ -725,7 +742,7 @@ export class TableFilter {
             );
         }
         inp.className = cssClass || this.fltCssClass;
-        Event.add(inp, 'focus', this.Evt.onInpFocus.bind(this));
+        Event.add(inp, 'focus', (evt) => this.onInpFocus(evt));
 
         //filter is appended in custom element
         if (externalFltTgtId) {
@@ -737,10 +754,10 @@ export class TableFilter {
 
         this.fltIds.push(inp.id);
 
-        Event.add(inp, 'keypress', this.Evt.detectKey.bind(this));
-        Event.add(inp, 'keydown', this.Evt.onKeyDown.bind(this));
-        Event.add(inp, 'keyup', this.Evt.onKeyUp.bind(this));
-        Event.add(inp, 'blur', this.Evt.onInpBlur.bind(this));
+        Event.add(inp, 'keypress', (evt) => this.detectKey(evt));
+        Event.add(inp, 'keydown', () => this.onKeyDown());
+        Event.add(inp, 'keyup', (evt) => this.onKeyUp(evt));
+        Event.add(inp, 'blur', () => this.onInpBlur());
     }
 
     /**
