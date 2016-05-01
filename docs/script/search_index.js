@@ -3726,12 +3726,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/tablefilter.js~tablefilter#evt",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-Evt",
-    "src/tablefilter.js~TableFilter#Evt",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#extregistry",
     "class/src/tablefilter.js~TableFilter.html#instance-member-ExtRegistry",
     "src/tablefilter.js~TableFilter#ExtRegistry",
@@ -3963,6 +3957,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#destroyextensions",
     "class/src/tablefilter.js~TableFilter.html#instance-method-destroyExtensions",
     "src/tablefilter.js~TableFilter#destroyExtensions",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#detectkey",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-detectKey",
+    "src/tablefilter.js~TableFilter#detectKey",
     "method"
   ],
   [
@@ -4738,6 +4738,30 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-member-onFiltersLoaded",
     "src/tablefilter.js~TableFilter#onFiltersLoaded",
     "member"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#oninpblur",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-onInpBlur",
+    "src/tablefilter.js~TableFilter#onInpBlur",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#oninpfocus",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-onInpFocus",
+    "src/tablefilter.js~TableFilter#onInpFocus",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#onkeydown",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-onKeyDown",
+    "src/tablefilter.js~TableFilter#onKeyDown",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#onkeyup",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-onKeyUp",
+    "src/tablefilter.js~TableFilter#onKeyUp",
+    "method"
   ],
   [
     "src/tablefilter.js~tablefilter#onrowvalidated",
