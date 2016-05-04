@@ -45,6 +45,38 @@ test('Can select options', function() {
     notEqual(flt1.getAttribute('value').indexOf('1.4'), -1, 'Option selected');
     notEqual(flt1.getAttribute('value').indexOf('.6'), -1, 'Option selected');
 });
+test('Can get selected values', function() {
+    //setup
+    var values = ['.6', '1.4'];
+    tf.clearFilters();
+    tf.setFilterValue(3, values);
+
+    //act
+    var result = checkList.getValues(3);
+
+    //assert
+    deepEqual(values, result);
+});
+test('Can return values when no selected options', function() {
+    //setup
+    tf.clearFilters();
+
+    //act
+    var result = checkList.getValues(3);
+
+    //assert
+    deepEqual([''], result);
+});
+test('Can return values checklist element has no value attribute', function() {
+    //setup
+    tf.getFilterElement(3).removeAttribute('value');
+
+    //act
+    var result = checkList.getValues(3);
+
+    //assert
+    deepEqual([''], result);
+});
 
 // Issue 113, addressing option sorting for numeric values
 module('Options sorting');

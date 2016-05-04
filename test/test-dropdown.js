@@ -46,6 +46,29 @@ test('Can select options', function() {
     deepEqual(flt1.options[6].selected, true, 'Option selected');
 });
 
+test('Can get selected values', function() {
+    //setup
+    var values = ['286', '872'];
+    tf.clearFilters();
+    tf.setFilterValue(2, values);
+
+    //act
+    var result = dropdown.getValues(2);
+
+    //assert
+    deepEqual(values, result);
+});
+test('Can return values when no selected options', function() {
+    //setup
+    tf.clearFilters();
+
+    //act
+    var result = dropdown.getValues(2);
+
+    //assert
+    deepEqual([], result);
+});
+
 // Issue 113, addressing option sorting for numeric values
 module('Options sorting');
 test('Can sort options', function() {
