@@ -91,7 +91,7 @@ export default class FiltersVisibility {
         this.buildUI();
         this.initialized = true;
         this.emitter.on(['show-filters'], (tf, visible) => this.show(visible));
-        this.emitter.emit('filters-visibility-initialized', tf, this);
+        this.emitter.emit('filters-visibility-initialized', this.tf, this);
     }
 
     /**
@@ -147,7 +147,6 @@ export default class FiltersVisibility {
         let isDisplayed = fltRow.style.display === '';
 
         this.show(!isDisplayed);
-        this.emitter.emit('filters-toggled', tf, this, !isDisplayed);
     }
 
     /**
@@ -179,6 +178,8 @@ export default class FiltersVisibility {
         if (this.onAfterHide && !visible) {
             this.onAfterHide.call(null, this);
         }
+
+        this.emitter.emit('filters-toggled', tf, this, visible);
     }
 
     /**
