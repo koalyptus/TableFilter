@@ -1614,6 +1614,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/checklist.js~checklist#getvalues",
+    "class/src/modules/checkList.js~CheckList.html#instance-method-getValues",
+    "src/modules/checkList.js~CheckList#getValues",
+    "method"
+  ],
+  [
     "src/modules/checklist.js~checklist#init",
     "class/src/modules/checkList.js~CheckList.html#instance-method-init",
     "src/modules/checkList.js~CheckList#init",
@@ -1798,6 +1804,12 @@ window.esdocSearchIndex = [
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-enableSlcResetFilter",
     "src/modules/dropdown.js~Dropdown#enableSlcResetFilter",
     "member"
+  ],
+  [
+    "src/modules/dropdown.js~dropdown#getvalues",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-method-getValues",
+    "src/modules/dropdown.js~Dropdown#getValues",
+    "method"
   ],
   [
     "src/modules/dropdown.js~dropdown#init",

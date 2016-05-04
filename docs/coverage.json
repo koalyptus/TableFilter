@@ -1,7 +1,7 @@
 {
-  "coverage": "26.64%",
-  "expectCount": 758,
-  "actualCount": 202,
+  "coverage": "26.84%",
+  "expectCount": 760,
+  "actualCount": 204,
   "files": {
     "src/extensions/advancedGrid/adapterEzEditTable.js": {
       "expectCount": 17,
@@ -64,28 +64,28 @@
       ]
     },
     "src/modules/checkList.js": {
-      "expectCount": 26,
-      "actualCount": 7,
+      "expectCount": 27,
+      "actualCount": 8,
       "undocumentLines": [
-        11,
-        36,
-        28,
-        23,
-        25,
-        30,
-        39,
-        33,
-        455,
-        42,
-        50,
-        119,
-        47,
-        53,
-        65,
-        60,
+        12,
+        37,
+        29,
+        24,
+        26,
+        31,
+        40,
+        34,
+        478,
+        43,
+        51,
+        120,
         48,
+        54,
+        66,
+        61,
         49,
-        45
+        50,
+        46
       ]
     },
     "src/modules/clearButton.js": {
@@ -172,12 +172,12 @@
       ]
     },
     "src/modules/dropdown.js": {
-      "expectCount": 19,
-      "actualCount": 6,
+      "expectCount": 20,
+      "actualCount": 7,
       "undocumentLines": [
         11,
         28,
-        358,
+        374,
         23,
         112,
         34,
