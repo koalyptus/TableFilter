@@ -1356,7 +1356,7 @@ export class TableFilter {
                         cellData.lastIndexOf(searchArg, cellData.length - 1) ===
                             (cellData.length - 1) - (searchArg.length - 1) &&
                             cellData.lastIndexOf(searchArg, cellData.length - 1)
-                                > -1 ? true : false;
+                            > -1 ? true : false;
                 }
                 //empty
                 else if (hasEM) {
@@ -1549,11 +1549,10 @@ export class TableFilter {
         if (!this.fltGrid) {
             return;
         }
-        let fltValue = '',
-            fltValues = [],
-            flt = this.getFilterElement(index);
+        let fltValue = '';
+        let flt = this.getFilterElement(index);
         if (!flt) {
-            return '';
+            return fltValue;
         }
 
         let fltColType = this.getFilterType(index);
@@ -1563,33 +1562,19 @@ export class TableFilter {
         }
         //mutiple select
         else if (fltColType === this.fltTypeMulti) {
-            // TODO: extract a method in dropdown module from below
-            for (let j = 0, len = flt.options.length; j < len; j++) {
-                if (flt.options[j].selected) {
-                    fltValues.push(flt.options[j].value);
-                }
-            }
-            //return empty string if collection is empty
-            fltValue = fltValues.length > 0 ? fltValues : '';
+            fltValue = this.feature('dropdown').getValues(index);
         }
         //checklist
         else if (fltColType === this.fltTypeCheckList) {
-            // TODO: extract a method in checklist module from below
-            if (flt.getAttribute('value') !== null) {
-                fltValues = flt.getAttribute('value');
-                //removes last operator ||
-                fltValues = fltValues.substr(0, fltValues.length - 3);
-                //convert || separated values into array
-                fltValues = fltValues.split(' ' + this.orOperator + ' ');
-            }
-            //return empty string if collection is empty
-            fltValue = fltValues.length > 0 ? fltValues : '';
+            fltValue = this.feature('checkList').getValues(index);
         }
-        //return an empty string if collection contains a single empty string
-        if (Types.isArray(fltValue) && fltValue.length === 1 &&
-            fltValue[0] === '') {
+        //return an empty string if collection is empty or contains a single
+        //empty string
+        if (Types.isArray(fltValue) && fltValue.length === 0 ||
+            (fltValue.length === 1 && fltValue[0] === '')) {
             fltValue = '';
         }
+
         return fltValue;
     }
 
