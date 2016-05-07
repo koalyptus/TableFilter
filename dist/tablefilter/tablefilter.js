@@ -482,8 +482,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /*** data types ***/
 	        //defines default date type (european DMY)
 	        this.defaultDateType = f.default_date_type || 'DMY';
-	        //defines default thousands separator
-	        //US = ',' EU = '.'
+	        //defines default thousands separator US = ',' EU = '.'
 	        this.thousandsSeparator = f.thousands_separator || ',';
 	        //defines default decimal separator
 	        //US & javascript = '.' EU = ','
