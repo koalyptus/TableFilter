@@ -5,6 +5,7 @@ import Str from '../string';
 import Sort from '../sort';
 import Event from '../event';
 import Types from '../types';
+import {CHECKLIST, NONE} from '../const';
 
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
     '{1} manner.';
@@ -294,7 +295,7 @@ export class CheckList extends Feature {
 
             if (val === '') {
                 //item is hidden
-                li.style.display = 'none';
+                li.style.display = NONE;
             }
         }
     }
@@ -315,7 +316,7 @@ export class CheckList extends Feature {
         Event.add(li0.check, 'click', (evt) => this.optionClick(evt));
 
         if (!this.enableCheckListResetFilter) {
-            li0.style.display = 'none';
+            li0.style.display = NONE;
         }
 
         if (tf.enableEmptyOption) {
@@ -429,8 +430,7 @@ export class CheckList extends Feature {
      */
     selectOptions(colIndex, values = []) {
         let tf = this.tf;
-        if (tf.getFilterType(colIndex) !== tf.fltTypeCheckList ||
-            values.length === 0) {
+        if (tf.getFilterType(colIndex) !== CHECKLIST || values.length === 0) {
             return;
         }
         let flt = tf.getFilterElement(colIndex);

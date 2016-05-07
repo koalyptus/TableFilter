@@ -1,7 +1,7 @@
 import {Feature} from './feature';
 import Dom from '../dom';
 import Event from '../event';
-
+import {NONE} from '../const';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
                     '4.-Filter-operators';
@@ -128,10 +128,10 @@ export class Help extends Feature{
             return;
         }
         var divDisplay = this.cont.style.display;
-        if(divDisplay === '' || divDisplay === 'none'){
+        if(divDisplay === '' || divDisplay === NONE){
             this.cont.style.display = 'inline';
         } else {
-            this.cont.style.display = 'none';
+            this.cont.style.display = NONE;
         }
     }
 

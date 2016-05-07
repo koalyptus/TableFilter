@@ -1,6 +1,7 @@
 import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
+import {NONE} from '../const';
 
 export class NoResults extends Feature{
 
@@ -101,7 +102,7 @@ export class NoResults extends Feature{
             this.onBeforeHideMsg.call(null, this.tf, this);
         }
 
-        this.cont.style.display = 'none';
+        this.cont.style.display = NONE;
 
         if(this.onBeforeHideMsg){
             this.onBeforeHideMsg.call(null, this.tf, this);

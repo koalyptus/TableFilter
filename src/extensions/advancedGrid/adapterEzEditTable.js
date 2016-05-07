@@ -1,4 +1,5 @@
 import Dom from '../../dom';
+import {INPUT} from '../../const';
 
 export default class AdapterEzEditTable {
     /**
@@ -416,7 +417,7 @@ export default class AdapterEzEditTable {
         }
         var colIndex = tf.getColumnIndexFromFilterId(tf.getActiveFilterId());
         var filterType = tf.getFilterType(colIndex);
-        if(filterType === tf.fltTypeInp){
+        if(filterType === INPUT){
             this.toggle();
         }
     }

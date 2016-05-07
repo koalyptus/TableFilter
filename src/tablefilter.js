@@ -21,6 +21,8 @@ import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
 import {State} from './modules/state';
 
+import {INPUT, SELECT, MULTIPLE, CHECKLIST, NONE} from './const';
+
 let global = window,
     doc = global.document;
 
@@ -35,8 +37,6 @@ export class TableFilter {
      * @param {Object} configuration object
      */
     constructor(...args) {
-        if (args.length === 0) { return; }
-
         this.id = null;
         this.version = '{VERSION}';
         this.year = new Date().getFullYear();
@@ -52,7 +52,7 @@ export class TableFilter {
 
         // TODO: use for-of with babel plug-in
         args.forEach((arg) => {
-            // for (let arg of args) {
+        // for (let arg of args) {
             let argtype = typeof arg;
             if (argtype === 'object' && arg && arg.nodeName === 'TABLE') {
                 this.tbl = arg;
@@ -65,13 +65,13 @@ export class TableFilter {
             } else if (argtype === 'object') {
                 this.cfg = arg;
             }
-            // }
+        // }
         });
 
-        if (!this.tbl || this.tbl.nodeName != 'TABLE' ||
+        if (!this.tbl || this.tbl.nodeName !== 'TABLE' ||
             this.getRowsNb() === 0) {
-            throw new Error(
-                'Could not instantiate TableFilter: HTML table not found.');
+            throw new Error('Could not instantiate TableFilter: HTML table ' +
+               'DOMElement not found.');
         }
 
         // configuration object
@@ -88,11 +88,8 @@ export class TableFilter {
         this.basePath = f.base_path || 'tablefilter/';
 
         /*** filter types ***/
-        this.fltTypeInp = 'input';
-        this.fltTypeSlc = 'select';
-        this.fltTypeMulti = 'multiple';
-        this.fltTypeCheckList = 'checklist';
-        this.fltTypeNone = 'none';
+        // this.fltTypeCheckList = 'checklist';
+        // this.fltTypeNone = 'none';
 
         /*** filters' grid properties ***/
 
@@ -488,19 +485,19 @@ export class TableFilter {
 
                 //only 1 input for single search
                 if (this.singleSearchFlt) {
-                    col = this.fltTypeInp;
+                    col = INPUT;
                     inpclass = this.singleFltCssClass;
                 }
 
                 //drop-down filters
-                if (col === this.fltTypeSlc || col === this.fltTypeMulti) {
+                if (col === SELECT || col === MULTIPLE) {
                     if (!Mod.dropdown) {
                         Mod.dropdown = new Dropdown(this);
                     }
                     Mod.dropdown.init(i, this.isExternalFlt, fltcell);
                 }
                 // checklist
-                else if (col === this.fltTypeCheckList) {
+                else if (col === CHECKLIST) {
                     if (!Mod.checkList) {
                         Mod.checkList = new CheckList(this);
                     }
@@ -699,7 +696,7 @@ export class TableFilter {
         fltrow.className = this.fltsRowCssClass;
 
         if (this.isExternalFlt) {
-            fltrow.style.display = 'none';
+            fltrow.style.display = NONE;
         }
 
         this.emitter.emit('filters-row-inserted', this, fltrow);
@@ -729,8 +726,8 @@ export class TableFilter {
         let col = this.getFilterType(colIndex);
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
-        let inptype = col === this.fltTypeInp ? 'text' : 'hidden';
-        let inp = Dom.create(this.fltTypeInp,
+        let inptype = col === INPUT ? 'text' : 'hidden';
+        let inp = Dom.create(INPUT,
             ['id', this.prfxFlt + colIndex + '_' + this.id],
             ['type', inptype], ['ct', colIndex]);
 
@@ -767,7 +764,7 @@ export class TableFilter {
     _buildSubmitButton(colIndex, container) {
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
-        let btn = Dom.create(this.fltTypeInp,
+        let btn = Dom.create(INPUT,
             ['id', this.prfxValButton + colIndex + '_' + this.id],
             ['type', 'button'], ['value', this.btnText]);
         btn.className = this.btnCssClass;
@@ -1566,16 +1563,15 @@ export class TableFilter {
         }
 
         let fltColType = this.getFilterType(index);
-        if (fltColType !== this.fltTypeMulti &&
-            fltColType !== this.fltTypeCheckList) {
+        if (fltColType !== MULTIPLE && fltColType !== CHECKLIST) {
             fltValue = flt.value;
         }
         //mutiple select
-        else if (fltColType === this.fltTypeMulti) {
+        else if (fltColType === MULTIPLE) {
             fltValue = this.feature('dropdown').getValues(index);
         }
         //checklist
-        else if (fltColType === this.fltTypeCheckList) {
+        else if (fltColType === CHECKLIST) {
             fltValue = this.feature('checkList').getValues(index);
         }
         //return an empty string if collection is empty or contains a single
@@ -1825,7 +1821,7 @@ export class TableFilter {
             isValid = true;
         }
 
-        let displayFlag = isValid ? '' : 'none',
+        let displayFlag = isValid ? '' : NONE,
             validFlag = isValid ? 'true' : 'false';
         row.style.display = displayFlag;
 
@@ -1871,8 +1867,7 @@ export class TableFilter {
         let slc = this.getFilterElement(index),
             fltColType = this.getFilterType(index);
 
-        if (fltColType !== this.fltTypeMulti &&
-            fltColType != this.fltTypeCheckList) {
+        if (fltColType !== MULTIPLE && fltColType !== CHECKLIST) {
             if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-select-filter', this, index,
                     this.linkedFilters, this.isExternalFlt);
@@ -1880,7 +1875,7 @@ export class TableFilter {
             slc.value = query;
         }
         //multiple selects
-        else if (fltColType === this.fltTypeMulti) {
+        else if (fltColType === MULTIPLE) {
             let values = Types.isArray(query) ? query :
                 query.split(' ' + this.orOperator + ' ');
 
@@ -1892,7 +1887,7 @@ export class TableFilter {
             this.emitter.emit('select-options', this, index, values);
         }
         //checklist
-        else if (fltColType === this.fltTypeCheckList) {
+        else if (fltColType === CHECKLIST) {
             let values = [];
             if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-checklist-filter', this, index,
@@ -2058,9 +2053,9 @@ export class TableFilter {
         if (!this.linkedFilters || !this.activeFilterId) {
             return;
         }
-        let slcA1 = this.getFiltersByType(this.fltTypeSlc, true),
-            slcA2 = this.getFiltersByType(this.fltTypeMulti, true),
-            slcA3 = this.getFiltersByType(this.fltTypeCheckList, true),
+        let slcA1 = this.getFiltersByType(SELECT, true),
+            slcA2 = this.getFiltersByType(MULTIPLE, true),
+            slcA3 = this.getFiltersByType(CHECKLIST, true),
             slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
 
@@ -2107,7 +2102,7 @@ export class TableFilter {
     isExactMatch(colIndex) {
         let fltType = this.getFilterType(colIndex);
         return this.exactMatchByCol[colIndex] || this.exactMatch ||
-            (fltType !== this.fltTypeInp);
+            fltType !== INPUT;
     }
 
     /**
@@ -2210,7 +2205,7 @@ export class TableFilter {
         for (let k = this.refRow; k < this.getRowsNb(true); k++) {
             let r = this.tbl.rows[k];
             if (!this.paging) {
-                if (this.getRowDisplay(r) !== 'none') {
+                if (this.getRowDisplay(r) !== NONE) {
                     this.validRowsIndex.push(r.rowIndex);
                 }
             } else {
@@ -2308,7 +2303,7 @@ export class TableFilter {
      */
     getFilterType(colIndex) {
         let colType = this.cfg['col_' + colIndex];
-        return !colType ? this.fltTypeInp : Str.lower(colType);
+        return !colType ? INPUT : Str.lower(colType);
     }
 
     /**
