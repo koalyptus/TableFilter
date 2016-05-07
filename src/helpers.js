@@ -5,18 +5,18 @@
 import Str from './string';
 
 export default {
-    removeNbFormat(data, format){
-        if(!data){
+    removeNbFormat(data, format) {
+        if (!data) {
             return;
         }
-        if(!format){
+        if (!format) {
             format = 'us';
         }
         let n = data;
-        if(Str.lower(format) === 'us'){
-            n =+ n.replace(/[^\d\.-]/g,'');
+        if (Str.lower(format) === 'us') {
+            n = + n.replace(/[^\d\.-]/g, '');
         } else {
-            n =+ n.replace(/[^\d\,-]/g,'').replace(',','.');
+            n = + n.replace(/[^\d\,-]/g, '').replace(',', '.');
         }
         return n;
     }
