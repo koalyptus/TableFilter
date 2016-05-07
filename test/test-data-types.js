@@ -235,10 +235,11 @@
             // assert
             deepEqual(tf.getValidRows(), [4, 8, 14], 'Expected rows');
         });
-    // module('Tear-down');
-    // test('can destroy TableFilter DOM elements', function() {
-    //     tf.destroy();
-    //     deepEqual(tf.hasGrid(), false, 'Filters removed');
-    // });
+
+    module('Tear-down');
+    test('can destroy TableFilter DOM elements', function() {
+        tf.destroy();
+        deepEqual(tf.hasGrid(), false, 'Filters removed');
+    });
 
 })(window, TableFilter);
