@@ -339,8 +339,7 @@ export class TableFilter {
         /*** data types ***/
         //defines default date type (european DMY)
         this.defaultDateType = f.default_date_type || 'DMY';
-        //defines default thousands separator
-        //US = ',' EU = '.'
+        //defines default thousands separator US = ',' EU = '.'
         this.thousandsSeparator = f.thousands_separator || ',';
         //defines default decimal separator
         //US & javascript = '.' EU = ','
@@ -1162,8 +1161,9 @@ export class TableFilter {
         // search args re-init
         let searchArgs = this.getFiltersValue();
 
-        var numCellData, nbFormat;
-        var re_le = new RegExp(this.leOperator),
+        let numCellData;
+        let nbFormat;
+        let re_le = new RegExp(this.leOperator),
             re_ge = new RegExp(this.geOperator),
             re_l = new RegExp(this.lwOperator),
             re_g = new RegExp(this.grOperator),
@@ -1199,7 +1199,6 @@ export class TableFilter {
 
         //looks for search argument in current row
         function hasArg(sA, cellData, j) {
-            /*jshint validthis:true */
             sA = Str.matchCase(sA, this.caseSensitive);
 
             let occurence,
@@ -1293,8 +1292,7 @@ export class TableFilter {
             else {
                 //first numbers need to be formated
                 if (this.hasColNbFormat && this.colNbFormat[j]) {
-                    numCellData = removeNbFormat(
-                        cellData, this.colNbFormat[j]);
+                    numCellData = removeNbFormat(cellData, this.colNbFormat[j]);
                     nbFormat = this.colNbFormat[j];
                 } else {
                     if (this.thousandsSeparator === ',' &&
@@ -1374,10 +1372,22 @@ export class TableFilter {
                         let srchArg = sA.replace(re_re, '');
                         let rgx = new RegExp(srchArg);
                         occurence = rgx.test(cellData);
-                    } catch (e) { occurence = false; }
+                    } catch (ex) {
+                        occurence = false;
+                    }
                 } else {
-                    occurence = Str.contains(sA, cellData, this.isExactMatch(j),
-                        this.caseSensitive);
+                    // If numeric type data, perform a strict equality test and
+                    // fallback to unformatted number string comparison
+                    if(numCellData && !this.singleSearchFlt) {
+                        sA = removeNbFormat(sA, nbFormat);
+                        occurence = numCellData === sA ||
+                            Str.contains(sA.toString(), numCellData.toString(),
+                                this.isExactMatch(j), this.caseSensitive);
+                    } else {
+                        // Finally test search term is contained in cell data
+                        occurence = Str.contains(sA, cellData,
+                            this.isExactMatch(j), this.caseSensitive);
+                    }
                 }
 
             }//else
