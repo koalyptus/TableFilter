@@ -10,14 +10,14 @@ export default {
      * @param  {String or Object}  v
      * @return {Boolean}
      */
-    isObj(v){
+    isObj(v) {
         let isO = false;
-        if(typeof v === 'string'){
-            if(window[v] && typeof window[v] === 'object'){
+        if (typeof v === 'string') {
+            if (window[v] && typeof window[v] === 'object') {
                 isO = true;
             }
         } else {
-            if(v && typeof v === 'object'){
+            if (v && typeof v === 'object') {
                 isO = true;
             }
         }
@@ -29,7 +29,7 @@ export default {
      * @param  {Function} fn
      * @return {Boolean}
      */
-    isFn(fn){
+    isFn(fn) {
         return (fn && fn.constructor == Function);
     },
 
@@ -38,7 +38,7 @@ export default {
      * @param  {Array}  obj
      * @return {Boolean}
      */
-    isArray(obj){
+    isArray(obj) {
         return (obj && obj.constructor == Array);
     },
 
@@ -47,8 +47,18 @@ export default {
      * @param {String} val Value
      * @returns {Boolean}
      */
-    isString(val){
+    isString(val) {
         return Object.prototype.toString.call(val) === '[object String]';
+    },
+
+
+    /**
+     * Check argument is a number
+     * @param {Number} val
+     * @returns {Boolean}
+     */
+    isNumber(val) {
+        return Object.prototype.toString.call(val) === '[object Number]';
     },
 
     /**
@@ -56,7 +66,7 @@ export default {
      * @param  {Any}  o
      * @return {Boolean}
      */
-    isUndef(o){
+    isUndef(o) {
         return o === UNDEFINED;
     },
 
@@ -65,7 +75,7 @@ export default {
      * @param  {Any}  o
      * @return {Boolean}
      */
-    isNull(o){
+    isNull(o) {
         return o === null;
     },
 
@@ -74,7 +84,7 @@ export default {
      * @param  {Any}  o
      * @return {Boolean}
      */
-    isEmpty(o){
-        return this.isUndef(o) || this.isNull(o) || o.length===0;
+    isEmpty(o) {
+        return this.isUndef(o) || this.isNull(o) || o.length === 0;
     }
 };
