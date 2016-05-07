@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/helpers.js | tablefilter v0.2.18 API Document</title>
+  <title data-ice="title">src/helpers.js | tablefilter v0.2.19 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -70,18 +70,18 @@
 import Str from &apos;./string&apos;;
 
 export default {
-    removeNbFormat(data, format){
-        if(!data){
+    removeNbFormat(data, format) {
+        if (!data) {
             return;
         }
-        if(!format){
+        if (!format) {
             format = &apos;us&apos;;
         }
         let n = data;
-        if(Str.lower(format) === &apos;us&apos;){
-            n =+ n.replace(/[^\d\.-]/g,&apos;&apos;);
+        if (Str.lower(format) === &apos;us&apos;) {
+            n = + n.replace(/[^\d\.-]/g, &apos;&apos;);
         } else {
-            n =+ n.replace(/[^\d\,-]/g,&apos;&apos;).replace(&apos;,&apos;,&apos;.&apos;);
+            n = + n.replace(/[^\d\,-]/g, &apos;&apos;).replace(&apos;,&apos;, &apos;.&apos;);
         }
         return n;
     }
