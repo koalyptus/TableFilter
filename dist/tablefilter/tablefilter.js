@@ -249,12 +249,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //default script base path
 	        this.basePath = f.base_path || 'tablefilter/';
 	
-	        /*** filter types ***/
-	        // this.fltTypeCheckList = 'checklist';
-	        // this.fltTypeNone = 'none';
-	
 	        /*** filters' grid properties ***/
-	
 	        //enables/disables filter grid
 	        this.fltGrid = f.grid === false ? false : true;
 	
@@ -1414,6 +1409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var occurence = void 0,
 	                removeNbFormat = _helpers2.default.removeNbFormat;
+	            var dtType = this.hasColDateType ? this.colDateType[j] : this.defaultDateType;
 	
 	            //Search arg operator tests
 	            var hasLO = re_l.test(sA),
@@ -1602,7 +1598,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var j = 0; j < nchilds; j++) {
 	                //searched keyword
 	                var sA = searchArgs[this.singleSearchFlt ? 0 : j];
-	                var dtType = this.hasColDateType ? this.colDateType[j] : this.defaultDateType;
 	
 	                if (sA === '') {
 	                    continue;

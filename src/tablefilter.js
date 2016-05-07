@@ -87,12 +87,7 @@ export class TableFilter {
         //default script base path
         this.basePath = f.base_path || 'tablefilter/';
 
-        /*** filter types ***/
-        // this.fltTypeCheckList = 'checklist';
-        // this.fltTypeNone = 'none';
-
         /*** filters' grid properties ***/
-
         //enables/disables filter grid
         this.fltGrid = f.grid === false ? false : true;
 
@@ -973,7 +968,7 @@ export class TableFilter {
         // Destroy modules
         // TODO: subcribe modules to destroy event instead
         Object.keys(Mod).forEach(function (key) {
-            var feature = Mod[key];
+            let feature = Mod[key];
             if (feature && Types.isFn(feature.destroy)) {
                 feature.destroy();
             }
@@ -1023,7 +1018,7 @@ export class TableFilter {
         }
         //default location: just above the table
         else {
-            var cont = Dom.create('caption');
+            let cont = Dom.create('caption');
             cont.appendChild(infdiv);
             this.tbl.insertBefore(cont, this.tbl.firstChild);
         }
@@ -1200,6 +1195,8 @@ export class TableFilter {
 
             let occurence,
                 removeNbFormat = Helpers.removeNbFormat;
+            let dtType = this.hasColDateType ?
+                    this.colDateType[j] : this.defaultDateType;
 
             //Search arg operator tests
             let hasLO = re_l.test(sA),
@@ -1412,8 +1409,6 @@ export class TableFilter {
             for (let j = 0; j < nchilds; j++) {
                 //searched keyword
                 let sA = searchArgs[this.singleSearchFlt ? 0 : j];
-                var dtType = this.hasColDateType ?
-                    this.colDateType[j] : this.defaultDateType;
 
                 if (sA === '') {
                     continue;
