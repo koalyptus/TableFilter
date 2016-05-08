@@ -56,7 +56,7 @@ export class TableFilter {
 
         // TODO: use for-of with babel plug-in
         args.forEach((arg) => {
-        // for (let arg of args) {
+            // for (let arg of args) {
             let argtype = typeof arg;
             if (argtype === 'object' && arg && arg.nodeName === 'TABLE') {
                 this.tbl = arg;
@@ -69,13 +69,13 @@ export class TableFilter {
             } else if (argtype === 'object') {
                 this.cfg = arg;
             }
-        // }
+            // }
         });
 
         if (!this.tbl || this.tbl.nodeName !== 'TABLE' ||
             this.getRowsNb() === 0) {
             throw new Error('Could not instantiate TableFilter: HTML table ' +
-               'DOMElement not found.');
+                'DOMElement not found.');
         }
 
         // configuration object
@@ -1198,7 +1198,7 @@ export class TableFilter {
             let occurence,
                 removeNbFormat = Helpers.removeNbFormat;
             let dtType = this.hasColDateType ?
-                    this.colDateType[j] : this.defaultDateType;
+                this.colDateType[j] : this.defaultDateType;
 
             //Search arg operator tests
             let hasLO = re_l.test(sA),
@@ -1374,7 +1374,7 @@ export class TableFilter {
                 } else {
                     // If numeric type data, perform a strict equality test and
                     // fallback to unformatted number string comparison
-                    if(numCellData && !this.singleSearchFlt) {
+                    if (numCellData && !this.singleSearchFlt) {
                         sA = removeNbFormat(sA, nbFormat);
                         occurence = numCellData === sA ||
                             Str.contains(sA.toString(), numCellData.toString(),

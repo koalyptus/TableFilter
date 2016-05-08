@@ -179,9 +179,9 @@ export class CheckList extends Feature {
                     (colIndex === j && tf.linkedFilters &&
                         ((rows[k].style.display === '' && !tf.paging) ||
                             (tf.paging && ((!activeIdx ||
-                            activeIdx === colIndex) ||
+                                activeIdx === colIndex) ||
                                 (activeIdx != colIndex &&
-                                tf.validRowsIndex.indexOf(k) != -1)))))) {
+                                    tf.validRowsIndex.indexOf(k) != -1)))))) {
 
                     let cellData = tf.getCellData(cells[j]);
                     //Vary Peter's patch
@@ -430,10 +430,10 @@ export class CheckList extends Feature {
      */
     selectOptions(colIndex, values = []) {
         let tf = this.tf;
-        if (tf.getFilterType(colIndex) !== CHECKLIST || values.length === 0) {
+        let flt = tf.getFilterElement(colIndex);
+        if (tf.getFilterType(colIndex) !== CHECKLIST || !flt) {
             return;
         }
-        let flt = tf.getFilterElement(colIndex);
 
         let lisNb = Dom.tag(flt, 'li').length;
 
