@@ -3,6 +3,7 @@ import Dom from '../dom';
 import Types from '../types';
 import Event from '../event';
 import Str from '../string';
+import {NONE} from '../const';
 
 export class GridLayout extends Feature{
 
@@ -311,7 +312,7 @@ export class GridLayout extends Feature{
         };
 
         if(tf.popupFilters){
-            filtersRow.style.display = 'none';
+            filtersRow.style.display = NONE;
         }
 
         if(tbl.clientWidth !== this.headTbl.clientWidth){

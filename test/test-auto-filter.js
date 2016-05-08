@@ -24,7 +24,7 @@
         });
 
         deepEqual(tf.autoFilter, false, 'Auto filtering disabled');
-        deepEqual(tf.autoFilterDelay, 900, 'Expected filtering delay');
+        deepEqual(tf.autoFilterDelay, 750, 'Expected filtering delay');
     });
 
 })(window, TableFilter);

@@ -5,6 +5,7 @@ import Str from '../string';
 import Sort from '../sort';
 import Event from '../event';
 import Types from '../types';
+import {CHECKLIST, NONE} from '../const';
 
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
     '{1} manner.';
@@ -178,9 +179,9 @@ export class CheckList extends Feature {
                     (colIndex === j && tf.linkedFilters &&
                         ((rows[k].style.display === '' && !tf.paging) ||
                             (tf.paging && ((!activeIdx ||
-                            activeIdx === colIndex) ||
+                                activeIdx === colIndex) ||
                                 (activeIdx != colIndex &&
-                                tf.validRowsIndex.indexOf(k) != -1)))))) {
+                                    tf.validRowsIndex.indexOf(k) != -1)))))) {
 
                     let cellData = tf.getCellData(cells[j]);
                     //Vary Peter's patch
@@ -294,7 +295,7 @@ export class CheckList extends Feature {
 
             if (val === '') {
                 //item is hidden
-                li.style.display = 'none';
+                li.style.display = NONE;
             }
         }
     }
@@ -315,7 +316,7 @@ export class CheckList extends Feature {
         Event.add(li0.check, 'click', (evt) => this.optionClick(evt));
 
         if (!this.enableCheckListResetFilter) {
-            li0.style.display = 'none';
+            li0.style.display = NONE;
         }
 
         if (tf.enableEmptyOption) {
@@ -429,11 +430,10 @@ export class CheckList extends Feature {
      */
     selectOptions(colIndex, values = []) {
         let tf = this.tf;
-        if (tf.getFilterType(colIndex) !== tf.fltTypeCheckList ||
-            values.length === 0) {
+        let flt = tf.getFilterElement(colIndex);
+        if (tf.getFilterType(colIndex) !== CHECKLIST || !flt) {
             return;
         }
-        let flt = tf.getFilterElement(colIndex);
 
         let lisNb = Dom.tag(flt, 'li').length;
 

@@ -2,6 +2,7 @@ import {Feature} from './feature';
 import Types from '../types';
 import Dom from '../dom';
 import Event from '../event';
+import {INPUT, NONE} from '../const';
 
 export class PopupFilter extends Feature{
 
@@ -91,7 +92,7 @@ export class PopupFilter extends Feature{
         }
 
         for(var i=0; i<tf.nbCells; i++){
-            if(tf.getFilterType(i) === tf.fltTypeNone){
+            if(tf.getFilterType(i) === NONE){
                 continue;
             }
             var popUpSpan = Dom.create(
@@ -163,14 +164,14 @@ export class PopupFilter extends Feature{
         var tf = this.tf,
             popUpFltElm = this.popUpFltElms[colIndex];
 
-        if(popUpFltElm.style.display === 'none' ||
+        if(popUpFltElm.style.display === NONE ||
             popUpFltElm.style.display === ''){
             if(this.onBeforePopUpOpen){
                 this.onBeforePopUpOpen.call(
                     null, this, this.popUpFltElms[colIndex], colIndex);
             }
             popUpFltElm.style.display = 'block';
-            if(tf.getFilterType(colIndex) === tf.fltTypeInp){
+            if(tf.getFilterType(colIndex) === INPUT){
                 var flt = tf.getFilterElement(colIndex);
                 if(flt){
                     flt.focus();
@@ -185,7 +186,7 @@ export class PopupFilter extends Feature{
                 this.onBeforePopUpClose.call(
                     null, this, this.popUpFltElms[colIndex], colIndex);
             }
-            popUpFltElm.style.display = 'none';
+            popUpFltElm.style.display = NONE;
             if(this.onAfterPopUpClose){
                 this.onAfterPopUpClose.call(
                     null, this, this.popUpFltElms[colIndex], colIndex);
@@ -204,7 +205,7 @@ export class PopupFilter extends Feature{
             }
             var popUpFltElm = this.popUpFltElms[i];
             if(popUpFltElm){
-                popUpFltElm.style.display = 'none';
+                popUpFltElm.style.display = NONE;
             }
         }
     }

@@ -3,6 +3,7 @@ import Dom from '../dom';
 import Types from '../types';
 import Str from '../string';
 import Event from '../event';
+import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
 
 export class Paging extends Feature {
 
@@ -83,7 +84,7 @@ export class Paging extends Feature {
         //enables/disables paging buttons
         this.hasPagingBtns = f.paging_btns === false ? false : true;
         //defines previous page button html
-        this.pageSelectorType = f.page_selector_type || tf.fltTypeSlc;
+        this.pageSelectorType = f.page_selector_type || SELECT;
         //calls function before page is changed
         this.onBeforeChangePage = Types.isFn(f.on_before_change_page) ?
             f.on_before_change_page : null;
@@ -130,12 +131,12 @@ export class Paging extends Feature {
         // Paging DOM events
         this.evt = {
             slcIndex() {
-                return (o.pageSelectorType === tf.fltTypeSlc) ?
+                return (o.pageSelectorType === SELECT) ?
                     o.pagingSlc.options.selectedIndex :
                     parseInt(o.pagingSlc.value, 10) - 1;
             },
             nbOpts() {
-                return (o.pageSelectorType === tf.fltTypeSlc) ?
+                return (o.pageSelectorType === SELECT) ?
                     parseInt(o.pagingSlc.options.length, 10) - 1 :
                     (o.nbPages - 1);
             },
@@ -157,7 +158,7 @@ export class Paging extends Feature {
             },
             _detectKey(e) {
                 var key = Event.keyCode(e);
-                if (key === 13) {
+                if (key === ENTER_KEY) {
                     if (tf.sorted) {
                         tf.filter();
                         o.changePage(o.evt.slcIndex());
@@ -204,17 +205,15 @@ export class Paging extends Feature {
         };
 
         // Paging drop-down list selector
-        if (this.pageSelectorType === tf.fltTypeSlc) {
-            slcPages = Dom.create(
-                tf.fltTypeSlc, ['id', this.prfxSlcPages + tf.id]);
+        if (this.pageSelectorType === SELECT) {
+            slcPages = Dom.create(SELECT, ['id', this.prfxSlcPages + tf.id]);
             slcPages.className = this.pgSlcCssClass;
             Event.add(slcPages, 'change', evt.slcPagesChange);
         }
 
         // Paging input selector
-        if (this.pageSelectorType === tf.fltTypeInp) {
-            slcPages = Dom.create(
-                tf.fltTypeInp,
+        if (this.pageSelectorType === INPUT) {
+            slcPages = Dom.create(INPUT,
                 ['id', this.prfxSlcPages + tf.id],
                 ['value', this.currentPageNb]
             );
@@ -235,8 +234,7 @@ export class Paging extends Feature {
         if (this.hasPagingBtns) {
             // Next button
             if (!this.btnNextPageHtml) {
-                var btn_next = Dom.create(
-                    tf.fltTypeInp,
+                var btn_next = Dom.create(INPUT,
                     ['id', this.prfxBtnNext + tf.id],
                     ['type', 'button'],
                     ['value', this.btnNextPageText],
@@ -251,8 +249,7 @@ export class Paging extends Feature {
             }
             // Previous button
             if (!this.btnPrevPageHtml) {
-                var btn_prev = Dom.create(
-                    tf.fltTypeInp,
+                var btn_prev = Dom.create(INPUT,
                     ['id', this.prfxBtnPrev + tf.id],
                     ['type', 'button'],
                     ['value', this.btnPrevPageText],
@@ -267,8 +264,7 @@ export class Paging extends Feature {
             }
             // Last button
             if (!this.btnLastPageHtml) {
-                var btn_last = Dom.create(
-                    tf.fltTypeInp,
+                var btn_last = Dom.create(INPUT,
                     ['id', this.prfxBtnLast + tf.id],
                     ['type', 'button'],
                     ['value', this.btnLastPageText],
@@ -283,8 +279,7 @@ export class Paging extends Feature {
             }
             // First button
             if (!this.btnFirstPageHtml) {
-                var btn_first = Dom.create(
-                    tf.fltTypeInp,
+                var btn_first = Dom.create(INPUT,
                     ['id', this.prfxBtnFirst + tf.id],
                     ['type', 'button'],
                     ['value', this.btnFirstPageText],
@@ -386,13 +381,13 @@ export class Paging extends Feature {
         //refresh page nb span
         pgspan.innerHTML = this.nbPages;
         //select clearing shortcut
-        if (this.pageSelectorType === tf.fltTypeSlc) {
+        if (this.pageSelectorType === SELECT) {
             this.pagingSlc.innerHTML = '';
         }
 
         if (this.nbPages > 0) {
             mdiv.style.visibility = 'visible';
-            if (this.pageSelectorType === tf.fltTypeSlc) {
+            if (this.pageSelectorType === SELECT) {
                 for (var z = 0; z < this.nbPages; z++) {
                     var opt = Dom.createOpt(z + 1, z * this.pagingLength,
                         false);
@@ -439,7 +434,7 @@ export class Paging extends Feature {
                     rowDisplayed = true;
                 }
             } else {
-                r.style.display = 'none';
+                r.style.display = NONE;
             }
             this.emitter.emit('row-paged', tf, validRowIdx, h, rowDisplayed);
         }
@@ -510,8 +505,7 @@ export class Paging extends Feature {
             ev.target.blur();
         };
 
-        var slcR = Dom.create(
-            tf.fltTypeSlc, ['id', this.prfxSlcResults + tf.id]);
+        var slcR = Dom.create( SELECT, ['id', this.prfxSlcResults + tf.id]);
         slcR.className = this.resultsSlcCssClass;
         var slcRText = this.resultsPerPage[0],
             slcROpts = this.resultsPerPage[1];
@@ -577,7 +571,7 @@ export class Paging extends Feature {
         this.emitter.emit('before-page-change', tf, (index + 1));
 
         if (index === null) {
-            index = this.pageSelectorType === tf.fltTypeSlc ?
+            index = this.pageSelectorType === SELECT ?
                 this.pagingSlc.options.selectedIndex : this.pagingSlc.value - 1;
         }
         if (index >= 0 && index <= (this.nbPages - 1)) {
@@ -585,13 +579,13 @@ export class Paging extends Feature {
                 this.onBeforeChangePage.call(null, this, (index + 1));
             }
             this.currentPageNb = parseInt(index, 10) + 1;
-            if (this.pageSelectorType === tf.fltTypeSlc) {
+            if (this.pageSelectorType === SELECT) {
                 this.pagingSlc.options[index].selected = true;
             } else {
                 this.pagingSlc.value = this.currentPageNb;
             }
 
-            this.startPagingRow = (this.pageSelectorType === tf.fltTypeSlc) ?
+            this.startPagingRow = (this.pageSelectorType === SELECT) ?
                 this.pagingSlc.value : (index * this.pagingLength);
 
             this.groupByPage();
@@ -627,7 +621,7 @@ export class Paging extends Feature {
 
         var slcR = this.resultsPerPageSlc;
         var slcIndex = slcR.selectedIndex;
-        var slcPagesSelIndex = (this.pageSelectorType === tf.fltTypeSlc) ?
+        var slcPagesSelIndex = (this.pageSelectorType === SELECT) ?
             this.pagingSlc.selectedIndex :
             parseInt(this.pagingSlc.value - 1, 10);
         this.pagingLength = parseInt(slcR.options[slcIndex].value, 10);
@@ -639,7 +633,7 @@ export class Paging extends Feature {
             }
             this.setPagingInfo();
 
-            if (this.pageSelectorType === tf.fltTypeSlc) {
+            if (this.pageSelectorType === SELECT) {
                 var slcIdx =
                     (this.pagingSlc.options.length - 1 <= slcPagesSelIndex) ?
                         (this.pagingSlc.options.length - 1) : slcPagesSelIndex;
@@ -708,10 +702,10 @@ export class Paging extends Feature {
         var evt = this.evt;
 
         if (this.pagingSlc) {
-            if (this.pageSelectorType === tf.fltTypeSlc) {
+            if (this.pageSelectorType === SELECT) {
                 Event.remove(this.pagingSlc, 'change', evt.slcPagesChange);
             }
-            else if (this.pageSelectorType === tf.fltTypeInp) {
+            else if (this.pageSelectorType === INPUT) {
                 Event.remove(this.pagingSlc, 'keypress', evt._detectKey);
             }
             Dom.remove(this.pagingSlc);

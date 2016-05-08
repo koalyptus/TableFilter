@@ -4,6 +4,7 @@ import Arr from '../array';
 import Str from '../string';
 import Sort from '../sort';
 import Event from '../event';
+import {SELECT, MULTIPLE, NONE} from '../const';
 
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
     '{1} manner.';
@@ -66,16 +67,16 @@ export class Dropdown extends Feature {
         let externalFltTgtId = isExternal ?
             tf.externalFltTgtIds[colIndex] : null;
 
-        let slc = Dom.create(tf.fltTypeSlc,
+        let slc = Dom.create(SELECT,
             ['id', tf.prfxFlt + colIndex + '_' + tf.id],
             ['ct', colIndex], ['filled', '0']
         );
 
-        if (col === tf.fltTypeMulti) {
-            slc.multiple = tf.fltTypeMulti;
+        if (col === MULTIPLE) {
+            slc.multiple = MULTIPLE;
             slc.title = this.multipleSlcTooltip;
         }
-        slc.className = Str.lower(col) === tf.fltTypeSlc ?
+        slc.className = Str.lower(col) === SELECT ?
             tf.fltCssClass : tf.fltMultiCssClass;
 
         //filter is appended in container element
@@ -292,7 +293,7 @@ export class Dropdown extends Feature {
             let opt;
             //fill select on demand
             if (tf.loadFltOnDemand && slcValue === this.opts[y] &&
-                tf.getFilterType(colIndex) === tf.fltTypeSlc) {
+                tf.getFilterType(colIndex) === SELECT) {
                 opt = Dom.createOpt(lbl, val, true);
             } else {
                 opt = Dom.createOpt(lbl, val, false);
@@ -316,7 +317,7 @@ export class Dropdown extends Feature {
         let opt0 = Dom.createOpt(
             (!this.enableSlcResetFilter ? '' : tf.displayAllText), '');
         if (!this.enableSlcResetFilter) {
-            opt0.style.display = 'none';
+            opt0.style.display = NONE;
         }
         slc.appendChild(opt0);
         if (tf.enableEmptyOption) {
@@ -337,8 +338,7 @@ export class Dropdown extends Feature {
      */
     selectOptions(colIndex, values = []) {
         let tf = this.tf;
-        if (tf.getFilterType(colIndex) !== tf.fltTypeMulti ||
-            values.length === 0) {
+        if (tf.getFilterType(colIndex) !== MULTIPLE || values.length === 0) {
             return;
         }
         let slc = tf.getFilterElement(colIndex);
