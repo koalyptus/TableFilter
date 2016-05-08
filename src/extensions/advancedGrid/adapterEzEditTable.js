@@ -1,5 +1,6 @@
 import Dom from '../../dom';
 import {INPUT} from '../../const';
+import {root} from '../../root';
 
 export default class AdapterEzEditTable {
     /**
@@ -36,7 +37,7 @@ export default class AdapterEzEditTable {
      */
     init(){
         var tf = this.tf;
-        if(window.EditTable){
+        if(root.EditTable){
             this._setAdvancedGrid();
         } else {
             var path = this.vendorPath + this.filename;

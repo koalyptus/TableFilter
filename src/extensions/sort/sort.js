@@ -1,6 +1,7 @@
 import AdapterSortableTable from './adapterSortabletable';
+import {root} from '../../root';
 
-if(!window.SortableTable){
+if(!root.SortableTable){
     require('script!sortabletable');
 }
 

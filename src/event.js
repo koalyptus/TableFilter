@@ -1,3 +1,5 @@
+import {root} from './root';
+
 /**
  * DOM event utilities
  */
@@ -25,7 +27,7 @@ export default {
     },
     stop(evt){
         if(!evt){
-            evt = window.event;
+            evt = root.event;
         }
         if(evt.stopPropagation){
             evt.stopPropagation();
@@ -35,7 +37,7 @@ export default {
     },
     cancel(evt){
         if(!evt){
-            evt = window.event;
+            evt = root.event;
         }
         if(evt.preventDefault) {
             evt.preventDefault();
@@ -44,7 +46,7 @@ export default {
         }
     },
     target(evt){
-        return (evt && evt.target) || (window.event && window.event.srcElement);
+        return (evt && evt.target) || (root.event && root.event.srcElement);
     },
     keyCode(evt){
         return evt.charCode ? evt.charCode :
