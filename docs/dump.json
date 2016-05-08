@@ -585,8 +585,8 @@
     "longname": "src/event.js",
     "access": null,
     "description": null,
-    "lineNumber": 5,
-    "content": "/**\n * DOM event utilities\n */\n\nexport default {\n    add(obj, type, func, capture){\n        if(obj.addEventListener){\n            obj.addEventListener(type, func, capture);\n        }\n        else if(obj.attachEvent){\n            obj.attachEvent('on'+type, func);\n        } else {\n            obj['on'+type] = func;\n        }\n    },\n    remove(obj, type, func, capture){\n        if(obj.detachEvent){\n            obj.detachEvent('on'+type,func);\n        }\n        else if(obj.removeEventListener){\n            obj.removeEventListener(type, func, capture);\n        } else {\n            obj['on'+type] = null;\n        }\n    },\n    stop(evt){\n        if(!evt){\n            evt = window.event;\n        }\n        if(evt.stopPropagation){\n            evt.stopPropagation();\n        } else {\n            evt.cancelBubble = true;\n        }\n    },\n    cancel(evt){\n        if(!evt){\n            evt = window.event;\n        }\n        if(evt.preventDefault) {\n            evt.preventDefault();\n        } else {\n            evt.returnValue = false;\n        }\n    },\n    target(evt){\n        return (evt && evt.target) || (window.event && window.event.srcElement);\n    },\n    keyCode(evt){\n        return evt.charCode ? evt.charCode :\n            (evt.keyCode ? evt.keyCode: (evt.which ? evt.which : 0));\n    }\n};\n"
+    "lineNumber": 1,
+    "content": "import {root} from './root';\n\n/**\n * DOM event utilities\n */\n\nexport default {\n    add(obj, type, func, capture){\n        if(obj.addEventListener){\n            obj.addEventListener(type, func, capture);\n        }\n        else if(obj.attachEvent){\n            obj.attachEvent('on'+type, func);\n        } else {\n            obj['on'+type] = func;\n        }\n    },\n    remove(obj, type, func, capture){\n        if(obj.detachEvent){\n            obj.detachEvent('on'+type,func);\n        }\n        else if(obj.removeEventListener){\n            obj.removeEventListener(type, func, capture);\n        } else {\n            obj['on'+type] = null;\n        }\n    },\n    stop(evt){\n        if(!evt){\n            evt = root.event;\n        }\n        if(evt.stopPropagation){\n            evt.stopPropagation();\n        } else {\n            evt.cancelBubble = true;\n        }\n    },\n    cancel(evt){\n        if(!evt){\n            evt = root.event;\n        }\n        if(evt.preventDefault) {\n            evt.preventDefault();\n        } else {\n            evt.returnValue = false;\n        }\n    },\n    target(evt){\n        return (evt && evt.target) || (root.event && root.event.srcElement);\n    },\n    keyCode(evt){\n        return evt.charCode ? evt.charCode :\n            (evt.keyCode ? evt.keyCode: (evt.which ? evt.which : 0));\n    }\n};\n"
   },
   {
     "__docId__": 29,
@@ -599,7 +599,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import Dom from '../../dom';\nimport {INPUT} from '../../const';\n\nexport default class AdapterEzEditTable {\n    /**\n     * Adapter module for ezEditTable, an external library providing advanced\n     * grid features (selection and edition):\n     * http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus\n     *\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf, cfg){\n        // ezEditTable config\n        this.initialized = false;\n        this.desc = cfg.description || 'ezEditTable adapter';\n        this.filename = cfg.filename || 'ezEditTable.js';\n        this.vendorPath = cfg.vendor_path;\n        this.loadStylesheet = Boolean(cfg.load_stylesheet);\n        this.stylesheet = cfg.stylesheet || this.vendorPath + 'ezEditTable.css';\n        this.stylesheetName = cfg.stylesheet_name || 'ezEditTableCss';\n        this.err = 'Failed to instantiate EditTable object.\\n\"ezEditTable\" ' +\n            'dependency not found.';\n        // Enable the ezEditTable's scroll into view behaviour if grid layout on\n        cfg.scroll_into_view = cfg.scroll_into_view===false ?\n            false : tf.gridLayout;\n\n        this._ezEditTable = null;\n        this.cfg = cfg;\n        this.tf = tf;\n        this.emitter = tf.emitter;\n    }\n\n    /**\n     * Conditionally load ezEditTable library and set advanced grid\n     * @return {[type]} [description]\n     */\n    init(){\n        var tf = this.tf;\n        if(window.EditTable){\n            this._setAdvancedGrid();\n        } else {\n            var path = this.vendorPath + this.filename;\n            tf.import(this.filename, path, ()=> { this._setAdvancedGrid(); });\n        }\n        if(this.loadStylesheet && !tf.isImported(this.stylesheet, 'link')){\n            tf.import(this.stylesheetName, this.stylesheet, null, 'link');\n        }\n\n        // TODO: hack to prevent ezEditTable enter key event hijaking.\n        // Needs to be fixed in the vendor's library\n        this.emitter.on(['filter-focus', 'filter-blur'],\n            ()=> this._toggleForInputFilter());\n    }\n\n    /**\n     * Instantiate ezEditTable component for advanced grid features\n     */\n    _setAdvancedGrid(){\n        var tf = this.tf;\n\n        //start row for EditTable constructor needs to be calculated\n        var startRow,\n            cfg = this.cfg,\n            thead = Dom.tag(tf.tbl, 'thead');\n\n        //if thead exists and startRow not specified, startRow is calculated\n        //automatically by EditTable\n        if(thead.length > 0 && !cfg.startRow){\n            startRow = undefined;\n        }\n        //otherwise startRow config property if any or TableFilter refRow\n        else{\n            startRow = cfg.startRow || tf.refRow;\n        }\n\n        cfg.base_path = cfg.base_path || tf.basePath + 'ezEditTable/';\n        var editable = cfg.editable;\n        var selectable = cfg.selection;\n\n        if(selectable){\n            cfg.default_selection = cfg.default_selection || 'row';\n        }\n        //CSS Styles\n        cfg.active_cell_css = cfg.active_cell_css || 'ezETSelectedCell';\n\n        var _lastValidRowIndex = 0;\n        var _lastRowIndex = 0;\n\n        if(selectable){\n            //Row navigation needs to be calculated according to TableFilter's\n            //validRowsIndex array\n            var onAfterSelection = function(et, selectedElm, e){\n                var slc = et.Selection;\n                //Next valid filtered row needs to be selected\n                var doSelect = function(nextRowIndex){\n                    if(et.defaultSelection === 'row'){\n                        /* eslint-disable */\n                        slc.SelectRowByIndex(nextRowIndex);\n                        /* eslint-enable */\n                    } else {\n                        /* eslint-disable */\n                        et.ClearSelections();\n                        /* eslint-enable */\n                        var cellIndex = selectedElm.cellIndex,\n                            row = tf.tbl.rows[nextRowIndex];\n                        if(et.defaultSelection === 'both'){\n                            /* eslint-disable */\n                            slc.SelectRowByIndex(nextRowIndex);\n                            /* eslint-enable */\n                        }\n                        if(row){\n                            /* eslint-disable */\n                            slc.SelectCell(row.cells[cellIndex]);\n                            /* eslint-enable */\n                        }\n                    }\n                    //Table is filtered\n                    if(tf.validRowsIndex.length !== tf.getRowsNb()){\n                        var r = tf.tbl.rows[nextRowIndex];\n                        if(r){\n                            r.scrollIntoView(false);\n                        }\n                        if(cell){\n                            if(cell.cellIndex === (tf.getCellsNb()-1) &&\n                                tf.gridLayout){\n                                tf.tblCont.scrollLeft = 100000000;\n                            }\n                            else if(cell.cellIndex===0 && tf.gridLayout){\n                                tf.tblCont.scrollLeft = 0;\n                            } else {\n                                cell.scrollIntoView(false);\n                            }\n                        }\n                    }\n                };\n\n                //table is not filtered\n                if(!tf.validRowsIndex){\n                    return;\n                }\n                var validIndexes = tf.validRowsIndex,\n                    validIdxLen = validIndexes.length,\n                    row = et.defaultSelection !== 'row' ?\n                        selectedElm.parentNode : selectedElm,\n                    //cell for default_selection = 'both' or 'cell'\n                    cell = selectedElm.nodeName==='TD' ? selectedElm : null,\n                    /* eslint-disable */\n                    keyCode = e !== undefined ? et.Event.GetKey(e) : 0,\n                    /* eslint-enable */\n                    isRowValid = validIndexes.indexOf(row.rowIndex) !== -1,\n                    nextRowIndex,\n                    paging = tf.feature('paging'),\n                    //pgup/pgdown keys\n                    d = (keyCode === 34 || keyCode === 33 ?\n                        (paging && paging.pagingLength || et.nbRowsPerPage) :1);\n\n                //If next row is not valid, next valid filtered row needs to be\n                //calculated\n                if(!isRowValid){\n                    //Selection direction up/down\n                    if(row.rowIndex>_lastRowIndex){\n                        //last row\n                        if(row.rowIndex >= validIndexes[validIdxLen-1]){\n                            nextRowIndex = validIndexes[validIdxLen-1];\n                        } else {\n                            var calcRowIndex = (_lastValidRowIndex + d);\n                            if(calcRowIndex > (validIdxLen-1)){\n                                nextRowIndex = validIndexes[validIdxLen-1];\n                            } else {\n                                nextRowIndex = validIndexes[calcRowIndex];\n                            }\n                        }\n                    } else{\n                        //first row\n                        if(row.rowIndex <= validIndexes[0]){\n                            nextRowIndex = validIndexes[0];\n                        } else {\n                            var v = validIndexes[_lastValidRowIndex - d];\n                            nextRowIndex = v ? v : validIndexes[0];\n                        }\n                    }\n                    _lastRowIndex = row.rowIndex;\n                    doSelect(nextRowIndex);\n                } else {\n                    //If filtered row is valid, special calculation for\n                    //pgup/pgdown keys\n                    if(keyCode!==34 && keyCode!==33){\n                        _lastValidRowIndex = validIndexes.indexOf(row.rowIndex);\n                        _lastRowIndex = row.rowIndex;\n                    } else {\n                        if(keyCode === 34){ //pgdown\n                            //last row\n                            if((_lastValidRowIndex + d) <= (validIdxLen-1)){\n                                nextRowIndex = validIndexes[\n                                _lastValidRowIndex + d];\n                            } else {\n                                nextRowIndex = [validIdxLen-1];\n                            }\n                        } else { //pgup\n                            //first row\n                            if((_lastValidRowIndex - d) <= validIndexes[0]){\n                                nextRowIndex = validIndexes[0];\n                            } else {\n                                nextRowIndex = validIndexes[\n                                    _lastValidRowIndex - d];\n                            }\n                        }\n                        _lastRowIndex = nextRowIndex;\n                        _lastValidRowIndex = validIndexes.indexOf(nextRowIndex);\n                        doSelect(nextRowIndex);\n                    }\n                }\n            };\n\n            //Page navigation has to be enforced whenever selected row is out of\n            //the current page range\n            var onBeforeSelection = function(et, selectedElm){\n                var row = et.defaultSelection !== 'row' ?\n                    selectedElm.parentNode : selectedElm;\n                if(tf.paging){\n                    if(tf.feature('paging').nbPages > 1){\n                        var paging = tf.feature('paging');\n                        //page length is re-assigned in case it has changed\n                        et.nbRowsPerPage = paging.pagingLength;\n                        var validIndexes = tf.validRowsIndex,\n                            validIdxLen = validIndexes.length,\n                            pagingEndRow = parseInt(paging.startPagingRow, 10) +\n                                parseInt(paging.pagingLength, 10);\n                        var rowIndex = row.rowIndex;\n\n                        if((rowIndex === validIndexes[validIdxLen-1]) &&\n                            paging.currentPageNb!==paging.nbPages){\n                            paging.setPage('last');\n                        }\n                        else if((rowIndex == validIndexes[0]) &&\n                            paging.currentPageNb!==1){\n                            paging.setPage('first');\n                        }\n                        else if(rowIndex > validIndexes[pagingEndRow-1] &&\n                            rowIndex < validIndexes[validIdxLen-1]){\n                            paging.setPage('next');\n                        }\n                        else if(\n                            rowIndex < validIndexes[paging.startPagingRow] &&\n                            rowIndex > validIndexes[0]){\n                            paging.setPage('previous');\n                        }\n                    }\n                }\n            };\n\n            //Selected row needs to be visible when paging is activated\n            if(tf.paging){\n                tf.feature('paging').onAfterChangePage = function(paging){\n                    var advGrid = paging.tf.extension('advancedGrid');\n                    var et = advGrid._ezEditTable;\n                    var slc = et.Selection;\n                    /* eslint-disable */\n                    var row = slc.GetActiveRow();\n                    /* eslint-enable */\n                    if(row){\n                        row.scrollIntoView(false);\n                    }\n                    /* eslint-disable */\n                    var cell = slc.GetActiveCell();\n                    /* eslint-enable */\n                    if(cell){\n                        cell.scrollIntoView(false);\n                    }\n                };\n            }\n\n            //Rows navigation when rows are filtered is performed with the\n            //EditTable row selection callback events\n            if(cfg.default_selection==='row'){\n                var fnB = cfg.on_before_selected_row;\n                cfg.on_before_selected_row = function(){\n                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);\n                    if(fnB){\n                        fnB.call(\n                            null, arguments[0], arguments[1], arguments[2]);\n                    }\n                };\n                var fnA = cfg.on_after_selected_row;\n                cfg.on_after_selected_row = function(){\n                    onAfterSelection(arguments[0], arguments[1], arguments[2]);\n                    if(fnA){\n                        fnA.call(\n                            null, arguments[0], arguments[1], arguments[2]);\n                    }\n                };\n            } else {\n                var fnD = cfg.on_before_selected_cell;\n                cfg.on_before_selected_cell = function(){\n                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);\n                    if(fnD){\n                        fnD.call(\n                            null, arguments[0], arguments[1], arguments[2]);\n                    }\n                };\n                var fnC = cfg.on_after_selected_cell;\n                cfg.on_after_selected_cell = function(){\n                    onAfterSelection(arguments[0], arguments[1], arguments[2]);\n                    if(fnC){\n                        fnC.call(\n                            null, arguments[0], arguments[1], arguments[2]);\n                    }\n                };\n            }\n        }\n        if(editable){\n            //Added or removed rows, TF rows number needs to be re-calculated\n            var fnE = cfg.on_added_dom_row;\n            cfg.on_added_dom_row = function(){\n                tf.nbFilterableRows++;\n                if(!tf.paging){\n                    tf.emitter.emit('rows-changed', tf, this);\n                    //tf.feature('rowsCounter').refresh();\n                } else {\n                    tf.nbRows++;\n                    tf.nbVisibleRows++;\n                    tf.nbFilterableRows++;\n                    tf.paging=false;\n                    tf.feature('paging').destroy();\n                    tf.feature('paging').reset();\n                }\n                if(tf.alternateRows){\n                    tf.feature('alternateRows').init();\n                }\n                if(fnE){\n                    fnE.call(null, arguments[0], arguments[1], arguments[2]);\n                }\n            };\n            if(cfg.actions && cfg.actions['delete']){\n                var fnF = cfg.actions['delete'].on_after_submit;\n                cfg.actions['delete'].on_after_submit = function(){\n                    tf.nbFilterableRows--;\n                    if(!tf.paging){\n                        // tf.feature('rowsCounter').refresh();\n                        tf.emitter.emit('rows-changed', tf, this);\n                    } else {\n                        tf.nbRows--;\n                        tf.nbVisibleRows--;\n                        tf.nbFilterableRows--;\n                        tf.paging=false;\n                        tf.feature('paging').destroy();\n                        tf.feature('paging').reset(false);\n                    }\n                    if(tf.alternateRows){\n                        tf.feature('alternateRows').init();\n                    }\n                    if(fnF){\n                        fnF.call(null, arguments[0], arguments[1]);\n                    }\n                };\n            }\n        }\n\n        try{\n            /* eslint-disable */\n            this._ezEditTable = new EditTable(tf.id, cfg, startRow);\n            this._ezEditTable.Init();\n            /* eslint-enable */\n        } catch(e) { throw new Error(this.err); }\n\n        this.initialized = true;\n    }\n\n    /**\n     * Reset advanced grid when previously removed\n     */\n    reset(){\n        var ezEditTable = this._ezEditTable;\n        if(ezEditTable){\n            if(this.cfg.selection){\n                /* eslint-disable */\n                ezEditTable.Selection.Set();\n                /* eslint-enable */\n            }\n            if(this.cfg.editable){\n                /* eslint-disable */\n                ezEditTable.Editable.Set();\n                /* eslint-enable */\n            }\n        }\n    }\n\n    /**\n     * Toggle behaviour\n     */\n    toggle(){\n        var ezEditTable = this._ezEditTable;\n        if(ezEditTable.editable){\n            /* eslint-disable */\n            ezEditTable.Editable.Remove();\n            /* eslint-enable */\n        } else {\n            /* eslint-disable */\n            ezEditTable.Editable.Set();\n            /* eslint-enable */\n        }\n        if(ezEditTable.selection){\n            /* eslint-disable */\n            ezEditTable.Selection.Remove();\n            /* eslint-enable */\n        } else {\n            /* eslint-disable */\n            ezEditTable.Selection.Set();\n            /* eslint-enable */\n        }\n    }\n\n    _toggleForInputFilter(){\n        var tf = this.tf;\n        if(!tf.getActiveFilterId()){\n            return;\n        }\n        var colIndex = tf.getColumnIndexFromFilterId(tf.getActiveFilterId());\n        var filterType = tf.getFilterType(colIndex);\n        if(filterType === INPUT){\n            this.toggle();\n        }\n    }\n\n    /**\n     * Remove advanced grid\n     */\n    destroy(){\n        var ezEditTable = this._ezEditTable;\n        if(ezEditTable){\n            if(this.cfg.selection){\n                /* eslint-disable */\n                ezEditTable.Selection.ClearSelections();\n                ezEditTable.Selection.Remove();\n                /* eslint-enable */\n            }\n            if(this.cfg.editable){\n                /* eslint-disable */\n                ezEditTable.Editable.Remove();\n                /* eslint-enable */\n            }\n        }\n\n        this.emitter.off(['filter-focus', 'filter-blur'],\n            ()=> this._toggleForInputFilter());\n        this.initialized = false;\n    }\n}\n"
+    "content": "import Dom from '../../dom';\nimport {INPUT} from '../../const';\nimport {root} from '../../root';\n\nexport default class AdapterEzEditTable {\n    /**\n     * Adapter module for ezEditTable, an external library providing advanced\n     * grid features (selection and edition):\n     * http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus\n     *\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf, cfg){\n        // ezEditTable config\n        this.initialized = false;\n        this.desc = cfg.description || 'ezEditTable adapter';\n        this.filename = cfg.filename || 'ezEditTable.js';\n        this.vendorPath = cfg.vendor_path;\n        this.loadStylesheet = Boolean(cfg.load_stylesheet);\n        this.stylesheet = cfg.stylesheet || this.vendorPath + 'ezEditTable.css';\n        this.stylesheetName = cfg.stylesheet_name || 'ezEditTableCss';\n        this.err = 'Failed to instantiate EditTable object.\\n\"ezEditTable\" ' +\n            'dependency not found.';\n        // Enable the ezEditTable's scroll into view behaviour if grid layout on\n        cfg.scroll_into_view = cfg.scroll_into_view===false ?\n            false : tf.gridLayout;\n\n        this._ezEditTable = null;\n        this.cfg = cfg;\n        this.tf = tf;\n        this.emitter = tf.emitter;\n    }\n\n    /**\n     * Conditionally load ezEditTable library and set advanced grid\n     * @return {[type]} [description]\n     */\n    init(){\n        var tf = this.tf;\n        if(root.EditTable){\n            this._setAdvancedGrid();\n        } else {\n            var path = this.vendorPath + this.filename;\n            tf.import(this.filename, path, ()=> { this._setAdvancedGrid(); });\n        }\n        if(this.loadStylesheet && !tf.isImported(this.stylesheet, 'link')){\n            tf.import(this.stylesheetName, this.stylesheet, null, 'link');\n        }\n\n        // TODO: hack to prevent ezEditTable enter key event hijaking.\n        // Needs to be fixed in the vendor's library\n        this.emitter.on(['filter-focus', 'filter-blur'],\n            ()=> this._toggleForInputFilter());\n    }\n\n    /**\n     * Instantiate ezEditTable component for advanced grid features\n     */\n    _setAdvancedGrid(){\n        var tf = this.tf;\n\n        //start row for EditTable constructor needs to be calculated\n        var startRow,\n            cfg = this.cfg,\n            thead = Dom.tag(tf.tbl, 'thead');\n\n        //if thead exists and startRow not specified, startRow is calculated\n        //automatically by EditTable\n        if(thead.length > 0 && !cfg.startRow){\n            startRow = undefined;\n        }\n        //otherwise startRow config property if any or TableFilter refRow\n        else{\n            startRow = cfg.startRow || tf.refRow;\n        }\n\n        cfg.base_path = cfg.base_path || tf.basePath + 'ezEditTable/';\n        var editable = cfg.editable;\n        var selectable = cfg.selection;\n\n        if(selectable){\n            cfg.default_selection = cfg.default_selection || 'row';\n        }\n        //CSS Styles\n        cfg.active_cell_css = cfg.active_cell_css || 'ezETSelectedCell';\n\n        var _lastValidRowIndex = 0;\n        var _lastRowIndex = 0;\n\n        if(selectable){\n            //Row navigation needs to be calculated according to TableFilter's\n            //validRowsIndex array\n            var onAfterSelection = function(et, selectedElm, e){\n                var slc = et.Selection;\n                //Next valid filtered row needs to be selected\n                var doSelect = function(nextRowIndex){\n                    if(et.defaultSelection === 'row'){\n                        /* eslint-disable */\n                        slc.SelectRowByIndex(nextRowIndex);\n                        /* eslint-enable */\n                    } else {\n                        /* eslint-disable */\n                        et.ClearSelections();\n                        /* eslint-enable */\n                        var cellIndex = selectedElm.cellIndex,\n                            row = tf.tbl.rows[nextRowIndex];\n                        if(et.defaultSelection === 'both'){\n                            /* eslint-disable */\n                            slc.SelectRowByIndex(nextRowIndex);\n                            /* eslint-enable */\n                        }\n                        if(row){\n                            /* eslint-disable */\n                            slc.SelectCell(row.cells[cellIndex]);\n                            /* eslint-enable */\n                        }\n                    }\n                    //Table is filtered\n                    if(tf.validRowsIndex.length !== tf.getRowsNb()){\n                        var r = tf.tbl.rows[nextRowIndex];\n                        if(r){\n                            r.scrollIntoView(false);\n                        }\n                        if(cell){\n                            if(cell.cellIndex === (tf.getCellsNb()-1) &&\n                                tf.gridLayout){\n                                tf.tblCont.scrollLeft = 100000000;\n                            }\n                            else if(cell.cellIndex===0 && tf.gridLayout){\n                                tf.tblCont.scrollLeft = 0;\n                            } else {\n                                cell.scrollIntoView(false);\n                            }\n                        }\n                    }\n                };\n\n                //table is not filtered\n                if(!tf.validRowsIndex){\n                    return;\n                }\n                var validIndexes = tf.validRowsIndex,\n                    validIdxLen = validIndexes.length,\n                    row = et.defaultSelection !== 'row' ?\n                        selectedElm.parentNode : selectedElm,\n                    //cell for default_selection = 'both' or 'cell'\n                    cell = selectedElm.nodeName==='TD' ? selectedElm : null,\n                    /* eslint-disable */\n                    keyCode = e !== undefined ? et.Event.GetKey(e) : 0,\n                    /* eslint-enable */\n                    isRowValid = validIndexes.indexOf(row.rowIndex) !== -1,\n                    nextRowIndex,\n                    paging = tf.feature('paging'),\n                    //pgup/pgdown keys\n                    d = (keyCode === 34 || keyCode === 33 ?\n                        (paging && paging.pagingLength || et.nbRowsPerPage) :1);\n\n                //If next row is not valid, next valid filtered row needs to be\n                //calculated\n                if(!isRowValid){\n                    //Selection direction up/down\n                    if(row.rowIndex>_lastRowIndex){\n                        //last row\n                        if(row.rowIndex >= validIndexes[validIdxLen-1]){\n                            nextRowIndex = validIndexes[validIdxLen-1];\n                        } else {\n                            var calcRowIndex = (_lastValidRowIndex + d);\n                            if(calcRowIndex > (validIdxLen-1)){\n                                nextRowIndex = validIndexes[validIdxLen-1];\n                            } else {\n                                nextRowIndex = validIndexes[calcRowIndex];\n                            }\n                        }\n                    } else{\n                        //first row\n                        if(row.rowIndex <= validIndexes[0]){\n                            nextRowIndex = validIndexes[0];\n                        } else {\n                            var v = validIndexes[_lastValidRowIndex - d];\n                            nextRowIndex = v ? v : validIndexes[0];\n                        }\n                    }\n                    _lastRowIndex = row.rowIndex;\n                    doSelect(nextRowIndex);\n                } else {\n                    //If filtered row is valid, special calculation for\n                    //pgup/pgdown keys\n                    if(keyCode!==34 && keyCode!==33){\n                        _lastValidRowIndex = validIndexes.indexOf(row.rowIndex);\n                        _lastRowIndex = row.rowIndex;\n                    } else {\n                        if(keyCode === 34){ //pgdown\n                            //last row\n                            if((_lastValidRowIndex + d) <= (validIdxLen-1)){\n                                nextRowIndex = validIndexes[\n                                _lastValidRowIndex + d];\n                            } else {\n                                nextRowIndex = [validIdxLen-1];\n                            }\n                        } else { //pgup\n                            //first row\n                            if((_lastValidRowIndex - d) <= validIndexes[0]){\n                                nextRowIndex = validIndexes[0];\n                            } else {\n                                nextRowIndex = validIndexes[\n                                    _lastValidRowIndex - d];\n                            }\n                        }\n                        _lastRowIndex = nextRowIndex;\n                        _lastValidRowIndex = validIndexes.indexOf(nextRowIndex);\n                        doSelect(nextRowIndex);\n                    }\n                }\n            };\n\n            //Page navigation has to be enforced whenever selected row is out of\n            //the current page range\n            var onBeforeSelection = function(et, selectedElm){\n                var row = et.defaultSelection !== 'row' ?\n                    selectedElm.parentNode : selectedElm;\n                if(tf.paging){\n                    if(tf.feature('paging').nbPages > 1){\n                        var paging = tf.feature('paging');\n                        //page length is re-assigned in case it has changed\n                        et.nbRowsPerPage = paging.pagingLength;\n                        var validIndexes = tf.validRowsIndex,\n                            validIdxLen = validIndexes.length,\n                            pagingEndRow = parseInt(paging.startPagingRow, 10) +\n                                parseInt(paging.pagingLength, 10);\n                        var rowIndex = row.rowIndex;\n\n                        if((rowIndex === validIndexes[validIdxLen-1]) &&\n                            paging.currentPageNb!==paging.nbPages){\n                            paging.setPage('last');\n                        }\n                        else if((rowIndex == validIndexes[0]) &&\n                            paging.currentPageNb!==1){\n                            paging.setPage('first');\n                        }\n                        else if(rowIndex > validIndexes[pagingEndRow-1] &&\n                            rowIndex < validIndexes[validIdxLen-1]){\n                            paging.setPage('next');\n                        }\n                        else if(\n                            rowIndex < validIndexes[paging.startPagingRow] &&\n                            rowIndex > validIndexes[0]){\n                            paging.setPage('previous');\n                        }\n                    }\n                }\n            };\n\n            //Selected row needs to be visible when paging is activated\n            if(tf.paging){\n                tf.feature('paging').onAfterChangePage = function(paging){\n                    var advGrid = paging.tf.extension('advancedGrid');\n                    var et = advGrid._ezEditTable;\n                    var slc = et.Selection;\n                    /* eslint-disable */\n                    var row = slc.GetActiveRow();\n                    /* eslint-enable */\n                    if(row){\n                        row.scrollIntoView(false);\n                    }\n                    /* eslint-disable */\n                    var cell = slc.GetActiveCell();\n                    /* eslint-enable */\n                    if(cell){\n                        cell.scrollIntoView(false);\n                    }\n                };\n            }\n\n            //Rows navigation when rows are filtered is performed with the\n            //EditTable row selection callback events\n            if(cfg.default_selection==='row'){\n                var fnB = cfg.on_before_selected_row;\n                cfg.on_before_selected_row = function(){\n                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);\n                    if(fnB){\n                        fnB.call(\n                            null, arguments[0], arguments[1], arguments[2]);\n                    }\n                };\n                var fnA = cfg.on_after_selected_row;\n                cfg.on_after_selected_row = function(){\n                    onAfterSelection(arguments[0], arguments[1], arguments[2]);\n                    if(fnA){\n                        fnA.call(\n                            null, arguments[0], arguments[1], arguments[2]);\n                    }\n                };\n            } else {\n                var fnD = cfg.on_before_selected_cell;\n                cfg.on_before_selected_cell = function(){\n                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);\n                    if(fnD){\n                        fnD.call(\n                            null, arguments[0], arguments[1], arguments[2]);\n                    }\n                };\n                var fnC = cfg.on_after_selected_cell;\n                cfg.on_after_selected_cell = function(){\n                    onAfterSelection(arguments[0], arguments[1], arguments[2]);\n                    if(fnC){\n                        fnC.call(\n                            null, arguments[0], arguments[1], arguments[2]);\n                    }\n                };\n            }\n        }\n        if(editable){\n            //Added or removed rows, TF rows number needs to be re-calculated\n            var fnE = cfg.on_added_dom_row;\n            cfg.on_added_dom_row = function(){\n                tf.nbFilterableRows++;\n                if(!tf.paging){\n                    tf.emitter.emit('rows-changed', tf, this);\n                    //tf.feature('rowsCounter').refresh();\n                } else {\n                    tf.nbRows++;\n                    tf.nbVisibleRows++;\n                    tf.nbFilterableRows++;\n                    tf.paging=false;\n                    tf.feature('paging').destroy();\n                    tf.feature('paging').reset();\n                }\n                if(tf.alternateRows){\n                    tf.feature('alternateRows').init();\n                }\n                if(fnE){\n                    fnE.call(null, arguments[0], arguments[1], arguments[2]);\n                }\n            };\n            if(cfg.actions && cfg.actions['delete']){\n                var fnF = cfg.actions['delete'].on_after_submit;\n                cfg.actions['delete'].on_after_submit = function(){\n                    tf.nbFilterableRows--;\n                    if(!tf.paging){\n                        // tf.feature('rowsCounter').refresh();\n                        tf.emitter.emit('rows-changed', tf, this);\n                    } else {\n                        tf.nbRows--;\n                        tf.nbVisibleRows--;\n                        tf.nbFilterableRows--;\n                        tf.paging=false;\n                        tf.feature('paging').destroy();\n                        tf.feature('paging').reset(false);\n                    }\n                    if(tf.alternateRows){\n                        tf.feature('alternateRows').init();\n                    }\n                    if(fnF){\n                        fnF.call(null, arguments[0], arguments[1]);\n                    }\n                };\n            }\n        }\n\n        try{\n            /* eslint-disable */\n            this._ezEditTable = new EditTable(tf.id, cfg, startRow);\n            this._ezEditTable.Init();\n            /* eslint-enable */\n        } catch(e) { throw new Error(this.err); }\n\n        this.initialized = true;\n    }\n\n    /**\n     * Reset advanced grid when previously removed\n     */\n    reset(){\n        var ezEditTable = this._ezEditTable;\n        if(ezEditTable){\n            if(this.cfg.selection){\n                /* eslint-disable */\n                ezEditTable.Selection.Set();\n                /* eslint-enable */\n            }\n            if(this.cfg.editable){\n                /* eslint-disable */\n                ezEditTable.Editable.Set();\n                /* eslint-enable */\n            }\n        }\n    }\n\n    /**\n     * Toggle behaviour\n     */\n    toggle(){\n        var ezEditTable = this._ezEditTable;\n        if(ezEditTable.editable){\n            /* eslint-disable */\n            ezEditTable.Editable.Remove();\n            /* eslint-enable */\n        } else {\n            /* eslint-disable */\n            ezEditTable.Editable.Set();\n            /* eslint-enable */\n        }\n        if(ezEditTable.selection){\n            /* eslint-disable */\n            ezEditTable.Selection.Remove();\n            /* eslint-enable */\n        } else {\n            /* eslint-disable */\n            ezEditTable.Selection.Set();\n            /* eslint-enable */\n        }\n    }\n\n    _toggleForInputFilter(){\n        var tf = this.tf;\n        if(!tf.getActiveFilterId()){\n            return;\n        }\n        var colIndex = tf.getColumnIndexFromFilterId(tf.getActiveFilterId());\n        var filterType = tf.getFilterType(colIndex);\n        if(filterType === INPUT){\n            this.toggle();\n        }\n    }\n\n    /**\n     * Remove advanced grid\n     */\n    destroy(){\n        var ezEditTable = this._ezEditTable;\n        if(ezEditTable){\n            if(this.cfg.selection){\n                /* eslint-disable */\n                ezEditTable.Selection.ClearSelections();\n                ezEditTable.Selection.Remove();\n                /* eslint-enable */\n            }\n            if(this.cfg.editable){\n                /* eslint-disable */\n                ezEditTable.Editable.Remove();\n                /* eslint-enable */\n            }\n        }\n\n        this.emitter.off(['filter-focus', 'filter-blur'],\n            ()=> this._toggleForInputFilter());\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 30,
@@ -614,7 +614,7 @@
     "importPath": "tablefilter/src/extensions/advancedGrid/adapterEzEditTable.js",
     "importStyle": "AdapterEzEditTable",
     "description": null,
-    "lineNumber": 4,
+    "lineNumber": 5,
     "undocument": true,
     "interface": false
   },
@@ -628,7 +628,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#constructor",
     "access": null,
     "description": "Adapter module for ezEditTable, an external library providing advanced\ngrid features (selection and edition):\nhttp://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus",
-    "lineNumber": 12,
+    "lineNumber": 13,
     "params": [
       {
         "nullable": null,
@@ -653,7 +653,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 14,
+    "lineNumber": 15,
     "undocument": true,
     "type": {
       "types": [
@@ -671,7 +671,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#desc",
     "access": null,
     "description": null,
-    "lineNumber": 15,
+    "lineNumber": 16,
     "undocument": true,
     "type": {
       "types": [
@@ -689,7 +689,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#filename",
     "access": null,
     "description": null,
-    "lineNumber": 16,
+    "lineNumber": 17,
     "undocument": true,
     "type": {
       "types": [
@@ -707,7 +707,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#vendorPath",
     "access": null,
     "description": null,
-    "lineNumber": 17,
+    "lineNumber": 18,
     "undocument": true,
     "type": {
       "types": [
@@ -725,7 +725,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#loadStylesheet",
     "access": null,
     "description": null,
-    "lineNumber": 18,
+    "lineNumber": 19,
     "undocument": true,
     "type": {
       "types": [
@@ -743,7 +743,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#stylesheet",
     "access": null,
     "description": null,
-    "lineNumber": 19,
+    "lineNumber": 20,
     "undocument": true,
     "type": {
       "types": [
@@ -761,7 +761,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#stylesheetName",
     "access": null,
     "description": null,
-    "lineNumber": 20,
+    "lineNumber": 21,
     "undocument": true,
     "type": {
       "types": [
@@ -779,7 +779,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#err",
     "access": null,
     "description": null,
-    "lineNumber": 21,
+    "lineNumber": 22,
     "undocument": true,
     "type": {
       "types": [
@@ -797,7 +797,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#_ezEditTable",
     "access": null,
     "description": null,
-    "lineNumber": 27,
+    "lineNumber": 28,
     "undocument": true,
     "type": {
       "types": [
@@ -815,7 +815,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#cfg",
     "access": null,
     "description": null,
-    "lineNumber": 28,
+    "lineNumber": 29,
     "undocument": true,
     "type": {
       "types": [
@@ -833,7 +833,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#tf",
     "access": null,
     "description": null,
-    "lineNumber": 29,
+    "lineNumber": 30,
     "undocument": true,
     "type": {
       "types": [
@@ -851,7 +851,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#emitter",
     "access": null,
     "description": null,
-    "lineNumber": 30,
+    "lineNumber": 31,
     "undocument": true,
     "type": {
       "types": [
@@ -869,7 +869,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#init",
     "access": null,
     "description": "Conditionally load ezEditTable library and set advanced grid",
-    "lineNumber": 37,
+    "lineNumber": 38,
     "params": [],
     "return": {
       "nullable": null,
@@ -891,7 +891,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#_setAdvancedGrid",
     "access": null,
     "description": "Instantiate ezEditTable component for advanced grid features",
-    "lineNumber": 58,
+    "lineNumber": 59,
     "params": [],
     "generator": false
   },
@@ -905,7 +905,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#_ezEditTable",
     "access": null,
     "description": null,
-    "lineNumber": 361,
+    "lineNumber": 362,
     "undocument": true,
     "type": {
       "types": [
@@ -923,7 +923,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 366,
+    "lineNumber": 367,
     "undocument": true,
     "type": {
       "types": [
@@ -941,7 +941,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#reset",
     "access": null,
     "description": "Reset advanced grid when previously removed",
-    "lineNumber": 372,
+    "lineNumber": 373,
     "params": [],
     "generator": false
   },
@@ -955,7 +955,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#toggle",
     "access": null,
     "description": "Toggle behaviour",
-    "lineNumber": 391,
+    "lineNumber": 392,
     "params": [],
     "generator": false
   },
@@ -969,7 +969,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#_toggleForInputFilter",
     "access": null,
     "description": null,
-    "lineNumber": 413,
+    "lineNumber": 414,
     "undocument": true,
     "params": [],
     "generator": false
@@ -984,7 +984,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#destroy",
     "access": null,
     "description": "Remove advanced grid",
-    "lineNumber": 428,
+    "lineNumber": 429,
     "params": [],
     "generator": false
   },
@@ -998,7 +998,7 @@
     "longname": "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 446,
+    "lineNumber": 447,
     "undocument": true,
     "type": {
       "types": [
@@ -4190,7 +4190,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import AdapterSortableTable from './adapterSortabletable';\n\nif(!window.SortableTable){\n    require('script!sortabletable');\n}\n\nexport default AdapterSortableTable;\n"
+    "content": "import AdapterSortableTable from './adapterSortabletable';\nimport {root} from '../../root';\n\nif(!root.SortableTable){\n    require('script!sortabletable');\n}\n\nexport default AdapterSortableTable;\n"
   },
   {
     "__docId__": 220,

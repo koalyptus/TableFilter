@@ -75,6 +75,97 @@
       }
     },
     {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "root",
+            "range": [
+              67,
+              71
+            ],
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 8
+              },
+              "end": {
+                "line": 2,
+                "column": 12
+              }
+            }
+          },
+          "imported": {
+            "type": "Identifier",
+            "name": "root",
+            "range": [
+              67,
+              71
+            ],
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 8
+              },
+              "end": {
+                "line": 2,
+                "column": 12
+              }
+            }
+          },
+          "range": [
+            67,
+            71
+          ],
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 8
+            },
+            "end": {
+              "line": 2,
+              "column": 12
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "../../root",
+        "raw": "'../../root'",
+        "range": [
+          78,
+          90
+        ],
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 19
+          },
+          "end": {
+            "line": 2,
+            "column": 31
+          }
+        }
+      },
+      "range": [
+        59,
+        91
+      ],
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 32
+        }
+      }
+    },
+    {
       "type": "IfStatement",
       "test": {
         "type": "UnaryExpression",
@@ -84,19 +175,19 @@
           "computed": false,
           "object": {
             "type": "Identifier",
-            "name": "window",
+            "name": "root",
             "range": [
-              64,
-              70
+              97,
+              101
             ],
             "loc": {
               "start": {
-                "line": 3,
+                "line": 4,
                 "column": 4
               },
               "end": {
-                "line": 3,
-                "column": 10
+                "line": 4,
+                "column": 8
               }
             }
           },
@@ -104,48 +195,48 @@
             "type": "Identifier",
             "name": "SortableTable",
             "range": [
-              71,
-              84
+              102,
+              115
             ],
             "loc": {
               "start": {
-                "line": 3,
-                "column": 11
+                "line": 4,
+                "column": 9
               },
               "end": {
-                "line": 3,
-                "column": 24
+                "line": 4,
+                "column": 22
               }
             }
           },
           "range": [
-            64,
-            84
+            97,
+            115
           ],
           "loc": {
             "start": {
-              "line": 3,
+              "line": 4,
               "column": 4
             },
             "end": {
-              "line": 3,
-              "column": 24
+              "line": 4,
+              "column": 22
             }
           }
         },
         "prefix": true,
         "range": [
-          63,
-          84
+          96,
+          115
         ],
         "loc": {
           "start": {
-            "line": 3,
+            "line": 4,
             "column": 3
           },
           "end": {
-            "line": 3,
-            "column": 24
+            "line": 4,
+            "column": 22
           }
         }
       },
@@ -160,16 +251,16 @@
                 "type": "Identifier",
                 "name": "require",
                 "range": [
-                  91,
-                  98
+                  122,
+                  129
                 ],
                 "loc": {
                   "start": {
-                    "line": 4,
+                    "line": 5,
                     "column": 4
                   },
                   "end": {
-                    "line": 4,
+                    "line": 5,
                     "column": 11
                   }
                 }
@@ -180,79 +271,79 @@
                   "value": "script!sortabletable",
                   "raw": "'script!sortabletable'",
                   "range": [
-                    99,
-                    121
+                    130,
+                    152
                   ],
                   "loc": {
                     "start": {
-                      "line": 4,
+                      "line": 5,
                       "column": 12
                     },
                     "end": {
-                      "line": 4,
+                      "line": 5,
                       "column": 34
                     }
                   }
                 }
               ],
               "range": [
-                91,
-                122
+                122,
+                153
               ],
               "loc": {
                 "start": {
-                  "line": 4,
+                  "line": 5,
                   "column": 4
                 },
                 "end": {
-                  "line": 4,
+                  "line": 5,
                   "column": 35
                 }
               }
             },
             "range": [
-              91,
-              123
+              122,
+              154
             ],
             "loc": {
               "start": {
-                "line": 4,
+                "line": 5,
                 "column": 4
               },
               "end": {
-                "line": 4,
+                "line": 5,
                 "column": 36
               }
             }
           }
         ],
         "range": [
-          85,
-          125
+          116,
+          156
         ],
         "loc": {
           "start": {
-            "line": 3,
-            "column": 25
+            "line": 4,
+            "column": 23
           },
           "end": {
-            "line": 5,
+            "line": 6,
             "column": 1
           }
         }
       },
       "alternate": null,
       "range": [
-        60,
-        125
+        93,
+        156
       ],
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 0
         },
         "end": {
-          "line": 5,
+          "line": 6,
           "column": 1
         }
       }
@@ -263,16 +354,16 @@
         "type": "Identifier",
         "name": "AdapterSortableTable",
         "range": [
-          142,
-          162
+          173,
+          193
         ],
         "loc": {
           "start": {
-            "line": 7,
+            "line": 8,
             "column": 15
           },
           "end": {
-            "line": 7,
+            "line": 8,
             "column": 35
           }
         },
@@ -280,16 +371,16 @@
         "trailingComments": []
       },
       "range": [
-        127,
-        163
+        158,
+        194
       ],
       "loc": {
         "start": {
-          "line": 7,
+          "line": 8,
           "column": 0
         },
         "end": {
-          "line": 7,
+          "line": 8,
           "column": 36
         }
       }
@@ -298,7 +389,7 @@
   "sourceType": "module",
   "range": [
     0,
-    163
+    194
   ],
   "loc": {
     "start": {
@@ -306,7 +397,7 @@
       "column": 0
     },
     "end": {
-      "line": 7,
+      "line": 8,
       "column": 36
     }
   },

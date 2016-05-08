@@ -22,18 +22,18 @@
       "expectCount": 17,
       "actualCount": 5,
       "undocumentLines": [
-        4,
-        28,
-        15,
-        30,
-        21,
+        5,
+        29,
         16,
-        14,
-        18,
+        31,
+        22,
+        17,
+        15,
         19,
         20,
-        29,
-        17
+        21,
+        30,
+        18
       ]
     },
     "src/extensions/sort/adapterSortabletable.js": {
