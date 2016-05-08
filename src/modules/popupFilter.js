@@ -58,9 +58,8 @@ export class PopupFilter extends Feature{
         this.prfxPopUpDiv = 'popUpDiv_';
     }
 
-    onClick(e){
-        var evt = e || global.event,
-            elm = evt.target.parentNode,
+    onClick(evt){
+        var elm = Event.target(evt).parentNode,
             colIndex = parseInt(elm.getAttribute('ci'), 10);
 
         this.closeAll(colIndex);

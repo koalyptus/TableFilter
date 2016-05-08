@@ -5,6 +5,7 @@ import Types from './types';
 import DateHelper from './date';
 import Helpers from './helpers';
 
+import {root} from './root';
 import {Emitter} from './emitter';
 import {GridLayout} from './modules/gridLayout';
 import {Loader} from './modules/loader';
@@ -27,8 +28,7 @@ import {
     CELL_TAG, AUTO_FILTER_DELAY
 } from './const';
 
-let global = window,
-    doc = global.document;
+let doc = root.document;
 
 export class TableFilter {
 
@@ -606,7 +606,7 @@ export class TableFilter {
                 Event.stop(evt);
             } else {
                 this.isUserTyping = true;
-                global.clearInterval(this.autoFilterTimer);
+                root.clearInterval(this.autoFilterTimer);
                 this.autoFilterTimer = null;
             }
         }
@@ -625,7 +625,7 @@ export class TableFilter {
         this.isUserTyping = false;
 
         function filter() {
-            global.clearInterval(this.autoFilterTimer);
+            root.clearInterval(this.autoFilterTimer);
             this.autoFilterTimer = null;
             if (!this.isUserTyping) {
                 this.filter();
@@ -636,11 +636,11 @@ export class TableFilter {
         if (key !== ENTER_KEY && key !== TAB_KEY && key !== ESC_KEY &&
             key !== UP_ARROW_KEY && key !== DOWN_ARROW_KEY) {
             if (this.autoFilterTimer === null) {
-                this.autoFilterTimer = global.setInterval(filter.bind(this),
+                this.autoFilterTimer = root.setInterval(filter.bind(this),
                     this.autoFilterDelay);
             }
         } else {
-            global.clearInterval(this.autoFilterTimer);
+            root.clearInterval(this.autoFilterTimer);
             this.autoFilterTimer = null;
         }
     }
@@ -669,7 +669,7 @@ export class TableFilter {
     onInpBlur() {
         if (this.autoFilter) {
             this.isUserTyping = false;
-            global.clearInterval(this.autoFilterTimer);
+            root.clearInterval(this.autoFilterTimer);
         }
         this.emitter.emit('filter-blur', this);
     }

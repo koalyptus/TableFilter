@@ -1,3 +1,5 @@
+import {root} from './root';
+
 /**
  * Types utilities
  */
@@ -13,7 +15,7 @@ export default {
     isObj(v) {
         let isO = false;
         if (typeof v === 'string') {
-            if (window[v] && typeof window[v] === 'object') {
+            if (root[v] && typeof root[v] === 'object') {
                 isO = true;
             }
         } else {
