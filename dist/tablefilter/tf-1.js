@@ -1946,7 +1946,7 @@ webpackJsonp([1],{
 	            // find Header element
 	            var el = evt.target || evt.srcElement;
 	
-	            while (el.tagName !== 'TD' && el.tagName !== 'TH') {
+	            while (el.tagName !== _const.CELL_TAG && el.tagName !== _const.HEADER_TAG) {
 	                el = el.parentNode;
 	            }
 	

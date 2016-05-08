@@ -260,7 +260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.headersRow = isNaN(f.headers_row_index) ? this.filtersRowIndex === 0 ? 1 : 0 : f.headers_row_index;
 	
 	        //defines tag of the cells containing filters (td/th)
-	        this.fltCellTag = f.filters_cell_tag !== 'th' || f.filters_cell_tag !== 'td' ? 'td' : f.filters_cell_tag;
+	        this.fltCellTag = _types2.default.isString(f.filters_cell_tag) ? f.filters_cell_tag : _const.CELL_TAG;
 	
 	        //stores filters ids
 	        this.fltIds = [];
@@ -343,8 +343,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.externalFltTgtIds = f.external_flt_grid_ids || [];
 	        //stores filters elements if isExternalFlt is true
 	        this.externalFltEls = [];
-	        //delays any filtering process if loader true
-	        this.execDelay = !isNaN(f.exec_delay) ? parseInt(f.exec_delay, 10) : 100;
 	        //calls function when filters grid loaded
 	        this.onFiltersLoaded = _types2.default.isFn(f.on_filters_loaded) ? f.on_filters_loaded : null;
 	        //enables/disables single filter search
@@ -455,7 +453,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //Auto filtering, table is filtered when user stops typing
 	        this.autoFilter = Boolean(f.auto_filter);
 	        //onkeyup delay timer (msecs)
-	        this.autoFilterDelay = !isNaN(f.auto_filter_delay) ? f.auto_filter_delay : 900;
+	        this.autoFilterDelay = !isNaN(f.auto_filter_delay) ? f.auto_filter_delay : _const.AUTO_FILTER_DELAY;
 	        //typing indicator
 	        this.isUserTyping = null;
 	        this.autoFilterTimer = null;
@@ -751,7 +749,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        if (evt) {
 	            var key = _event2.default.keyCode(evt);
-	            if (key === 13) {
+	            if (key === _const.ENTER_KEY) {
 	                this.filter();
 	                _event2.default.cancel(evt);
 	                _event2.default.stop(evt);
@@ -785,8 +783,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.isUserTyping = null;
 	            }
 	        }
-	        // TODO: define constants for keys
-	        if (key !== 13 && key !== 9 && key !== 27 && key !== 38 && key !== 40) {
+	
+	        if (key !== _const.ENTER_KEY && key !== _const.TAB_KEY && key !== _const.ESC_KEY && key !== _const.UP_ARROW_KEY && key !== _const.DOWN_ARROW_KEY) {
 	            if (this.autoFilterTimer === null) {
 	                this.autoFilterTimer = global.setInterval(filter.bind(this), this.autoFilterDelay);
 	            }
@@ -3758,7 +3756,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
 	/**
 	 * Filter types
 	 */
@@ -3767,6 +3764,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	var MULTIPLE = exports.MULTIPLE = 'multiple';
 	var CHECKLIST = exports.CHECKLIST = 'checklist';
 	var NONE = exports.NONE = 'none';
+	
+	/**
+	 * Key codes
+	 */
+	var ENTER_KEY = exports.ENTER_KEY = 13;
+	var TAB_KEY = exports.TAB_KEY = 9;
+	var ESC_KEY = exports.ESC_KEY = 27;
+	var UP_ARROW_KEY = exports.UP_ARROW_KEY = 38;
+	var DOWN_ARROW_KEY = exports.DOWN_ARROW_KEY = 40;
+	
+	/**
+	 * HTML tags
+	 */
+	var HEADER_TAG = exports.HEADER_TAG = 'TH';
+	var CELL_TAG = exports.CELL_TAG = 'TD';
+	
+	/**
+	 * Numeric values
+	 */
+	var AUTO_FILTER_DELAY = exports.AUTO_FILTER_DELAY = 750;
 
 /***/ },
 /* 11 */
@@ -6055,7 +6072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            },
 	            _detectKey: function _detectKey(e) {
 	                var key = _event2.default.keyCode(e);
-	                if (key === 13) {
+	                if (key === _const.ENTER_KEY) {
 	                    if (tf.sorted) {
 	                        tf.filter();
 	                        o.changePage(o.evt.slcIndex());

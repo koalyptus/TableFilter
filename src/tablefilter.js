@@ -21,7 +21,11 @@ import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
 import {State} from './modules/state';
 
-import {INPUT, SELECT, MULTIPLE, CHECKLIST, NONE} from './const';
+import {
+    INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
+    ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
+    CELL_TAG, AUTO_FILTER_DELAY
+} from './const';
 
 let global = window,
     doc = global.document;
@@ -100,8 +104,8 @@ export class TableFilter {
             (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
 
         //defines tag of the cells containing filters (td/th)
-        this.fltCellTag = f.filters_cell_tag !== 'th' ||
-            f.filters_cell_tag !== 'td' ? 'td' : f.filters_cell_tag;
+        this.fltCellTag = Types.isString(f.filters_cell_tag) ?
+            f.filters_cell_tag : CELL_TAG;
 
         //stores filters ids
         this.fltIds = [];
@@ -187,9 +191,6 @@ export class TableFilter {
         this.externalFltTgtIds = f.external_flt_grid_ids || [];
         //stores filters elements if isExternalFlt is true
         this.externalFltEls = [];
-        //delays any filtering process if loader true
-        this.execDelay = !isNaN(f.exec_delay) ? parseInt(f.exec_delay, 10) :
-            100;
         //calls function when filters grid loaded
         this.onFiltersLoaded = Types.isFn(f.on_filters_loaded) ?
             f.on_filters_loaded : null;
@@ -312,7 +313,7 @@ export class TableFilter {
         this.autoFilter = Boolean(f.auto_filter);
         //onkeyup delay timer (msecs)
         this.autoFilterDelay = !isNaN(f.auto_filter_delay) ?
-            f.auto_filter_delay : 900;
+            f.auto_filter_delay : AUTO_FILTER_DELAY;
         //typing indicator
         this.isUserTyping = null;
         this.autoFilterTimer = null;
@@ -599,7 +600,7 @@ export class TableFilter {
         }
         if (evt) {
             let key = Event.keyCode(evt);
-            if (key === 13) {
+            if (key === ENTER_KEY) {
                 this.filter();
                 Event.cancel(evt);
                 Event.stop(evt);
@@ -631,8 +632,9 @@ export class TableFilter {
                 this.isUserTyping = null;
             }
         }
-        // TODO: define constants for keys
-        if (key !== 13 && key !== 9 && key !== 27 && key !== 38 && key !== 40) {
+
+        if (key !== ENTER_KEY && key !== TAB_KEY && key !== ESC_KEY &&
+            key !== UP_ARROW_KEY && key !== DOWN_ARROW_KEY) {
             if (this.autoFilterTimer === null) {
                 this.autoFilterTimer = global.setInterval(filter.bind(this),
                     this.autoFilterDelay);

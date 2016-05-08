@@ -3,7 +3,7 @@ import Dom from '../dom';
 import Types from '../types';
 import Str from '../string';
 import Event from '../event';
-import {INPUT, SELECT, NONE} from '../const';
+import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
 
 export class Paging extends Feature {
 
@@ -158,7 +158,7 @@ export class Paging extends Feature {
             },
             _detectKey(e) {
                 var key = Event.keyCode(e);
-                if (key === 13) {
+                if (key === ENTER_KEY) {
                     if (tf.sorted) {
                         tf.filter();
                         o.changePage(o.evt.slcIndex());

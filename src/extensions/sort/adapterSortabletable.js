@@ -3,7 +3,7 @@ import Dom from '../../dom';
 import Event from '../../event';
 import DateHelper from '../../date';
 import Helpers from '../../helpers';
-import {NONE} from '../../const';
+import {NONE, CELL_TAG, HEADER_TAG} from '../../const';
 
 export default class AdapterSortableTable {
 
@@ -137,7 +137,7 @@ export default class AdapterSortableTable {
             // find Header element
             let el = evt.target || evt.srcElement;
 
-            while (el.tagName !== 'TD' && el.tagName !== 'TH') {
+            while (el.tagName !== CELL_TAG && el.tagName !== HEADER_TAG) {
                 el = el.parentNode;
             }
 
