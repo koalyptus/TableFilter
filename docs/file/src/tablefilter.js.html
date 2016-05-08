@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.19 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.20 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -34,6 +34,19 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHECKLIST">CHECKLIST</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DOWN_ARROW_KEY">DOWN_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ENTER_KEY">ENTER_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ESC_KEY">ESC_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HEADER_TAG">HEADER_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INPUT">INPUT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MULTIPLE">MULTIPLE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NONE">NONE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT">SELECT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/advancedGrid</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colOps</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colsVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></span></li>
@@ -86,6 +99,12 @@ import {AlternateRows} from &apos;./modules/alternateRows&apos;;
 import {NoResults} from &apos;./modules/noResults&apos;;
 import {State} from &apos;./modules/state&apos;;
 
+import {
+    INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
+    ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
+    CELL_TAG, AUTO_FILTER_DELAY
+} from &apos;./const&apos;;
+
 let global = window,
     doc = global.document;
 
@@ -100,8 +119,6 @@ export class TableFilter {
      * @param {Object} configuration object
      */
     constructor(...args) {
-        if (args.length === 0) { return; }
-
         this.id = null;
         this.version = &apos;{VERSION}&apos;;
         this.year = new Date().getFullYear();
@@ -133,10 +150,10 @@ export class TableFilter {
             // }
         });
 
-        if (!this.tbl || this.tbl.nodeName != &apos;TABLE&apos; ||
+        if (!this.tbl || this.tbl.nodeName !== &apos;TABLE&apos; ||
             this.getRowsNb() === 0) {
-            throw new Error(
-                &apos;Could not instantiate TableFilter: HTML table not found.&apos;);
+            throw new Error(&apos;Could not instantiate TableFilter: HTML table &apos; +
+                &apos;DOMElement not found.&apos;);
         }
 
         // configuration object
@@ -152,15 +169,7 @@ export class TableFilter {
         //default script base path
         this.basePath = f.base_path || &apos;tablefilter/&apos;;
 
-        /*** filter types ***/
-        this.fltTypeInp = &apos;input&apos;;
-        this.fltTypeSlc = &apos;select&apos;;
-        this.fltTypeMulti = &apos;multiple&apos;;
-        this.fltTypeCheckList = &apos;checklist&apos;;
-        this.fltTypeNone = &apos;none&apos;;
-
         /*** filters&apos; grid properties ***/
-
         //enables/disables filter grid
         this.fltGrid = f.grid === false ? false : true;
 
@@ -173,8 +182,8 @@ export class TableFilter {
             (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
 
         //defines tag of the cells containing filters (td/th)
-        this.fltCellTag = f.filters_cell_tag !== &apos;th&apos; ||
-            f.filters_cell_tag !== &apos;td&apos; ? &apos;td&apos; : f.filters_cell_tag;
+        this.fltCellTag = Types.isString(f.filters_cell_tag) ?
+            f.filters_cell_tag : CELL_TAG;
 
         //stores filters ids
         this.fltIds = [];
@@ -260,9 +269,6 @@ export class TableFilter {
         this.externalFltTgtIds = f.external_flt_grid_ids || [];
         //stores filters elements if isExternalFlt is true
         this.externalFltEls = [];
-        //delays any filtering process if loader true
-        this.execDelay = !isNaN(f.exec_delay) ? parseInt(f.exec_delay, 10) :
-            100;
         //calls function when filters grid loaded
         this.onFiltersLoaded = Types.isFn(f.on_filters_loaded) ?
             f.on_filters_loaded : null;
@@ -385,7 +391,7 @@ export class TableFilter {
         this.autoFilter = Boolean(f.auto_filter);
         //onkeyup delay timer (msecs)
         this.autoFilterDelay = !isNaN(f.auto_filter_delay) ?
-            f.auto_filter_delay : 900;
+            f.auto_filter_delay : AUTO_FILTER_DELAY;
         //typing indicator
         this.isUserTyping = null;
         this.autoFilterTimer = null;
@@ -553,19 +559,19 @@ export class TableFilter {
 
                 //only 1 input for single search
                 if (this.singleSearchFlt) {
-                    col = this.fltTypeInp;
+                    col = INPUT;
                     inpclass = this.singleFltCssClass;
                 }
 
                 //drop-down filters
-                if (col === this.fltTypeSlc || col === this.fltTypeMulti) {
+                if (col === SELECT || col === MULTIPLE) {
                     if (!Mod.dropdown) {
                         Mod.dropdown = new Dropdown(this);
                     }
                     Mod.dropdown.init(i, this.isExternalFlt, fltcell);
                 }
                 // checklist
-                else if (col === this.fltTypeCheckList) {
+                else if (col === CHECKLIST) {
                     if (!Mod.checkList) {
                         Mod.checkList = new CheckList(this);
                     }
@@ -672,7 +678,7 @@ export class TableFilter {
         }
         if (evt) {
             let key = Event.keyCode(evt);
-            if (key === 13) {
+            if (key === ENTER_KEY) {
                 this.filter();
                 Event.cancel(evt);
                 Event.stop(evt);
@@ -704,8 +710,9 @@ export class TableFilter {
                 this.isUserTyping = null;
             }
         }
-        // TODO: define constants for keys
-        if (key !== 13 &amp;&amp; key !== 9 &amp;&amp; key !== 27 &amp;&amp; key !== 38 &amp;&amp; key !== 40) {
+
+        if (key !== ENTER_KEY &amp;&amp; key !== TAB_KEY &amp;&amp; key !== ESC_KEY &amp;&amp;
+            key !== UP_ARROW_KEY &amp;&amp; key !== DOWN_ARROW_KEY) {
             if (this.autoFilterTimer === null) {
                 this.autoFilterTimer = global.setInterval(filter.bind(this),
                     this.autoFilterDelay);
@@ -764,7 +771,7 @@ export class TableFilter {
         fltrow.className = this.fltsRowCssClass;
 
         if (this.isExternalFlt) {
-            fltrow.style.display = &apos;none&apos;;
+            fltrow.style.display = NONE;
         }
 
         this.emitter.emit(&apos;filters-row-inserted&apos;, this, fltrow);
@@ -794,8 +801,8 @@ export class TableFilter {
         let col = this.getFilterType(colIndex);
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
-        let inptype = col === this.fltTypeInp ? &apos;text&apos; : &apos;hidden&apos;;
-        let inp = Dom.create(this.fltTypeInp,
+        let inptype = col === INPUT ? &apos;text&apos; : &apos;hidden&apos;;
+        let inp = Dom.create(INPUT,
             [&apos;id&apos;, this.prfxFlt + colIndex + &apos;_&apos; + this.id],
             [&apos;type&apos;, inptype], [&apos;ct&apos;, colIndex]);
 
@@ -832,7 +839,7 @@ export class TableFilter {
     _buildSubmitButton(colIndex, container) {
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
-        let btn = Dom.create(this.fltTypeInp,
+        let btn = Dom.create(INPUT,
             [&apos;id&apos;, this.prfxValButton + colIndex + &apos;_&apos; + this.id],
             [&apos;type&apos;, &apos;button&apos;], [&apos;value&apos;, this.btnText]);
         btn.className = this.btnCssClass;
@@ -1041,7 +1048,7 @@ export class TableFilter {
         // Destroy modules
         // TODO: subcribe modules to destroy event instead
         Object.keys(Mod).forEach(function (key) {
-            var feature = Mod[key];
+            let feature = Mod[key];
             if (feature &amp;&amp; Types.isFn(feature.destroy)) {
                 feature.destroy();
             }
@@ -1091,7 +1098,7 @@ export class TableFilter {
         }
         //default location: just above the table
         else {
-            var cont = Dom.create(&apos;caption&apos;);
+            let cont = Dom.create(&apos;caption&apos;);
             cont.appendChild(infdiv);
             this.tbl.insertBefore(cont, this.tbl.firstChild);
         }
@@ -1268,6 +1275,8 @@ export class TableFilter {
 
             let occurence,
                 removeNbFormat = Helpers.removeNbFormat;
+            let dtType = this.hasColDateType ?
+                this.colDateType[j] : this.defaultDateType;
 
             //Search arg operator tests
             let hasLO = re_l.test(sA),
@@ -1443,7 +1452,7 @@ export class TableFilter {
                 } else {
                     // If numeric type data, perform a strict equality test and
                     // fallback to unformatted number string comparison
-                    if(numCellData &amp;&amp; !this.singleSearchFlt) {
+                    if (numCellData &amp;&amp; !this.singleSearchFlt) {
                         sA = removeNbFormat(sA, nbFormat);
                         occurence = numCellData === sA ||
                             Str.contains(sA.toString(), numCellData.toString(),
@@ -1480,8 +1489,6 @@ export class TableFilter {
             for (let j = 0; j &lt; nchilds; j++) {
                 //searched keyword
                 let sA = searchArgs[this.singleSearchFlt ? 0 : j];
-                var dtType = this.hasColDateType ?
-                    this.colDateType[j] : this.defaultDateType;
 
                 if (sA === &apos;&apos;) {
                     continue;
@@ -1631,16 +1638,15 @@ export class TableFilter {
         }
 
         let fltColType = this.getFilterType(index);
-        if (fltColType !== this.fltTypeMulti &amp;&amp;
-            fltColType !== this.fltTypeCheckList) {
+        if (fltColType !== MULTIPLE &amp;&amp; fltColType !== CHECKLIST) {
             fltValue = flt.value;
         }
         //mutiple select
-        else if (fltColType === this.fltTypeMulti) {
+        else if (fltColType === MULTIPLE) {
             fltValue = this.feature(&apos;dropdown&apos;).getValues(index);
         }
         //checklist
-        else if (fltColType === this.fltTypeCheckList) {
+        else if (fltColType === CHECKLIST) {
             fltValue = this.feature(&apos;checkList&apos;).getValues(index);
         }
         //return an empty string if collection is empty or contains a single
@@ -1890,7 +1896,7 @@ export class TableFilter {
             isValid = true;
         }
 
-        let displayFlag = isValid ? &apos;&apos; : &apos;none&apos;,
+        let displayFlag = isValid ? &apos;&apos; : NONE,
             validFlag = isValid ? &apos;true&apos; : &apos;false&apos;;
         row.style.display = displayFlag;
 
@@ -1936,8 +1942,7 @@ export class TableFilter {
         let slc = this.getFilterElement(index),
             fltColType = this.getFilterType(index);
 
-        if (fltColType !== this.fltTypeMulti &amp;&amp;
-            fltColType != this.fltTypeCheckList) {
+        if (fltColType !== MULTIPLE &amp;&amp; fltColType !== CHECKLIST) {
             if (this.loadFltOnDemand &amp;&amp; !this.initialized) {
                 this.emitter.emit(&apos;build-select-filter&apos;, this, index,
                     this.linkedFilters, this.isExternalFlt);
@@ -1945,7 +1950,7 @@ export class TableFilter {
             slc.value = query;
         }
         //multiple selects
-        else if (fltColType === this.fltTypeMulti) {
+        else if (fltColType === MULTIPLE) {
             let values = Types.isArray(query) ? query :
                 query.split(&apos; &apos; + this.orOperator + &apos; &apos;);
 
@@ -1957,7 +1962,7 @@ export class TableFilter {
             this.emitter.emit(&apos;select-options&apos;, this, index, values);
         }
         //checklist
-        else if (fltColType === this.fltTypeCheckList) {
+        else if (fltColType === CHECKLIST) {
             let values = [];
             if (this.loadFltOnDemand &amp;&amp; !this.initialized) {
                 this.emitter.emit(&apos;build-checklist-filter&apos;, this, index,
@@ -2123,9 +2128,9 @@ export class TableFilter {
         if (!this.linkedFilters || !this.activeFilterId) {
             return;
         }
-        let slcA1 = this.getFiltersByType(this.fltTypeSlc, true),
-            slcA2 = this.getFiltersByType(this.fltTypeMulti, true),
-            slcA3 = this.getFiltersByType(this.fltTypeCheckList, true),
+        let slcA1 = this.getFiltersByType(SELECT, true),
+            slcA2 = this.getFiltersByType(MULTIPLE, true),
+            slcA3 = this.getFiltersByType(CHECKLIST, true),
             slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
 
@@ -2172,7 +2177,7 @@ export class TableFilter {
     isExactMatch(colIndex) {
         let fltType = this.getFilterType(colIndex);
         return this.exactMatchByCol[colIndex] || this.exactMatch ||
-            (fltType !== this.fltTypeInp);
+            fltType !== INPUT;
     }
 
     /**
@@ -2275,7 +2280,7 @@ export class TableFilter {
         for (let k = this.refRow; k &lt; this.getRowsNb(true); k++) {
             let r = this.tbl.rows[k];
             if (!this.paging) {
-                if (this.getRowDisplay(r) !== &apos;none&apos;) {
+                if (this.getRowDisplay(r) !== NONE) {
                     this.validRowsIndex.push(r.rowIndex);
                 }
             } else {
@@ -2373,7 +2378,7 @@ export class TableFilter {
      */
     getFilterType(colIndex) {
         let colType = this.cfg[&apos;col_&apos; + colIndex];
-        return !colType ? this.fltTypeInp : Str.lower(colType);
+        return !colType ? INPUT : Str.lower(colType);
     }
 
     /**

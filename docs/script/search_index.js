@@ -1,5 +1,11 @@
 window.esdocSearchIndex = [
   [
+    "tablefilter/src/const.js~auto_filter_delay",
+    "variable/index.html#static-variable-AUTO_FILTER_DELAY",
+    "<span>AUTO_FILTER_DELAY</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable",
     "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html",
     "<span>AdapterEzEditTable</span> <span class=\"search-result-import-path\">tablefilter/src/extensions/advancedGrid/adapterEzEditTable.js</span>",
@@ -16,6 +22,18 @@ window.esdocSearchIndex = [
     "class/src/modules/alternateRows.js~AlternateRows.html",
     "<span>AlternateRows</span> <span class=\"search-result-import-path\">tablefilter/src/modules/alternateRows.js</span>",
     "class"
+  ],
+  [
+    "tablefilter/src/const.js~cell_tag",
+    "variable/index.html#static-variable-CELL_TAG",
+    "<span>CELL_TAG</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/const.js~checklist",
+    "variable/index.html#static-variable-CHECKLIST",
+    "<span>CHECKLIST</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
   ],
   [
     "tablefilter/src/modules/checklist.js~checklist",
@@ -42,10 +60,28 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/const.js~down_arrow_key",
+    "variable/index.html#static-variable-DOWN_ARROW_KEY",
+    "<span>DOWN_ARROW_KEY</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/modules/dropdown.js~dropdown",
     "class/src/modules/dropdown.js~Dropdown.html",
     "<span>Dropdown</span> <span class=\"search-result-import-path\">tablefilter/src/modules/dropdown.js</span>",
     "class"
+  ],
+  [
+    "tablefilter/src/const.js~enter_key",
+    "variable/index.html#static-variable-ENTER_KEY",
+    "<span>ENTER_KEY</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/const.js~esc_key",
+    "variable/index.html#static-variable-ESC_KEY",
+    "<span>ESC_KEY</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
   ],
   [
     "tablefilter/src/emitter.js~emitter",
@@ -72,6 +108,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/const.js~header_tag",
+    "variable/index.html#static-variable-HEADER_TAG",
+    "<span>HEADER_TAG</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/modules/hash.js~hash",
     "class/src/modules/hash.js~Hash.html",
     "<span>Hash</span> <span class=\"search-result-import-path\">tablefilter/src/modules/hash.js</span>",
@@ -90,10 +132,28 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/const.js~input",
+    "variable/index.html#static-variable-INPUT",
+    "<span>INPUT</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/modules/loader.js~loader",
     "class/src/modules/loader.js~Loader.html",
     "<span>Loader</span> <span class=\"search-result-import-path\">tablefilter/src/modules/loader.js</span>",
     "class"
+  ],
+  [
+    "tablefilter/src/const.js~multiple",
+    "variable/index.html#static-variable-MULTIPLE",
+    "<span>MULTIPLE</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/const.js~none",
+    "variable/index.html#static-variable-NONE",
+    "<span>NONE</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
   ],
   [
     "tablefilter/src/modules/noresults.js~noresults",
@@ -120,6 +180,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/const.js~select",
+    "variable/index.html#static-variable-SELECT",
+    "<span>SELECT</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/modules/state.js~state",
     "class/src/modules/state.js~State.html",
     "<span>State</span> <span class=\"search-result-import-path\">tablefilter/src/modules/state.js</span>",
@@ -138,10 +204,22 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/const.js~tab_key",
+    "variable/index.html#static-variable-TAB_KEY",
+    "<span>TAB_KEY</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/tablefilter.js~tablefilter",
     "class/src/tablefilter.js~TableFilter.html",
     "<span>TableFilter</span> <span class=\"search-result-import-path\">tablefilter/src/tablefilter.js</span>",
     "class"
+  ],
+  [
+    "tablefilter/src/const.js~up_arrow_key",
+    "variable/index.html#static-variable-UP_ARROW_KEY",
+    "<span>UP_ARROW_KEY</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
   ],
   [
     "tablefilter/src/modules/hash.js~hashashchange",
@@ -489,6 +567,12 @@ window.esdocSearchIndex = [
     "src/array.js",
     "file/src/array.js.html",
     "src/array.js",
+    "file"
+  ],
+  [
+    "src/const.js",
+    "file/src/const.js.html",
+    "src/const.js",
     "file"
   ],
   [
@@ -4080,12 +4164,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#execdelay",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-execDelay",
-    "src/tablefilter.js~TableFilter#execDelay",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#extension",
     "class/src/tablefilter.js~TableFilter.html#instance-method-extension",
     "src/tablefilter.js~TableFilter#extension",
@@ -4173,36 +4251,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#fltsmallcssclass",
     "class/src/tablefilter.js~TableFilter.html#instance-member-fltSmallCssClass",
     "src/tablefilter.js~TableFilter#fltSmallCssClass",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#flttypechecklist",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fltTypeCheckList",
-    "src/tablefilter.js~TableFilter#fltTypeCheckList",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#flttypeinp",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fltTypeInp",
-    "src/tablefilter.js~TableFilter#fltTypeInp",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#flttypemulti",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fltTypeMulti",
-    "src/tablefilter.js~TableFilter#fltTypeMulti",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#flttypenone",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fltTypeNone",
-    "src/tablefilter.js~TableFilter#fltTypeNone",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#flttypeslc",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fltTypeSlc",
-    "src/tablefilter.js~TableFilter#fltTypeSlc",
     "member"
   ],
   [

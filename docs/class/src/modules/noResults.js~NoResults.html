@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">NoResults | tablefilter v0.2.19 API Document</title>
+  <title data-ice="title">NoResults | tablefilter v0.2.20 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -34,6 +34,19 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHECKLIST">CHECKLIST</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DOWN_ARROW_KEY">DOWN_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ENTER_KEY">ENTER_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ESC_KEY">ESC_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HEADER_TAG">HEADER_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INPUT">INPUT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MULTIPLE">MULTIPLE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NONE">NONE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT">SELECT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/advancedGrid</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colOps</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colsVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></span></li>
@@ -63,13 +76,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {NoResults} from &apos;<span><a href="file/src/modules/noResults.js.html#lineNumber5">tablefilter/src/modules/noResults.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {NoResults} from &apos;<span><a href="file/src/modules/noResults.js.html#lineNumber6">tablefilter/src/modules/noResults.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/noResults.js.html#lineNumber5">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/noResults.js.html#lineNumber6">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -923,7 +936,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber11">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber12">source</a></span></span>
     </span>
   </h3>
 
@@ -984,7 +997,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber25">source</a></span></span>
     </span>
   </h3>
 
@@ -1024,7 +1037,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber17">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber18">source</a></span></span>
     </span>
   </h3>
 
@@ -1064,7 +1077,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber22">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
@@ -1104,7 +1117,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber18">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber19">source</a></span></span>
     </span>
   </h3>
 
@@ -1144,7 +1157,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber19">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber20">source</a></span></span>
     </span>
   </h3>
 
@@ -1184,7 +1197,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber67">source</a></span></span>
     </span>
   </h3>
 
@@ -1224,7 +1237,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber20">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber21">source</a></span></span>
     </span>
   </h3>
 
@@ -1264,7 +1277,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber37">source</a></span></span>
     </span>
   </h3>
 
@@ -1304,7 +1317,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -1344,7 +1357,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber34">source</a></span></span>
     </span>
   </h3>
 
@@ -1384,7 +1397,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber27">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber28">source</a></span></span>
     </span>
   </h3>
 
@@ -1424,7 +1437,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber39">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber40">source</a></span></span>
     </span>
   </h3>
 
@@ -1467,7 +1480,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber124">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber125">source</a></span></span>
     </span>
   </h3>
 
@@ -1507,7 +1520,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber96">source</a></span></span>
     </span>
   </h3>
 
@@ -1547,7 +1560,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber42">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
@@ -1587,7 +1600,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber112">source</a></span></span>
     </span>
   </h3>
 
@@ -1627,7 +1640,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber78">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber79">source</a></span></span>
     </span>
   </h3>
 
@@ -1667,7 +1680,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/noResults.js.html#lineNumber71">source</a></span></span>
     </span>
   </h3>
 

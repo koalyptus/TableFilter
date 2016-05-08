@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">PopupFilter | tablefilter v0.2.19 API Document</title>
+  <title data-ice="title">PopupFilter | tablefilter v0.2.20 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -34,6 +34,19 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHECKLIST">CHECKLIST</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DOWN_ARROW_KEY">DOWN_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ENTER_KEY">ENTER_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ESC_KEY">ESC_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HEADER_TAG">HEADER_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INPUT">INPUT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MULTIPLE">MULTIPLE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NONE">NONE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT">SELECT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/advancedGrid</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colOps</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colsVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></span></li>
@@ -63,13 +76,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PopupFilter} from &apos;<span><a href="file/src/modules/popupFilter.js.html#lineNumber6">tablefilter/src/modules/popupFilter.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PopupFilter} from &apos;<span><a href="file/src/modules/popupFilter.js.html#lineNumber7">tablefilter/src/modules/popupFilter.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/popupFilter.js.html#lineNumber6">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/popupFilter.js.html#lineNumber7">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -1132,7 +1145,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber12">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber13">source</a></span></span>
     </span>
   </h3>
 
@@ -1193,7 +1206,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber120">source</a></span></span>
     </span>
   </h3>
 
@@ -1233,7 +1246,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber43">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
@@ -1273,7 +1286,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber37">source</a></span></span>
     </span>
   </h3>
 
@@ -1313,7 +1326,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber39">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber40">source</a></span></span>
     </span>
   </h3>
 
@@ -1353,7 +1366,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber34">source</a></span></span>
     </span>
   </h3>
 
@@ -1393,7 +1406,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber32">source</a></span></span>
     </span>
   </h3>
 
@@ -1433,7 +1446,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber53">source</a></span></span>
     </span>
   </h3>
 
@@ -1473,7 +1486,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber241">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber242">source</a></span></span>
     </span>
   </h3>
 
@@ -1513,7 +1526,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber51">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber52">source</a></span></span>
     </span>
   </h3>
 
@@ -1553,7 +1566,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber49">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber50">source</a></span></span>
     </span>
   </h3>
 
@@ -1593,7 +1606,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber47">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber48">source</a></span></span>
     </span>
   </h3>
 
@@ -1633,7 +1646,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber23">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber24">source</a></span></span>
     </span>
   </h3>
 
@@ -1673,7 +1686,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber26">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber27">source</a></span></span>
     </span>
   </h3>
 
@@ -1713,7 +1726,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
@@ -1753,7 +1766,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber57">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber58">source</a></span></span>
     </span>
   </h3>
 
@@ -1793,7 +1806,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber55">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber56">source</a></span></span>
     </span>
   </h3>
 
@@ -1836,7 +1849,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber146">source</a></span></span>
     </span>
   </h3>
 
@@ -1901,7 +1914,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber134">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber135">source</a></span></span>
     </span>
   </h3>
 
@@ -1942,7 +1955,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber226">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber227">source</a></span></span>
     </span>
   </h3>
 
@@ -2007,7 +2020,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber215">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber216">source</a></span></span>
     </span>
   </h3>
 
@@ -2048,7 +2061,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber200">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber201">source</a></span></span>
     </span>
   </h3>
 
@@ -2106,7 +2119,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber236">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber237">source</a></span></span>
     </span>
   </h3>
 
@@ -2147,7 +2160,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber81">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber82">source</a></span></span>
     </span>
   </h3>
 
@@ -2188,7 +2201,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber60">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber61">source</a></span></span>
     </span>
   </h3>
 
@@ -2244,7 +2257,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber126">source</a></span></span>
     </span>
   </h3>
 
@@ -2285,7 +2298,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber162">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/popupFilter.js.html#lineNumber163">source</a></span></span>
     </span>
   </h3>
 

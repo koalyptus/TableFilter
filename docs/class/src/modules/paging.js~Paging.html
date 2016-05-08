@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">Paging | tablefilter v0.2.19 API Document</title>
+  <title data-ice="title">Paging | tablefilter v0.2.20 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -34,6 +34,19 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHECKLIST">CHECKLIST</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DOWN_ARROW_KEY">DOWN_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ENTER_KEY">ENTER_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ESC_KEY">ESC_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HEADER_TAG">HEADER_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INPUT">INPUT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MULTIPLE">MULTIPLE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NONE">NONE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT">SELECT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/advancedGrid</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colOps</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colsVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></span></li>
@@ -63,13 +76,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Paging} from &apos;<span><a href="file/src/modules/paging.js.html#lineNumber7">tablefilter/src/modules/paging.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Paging} from &apos;<span><a href="file/src/modules/paging.js.html#lineNumber8">tablefilter/src/modules/paging.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/paging.js.html#lineNumber7">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/paging.js.html#lineNumber8">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -2013,7 +2026,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber13">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber14">source</a></span></span>
     </span>
   </h3>
 
@@ -2074,7 +2087,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber68">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber69">source</a></span></span>
     </span>
   </h3>
 
@@ -2114,7 +2127,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber56">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber57">source</a></span></span>
     </span>
   </h3>
 
@@ -2154,7 +2167,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber73">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -2194,7 +2207,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber54">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber55">source</a></span></span>
     </span>
   </h3>
 
@@ -2234,7 +2247,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber58">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber59">source</a></span></span>
     </span>
   </h3>
 
@@ -2274,7 +2287,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber50">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber51">source</a></span></span>
     </span>
   </h3>
 
@@ -2314,7 +2327,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber20">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber21">source</a></span></span>
     </span>
   </h3>
 
@@ -2354,7 +2367,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber63">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber64">source</a></span></span>
     </span>
   </h3>
 
@@ -2394,7 +2407,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber53">source</a></span></span>
     </span>
   </h3>
 
@@ -2434,7 +2447,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber48">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber49">source</a></span></span>
     </span>
   </h3>
 
@@ -2474,7 +2487,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber131">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
@@ -2514,7 +2527,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber84">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber85">source</a></span></span>
     </span>
   </h3>
 
@@ -2554,7 +2567,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber38">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber39">source</a></span></span>
     </span>
   </h3>
 
@@ -2594,7 +2607,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber342">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber337">source</a></span></span>
     </span>
   </h3>
 
@@ -2634,7 +2647,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber46">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
@@ -2674,7 +2687,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber83">source</a></span></span>
     </span>
   </h3>
 
@@ -2714,7 +2727,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber81">source</a></span></span>
     </span>
   </h3>
 
@@ -2754,7 +2767,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber91">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
@@ -2794,7 +2807,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber88">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber89">source</a></span></span>
     </span>
   </h3>
 
@@ -2834,7 +2847,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber86">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber87">source</a></span></span>
     </span>
   </h3>
 
@@ -2874,7 +2887,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber78">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber79">source</a></span></span>
     </span>
   </h3>
 
@@ -2914,7 +2927,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
@@ -2954,7 +2967,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber22">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
@@ -2994,7 +3007,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber26">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber27">source</a></span></span>
     </span>
   </h3>
 
@@ -3034,7 +3047,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber34">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber35">source</a></span></span>
     </span>
   </h3>
 
@@ -3074,7 +3087,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber32">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber33">source</a></span></span>
     </span>
   </h3>
 
@@ -3114,7 +3127,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber115">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber116">source</a></span></span>
     </span>
   </h3>
 
@@ -3154,7 +3167,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber107">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber108">source</a></span></span>
     </span>
   </h3>
 
@@ -3194,7 +3207,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber113">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber114">source</a></span></span>
     </span>
   </h3>
 
@@ -3234,7 +3247,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
@@ -3274,7 +3287,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber109">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber110">source</a></span></span>
     </span>
   </h3>
 
@@ -3314,7 +3327,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber101">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -3354,7 +3367,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber112">source</a></span></span>
     </span>
   </h3>
 
@@ -3394,7 +3407,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber103">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber104">source</a></span></span>
     </span>
   </h3>
 
@@ -3434,7 +3447,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber121">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber122">source</a></span></span>
     </span>
   </h3>
 
@@ -3474,7 +3487,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber120">source</a></span></span>
     </span>
   </h3>
 
@@ -3514,7 +3527,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber117">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber118">source</a></span></span>
     </span>
   </h3>
 
@@ -3554,7 +3567,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber96">source</a></span></span>
     </span>
   </h3>
 
@@ -3594,7 +3607,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber97">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber98">source</a></span></span>
     </span>
   </h3>
 
@@ -3634,7 +3647,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber99">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber100">source</a></span></span>
     </span>
   </h3>
 
@@ -3674,7 +3687,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber37">source</a></span></span>
     </span>
   </h3>
 
@@ -3714,7 +3727,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber25">source</a></span></span>
     </span>
   </h3>
 
@@ -3754,7 +3767,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -3794,7 +3807,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber40">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
@@ -3834,7 +3847,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber42">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
@@ -3874,7 +3887,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber44">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
@@ -3917,7 +3930,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber570">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber564">source</a></span></span>
     </span>
   </h3>
 
@@ -3975,7 +3988,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber607">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber601">source</a></span></span>
     </span>
   </h3>
 
@@ -4031,7 +4044,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber690">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber684">source</a></span></span>
     </span>
   </h3>
 
@@ -4072,7 +4085,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber457">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber452">source</a></span></span>
     </span>
   </h3>
 
@@ -4124,7 +4137,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber417">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber412">source</a></span></span>
     </span>
   </h3>
 
@@ -4182,7 +4195,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber181">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber182">source</a></span></span>
     </span>
   </h3>
 
@@ -4223,7 +4236,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber619">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber613">source</a></span></span>
     </span>
   </h3>
 
@@ -4264,7 +4277,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber550">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber544">source</a></span></span>
     </span>
   </h3>
 
@@ -4305,7 +4318,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber349">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber344">source</a></span></span>
     </span>
   </h3>
 
@@ -4363,7 +4376,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber656">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber650">source</a></span></span>
     </span>
   </h3>
 
@@ -4404,7 +4417,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber672">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber666">source</a></span></span>
     </span>
   </h3>
 
@@ -4445,7 +4458,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber365">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber360">source</a></span></span>
     </span>
   </h3>
 
@@ -4486,7 +4499,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber466">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber461">source</a></span></span>
     </span>
   </h3>
 
@@ -4545,7 +4558,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber376">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber371">source</a></span></span>
     </span>
   </h3>
 
@@ -4604,7 +4617,7 @@ Refresh paging select according to number of pages</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber500">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/paging.js.html#lineNumber495">source</a></span></span>
     </span>
   </h3>
 
