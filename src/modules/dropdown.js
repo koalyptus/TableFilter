@@ -177,8 +177,8 @@ export class Dropdown extends Feature {
                                 (tf.validRowsIndex &&
                                     tf.validRowsIndex.indexOf(k) != -1)) &&
                                 ((activeIdx === undefined ||
-                                activeIdx === colIndex) ||
-                                (activeIdx != colIndex &&
+                                    activeIdx === colIndex) ||
+                                    (activeIdx != colIndex &&
                                     tf.validRowsIndex.indexOf(k) != -1)))))) {
                     let cellData = tf.getCellData(cell[j]),
                         //Vary Peter's patch
@@ -365,8 +365,18 @@ export class Dropdown extends Feature {
         let tf = this.tf;
         let slc = tf.getFilterElement(colIndex);
         let values = [];
-        [].forEach.call(slc.selectedOptions,
-            option => values.push(option.value));
+
+        // IE >= 9 does not support the selectedOptions property :(
+        if (slc.selectedOptions) {
+            [].forEach.call(slc.selectedOptions,
+                option => values.push(option.value));
+        } else {
+            [].forEach.call(slc.options, (option) => {
+                if (option.selected) {
+                    values.push(option.value);
+                }
+            });
+        }
 
         return values;
     }
