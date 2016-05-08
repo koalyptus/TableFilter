@@ -1,13 +1,13 @@
 
 import Cookie from '../cookie';
+import {root} from '../root';
 
-const global = window;
-const JSON = global.JSON;
-const localStorage = global.localStorage;
-const location = global.location;
+const JSON = root.JSON;
+const localStorage = root.localStorage;
+const location = root.location;
 
 export const hasStorage = () => {
-    return 'Storage' in global;
+    return 'Storage' in root;
 };
 
 /**

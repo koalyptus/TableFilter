@@ -1,9 +1,8 @@
 import {Feature} from './feature';
 import Dom from '../dom';
 import Types from '../types';
+import {root} from '../root';
 import {NONE} from '../const';
-
-let global = window;
 
 export class Loader extends Feature {
 
@@ -114,7 +113,7 @@ export class Loader extends Feature {
         };
 
         let t = p === NONE ? this.loaderCloseDelay : 1;
-        global.setTimeout(displayLoader, t);
+        root.setTimeout(displayLoader, t);
     }
 
     destroy() {

@@ -1,13 +1,13 @@
 import Event from '../event';
+import {root} from '../root';
 
-const global = window;
-const JSON = global.JSON;
-const location = global.location;
-const decodeURIComponent = global.decodeURIComponent;
+const JSON = root.JSON;
+const location = root.location;
+const decodeURIComponent = root.decodeURIComponent;
 
 export const hasHashChange = () => {
-    var docMode = global.documentMode;
-    return ('onhashchange' in global) && (docMode === undefined || docMode > 7);
+    var docMode = root.documentMode;
+    return ('onhashchange' in root) && (docMode === undefined || docMode > 7);
 };
 
 /**
@@ -41,7 +41,7 @@ export class Hash {
 
         this.emitter.on(['state-changed'], (tf, state) => this.update(state));
         this.emitter.on(['initialized'], () => this.sync());
-        Event.add(global, 'hashchange', () => this.sync());
+        Event.add(root, 'hashchange', () => this.sync());
     }
 
     /**
@@ -91,7 +91,7 @@ export class Hash {
     destroy() {
         this.emitter.off(['state-changed'], (tf, state) => this.update(state));
         this.emitter.off(['initialized'], () => this.sync());
-        Event.remove(global, 'hashchange', () => this.sync());
+        Event.remove(root, 'hashchange', () => this.sync());
 
         this.state = null;
         this.lastHash = null;

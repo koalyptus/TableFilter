@@ -1,8 +1,7 @@
 import {Feature} from './feature';
+import {root} from '../root';
 import Dom from '../dom';
 import Types from '../types';
-
-let global = window;
 
 export class StatusBar extends Feature{
 
@@ -158,7 +157,7 @@ export class StatusBar extends Feature{
         }
 
         let d = t==='' ? this.statusBarCloseDelay : 1;
-        global.setTimeout(() => {
+        root.setTimeout(() => {
             if(!this.initialized){
                 return;
             }
