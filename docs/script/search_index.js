@@ -234,6 +234,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/root.js~root",
+    "variable/index.html#static-variable-root",
+    "<span>root</span> <span class=\"search-result-import-path\">tablefilter/src/root.js</span>",
+    "variable"
+  ],
+  [
     "builtinexternal/ecmascriptexternal.js~array",
     "external/index.html",
     "BuiltinExternal/ECMAScriptExternal.js~Array",
@@ -3802,6 +3808,12 @@ window.esdocSearchIndex = [
     "class/src/modules/storage.js~Storage.html#instance-member-tf",
     "src/modules/storage.js~Storage#tf",
     "member"
+  ],
+  [
+    "src/root.js",
+    "file/src/root.js.html",
+    "src/root.js",
+    "file"
   ],
   [
     "src/sort.js",
