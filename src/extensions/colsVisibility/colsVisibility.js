@@ -1,8 +1,9 @@
+import {Feature} from '../../feature';
 import Dom from '../../dom';
 import Types from '../../types';
 import Event from '../../event';
 
-export default class ColsVisibility {
+export default class ColsVisibility extends Feature {
 
     /**
      * Columns Visibility extension
@@ -10,6 +11,7 @@ export default class ColsVisibility {
      * @param {Object} f Extension's configuration
      */
     constructor(tf, f) {
+        super(tf, f.name);
 
         // Configuration object
         let cfg = tf.config();
@@ -119,8 +121,7 @@ export default class ColsVisibility {
         tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,
             'link');
 
-        this.tf = tf;
-        this.emitter = tf.emitter;
+        this.enable();
     }
 
     toggle() {
@@ -171,7 +172,7 @@ export default class ColsVisibility {
     }
 
     init() {
-        if (!this.manager) {
+        if (this.initialized || !this.manager) {
             return;
         }
 
@@ -483,7 +484,7 @@ export default class ColsVisibility {
      * Remove the columns manager
      */
     destroy() {
-        if (!this.btnEl && !this.contEl) {
+        if (!this.initialized) {
             return;
         }
         if (Dom.id(this.contElTgtId)) {

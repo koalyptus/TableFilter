@@ -1,8 +1,9 @@
+import {Feature} from '../../feature';
 import Dom from '../../dom';
 import Types from '../../types';
 import Event from '../../event';
 
-export default class FiltersVisibility {
+export default class FiltersVisibility extends Feature {
 
     /**
      * Filters Row Visibility extension
@@ -10,8 +11,8 @@ export default class FiltersVisibility {
      * @param {Object} f Config
      */
     constructor(tf, f) {
+        super(tf, f.name);
 
-        this.initialized = false;
         this.name = f.name;
         this.desc = f.description || 'Filters row visibility manager';
 
@@ -76,8 +77,7 @@ export default class FiltersVisibility {
         tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,
             'link');
 
-        this.tf = tf;
-        this.emitter = tf.emitter;
+        this.enable();
     }
 
     /**
@@ -186,7 +186,7 @@ export default class FiltersVisibility {
      * Destroy the UI
      */
     destroy() {
-        if (!this.btnEl && !this.contEl) {
+        if (!this.initialized) {
             return;
         }
 
