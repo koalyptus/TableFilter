@@ -90,9 +90,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "tablefilter/src/modules/feature.js~feature",
-    "class/src/modules/feature.js~Feature.html",
-    "<span>Feature</span> <span class=\"search-result-import-path\">tablefilter/src/modules/feature.js</span>",
+    "tablefilter/src/feature.js~feature",
+    "class/src/feature.js~Feature.html",
+    "<span>Feature</span> <span class=\"search-result-import-path\">tablefilter/src/feature.js</span>",
     "class"
   ],
   [
@@ -672,18 +672,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#emitter",
-    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-emitter",
-    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#emitter",
-    "member"
-  ],
-  [
-    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#err",
-    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-err",
-    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#err",
-    "member"
-  ],
-  [
     "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#filename",
     "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-filename",
     "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#filename",
@@ -723,12 +711,6 @@ window.esdocSearchIndex = [
     "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#stylesheetname",
     "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-stylesheetName",
     "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#stylesheetName",
-    "member"
-  ],
-  [
-    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#tf",
-    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-tf",
-    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#tf",
     "member"
   ],
   [
@@ -780,6 +762,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/extensions/colops/colops.js~colops#initialized",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-initialized",
+    "src/extensions/colOps/colOps.js~ColOps#initialized",
+    "member"
+  ],
+  [
     "src/extensions/colops/colops.js~colops#onafteroperation",
     "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-onAfterOperation",
     "src/extensions/colOps/colOps.js~ColOps#onAfterOperation",
@@ -795,12 +783,6 @@ window.esdocSearchIndex = [
     "src/extensions/colops/colops.js~colops#opts",
     "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-opts",
     "src/extensions/colOps/colOps.js~ColOps#opts",
-    "member"
-  ],
-  [
-    "src/extensions/colops/colops.js~colops#tf",
-    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-tf",
-    "src/extensions/colOps/colOps.js~ColOps#tf",
     "member"
   ],
   [
@@ -916,12 +898,6 @@ window.esdocSearchIndex = [
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-destroy",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#destroy",
     "method"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#emitter",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-emitter",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#emitter",
-    "member"
   ],
   [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#enablehover",
@@ -1128,12 +1104,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#tf",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-tf",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#tf",
-    "member"
-  ],
-  [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#tickalltext",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-tickAllText",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#tickAllText",
@@ -1234,12 +1204,6 @@ window.esdocSearchIndex = [
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-method-destroy",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#destroy",
     "method"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#emitter",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-emitter",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#emitter",
-    "member"
   ],
   [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#enableicon",
@@ -1350,12 +1314,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#tf",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-tf",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#tf",
-    "member"
-  ],
-  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#toggle",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-method-toggle",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#toggle",
@@ -1408,12 +1366,6 @@ window.esdocSearchIndex = [
     "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-method-destroy",
     "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#destroy",
     "method"
-  ],
-  [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#emitter",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-emitter",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#emitter",
-    "member"
   ],
   [
     "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#imgascclassname",
@@ -1524,12 +1476,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#tf",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-tf",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#tf",
-    "member"
-  ],
-  [
     "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#triggerids",
     "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-triggerIds",
     "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#triggerIds",
@@ -1540,6 +1486,90 @@ window.esdocSearchIndex = [
     "file/src/extensions/sort/sort.js.html",
     "src/extensions/sort/sort.js",
     "file"
+  ],
+  [
+    "src/feature.js",
+    "file/src/feature.js.html",
+    "src/feature.js",
+    "file"
+  ],
+  [
+    "src/feature.js~feature#config",
+    "class/src/feature.js~Feature.html#instance-member-config",
+    "src/feature.js~Feature#config",
+    "member"
+  ],
+  [
+    "src/feature.js~feature#constructor",
+    "class/src/feature.js~Feature.html#instance-constructor-constructor",
+    "src/feature.js~Feature#constructor",
+    "method"
+  ],
+  [
+    "src/feature.js~feature#destroy",
+    "class/src/feature.js~Feature.html#instance-method-destroy",
+    "src/feature.js~Feature#destroy",
+    "method"
+  ],
+  [
+    "src/feature.js~feature#disable",
+    "class/src/feature.js~Feature.html#instance-method-disable",
+    "src/feature.js~Feature#disable",
+    "method"
+  ],
+  [
+    "src/feature.js~feature#emitter",
+    "class/src/feature.js~Feature.html#instance-member-emitter",
+    "src/feature.js~Feature#emitter",
+    "member"
+  ],
+  [
+    "src/feature.js~feature#enable",
+    "class/src/feature.js~Feature.html#instance-method-enable",
+    "src/feature.js~Feature#enable",
+    "method"
+  ],
+  [
+    "src/feature.js~feature#enabled",
+    "class/src/feature.js~Feature.html#instance-member-enabled",
+    "src/feature.js~Feature#enabled",
+    "member"
+  ],
+  [
+    "src/feature.js~feature#feature",
+    "class/src/feature.js~Feature.html#instance-member-feature",
+    "src/feature.js~Feature#feature",
+    "member"
+  ],
+  [
+    "src/feature.js~feature#init",
+    "class/src/feature.js~Feature.html#instance-method-init",
+    "src/feature.js~Feature#init",
+    "method"
+  ],
+  [
+    "src/feature.js~feature#initialized",
+    "class/src/feature.js~Feature.html#instance-member-initialized",
+    "src/feature.js~Feature#initialized",
+    "member"
+  ],
+  [
+    "src/feature.js~feature#isenabled",
+    "class/src/feature.js~Feature.html#instance-method-isEnabled",
+    "src/feature.js~Feature#isEnabled",
+    "method"
+  ],
+  [
+    "src/feature.js~feature#reset",
+    "class/src/feature.js~Feature.html#instance-method-reset",
+    "src/feature.js~Feature#reset",
+    "method"
+  ],
+  [
+    "src/feature.js~feature#tf",
+    "class/src/feature.js~Feature.html#instance-member-tf",
+    "src/feature.js~Feature#tf",
+    "member"
   ],
   [
     "src/helpers.js",
@@ -1965,90 +1995,6 @@ window.esdocSearchIndex = [
     "src/modules/dropdown.js~dropdown#slcinnerhtml",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-slcInnerHtml",
     "src/modules/dropdown.js~Dropdown#slcInnerHtml",
-    "member"
-  ],
-  [
-    "src/modules/feature.js",
-    "file/src/modules/feature.js.html",
-    "src/modules/feature.js",
-    "file"
-  ],
-  [
-    "src/modules/feature.js~feature#config",
-    "class/src/modules/feature.js~Feature.html#instance-member-config",
-    "src/modules/feature.js~Feature#config",
-    "member"
-  ],
-  [
-    "src/modules/feature.js~feature#constructor",
-    "class/src/modules/feature.js~Feature.html#instance-constructor-constructor",
-    "src/modules/feature.js~Feature#constructor",
-    "method"
-  ],
-  [
-    "src/modules/feature.js~feature#destroy",
-    "class/src/modules/feature.js~Feature.html#instance-method-destroy",
-    "src/modules/feature.js~Feature#destroy",
-    "method"
-  ],
-  [
-    "src/modules/feature.js~feature#disable",
-    "class/src/modules/feature.js~Feature.html#instance-method-disable",
-    "src/modules/feature.js~Feature#disable",
-    "method"
-  ],
-  [
-    "src/modules/feature.js~feature#emitter",
-    "class/src/modules/feature.js~Feature.html#instance-member-emitter",
-    "src/modules/feature.js~Feature#emitter",
-    "member"
-  ],
-  [
-    "src/modules/feature.js~feature#enable",
-    "class/src/modules/feature.js~Feature.html#instance-method-enable",
-    "src/modules/feature.js~Feature#enable",
-    "method"
-  ],
-  [
-    "src/modules/feature.js~feature#enabled",
-    "class/src/modules/feature.js~Feature.html#instance-member-enabled",
-    "src/modules/feature.js~Feature#enabled",
-    "member"
-  ],
-  [
-    "src/modules/feature.js~feature#feature",
-    "class/src/modules/feature.js~Feature.html#instance-member-feature",
-    "src/modules/feature.js~Feature#feature",
-    "member"
-  ],
-  [
-    "src/modules/feature.js~feature#init",
-    "class/src/modules/feature.js~Feature.html#instance-method-init",
-    "src/modules/feature.js~Feature#init",
-    "method"
-  ],
-  [
-    "src/modules/feature.js~feature#initialized",
-    "class/src/modules/feature.js~Feature.html#instance-member-initialized",
-    "src/modules/feature.js~Feature#initialized",
-    "member"
-  ],
-  [
-    "src/modules/feature.js~feature#isenabled",
-    "class/src/modules/feature.js~Feature.html#instance-method-isEnabled",
-    "src/modules/feature.js~Feature#isEnabled",
-    "method"
-  ],
-  [
-    "src/modules/feature.js~feature#reset",
-    "class/src/modules/feature.js~Feature.html#instance-method-reset",
-    "src/modules/feature.js~Feature#reset",
-    "method"
-  ],
-  [
-    "src/modules/feature.js~feature#tf",
-    "class/src/modules/feature.js~Feature.html#instance-member-tf",
-    "src/modules/feature.js~Feature#tf",
     "member"
   ],
   [
