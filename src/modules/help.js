@@ -1,4 +1,4 @@
-import {Feature} from './feature';
+import {Feature} from '../feature';
 import Dom from '../dom';
 import Event from '../event';
 import {NONE} from '../const';

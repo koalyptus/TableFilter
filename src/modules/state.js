@@ -1,4 +1,4 @@
-import {Feature} from './feature';
+import {Feature} from '../feature';
 import {Hash} from './hash';
 import {Storage} from './storage';
 import Str from '../string';

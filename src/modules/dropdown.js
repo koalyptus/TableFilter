@@ -1,4 +1,4 @@
-import {Feature} from './feature';
+import {Feature} from '../feature';
 import Dom from '../dom';
 import Arr from '../array';
 import Str from '../string';

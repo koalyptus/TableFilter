@@ -1,3 +1,4 @@
+import {Feature} from '../../feature';
 import Types from '../../types';
 import Dom from '../../dom';
 import Event from '../../event';
@@ -5,18 +6,19 @@ import DateHelper from '../../date';
 import Helpers from '../../helpers';
 import {NONE, CELL_TAG, HEADER_TAG} from '../../const';
 
-export default class AdapterSortableTable {
+export default class AdapterSortableTable extends Feature {
 
     /**
      * SortableTable Adapter module
      * @param {Object} tf TableFilter instance
      */
     constructor(tf, opts) {
-        this.initialized = false;
+        super(tf, opts.name);
+
         this.name = opts.name;
         this.desc = opts.description || 'Sortable table';
 
-        //indicates if tables was sorted
+        //indicates if table previously sorted
         this.sorted = false;
 
         this.sortTypes = Types.isArray(opts.types) ? opts.types : [];
@@ -46,11 +48,13 @@ export default class AdapterSortableTable {
         this.onAfterSort = Types.isFn(opts.on_after_sort) ?
             opts.on_after_sort : null;
 
-        this.tf = tf;
-        this.emitter = tf.emitter;
+        this.enable();
     }
 
     init() {
+        if (this.initialized) {
+            return;
+        }
         let tf = this.tf;
         let adpt = this;
 
@@ -354,6 +358,9 @@ export default class AdapterSortableTable {
      * Destroy sort
      */
     destroy() {
+        if (!this.initialized) {
+            return;
+        }
         let tf = this.tf;
         this.emitter.off(['sort'],
             (tf, colIdx, desc) => this.sortByColumnIndex(colIdx, desc));
@@ -370,6 +377,7 @@ export default class AdapterSortableTable {
                 header.removeChild(img[0]);
             }
         }
+        this.initialized = false;
     }
 
 }

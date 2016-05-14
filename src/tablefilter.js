@@ -862,7 +862,7 @@ export class TableFilter {
             let extInstance = this.ExtRegistry[ext.name];
             if (extInstance) {
                 extInstance.destroy();
-                this.ExtRegistry[ext.name] = null;
+                this.ExtRegistry[ext.name] = undefined;
             }
         }
     }

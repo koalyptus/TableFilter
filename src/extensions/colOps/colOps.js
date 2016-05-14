@@ -1,14 +1,16 @@
+import {Feature} from '../../feature';
 import Dom from '../../dom';
 import Str from '../../string';
 import Types from '../../types';
 
-export default class ColOps{
+export default class ColOps extends Feature {
 
     /**
      * Column calculations
      * @param {Object} tf TableFilter instance
      */
     constructor(tf, opts) {
+        super(tf, opts.name);
 
         //calls function before col operation
         this.onBeforeOperation = Types.isFn(opts.on_before_operation) ?
@@ -18,14 +20,18 @@ export default class ColOps{
             opts.on_after_operation : null;
 
         this.opts = opts;
-        this.tf = tf;
+        this.enable();
     }
 
-    init(){
+    init() {
+        if (this.initialized) {
+            return;
+        }
         // subscribe to events
-        this.tf.emitter.on(['after-filtering'], ()=> this.calc());
+        this.tf.emitter.on(['after-filtering'], () => this.calc());
 
         this.calc();
+        this.initialized = true;
     }
 
     /**
@@ -46,11 +52,11 @@ export default class ColOps{
      */
     calc() {
         var tf = this.tf;
-        if(!tf.hasGrid()){
+        if (!tf.hasGrid()) {
             return;
         }
 
-        if(this.onBeforeOperation){
+        if (this.onBeforeOperation) {
             this.onBeforeOperation.call(null, tf);
         }
 
@@ -69,28 +75,28 @@ export default class ColOps{
             ucolMax = 0;
         ucolIndex[ucolMax] = colIndex[0];
 
-        for(var ii=1; ii<colIndex.length; ii++){
+        for (var ii = 1; ii < colIndex.length; ii++) {
             var saved = 0;
             //see if colIndex[ii] is already in the list of unique indexes
-            for(var jj=0; jj<=ucolMax; jj++){
-                if(ucolIndex[jj] === colIndex[ii]){
+            for (var jj = 0; jj <= ucolMax; jj++) {
+                if (ucolIndex[jj] === colIndex[ii]) {
                     saved = 1;
                 }
             }
             //if not saved then, save the index;
-            if (saved === 0){
+            if (saved === 0) {
                 ucolMax++;
                 ucolIndex[ucolMax] = colIndex[ii];
             }
         }
 
-        if(Str.lower(typeof labelId)=='object' &&
-            Str.lower(typeof colIndex)=='object' &&
-            Str.lower(typeof operation)=='object'){
+        if (Str.lower(typeof labelId) == 'object' &&
+            Str.lower(typeof colIndex) == 'object' &&
+            Str.lower(typeof operation) == 'object') {
             var rows = tf.tbl.rows,
                 colvalues = [];
 
-            for(var ucol=0; ucol<=ucolMax; ucol++){
+            for (var ucol = 0; ucol <= ucolMax; ucol++) {
                 //this retrieves col values
                 //use ucolIndex because we only want to pass through this loop
                 //once for each column get the values in this unique column
@@ -99,74 +105,74 @@ export default class ColOps{
 
                 //next: calculate all operations for this column
                 var result,
-                    nbvalues=0,
+                    nbvalues = 0,
                     temp,
-                    meanValue=0,
-                    sumValue=0,
-                    minValue=null,
-                    maxValue=null,
-                    q1Value=null,
-                    medValue=null,
-                    q3Value=null,
-                    meanFlag=0,
-                    sumFlag=0,
-                    minFlag=0,
-                    maxFlag=0,
-                    q1Flag=0,
-                    medFlag=0,
-                    q3Flag=0,
-                    theList=[],
-                    opsThisCol=[],
-                    decThisCol=[],
-                    labThisCol=[],
-                    oTypeThisCol=[],
-                    mThisCol=-1;
+                    meanValue = 0,
+                    sumValue = 0,
+                    minValue = null,
+                    maxValue = null,
+                    q1Value = null,
+                    medValue = null,
+                    q3Value = null,
+                    meanFlag = 0,
+                    sumFlag = 0,
+                    minFlag = 0,
+                    maxFlag = 0,
+                    q1Flag = 0,
+                    medFlag = 0,
+                    q3Flag = 0,
+                    theList = [],
+                    opsThisCol = [],
+                    decThisCol = [],
+                    labThisCol = [],
+                    oTypeThisCol = [],
+                    mThisCol = -1;
 
-                for(var k=0; k<colIndex.length; k++){
-                    if(colIndex[k] === ucolIndex[ucol]){
+                for (var k = 0; k < colIndex.length; k++) {
+                    if (colIndex[k] === ucolIndex[ucol]) {
                         mThisCol++;
-                        opsThisCol[mThisCol]=Str.lower(operation[k]);
-                        decThisCol[mThisCol]=decimalPrecision[k];
-                        labThisCol[mThisCol]=labelId[k];
+                        opsThisCol[mThisCol] = Str.lower(operation[k]);
+                        decThisCol[mThisCol] = decimalPrecision[k];
+                        labThisCol[mThisCol] = labelId[k];
                         oTypeThisCol = outputType !== undefined &&
-                            Str.lower(typeof outputType)==='object' ?
+                            Str.lower(typeof outputType) === 'object' ?
                             outputType[k] : null;
 
-                        switch(opsThisCol[mThisCol]){
+                        switch (opsThisCol[mThisCol]) {
                             case 'mean':
-                                meanFlag=1;
+                                meanFlag = 1;
                                 break;
                             case 'sum':
-                                sumFlag=1;
+                                sumFlag = 1;
                                 break;
                             case 'min':
-                                minFlag=1;
+                                minFlag = 1;
                                 break;
                             case 'max':
-                                maxFlag=1;
+                                maxFlag = 1;
                                 break;
                             case 'median':
-                                medFlag=1;
+                                medFlag = 1;
                                 break;
                             case 'q1':
-                                q1Flag=1;
+                                q1Flag = 1;
                                 break;
                             case 'q3':
-                                q3Flag=1;
+                                q3Flag = 1;
                                 break;
                         }
                     }
                 }
 
-                for(var j=0; j<colvalues[ucol].length; j++){
+                for (var j = 0; j < colvalues[ucol].length; j++) {
                     //sort the list for calculation of median and quartiles
-                    if((q1Flag==1)|| (q3Flag==1) || (medFlag==1)){
-                        if (j<colvalues[ucol].length -1){
-                            for(k=j+1; k<colvalues[ucol].length; k++) {
+                    if ((q1Flag == 1) || (q3Flag == 1) || (medFlag == 1)) {
+                        if (j < colvalues[ucol].length - 1) {
+                            for (k = j + 1; k < colvalues[ucol].length; k++) {
                                 /* eslint-disable */
-                                if(eval(colvalues[ucol][k]) <
-                                    eval(colvalues[ucol][j])){
-                                /* eslint-enable */
+                                if (eval(colvalues[ucol][k]) <
+                                    eval(colvalues[ucol][j])) {
+                                    /* eslint-enable */
                                     temp = colvalues[ucol][j];
                                     colvalues[ucol][j] = colvalues[ucol][k];
                                     colvalues[ucol][k] = temp;
@@ -177,107 +183,108 @@ export default class ColOps{
                     var cvalue = parseFloat(colvalues[ucol][j]);
                     theList[j] = parseFloat(cvalue);
 
-                    if(!isNaN(cvalue)){
+                    if (!isNaN(cvalue)) {
                         nbvalues++;
-                        if(sumFlag===1 || meanFlag===1){
-                            sumValue += parseFloat( cvalue );
+                        if (sumFlag === 1 || meanFlag === 1) {
+                            sumValue += parseFloat(cvalue);
                         }
-                        if(minFlag===1){
-                            if(minValue===null){
-                                minValue = parseFloat( cvalue );
-                            } else{
-                                minValue = parseFloat( cvalue ) < minValue ?
-                                    parseFloat( cvalue ): minValue;
+                        if (minFlag === 1) {
+                            if (minValue === null) {
+                                minValue = parseFloat(cvalue);
+                            } else {
+                                minValue = parseFloat(cvalue) < minValue ?
+                                    parseFloat(cvalue) : minValue;
                             }
                         }
-                        if(maxFlag===1){
-                            if (maxValue===null){
-                                maxValue = parseFloat( cvalue );
+                        if (maxFlag === 1) {
+                            if (maxValue === null) {
+                                maxValue = parseFloat(cvalue);
                             } else {
-                                maxValue = parseFloat( cvalue ) > maxValue ?
-                                    parseFloat( cvalue ): maxValue;
+                                maxValue = parseFloat(cvalue) > maxValue ?
+                                    parseFloat(cvalue) : maxValue;
                             }
                         }
                     }
                 }//for j
-                if(meanFlag===1){
-                    meanValue = sumValue/nbvalues;
+                if (meanFlag === 1) {
+                    meanValue = sumValue / nbvalues;
                 }
-                if(medFlag===1){
+                if (medFlag === 1) {
                     var aux = 0;
-                    if(nbvalues%2 === 1){
-                        aux = Math.floor(nbvalues/2);
+                    if (nbvalues % 2 === 1) {
+                        aux = Math.floor(nbvalues / 2);
                         medValue = theList[aux];
-                    } else{
-                        medValue =
-                            (theList[nbvalues/2] + theList[((nbvalues/2)-1)])/2;
+                    } else {
+                        medValue = (theList[nbvalues / 2] +
+                            theList[((nbvalues / 2) - 1)]) / 2;
                     }
                 }
                 var posa;
-                if(q1Flag===1){
-                    posa=0.0;
-                    posa = Math.floor(nbvalues/4);
-                    if(4*posa == nbvalues){
-                        q1Value = (theList[posa-1] + theList[posa])/2;
+                if (q1Flag === 1) {
+                    posa = 0.0;
+                    posa = Math.floor(nbvalues / 4);
+                    if (4 * posa == nbvalues) {
+                        q1Value = (theList[posa - 1] + theList[posa]) / 2;
                     } else {
                         q1Value = theList[posa];
                     }
                 }
-                if (q3Flag===1){
-                    posa=0.0;
-                    var posb=0.0;
-                    posa = Math.floor(nbvalues/4);
-                    if (4*posa === nbvalues){
-                        posb = 3*posa;
-                        q3Value = (theList[posb] + theList[posb-1])/2;
+                if (q3Flag === 1) {
+                    posa = 0.0;
+                    var posb = 0.0;
+                    posa = Math.floor(nbvalues / 4);
+                    if (4 * posa === nbvalues) {
+                        posb = 3 * posa;
+                        q3Value = (theList[posb] + theList[posb - 1]) / 2;
                     } else {
-                        q3Value = theList[nbvalues-posa-1];
+                        q3Value = theList[nbvalues - posa - 1];
                     }
                 }
 
-                for(var i=0; i<=mThisCol; i++){
-                    switch( opsThisCol[i] ){
+                for (var i = 0; i <= mThisCol; i++) {
+                    switch (opsThisCol[i]) {
                         case 'mean':
-                            result=meanValue;
+                            result = meanValue;
                             break;
                         case 'sum':
-                            result=sumValue;
+                            result = sumValue;
                             break;
                         case 'min':
-                            result=minValue;
+                            result = minValue;
                             break;
                         case 'max':
-                            result=maxValue;
+                            result = maxValue;
                             break;
                         case 'median':
-                            result=medValue;
+                            result = medValue;
                             break;
                         case 'q1':
-                            result=q1Value;
+                            result = q1Value;
                             break;
                         case 'q3':
-                            result=q3Value;
+                            result = q3Value;
                             break;
                     }
 
                     var precision = !isNaN(decThisCol[i]) ? decThisCol[i] : 2;
 
                     //if outputType is defined
-                    if(oTypeThisCol && result){
-                        result = result.toFixed( precision );
+                    if (oTypeThisCol && result) {
+                        result = result.toFixed(precision);
 
-                        if(Dom.id(labThisCol[i])){
-                            switch( Str.lower(oTypeThisCol) ){
+                        if (Dom.id(labThisCol[i])) {
+                            switch (Str.lower(oTypeThisCol)) {
                                 case 'innerhtml':
                                     if (isNaN(result) || !isFinite(result) ||
-                                        nbvalues===0){
+                                        nbvalues === 0) {
                                         Dom.id(labThisCol[i]).innerHTML = '.';
-                                    } else{
-                                        Dom.id(labThisCol[i]).innerHTML= result;
+                                    } else {
+                                        Dom.id(labThisCol[i]).innerHTML =
+                                            result;
                                     }
                                     break;
                                 case 'setvalue':
-                                    Dom.id( labThisCol[i] ).value = result;
+                                    Dom.id(labThisCol[i]).value = result;
                                     break;
                                 case 'createtextnode':
                                     var oldnode = Dom.id(labThisCol[i])
@@ -289,35 +296,39 @@ export default class ColOps{
                             }//switch
                         }
                     } else {
-                        try{
-                            if(isNaN(result) || !isFinite(result) ||
-                                nbvalues===0){
+                        try {
+                            if (isNaN(result) || !isFinite(result) ||
+                                nbvalues === 0) {
                                 Dom.id(labThisCol[i]).innerHTML = '.';
                             } else {
                                 Dom.id(labThisCol[i]).innerHTML =
                                     result.toFixed(precision);
                             }
-                        } catch(e) {}//catch
+                        } catch (e) { }//catch
                     }//else
                 }//for i
 
                 // row(s) with result are always visible
                 var totRow = totRowIndex && totRowIndex[ucol] ?
-                                rows[totRowIndex[ucol]] : null;
-                if(totRow){
+                    rows[totRowIndex[ucol]] : null;
+                if (totRow) {
                     totRow.style.display = '';
                 }
             }//for ucol
         }//if typeof
 
-        if(this.onAfterOperation){
+        if (this.onAfterOperation) {
             this.onAfterOperation.call(null, tf);
         }
     }
 
-    destroy(){
+    destroy() {
+        if (!this.initialized) {
+            return;
+        }
         // unsubscribe to events
-        this.tf.emitter.off(['after-filtering'], ()=> this.calc());
+        this.tf.emitter.off(['after-filtering'], () => this.calc());
+        this.initialized = false;
     }
 
 }
