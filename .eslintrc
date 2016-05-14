@@ -1,5 +1,8 @@
 {
   "parser": "babel-eslint",
+  "parserOptions": {
+      "sourceType": "module"
+  },
   "rules": {
     "max-len": [2, 80, 2, {"ignoreUrls": true}],
     "max-depth": [2, 7],
