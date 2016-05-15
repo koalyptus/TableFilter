@@ -180,8 +180,8 @@ export class CheckList extends Feature {
                         ((rows[k].style.display === '' && !tf.paging) ||
                             (tf.paging && ((!activeIdx ||
                                 activeIdx === colIndex) ||
-                                (activeIdx != colIndex &&
-                                    tf.validRowsIndex.indexOf(k) != -1)))))) {
+                                (activeIdx !== colIndex &&
+                                    tf.validRowsIndex.indexOf(k) !== -1)))))) {
 
                     let cellData = tf.getCellData(cells[j]);
                     //Vary Peter's patch
@@ -226,7 +226,7 @@ export class CheckList extends Feature {
             }
         }
         //asc sort
-        if (tf.sortNumAsc.indexOf(colIndex) != -1) {
+        if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
             try {
                 this.opts.sort(Sort.numSortAsc);
                 if (this.excludedOpts) {
@@ -241,7 +241,7 @@ export class CheckList extends Feature {
             }//in case there are alphanumeric values
         }
         //desc sort
-        if (tf.sortNumDesc.indexOf(colIndex) != -1) {
+        if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
             try {
                 this.opts.sort(Sort.numSortDesc);
                 if (this.excludedOpts) {

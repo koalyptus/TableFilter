@@ -158,7 +158,7 @@ export default class AdapterSortableTable extends Feature {
         SortableTable.getCellIndex = function (oTd) {
             let cells = oTd.parentNode.cells,
                 l = cells.length, i;
-            for (i = 0; cells[i] != oTd && i < l; i++) { }
+            for (i = 0; cells[i] !== oTd && i < l; i++) { }
             return i;
         };
 
@@ -418,7 +418,7 @@ function ipAddress(value) {
 function sortIP(a, b) {
     let aa = ipAddress(a.value.toLowerCase());
     let bb = ipAddress(b.value.toLowerCase());
-    if (aa == bb) {
+    if (aa === bb) {
         return 0;
     } else if (aa < bb) {
         return -1;

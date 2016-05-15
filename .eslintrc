@@ -14,7 +14,7 @@
     "no-loop-func": 2,
     "no-floating-decimal": 2,
     "curly": 2,
-    //"eqeqeq": [2, "smart"],
+    "eqeqeq": [2, "smart"],
     "quotes": [2, "single"],
     "indent": [2, 4, {"SwitchCase": 1}],
     "no-trailing-spaces": 2,

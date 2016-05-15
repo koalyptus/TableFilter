@@ -472,7 +472,7 @@ export class TableFilter {
                 if (!this.gridLayout) {
                     fltrow.appendChild(fltcell);
                 }
-                inpclass = (i == n - 1 && this.displayBtn) ?
+                inpclass = (i === n - 1 && this.displayBtn) ?
                     this.fltSmallCssClass : this.fltCssClass;
 
                 //only 1 input for single search
@@ -499,7 +499,7 @@ export class TableFilter {
                 }
 
                 // this adds submit button
-                if (i == n - 1 && this.displayBtn) {
+                if (i === n - 1 && this.displayBtn) {
                     this._buildSubmitButton(i, fltcell);
                 }
 
@@ -1092,7 +1092,7 @@ export class TableFilter {
      */
     isCustomOptions(colIndex) {
         return this.hasCustomOptions &&
-            this.customOptions.cols.indexOf(colIndex) != -1;
+            this.customOptions.cols.indexOf(colIndex) !== -1;
     }
 
     /**
@@ -1252,12 +1252,12 @@ export class TableFilter {
                 // different date
                 else if (isDFDate) {
                     dte2 = DateHelper.format(sA.replace(re_d, ''), dtType);
-                    occurence = dte1.toString() != dte2.toString();
+                    occurence = dte1.toString() !== dte2.toString();
                 }
                 // equal date
                 else if (isEQDate) {
                     dte2 = DateHelper.format(sA.replace(re_eq, ''), dtType);
-                    occurence = dte1.toString() == dte2.toString();
+                    occurence = dte1.toString() === dte2.toString();
                 }
                 // searched keyword with * operator doesn't have to be a date
                 else if (re_lk.test(sA)) {// like date
@@ -1515,7 +1515,7 @@ export class TableFilter {
             let isExludedRow = false;
             // checks if current row index appears in exclude array
             if (exclude.length > 0) {
-                isExludedRow = exclude.indexOf(i) != -1;
+                isExludedRow = exclude.indexOf(i) !== -1;
             }
             let cell = row[i].cells,
                 nchilds = cell.length;
@@ -1524,7 +1524,7 @@ export class TableFilter {
             if (nchilds === this.nbCells && !isExludedRow) {
                 // this loop retrieves cell data
                 for (let j = 0; j < nchilds; j++) {
-                    if (j != colIndex || row[i].style.display !== '') {
+                    if (j !== colIndex || row[i].style.display !== '') {
                         continue;
                     }
                     let cellData = this.getCellData(cell[j]),
@@ -1674,7 +1674,8 @@ export class TableFilter {
     getCellData(cell) {
         let idx = cell.cellIndex;
         //Check for customCellData callback
-        if (this.customCellData && this.customCellDataCols.indexOf(idx) != -1) {
+        if (this.customCellData &&
+            this.customCellDataCols.indexOf(idx) !== -1) {
             return this.customCellData.call(null, this, cell, idx);
         } else {
             return Dom.getText(cell);
@@ -2058,10 +2059,10 @@ export class TableFilter {
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement
             if (activeIdx !== slcIndex[i] ||
-                (this.paging && slcA1.indexOf(slcIndex[i]) != -1 &&
+                (this.paging && slcA1.indexOf(slcIndex[i]) !== -1 &&
                     activeIdx === slcIndex[i]) ||
-                (!this.paging && (slcA3.indexOf(slcIndex[i]) != -1 ||
-                    slcA2.indexOf(slcIndex[i]) != -1)) ||
+                (!this.paging && (slcA3.indexOf(slcIndex[i]) !== -1 ||
+                    slcA2.indexOf(slcIndex[i]) !== -1)) ||
                 slcSelectedValue === this.displayAllText) {
 
                 //1st option needs to be inserted
@@ -2071,7 +2072,7 @@ export class TableFilter {
                     curSlc.appendChild(opt0);
                 }
 
-                if (slcA3.indexOf(slcIndex[i]) != -1) {
+                if (slcA3.indexOf(slcIndex[i]) !== -1) {
                     this.emitter.emit('build-checklist-filter', this,
                         slcIndex[i]);
                 } else {
@@ -2104,7 +2105,7 @@ export class TableFilter {
     isImported(filePath, type) {
         let imported = false,
             importType = !type ? 'script' : type,
-            attr = importType == 'script' ? 'src' : 'href',
+            attr = importType === 'script' ? 'src' : 'href',
             files = Dom.tag(doc, importType);
         for (let i = 0, len = files.length; i < len; i++) {
             if (files[i][attr] === undefined) {
