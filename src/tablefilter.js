@@ -357,12 +357,7 @@ export class TableFilter {
         this.prfxRDiv = 'rdiv_';
         //middle div
         this.prfxMDiv = 'mdiv_';
-        //filter values cookie
-        this.prfxCookieFltsValues = 'tf_flts_';
-        //page nb cookie
-        this.prfxCookiePageNb = 'tf_pgnb_';
-        //page length cookie
-        this.prfxCookiePageLen = 'tf_pglen_';
+        //responsive table css class
         this.prfxResponsive = 'resp';
 
         /*** extensions ***/
