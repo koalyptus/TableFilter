@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import {root} from '../root';
 import Dom from '../dom';
-import Types from '../types';
+import {isFn} from '../types';
 
 export class StatusBar extends Feature{
 
@@ -31,10 +31,10 @@ export class StatusBar extends Feature{
         this.statusBarCloseDelay = 250;
 
         //calls function before message is displayed
-        this.onBeforeShowMsg = Types.isFn(f.on_before_show_msg) ?
+        this.onBeforeShowMsg = isFn(f.on_before_show_msg) ?
             f.on_before_show_msg : null;
         //calls function after message is displayed
-        this.onAfterShowMsg = Types.isFn(f.on_after_show_msg) ?
+        this.onAfterShowMsg = isFn(f.on_after_show_msg) ?
             f.on_after_show_msg : null;
 
         //status messages

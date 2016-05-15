@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
-import Types from '../types';
+import {isFn, isNull} from '../types';
 import Event from '../event';
 import Str from '../string';
 import {NONE} from '../const';
@@ -74,7 +74,7 @@ export class GridLayout extends Feature{
         }
 
         // Override reference rows indexes
-        tf.refRow = Types.isNull(tf.startRow) ? 0 : tf.startRow;
+        tf.refRow = isNull(tf.startRow) ? 0 : tf.startRow;
         tf.headersRow = 0;
         tf.filtersRowIndex = 1;
 
@@ -289,7 +289,7 @@ export class GridLayout extends Feature{
             }
         }
 
-        let afterColResizedFn = Types.isFn(f.on_after_col_resized) ?
+        let afterColResizedFn = isFn(f.on_after_col_resized) ?
             f.on_after_col_resized : null;
         f.on_after_col_resized = function(o, colIndex){
             if(!colIndex){

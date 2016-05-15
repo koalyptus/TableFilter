@@ -4,7 +4,7 @@ import Arr from '../array';
 import Str from '../string';
 import Sort from '../sort';
 import Event from '../event';
-import Types from '../types';
+import {isEmpty} from '../types';
 import {CHECKLIST, NONE} from '../const';
 
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
@@ -465,7 +465,7 @@ export class CheckList extends Feature {
         let tf = this.tf;
         let flt = tf.getFilterElement(colIndex);
         let fltAttr = flt.getAttribute('value');
-        let values = Types.isEmpty(fltAttr) ? '' : fltAttr;
+        let values = isEmpty(fltAttr) ? '' : fltAttr;
 
         //removes last operator ||
         values = values.substr(0, values.length - 3);

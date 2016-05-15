@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
-import Types from '../types';
+import {isFn} from '../types';
 import {root} from '../root';
 import {NONE} from '../const';
 
@@ -29,11 +29,9 @@ export class Loader extends Feature {
         //delay for hiding loader
         this.loaderCloseDelay = 250;
         //callback function before loader is displayed
-        this.onShowLoader = Types.isFn(f.on_show_loader) ?
-            f.on_show_loader : null;
+        this.onShowLoader = isFn(f.on_show_loader) ? f.on_show_loader : null;
         //callback function after loader is closed
-        this.onHideLoader = Types.isFn(f.on_hide_loader) ?
-            f.on_hide_loader : null;
+        this.onHideLoader = isFn(f.on_hide_loader) ? f.on_hide_loader : null;
         //loader div
         this.prfxLoader = 'load_';
     }

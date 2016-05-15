@@ -1,7 +1,7 @@
 import {Feature} from '../../feature';
 import Dom from '../../dom';
 import Str from '../../string';
-import Types from '../../types';
+import {isFn, isUndef} from '../../types';
 
 export default class ColOps extends Feature {
 
@@ -13,10 +13,10 @@ export default class ColOps extends Feature {
         super(tf, opts.name);
 
         //calls function before col operation
-        this.onBeforeOperation = Types.isFn(opts.on_before_operation) ?
+        this.onBeforeOperation = isFn(opts.on_before_operation) ?
             opts.on_before_operation : null;
         //calls function after col operation
-        this.onAfterOperation = Types.isFn(opts.on_after_operation) ?
+        this.onAfterOperation = isFn(opts.on_after_operation) ?
             opts.on_after_operation : null;
 
         this.opts = opts;
@@ -67,7 +67,7 @@ export default class ColOps extends Feature {
             outputType = opts.write_method,
             totRowIndex = opts.tot_row_index,
             excludeRow = opts.exclude_row,
-            decimalPrecision = Types.isUndef(opts.decimal_precision) ?
+            decimalPrecision = isUndef(opts.decimal_precision) ?
                 2 : opts.decimal_precision;
 
         //nuovella: determine unique list of columns to operate on

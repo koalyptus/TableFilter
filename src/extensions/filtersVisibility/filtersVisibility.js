@@ -1,6 +1,6 @@
 import {Feature} from '../../feature';
 import Dom from '../../dom';
-import Types from '../../types';
+import {isFn, isUndef} from '../../types';
 import Event from '../../event';
 
 export default class FiltersVisibility extends Feature {
@@ -52,26 +52,23 @@ export default class FiltersVisibility extends Feature {
         this.btnCssClass = f.btn_css_class || 'btnExpClpFlt';
         //defines css class span containing expand/collapse filters
         this.contCssClass = f.cont_css_class || 'expClpFlt';
-        this.filtersRowIndex = !Types.isUndef(f.filters_row_index) ?
+        this.filtersRowIndex = !isUndef(f.filters_row_index) ?
             f.filters_row_index : tf.getFiltersRowIndex();
 
-        this.visibleAtStart = !Types.isUndef(f.visible_at_start) ?
+        this.visibleAtStart = !isUndef(f.visible_at_start) ?
             Boolean(f.visible_at_start) : true;
 
         // Prefix
         this.prfx = 'fltsVis_';
 
         //callback before filters row is shown
-        this.onBeforeShow = Types.isFn(f.on_before_show) ?
-            f.on_before_show : null;
+        this.onBeforeShow = isFn(f.on_before_show) ? f.on_before_show : null;
         //callback after filters row is shown
-        this.onAfterShow = Types.isFn(f.on_after_show) ?
-            f.on_after_show : null;
+        this.onAfterShow = isFn(f.on_after_show) ? f.on_after_show : null;
         //callback before filters row is hidden
-        this.onBeforeHide = Types.isFn(f.on_before_hide) ?
-            f.on_before_hide : null;
+        this.onBeforeHide = isFn(f.on_before_hide) ? f.on_before_hide : null;
         //callback after filters row is hidden
-        this.onAfterHide = Types.isFn(f.on_after_hide) ? f.on_after_hide : null;
+        this.onAfterHide = isFn(f.on_after_hide) ? f.on_after_hide : null;
 
         //Loads extension stylesheet
         tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,

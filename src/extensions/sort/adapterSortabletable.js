@@ -1,5 +1,5 @@
 import {Feature} from '../../feature';
-import Types from '../../types';
+import {isArray, isFn, isUndef} from '../../types';
 import Dom from '../../dom';
 import Event from '../../event';
 import DateHelper from '../../date';
@@ -21,12 +21,11 @@ export default class AdapterSortableTable extends Feature {
         //indicates if table previously sorted
         this.sorted = false;
 
-        this.sortTypes = Types.isArray(opts.types) ? opts.types : [];
-        this.sortColAtStart = Types.isArray(opts.sort_col_at_start) ?
+        this.sortTypes = isArray(opts.types) ? opts.types : [];
+        this.sortColAtStart = isArray(opts.sort_col_at_start) ?
             opts.sort_col_at_start : null;
         this.asyncSort = Boolean(opts.async_sort);
-        this.triggerIds = Types.isArray(opts.trigger_ids) ?
-            opts.trigger_ids : [];
+        this.triggerIds = isArray(opts.trigger_ids) ? opts.trigger_ids : [];
 
         // edit .sort-arrow.descending / .sort-arrow.ascending in
         // tablefilter.css to reflect any path change
@@ -39,14 +38,13 @@ export default class AdapterSortableTable extends Feature {
         this.customKey = opts.custom_key || 'data-tf-sortKey';
 
         // callback invoked after sort is loaded and instanciated
-        this.onSortLoaded = Types.isFn(opts.on_sort_loaded) ?
+        this.onSortLoaded = isFn(opts.on_sort_loaded) ?
             opts.on_sort_loaded : null;
         // callback invoked before table is sorted
-        this.onBeforeSort = Types.isFn(opts.on_before_sort) ?
+        this.onBeforeSort = isFn(opts.on_before_sort) ?
             opts.on_before_sort : null;
         // callback invoked after table is sorted
-        this.onAfterSort = Types.isFn(opts.on_after_sort) ?
-            opts.on_after_sort : null;
+        this.onAfterSort = isFn(opts.on_after_sort) ? opts.on_after_sort : null;
 
         this.enable();
     }
@@ -59,7 +57,7 @@ export default class AdapterSortableTable extends Feature {
         let adpt = this;
 
         // SortableTable class sanity check (sortabletable.js)
-        if (Types.isUndef(SortableTable)) {
+        if (isUndef(SortableTable)) {
             throw new Error('SortableTable class not found.');
         }
 

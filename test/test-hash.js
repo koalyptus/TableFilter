@@ -17,7 +17,7 @@ var hash = state.hash;
 module('Sanity checks');
 test('State instance', function() {
     deepEqual(typeof hash, 'object', 'Hash is instantiated');
-    deepEqual(hash.lastHash, '', 'Last store hash');
+    deepEqual(hash.lastHash, '', 'Last stored hash');
     deepEqual(hash.state, state, 'State instance');
     deepEqual(hash.emitter, state.emitter, 'Emitter instance');
 });

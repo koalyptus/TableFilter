@@ -1,6 +1,6 @@
 import {Feature} from '../../feature';
 import Dom from '../../dom';
-import Types from '../../types';
+import {isFn} from '../../types';
 import Event from '../../event';
 
 export default class ColsVisibility extends Feature {
@@ -83,30 +83,27 @@ export default class ColsVisibility extends Feature {
         this.tblHasColTag = (Dom.tag(tf.tbl, 'col').length > 0);
 
         //callback invoked just after cols manager is loaded
-        this.onLoaded = Types.isFn(f.on_loaded) ? f.on_loaded : null;
+        this.onLoaded = isFn(f.on_loaded) ? f.on_loaded : null;
         //calls function before cols manager is opened
-        this.onBeforeOpen = Types.isFn(f.on_before_open) ?
-            f.on_before_open : null;
+        this.onBeforeOpen = isFn(f.on_before_open) ? f.on_before_open : null;
         //calls function after cols manager is opened
-        this.onAfterOpen = Types.isFn(f.on_after_open) ? f.on_after_open : null;
+        this.onAfterOpen = isFn(f.on_after_open) ? f.on_after_open : null;
         //calls function before cols manager is closed
-        this.onBeforeClose = Types.isFn(f.on_before_close) ?
-            f.on_before_close : null;
+        this.onBeforeClose = isFn(f.on_before_close) ? f.on_before_close : null;
         //calls function after cols manager is closed
-        this.onAfterClose = Types.isFn(f.on_after_close) ?
-            f.on_after_close : null;
+        this.onAfterClose = isFn(f.on_after_close) ? f.on_after_close : null;
 
         //callback before col is hidden
-        this.onBeforeColHidden = Types.isFn(f.on_before_col_hidden) ?
+        this.onBeforeColHidden = isFn(f.on_before_col_hidden) ?
             f.on_before_col_hidden : null;
         //callback after col is hidden
-        this.onAfterColHidden = Types.isFn(f.on_after_col_hidden) ?
+        this.onAfterColHidden = isFn(f.on_after_col_hidden) ?
             f.on_after_col_hidden : null;
         //callback before col is displayed
-        this.onBeforeColDisplayed = Types.isFn(f.on_before_col_displayed) ?
+        this.onBeforeColDisplayed = isFn(f.on_before_col_displayed) ?
             f.on_before_col_displayed : null;
         //callback after col is displayed
-        this.onAfterColDisplayed = Types.isFn(f.on_after_col_displayed) ?
+        this.onAfterColDisplayed = isFn(f.on_after_col_displayed) ?
             f.on_after_col_displayed : null;
 
         //Grid layout compatibility

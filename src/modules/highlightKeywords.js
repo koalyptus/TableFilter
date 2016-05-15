@@ -1,6 +1,6 @@
 import Dom from '../dom';
 import Str from '../string';
-import Types from '../types';
+import {isArray} from '../types';
 
 export class HighlightKeyword {
 
@@ -100,7 +100,7 @@ export class HighlightKeyword {
         }
         // iterate filters values to unhighlight all values
         this.tf.getFiltersValue().forEach((val) => {
-            if (Types.isArray(val)) {
+            if (isArray(val)) {
                 val.forEach((item) =>
                     this.unhighlight(item, this.highlightCssClass));
             } else {

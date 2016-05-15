@@ -6,7 +6,7 @@ const location = root.location;
 const decodeURIComponent = root.decodeURIComponent;
 
 export const hasHashChange = () => {
-    var docMode = root.documentMode;
+    let docMode = root.documentMode;
     return ('onhashchange' in root) && (docMode === undefined || docMode > 7);
 };
 
