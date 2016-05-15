@@ -148,6 +148,8 @@
         
             
         
+            
+        
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -248,7 +250,9 @@
 
 
 <!-- SystemJS -->
-<script src="https://jspm.io/system@0.19.js"></script>
+<div data-config>
+  <script src="https://jspm.io/system@0.19.js"></script>
+</div>
 
 <script data-config>
 // SystemJS example
@@ -268,14 +272,16 @@ System.import('./tablefilter/tablefilter').then(function(mod) {
 });
 </script>
 
-<p></p>
-
+<hr>
 <ul class="nav nav-pills">
     <li class="active">
         <a data-toggle="tab" href="#js">JS</a>
     </li>
     <li>
         <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
     </li>
 </ul>
 
@@ -318,12 +324,81 @@ System.import('./tablefilter/tablefilter').then(function(mod) {
 
     </div>
     <div id="html" class="tab-pane fade">
-<pre>
-&lt;!-- SystemJS --&gt;
-&lt;script src="https://jspm.io/system@0.19.js"&gt;&lt;/script&gt;
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html">
+  <code class="xml"></code>
 </pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css">
+  <code class="css"></code>
+</pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
     </div>
 </div>
+
 
 
     </div>

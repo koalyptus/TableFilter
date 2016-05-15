@@ -148,6 +148,8 @@
         
             
         
+            
+        
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -181,69 +183,71 @@
     elements of your page.
 </p>
 
-<div id="extGrid" class="panel panel-info pull-left">
-    <div class="panel-heading">Filters</div>
+<div data-config>
+  <div id="extGrid" class="panel panel-info pull-left">
+      <div class="panel-heading">Filters</div>
 
-    <div class="panel-body bg-info">
-        <label>Choose Country:</label><br>
-        <span id="slcCountry"></span><br>
+      <div class="panel-body bg-info">
+          <label>Choose Country:</label><br>
+          <span id="slcCountry"></span><br>
 
-        <span>Keep Ctrl/Cmd key pressed for multiple selections</span><br><br>
-        <label>Choose Country code:</label><br>
-        <span id="slcCode"></span><br><br>
+          <span>Keep Ctrl/Cmd key pressed for multiple selections</span><br><br>
+          <label>Choose Country code:</label><br>
+          <span id="slcCode"></span><br><br>
 
-        <label>Choose year:</label><br>
-        <span id="slcYear"></span><br><br>
+          <label>Choose year:</label><br>
+          <span id="slcYear"></span><br><br>
 
-        <label for="inpPop">POP:</label><br>
-        <span id="inpPop"></span><br><br>
+          <label for="inpPop">POP:</label><br>
+          <span id="inpPop"></span><br><br>
 
-        <form id="frmRadioInps" name="frmRadioInps">
-            <label for="rdoXRat">XRAT:</label><br>
-            <input type="checkbox" id="rdoXRat" name="rdoXRat" value="!NA"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(4, this.value);
-                    } else tf.setFilterValue(4, '');
-                    tf.filter();"  >Not NA
+          <form id="frmRadioInps" name="frmRadioInps">
+              <label for="rdoXRat">XRAT:</label><br>
+              <input type="checkbox" id="rdoXRat" name="rdoXRat" value="!NA"
+                  onclick="
+                      if(this.checked){
+                          tf.setFilterValue(4, this.value);
+                      } else tf.setFilterValue(4, '');
+                      tf.filter();"  >Not NA
 
-            <br><br>
+              <br><br>
 
-            <label for="chkCI">CI:</label><br>
-            <input type="radio" id="chkCI" name="chkCI" value=">0 && <=10"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" > 0 - 10
-            <input type="radio" id="chkCI" name="chkCI" value=">10 && <=20"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" > 10 - 20
-            <input type="radio" id="chkCI" name="chkCI" value=">20 && <=30"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" > 20 - 30
-        </form>
-    </div>
-    <div class="panel-footer">
-        <input id="btnFlt" value="Filter" type="button" class="btn btn-default"
-            onclick="tf.filter();" >&nbsp;
-        <input id="btnClr" value="Clear" type="button" class="btn btn-link"
-            onclick="tf.clearFilters();
-                //clears radio btns
-                for( var o=frmRadioInps.elements, p=o.length - 1; p > -1; p--) {
-                    if ( o[p].type ){
-                        o[p].checked = false;
-                    }
-                }
-            " >
-        <div id="statusDiv" class="pull-right"></div>
-    </div>
+              <label for="chkCI">CI:</label><br>
+              <input type="radio" id="chkCI" name="chkCI" value=">0 && <=10"
+                  onclick="
+                      if(this.checked){
+                          tf.setFilterValue(8, this.value);
+                          tf.filter();
+                      }" > 0 - 10
+              <input type="radio" id="chkCI" name="chkCI" value=">10 && <=20"
+                  onclick="
+                      if(this.checked){
+                          tf.setFilterValue(8, this.value);
+                          tf.filter();
+                      }" > 10 - 20
+              <input type="radio" id="chkCI" name="chkCI" value=">20 && <=30"
+                  onclick="
+                      if(this.checked){
+                          tf.setFilterValue(8, this.value);
+                          tf.filter();
+                      }" > 20 - 30
+          </form>
+      </div>
+      <div class="panel-footer">
+          <input id="btnFlt" value="Filter" type="button"
+            class="btn btn-default" onclick="tf.filter();" >&nbsp;
+          <input id="btnClr" value="Clear" type="button" class="btn btn-link"
+              onclick="tf.clearFilters();
+                  //clears radio btns
+                  for(var o=frmRadioInps.elements, p=o.length - 1; p > -1; p--){
+                      if (o[p].type){
+                          o[p].checked = false;
+                      }
+                  }
+              " >
+          <div id="statusDiv" class="pull-right"></div>
+      </div>
+  </div>
 </div>
 
 <div class="pull-left" style="margin-left: 0.5em;">
@@ -728,8 +732,24 @@
     tf.init();
 </script>
 
-<p class="clearfix">
-    
+<p class="clearfix"></p>
+
+<hr>
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -764,79 +784,88 @@
 
 
 
-</p>
+    </div>
+    <div id="html" class="tab-pane fade">
+        
 
-<h4>Markup</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html">
+  <code class="xml"></code>
+</pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css">
+  <code class="css"></code>
+</pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+</div>
+
+
 <div class="alert alert-warning" role="alert">
     NOTE: the filters panel on the left is designed using Bootstrap's
     panel classes.
 </div>
-<pre>
-&lt;div id="extGrid" class="panel panel-info pull-left"&gt;
-    &lt;div class="panel-heading"&gt;Filters&lt;/div&gt;
-
-    &lt;div class="panel-body bg-info"&gt;
-        &lt;label&gt;Choose Country:&lt;/label&gt;&lt;br&gt;
-        &lt;span id="slcCountry"&gt;&lt;/span&gt;&lt;br&gt;
-
-        &lt;span&gt;Keep Ctrl/Cmd key pressed for multiple selections&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-        &lt;label&gt;Choose Country code:&lt;/label&gt;&lt;br&gt;
-        &lt;span id="slcCode"&gt;&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-
-        &lt;label&gt;Choose year:&lt;/label&gt;&lt;br&gt;
-        &lt;span id="slcYear"&gt;&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-
-        &lt;label for="inpPop"&gt;POP:&lt;/label&gt;&lt;br&gt;
-        &lt;span id="inpPop"&gt;&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-
-        &lt;form id="frmRadioInps" name="frmRadioInps"&gt;
-            &lt;label for="rdoXRat"&gt;XRAT:&lt;/label&gt;&lt;br&gt;
-            &lt;input type="checkbox" id="rdoXRat" name="rdoXRat" value="!NA"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(4, this.value);
-                    } else tf.setFilterValue(4, '');
-                    tf.filter();"  &gt;Not NA
-
-            &lt;br&gt;&lt;br&gt;
-
-            &lt;label for="chkCI"&gt;CI:&lt;/label&gt;&lt;br&gt;
-            &lt;input type="radio" id="chkCI" name="chkCI" value="&gt;0 && &lt;=10"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" &gt; 0 - 10
-            &lt;input type="radio" id="chkCI" name="chkCI" value="&gt;10 && &lt;=20"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" &gt; 10 - 20
-            &lt;input type="radio" id="chkCI" name="chkCI" value="&gt;20 && &lt;=30"
-                onclick="
-                    if(this.checked){
-                        tf.setFilterValue(8, this.value);
-                        tf.filter();
-                    }" &gt; 20 - 30
-        &lt;/form&gt;
-    &lt;/div&gt;
-    &lt;div class="panel-footer"&gt;
-        &lt;input id="btnFlt" value="Filter" type="button"
-            onclick="tf.filter();" &gt;&nbsp;
-        &lt;input id="btnClr" value="Clear" type="button"
-            onclick="tf.clearFilters();
-                //clears radio btns
-                for( var o=frmRadioInps.elements, p=o.length - 1; p &gt; -1; p--) {
-                    if ( o[p].type ){
-                        o[p].checked = false;
-                    }
-                }
-            " &gt;
-        &lt;div id="statusDiv" class="pull-right"&gt;&lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-</pre>
 
 
     </div>

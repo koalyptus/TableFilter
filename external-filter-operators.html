@@ -148,6 +148,8 @@
         
             
         
+            
+        
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -13228,6 +13230,7 @@ var tfConfig = {
         document.querySelector('.countries'),
         {
             base_path: 'tablefilter/',
+            mark_active_columns: true,
             alternate_rows: true,
             rows_counter: true,
             highlight_keywords: true,
@@ -13250,12 +13253,16 @@ var tfConfig = {
     tf.init();
 </script>
 
+<hr>
 <ul class="nav nav-pills">
     <li class="active">
         <a data-toggle="tab" href="#js">JS</a>
     </li>
     <li>
         <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
     </li>
 </ul>
 
@@ -13334,7 +13341,45 @@ var tfConfig = {
 
 
     </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css">
+  <code class="css"></code>
+</pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
 </div>
+
 
 <div class="alert alert-warning" role="alert">
     <p>ENHANCEMENT: Provide via a configuration property an easy way to hide the

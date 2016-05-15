@@ -148,6 +148,8 @@
         
             
         
+            
+        
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -185,44 +187,46 @@
     Instructions: use the drop-down or the buttons to sort the table columns.
 </div>
 
-<div class="row">
-    <div class="btn-group col-md-4">
-        <button type="button" class="btn btn-default dropdown-toggle"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Sort <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li>
-                <a id="extSort0" href="#" onclick="sortColumn(0);">Country</a>
-                <a id="extSort1" href="#" onclick="sortColumn(1);">ISO</a>
-                <a id="extSort2" href="#" onclick="sortColumn(2);">Year</a>
-                <a id="extSort3" href="#" onclick="sortColumn(3);">POP</a>
-                <a id="extSort4" href="#" onclick="sortColumn(4);">XRAT</a>
-                <a id="extSort5" href="#" onclick="sortColumn(5);">PPP</a>
-                <a id="extSort6" href="#" onclick="sortColumn(6);">cgdp</a>
-                <a id="extSort7" href="#" onclick="sortColumn(7);">cc</a>
-                <a id="extSort8" href="#" onclick="sortColumn(8);">ci</a>
-            </li>
-        </ul>
+<div data-config>
+  <div class="row">
+      <div class="btn-group col-md-4">
+          <button type="button" class="btn btn-default dropdown-toggle"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Sort <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+              <li>
+                  <a id="extSort0" href="#" onclick="sortColumn(0);">Country</a>
+                  <a id="extSort1" href="#" onclick="sortColumn(1);">ISO</a>
+                  <a id="extSort2" href="#" onclick="sortColumn(2);">Year</a>
+                  <a id="extSort3" href="#" onclick="sortColumn(3);">POP</a>
+                  <a id="extSort4" href="#" onclick="sortColumn(4);">XRAT</a>
+                  <a id="extSort5" href="#" onclick="sortColumn(5);">PPP</a>
+                  <a id="extSort6" href="#" onclick="sortColumn(6);">cgdp</a>
+                  <a id="extSort7" href="#" onclick="sortColumn(7);">cc</a>
+                  <a id="extSort8" href="#" onclick="sortColumn(8);">ci</a>
+              </li>
+          </ul>
 
-    </div>
+      </div>
 
-    <div class="btn-group col-md-5" role="group" aria-label="...">
-        <button type="button" class="btn btn-default"
-            onclick="sortColumn(0, false);">Country &uarr;</button>
-        <button type="button" class="btn btn-default"
-            onclick="sortColumn(0, true);">Country &darr;</button>
-        <button type="button" class="btn btn-default"
-            onclick="sortColumn(2, false);">Year &uarr;</button>
-        <button type="button" class="btn btn-default"
-            onclick="sortColumn(2, true);">Year &darr;</button>
-    </div>
+      <div class="btn-group col-md-5" role="group" aria-label="...">
+          <button type="button" class="btn btn-default"
+              onclick="sortColumn(0, false);">Country &uarr;</button>
+          <button type="button" class="btn btn-default"
+              onclick="sortColumn(0, true);">Country &darr;</button>
+          <button type="button" class="btn btn-default"
+              onclick="sortColumn(2, false);">Year &uarr;</button>
+          <button type="button" class="btn btn-default"
+              onclick="sortColumn(2, true);">Year &darr;</button>
+      </div>
 
-    <div class="col-md-3">
-        <div class="pull-right">
-            Sorted column: <span class="badge">None</span>
-        </div>
-    </div>
+      <div class="col-md-3">
+          <div class="pull-right">
+              Sorted column: <span class="badge">None</span>
+          </div>
+      </div>
+  </div>
 </div>
 
 <p></p>
@@ -715,8 +719,22 @@
     tf.init();
 </script>
 
-<p>
-    
+<hr>
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -751,54 +769,87 @@
 
 
 
-</p>
+    </div>
+    <div id="html" class="tab-pane fade">
+        
 
-<h4>Markup</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html">
+  <code class="xml"></code>
+</pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css">
+  <code class="css"></code>
+</pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+</div>
+
+
 <div class="alert alert-warning" role="alert">
     NOTE: the sorting commands above the table use Bootstrap styles.
 </div>
-
-<pre>
-&lt;div class="row"&gt;
-    &lt;div class="btn-group col-md-4"&gt;
-        &lt;button type="button" class="btn btn-default dropdown-toggle"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;
-            Sort &lt;span class="caret"&gt;&lt;/span&gt;
-        &lt;/button&gt;
-        &lt;ul class="dropdown-menu"&gt;
-            &lt;li&gt;
-                &lt;a id="extSort0" href="#" onclick="sortColumn(0);"&gt;Country&lt;/a&gt;
-                &lt;a id="extSort1" href="#" onclick="sortColumn(1);"&gt;ISO&lt;/a&gt;
-                &lt;a id="extSort2" href="#" onclick="sortColumn(2);"&gt;Year&lt;/a&gt;
-                &lt;a id="extSort3" href="#" onclick="sortColumn(3);"&gt;POP&lt;/a&gt;
-                &lt;a id="extSort4" href="#" onclick="sortColumn(4);"&gt;XRAT&lt;/a&gt;
-                &lt;a id="extSort5" href="#" onclick="sortColumn(5);"&gt;PPP&lt;/a&gt;
-                &lt;a id="extSort6" href="#" onclick="sortColumn(6);"&gt;cgdp&lt;/a&gt;
-                &lt;a id="extSort7" href="#" onclick="sortColumn(7);"&gt;cc&lt;/a&gt;
-                &lt;a id="extSort8" href="#" onclick="sortColumn(8);"&gt;ci&lt;/a&gt;
-            &lt;/li&gt;
-        &lt;/ul&gt;
-
-    &lt;/div&gt;
-
-    &lt;div class="btn-group col-md-5" role="group" aria-label="..."&gt;
-        &lt;button type="button" class="btn btn-default"
-            onclick="sortColumn(0, false);"&gt;Country &uarr;&lt;/button&gt;
-        &lt;button type="button" class="btn btn-default"
-            onclick="sortColumn(0, true);"&gt;Country &darr;&lt;/button&gt;
-        &lt;button type="button" class="btn btn-default"
-            onclick="sortColumn(2, false);"&gt;Year &uarr;&lt;/button&gt;
-        &lt;button type="button" class="btn btn-default"
-            onclick="sortColumn(2, true);"&gt;Year &darr;&lt;/button&gt;
-    &lt;/div&gt;
-
-    &lt;div class="col-md-3"&gt;
-        &lt;div class="pull-right"&gt;
-            Sorted column: &lt;span class="badge"&gt;None&lt;/span&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-</pre>
 
 
     </div>

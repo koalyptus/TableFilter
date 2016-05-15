@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>0 configuration | TableFilter</title>
+    <title>Responsive grid layout | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -176,12 +176,20 @@
     <div class="container theme-showcase" role="main">
 
       
+<div data-config>
+<link rel="stylesheet" type="text/css" href="tablefilter/style/tablefilter.css">
+</div>
 
-<h1>Zero configuration</h1>
+<h1>Responsive grid layout</h1>
 <p>
-    With no configuration, <code>TableFilter</code> adds by default a text-box
-    filter to each column.
+    Easily turn your tabular data into a responsive data table with the
+    <code>grid_layout</code> and <code>grid_width</code> options.
 </p>
+
+<div class="alert alert-info" role="alert">
+  Instructions: resize the browser's window or choose a device in the browser's
+  developer tools.
+</div>
 
 
 
@@ -622,12 +630,25 @@
 </table>
 
 
+<div class="alert alert-warning" role="alert">
+    <code>TableFilter</code> imports the required stylesheets dynamically.
+    However, if you use <code>grid_layout</code>, it is recommended to
+    import at least the main stylesheet in your page: <br>
+    <code>
+&lt;link rel="stylesheet" type="text/css" href="{your path to tablefilter}/style/tablefilter.css" /&gt;
+    </code>
+</div>
+
 
 <script src="tablefilter/tablefilter.js"></script>
 
 
 <script data-config>
-    var tf = new TableFilter('demo');
+    var tf = new TableFilter('demo', {
+      base_path: 'tablefilter/',
+      grid_layout: true,
+      grid_width: '100%'
+    });
     tf.init();
 </script>
 
@@ -758,16 +779,6 @@
     </div>
 </div>
 
-
-<div class="alert alert-warning" role="alert">
-    It is recommended to always define the <code>base_path</code> setting in
-    the configuration object. If not specified, the script will default to
-    <code>tablefilter/</code> directory:
-    <pre>
-your-page.html
-    |— tablefilter
-    </pre>
-</div>
 
 
     </div>

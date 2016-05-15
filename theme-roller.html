@@ -148,6 +148,8 @@
         
             
         
+            
+        
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -177,14 +179,16 @@
 
 <h1>Theme roller</h1>
 
-<div class="form-inline form-group">
-    <label>Theme:
-        <select onchange="javascript:changeTheme(this.value);" class="form-control">
-            <option value="default" selected="selected">default</option>
-            <option value="mytheme">mytheme</option>
-            <option value="skyblue">skyblue</option>
-        </select>
-    </label>
+<div data-config>
+  <div class="form-inline form-group">
+      <label>Theme:
+          <select onchange="javascript:changeTheme(this.value);" class="form-control">
+              <option value="default" selected="selected">default</option>
+              <option value="mytheme">mytheme</option>
+              <option value="skyblue">skyblue</option>
+          </select>
+      </label>
+  </div>
 </div>
 
 
@@ -540,8 +544,22 @@
     }
 </script>
 
-<p>
-    
+<hr>
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
 
 
 
@@ -576,23 +594,87 @@
 
 
 
-</p>
+    </div>
+    <div id="html" class="tab-pane fade">
+        
 
-<h4>Markup</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html">
+  <code class="xml"></code>
+</pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css">
+  <code class="css"></code>
+</pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+</div>
+
+
 <div class="alert alert-warning" role="alert">
     NOTE: the theme selector is designed using Bootstrap's form classes.
 </div>
-<pre>
-&lt;div class="form-inline form-group"&gt;
-    &lt;label&gt;Theme:
-        &lt;select onchange="javascript:changeTheme(this.value);" class="form-control"&gt;
-            &lt;option value="default" selected="selected"&gt;default&lt;/option&gt;
-            &lt;option value="mytheme"&gt;mytheme&lt;/option&gt;
-            &lt;option value="skyblue"&gt;skyblue&lt;/option&gt;
-        &lt;/select&gt;
-    &lt;/label&gt;
-&lt;/div&gt;
-</pre>
 
 
     </div>

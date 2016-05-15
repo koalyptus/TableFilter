@@ -148,6 +148,8 @@
         
             
         
+            
+        
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -248,7 +250,9 @@
 
 
 <!-- RequiresJS -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
+<div data-config>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
+</div>
 
 <script data-config>
 // AMD example
@@ -269,14 +273,16 @@ requirejs(['./tablefilter/tablefilter'], function(mod) {
 );
 </script>
 
-<p></p>
-
+<hr>
 <ul class="nav nav-pills">
     <li class="active">
         <a data-toggle="tab" href="#js">JS</a>
     </li>
     <li>
         <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
     </li>
 </ul>
 
@@ -319,12 +325,81 @@ requirejs(['./tablefilter/tablefilter'], function(mod) {
 
     </div>
     <div id="html" class="tab-pane fade">
-<pre>
-&lt;!-- RequiresJS --&gt;
-&lt;script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"&gt;&lt;/script&gt;
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html">
+  <code class="xml"></code>
 </pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css">
+  <code class="css"></code>
+</pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
     </div>
 </div>
+
 
 
     </div>
