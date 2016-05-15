@@ -5,7 +5,7 @@
 import Str from './string';
 
 export default {
-    has: function (arr, val, caseSensitive) {
+    has(arr, val, caseSensitive) {
         let sCase = Boolean(caseSensitive);
         for (var i = 0, l = arr.length; i < l; i++) {
             if (Str.matchCase(arr[i].toString(), sCase) === val) {
