@@ -4860,24 +4860,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#prfxcookiefltsvalues",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxCookieFltsValues",
-    "src/tablefilter.js~TableFilter#prfxCookieFltsValues",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxcookiepagelen",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxCookiePageLen",
-    "src/tablefilter.js~TableFilter#prfxCookiePageLen",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxcookiepagenb",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxCookiePageNb",
-    "src/tablefilter.js~TableFilter#prfxCookiePageNb",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#prfxflt",
     "class/src/tablefilter.js~TableFilter.html#instance-member-prfxFlt",
     "src/tablefilter.js~TableFilter#prfxFlt",
