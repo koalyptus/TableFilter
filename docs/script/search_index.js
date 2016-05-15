@@ -234,6 +234,54 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/types.js~isarray",
+    "variable/index.html#static-variable-isArray",
+    "<span>isArray</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/types.js~isempty",
+    "variable/index.html#static-variable-isEmpty",
+    "<span>isEmpty</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/types.js~isfn",
+    "variable/index.html#static-variable-isFn",
+    "<span>isFn</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/types.js~isnull",
+    "variable/index.html#static-variable-isNull",
+    "<span>isNull</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/types.js~isnumber",
+    "variable/index.html#static-variable-isNumber",
+    "<span>isNumber</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/types.js~isobj",
+    "variable/index.html#static-variable-isObj",
+    "<span>isObj</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/types.js~isstring",
+    "variable/index.html#static-variable-isString",
+    "<span>isString</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/types.js~isundef",
+    "variable/index.html#static-variable-isUndef",
+    "<span>isUndef</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/root.js~root",
     "variable/index.html#static-variable-root",
     "<span>root</span> <span class=\"search-result-import-path\">tablefilter/src/root.js</span>",

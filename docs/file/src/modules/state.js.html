@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/state.js | tablefilter v0.2.25 API Document</title>
+  <title data-ice="title">src/modules/state.js | tablefilter v0.2.26 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -49,6 +49,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isArray">isArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isFn">isFn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isNull">isNull</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isNumber">isNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isObj">isObj</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isString">isString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isUndef">isUndef</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/advancedGrid</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colOps</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colsVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></span></li>
@@ -81,7 +89,7 @@
 import {Hash} from &apos;./hash&apos;;
 import {Storage} from &apos;./storage&apos;;
 import Str from &apos;../string&apos;;
-import Types from &apos;../types&apos;;
+import {isArray, isNull, isString, isUndef} from &apos;../types&apos;;
 
 /**
  * Reflects the state of features to be persisted via hash, localStorage or
@@ -104,10 +112,10 @@ export class State extends Feature {
         let cfg = this.config.state;
 
         this.enableHash = cfg === true ||
-            (Types.isObj(cfg.types) &amp;&amp; cfg.types.indexOf(&apos;hash&apos;) !== -1);
-        this.enableLocalStorage = Types.isObj(cfg.types) &amp;&amp;
+            (isArray(cfg.types) &amp;&amp; cfg.types.indexOf(&apos;hash&apos;) !== -1);
+        this.enableLocalStorage = isArray(cfg.types) &amp;&amp;
             cfg.types.indexOf(&apos;local_storage&apos;) !== -1;
-        this.enableCookie = Types.isObj(cfg.types) &amp;&amp;
+        this.enableCookie = isArray(cfg.types) &amp;&amp;
             cfg.types.indexOf(&apos;cookie&apos;) !== -1;
         this.persistFilters = cfg.filters === false ? false : true;
         this.persistPageNumber = Boolean(cfg.page_number);
@@ -186,7 +194,7 @@ export class State extends Feature {
             filterValues.forEach((val, idx) =&gt; {
                 let key = `${this.prfxCol}${idx}`;
 
-                if (Types.isString(val) &amp;&amp; Str.isEmpty(val)) {
+                if (isString(val) &amp;&amp; Str.isEmpty(val)) {
                     if (state.hasOwnProperty(key)) {
                         state[key].flt = undefined;
                     }
@@ -198,7 +206,7 @@ export class State extends Feature {
         }
 
         if (this.persistPageNumber) {
-            if (Types.isNull(this.pageNb)) {
+            if (isNull(this.pageNb)) {
                 state[this.pageNbKey] = undefined;
             } else {
                 state[this.pageNbKey] = this.pageNb;
@@ -206,7 +214,7 @@ export class State extends Feature {
         }
 
         if (this.persistPageLength) {
-            if (Types.isNull(this.pageLength)) {
+            if (isNull(this.pageLength)) {
                 state[this.pageLengthKey] = undefined;
             } else {
                 state[this.pageLengthKey] = this.pageLength;
@@ -214,7 +222,7 @@ export class State extends Feature {
         }
 
         if (this.persistSort) {
-            if (!Types.isNull(this.sort)) {
+            if (!isNull(this.sort)) {
                 // Remove previuosly sorted column
                 Object.keys(state).forEach((key) =&gt; {
                     if (key.indexOf(this.prfxCol) !== -1 &amp;&amp; state[key]) {
@@ -229,7 +237,7 @@ export class State extends Feature {
         }
 
         if (this.persistColsVisibility) {
-            if (!Types.isNull(this.hiddenCols)) {
+            if (!isNull(this.hiddenCols)) {
                 // Clear previuosly hidden columns
                 Object.keys(state).forEach((key) =&gt; {
                     if (key.indexOf(this.prfxCol) !== -1 &amp;&amp; state[key]) {
@@ -246,7 +254,7 @@ export class State extends Feature {
         }
 
         if (this.persistFiltersVisibility) {
-            if (Types.isNull(this.filtersVisibility)) {
+            if (isNull(this.filtersVisibility)) {
                 state[this.filtersVisKey] = undefined;
             } else {
                 state[this.filtersVisKey] = this.filtersVisibility;
@@ -398,7 +406,7 @@ export class State extends Feature {
         Object.keys(state).forEach((key) =&gt; {
             if (key.indexOf(this.prfxCol) !== -1) {
                 let colIdx = parseInt(key.replace(this.prfxCol, &apos;&apos;), 10);
-                if (!Types.isUndef(state[key].sort)) {
+                if (!isUndef(state[key].sort)) {
                     let sort = state[key].sort;
                     this.emitter.emit(&apos;sort&apos;, tf, colIdx, sort.descending);
                 }
@@ -422,7 +430,7 @@ export class State extends Feature {
         Object.keys(state).forEach((key) =&gt; {
             if (key.indexOf(this.prfxCol) !== -1) {
                 let colIdx = parseInt(key.replace(this.prfxCol, &apos;&apos;), 10);
-                if (!Types.isUndef(state[key].hidden)) {
+                if (!isUndef(state[key].hidden)) {
                     hiddenCols.push(colIdx);
                 }
             }
