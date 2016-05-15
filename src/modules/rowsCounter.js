@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
-import Types from '../types';
+import {isFn} from '../types';
 
 export class RowsCounter extends Feature{
 
@@ -33,10 +33,10 @@ export class RowsCounter extends Feature{
         //label preceding nb rows label
         this.prfxTotRowsTxt = 'totRowsTextSpan_';
         //callback raised before counter is refreshed
-        this.onBeforeRefreshCounter = Types.isFn(f.on_before_refresh_counter) ?
+        this.onBeforeRefreshCounter = isFn(f.on_before_refresh_counter) ?
             f.on_before_refresh_counter : null;
         //callback raised after counter is refreshed
-        this.onAfterRefreshCounter = Types.isFn(f.on_after_refresh_counter) ?
+        this.onAfterRefreshCounter = isFn(f.on_after_refresh_counter) ?
             f.on_after_refresh_counter : null;
     }
 

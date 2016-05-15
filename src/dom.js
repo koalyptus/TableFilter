@@ -1,4 +1,4 @@
-import Types from './types';
+import {isUndef} from './types';
 import Str from './string';
 
 /**
@@ -12,8 +12,8 @@ export default {
      * @param  {NodeElement} node
      * @return {String}
      */
-    getText(node){
-        if(Types.isUndef(node.textContent)) {
+    getText(node) {
+        if (isUndef(node.textContent)) {
             return Str.trim(node.innerText);
         }
         return Str.trim(node.textContent);
@@ -24,10 +24,10 @@ export default {
      * @param  {NodeElement} node node
      * @return {String}
      */
-    getFirstTextNode(node){
-        for(let i=0; i<node.childNodes.length; i++){
+    getFirstTextNode(node) {
+        for (let i = 0; i < node.childNodes.length; i++) {
             let n = node.childNodes[i];
-            if(n.nodeType === 3){
+            if (n.nodeType === 3) {
                 return n.data;
             }
         }
@@ -40,18 +40,18 @@ export default {
      *                    items, the attribute name and its value ['id','myId']
      * @return {Object}     created element
      */
-    create(tag){
-        if(!tag || tag===''){
+    create(tag) {
+        if (!tag || tag === '') {
             return;
         }
 
         let el = document.createElement(tag),
             args = arguments;
 
-        if(args.length > 1){
-            for(let i=0; i<args.length; i++){
+        if (args.length > 1) {
+            for (let i = 0; i < args.length; i++) {
                 let argtype = typeof args[i];
-                if(argtype.toLowerCase() === 'object' && args[i].length === 2){
+                if (argtype === 'object' && args[i].length === 2) {
                     el.setAttribute(args[i][0], args[i][1]);
                 }
             }
@@ -64,7 +64,7 @@ export default {
      * @param  {DOMElement} node
      * @return {DOMElement} old node reference
      */
-    remove(node){
+    remove(node) {
         return node.parentNode.removeChild(node);
     },
 
@@ -73,43 +73,43 @@ export default {
      * @param  {String} txt
      * @return {Object}
      */
-    text(txt){
+    text(txt) {
         return document.createTextNode(txt);
     },
 
-    hasClass(ele, cls){
-        if(!ele){ return false; }
+    hasClass(ele, cls) {
+        if (!ele) { return false; }
 
-        if(supportsClassList()){
+        if (supportsClassList()) {
             return ele.classList.contains(cls);
         }
-        return ele.className.match(new RegExp('(\\s|^)'+ cls +'(\\s|$)'));
+        return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
     },
 
-    addClass(ele, cls){
-        if(!ele){ return; }
+    addClass(ele, cls) {
+        if (!ele) { return; }
 
-        if(supportsClassList()){
+        if (supportsClassList()) {
             ele.classList.add(cls);
             return;
         }
 
-        if(ele.className === ''){
+        if (ele.className === '') {
             ele.className = cls;
         }
-        else if(!this.hasClass(ele, cls)){
+        else if (!this.hasClass(ele, cls)) {
             ele.className += ' ' + cls;
         }
     },
 
-    removeClass(ele, cls){
-        if(!ele){ return; }
+    removeClass(ele, cls) {
+        if (!ele) { return; }
 
-        if(supportsClassList()){
+        if (supportsClassList()) {
             ele.classList.remove(cls);
             return;
         }
-        let reg = new RegExp('(\\s|^)'+ cls +'(\\s|$)', 'g');
+        let reg = new RegExp('(\\s|^)' + cls + '(\\s|$)', 'g');
         ele.className = ele.className.replace(reg, '');
     },
 
@@ -120,11 +120,11 @@ export default {
      * @param  {Boolean} isSel whether option is selected
      * @return {Object}        option element
      */
-    createOpt(text, value, isSel){
+    createOpt(text, value, isSel) {
         let isSelected = isSel ? true : false,
             opt = isSelected ?
-                this.create('option', ['value',value], ['selected','true']) :
-                this.create('option', ['value',value]);
+                this.create('option', ['value', value], ['selected', 'true']) :
+                this.create('option', ['value', value]);
         opt.appendChild(this.text(text));
         return opt;
     },
@@ -136,7 +136,7 @@ export default {
      * @param  {String} labelText check item label text
      * @return {Object}           li DOM element
      */
-    createCheckItem(chkIndex, chkValue, labelText){
+    createCheckItem(chkIndex, chkValue, labelText) {
         let li = this.create('li'),
             label = this.create('label', ['for', chkIndex]),
             check = this.create('input',
@@ -153,16 +153,16 @@ export default {
         return li;
     },
 
-    id(key){
+    id(key) {
         return document.getElementById(key);
     },
 
-    tag(o, tagname){
+    tag(o, tagname) {
         return o.getElementsByTagName(tagname);
     }
 };
 
 // HTML5 classList API
-function supportsClassList(){
+function supportsClassList() {
     return document.documentElement.classList;
 }

@@ -175,11 +175,11 @@ export class Dropdown extends Feature {
                         ((rows[k].style.display === '' && !tf.paging) ||
                             (tf.paging && (!tf.validRowsIndex ||
                                 (tf.validRowsIndex &&
-                                    tf.validRowsIndex.indexOf(k) != -1)) &&
+                                    tf.validRowsIndex.indexOf(k) !== -1)) &&
                                 ((activeIdx === undefined ||
                                     activeIdx === colIndex) ||
-                                    (activeIdx != colIndex &&
-                                    tf.validRowsIndex.indexOf(k) != -1)))))) {
+                                    (activeIdx !== colIndex &&
+                                    tf.validRowsIndex.indexOf(k) !== -1)))))) {
                     let cellData = tf.getCellData(cell[j]),
                         //Vary Peter's patch
                         cellString = Str.matchCase(cellData, matchCase);
@@ -224,7 +224,7 @@ export class Dropdown extends Feature {
         }
 
         //asc sort
-        if (tf.sortNumAsc.indexOf(colIndex) != -1) {
+        if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
             try {
                 this.opts.sort(Sort.numSortAsc);
                 if (excludedOpts) {
@@ -239,7 +239,7 @@ export class Dropdown extends Feature {
             }//in case there are alphanumeric values
         }
         //desc sort
-        if (tf.sortNumDesc.indexOf(colIndex) != -1) {
+        if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
             try {
                 this.opts.sort(Sort.numSortDesc);
                 if (excludedOpts) {

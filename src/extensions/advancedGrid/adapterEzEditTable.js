@@ -243,7 +243,7 @@ export default class AdapterEzEditTable extends Feature {
                             paging.currentPageNb !== paging.nbPages) {
                             paging.setPage('last');
                         }
-                        else if ((rowIndex == validIndexes[0]) &&
+                        else if ((rowIndex === validIndexes[0]) &&
                             paging.currentPageNb !== 1) {
                             paging.setPage('first');
                         }

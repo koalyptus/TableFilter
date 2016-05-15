@@ -2,7 +2,7 @@ import {Feature} from '../feature';
 import {Hash} from './hash';
 import {Storage} from './storage';
 import Str from '../string';
-import Types from '../types';
+import {isArray, isNull, isString, isUndef} from '../types';
 
 /**
  * Reflects the state of features to be persisted via hash, localStorage or
@@ -25,10 +25,10 @@ export class State extends Feature {
         let cfg = this.config.state;
 
         this.enableHash = cfg === true ||
-            (Types.isObj(cfg.types) && cfg.types.indexOf('hash') !== -1);
-        this.enableLocalStorage = Types.isObj(cfg.types) &&
+            (isArray(cfg.types) && cfg.types.indexOf('hash') !== -1);
+        this.enableLocalStorage = isArray(cfg.types) &&
             cfg.types.indexOf('local_storage') !== -1;
-        this.enableCookie = Types.isObj(cfg.types) &&
+        this.enableCookie = isArray(cfg.types) &&
             cfg.types.indexOf('cookie') !== -1;
         this.persistFilters = cfg.filters === false ? false : true;
         this.persistPageNumber = Boolean(cfg.page_number);
@@ -107,7 +107,7 @@ export class State extends Feature {
             filterValues.forEach((val, idx) => {
                 let key = `${this.prfxCol}${idx}`;
 
-                if (Types.isString(val) && Str.isEmpty(val)) {
+                if (isString(val) && Str.isEmpty(val)) {
                     if (state.hasOwnProperty(key)) {
                         state[key].flt = undefined;
                     }
@@ -119,7 +119,7 @@ export class State extends Feature {
         }
 
         if (this.persistPageNumber) {
-            if (Types.isNull(this.pageNb)) {
+            if (isNull(this.pageNb)) {
                 state[this.pageNbKey] = undefined;
             } else {
                 state[this.pageNbKey] = this.pageNb;
@@ -127,7 +127,7 @@ export class State extends Feature {
         }
 
         if (this.persistPageLength) {
-            if (Types.isNull(this.pageLength)) {
+            if (isNull(this.pageLength)) {
                 state[this.pageLengthKey] = undefined;
             } else {
                 state[this.pageLengthKey] = this.pageLength;
@@ -135,7 +135,7 @@ export class State extends Feature {
         }
 
         if (this.persistSort) {
-            if (!Types.isNull(this.sort)) {
+            if (!isNull(this.sort)) {
                 // Remove previuosly sorted column
                 Object.keys(state).forEach((key) => {
                     if (key.indexOf(this.prfxCol) !== -1 && state[key]) {
@@ -150,7 +150,7 @@ export class State extends Feature {
         }
 
         if (this.persistColsVisibility) {
-            if (!Types.isNull(this.hiddenCols)) {
+            if (!isNull(this.hiddenCols)) {
                 // Clear previuosly hidden columns
                 Object.keys(state).forEach((key) => {
                     if (key.indexOf(this.prfxCol) !== -1 && state[key]) {
@@ -167,7 +167,7 @@ export class State extends Feature {
         }
 
         if (this.persistFiltersVisibility) {
-            if (Types.isNull(this.filtersVisibility)) {
+            if (isNull(this.filtersVisibility)) {
                 state[this.filtersVisKey] = undefined;
             } else {
                 state[this.filtersVisKey] = this.filtersVisibility;
@@ -319,7 +319,7 @@ export class State extends Feature {
         Object.keys(state).forEach((key) => {
             if (key.indexOf(this.prfxCol) !== -1) {
                 let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);
-                if (!Types.isUndef(state[key].sort)) {
+                if (!isUndef(state[key].sort)) {
                     let sort = state[key].sort;
                     this.emitter.emit('sort', tf, colIdx, sort.descending);
                 }
@@ -343,7 +343,7 @@ export class State extends Feature {
         Object.keys(state).forEach((key) => {
             if (key.indexOf(this.prfxCol) !== -1) {
                 let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);
-                if (!Types.isUndef(state[key].hidden)) {
+                if (!isUndef(state[key].hidden)) {
                     hiddenCols.push(colIdx);
                 }
             }

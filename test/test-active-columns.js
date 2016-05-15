@@ -19,11 +19,11 @@
         var header1 = tf.getHeaderElement(1);
         var header3 = tf.getHeaderElement(3);
         deepEqual(
-            header1.className.indexOf('activeHeader') != -1,
+            header1.className.indexOf('activeHeader') !== -1,
             true,
             'Active filter indicator');
         deepEqual(
-            header3.className.indexOf('activeHeader') != -1,
+            header3.className.indexOf('activeHeader') !== -1,
             true,
             'Active filter indicator');
     });
@@ -44,11 +44,11 @@
         var header1 = tf.getHeaderElement(1);
         var header3 = tf.getHeaderElement(3);
         deepEqual(
-            header1.className.indexOf('activeHeader') != -1,
+            header1.className.indexOf('activeHeader') !== -1,
             true,
             'Active filter indicator');
         deepEqual(
-            header3.className.indexOf('activeHeader') != -1,
+            header3.className.indexOf('activeHeader') !== -1,
             true,
             'Active filter indicator');
     });
@@ -69,11 +69,11 @@
         var header1 = tf.getHeaderElement(1);
         var header3 = tf.getHeaderElement(3);
         deepEqual(
-            header1.className.indexOf('activeHeader') != -1,
+            header1.className.indexOf('activeHeader') !== -1,
             true,
             'Active filter indicator');
         deepEqual(
-            header3.className.indexOf('activeHeader') != -1,
+            header3.className.indexOf('activeHeader') !== -1,
             true,
             'Active filter indicator');
 

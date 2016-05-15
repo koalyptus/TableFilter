@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
-import Types from '../types';
+import {isEmpty, isFn} from '../types';
 import {NONE} from '../const';
 
 export class NoResults extends Feature{
@@ -18,23 +18,23 @@ export class NoResults extends Feature{
         this.content = f.content || 'No results';
         this.customContainer = f.custom_container || null;
         this.customContainerId = f.custom_container_id || null;
-        this.isExternal = !Types.isEmpty(this.customContainer) ||
-            !Types.isEmpty(this.customContainerId);
+        this.isExternal = !isEmpty(this.customContainer) ||
+            !isEmpty(this.customContainerId);
         this.cssClass = f.css_class || 'no-results';
 
         this.cont = null;
 
         //callback before message is displayed
-        this.onBeforeShowMsg = Types.isFn(f.on_before_show_msg) ?
+        this.onBeforeShowMsg = isFn(f.on_before_show_msg) ?
             f.on_before_show_msg : null;
         //callback after message is displayed
-        this.onAfterShowMsg = Types.isFn(f.on_after_show_msg) ?
+        this.onAfterShowMsg = isFn(f.on_after_show_msg) ?
             f.on_after_show_msg : null;
         //callback before message is hidden
-        this.onBeforeHideMsg = Types.isFn(f.on_before_hide_msg) ?
+        this.onBeforeHideMsg = isFn(f.on_before_hide_msg) ?
             f.on_before_hide_msg : null;
         //callback after message is hidden
-        this.onAfterHideMsg = Types.isFn(f.on_after_hide_msg) ?
+        this.onAfterHideMsg = isFn(f.on_after_hide_msg) ?
             f.on_after_hide_msg : null;
 
         this.prfxNoResults = 'nores_';

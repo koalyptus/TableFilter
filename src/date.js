@@ -8,7 +8,7 @@ export default {
             format = 'DMY';
         }
         format = format.toUpperCase();
-        if(format.length != 3) {
+        if(format.length !== 3) {
             if(format === 'DDMMMYYYY'){
                 let d = this.format(dateStr, format);
                 dateStr = d.getDate() +'/'+ (d.getMonth()+1) +'/'+
@@ -71,10 +71,10 @@ export default {
         let dt = new Date(
             parseInt(yy, 10), parseInt(mm, 10)-1, parseInt(dd, 10),
             0, 0, 0, 0);
-        if(parseInt(dd, 10) != dt.getDate()){
+        if(parseInt(dd, 10) !== dt.getDate()){
             return false;
         }
-        if(parseInt(mm, 10)-1 != dt.getMonth()){
+        if(parseInt(mm, 10)-1 !== dt.getMonth()){
             return false;
         }
         return true;

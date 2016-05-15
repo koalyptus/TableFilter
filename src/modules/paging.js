@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
-import Types from '../types';
+import {isArray, isFn, isNull} from '../types';
 import Str from '../string';
 import Event from '../event';
 import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
@@ -36,7 +36,7 @@ export class Paging extends Feature {
         //stores results per page text and values
         this.resultsPerPage = f.results_per_page || null;
         //enables/disables results per page drop-down
-        this.hasResultsPerPage = Types.isArray(this.resultsPerPage);
+        this.hasResultsPerPage = isArray(this.resultsPerPage);
         //defines css class for results per page select
         this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';
         //css class for label preceding results per page select
@@ -86,10 +86,10 @@ export class Paging extends Feature {
         //defines previous page button html
         this.pageSelectorType = f.page_selector_type || SELECT;
         //calls function before page is changed
-        this.onBeforeChangePage = Types.isFn(f.on_before_change_page) ?
+        this.onBeforeChangePage = isFn(f.on_before_change_page) ?
             f.on_before_change_page : null;
         //calls function before page is changed
-        this.onAfterChangePage = Types.isFn(f.on_after_change_page) ?
+        this.onAfterChangePage = isFn(f.on_after_change_page) ?
             f.on_after_change_page : null;
 
         //pages select
@@ -428,8 +428,7 @@ export class Paging extends Feature {
             var rowDisplayed = false;
 
             if (h >= startPagingRow && h < endPagingRow) {
-                if (Types.isNull(isRowValid) ||
-                    Boolean(isRowValid === 'true')) {
+                if (isNull(isRowValid) || Boolean(isRowValid === 'true')) {
                     r.style.display = '';
                     rowDisplayed = true;
                 }
@@ -505,7 +504,7 @@ export class Paging extends Feature {
             ev.target.blur();
         };
 
-        var slcR = Dom.create( SELECT, ['id', this.prfxSlcResults + tf.id]);
+        var slcR = Dom.create(SELECT, ['id', this.prfxSlcResults + tf.id]);
         slcR.className = this.resultsSlcCssClass;
         var slcRText = this.resultsPerPage[0],
             slcROpts = this.resultsPerPage[1];

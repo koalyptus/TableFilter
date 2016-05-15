@@ -1,4 +1,3 @@
-import {root} from './root';
 
 /**
  * Types utilities
@@ -6,87 +5,63 @@ import {root} from './root';
 
 const UNDEFINED = void 0;
 
-export default {
-    /**
-     * Check if argument is an object or a global object
-     * @param  {String or Object}  v
-     * @return {Boolean}
-     */
-    isObj(v) {
-        let isO = false;
-        if (typeof v === 'string') {
-            if (root[v] && typeof root[v] === 'object') {
-                isO = true;
-            }
-        } else {
-            if (v && typeof v === 'object') {
-                isO = true;
-            }
-        }
-        return isO;
-    },
+/**
+ * Check passed argument is an object
+ * @param  {Object}  obj
+ * @return {Boolean}
+ */
+export const isObj =
+    obj => Object.prototype.toString.call(obj) === '[object Object]';
 
-    /**
-     * Check if argument is a function
-     * @param  {Function} fn
-     * @return {Boolean}
-     */
-    isFn(fn) {
-        return (fn && fn.constructor == Function);
-    },
+/**
+ * Check passed argument is a function
+ * @param  {Function} obj
+ * @return {Boolean}
+ */
+export const isFn =
+    obj => Object.prototype.toString.call(obj) === '[object Function]';
 
-    /**
-     * Check if argument is an array
-     * @param  {Array}  obj
-     * @return {Boolean}
-     */
-    isArray(obj) {
-        return (obj && obj.constructor == Array);
-    },
+/**
+ * Check passed argument is an array
+ * @param  {Array}  obj
+ * @return {Boolean}
+ */
+export const isArray =
+    obj => Object.prototype.toString.call(obj) === '[object Array]';
 
-    /**
-     * Check argument is a string
-     * @param {String} val Value
-     * @returns {Boolean}
-     */
-    isString(val) {
-        return Object.prototype.toString.call(val) === '[object String]';
-    },
+/**
+ * Check passed argument is a string
+ * @param {String} obj objue
+ * @returns {Boolean}
+ */
+export const isString =
+    obj => Object.prototype.toString.call(obj) === '[object String]';
 
+/**
+ * Check passed argument is a number
+ * @param {Number} obj
+ * @returns {Boolean}
+ */
+export const isNumber =
+    obj => Object.prototype.toString.call(obj) === '[object Number]';
 
-    /**
-     * Check argument is a number
-     * @param {Number} val
-     * @returns {Boolean}
-     */
-    isNumber(val) {
-        return Object.prototype.toString.call(val) === '[object Number]';
-    },
+/**
+ * Check passed argument is undefined
+ * @param  {Any}  obj
+ * @return {Boolean}
+ */
+export const isUndef = obj => obj === UNDEFINED;
 
-    /**
-     * Determine if argument is undefined
-     * @param  {Any}  o
-     * @return {Boolean}
-     */
-    isUndef(o) {
-        return o === UNDEFINED;
-    },
+/**
+ * Check passed argument is null
+ * @param  {Any}  obj
+ * @return {Boolean}
+ */
+export const isNull = obj => obj === null;
 
-    /**
-     * Determine if argument is null
-     * @param  {Any}  o
-     * @return {Boolean}
-     */
-    isNull(o) {
-        return o === null;
-    },
-
-    /**
-     * Determine if argument is empty (undefined, null or empty string)
-     * @param  {Any}  o
-     * @return {Boolean}
-     */
-    isEmpty(o) {
-        return this.isUndef(o) || this.isNull(o) || o.length === 0;
-    }
-};
+/**
+ * Check passed argument is empty (undefined, null or empty string)
+ * @param  {Any}  obj
+ * @return {Boolean}
+ */
+export const isEmpty = obj => isUndef(obj) || isNull(obj) || obj.length === 0;

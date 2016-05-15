@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import Types from '../types';
+import {isFn} from '../types';
 import Dom from '../dom';
 import Event from '../event';
 import {INPUT, NONE} from '../const';
@@ -31,17 +31,16 @@ export class PopupFilter extends Feature{
         //defines css class for popup div containing filter
         this.popUpDivCssClass = f.popup_div_css_class || 'popUpFilter';
         //callback function before popup filtes is opened
-        this.onBeforePopUpOpen = Types.isFn(f.on_before_popup_filter_open) ?
+        this.onBeforePopUpOpen = isFn(f.on_before_popup_filter_open) ?
             f.on_before_popup_filter_open : null;
         //callback function after popup filtes is opened
-        this.onAfterPopUpOpen = Types.isFn(f.on_after_popup_filter_open) ?
+        this.onAfterPopUpOpen = isFn(f.on_after_popup_filter_open) ?
             f.on_after_popup_filter_open : null;
         //callback function before popup filtes is closed
-        this.onBeforePopUpClose =
-            Types.isFn(f.on_before_popup_filter_close) ?
+        this.onBeforePopUpClose = isFn(f.on_before_popup_filter_close) ?
             f.on_before_popup_filter_close : null;
         //callback function after popup filtes is closed
-        this.onAfterPopUpClose = Types.isFn(f.on_after_popup_filter_close) ?
+        this.onAfterPopUpClose = isFn(f.on_after_popup_filter_close) ?
             f.on_after_popup_filter_close : null;
 
         //stores filters spans
