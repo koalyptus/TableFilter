@@ -141,6 +141,7 @@ export class CheckList extends Feature {
         Event.add(ul, 'change', (evt) => this.onChange(evt));
 
         let rows = tf.tbl.rows;
+        let nbRows = tf.getRowsNb(true);
         this.isCustom = tf.isCustomOptions(colIndex);
 
         let activeIdx;
@@ -156,7 +157,7 @@ export class CheckList extends Feature {
 
         flt.innerHTML = '';
 
-        for (let k = tf.refRow; k < tf.nbRows; k++) {
+        for (let k = tf.refRow; k < nbRows; k++) {
             // always visible rows don't need to appear on selects as always
             // valid
             if (tf.hasVisibleRows && tf.visibleRows.indexOf(k) !== -1) {

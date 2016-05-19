@@ -131,6 +131,7 @@ export class Dropdown extends Feature {
         let slcId = tf.fltIds[colIndex];
         let slc = Dom.id(slcId),
             rows = tf.tbl.rows,
+            nbRows = tf.getRowsNb(true),
             matchCase = tf.matchCase;
 
         //custom select test
@@ -150,7 +151,7 @@ export class Dropdown extends Feature {
             filteredDataCol = [];
         }
 
-        for (let k = tf.refRow; k < tf.nbRows; k++) {
+        for (let k = tf.refRow; k < nbRows; k++) {
             // always visible rows don't need to appear on selects as always
             // valid
             if (tf.hasVisibleRows && tf.visibleRows.indexOf(k) !== -1) {
