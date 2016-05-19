@@ -2,7 +2,7 @@ import Event from './event';
 import Dom from './dom';
 import Str from './string';
 import {isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef}
-    from './types';
+from './types';
 import DateHelper from './date';
 import Helpers from './helpers';
 
@@ -1366,7 +1366,7 @@ export class TableFilter {
                     // If numeric type data, perform a strict equality test and
                     // fallback to unformatted number string comparison
                     if (numCellData && this.hasColNbFormat &&
-                        !this.singleSearchFlt) {
+                        this.colNbFormat[j] && !this.singleSearchFlt) {
                         sA = removeNbFormat(sA, nbFormat);
                         occurence = numCellData === sA ||
                             Str.contains(sA.toString(), numCellData.toString(),
