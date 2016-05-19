@@ -113,7 +113,8 @@ export class AlternateRows extends Feature {
         if(!this.initialized){
             return;
         }
-        for(var i=0; i<this.tf.nbRows; i++){
+        let nbRows = this.tf.getRowsNb(true);
+        for(var i=0; i<nbRows; i++){
             this.removeRowBg(i);
         }
 

@@ -122,7 +122,7 @@ export class Paging extends Feature {
         this.prfxPgAfterSpan = 'pgafterspan_';
 
         var start_row = tf.refRow;
-        var nrows = tf.nbRows;
+        var nrows = tf.getRowsNb(true);
         //calculates page nb
         this.nbPages = Math.ceil((nrows - start_row) / this.pagingLength);
 
