@@ -4734,12 +4734,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#nbrows",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-nbRows",
-    "src/tablefilter.js~TableFilter#nbRows",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#nbvisiblerows",
     "class/src/tablefilter.js~TableFilter.html#instance-member-nbVisibleRows",
     "src/tablefilter.js~TableFilter#nbVisibleRows",

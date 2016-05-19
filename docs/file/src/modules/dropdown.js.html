@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/dropdown.js | tablefilter v0.2.28 API Document</title>
+  <title data-ice="title">src/modules/dropdown.js | tablefilter v0.2.29 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -218,6 +218,7 @@ export class Dropdown extends Feature {
         let slcId = tf.fltIds[colIndex];
         let slc = Dom.id(slcId),
             rows = tf.tbl.rows,
+            nbRows = tf.getRowsNb(true),
             matchCase = tf.matchCase;
 
         //custom select test
@@ -237,7 +238,7 @@ export class Dropdown extends Feature {
             filteredDataCol = [];
         }
 
-        for (let k = tf.refRow; k &lt; tf.nbRows; k++) {
+        for (let k = tf.refRow; k &lt; nbRows; k++) {
             // always visible rows don&apos;t need to appear on selects as always
             // valid
             if (tf.hasVisibleRows &amp;&amp; tf.visibleRows.indexOf(k) !== -1) {

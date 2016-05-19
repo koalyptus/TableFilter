@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/advancedGrid/adapterEzEditTable.js | tablefilter v0.2.28 API Document</title>
+  <title data-ice="title">src/extensions/advancedGrid/adapterEzEditTable.js | tablefilter v0.2.29 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -415,7 +415,6 @@ export default class AdapterEzEditTable extends Feature {
                     tf.emitter.emit(&apos;rows-changed&apos;, tf, this);
                     //tf.feature(&apos;rowsCounter&apos;).refresh();
                 } else {
-                    tf.nbRows++;
                     tf.nbVisibleRows++;
                     tf.nbFilterableRows++;
                     tf.paging = false;
@@ -437,7 +436,6 @@ export default class AdapterEzEditTable extends Feature {
                         // tf.feature(&apos;rowsCounter&apos;).refresh();
                         tf.emitter.emit(&apos;rows-changed&apos;, tf, this);
                     } else {
-                        tf.nbRows--;
                         tf.nbVisibleRows--;
                         tf.nbFilterableRows--;
                         tf.paging = false;
