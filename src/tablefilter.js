@@ -1365,7 +1365,8 @@ export class TableFilter {
                 } else {
                     // If numeric type data, perform a strict equality test and
                     // fallback to unformatted number string comparison
-                    if (numCellData && !this.singleSearchFlt) {
+                    if (numCellData && this.hasColNbFormat &&
+                        !this.singleSearchFlt) {
                         sA = removeNbFormat(sA, nbFormat);
                         occurence = numCellData === sA ||
                             Str.contains(sA.toString(), numCellData.toString(),

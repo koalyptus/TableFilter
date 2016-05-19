@@ -48,6 +48,32 @@ test('can filter values in this format: 21-Jul-2010 as date with operator',
     }
 );
 
+module('Issue 217');
+test('can filter columns with blank space separated values (1)', function(){
+    tf.clearFilters();
+    tf.setFilterValue(3, 'c');
+    tf.filter();
+    deepEqual(tf.getValidRows().length, 1, 'Expected number of matches');
+});
+test('can filter columns with blank space separated values (2)', function(){
+    tf.clearFilters();
+    tf.setFilterValue(3, 'xyz');
+    tf.filter();
+    deepEqual(tf.getValidRows().length, 3, 'Expected number of matches');
+});
+test('can filter columns with alpha numeric values (1)', function(){
+    tf.clearFilters();
+    tf.setFilterValue(4, '1');
+    tf.filter();
+    deepEqual(tf.getValidRows().length, 1, 'Expected number of matches');
+});
+test('can filter columns with alpha numeric values (2)', function(){
+    tf.clearFilters();
+    tf.setFilterValue(4, 'numeric');
+    tf.filter();
+    deepEqual(tf.getValidRows().length, 3, 'Expected number of matches');
+});
+
 module('Tear-down');
 test('can destroy TableFilter DOM elements', function() {
     tf.destroy();
