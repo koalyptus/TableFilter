@@ -2,7 +2,7 @@ import Event from './event';
 import Dom from './dom';
 import Str from './string';
 import {isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef}
-    from './types';
+from './types';
 import DateHelper from './date';
 import Helpers from './helpers';
 
@@ -51,7 +51,6 @@ export class TableFilter {
         this.headersRow = null;
         this.cfg = {};
         this.nbFilterableRows = null;
-        this.nbRows = null;
         this.nbCells = null;
         this._hasGrid = false;
 
@@ -452,7 +451,6 @@ export class TableFilter {
 
             this.nbFilterableRows = this.getRowsNb();
             this.nbVisibleRows = this.nbFilterableRows;
-            this.nbRows = this.tbl.rows.length;
 
             // Generate filters
             for (let i = 0; i < n; i++) {
@@ -701,7 +699,6 @@ export class TableFilter {
         this.refRow = this.refRow > 0 ? this.refRow - 1 : 0;
         this.nbFilterableRows = this.getRowsNb();
         this.nbVisibleRows = this.nbFilterableRows;
-        this.nbRows = this.nbFilterableRows + this.refRow;
     }
 
     /**
@@ -1140,6 +1137,7 @@ export class TableFilter {
         this.emitter.emit('before-filtering', this);
 
         let row = this.tbl.rows,
+            nbRows = this.getRowsNb(true),
             hiddenrows = 0;
 
         this.validRowsIndex = [];
@@ -1365,7 +1363,8 @@ export class TableFilter {
                 } else {
                     // If numeric type data, perform a strict equality test and
                     // fallback to unformatted number string comparison
-                    if (numCellData && !this.singleSearchFlt) {
+                    if (numCellData && this.hasColNbFormat &&
+                        this.colNbFormat[j] && !this.singleSearchFlt) {
                         sA = removeNbFormat(sA, nbFormat);
                         occurence = numCellData === sA ||
                             Str.contains(sA.toString(), numCellData.toString(),
@@ -1381,7 +1380,7 @@ export class TableFilter {
             return occurence;
         }//fn
 
-        for (let k = this.refRow; k < this.nbRows; k++) {
+        for (let k = this.refRow; k < nbRows; k++) {
             // already filtered rows display re-init
             row[k].style.display = '';
 
@@ -1499,14 +1498,15 @@ export class TableFilter {
         if (!this.fltGrid) {
             return;
         }
-        let row = this.tbl.rows,
-            colValues = [];
+        let row = this.tbl.rows;
+        let nbRows = this.getRowsNb(true);
+        let colValues = [];
 
         if (includeHeaders) {
             colValues.push(this.getHeadersText()[colIndex]);
         }
 
-        for (let i = this.refRow; i < this.nbRows; i++) {
+        for (let i = this.refRow; i < nbRows; i++) {
             let isExludedRow = false;
             // checks if current row index appears in exclude array
             if (exclude.length > 0) {
@@ -1655,9 +1655,11 @@ export class TableFilter {
      * @return {Number}                 Number of filterable rows
      */
     getRowsNb(includeHeaders) {
-        let s = isUndef(this.refRow) ? 0 : this.refRow,
-            ntrs = this.tbl.rows.length;
-        if (includeHeaders) { s = 0; }
+        let s = isUndef(this.refRow) ? 0 : this.refRow;
+        let ntrs = this.tbl.rows.length;
+        if (includeHeaders) {
+            s = 0;
+        }
         return parseInt(ntrs - s, 10);
     }
 
@@ -1691,12 +1693,13 @@ export class TableFilter {
      */
     getTableData(includeHeaders = false, excludeHiddenCols = false) {
         let rows = this.tbl.rows;
+        let nbRows = this.getRowsNb(true);
         let tblData = [];
         if (includeHeaders) {
             let headers = this.getHeadersText(excludeHiddenCols);
             tblData.push([this.getHeadersRowIndex(), headers]);
         }
-        for (let k = this.refRow; k < this.nbRows; k++) {
+        for (let k = this.refRow; k < nbRows; k++) {
             let rowData = [k, []];
             let cells = rows[k].cells;
             for (let j = 0, len = cells.length; j < len; j++) {
@@ -1931,10 +1934,11 @@ export class TableFilter {
         if (!this.hasVisibleRows) {
             return;
         }
+        let nbRows = this.getRowsNb(true);
         for (let i = 0, len = this.visibleRows.length; i < len; i++) {
             let row = this.visibleRows[i];
             //row index cannot be > nrows
-            if (row <= this.nbRows) {
+            if (row <= nbRows) {
                 this.validateRow(row, true);
             }
         }
@@ -2187,8 +2191,9 @@ export class TableFilter {
             return this.validRowsIndex;
         }
 
+        let nbRows = this.getRowsNb(true);
         this.validRowsIndex = [];
-        for (let k = this.refRow; k < this.getRowsNb(true); k++) {
+        for (let k = this.refRow; k < nbRows; k++) {
             let r = this.tbl.rows[k];
             if (!this.paging) {
                 if (this.getRowDisplay(r) !== NONE) {
@@ -2234,7 +2239,8 @@ export class TableFilter {
      * @return {Number}
      */
     getLastRowIndex() {
-        return (this.nbRows - 1);
+        let nbRows = this.getRowsNb(true);
+        return (nbRows - 1);
     }
 
     /**
