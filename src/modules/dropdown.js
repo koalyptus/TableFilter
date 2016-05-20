@@ -2,7 +2,7 @@ import {Feature} from '../feature';
 import Dom from '../dom';
 import {has} from '../array';
 import Str from '../string';
-import Sort from '../sort';
+import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
 import Event from '../event';
 import {SELECT, MULTIPLE, NONE} from '../const';
 
@@ -214,9 +214,9 @@ export class Dropdown extends Feature {
 
         if (tf.sortSlc && !this.isCustom) {
             if (!matchCase) {
-                this.opts.sort(Sort.ignoreCase);
+                this.opts.sort(ignoreCase);
                 if (excludedOpts) {
-                    excludedOpts.sort(Sort.ignoreCase);
+                    excludedOpts.sort(ignoreCase);
                 }
             } else {
                 this.opts.sort();
@@ -227,12 +227,12 @@ export class Dropdown extends Feature {
         //asc sort
         if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
             try {
-                this.opts.sort(Sort.numSortAsc);
+                this.opts.sort(numSortAsc);
                 if (excludedOpts) {
-                    excludedOpts.sort(Sort.numSortAsc);
+                    excludedOpts.sort(numSortAsc);
                 }
                 if (this.isCustom) {
-                    this.optsTxt.sort(Sort.numSortAsc);
+                    this.optsTxt.sort(numSortAsc);
                 }
             } catch (e) {
                 throw new Error(SORT_ERROR.replace('{0}', colIndex)
@@ -242,12 +242,12 @@ export class Dropdown extends Feature {
         //desc sort
         if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
             try {
-                this.opts.sort(Sort.numSortDesc);
+                this.opts.sort(numSortDesc);
                 if (excludedOpts) {
-                    excludedOpts.sort(Sort.numSortDesc);
+                    excludedOpts.sort(numSortDesc);
                 }
                 if (this.isCustom) {
-                    this.optsTxt.sort(Sort.numSortDesc);
+                    this.optsTxt.sort(numSortDesc);
                 }
             } catch (e) {
                 throw new Error(SORT_ERROR.replace('{0}', colIndex)

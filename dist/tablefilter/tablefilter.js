@@ -4445,8 +4445,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _sort = __webpack_require__(17);
 	
-	var _sort2 = _interopRequireDefault(_sort);
-	
 	var _event = __webpack_require__(1);
 	
 	var _event2 = _interopRequireDefault(_event);
@@ -4664,9 +4662,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        if (tf.sortSlc && !this.isCustom) {
 	            if (!matchCase) {
-	                this.opts.sort(_sort2.default.ignoreCase);
+	                this.opts.sort(_sort.ignoreCase);
 	                if (excludedOpts) {
-	                    excludedOpts.sort(_sort2.default.ignoreCase);
+	                    excludedOpts.sort(_sort.ignoreCase);
 	                }
 	            } else {
 	                this.opts.sort();
@@ -4679,12 +4677,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //asc sort
 	        if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
 	            try {
-	                this.opts.sort(_sort2.default.numSortAsc);
+	                this.opts.sort(_sort.numSortAsc);
 	                if (excludedOpts) {
-	                    excludedOpts.sort(_sort2.default.numSortAsc);
+	                    excludedOpts.sort(_sort.numSortAsc);
 	                }
 	                if (this.isCustom) {
-	                    this.optsTxt.sort(_sort2.default.numSortAsc);
+	                    this.optsTxt.sort(_sort.numSortAsc);
 	                }
 	            } catch (e) {
 	                throw new Error(SORT_ERROR.replace('{0}', colIndex).replace('{1}', 'ascending'));
@@ -4693,12 +4691,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //desc sort
 	        if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
 	            try {
-	                this.opts.sort(_sort2.default.numSortDesc);
+	                this.opts.sort(_sort.numSortDesc);
 	                if (excludedOpts) {
-	                    excludedOpts.sort(_sort2.default.numSortDesc);
+	                    excludedOpts.sort(_sort.numSortDesc);
 	                }
 	                if (this.isCustom) {
-	                    this.optsTxt.sort(_sort2.default.numSortDesc);
+	                    this.optsTxt.sort(_sort.numSortDesc);
 	                }
 	            } catch (e) {
 	                throw new Error(SORT_ERROR.replace('{0}', colIndex).replace('{1}', 'ascending'));
@@ -4880,32 +4878,29 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 17 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	/**
+	 * Sorting utilities
+	 */
 	
-	var _string = __webpack_require__(5);
+	var ignoreCase = exports.ignoreCase = function ignoreCase(a, b) {
+	    var x = a.toLowerCase();
+	    var y = b.toLowerCase();
+	    return x < y ? -1 : x > y ? 1 : 0;
+	};
 	
-	var _string2 = _interopRequireDefault(_string);
+	var numSortAsc = exports.numSortAsc = function numSortAsc(a, b) {
+	    return a - b;
+	};
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	exports.default = {
-	    ignoreCase: function ignoreCase(a, b) {
-	        var x = _string2.default.lower(a);
-	        var y = _string2.default.lower(b);
-	        return x < y ? -1 : x > y ? 1 : 0;
-	    },
-	    numSortAsc: function numSortAsc(a, b) {
-	        return a - b;
-	    },
-	    numSortDesc: function numSortDesc(a, b) {
-	        return b - a;
-	    }
+	var numSortDesc = exports.numSortDesc = function numSortDesc(a, b) {
+	    return b - a;
 	};
 
 /***/ },
@@ -4932,8 +4927,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _string2 = _interopRequireDefault(_string);
 	
 	var _sort = __webpack_require__(17);
-	
-	var _sort2 = _interopRequireDefault(_sort);
 	
 	var _event = __webpack_require__(1);
 	
@@ -5158,9 +5151,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        if (tf.sortSlc && !this.isCustom) {
 	            if (!tf.matchCase) {
-	                this.opts.sort(_sort2.default.ignoreCase);
+	                this.opts.sort(_sort.ignoreCase);
 	                if (this.excludedOpts) {
-	                    this.excludedOpts.sort(_sort2.default.ignoreCase);
+	                    this.excludedOpts.sort(_sort.ignoreCase);
 	                }
 	            } else {
 	                this.opts.sort();
@@ -5172,12 +5165,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //asc sort
 	        if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
 	            try {
-	                this.opts.sort(_sort2.default.numSortAsc);
+	                this.opts.sort(_sort.numSortAsc);
 	                if (this.excludedOpts) {
-	                    this.excludedOpts.sort(_sort2.default.numSortAsc);
+	                    this.excludedOpts.sort(_sort.numSortAsc);
 	                }
 	                if (this.isCustom) {
-	                    this.optsTxt.sort(_sort2.default.numSortAsc);
+	                    this.optsTxt.sort(_sort.numSortAsc);
 	                }
 	            } catch (e) {
 	                throw new Error(SORT_ERROR.replace('{0}', colIndex).replace('{1}', 'ascending'));
@@ -5186,12 +5179,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //desc sort
 	        if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
 	            try {
-	                this.opts.sort(_sort2.default.numSortDesc);
+	                this.opts.sort(_sort.numSortDesc);
 	                if (this.excludedOpts) {
-	                    this.excludedOpts.sort(_sort2.default.numSortDesc);
+	                    this.excludedOpts.sort(_sort.numSortDesc);
 	                }
 	                if (this.isCustom) {
-	                    this.optsTxt.sort(_sort2.default.numSortDesc);
+	                    this.optsTxt.sort(_sort.numSortDesc);
 	                }
 	            } catch (e) {
 	                throw new Error(SORT_ERROR.replace('{0}', colIndex).replace('{1}', 'descending'));

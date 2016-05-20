@@ -2,7 +2,7 @@ import {Feature} from '../feature';
 import Dom from '../dom';
 import {has} from '../array';
 import Str from '../string';
-import Sort from '../sort';
+import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
 import Event from '../event';
 import {isEmpty} from '../types';
 import {CHECKLIST, NONE} from '../const';
@@ -214,9 +214,9 @@ export class CheckList extends Feature {
 
         if (tf.sortSlc && !this.isCustom) {
             if (!tf.matchCase) {
-                this.opts.sort(Sort.ignoreCase);
+                this.opts.sort(ignoreCase);
                 if (this.excludedOpts) {
-                    this.excludedOpts.sort(Sort.ignoreCase);
+                    this.excludedOpts.sort(ignoreCase);
                 }
             } else {
                 this.opts.sort();
@@ -228,12 +228,12 @@ export class CheckList extends Feature {
         //asc sort
         if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
             try {
-                this.opts.sort(Sort.numSortAsc);
+                this.opts.sort(numSortAsc);
                 if (this.excludedOpts) {
-                    this.excludedOpts.sort(Sort.numSortAsc);
+                    this.excludedOpts.sort(numSortAsc);
                 }
                 if (this.isCustom) {
-                    this.optsTxt.sort(Sort.numSortAsc);
+                    this.optsTxt.sort(numSortAsc);
                 }
             } catch (e) {
                 throw new Error(SORT_ERROR.replace('{0}', colIndex)
@@ -243,12 +243,12 @@ export class CheckList extends Feature {
         //desc sort
         if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
             try {
-                this.opts.sort(Sort.numSortDesc);
+                this.opts.sort(numSortDesc);
                 if (this.excludedOpts) {
-                    this.excludedOpts.sort(Sort.numSortDesc);
+                    this.excludedOpts.sort(numSortDesc);
                 }
                 if (this.isCustom) {
-                    this.optsTxt.sort(Sort.numSortDesc);
+                    this.optsTxt.sort(numSortDesc);
                 }
             } catch (e) {
                 throw new Error(SORT_ERROR.replace('{0}', colIndex)
