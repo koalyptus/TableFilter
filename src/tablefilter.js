@@ -4,7 +4,7 @@ import Str from './string';
 import {isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef}
 from './types';
 import DateHelper from './date';
-import Helpers from './helpers';
+import {removeNbFormat} from './helpers';
 
 import {root} from './root';
 import {Emitter} from './emitter';
@@ -1184,8 +1184,7 @@ export class TableFilter {
         function hasArg(sA, cellData, j) {
             sA = Str.matchCase(sA, this.caseSensitive);
 
-            let occurence,
-                removeNbFormat = Helpers.removeNbFormat;
+            let occurence;
             let dtType = this.hasColDateType ?
                 this.colDateType[j] : this.defaultDateType;
 
@@ -1525,8 +1524,7 @@ export class TableFilter {
                     let cellData = this.getCellData(cell[j]),
                         nbFormat = this.colNbFormat ?
                             this.colNbFormat[colIndex] : null,
-                        data = num ?
-                            Helpers.removeNbFormat(cellData, nbFormat) :
+                        data = num ? removeNbFormat(cellData, nbFormat) :
                             cellData;
                     colValues.push(data);
                 }

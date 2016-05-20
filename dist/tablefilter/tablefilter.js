@@ -134,8 +134,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _helpers = __webpack_require__(7);
 	
-	var _helpers2 = _interopRequireDefault(_helpers);
-	
 	var _root = __webpack_require__(2);
 	
 	var _emitter = __webpack_require__(8);
@@ -1394,8 +1392,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        function hasArg(sA, cellData, j) {
 	            sA = _string2.default.matchCase(sA, this.caseSensitive);
 	
-	            var occurence = void 0,
-	                removeNbFormat = _helpers2.default.removeNbFormat;
+	            var occurence = void 0;
 	            var dtType = this.hasColDateType ? this.colDateType[j] : this.defaultDateType;
 	
 	            //Search arg operator tests
@@ -1478,14 +1475,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                //first numbers need to be formated
 	                if (this.hasColNbFormat && this.colNbFormat[j]) {
-	                    numCellData = removeNbFormat(cellData, this.colNbFormat[j]);
+	                    numCellData = (0, _helpers.removeNbFormat)(cellData, this.colNbFormat[j]);
 	                    nbFormat = this.colNbFormat[j];
 	                } else {
 	                    if (this.thousandsSeparator === ',' && this.decimalSeparator === '.') {
-	                        numCellData = removeNbFormat(cellData, 'us');
+	                        numCellData = (0, _helpers.removeNbFormat)(cellData, 'us');
 	                        nbFormat = 'us';
 	                    } else {
-	                        numCellData = removeNbFormat(cellData, 'eu');
+	                        numCellData = (0, _helpers.removeNbFormat)(cellData, 'eu');
 	                        nbFormat = 'eu';
 	                    }
 	                }
@@ -1494,19 +1491,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // rgx:)
 	                // lower equal
 	                if (hasLE) {
-	                    occurence = numCellData <= removeNbFormat(sA.replace(re_le, ''), nbFormat);
+	                    occurence = numCellData <= (0, _helpers.removeNbFormat)(sA.replace(re_le, ''), nbFormat);
 	                }
 	                //greater equal
 	                else if (hasGE) {
-	                        occurence = numCellData >= removeNbFormat(sA.replace(re_ge, ''), nbFormat);
+	                        occurence = numCellData >= (0, _helpers.removeNbFormat)(sA.replace(re_ge, ''), nbFormat);
 	                    }
 	                    //lower
 	                    else if (hasLO) {
-	                            occurence = numCellData < removeNbFormat(sA.replace(re_l, ''), nbFormat);
+	                            occurence = numCellData < (0, _helpers.removeNbFormat)(sA.replace(re_l, ''), nbFormat);
 	                        }
 	                        //greater
 	                        else if (hasGR) {
-	                                occurence = numCellData > removeNbFormat(sA.replace(re_g, ''), nbFormat);
+	                                occurence = numCellData > (0, _helpers.removeNbFormat)(sA.replace(re_g, ''), nbFormat);
 	                            }
 	                            //different
 	                            else if (hasDF) {
@@ -1552,7 +1549,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                // If numeric type data, perform a strict equality test and
 	                                                                // fallback to unformatted number string comparison
 	                                                                if (numCellData && this.hasColNbFormat && this.colNbFormat[j] && !this.singleSearchFlt) {
-	                                                                    sA = removeNbFormat(sA, nbFormat);
+	                                                                    sA = (0, _helpers.removeNbFormat)(sA, nbFormat);
 	                                                                    occurence = numCellData === sA || _string2.default.contains(sA.toString(), numCellData.toString(), this.isExactMatch(j), this.caseSensitive);
 	                                                                } else {
 	                                                                    // Finally test search term is contained in cell data
@@ -1713,7 +1710,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                    var cellData = this.getCellData(cell[j]),
 	                        nbFormat = this.colNbFormat ? this.colNbFormat[colIndex] : null,
-	                        data = num ? _helpers2.default.removeNbFormat(cellData, nbFormat) : cellData;
+	                        data = num ? (0, _helpers.removeNbFormat)(cellData, nbFormat) : cellData;
 	                    colValues.push(data);
 	                }
 	            }
@@ -3180,39 +3177,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	/**
+	 * Misc helpers
+	 */
 	
-	var _string = __webpack_require__(5);
-	
-	var _string2 = _interopRequireDefault(_string);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	exports.default = {
-	    removeNbFormat: function removeNbFormat(data, format) {
-	        if (!data) {
-	            return;
-	        }
-	        if (!format) {
-	            format = 'us';
-	        }
-	        var n = data;
-	        if (_string2.default.lower(format) === 'us') {
-	            n = +n.replace(/[^\d\.-]/g, '');
-	        } else {
-	            n = +n.replace(/[^\d\,-]/g, '').replace(',', '.');
-	        }
-	        return n;
+	var removeNbFormat = exports.removeNbFormat = function removeNbFormat(data, format) {
+	    if (!data) {
+	        return;
 	    }
-	}; /**
-	    * Misc helpers
-	    */
+	    if (!format) {
+	        format = 'us';
+	    }
+	    var n = data;
+	    if (format.toLowerCase() === 'us') {
+	        n = +n.replace(/[^\d\.-]/g, '');
+	    } else {
+	        n = +n.replace(/[^\d\,-]/g, '').replace(',', '.');
+	    }
+	    return n;
+	};
 
 /***/ },
 /* 8 */

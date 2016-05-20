@@ -1857,8 +1857,6 @@ webpackJsonp([1],{
 	
 	var _helpers = __webpack_require__(7);
 	
-	var _helpers2 = _interopRequireDefault(_helpers);
-	
 	var _const = __webpack_require__(11);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -2260,10 +2258,10 @@ webpackJsonp([1],{
 	
 	exports.default = AdapterSortableTable;
 	function usNumberConverter(s) {
-	    return _helpers2.default.removeNbFormat(s, 'us');
+	    return (0, _helpers.removeNbFormat)(s, 'us');
 	}
 	function euNumberConverter(s) {
-	    return _helpers2.default.removeNbFormat(s, 'eu');
+	    return (0, _helpers.removeNbFormat)(s, 'eu');
 	}
 	function dateConverter(s, format) {
 	    return _date2.default.format(s, format);
