@@ -626,10 +626,6 @@ webpackJsonp([1],{
 	
 	var _dom2 = _interopRequireDefault(_dom);
 	
-	var _string = __webpack_require__(5);
-	
-	var _string2 = _interopRequireDefault(_string);
-	
 	var _types = __webpack_require__(4);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -774,7 +770,7 @@ webpackJsonp([1],{
 	                for (var k = 0; k < colIndex.length; k++) {
 	                    if (colIndex[k] === ucolIndex[ucol]) {
 	                        mThisCol++;
-	                        opsThisCol[mThisCol] = _string2.default.lower(operation[k]);
+	                        opsThisCol[mThisCol] = operation[k].toLowerCase();
 	                        decThisCol[mThisCol] = decimalPrecision[k];
 	                        labThisCol[mThisCol] = labelId[k];
 	                        oTypeThisCol = (0, _types.isArray)(outputType) ? outputType[k] : null;
@@ -910,7 +906,7 @@ webpackJsonp([1],{
 	                        result = result.toFixed(precision);
 	
 	                        if (_dom2.default.id(labThisCol[i])) {
-	                            switch (_string2.default.lower(oTypeThisCol)) {
+	                            switch (oTypeThisCol.toLowerCase()) {
 	                                case 'innerhtml':
 	                                    if (isNaN(result) || !isFinite(result) || nbvalues === 0) {
 	                                        _dom2.default.id(labThisCol[i]).innerHTML = '.';

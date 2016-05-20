@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
 import {has} from '../array';
-import Str from '../string';
+import {matchCase, trim, rgxEsc} from '../string';
 import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
 import Event from '../event';
 import {isEmpty} from '../types';
@@ -186,7 +186,7 @@ export class CheckList extends Feature {
 
                     let cellData = tf.getCellData(cells[j]);
                     //Vary Peter's patch
-                    let cellString = Str.matchCase(cellData, tf.matchCase);
+                    let cellString = matchCase(cellData, tf.matchCase);
                     // checks if celldata is already in array
                     if (!has(this.opts, cellString, tf.matchCase)) {
                         this.opts.push(cellData);
@@ -284,7 +284,7 @@ export class CheckList extends Feature {
             li.className = this.checkListItemCssClass;
 
             if (tf.linkedFilters && tf.disableExcludedOptions &&
-                has(this.excludedOpts, Str.matchCase(val, tf.matchCase),
+                has(this.excludedOpts, matchCase(val, tf.matchCase),
                     tf.matchCase)) {
                 Dom.addClass(li, this.checkListItemDisabledCssClass);
                 li.check.disabled = true;
@@ -390,7 +390,7 @@ export class CheckList extends Feature {
 
             } else {
                 fltValue = (fltValue) ? fltValue : '';
-                chkValue = Str.trim(fltValue + ' ' + chkValue + ' ' +
+                chkValue = trim(fltValue + ' ' + chkValue + ' ' +
                     tf.orOperator);
                 chkIndex = fltIndexes + chkIndex + tf.separator;
                 n.setAttribute('value', chkValue);
@@ -409,12 +409,12 @@ export class CheckList extends Feature {
         } else { //removes values and indexes
             if (chkValue !== '') {
                 let replaceValue = new RegExp(
-                    Str.rgxEsc(chkValue + ' ' + tf.orOperator));
+                    rgxEsc(chkValue + ' ' + tf.orOperator));
                 fltValue = fltValue.replace(replaceValue, '');
-                n.setAttribute('value', Str.trim(fltValue));
+                n.setAttribute('value', trim(fltValue));
 
                 let replaceIndex = new RegExp(
-                    Str.rgxEsc(chkIndex + tf.separator));
+                    rgxEsc(chkIndex + tf.separator));
                 fltIndexes = fltIndexes.replace(replaceIndex, '');
                 n.setAttribute('indexes', fltIndexes);
             }
@@ -445,7 +445,7 @@ export class CheckList extends Feature {
             let li = Dom.tag(flt, 'li')[k],
                 lbl = Dom.tag(li, 'label')[0],
                 chk = Dom.tag(li, 'input')[0],
-                lblTxt = Str.matchCase(Dom.getText(lbl), tf.caseSensitive);
+                lblTxt = matchCase(Dom.getText(lbl), tf.caseSensitive);
             if (lblTxt !== '' && has(values, lblTxt, tf.caseSensitive)) {
                 chk.checked = true;
                 this.setCheckListValues(chk);

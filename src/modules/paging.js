@@ -1,7 +1,6 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
 import {isArray, isFn, isNull} from '../types';
-import Str from '../string';
 import Event from '../event';
 import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
 
@@ -465,7 +464,7 @@ export class Paging extends Feature {
         var btnEvt = this.evt,
             cmdtype = typeof cmd;
         if (cmdtype === 'string') {
-            switch (Str.lower(cmd)) {
+            switch (cmd.toLowerCase()) {
                 case 'next':
                     btnEvt.next();
                     break;

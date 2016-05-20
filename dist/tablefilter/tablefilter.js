@@ -124,8 +124,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _string = __webpack_require__(5);
 	
-	var _string2 = _interopRequireDefault(_string);
-	
 	var _types = __webpack_require__(4);
 	
 	var _date = __webpack_require__(6);
@@ -1359,7 +1357,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            re_l = new RegExp(this.lwOperator),
 	            re_g = new RegExp(this.grOperator),
 	            re_d = new RegExp(this.dfOperator),
-	            re_lk = new RegExp(_string2.default.rgxEsc(this.lkOperator)),
+	            re_lk = new RegExp((0, _string.rgxEsc)(this.lkOperator)),
 	            re_eq = new RegExp(this.eqOperator),
 	            re_st = new RegExp(this.stOperator),
 	            re_en = new RegExp(this.enOperator),
@@ -1368,7 +1366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // re_cr = new RegExp(this.curExp),
 	        re_em = this.emOperator,
 	            re_nm = this.nmOperator,
-	            re_re = new RegExp(_string2.default.rgxEsc(this.rgxOperator));
+	            re_re = new RegExp((0, _string.rgxEsc)(this.rgxOperator));
 	
 	        //keyword highlighting
 	        function highlight(str, ok, cell) {
@@ -1390,7 +1388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        //looks for search argument in current row
 	        function hasArg(sA, cellData, j) {
-	            sA = _string2.default.matchCase(sA, this.caseSensitive);
+	            sA = (0, _string.matchCase)(sA, this.caseSensitive);
 	
 	            var occurence = void 0;
 	            var dtType = this.hasColDateType ? this.colDateType[j] : this.defaultDateType;
@@ -1457,20 +1455,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                    // searched keyword with * operator doesn't have to be a date
 	                                    else if (re_lk.test(sA)) {
 	                                            // like date
-	                                            occurence = _string2.default.contains(sA.replace(re_lk, ''), cellData, false, this.caseSensitive);
+	                                            occurence = (0, _string.contains)(sA.replace(re_lk, ''), cellData, false, this.caseSensitive);
 	                                        } else if (_date2.default.isValid(sA, dtType)) {
 	                                            dte2 = _date2.default.format(sA, dtType);
 	                                            occurence = dte1.toString() === dte2.toString();
 	                                        }
 	                                        //empty
 	                                        else if (hasEM) {
-	                                                occurence = _string2.default.isEmpty(cellData);
+	                                                occurence = (0, _string.isEmpty)(cellData);
 	                                            }
 	                                            //non-empty
 	                                            else if (hasNM) {
-	                                                    occurence = !_string2.default.isEmpty(cellData);
+	                                                    occurence = !(0, _string.isEmpty)(cellData);
 	                                                } else {
-	                                                    occurence = _string2.default.contains(sA, cellData, this.isExactMatch(j), this.caseSensitive);
+	                                                    occurence = (0, _string.contains)(sA, cellData, this.isExactMatch(j), this.caseSensitive);
 	                                                }
 	            } else {
 	                //first numbers need to be formated
@@ -1507,15 +1505,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            }
 	                            //different
 	                            else if (hasDF) {
-	                                    occurence = _string2.default.contains(sA.replace(re_d, ''), cellData, false, this.caseSensitive) ? false : true;
+	                                    occurence = (0, _string.contains)(sA.replace(re_d, ''), cellData, false, this.caseSensitive) ? false : true;
 	                                }
 	                                //like
 	                                else if (hasLK) {
-	                                        occurence = _string2.default.contains(sA.replace(re_lk, ''), cellData, false, this.caseSensitive);
+	                                        occurence = (0, _string.contains)(sA.replace(re_lk, ''), cellData, false, this.caseSensitive);
 	                                    }
 	                                    //equal
 	                                    else if (hasEQ) {
-	                                            occurence = _string2.default.contains(sA.replace(re_eq, ''), cellData, true, this.caseSensitive);
+	                                            occurence = (0, _string.contains)(sA.replace(re_eq, ''), cellData, true, this.caseSensitive);
 	                                        }
 	                                        //starts with
 	                                        else if (hasST) {
@@ -1528,11 +1526,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                }
 	                                                //empty
 	                                                else if (hasEM) {
-	                                                        occurence = _string2.default.isEmpty(cellData);
+	                                                        occurence = (0, _string.isEmpty)(cellData);
 	                                                    }
 	                                                    //non-empty
 	                                                    else if (hasNM) {
-	                                                            occurence = !_string2.default.isEmpty(cellData);
+	                                                            occurence = !(0, _string.isEmpty)(cellData);
 	                                                        }
 	                                                        //regexp
 	                                                        else if (hasRE) {
@@ -1550,10 +1548,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                // fallback to unformatted number string comparison
 	                                                                if (numCellData && this.hasColNbFormat && this.colNbFormat[j] && !this.singleSearchFlt) {
 	                                                                    sA = (0, _helpers.removeNbFormat)(sA, nbFormat);
-	                                                                    occurence = numCellData === sA || _string2.default.contains(sA.toString(), numCellData.toString(), this.isExactMatch(j), this.caseSensitive);
+	                                                                    occurence = numCellData === sA || (0, _string.contains)(sA.toString(), numCellData.toString(), this.isExactMatch(j), this.caseSensitive);
 	                                                                } else {
 	                                                                    // Finally test search term is contained in cell data
-	                                                                    occurence = _string2.default.contains(sA, cellData, this.isExactMatch(j), this.caseSensitive);
+	                                                                    occurence = (0, _string.contains)(sA, cellData, this.isExactMatch(j), this.caseSensitive);
 	                                                                }
 	                                                            }
 	            } //else
@@ -1587,7 +1585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    continue;
 	                }
 	
-	                var cellData = _string2.default.matchCase(this.getCellData(cells[j]), this.caseSensitive);
+	                var cellData = (0, _string.matchCase)(this.getCellData(cells[j]), this.caseSensitive);
 	
 	                //multiple search parameter operator ||
 	                var sAOrSplit = sA.toString().split(this.orOperator),
@@ -1613,7 +1611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                    // TODO: improve clarity/readability of this block
 	                    for (var w = 0, len = s.length; w < len; w++) {
-	                        cS = _string2.default.trim(s[w]);
+	                        cS = (0, _string.trim)(s[w]);
 	                        occur = hasArg.call(this, cS, cellData, j);
 	                        highlight.call(this, cS, occur, cells[j]);
 	                        if (hasMultiOrSA && occur || hasMultiAndSA && !occur) {
@@ -1627,7 +1625,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                //single search parameter
 	                else {
-	                        occurence[j] = hasArg.call(this, _string2.default.trim(sA), cellData, j);
+	                        occurence[j] = hasArg.call(this, (0, _string.trim)(sA), cellData, j);
 	                        highlight.call(this, sA, occurence[j], cells[j]);
 	                    } //else single param
 	
@@ -1772,7 +1770,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if ((0, _types.isArray)(fltValue)) {
 	                searchArgs.push(fltValue);
 	            } else {
-	                searchArgs.push(_string2.default.trim(fltValue));
+	                searchArgs.push((0, _string.trim)(fltValue));
 	            }
 	        }
 	        return searchArgs;
@@ -1810,7 +1808,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var arr = [];
 	        for (var i = 0, len = this.fltIds.length; i < len; i++) {
 	            var fltType = this.getFilterType(i);
-	            if (fltType === _string2.default.lower(type)) {
+	            if (fltType === type.toLowerCase()) {
 	                var a = bool ? i : this.fltIds[i];
 	                arr.push(a);
 	            }
@@ -2106,7 +2104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    if ((0, _types.isArray)(query)) {
 	                        _values = query;
 	                    } else {
-	                        query = _string2.default.matchCase(query, this.caseSensitive);
+	                        query = (0, _string.matchCase)(query, this.caseSensitive);
 	                        _values = query.split(' ' + this.orOperator + ' ');
 	                    }
 	
@@ -2376,7 +2374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            file = void 0,
 	            head = _dom2.default.tag(doc, 'head')[0];
 	
-	        if (_string2.default.lower(ftype) === 'link') {
+	        if (ftype.toLowerCase() === 'link') {
 	            file = _dom2.default.create('link', ['id', fileId], ['type', 'text/css'], ['rel', 'stylesheet'], ['href', filePath]);
 	        } else {
 	            file = _dom2.default.create('script', ['id', fileId], ['type', 'text/javascript'], ['src', filePath]);
@@ -2548,7 +2546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    TableFilter.prototype.getFilterType = function getFilterType(colIndex) {
 	        var colType = this.cfg['col_' + colIndex];
-	        return !colType ? _const.INPUT : _string2.default.lower(colType);
+	        return !colType ? _const.INPUT : colType.toLowerCase();
 	    };
 	
 	    /**
@@ -2671,10 +2669,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _string = __webpack_require__(5);
 	
-	var _string2 = _interopRequireDefault(_string);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
 	/**
 	 * DOM utilities
 	 */
@@ -2689,9 +2683,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    getText: function getText(node) {
 	        if ((0, _types.isUndef)(node.textContent)) {
-	            return _string2.default.trim(node.innerText);
+	            return (0, _string.trim)(node.innerText);
 	        }
-	        return _string2.default.trim(node.textContent);
+	        return (0, _string.trim)(node.textContent);
 	    },
 	
 	
@@ -2943,58 +2937,52 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * String utilities
 	 */
 	
-	exports.default = {
-	    lower: function lower(text) {
-	        return text.toLowerCase();
-	    },
-	    upper: function upper(text) {
-	        return text.toUpperCase();
-	    },
-	    trim: function trim(text) {
-	        if (text.trim) {
-	            return text.trim();
-	        }
-	        return text.replace(/^\s*|\s*$/g, '');
-	    },
-	    isEmpty: function isEmpty(text) {
-	        return this.trim(text) === '';
-	    },
-	    rgxEsc: function rgxEsc(text) {
-	        var chars = /[-\/\\^$*+?.()|[\]{}]/g;
-	        var escMatch = '\\$&';
-	        return String(text).replace(chars, escMatch);
-	    },
-	    matchCase: function matchCase(text, caseSensitive) {
-	        if (!caseSensitive) {
-	            return this.lower(text);
-	        }
-	        return text;
-	    },
-	
-	
-	    /**
-	     * Checks if passed data contains the searched term
-	     * @param  {String} term           Searched term
-	     * @param  {String} data           Data string
-	     * @param  {Boolean} exactMatch    Exact match
-	     * @param  {Boolean} caseSensitive Case sensitive
-	     * @return {Boolean}
-	     */
-	    contains: function contains(term, data) {
-	        var exactMatch = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
-	        var caseSensitive = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
-	
-	        // Improved by Cedric Wartel (cwl) automatic exact match for selects and
-	        // special characters are now filtered
-	        var regexp = void 0,
-	            modifier = caseSensitive ? 'g' : 'gi';
-	        if (exactMatch) {
-	            regexp = new RegExp('(^\\s*)' + this.rgxEsc(term) + '(\\s*$)', modifier);
-	        } else {
-	            regexp = new RegExp(this.rgxEsc(term), modifier);
-	        }
-	        return regexp.test(data);
+	var trim = exports.trim = function trim(text) {
+	    if (text.trim) {
+	        return text.trim();
 	    }
+	    return text.replace(/^\s*|\s*$/g, '');
+	};
+	
+	var isEmpty = exports.isEmpty = function isEmpty(text) {
+	    return trim(text) === '';
+	};
+	
+	var rgxEsc = exports.rgxEsc = function rgxEsc(text) {
+	    var chars = /[-\/\\^$*+?.()|[\]{}]/g;
+	    var escMatch = '\\$&';
+	    return String(text).replace(chars, escMatch);
+	};
+	
+	var matchCase = exports.matchCase = function matchCase(text, caseSensitive) {
+	    if (!caseSensitive) {
+	        return text.toLowerCase();
+	    }
+	    return text;
+	};
+	
+	/**
+	 * Checks if passed data contains the searched term
+	 * @param  {String} term           Searched term
+	 * @param  {String} data           Data string
+	 * @param  {Boolean} exactMatch    Exact match
+	 * @param  {Boolean} caseSensitive Case sensitive
+	 * @return {Boolean}
+	 */
+	var contains = exports.contains = function contains(term, data) {
+	    var exactMatch = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+	    var caseSensitive = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+	
+	    // Improved by Cedric Wartel (cwl) automatic exact match for selects and
+	    // special characters are now filtered
+	    var regexp = void 0;
+	    var modifier = caseSensitive ? 'g' : 'gi';
+	    if (exactMatch) {
+	        regexp = new RegExp('(^\\s*)' + rgxEsc(term) + '(\\s*$)', modifier);
+	    } else {
+	        regexp = new RegExp(rgxEsc(term), modifier);
+	    }
+	    return regexp.test(data);
 	};
 
 /***/ },
@@ -3307,8 +3295,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _string = __webpack_require__(5);
 	
-	var _string2 = _interopRequireDefault(_string);
-	
 	var _const = __webpack_require__(11);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -3456,7 +3442,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        //In case table width is expressed in %
 	        if (tbl.style.width === '') {
-	            tbl.style.width = (_string2.default.contains('%', tblW) ? tbl.clientWidth : tblW) + 'px';
+	            tbl.style.width = ((0, _string.contains)('%', tblW) ? tbl.clientWidth : tblW) + 'px';
 	        }
 	
 	        var d = _dom2.default.remove(this.tblCont);
@@ -3934,10 +3920,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _dom2 = _interopRequireDefault(_dom);
 	
-	var _string = __webpack_require__(5);
-	
-	var _string2 = _interopRequireDefault(_string);
-	
 	var _types = __webpack_require__(4);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -3993,8 +3975,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        if (node.nodeType === 3) {
-	            var tempNodeVal = _string2.default.lower(node.nodeValue);
-	            var tempWordVal = _string2.default.lower(word);
+	            var tempNodeVal = node.nodeValue.toLowerCase();
+	            var tempWordVal = word.toLowerCase();
 	            if (tempNodeVal.indexOf(tempWordVal) !== -1) {
 	                var pn = node.parentNode;
 	                if (pn && pn.className !== cssClass) {
@@ -4031,8 +4013,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < highlightedNodes.length; i++) {
 	            var n = highlightedNodes[i];
 	            var nodeVal = _dom2.default.getText(n),
-	                tempNodeVal = _string2.default.lower(nodeVal),
-	                tempWordVal = _string2.default.lower(word);
+	                tempNodeVal = nodeVal.toLowerCase(),
+	                tempWordVal = word.toLowerCase();
 	
 	            if (tempNodeVal.indexOf(tempWordVal) !== -1) {
 	                n.parentNode.replaceChild(_dom2.default.text(nodeVal), n);
@@ -4431,8 +4413,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _string = __webpack_require__(5);
 	
-	var _string2 = _interopRequireDefault(_string);
-	
 	var _sort = __webpack_require__(17);
 	
 	var _event = __webpack_require__(1);
@@ -4521,7 +4501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            slc.multiple = _const.MULTIPLE;
 	            slc.title = this.multipleSlcTooltip;
 	        }
-	        slc.className = _string2.default.lower(col) === _const.SELECT ? tf.fltCssClass : tf.fltMultiCssClass;
+	        slc.className = col.toLowerCase() === _const.SELECT ? tf.fltCssClass : tf.fltMultiCssClass;
 	
 	        //filter is appended in container element
 	        if (externalFltTgtId) {
@@ -4580,8 +4560,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var slcId = tf.fltIds[colIndex];
 	        var slc = _dom2.default.id(slcId),
 	            rows = tf.tbl.rows,
-	            nbRows = tf.getRowsNb(true),
-	            matchCase = tf.matchCase;
+	            nbRows = tf.getRowsNb(true);
 	
 	        //custom select test
 	        this.isCustom = tf.isCustomOptions(colIndex);
@@ -4623,10 +4602,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var cellData = tf.getCellData(cell[j]),
 	
 	                    //Vary Peter's patch
-	                    cellString = _string2.default.matchCase(cellData, matchCase);
+	                    cellString = (0, _string.matchCase)(cellData, tf.matchCase);
 	
 	                    // checks if celldata is already in array
-	                    if (!(0, _array.has)(this.opts, cellString, matchCase)) {
+	                    if (!(0, _array.has)(this.opts, cellString, tf.matchCase)) {
 	                        this.opts.push(cellData);
 	                    }
 	
@@ -4635,7 +4614,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        if (!filteredCol) {
 	                            filteredCol = tf.getFilteredDataCol(j);
 	                        }
-	                        if (!(0, _array.has)(filteredCol, cellString, matchCase) && !(0, _array.has)(excludedOpts, cellString, matchCase)) {
+	                        if (!(0, _array.has)(filteredCol, cellString, tf.matchCase) && !(0, _array.has)(excludedOpts, cellString, tf.matchCase)) {
 	                            excludedOpts.push(cellData);
 	                        }
 	                    }
@@ -4651,7 +4630,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        if (tf.sortSlc && !this.isCustom) {
-	            if (!matchCase) {
+	            if (!tf.matchCase) {
 	                this.opts.sort(_sort.ignoreCase);
 	                if (excludedOpts) {
 	                    excludedOpts.sort(_sort.ignoreCase);
@@ -4722,7 +4701,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var val = this.opts[y]; //option value
 	            var lbl = this.isCustom ? this.optsTxt[y] : val; //option text
 	            var isDisabled = false;
-	            if (isLinked && tf.disableExcludedOptions && (0, _array.has)(excludedOpts, _string2.default.matchCase(val, tf.matchCase), tf.matchCase)) {
+	            if (isLinked && tf.disableExcludedOptions && (0, _array.has)(excludedOpts, (0, _string.matchCase)(val, tf.matchCase), tf.matchCase)) {
 	                isDisabled = true;
 	            }
 	
@@ -4850,14 +4829,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _string = __webpack_require__(5);
 	
-	var _string2 = _interopRequireDefault(_string);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
 	var has = exports.has = function has(arr, val, caseSensitive) {
 	    var sCase = Boolean(caseSensitive);
 	    for (var i = 0, l = arr.length; i < l; i++) {
-	        if (_string2.default.matchCase(arr[i].toString(), sCase) === val) {
+	        if ((0, _string.matchCase)(arr[i].toString(), sCase) === val) {
 	            return true;
 	        }
 	    }
@@ -4913,8 +4888,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _array = __webpack_require__(16);
 	
 	var _string = __webpack_require__(5);
-	
-	var _string2 = _interopRequireDefault(_string);
 	
 	var _sort = __webpack_require__(17);
 	
@@ -5114,7 +5087,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                    var cellData = tf.getCellData(cells[j]);
 	                    //Vary Peter's patch
-	                    var cellString = _string2.default.matchCase(cellData, tf.matchCase);
+	                    var cellString = (0, _string.matchCase)(cellData, tf.matchCase);
 	                    // checks if celldata is already in array
 	                    if (!(0, _array.has)(this.opts, cellString, tf.matchCase)) {
 	                        this.opts.push(cellData);
@@ -5211,7 +5184,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var li = _dom2.default.createCheckItem(tf.fltIds[colIndex] + '_' + (y + chkCt), val, lbl);
 	            li.className = this.checkListItemCssClass;
 	
-	            if (tf.linkedFilters && tf.disableExcludedOptions && (0, _array.has)(this.excludedOpts, _string2.default.matchCase(val, tf.matchCase), tf.matchCase)) {
+	            if (tf.linkedFilters && tf.disableExcludedOptions && (0, _array.has)(this.excludedOpts, (0, _string.matchCase)(val, tf.matchCase), tf.matchCase)) {
 	                _dom2.default.addClass(li, this.checkListItemDisabledCssClass);
 	                li.check.disabled = true;
 	                li.disabled = true;
@@ -5319,7 +5292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                n.setAttribute('indexes', '');
 	            } else {
 	                fltValue = fltValue ? fltValue : '';
-	                chkValue = _string2.default.trim(fltValue + ' ' + chkValue + ' ' + tf.orOperator);
+	                chkValue = (0, _string.trim)(fltValue + ' ' + chkValue + ' ' + tf.orOperator);
 	                chkIndex = fltIndexes + chkIndex + tf.separator;
 	                n.setAttribute('value', chkValue);
 	                n.setAttribute('indexes', chkIndex);
@@ -5336,11 +5309,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            //removes values and indexes
 	            if (chkValue !== '') {
-	                var replaceValue = new RegExp(_string2.default.rgxEsc(chkValue + ' ' + tf.orOperator));
+	                var replaceValue = new RegExp((0, _string.rgxEsc)(chkValue + ' ' + tf.orOperator));
 	                fltValue = fltValue.replace(replaceValue, '');
-	                n.setAttribute('value', _string2.default.trim(fltValue));
+	                n.setAttribute('value', (0, _string.trim)(fltValue));
 	
-	                var replaceIndex = new RegExp(_string2.default.rgxEsc(chkIndex + tf.separator));
+	                var replaceIndex = new RegExp((0, _string.rgxEsc)(chkIndex + tf.separator));
 	                fltIndexes = fltIndexes.replace(replaceIndex, '');
 	                n.setAttribute('indexes', fltIndexes);
 	            }
@@ -5375,7 +5348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var li = _dom2.default.tag(flt, 'li')[k],
 	                lbl = _dom2.default.tag(li, 'label')[0],
 	                chk = _dom2.default.tag(li, 'input')[0],
-	                lblTxt = _string2.default.matchCase(_dom2.default.getText(lbl), tf.caseSensitive);
+	                lblTxt = (0, _string.matchCase)(_dom2.default.getText(lbl), tf.caseSensitive);
 	            if (lblTxt !== '' && (0, _array.has)(values, lblTxt, tf.caseSensitive)) {
 	                chk.checked = true;
 	                this.setCheckListValues(chk);
@@ -5878,10 +5851,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _types = __webpack_require__(4);
 	
-	var _string = __webpack_require__(5);
-	
-	var _string2 = _interopRequireDefault(_string);
-	
 	var _event = __webpack_require__(1);
 	
 	var _event2 = _interopRequireDefault(_event);
@@ -6334,7 +6303,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var btnEvt = this.evt,
 	            cmdtype = typeof cmd === 'undefined' ? 'undefined' : _typeof(cmd);
 	        if (cmdtype === 'string') {
-	            switch (_string2.default.lower(cmd)) {
+	            switch (cmd.toLowerCase()) {
 	                case 'next':
 	                    btnEvt.next();
 	                    break;
@@ -7327,11 +7296,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _string = __webpack_require__(5);
 	
-	var _string2 = _interopRequireDefault(_string);
-	
 	var _types = __webpack_require__(4);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -7462,7 +7427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            filterValues.forEach(function (val, idx) {
 	                var key = '' + _this3.prfxCol + idx;
 	
-	                if ((0, _types.isString)(val) && _string2.default.isEmpty(val)) {
+	                if ((0, _types.isString)(val) && (0, _string.isEmpty)(val)) {
 	                    if (state.hasOwnProperty(key)) {
 	                        state[key].flt = undefined;
 	                    }
