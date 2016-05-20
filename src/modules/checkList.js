@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
-import Arr from '../array';
+import {has} from '../array';
 import Str from '../string';
 import Sort from '../sort';
 import Event from '../event';
@@ -188,7 +188,7 @@ export class CheckList extends Feature {
                     //Vary Peter's patch
                     let cellString = Str.matchCase(cellData, tf.matchCase);
                     // checks if celldata is already in array
-                    if (!Arr.has(this.opts, cellString, tf.matchCase)) {
+                    if (!has(this.opts, cellString, tf.matchCase)) {
                         this.opts.push(cellData);
                     }
                     let filteredCol = filteredDataCol[j];
@@ -196,9 +196,8 @@ export class CheckList extends Feature {
                         if (!filteredCol) {
                             filteredCol = tf.getFilteredDataCol(j);
                         }
-                        if (!Arr.has(filteredCol, cellString, tf.matchCase) &&
-                            !Arr.has(this.excludedOpts,
-                                cellString, tf.matchCase)) {
+                        if (!has(filteredCol, cellString, tf.matchCase) &&
+                            !has(this.excludedOpts, cellString, tf.matchCase)) {
                             this.excludedOpts.push(cellData);
                         }
                     }
@@ -283,9 +282,10 @@ export class CheckList extends Feature {
             let li = Dom.createCheckItem(
                 tf.fltIds[colIndex] + '_' + (y + chkCt), val, lbl);
             li.className = this.checkListItemCssClass;
+
             if (tf.linkedFilters && tf.disableExcludedOptions &&
-                Arr.has(this.excludedOpts,
-                    Str.matchCase(val, tf.matchCase), tf.matchCase)) {
+                has(this.excludedOpts, Str.matchCase(val, tf.matchCase),
+                    tf.matchCase)) {
                 Dom.addClass(li, this.checkListItemDisabledCssClass);
                 li.check.disabled = true;
                 li.disabled = true;
@@ -446,7 +446,7 @@ export class CheckList extends Feature {
                 lbl = Dom.tag(li, 'label')[0],
                 chk = Dom.tag(li, 'input')[0],
                 lblTxt = Str.matchCase(Dom.getText(lbl), tf.caseSensitive);
-            if (lblTxt !== '' && Arr.has(values, lblTxt, tf.caseSensitive)) {
+            if (lblTxt !== '' && has(values, lblTxt, tf.caseSensitive)) {
                 chk.checked = true;
                 this.setCheckListValues(chk);
             }

@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
-import Arr from '../array';
+import {has} from '../array';
 import Str from '../string';
 import Sort from '../sort';
 import Event from '../event';
@@ -169,6 +169,7 @@ export class Dropdown extends Feature {
             // this loop retrieves cell data
             for (let j = 0; j < nchilds; j++) {
                 // WTF: cyclomatic complexity hell
+                // TODO: simplify hell below
                 if ((colIndex === j &&
                     (!isLinked ||
                         (isLinked && tf.disableExcludedOptions))) ||
@@ -186,7 +187,7 @@ export class Dropdown extends Feature {
                         cellString = Str.matchCase(cellData, matchCase);
 
                     // checks if celldata is already in array
-                    if (!Arr.has(this.opts, cellString, matchCase)) {
+                    if (!has(this.opts, cellString, matchCase)) {
                         this.opts.push(cellData);
                     }
 
@@ -195,9 +196,8 @@ export class Dropdown extends Feature {
                         if (!filteredCol) {
                             filteredCol = tf.getFilteredDataCol(j);
                         }
-                        if (!Arr.has(filteredCol, cellString, matchCase) &&
-                            !Arr.has(
-                                excludedOpts, cellString, matchCase)) {
+                        if (!has(filteredCol, cellString, matchCase) &&
+                            !has(excludedOpts, cellString, matchCase)) {
                             excludedOpts.push(cellData);
                         }
                     }
@@ -283,11 +283,8 @@ export class Dropdown extends Feature {
             let lbl = this.isCustom ? this.optsTxt[y] : val; //option text
             let isDisabled = false;
             if (isLinked && tf.disableExcludedOptions &&
-                Arr.has(
-                    excludedOpts,
-                    Str.matchCase(val, tf.matchCase),
-                    tf.matchCase
-                )) {
+                has(excludedOpts, Str.matchCase(val, tf.matchCase),
+                    tf.matchCase)) {
                 isDisabled = true;
             }
 
@@ -350,8 +347,7 @@ export class Dropdown extends Feature {
                 option.selected = false;
             }
 
-            if (option.value !== '' &&
-                Arr.has(values, option.value, true)) {
+            if (option.value !== '' && has(values, option.value, true)) {
                 option.selected = true;
             }//if
         });
