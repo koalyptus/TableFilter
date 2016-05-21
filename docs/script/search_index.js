@@ -222,6 +222,24 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/string.js~contains",
+    "variable/index.html#static-variable-contains",
+    "<span>contains</span> <span class=\"search-result-import-path\">tablefilter/src/string.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/date.js~formatdate",
+    "variable/index.html#static-variable-formatDate",
+    "<span>formatDate</span> <span class=\"search-result-import-path\">tablefilter/src/date.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/array.js~has",
+    "variable/index.html#static-variable-has",
+    "<span>has</span> <span class=\"search-result-import-path\">tablefilter/src/array.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/modules/hash.js~hashashchange",
     "variable/index.html#static-variable-hasHashChange",
     "<span>hasHashChange</span> <span class=\"search-result-import-path\">tablefilter/src/modules/hash.js</span>",
@@ -234,9 +252,21 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/sort.js~ignorecase",
+    "variable/index.html#static-variable-ignoreCase",
+    "<span>ignoreCase</span> <span class=\"search-result-import-path\">tablefilter/src/sort.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/types.js~isarray",
     "variable/index.html#static-variable-isArray",
     "<span>isArray</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/string.js~isempty",
+    "variable/index.html#static-variable-isEmpty",
+    "<span>isEmpty</span> <span class=\"search-result-import-path\">tablefilter/src/string.js</span>",
     "variable"
   ],
   [
@@ -282,9 +312,51 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/date.js~isvaliddate",
+    "variable/index.html#static-variable-isValidDate",
+    "<span>isValidDate</span> <span class=\"search-result-import-path\">tablefilter/src/date.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/string.js~matchcase",
+    "variable/index.html#static-variable-matchCase",
+    "<span>matchCase</span> <span class=\"search-result-import-path\">tablefilter/src/string.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/sort.js~numsortasc",
+    "variable/index.html#static-variable-numSortAsc",
+    "<span>numSortAsc</span> <span class=\"search-result-import-path\">tablefilter/src/sort.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/sort.js~numsortdesc",
+    "variable/index.html#static-variable-numSortDesc",
+    "<span>numSortDesc</span> <span class=\"search-result-import-path\">tablefilter/src/sort.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/helpers.js~removenbformat",
+    "variable/index.html#static-variable-removeNbFormat",
+    "<span>removeNbFormat</span> <span class=\"search-result-import-path\">tablefilter/src/helpers.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/string.js~rgxesc",
+    "variable/index.html#static-variable-rgxEsc",
+    "<span>rgxEsc</span> <span class=\"search-result-import-path\">tablefilter/src/string.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/root.js~root",
     "variable/index.html#static-variable-root",
     "<span>root</span> <span class=\"search-result-import-path\">tablefilter/src/root.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/string.js~trim",
+    "variable/index.html#static-variable-trim",
+    "<span>trim</span> <span class=\"search-result-import-path\">tablefilter/src/string.js</span>",
     "variable"
   ],
   [

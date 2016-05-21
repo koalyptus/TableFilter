@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.29 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.30 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -35,6 +35,7 @@
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/feature.js~Feature.html">Feature</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-has">has</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHECKLIST">CHECKLIST</a></span></span></li>
@@ -48,7 +49,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT">SELECT</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortAsc">numSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortDesc">numSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-contains">contains</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-matchCase">matchCase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-rgxEsc">rgxEsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-trim">trim</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isArray">isArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isFn">isFn</a></span></span></li>
@@ -87,11 +99,12 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/tablefilter.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Event from &apos;./event&apos;;
 import Dom from &apos;./dom&apos;;
-import Str from &apos;./string&apos;;
+import {contains, matchCase, rgxEsc, trim} from &apos;./string&apos;;
+import {isEmpty as isEmptyString} from &apos;./string&apos;;
 import {isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef}
 from &apos;./types&apos;;
-import DateHelper from &apos;./date&apos;;
-import Helpers from &apos;./helpers&apos;;
+import {formatDate, isValidDate} from &apos;./date&apos;;
+import {removeNbFormat} from &apos;./helpers&apos;;
 
 import {root} from &apos;./root&apos;;
 import {Emitter} from &apos;./emitter&apos;;
@@ -1238,7 +1251,7 @@ export class TableFilter {
             re_l = new RegExp(this.lwOperator),
             re_g = new RegExp(this.grOperator),
             re_d = new RegExp(this.dfOperator),
-            re_lk = new RegExp(Str.rgxEsc(this.lkOperator)),
+            re_lk = new RegExp(rgxEsc(this.lkOperator)),
             re_eq = new RegExp(this.eqOperator),
             re_st = new RegExp(this.stOperator),
             re_en = new RegExp(this.enOperator),
@@ -1246,7 +1259,7 @@ export class TableFilter {
             // re_cr = new RegExp(this.curExp),
             re_em = this.emOperator,
             re_nm = this.nmOperator,
-            re_re = new RegExp(Str.rgxEsc(this.rgxOperator));
+            re_re = new RegExp(rgxEsc(this.rgxOperator));
 
         //keyword highlighting
         function highlight(str, ok, cell) {
@@ -1269,10 +1282,9 @@ export class TableFilter {
 
         //looks for search argument in current row
         function hasArg(sA, cellData, j) {
-            sA = Str.matchCase(sA, this.caseSensitive);
+            sA = matchCase(sA, this.caseSensitive);
 
-            let occurence,
-                removeNbFormat = Helpers.removeNbFormat;
+            let occurence;
             let dtType = this.hasColDateType ?
                 this.colDateType[j] : this.defaultDateType;
 
@@ -1292,71 +1304,65 @@ export class TableFilter {
                 hasRE = re_re.test(sA);
 
             //Search arg dates tests
-            let isLDate = hasLO &amp;&amp;
-                DateHelper.isValid(sA.replace(re_l, &apos;&apos;), dtType);
-            let isLEDate = hasLE &amp;&amp;
-                DateHelper.isValid(sA.replace(re_le, &apos;&apos;), dtType);
-            let isGDate = hasGR &amp;&amp;
-                DateHelper.isValid(sA.replace(re_g, &apos;&apos;), dtType);
-            let isGEDate = hasGE &amp;&amp;
-                DateHelper.isValid(sA.replace(re_ge, &apos;&apos;), dtType);
-            let isDFDate = hasDF &amp;&amp;
-                DateHelper.isValid(sA.replace(re_d, &apos;&apos;), dtType);
-            let isEQDate = hasEQ &amp;&amp;
-                DateHelper.isValid(sA.replace(re_eq, &apos;&apos;), dtType);
+            let isLDate = hasLO &amp;&amp; isValidDate(sA.replace(re_l, &apos;&apos;), dtType);
+            let isLEDate = hasLE &amp;&amp; isValidDate(sA.replace(re_le, &apos;&apos;), dtType);
+            let isGDate = hasGR &amp;&amp; isValidDate(sA.replace(re_g, &apos;&apos;), dtType);
+            let isGEDate = hasGE &amp;&amp; isValidDate(sA.replace(re_ge, &apos;&apos;), dtType);
+            let isDFDate = hasDF &amp;&amp; isValidDate(sA.replace(re_d, &apos;&apos;), dtType);
+            let isEQDate = hasEQ &amp;&amp; isValidDate(sA.replace(re_eq, &apos;&apos;), dtType);
 
             let dte1, dte2;
             //dates
-            if (DateHelper.isValid(cellData, dtType)) {
-                dte1 = DateHelper.format(cellData, dtType);
+            if (isValidDate(cellData, dtType)) {
+                dte1 = formatDate(cellData, dtType);
                 // lower date
                 if (isLDate) {
-                    dte2 = DateHelper.format(sA.replace(re_l, &apos;&apos;), dtType);
+                    dte2 = formatDate(sA.replace(re_l, &apos;&apos;), dtType);
                     occurence = dte1 &lt; dte2;
                 }
                 // lower equal date
                 else if (isLEDate) {
-                    dte2 = DateHelper.format(sA.replace(re_le, &apos;&apos;), dtType);
+                    dte2 = formatDate(sA.replace(re_le, &apos;&apos;), dtType);
                     occurence = dte1 &lt;= dte2;
                 }
                 // greater equal date
                 else if (isGEDate) {
-                    dte2 = DateHelper.format(sA.replace(re_ge, &apos;&apos;), dtType);
+                    dte2 = formatDate(sA.replace(re_ge, &apos;&apos;), dtType);
                     occurence = dte1 &gt;= dte2;
                 }
                 // greater date
                 else if (isGDate) {
-                    dte2 = DateHelper.format(sA.replace(re_g, &apos;&apos;), dtType);
+                    dte2 = formatDate(sA.replace(re_g, &apos;&apos;), dtType);
                     occurence = dte1 &gt; dte2;
                 }
                 // different date
                 else if (isDFDate) {
-                    dte2 = DateHelper.format(sA.replace(re_d, &apos;&apos;), dtType);
+                    dte2 = formatDate(sA.replace(re_d, &apos;&apos;), dtType);
                     occurence = dte1.toString() !== dte2.toString();
                 }
                 // equal date
                 else if (isEQDate) {
-                    dte2 = DateHelper.format(sA.replace(re_eq, &apos;&apos;), dtType);
+                    dte2 = formatDate(sA.replace(re_eq, &apos;&apos;), dtType);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 // searched keyword with * operator doesn&apos;t have to be a date
                 else if (re_lk.test(sA)) {// like date
-                    occurence = Str.contains(sA.replace(re_lk, &apos;&apos;), cellData,
+                    occurence = contains(sA.replace(re_lk, &apos;&apos;), cellData,
                         false, this.caseSensitive);
                 }
-                else if (DateHelper.isValid(sA, dtType)) {
-                    dte2 = DateHelper.format(sA, dtType);
+                else if (isValidDate(sA, dtType)) {
+                    dte2 = formatDate(sA, dtType);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 //empty
                 else if (hasEM) {
-                    occurence = Str.isEmpty(cellData);
+                    occurence = isEmptyString(cellData);
                 }
                 //non-empty
                 else if (hasNM) {
-                    occurence = !Str.isEmpty(cellData);
+                    occurence = !isEmptyString(cellData);
                 } else {
-                    occurence = Str.contains(sA, cellData, this.isExactMatch(j),
+                    occurence = contains(sA, cellData, this.isExactMatch(j),
                         this.caseSensitive);
                 }
             }
@@ -1401,17 +1407,17 @@ export class TableFilter {
                 }
                 //different
                 else if (hasDF) {
-                    occurence = Str.contains(sA.replace(re_d, &apos;&apos;), cellData,
+                    occurence = contains(sA.replace(re_d, &apos;&apos;), cellData,
                         false, this.caseSensitive) ? false : true;
                 }
                 //like
                 else if (hasLK) {
-                    occurence = Str.contains(sA.replace(re_lk, &apos;&apos;), cellData,
+                    occurence = contains(sA.replace(re_lk, &apos;&apos;), cellData,
                         false, this.caseSensitive);
                 }
                 //equal
                 else if (hasEQ) {
-                    occurence = Str.contains(sA.replace(re_eq, &apos;&apos;), cellData,
+                    occurence = contains(sA.replace(re_eq, &apos;&apos;), cellData,
                         true, this.caseSensitive);
                 }
                 //starts with
@@ -1430,11 +1436,11 @@ export class TableFilter {
                 }
                 //empty
                 else if (hasEM) {
-                    occurence = Str.isEmpty(cellData);
+                    occurence = isEmptyString(cellData);
                 }
                 //non-empty
                 else if (hasNM) {
-                    occurence = !Str.isEmpty(cellData);
+                    occurence = !isEmptyString(cellData);
                 }
                 //regexp
                 else if (hasRE) {
@@ -1454,12 +1460,12 @@ export class TableFilter {
                         this.colNbFormat[j] &amp;&amp; !this.singleSearchFlt) {
                         sA = removeNbFormat(sA, nbFormat);
                         occurence = numCellData === sA ||
-                            Str.contains(sA.toString(), numCellData.toString(),
+                            contains(sA.toString(), numCellData.toString(),
                                 this.isExactMatch(j), this.caseSensitive);
                     } else {
                         // Finally test search term is contained in cell data
-                        occurence = Str.contains(sA, cellData,
-                            this.isExactMatch(j), this.caseSensitive);
+                        occurence = contains(sA, cellData, this.isExactMatch(j),
+                            this.caseSensitive);
                     }
                 }
 
@@ -1493,7 +1499,7 @@ export class TableFilter {
                     continue;
                 }
 
-                let cellData = Str.matchCase(this.getCellData(cells[j]),
+                let cellData = matchCase(this.getCellData(cells[j]),
                     this.caseSensitive);
 
                 //multiple search parameter operator ||
@@ -1517,7 +1523,7 @@ export class TableFilter {
                     }
                     // TODO: improve clarity/readability of this block
                     for (let w = 0, len = s.length; w &lt; len; w++) {
-                        cS = Str.trim(s[w]);
+                        cS = trim(s[w]);
                         occur = hasArg.call(this, cS, cellData, j);
                         highlight.call(this, cS, occur, cells[j]);
                         if ((hasMultiOrSA &amp;&amp; occur) ||
@@ -1533,7 +1539,7 @@ export class TableFilter {
                 }
                 //single search parameter
                 else {
-                    occurence[j] = hasArg.call(this, Str.trim(sA), cellData, j);
+                    occurence[j] = hasArg.call(this, trim(sA), cellData, j);
                     highlight.call(this, sA, occurence[j], cells[j]);
                 }//else single param
 
@@ -1612,8 +1618,7 @@ export class TableFilter {
                     let cellData = this.getCellData(cell[j]),
                         nbFormat = this.colNbFormat ?
                             this.colNbFormat[colIndex] : null,
-                        data = num ?
-                            Helpers.removeNbFormat(cellData, nbFormat) :
+                        data = num ? removeNbFormat(cellData, nbFormat) :
                             cellData;
                     colValues.push(data);
                 }
@@ -1673,7 +1678,7 @@ export class TableFilter {
             if (isArray(fltValue)) {
                 searchArgs.push(fltValue);
             } else {
-                searchArgs.push(Str.trim(fltValue));
+                searchArgs.push(trim(fltValue));
             }
         }
         return searchArgs;
@@ -1707,7 +1712,7 @@ export class TableFilter {
         let arr = [];
         for (let i = 0, len = this.fltIds.length; i &lt; len; i++) {
             let fltType = this.getFilterType(i);
-            if (fltType === Str.lower(type)) {
+            if (fltType === type.toLowerCase()) {
                 let a = bool ? i : this.fltIds[i];
                 arr.push(a);
             }
@@ -1972,7 +1977,7 @@ export class TableFilter {
             if (isArray(query)) {
                 values = query;
             } else {
-                query = Str.matchCase(query, this.caseSensitive);
+                query = matchCase(query, this.caseSensitive);
                 values = query.split(&apos; &apos; + this.orOperator + &apos; &apos;);
             }
 
@@ -2223,7 +2228,7 @@ export class TableFilter {
             file,
             head = Dom.tag(doc, &apos;head&apos;)[0];
 
-        if (Str.lower(ftype) === &apos;link&apos;) {
+        if (ftype.toLowerCase() === &apos;link&apos;) {
             file = Dom.create(&apos;link&apos;,
                 [&apos;id&apos;, fileId], [&apos;type&apos;, &apos;text/css&apos;],
                 [&apos;rel&apos;, &apos;stylesheet&apos;], [&apos;href&apos;, filePath]
@@ -2382,7 +2387,7 @@ export class TableFilter {
      */
     getFilterType(colIndex) {
         let colType = this.cfg[&apos;col_&apos; + colIndex];
-        return !colType ? INPUT : Str.lower(colType);
+        return !colType ? INPUT : colType.toLowerCase();
     }
 
     /**
