@@ -2,7 +2,7 @@ import {Feature} from '../../feature';
 import {isArray, isFn, isUndef} from '../../types';
 import Dom from '../../dom';
 import Event from '../../event';
-import DateHelper from '../../date';
+import {formatDate} from '../../date';
 import {removeNbFormat} from '../../helpers';
 import {NONE, CELL_TAG, HEADER_TAG} from '../../const';
 
@@ -388,7 +388,7 @@ function euNumberConverter(s) {
     return removeNbFormat(s, 'eu');
 }
 function dateConverter(s, format) {
-    return DateHelper.format(s, format);
+    return formatDate(s, format);
 }
 function dmyDateConverter(s) {
     return dateConverter(s, 'DMY');
