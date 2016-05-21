@@ -1,6 +1,5 @@
 import {Feature} from '../../feature';
 import Dom from '../../dom';
-import Str from '../../string';
 import {isArray, isFn, isUndef} from '../../types';
 
 export default class ColOps extends Feature {
@@ -129,7 +128,7 @@ export default class ColOps extends Feature {
                 for (var k = 0; k < colIndex.length; k++) {
                     if (colIndex[k] === ucolIndex[ucol]) {
                         mThisCol++;
-                        opsThisCol[mThisCol] = Str.lower(operation[k]);
+                        opsThisCol[mThisCol] = operation[k].toLowerCase();
                         decThisCol[mThisCol] = decimalPrecision[k];
                         labThisCol[mThisCol] = labelId[k];
                         oTypeThisCol = isArray(outputType) ?
@@ -270,7 +269,7 @@ export default class ColOps extends Feature {
                         result = result.toFixed(precision);
 
                         if (Dom.id(labThisCol[i])) {
-                            switch (Str.lower(oTypeThisCol)) {
+                            switch (oTypeThisCol.toLowerCase()) {
                                 case 'innerhtml':
                                     if (isNaN(result) || !isFinite(result) ||
                                         nbvalues === 0) {

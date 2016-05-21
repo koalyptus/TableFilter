@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import {Hash} from './hash';
 import {Storage} from './storage';
-import Str from '../string';
+import {isEmpty} from '../string';
 import {isArray, isNull, isString, isUndef} from '../types';
 
 /**
@@ -107,7 +107,7 @@ export class State extends Feature {
             filterValues.forEach((val, idx) => {
                 let key = `${this.prfxCol}${idx}`;
 
-                if (isString(val) && Str.isEmpty(val)) {
+                if (isString(val) && isEmpty(val)) {
                     if (state.hasOwnProperty(key)) {
                         state[key].flt = undefined;
                     }

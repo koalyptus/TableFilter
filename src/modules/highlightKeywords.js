@@ -1,5 +1,4 @@
 import Dom from '../dom';
-import Str from '../string';
 import {isArray} from '../types';
 
 export class HighlightKeyword {
@@ -47,8 +46,8 @@ export class HighlightKeyword {
         }
 
         if (node.nodeType === 3) {
-            let tempNodeVal = Str.lower(node.nodeValue);
-            let tempWordVal = Str.lower(word);
+            let tempNodeVal = node.nodeValue.toLowerCase();
+            let tempWordVal = word.toLowerCase();
             if (tempNodeVal.indexOf(tempWordVal) !== -1) {
                 let pn = node.parentNode;
                 if (pn && pn.className !== cssClass) {
@@ -82,8 +81,8 @@ export class HighlightKeyword {
         for (let i = 0; i < highlightedNodes.length; i++) {
             let n = highlightedNodes[i];
             let nodeVal = Dom.getText(n),
-                tempNodeVal = Str.lower(nodeVal),
-                tempWordVal = Str.lower(word);
+                tempNodeVal = nodeVal.toLowerCase(),
+                tempWordVal = word.toLowerCase();
 
             if (tempNodeVal.indexOf(tempWordVal) !== -1) {
                 n.parentNode.replaceChild(Dom.text(nodeVal), n);

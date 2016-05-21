@@ -2,7 +2,7 @@ import {Feature} from '../feature';
 import Dom from '../dom';
 import {isFn, isNull, isUndef} from '../types';
 import Event from '../event';
-import Str from '../string';
+import {contains} from '../string';
 import {NONE} from '../const';
 
 export class GridLayout extends Feature {
@@ -137,7 +137,7 @@ export class GridLayout extends Feature {
 
         //In case table width is expressed in %
         if (tbl.style.width === '') {
-            tbl.style.width = (Str.contains('%', tblW) ?
+            tbl.style.width = (contains('%', tblW) ?
                 tbl.clientWidth : tblW) + 'px';
         }
 

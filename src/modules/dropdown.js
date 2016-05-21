@@ -1,8 +1,8 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
-import Arr from '../array';
-import Str from '../string';
-import Sort from '../sort';
+import {has} from '../array';
+import {matchCase} from '../string';
+import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
 import Event from '../event';
 import {SELECT, MULTIPLE, NONE} from '../const';
 
@@ -76,7 +76,7 @@ export class Dropdown extends Feature {
             slc.multiple = MULTIPLE;
             slc.title = this.multipleSlcTooltip;
         }
-        slc.className = Str.lower(col) === SELECT ?
+        slc.className = col.toLowerCase() === SELECT ?
             tf.fltCssClass : tf.fltMultiCssClass;
 
         //filter is appended in container element
@@ -131,8 +131,7 @@ export class Dropdown extends Feature {
         let slcId = tf.fltIds[colIndex];
         let slc = Dom.id(slcId),
             rows = tf.tbl.rows,
-            nbRows = tf.getRowsNb(true),
-            matchCase = tf.matchCase;
+            nbRows = tf.getRowsNb(true);
 
         //custom select test
         this.isCustom = tf.isCustomOptions(colIndex);
@@ -169,6 +168,7 @@ export class Dropdown extends Feature {
             // this loop retrieves cell data
             for (let j = 0; j < nchilds; j++) {
                 // WTF: cyclomatic complexity hell
+                // TODO: simplify hell below
                 if ((colIndex === j &&
                     (!isLinked ||
                         (isLinked && tf.disableExcludedOptions))) ||
@@ -183,10 +183,10 @@ export class Dropdown extends Feature {
                                     tf.validRowsIndex.indexOf(k) !== -1)))))) {
                     let cellData = tf.getCellData(cell[j]),
                         //Vary Peter's patch
-                        cellString = Str.matchCase(cellData, matchCase);
+                        cellString = matchCase(cellData, tf.matchCase);
 
                     // checks if celldata is already in array
-                    if (!Arr.has(this.opts, cellString, matchCase)) {
+                    if (!has(this.opts, cellString, tf.matchCase)) {
                         this.opts.push(cellData);
                     }
 
@@ -195,9 +195,8 @@ export class Dropdown extends Feature {
                         if (!filteredCol) {
                             filteredCol = tf.getFilteredDataCol(j);
                         }
-                        if (!Arr.has(filteredCol, cellString, matchCase) &&
-                            !Arr.has(
-                                excludedOpts, cellString, matchCase)) {
+                        if (!has(filteredCol, cellString, tf.matchCase) &&
+                            !has(excludedOpts, cellString, tf.matchCase)) {
                             excludedOpts.push(cellData);
                         }
                     }
@@ -213,10 +212,10 @@ export class Dropdown extends Feature {
         }
 
         if (tf.sortSlc && !this.isCustom) {
-            if (!matchCase) {
-                this.opts.sort(Sort.ignoreCase);
+            if (!tf.matchCase) {
+                this.opts.sort(ignoreCase);
                 if (excludedOpts) {
-                    excludedOpts.sort(Sort.ignoreCase);
+                    excludedOpts.sort(ignoreCase);
                 }
             } else {
                 this.opts.sort();
@@ -227,12 +226,12 @@ export class Dropdown extends Feature {
         //asc sort
         if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
             try {
-                this.opts.sort(Sort.numSortAsc);
+                this.opts.sort(numSortAsc);
                 if (excludedOpts) {
-                    excludedOpts.sort(Sort.numSortAsc);
+                    excludedOpts.sort(numSortAsc);
                 }
                 if (this.isCustom) {
-                    this.optsTxt.sort(Sort.numSortAsc);
+                    this.optsTxt.sort(numSortAsc);
                 }
             } catch (e) {
                 throw new Error(SORT_ERROR.replace('{0}', colIndex)
@@ -242,12 +241,12 @@ export class Dropdown extends Feature {
         //desc sort
         if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
             try {
-                this.opts.sort(Sort.numSortDesc);
+                this.opts.sort(numSortDesc);
                 if (excludedOpts) {
-                    excludedOpts.sort(Sort.numSortDesc);
+                    excludedOpts.sort(numSortDesc);
                 }
                 if (this.isCustom) {
-                    this.optsTxt.sort(Sort.numSortDesc);
+                    this.optsTxt.sort(numSortDesc);
                 }
             } catch (e) {
                 throw new Error(SORT_ERROR.replace('{0}', colIndex)
@@ -283,11 +282,7 @@ export class Dropdown extends Feature {
             let lbl = this.isCustom ? this.optsTxt[y] : val; //option text
             let isDisabled = false;
             if (isLinked && tf.disableExcludedOptions &&
-                Arr.has(
-                    excludedOpts,
-                    Str.matchCase(val, tf.matchCase),
-                    tf.matchCase
-                )) {
+                has(excludedOpts, matchCase(val, tf.matchCase), tf.matchCase)) {
                 isDisabled = true;
             }
 
@@ -350,8 +345,7 @@ export class Dropdown extends Feature {
                 option.selected = false;
             }
 
-            if (option.value !== '' &&
-                Arr.has(values, option.value, true)) {
+            if (option.value !== '' && has(values, option.value, true)) {
                 option.selected = true;
             }//if
         });

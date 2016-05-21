@@ -1,8 +1,8 @@
 import {Feature} from '../feature';
 import Dom from '../dom';
-import Arr from '../array';
-import Str from '../string';
-import Sort from '../sort';
+import {has} from '../array';
+import {matchCase, trim, rgxEsc} from '../string';
+import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
 import Event from '../event';
 import {isEmpty} from '../types';
 import {CHECKLIST, NONE} from '../const';
@@ -186,9 +186,9 @@ export class CheckList extends Feature {
 
                     let cellData = tf.getCellData(cells[j]);
                     //Vary Peter's patch
-                    let cellString = Str.matchCase(cellData, tf.matchCase);
+                    let cellString = matchCase(cellData, tf.matchCase);
                     // checks if celldata is already in array
-                    if (!Arr.has(this.opts, cellString, tf.matchCase)) {
+                    if (!has(this.opts, cellString, tf.matchCase)) {
                         this.opts.push(cellData);
                     }
                     let filteredCol = filteredDataCol[j];
@@ -196,9 +196,8 @@ export class CheckList extends Feature {
                         if (!filteredCol) {
                             filteredCol = tf.getFilteredDataCol(j);
                         }
-                        if (!Arr.has(filteredCol, cellString, tf.matchCase) &&
-                            !Arr.has(this.excludedOpts,
-                                cellString, tf.matchCase)) {
+                        if (!has(filteredCol, cellString, tf.matchCase) &&
+                            !has(this.excludedOpts, cellString, tf.matchCase)) {
                             this.excludedOpts.push(cellData);
                         }
                     }
@@ -215,9 +214,9 @@ export class CheckList extends Feature {
 
         if (tf.sortSlc && !this.isCustom) {
             if (!tf.matchCase) {
-                this.opts.sort(Sort.ignoreCase);
+                this.opts.sort(ignoreCase);
                 if (this.excludedOpts) {
-                    this.excludedOpts.sort(Sort.ignoreCase);
+                    this.excludedOpts.sort(ignoreCase);
                 }
             } else {
                 this.opts.sort();
@@ -229,12 +228,12 @@ export class CheckList extends Feature {
         //asc sort
         if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
             try {
-                this.opts.sort(Sort.numSortAsc);
+                this.opts.sort(numSortAsc);
                 if (this.excludedOpts) {
-                    this.excludedOpts.sort(Sort.numSortAsc);
+                    this.excludedOpts.sort(numSortAsc);
                 }
                 if (this.isCustom) {
-                    this.optsTxt.sort(Sort.numSortAsc);
+                    this.optsTxt.sort(numSortAsc);
                 }
             } catch (e) {
                 throw new Error(SORT_ERROR.replace('{0}', colIndex)
@@ -244,12 +243,12 @@ export class CheckList extends Feature {
         //desc sort
         if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
             try {
-                this.opts.sort(Sort.numSortDesc);
+                this.opts.sort(numSortDesc);
                 if (this.excludedOpts) {
-                    this.excludedOpts.sort(Sort.numSortDesc);
+                    this.excludedOpts.sort(numSortDesc);
                 }
                 if (this.isCustom) {
-                    this.optsTxt.sort(Sort.numSortDesc);
+                    this.optsTxt.sort(numSortDesc);
                 }
             } catch (e) {
                 throw new Error(SORT_ERROR.replace('{0}', colIndex)
@@ -283,9 +282,10 @@ export class CheckList extends Feature {
             let li = Dom.createCheckItem(
                 tf.fltIds[colIndex] + '_' + (y + chkCt), val, lbl);
             li.className = this.checkListItemCssClass;
+
             if (tf.linkedFilters && tf.disableExcludedOptions &&
-                Arr.has(this.excludedOpts,
-                    Str.matchCase(val, tf.matchCase), tf.matchCase)) {
+                has(this.excludedOpts, matchCase(val, tf.matchCase),
+                    tf.matchCase)) {
                 Dom.addClass(li, this.checkListItemDisabledCssClass);
                 li.check.disabled = true;
                 li.disabled = true;
@@ -390,7 +390,7 @@ export class CheckList extends Feature {
 
             } else {
                 fltValue = (fltValue) ? fltValue : '';
-                chkValue = Str.trim(fltValue + ' ' + chkValue + ' ' +
+                chkValue = trim(fltValue + ' ' + chkValue + ' ' +
                     tf.orOperator);
                 chkIndex = fltIndexes + chkIndex + tf.separator;
                 n.setAttribute('value', chkValue);
@@ -409,12 +409,12 @@ export class CheckList extends Feature {
         } else { //removes values and indexes
             if (chkValue !== '') {
                 let replaceValue = new RegExp(
-                    Str.rgxEsc(chkValue + ' ' + tf.orOperator));
+                    rgxEsc(chkValue + ' ' + tf.orOperator));
                 fltValue = fltValue.replace(replaceValue, '');
-                n.setAttribute('value', Str.trim(fltValue));
+                n.setAttribute('value', trim(fltValue));
 
                 let replaceIndex = new RegExp(
-                    Str.rgxEsc(chkIndex + tf.separator));
+                    rgxEsc(chkIndex + tf.separator));
                 fltIndexes = fltIndexes.replace(replaceIndex, '');
                 n.setAttribute('indexes', fltIndexes);
             }
@@ -445,8 +445,8 @@ export class CheckList extends Feature {
             let li = Dom.tag(flt, 'li')[k],
                 lbl = Dom.tag(li, 'label')[0],
                 chk = Dom.tag(li, 'input')[0],
-                lblTxt = Str.matchCase(Dom.getText(lbl), tf.caseSensitive);
-            if (lblTxt !== '' && Arr.has(values, lblTxt, tf.caseSensitive)) {
+                lblTxt = matchCase(Dom.getText(lbl), tf.caseSensitive);
+            if (lblTxt !== '' && has(values, lblTxt, tf.caseSensitive)) {
                 chk.checked = true;
                 this.setCheckListValues(chk);
             }

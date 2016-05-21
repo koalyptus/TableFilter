@@ -2,8 +2,8 @@ import {Feature} from '../../feature';
 import {isArray, isFn, isUndef} from '../../types';
 import Dom from '../../dom';
 import Event from '../../event';
-import DateHelper from '../../date';
-import Helpers from '../../helpers';
+import {formatDate} from '../../date';
+import {removeNbFormat} from '../../helpers';
 import {NONE, CELL_TAG, HEADER_TAG} from '../../const';
 
 export default class AdapterSortableTable extends Feature {
@@ -382,13 +382,13 @@ export default class AdapterSortableTable extends Feature {
 
 //Converters
 function usNumberConverter(s) {
-    return Helpers.removeNbFormat(s, 'us');
+    return removeNbFormat(s, 'us');
 }
 function euNumberConverter(s) {
-    return Helpers.removeNbFormat(s, 'eu');
+    return removeNbFormat(s, 'eu');
 }
 function dateConverter(s, format) {
-    return DateHelper.format(s, format);
+    return formatDate(s, format);
 }
 function dmyDateConverter(s) {
     return dateConverter(s, 'DMY');
