@@ -37,6 +37,9 @@ npm install tablefilter --save
 ```shell
 npm install tablefilter@next --save
 ```
+* If you don't use `npm`, you can also 
+[access these files on npmcdn](https://npmcdn.com/tablefilter/), download them 
+or point your package manager to them.
 
 ## Setup
 Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the main js file in your page:
