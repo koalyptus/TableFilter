@@ -1,15 +1,15 @@
 import {Feature} from '../feature';
 import {root} from '../root';
-import Dom from '../dom';
+import {createElm, createText, id, removeElm} from '../dom';
 import {isFn} from '../types';
 
-export class StatusBar extends Feature{
+export class StatusBar extends Feature {
 
     /**
      * Status bar UI component
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, 'statusBar');
 
         // Configuration object
@@ -72,8 +72,8 @@ export class StatusBar extends Feature{
         this.prfxStatusTxt = 'statusText_';
     }
 
-    init(){
-        if(this.initialized){
+    init() {
+        if (this.initialized) {
             return;
         }
 
@@ -81,25 +81,25 @@ export class StatusBar extends Feature{
         let emitter = this.emitter;
 
         //status bar container
-        let statusDiv = Dom.create('div', ['id', this.prfxStatus+tf.id]);
+        let statusDiv = createElm('div', ['id', this.prfxStatus + tf.id]);
         statusDiv.className = this.statusBarCssClass;
 
         //status bar label
-        let statusSpan = Dom.create('span', ['id', this.prfxStatusSpan+tf.id]);
+        let statusSpan = createElm('span', ['id', this.prfxStatusSpan + tf.id]);
         //preceding text
-        let statusSpanText = Dom.create('span',
-            ['id', this.prfxStatusTxt+tf.id]);
-        statusSpanText.appendChild(Dom.text(this.statusBarText));
+        let statusSpanText = createElm('span',
+            ['id', this.prfxStatusTxt + tf.id]);
+        statusSpanText.appendChild(createText(this.statusBarText));
 
         // target element container
-        if(!this.statusBarTgtId){
+        if (!this.statusBarTgtId) {
             tf.setToolbar();
         }
         let targetEl = (!this.statusBarTgtId) ?
-                tf.lDiv : Dom.id(this.statusBarTgtId);
+            tf.lDiv : id(this.statusBarTgtId);
 
         //default container: 'lDiv'
-        if(!this.statusBarTgtId){
+        if (!this.statusBarTgtId) {
             statusDiv.appendChild(statusSpanText);
             statusDiv.appendChild(statusSpan);
             targetEl.appendChild(statusDiv);
@@ -114,22 +114,23 @@ export class StatusBar extends Feature{
         this.statusBarSpanText = statusSpanText;
 
         // Subscribe to events
-        emitter.on(['before-filtering'], ()=> this.message(this.msgFilter));
+        emitter.on(['before-filtering'], () => this.message(this.msgFilter));
         emitter.on(['before-populating-filter'],
-            ()=> this.message(this.msgPopulate));
+            () => this.message(this.msgPopulate));
         emitter.on(['before-page-change'],
-            ()=> this.message(this.msgChangePage));
-        emitter.on(['before-clearing-filters'], ()=>
+            () => this.message(this.msgChangePage));
+        emitter.on(['before-clearing-filters'], () =>
             this.message(this.msgClear));
         emitter.on(['before-page-length-change'],
-            ()=> this.message(this.msgChangeResults));
-        emitter.on(['before-reset-page'], ()=> this.message(this.msgResetPage));
+            () => this.message(this.msgChangeResults));
+        emitter.on(['before-reset-page'],
+            () => this.message(this.msgResetPage));
         emitter.on(['before-reset-page-length'],
-            ()=> this.message(this.msgResetPageLength));
+            () => this.message(this.msgResetPageLength));
         emitter.on(['before-loading-extensions'],
-            ()=> this.message(this.msgLoadExtensions));
+            () => this.message(this.msgLoadExtensions));
         emitter.on(['before-loading-themes'],
-            ()=> this.message(this.msgLoadThemes));
+            () => this.message(this.msgLoadThemes));
 
         emitter.on([
             'after-filtering',
@@ -141,66 +142,66 @@ export class StatusBar extends Feature{
             'after-reset-page-length',
             'after-loading-extensions',
             'after-loading-themes'],
-            ()=> this.message('')
+            () => this.message('')
         );
 
         this.initialized = true;
     }
 
-    message(t=''){
-        if(!this.isEnabled()){
+    message(t = '') {
+        if (!this.isEnabled()) {
             return;
         }
 
-        if(this.onBeforeShowMsg){
+        if (this.onBeforeShowMsg) {
             this.onBeforeShowMsg.call(null, this.tf, t);
         }
 
-        let d = t==='' ? this.statusBarCloseDelay : 1;
+        let d = t === '' ? this.statusBarCloseDelay : 1;
         root.setTimeout(() => {
-            if(!this.initialized){
+            if (!this.initialized) {
                 return;
             }
             this.statusBarSpan.innerHTML = t;
-            if(this.onAfterShowMsg){
+            if (this.onAfterShowMsg) {
                 this.onAfterShowMsg.call(null, this.tf, t);
             }
         }, d);
     }
 
-    destroy(){
-        if(!this.initialized){
+    destroy() {
+        if (!this.initialized) {
             return;
         }
 
         let emitter = this.emitter;
 
         this.statusBarDiv.innerHTML = '';
-        if(!this.statusBarTgtId){
-            Dom.remove(this.statusBarDiv);
+        if (!this.statusBarTgtId) {
+            removeElm(this.statusBarDiv);
         }
         this.statusBarSpan = null;
         this.statusBarSpanText = null;
         this.statusBarDiv = null;
 
         // Unsubscribe to events
-        emitter.off(['before-filtering'], ()=> this.message(this.msgFilter));
+        emitter.off(['before-filtering'], () => this.message(this.msgFilter));
         emitter.off(['before-populating-filter'],
-            ()=> this.message(this.msgPopulate));
+            () => this.message(this.msgPopulate));
         emitter.off(['before-page-change'],
-            ()=> this.message(this.msgChangePage));
+            () => this.message(this.msgChangePage));
         emitter.off(['before-clearing-filters'],
-            ()=> this.message(this.msgClear));
+            () => this.message(this.msgClear));
         emitter.off(['before-page-length-change'],
-            ()=> this.message(this.msgChangeResults));
-        emitter.off(['before-reset-page'], ()=>
+            () => this.message(this.msgChangeResults));
+        emitter.off(['before-reset-page'], () =>
             this.message(this.msgResetPage));
         emitter.off(['before-reset-page-length'],
-            ()=> this.message(this.msgResetPageLength));
+            () => this.message(this.msgResetPageLength));
         emitter.off(['before-loading-extensions'],
-            ()=> this.message(this.msgLoadExtensions));
+            () => this.message(this.msgLoadExtensions));
         emitter.off(['before-loading-themes'],
-            ()=> this.message(this.msgLoadThemes));
+            () => this.message(this.msgLoadThemes));
 
         emitter.off([
             'after-filtering',
@@ -212,7 +213,7 @@ export class StatusBar extends Feature{
             'after-reset-page-length',
             'after-loading-extensions',
             'after-loading-themes'],
-            ()=> this.message('')
+            () => this.message('')
         );
 
         this.initialized = false;

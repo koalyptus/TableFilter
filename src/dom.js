@@ -5,162 +5,155 @@ import {trim} from './string';
  * DOM utilities
  */
 
-export default {
+// export default {
 
-    /**
-     * Returns text + text of children of given node
-     * @param  {NodeElement} node
-     * @return {String}
-     */
-    getText(node) {
-        if (isUndef(node.textContent)) {
-            return trim(node.innerText);
-        }
-        return trim(node.textContent);
-    },
-
-    /**
-     * Returns the first text node contained in the supplied node
-     * @param  {NodeElement} node node
-     * @return {String}
-     */
-    getFirstTextNode(node) {
-        for (let i = 0; i < node.childNodes.length; i++) {
-            let n = node.childNodes[i];
-            if (n.nodeType === 3) {
-                return n.data;
-            }
-        }
-    },
-
-    /**
-     * Creates an html element with given collection of attributes
-     * @param  {String} tag a string of the html tag to create
-     * @param  {Array} an undetermined number of arrays containing the with 2
-     *                    items, the attribute name and its value ['id','myId']
-     * @return {Object}     created element
-     */
-    create(tag) {
-        if (!tag || tag === '') {
-            return;
-        }
-
-        let el = document.createElement(tag),
-            args = arguments;
-
-        if (args.length > 1) {
-            for (let i = 0; i < args.length; i++) {
-                let argtype = typeof args[i];
-                if (argtype === 'object' && args[i].length === 2) {
-                    el.setAttribute(args[i][0], args[i][1]);
-                }
-            }
-        }
-        return el;
-    },
-
-    /**
-     * Removes passed node from DOM
-     * @param  {DOMElement} node
-     * @return {DOMElement} old node reference
-     */
-    remove(node) {
-        return node.parentNode.removeChild(node);
-    },
-
-    /**
-     * Returns a text node with given text
-     * @param  {String} txt
-     * @return {Object}
-     */
-    text(txt) {
-        return document.createTextNode(txt);
-    },
-
-    hasClass(ele, cls) {
-        if (!ele) { return false; }
-
-        if (supportsClassList()) {
-            return ele.classList.contains(cls);
-        }
-        return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-    },
-
-    addClass(ele, cls) {
-        if (!ele) { return; }
-
-        if (supportsClassList()) {
-            ele.classList.add(cls);
-            return;
-        }
-
-        if (ele.className === '') {
-            ele.className = cls;
-        }
-        else if (!this.hasClass(ele, cls)) {
-            ele.className += ' ' + cls;
-        }
-    },
-
-    removeClass(ele, cls) {
-        if (!ele) { return; }
-
-        if (supportsClassList()) {
-            ele.classList.remove(cls);
-            return;
-        }
-        let reg = new RegExp('(\\s|^)' + cls + '(\\s|$)', 'g');
-        ele.className = ele.className.replace(reg, '');
-    },
-
-    /**
-     * Creates and returns an option element
-     * @param  {String}  text  option text
-     * @param  {String}  value option value
-     * @param  {Boolean} isSel whether option is selected
-     * @return {Object}        option element
-     */
-    createOpt(text, value, isSel) {
-        let isSelected = isSel ? true : false,
-            opt = isSelected ?
-                this.create('option', ['value', value], ['selected', 'true']) :
-                this.create('option', ['value', value]);
-        opt.appendChild(this.text(text));
-        return opt;
-    },
-
-    /**
-     * Creates and returns a checklist item
-     * @param  {Number} chkIndex  index of check item
-     * @param  {String} chkValue  check item value
-     * @param  {String} labelText check item label text
-     * @return {Object}           li DOM element
-     */
-    createCheckItem(chkIndex, chkValue, labelText) {
-        let li = this.create('li'),
-            label = this.create('label', ['for', chkIndex]),
-            check = this.create('input',
-                ['id', chkIndex],
-                ['name', chkIndex],
-                ['type', 'checkbox'],
-                ['value', chkValue]
-            );
-        label.appendChild(check);
-        label.appendChild(this.text(labelText));
-        li.appendChild(label);
-        li.label = label;
-        li.check = check;
-        return li;
-    },
-
-    id(key) {
-        return document.getElementById(key);
-    },
-
-    tag(o, tagname) {
-        return o.getElementsByTagName(tagname);
+/**
+ * Returns text + text of children of given node
+ * @param  {NodeElement} node
+ * @return {String}
+ */
+export const getText = node => {
+    if (isUndef(node.textContent)) {
+        return trim(node.innerText);
     }
-};
+    return trim(node.textContent);
+}
+
+/**
+ * Returns the first text node contained in the supplied node
+ * @param  {NodeElement} node node
+ * @return {String}
+ */
+export const getFirstTextNode = node => {
+    for (let i = 0; i < node.childNodes.length; i++) {
+        let n = node.childNodes[i];
+        if (n.nodeType === 3) {
+            return n.data;
+        }
+    }
+}
+
+/**
+ * Creates an html element with given collection of attributes
+ * @param  {String} tag a string of the html tag to create
+ * @param  {Array} an undetermined number of arrays containing the with 2
+ *                    items, the attribute name and its value ['id','myId']
+ * @return {Object}     created element
+ */
+export const createElm = tag => {
+    if (isUndef(tag)) {
+        return;
+    }
+
+    let el = document.createElement(tag),
+        args = arguments;
+
+    if (args.length > 1) {
+        for (let i = 0; i < args.length; i++) {
+            let argtype = typeof args[i];
+            if (argtype === 'object' && args[i].length === 2) {
+                el.setAttribute(args[i][0], args[i][1]);
+            }
+        }
+    }
+    return el;
+}
+
+/**
+ * Removes passed node from DOM
+ * @param  {DOMElement} node
+ * @return {DOMElement} old node reference
+ */
+export const removeElm = node => node.parentNode.removeChild(node);
+
+/**
+ * Returns a text node with given text
+ * @param  {String} txt
+ * @return {Object}
+ */
+export const createText = txt => document.createTextNode(txt);
+
+export const hasClass = (ele, cls) => {
+    if (!ele) { return false; }
+
+    if (supportsClassList()) {
+        return ele.classList.contains(cls);
+    }
+    return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+}
+
+export const addClass = (ele, cls) => {
+    if (!ele) { return; }
+
+    if (supportsClassList()) {
+        ele.classList.add(cls);
+        return;
+    }
+
+    if (ele.className === '') {
+        ele.className = cls;
+    }
+    else if (!hasClass(ele, cls)) {
+        ele.className += ' ' + cls;
+    }
+}
+
+export const removeClass = (ele, cls) => {
+    if (!ele) { return; }
+
+    if (supportsClassList()) {
+        ele.classList.remove(cls);
+        return;
+    }
+    let reg = new RegExp('(\\s|^)' + cls + '(\\s|$)', 'g');
+    ele.className = ele.className.replace(reg, '');
+}
+
+/**
+ * Creates and returns an option element
+ * @param  {String}  text  option text
+ * @param  {String}  value option value
+ * @param  {Boolean} isSel whether option is selected
+ * @return {Object}        option element
+ */
+export const createOpt = (text, value, isSel) => {
+    let isSelected = isSel ? true : false,
+        opt = isSelected ?
+            createElm('option', ['value', value], ['selected', 'true']) :
+            createElm('option', ['value', value]);
+    opt.appendChild(createText(text));
+    return opt;
+}
+
+/**
+ * Creates and returns a checklist item
+ * @param  {Number} chkIndex  index of check item
+ * @param  {String} chkValue  check item value
+ * @param  {String} labelText check item label text
+ * @return {Object}           li DOM element
+ */
+export const createCheckItem = (chkIndex, chkValue, labelText) => {
+    let li = createElm('li');
+    let label = createElm('label', ['for', chkIndex]);
+    let check = createElm('input',
+        ['id', chkIndex],
+        ['name', chkIndex],
+        ['type', 'checkbox'],
+        ['value', chkValue]
+    );
+    label.appendChild(check);
+    label.appendChild(createText(labelText));
+    li.appendChild(label);
+    li.label = label;
+    li.check = check;
+    return li;
+}
+
+export const byId = key => document.getElementById(key);
+
+export const tag = (o, tagname) => o.getElementsByTagName(tagname);
+
+// };
 
 // HTML5 classList API
 function supportsClassList() {

@@ -1,5 +1,8 @@
 import Event from './event';
-import Dom from './dom';
+import {
+    addClass, createElm, createOpt, getText, getFirstTextNode, byId, tag,
+    removeClass, removeElm
+} from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
 import {isEmpty as isEmptyString} from './string';
 import {isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef}
@@ -62,7 +65,7 @@ export class TableFilter {
                 this.id = arg.id || `tf_${new Date().getTime()}_`;
             } else if (isString(arg)) {
                 this.id = arg;
-                this.tbl = Dom.id(arg);
+                this.tbl = byId(arg);
             } else if (isNumber(arg)) {
                 this.startRow = arg;
             } else if (isObj(arg)) {
@@ -457,7 +460,7 @@ export class TableFilter {
             for (let i = 0; i < n; i++) {
                 this.emitter.emit('before-filter-init', this, i);
 
-                let fltcell = Dom.create(this.fltCellTag),
+                let fltcell = createElm(this.fltCellTag),
                     col = this.getFilterType(i);
 
                 if (this.singleSearchFlt) {
@@ -550,9 +553,9 @@ export class TableFilter {
 
         //TF css class is added to table
         if (!this.gridLayout) {
-            Dom.addClass(this.tbl, this.prfxTf);
+            addClass(this.tbl, this.prfxTf);
             if (this.responsive) {
-                Dom.addClass(this.tbl, this.prfxResponsive);
+                addClass(this.tbl, this.prfxResponsive);
             }
         }
 
@@ -673,7 +676,7 @@ export class TableFilter {
         }
         let fltrow;
 
-        let thead = Dom.tag(this.tbl, 'thead');
+        let thead = tag(this.tbl, 'thead');
         if (thead.length > 0) {
             fltrow = thead[0].insertRow(this.filtersRowIndex);
         } else {
@@ -713,7 +716,7 @@ export class TableFilter {
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
         let inptype = col === INPUT ? 'text' : 'hidden';
-        let inp = Dom.create(INPUT,
+        let inp = createElm(INPUT,
             ['id', this.prfxFlt + colIndex + '_' + this.id],
             ['type', inptype], ['ct', colIndex]);
 
@@ -728,7 +731,7 @@ export class TableFilter {
 
         //filter is appended in custom element
         if (externalFltTgtId) {
-            Dom.id(externalFltTgtId).appendChild(inp);
+            byId(externalFltTgtId).appendChild(inp);
             this.externalFltEls.push(inp);
         } else {
             container.appendChild(inp);
@@ -750,14 +753,14 @@ export class TableFilter {
     _buildSubmitButton(colIndex, container) {
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
-        let btn = Dom.create(INPUT,
+        let btn = createElm(INPUT,
             ['id', this.prfxValButton + colIndex + '_' + this.id],
             ['type', 'button'], ['value', this.btnText]);
         btn.className = this.btnCssClass;
 
         //filter is appended in custom element
         if (externalFltTgtId) {
-            Dom.id(externalFltTgtId).appendChild(btn);
+            byId(externalFltTgtId).appendChild(btn);
         } else {
             container.appendChild(btn);
         }
@@ -916,7 +919,7 @@ export class TableFilter {
      * @return {DOMElement} stylesheet element
      */
     getStylesheet(name = 'default') {
-        return Dom.id(this.prfxTf + name);
+        return byId(this.prfxTf + name);
     }
 
     /**
@@ -975,8 +978,8 @@ export class TableFilter {
         this.emitter.off(['filter-focus'],
             (tf, filter) => this.setActiveFilterId(filter.id));
 
-        Dom.removeClass(this.tbl, this.prfxTf);
-        Dom.removeClass(this.tbl, this.prfxResponsive);
+        removeClass(this.tbl, this.prfxTf);
+        removeClass(this.tbl, this.prfxResponsive);
 
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
@@ -994,12 +997,12 @@ export class TableFilter {
         }
 
         /*** container div ***/
-        let infdiv = Dom.create('div', ['id', this.prfxInfDiv + this.id]);
+        let infdiv = createElm('div', ['id', this.prfxInfDiv + this.id]);
         infdiv.className = this.infDivCssClass;
 
         //custom container
         if (this.toolBarTgtId) {
-            Dom.id(this.toolBarTgtId).appendChild(infdiv);
+            byId(this.toolBarTgtId).appendChild(infdiv);
         }
         //grid-layout
         else if (this.gridLayout) {
@@ -1009,30 +1012,30 @@ export class TableFilter {
         }
         //default location: just above the table
         else {
-            let cont = Dom.create('caption');
+            let cont = createElm('caption');
             cont.appendChild(infdiv);
             this.tbl.insertBefore(cont, this.tbl.firstChild);
         }
-        this.infDiv = Dom.id(this.prfxInfDiv + this.id);
+        this.infDiv = byId(this.prfxInfDiv + this.id);
 
         /*** left div containing rows # displayer ***/
-        let ldiv = Dom.create('div', ['id', this.prfxLDiv + this.id]);
+        let ldiv = createElm('div', ['id', this.prfxLDiv + this.id]);
         ldiv.className = this.lDivCssClass;
         infdiv.appendChild(ldiv);
-        this.lDiv = Dom.id(this.prfxLDiv + this.id);
+        this.lDiv = byId(this.prfxLDiv + this.id);
 
         /***    right div containing reset button
                 + nb results per page select    ***/
-        let rdiv = Dom.create('div', ['id', this.prfxRDiv + this.id]);
+        let rdiv = createElm('div', ['id', this.prfxRDiv + this.id]);
         rdiv.className = this.rDivCssClass;
         infdiv.appendChild(rdiv);
-        this.rDiv = Dom.id(this.prfxRDiv + this.id);
+        this.rDiv = byId(this.prfxRDiv + this.id);
 
         /*** mid div containing paging elements ***/
-        let mdiv = Dom.create('div', ['id', this.prfxMDiv + this.id]);
+        let mdiv = createElm('div', ['id', this.prfxMDiv + this.id]);
         mdiv.className = this.mDivCssClass;
         infdiv.appendChild(mdiv);
-        this.mDiv = Dom.id(this.prfxMDiv + this.id);
+        this.mDiv = byId(this.prfxMDiv + this.id);
 
         // emit help initialisation only if undefined
         if (isUndef(this.help)) {
@@ -1050,11 +1053,11 @@ export class TableFilter {
         if (!this.infDiv) {
             return;
         }
-        Dom.remove(this.infDiv);
+        removeElm(this.infDiv);
         this.infDiv = null;
 
         let tbl = this.tbl;
-        let captions = Dom.tag(tbl, 'caption');
+        let captions = tag(tbl, 'caption');
         if (captions.length > 0) {
             [].forEach.call(captions, (elm) => tbl.removeChild(elm));
         }
@@ -1071,7 +1074,7 @@ export class TableFilter {
             len = ids.length;
         for (let ct = 0; ct < len; ct++) {
             let externalFltTgtId = ids[ct],
-                externalFlt = Dom.id(externalFltTgtId);
+                externalFlt = byId(externalFltTgtId);
             if (externalFlt) {
                 externalFlt.innerHTML = '';
             }
@@ -1173,7 +1176,7 @@ export class TableFilter {
                 let w = str;
                 if (re_le.test(str) || re_ge.test(str) || re_l.test(str) ||
                     re_g.test(str) || re_d.test(str)) {
-                    w = Dom.getText(cell);
+                    w = getText(cell);
                 }
                 if (w !== '') {
                     this.emitter.emit('highlight-keyword', this, cell, w);
@@ -1628,7 +1631,7 @@ export class TableFilter {
      */
     getFilterElement(index) {
         let fltId = this.fltIds[index];
-        return Dom.id(fltId);
+        return byId(fltId);
     }
 
     /**
@@ -1668,7 +1671,7 @@ export class TableFilter {
             this.customCellDataCols.indexOf(idx) !== -1) {
             return this.customCellData.call(null, this, cell, idx);
         } else {
-            return Dom.getText(cell);
+            return getText(cell);
         }
     }
 
@@ -1901,7 +1904,7 @@ export class TableFilter {
         function setWidths() {
             let nbCols = this.nbCells;
             let colWidths = this.colWidths;
-            let colTags = Dom.tag(tbl, 'col');
+            let colTags = tag(tbl, 'col');
             let tblHasColTag = colTags.length > 0;
             let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
             for (let k = 0; k < nbCols; k++) {
@@ -1909,7 +1912,7 @@ export class TableFilter {
                 if (tblHasColTag) {
                     col = colTags[k];
                 } else {
-                    col = Dom.create('col', ['id', this.id + '_col_' + k]);
+                    col = createElm('col', ['id', this.id + '_col_' + k]);
                     frag.appendChild(col);
                 }
                 col.style.width = colWidths[k];
@@ -1967,8 +1970,7 @@ export class TableFilter {
      */
     clearActiveColumns() {
         for (let i = 0, len = this.getCellsNb(this.headersRow); i < len; i++) {
-            Dom.removeClass(
-                this.getHeaderElement(i), this.activeColumnsCssClass);
+            removeClass(this.getHeaderElement(i), this.activeColumnsCssClass);
         }
     }
 
@@ -1978,13 +1980,13 @@ export class TableFilter {
      */
     markActiveColumn(colIndex) {
         let header = this.getHeaderElement(colIndex);
-        if (Dom.hasClass(header, this.activeColumnsCssClass)) {
+        if (hasClass(header, this.activeColumnsCssClass)) {
             return;
         }
         if (this.onBeforeActiveColumn) {
             this.onBeforeActiveColumn.call(null, this, colIndex);
         }
-        Dom.addClass(header, this.activeColumnsCssClass);
+        addClass(header, this.activeColumnsCssClass);
         if (this.onAfterActiveColumn) {
             this.onAfterActiveColumn.call(null, this, colIndex);
         }
@@ -2045,7 +2047,7 @@ export class TableFilter {
         let activeIdx = this.getColumnIndexFromFilterId(this.activeFilterId);
 
         for (let i = 0, len = slcIndex.length; i < len; i++) {
-            let curSlc = Dom.id(this.fltIds[slcIndex[i]]);
+            let curSlc = byId(this.fltIds[slcIndex[i]]);
             let slcSelectedValue = this.getFilterValue(slcIndex[i]);
 
             // Welcome to cyclomatic complexity hell :)
@@ -2059,7 +2061,7 @@ export class TableFilter {
 
                 //1st option needs to be inserted
                 if (this.loadFltOnDemand) {
-                    let opt0 = Dom.createOpt(this.displayAllText, '');
+                    let opt0 = createOpt(this.displayAllText, '');
                     curSlc.innerHTML = '';
                     curSlc.appendChild(opt0);
                 }
@@ -2098,7 +2100,7 @@ export class TableFilter {
         let imported = false,
             importType = !type ? 'script' : type,
             attr = importType === 'script' ? 'src' : 'href',
-            files = Dom.tag(doc, importType);
+            files = tag(doc, importType);
         for (let i = 0, len = files.length; i < len; i++) {
             if (files[i][attr] === undefined) {
                 continue;
@@ -2127,15 +2129,15 @@ export class TableFilter {
         let o = this,
             isLoaded = false,
             file,
-            head = Dom.tag(doc, 'head')[0];
+            head = tag(doc, 'head')[0];
 
         if (ftype.toLowerCase() === 'link') {
-            file = Dom.create('link',
+            file = createElm('link',
                 ['id', fileId], ['type', 'text/css'],
                 ['rel', 'stylesheet'], ['href', filePath]
             );
         } else {
-            file = Dom.create('script',
+            file = createElm('script',
                 ['id', fileId],
                 ['type', 'text/javascript'], ['src', filePath]
             );
@@ -2243,7 +2245,7 @@ export class TableFilter {
      */
     getHeaderElement(colIndex) {
         let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl;
-        let tHead = Dom.tag(table, 'thead');
+        let tHead = tag(table, 'thead');
         let headersRow = this.headersRow;
         let header;
         for (let i = 0; i < this.nbCells; i++) {
@@ -2275,7 +2277,7 @@ export class TableFilter {
                 }
             }
             let header = this.getHeaderElement(j);
-            let headerText = Dom.getFirstTextNode(header);
+            let headerText = getFirstTextNode(header);
             headers.push(headerText);
         }
         return headers;

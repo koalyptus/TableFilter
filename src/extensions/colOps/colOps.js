@@ -1,5 +1,5 @@
 import {Feature} from '../../feature';
-import Dom from '../../dom';
+import {createText, byId} from '../../dom';
 import {isArray, isFn, isUndef} from '../../types';
 
 export default class ColOps extends Feature {
@@ -268,25 +268,24 @@ export default class ColOps extends Feature {
                     if (oTypeThisCol && result) {
                         result = result.toFixed(precision);
 
-                        if (Dom.id(labThisCol[i])) {
+                        if (byId(labThisCol[i])) {
                             switch (oTypeThisCol.toLowerCase()) {
                                 case 'innerhtml':
                                     if (isNaN(result) || !isFinite(result) ||
                                         nbvalues === 0) {
-                                        Dom.id(labThisCol[i]).innerHTML = '.';
+                                        byId(labThisCol[i]).innerHTML = '.';
                                     } else {
-                                        Dom.id(labThisCol[i]).innerHTML =
-                                            result;
+                                        byId(labThisCol[i]).innerHTML = result;
                                     }
                                     break;
                                 case 'setvalue':
-                                    Dom.id(labThisCol[i]).value = result;
+                                    byId(labThisCol[i]).value = result;
                                     break;
                                 case 'createtextnode':
-                                    var oldnode = Dom.id(labThisCol[i])
-                                        .firstChild;
-                                    var txtnode = Dom.text(result);
-                                    Dom.id(labThisCol[i])
+                                    var oldnode =
+                                        byId(labThisCol[i]).firstChild;
+                                    var txtnode = createText(result);
+                                    byId(labThisCol[i])
                                         .replaceChild(txtnode, oldnode);
                                     break;
                             }//switch
@@ -295,9 +294,9 @@ export default class ColOps extends Feature {
                         try {
                             if (isNaN(result) || !isFinite(result) ||
                                 nbvalues === 0) {
-                                Dom.id(labThisCol[i]).innerHTML = '.';
+                                byId(labThisCol[i]).innerHTML = '.';
                             } else {
-                                Dom.id(labThisCol[i]).innerHTML =
+                                byId(labThisCol[i]).innerHTML =
                                     result.toFixed(precision);
                             }
                         } catch (e) { }//catch

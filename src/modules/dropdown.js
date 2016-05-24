@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import Dom from '../dom';
+import {createElm, createOpt, id} from '../dom';
 import {has} from '../array';
 import {matchCase} from '../string';
 import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
@@ -67,7 +67,7 @@ export class Dropdown extends Feature {
         let externalFltTgtId = isExternal ?
             tf.externalFltTgtIds[colIndex] : null;
 
-        let slc = Dom.create(SELECT,
+        let slc = createElm(SELECT,
             ['id', tf.prfxFlt + colIndex + '_' + tf.id],
             ['ct', colIndex], ['filled', '0']
         );
@@ -81,7 +81,7 @@ export class Dropdown extends Feature {
 
         //filter is appended in container element
         if (externalFltTgtId) {
-            Dom.id(externalFltTgtId).appendChild(slc);
+            id(externalFltTgtId).appendChild(slc);
             tf.externalFltEls.push(slc);
         } else {
             container.appendChild(slc);
@@ -93,7 +93,7 @@ export class Dropdown extends Feature {
             this.build(colIndex);
         } else {
             //1st option is created here since build isn't invoked
-            let opt0 = Dom.createOpt(tf.displayAllText, '');
+            let opt0 = createOpt(tf.displayAllText, '');
             slc.appendChild(opt0);
         }
 
@@ -129,9 +129,9 @@ export class Dropdown extends Feature {
         this.slcInnerHtml = '';
 
         let slcId = tf.fltIds[colIndex];
-        let slc = Dom.id(slcId),
-            rows = tf.tbl.rows,
-            nbRows = tf.getRowsNb(true);
+        let slc = id(slcId);
+        let rows = tf.tbl.rows;
+        let nbRows = tf.getRowsNb(true);
 
         //custom select test
         this.isCustom = tf.isCustomOptions(colIndex);
@@ -290,9 +290,9 @@ export class Dropdown extends Feature {
             //fill select on demand
             if (tf.loadFltOnDemand && slcValue === this.opts[y] &&
                 tf.getFilterType(colIndex) === SELECT) {
-                opt = Dom.createOpt(lbl, val, true);
+                opt = createOpt(lbl, val, true);
             } else {
-                opt = Dom.createOpt(lbl, val, false);
+                opt = createOpt(lbl, val, false);
             }
             if (isDisabled) {
                 opt.disabled = true;
@@ -310,18 +310,18 @@ export class Dropdown extends Feature {
     addFirstOption(slc) {
         let tf = this.tf;
 
-        let opt0 = Dom.createOpt(
+        let opt0 = createOpt(
             (!this.enableSlcResetFilter ? '' : tf.displayAllText), '');
         if (!this.enableSlcResetFilter) {
             opt0.style.display = NONE;
         }
         slc.appendChild(opt0);
         if (tf.enableEmptyOption) {
-            let opt1 = Dom.createOpt(tf.emptyText, tf.emOperator);
+            let opt1 = createOpt(tf.emptyText, tf.emOperator);
             slc.appendChild(opt1);
         }
         if (tf.enableNonEmptyOption) {
-            let opt2 = Dom.createOpt(tf.nonEmptyText, tf.nmOperator);
+            let opt2 = createOpt(tf.nonEmptyText, tf.nmOperator);
             slc.appendChild(opt2);
         }
         return slc;

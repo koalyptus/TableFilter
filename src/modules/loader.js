@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import Dom from '../dom';
+import {createElm, createText, id, removeElm} from '../dom';
 import {isFn} from '../types';
 import {root} from '../root';
 import {NONE} from '../const';
@@ -44,11 +44,11 @@ export class Loader extends Feature {
         let tf = this.tf;
         let emitter = this.emitter;
 
-        let containerDiv = Dom.create('div', ['id', this.prfxLoader + tf.id]);
+        let containerDiv = createElm('div', ['id', this.prfxLoader + tf.id]);
         containerDiv.className = this.loaderCssClass;
 
         let targetEl = !this.loaderTgtId ?
-            tf.tbl.parentNode : Dom.id(this.loaderTgtId);
+            tf.tbl.parentNode : id(this.loaderTgtId);
         if (!this.loaderTgtId) {
             targetEl.insertBefore(containerDiv, tf.tbl);
         } else {
@@ -56,7 +56,7 @@ export class Loader extends Feature {
         }
         this.loaderDiv = containerDiv;
         if (!this.loaderHtml) {
-            this.loaderDiv.appendChild(Dom.text(this.loaderText));
+            this.loaderDiv.appendChild(createText(this.loaderText));
         } else {
             this.loaderDiv.innerHTML = this.loaderHtml;
         }
@@ -121,7 +121,7 @@ export class Loader extends Feature {
 
         let emitter = this.emitter;
 
-        Dom.remove(this.loaderDiv);
+        removeElm(this.loaderDiv);
         this.loaderDiv = null;
 
         // Unsubscribe to events

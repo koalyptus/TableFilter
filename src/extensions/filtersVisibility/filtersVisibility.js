@@ -1,5 +1,5 @@
 import {Feature} from '../../feature';
-import Dom from '../../dom';
+import {createElm, removeElm, byId} from '../../dom';
 import {isFn, isUndef} from '../../types';
 import Event from '../../event';
 
@@ -96,14 +96,14 @@ export default class FiltersVisibility extends Feature {
      */
     buildUI() {
         let tf = this.tf;
-        let span = Dom.create('span', ['id', this.prfx + tf.id]);
+        let span = createElm('span', ['id', this.prfx + tf.id]);
         span.className = this.contCssClass;
 
         //Container element (rdiv or custom element)
         if (!this.targetId) {
             tf.setToolbar();
         }
-        let targetEl = !this.targetId ? tf.rDiv : Dom.id(this.targetId);
+        let targetEl = !this.targetId ? tf.rDiv : byId(this.targetId);
 
         if (!this.targetId) {
             let firstChild = targetEl.firstChild;
@@ -114,7 +114,7 @@ export default class FiltersVisibility extends Feature {
 
         let btn;
         if (!this.btnHtml) {
-            btn = Dom.create('a', ['href', 'javascript:void(0);']);
+            btn = createElm('a', ['href', 'javascript:void(0);']);
             btn.className = this.btnCssClass;
             btn.title = this.btnText || this.defaultText;
             btn.innerHTML = this.collapseBtnHtml;
@@ -190,11 +190,11 @@ export default class FiltersVisibility extends Feature {
         this.emitter.off(['show-filters'], (tf, visible) => this.show(visible));
 
         this.btnEl.innerHTML = '';
-        Dom.remove(this.btnEl);
+        removeElm(this.btnEl);
         this.btnEl = null;
 
         this.contEl.innerHTML = '';
-        Dom.remove(this.contEl);
+        removeElm(this.contEl);
         this.contEl = null;
         this.initialized = false;
     }

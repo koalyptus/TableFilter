@@ -1,14 +1,14 @@
 import {Feature} from '../feature';
-import Dom from '../dom';
+import {createElm, createText, id, removeElm} from '../dom';
 import {isFn} from '../types';
 
-export class RowsCounter extends Feature{
+export class RowsCounter extends Feature {
 
     /**
      * Rows counter
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, 'rowsCounter');
 
         // TableFilter configuration
@@ -40,35 +40,35 @@ export class RowsCounter extends Feature{
             f.on_after_refresh_counter : null;
     }
 
-    init(){
-        if(this.initialized){
+    init() {
+        if (this.initialized) {
             return;
         }
 
         var tf = this.tf;
 
         //rows counter container
-        var countDiv = Dom.create('div', ['id', this.prfxCounter+tf.id]);
+        var countDiv = createElm('div', ['id', this.prfxCounter + tf.id]);
         countDiv.className = this.totRowsCssClass;
         //rows counter label
-        var countSpan = Dom.create('span', ['id', this.prfxTotRows+tf.id]);
-        var countText = Dom.create('span', ['id', this.prfxTotRowsTxt+tf.id]);
-        countText.appendChild(Dom.text(this.rowsCounterText));
+        var countSpan = createElm('span', ['id', this.prfxTotRows + tf.id]);
+        var countText = createElm('span', ['id', this.prfxTotRowsTxt + tf.id]);
+        countText.appendChild(createText(this.rowsCounterText));
 
         // counter is added to defined element
-        if(!this.rowsCounterTgtId){
+        if (!this.rowsCounterTgtId) {
             tf.setToolbar();
         }
         var targetEl = !this.rowsCounterTgtId ?
-                tf.lDiv : Dom.id( this.rowsCounterTgtId );
+            tf.lDiv : id(this.rowsCounterTgtId);
 
         //default container: 'lDiv'
-        if(!this.rowsCounterTgtId){
+        if (!this.rowsCounterTgtId) {
             countDiv.appendChild(countText);
             countDiv.appendChild(countSpan);
             targetEl.appendChild(countDiv);
         }
-        else{
+        else {
             //custom container, no need to append statusDiv
             targetEl.appendChild(countText);
             targetEl.appendChild(countSpan);
@@ -78,40 +78,41 @@ export class RowsCounter extends Feature{
 
         // subscribe to events
         this.emitter.on(['after-filtering', 'grouped-by-page'],
-            ()=> this.refresh(tf.nbVisibleRows));
-        this.emitter.on(['rows-changed'], ()=> this.refresh());
+            () => this.refresh(tf.nbVisibleRows));
+        this.emitter.on(['rows-changed'], () => this.refresh());
 
         this.initialized = true;
         this.refresh();
     }
 
-    refresh(p){
-        if(!this.initialized || !this.isEnabled()){
+    refresh(p) {
+        if (!this.initialized || !this.isEnabled()) {
             return;
         }
 
         var tf = this.tf;
 
-        if(this.onBeforeRefreshCounter){
+        if (this.onBeforeRefreshCounter) {
             this.onBeforeRefreshCounter.call(null, tf, this.rowsCounterSpan);
         }
 
         var totTxt;
-        if(!tf.paging){
-            if(p && p !== ''){
+        if (!tf.paging) {
+            if (p && p !== '') {
                 totTxt = p;
-            } else{
+            } else {
                 totTxt = tf.nbFilterableRows - tf.nbHiddenRows;
             }
         } else {
             var paging = tf.feature('paging');
-            if(paging){
+            if (paging) {
                 //paging start row
                 var paging_start_row = parseInt(paging.startPagingRow, 10) +
-                        ((tf.nbVisibleRows>0) ? 1 : 0);
-                var paging_end_row = (paging_start_row+paging.pagingLength)-1 <=
-                        tf.nbVisibleRows ?
-                        paging_start_row+paging.pagingLength-1 :
+                    ((tf.nbVisibleRows > 0) ? 1 : 0);
+                var paging_end_row =
+                    (paging_start_row + paging.pagingLength) - 1 <=
+                    tf.nbVisibleRows ?
+                        paging_start_row + paging.pagingLength - 1 :
                         tf.nbVisibleRows;
                 totTxt = paging_start_row + this.fromToTextSeparator +
                     paging_end_row + this.overText + tf.nbVisibleRows;
@@ -119,29 +120,29 @@ export class RowsCounter extends Feature{
         }
 
         this.rowsCounterSpan.innerHTML = totTxt;
-        if(this.onAfterRefreshCounter){
+        if (this.onAfterRefreshCounter) {
             this.onAfterRefreshCounter.call(
                 null, tf, this.rowsCounterSpan, totTxt);
         }
     }
 
-    destroy(){
-        if(!this.initialized){
+    destroy() {
+        if (!this.initialized) {
             return;
         }
 
-        if(!this.rowsCounterTgtId && this.rowsCounterDiv){
-            Dom.remove(this.rowsCounterDiv);
+        if (!this.rowsCounterTgtId && this.rowsCounterDiv) {
+            removeElm(this.rowsCounterDiv);
         } else {
-            Dom.id(this.rowsCounterTgtId).innerHTML = '';
+            id(this.rowsCounterTgtId).innerHTML = '';
         }
         this.rowsCounterSpan = null;
         this.rowsCounterDiv = null;
 
         // unsubscribe to events
         this.emitter.off(['after-filtering', 'grouped-by-page'],
-            ()=> this.refresh(tf.nbVisibleRows));
-        this.emitter.off(['rows-changed'], ()=> this.refresh());
+            () => this.refresh(tf.nbVisibleRows));
+        this.emitter.off(['rows-changed'], () => this.refresh());
 
         this.initialized = false;
     }
