@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import {createElm, createOpt, id} from '../dom';
+import {createElm, createOpt, elm} from '../dom';
 import {has} from '../array';
 import {matchCase} from '../string';
 import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
@@ -81,7 +81,7 @@ export class Dropdown extends Feature {
 
         //filter is appended in container element
         if (externalFltTgtId) {
-            id(externalFltTgtId).appendChild(slc);
+            elm(externalFltTgtId).appendChild(slc);
             tf.externalFltEls.push(slc);
         } else {
             container.appendChild(slc);
@@ -129,7 +129,7 @@ export class Dropdown extends Feature {
         this.slcInnerHtml = '';
 
         let slcId = tf.fltIds[colIndex];
-        let slc = id(slcId);
+        let slc = elm(slcId);
         let rows = tf.tbl.rows;
         let nbRows = tf.getRowsNb(true);
 

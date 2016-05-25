@@ -1,5 +1,5 @@
 import {Feature} from '../../feature';
-import {createText, byId} from '../../dom';
+import {createText, elm} from '../../dom';
 import {isArray, isFn, isUndef} from '../../types';
 
 export default class ColOps extends Feature {
@@ -268,24 +268,24 @@ export default class ColOps extends Feature {
                     if (oTypeThisCol && result) {
                         result = result.toFixed(precision);
 
-                        if (byId(labThisCol[i])) {
+                        if (elm(labThisCol[i])) {
                             switch (oTypeThisCol.toLowerCase()) {
                                 case 'innerhtml':
                                     if (isNaN(result) || !isFinite(result) ||
                                         nbvalues === 0) {
-                                        byId(labThisCol[i]).innerHTML = '.';
+                                        elm(labThisCol[i]).innerHTML = '.';
                                     } else {
-                                        byId(labThisCol[i]).innerHTML = result;
+                                        elm(labThisCol[i]).innerHTML = result;
                                     }
                                     break;
                                 case 'setvalue':
-                                    byId(labThisCol[i]).value = result;
+                                    elm(labThisCol[i]).value = result;
                                     break;
                                 case 'createtextnode':
                                     var oldnode =
-                                        byId(labThisCol[i]).firstChild;
+                                        elm(labThisCol[i]).firstChild;
                                     var txtnode = createText(result);
-                                    byId(labThisCol[i])
+                                    elm(labThisCol[i])
                                         .replaceChild(txtnode, oldnode);
                                     break;
                             }//switch
@@ -294,9 +294,9 @@ export default class ColOps extends Feature {
                         try {
                             if (isNaN(result) || !isFinite(result) ||
                                 nbvalues === 0) {
-                                byId(labThisCol[i]).innerHTML = '.';
+                                elm(labThisCol[i]).innerHTML = '.';
                             } else {
-                                byId(labThisCol[i]).innerHTML =
+                                elm(labThisCol[i]).innerHTML =
                                     result.toFixed(precision);
                             }
                         } catch (e) { }//catch

@@ -2,6 +2,11 @@
  * String utilities
  */
 
+/**
+ * Removes whitespace from both sides of passed string
+ * @param  {String} text
+ * @return {String}
+ */
 export const trim = text => {
     if (text.trim) {
         return text.trim();
@@ -9,14 +14,30 @@ export const trim = text => {
     return text.replace(/^\s*|\s*$/g, '');
 }
 
+/**
+ * Checks if passed string is empty
+ * @param {String} text
+ * @return {Boolean}
+ */
 export const isEmpty = (text) => trim(text) === '';
 
+/**
+ * Makes regex safe string by escaping special characters from passed string
+ * @param {String} text
+ * @return {String} escaped string
+ */
 export const rgxEsc = text => {
     let chars = /[-\/\\^$*+?.()|[\]{}]/g;
     let escMatch = '\\$&';
     return String(text).replace(chars, escMatch);
 }
 
+/**
+ * Returns passed string as lowercase if caseSensitive flag set false. By
+ * default it returns the string with no casing changes.
+ * @param {String} text
+ * @return {String} string
+ */
 export const matchCase = (text, caseSensitive) => {
     if (!caseSensitive) {
         return text.toLowerCase();

@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import {createElm, createText, id, removeElm} from '../dom';
+import {createElm, createText, elm, removeElm} from '../dom';
 import {isFn} from '../types';
 import {root} from '../root';
 import {NONE} from '../const';
@@ -48,7 +48,7 @@ export class Loader extends Feature {
         containerDiv.className = this.loaderCssClass;
 
         let targetEl = !this.loaderTgtId ?
-            tf.tbl.parentNode : id(this.loaderTgtId);
+            tf.tbl.parentNode : elm(this.loaderTgtId);
         if (!this.loaderTgtId) {
             targetEl.insertBefore(containerDiv, tf.tbl);
         } else {

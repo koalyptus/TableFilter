@@ -1,6 +1,6 @@
 import {Feature} from '../../feature';
 import {isArray, isFn, isUndef} from '../../types';
-import {createElm, byId, getText, tag} from '../../dom';
+import {createElm, elm, getText, tag} from '../../dom';
 import Event from '../../event';
 import {formatDate} from '../../date';
 import {removeNbFormat} from '../../helpers';
@@ -214,7 +214,7 @@ export default class AdapterSortableTable extends Feature {
                 cells = [];
                 l = triggers.length;
                 for (let j = 0; j < triggers.length; j++) {
-                    cells.push(byId(triggers[j]));
+                    cells.push(elm(triggers[j]));
                 }
             } else {
                 if (!this.tHead) {
@@ -335,7 +335,7 @@ export default class AdapterSortableTable extends Feature {
                 if (triggers[j] === null) {
                     continue;
                 }
-                let trigger = byId(triggers[j]);
+                let trigger = elm(triggers[j]);
                 if (trigger) {
                     trigger.style.cursor = 'pointer';
 

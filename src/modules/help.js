@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import {createElm, createText, id, removeElm} from '../dom';
+import {createElm, createText, elm, removeElm} from '../dom';
 import Event from '../event';
 import {NONE} from '../const';
 
@@ -77,10 +77,10 @@ export class Help extends Feature{
         if(!this.tgtId){
             tf.setToolbar();
         }
-        var targetEl = !this.tgtId ? tf.rDiv : id(this.tgtId);
+        var targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
         targetEl.appendChild(helpspan);
 
-        var divContainer = !this.contTgtId ? helpspan : id(this.contTgtId);
+        var divContainer = !this.contTgtId ? helpspan : elm(this.contTgtId);
 
         if(!this.btnHtml){
             divContainer.appendChild(helpdiv);

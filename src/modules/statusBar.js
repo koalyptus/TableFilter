@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import {root} from '../root';
-import {createElm, createText, id, removeElm} from '../dom';
+import {createElm, createText, elm, removeElm} from '../dom';
 import {isFn} from '../types';
 
 export class StatusBar extends Feature {
@@ -96,7 +96,7 @@ export class StatusBar extends Feature {
             tf.setToolbar();
         }
         let targetEl = (!this.statusBarTgtId) ?
-            tf.lDiv : id(this.statusBarTgtId);
+            tf.lDiv : elm(this.statusBarTgtId);
 
         //default container: 'lDiv'
         if (!this.statusBarTgtId) {

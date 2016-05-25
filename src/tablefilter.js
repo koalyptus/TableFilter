@@ -1,7 +1,7 @@
 import Event from './event';
 import {
-    addClass, createElm, createOpt, getText, getFirstTextNode, byId, tag,
-    removeClass, removeElm
+    addClass, createElm, createOpt, elm, getText, getFirstTextNode, hasClass,
+    removeClass, removeElm, tag
 } from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
 import {isEmpty as isEmptyString} from './string';
@@ -65,7 +65,7 @@ export class TableFilter {
                 this.id = arg.id || `tf_${new Date().getTime()}_`;
             } else if (isString(arg)) {
                 this.id = arg;
-                this.tbl = byId(arg);
+                this.tbl = elm(arg);
             } else if (isNumber(arg)) {
                 this.startRow = arg;
             } else if (isObj(arg)) {
@@ -731,7 +731,7 @@ export class TableFilter {
 
         //filter is appended in custom element
         if (externalFltTgtId) {
-            byId(externalFltTgtId).appendChild(inp);
+            elm(externalFltTgtId).appendChild(inp);
             this.externalFltEls.push(inp);
         } else {
             container.appendChild(inp);
@@ -760,7 +760,7 @@ export class TableFilter {
 
         //filter is appended in custom element
         if (externalFltTgtId) {
-            byId(externalFltTgtId).appendChild(btn);
+            elm(externalFltTgtId).appendChild(btn);
         } else {
             container.appendChild(btn);
         }
@@ -919,7 +919,7 @@ export class TableFilter {
      * @return {DOMElement} stylesheet element
      */
     getStylesheet(name = 'default') {
-        return byId(this.prfxTf + name);
+        return elm(this.prfxTf + name);
     }
 
     /**
@@ -1002,7 +1002,7 @@ export class TableFilter {
 
         //custom container
         if (this.toolBarTgtId) {
-            byId(this.toolBarTgtId).appendChild(infdiv);
+            elm(this.toolBarTgtId).appendChild(infdiv);
         }
         //grid-layout
         else if (this.gridLayout) {
@@ -1016,26 +1016,26 @@ export class TableFilter {
             cont.appendChild(infdiv);
             this.tbl.insertBefore(cont, this.tbl.firstChild);
         }
-        this.infDiv = byId(this.prfxInfDiv + this.id);
+        this.infDiv = elm(this.prfxInfDiv + this.id);
 
         /*** left div containing rows # displayer ***/
         let ldiv = createElm('div', ['id', this.prfxLDiv + this.id]);
         ldiv.className = this.lDivCssClass;
         infdiv.appendChild(ldiv);
-        this.lDiv = byId(this.prfxLDiv + this.id);
+        this.lDiv = elm(this.prfxLDiv + this.id);
 
         /***    right div containing reset button
                 + nb results per page select    ***/
         let rdiv = createElm('div', ['id', this.prfxRDiv + this.id]);
         rdiv.className = this.rDivCssClass;
         infdiv.appendChild(rdiv);
-        this.rDiv = byId(this.prfxRDiv + this.id);
+        this.rDiv = elm(this.prfxRDiv + this.id);
 
         /*** mid div containing paging elements ***/
         let mdiv = createElm('div', ['id', this.prfxMDiv + this.id]);
         mdiv.className = this.mDivCssClass;
         infdiv.appendChild(mdiv);
-        this.mDiv = byId(this.prfxMDiv + this.id);
+        this.mDiv = elm(this.prfxMDiv + this.id);
 
         // emit help initialisation only if undefined
         if (isUndef(this.help)) {
@@ -1074,7 +1074,7 @@ export class TableFilter {
             len = ids.length;
         for (let ct = 0; ct < len; ct++) {
             let externalFltTgtId = ids[ct],
-                externalFlt = byId(externalFltTgtId);
+                externalFlt = elm(externalFltTgtId);
             if (externalFlt) {
                 externalFlt.innerHTML = '';
             }
@@ -1631,7 +1631,7 @@ export class TableFilter {
      */
     getFilterElement(index) {
         let fltId = this.fltIds[index];
-        return byId(fltId);
+        return elm(fltId);
     }
 
     /**
@@ -2047,7 +2047,7 @@ export class TableFilter {
         let activeIdx = this.getColumnIndexFromFilterId(this.activeFilterId);
 
         for (let i = 0, len = slcIndex.length; i < len; i++) {
-            let curSlc = byId(this.fltIds[slcIndex[i]]);
+            let curSlc = elm(this.fltIds[slcIndex[i]]);
             let slcSelectedValue = this.getFilterValue(slcIndex[i]);
 
             // Welcome to cyclomatic complexity hell :)

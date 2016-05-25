@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import {createElm, removeElm, id, tag} from '../dom';
+import {createElm, removeElm, elm, tag} from '../dom';
 import {isFn, isNull, isUndef} from '../types';
 import Event from '../event';
 import {contains} from '../string';
@@ -343,7 +343,7 @@ export class GridLayout extends Feature {
 
         tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element for future usage
-        this.tf.tbl = id(tf.id);
+        this.tf.tbl = elm(tf.id);
 
         this.initialized = false;
     }

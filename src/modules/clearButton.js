@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import {createElm, createText, id, removeElm} from '../dom';
+import {createElm, createText, elm, removeElm} from '../dom';
 import Event from '../event';
 
 export class ClearButton extends Feature {
@@ -54,11 +54,11 @@ export class ClearButton extends Feature {
         if (!this.btnResetTgtId) {
             tf.setToolbar();
         }
-        let targetEl = !this.btnResetTgtId ? tf.rDiv : id(this.btnResetTgtId);
+        let targetEl = !this.btnResetTgtId ? tf.rDiv : elm(this.btnResetTgtId);
         targetEl.appendChild(resetspan);
 
         if (!this.btnResetHtml) {
-            let fltreset = createElm('a', ['href', 'javascript:void(0);']);
+            let fltreset = createElm('a', ['href', 'javascript:voelm(0);']);
             fltreset.className = tf.btnResetCssClass;
             fltreset.appendChild(createText(this.btnResetText));
             resetspan.appendChild(fltreset);
@@ -83,7 +83,7 @@ export class ClearButton extends Feature {
             return;
         }
 
-        let resetspan = id(this.prfxResetSpan + tf.id);
+        let resetspan = elm(this.prfxResetSpan + tf.id);
         if (resetspan) {
             removeElm(resetspan);
         }

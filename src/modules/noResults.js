@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import {createElm, id, removeElm} from '../dom';
+import {createElm, elm, removeElm} from '../dom';
 import {isEmpty, isFn} from '../types';
 import {NONE} from '../const';
 
@@ -45,7 +45,7 @@ export class NoResults extends Feature {
             return;
         }
         let tf = this.tf;
-        let target = this.customContainer || id(this.customContainerId) ||
+        let target = this.customContainer || elm(this.customContainerId) ||
             tf.tbl;
 
         //container

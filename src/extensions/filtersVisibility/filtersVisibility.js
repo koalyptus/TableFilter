@@ -1,5 +1,5 @@
 import {Feature} from '../../feature';
-import {createElm, removeElm, byId} from '../../dom';
+import {createElm, removeElm, elm} from '../../dom';
 import {isFn, isUndef} from '../../types';
 import Event from '../../event';
 
@@ -103,7 +103,7 @@ export default class FiltersVisibility extends Feature {
         if (!this.targetId) {
             tf.setToolbar();
         }
-        let targetEl = !this.targetId ? tf.rDiv : byId(this.targetId);
+        let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);
 
         if (!this.targetId) {
             let firstChild = targetEl.firstChild;

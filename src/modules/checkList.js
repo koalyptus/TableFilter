@@ -1,6 +1,7 @@
 import {Feature} from '../feature';
 import {
-    addClass, createCheckItem, createText, createElm, byId, removeClass, tag
+    addClass, createCheckItem, createText, createElm, elm, getText,
+    removeClass, tag
 } from '../dom';
 import {has} from '../array';
 import {matchCase, trim, rgxEsc} from '../string';
@@ -94,7 +95,7 @@ export class CheckList extends Feature {
 
         //filter is appended in desired element
         if (externalFltTgtId) {
-            byId(externalFltTgtId).appendChild(divCont);
+            elm(externalFltTgtId).appendChild(divCont);
             tf.externalFltEls.push(divCont);
         } else {
             container.appendChild(divCont);
@@ -373,7 +374,7 @@ export class CheckList extends Feature {
                     //checked items loop
                     for (let u = 0; u < indSplit.length; u++) {
                         //checked item
-                        let cChk = byId(tf.fltIds[colIndex] + '_' +
+                        let cChk = elm(tf.fltIds[colIndex] + '_' +
                             indSplit[u]);
                         if (cChk) {
                             cChk.checked = false;
@@ -393,8 +394,8 @@ export class CheckList extends Feature {
                 n.setAttribute('value', chkValue);
                 n.setAttribute('indexes', chkIndex);
                 //1st option unchecked
-                if (byId(tf.fltIds[colIndex] + '_0')) {
-                    byId(tf.fltIds[colIndex] + '_0').checked = false;
+                if (elm(tf.fltIds[colIndex] + '_0')) {
+                    elm(tf.fltIds[colIndex] + '_0').checked = false;
                 }
             }
 

@@ -1,11 +1,12 @@
-import {isUndef} from './types';
+import {root} from './root';
+import {isArray, isString, isUndef} from './types';
 import {trim} from './string';
 
 /**
  * DOM utilities
  */
 
-// export default {
+const doc = root.document;
 
 /**
  * Returns text + text of children of given node
@@ -40,22 +41,21 @@ export const getFirstTextNode = node => {
  *                    items, the attribute name and its value ['id','myId']
  * @return {Object}     created element
  */
-export const createElm = tag => {
-    if (isUndef(tag)) {
-        return;
+export const createElm = (...args) => {
+    let tag = args[0];
+    if (!isString(tag)) {
+        return null;
     }
 
-    let el = document.createElement(tag),
-        args = arguments;
+    let el = doc.createElement(tag);
+    for (let i = 0; i < args.length; i++) {
+        let arg = args[i];
 
-    if (args.length > 1) {
-        for (let i = 0; i < args.length; i++) {
-            let argtype = typeof args[i];
-            if (argtype === 'object' && args[i].length === 2) {
-                el.setAttribute(args[i][0], args[i][1]);
-            }
+        if (isArray(arg) && arg.length === 2) {
+            el.setAttribute(arg[0], arg[1]);
         }
     }
+
     return el;
 }
 
@@ -71,10 +71,18 @@ export const removeElm = node => node.parentNode.removeChild(node);
  * @param  {String} txt
  * @return {Object}
  */
-export const createText = txt => document.createTextNode(txt);
+export const createText = txt => doc.createTextNode(txt);
 
+/**
+ * Determine whether the passed elements is assigned the given class
+ * @param {DOMElement} ele DOM element
+ * @param {String} cls CSS class name
+ * @returns {Boolean}
+ */
 export const hasClass = (ele, cls) => {
-    if (!ele) { return false; }
+    if (isUndef(ele)) {
+        return false;
+    }
 
     if (supportsClassList()) {
         return ele.classList.contains(cls);
@@ -82,8 +90,15 @@ export const hasClass = (ele, cls) => {
     return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
 }
 
+/**
+ * Adds the specified class to the passed element
+ * @param {DOMElement} ele DOM element
+ * @param {String} cls CSS class name
+ */
 export const addClass = (ele, cls) => {
-    if (!ele) { return; }
+    if (isUndef(ele)) {
+        return;
+    }
 
     if (supportsClassList()) {
         ele.classList.add(cls);
@@ -98,8 +113,15 @@ export const addClass = (ele, cls) => {
     }
 }
 
+/**
+ * Removes the specified class to the passed element
+ * @param {DOMElement} ele DOM element
+ * @param {String} cls CSS class name
+ */
 export const removeClass = (ele, cls) => {
-    if (!ele) { return; }
+    if (isUndef(ele)) {
+        return;
+    }
 
     if (supportsClassList()) {
         ele.classList.remove(cls);
@@ -117,8 +139,8 @@ export const removeClass = (ele, cls) => {
  * @return {Object}        option element
  */
 export const createOpt = (text, value, isSel) => {
-    let isSelected = isSel ? true : false,
-        opt = isSelected ?
+    let isSelected = isSel ? true : false;
+    let opt = isSelected ?
             createElm('option', ['value', value], ['selected', 'true']) :
             createElm('option', ['value', value]);
     opt.appendChild(createText(text));
@@ -149,13 +171,21 @@ export const createCheckItem = (chkIndex, chkValue, labelText) => {
     return li;
 }
 
-export const byId = key => document.getElementById(key);
+/**
+ * Returns the element matching the supplied Id
+ * @param  {String} id  Element identifier
+ * @return {DOMElement}
+ */
+export const elm = id => doc.getElementById(id);
 
+/**
+ * Returns list of element matching the supplied tag name
+ * @param  {String} tagname  Tag name
+ * @return {NodeList}
+ */
 export const tag = (o, tagname) => o.getElementsByTagName(tagname);
-
-// };
 
 // HTML5 classList API
 function supportsClassList() {
-    return document.documentElement.classList;
+    return doc.documentElement.classList;
 }

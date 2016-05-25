@@ -1,6 +1,8 @@
 import {Feature} from '../../feature';
-import {addClass, removeClass, createElm, byId, removeElm, getText, tag}
-    from '../../dom';
+import {
+    addClass, removeClass, createCheckItem, createElm, elm, removeElm,
+    getText, tag
+} from '../../dom';
 import {isFn} from '../../types';
 import Event from '../../event';
 
@@ -202,7 +204,7 @@ export default class ColsVisibility extends Feature {
         if (!this.btnTgtId) {
             tf.setToolbar();
         }
-        let targetEl = !this.btnTgtId ? tf.rDiv : byId(this.btnTgtId);
+        let targetEl = !this.btnTgtId ? tf.rDiv : elm(this.btnTgtId);
 
         if (!this.btnTgtId) {
             let firstChild = targetEl.firstChild;
@@ -249,7 +251,7 @@ export default class ColsVisibility extends Feature {
 
         let container = !this.contElTgtId ?
             createElm('div', ['id', this.prfxCont + tf.id]) :
-            byId(this.contElTgtId);
+            elm(this.contElTgtId);
         container.className = this.contCssClass;
 
         //Extension description
@@ -276,7 +278,7 @@ export default class ColsVisibility extends Feature {
 
             Event.add(li.check, 'click', () => {
                 for (let h = 0; h < headerRow.cells.length; h++) {
-                    let itm = byId('col_' + h + '_' + tf.id);
+                    let itm = elm('col_' + h + '_' + tf.id);
                     if (itm && li.check.checked !== itm.checked) {
                         itm.click();
                         itm.checked = li.check.checked;
@@ -420,7 +422,7 @@ export default class ColsVisibility extends Feature {
             return;
         }
         if (this.manager && this.contEl) {
-            let itm = byId('col_' + colIndex + '_' + this.tf.id);
+            let itm = elm('col_' + colIndex + '_' + this.tf.id);
             if (itm) {
                 itm.click();
             }
@@ -438,7 +440,7 @@ export default class ColsVisibility extends Feature {
             return;
         }
         if (this.manager && this.contEl) {
-            let itm = byId('col_' + colIndex + '_' + this.tf.id);
+            let itm = elm('col_' + colIndex + '_' + this.tf.id);
             if (itm) {
                 itm.click();
             }
@@ -485,8 +487,8 @@ export default class ColsVisibility extends Feature {
         if (!this.initialized) {
             return;
         }
-        if (byId(this.contElTgtId)) {
-            byId(this.contElTgtId).innerHTML = '';
+        if (elm(this.contElTgtId)) {
+            elm(this.contElTgtId).innerHTML = '';
         } else {
             this.contEl.innerHTML = '';
             removeElm(this.contEl);

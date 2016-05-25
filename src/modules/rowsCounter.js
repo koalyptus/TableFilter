@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import {createElm, createText, id, removeElm} from '../dom';
+import {createElm, createText, elm, removeElm} from '../dom';
 import {isFn} from '../types';
 
 export class RowsCounter extends Feature {
@@ -60,7 +60,7 @@ export class RowsCounter extends Feature {
             tf.setToolbar();
         }
         var targetEl = !this.rowsCounterTgtId ?
-            tf.lDiv : id(this.rowsCounterTgtId);
+            tf.lDiv : elm(this.rowsCounterTgtId);
 
         //default container: 'lDiv'
         if (!this.rowsCounterTgtId) {
@@ -134,7 +134,7 @@ export class RowsCounter extends Feature {
         if (!this.rowsCounterTgtId && this.rowsCounterDiv) {
             removeElm(this.rowsCounterDiv);
         } else {
-            id(this.rowsCounterTgtId).innerHTML = '';
+            elm(this.rowsCounterTgtId).innerHTML = '';
         }
         this.rowsCounterSpan = null;
         this.rowsCounterDiv = null;
