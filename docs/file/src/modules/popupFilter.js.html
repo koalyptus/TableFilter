@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -99,21 +111,21 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/popupFilter.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {isFn} from &apos;../types&apos;;
-import Dom from &apos;../dom&apos;;
+import {createElm, removeElm} from &apos;../dom&apos;;
 import Event from &apos;../event&apos;;
 import {INPUT, NONE} from &apos;../const&apos;;
 
-export class PopupFilter extends Feature{
+export class PopupFilter extends Feature {
 
     /**
      * Pop-up filter component
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, &apos;popupFilters&apos;);
 
         // Configuration object
-        var f = this.config;
+        let f = this.config;
 
         // Enable external filters
         tf.isExternalFlt = true;
@@ -121,12 +133,12 @@ export class PopupFilter extends Feature{
 
         //filter icon path
         this.popUpImgFlt = f.popup_filters_image ||
-            tf.themesPath+&apos;icn_filter.gif&apos;;
+            tf.themesPath + &apos;icn_filter.gif&apos;;
         //active filter icon path
         this.popUpImgFltActive = f.popup_filters_image_active ||
-            tf.themesPath+&apos;icn_filterActive.gif&apos;;
+            tf.themesPath + &apos;icn_filterActive.gif&apos;;
         this.popUpImgFltHtml = f.popup_filters_image_html ||
-            &apos;&lt;img src=&quot;&apos;+ this.popUpImgFlt +&apos;&quot; alt=&quot;Column filter&quot; /&gt;&apos;;
+            &apos;&lt;img src=&quot;&apos; + this.popUpImgFlt + &apos;&quot; alt=&quot;Column filter&quot; /&gt;&apos;;
         //defines css class for popup div containing filter
         this.popUpDivCssClass = f.popup_div_css_class || &apos;popUpFilter&apos;;
         //callback function before popup filtes is opened
@@ -156,15 +168,15 @@ export class PopupFilter extends Feature{
         this.prfxPopUpDiv = &apos;popUpDiv_&apos;;
     }
 
-    onClick(evt){
-        var elm = Event.target(evt).parentNode,
+    onClick(evt) {
+        let elm = Event.target(evt).parentNode,
             colIndex = parseInt(elm.getAttribute(&apos;ci&apos;), 10);
 
         this.closeAll(colIndex);
         this.toggle(colIndex);
 
-        if(this.popUpFltAdjustToContainer){
-            var popUpDiv = this.popUpFltElms[colIndex],
+        if (this.popUpFltAdjustToContainer) {
+            let popUpDiv = this.popUpFltElms[colIndex],
                 header = this.tf.getHeaderElement(colIndex),
                 headerWidth = header.clientWidth * 0.95;
             popUpDiv.style.width = parseInt(headerWidth, 10) + &apos;px&apos;;
@@ -176,29 +188,29 @@ export class PopupFilter extends Feature{
     /**
      * Initialize DOM elements
      */
-    init(){
-        if(this.initialized){
+    init() {
+        if (this.initialized) {
             return;
         }
 
-        var tf = this.tf;
+        let tf = this.tf;
 
         // Override headers row index if no grouped headers
-        if(tf.headersRow &lt;= 1){
+        if (tf.headersRow &lt;= 1) {
             tf.headersRow = 0;
         }
 
-        for(var i=0; i&lt;tf.nbCells; i++){
-            if(tf.getFilterType(i) === NONE){
+        for (let i = 0; i &lt; tf.nbCells; i++) {
+            if (tf.getFilterType(i) === NONE) {
                 continue;
             }
-            var popUpSpan = Dom.create(
+            let popUpSpan = createElm(
                 &apos;span&apos;,
-                [&apos;id&apos;, this.prfxPopUpSpan+tf.id+&apos;_&apos;+i],
+                [&apos;id&apos;, this.prfxPopUpSpan + tf.id + &apos;_&apos; + i],
                 [&apos;ci&apos;, i]
             );
             popUpSpan.innerHTML = this.popUpImgFltHtml;
-            var header = tf.getHeaderElement(i);
+            let header = tf.getHeaderElement(i);
             header.appendChild(popUpSpan);
             Event.add(popUpSpan, &apos;click&apos;, (evt) =&gt; { this.onClick(evt); });
             this.popUpFltSpans[i] = popUpSpan;
@@ -206,13 +218,13 @@ export class PopupFilter extends Feature{
         }
 
         // subscribe to events
-        this.emitter.on([&apos;before-filtering&apos;], ()=&gt; this.buildIcons());
-        this.emitter.on([&apos;after-filtering&apos;], ()=&gt; this.closeAll());
+        this.emitter.on([&apos;before-filtering&apos;], () =&gt; this.buildIcons());
+        this.emitter.on([&apos;after-filtering&apos;], () =&gt; this.closeAll());
         this.emitter.on([&apos;cell-processed&apos;],
-            (tf, cellIndex)=&gt; this.buildIcon(cellIndex, true));
-        this.emitter.on([&apos;filters-row-inserted&apos;], ()=&gt; this.tf.headersRow++);
+            (tf, cellIndex) =&gt; this.buildIcon(cellIndex, true));
+        this.emitter.on([&apos;filters-row-inserted&apos;], () =&gt; this.tf.headersRow++);
         this.emitter.on([&apos;before-filter-init&apos;],
-            (tf, colIndex)=&gt; this.build(colIndex));
+            (tf, colIndex) =&gt; this.build(colIndex));
 
         this.initialized = true;
     }
@@ -220,7 +232,7 @@ export class PopupFilter extends Feature{
     /**
      * Reset previously destroyed feature
      */
-    reset(){
+    reset() {
         this.enable();
         this.init();
         this.buildAll();
@@ -229,8 +241,8 @@ export class PopupFilter extends Feature{
     /**
      * Build all pop-up filters elements
      */
-    buildAll(){
-        for(var i=0; i&lt;this.popUpFltElmCache.length; i++){
+    buildAll() {
+        for (let i = 0; i &lt; this.popUpFltElmCache.length; i++) {
             this.build(i, this.popUpFltElmCache[i]);
         }
     }
@@ -240,14 +252,15 @@ export class PopupFilter extends Feature{
      * @param  {Number} colIndex Column index
      * @param  {Object} div      Optional container DOM element
      */
-    build(colIndex, div){
-        var tf = this.tf;
-        var popUpDiv = !div ?
-            Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxPopUpDiv+tf.id+&apos;_&apos;+colIndex]) :
+    build(colIndex, div) {
+        let tf = this.tf;
+        let popUpDiv = !div ?
+            createElm(&apos;div&apos;,
+                [&apos;id&apos;, this.prfxPopUpDiv + tf.id + &apos;_&apos; + colIndex]) :
             div;
         popUpDiv.className = this.popUpDivCssClass;
         tf.externalFltTgtIds.push(popUpDiv.id);
-        var header = tf.getHeaderElement(colIndex);
+        let header = tf.getHeaderElement(colIndex);
         header.insertBefore(popUpDiv, header.firstChild);
         Event.add(popUpDiv, &apos;click&apos;, (evt) =&gt; Event.stop(evt));
         this.popUpFltElms[colIndex] = popUpDiv;
@@ -257,34 +270,34 @@ export class PopupFilter extends Feature{
      * Toogle visibility of specified filter
      * @param  {Number} colIndex Column index
      */
-    toggle(colIndex){
-        var tf = this.tf,
+    toggle(colIndex) {
+        let tf = this.tf,
             popUpFltElm = this.popUpFltElms[colIndex];
 
-        if(popUpFltElm.style.display === NONE ||
-            popUpFltElm.style.display === &apos;&apos;){
-            if(this.onBeforePopUpOpen){
+        if (popUpFltElm.style.display === NONE ||
+            popUpFltElm.style.display === &apos;&apos;) {
+            if (this.onBeforePopUpOpen) {
                 this.onBeforePopUpOpen.call(
                     null, this, this.popUpFltElms[colIndex], colIndex);
             }
             popUpFltElm.style.display = &apos;block&apos;;
-            if(tf.getFilterType(colIndex) === INPUT){
-                var flt = tf.getFilterElement(colIndex);
-                if(flt){
+            if (tf.getFilterType(colIndex) === INPUT) {
+                let flt = tf.getFilterElement(colIndex);
+                if (flt) {
                     flt.focus();
                 }
             }
-            if(this.onAfterPopUpOpen){
+            if (this.onAfterPopUpOpen) {
                 this.onAfterPopUpOpen.call(
                     null, this, this.popUpFltElms[colIndex], colIndex);
             }
         } else {
-            if(this.onBeforePopUpClose){
+            if (this.onBeforePopUpClose) {
                 this.onBeforePopUpClose.call(
                     null, this, this.popUpFltElms[colIndex], colIndex);
             }
             popUpFltElm.style.display = NONE;
-            if(this.onAfterPopUpClose){
+            if (this.onAfterPopUpClose) {
                 this.onAfterPopUpClose.call(
                     null, this, this.popUpFltElms[colIndex], colIndex);
             }
@@ -295,13 +308,13 @@ export class PopupFilter extends Feature{
      * Close all filters excepted for the specified one if any
      * @param  {Number} exceptIdx Column index of the filter to not close
      */
-    closeAll(exceptIdx){
-        for(var i=0; i&lt;this.popUpFltElms.length; i++){
-            if(i === exceptIdx){
+    closeAll(exceptIdx) {
+        for (let i = 0; i &lt; this.popUpFltElms.length; i++) {
+            if (i === exceptIdx) {
                 continue;
             }
-            var popUpFltElm = this.popUpFltElms[i];
-            if(popUpFltElm){
+            let popUpFltElm = this.popUpFltElms[i];
+            if (popUpFltElm) {
                 popUpFltElm.style.display = NONE;
             }
         }
@@ -310,8 +323,8 @@ export class PopupFilter extends Feature{
     /**
      * Build all the icons representing the pop-up filters
      */
-    buildIcons(){
-        for(var i=0; i&lt;this.popUpFltImgs.length; i++){
+    buildIcons() {
+        for (let i = 0; i &lt; this.popUpFltImgs.length; i++) {
             this.buildIcon(i, false);
         }
     }
@@ -321,8 +334,8 @@ export class PopupFilter extends Feature{
      * @param  {Number} colIndex Column index
      * @param  {Boolean} active   Apply active state
      */
-    buildIcon(colIndex, active){
-        if(this.popUpFltImgs[colIndex]){
+    buildIcon(colIndex, active) {
+        if (this.popUpFltImgs[colIndex]) {
             this.popUpFltImgs[colIndex].src = active ?
                 this.popUpImgFltActive : this.popUpImgFlt;
         }
@@ -331,27 +344,27 @@ export class PopupFilter extends Feature{
     /**
      * Remove pop-up filters
      */
-    destroy(){
-        if(!this.initialized){
+    destroy() {
+        if (!this.initialized) {
             return;
         }
 
         this.popUpFltElmCache = [];
-        for(var i=0; i&lt;this.popUpFltElms.length; i++){
-            var popUpFltElm = this.popUpFltElms[i],
+        for (let i = 0; i &lt; this.popUpFltElms.length; i++) {
+            let popUpFltElm = this.popUpFltElms[i],
                 popUpFltSpan = this.popUpFltSpans[i],
                 popUpFltImg = this.popUpFltImgs[i];
-            if(popUpFltElm){
-                Dom.remove(popUpFltElm);
+            if (popUpFltElm) {
+                removeElm(popUpFltElm);
                 this.popUpFltElmCache[i] = popUpFltElm;
             }
             popUpFltElm = null;
-            if(popUpFltSpan){
-                Dom.remove(popUpFltSpan);
+            if (popUpFltSpan) {
+                removeElm(popUpFltSpan);
             }
             popUpFltSpan = null;
-            if(popUpFltImg){
-                Dom.remove(popUpFltImg);
+            if (popUpFltImg) {
+                removeElm(popUpFltImg);
             }
             popUpFltImg = null;
         }
@@ -360,13 +373,13 @@ export class PopupFilter extends Feature{
         this.popUpFltImgs = [];
 
         // unsubscribe to events
-        this.emitter.off([&apos;before-filtering&apos;], ()=&gt; this.buildIcons());
-        this.emitter.off([&apos;after-filtering&apos;], ()=&gt; this.closeAll());
+        this.emitter.off([&apos;before-filtering&apos;], () =&gt; this.buildIcons());
+        this.emitter.off([&apos;after-filtering&apos;], () =&gt; this.closeAll());
         this.emitter.off([&apos;cell-processed&apos;],
-            (tf, cellIndex)=&gt; this.buildIcon(cellIndex, true));
-        this.emitter.off([&apos;filters-row-inserted&apos;], ()=&gt; this.tf.headersRow++);
+            (tf, cellIndex) =&gt; this.buildIcon(cellIndex, true));
+        this.emitter.off([&apos;filters-row-inserted&apos;], () =&gt; this.tf.headersRow++);
         this.emitter.off([&apos;before-filter-init&apos;],
-            (tf, colIndex)=&gt; this.build(colIndex));
+            (tf, colIndex) =&gt; this.build(colIndex));
 
         this.initialized = false;
     }

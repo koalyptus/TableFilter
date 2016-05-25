@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -98,7 +110,10 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/tablefilter.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Event from &apos;./event&apos;;
-import Dom from &apos;./dom&apos;;
+import {
+    addClass, createElm, createOpt, elm, getText, getFirstTextNode, hasClass,
+    removeClass, removeElm, tag
+} from &apos;./dom&apos;;
 import {contains, matchCase, rgxEsc, trim} from &apos;./string&apos;;
 import {isEmpty as isEmptyString} from &apos;./string&apos;;
 import {isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef}
@@ -161,7 +176,7 @@ export class TableFilter {
                 this.id = arg.id || `tf_${new Date().getTime()}_`;
             } else if (isString(arg)) {
                 this.id = arg;
-                this.tbl = Dom.id(arg);
+                this.tbl = elm(arg);
             } else if (isNumber(arg)) {
                 this.startRow = arg;
             } else if (isObj(arg)) {
@@ -556,7 +571,7 @@ export class TableFilter {
             for (let i = 0; i &lt; n; i++) {
                 this.emitter.emit(&apos;before-filter-init&apos;, this, i);
 
-                let fltcell = Dom.create(this.fltCellTag),
+                let fltcell = createElm(this.fltCellTag),
                     col = this.getFilterType(i);
 
                 if (this.singleSearchFlt) {
@@ -649,9 +664,9 @@ export class TableFilter {
 
         //TF css class is added to table
         if (!this.gridLayout) {
-            Dom.addClass(this.tbl, this.prfxTf);
+            addClass(this.tbl, this.prfxTf);
             if (this.responsive) {
-                Dom.addClass(this.tbl, this.prfxResponsive);
+                addClass(this.tbl, this.prfxResponsive);
             }
         }
 
@@ -772,7 +787,7 @@ export class TableFilter {
         }
         let fltrow;
 
-        let thead = Dom.tag(this.tbl, &apos;thead&apos;);
+        let thead = tag(this.tbl, &apos;thead&apos;);
         if (thead.length &gt; 0) {
             fltrow = thead[0].insertRow(this.filtersRowIndex);
         } else {
@@ -812,7 +827,7 @@ export class TableFilter {
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
         let inptype = col === INPUT ? &apos;text&apos; : &apos;hidden&apos;;
-        let inp = Dom.create(INPUT,
+        let inp = createElm(INPUT,
             [&apos;id&apos;, this.prfxFlt + colIndex + &apos;_&apos; + this.id],
             [&apos;type&apos;, inptype], [&apos;ct&apos;, colIndex]);
 
@@ -827,7 +842,7 @@ export class TableFilter {
 
         //filter is appended in custom element
         if (externalFltTgtId) {
-            Dom.id(externalFltTgtId).appendChild(inp);
+            elm(externalFltTgtId).appendChild(inp);
             this.externalFltEls.push(inp);
         } else {
             container.appendChild(inp);
@@ -849,14 +864,14 @@ export class TableFilter {
     _buildSubmitButton(colIndex, container) {
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
-        let btn = Dom.create(INPUT,
+        let btn = createElm(INPUT,
             [&apos;id&apos;, this.prfxValButton + colIndex + &apos;_&apos; + this.id],
             [&apos;type&apos;, &apos;button&apos;], [&apos;value&apos;, this.btnText]);
         btn.className = this.btnCssClass;
 
         //filter is appended in custom element
         if (externalFltTgtId) {
-            Dom.id(externalFltTgtId).appendChild(btn);
+            elm(externalFltTgtId).appendChild(btn);
         } else {
             container.appendChild(btn);
         }
@@ -1015,7 +1030,7 @@ export class TableFilter {
      * @return {DOMElement} stylesheet element
      */
     getStylesheet(name = &apos;default&apos;) {
-        return Dom.id(this.prfxTf + name);
+        return elm(this.prfxTf + name);
     }
 
     /**
@@ -1074,8 +1089,8 @@ export class TableFilter {
         this.emitter.off([&apos;filter-focus&apos;],
             (tf, filter) =&gt; this.setActiveFilterId(filter.id));
 
-        Dom.removeClass(this.tbl, this.prfxTf);
-        Dom.removeClass(this.tbl, this.prfxResponsive);
+        removeClass(this.tbl, this.prfxTf);
+        removeClass(this.tbl, this.prfxResponsive);
 
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
@@ -1093,12 +1108,12 @@ export class TableFilter {
         }
 
         /*** container div ***/
-        let infdiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxInfDiv + this.id]);
+        let infdiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxInfDiv + this.id]);
         infdiv.className = this.infDivCssClass;
 
         //custom container
         if (this.toolBarTgtId) {
-            Dom.id(this.toolBarTgtId).appendChild(infdiv);
+            elm(this.toolBarTgtId).appendChild(infdiv);
         }
         //grid-layout
         else if (this.gridLayout) {
@@ -1108,30 +1123,30 @@ export class TableFilter {
         }
         //default location: just above the table
         else {
-            let cont = Dom.create(&apos;caption&apos;);
+            let cont = createElm(&apos;caption&apos;);
             cont.appendChild(infdiv);
             this.tbl.insertBefore(cont, this.tbl.firstChild);
         }
-        this.infDiv = Dom.id(this.prfxInfDiv + this.id);
+        this.infDiv = elm(this.prfxInfDiv + this.id);
 
         /*** left div containing rows # displayer ***/
-        let ldiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxLDiv + this.id]);
+        let ldiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxLDiv + this.id]);
         ldiv.className = this.lDivCssClass;
         infdiv.appendChild(ldiv);
-        this.lDiv = Dom.id(this.prfxLDiv + this.id);
+        this.lDiv = elm(this.prfxLDiv + this.id);
 
         /***    right div containing reset button
                 + nb results per page select    ***/
-        let rdiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxRDiv + this.id]);
+        let rdiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxRDiv + this.id]);
         rdiv.className = this.rDivCssClass;
         infdiv.appendChild(rdiv);
-        this.rDiv = Dom.id(this.prfxRDiv + this.id);
+        this.rDiv = elm(this.prfxRDiv + this.id);
 
         /*** mid div containing paging elements ***/
-        let mdiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxMDiv + this.id]);
+        let mdiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxMDiv + this.id]);
         mdiv.className = this.mDivCssClass;
         infdiv.appendChild(mdiv);
-        this.mDiv = Dom.id(this.prfxMDiv + this.id);
+        this.mDiv = elm(this.prfxMDiv + this.id);
 
         // emit help initialisation only if undefined
         if (isUndef(this.help)) {
@@ -1149,11 +1164,11 @@ export class TableFilter {
         if (!this.infDiv) {
             return;
         }
-        Dom.remove(this.infDiv);
+        removeElm(this.infDiv);
         this.infDiv = null;
 
         let tbl = this.tbl;
-        let captions = Dom.tag(tbl, &apos;caption&apos;);
+        let captions = tag(tbl, &apos;caption&apos;);
         if (captions.length &gt; 0) {
             [].forEach.call(captions, (elm) =&gt; tbl.removeChild(elm));
         }
@@ -1170,7 +1185,7 @@ export class TableFilter {
             len = ids.length;
         for (let ct = 0; ct &lt; len; ct++) {
             let externalFltTgtId = ids[ct],
-                externalFlt = Dom.id(externalFltTgtId);
+                externalFlt = elm(externalFltTgtId);
             if (externalFlt) {
                 externalFlt.innerHTML = &apos;&apos;;
             }
@@ -1272,7 +1287,7 @@ export class TableFilter {
                 let w = str;
                 if (re_le.test(str) || re_ge.test(str) || re_l.test(str) ||
                     re_g.test(str) || re_d.test(str)) {
-                    w = Dom.getText(cell);
+                    w = getText(cell);
                 }
                 if (w !== &apos;&apos;) {
                     this.emitter.emit(&apos;highlight-keyword&apos;, this, cell, w);
@@ -1727,7 +1742,7 @@ export class TableFilter {
      */
     getFilterElement(index) {
         let fltId = this.fltIds[index];
-        return Dom.id(fltId);
+        return elm(fltId);
     }
 
     /**
@@ -1767,7 +1782,7 @@ export class TableFilter {
             this.customCellDataCols.indexOf(idx) !== -1) {
             return this.customCellData.call(null, this, cell, idx);
         } else {
-            return Dom.getText(cell);
+            return getText(cell);
         }
     }
 
@@ -2000,7 +2015,7 @@ export class TableFilter {
         function setWidths() {
             let nbCols = this.nbCells;
             let colWidths = this.colWidths;
-            let colTags = Dom.tag(tbl, &apos;col&apos;);
+            let colTags = tag(tbl, &apos;col&apos;);
             let tblHasColTag = colTags.length &gt; 0;
             let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
             for (let k = 0; k &lt; nbCols; k++) {
@@ -2008,7 +2023,7 @@ export class TableFilter {
                 if (tblHasColTag) {
                     col = colTags[k];
                 } else {
-                    col = Dom.create(&apos;col&apos;, [&apos;id&apos;, this.id + &apos;_col_&apos; + k]);
+                    col = createElm(&apos;col&apos;, [&apos;id&apos;, this.id + &apos;_col_&apos; + k]);
                     frag.appendChild(col);
                 }
                 col.style.width = colWidths[k];
@@ -2066,8 +2081,7 @@ export class TableFilter {
      */
     clearActiveColumns() {
         for (let i = 0, len = this.getCellsNb(this.headersRow); i &lt; len; i++) {
-            Dom.removeClass(
-                this.getHeaderElement(i), this.activeColumnsCssClass);
+            removeClass(this.getHeaderElement(i), this.activeColumnsCssClass);
         }
     }
 
@@ -2077,13 +2091,13 @@ export class TableFilter {
      */
     markActiveColumn(colIndex) {
         let header = this.getHeaderElement(colIndex);
-        if (Dom.hasClass(header, this.activeColumnsCssClass)) {
+        if (hasClass(header, this.activeColumnsCssClass)) {
             return;
         }
         if (this.onBeforeActiveColumn) {
             this.onBeforeActiveColumn.call(null, this, colIndex);
         }
-        Dom.addClass(header, this.activeColumnsCssClass);
+        addClass(header, this.activeColumnsCssClass);
         if (this.onAfterActiveColumn) {
             this.onAfterActiveColumn.call(null, this, colIndex);
         }
@@ -2144,7 +2158,7 @@ export class TableFilter {
         let activeIdx = this.getColumnIndexFromFilterId(this.activeFilterId);
 
         for (let i = 0, len = slcIndex.length; i &lt; len; i++) {
-            let curSlc = Dom.id(this.fltIds[slcIndex[i]]);
+            let curSlc = elm(this.fltIds[slcIndex[i]]);
             let slcSelectedValue = this.getFilterValue(slcIndex[i]);
 
             // Welcome to cyclomatic complexity hell :)
@@ -2158,7 +2172,7 @@ export class TableFilter {
 
                 //1st option needs to be inserted
                 if (this.loadFltOnDemand) {
-                    let opt0 = Dom.createOpt(this.displayAllText, &apos;&apos;);
+                    let opt0 = createOpt(this.displayAllText, &apos;&apos;);
                     curSlc.innerHTML = &apos;&apos;;
                     curSlc.appendChild(opt0);
                 }
@@ -2197,7 +2211,7 @@ export class TableFilter {
         let imported = false,
             importType = !type ? &apos;script&apos; : type,
             attr = importType === &apos;script&apos; ? &apos;src&apos; : &apos;href&apos;,
-            files = Dom.tag(doc, importType);
+            files = tag(doc, importType);
         for (let i = 0, len = files.length; i &lt; len; i++) {
             if (files[i][attr] === undefined) {
                 continue;
@@ -2226,15 +2240,15 @@ export class TableFilter {
         let o = this,
             isLoaded = false,
             file,
-            head = Dom.tag(doc, &apos;head&apos;)[0];
+            head = tag(doc, &apos;head&apos;)[0];
 
         if (ftype.toLowerCase() === &apos;link&apos;) {
-            file = Dom.create(&apos;link&apos;,
+            file = createElm(&apos;link&apos;,
                 [&apos;id&apos;, fileId], [&apos;type&apos;, &apos;text/css&apos;],
                 [&apos;rel&apos;, &apos;stylesheet&apos;], [&apos;href&apos;, filePath]
             );
         } else {
-            file = Dom.create(&apos;script&apos;,
+            file = createElm(&apos;script&apos;,
                 [&apos;id&apos;, fileId],
                 [&apos;type&apos;, &apos;text/javascript&apos;], [&apos;src&apos;, filePath]
             );
@@ -2342,7 +2356,7 @@ export class TableFilter {
      */
     getHeaderElement(colIndex) {
         let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl;
-        let tHead = Dom.tag(table, &apos;thead&apos;);
+        let tHead = tag(table, &apos;thead&apos;);
         let headersRow = this.headersRow;
         let header;
         for (let i = 0; i &lt; this.nbCells; i++) {
@@ -2374,7 +2388,7 @@ export class TableFilter {
                 }
             }
             let header = this.getHeaderElement(j);
-            let headerText = Dom.getFirstTextNode(header);
+            let headerText = getFirstTextNode(header);
             headers.push(headerText);
         }
         return headers;

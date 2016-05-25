@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -98,7 +110,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/gridLayout.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
-import Dom from &apos;../dom&apos;;
+import {createElm, removeElm, elm, tag} from &apos;../dom&apos;;
 import {isFn, isNull, isUndef} from &apos;../types&apos;;
 import Event from &apos;../event&apos;;
 import {contains} from &apos;../string&apos;;
@@ -209,7 +221,7 @@ export class GridLayout extends Feature {
         }
 
         //Main container: it will contain all the elements
-        this.tblMainCont = Dom.create(&apos;div&apos;,
+        this.tblMainCont = createElm(&apos;div&apos;,
             [&apos;id&apos;, this.prfxMainTblCont + tf.id]);
         this.tblMainCont.className = this.gridMainContCssClass;
         if (this.gridWidth) {
@@ -218,7 +230,7 @@ export class GridLayout extends Feature {
         tbl.parentNode.insertBefore(this.tblMainCont, tbl);
 
         //Table container: div wrapping content table
-        this.tblCont = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxTblCont + tf.id]);
+        this.tblCont = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxTblCont + tf.id]);
         this.tblCont.className = this.gridContCssClass;
         if (this.gridWidth) {
             if (this.gridWidth.indexOf(&apos;%&apos;) !== -1) {
@@ -231,7 +243,7 @@ export class GridLayout extends Feature {
             this.tblCont.style.height = this.gridHeight;
         }
         tbl.parentNode.insertBefore(this.tblCont, tbl);
-        let t = Dom.remove(tbl);
+        let t = removeElm(tbl);
         this.tblCont.appendChild(t);
 
         //In case table width is expressed in %
@@ -240,11 +252,11 @@ export class GridLayout extends Feature {
                 tbl.clientWidth : tblW) + &apos;px&apos;;
         }
 
-        let d = Dom.remove(this.tblCont);
+        let d = removeElm(this.tblCont);
         this.tblMainCont.appendChild(d);
 
         //Headers table container: div wrapping headers table
-        this.headTblCont = Dom.create(
+        this.headTblCont = createElm(
             &apos;div&apos;, [&apos;id&apos;, this.prfxHeadTblCont + tf.id]);
         this.headTblCont.className = this.gridHeadContCssClass;
         if (this.gridWidth) {
@@ -256,8 +268,8 @@ export class GridLayout extends Feature {
         }
 
         //Headers table
-        this.headTbl = Dom.create(&apos;table&apos;, [&apos;id&apos;, this.prfxHeadTbl + tf.id]);
-        let tH = Dom.create(&apos;tHead&apos;);
+        this.headTbl = createElm(&apos;table&apos;, [&apos;id&apos;, this.prfxHeadTbl + tf.id]);
+        let tH = createElm(&apos;tHead&apos;);
 
         //1st row should be headers row, ids are added if not set
         //Those ids are used by the sort feature
@@ -274,12 +286,12 @@ export class GridLayout extends Feature {
         }
 
         //Filters row is created
-        let filtersRow = Dom.create(&apos;tr&apos;);
+        let filtersRow = createElm(&apos;tr&apos;);
         if (this.gridEnableFilters &amp;&amp; tf.fltGrid) {
             tf.externalFltTgtIds = [];
             for (let j = 0; j &lt; tf.nbCells; j++) {
                 let fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;
-                let cl = Dom.create(tf.fltCellTag, [&apos;id&apos;, fltTdId]);
+                let cl = createElm(tf.fltCellTag, [&apos;id&apos;, fltTdId]);
                 filtersRow.appendChild(cl);
                 tf.externalFltTgtIds[j] = fltTdId;
             }
@@ -294,7 +306,7 @@ export class GridLayout extends Feature {
         } else {
             // Handle table with no headers, assuming here headers do not
             // exist
-            tH.appendChild(Dom.create(&apos;tr&apos;));
+            tH.appendChild(createElm(&apos;tr&apos;));
         }
 
         this.headTbl.appendChild(tH);
@@ -308,7 +320,7 @@ export class GridLayout extends Feature {
         this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);
 
         //THead needs to be removed in content table for sort feature
-        let thead = Dom.tag(tbl, &apos;thead&apos;);
+        let thead = tag(tbl, &apos;thead&apos;);
         if (thead.length &gt; 0) {
             tbl.removeChild(thead[0]);
         }
@@ -363,13 +375,13 @@ export class GridLayout extends Feature {
         }
 
         //Cols generation for all browsers excepted IE&lt;=7
-        this.tblHasColTag = Dom.tag(tbl, &apos;col&apos;).length &gt; 0 ? true : false;
+        this.tblHasColTag = tag(tbl, &apos;col&apos;).length &gt; 0 ? true : false;
 
         //Col elements are enough to keep column widths after sorting and
         //filtering
         let createColTags = function () {
             for (let k = (tf.nbCells - 1); k &gt;= 0; k--) {
-                let col = Dom.create(&apos;col&apos;, [&apos;id&apos;, tf.id + &apos;_col_&apos; + k]);
+                let col = createElm(&apos;col&apos;, [&apos;id&apos;, tf.id + &apos;_col_&apos; + k]);
                 tbl.insertBefore(col, tbl.firstChild);
                 col.style.width = tf.colWidths[k];
                 this.gridColElms[k] = col;
@@ -380,7 +392,7 @@ export class GridLayout extends Feature {
         if (!this.tblHasColTag) {
             createColTags.call(this);
         } else {
-            let cols = Dom.tag(tbl, &apos;col&apos;);
+            let cols = tag(tbl, &apos;col&apos;);
             for (let ii = 0; ii &lt; tf.nbCells; ii++) {
                 cols[ii].setAttribute(&apos;id&apos;, tf.id + &apos;_col_&apos; + ii);
                 cols[ii].style.width = tf.colWidths[ii];
@@ -431,9 +443,9 @@ export class GridLayout extends Feature {
         if (!this.initialized) {
             return;
         }
-        let t = Dom.remove(tbl);
+        let t = removeElm(tbl);
         this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);
-        Dom.remove(this.tblMainCont);
+        removeElm(this.tblMainCont);
 
         this.tblMainCont = null;
         this.headTblCont = null;
@@ -442,7 +454,7 @@ export class GridLayout extends Feature {
 
         tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element for future usage
-        this.tf.tbl = Dom.id(tf.id);
+        this.tf.tbl = elm(tf.id);
 
         this.initialized = false;
     }

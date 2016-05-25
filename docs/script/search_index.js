@@ -222,9 +222,45 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/dom.js~addclass",
+    "variable/index.html#static-variable-addClass",
+    "<span>addClass</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/string.js~contains",
     "variable/index.html#static-variable-contains",
     "<span>contains</span> <span class=\"search-result-import-path\">tablefilter/src/string.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/dom.js~createcheckitem",
+    "variable/index.html#static-variable-createCheckItem",
+    "<span>createCheckItem</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/dom.js~createelm",
+    "variable/index.html#static-variable-createElm",
+    "<span>createElm</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/dom.js~createopt",
+    "variable/index.html#static-variable-createOpt",
+    "<span>createOpt</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/dom.js~createtext",
+    "variable/index.html#static-variable-createText",
+    "<span>createText</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/dom.js~elm",
+    "variable/index.html#static-variable-elm",
+    "<span>elm</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
     "variable"
   ],
   [
@@ -234,9 +270,27 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/dom.js~getfirsttextnode",
+    "variable/index.html#static-variable-getFirstTextNode",
+    "<span>getFirstTextNode</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/dom.js~gettext",
+    "variable/index.html#static-variable-getText",
+    "<span>getText</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/array.js~has",
     "variable/index.html#static-variable-has",
     "<span>has</span> <span class=\"search-result-import-path\">tablefilter/src/array.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/dom.js~hasclass",
+    "variable/index.html#static-variable-hasClass",
+    "<span>hasClass</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
     "variable"
   ],
   [
@@ -336,6 +390,18 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/dom.js~removeclass",
+    "variable/index.html#static-variable-removeClass",
+    "<span>removeClass</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/dom.js~removeelm",
+    "variable/index.html#static-variable-removeElm",
+    "<span>removeElm</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/helpers.js~removenbformat",
     "variable/index.html#static-variable-removeNbFormat",
     "<span>removeNbFormat</span> <span class=\"search-result-import-path\">tablefilter/src/helpers.js</span>",
@@ -351,6 +417,12 @@ window.esdocSearchIndex = [
     "tablefilter/src/root.js~root",
     "variable/index.html#static-variable-root",
     "<span>root</span> <span class=\"search-result-import-path\">tablefilter/src/root.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/dom.js~tag",
+    "variable/index.html#static-variable-tag",
+    "<span>tag</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
     "variable"
   ],
   [

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/dropdown.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/modules/dropdown.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -98,7 +110,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/dropdown.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
-import Dom from &apos;../dom&apos;;
+import {createElm, createOpt, elm} from &apos;../dom&apos;;
 import {has} from &apos;../array&apos;;
 import {matchCase} from &apos;../string&apos;;
 import {ignoreCase, numSortAsc, numSortDesc} from &apos;../sort&apos;;
@@ -166,7 +178,7 @@ export class Dropdown extends Feature {
         let externalFltTgtId = isExternal ?
             tf.externalFltTgtIds[colIndex] : null;
 
-        let slc = Dom.create(SELECT,
+        let slc = createElm(SELECT,
             [&apos;id&apos;, tf.prfxFlt + colIndex + &apos;_&apos; + tf.id],
             [&apos;ct&apos;, colIndex], [&apos;filled&apos;, &apos;0&apos;]
         );
@@ -180,7 +192,7 @@ export class Dropdown extends Feature {
 
         //filter is appended in container element
         if (externalFltTgtId) {
-            Dom.id(externalFltTgtId).appendChild(slc);
+            elm(externalFltTgtId).appendChild(slc);
             tf.externalFltEls.push(slc);
         } else {
             container.appendChild(slc);
@@ -192,7 +204,7 @@ export class Dropdown extends Feature {
             this.build(colIndex);
         } else {
             //1st option is created here since build isn&apos;t invoked
-            let opt0 = Dom.createOpt(tf.displayAllText, &apos;&apos;);
+            let opt0 = createOpt(tf.displayAllText, &apos;&apos;);
             slc.appendChild(opt0);
         }
 
@@ -228,9 +240,9 @@ export class Dropdown extends Feature {
         this.slcInnerHtml = &apos;&apos;;
 
         let slcId = tf.fltIds[colIndex];
-        let slc = Dom.id(slcId),
-            rows = tf.tbl.rows,
-            nbRows = tf.getRowsNb(true);
+        let slc = elm(slcId);
+        let rows = tf.tbl.rows;
+        let nbRows = tf.getRowsNb(true);
 
         //custom select test
         this.isCustom = tf.isCustomOptions(colIndex);
@@ -389,9 +401,9 @@ export class Dropdown extends Feature {
             //fill select on demand
             if (tf.loadFltOnDemand &amp;&amp; slcValue === this.opts[y] &amp;&amp;
                 tf.getFilterType(colIndex) === SELECT) {
-                opt = Dom.createOpt(lbl, val, true);
+                opt = createOpt(lbl, val, true);
             } else {
-                opt = Dom.createOpt(lbl, val, false);
+                opt = createOpt(lbl, val, false);
             }
             if (isDisabled) {
                 opt.disabled = true;
@@ -409,18 +421,18 @@ export class Dropdown extends Feature {
     addFirstOption(slc) {
         let tf = this.tf;
 
-        let opt0 = Dom.createOpt(
+        let opt0 = createOpt(
             (!this.enableSlcResetFilter ? &apos;&apos; : tf.displayAllText), &apos;&apos;);
         if (!this.enableSlcResetFilter) {
             opt0.style.display = NONE;
         }
         slc.appendChild(opt0);
         if (tf.enableEmptyOption) {
-            let opt1 = Dom.createOpt(tf.emptyText, tf.emOperator);
+            let opt1 = createOpt(tf.emptyText, tf.emOperator);
             slc.appendChild(opt1);
         }
         if (tf.enableNonEmptyOption) {
-            let opt2 = Dom.createOpt(tf.nonEmptyText, tf.nmOperator);
+            let opt2 = createOpt(tf.nonEmptyText, tf.nmOperator);
             slc.appendChild(opt2);
         }
         return slc;

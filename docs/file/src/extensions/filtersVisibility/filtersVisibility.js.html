@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/filtersVisibility/filtersVisibility.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/extensions/filtersVisibility/filtersVisibility.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -98,7 +110,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/extensions/filtersVisibility/filtersVisibility.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../../feature&apos;;
-import Dom from &apos;../../dom&apos;;
+import {createElm, removeElm, elm} from &apos;../../dom&apos;;
 import {isFn, isUndef} from &apos;../../types&apos;;
 import Event from &apos;../../event&apos;;
 
@@ -195,14 +207,14 @@ export default class FiltersVisibility extends Feature {
      */
     buildUI() {
         let tf = this.tf;
-        let span = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfx + tf.id]);
+        let span = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfx + tf.id]);
         span.className = this.contCssClass;
 
         //Container element (rdiv or custom element)
         if (!this.targetId) {
             tf.setToolbar();
         }
-        let targetEl = !this.targetId ? tf.rDiv : Dom.id(this.targetId);
+        let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);
 
         if (!this.targetId) {
             let firstChild = targetEl.firstChild;
@@ -213,7 +225,7 @@ export default class FiltersVisibility extends Feature {
 
         let btn;
         if (!this.btnHtml) {
-            btn = Dom.create(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
+            btn = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
             btn.className = this.btnCssClass;
             btn.title = this.btnText || this.defaultText;
             btn.innerHTML = this.collapseBtnHtml;
@@ -289,11 +301,11 @@ export default class FiltersVisibility extends Feature {
         this.emitter.off([&apos;show-filters&apos;], (tf, visible) =&gt; this.show(visible));
 
         this.btnEl.innerHTML = &apos;&apos;;
-        Dom.remove(this.btnEl);
+        removeElm(this.btnEl);
         this.btnEl = null;
 
         this.contEl.innerHTML = &apos;&apos;;
-        Dom.remove(this.contEl);
+        removeElm(this.contEl);
         this.contEl = null;
         this.initialized = false;
     }

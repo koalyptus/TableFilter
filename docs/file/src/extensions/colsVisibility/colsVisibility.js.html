@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/colsVisibility/colsVisibility.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/extensions/colsVisibility/colsVisibility.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -98,7 +110,10 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/extensions/colsVisibility/colsVisibility.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../../feature&apos;;
-import Dom from &apos;../../dom&apos;;
+import {
+    addClass, removeClass, createCheckItem, createElm, elm, removeElm,
+    getText, tag
+} from &apos;../../dom&apos;;
 import {isFn} from &apos;../../types&apos;;
 import Event from &apos;../../event&apos;;
 
@@ -179,7 +194,7 @@ export default class ColsVisibility extends Feature {
 
         //array containing hidden columns indexes
         this.hiddenCols = [];
-        this.tblHasColTag = (Dom.tag(tf.tbl, &apos;col&apos;).length &gt; 0);
+        this.tblHasColTag = tag(tf.tbl, &apos;col&apos;).length &gt; 0;
 
         //callback invoked just after cols manager is loaded
         this.onLoaded = isFn(f.on_loaded) ? f.on_loaded : null;
@@ -254,9 +269,9 @@ export default class ColsVisibility extends Feature {
         let colIndex = lbl.firstChild.getAttribute(&apos;id&apos;).split(&apos;_&apos;)[1];
         colIndex = parseInt(colIndex, 10);
         if (isChecked) {
-            Dom.addClass(li, this.listSlcItemCssClass);
+            addClass(li, this.listSlcItemCssClass);
         } else {
-            Dom.removeClass(li, this.listSlcItemCssClass);
+            removeClass(li, this.listSlcItemCssClass);
         }
 
         let hide = false;
@@ -293,14 +308,14 @@ export default class ColsVisibility extends Feature {
             return;
         }
         let tf = this.tf;
-        let span = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfx + tf.id]);
+        let span = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfx + tf.id]);
         span.className = this.spanCssClass;
 
         //Container element (rdiv or custom element)
         if (!this.btnTgtId) {
             tf.setToolbar();
         }
-        let targetEl = !this.btnTgtId ? tf.rDiv : Dom.id(this.btnTgtId);
+        let targetEl = !this.btnTgtId ? tf.rDiv : elm(this.btnTgtId);
 
         if (!this.btnTgtId) {
             let firstChild = targetEl.firstChild;
@@ -310,7 +325,7 @@ export default class ColsVisibility extends Feature {
         }
 
         if (!this.btnHtml) {
-            let btn = Dom.create(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:;&apos;]);
+            let btn = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:;&apos;]);
             btn.className = this.btnCssClass;
             btn.title = this.desc;
 
@@ -346,17 +361,17 @@ export default class ColsVisibility extends Feature {
         let tf = this.tf;
 
         let container = !this.contElTgtId ?
-            Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxCont + tf.id]) :
-            Dom.id(this.contElTgtId);
+            createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxCont + tf.id]) :
+            elm(this.contElTgtId);
         container.className = this.contCssClass;
 
         //Extension description
-        let extNameLabel = Dom.create(&apos;p&apos;);
+        let extNameLabel = createElm(&apos;p&apos;);
         extNameLabel.innerHTML = this.text;
         container.appendChild(extNameLabel);
 
         //Headers list
-        let ul = Dom.create(&apos;ul&apos;, [&apos;id&apos;, &apos;ul&apos; + this.name + &apos;_&apos; + tf.id]);
+        let ul = createElm(&apos;ul&apos;, [&apos;id&apos;, &apos;ul&apos; + this.name + &apos;_&apos; + tf.id]);
         ul.className = this.listCssClass;
 
         let tbl = this.headersTbl ? this.headersTbl : tf.tbl;
@@ -366,15 +381,15 @@ export default class ColsVisibility extends Feature {
 
         //Tick all option
         if (this.enableTickAll) {
-            let li = Dom.createCheckItem(
-                &apos;col__&apos; + tf.id, this.tickAllText, this.tickAllText);
-            Dom.addClass(li, this.listItemCssClass);
+            let li = createCheckItem(&apos;col__&apos; + tf.id, this.tickAllText,
+                this.tickAllText);
+            addClass(li, this.listItemCssClass);
             ul.appendChild(li);
             li.check.checked = !this.tickToHide;
 
             Event.add(li.check, &apos;click&apos;, () =&gt; {
                 for (let h = 0; h &lt; headerRow.cells.length; h++) {
-                    let itm = Dom.id(&apos;col_&apos; + h + &apos;_&apos; + tf.id);
+                    let itm = elm(&apos;col_&apos; + h + &apos;_&apos; + tf.id);
                     if (itm &amp;&amp; li.check.checked !== itm.checked) {
                         itm.click();
                         itm.checked = li.check.checked;
@@ -387,11 +402,11 @@ export default class ColsVisibility extends Feature {
             let cell = headerRow.cells[i];
             let cellText = this.headersText &amp;&amp; this.headersText[i] ?
                 this.headersText[i] : this._getHeaderText(cell);
-            let liElm = Dom.createCheckItem(
-                &apos;col_&apos; + i + &apos;_&apos; + tf.id, cellText, cellText);
-            Dom.addClass(liElm, this.listItemCssClass);
+            let liElm = createCheckItem(&apos;col_&apos; + i + &apos;_&apos; + tf.id, cellText,
+                cellText);
+            addClass(liElm, this.listItemCssClass);
             if (!this.tickToHide) {
-                Dom.addClass(liElm, this.listSlcItemCssClass);
+                addClass(liElm, this.listSlcItemCssClass);
             }
             ul.appendChild(liElm);
             if (!this.tickToHide) {
@@ -406,11 +421,11 @@ export default class ColsVisibility extends Feature {
         }
 
         //separator
-        let p = Dom.create(&apos;p&apos;, [&apos;align&apos;, &apos;center&apos;]);
+        let p = createElm(&apos;p&apos;, [&apos;align&apos;, &apos;center&apos;]);
         let btn;
         //Close link
         if (!this.btnCloseHtml) {
-            btn = Dom.create(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:;&apos;]);
+            btn = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:;&apos;]);
             btn.className = this.btnCloseCssClass;
             btn.innerHTML = this.btnCloseText;
             Event.add(btn, &apos;click&apos;, (evt) =&gt; this.toggle(evt));
@@ -518,7 +533,7 @@ export default class ColsVisibility extends Feature {
             return;
         }
         if (this.manager &amp;&amp; this.contEl) {
-            let itm = Dom.id(&apos;col_&apos; + colIndex + &apos;_&apos; + this.tf.id);
+            let itm = elm(&apos;col_&apos; + colIndex + &apos;_&apos; + this.tf.id);
             if (itm) {
                 itm.click();
             }
@@ -536,7 +551,7 @@ export default class ColsVisibility extends Feature {
             return;
         }
         if (this.manager &amp;&amp; this.contEl) {
-            let itm = Dom.id(&apos;col_&apos; + colIndex + &apos;_&apos; + this.tf.id);
+            let itm = elm(&apos;col_&apos; + colIndex + &apos;_&apos; + this.tf.id);
             if (itm) {
                 itm.click();
             }
@@ -583,15 +598,15 @@ export default class ColsVisibility extends Feature {
         if (!this.initialized) {
             return;
         }
-        if (Dom.id(this.contElTgtId)) {
-            Dom.id(this.contElTgtId).innerHTML = &apos;&apos;;
+        if (elm(this.contElTgtId)) {
+            elm(this.contElTgtId).innerHTML = &apos;&apos;;
         } else {
             this.contEl.innerHTML = &apos;&apos;;
-            Dom.remove(this.contEl);
+            removeElm(this.contEl);
             this.contEl = null;
         }
         this.btnEl.innerHTML = &apos;&apos;;
-        Dom.remove(this.btnEl);
+        removeElm(this.btnEl);
         this.btnEl = null;
 
         this.emitter.off([&apos;hide-column&apos;],
@@ -613,7 +628,7 @@ export default class ColsVisibility extends Feature {
                 if (n.id &amp;&amp; n.id.indexOf(&apos;popUp&apos;) !== -1) {
                     continue;
                 } else {
-                    return Dom.getText(n);
+                    return getText(n);
                 }
             }
             continue;

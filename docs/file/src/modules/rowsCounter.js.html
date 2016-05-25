@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/rowsCounter.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/modules/rowsCounter.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -98,16 +110,16 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/rowsCounter.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
-import Dom from &apos;../dom&apos;;
+import {createElm, createText, elm, removeElm} from &apos;../dom&apos;;
 import {isFn} from &apos;../types&apos;;
 
-export class RowsCounter extends Feature{
+export class RowsCounter extends Feature {
 
     /**
      * Rows counter
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, &apos;rowsCounter&apos;);
 
         // TableFilter configuration
@@ -139,35 +151,35 @@ export class RowsCounter extends Feature{
             f.on_after_refresh_counter : null;
     }
 
-    init(){
-        if(this.initialized){
+    init() {
+        if (this.initialized) {
             return;
         }
 
         var tf = this.tf;
 
         //rows counter container
-        var countDiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxCounter+tf.id]);
+        var countDiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxCounter + tf.id]);
         countDiv.className = this.totRowsCssClass;
         //rows counter label
-        var countSpan = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfxTotRows+tf.id]);
-        var countText = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfxTotRowsTxt+tf.id]);
-        countText.appendChild(Dom.text(this.rowsCounterText));
+        var countSpan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxTotRows + tf.id]);
+        var countText = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxTotRowsTxt + tf.id]);
+        countText.appendChild(createText(this.rowsCounterText));
 
         // counter is added to defined element
-        if(!this.rowsCounterTgtId){
+        if (!this.rowsCounterTgtId) {
             tf.setToolbar();
         }
         var targetEl = !this.rowsCounterTgtId ?
-                tf.lDiv : Dom.id( this.rowsCounterTgtId );
+            tf.lDiv : elm(this.rowsCounterTgtId);
 
         //default container: &apos;lDiv&apos;
-        if(!this.rowsCounterTgtId){
+        if (!this.rowsCounterTgtId) {
             countDiv.appendChild(countText);
             countDiv.appendChild(countSpan);
             targetEl.appendChild(countDiv);
         }
-        else{
+        else {
             //custom container, no need to append statusDiv
             targetEl.appendChild(countText);
             targetEl.appendChild(countSpan);
@@ -177,40 +189,41 @@ export class RowsCounter extends Feature{
 
         // subscribe to events
         this.emitter.on([&apos;after-filtering&apos;, &apos;grouped-by-page&apos;],
-            ()=&gt; this.refresh(tf.nbVisibleRows));
-        this.emitter.on([&apos;rows-changed&apos;], ()=&gt; this.refresh());
+            () =&gt; this.refresh(tf.nbVisibleRows));
+        this.emitter.on([&apos;rows-changed&apos;], () =&gt; this.refresh());
 
         this.initialized = true;
         this.refresh();
     }
 
-    refresh(p){
-        if(!this.initialized || !this.isEnabled()){
+    refresh(p) {
+        if (!this.initialized || !this.isEnabled()) {
             return;
         }
 
         var tf = this.tf;
 
-        if(this.onBeforeRefreshCounter){
+        if (this.onBeforeRefreshCounter) {
             this.onBeforeRefreshCounter.call(null, tf, this.rowsCounterSpan);
         }
 
         var totTxt;
-        if(!tf.paging){
-            if(p &amp;&amp; p !== &apos;&apos;){
+        if (!tf.paging) {
+            if (p &amp;&amp; p !== &apos;&apos;) {
                 totTxt = p;
-            } else{
+            } else {
                 totTxt = tf.nbFilterableRows - tf.nbHiddenRows;
             }
         } else {
             var paging = tf.feature(&apos;paging&apos;);
-            if(paging){
+            if (paging) {
                 //paging start row
                 var paging_start_row = parseInt(paging.startPagingRow, 10) +
-                        ((tf.nbVisibleRows&gt;0) ? 1 : 0);
-                var paging_end_row = (paging_start_row+paging.pagingLength)-1 &lt;=
-                        tf.nbVisibleRows ?
-                        paging_start_row+paging.pagingLength-1 :
+                    ((tf.nbVisibleRows &gt; 0) ? 1 : 0);
+                var paging_end_row =
+                    (paging_start_row + paging.pagingLength) - 1 &lt;=
+                    tf.nbVisibleRows ?
+                        paging_start_row + paging.pagingLength - 1 :
                         tf.nbVisibleRows;
                 totTxt = paging_start_row + this.fromToTextSeparator +
                     paging_end_row + this.overText + tf.nbVisibleRows;
@@ -218,29 +231,29 @@ export class RowsCounter extends Feature{
         }
 
         this.rowsCounterSpan.innerHTML = totTxt;
-        if(this.onAfterRefreshCounter){
+        if (this.onAfterRefreshCounter) {
             this.onAfterRefreshCounter.call(
                 null, tf, this.rowsCounterSpan, totTxt);
         }
     }
 
-    destroy(){
-        if(!this.initialized){
+    destroy() {
+        if (!this.initialized) {
             return;
         }
 
-        if(!this.rowsCounterTgtId &amp;&amp; this.rowsCounterDiv){
-            Dom.remove(this.rowsCounterDiv);
+        if (!this.rowsCounterTgtId &amp;&amp; this.rowsCounterDiv) {
+            removeElm(this.rowsCounterDiv);
         } else {
-            Dom.id(this.rowsCounterTgtId).innerHTML = &apos;&apos;;
+            elm(this.rowsCounterTgtId).innerHTML = &apos;&apos;;
         }
         this.rowsCounterSpan = null;
         this.rowsCounterDiv = null;
 
         // unsubscribe to events
         this.emitter.off([&apos;after-filtering&apos;, &apos;grouped-by-page&apos;],
-            ()=&gt; this.refresh(tf.nbVisibleRows));
-        this.emitter.off([&apos;rows-changed&apos;], ()=&gt; this.refresh());
+            () =&gt; this.refresh(tf.nbVisibleRows));
+        this.emitter.off([&apos;rows-changed&apos;], () =&gt; this.refresh());
 
         this.initialized = false;
     }

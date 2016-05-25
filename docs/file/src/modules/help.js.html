@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/help.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/modules/help.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -98,7 +110,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/help.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
-import Dom from &apos;../dom&apos;;
+import {createElm, createText, elm, removeElm} from &apos;../dom&apos;;
 import Event from &apos;../event&apos;;
 import {NONE} from &apos;../const&apos;;
 
@@ -169,36 +181,36 @@ export class Help extends Feature{
 
         var tf = this.tf;
 
-        var helpspan = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfxHelpSpan+tf.id]);
-        var helpdiv = Dom.create(&apos;div&apos;, [&apos;id&apos;, this.prfxHelpDiv+tf.id]);
+        var helpspan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxHelpSpan+tf.id]);
+        var helpdiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxHelpDiv+tf.id]);
 
         //help button is added to defined element
         if(!this.tgtId){
             tf.setToolbar();
         }
-        var targetEl = !this.tgtId ? tf.rDiv : Dom.id(this.tgtId);
+        var targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
         targetEl.appendChild(helpspan);
 
-        var divContainer = !this.contTgtId ? helpspan : Dom.id(this.contTgtId);
+        var divContainer = !this.contTgtId ? helpspan : elm(this.contTgtId);
 
         if(!this.btnHtml){
             divContainer.appendChild(helpdiv);
-            var helplink = Dom.create(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
+            var helplink = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
             helplink.className = this.btnCssClass;
-            helplink.appendChild(Dom.text(this.btnText));
+            helplink.appendChild(createText(this.btnText));
             helpspan.appendChild(helplink);
-            Event.add(helplink, &apos;click&apos;, () =&gt; { this.toggle(); });
+            Event.add(helplink, &apos;click&apos;, () =&gt; this.toggle());
         } else {
             helpspan.innerHTML = this.btnHtml;
             var helpEl = helpspan.firstChild;
-            Event.add(helpEl, &apos;click&apos;, () =&gt; { this.toggle(); });
+            Event.add(helpEl, &apos;click&apos;, () =&gt; this.toggle());
             divContainer.appendChild(helpdiv);
         }
 
         if(!this.instrHtml){
             helpdiv.innerHTML = this.instrText;
             helpdiv.className = this.contCssClass;
-            Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; { this.toggle(); });
+            Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
         } else {
             if(this.contTgtId){
                 divContainer.appendChild(helpdiv);
@@ -206,11 +218,11 @@ export class Help extends Feature{
             helpdiv.innerHTML = this.instrHtml;
             if(!this.contTgtId){
                 helpdiv.className = this.contCssClass;
-                Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; { this.toggle(); });
+                Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
             }
         }
         helpdiv.innerHTML += this.defaultHtml;
-        Event.add(helpdiv, &apos;click&apos;, () =&gt; { this.toggle(); });
+        Event.add(helpdiv, &apos;click&apos;, () =&gt; this.toggle());
 
         this.cont = helpdiv;
         this.btn = helpspan;
@@ -241,12 +253,12 @@ export class Help extends Feature{
         if(!this.initialized){
             return;
         }
-        Dom.remove(this.btn);
+        removeElm(this.btn);
         this.btn = null;
         if(!this.cont){
             return;
         }
-        Dom.remove(this.cont);
+        removeElm(this.cont);
         this.cont = null;
         this.initialized = false;
     }

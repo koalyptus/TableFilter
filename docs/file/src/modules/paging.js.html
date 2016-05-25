@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -98,7 +110,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/paging.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
-import Dom from &apos;../dom&apos;;
+import {createElm, createOpt, createText, elm, removeElm} from &apos;../dom&apos;;
 import {isArray, isFn, isNull} from &apos;../types&apos;;
 import Event from &apos;../event&apos;;
 import {INPUT, SELECT, NONE, ENTER_KEY} from &apos;../const&apos;;
@@ -304,14 +316,14 @@ export class Paging extends Feature {
 
         // Paging drop-down list selector
         if (this.pageSelectorType === SELECT) {
-            slcPages = Dom.create(SELECT, [&apos;id&apos;, this.prfxSlcPages + tf.id]);
+            slcPages = createElm(SELECT, [&apos;id&apos;, this.prfxSlcPages + tf.id]);
             slcPages.className = this.pgSlcCssClass;
             Event.add(slcPages, &apos;change&apos;, evt.slcPagesChange);
         }
 
         // Paging input selector
         if (this.pageSelectorType === INPUT) {
-            slcPages = Dom.create(INPUT,
+            slcPages = createElm(INPUT,
                 [&apos;id&apos;, this.prfxSlcPages + tf.id],
                 [&apos;value&apos;, this.currentPageNb]
             );
@@ -320,19 +332,19 @@ export class Paging extends Feature {
         }
 
         // btns containers
-        var btnNextSpan = Dom.create(
+        var btnNextSpan = createElm(
             &apos;span&apos;, [&apos;id&apos;, this.prfxBtnNextSpan + tf.id]);
-        var btnPrevSpan = Dom.create(
+        var btnPrevSpan = createElm(
             &apos;span&apos;, [&apos;id&apos;, this.prfxBtnPrevSpan + tf.id]);
-        var btnLastSpan = Dom.create(
+        var btnLastSpan = createElm(
             &apos;span&apos;, [&apos;id&apos;, this.prfxBtnLastSpan + tf.id]);
-        var btnFirstSpan = Dom.create(
+        var btnFirstSpan = createElm(
             &apos;span&apos;, [&apos;id&apos;, this.prfxBtnFirstSpan + tf.id]);
 
         if (this.hasPagingBtns) {
             // Next button
             if (!this.btnNextPageHtml) {
-                var btn_next = Dom.create(INPUT,
+                var btn_next = createElm(INPUT,
                     [&apos;id&apos;, this.prfxBtnNext + tf.id],
                     [&apos;type&apos;, &apos;button&apos;],
                     [&apos;value&apos;, this.btnNextPageText],
@@ -347,7 +359,7 @@ export class Paging extends Feature {
             }
             // Previous button
             if (!this.btnPrevPageHtml) {
-                var btn_prev = Dom.create(INPUT,
+                var btn_prev = createElm(INPUT,
                     [&apos;id&apos;, this.prfxBtnPrev + tf.id],
                     [&apos;type&apos;, &apos;button&apos;],
                     [&apos;value&apos;, this.btnPrevPageText],
@@ -362,7 +374,7 @@ export class Paging extends Feature {
             }
             // Last button
             if (!this.btnLastPageHtml) {
-                var btn_last = Dom.create(INPUT,
+                var btn_last = createElm(INPUT,
                     [&apos;id&apos;, this.prfxBtnLast + tf.id],
                     [&apos;type&apos;, &apos;button&apos;],
                     [&apos;value&apos;, this.btnLastPageText],
@@ -377,7 +389,7 @@ export class Paging extends Feature {
             }
             // First button
             if (!this.btnFirstPageHtml) {
-                var btn_first = Dom.create(INPUT,
+                var btn_first = createElm(INPUT,
                     [&apos;id&apos;, this.prfxBtnFirst + tf.id],
                     [&apos;type&apos;, &apos;button&apos;],
                     [&apos;value&apos;, this.btnFirstPageText],
@@ -396,28 +408,28 @@ export class Paging extends Feature {
         if (!this.pagingTgtId) {
             tf.setToolbar();
         }
-        var targetEl = !this.pagingTgtId ? tf.mDiv : Dom.id(this.pagingTgtId);
+        var targetEl = !this.pagingTgtId ? tf.mDiv : elm(this.pagingTgtId);
         targetEl.appendChild(btnFirstSpan);
         targetEl.appendChild(btnPrevSpan);
 
-        var pgBeforeSpan = Dom.create(
+        var pgBeforeSpan = createElm(
             &apos;span&apos;, [&apos;id&apos;, this.prfxPgBeforeSpan + tf.id]);
-        pgBeforeSpan.appendChild(Dom.text(this.pageText));
+        pgBeforeSpan.appendChild(createText(this.pageText));
         pgBeforeSpan.className = this.nbPgSpanCssClass;
         targetEl.appendChild(pgBeforeSpan);
         targetEl.appendChild(slcPages);
-        var pgAfterSpan = Dom.create(
+        var pgAfterSpan = createElm(
             &apos;span&apos;, [&apos;id&apos;, this.prfxPgAfterSpan + tf.id]);
-        pgAfterSpan.appendChild(Dom.text(this.ofText));
+        pgAfterSpan.appendChild(createText(this.ofText));
         pgAfterSpan.className = this.nbPgSpanCssClass;
         targetEl.appendChild(pgAfterSpan);
-        var pgspan = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfxPgSpan + tf.id]);
+        var pgspan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxPgSpan + tf.id]);
         pgspan.className = this.nbPgSpanCssClass;
-        pgspan.appendChild(Dom.text(&apos; &apos; + this.nbPages + &apos; &apos;));
+        pgspan.appendChild(createText(&apos; &apos; + this.nbPages + &apos; &apos;));
         targetEl.appendChild(pgspan);
         targetEl.appendChild(btnNextSpan);
         targetEl.appendChild(btnLastSpan);
-        this.pagingSlc = Dom.id(this.prfxSlcPages + tf.id);
+        this.pagingSlc = elm(this.prfxSlcPages + tf.id);
 
         this.setPagingInfo();
 
@@ -468,8 +480,8 @@ export class Paging extends Feature {
      */
     setPagingInfo(validRows) {
         var tf = this.tf;
-        var mdiv = !this.pagingTgtId ? tf.mDiv : Dom.id(this.pagingTgtId);
-        var pgspan = Dom.id(this.prfxPgSpan + tf.id);
+        var mdiv = !this.pagingTgtId ? tf.mDiv : elm(this.pagingTgtId);
+        var pgspan = elm(this.prfxPgSpan + tf.id);
 
         //store valid rows indexes
         tf.validRowsIndex = validRows || tf.getValidRows(true);
@@ -487,8 +499,7 @@ export class Paging extends Feature {
             mdiv.style.visibility = &apos;visible&apos;;
             if (this.pageSelectorType === SELECT) {
                 for (var z = 0; z &lt; this.nbPages; z++) {
-                    var opt = Dom.createOpt(z + 1, z * this.pagingLength,
-                        false);
+                    var opt = createOpt(z + 1, z * this.pagingLength, false);
                     this.pagingSlc.options[z] = opt;
                 }
             } else {
@@ -602,11 +613,11 @@ export class Paging extends Feature {
             ev.target.blur();
         };
 
-        var slcR = Dom.create(SELECT, [&apos;id&apos;, this.prfxSlcResults + tf.id]);
+        var slcR = createElm(SELECT, [&apos;id&apos;, this.prfxSlcResults + tf.id]);
         slcR.className = this.resultsSlcCssClass;
         var slcRText = this.resultsPerPage[0],
             slcROpts = this.resultsPerPage[1];
-        var slcRSpan = Dom.create(
+        var slcRSpan = createElm(
             &apos;span&apos;, [&apos;id&apos;, this.prfxSlcResultsTxt + tf.id]);
         slcRSpan.className = this.resultsSpanCssClass;
 
@@ -615,8 +626,8 @@ export class Paging extends Feature {
             tf.setToolbar();
         }
         var targetEl = !this.resultsPerPageTgtId ?
-            tf.rDiv : Dom.id(this.resultsPerPageTgtId);
-        slcRSpan.appendChild(Dom.text(slcRText));
+            tf.rDiv : elm(this.resultsPerPageTgtId);
+        slcRSpan.appendChild(createText(slcRText));
 
         var help = tf.feature(&apos;help&apos;);
         if (help &amp;&amp; help.btn) {
@@ -644,12 +655,12 @@ export class Paging extends Feature {
             return;
         }
         var slcR = this.resultsPerPageSlc,
-            slcRSpan = Dom.id(this.prfxSlcResultsTxt + tf.id);
+            slcRSpan = elm(this.prfxSlcResultsTxt + tf.id);
         if (slcR) {
-            Dom.remove(slcR);
+            removeElm(slcR);
         }
         if (slcRSpan) {
-            Dom.remove(slcRSpan);
+            removeElm(slcRSpan);
         }
         this.resultsPerPageSlc = null;
     }
@@ -785,16 +796,16 @@ export class Paging extends Feature {
             return;
         }
         // btns containers
-        var btnNextSpan = Dom.id(this.prfxBtnNextSpan + tf.id);
-        var btnPrevSpan = Dom.id(this.prfxBtnPrevSpan + tf.id);
-        var btnLastSpan = Dom.id(this.prfxBtnLastSpan + tf.id);
-        var btnFirstSpan = Dom.id(this.prfxBtnFirstSpan + tf.id);
+        var btnNextSpan = elm(this.prfxBtnNextSpan + tf.id);
+        var btnPrevSpan = elm(this.prfxBtnPrevSpan + tf.id);
+        var btnLastSpan = elm(this.prfxBtnLastSpan + tf.id);
+        var btnFirstSpan = elm(this.prfxBtnFirstSpan + tf.id);
         //span containing &apos;Page&apos; text
-        var pgBeforeSpan = Dom.id(this.prfxPgBeforeSpan + tf.id);
+        var pgBeforeSpan = elm(this.prfxPgBeforeSpan + tf.id);
         //span containing &apos;of&apos; text
-        var pgAfterSpan = Dom.id(this.prfxPgAfterSpan + tf.id);
+        var pgAfterSpan = elm(this.prfxPgAfterSpan + tf.id);
         //span containing nb of pages
-        var pgspan = Dom.id(this.prfxPgSpan + tf.id);
+        var pgspan = elm(this.prfxPgSpan + tf.id);
 
         var evt = this.evt;
 
@@ -805,39 +816,39 @@ export class Paging extends Feature {
             else if (this.pageSelectorType === INPUT) {
                 Event.remove(this.pagingSlc, &apos;keypress&apos;, evt._detectKey);
             }
-            Dom.remove(this.pagingSlc);
+            removeElm(this.pagingSlc);
         }
 
         if (btnNextSpan) {
             Event.remove(btnNextSpan, &apos;click&apos;, evt.next);
-            Dom.remove(btnNextSpan);
+            removeElm(btnNextSpan);
         }
 
         if (btnPrevSpan) {
             Event.remove(btnPrevSpan, &apos;click&apos;, evt.prev);
-            Dom.remove(btnPrevSpan);
+            removeElm(btnPrevSpan);
         }
 
         if (btnLastSpan) {
             Event.remove(btnLastSpan, &apos;click&apos;, evt.last);
-            Dom.remove(btnLastSpan);
+            removeElm(btnLastSpan);
         }
 
         if (btnFirstSpan) {
             Event.remove(btnFirstSpan, &apos;click&apos;, evt.first);
-            Dom.remove(btnFirstSpan);
+            removeElm(btnFirstSpan);
         }
 
         if (pgBeforeSpan) {
-            Dom.remove(pgBeforeSpan);
+            removeElm(pgBeforeSpan);
         }
 
         if (pgAfterSpan) {
-            Dom.remove(pgAfterSpan);
+            removeElm(pgAfterSpan);
         }
 
         if (pgspan) {
-            Dom.remove(pgspan);
+            removeElm(pgspan);
         }
 
         if (this.hasResultsPerPage) {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/clearButton.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/modules/clearButton.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -98,20 +110,20 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/clearButton.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
-import Dom from &apos;../dom&apos;;
+import {createElm, createText, elm, removeElm} from &apos;../dom&apos;;
 import Event from &apos;../event&apos;;
 
-export class ClearButton extends Feature{
+export class ClearButton extends Feature {
 
     /**
      * Clear button component
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, &apos;btnReset&apos;);
 
         // Configuration object
-        var f = this.config;
+        let f = this.config;
 
         //id of container element
         this.btnResetTgtId = f.btn_reset_target_id || null;
@@ -124,14 +136,14 @@ export class ClearButton extends Feature{
         //defines reset button innerHtml
         this.btnResetHtml = f.btn_reset_html ||
             (!tf.enableIcons ? null :
-            &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos;+tf.btnResetCssClass+&apos;&quot; &apos; +
-            &apos;title=&quot;&apos;+this.btnResetTooltip+&apos;&quot; /&gt;&apos;);
+                &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + tf.btnResetCssClass +
+                &apos;&quot; &apos; + &apos;title=&quot;&apos; + this.btnResetTooltip + &apos;&quot; /&gt;&apos;);
         //span containing reset button
         this.prfxResetSpan = &apos;resetspan_&apos;;
     }
 
-    onClick(){
-        if(!this.isEnabled()){
+    onClick() {
+        if (!this.isEnabled()) {
             return;
         }
         this.tf.clearFilters();
@@ -140,33 +152,32 @@ export class ClearButton extends Feature{
     /**
      * Build DOM elements
      */
-    init(){
-        var tf = this.tf;
+    init() {
+        let tf = this.tf;
 
-        if(this.initialized){
+        if (this.initialized) {
             return;
         }
 
-        var resetspan = Dom.create(&apos;span&apos;, [&apos;id&apos;, this.prfxResetSpan+tf.id]);
+        let resetspan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxResetSpan + tf.id]);
 
         // reset button is added to defined element
-        if(!this.btnResetTgtId){
+        if (!this.btnResetTgtId) {
             tf.setToolbar();
         }
-        var targetEl = !this.btnResetTgtId ?
-            tf.rDiv : Dom.id(this.btnResetTgtId);
+        let targetEl = !this.btnResetTgtId ? tf.rDiv : elm(this.btnResetTgtId);
         targetEl.appendChild(resetspan);
 
-        if(!this.btnResetHtml){
-            var fltreset = Dom.create(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
+        if (!this.btnResetHtml) {
+            let fltreset = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:voelm(0);&apos;]);
             fltreset.className = tf.btnResetCssClass;
-            fltreset.appendChild(Dom.text(this.btnResetText));
+            fltreset.appendChild(createText(this.btnResetText));
             resetspan.appendChild(fltreset);
-            Event.add(fltreset, &apos;click&apos;, ()=&gt; { this.onClick(); });
+            Event.add(fltreset, &apos;click&apos;, () =&gt; { this.onClick(); });
         } else {
             resetspan.innerHTML = this.btnResetHtml;
-            var resetEl = resetspan.firstChild;
-            Event.add(resetEl, &apos;click&apos;, ()=&gt; { this.onClick(); });
+            let resetEl = resetspan.firstChild;
+            Event.add(resetEl, &apos;click&apos;, () =&gt; { this.onClick(); });
         }
         this.btnResetEl = resetspan.firstChild;
 
@@ -176,16 +187,16 @@ export class ClearButton extends Feature{
     /**
      * Remove clear button UI
      */
-    destroy(){
-        var tf = this.tf;
+    destroy() {
+        let tf = this.tf;
 
-        if(!this.initialized){
+        if (!this.initialized) {
             return;
         }
 
-        var resetspan = Dom.id(this.prfxResetSpan+tf.id);
-        if(resetspan){
-            Dom.remove(resetspan);
+        let resetspan = elm(this.prfxResetSpan + tf.id);
+        if (resetspan) {
+            removeElm(resetspan);
         }
         this.btnResetEl = null;
         this.initialized = false;

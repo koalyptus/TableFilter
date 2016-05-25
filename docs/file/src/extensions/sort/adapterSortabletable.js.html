@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/sort/adapterSortabletable.js | tablefilter v0.2.30 API Document</title>
+  <title data-ice="title">src/extensions/sort/adapterSortabletable.js | tablefilter v0.2.31 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -51,6 +51,18 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -99,7 +111,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/extensions/sort/adapterSortabletable.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../../feature&apos;;
 import {isArray, isFn, isUndef} from &apos;../../types&apos;;
-import Dom from &apos;../../dom&apos;;
+import {createElm, elm, getText, tag} from &apos;../../dom&apos;;
 import Event from &apos;../../event&apos;;
 import {formatDate} from &apos;../../date&apos;;
 import {removeNbFormat} from &apos;../../helpers&apos;;
@@ -285,7 +297,7 @@ export default class AdapterSortableTable extends Feature {
                 c = cells[i];
                 if (stt.sortTypes[i] !== null &amp;&amp; stt.sortTypes[i] !== &apos;None&apos;) {
                     c.style.cursor = &apos;pointer&apos;;
-                    img = Dom.create(&apos;img&apos;,
+                    img = createElm(&apos;img&apos;,
                         [&apos;src&apos;, adpt.imgPath + adpt.imgBlank]);
                     c.appendChild(img);
                     if (stt.sortTypes[i] !== null) {
@@ -313,7 +325,7 @@ export default class AdapterSortableTable extends Feature {
                 cells = [];
                 l = triggers.length;
                 for (let j = 0; j &lt; triggers.length; j++) {
-                    cells.push(Dom.id(triggers[j]));
+                    cells.push(elm(triggers[j]));
                 }
             } else {
                 if (!this.tHead) {
@@ -327,7 +339,7 @@ export default class AdapterSortableTable extends Feature {
                 if (cellAttr !== null &amp;&amp; cellAttr !== &apos;None&apos;) {
                     img = cells[i].lastChild || cells[i];
                     if (img.nodeName.toLowerCase() !== &apos;img&apos;) {
-                        img = Dom.create(&apos;img&apos;,
+                        img = createElm(&apos;img&apos;,
                             [&apos;src&apos;, adpt.imgPath + adpt.imgBlank]);
                         cells[i].appendChild(img);
                     }
@@ -375,7 +387,7 @@ export default class AdapterSortableTable extends Feature {
             if (oNode.getAttribute(adpt.customKey)) {
                 return oNode.getAttribute(adpt.customKey);
             } else {
-                return Dom.getText(oNode);
+                return getText(oNode);
             }
         };
     }
@@ -434,7 +446,7 @@ export default class AdapterSortableTable extends Feature {
                 if (triggers[j] === null) {
                     continue;
                 }
-                let trigger = Dom.id(triggers[j]);
+                let trigger = elm(triggers[j]);
                 if (trigger) {
                     trigger.style.cursor = &apos;pointer&apos;;
 
@@ -468,7 +480,7 @@ export default class AdapterSortableTable extends Feature {
         let ids = tf.getFiltersId();
         for (let idx = 0; idx &lt; ids.length; idx++) {
             let header = tf.getHeaderElement(idx);
-            let img = Dom.tag(header, &apos;img&apos;);
+            let img = tag(header, &apos;img&apos;);
 
             if (img.length === 1) {
                 header.removeChild(img[0]);
