@@ -1,6 +1,6 @@
 import {Feature} from '../../feature';
 import {isArray, isFn, isUndef} from '../../types';
-import Dom from '../../dom';
+import {createElm, elm, getText, tag} from '../../dom';
 import Event from '../../event';
 import {formatDate} from '../../date';
 import {removeNbFormat} from '../../helpers';
@@ -186,7 +186,7 @@ export default class AdapterSortableTable extends Feature {
                 c = cells[i];
                 if (stt.sortTypes[i] !== null && stt.sortTypes[i] !== 'None') {
                     c.style.cursor = 'pointer';
-                    img = Dom.create('img',
+                    img = createElm('img',
                         ['src', adpt.imgPath + adpt.imgBlank]);
                     c.appendChild(img);
                     if (stt.sortTypes[i] !== null) {
@@ -214,7 +214,7 @@ export default class AdapterSortableTable extends Feature {
                 cells = [];
                 l = triggers.length;
                 for (let j = 0; j < triggers.length; j++) {
-                    cells.push(Dom.id(triggers[j]));
+                    cells.push(elm(triggers[j]));
                 }
             } else {
                 if (!this.tHead) {
@@ -228,7 +228,7 @@ export default class AdapterSortableTable extends Feature {
                 if (cellAttr !== null && cellAttr !== 'None') {
                     img = cells[i].lastChild || cells[i];
                     if (img.nodeName.toLowerCase() !== 'img') {
-                        img = Dom.create('img',
+                        img = createElm('img',
                             ['src', adpt.imgPath + adpt.imgBlank]);
                         cells[i].appendChild(img);
                     }
@@ -276,7 +276,7 @@ export default class AdapterSortableTable extends Feature {
             if (oNode.getAttribute(adpt.customKey)) {
                 return oNode.getAttribute(adpt.customKey);
             } else {
-                return Dom.getText(oNode);
+                return getText(oNode);
             }
         };
     }
@@ -335,7 +335,7 @@ export default class AdapterSortableTable extends Feature {
                 if (triggers[j] === null) {
                     continue;
                 }
-                let trigger = Dom.id(triggers[j]);
+                let trigger = elm(triggers[j]);
                 if (trigger) {
                     trigger.style.cursor = 'pointer';
 
@@ -369,7 +369,7 @@ export default class AdapterSortableTable extends Feature {
         let ids = tf.getFiltersId();
         for (let idx = 0; idx < ids.length; idx++) {
             let header = tf.getHeaderElement(idx);
-            let img = Dom.tag(header, 'img');
+            let img = tag(header, 'img');
 
             if (img.length === 1) {
                 header.removeChild(img[0]);

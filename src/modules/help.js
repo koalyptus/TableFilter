@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import Dom from '../dom';
+import {createElm, createText, elm, removeElm} from '../dom';
 import Event from '../event';
 import {NONE} from '../const';
 
@@ -70,36 +70,36 @@ export class Help extends Feature{
 
         var tf = this.tf;
 
-        var helpspan = Dom.create('span', ['id', this.prfxHelpSpan+tf.id]);
-        var helpdiv = Dom.create('div', ['id', this.prfxHelpDiv+tf.id]);
+        var helpspan = createElm('span', ['id', this.prfxHelpSpan+tf.id]);
+        var helpdiv = createElm('div', ['id', this.prfxHelpDiv+tf.id]);
 
         //help button is added to defined element
         if(!this.tgtId){
             tf.setToolbar();
         }
-        var targetEl = !this.tgtId ? tf.rDiv : Dom.id(this.tgtId);
+        var targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
         targetEl.appendChild(helpspan);
 
-        var divContainer = !this.contTgtId ? helpspan : Dom.id(this.contTgtId);
+        var divContainer = !this.contTgtId ? helpspan : elm(this.contTgtId);
 
         if(!this.btnHtml){
             divContainer.appendChild(helpdiv);
-            var helplink = Dom.create('a', ['href', 'javascript:void(0);']);
+            var helplink = createElm('a', ['href', 'javascript:void(0);']);
             helplink.className = this.btnCssClass;
-            helplink.appendChild(Dom.text(this.btnText));
+            helplink.appendChild(createText(this.btnText));
             helpspan.appendChild(helplink);
-            Event.add(helplink, 'click', () => { this.toggle(); });
+            Event.add(helplink, 'click', () => this.toggle());
         } else {
             helpspan.innerHTML = this.btnHtml;
             var helpEl = helpspan.firstChild;
-            Event.add(helpEl, 'click', () => { this.toggle(); });
+            Event.add(helpEl, 'click', () => this.toggle());
             divContainer.appendChild(helpdiv);
         }
 
         if(!this.instrHtml){
             helpdiv.innerHTML = this.instrText;
             helpdiv.className = this.contCssClass;
-            Event.add(helpdiv, 'dblclick', () => { this.toggle(); });
+            Event.add(helpdiv, 'dblclick', () => this.toggle());
         } else {
             if(this.contTgtId){
                 divContainer.appendChild(helpdiv);
@@ -107,11 +107,11 @@ export class Help extends Feature{
             helpdiv.innerHTML = this.instrHtml;
             if(!this.contTgtId){
                 helpdiv.className = this.contCssClass;
-                Event.add(helpdiv, 'dblclick', () => { this.toggle(); });
+                Event.add(helpdiv, 'dblclick', () => this.toggle());
             }
         }
         helpdiv.innerHTML += this.defaultHtml;
-        Event.add(helpdiv, 'click', () => { this.toggle(); });
+        Event.add(helpdiv, 'click', () => this.toggle());
 
         this.cont = helpdiv;
         this.btn = helpspan;
@@ -142,12 +142,12 @@ export class Help extends Feature{
         if(!this.initialized){
             return;
         }
-        Dom.remove(this.btn);
+        removeElm(this.btn);
         this.btn = null;
         if(!this.cont){
             return;
         }
-        Dom.remove(this.cont);
+        removeElm(this.cont);
         this.cont = null;
         this.initialized = false;
     }

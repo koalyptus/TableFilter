@@ -1,18 +1,18 @@
 import {Feature} from '../feature';
-import Dom from '../dom';
+import {createElm, createText, elm, removeElm} from '../dom';
 import Event from '../event';
 
-export class ClearButton extends Feature{
+export class ClearButton extends Feature {
 
     /**
      * Clear button component
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, 'btnReset');
 
         // Configuration object
-        var f = this.config;
+        let f = this.config;
 
         //id of container element
         this.btnResetTgtId = f.btn_reset_target_id || null;
@@ -25,14 +25,14 @@ export class ClearButton extends Feature{
         //defines reset button innerHtml
         this.btnResetHtml = f.btn_reset_html ||
             (!tf.enableIcons ? null :
-            '<input type="button" value="" class="'+tf.btnResetCssClass+'" ' +
-            'title="'+this.btnResetTooltip+'" />');
+                '<input type="button" value="" class="' + tf.btnResetCssClass +
+                '" ' + 'title="' + this.btnResetTooltip + '" />');
         //span containing reset button
         this.prfxResetSpan = 'resetspan_';
     }
 
-    onClick(){
-        if(!this.isEnabled()){
+    onClick() {
+        if (!this.isEnabled()) {
             return;
         }
         this.tf.clearFilters();
@@ -41,33 +41,32 @@ export class ClearButton extends Feature{
     /**
      * Build DOM elements
      */
-    init(){
-        var tf = this.tf;
+    init() {
+        let tf = this.tf;
 
-        if(this.initialized){
+        if (this.initialized) {
             return;
         }
 
-        var resetspan = Dom.create('span', ['id', this.prfxResetSpan+tf.id]);
+        let resetspan = createElm('span', ['id', this.prfxResetSpan + tf.id]);
 
         // reset button is added to defined element
-        if(!this.btnResetTgtId){
+        if (!this.btnResetTgtId) {
             tf.setToolbar();
         }
-        var targetEl = !this.btnResetTgtId ?
-            tf.rDiv : Dom.id(this.btnResetTgtId);
+        let targetEl = !this.btnResetTgtId ? tf.rDiv : elm(this.btnResetTgtId);
         targetEl.appendChild(resetspan);
 
-        if(!this.btnResetHtml){
-            var fltreset = Dom.create('a', ['href', 'javascript:void(0);']);
+        if (!this.btnResetHtml) {
+            let fltreset = createElm('a', ['href', 'javascript:voelm(0);']);
             fltreset.className = tf.btnResetCssClass;
-            fltreset.appendChild(Dom.text(this.btnResetText));
+            fltreset.appendChild(createText(this.btnResetText));
             resetspan.appendChild(fltreset);
-            Event.add(fltreset, 'click', ()=> { this.onClick(); });
+            Event.add(fltreset, 'click', () => { this.onClick(); });
         } else {
             resetspan.innerHTML = this.btnResetHtml;
-            var resetEl = resetspan.firstChild;
-            Event.add(resetEl, 'click', ()=> { this.onClick(); });
+            let resetEl = resetspan.firstChild;
+            Event.add(resetEl, 'click', () => { this.onClick(); });
         }
         this.btnResetEl = resetspan.firstChild;
 
@@ -77,16 +76,16 @@ export class ClearButton extends Feature{
     /**
      * Remove clear button UI
      */
-    destroy(){
-        var tf = this.tf;
+    destroy() {
+        let tf = this.tf;
 
-        if(!this.initialized){
+        if (!this.initialized) {
             return;
         }
 
-        var resetspan = Dom.id(this.prfxResetSpan+tf.id);
-        if(resetspan){
-            Dom.remove(resetspan);
+        let resetspan = elm(this.prfxResetSpan + tf.id);
+        if (resetspan) {
+            removeElm(resetspan);
         }
         this.btnResetEl = null;
         this.initialized = false;

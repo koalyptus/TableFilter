@@ -2,6 +2,12 @@
  * Misc helpers
  */
 
+/**
+ * Returns a unformatted number
+ * @param {String} Formatted number
+ * @param {String} Format type, currently 'us' or 'eu'
+ * @return {String} Unformatted number
+ */
 export const removeNbFormat = (data, format) => {
     if (!data) {
         return;

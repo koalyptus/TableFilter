@@ -1,4 +1,4 @@
-import Dom from '../dom';
+import {createText, createElm, getText} from '../dom';
 import {isArray} from '../types';
 
 export class HighlightKeyword {
@@ -55,11 +55,11 @@ export class HighlightKeyword {
                     let nv = node.nodeValue,
                         ni = tempNodeVal.indexOf(tempWordVal),
                         // Create a load of replacement nodes
-                        before = Dom.text(nv.substr(0, ni)),
+                        before = createText(nv.substr(0, ni)),
                         docWordVal = nv.substr(ni, word.length),
-                        after = Dom.text(nv.substr(ni + word.length)),
-                        hiwordtext = Dom.text(docWordVal),
-                        hiword = Dom.create('span');
+                        after = createText(nv.substr(ni + word.length)),
+                        hiwordtext = createText(docWordVal),
+                        hiword = createElm('span');
                     hiword.className = cssClass;
                     hiword.appendChild(hiwordtext);
                     pn.insertBefore(before, node);
@@ -80,12 +80,12 @@ export class HighlightKeyword {
         let highlightedNodes = this.tf.tbl.querySelectorAll(`.${cssClass}`);
         for (let i = 0; i < highlightedNodes.length; i++) {
             let n = highlightedNodes[i];
-            let nodeVal = Dom.getText(n),
+            let nodeVal = getText(n),
                 tempNodeVal = nodeVal.toLowerCase(),
                 tempWordVal = word.toLowerCase();
 
             if (tempNodeVal.indexOf(tempWordVal) !== -1) {
-                n.parentNode.replaceChild(Dom.text(nodeVal), n);
+                n.parentNode.replaceChild(createText(nodeVal), n);
             }
         }
     }

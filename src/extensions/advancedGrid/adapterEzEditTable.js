@@ -1,5 +1,5 @@
 import {Feature} from '../../feature';
-import Dom from '../../dom';
+import {tag} from '../../dom';
 import {INPUT} from '../../const';
 import {root} from '../../root';
 
@@ -71,7 +71,7 @@ export default class AdapterEzEditTable extends Feature {
         //start row for EditTable constructor needs to be calculated
         var startRow,
             cfg = this.cfg,
-            thead = Dom.tag(tf.tbl, 'thead');
+            thead = tag(tf.tbl, 'thead');
 
         //if thead exists and startRow not specified, startRow is calculated
         //automatically by EditTable

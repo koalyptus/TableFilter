@@ -2,6 +2,12 @@
  * Date utilities
  */
 
+/**
+ * Verifies passed formatted date string is valid
+ * @param  {String}  dateStr Formatted date string
+ * @param  {String}  format accepted formats: 'DMY', 'MDY', 'YMD', 'DDMMMYYYY'
+ * @return {Boolean}
+ */
 export const isValidDate = (dateStr, format) => {
     if (!format) {
         format = 'DMY';
@@ -79,6 +85,12 @@ export const isValidDate = (dateStr, format) => {
     return true;
 }
 
+/**
+ * Converts formatted date into a Date object
+ * @param  {String} dateStr Formatted date string
+ * @param  {String} format accepted formats: 'DMY', 'MDY', 'YMD', 'DDMMMYYYY'
+ * @return {Object} date object
+ */
 export const formatDate = (dateStr, formatStr) => {
     if (!formatStr) {
         formatStr = 'DMY';

@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import Dom from '../dom';
+import {createElm, removeElm, elm, tag} from '../dom';
 import {isFn, isNull, isUndef} from '../types';
 import Event from '../event';
 import {contains} from '../string';
@@ -110,7 +110,7 @@ export class GridLayout extends Feature {
         }
 
         //Main container: it will contain all the elements
-        this.tblMainCont = Dom.create('div',
+        this.tblMainCont = createElm('div',
             ['id', this.prfxMainTblCont + tf.id]);
         this.tblMainCont.className = this.gridMainContCssClass;
         if (this.gridWidth) {
@@ -119,7 +119,7 @@ export class GridLayout extends Feature {
         tbl.parentNode.insertBefore(this.tblMainCont, tbl);
 
         //Table container: div wrapping content table
-        this.tblCont = Dom.create('div', ['id', this.prfxTblCont + tf.id]);
+        this.tblCont = createElm('div', ['id', this.prfxTblCont + tf.id]);
         this.tblCont.className = this.gridContCssClass;
         if (this.gridWidth) {
             if (this.gridWidth.indexOf('%') !== -1) {
@@ -132,7 +132,7 @@ export class GridLayout extends Feature {
             this.tblCont.style.height = this.gridHeight;
         }
         tbl.parentNode.insertBefore(this.tblCont, tbl);
-        let t = Dom.remove(tbl);
+        let t = removeElm(tbl);
         this.tblCont.appendChild(t);
 
         //In case table width is expressed in %
@@ -141,11 +141,11 @@ export class GridLayout extends Feature {
                 tbl.clientWidth : tblW) + 'px';
         }
 
-        let d = Dom.remove(this.tblCont);
+        let d = removeElm(this.tblCont);
         this.tblMainCont.appendChild(d);
 
         //Headers table container: div wrapping headers table
-        this.headTblCont = Dom.create(
+        this.headTblCont = createElm(
             'div', ['id', this.prfxHeadTblCont + tf.id]);
         this.headTblCont.className = this.gridHeadContCssClass;
         if (this.gridWidth) {
@@ -157,8 +157,8 @@ export class GridLayout extends Feature {
         }
 
         //Headers table
-        this.headTbl = Dom.create('table', ['id', this.prfxHeadTbl + tf.id]);
-        let tH = Dom.create('tHead');
+        this.headTbl = createElm('table', ['id', this.prfxHeadTbl + tf.id]);
+        let tH = createElm('tHead');
 
         //1st row should be headers row, ids are added if not set
         //Those ids are used by the sort feature
@@ -175,12 +175,12 @@ export class GridLayout extends Feature {
         }
 
         //Filters row is created
-        let filtersRow = Dom.create('tr');
+        let filtersRow = createElm('tr');
         if (this.gridEnableFilters && tf.fltGrid) {
             tf.externalFltTgtIds = [];
             for (let j = 0; j < tf.nbCells; j++) {
                 let fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;
-                let cl = Dom.create(tf.fltCellTag, ['id', fltTdId]);
+                let cl = createElm(tf.fltCellTag, ['id', fltTdId]);
                 filtersRow.appendChild(cl);
                 tf.externalFltTgtIds[j] = fltTdId;
             }
@@ -195,7 +195,7 @@ export class GridLayout extends Feature {
         } else {
             // Handle table with no headers, assuming here headers do not
             // exist
-            tH.appendChild(Dom.create('tr'));
+            tH.appendChild(createElm('tr'));
         }
 
         this.headTbl.appendChild(tH);
@@ -209,7 +209,7 @@ export class GridLayout extends Feature {
         this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);
 
         //THead needs to be removed in content table for sort feature
-        let thead = Dom.tag(tbl, 'thead');
+        let thead = tag(tbl, 'thead');
         if (thead.length > 0) {
             tbl.removeChild(thead[0]);
         }
@@ -264,13 +264,13 @@ export class GridLayout extends Feature {
         }
 
         //Cols generation for all browsers excepted IE<=7
-        this.tblHasColTag = Dom.tag(tbl, 'col').length > 0 ? true : false;
+        this.tblHasColTag = tag(tbl, 'col').length > 0 ? true : false;
 
         //Col elements are enough to keep column widths after sorting and
         //filtering
         let createColTags = function () {
             for (let k = (tf.nbCells - 1); k >= 0; k--) {
-                let col = Dom.create('col', ['id', tf.id + '_col_' + k]);
+                let col = createElm('col', ['id', tf.id + '_col_' + k]);
                 tbl.insertBefore(col, tbl.firstChild);
                 col.style.width = tf.colWidths[k];
                 this.gridColElms[k] = col;
@@ -281,7 +281,7 @@ export class GridLayout extends Feature {
         if (!this.tblHasColTag) {
             createColTags.call(this);
         } else {
-            let cols = Dom.tag(tbl, 'col');
+            let cols = tag(tbl, 'col');
             for (let ii = 0; ii < tf.nbCells; ii++) {
                 cols[ii].setAttribute('id', tf.id + '_col_' + ii);
                 cols[ii].style.width = tf.colWidths[ii];
@@ -332,9 +332,9 @@ export class GridLayout extends Feature {
         if (!this.initialized) {
             return;
         }
-        let t = Dom.remove(tbl);
+        let t = removeElm(tbl);
         this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);
-        Dom.remove(this.tblMainCont);
+        removeElm(this.tblMainCont);
 
         this.tblMainCont = null;
         this.headTblCont = null;
@@ -343,7 +343,7 @@ export class GridLayout extends Feature {
 
         tbl.outerHTML = this.sourceTblHtml;
         //needed to keep reference of table element for future usage
-        this.tf.tbl = Dom.id(tf.id);
+        this.tf.tbl = elm(tf.id);
 
         this.initialized = false;
     }

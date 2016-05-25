@@ -1,5 +1,8 @@
 import {Feature} from '../../feature';
-import Dom from '../../dom';
+import {
+    addClass, removeClass, createCheckItem, createElm, elm, removeElm,
+    getText, tag
+} from '../../dom';
 import {isFn} from '../../types';
 import Event from '../../event';
 
@@ -80,7 +83,7 @@ export default class ColsVisibility extends Feature {
 
         //array containing hidden columns indexes
         this.hiddenCols = [];
-        this.tblHasColTag = (Dom.tag(tf.tbl, 'col').length > 0);
+        this.tblHasColTag = tag(tf.tbl, 'col').length > 0;
 
         //callback invoked just after cols manager is loaded
         this.onLoaded = isFn(f.on_loaded) ? f.on_loaded : null;
@@ -155,9 +158,9 @@ export default class ColsVisibility extends Feature {
         let colIndex = lbl.firstChild.getAttribute('id').split('_')[1];
         colIndex = parseInt(colIndex, 10);
         if (isChecked) {
-            Dom.addClass(li, this.listSlcItemCssClass);
+            addClass(li, this.listSlcItemCssClass);
         } else {
-            Dom.removeClass(li, this.listSlcItemCssClass);
+            removeClass(li, this.listSlcItemCssClass);
         }
 
         let hide = false;
@@ -194,14 +197,14 @@ export default class ColsVisibility extends Feature {
             return;
         }
         let tf = this.tf;
-        let span = Dom.create('span', ['id', this.prfx + tf.id]);
+        let span = createElm('span', ['id', this.prfx + tf.id]);
         span.className = this.spanCssClass;
 
         //Container element (rdiv or custom element)
         if (!this.btnTgtId) {
             tf.setToolbar();
         }
-        let targetEl = !this.btnTgtId ? tf.rDiv : Dom.id(this.btnTgtId);
+        let targetEl = !this.btnTgtId ? tf.rDiv : elm(this.btnTgtId);
 
         if (!this.btnTgtId) {
             let firstChild = targetEl.firstChild;
@@ -211,7 +214,7 @@ export default class ColsVisibility extends Feature {
         }
 
         if (!this.btnHtml) {
-            let btn = Dom.create('a', ['href', 'javascript:;']);
+            let btn = createElm('a', ['href', 'javascript:;']);
             btn.className = this.btnCssClass;
             btn.title = this.desc;
 
@@ -247,17 +250,17 @@ export default class ColsVisibility extends Feature {
         let tf = this.tf;
 
         let container = !this.contElTgtId ?
-            Dom.create('div', ['id', this.prfxCont + tf.id]) :
-            Dom.id(this.contElTgtId);
+            createElm('div', ['id', this.prfxCont + tf.id]) :
+            elm(this.contElTgtId);
         container.className = this.contCssClass;
 
         //Extension description
-        let extNameLabel = Dom.create('p');
+        let extNameLabel = createElm('p');
         extNameLabel.innerHTML = this.text;
         container.appendChild(extNameLabel);
 
         //Headers list
-        let ul = Dom.create('ul', ['id', 'ul' + this.name + '_' + tf.id]);
+        let ul = createElm('ul', ['id', 'ul' + this.name + '_' + tf.id]);
         ul.className = this.listCssClass;
 
         let tbl = this.headersTbl ? this.headersTbl : tf.tbl;
@@ -267,15 +270,15 @@ export default class ColsVisibility extends Feature {
 
         //Tick all option
         if (this.enableTickAll) {
-            let li = Dom.createCheckItem(
-                'col__' + tf.id, this.tickAllText, this.tickAllText);
-            Dom.addClass(li, this.listItemCssClass);
+            let li = createCheckItem('col__' + tf.id, this.tickAllText,
+                this.tickAllText);
+            addClass(li, this.listItemCssClass);
             ul.appendChild(li);
             li.check.checked = !this.tickToHide;
 
             Event.add(li.check, 'click', () => {
                 for (let h = 0; h < headerRow.cells.length; h++) {
-                    let itm = Dom.id('col_' + h + '_' + tf.id);
+                    let itm = elm('col_' + h + '_' + tf.id);
                     if (itm && li.check.checked !== itm.checked) {
                         itm.click();
                         itm.checked = li.check.checked;
@@ -288,11 +291,11 @@ export default class ColsVisibility extends Feature {
             let cell = headerRow.cells[i];
             let cellText = this.headersText && this.headersText[i] ?
                 this.headersText[i] : this._getHeaderText(cell);
-            let liElm = Dom.createCheckItem(
-                'col_' + i + '_' + tf.id, cellText, cellText);
-            Dom.addClass(liElm, this.listItemCssClass);
+            let liElm = createCheckItem('col_' + i + '_' + tf.id, cellText,
+                cellText);
+            addClass(liElm, this.listItemCssClass);
             if (!this.tickToHide) {
-                Dom.addClass(liElm, this.listSlcItemCssClass);
+                addClass(liElm, this.listSlcItemCssClass);
             }
             ul.appendChild(liElm);
             if (!this.tickToHide) {
@@ -307,11 +310,11 @@ export default class ColsVisibility extends Feature {
         }
 
         //separator
-        let p = Dom.create('p', ['align', 'center']);
+        let p = createElm('p', ['align', 'center']);
         let btn;
         //Close link
         if (!this.btnCloseHtml) {
-            btn = Dom.create('a', ['href', 'javascript:;']);
+            btn = createElm('a', ['href', 'javascript:;']);
             btn.className = this.btnCloseCssClass;
             btn.innerHTML = this.btnCloseText;
             Event.add(btn, 'click', (evt) => this.toggle(evt));
@@ -419,7 +422,7 @@ export default class ColsVisibility extends Feature {
             return;
         }
         if (this.manager && this.contEl) {
-            let itm = Dom.id('col_' + colIndex + '_' + this.tf.id);
+            let itm = elm('col_' + colIndex + '_' + this.tf.id);
             if (itm) {
                 itm.click();
             }
@@ -437,7 +440,7 @@ export default class ColsVisibility extends Feature {
             return;
         }
         if (this.manager && this.contEl) {
-            let itm = Dom.id('col_' + colIndex + '_' + this.tf.id);
+            let itm = elm('col_' + colIndex + '_' + this.tf.id);
             if (itm) {
                 itm.click();
             }
@@ -484,15 +487,15 @@ export default class ColsVisibility extends Feature {
         if (!this.initialized) {
             return;
         }
-        if (Dom.id(this.contElTgtId)) {
-            Dom.id(this.contElTgtId).innerHTML = '';
+        if (elm(this.contElTgtId)) {
+            elm(this.contElTgtId).innerHTML = '';
         } else {
             this.contEl.innerHTML = '';
-            Dom.remove(this.contEl);
+            removeElm(this.contEl);
             this.contEl = null;
         }
         this.btnEl.innerHTML = '';
-        Dom.remove(this.btnEl);
+        removeElm(this.btnEl);
         this.btnEl = null;
 
         this.emitter.off(['hide-column'],
@@ -514,7 +517,7 @@ export default class ColsVisibility extends Feature {
                 if (n.id && n.id.indexOf('popUp') !== -1) {
                     continue;
                 } else {
-                    return Dom.getText(n);
+                    return getText(n);
                 }
             }
             continue;
