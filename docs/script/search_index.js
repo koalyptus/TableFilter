@@ -4578,6 +4578,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#getvalidrowsnb",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getValidRowsNb",
+    "src/tablefilter.js~TableFilter#getValidRowsNb",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#groperator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-grOperator",
     "src/tablefilter.js~TableFilter#grOperator",
@@ -4875,12 +4881,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#nbhiddenrows",
     "class/src/tablefilter.js~TableFilter.html#instance-member-nbHiddenRows",
     "src/tablefilter.js~TableFilter#nbHiddenRows",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#nbvisiblerows",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-nbVisibleRows",
-    "src/tablefilter.js~TableFilter#nbVisibleRows",
     "member"
   ],
   [
