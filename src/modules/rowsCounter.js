@@ -101,7 +101,7 @@ export class RowsCounter extends Feature {
             if (p && p !== '') {
                 totTxt = p;
             } else {
-                totTxt = tf.nbFilterableRows - tf.nbHiddenRows;
+                totTxt = tf.getFilterableRowsNb() - tf.nbHiddenRows;
             }
         } else {
             var paging = tf.feature('paging');
