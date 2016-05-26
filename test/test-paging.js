@@ -117,7 +117,7 @@ test('Filter from non starting page', function() {
     tf.filter();
     deepEqual(tf.validRowsIndex.length,
         1, 'Expected valid rows after page change');
-    deepEqual(tf.nbVisibleRows,
+    deepEqual(tf.getValidRowsNb(),
         1, 'Expected visible rows after page change');
 });
 
@@ -185,7 +185,7 @@ test('Filter from non starting page', function() {
     tf.filter();
     deepEqual(tf.validRowsIndex.length,
         1, 'Expected valid rows after page change');
-    deepEqual(tf.nbVisibleRows,
+    deepEqual(tf.getValidRowsNb(),
         1, 'Expected visible rows after page change');
 });
 

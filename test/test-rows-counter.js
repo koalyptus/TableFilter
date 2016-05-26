@@ -79,11 +79,23 @@ test('RowsCounter component with paging', function() {
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
         rows_counter: true,
-        paging: true
+        paging: true,
+        paging_length: 3
     });
     tf.init();
     equal(tf.feature('rowsCounter').rowsCounterSpan.innerHTML,
-        '1-7 / 7', 'Counter value with paging');
+        '1-3 / 7', 'Counter value with paging');
+});
+test('Can calculate page on page change', function() {
+    //setup
+    var paging = tf.feature('paging');
+
+    //act
+    paging.setPage(2);
+
+    //assert
+    equal(tf.feature('rowsCounter').rowsCounterSpan.innerHTML,
+        '4-6 / 7', 'Counter value with paging');
 });
 
 module('Tear-down');

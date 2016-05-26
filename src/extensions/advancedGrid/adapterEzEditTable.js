@@ -328,7 +328,6 @@ export default class AdapterEzEditTable extends Feature {
                     tf.emitter.emit('rows-changed', tf, this);
                     //tf.feature('rowsCounter').refresh();
                 } else {
-                    tf.nbVisibleRows++;
                     tf.nbFilterableRows++;
                     tf.paging = false;
                     tf.feature('paging').destroy();
@@ -349,7 +348,6 @@ export default class AdapterEzEditTable extends Feature {
                         // tf.feature('rowsCounter').refresh();
                         tf.emitter.emit('rows-changed', tf, this);
                     } else {
-                        tf.nbVisibleRows--;
                         tf.nbFilterableRows--;
                         tf.paging = false;
                         tf.feature('paging').destroy();

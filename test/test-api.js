@@ -20,10 +20,10 @@ test('TableFilter object', function() {
     deepEqual(tf.id, 'demo', 'id check');
     deepEqual(tf.getFiltersRowIndex(), 0, 'Filters row index');
     deepEqual(tf.getHeadersRowIndex(), 1, 'Headers row index');
-    deepEqual(tf.getCellsNb(), 5, 'cells collection length');
-    deepEqual(tf.getRowsNb(), 7, 'rows collection length');
-    deepEqual(tf.getFilterableRowsNb(), 7, 'number of filterable rows');
-    deepEqual(tf.getFilterId(0), 'flt0_demo', 'filter DOM element id');
+    deepEqual(tf.getCellsNb(), 5, 'Cells collection length');
+    deepEqual(tf.getRowsNb(), 7, 'Rows collection length');
+    deepEqual(tf.getFilterableRowsNb(), 7, 'Number of filterable rows');
+    deepEqual(tf.getFilterId(0), 'flt0_demo', 'Filter DOM element id');
     deepEqual(tf.getStartRowIndex(), 2, 'Start of filterable rows');
     deepEqual(tf.getLastRowIndex(), 8, 'Last row index');
     deepEqual(
@@ -36,6 +36,7 @@ test('TableFilter object', function() {
         'Destination',
         'Column header text'
     );
+    deepEqual(tf.getValidRowsNb(), 0, 'Number of valid rows before filtering');
 });
 
 module('Public methods');
@@ -60,7 +61,7 @@ test('Filter table', function() {
         'Column 0 filter value after clearing filters');
     tf.setFilterValue(0, 'Syd');
     tf.filter();
-    deepEqual(tf.getValidRows().length, 4, 'Filtered rows number');
+    deepEqual(tf.getValidRowsNb(), 4, 'Filtered rows number');
 });
 
 test('Filter table with range', function() {
@@ -120,7 +121,7 @@ test('Activate filter for a specified column', function() {
 
 test('Clear filters', function() {
     tf.clearFilters();
-    deepEqual(tf.nbVisibleRows, 7, 'Filtered rows number');
+    deepEqual(tf.getValidRowsNb(), 7, 'Filtered rows number');
     deepEqual(tf.getFiltersValue(), ['', '', '', '', '']);
 });
 
@@ -389,7 +390,7 @@ test('Filter table', function() {
 
 test('Clear filters', function() {
     tf.clearFilters();
-    deepEqual(tf.nbVisibleRows, 7, 'Filtered rows number');
+    deepEqual(tf.getValidRowsNb(), 7, 'Filtered rows number');
     deepEqual(tf.getFiltersValue(), ['', '', '', '', '']);
 });
 

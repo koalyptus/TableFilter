@@ -145,6 +145,7 @@ export class CheckList extends Feature {
 
         let rows = tf.tbl.rows;
         let nbRows = tf.getRowsNb(true);
+        let caseSensitive = tf.caseSensitive;
         this.isCustom = tf.isCustomOptions(colIndex);
 
         let activeIdx;
@@ -189,9 +190,9 @@ export class CheckList extends Feature {
 
                     let cellData = tf.getCellData(cells[j]);
                     //Vary Peter's patch
-                    let cellString = matchCase(cellData, tf.matchCase);
+                    let cellString = matchCase(cellData, caseSensitive);
                     // checks if celldata is already in array
-                    if (!has(this.opts, cellString, tf.matchCase)) {
+                    if (!has(this.opts, cellString, caseSensitive)) {
                         this.opts.push(cellData);
                     }
                     let filteredCol = filteredDataCol[j];
@@ -199,8 +200,9 @@ export class CheckList extends Feature {
                         if (!filteredCol) {
                             filteredCol = tf.getFilteredDataCol(j);
                         }
-                        if (!has(filteredCol, cellString, tf.matchCase) &&
-                            !has(this.excludedOpts, cellString, tf.matchCase)) {
+                        if (!has(filteredCol, cellString, caseSensitive) &&
+                            !has(this.excludedOpts, cellString,
+                                caseSensitive)) {
                             this.excludedOpts.push(cellData);
                         }
                     }
@@ -216,7 +218,7 @@ export class CheckList extends Feature {
         }
 
         if (tf.sortSlc && !this.isCustom) {
-            if (!tf.matchCase) {
+            if (!caseSensitive) {
                 this.opts.sort(ignoreCase);
                 if (this.excludedOpts) {
                     this.excludedOpts.sort(ignoreCase);
@@ -287,8 +289,8 @@ export class CheckList extends Feature {
             li.className = this.checkListItemCssClass;
 
             if (tf.linkedFilters && tf.disableExcludedOptions &&
-                has(this.excludedOpts, matchCase(val, tf.matchCase),
-                    tf.matchCase)) {
+                has(this.excludedOpts, matchCase(val, tf.caseSensitive),
+                    tf.caseSensitive)) {
                 addClass(li, this.checkListItemDisabledCssClass);
                 li.check.disabled = true;
                 li.disabled = true;
