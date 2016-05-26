@@ -69,7 +69,7 @@ export class NoResults extends Feature {
     }
 
     toggle() {
-        if (this.tf.nbVisibleRows > 0) {
+        if (this.tf.getValidRowsNb() > 0) {
             this.hide();
         } else {
             this.show();

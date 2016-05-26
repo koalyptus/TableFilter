@@ -54,7 +54,7 @@ export class TableFilter {
         this.refRow = null;
         this.headersRow = null;
         this.cfg = {};
-        this.nbFilterableRows = null;
+        this.nbFilterableRows = 0;
         this.nbCells = null;
         this._hasGrid = false;
 
@@ -304,7 +304,6 @@ export class TableFilter {
         /*** paging ***/
         //enables/disables table paging
         this.paging = Boolean(f.paging);
-        this.nbVisibleRows = 0; //nb visible rows
         this.nbHiddenRows = 0; //nb hidden rows
 
         /*** autofilter on typing ***/
@@ -454,7 +453,6 @@ export class TableFilter {
             let fltrow = this._insertFiltersRow();
 
             this.nbFilterableRows = this.getRowsNb();
-            this.nbVisibleRows = this.nbFilterableRows;
 
             // Generate filters
             for (let i = 0; i < n; i++) {
@@ -702,7 +700,6 @@ export class TableFilter {
         }
         this.refRow = this.refRow > 0 ? this.refRow - 1 : 0;
         this.nbFilterableRows = this.getRowsNb();
-        this.nbVisibleRows = this.nbFilterableRows;
     }
 
     /**
@@ -1142,7 +1139,7 @@ export class TableFilter {
 
         let row = this.tbl.rows,
             nbRows = this.getRowsNb(true),
-            hiddenrows = 0;
+            hiddenRows = 0;
 
         this.validRowsIndex = [];
         // search args re-init
@@ -1463,7 +1460,7 @@ export class TableFilter {
 
             if (!isRowValid) {
                 this.validateRow(k, false);
-                hiddenrows++;
+                hiddenRows++;
             } else {
                 this.validateRow(k, true);
             }
@@ -1472,8 +1469,7 @@ export class TableFilter {
                 this.validRowsIndex.length, isRowValid);
         }// for k
 
-        this.nbVisibleRows = this.validRowsIndex.length;
-        this.nbHiddenRows = hiddenrows;
+        this.nbHiddenRows = hiddenRows;
 
         //invokes onafterfilter callback
         if (this.onAfterFilter) {
@@ -2299,6 +2295,15 @@ export class TableFilter {
      */
     getFilterableRowsNb() {
         return this.getRowsNb(false);
+    }
+
+    /**
+     * Return the total number of valid rows
+     * @param {Boolean} [reCalc=false] Forces calculation of filtered rows
+     * @returns {Number}
+     */
+    getValidRowsNb(reCalc = false) {
+        return this.getValidRows(reCalc).length;
     }
 
     /**

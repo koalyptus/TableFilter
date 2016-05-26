@@ -419,7 +419,7 @@ export class Paging extends Feature {
         }
 
         //this loop shows valid rows of current page
-        for (var h = 0, len = tf.validRowsIndex.length; h < len; h++) {
+        for (var h = 0, len = tf.getValidRowsNb(true); h < len; h++) {
             var validRowIdx = tf.validRowsIndex[h];
             var r = rows[validRowIdx];
             var isRowValid = r.getAttribute('validRow');
@@ -435,8 +435,6 @@ export class Paging extends Feature {
             }
             this.emitter.emit('row-paged', tf, validRowIdx, h, rowDisplayed);
         }
-
-        tf.nbVisibleRows = tf.validRowsIndex.length;
 
         // broadcast grouping by page
         this.emitter.emit('grouped-by-page', tf, this);

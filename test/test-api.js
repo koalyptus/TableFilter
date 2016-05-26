@@ -120,7 +120,7 @@ test('Activate filter for a specified column', function() {
 
 test('Clear filters', function() {
     tf.clearFilters();
-    deepEqual(tf.nbVisibleRows, 7, 'Filtered rows number');
+    deepEqual(tf.getValidRowsNb(), 7, 'Filtered rows number');
     deepEqual(tf.getFiltersValue(), ['', '', '', '', '']);
 });
 
@@ -389,7 +389,7 @@ test('Filter table', function() {
 
 test('Clear filters', function() {
     tf.clearFilters();
-    deepEqual(tf.nbVisibleRows, 7, 'Filtered rows number');
+    deepEqual(tf.getValidRowsNb(), 7, 'Filtered rows number');
     deepEqual(tf.getFiltersValue(), ['', '', '', '', '']);
 });
 

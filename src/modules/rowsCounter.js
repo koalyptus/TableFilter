@@ -78,7 +78,7 @@ export class RowsCounter extends Feature {
 
         // subscribe to events
         this.emitter.on(['after-filtering', 'grouped-by-page'],
-            () => this.refresh(tf.nbVisibleRows));
+            () => this.refresh(tf.getValidRowsNb()));
         this.emitter.on(['rows-changed'], () => this.refresh());
 
         this.initialized = true;
@@ -107,15 +107,15 @@ export class RowsCounter extends Feature {
             var paging = tf.feature('paging');
             if (paging) {
                 //paging start row
-                var paging_start_row = parseInt(paging.startPagingRow, 10) +
-                    ((tf.nbVisibleRows > 0) ? 1 : 0);
-                var paging_end_row =
-                    (paging_start_row + paging.pagingLength) - 1 <=
-                    tf.nbVisibleRows ?
-                        paging_start_row + paging.pagingLength - 1 :
-                        tf.nbVisibleRows;
-                totTxt = paging_start_row + this.fromToTextSeparator +
-                    paging_end_row + this.overText + tf.nbVisibleRows;
+                var pagingStartRow = parseInt(paging.startPagingRow, 10) +
+                    ((tf.getValidRowsNb() > 0) ? 1 : 0);
+                var pagingEndRow =
+                    (pagingStartRow + paging.pagingLength) - 1 <=
+                    tf.getValidRowsNb() ?
+                        pagingStartRow + paging.pagingLength - 1 :
+                        tf.getValidRowsNb();
+                totTxt = pagingStartRow + this.fromToTextSeparator +
+                    pagingEndRow + this.overText + tf.getValidRowsNb();
             }
         }
 
@@ -141,7 +141,7 @@ export class RowsCounter extends Feature {
 
         // unsubscribe to events
         this.emitter.off(['after-filtering', 'grouped-by-page'],
-            () => this.refresh(tf.nbVisibleRows));
+            () => this.refresh(tf.getValidRowsNb()));
         this.emitter.off(['rows-changed'], () => this.refresh());
 
         this.initialized = false;

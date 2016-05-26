@@ -38,7 +38,7 @@ export const rgxEsc = text => {
  * @param {String} text
  * @return {String} string
  */
-export const matchCase = (text, caseSensitive) => {
+export const matchCase = (text, caseSensitive = false) => {
     if (!caseSensitive) {
         return text.toLowerCase();
     }
