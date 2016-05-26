@@ -183,10 +183,10 @@ export class Dropdown extends Feature {
                                     tf.validRowsIndex.indexOf(k) !== -1)))))) {
                     let cellData = tf.getCellData(cell[j]),
                         //Vary Peter's patch
-                        cellString = matchCase(cellData, tf.matchCase);
+                        cellString = matchCase(cellData, tf.caseSensitive);
 
                     // checks if celldata is already in array
-                    if (!has(this.opts, cellString, tf.matchCase)) {
+                    if (!has(this.opts, cellString, tf.caseSensitive)) {
                         this.opts.push(cellData);
                     }
 
@@ -195,8 +195,8 @@ export class Dropdown extends Feature {
                         if (!filteredCol) {
                             filteredCol = tf.getFilteredDataCol(j);
                         }
-                        if (!has(filteredCol, cellString, tf.matchCase) &&
-                            !has(excludedOpts, cellString, tf.matchCase)) {
+                        if (!has(filteredCol, cellString, tf.caseSensitive) &&
+                            !has(excludedOpts, cellString, tf.caseSensitive)) {
                             excludedOpts.push(cellData);
                         }
                     }
@@ -212,7 +212,7 @@ export class Dropdown extends Feature {
         }
 
         if (tf.sortSlc && !this.isCustom) {
-            if (!tf.matchCase) {
+            if (!tf.caseSensitive) {
                 this.opts.sort(ignoreCase);
                 if (excludedOpts) {
                     excludedOpts.sort(ignoreCase);
@@ -282,7 +282,8 @@ export class Dropdown extends Feature {
             let lbl = this.isCustom ? this.optsTxt[y] : val; //option text
             let isDisabled = false;
             if (isLinked && tf.disableExcludedOptions &&
-                has(excludedOpts, matchCase(val, tf.matchCase), tf.matchCase)) {
+                has(excludedOpts, matchCase(val, tf.caseSensitive),
+                    tf.caseSensitive)) {
                 isDisabled = true;
             }
 
