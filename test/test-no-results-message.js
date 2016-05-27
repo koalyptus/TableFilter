@@ -78,7 +78,7 @@ test('No Results Feature', function() {
 
     test('can destroy TableFilter DOM elements', function() {
         tf.destroy();
-        deepEqual(tf.hasGrid(), false, 'Filters removed');
+        deepEqual(tf.isInitialized(), false, 'Filters removed');
         tf = null;
     });
 });
@@ -122,7 +122,7 @@ test('External container sanity checks', function() {
 
     test('can destroy TableFilter DOM elements', function() {
         tfCustom.destroy();
-        deepEqual(tfCustom.hasGrid(), false, 'Filters removed');
+        deepEqual(tfCustom.isInitialized(), false, 'Filters removed');
         tfCustom = null;
     });
 });
@@ -166,7 +166,7 @@ test('Sanity checks', function() {
 
     test('can destroy TableFilter DOM elements', function() {
         tfGl.destroy();
-        deepEqual(tfGl.hasGrid(), false, 'Filters removed');
+        deepEqual(tfGl.isInitialized(), false, 'Filters removed');
         tfGl = null;
     });
 });
@@ -216,7 +216,7 @@ test('External container sanity checks', function() {
 
     test('can destroy TableFilter DOM elements', function() {
         tfCall.destroy();
-        deepEqual(tfCall.hasGrid(), false, 'Filters removed');
+        deepEqual(tfCall.isInitialized(), false, 'Filters removed');
         tfCall = null;
     });
 });

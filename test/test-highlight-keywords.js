@@ -39,7 +39,7 @@ test('can destroy TableFilter DOM elements and clean highlighted words',
         tf.setFilterValue(1, 'Perth');
         tf.filter();
         tf.destroy();
-        deepEqual(tf.hasGrid(), false, 'Filters removed');
+        deepEqual(tf.isInitialized(), false, 'Filters removed');
         deepEqual(tf.tbl.querySelectorAll('.keyword').length, 0,
             'Number of applied CSS classes');
     }

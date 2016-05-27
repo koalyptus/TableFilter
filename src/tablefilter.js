@@ -56,7 +56,7 @@ export class TableFilter {
         this.cfg = {};
         this.nbFilterableRows = 0;
         this.nbCells = null;
-        this._hasGrid = false;
+        // this._hasGrid = false;
 
         // TODO: use for-of
         args.forEach((arg) => {
@@ -389,7 +389,7 @@ export class TableFilter {
      * Initialise features and layout
      */
     init() {
-        if (this._hasGrid) {
+        if (this.initialized/*_hasGrid*/) {
             return;
         }
 
@@ -547,7 +547,7 @@ export class TableFilter {
             Mod.noResults.init();
         }
 
-        this._hasGrid = true;
+        // this._hasGrid = true;
 
         //TF css class is added to table
         if (!this.gridLayout) {
@@ -923,7 +923,7 @@ export class TableFilter {
      * Destroy filter grid
      */
     destroy() {
-        if (!this._hasGrid) {
+        if (!this.initialized/*_hasGrid*/) {
             return;
         }
         let rows = this.tbl.rows,
@@ -981,7 +981,7 @@ export class TableFilter {
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
         this.fltIds = [];
-        this._hasGrid = false;
+        // this._hasGrid = false;
         this.initialized = false;
     }
 
@@ -1128,7 +1128,7 @@ export class TableFilter {
      * hidden when all the search terms are not found in inspected row.
      */
     filter() {
-        if (!this.fltGrid || !this._hasGrid) {
+        if (!this.fltGrid || !this.initialized/*_hasGrid*/) {
             return;
         }
         //invoke onbefore callback
@@ -1827,7 +1827,7 @@ export class TableFilter {
      * Validate all filterable rows
      */
     validateAllRows() {
-        if (!this._hasGrid) {
+        if (!this.initialized/*_hasGrid*/) {
             return;
         }
         this.validRowsIndex = [];
@@ -2160,8 +2160,8 @@ export class TableFilter {
      * Check if table has filters grid
      * @return {Boolean}
      */
-    hasGrid() {
-        return this._hasGrid;
+    isInitialized() {
+        return this.initialized/*_hasGrid*/;
     }
 
     /**

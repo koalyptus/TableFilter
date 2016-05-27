@@ -206,7 +206,7 @@ test('Get table data', function() {
 
 test('Destroy', function() {
     tf.destroy();
-    deepEqual(tf.hasGrid(), false, 'Filters removed');
+    deepEqual(tf.isInitialized(), false, 'Filters removed');
     tf = null;
 });
 
@@ -461,7 +461,7 @@ test('Get table data', function() {
 
 test('Destroy', function() {
     tf.destroy();
-    deepEqual(tf.hasGrid(), false, 'Filters removed');
+    deepEqual(tf.isInitialized(), false, 'Filters removed');
     tf = null;
 });
 
@@ -539,7 +539,7 @@ function colsVisibilityTests() { // issue 94
 
     test('Destroy', function() {
         tf1.destroy();
-        deepEqual(tf1.hasGrid(), false, 'Filters removed');
+        deepEqual(tf1.isInitialized(), false, 'Filters removed');
         tf1 = null;
     });
 }

@@ -455,7 +455,7 @@ export class Paging extends Feature {
      */
     setPage(cmd) {
         var tf = this.tf;
-        if (!tf.hasGrid() || !this.isEnabled()) {
+        if (!tf.isInitialized() || !this.isEnabled()) {
             return;
         }
         var btnEvt = this.evt,
@@ -538,7 +538,8 @@ export class Paging extends Feature {
      */
     removeResultsPerPage() {
         var tf = this.tf;
-        if (!tf.hasGrid() || !this.resultsPerPageSlc || !this.resultsPerPage) {
+        if (!tf.isInitialized() || !this.resultsPerPageSlc ||
+            !this.resultsPerPage) {
             return;
         }
         var slcR = this.resultsPerPageSlc,

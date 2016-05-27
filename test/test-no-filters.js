@@ -51,7 +51,7 @@
     module('Tear-down');
     test('TableFilter removed', function() {
         tf.destroy();
-        deepEqual(tf.hasGrid(), false, 'Filters removed');
+        deepEqual(tf.isInitialized(), false, 'Filters removed');
     });
 
 })(window, TableFilter);
