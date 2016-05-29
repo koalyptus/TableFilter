@@ -4638,12 +4638,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#hasgrid",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-hasGrid",
-    "src/tablefilter.js~TableFilter#hasGrid",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#hasthemes",
     "class/src/tablefilter.js~TableFilter.html#instance-member-hasThemes",
     "src/tablefilter.js~TableFilter#hasThemes",
@@ -4737,6 +4731,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#isimported",
     "class/src/tablefilter.js~TableFilter.html#instance-method-isImported",
     "src/tablefilter.js~TableFilter#isImported",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#isinitialized",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-isInitialized",
+    "src/tablefilter.js~TableFilter#isInitialized",
     "method"
   ],
   [
