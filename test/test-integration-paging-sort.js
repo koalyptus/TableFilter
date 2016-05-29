@@ -55,5 +55,5 @@ test('Can change page', function() {
 module('Tear-down');
 test('can destroy TableFilter DOM elements', function() {
     tf.destroy();
-    deepEqual(tf.hasGrid(), false, 'Filters removed');
+    deepEqual(tf.isInitialized(), false, 'Filters removed');
 });

@@ -56,7 +56,6 @@ export class TableFilter {
         this.cfg = {};
         this.nbFilterableRows = 0;
         this.nbCells = null;
-        this._hasGrid = false;
 
         // TODO: use for-of
         args.forEach((arg) => {
@@ -271,15 +270,12 @@ export class TableFilter {
         this.curExp = f.cur_exp || '^[¥£€$]';
         this.separator = f.separator || ',';
 
-        /*** rows counter ***/
         //show/hides rows counter
         this.rowsCounter = Boolean(f.rows_counter);
 
-        /*** status bar ***/
         //show/hides status bar
         this.statusBar = Boolean(f.status_bar);
 
-        /*** loader ***/
         //enables/disables loader/spinner indicator
         this.loader = Boolean(f.loader);
 
@@ -324,7 +320,7 @@ export class TableFilter {
         this.noResults = isObj(f.no_results_message) ||
             Boolean(f.no_results_message);
 
-        // stateful
+        // state persisstence
         this.state = isObj(f.state) || Boolean(f.state);
 
         /*** data types ***/
@@ -389,7 +385,7 @@ export class TableFilter {
      * Initialise features and layout
      */
     init() {
-        if (this._hasGrid) {
+        if (this.initialized) {
             return;
         }
 
@@ -546,8 +542,6 @@ export class TableFilter {
             }
             Mod.noResults.init();
         }
-
-        this._hasGrid = true;
 
         //TF css class is added to table
         if (!this.gridLayout) {
@@ -923,7 +917,7 @@ export class TableFilter {
      * Destroy filter grid
      */
     destroy() {
-        if (!this._hasGrid) {
+        if (!this.initialized) {
             return;
         }
         let rows = this.tbl.rows,
@@ -981,7 +975,6 @@ export class TableFilter {
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
         this.fltIds = [];
-        this._hasGrid = false;
         this.initialized = false;
     }
 
@@ -1128,7 +1121,7 @@ export class TableFilter {
      * hidden when all the search terms are not found in inspected row.
      */
     filter() {
-        if (!this.fltGrid || !this._hasGrid) {
+        if (!this.fltGrid || !this.initialized) {
             return;
         }
         //invoke onbefore callback
@@ -1827,7 +1820,7 @@ export class TableFilter {
      * Validate all filterable rows
      */
     validateAllRows() {
-        if (!this._hasGrid) {
+        if (!this.initialized) {
             return;
         }
         this.validRowsIndex = [];
@@ -2160,8 +2153,8 @@ export class TableFilter {
      * Check if table has filters grid
      * @return {Boolean}
      */
-    hasGrid() {
-        return this._hasGrid;
+    isInitialized() {
+        return this.initialized;
     }
 
     /**

@@ -58,7 +58,7 @@ test('Filters are populated after activation', function() {
 
 test('TableFilter re-initialised with grid layout', function() {
     tf.destroy();
-    deepEqual(tf.hasGrid(), false, 'Filters removed');
+    deepEqual(tf.isInitialized(), false, 'Filters removed');
     tf = null;
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
@@ -119,6 +119,6 @@ test('Filters can filter table', function() {
 
 test('TableFilter removed', function() {
     tf.destroy();
-    deepEqual(tf.hasGrid(), false, 'Filters removed');
+    deepEqual(tf.isInitialized(), false, 'Filters removed');
     tf = null;
 });

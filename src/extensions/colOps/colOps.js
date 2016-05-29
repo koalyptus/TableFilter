@@ -51,7 +51,7 @@ export default class ColOps extends Feature {
      */
     calc() {
         var tf = this.tf;
-        if (!tf.hasGrid()) {
+        if (!tf.isInitialized()) {
             return;
         }
 

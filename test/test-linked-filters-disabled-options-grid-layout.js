@@ -66,7 +66,7 @@
         test('Tear down', function() {
             tf.destroy();
 
-            deepEqual(tf.hasGrid(), false, 'Filters removed');
+            deepEqual(tf.isInitialized(), false, 'Filters removed');
         });
         tf.emitter.off(['after-populating-filter'], checkFilters);
     }
