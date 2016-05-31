@@ -1,6 +1,6 @@
-(function(win, TableFilter){
+(function (win, TableFilter) {
 
-    var id = function (id){ return document.getElementById(id); };
+    var id = function (id) { return document.getElementById(id); };
 
     var tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
@@ -15,7 +15,7 @@
     triggerEvents();
 
     module('Sanity checks');
-    test('Linked filters feature', function() {
+    test('Linked filters feature', function () {
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instantiated');
         deepEqual(tf.linkedFilters, true, 'Linked filters enabled');
     });
@@ -35,11 +35,11 @@
 
     function checkFilters(tf, colIndex, flt) {
         module('behaviour');
-        test('Can filter', function() {
-            if(colIndex === 0){
+        test('Can filter', function () {
+            if (colIndex === 0) {
                 deepEqual(flt.options.length, 2, 'Filter 0 options number');
             }
-            if(colIndex === 1){
+            if (colIndex === 1) {
                 deepEqual(flt.getElementsByTagName('li').length, 2,
                     'Filter 1 options number');
                 testClearFilters();
@@ -49,7 +49,7 @@
 
     // Tests for https://github.com/koalyptus/TableFilter/pull/42 issue
     function testClearFilters() {
-        test('Check clear filters functionality', function() {
+        test('Check clear filters functionality', function () {
             tf.clearFilters();
 
             deepEqual(tf.getFilterableRowsNb(), 7,
@@ -60,7 +60,7 @@
     }
 
     function testDestroy() {
-        test('Tear down', function() {
+        test('Tear down', function () {
             tf.destroy();
 
             deepEqual(tf.isInitialized(), false, 'Filters removed');

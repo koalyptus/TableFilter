@@ -109,12 +109,8 @@ export class TableFilter {
 
         //stores filters ids
         this.fltIds = [];
-        //stores filters DOM elements
-        this.fltElms = [];
         //stores valid rows indexes (rows visible upon filtering)
         this.validRowsIndex = [];
-        //stores filters row element
-        this.fltGridEl = null;
         //container div for paging elements, reset btn etc.
         this.infDiv = null;
         //div for rows counter
@@ -920,9 +916,9 @@ export class TableFilter {
         if (!this.initialized) {
             return;
         }
-        let rows = this.tbl.rows,
-            Mod = this.Mod,
-            emitter = this.emitter;
+
+        let Mod = this.Mod;
+        let emitter = this.emitter;
 
         if (this.isExternalFlt && !this.popupFilters) {
             this.removeExternalFlts();
@@ -943,7 +939,6 @@ export class TableFilter {
         this.validateAllRows();
 
         if (this.fltGrid && !this.gridLayout) {
-            this.fltGridEl = rows[this.filtersRowIndex];
             this.tbl.deleteRow(this.filtersRowIndex);
         }
 
