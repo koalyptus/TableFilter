@@ -1,16 +1,20 @@
 import {Feature} from '../feature';
 import {addClass, removeClass} from '../dom';
 
+/**
+ * Rows with alternating background color for improved readability
+ */
 export class AlternateRows extends Feature {
 
     /**
-     * Alternating rows color
+     * Creates an instance of AlternateRows.
+     *
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'alternateRows');
 
-        var config = this.config;
+        let config = this.config;
         //defines css class for even rows
         this.evenCss = config.even_row_css_class || 'even';
         //defines css class for odd rows
@@ -36,24 +40,21 @@ export class AlternateRows extends Feature {
         this.initialized = true;
     }
 
+    /**
+     * Apply background to all valid rows
+     */
     processAll() {
         if (!this.isEnabled()) {
             return;
         }
-        var tf = this.tf;
-        var validRowsIndex = tf.getValidRows(true);
-        var noValidRowsIndex = validRowsIndex.length === 0;
-        //1st index
-        var beginIndex = noValidRowsIndex ? tf.refRow : 0;
-        // nb indexes
-        var indexLen = noValidRowsIndex ?
-            tf.nbFilterableRows + beginIndex :
-            validRowsIndex.length;
-        var idx = 0;
+        let tf = this.tf;
+        let validRowsIndex = tf.getValidRows(true);
+        let indexLen = validRowsIndex.length;
+        let idx = 0;
 
         //alternates bg color
-        for (var j = beginIndex; j < indexLen; j++) {
-            var rowIdx = noValidRowsIndex ? j : validRowsIndex[j];
+        for (let j = 0; j < indexLen; j++) {
+            let rowIdx = validRowsIndex[j];
             this.setRowBg(rowIdx, idx);
             idx++;
         }
@@ -83,8 +84,8 @@ export class AlternateRows extends Feature {
         if (!this.isEnabled() || isNaN(rowIdx)) {
             return;
         }
-        var rows = this.tf.tbl.rows;
-        var i = isNaN(idx) ? rowIdx : idx;
+        let rows = this.tf.tbl.rows;
+        let i = isNaN(idx) ? rowIdx : idx;
         this.removeRowBg(rowIdx);
 
         addClass(rows[rowIdx], (i % 2) ? this.evenCss : this.oddCss);
@@ -98,7 +99,7 @@ export class AlternateRows extends Feature {
         if (isNaN(idx)) {
             return;
         }
-        var rows = this.tf.tbl.rows;
+        let rows = this.tf.tbl.rows;
         removeClass(rows[idx], this.oddCss);
         removeClass(rows[idx], this.evenCss);
     }
@@ -111,7 +112,7 @@ export class AlternateRows extends Feature {
             return;
         }
         let nbRows = this.tf.getRowsNb(true);
-        for (var i = 0; i < nbRows; i++) {
+        for (let i = 0; i < nbRows; i++) {
             this.removeRowBg(i);
         }
 

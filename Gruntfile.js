@@ -83,21 +83,21 @@ module.exports = function (grunt) {
                         {
                             pattern: /{NAME}/ig,
                             replacement: pkg.name
-                        },{
+                        }, {
                             pattern: /{VERSION}/ig,
                             replacement: pkg.version
-                        },{
+                        }, {
                             pattern: /{EZEDITTABLE_LINK}/ig,
                             replacement: '<a href="http://edittable.free.fr/' +
-                                'zip.php?f=ezEditTable.zip&amp;p=1"' +
-                                'target="_blank" title="ezEditTable is a ' +
-                                'javascript code aimed at enhancing regular ' +
-                                'HTML tables by adding features such as ' +
-                                'inline editing components, advanced ' +
-                                'selection and keyboard navigation ' +
-                                '- Developed by '+ pkg.author.name +'">' +
-                                'ezEditTable</a>'
-                        },{
+                            'zip.php?f=ezEditTable.zip&amp;p=1"' +
+                            'target="_blank" title="ezEditTable is a ' +
+                            'javascript code aimed at enhancing regular ' +
+                            'HTML tables by adding features such as ' +
+                            'inline editing components, advanced ' +
+                            'selection and keyboard navigation ' +
+                            '- Developed by ' + pkg.author.name + '">' +
+                            'ezEditTable</a>'
+                        }, {
                             pattern: /<!-- @import (.*?) -->/ig,
                             replacement: function (match, p1) {
                                 return grunt.file.read('static/' + p1);
@@ -178,34 +178,34 @@ module.exports = function (grunt) {
             compile: {
                 options: {
                     banner: '/** \n' +
-                        ' *\t '+ pkg.name +' v'+ pkg.version +
-                        ' by '+ pkg.author.name +' \n' +
-                        ' *\t build date: '+ new Date().toISOString() +' \n' +
-                        ' *\t MIT License  \n' +
-                        ' */ \n'
+                    ' *\t ' + pkg.name + ' v' + pkg.version +
+                    ' by ' + pkg.author.name + ' \n' +
+                    ' *\t build date: ' + new Date().toISOString() + ' \n' +
+                    ' *\t MIT License  \n' +
+                    ' */ \n'
                 },
                 files: [
                     {
                         src: ['static/style/*.styl'],
                         dest: 'dist/tablefilter/style/tablefilter.css'
-                    },{
+                    }, {
                         src: ['static/style/extensions/colsVisibility.styl'],
                         dest: 'dist/tablefilter/style/colsVisibility.css'
-                    },{
+                    }, {
                         src: ['static/style/extensions/filtersVisibility.styl'],
                         dest: 'dist/tablefilter/style/filtersVisibility.css'
-                    },{
+                    }, {
                         src: ['static/style/themes/default/*.styl'],
                         dest:
-                            'dist/tablefilter/style/themes/default/default.css'
-                    },{
+                        'dist/tablefilter/style/themes/default/default.css'
+                    }, {
                         src: ['static/style/themes/mytheme/*.styl'],
                         dest:
-                            'dist/tablefilter/style/themes/mytheme/mytheme.css'
-                    },{
+                        'dist/tablefilter/style/themes/mytheme/mytheme.css'
+                    }, {
                         src: ['static/style/themes/skyblue/*.styl'],
                         dest:
-                            'dist/tablefilter/style/themes/skyblue/skyblue.css'
+                        'dist/tablefilter/style/themes/skyblue/skyblue.css'
                     }
                 ]
             }
@@ -248,7 +248,7 @@ module.exports = function (grunt) {
                     base: 'dist',
                     repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
                     message: 'publish TableFilter to gh-pages (auto)' +
-                                getDeployMessage(),
+                    getDeployMessage(),
                     silent: true
                 },
                 src: ['**/*']
@@ -261,7 +261,7 @@ module.exports = function (grunt) {
                     base: './',
                     repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
                     message: 'publish README to gh-pages (auto)' +
-                                getDeployMessage(),
+                    getDeployMessage(),
                     silent: true
                 },
                 src: ['README.md', 'LICENSE']
@@ -274,7 +274,7 @@ module.exports = function (grunt) {
                     base: 'docs',
                     repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
                     message: 'publish Docs to gh-pages (auto)' +
-                                getDeployMessage(),
+                    getDeployMessage(),
                     silent: true
                 },
                 src: ['**/*']
@@ -335,14 +335,14 @@ module.exports = function (grunt) {
     // Usage example: grunt test-only:test.html,test-help.html
     grunt.registerTask('test-only',
         'A task that runs only specified tests.',
-        function(tests) {
-            if(!tests) {
+        function (tests) {
+            if (!tests) {
                 return;
             }
             tests = tests.split(',');
             var res = [];
 
-            tests.forEach(function(itm) {
+            tests.forEach(function (itm) {
                 var filePath = path.resolve(testDir, itm);
                 var parts = filePath.split(path.sep);
                 res.push(buildTestUrl(testHost, testDir, parts));
@@ -356,9 +356,9 @@ module.exports = function (grunt) {
 
     function isTestFile(pth) {
         var allowedExts = ['.html', '.htm'];
-        for(var i=0, len=allowedExts.length; i<len; i++){
+        for (var i = 0, len = allowedExts.length; i < len; i++) {
             var ext = allowedExts[i];
-            if(pth.indexOf(ext) !== -1){
+            if (pth.indexOf(ext) !== -1) {
                 return true;
             }
         }
@@ -375,17 +375,17 @@ module.exports = function (grunt) {
     // Returns the list of test files from the test folder for qunit task
     function getTestFiles(testDir, host) {
 
-        var getFiles = function(dir, host) {
+        var getFiles = function (dir, host) {
             var res = [];
             var items = fs.readdirSync(dir);
 
-            items.forEach(function(itm){
+            items.forEach(function (itm) {
                 var fileOrDir = path.resolve(dir, itm);
-                if(isTestFile(fileOrDir)) {
+                if (isTestFile(fileOrDir)) {
                     var parts = fileOrDir.split(path.sep);
                     res.push(buildTestUrl(host, testDir, parts));
                 } else {
-                    if(fs.lstatSync(fileOrDir).isDirectory()) {
+                    if (fs.lstatSync(fileOrDir).isDirectory()) {
                         res = res.concat(getFiles(fileOrDir, host));
                     }
                 }
@@ -397,7 +397,7 @@ module.exports = function (grunt) {
         return getFiles(testDir, host);
     }
 
-    grunt.registerTask('check-deploy', function() {
+    grunt.registerTask('check-deploy', function () {
         var env = process.env;
         // need this
         this.requires(['build', 'esdoc']);

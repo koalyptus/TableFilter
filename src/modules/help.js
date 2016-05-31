@@ -4,16 +4,16 @@ import Event from '../event';
 import {NONE} from '../const';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
-                    '4.-Filter-operators';
+    '4.-Filter-operators';
 const WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';
 
-export class Help extends Feature{
+export class Help extends Feature {
 
     /**
      * Help UI component
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, 'help');
 
         var f = this.config;
@@ -31,7 +31,7 @@ export class Help extends Feature{
             'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
             '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
             '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
-            '<b>rgx:</b><br/><a href="'+ WIKI_URL +'" target="_blank">' +
+            '<b>rgx:</b><br/><a href="' + WIKI_URL + '" target="_blank">' +
             'Learn more</a><hr/>';
         //defines help innerHtml
         this.instrHtml = f.help_instructions_html || null;
@@ -46,12 +46,12 @@ export class Help extends Feature{
             'helpCont';
         //help button element
         this.btn = null;
-         //help content div
+        //help content div
         this.cont = null;
         this.defaultHtml = '<div class="helpFooter"><h4>TableFilter ' +
-            'v'+ tf.version +'</h4>' +
-            '<a href="'+ WEBSITE_URL +'" target="_blank">'+ WEBSITE_URL +'</a>'+
-            '<br/><span>&copy;2015-'+ tf.year +' {AUTHOR}</span>' +
+            'v' + tf.version + '</h4>' + '<a href="' + WEBSITE_URL +
+            '" target="_blank">' + WEBSITE_URL + '</a>' +
+            '<br/><span>&copy;2015-' + tf.year + ' {AUTHOR}</span>' +
             '<div align="center" style="margin-top:8px;">' +
             '<a href="javascript:void(0);" class="close">Close</a></div></div>';
 
@@ -60,21 +60,26 @@ export class Help extends Feature{
         //id prefix for help elements
         this.prfxHelpDiv = 'helpDiv_';
 
-        this.emitter.on(['init-help'], ()=> this.init());
+        this.emitter.on(['init-help'], () => this.init());
     }
 
-    init(){
-        if(this.initialized){
+    /**
+     * Initialise Help instance
+     *
+     * @returns (description)
+     */
+    init() {
+        if (this.initialized) {
             return;
         }
 
         var tf = this.tf;
 
-        var helpspan = createElm('span', ['id', this.prfxHelpSpan+tf.id]);
-        var helpdiv = createElm('div', ['id', this.prfxHelpDiv+tf.id]);
+        var helpspan = createElm('span', ['id', this.prfxHelpSpan + tf.id]);
+        var helpdiv = createElm('div', ['id', this.prfxHelpDiv + tf.id]);
 
         //help button is added to defined element
-        if(!this.tgtId){
+        if (!this.tgtId) {
             tf.setToolbar();
         }
         var targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
@@ -82,7 +87,7 @@ export class Help extends Feature{
 
         var divContainer = !this.contTgtId ? helpspan : elm(this.contTgtId);
 
-        if(!this.btnHtml){
+        if (!this.btnHtml) {
             divContainer.appendChild(helpdiv);
             var helplink = createElm('a', ['href', 'javascript:void(0);']);
             helplink.className = this.btnCssClass;
@@ -96,16 +101,16 @@ export class Help extends Feature{
             divContainer.appendChild(helpdiv);
         }
 
-        if(!this.instrHtml){
+        if (!this.instrHtml) {
             helpdiv.innerHTML = this.instrText;
             helpdiv.className = this.contCssClass;
             Event.add(helpdiv, 'dblclick', () => this.toggle());
         } else {
-            if(this.contTgtId){
+            if (this.contTgtId) {
                 divContainer.appendChild(helpdiv);
             }
             helpdiv.innerHTML = this.instrHtml;
-            if(!this.contTgtId){
+            if (!this.contTgtId) {
                 helpdiv.className = this.contCssClass;
                 Event.add(helpdiv, 'dblclick', () => this.toggle());
             }
@@ -121,14 +126,14 @@ export class Help extends Feature{
     /**
      * Toggle help pop-up
      */
-    toggle(){
+    toggle() {
         // check only if explicitily set to false as in this case undefined
         // signifies the help feature is enabled by default
-        if(this.enabled === false){
+        if (this.enabled === false) {
             return;
         }
         var divDisplay = this.cont.style.display;
-        if(divDisplay === '' || divDisplay === NONE){
+        if (divDisplay === '' || divDisplay === NONE) {
             this.cont.style.display = 'inline';
         } else {
             this.cont.style.display = NONE;
@@ -138,13 +143,13 @@ export class Help extends Feature{
     /**
      * Remove help UI
      */
-    destroy(){
-        if(!this.initialized){
+    destroy() {
+        if (!this.initialized) {
             return;
         }
         removeElm(this.btn);
         this.btn = null;
-        if(!this.cont){
+        if (!this.cont) {
             return;
         }
         removeElm(this.cont);
