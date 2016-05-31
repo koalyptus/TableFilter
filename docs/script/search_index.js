@@ -4368,21 +4368,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#fltelms",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fltElms",
-    "src/tablefilter.js~TableFilter#fltElms",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#fltgrid",
     "class/src/tablefilter.js~TableFilter.html#instance-member-fltGrid",
     "src/tablefilter.js~TableFilter#fltGrid",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#fltgridel",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fltGridEl",
-    "src/tablefilter.js~TableFilter#fltGridEl",
     "member"
   ],
   [

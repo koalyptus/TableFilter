@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/alternateRows.js | tablefilter v0.2.33 API Document</title>
+  <title data-ice="title">src/modules/alternateRows.js | tablefilter v0.2.34 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -112,16 +112,20 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {addClass, removeClass} from &apos;../dom&apos;;
 
+/**
+ * Rows with alternating background color for improved readability
+ */
 export class AlternateRows extends Feature {
 
     /**
-     * Alternating rows color
+     * Creates an instance of AlternateRows.
+     *
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, &apos;alternateRows&apos;);
 
-        var config = this.config;
+        let config = this.config;
         //defines css class for even rows
         this.evenCss = config.even_row_css_class || &apos;even&apos;;
         //defines css class for odd rows
@@ -147,24 +151,21 @@ export class AlternateRows extends Feature {
         this.initialized = true;
     }
 
+    /**
+     * Apply background to all valid rows
+     */
     processAll() {
         if (!this.isEnabled()) {
             return;
         }
-        var tf = this.tf;
-        var validRowsIndex = tf.getValidRows(true);
-        var noValidRowsIndex = validRowsIndex.length === 0;
-        //1st index
-        var beginIndex = noValidRowsIndex ? tf.refRow : 0;
-        // nb indexes
-        var indexLen = noValidRowsIndex ?
-            tf.nbFilterableRows + beginIndex :
-            validRowsIndex.length;
-        var idx = 0;
+        let tf = this.tf;
+        let validRowsIndex = tf.getValidRows(true);
+        let indexLen = validRowsIndex.length;
+        let idx = 0;
 
         //alternates bg color
-        for (var j = beginIndex; j &lt; indexLen; j++) {
-            var rowIdx = noValidRowsIndex ? j : validRowsIndex[j];
+        for (let j = 0; j &lt; indexLen; j++) {
+            let rowIdx = validRowsIndex[j];
             this.setRowBg(rowIdx, idx);
             idx++;
         }
@@ -194,8 +195,8 @@ export class AlternateRows extends Feature {
         if (!this.isEnabled() || isNaN(rowIdx)) {
             return;
         }
-        var rows = this.tf.tbl.rows;
-        var i = isNaN(idx) ? rowIdx : idx;
+        let rows = this.tf.tbl.rows;
+        let i = isNaN(idx) ? rowIdx : idx;
         this.removeRowBg(rowIdx);
 
         addClass(rows[rowIdx], (i % 2) ? this.evenCss : this.oddCss);
@@ -209,7 +210,7 @@ export class AlternateRows extends Feature {
         if (isNaN(idx)) {
             return;
         }
-        var rows = this.tf.tbl.rows;
+        let rows = this.tf.tbl.rows;
         removeClass(rows[idx], this.oddCss);
         removeClass(rows[idx], this.evenCss);
     }
@@ -222,7 +223,7 @@ export class AlternateRows extends Feature {
             return;
         }
         let nbRows = this.tf.getRowsNb(true);
-        for (var i = 0; i &lt; nbRows; i++) {
+        for (let i = 0; i &lt; nbRows; i++) {
             this.removeRowBg(i);
         }
 

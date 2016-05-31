@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/help.js | tablefilter v0.2.33 API Document</title>
+  <title data-ice="title">src/modules/help.js | tablefilter v0.2.34 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -115,16 +115,16 @@ import Event from &apos;../event&apos;;
 import {NONE} from &apos;../const&apos;;
 
 const WIKI_URL = &apos;https://github.com/koalyptus/TableFilter/wiki/&apos; +
-                    &apos;4.-Filter-operators&apos;;
+    &apos;4.-Filter-operators&apos;;
 const WEBSITE_URL = &apos;http://koalyptus.github.io/TableFilter/&apos;;
 
-export class Help extends Feature{
+export class Help extends Feature {
 
     /**
      * Help UI component
      * @param {Object} tf TableFilter instance
      */
-    constructor(tf){
+    constructor(tf) {
         super(tf, &apos;help&apos;);
 
         var f = this.config;
@@ -142,7 +142,7 @@ export class Help extends Feature{
             &apos;operators: &lt;br /&gt;&lt;b&gt;&amp;lt;&lt;/b&gt;, &lt;b&gt;&amp;lt;=&lt;/b&gt;, &lt;b&gt;&amp;gt;&lt;/b&gt;, &apos; +
             &apos;&lt;b&gt;&amp;gt;=&lt;/b&gt;, &lt;b&gt;=&lt;/b&gt;, &lt;b&gt;*&lt;/b&gt;, &lt;b&gt;!&lt;/b&gt;, &lt;b&gt;{&lt;/b&gt;, &lt;b&gt;}&lt;/b&gt;, &apos; +
             &apos;&lt;b&gt;||&lt;/b&gt;,&lt;b&gt;&amp;amp;&amp;amp;&lt;/b&gt;, &lt;b&gt;[empty]&lt;/b&gt;, &lt;b&gt;[nonempty]&lt;/b&gt;, &apos; +
-            &apos;&lt;b&gt;rgx:&lt;/b&gt;&lt;br/&gt;&lt;a href=&quot;&apos;+ WIKI_URL +&apos;&quot; target=&quot;_blank&quot;&gt;&apos; +
+            &apos;&lt;b&gt;rgx:&lt;/b&gt;&lt;br/&gt;&lt;a href=&quot;&apos; + WIKI_URL + &apos;&quot; target=&quot;_blank&quot;&gt;&apos; +
             &apos;Learn more&lt;/a&gt;&lt;hr/&gt;&apos;;
         //defines help innerHtml
         this.instrHtml = f.help_instructions_html || null;
@@ -157,12 +157,12 @@ export class Help extends Feature{
             &apos;helpCont&apos;;
         //help button element
         this.btn = null;
-         //help content div
+        //help content div
         this.cont = null;
         this.defaultHtml = &apos;&lt;div class=&quot;helpFooter&quot;&gt;&lt;h4&gt;TableFilter &apos; +
-            &apos;v&apos;+ tf.version +&apos;&lt;/h4&gt;&apos; +
-            &apos;&lt;a href=&quot;&apos;+ WEBSITE_URL +&apos;&quot; target=&quot;_blank&quot;&gt;&apos;+ WEBSITE_URL +&apos;&lt;/a&gt;&apos;+
-            &apos;&lt;br/&gt;&lt;span&gt;&amp;copy;2015-&apos;+ tf.year +&apos; {AUTHOR}&lt;/span&gt;&apos; +
+            &apos;v&apos; + tf.version + &apos;&lt;/h4&gt;&apos; + &apos;&lt;a href=&quot;&apos; + WEBSITE_URL +
+            &apos;&quot; target=&quot;_blank&quot;&gt;&apos; + WEBSITE_URL + &apos;&lt;/a&gt;&apos; +
+            &apos;&lt;br/&gt;&lt;span&gt;&amp;copy;2015-&apos; + tf.year + &apos; {AUTHOR}&lt;/span&gt;&apos; +
             &apos;&lt;div align=&quot;center&quot; style=&quot;margin-top:8px;&quot;&gt;&apos; +
             &apos;&lt;a href=&quot;javascript:void(0);&quot; class=&quot;close&quot;&gt;Close&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&apos;;
 
@@ -171,21 +171,26 @@ export class Help extends Feature{
         //id prefix for help elements
         this.prfxHelpDiv = &apos;helpDiv_&apos;;
 
-        this.emitter.on([&apos;init-help&apos;], ()=&gt; this.init());
+        this.emitter.on([&apos;init-help&apos;], () =&gt; this.init());
     }
 
-    init(){
-        if(this.initialized){
+    /**
+     * Initialise Help instance
+     *
+     * @returns (description)
+     */
+    init() {
+        if (this.initialized) {
             return;
         }
 
         var tf = this.tf;
 
-        var helpspan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxHelpSpan+tf.id]);
-        var helpdiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxHelpDiv+tf.id]);
+        var helpspan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxHelpSpan + tf.id]);
+        var helpdiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxHelpDiv + tf.id]);
 
         //help button is added to defined element
-        if(!this.tgtId){
+        if (!this.tgtId) {
             tf.setToolbar();
         }
         var targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
@@ -193,7 +198,7 @@ export class Help extends Feature{
 
         var divContainer = !this.contTgtId ? helpspan : elm(this.contTgtId);
 
-        if(!this.btnHtml){
+        if (!this.btnHtml) {
             divContainer.appendChild(helpdiv);
             var helplink = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
             helplink.className = this.btnCssClass;
@@ -207,16 +212,16 @@ export class Help extends Feature{
             divContainer.appendChild(helpdiv);
         }
 
-        if(!this.instrHtml){
+        if (!this.instrHtml) {
             helpdiv.innerHTML = this.instrText;
             helpdiv.className = this.contCssClass;
             Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
         } else {
-            if(this.contTgtId){
+            if (this.contTgtId) {
                 divContainer.appendChild(helpdiv);
             }
             helpdiv.innerHTML = this.instrHtml;
-            if(!this.contTgtId){
+            if (!this.contTgtId) {
                 helpdiv.className = this.contCssClass;
                 Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
             }
@@ -232,14 +237,14 @@ export class Help extends Feature{
     /**
      * Toggle help pop-up
      */
-    toggle(){
+    toggle() {
         // check only if explicitily set to false as in this case undefined
         // signifies the help feature is enabled by default
-        if(this.enabled === false){
+        if (this.enabled === false) {
             return;
         }
         var divDisplay = this.cont.style.display;
-        if(divDisplay === &apos;&apos; || divDisplay === NONE){
+        if (divDisplay === &apos;&apos; || divDisplay === NONE) {
             this.cont.style.display = &apos;inline&apos;;
         } else {
             this.cont.style.display = NONE;
@@ -249,13 +254,13 @@ export class Help extends Feature{
     /**
      * Remove help UI
      */
-    destroy(){
-        if(!this.initialized){
+    destroy() {
+        if (!this.initialized) {
             return;
         }
         removeElm(this.btn);
         this.btn = null;
-        if(!this.cont){
+        if (!this.cont) {
             return;
         }
         removeElm(this.cont);

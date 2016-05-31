@@ -177,17 +177,17 @@
             "type": "Identifier",
             "name": "root",
             "range": [
-              97,
-              101
+              98,
+              102
             ],
             "loc": {
               "start": {
                 "line": 4,
-                "column": 4
+                "column": 5
               },
               "end": {
                 "line": 4,
-                "column": 8
+                "column": 9
               }
             }
           },
@@ -195,48 +195,48 @@
             "type": "Identifier",
             "name": "SortableTable",
             "range": [
-              102,
-              115
+              103,
+              116
             ],
             "loc": {
               "start": {
                 "line": 4,
-                "column": 9
+                "column": 10
               },
               "end": {
                 "line": 4,
-                "column": 22
+                "column": 23
               }
             }
           },
           "range": [
-            97,
-            115
+            98,
+            116
           ],
           "loc": {
             "start": {
               "line": 4,
-              "column": 4
+              "column": 5
             },
             "end": {
               "line": 4,
-              "column": 22
+              "column": 23
             }
           }
         },
         "prefix": true,
         "range": [
-          96,
-          115
+          97,
+          116
         ],
         "loc": {
           "start": {
             "line": 4,
-            "column": 3
+            "column": 4
           },
           "end": {
             "line": 4,
-            "column": 22
+            "column": 23
           }
         }
       },
@@ -251,8 +251,8 @@
                 "type": "Identifier",
                 "name": "require",
                 "range": [
-                  122,
-                  129
+                  124,
+                  131
                 ],
                 "loc": {
                   "start": {
@@ -271,8 +271,8 @@
                   "value": "script!sortabletable",
                   "raw": "'script!sortabletable'",
                   "range": [
-                    130,
-                    152
+                    132,
+                    154
                   ],
                   "loc": {
                     "start": {
@@ -287,8 +287,8 @@
                 }
               ],
               "range": [
-                122,
-                153
+                124,
+                155
               ],
               "loc": {
                 "start": {
@@ -302,8 +302,8 @@
               }
             },
             "range": [
-              122,
-              154
+              124,
+              156
             ],
             "loc": {
               "start": {
@@ -318,13 +318,13 @@
           }
         ],
         "range": [
-          116,
-          156
+          118,
+          158
         ],
         "loc": {
           "start": {
             "line": 4,
-            "column": 23
+            "column": 25
           },
           "end": {
             "line": 6,
@@ -335,7 +335,7 @@
       "alternate": null,
       "range": [
         93,
-        156
+        158
       ],
       "loc": {
         "start": {
@@ -354,8 +354,8 @@
         "type": "Identifier",
         "name": "AdapterSortableTable",
         "range": [
-          173,
-          193
+          175,
+          195
         ],
         "loc": {
           "start": {
@@ -371,8 +371,8 @@
         "trailingComments": []
       },
       "range": [
-        158,
-        194
+        160,
+        196
       ],
       "loc": {
         "start": {
@@ -389,7 +389,7 @@
   "sourceType": "module",
   "range": [
     0,
-    194
+    196
   ],
   "loc": {
     "start": {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/emitter.js | tablefilter v0.2.33 API Document</title>
+  <title data-ice="title">src/emitter.js | tablefilter v0.2.34 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -113,6 +113,9 @@
  * Event emitter class
  */
 export class Emitter {
+    /**
+     * Creates an instance of Emitter.
+     */
     constructor() {
         /**
          * Events object
@@ -127,7 +130,7 @@ export class Emitter {
      * @param  {Function} fn  Function invoked when event is emitted
      */
     on(evts, fn) {
-        evts.forEach((evt)=&gt; {
+        evts.forEach((evt) =&gt; {
             this.events[evt] = this.events[evt] || [];
             this.events[evt].push(fn);
         });
@@ -139,8 +142,8 @@ export class Emitter {
      * @param  {Function} fn  Function invoked when event is emitted
      */
     off(evts, fn) {
-        evts.forEach((evt)=&gt; {
-            if(evt in this.events) {
+        evts.forEach((evt) =&gt; {
+            if (evt in this.events) {
                 this.events[evt].splice(this.events[evt].indexOf(fn), 1);
             }
         });
@@ -152,8 +155,8 @@ export class Emitter {
      * the invoked function
      */
     emit(evt /*, args...*/) {
-        if(evt in this.events) {
-            for(let i = 0; i &lt; this.events[evt].length; i++) {
+        if (evt in this.events) {
+            for (let i = 0; i &lt; this.events[evt].length; i++) {
                 this.events[evt][i].apply(this, [].slice.call(arguments, 1));
             }
         }
