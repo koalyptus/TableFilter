@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
-import Event from '../event';
+import {addEvt} from '../event';
 
 export class ClearButton extends Feature {
 
@@ -62,11 +62,11 @@ export class ClearButton extends Feature {
             fltreset.className = tf.btnResetCssClass;
             fltreset.appendChild(createText(this.btnResetText));
             resetspan.appendChild(fltreset);
-            Event.add(fltreset, 'click', () => { this.onClick(); });
+            addEvt(fltreset, 'click', () => this.onClick());
         } else {
             resetspan.innerHTML = this.btnResetHtml;
             let resetEl = resetspan.firstChild;
-            Event.add(resetEl, 'click', () => { this.onClick(); });
+            addEvt(resetEl, 'click', () => this.onClick());
         }
         this.btnResetEl = resetspan.firstChild;
 

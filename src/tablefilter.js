@@ -1,4 +1,4 @@
-import Event from './event';
+import {addEvt, cancelEvt, stopEvt, targetEvt, keyCode} from './event';
 import {
     addClass, createElm, createOpt, elm, getText, getFirstTextNode, hasClass,
     removeClass, removeElm, tag
@@ -580,11 +580,11 @@ export class TableFilter {
             return;
         }
         if (evt) {
-            let key = Event.keyCode(evt);
+            let key = keyCode(evt);
             if (key === ENTER_KEY) {
                 this.filter();
-                Event.cancel(evt);
-                Event.stop(evt);
+                cancelEvt(evt);
+                stopEvt(evt);
             } else {
                 this.isUserTyping = true;
                 root.clearInterval(this.autoFilterTimer);
@@ -602,7 +602,7 @@ export class TableFilter {
         if (!this.autoFilter) {
             return;
         }
-        let key = Event.keyCode(evt);
+        let key = keyCode(evt);
         this.isUserTyping = false;
 
         function filter() {
@@ -640,7 +640,7 @@ export class TableFilter {
      * @param {Event} evt
      */
     onInpFocus(evt) {
-        let elm = Event.target(evt);
+        let elm = targetEvt(evt);
         this.emitter.emit('filter-focus', this, elm);
     }
 
@@ -714,7 +714,7 @@ export class TableFilter {
             );
         }
         inp.className = cssClass || this.fltCssClass;
-        Event.add(inp, 'focus', (evt) => this.onInpFocus(evt));
+        addEvt(inp, 'focus', (evt) => this.onInpFocus(evt));
 
         //filter is appended in custom element
         if (externalFltTgtId) {
@@ -726,10 +726,10 @@ export class TableFilter {
 
         this.fltIds.push(inp.id);
 
-        Event.add(inp, 'keypress', (evt) => this.detectKey(evt));
-        Event.add(inp, 'keydown', () => this.onKeyDown());
-        Event.add(inp, 'keyup', (evt) => this.onKeyUp(evt));
-        Event.add(inp, 'blur', () => this.onInpBlur());
+        addEvt(inp, 'keypress', (evt) => this.detectKey(evt));
+        addEvt(inp, 'keydown', () => this.onKeyDown());
+        addEvt(inp, 'keyup', (evt) => this.onKeyUp(evt));
+        addEvt(inp, 'blur', () => this.onInpBlur());
     }
 
     /**
@@ -752,7 +752,7 @@ export class TableFilter {
             container.appendChild(btn);
         }
 
-        Event.add(btn, 'click', () => this.filter());
+        addEvt(btn, 'click', () => this.filter());
     }
 
     /**

@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
-import Event from '../event';
+import {addEvt} from '../event';
 import {NONE} from '../const';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
@@ -93,18 +93,18 @@ export class Help extends Feature {
             helplink.className = this.btnCssClass;
             helplink.appendChild(createText(this.btnText));
             helpspan.appendChild(helplink);
-            Event.add(helplink, 'click', () => this.toggle());
+            addEvt(helplink, 'click', () => this.toggle());
         } else {
             helpspan.innerHTML = this.btnHtml;
             var helpEl = helpspan.firstChild;
-            Event.add(helpEl, 'click', () => this.toggle());
+            addEvt(helpEl, 'click', () => this.toggle());
             divContainer.appendChild(helpdiv);
         }
 
         if (!this.instrHtml) {
             helpdiv.innerHTML = this.instrText;
             helpdiv.className = this.contCssClass;
-            Event.add(helpdiv, 'dblclick', () => this.toggle());
+            addEvt(helpdiv, 'dblclick', () => this.toggle());
         } else {
             if (this.contTgtId) {
                 divContainer.appendChild(helpdiv);
@@ -112,11 +112,11 @@ export class Help extends Feature {
             helpdiv.innerHTML = this.instrHtml;
             if (!this.contTgtId) {
                 helpdiv.className = this.contCssClass;
-                Event.add(helpdiv, 'dblclick', () => this.toggle());
+                addEvt(helpdiv, 'dblclick', () => this.toggle());
             }
         }
         helpdiv.innerHTML += this.defaultHtml;
-        Event.add(helpdiv, 'click', () => this.toggle());
+        addEvt(helpdiv, 'click', () => this.toggle());
 
         this.cont = helpdiv;
         this.btn = helpspan;

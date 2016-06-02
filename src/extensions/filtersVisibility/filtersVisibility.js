@@ -1,7 +1,7 @@
 import {Feature} from '../../feature';
 import {createElm, removeElm, elm} from '../../dom';
 import {isFn, isUndef} from '../../types';
-import Event from '../../event';
+import {addEvt} from '../../event';
 
 export default class FiltersVisibility extends Feature {
 
@@ -124,7 +124,7 @@ export default class FiltersVisibility extends Feature {
             btn = span.firstChild;
         }
 
-        Event.add(btn, 'click', () => this.toggle());
+        addEvt(btn, 'click', () => this.toggle());
 
         this.contEl = span;
         this.btnEl = btn;
