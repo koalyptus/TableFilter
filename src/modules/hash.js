@@ -1,4 +1,4 @@
-import Event from '../event';
+import {addEvt, removeEvt} from '../event';
 import {root} from '../root';
 
 const JSON = root.JSON;
@@ -41,7 +41,7 @@ export class Hash {
 
         this.emitter.on(['state-changed'], (tf, state) => this.update(state));
         this.emitter.on(['initialized'], () => this.sync());
-        Event.add(root, 'hashchange', () => this.sync());
+        addEvt(root, 'hashchange', () => this.sync());
     }
 
     /**
@@ -91,7 +91,7 @@ export class Hash {
     destroy() {
         this.emitter.off(['state-changed'], (tf, state) => this.update(state));
         this.emitter.off(['initialized'], () => this.sync());
-        Event.remove(root, 'hashchange', () => this.sync());
+        removeEvt(root, 'hashchange', () => this.sync());
 
         this.state = null;
         this.lastHash = null;

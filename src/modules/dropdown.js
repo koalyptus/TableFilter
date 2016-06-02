@@ -3,7 +3,7 @@ import {createElm, createOpt, elm} from '../dom';
 import {has} from '../array';
 import {matchCase} from '../string';
 import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
-import Event from '../event';
+import {addEvt, targetEvt} from '../event';
 import {SELECT, MULTIPLE, NONE} from '../const';
 
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
@@ -39,7 +39,7 @@ export class Dropdown extends Feature {
     }
 
     onSlcFocus(e) {
-        let elm = Event.target(e);
+        let elm = targetEvt(e);
         let tf = this.tf;
         // select is populated when element has focus
         if (tf.loadFltOnDemand && elm.getAttribute('filled') === '0') {
@@ -97,8 +97,8 @@ export class Dropdown extends Feature {
             slc.appendChild(opt0);
         }
 
-        Event.add(slc, 'change', () => this.onSlcChange());
-        Event.add(slc, 'focus', (e) => this.onSlcFocus(e));
+        addEvt(slc, 'change', () => this.onSlcChange());
+        addEvt(slc, 'focus', (e) => this.onSlcFocus(e));
 
         this.emitter.on(
             ['build-select-filter'],

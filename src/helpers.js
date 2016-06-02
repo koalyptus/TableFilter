@@ -8,13 +8,11 @@
  * @param {String} Format type, currently 'us' or 'eu'
  * @return {String} Unformatted number
  */
-export const removeNbFormat = (data, format) => {
+export const removeNbFormat = (data, format = 'us') => {
     if (!data) {
         return;
     }
-    if (!format) {
-        format = 'us';
-    }
+
     let n = data;
     if (format.toLowerCase() === 'us') {
         n = + n.replace(/[^\d\.-]/g, '');

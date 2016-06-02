@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import {isFn} from '../types';
 import {createElm, removeElm} from '../dom';
-import Event from '../event';
+import {addEvt, cancelEvt, stopEvt, targetEvt} from '../event';
 import {INPUT, NONE} from '../const';
 
 export class PopupFilter extends Feature {
@@ -58,7 +58,7 @@ export class PopupFilter extends Feature {
     }
 
     onClick(evt) {
-        let elm = Event.target(evt).parentNode,
+        let elm = targetEvt(evt).parentNode,
             colIndex = parseInt(elm.getAttribute('ci'), 10);
 
         this.closeAll(colIndex);
@@ -70,8 +70,8 @@ export class PopupFilter extends Feature {
                 headerWidth = header.clientWidth * 0.95;
             popUpDiv.style.width = parseInt(headerWidth, 10) + 'px';
         }
-        Event.cancel(evt);
-        Event.stop(evt);
+        cancelEvt(evt);
+        stopEvt(evt);
     }
 
     /**
@@ -101,7 +101,7 @@ export class PopupFilter extends Feature {
             popUpSpan.innerHTML = this.popUpImgFltHtml;
             let header = tf.getHeaderElement(i);
             header.appendChild(popUpSpan);
-            Event.add(popUpSpan, 'click', (evt) => { this.onClick(evt); });
+            addEvt(popUpSpan, 'click', (evt) => this.onClick(evt));
             this.popUpFltSpans[i] = popUpSpan;
             this.popUpFltImgs[i] = popUpSpan.firstChild;
         }
@@ -151,7 +151,7 @@ export class PopupFilter extends Feature {
         tf.externalFltTgtIds.push(popUpDiv.id);
         let header = tf.getHeaderElement(colIndex);
         header.insertBefore(popUpDiv, header.firstChild);
-        Event.add(popUpDiv, 'click', (evt) => Event.stop(evt));
+        addEvt(popUpDiv, 'click', (evt) => stopEvt(evt));
         this.popUpFltElms[colIndex] = popUpDiv;
     }
 

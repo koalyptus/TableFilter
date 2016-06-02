@@ -4,7 +4,7 @@ import {
     getText, tag
 } from '../../dom';
 import {isFn} from '../../types';
-import Event from '../../event';
+import {addEvt, targetEvt} from '../../event';
 
 export default class ColsVisibility extends Feature {
 
@@ -221,17 +221,17 @@ export default class ColsVisibility extends Feature {
             btn.innerHTML = this.btnText;
             span.appendChild(btn);
             if (!this.enableHover) {
-                Event.add(btn, 'click', (evt) => this.toggle(evt));
+                addEvt(btn, 'click', (evt) => this.toggle(evt));
             } else {
-                Event.add(btn, 'mouseover', (evt) => this.toggle(evt));
+                addEvt(btn, 'mouseover', (evt) => this.toggle(evt));
             }
         } else { //Custom html
             span.innerHTML = this.btnHtml;
             let colVisEl = span.firstChild;
             if (!this.enableHover) {
-                Event.add(colVisEl, 'click', (evt) => this.toggle(evt));
+                addEvt(colVisEl, 'click', (evt) => this.toggle(evt));
             } else {
-                Event.add(colVisEl, 'mouseover', (evt) => this.toggle(evt));
+                addEvt(colVisEl, 'mouseover', (evt) => this.toggle(evt));
             }
         }
 
@@ -276,7 +276,7 @@ export default class ColsVisibility extends Feature {
             ul.appendChild(li);
             li.check.checked = !this.tickToHide;
 
-            Event.add(li.check, 'click', () => {
+            addEvt(li.check, 'click', () => {
                 for (let h = 0; h < headerRow.cells.length; h++) {
                     let itm = elm('col_' + h + '_' + tf.id);
                     if (itm && li.check.checked !== itm.checked) {
@@ -302,8 +302,8 @@ export default class ColsVisibility extends Feature {
                 liElm.check.checked = true;
             }
 
-            Event.add(liElm.check, 'click', (evt) => {
-                let elm = Event.target(evt);
+            addEvt(liElm.check, 'click', (evt) => {
+                let elm = targetEvt(evt);
                 let lbl = elm.parentNode;
                 this.checkItem(lbl);
             });
@@ -317,12 +317,12 @@ export default class ColsVisibility extends Feature {
             btn = createElm('a', ['href', 'javascript:;']);
             btn.className = this.btnCloseCssClass;
             btn.innerHTML = this.btnCloseText;
-            Event.add(btn, 'click', (evt) => this.toggle(evt));
+            addEvt(btn, 'click', (evt) => this.toggle(evt));
             p.appendChild(btn);
         } else {
             p.innerHTML = this.btnCloseHtml;
             btn = p.firstChild;
-            Event.add(btn, 'click', (evt) => this.toggle(evt));
+            addEvt(btn, 'click', (evt) => this.toggle(evt));
         }
 
         container.appendChild(ul);

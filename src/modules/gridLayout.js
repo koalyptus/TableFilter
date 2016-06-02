@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import {createElm, removeElm, elm, tag} from '../dom';
 import {isFn, isNull, isUndef} from '../types';
-import Event from '../event';
+import {addEvt, targetEvt} from '../event';
 import {contains} from '../string';
 import {NONE} from '../const';
 
@@ -233,8 +233,8 @@ export class GridLayout extends Feature {
         //
 
         //scroll synchronisation
-        Event.add(this.tblCont, 'scroll', (evt) => {
-            let elm = Event.target(evt);
+        addEvt(this.tblCont, 'scroll', (evt) => {
+            let elm = targetEvt(evt);
             let scrollLeft = elm.scrollLeft;
             this.headTblCont.scrollLeft = scrollLeft;
             //New pointerX calc taking into account scrollLeft

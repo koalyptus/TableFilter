@@ -1,7 +1,7 @@
 import {Feature} from '../../feature';
 import {isArray, isFn, isUndef} from '../../types';
 import {createElm, elm, getText, tag} from '../../dom';
-import Event from '../../event';
+import {addEvt} from '../../event';
 import {formatDate} from '../../date';
 import {removeNbFormat} from '../../helpers';
 import {NONE, CELL_TAG, HEADER_TAG} from '../../const';
@@ -192,7 +192,7 @@ export default class AdapterSortableTable extends Feature {
                     if (stt.sortTypes[i] !== null) {
                         c.setAttribute('_sortType', stt.sortTypes[i]);
                     }
-                    Event.add(c, 'click', stt._headerOnclick);
+                    addEvt(c, 'click', stt._headerOnclick);
                 } else {
                     c.setAttribute('_sortType', oSortTypes[i]);
                     c._sortType = 'None';
@@ -339,7 +339,7 @@ export default class AdapterSortableTable extends Feature {
                 if (trigger) {
                     trigger.style.cursor = 'pointer';
 
-                    Event.add(trigger, 'click', (evt) => {
+                    addEvt(trigger, 'click', (evt) => {
                         let elm = evt.target;
                         if (!this.tf.sort) {
                             return;

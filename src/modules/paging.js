@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import {createElm, createOpt, createText, elm, removeElm} from '../dom';
 import {isArray, isFn, isNull} from '../types';
-import Event from '../event';
+import {addEvt, keyCode, removeEvt} from '../event';
 import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
 
 export class Paging extends Feature {
@@ -156,7 +156,7 @@ export class Paging extends Feature {
                 o.changePage(0);
             },
             _detectKey(e) {
-                var key = Event.keyCode(e);
+                var key = keyCode(e);
                 if (key === ENTER_KEY) {
                     if (tf.sorted) {
                         tf.filter();
@@ -207,7 +207,7 @@ export class Paging extends Feature {
         if (this.pageSelectorType === SELECT) {
             slcPages = createElm(SELECT, ['id', this.prfxSlcPages + tf.id]);
             slcPages.className = this.pgSlcCssClass;
-            Event.add(slcPages, 'change', evt.slcPagesChange);
+            addEvt(slcPages, 'change', evt.slcPagesChange);
         }
 
         // Paging input selector
@@ -217,7 +217,7 @@ export class Paging extends Feature {
                 ['value', this.currentPageNb]
             );
             slcPages.className = this.pgInpCssClass;
-            Event.add(slcPages, 'keypress', evt._detectKey);
+            addEvt(slcPages, 'keypress', evt._detectKey);
         }
 
         // btns containers
@@ -240,11 +240,11 @@ export class Paging extends Feature {
                     ['title', 'Next']
                 );
                 btn_next.className = this.btnPageCssClass;
-                Event.add(btn_next, 'click', evt.next);
+                addEvt(btn_next, 'click', evt.next);
                 btnNextSpan.appendChild(btn_next);
             } else {
                 btnNextSpan.innerHTML = this.btnNextPageHtml;
-                Event.add(btnNextSpan, 'click', evt.next);
+                addEvt(btnNextSpan, 'click', evt.next);
             }
             // Previous button
             if (!this.btnPrevPageHtml) {
@@ -255,11 +255,11 @@ export class Paging extends Feature {
                     ['title', 'Previous']
                 );
                 btn_prev.className = this.btnPageCssClass;
-                Event.add(btn_prev, 'click', evt.prev);
+                addEvt(btn_prev, 'click', evt.prev);
                 btnPrevSpan.appendChild(btn_prev);
             } else {
                 btnPrevSpan.innerHTML = this.btnPrevPageHtml;
-                Event.add(btnPrevSpan, 'click', evt.prev);
+                addEvt(btnPrevSpan, 'click', evt.prev);
             }
             // Last button
             if (!this.btnLastPageHtml) {
@@ -270,11 +270,11 @@ export class Paging extends Feature {
                     ['title', 'Last']
                 );
                 btn_last.className = this.btnPageCssClass;
-                Event.add(btn_last, 'click', evt.last);
+                addEvt(btn_last, 'click', evt.last);
                 btnLastSpan.appendChild(btn_last);
             } else {
                 btnLastSpan.innerHTML = this.btnLastPageHtml;
-                Event.add(btnLastSpan, 'click', evt.last);
+                addEvt(btnLastSpan, 'click', evt.last);
             }
             // First button
             if (!this.btnFirstPageHtml) {
@@ -285,11 +285,11 @@ export class Paging extends Feature {
                     ['title', 'First']
                 );
                 btn_first.className = this.btnPageCssClass;
-                Event.add(btn_first, 'click', evt.first);
+                addEvt(btn_first, 'click', evt.first);
                 btnFirstSpan.appendChild(btn_first);
             } else {
                 btnFirstSpan.innerHTML = this.btnFirstPageHtml;
-                Event.add(btnFirstSpan, 'click', evt.first);
+                addEvt(btnFirstSpan, 'click', evt.first);
             }
         }
 
@@ -529,7 +529,7 @@ export class Paging extends Feature {
             var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);
             slcR.options[r] = currOpt;
         }
-        Event.add(slcR, 'change', evt.slcResultsChange);
+        addEvt(slcR, 'change', evt.slcResultsChange);
         this.resultsPerPageSlc = slcR;
     }
 
@@ -699,31 +699,31 @@ export class Paging extends Feature {
 
         if (this.pagingSlc) {
             if (this.pageSelectorType === SELECT) {
-                Event.remove(this.pagingSlc, 'change', evt.slcPagesChange);
+                removeEvt(this.pagingSlc, 'change', evt.slcPagesChange);
             }
             else if (this.pageSelectorType === INPUT) {
-                Event.remove(this.pagingSlc, 'keypress', evt._detectKey);
+                removeEvt(this.pagingSlc, 'keypress', evt._detectKey);
             }
             removeElm(this.pagingSlc);
         }
 
         if (btnNextSpan) {
-            Event.remove(btnNextSpan, 'click', evt.next);
+            removeEvt(btnNextSpan, 'click', evt.next);
             removeElm(btnNextSpan);
         }
 
         if (btnPrevSpan) {
-            Event.remove(btnPrevSpan, 'click', evt.prev);
+            removeEvt(btnPrevSpan, 'click', evt.prev);
             removeElm(btnPrevSpan);
         }
 
         if (btnLastSpan) {
-            Event.remove(btnLastSpan, 'click', evt.last);
+            removeEvt(btnLastSpan, 'click', evt.last);
             removeElm(btnLastSpan);
         }
 
         if (btnFirstSpan) {
-            Event.remove(btnFirstSpan, 'click', evt.first);
+            removeEvt(btnFirstSpan, 'click', evt.first);
             removeElm(btnFirstSpan);
         }
 
