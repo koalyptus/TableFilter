@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/checkList.js | tablefilter v0.2.34 API Document</title>
+  <title data-ice="title">src/modules/checkList.js | tablefilter v0.2.35 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -63,6 +63,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addEvt">addEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-keyCode">keyCode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeEvt">removeEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stopEvt">stopEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -117,7 +123,7 @@ import {
 import {has} from &apos;../array&apos;;
 import {matchCase, trim, rgxEsc} from &apos;../string&apos;;
 import {ignoreCase, numSortAsc, numSortDesc} from &apos;../sort&apos;;
-import Event from &apos;../event&apos;;
+import {addEvt, removeEvt, targetEvt} from &apos;../event&apos;;
 import {isEmpty} from &apos;../types&apos;;
 import {CHECKLIST, NONE} from &apos;../const&apos;;
 
@@ -167,7 +173,7 @@ export class CheckList extends Feature {
     }
 
     onChange(evt) {
-        let elm = Event.target(evt);
+        let elm = targetEvt(evt);
         let tf = this.tf;
         this.emitter.emit(&apos;filter-focus&apos;, tf, elm);
         tf.filter();
@@ -179,12 +185,12 @@ export class CheckList extends Feature {
     }
 
     onCheckListClick(evt) {
-        let elm = Event.target(evt);
+        let elm = targetEvt(evt);
         if (this.tf.loadFltOnDemand &amp;&amp; elm.getAttribute(&apos;filled&apos;) === &apos;0&apos;) {
             let ct = elm.getAttribute(&apos;ct&apos;);
             let div = this.checkListDiv[ct];
             this.build(ct);
-            Event.remove(div, &apos;click&apos;, (evt) =&gt; this.onCheckListClick(evt));
+            removeEvt(div, &apos;click&apos;, (evt) =&gt; this.onCheckListClick(evt));
         }
     }
 
@@ -218,7 +224,7 @@ export class CheckList extends Feature {
         if (!tf.loadFltOnDemand) {
             this.build(colIndex);
         } else {
-            Event.add(divCont, &apos;click&apos;, (evt) =&gt; this.onCheckListClick(evt));
+            addEvt(divCont, &apos;click&apos;, (evt) =&gt; this.onCheckListClick(evt));
             divCont.appendChild(createText(this.activateCheckListTxt));
         }
 
@@ -252,7 +258,7 @@ export class CheckList extends Feature {
         let ul = createElm(&apos;ul&apos;, [&apos;id&apos;, tf.fltIds[colIndex]],
             [&apos;colIndex&apos;, colIndex]);
         ul.className = this.checkListCssClass;
-        Event.add(ul, &apos;change&apos;, (evt) =&gt; this.onChange(evt));
+        addEvt(ul, &apos;change&apos;, (evt) =&gt; this.onChange(evt));
 
         let rows = tf.tbl.rows;
         let nbRows = tf.getRowsNb(true);
@@ -406,7 +412,7 @@ export class CheckList extends Feature {
                 li.check.disabled = true;
                 li.disabled = true;
             } else {
-                Event.add(li.check, &apos;click&apos;, (evt) =&gt; this.optionClick(evt));
+                addEvt(li.check, &apos;click&apos;, (evt) =&gt; this.optionClick(evt));
             }
             ul.appendChild(li);
 
@@ -430,7 +436,7 @@ export class CheckList extends Feature {
         li0.className = this.checkListItemCssClass;
         ul.appendChild(li0);
 
-        Event.add(li0.check, &apos;click&apos;, (evt) =&gt; this.optionClick(evt));
+        addEvt(li0.check, &apos;click&apos;, (evt) =&gt; this.optionClick(evt));
 
         if (!this.enableCheckListResetFilter) {
             li0.style.display = NONE;
@@ -441,7 +447,7 @@ export class CheckList extends Feature {
                 tf.emOperator, tf.emptyText);
             li1.className = this.checkListItemCssClass;
             ul.appendChild(li1);
-            Event.add(li1.check, &apos;click&apos;, (evt) =&gt; this.optionClick(evt));
+            addEvt(li1.check, &apos;click&apos;, (evt) =&gt; this.optionClick(evt));
             chkCt++;
         }
 
@@ -450,7 +456,7 @@ export class CheckList extends Feature {
                 tf.nonEmptyText);
             li2.className = this.checkListItemCssClass;
             ul.appendChild(li2);
-            Event.add(li2.check, &apos;click&apos;, (evt) =&gt; this.optionClick(evt));
+            addEvt(li2.check, &apos;click&apos;, (evt) =&gt; this.optionClick(evt));
             chkCt++;
         }
         return chkCt;

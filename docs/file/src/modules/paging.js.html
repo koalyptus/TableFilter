@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.2.34 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.2.35 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -63,6 +63,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addEvt">addEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-keyCode">keyCode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeEvt">removeEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stopEvt">stopEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -112,7 +118,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {createElm, createOpt, createText, elm, removeElm} from &apos;../dom&apos;;
 import {isArray, isFn, isNull} from &apos;../types&apos;;
-import Event from &apos;../event&apos;;
+import {addEvt, keyCode, removeEvt} from &apos;../event&apos;;
 import {INPUT, SELECT, NONE, ENTER_KEY} from &apos;../const&apos;;
 
 export class Paging extends Feature {
@@ -267,7 +273,7 @@ export class Paging extends Feature {
                 o.changePage(0);
             },
             _detectKey(e) {
-                var key = Event.keyCode(e);
+                var key = keyCode(e);
                 if (key === ENTER_KEY) {
                     if (tf.sorted) {
                         tf.filter();
@@ -318,7 +324,7 @@ export class Paging extends Feature {
         if (this.pageSelectorType === SELECT) {
             slcPages = createElm(SELECT, [&apos;id&apos;, this.prfxSlcPages + tf.id]);
             slcPages.className = this.pgSlcCssClass;
-            Event.add(slcPages, &apos;change&apos;, evt.slcPagesChange);
+            addEvt(slcPages, &apos;change&apos;, evt.slcPagesChange);
         }
 
         // Paging input selector
@@ -328,7 +334,7 @@ export class Paging extends Feature {
                 [&apos;value&apos;, this.currentPageNb]
             );
             slcPages.className = this.pgInpCssClass;
-            Event.add(slcPages, &apos;keypress&apos;, evt._detectKey);
+            addEvt(slcPages, &apos;keypress&apos;, evt._detectKey);
         }
 
         // btns containers
@@ -351,11 +357,11 @@ export class Paging extends Feature {
                     [&apos;title&apos;, &apos;Next&apos;]
                 );
                 btn_next.className = this.btnPageCssClass;
-                Event.add(btn_next, &apos;click&apos;, evt.next);
+                addEvt(btn_next, &apos;click&apos;, evt.next);
                 btnNextSpan.appendChild(btn_next);
             } else {
                 btnNextSpan.innerHTML = this.btnNextPageHtml;
-                Event.add(btnNextSpan, &apos;click&apos;, evt.next);
+                addEvt(btnNextSpan, &apos;click&apos;, evt.next);
             }
             // Previous button
             if (!this.btnPrevPageHtml) {
@@ -366,11 +372,11 @@ export class Paging extends Feature {
                     [&apos;title&apos;, &apos;Previous&apos;]
                 );
                 btn_prev.className = this.btnPageCssClass;
-                Event.add(btn_prev, &apos;click&apos;, evt.prev);
+                addEvt(btn_prev, &apos;click&apos;, evt.prev);
                 btnPrevSpan.appendChild(btn_prev);
             } else {
                 btnPrevSpan.innerHTML = this.btnPrevPageHtml;
-                Event.add(btnPrevSpan, &apos;click&apos;, evt.prev);
+                addEvt(btnPrevSpan, &apos;click&apos;, evt.prev);
             }
             // Last button
             if (!this.btnLastPageHtml) {
@@ -381,11 +387,11 @@ export class Paging extends Feature {
                     [&apos;title&apos;, &apos;Last&apos;]
                 );
                 btn_last.className = this.btnPageCssClass;
-                Event.add(btn_last, &apos;click&apos;, evt.last);
+                addEvt(btn_last, &apos;click&apos;, evt.last);
                 btnLastSpan.appendChild(btn_last);
             } else {
                 btnLastSpan.innerHTML = this.btnLastPageHtml;
-                Event.add(btnLastSpan, &apos;click&apos;, evt.last);
+                addEvt(btnLastSpan, &apos;click&apos;, evt.last);
             }
             // First button
             if (!this.btnFirstPageHtml) {
@@ -396,11 +402,11 @@ export class Paging extends Feature {
                     [&apos;title&apos;, &apos;First&apos;]
                 );
                 btn_first.className = this.btnPageCssClass;
-                Event.add(btn_first, &apos;click&apos;, evt.first);
+                addEvt(btn_first, &apos;click&apos;, evt.first);
                 btnFirstSpan.appendChild(btn_first);
             } else {
                 btnFirstSpan.innerHTML = this.btnFirstPageHtml;
-                Event.add(btnFirstSpan, &apos;click&apos;, evt.first);
+                addEvt(btnFirstSpan, &apos;click&apos;, evt.first);
             }
         }
 
@@ -640,7 +646,7 @@ export class Paging extends Feature {
             var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);
             slcR.options[r] = currOpt;
         }
-        Event.add(slcR, &apos;change&apos;, evt.slcResultsChange);
+        addEvt(slcR, &apos;change&apos;, evt.slcResultsChange);
         this.resultsPerPageSlc = slcR;
     }
 
@@ -810,31 +816,31 @@ export class Paging extends Feature {
 
         if (this.pagingSlc) {
             if (this.pageSelectorType === SELECT) {
-                Event.remove(this.pagingSlc, &apos;change&apos;, evt.slcPagesChange);
+                removeEvt(this.pagingSlc, &apos;change&apos;, evt.slcPagesChange);
             }
             else if (this.pageSelectorType === INPUT) {
-                Event.remove(this.pagingSlc, &apos;keypress&apos;, evt._detectKey);
+                removeEvt(this.pagingSlc, &apos;keypress&apos;, evt._detectKey);
             }
             removeElm(this.pagingSlc);
         }
 
         if (btnNextSpan) {
-            Event.remove(btnNextSpan, &apos;click&apos;, evt.next);
+            removeEvt(btnNextSpan, &apos;click&apos;, evt.next);
             removeElm(btnNextSpan);
         }
 
         if (btnPrevSpan) {
-            Event.remove(btnPrevSpan, &apos;click&apos;, evt.prev);
+            removeEvt(btnPrevSpan, &apos;click&apos;, evt.prev);
             removeElm(btnPrevSpan);
         }
 
         if (btnLastSpan) {
-            Event.remove(btnLastSpan, &apos;click&apos;, evt.last);
+            removeEvt(btnLastSpan, &apos;click&apos;, evt.last);
             removeElm(btnLastSpan);
         }
 
         if (btnFirstSpan) {
-            Event.remove(btnFirstSpan, &apos;click&apos;, evt.first);
+            removeEvt(btnFirstSpan, &apos;click&apos;, evt.first);
             removeElm(btnFirstSpan);
         }
 

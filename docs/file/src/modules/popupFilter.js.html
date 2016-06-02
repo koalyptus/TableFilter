@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.2.34 API Document</title>
+  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.2.35 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -63,6 +63,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addEvt">addEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-keyCode">keyCode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeEvt">removeEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stopEvt">stopEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -112,7 +118,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {isFn} from &apos;../types&apos;;
 import {createElm, removeElm} from &apos;../dom&apos;;
-import Event from &apos;../event&apos;;
+import {addEvt, cancelEvt, stopEvt, targetEvt} from &apos;../event&apos;;
 import {INPUT, NONE} from &apos;../const&apos;;
 
 export class PopupFilter extends Feature {
@@ -169,7 +175,7 @@ export class PopupFilter extends Feature {
     }
 
     onClick(evt) {
-        let elm = Event.target(evt).parentNode,
+        let elm = targetEvt(evt).parentNode,
             colIndex = parseInt(elm.getAttribute(&apos;ci&apos;), 10);
 
         this.closeAll(colIndex);
@@ -181,8 +187,8 @@ export class PopupFilter extends Feature {
                 headerWidth = header.clientWidth * 0.95;
             popUpDiv.style.width = parseInt(headerWidth, 10) + &apos;px&apos;;
         }
-        Event.cancel(evt);
-        Event.stop(evt);
+        cancelEvt(evt);
+        stopEvt(evt);
     }
 
     /**
@@ -212,7 +218,7 @@ export class PopupFilter extends Feature {
             popUpSpan.innerHTML = this.popUpImgFltHtml;
             let header = tf.getHeaderElement(i);
             header.appendChild(popUpSpan);
-            Event.add(popUpSpan, &apos;click&apos;, (evt) =&gt; { this.onClick(evt); });
+            addEvt(popUpSpan, &apos;click&apos;, (evt) =&gt; this.onClick(evt));
             this.popUpFltSpans[i] = popUpSpan;
             this.popUpFltImgs[i] = popUpSpan.firstChild;
         }
@@ -262,7 +268,7 @@ export class PopupFilter extends Feature {
         tf.externalFltTgtIds.push(popUpDiv.id);
         let header = tf.getHeaderElement(colIndex);
         header.insertBefore(popUpDiv, header.firstChild);
-        Event.add(popUpDiv, &apos;click&apos;, (evt) =&gt; Event.stop(evt));
+        addEvt(popUpDiv, &apos;click&apos;, (evt) =&gt; stopEvt(evt));
         this.popUpFltElms[colIndex] = popUpDiv;
     }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/colsVisibility/colsVisibility.js | tablefilter v0.2.34 API Document</title>
+  <title data-ice="title">src/extensions/colsVisibility/colsVisibility.js | tablefilter v0.2.35 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -63,6 +63,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addEvt">addEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-keyCode">keyCode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeEvt">removeEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stopEvt">stopEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -115,7 +121,7 @@ import {
     getText, tag
 } from &apos;../../dom&apos;;
 import {isFn} from &apos;../../types&apos;;
-import Event from &apos;../../event&apos;;
+import {addEvt, targetEvt} from &apos;../../event&apos;;
 
 export default class ColsVisibility extends Feature {
 
@@ -332,17 +338,17 @@ export default class ColsVisibility extends Feature {
             btn.innerHTML = this.btnText;
             span.appendChild(btn);
             if (!this.enableHover) {
-                Event.add(btn, &apos;click&apos;, (evt) =&gt; this.toggle(evt));
+                addEvt(btn, &apos;click&apos;, (evt) =&gt; this.toggle(evt));
             } else {
-                Event.add(btn, &apos;mouseover&apos;, (evt) =&gt; this.toggle(evt));
+                addEvt(btn, &apos;mouseover&apos;, (evt) =&gt; this.toggle(evt));
             }
         } else { //Custom html
             span.innerHTML = this.btnHtml;
             let colVisEl = span.firstChild;
             if (!this.enableHover) {
-                Event.add(colVisEl, &apos;click&apos;, (evt) =&gt; this.toggle(evt));
+                addEvt(colVisEl, &apos;click&apos;, (evt) =&gt; this.toggle(evt));
             } else {
-                Event.add(colVisEl, &apos;mouseover&apos;, (evt) =&gt; this.toggle(evt));
+                addEvt(colVisEl, &apos;mouseover&apos;, (evt) =&gt; this.toggle(evt));
             }
         }
 
@@ -387,7 +393,7 @@ export default class ColsVisibility extends Feature {
             ul.appendChild(li);
             li.check.checked = !this.tickToHide;
 
-            Event.add(li.check, &apos;click&apos;, () =&gt; {
+            addEvt(li.check, &apos;click&apos;, () =&gt; {
                 for (let h = 0; h &lt; headerRow.cells.length; h++) {
                     let itm = elm(&apos;col_&apos; + h + &apos;_&apos; + tf.id);
                     if (itm &amp;&amp; li.check.checked !== itm.checked) {
@@ -413,8 +419,8 @@ export default class ColsVisibility extends Feature {
                 liElm.check.checked = true;
             }
 
-            Event.add(liElm.check, &apos;click&apos;, (evt) =&gt; {
-                let elm = Event.target(evt);
+            addEvt(liElm.check, &apos;click&apos;, (evt) =&gt; {
+                let elm = targetEvt(evt);
                 let lbl = elm.parentNode;
                 this.checkItem(lbl);
             });
@@ -428,12 +434,12 @@ export default class ColsVisibility extends Feature {
             btn = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:;&apos;]);
             btn.className = this.btnCloseCssClass;
             btn.innerHTML = this.btnCloseText;
-            Event.add(btn, &apos;click&apos;, (evt) =&gt; this.toggle(evt));
+            addEvt(btn, &apos;click&apos;, (evt) =&gt; this.toggle(evt));
             p.appendChild(btn);
         } else {
             p.innerHTML = this.btnCloseHtml;
             btn = p.firstChild;
-            Event.add(btn, &apos;click&apos;, (evt) =&gt; this.toggle(evt));
+            addEvt(btn, &apos;click&apos;, (evt) =&gt; this.toggle(evt));
         }
 
         container.appendChild(ul);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/help.js | tablefilter v0.2.34 API Document</title>
+  <title data-ice="title">src/modules/help.js | tablefilter v0.2.35 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -63,6 +63,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addEvt">addEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-keyCode">keyCode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeEvt">removeEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stopEvt">stopEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -111,7 +117,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/help.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {createElm, createText, elm, removeElm} from &apos;../dom&apos;;
-import Event from &apos;../event&apos;;
+import {addEvt} from &apos;../event&apos;;
 import {NONE} from &apos;../const&apos;;
 
 const WIKI_URL = &apos;https://github.com/koalyptus/TableFilter/wiki/&apos; +
@@ -204,18 +210,18 @@ export class Help extends Feature {
             helplink.className = this.btnCssClass;
             helplink.appendChild(createText(this.btnText));
             helpspan.appendChild(helplink);
-            Event.add(helplink, &apos;click&apos;, () =&gt; this.toggle());
+            addEvt(helplink, &apos;click&apos;, () =&gt; this.toggle());
         } else {
             helpspan.innerHTML = this.btnHtml;
             var helpEl = helpspan.firstChild;
-            Event.add(helpEl, &apos;click&apos;, () =&gt; this.toggle());
+            addEvt(helpEl, &apos;click&apos;, () =&gt; this.toggle());
             divContainer.appendChild(helpdiv);
         }
 
         if (!this.instrHtml) {
             helpdiv.innerHTML = this.instrText;
             helpdiv.className = this.contCssClass;
-            Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
+            addEvt(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
         } else {
             if (this.contTgtId) {
                 divContainer.appendChild(helpdiv);
@@ -223,11 +229,11 @@ export class Help extends Feature {
             helpdiv.innerHTML = this.instrHtml;
             if (!this.contTgtId) {
                 helpdiv.className = this.contCssClass;
-                Event.add(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
+                addEvt(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
             }
         }
         helpdiv.innerHTML += this.defaultHtml;
-        Event.add(helpdiv, &apos;click&apos;, () =&gt; this.toggle());
+        addEvt(helpdiv, &apos;click&apos;, () =&gt; this.toggle());
 
         this.cont = helpdiv;
         this.btn = helpspan;

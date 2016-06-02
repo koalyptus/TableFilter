@@ -228,6 +228,18 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/event.js~addevt",
+    "variable/index.html#static-variable-addEvt",
+    "<span>addEvt</span> <span class=\"search-result-import-path\">tablefilter/src/event.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/event.js~cancelevt",
+    "variable/index.html#static-variable-cancelEvt",
+    "<span>cancelEvt</span> <span class=\"search-result-import-path\">tablefilter/src/event.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/string.js~contains",
     "variable/index.html#static-variable-contains",
     "<span>contains</span> <span class=\"search-result-import-path\">tablefilter/src/string.js</span>",
@@ -372,6 +384,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/event.js~keycode",
+    "variable/index.html#static-variable-keyCode",
+    "<span>keyCode</span> <span class=\"search-result-import-path\">tablefilter/src/event.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/string.js~matchcase",
     "variable/index.html#static-variable-matchCase",
     "<span>matchCase</span> <span class=\"search-result-import-path\">tablefilter/src/string.js</span>",
@@ -402,6 +420,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/event.js~removeevt",
+    "variable/index.html#static-variable-removeEvt",
+    "<span>removeEvt</span> <span class=\"search-result-import-path\">tablefilter/src/event.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/helpers.js~removenbformat",
     "variable/index.html#static-variable-removeNbFormat",
     "<span>removeNbFormat</span> <span class=\"search-result-import-path\">tablefilter/src/helpers.js</span>",
@@ -420,9 +444,21 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/event.js~stopevt",
+    "variable/index.html#static-variable-stopEvt",
+    "<span>stopEvt</span> <span class=\"search-result-import-path\">tablefilter/src/event.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/dom.js~tag",
     "variable/index.html#static-variable-tag",
     "<span>tag</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/event.js~targetevt",
+    "variable/index.html#static-variable-targetEvt",
+    "<span>targetEvt</span> <span class=\"search-result-import-path\">tablefilter/src/event.js</span>",
     "variable"
   ],
   [
