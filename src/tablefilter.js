@@ -1505,7 +1505,7 @@ export class TableFilter {
                     }
                     let cellData = this.getCellData(cell[j]),
                         nbFormat = this.colNbFormat ?
-                            this.colNbFormat[colIndex] : null,
+                            this.colNbFormat[colIndex] : undefined,
                         data = num ? removeNbFormat(cellData, nbFormat) :
                             cellData;
                     colValues.push(data);
