@@ -81,6 +81,10 @@ export class TableFilter {
         // configuration object
         let f = this.cfg;
 
+        /**
+         * Event emitter instance
+         * @type {Emitter}
+         */
         this.emitter = new Emitter();
 
         //Start row et cols nb

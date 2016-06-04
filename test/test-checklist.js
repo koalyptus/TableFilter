@@ -11,8 +11,8 @@ var checkList = tf.feature('checkList');
 module('Sanity checks');
 test('CheckList component', function() {
     deepEqual(typeof checkList, 'object', 'CheckList instanciated');
-    deepEqual(checkList.checkListDiv instanceof Array, true,
-        'Type of checkListDiv property');
+    deepEqual(checkList.containers instanceof Array, true,
+        'Type of containers property');
 });
 
 module('UI elements');
