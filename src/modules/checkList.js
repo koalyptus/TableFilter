@@ -295,7 +295,7 @@ export class CheckList extends Feature {
                 li.check.disabled = true;
                 li.disabled = true;
             } else {
-                addEvt(li.check, 'click', (evt) => this.optionClick(evt));
+                addEvt(li.check, 'click', evt => this.optionClick(evt));
             }
             ul.appendChild(li);
 
@@ -319,7 +319,7 @@ export class CheckList extends Feature {
         li0.className = this.checkListItemCssClass;
         ul.appendChild(li0);
 
-        addEvt(li0.check, 'click', (evt) => this.optionClick(evt));
+        addEvt(li0.check, 'click', evt => this.optionClick(evt));
 
         if (!this.enableCheckListResetFilter) {
             li0.style.display = NONE;
@@ -330,7 +330,7 @@ export class CheckList extends Feature {
                 tf.emOperator, tf.emptyText);
             li1.className = this.checkListItemCssClass;
             ul.appendChild(li1);
-            addEvt(li1.check, 'click', (evt) => this.optionClick(evt));
+            addEvt(li1.check, 'click', evt => this.optionClick(evt));
             chkCt++;
         }
 
@@ -339,7 +339,7 @@ export class CheckList extends Feature {
                 tf.nonEmptyText);
             li2.className = this.checkListItemCssClass;
             ul.appendChild(li2);
-            addEvt(li2.check, 'click', (evt) => this.optionClick(evt));
+            addEvt(li2.check, 'click', evt => this.optionClick(evt));
             chkCt++;
         }
         return chkCt;
@@ -441,18 +441,27 @@ export class CheckList extends Feature {
         flt.setAttribute('indexes', '');
 
         for (let k = 0; k < lisNb; k++) {
-            let li = tag(flt, 'li')[k],
-                lbl = tag(li, 'label')[0],
-                chk = tag(li, 'input')[0],
-                lblTxt = matchCase(getText(lbl), tf.caseSensitive);
+            let li = tag(flt, 'li')[k];
+            let lbl = tag(li, 'label')[0];
+            let chk = tag(li, 'input')[0];
+            let lblTxt = matchCase(getText(lbl), tf.caseSensitive);
+
             if (lblTxt !== '' && has(values, lblTxt, tf.caseSensitive)) {
                 chk.checked = true;
-                this.setCheckListValues(chk);
+            } else {
+                // Check non-empty-text or empty-text option
+                if (values.indexOf(tf.nmOperator) !== -1 &&
+                    lblTxt === matchCase(tf.nonEmptyText, tf.caseSensitive)) {
+                    chk.checked = true;
+                }
+                else if (values.indexOf(tf.emOperator) !== -1 &&
+                    lblTxt === matchCase(tf.emptyText, tf.caseSensitive)) {
+                    chk.checked = true;
+                } else {
+                    chk.checked = false;
+                }
             }
-            else {
-                chk.checked = false;
-                this.setCheckListValues(chk);
-            }
+            this.setCheckListValues(chk);
         }
     }
 
