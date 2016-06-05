@@ -11,8 +11,8 @@ var checkList = tf.feature('checkList');
 module('Sanity checks');
 test('CheckList component', function() {
     deepEqual(typeof checkList, 'object', 'CheckList instanciated');
-    deepEqual(checkList.checkListDiv instanceof Array, true,
-        'Type of checkListDiv property');
+    deepEqual(checkList.containers instanceof Array, true,
+        'Type of containers property');
 });
 
 module('UI elements');
@@ -129,6 +129,44 @@ test('Can sort options', function() {
     );
 });
 
+// Issue 238, empty and non-empty options cannot be selected
+module('Empty and non-empty options');
+test('Can select empty and non-empty options', function() {
+    // setup
+    tf.clearFilters();
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        col_2: 'checklist',
+        col_3: 'checklist',
+        enable_empty_option: true,
+        enable_non_empty_option: true
+    });
+    tf.init();
+    var checkList = tf.feature('checkList');
+    var flt2 = tf.getFilterElement(2);
+    var flt3 = tf.getFilterElement(3);
+
+    // act
+    checkList.selectOptions(2, [tf.emOperator, tf.nmOperator]);
+    checkList.selectOptions(3, [tf.emOperator, tf.nmOperator, '1.4']);
+
+    // assert
+    deepEqual(checkList.getValues(2), [tf.emOperator, tf.nmOperator],
+        'Filter 2 empty and non-empty options selected');
+    notEqual(flt2.getAttribute('value').indexOf(tf.emOperator), -1,
+        'Filter 2 options values attribute');
+    notEqual(flt2.getAttribute('value').indexOf(tf.nmOperator), -1,
+        'Filter 2 options values attribute');
+    deepEqual(checkList.getValues(3), [tf.emOperator, tf.nmOperator, '1.4'],
+        'Filter 3 options selected');
+    notEqual(flt3.getAttribute('value').indexOf(tf.emOperator), -1,
+        'Filter 3 options values attribute');
+    notEqual(flt3.getAttribute('value').indexOf(tf.nmOperator), -1,
+        'Filter 3 options values attribute');
+});
+
+module('Tear down');
 test('TableFilter removed', function() {
     tf.destroy();
     deepEqual(id(tf.fltIds[3]), null, 'CheckList UL element');

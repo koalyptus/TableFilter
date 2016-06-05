@@ -13,48 +13,113 @@ import {CHECKLIST, NONE} from '../const';
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
     '{1} manner.';
 
+/**
+ * Checklist filter UI component
+ */
 export class CheckList extends Feature {
 
     /**
-     * Checklist UI component
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of CheckList
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'checkList');
 
-        // Configuration object
-        let f = tf.config();
+        let f = this.config;
 
-        this.checkListDiv = []; //checklist container div
-        //defines css class for div containing checklist filter
-        this.checkListDivCssClass = f.div_checklist_css_class ||
-            'div_checklist';
-        //defines css class for checklist filters
-        this.checkListCssClass = f.checklist_css_class || 'flt_checklist';
-        //defines css class for checklist item (li)
-        this.checkListItemCssClass = f.checklist_item_css_class ||
-            'flt_checklist_item';
-        //defines css class for selected checklist item (li)
-        this.checkListSlcItemCssClass = f.checklist_selected_item_css_class ||
-            'flt_checklist_slc_item';
-        //Load on demand text
-        this.activateCheckListTxt = f.activate_checklist_text ||
-            'Click to load filter data';
-        //defines css class for checklist filters
-        this.checkListItemDisabledCssClass =
-            f.checklist_item_disabled_css_class ||
+        /**
+         * List of container DOM elements
+         * @type {Array}
+         */
+        this.containers = [];
+
+        /**
+         * Css class for the container of the checklist filter (div)
+         * @type {String}
+         */
+        this.containerCssClass = f.div_checklist_css_class || 'div_checklist';
+
+        /**
+         * Css class for the checklist filter element (ul)
+         * @type {String}
+         */
+        this.filterCssClass = f.checklist_css_class || 'flt_checklist';
+
+        /**
+         * Css class for the item of a checklist (li)
+         * @type {String}
+         */
+        this.itemCssClass = f.checklist_item_css_class || 'flt_checklist_item';
+
+        /**
+         * Css class for a selected item of a checklist (li)
+         * @type {String}
+         */
+        this.selectedItemCssClass =
+            f.checklist_selected_item_css_class || 'flt_checklist_slc_item';
+
+        /**
+         * Text placed in the filter's container when load filter on demand
+         * feature is enabled
+         * @type {String}
+         */
+        this.activateText =
+            f.activate_checklist_text || 'Click to load filter data';
+
+        /**
+         * Css class for a disabled item of a checklist (li)
+         * @type {String}
+         */
+        this.disabledItemCssClass = f.checklist_item_disabled_css_class ||
             'flt_checklist_item_disabled';
-        this.enableCheckListResetFilter =
-            f.enable_checklist_reset_filter === false ? false : true;
-        //checklist filter container div
-        this.prfxCheckListDiv = 'chkdiv_';
 
-        this.isCustom = null;
-        this.opts = null;
-        this.optsTxt = null;
-        this.excludedOpts = null;
+        /**
+         * Enable the reset filter option as first item
+         * @type {Boolean}
+         */
+        this.enableResetOption = f.enable_checklist_reset_filter === false ?
+            false : true;
+
+        /**
+         * Prefix for container element ID
+         * @type {String}
+         * @private
+         */
+        this.prfx = 'chkdiv_';
+
+        /**
+         * Has custom options
+         * @type {Boolean}
+         * @private
+         */
+        this.isCustom = false;
+
+        /**
+         * List of options values
+         * @type {Array}
+         * @private
+         */
+        this.opts = [];
+
+        /**
+         * List of options texts for custom values
+         * @type {Array}
+         * @private
+         */
+        this.optsTxt = [];
+
+        /**
+         * List of options to be excluded from the checklist filter
+         * @type {Array}
+         * @private
+         */
+        this.excludedOpts = [];
     }
 
+    /**
+     * Checklist change event handler
+     * @param {Event} evt
+     */
     onChange(evt) {
         let elm = targetEvt(evt);
         let tf = this.tf;
@@ -62,16 +127,24 @@ export class CheckList extends Feature {
         tf.filter();
     }
 
+    /**
+     * Checklist option click event handler
+     * @param {Event} evt
+     */
     optionClick(evt) {
         this.setCheckListValues(evt.target);
         this.onChange(evt);
     }
 
+    /**
+     * Checklist container click event handler for load on demand feature
+     * @param {Event} evt
+     */
     onCheckListClick(evt) {
         let elm = targetEvt(evt);
         if (this.tf.loadFltOnDemand && elm.getAttribute('filled') === '0') {
             let ct = elm.getAttribute('ct');
-            let div = this.checkListDiv[ct];
+            let div = this.containers[ct];
             this.build(ct);
             removeEvt(div, 'click', (evt) => this.onCheckListClick(evt));
         }
@@ -89,9 +162,9 @@ export class CheckList extends Feature {
             tf.externalFltTgtIds[colIndex] : null;
 
         let divCont = createElm('div',
-            ['id', this.prfxCheckListDiv + colIndex + '_' + tf.id],
+            ['id', this.prfx + colIndex + '_' + tf.id],
             ['ct', colIndex], ['filled', '0']);
-        divCont.className = this.checkListDivCssClass;
+        divCont.className = this.containerCssClass;
 
         //filter is appended in desired element
         if (externalFltTgtId) {
@@ -101,14 +174,14 @@ export class CheckList extends Feature {
             container.appendChild(divCont);
         }
 
-        this.checkListDiv[colIndex] = divCont;
+        this.containers[colIndex] = divCont;
         tf.fltIds.push(tf.prfxFlt + colIndex + '_' + tf.id);
 
         if (!tf.loadFltOnDemand) {
             this.build(colIndex);
         } else {
             addEvt(divCont, 'click', (evt) => this.onCheckListClick(evt));
-            divCont.appendChild(createText(this.activateCheckListTxt));
+            divCont.appendChild(createText(this.activateText));
         }
 
         this.emitter.on(
@@ -137,10 +210,10 @@ export class CheckList extends Feature {
         this.opts = [];
         this.optsTxt = [];
 
-        let flt = this.checkListDiv[colIndex];
+        let flt = this.containers[colIndex];
         let ul = createElm('ul', ['id', tf.fltIds[colIndex]],
             ['colIndex', colIndex]);
-        ul.className = this.checkListCssClass;
+        ul.className = this.filterCssClass;
         addEvt(ul, 'change', (evt) => this.onChange(evt));
 
         let rows = tf.tbl.rows;
@@ -286,16 +359,16 @@ export class CheckList extends Feature {
             let lbl = this.isCustom ? this.optsTxt[y] : val; //item text
             let li = createCheckItem(tf.fltIds[colIndex] + '_' + (y + chkCt),
                 val, lbl);
-            li.className = this.checkListItemCssClass;
+            li.className = this.itemCssClass;
 
             if (tf.linkedFilters && tf.disableExcludedOptions &&
                 has(this.excludedOpts, matchCase(val, tf.caseSensitive),
                     tf.caseSensitive)) {
-                addClass(li, this.checkListItemDisabledCssClass);
+                addClass(li, this.disabledItemCssClass);
                 li.check.disabled = true;
                 li.disabled = true;
             } else {
-                addEvt(li.check, 'click', (evt) => this.optionClick(evt));
+                addEvt(li.check, 'click', evt => this.optionClick(evt));
             }
             ul.appendChild(li);
 
@@ -316,30 +389,30 @@ export class CheckList extends Feature {
         let chkCt = 1;
         let li0 = createCheckItem(tf.fltIds[colIndex] + '_0', '',
             tf.displayAllText);
-        li0.className = this.checkListItemCssClass;
+        li0.className = this.itemCssClass;
         ul.appendChild(li0);
 
-        addEvt(li0.check, 'click', (evt) => this.optionClick(evt));
+        addEvt(li0.check, 'click', evt => this.optionClick(evt));
 
-        if (!this.enableCheckListResetFilter) {
+        if (!this.enableResetOption) {
             li0.style.display = NONE;
         }
 
         if (tf.enableEmptyOption) {
             let li1 = createCheckItem(tf.fltIds[colIndex] + '_1',
                 tf.emOperator, tf.emptyText);
-            li1.className = this.checkListItemCssClass;
+            li1.className = this.itemCssClass;
             ul.appendChild(li1);
-            addEvt(li1.check, 'click', (evt) => this.optionClick(evt));
+            addEvt(li1.check, 'click', evt => this.optionClick(evt));
             chkCt++;
         }
 
         if (tf.enableNonEmptyOption) {
             let li2 = createCheckItem(tf.fltIds[colIndex] + '_2', tf.nmOperator,
                 tf.nonEmptyText);
-            li2.className = this.checkListItemCssClass;
+            li2.className = this.itemCssClass;
             ul.appendChild(li2);
-            addEvt(li2.check, 'click', (evt) => this.optionClick(evt));
+            addEvt(li2.check, 'click', evt => this.optionClick(evt));
             chkCt++;
         }
         return chkCt;
@@ -381,7 +454,7 @@ export class CheckList extends Feature {
                         if (cChk) {
                             cChk.checked = false;
                             removeClass(n.childNodes[indSplit[u]],
-                                this.checkListSlcItemCssClass);
+                                this.selectedItemCssClass);
                         }
                     }
                 }
@@ -402,8 +475,8 @@ export class CheckList extends Feature {
             }
 
             if (li.nodeName === itemTag) {
-                removeClass(n.childNodes[0], this.checkListSlcItemCssClass);
-                addClass(li, this.checkListSlcItemCssClass);
+                removeClass(n.childNodes[0], this.selectedItemCssClass);
+                addClass(li, this.selectedItemCssClass);
             }
         } else { //removes values and indexes
             if (chkValue !== '') {
@@ -418,7 +491,7 @@ export class CheckList extends Feature {
                 n.setAttribute('indexes', fltIndexes);
             }
             if (li.nodeName === itemTag) {
-                removeClass(li, this.checkListSlcItemCssClass);
+                removeClass(li, this.selectedItemCssClass);
             }
         }
     }
@@ -441,18 +514,27 @@ export class CheckList extends Feature {
         flt.setAttribute('indexes', '');
 
         for (let k = 0; k < lisNb; k++) {
-            let li = tag(flt, 'li')[k],
-                lbl = tag(li, 'label')[0],
-                chk = tag(li, 'input')[0],
-                lblTxt = matchCase(getText(lbl), tf.caseSensitive);
+            let li = tag(flt, 'li')[k];
+            let lbl = tag(li, 'label')[0];
+            let chk = tag(li, 'input')[0];
+            let lblTxt = matchCase(getText(lbl), tf.caseSensitive);
+
             if (lblTxt !== '' && has(values, lblTxt, tf.caseSensitive)) {
                 chk.checked = true;
-                this.setCheckListValues(chk);
+            } else {
+                // Check non-empty-text or empty-text option
+                if (values.indexOf(tf.nmOperator) !== -1 &&
+                    lblTxt === matchCase(tf.nonEmptyText, tf.caseSensitive)) {
+                    chk.checked = true;
+                }
+                else if (values.indexOf(tf.emOperator) !== -1 &&
+                    lblTxt === matchCase(tf.emptyText, tf.caseSensitive)) {
+                    chk.checked = true;
+                } else {
+                    chk.checked = false;
+                }
             }
-            else {
-                chk.checked = false;
-                this.setCheckListValues(chk);
-            }
+            this.setCheckListValues(chk);
         }
     }
 
@@ -475,6 +557,9 @@ export class CheckList extends Feature {
         return values;
     }
 
+    /**
+     * Destroy CheckList instance
+     */
     destroy() {
         this.emitter.off(
             ['build-checklist-filter'],
