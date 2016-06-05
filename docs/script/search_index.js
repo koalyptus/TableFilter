@@ -1878,9 +1878,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/modules/checklist.js~checklist#activatechecklisttxt",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-activateCheckListTxt",
-    "src/modules/checkList.js~CheckList#activateCheckListTxt",
+    "src/modules/checklist.js~checklist#activatetext",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-activateText",
+    "src/modules/checkList.js~CheckList#activateText",
     "member"
   ],
   [
@@ -1902,46 +1902,22 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/checklist.js~checklist#checklistcssclass",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-checkListCssClass",
-    "src/modules/checkList.js~CheckList#checkListCssClass",
-    "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#checklistdiv",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-checkListDiv",
-    "src/modules/checkList.js~CheckList#checkListDiv",
-    "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#checklistdivcssclass",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-checkListDivCssClass",
-    "src/modules/checkList.js~CheckList#checkListDivCssClass",
-    "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#checklistitemcssclass",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-checkListItemCssClass",
-    "src/modules/checkList.js~CheckList#checkListItemCssClass",
-    "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#checklistitemdisabledcssclass",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-checkListItemDisabledCssClass",
-    "src/modules/checkList.js~CheckList#checkListItemDisabledCssClass",
-    "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#checklistslcitemcssclass",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-checkListSlcItemCssClass",
-    "src/modules/checkList.js~CheckList#checkListSlcItemCssClass",
-    "member"
-  ],
-  [
     "src/modules/checklist.js~checklist#constructor",
     "class/src/modules/checkList.js~CheckList.html#instance-constructor-constructor",
     "src/modules/checkList.js~CheckList#constructor",
     "method"
+  ],
+  [
+    "src/modules/checklist.js~checklist#containercssclass",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-containerCssClass",
+    "src/modules/checkList.js~CheckList#containerCssClass",
+    "member"
+  ],
+  [
+    "src/modules/checklist.js~checklist#containers",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-containers",
+    "src/modules/checkList.js~CheckList#containers",
+    "member"
   ],
   [
     "src/modules/checklist.js~checklist#destroy",
@@ -1950,15 +1926,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/checklist.js~checklist#enablechecklistresetfilter",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-enableCheckListResetFilter",
-    "src/modules/checkList.js~CheckList#enableCheckListResetFilter",
+    "src/modules/checklist.js~checklist#disableditemcssclass",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-disabledItemCssClass",
+    "src/modules/checkList.js~CheckList#disabledItemCssClass",
     "member"
   ],
   [
-    "src/modules/checklist.js~checklist#excludedopts",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-excludedOpts",
-    "src/modules/checkList.js~CheckList#excludedOpts",
+    "src/modules/checklist.js~checklist#enableresetoption",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-enableResetOption",
+    "src/modules/checkList.js~CheckList#enableResetOption",
+    "member"
+  ],
+  [
+    "src/modules/checklist.js~checklist#filtercssclass",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-filterCssClass",
+    "src/modules/checkList.js~CheckList#filterCssClass",
     "member"
   ],
   [
@@ -1980,9 +1962,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/checklist.js~checklist#iscustom",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-isCustom",
-    "src/modules/checkList.js~CheckList#isCustom",
+    "src/modules/checklist.js~checklist#itemcssclass",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-itemCssClass",
+    "src/modules/checkList.js~CheckList#itemCssClass",
     "member"
   ],
   [
@@ -2004,28 +1986,16 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/checklist.js~checklist#opts",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-opts",
-    "src/modules/checkList.js~CheckList#opts",
-    "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#optstxt",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-optsTxt",
-    "src/modules/checkList.js~CheckList#optsTxt",
-    "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#prfxchecklistdiv",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-prfxCheckListDiv",
-    "src/modules/checkList.js~CheckList#prfxCheckListDiv",
-    "member"
-  ],
-  [
     "src/modules/checklist.js~checklist#selectoptions",
     "class/src/modules/checkList.js~CheckList.html#instance-method-selectOptions",
     "src/modules/checkList.js~CheckList#selectOptions",
     "method"
+  ],
+  [
+    "src/modules/checklist.js~checklist#selecteditemcssclass",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-selectedItemCssClass",
+    "src/modules/checkList.js~CheckList#selectedItemCssClass",
+    "member"
   ],
   [
     "src/modules/checklist.js~checklist#setchecklistvalues",
