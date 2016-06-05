@@ -997,7 +997,7 @@ export class TableFilter {
         else if (this.gridLayout) {
             let gridLayout = this.Mod.gridLayout;
             gridLayout.tblMainCont.appendChild(infdiv);
-            infdiv.className = gridLayout.gridInfDivCssClass;
+            infdiv.className = gridLayout.infDivCssClass;
         }
         //default location: just above the table
         else {

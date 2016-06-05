@@ -376,7 +376,7 @@ export default class ColsVisibility extends Feature {
             if (tf.gridLayout) {
                 gridLayout = tf.feature('gridLayout');
                 headTbl = gridLayout.headTbl;
-                gridColElms = gridLayout.gridColElms;
+                gridColElms = gridLayout.colElms;
                 let hiddenWidth = parseInt(
                     gridColElms[colIndex].style.width, 10);
 
@@ -399,7 +399,7 @@ export default class ColsVisibility extends Feature {
             if (tf.gridLayout) {
                 gridLayout = tf.feature('gridLayout');
                 headTbl = gridLayout.headTbl;
-                gridColElms = gridLayout.gridColElms;
+                gridColElms = gridLayout.colElms;
                 let width = parseInt(gridColElms[colIndex].style.width, 10);
                 headTbl.style.width =
                     (parseInt(headTbl.style.width, 10) + width) + 'px';
