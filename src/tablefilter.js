@@ -1887,27 +1887,23 @@ export class TableFilter {
         }
         tbl = tbl || this.tbl;
 
-        setWidths.call(this);
-
-        function setWidths() {
-            let nbCols = this.nbCells;
-            let colWidths = this.colWidths;
-            let colTags = tag(tbl, 'col');
-            let tblHasColTag = colTags.length > 0;
-            let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
-            for (let k = 0; k < nbCols; k++) {
-                let col;
-                if (tblHasColTag) {
-                    col = colTags[k];
-                } else {
-                    col = createElm('col', ['id', this.id + '_col_' + k]);
-                    frag.appendChild(col);
-                }
-                col.style.width = colWidths[k];
+        let nbCols = this.nbCells;
+        let colWidths = this.colWidths;
+        let colTags = tag(tbl, 'col');
+        let tblHasColTag = colTags.length > 0;
+        let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
+        for (let k = 0; k < nbCols; k++) {
+            let col;
+            if (tblHasColTag) {
+                col = colTags[k];
+            } else {
+                col = createElm('col', ['id', this.id + '_col_' + k]);
+                frag.appendChild(col);
             }
-            if (!tblHasColTag) {
-                tbl.insertBefore(frag, tbl.firstChild);
-            }
+            col.style.width = colWidths[k];
+        }
+        if (!tblHasColTag) {
+            tbl.insertBefore(frag, tbl.firstChild);
         }
     }
 
@@ -2084,13 +2080,12 @@ export class TableFilter {
      * @param  {String}  type     Possible values: 'script' or 'link'
      * @return {Boolean}
      */
-    isImported(filePath, type) {
+    isImported(filePath, type = 'script') {
         let imported = false,
-            importType = !type ? 'script' : type,
-            attr = importType === 'script' ? 'src' : 'href',
-            files = tag(doc, importType);
+            attr = type === 'script' ? 'src' : 'href',
+            files = tag(doc, type);
         for (let i = 0, len = files.length; i < len; i++) {
-            if (files[i][attr] === undefined) {
+            if (isUndef(files[i][attr])) {
                 continue;
             }
             if (files[i][attr].match(filePath)) {
@@ -2108,10 +2103,8 @@ export class TableFilter {
      * @param  {Function} callback Callback
      * @param  {String}   type     Possible values: 'script' or 'link'
      */
-    import(fileId, filePath, callback, type) {
-        let ftype = !type ? 'script' : type,
-            imported = this.isImported(filePath, ftype);
-        if (imported) {
+    import(fileId, filePath, callback, type = 'script') {
+        if (this.isImported(filePath, type)) {
             return;
         }
         let o = this,
@@ -2119,7 +2112,7 @@ export class TableFilter {
             file,
             head = tag(doc, 'head')[0];
 
-        if (ftype.toLowerCase() === 'link') {
+        if (type.toLowerCase() === 'link') {
             file = createElm('link',
                 ['id', fileId], ['type', 'text/css'],
                 ['rel', 'stylesheet'], ['href', filePath]
@@ -2132,7 +2125,7 @@ export class TableFilter {
         }
 
         //Browser <> IE onload event works only for scripts, not for stylesheets
-        file.onload = file.onreadystatechange = function () {
+        file.onload = file.onreadystatechange = () => {
             if (!isLoaded &&
                 (!this.readyState || this.readyState === 'loaded' ||
                     this.readyState === 'complete')) {
@@ -2143,7 +2136,7 @@ export class TableFilter {
             }
         };
         file.onerror = function () {
-            throw new Error('TableFilter could not load: ' + filePath);
+            throw new Error(`TableFilter could not load: ${filePath}`);
         };
         head.appendChild(file);
     }

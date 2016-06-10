@@ -48,7 +48,7 @@ export default class AdapterEzEditTable extends Feature {
             this._setAdvancedGrid();
         } else {
             var path = this.vendorPath + this.filename;
-            tf.import(this.filename, path, () => { this._setAdvancedGrid(); });
+            tf.import(this.filename, path, () => this._setAdvancedGrid());
         }
         if (this.loadStylesheet && !tf.isImported(this.stylesheet, 'link')) {
             tf.import(this.stylesheetName, this.stylesheet, null, 'link');
