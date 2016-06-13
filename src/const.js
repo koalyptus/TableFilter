@@ -63,7 +63,7 @@ export const DOWN_ARROW_KEY = 40;
  */
 
 /**
- * Header tag
+ * Header cell tag
  * @type {String}
  */
 export const HEADER_TAG = 'TH';
@@ -74,11 +74,11 @@ export const HEADER_TAG = 'TH';
 export const CELL_TAG = 'TD';
 
 /**
- * Misc values
+ * Default values
  */
 
 /**
- * Auto-filter delay in milliseconds
+ * Auto filter delay in milliseconds
  * @type {Number}
  */
 export const AUTO_FILTER_DELAY = 750;

@@ -148,7 +148,7 @@ export class TableFilter {
         this.alternateRows = Boolean(f.alternate_rows);
         //defines widths of columns
         this.hasColWidths = isArray(f.col_widths);
-        this.colWidths = this.hasColWidths ? f.col_widths : null;
+        this.colWidths = this.hasColWidths ? f.col_widths : [];
         //defines css class for filters
         this.fltCssClass = f.flt_css_class || 'flt';
         //defines css class for multiple selects filters
@@ -997,7 +997,7 @@ export class TableFilter {
         else if (this.gridLayout) {
             let gridLayout = this.Mod.gridLayout;
             gridLayout.tblMainCont.appendChild(infdiv);
-            infdiv.className = gridLayout.gridInfDivCssClass;
+            infdiv.className = gridLayout.infDivCssClass;
         }
         //default location: just above the table
         else {
@@ -1638,10 +1638,10 @@ export class TableFilter {
      * @param  {Boolean} includeHeaders Include the headers row
      * @return {Number}                 Number of filterable rows
      */
-    getRowsNb(includeHeaders) {
+    getRowsNb(includeHeaders){
         let s = isUndef(this.refRow) ? 0 : this.refRow;
         let ntrs = this.tbl.rows.length;
-        if (includeHeaders) {
+        if (includeHeaders){
             s = 0;
         }
         return parseInt(ntrs - s, 10);

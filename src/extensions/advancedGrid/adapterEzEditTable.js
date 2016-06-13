@@ -64,6 +64,7 @@ export default class AdapterEzEditTable extends Feature {
 
     /**
      * Instantiate ezEditTable component for advanced grid features
+     * @private
      */
     _setAdvancedGrid() {
         var tf = this.tf;
