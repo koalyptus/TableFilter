@@ -19,45 +19,128 @@ export class GridLayout extends Feature {
 
         let f = this.config;
 
-        //defines grid width
+        /**
+         * Grid-layout container width as CSS string
+         * @type {String}
+         */
         this.width = f.grid_width || null;
-        //defines grid height
+
+        /**
+         * Grid-layout container height as CSS string
+         * @type {String}
+         */
         this.height = f.grid_height || null;
-        //defines css class for main container
+
+        /**
+         * Css class for main container element
+         * @type {String}
+         */
         this.mainContCssClass = f.grid_cont_css_class || 'grd_Cont';
-        //defines css class for div containing table
+
+        /**
+         * Css class for body table container element
+         * @type {String}
+         */
         this.contCssClass = f.grid_tbl_cont_css_class || 'grd_tblCont';
-        //defines css class for div containing headers' table
+
+        /**
+         * Css class for headers table container element
+         * @type {String}
+         */
         this.headContCssClass = f.grid_tblHead_cont_css_class ||
             'grd_headTblCont';
-        //defines css class for div containing rows counter, paging etc.
+
+        /**
+         * Css class for toolbar container element (rows counter, paging etc.)
+         * @type {String}
+         */
         this.infDivCssClass = f.grid_inf_grid_css_class || 'grd_inf';
-        //defines which row contains column headers
+
+        /**
+         * Index of the headers row, default: 0
+         * @type {Number}
+         */
         this.headRowIndex = f.grid_headers_row_index || 0;
-        //array of headers row indexes to be placed in header table
+
+        /**
+         * Collection of the header row indexes to be moved into headers table
+         * @type {Array}
+         */
         this.headRows = f.grid_headers_rows || [0];
-        //generate filters in table headers
+
+        /**
+         * Enable or disable column filters generation, default: true
+         * @type {Boolean}
+         */
         this.enableFilters = f.grid_enable_default_filters === false ?
             false : true;
+
+        /**
+         * Enable or disable column headers, default: false
+         * @type {Boolean}
+         */
         this.noHeaders = Boolean(f.grid_no_headers);
-        //default col width
+
+        /**
+         * Grid-layout default column widht as CSS string
+         * @type {String}
+         */
         this.defaultColWidth = f.grid_default_col_width || '100px';
 
+        /**
+         * List of column elements
+         * @type {Array}
+         * @private
+         */
         this.colElms = [];
 
-        //div containing grid elements if grid_layout true
+        /**
+         * Prefix for grid-layout main container ID
+         * @type {String}
+         * @private
+         */
         this.prfxMainTblCont = 'gridCont_';
-        //div containing table if grid_layout true
+
+        /**
+         * Prefix for grid-layout body table container ID
+         * @type {String}
+         * @private
+         */
         this.prfxTblCont = 'tblCont_';
-        //div containing headers table if grid_layout true
+
+        /**
+         * Prefix for grid-layout headers table container ID
+         * @type {String}
+         * @private
+         */
         this.prfxHeadTblCont = 'tblHeadCont_';
-        //headers' table if grid_layout true
+
+        /**
+         * Prefix for grid-layout headers table ID
+         * @type {String}
+         * @private
+         */
         this.prfxHeadTbl = 'tblHead_';
-        //id of td containing the filter if grid_layout true
+
+        /**
+         * Prefix for grid-layout filter's cell ID
+         * @type {String}
+         * @private
+         */
         this.prfxGridFltTd = '_td_';
-        //id of th containing column header if grid_layout true
+
+        /**
+         * Prefix for grid-layout header's cell ID
+         * @type {String}
+         * @private
+         */
         this.prfxGridTh = 'tblHeadTh_';
 
+        /**
+         * Mark-up of original HTML table
+         * @type {String}
+         * @private
+         */
         this.sourceTblHtml = tf.tbl.outerHTML;
 
         // filters flag at TF level
@@ -85,25 +168,8 @@ export class GridLayout extends Feature {
 
         tf.isExternalFlt = true;
 
-        // default width of 100px if column widths not set
+        // Assign default column widths
         this.setDefaultColWidths();
-        // if (!tf.hasColWidths) {
-        //     tf.colWidths = [];
-        //     for (let k = 0; k < tf.nbCells; k++) {
-        //         let colW,
-        //             cell = tbl.rows[this.headRowIndex].cells[k];
-        //         if (cell.width !== '') {
-        //             colW = cell.width;
-        //         } else if (cell.style.width !== '') {
-        //             colW = parseInt(cell.style.width, 10);
-        //         } else {
-        //             colW = this.defaultColWidth;
-        //         }
-        //         tf.colWidths[k] = colW;
-        //     }
-        //     tf.hasColWidths = true;
-        // }
-        // tf.setColWidths();
 
         let tblW;//initial table width
         if (tbl.width !== '') {
@@ -195,7 +261,7 @@ export class GridLayout extends Feature {
         //Headers row are moved from content table to headers table
         if (!this.noHeaders) {
             for (let i = 0; i < this.headRows.length; i++) {
-                let headRow = tbl.rows[this.headRows[0]];
+                let headRow = tbl.rows[this.headRows[i]];
                 tH.appendChild(headRow);
             }
         } else {
@@ -306,12 +372,15 @@ export class GridLayout extends Feature {
         this.initialized = true;
     }
 
-    setDefaultColWidths(){
+    /**
+     * Set grid-layout default column widths if column widths are not defined
+     * @private
+     */
+    setDefaultColWidths() {
         let tf = this.tf;
-        if (tf.hasColWidths){
+        if (tf.hasColWidths) {
             return;
         }
-        // tf.colWidths = [];
         for (let k = 0, len = tf.getCellsNb(); k < len; k++) {
             let colW;
             let cell = tf.tbl.rows[tf.getHeadersRowIndex()].cells[k];

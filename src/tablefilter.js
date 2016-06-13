@@ -1638,10 +1638,10 @@ export class TableFilter {
      * @param  {Boolean} includeHeaders Include the headers row
      * @return {Number}                 Number of filterable rows
      */
-    getRowsNb(includeHeaders){
+    getRowsNb(includeHeaders) {
         let s = isUndef(this.refRow) ? 0 : this.refRow;
         let ntrs = this.tbl.rows.length;
-        if (includeHeaders){
+        if (includeHeaders) {
             s = 0;
         }
         return parseInt(ntrs - s, 10);
