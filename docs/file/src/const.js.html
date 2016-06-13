@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/const.js | tablefilter v0.2.36 API Document</title>
+  <title data-ice="title">src/const.js | tablefilter v0.2.37 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -118,29 +118,85 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
  * Filter types
  */
+
+/**
+ * Input filter type
+ * @type {String}
+ */
 export const INPUT = &apos;input&apos;;
+/**
+ * Select filter type
+ * @type {String}
+ */
 export const SELECT = &apos;select&apos;;
+/**
+ * Multiple select filter type
+ * @type {String}
+ */
 export const MULTIPLE = &apos;multiple&apos;;
+/**
+ * Checklist filter type
+ * @type {String}
+ */
 export const CHECKLIST = &apos;checklist&apos;;
+/**
+ * None filter type
+ * @type {String}
+ */
 export const NONE = &apos;none&apos;;
 
 /**
  * Key codes
  */
+
+/**
+ * Enter key code
+ * @type {Number}
+ */
 export const ENTER_KEY = 13;
+/**
+ * Tab key code
+ * @type {Number}
+ */
 export const TAB_KEY = 9;
+/**
+ * Escape key code
+ * @type {Number}
+ */
 export const ESC_KEY = 27;
+/**
+ * Up arrow key code
+ * @type {Number}
+ */
 export const UP_ARROW_KEY = 38;
+/**
+ * Down arrow key code
+ * @type {Number}
+ */
 export const DOWN_ARROW_KEY = 40;
 
 /**
  * HTML tags
  */
+
+/**
+ * Header cell tag
+ * @type {String}
+ */
 export const HEADER_TAG = &apos;TH&apos;;
+/**
+ * Cell tag
+ * @type {String}
+ */
 export const CELL_TAG = &apos;TD&apos;;
 
 /**
- * Numeric values
+ * Default values
+ */
+
+/**
+ * Auto filter delay in milliseconds
+ * @type {Number}
  */
 export const AUTO_FILTER_DELAY = 750;
 </code></pre>

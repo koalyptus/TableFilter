@@ -2208,75 +2208,45 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/gridlayout.js~gridlayout#contcssclass",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-contCssClass",
+    "src/modules/gridLayout.js~GridLayout#contCssClass",
+    "member"
+  ],
+  [
+    "src/modules/gridlayout.js~gridlayout#defaultcolwidth",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-defaultColWidth",
+    "src/modules/gridLayout.js~GridLayout#defaultColWidth",
+    "member"
+  ],
+  [
     "src/modules/gridlayout.js~gridlayout#destroy",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-method-destroy",
     "src/modules/gridLayout.js~GridLayout#destroy",
     "method"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#gridcolelms",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridColElms",
-    "src/modules/gridLayout.js~GridLayout#gridColElms",
+    "src/modules/gridlayout.js~gridlayout#enablefilters",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-enableFilters",
+    "src/modules/gridLayout.js~GridLayout#enableFilters",
     "member"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#gridcontcssclass",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridContCssClass",
-    "src/modules/gridLayout.js~GridLayout#gridContCssClass",
+    "src/modules/gridlayout.js~gridlayout#headcontcssclass",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-headContCssClass",
+    "src/modules/gridLayout.js~GridLayout#headContCssClass",
     "member"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#griddefaultcolwidth",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridDefaultColWidth",
-    "src/modules/gridLayout.js~GridLayout#gridDefaultColWidth",
+    "src/modules/gridlayout.js~gridlayout#headrowindex",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-headRowIndex",
+    "src/modules/gridLayout.js~GridLayout#headRowIndex",
     "member"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#gridenablefilters",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridEnableFilters",
-    "src/modules/gridLayout.js~GridLayout#gridEnableFilters",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#gridheadcontcssclass",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridHeadContCssClass",
-    "src/modules/gridLayout.js~GridLayout#gridHeadContCssClass",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#gridheadrowindex",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridHeadRowIndex",
-    "src/modules/gridLayout.js~GridLayout#gridHeadRowIndex",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#gridheadrows",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridHeadRows",
-    "src/modules/gridLayout.js~GridLayout#gridHeadRows",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#gridheight",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridHeight",
-    "src/modules/gridLayout.js~GridLayout#gridHeight",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#gridinfdivcssclass",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridInfDivCssClass",
-    "src/modules/gridLayout.js~GridLayout#gridInfDivCssClass",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#gridmaincontcssclass",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridMainContCssClass",
-    "src/modules/gridLayout.js~GridLayout#gridMainContCssClass",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#gridwidth",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridWidth",
-    "src/modules/gridLayout.js~GridLayout#gridWidth",
+    "src/modules/gridlayout.js~gridlayout#headrows",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-headRows",
+    "src/modules/gridLayout.js~GridLayout#headRows",
     "member"
   ],
   [
@@ -2292,6 +2262,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/gridlayout.js~gridlayout#height",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-height",
+    "src/modules/gridLayout.js~GridLayout#height",
+    "member"
+  ],
+  [
+    "src/modules/gridlayout.js~gridlayout#infdivcssclass",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-infDivCssClass",
+    "src/modules/gridLayout.js~GridLayout#infDivCssClass",
+    "member"
+  ],
+  [
     "src/modules/gridlayout.js~gridlayout#init",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-method-init",
     "src/modules/gridLayout.js~GridLayout#init",
@@ -2304,51 +2286,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/gridlayout.js~gridlayout#maincontcssclass",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-mainContCssClass",
+    "src/modules/gridLayout.js~GridLayout#mainContCssClass",
+    "member"
+  ],
+  [
     "src/modules/gridlayout.js~gridlayout#noheaders",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-noHeaders",
     "src/modules/gridLayout.js~GridLayout#noHeaders",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#prfxgridflttd",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxGridFltTd",
-    "src/modules/gridLayout.js~GridLayout#prfxGridFltTd",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#prfxgridth",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxGridTh",
-    "src/modules/gridLayout.js~GridLayout#prfxGridTh",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#prfxheadtbl",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxHeadTbl",
-    "src/modules/gridLayout.js~GridLayout#prfxHeadTbl",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#prfxheadtblcont",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxHeadTblCont",
-    "src/modules/gridLayout.js~GridLayout#prfxHeadTblCont",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#prfxmaintblcont",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxMainTblCont",
-    "src/modules/gridLayout.js~GridLayout#prfxMainTblCont",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#prfxtblcont",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxTblCont",
-    "src/modules/gridLayout.js~GridLayout#prfxTblCont",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#sourcetblhtml",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-sourceTblHtml",
-    "src/modules/gridLayout.js~GridLayout#sourceTblHtml",
     "member"
   ],
   [
@@ -2367,6 +2313,12 @@ window.esdocSearchIndex = [
     "src/modules/gridlayout.js~gridlayout#tblmaincont",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblMainCont",
     "src/modules/gridLayout.js~GridLayout#tblMainCont",
+    "member"
+  ],
+  [
+    "src/modules/gridlayout.js~gridlayout#width",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-width",
+    "src/modules/gridLayout.js~GridLayout#width",
     "member"
   ],
   [

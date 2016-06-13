@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.36 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.37 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -265,7 +265,7 @@ export class TableFilter {
         this.alternateRows = Boolean(f.alternate_rows);
         //defines widths of columns
         this.hasColWidths = isArray(f.col_widths);
-        this.colWidths = this.hasColWidths ? f.col_widths : null;
+        this.colWidths = this.hasColWidths ? f.col_widths : [];
         //defines css class for filters
         this.fltCssClass = f.flt_css_class || &apos;flt&apos;;
         //defines css class for multiple selects filters
@@ -1114,7 +1114,7 @@ export class TableFilter {
         else if (this.gridLayout) {
             let gridLayout = this.Mod.gridLayout;
             gridLayout.tblMainCont.appendChild(infdiv);
-            infdiv.className = gridLayout.gridInfDivCssClass;
+            infdiv.className = gridLayout.infDivCssClass;
         }
         //default location: just above the table
         else {
@@ -2004,27 +2004,23 @@ export class TableFilter {
         }
         tbl = tbl || this.tbl;
 
-        setWidths.call(this);
-
-        function setWidths() {
-            let nbCols = this.nbCells;
-            let colWidths = this.colWidths;
-            let colTags = tag(tbl, &apos;col&apos;);
-            let tblHasColTag = colTags.length &gt; 0;
-            let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
-            for (let k = 0; k &lt; nbCols; k++) {
-                let col;
-                if (tblHasColTag) {
-                    col = colTags[k];
-                } else {
-                    col = createElm(&apos;col&apos;, [&apos;id&apos;, this.id + &apos;_col_&apos; + k]);
-                    frag.appendChild(col);
-                }
-                col.style.width = colWidths[k];
+        let nbCols = this.nbCells;
+        let colWidths = this.colWidths;
+        let colTags = tag(tbl, &apos;col&apos;);
+        let tblHasColTag = colTags.length &gt; 0;
+        let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
+        for (let k = 0; k &lt; nbCols; k++) {
+            let col;
+            if (tblHasColTag) {
+                col = colTags[k];
+            } else {
+                col = createElm(&apos;col&apos;, [&apos;id&apos;, this.id + &apos;_col_&apos; + k]);
+                frag.appendChild(col);
             }
-            if (!tblHasColTag) {
-                tbl.insertBefore(frag, tbl.firstChild);
-            }
+            col.style.width = colWidths[k];
+        }
+        if (!tblHasColTag) {
+            tbl.insertBefore(frag, tbl.firstChild);
         }
     }
 
@@ -2201,13 +2197,12 @@ export class TableFilter {
      * @param  {String}  type     Possible values: &apos;script&apos; or &apos;link&apos;
      * @return {Boolean}
      */
-    isImported(filePath, type) {
+    isImported(filePath, type = &apos;script&apos;) {
         let imported = false,
-            importType = !type ? &apos;script&apos; : type,
-            attr = importType === &apos;script&apos; ? &apos;src&apos; : &apos;href&apos;,
-            files = tag(doc, importType);
+            attr = type === &apos;script&apos; ? &apos;src&apos; : &apos;href&apos;,
+            files = tag(doc, type);
         for (let i = 0, len = files.length; i &lt; len; i++) {
-            if (files[i][attr] === undefined) {
+            if (isUndef(files[i][attr])) {
                 continue;
             }
             if (files[i][attr].match(filePath)) {
@@ -2225,10 +2220,8 @@ export class TableFilter {
      * @param  {Function} callback Callback
      * @param  {String}   type     Possible values: &apos;script&apos; or &apos;link&apos;
      */
-    import(fileId, filePath, callback, type) {
-        let ftype = !type ? &apos;script&apos; : type,
-            imported = this.isImported(filePath, ftype);
-        if (imported) {
+    import(fileId, filePath, callback, type = &apos;script&apos;) {
+        if (this.isImported(filePath, type)) {
             return;
         }
         let o = this,
@@ -2236,7 +2229,7 @@ export class TableFilter {
             file,
             head = tag(doc, &apos;head&apos;)[0];
 
-        if (ftype.toLowerCase() === &apos;link&apos;) {
+        if (type.toLowerCase() === &apos;link&apos;) {
             file = createElm(&apos;link&apos;,
                 [&apos;id&apos;, fileId], [&apos;type&apos;, &apos;text/css&apos;],
                 [&apos;rel&apos;, &apos;stylesheet&apos;], [&apos;href&apos;, filePath]
@@ -2249,7 +2242,7 @@ export class TableFilter {
         }
 
         //Browser &lt;&gt; IE onload event works only for scripts, not for stylesheets
-        file.onload = file.onreadystatechange = function () {
+        file.onload = file.onreadystatechange = () =&gt; {
             if (!isLoaded &amp;&amp;
                 (!this.readyState || this.readyState === &apos;loaded&apos; ||
                     this.readyState === &apos;complete&apos;)) {
@@ -2260,7 +2253,7 @@ export class TableFilter {
             }
         };
         file.onerror = function () {
-            throw new Error(&apos;TableFilter could not load: &apos; + filePath);
+            throw new Error(`TableFilter could not load: ${filePath}`);
         };
         head.appendChild(file);
     }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">GridLayout | tablefilter v0.2.36 API Document</title>
+  <title data-ice="title">GridLayout | tablefilter v0.2.37 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -115,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GridLayout} from &apos;<span><a href="file/src/modules/gridLayout.js.html#lineNumber8">tablefilter/src/modules/gridLayout.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GridLayout} from &apos;<span><a href="file/src/modules/gridLayout.js.html#lineNumber11">tablefilter/src/modules/gridLayout.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/gridLayout.js.html#lineNumber8">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/gridLayout.js.html#lineNumber11">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -141,7 +141,8 @@
 
   
   
-  
+  <div class="description" data-ice="description"><p>Grid layout, table with fixed headers</p>
+</div>
 
   
 
@@ -175,7 +176,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Grid layout, table with fixed headers</p>
+        <div data-ice="description"><p>Creates an instance of GridLayout</p>
 </div>
       </div>
     </td>
@@ -202,13 +203,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridColElms">gridColElms</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-contCssClass">contCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Css class for body table container element</p>
+</div>
       </div>
     </td>
     <td>
@@ -227,13 +229,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridContCssClass">gridContCssClass</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-defaultColWidth">defaultColWidth</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Grid-layout default column widht as CSS string</p>
+</div>
       </div>
     </td>
     <td>
@@ -252,13 +255,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridDefaultColWidth">gridDefaultColWidth</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-enableFilters">enableFilters</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Enable or disable column filters generation, default: true</p>
+</div>
       </div>
     </td>
     <td>
@@ -277,13 +281,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridEnableFilters">gridEnableFilters</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-headContCssClass">headContCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Css class for headers table container element</p>
+</div>
       </div>
     </td>
     <td>
@@ -302,13 +307,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridHeadContCssClass">gridHeadContCssClass</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-headRowIndex">headRowIndex</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Index of the headers row, default: 0</p>
+</div>
       </div>
     </td>
     <td>
@@ -327,138 +333,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridHeadRowIndex">gridHeadRowIndex</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-headRows">headRows</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridHeadRows">gridHeadRows</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridHeight">gridHeight</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridInfDivCssClass">gridInfDivCssClass</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridMainContCssClass">gridMainContCssClass</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-gridWidth">gridWidth</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Collection of the header row indexes to be moved into headers table</p>
+</div>
       </div>
     </td>
     <td>
@@ -527,6 +409,58 @@
     <td>
       <div>
         <p>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-height">height</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Grid-layout container height as CSS string</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-infDivCssClass">infDivCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Css class for toolbar container element (rows counter, paging etc.)</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
            <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-initialized">initialized</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
@@ -552,13 +486,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-noHeaders">noHeaders</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-mainContCssClass">mainContCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Css class for main container element</p>
+</div>
       </div>
     </td>
     <td>
@@ -577,163 +512,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxGridFltTd">prfxGridFltTd</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-noHeaders">noHeaders</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxGridTh">prfxGridTh</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxHeadTbl">prfxHeadTbl</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxHeadTblCont">prfxHeadTblCont</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxMainTblCont">prfxMainTblCont</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxTblCont">prfxTblCont</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-sourceTblHtml">sourceTblHtml</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Enable or disable column headers, default: false</p>
+</div>
       </div>
     </td>
     <td>
@@ -809,6 +595,32 @@
         
         
         
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html#instance-member-width">width</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Grid-layout container width as CSS string</p>
+</div>
       </div>
     </td>
     <td>
@@ -1202,14 +1014,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber14">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber17">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Grid layout, table with fixed headers</p>
+  <div data-ice="description"><p>Creates an instance of GridLayout</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/feature.js~Feature.html#instance-constructor-constructor">Feature#constructor</a></span></div>
@@ -1253,24 +1065,25 @@
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridColElms">
+  <h3 data-ice="anchor" id="instance-member-contCssClass">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">gridColElms</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">contCssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber43">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Css class for body table container element</p>
+</div>
 
   
 
@@ -1293,24 +1106,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridContCssClass">
+  <h3 data-ice="anchor" id="instance-member-defaultColWidth">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">gridContCssClass</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">defaultColWidth</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber26">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber88">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Grid-layout default column widht as CSS string</p>
+</div>
 
   
 
@@ -1333,24 +1147,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridDefaultColWidth">
+  <h3 data-ice="anchor" id="instance-member-enableFilters">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">gridDefaultColWidth</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">enableFilters</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber75">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Enable or disable column filters generation, default: true</p>
+</div>
 
   
 
@@ -1373,24 +1188,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridEnableFilters">
+  <h3 data-ice="anchor" id="instance-member-headContCssClass">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">gridEnableFilters</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">headContCssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber37">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber50">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Css class for headers table container element</p>
+</div>
 
   
 
@@ -1413,24 +1229,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridHeadContCssClass">
+  <h3 data-ice="anchor" id="instance-member-headRowIndex">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">gridHeadContCssClass</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">headRowIndex</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Index of the headers row, default: 0</p>
+</div>
 
   
 
@@ -1453,224 +1270,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridHeadRowIndex">
+  <h3 data-ice="anchor" id="instance-member-headRows">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">gridHeadRowIndex</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">headRows</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber69">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
-
-  
-
-  <div data-ice="properties">
+  <div data-ice="description"><p>Collection of the header row indexes to be moved into headers table</p>
 </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridHeadRows">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">gridHeadRows</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber35">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridHeight">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">gridHeight</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber22">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridInfDivCssClass">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">gridInfDivCssClass</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber31">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridMainContCssClass">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">gridMainContCssClass</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber24">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-gridWidth">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">gridWidth</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber20">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -1703,7 +1321,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber160">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber232">source</a></span></span>
     </span>
   </h3>
 
@@ -1743,7 +1361,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber148">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
@@ -1751,6 +1369,88 @@
   
   
   
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-height">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">height</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber32">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Grid-layout container height as CSS string</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-infDivCssClass">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">infDivCssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber57">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Css class for toolbar container element (rows counter, paging etc.)</p>
+</div>
 
   
 
@@ -1783,7 +1483,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber322">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber372">source</a></span></span>
     </span>
   </h3>
 
@@ -1813,304 +1513,66 @@
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-mainContCssClass">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">mainContCssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber38">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Css class for main container element</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-noHeaders">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">noHeaders</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">noHeaders</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber39">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber82">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
-
-  
-
-  <div data-ice="properties">
+  <div data-ice="description"><p>Enable or disable column headers, default: false</p>
 </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxGridFltTd">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">prfxGridFltTd</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber54">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxGridTh">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">prfxGridTh</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber56">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxHeadTbl">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">prfxHeadTbl</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber52">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxHeadTblCont">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">prfxHeadTblCont</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber50">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxMainTblCont">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">prfxMainTblCont</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber46">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxTblCont">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">prfxTblCont</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber48">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-sourceTblHtml">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">sourceTblHtml</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber58">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -2143,7 +1605,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber122">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber194">source</a></span></span>
     </span>
   </h3>
 
@@ -2183,7 +1645,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber267">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber339">source</a></span></span>
     </span>
   </h3>
 
@@ -2223,7 +1685,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber113">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber185">source</a></span></span>
     </span>
   </h3>
 
@@ -2231,6 +1693,47 @@
   
   
   
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-width">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">width</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber26">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Grid-layout container width as CSS string</p>
+</div>
 
   
 
@@ -2266,7 +1769,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber328">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber403">source</a></span></span>
     </span>
   </h3>
 
@@ -2307,7 +1810,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber67">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/gridLayout.js.html#lineNumber155">source</a></span></span>
     </span>
   </h3>
 
@@ -2315,6 +1818,7 @@
   
   
   <div data-ice="description"><p>Generates a grid with fixed headers</p>
+<p>TODO: reduce size of init by extracting single purposed methods</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/feature.js~Feature.html#instance-method-init">Feature#init</a></span></div>

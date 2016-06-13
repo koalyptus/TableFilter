@@ -12,16 +12,16 @@
               "type": "Identifier",
               "name": "INPUT",
               "range": [
-                37,
-                42
+                85,
+                90
               ],
               "loc": {
                 "start": {
-                  "line": 4,
+                  "line": 9,
                   "column": 13
                 },
                 "end": {
-                  "line": 4,
+                  "line": 9,
                   "column": 18
                 }
               }
@@ -31,31 +31,31 @@
               "value": "input",
               "raw": "'input'",
               "range": [
-                45,
-                52
+                93,
+                100
               ],
               "loc": {
                 "start": {
-                  "line": 4,
+                  "line": 9,
                   "column": 21
                 },
                 "end": {
-                  "line": 4,
+                  "line": 9,
                   "column": 28
                 }
               }
             },
             "range": [
-              37,
-              52
+              85,
+              100
             ],
             "loc": {
               "start": {
-                "line": 4,
+                "line": 9,
                 "column": 13
               },
               "end": {
-                "line": 4,
+                "line": 9,
                 "column": 28
               }
             }
@@ -63,16 +63,16 @@
         ],
         "kind": "const",
         "range": [
-          31,
-          53
+          79,
+          101
         ],
         "loc": {
           "start": {
-            "line": 4,
+            "line": 9,
             "column": 7
           },
           "end": {
-            "line": 4,
+            "line": 9,
             "column": 29
           }
         },
@@ -94,23 +94,60 @@
                 "column": 3
               }
             }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * Input filter type\n * @type {String}\n ",
+            "range": [
+              25,
+              71
+            ],
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 0
+              },
+              "end": {
+                "line": 8,
+                "column": 3
+              }
+            }
           }
         ],
-        "trailingComments": []
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Select filter type\n * @type {String}\n ",
+            "range": [
+              102,
+              149
+            ],
+            "loc": {
+              "start": {
+                "line": 10,
+                "column": 0
+              },
+              "end": {
+                "line": 13,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        24,
-        53
+        72,
+        101
       ],
       "loc": {
         "start": {
-          "line": 4,
+          "line": 9,
           "column": 0
         },
         "end": {
-          "line": 4,
+          "line": 9,
           "column": 29
         }
       },
@@ -132,6 +169,44 @@
               "column": 3
             }
           }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * Input filter type\n * @type {String}\n ",
+          "range": [
+            25,
+            71
+          ],
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 0
+            },
+            "end": {
+              "line": 8,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Select filter type\n * @type {String}\n ",
+          "range": [
+            102,
+            149
+          ],
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 0
+            },
+            "end": {
+              "line": 13,
+              "column": 3
+            }
+          }
         }
       ]
     },
@@ -146,16 +221,16 @@
               "type": "Identifier",
               "name": "SELECT",
               "range": [
-                67,
-                73
+                163,
+                169
               ],
               "loc": {
                 "start": {
-                  "line": 5,
+                  "line": 14,
                   "column": 13
                 },
                 "end": {
-                  "line": 5,
+                  "line": 14,
                   "column": 19
                 }
               }
@@ -165,31 +240,31 @@
               "value": "select",
               "raw": "'select'",
               "range": [
-                76,
-                84
+                172,
+                180
               ],
               "loc": {
                 "start": {
-                  "line": 5,
+                  "line": 14,
                   "column": 22
                 },
                 "end": {
-                  "line": 5,
+                  "line": 14,
                   "column": 30
                 }
               }
             },
             "range": [
-              67,
-              84
+              163,
+              180
             ],
             "loc": {
               "start": {
-                "line": 5,
+                "line": 14,
                 "column": 13
               },
               "end": {
-                "line": 5,
+                "line": 14,
                 "column": 30
               }
             }
@@ -197,38 +272,116 @@
         ],
         "kind": "const",
         "range": [
-          61,
-          85
+          157,
+          181
         ],
         "loc": {
           "start": {
-            "line": 5,
+            "line": 14,
             "column": 7
           },
           "end": {
-            "line": 5,
+            "line": 14,
             "column": 31
           }
         },
-        "leadingComments": [],
-        "trailingComments": []
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Select filter type\n * @type {String}\n ",
+            "range": [
+              102,
+              149
+            ],
+            "loc": {
+              "start": {
+                "line": 10,
+                "column": 0
+              },
+              "end": {
+                "line": 13,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Multiple select filter type\n * @type {String}\n ",
+            "range": [
+              182,
+              238
+            ],
+            "loc": {
+              "start": {
+                "line": 15,
+                "column": 0
+              },
+              "end": {
+                "line": 18,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        54,
-        85
+        150,
+        181
       ],
       "loc": {
         "start": {
-          "line": 5,
+          "line": 14,
           "column": 0
         },
         "end": {
-          "line": 5,
+          "line": 14,
           "column": 31
         }
-      }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Select filter type\n * @type {String}\n ",
+          "range": [
+            102,
+            149
+          ],
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 0
+            },
+            "end": {
+              "line": 13,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Multiple select filter type\n * @type {String}\n ",
+          "range": [
+            182,
+            238
+          ],
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 0
+            },
+            "end": {
+              "line": 18,
+              "column": 3
+            }
+          }
+        }
+      ]
     },
     {
       "type": "ExportNamedDeclaration",
@@ -241,16 +394,16 @@
               "type": "Identifier",
               "name": "MULTIPLE",
               "range": [
-                99,
-                107
+                252,
+                260
               ],
               "loc": {
                 "start": {
-                  "line": 6,
+                  "line": 19,
                   "column": 13
                 },
                 "end": {
-                  "line": 6,
+                  "line": 19,
                   "column": 21
                 }
               }
@@ -260,31 +413,31 @@
               "value": "multiple",
               "raw": "'multiple'",
               "range": [
-                110,
-                120
+                263,
+                273
               ],
               "loc": {
                 "start": {
-                  "line": 6,
+                  "line": 19,
                   "column": 24
                 },
                 "end": {
-                  "line": 6,
+                  "line": 19,
                   "column": 34
                 }
               }
             },
             "range": [
-              99,
-              120
+              252,
+              273
             ],
             "loc": {
               "start": {
-                "line": 6,
+                "line": 19,
                 "column": 13
               },
               "end": {
-                "line": 6,
+                "line": 19,
                 "column": 34
               }
             }
@@ -292,38 +445,116 @@
         ],
         "kind": "const",
         "range": [
-          93,
-          121
+          246,
+          274
         ],
         "loc": {
           "start": {
-            "line": 6,
+            "line": 19,
             "column": 7
           },
           "end": {
-            "line": 6,
+            "line": 19,
             "column": 35
           }
         },
-        "leadingComments": [],
-        "trailingComments": []
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Multiple select filter type\n * @type {String}\n ",
+            "range": [
+              182,
+              238
+            ],
+            "loc": {
+              "start": {
+                "line": 15,
+                "column": 0
+              },
+              "end": {
+                "line": 18,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Checklist filter type\n * @type {String}\n ",
+            "range": [
+              275,
+              325
+            ],
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 0
+              },
+              "end": {
+                "line": 23,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        86,
-        121
+        239,
+        274
       ],
       "loc": {
         "start": {
-          "line": 6,
+          "line": 19,
           "column": 0
         },
         "end": {
-          "line": 6,
+          "line": 19,
           "column": 35
         }
-      }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Multiple select filter type\n * @type {String}\n ",
+          "range": [
+            182,
+            238
+          ],
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 0
+            },
+            "end": {
+              "line": 18,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Checklist filter type\n * @type {String}\n ",
+          "range": [
+            275,
+            325
+          ],
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 0
+            },
+            "end": {
+              "line": 23,
+              "column": 3
+            }
+          }
+        }
+      ]
     },
     {
       "type": "ExportNamedDeclaration",
@@ -336,16 +567,16 @@
               "type": "Identifier",
               "name": "CHECKLIST",
               "range": [
-                135,
-                144
+                339,
+                348
               ],
               "loc": {
                 "start": {
-                  "line": 7,
+                  "line": 24,
                   "column": 13
                 },
                 "end": {
-                  "line": 7,
+                  "line": 24,
                   "column": 22
                 }
               }
@@ -355,31 +586,31 @@
               "value": "checklist",
               "raw": "'checklist'",
               "range": [
-                147,
-                158
+                351,
+                362
               ],
               "loc": {
                 "start": {
-                  "line": 7,
+                  "line": 24,
                   "column": 25
                 },
                 "end": {
-                  "line": 7,
+                  "line": 24,
                   "column": 36
                 }
               }
             },
             "range": [
-              135,
-              158
+              339,
+              362
             ],
             "loc": {
               "start": {
-                "line": 7,
+                "line": 24,
                 "column": 13
               },
               "end": {
-                "line": 7,
+                "line": 24,
                 "column": 36
               }
             }
@@ -387,38 +618,116 @@
         ],
         "kind": "const",
         "range": [
-          129,
-          159
+          333,
+          363
         ],
         "loc": {
           "start": {
-            "line": 7,
+            "line": 24,
             "column": 7
           },
           "end": {
-            "line": 7,
+            "line": 24,
             "column": 37
           }
         },
-        "leadingComments": [],
-        "trailingComments": []
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Checklist filter type\n * @type {String}\n ",
+            "range": [
+              275,
+              325
+            ],
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 0
+              },
+              "end": {
+                "line": 23,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * None filter type\n * @type {String}\n ",
+            "range": [
+              364,
+              409
+            ],
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 0
+              },
+              "end": {
+                "line": 28,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        122,
-        159
+        326,
+        363
       ],
       "loc": {
         "start": {
-          "line": 7,
+          "line": 24,
           "column": 0
         },
         "end": {
-          "line": 7,
+          "line": 24,
           "column": 37
         }
-      }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Checklist filter type\n * @type {String}\n ",
+          "range": [
+            275,
+            325
+          ],
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 0
+            },
+            "end": {
+              "line": 23,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * None filter type\n * @type {String}\n ",
+          "range": [
+            364,
+            409
+          ],
+          "loc": {
+            "start": {
+              "line": 25,
+              "column": 0
+            },
+            "end": {
+              "line": 28,
+              "column": 3
+            }
+          }
+        }
+      ]
     },
     {
       "type": "ExportNamedDeclaration",
@@ -431,16 +740,16 @@
               "type": "Identifier",
               "name": "NONE",
               "range": [
-                173,
-                177
+                423,
+                427
               ],
               "loc": {
                 "start": {
-                  "line": 8,
+                  "line": 29,
                   "column": 13
                 },
                 "end": {
-                  "line": 8,
+                  "line": 29,
                   "column": 17
                 }
               }
@@ -450,31 +759,31 @@
               "value": "none",
               "raw": "'none'",
               "range": [
-                180,
-                186
+                430,
+                436
               ],
               "loc": {
                 "start": {
-                  "line": 8,
+                  "line": 29,
                   "column": 20
                 },
                 "end": {
-                  "line": 8,
+                  "line": 29,
                   "column": 26
                 }
               }
             },
             "range": [
-              173,
-              186
+              423,
+              436
             ],
             "loc": {
               "start": {
-                "line": 8,
+                "line": 29,
                 "column": 13
               },
               "end": {
-                "line": 8,
+                "line": 29,
                 "column": 26
               }
             }
@@ -482,35 +791,72 @@
         ],
         "kind": "const",
         "range": [
-          167,
-          187
+          417,
+          437
         ],
         "loc": {
           "start": {
-            "line": 8,
+            "line": 29,
             "column": 7
           },
           "end": {
-            "line": 8,
+            "line": 29,
             "column": 27
           }
         },
-        "leadingComments": [],
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * None filter type\n * @type {String}\n ",
+            "range": [
+              364,
+              409
+            ],
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 0
+              },
+              "end": {
+                "line": 28,
+                "column": 3
+              }
+            }
+          }
+        ],
         "trailingComments": [
           {
             "type": "Block",
             "value": "*\n * Key codes\n ",
             "range": [
-              189,
-              209
+              439,
+              459
             ],
             "loc": {
               "start": {
-                "line": 10,
+                "line": 31,
                 "column": 0
               },
               "end": {
-                "line": 12,
+                "line": 33,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * Enter key code\n * @type {Number}\n ",
+            "range": [
+              461,
+              504
+            ],
+            "loc": {
+              "start": {
+                "line": 35,
+                "column": 0
+              },
+              "end": {
+                "line": 38,
                 "column": 3
               }
             }
@@ -520,34 +866,72 @@
       "specifiers": [],
       "source": null,
       "range": [
-        160,
-        187
+        410,
+        437
       ],
       "loc": {
         "start": {
-          "line": 8,
+          "line": 29,
           "column": 0
         },
         "end": {
-          "line": 8,
+          "line": 29,
           "column": 27
         }
       },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * None filter type\n * @type {String}\n ",
+          "range": [
+            364,
+            409
+          ],
+          "loc": {
+            "start": {
+              "line": 25,
+              "column": 0
+            },
+            "end": {
+              "line": 28,
+              "column": 3
+            }
+          }
+        }
+      ],
       "trailingComments": [
         {
           "type": "Block",
           "value": "*\n * Key codes\n ",
           "range": [
-            189,
-            209
+            439,
+            459
           ],
           "loc": {
             "start": {
-              "line": 10,
+              "line": 31,
               "column": 0
             },
             "end": {
-              "line": 12,
+              "line": 33,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * Enter key code\n * @type {Number}\n ",
+          "range": [
+            461,
+            504
+          ],
+          "loc": {
+            "start": {
+              "line": 35,
+              "column": 0
+            },
+            "end": {
+              "line": 38,
               "column": 3
             }
           }
@@ -565,16 +949,16 @@
               "type": "Identifier",
               "name": "ENTER_KEY",
               "range": [
-                223,
-                232
+                518,
+                527
               ],
               "loc": {
                 "start": {
-                  "line": 13,
+                  "line": 39,
                   "column": 13
                 },
                 "end": {
-                  "line": 13,
+                  "line": 39,
                   "column": 22
                 }
               }
@@ -584,31 +968,31 @@
               "value": 13,
               "raw": "13",
               "range": [
-                235,
-                237
+                530,
+                532
               ],
               "loc": {
                 "start": {
-                  "line": 13,
+                  "line": 39,
                   "column": 25
                 },
                 "end": {
-                  "line": 13,
+                  "line": 39,
                   "column": 27
                 }
               }
             },
             "range": [
-              223,
-              237
+              518,
+              532
             ],
             "loc": {
               "start": {
-                "line": 13,
+                "line": 39,
                 "column": 13
               },
               "end": {
-                "line": 13,
+                "line": 39,
                 "column": 27
               }
             }
@@ -616,16 +1000,16 @@
         ],
         "kind": "const",
         "range": [
-          217,
-          238
+          512,
+          533
         ],
         "loc": {
           "start": {
-            "line": 13,
+            "line": 39,
             "column": 7
           },
           "end": {
-            "line": 13,
+            "line": 39,
             "column": 28
           }
         },
@@ -634,36 +1018,73 @@
             "type": "Block",
             "value": "*\n * Key codes\n ",
             "range": [
-              189,
-              209
+              439,
+              459
             ],
             "loc": {
               "start": {
-                "line": 10,
+                "line": 31,
                 "column": 0
               },
               "end": {
-                "line": 12,
+                "line": 33,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * Enter key code\n * @type {Number}\n ",
+            "range": [
+              461,
+              504
+            ],
+            "loc": {
+              "start": {
+                "line": 35,
+                "column": 0
+              },
+              "end": {
+                "line": 38,
                 "column": 3
               }
             }
           }
         ],
-        "trailingComments": []
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Tab key code\n * @type {Number}\n ",
+            "range": [
+              534,
+              575
+            ],
+            "loc": {
+              "start": {
+                "line": 40,
+                "column": 0
+              },
+              "end": {
+                "line": 43,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        210,
-        238
+        505,
+        533
       ],
       "loc": {
         "start": {
-          "line": 13,
+          "line": 39,
           "column": 0
         },
         "end": {
-          "line": 13,
+          "line": 39,
           "column": 28
         }
       },
@@ -672,16 +1093,54 @@
           "type": "Block",
           "value": "*\n * Key codes\n ",
           "range": [
-            189,
-            209
+            439,
+            459
           ],
           "loc": {
             "start": {
-              "line": 10,
+              "line": 31,
               "column": 0
             },
             "end": {
-              "line": 12,
+              "line": 33,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * Enter key code\n * @type {Number}\n ",
+          "range": [
+            461,
+            504
+          ],
+          "loc": {
+            "start": {
+              "line": 35,
+              "column": 0
+            },
+            "end": {
+              "line": 38,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Tab key code\n * @type {Number}\n ",
+          "range": [
+            534,
+            575
+          ],
+          "loc": {
+            "start": {
+              "line": 40,
+              "column": 0
+            },
+            "end": {
+              "line": 43,
               "column": 3
             }
           }
@@ -699,16 +1158,16 @@
               "type": "Identifier",
               "name": "TAB_KEY",
               "range": [
-                252,
-                259
+                589,
+                596
               ],
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 44,
                   "column": 13
                 },
                 "end": {
-                  "line": 14,
+                  "line": 44,
                   "column": 20
                 }
               }
@@ -718,31 +1177,31 @@
               "value": 9,
               "raw": "9",
               "range": [
-                262,
-                263
+                599,
+                600
               ],
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 44,
                   "column": 23
                 },
                 "end": {
-                  "line": 14,
+                  "line": 44,
                   "column": 24
                 }
               }
             },
             "range": [
-              252,
-              263
+              589,
+              600
             ],
             "loc": {
               "start": {
-                "line": 14,
+                "line": 44,
                 "column": 13
               },
               "end": {
-                "line": 14,
+                "line": 44,
                 "column": 24
               }
             }
@@ -750,38 +1209,116 @@
         ],
         "kind": "const",
         "range": [
-          246,
-          264
+          583,
+          601
         ],
         "loc": {
           "start": {
-            "line": 14,
+            "line": 44,
             "column": 7
           },
           "end": {
-            "line": 14,
+            "line": 44,
             "column": 25
           }
         },
-        "leadingComments": [],
-        "trailingComments": []
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Tab key code\n * @type {Number}\n ",
+            "range": [
+              534,
+              575
+            ],
+            "loc": {
+              "start": {
+                "line": 40,
+                "column": 0
+              },
+              "end": {
+                "line": 43,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Escape key code\n * @type {Number}\n ",
+            "range": [
+              602,
+              646
+            ],
+            "loc": {
+              "start": {
+                "line": 45,
+                "column": 0
+              },
+              "end": {
+                "line": 48,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        239,
-        264
+        576,
+        601
       ],
       "loc": {
         "start": {
-          "line": 14,
+          "line": 44,
           "column": 0
         },
         "end": {
-          "line": 14,
+          "line": 44,
           "column": 25
         }
-      }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Tab key code\n * @type {Number}\n ",
+          "range": [
+            534,
+            575
+          ],
+          "loc": {
+            "start": {
+              "line": 40,
+              "column": 0
+            },
+            "end": {
+              "line": 43,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Escape key code\n * @type {Number}\n ",
+          "range": [
+            602,
+            646
+          ],
+          "loc": {
+            "start": {
+              "line": 45,
+              "column": 0
+            },
+            "end": {
+              "line": 48,
+              "column": 3
+            }
+          }
+        }
+      ]
     },
     {
       "type": "ExportNamedDeclaration",
@@ -794,16 +1331,16 @@
               "type": "Identifier",
               "name": "ESC_KEY",
               "range": [
-                278,
-                285
+                660,
+                667
               ],
               "loc": {
                 "start": {
-                  "line": 15,
+                  "line": 49,
                   "column": 13
                 },
                 "end": {
-                  "line": 15,
+                  "line": 49,
                   "column": 20
                 }
               }
@@ -813,31 +1350,31 @@
               "value": 27,
               "raw": "27",
               "range": [
-                288,
-                290
+                670,
+                672
               ],
               "loc": {
                 "start": {
-                  "line": 15,
+                  "line": 49,
                   "column": 23
                 },
                 "end": {
-                  "line": 15,
+                  "line": 49,
                   "column": 25
                 }
               }
             },
             "range": [
-              278,
-              290
+              660,
+              672
             ],
             "loc": {
               "start": {
-                "line": 15,
+                "line": 49,
                 "column": 13
               },
               "end": {
-                "line": 15,
+                "line": 49,
                 "column": 25
               }
             }
@@ -845,38 +1382,116 @@
         ],
         "kind": "const",
         "range": [
-          272,
-          291
+          654,
+          673
         ],
         "loc": {
           "start": {
-            "line": 15,
+            "line": 49,
             "column": 7
           },
           "end": {
-            "line": 15,
+            "line": 49,
             "column": 26
           }
         },
-        "leadingComments": [],
-        "trailingComments": []
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Escape key code\n * @type {Number}\n ",
+            "range": [
+              602,
+              646
+            ],
+            "loc": {
+              "start": {
+                "line": 45,
+                "column": 0
+              },
+              "end": {
+                "line": 48,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Up arrow key code\n * @type {Number}\n ",
+            "range": [
+              674,
+              720
+            ],
+            "loc": {
+              "start": {
+                "line": 50,
+                "column": 0
+              },
+              "end": {
+                "line": 53,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        265,
-        291
+        647,
+        673
       ],
       "loc": {
         "start": {
-          "line": 15,
+          "line": 49,
           "column": 0
         },
         "end": {
-          "line": 15,
+          "line": 49,
           "column": 26
         }
-      }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Escape key code\n * @type {Number}\n ",
+          "range": [
+            602,
+            646
+          ],
+          "loc": {
+            "start": {
+              "line": 45,
+              "column": 0
+            },
+            "end": {
+              "line": 48,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Up arrow key code\n * @type {Number}\n ",
+          "range": [
+            674,
+            720
+          ],
+          "loc": {
+            "start": {
+              "line": 50,
+              "column": 0
+            },
+            "end": {
+              "line": 53,
+              "column": 3
+            }
+          }
+        }
+      ]
     },
     {
       "type": "ExportNamedDeclaration",
@@ -889,16 +1504,16 @@
               "type": "Identifier",
               "name": "UP_ARROW_KEY",
               "range": [
-                305,
-                317
+                734,
+                746
               ],
               "loc": {
                 "start": {
-                  "line": 16,
+                  "line": 54,
                   "column": 13
                 },
                 "end": {
-                  "line": 16,
+                  "line": 54,
                   "column": 25
                 }
               }
@@ -908,31 +1523,31 @@
               "value": 38,
               "raw": "38",
               "range": [
-                320,
-                322
+                749,
+                751
               ],
               "loc": {
                 "start": {
-                  "line": 16,
+                  "line": 54,
                   "column": 28
                 },
                 "end": {
-                  "line": 16,
+                  "line": 54,
                   "column": 30
                 }
               }
             },
             "range": [
-              305,
-              322
+              734,
+              751
             ],
             "loc": {
               "start": {
-                "line": 16,
+                "line": 54,
                 "column": 13
               },
               "end": {
-                "line": 16,
+                "line": 54,
                 "column": 30
               }
             }
@@ -940,38 +1555,116 @@
         ],
         "kind": "const",
         "range": [
-          299,
-          323
+          728,
+          752
         ],
         "loc": {
           "start": {
-            "line": 16,
+            "line": 54,
             "column": 7
           },
           "end": {
-            "line": 16,
+            "line": 54,
             "column": 31
           }
         },
-        "leadingComments": [],
-        "trailingComments": []
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Up arrow key code\n * @type {Number}\n ",
+            "range": [
+              674,
+              720
+            ],
+            "loc": {
+              "start": {
+                "line": 50,
+                "column": 0
+              },
+              "end": {
+                "line": 53,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Down arrow key code\n * @type {Number}\n ",
+            "range": [
+              753,
+              801
+            ],
+            "loc": {
+              "start": {
+                "line": 55,
+                "column": 0
+              },
+              "end": {
+                "line": 58,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        292,
-        323
+        721,
+        752
       ],
       "loc": {
         "start": {
-          "line": 16,
+          "line": 54,
           "column": 0
         },
         "end": {
-          "line": 16,
+          "line": 54,
           "column": 31
         }
-      }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Up arrow key code\n * @type {Number}\n ",
+          "range": [
+            674,
+            720
+          ],
+          "loc": {
+            "start": {
+              "line": 50,
+              "column": 0
+            },
+            "end": {
+              "line": 53,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Down arrow key code\n * @type {Number}\n ",
+          "range": [
+            753,
+            801
+          ],
+          "loc": {
+            "start": {
+              "line": 55,
+              "column": 0
+            },
+            "end": {
+              "line": 58,
+              "column": 3
+            }
+          }
+        }
+      ]
     },
     {
       "type": "ExportNamedDeclaration",
@@ -984,16 +1677,16 @@
               "type": "Identifier",
               "name": "DOWN_ARROW_KEY",
               "range": [
-                337,
-                351
+                815,
+                829
               ],
               "loc": {
                 "start": {
-                  "line": 17,
+                  "line": 59,
                   "column": 13
                 },
                 "end": {
-                  "line": 17,
+                  "line": 59,
                   "column": 27
                 }
               }
@@ -1003,31 +1696,31 @@
               "value": 40,
               "raw": "40",
               "range": [
-                354,
-                356
+                832,
+                834
               ],
               "loc": {
                 "start": {
-                  "line": 17,
+                  "line": 59,
                   "column": 30
                 },
                 "end": {
-                  "line": 17,
+                  "line": 59,
                   "column": 32
                 }
               }
             },
             "range": [
-              337,
-              356
+              815,
+              834
             ],
             "loc": {
               "start": {
-                "line": 17,
+                "line": 59,
                 "column": 13
               },
               "end": {
-                "line": 17,
+                "line": 59,
                 "column": 32
               }
             }
@@ -1035,35 +1728,72 @@
         ],
         "kind": "const",
         "range": [
-          331,
-          357
+          809,
+          835
         ],
         "loc": {
           "start": {
-            "line": 17,
+            "line": 59,
             "column": 7
           },
           "end": {
-            "line": 17,
+            "line": 59,
             "column": 33
           }
         },
-        "leadingComments": [],
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Down arrow key code\n * @type {Number}\n ",
+            "range": [
+              753,
+              801
+            ],
+            "loc": {
+              "start": {
+                "line": 55,
+                "column": 0
+              },
+              "end": {
+                "line": 58,
+                "column": 3
+              }
+            }
+          }
+        ],
         "trailingComments": [
           {
             "type": "Block",
             "value": "*\n * HTML tags\n ",
             "range": [
-              359,
-              379
+              837,
+              857
             ],
             "loc": {
               "start": {
-                "line": 19,
+                "line": 61,
                 "column": 0
               },
               "end": {
-                "line": 21,
+                "line": 63,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * Header cell tag\n * @type {String}\n ",
+            "range": [
+              859,
+              903
+            ],
+            "loc": {
+              "start": {
+                "line": 65,
+                "column": 0
+              },
+              "end": {
+                "line": 68,
                 "column": 3
               }
             }
@@ -1073,34 +1803,72 @@
       "specifiers": [],
       "source": null,
       "range": [
-        324,
-        357
+        802,
+        835
       ],
       "loc": {
         "start": {
-          "line": 17,
+          "line": 59,
           "column": 0
         },
         "end": {
-          "line": 17,
+          "line": 59,
           "column": 33
         }
       },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Down arrow key code\n * @type {Number}\n ",
+          "range": [
+            753,
+            801
+          ],
+          "loc": {
+            "start": {
+              "line": 55,
+              "column": 0
+            },
+            "end": {
+              "line": 58,
+              "column": 3
+            }
+          }
+        }
+      ],
       "trailingComments": [
         {
           "type": "Block",
           "value": "*\n * HTML tags\n ",
           "range": [
-            359,
-            379
+            837,
+            857
           ],
           "loc": {
             "start": {
-              "line": 19,
+              "line": 61,
               "column": 0
             },
             "end": {
-              "line": 21,
+              "line": 63,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * Header cell tag\n * @type {String}\n ",
+          "range": [
+            859,
+            903
+          ],
+          "loc": {
+            "start": {
+              "line": 65,
+              "column": 0
+            },
+            "end": {
+              "line": 68,
               "column": 3
             }
           }
@@ -1118,16 +1886,16 @@
               "type": "Identifier",
               "name": "HEADER_TAG",
               "range": [
-                393,
-                403
+                917,
+                927
               ],
               "loc": {
                 "start": {
-                  "line": 22,
+                  "line": 69,
                   "column": 13
                 },
                 "end": {
-                  "line": 22,
+                  "line": 69,
                   "column": 23
                 }
               }
@@ -1137,31 +1905,31 @@
               "value": "TH",
               "raw": "'TH'",
               "range": [
-                406,
-                410
+                930,
+                934
               ],
               "loc": {
                 "start": {
-                  "line": 22,
+                  "line": 69,
                   "column": 26
                 },
                 "end": {
-                  "line": 22,
+                  "line": 69,
                   "column": 30
                 }
               }
             },
             "range": [
-              393,
-              410
+              917,
+              934
             ],
             "loc": {
               "start": {
-                "line": 22,
+                "line": 69,
                 "column": 13
               },
               "end": {
-                "line": 22,
+                "line": 69,
                 "column": 30
               }
             }
@@ -1169,16 +1937,16 @@
         ],
         "kind": "const",
         "range": [
-          387,
-          411
+          911,
+          935
         ],
         "loc": {
           "start": {
-            "line": 22,
+            "line": 69,
             "column": 7
           },
           "end": {
-            "line": 22,
+            "line": 69,
             "column": 31
           }
         },
@@ -1187,36 +1955,73 @@
             "type": "Block",
             "value": "*\n * HTML tags\n ",
             "range": [
-              359,
-              379
+              837,
+              857
             ],
             "loc": {
               "start": {
-                "line": 19,
+                "line": 61,
                 "column": 0
               },
               "end": {
-                "line": 21,
+                "line": 63,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * Header cell tag\n * @type {String}\n ",
+            "range": [
+              859,
+              903
+            ],
+            "loc": {
+              "start": {
+                "line": 65,
+                "column": 0
+              },
+              "end": {
+                "line": 68,
                 "column": 3
               }
             }
           }
         ],
-        "trailingComments": []
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Cell tag\n * @type {String}\n ",
+            "range": [
+              936,
+              973
+            ],
+            "loc": {
+              "start": {
+                "line": 70,
+                "column": 0
+              },
+              "end": {
+                "line": 73,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        380,
-        411
+        904,
+        935
       ],
       "loc": {
         "start": {
-          "line": 22,
+          "line": 69,
           "column": 0
         },
         "end": {
-          "line": 22,
+          "line": 69,
           "column": 31
         }
       },
@@ -1225,16 +2030,54 @@
           "type": "Block",
           "value": "*\n * HTML tags\n ",
           "range": [
-            359,
-            379
+            837,
+            857
           ],
           "loc": {
             "start": {
-              "line": 19,
+              "line": 61,
               "column": 0
             },
             "end": {
-              "line": 21,
+              "line": 63,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * Header cell tag\n * @type {String}\n ",
+          "range": [
+            859,
+            903
+          ],
+          "loc": {
+            "start": {
+              "line": 65,
+              "column": 0
+            },
+            "end": {
+              "line": 68,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Cell tag\n * @type {String}\n ",
+          "range": [
+            936,
+            973
+          ],
+          "loc": {
+            "start": {
+              "line": 70,
+              "column": 0
+            },
+            "end": {
+              "line": 73,
               "column": 3
             }
           }
@@ -1252,16 +2095,16 @@
               "type": "Identifier",
               "name": "CELL_TAG",
               "range": [
-                425,
-                433
+                987,
+                995
               ],
               "loc": {
                 "start": {
-                  "line": 23,
+                  "line": 74,
                   "column": 13
                 },
                 "end": {
-                  "line": 23,
+                  "line": 74,
                   "column": 21
                 }
               }
@@ -1271,31 +2114,31 @@
               "value": "TD",
               "raw": "'TD'",
               "range": [
-                436,
-                440
+                998,
+                1002
               ],
               "loc": {
                 "start": {
-                  "line": 23,
+                  "line": 74,
                   "column": 24
                 },
                 "end": {
-                  "line": 23,
+                  "line": 74,
                   "column": 28
                 }
               }
             },
             "range": [
-              425,
-              440
+              987,
+              1002
             ],
             "loc": {
               "start": {
-                "line": 23,
+                "line": 74,
                 "column": 13
               },
               "end": {
-                "line": 23,
+                "line": 74,
                 "column": 28
               }
             }
@@ -1303,35 +2146,72 @@
         ],
         "kind": "const",
         "range": [
-          419,
-          441
+          981,
+          1003
         ],
         "loc": {
           "start": {
-            "line": 23,
+            "line": 74,
             "column": 7
           },
           "end": {
-            "line": 23,
+            "line": 74,
             "column": 29
           }
         },
-        "leadingComments": [],
-        "trailingComments": [
+        "leadingComments": [
           {
             "type": "Block",
-            "value": "*\n * Numeric values\n ",
+            "value": "*\n * Cell tag\n * @type {String}\n ",
             "range": [
-              443,
-              468
+              936,
+              973
             ],
             "loc": {
               "start": {
-                "line": 25,
+                "line": 70,
                 "column": 0
               },
               "end": {
-                "line": 27,
+                "line": 73,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Default values\n ",
+            "range": [
+              1005,
+              1030
+            ],
+            "loc": {
+              "start": {
+                "line": 76,
+                "column": 0
+              },
+              "end": {
+                "line": 78,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+            "range": [
+              1032,
+              1094
+            ],
+            "loc": {
+              "start": {
+                "line": 80,
+                "column": 0
+              },
+              "end": {
+                "line": 83,
                 "column": 3
               }
             }
@@ -1341,34 +2221,72 @@
       "specifiers": [],
       "source": null,
       "range": [
-        412,
-        441
+        974,
+        1003
       ],
       "loc": {
         "start": {
-          "line": 23,
+          "line": 74,
           "column": 0
         },
         "end": {
-          "line": 23,
+          "line": 74,
           "column": 29
         }
       },
-      "trailingComments": [
+      "leadingComments": [
         {
           "type": "Block",
-          "value": "*\n * Numeric values\n ",
+          "value": "*\n * Cell tag\n * @type {String}\n ",
           "range": [
-            443,
-            468
+            936,
+            973
           ],
           "loc": {
             "start": {
-              "line": 25,
+              "line": 70,
               "column": 0
             },
             "end": {
-              "line": 27,
+              "line": 73,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Default values\n ",
+          "range": [
+            1005,
+            1030
+          ],
+          "loc": {
+            "start": {
+              "line": 76,
+              "column": 0
+            },
+            "end": {
+              "line": 78,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+          "range": [
+            1032,
+            1094
+          ],
+          "loc": {
+            "start": {
+              "line": 80,
+              "column": 0
+            },
+            "end": {
+              "line": 83,
               "column": 3
             }
           }
@@ -1386,16 +2304,16 @@
               "type": "Identifier",
               "name": "AUTO_FILTER_DELAY",
               "range": [
-                482,
-                499
+                1108,
+                1125
               ],
               "loc": {
                 "start": {
-                  "line": 28,
+                  "line": 84,
                   "column": 13
                 },
                 "end": {
-                  "line": 28,
+                  "line": 84,
                   "column": 30
                 }
               }
@@ -1405,31 +2323,31 @@
               "value": 750,
               "raw": "750",
               "range": [
-                502,
-                505
+                1128,
+                1131
               ],
               "loc": {
                 "start": {
-                  "line": 28,
+                  "line": 84,
                   "column": 33
                 },
                 "end": {
-                  "line": 28,
+                  "line": 84,
                   "column": 36
                 }
               }
             },
             "range": [
-              482,
-              505
+              1108,
+              1131
             ],
             "loc": {
               "start": {
-                "line": 28,
+                "line": 84,
                 "column": 13
               },
               "end": {
-                "line": 28,
+                "line": 84,
                 "column": 36
               }
             }
@@ -1437,34 +2355,52 @@
         ],
         "kind": "const",
         "range": [
-          476,
-          506
+          1102,
+          1132
         ],
         "loc": {
           "start": {
-            "line": 28,
+            "line": 84,
             "column": 7
           },
           "end": {
-            "line": 28,
+            "line": 84,
             "column": 37
           }
         },
         "leadingComments": [
           {
             "type": "Block",
-            "value": "*\n * Numeric values\n ",
+            "value": "*\n * Default values\n ",
             "range": [
-              443,
-              468
+              1005,
+              1030
             ],
             "loc": {
               "start": {
-                "line": 25,
+                "line": 76,
                 "column": 0
               },
               "end": {
-                "line": 27,
+                "line": 78,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+            "range": [
+              1032,
+              1094
+            ],
+            "loc": {
+              "start": {
+                "line": 80,
+                "column": 0
+              },
+              "end": {
+                "line": 83,
                 "column": 3
               }
             }
@@ -1475,34 +2411,52 @@
       "specifiers": [],
       "source": null,
       "range": [
-        469,
-        506
+        1095,
+        1132
       ],
       "loc": {
         "start": {
-          "line": 28,
+          "line": 84,
           "column": 0
         },
         "end": {
-          "line": 28,
+          "line": 84,
           "column": 37
         }
       },
       "leadingComments": [
         {
           "type": "Block",
-          "value": "*\n * Numeric values\n ",
+          "value": "*\n * Default values\n ",
           "range": [
-            443,
-            468
+            1005,
+            1030
           ],
           "loc": {
             "start": {
-              "line": 25,
+              "line": 76,
               "column": 0
             },
             "end": {
-              "line": 27,
+              "line": 78,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+          "range": [
+            1032,
+            1094
+          ],
+          "loc": {
+            "start": {
+              "line": 80,
+              "column": 0
+            },
+            "end": {
+              "line": 83,
               "column": 3
             }
           }
@@ -1512,16 +2466,16 @@
   ],
   "sourceType": "module",
   "range": [
-    24,
-    506
+    72,
+    1132
   ],
   "loc": {
     "start": {
-      "line": 4,
+      "line": 9,
       "column": 0
     },
     "end": {
-      "line": 28,
+      "line": 84,
       "column": 37
     }
   },
@@ -1546,10 +2500,28 @@
     },
     {
       "type": "Block",
-      "value": "*\n * Key codes\n ",
+      "value": "*\n * Input filter type\n * @type {String}\n ",
       "range": [
-        189,
-        209
+        25,
+        71
+      ],
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Select filter type\n * @type {String}\n ",
+      "range": [
+        102,
+        149
       ],
       "loc": {
         "start": {
@@ -1557,7 +2529,169 @@
           "column": 0
         },
         "end": {
-          "line": 12,
+          "line": 13,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Multiple select filter type\n * @type {String}\n ",
+      "range": [
+        182,
+        238
+      ],
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Checklist filter type\n * @type {String}\n ",
+      "range": [
+        275,
+        325
+      ],
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 23,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * None filter type\n * @type {String}\n ",
+      "range": [
+        364,
+        409
+      ],
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 0
+        },
+        "end": {
+          "line": 28,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Key codes\n ",
+      "range": [
+        439,
+        459
+      ],
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 0
+        },
+        "end": {
+          "line": 33,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Enter key code\n * @type {Number}\n ",
+      "range": [
+        461,
+        504
+      ],
+      "loc": {
+        "start": {
+          "line": 35,
+          "column": 0
+        },
+        "end": {
+          "line": 38,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Tab key code\n * @type {Number}\n ",
+      "range": [
+        534,
+        575
+      ],
+      "loc": {
+        "start": {
+          "line": 40,
+          "column": 0
+        },
+        "end": {
+          "line": 43,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Escape key code\n * @type {Number}\n ",
+      "range": [
+        602,
+        646
+      ],
+      "loc": {
+        "start": {
+          "line": 45,
+          "column": 0
+        },
+        "end": {
+          "line": 48,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Up arrow key code\n * @type {Number}\n ",
+      "range": [
+        674,
+        720
+      ],
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 0
+        },
+        "end": {
+          "line": 53,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Down arrow key code\n * @type {Number}\n ",
+      "range": [
+        753,
+        801
+      ],
+      "loc": {
+        "start": {
+          "line": 55,
+          "column": 0
+        },
+        "end": {
+          "line": 58,
           "column": 3
         }
       }
@@ -1566,34 +2700,88 @@
       "type": "Block",
       "value": "*\n * HTML tags\n ",
       "range": [
-        359,
-        379
+        837,
+        857
       ],
       "loc": {
         "start": {
-          "line": 19,
+          "line": 61,
           "column": 0
         },
         "end": {
-          "line": 21,
+          "line": 63,
           "column": 3
         }
       }
     },
     {
       "type": "Block",
-      "value": "*\n * Numeric values\n ",
+      "value": "*\n * Header cell tag\n * @type {String}\n ",
       "range": [
-        443,
-        468
+        859,
+        903
       ],
       "loc": {
         "start": {
-          "line": 25,
+          "line": 65,
           "column": 0
         },
         "end": {
-          "line": 27,
+          "line": 68,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Cell tag\n * @type {String}\n ",
+      "range": [
+        936,
+        973
+      ],
+      "loc": {
+        "start": {
+          "line": 70,
+          "column": 0
+        },
+        "end": {
+          "line": 73,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Default values\n ",
+      "range": [
+        1005,
+        1030
+      ],
+      "loc": {
+        "start": {
+          "line": 76,
+          "column": 0
+        },
+        "end": {
+          "line": 78,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+      "range": [
+        1032,
+        1094
+      ],
+      "loc": {
+        "start": {
+          "line": 80,
+          "column": 0
+        },
+        "end": {
+          "line": 83,
           "column": 3
         }
       }
