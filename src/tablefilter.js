@@ -567,11 +567,11 @@ export class TableFilter {
             this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
 
+        this.initialized = true;
+
         if (this.onFiltersLoaded) {
             this.onFiltersLoaded.call(null, this);
         }
-
-        this.initialized = true;
         this.emitter.emit('initialized', this);
     }
 
