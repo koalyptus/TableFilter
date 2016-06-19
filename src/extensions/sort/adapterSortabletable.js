@@ -213,7 +213,7 @@ export default class AdapterSortableTable extends Feature {
                 let triggers = adpt.triggerIds;
                 cells = [];
                 l = triggers.length;
-                for (let j = 0; j < triggers.length; j++) {
+                for (let j = 0; j < l; j++) {
                     cells.push(elm(triggers[j]));
                 }
             } else {
@@ -224,13 +224,17 @@ export default class AdapterSortableTable extends Feature {
                 l = cells.length;
             }
             for (let i = 0; i < l; i++) {
-                let cellAttr = cells[i].getAttribute('_sortType');
+                let cell = cells[i];
+                if (!cell) {
+                    continue;
+                }
+                let cellAttr = cell.getAttribute('_sortType');
                 if (cellAttr !== null && cellAttr !== 'None') {
-                    img = cells[i].lastChild || cells[i];
+                    img = cell.lastChild || cell;
                     if (img.nodeName.toLowerCase() !== 'img') {
                         img = createElm('img',
                             ['src', adpt.imgPath + adpt.imgBlank]);
-                        cells[i].appendChild(img);
+                        cell.appendChild(img);
                     }
                     if (i === stt.sortColumn) {
                         img.className = adpt.imgClassName + ' ' +
