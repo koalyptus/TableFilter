@@ -1,7 +1,7 @@
 {
-  "coverage": "36.37%",
-  "expectCount": 778,
-  "actualCount": 283,
+  "coverage": "38.27%",
+  "expectCount": 776,
+  "actualCount": 297,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -28,7 +28,7 @@
       "actualCount": 3,
       "undocumentLines": [
         9,
-        284,
+        288,
         27,
         38,
         19,
@@ -44,21 +44,19 @@
         44,
         41,
         126,
-        289,
+        293,
         25,
         24,
         22,
-        329,
+        333,
         28
       ]
     },
     "src/modules/alternateRows.js": {
-      "expectCount": 11,
+      "expectCount": 9,
       "actualCount": 8,
       "undocumentLines": [
-        19,
-        40,
-        21
+        47
       ]
     },
     "src/modules/checkList.js": {
@@ -317,23 +315,8 @@
     },
     "src/feature.js": {
       "expectCount": 14,
-      "actualCount": 0,
-      "undocumentLines": [
-        4,
-        9,
-        5,
-        23,
-        31,
-        10,
-        27,
-        8,
-        7,
-        14,
-        11,
-        35,
-        18,
-        6
-      ]
+      "actualCount": 14,
+      "undocumentLines": []
     },
     "src/extensions/filtersVisibility/filtersVisibility.js": {
       "expectCount": 33,

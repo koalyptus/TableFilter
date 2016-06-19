@@ -1860,18 +1860,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/alternaterows.js~alternaterows#removerowbg",
-    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-removeRowBg",
-    "src/modules/alternateRows.js~AlternateRows#removeRowBg",
-    "method"
-  ],
-  [
-    "src/modules/alternaterows.js~alternaterows#setrowbg",
-    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-setRowBg",
-    "src/modules/alternateRows.js~AlternateRows#setRowBg",
-    "method"
-  ],
-  [
     "src/modules/checklist.js",
     "file/src/modules/checkList.js.html",
     "src/modules/checkList.js",
