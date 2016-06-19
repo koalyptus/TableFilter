@@ -15,9 +15,16 @@ export class AlternateRows extends Feature {
         super(tf, 'alternateRows');
 
         let config = this.config;
-        //defines css class for even rows
+        /**
+         * Css class for even rows (default: 'even')
+         * @type {String}
+         */
         this.evenCss = config.even_row_css_class || 'even';
-        //defines css class for odd rows
+
+        /**
+         * Css class for odd rows (default: 'odd')
+         * @type {String}
+         */
         this.oddCss = config.odd_row_css_class || 'odd';
     }
 
@@ -79,6 +86,7 @@ export class AlternateRows extends Feature {
      * @param {Number} rowIdx Row index
      * @param {Number} idx    Valid rows collection index needed to calculate bg
      * color
+     * @private
      */
     setRowBg(rowIdx, idx) {
         if (!this.isEnabled() || isNaN(rowIdx)) {
@@ -94,6 +102,7 @@ export class AlternateRows extends Feature {
     /**
      * Removes row background color
      * @param  {Number} idx Row index
+     * @private
      */
     removeRowBg(idx) {
         if (isNaN(idx)) {
