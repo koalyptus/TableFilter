@@ -14,9 +14,13 @@
 <script data-config>
     var filtersConfig = {
         base_path: '../dist/tablefilter/',
+        col_0: 'multiple',
         col_1: 'select',
-        col_2: 'select',
+        col_2: 'multiple',
         col_3: 'select',
+        on_after_filter: function() {
+            console.log('After filter fired');
+        },
         alternate_rows: true,
         rows_counter: true,
         btn_reset: true,
