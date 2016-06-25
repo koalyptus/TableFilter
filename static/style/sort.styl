@@ -3,14 +3,18 @@
  */
 
 .sort-arrow
+    position                absolute
+    display                 none
     width                   11px
     height                  11px
-    margin                  0 2px
+    margin                  0
     background-position     center center;
     background-repeat       no-repeat
 
 &.descending
-    background-image    url("themes/downsimple.png")
+    display                 inline
+    background-image        url("themes/downsimple.png")
 
 &.ascending
-    background-image    url("themes/upsimple.png")
+    display                 inline
+    background-image        url("themes/upsimple.png")
