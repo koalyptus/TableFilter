@@ -63,7 +63,7 @@
       "expectCount": 22,
       "actualCount": 21,
       "undocumentLines": [
-        197
+        196
       ]
     },
     "src/modules/clearButton.js": {
