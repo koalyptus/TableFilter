@@ -133,11 +133,10 @@ export class CheckList extends Feature {
      */
     optionClick(evt) {
         this.setCheckListValues(evt.target);
-        this.onChange(evt);
     }
 
     /**
-     * Checklist container click event handler for load on demand feature
+     * Checklist container click event handler for load-on-demand feature
      * @param {Event} evt
      */
     onCheckListClick(evt) {
