@@ -1956,12 +1956,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/checklist.js~checklist#onchange",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-onChange",
-    "src/modules/checkList.js~CheckList#onChange",
-    "method"
-  ],
-  [
     "src/modules/checklist.js~checklist#onchecklistclick",
     "class/src/modules/checkList.js~CheckList.html#instance-method-onCheckListClick",
     "src/modules/checkList.js~CheckList#onCheckListClick",
@@ -1998,36 +1992,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/modules/clearbutton.js~clearbutton#btnresetel",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-member-btnResetEl",
-    "src/modules/clearButton.js~ClearButton#btnResetEl",
-    "member"
-  ],
-  [
-    "src/modules/clearbutton.js~clearbutton#btnresethtml",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-member-btnResetHtml",
-    "src/modules/clearButton.js~ClearButton#btnResetHtml",
-    "member"
-  ],
-  [
-    "src/modules/clearbutton.js~clearbutton#btnresettext",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-member-btnResetText",
-    "src/modules/clearButton.js~ClearButton#btnResetText",
-    "member"
-  ],
-  [
-    "src/modules/clearbutton.js~clearbutton#btnresettgtid",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-member-btnResetTgtId",
-    "src/modules/clearButton.js~ClearButton#btnResetTgtId",
-    "member"
-  ],
-  [
-    "src/modules/clearbutton.js~clearbutton#btnresettooltip",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-member-btnResetTooltip",
-    "src/modules/clearButton.js~ClearButton#btnResetTooltip",
-    "member"
-  ],
-  [
     "src/modules/clearbutton.js~clearbutton#constructor",
     "class/src/modules/clearButton.js~ClearButton.html#instance-constructor-constructor",
     "src/modules/clearButton.js~ClearButton#constructor",
@@ -2038,6 +2002,12 @@ window.esdocSearchIndex = [
     "class/src/modules/clearButton.js~ClearButton.html#instance-method-destroy",
     "src/modules/clearButton.js~ClearButton#destroy",
     "method"
+  ],
+  [
+    "src/modules/clearbutton.js~clearbutton#html",
+    "class/src/modules/clearButton.js~ClearButton.html#instance-member-html",
+    "src/modules/clearButton.js~ClearButton#html",
+    "member"
   ],
   [
     "src/modules/clearbutton.js~clearbutton#init",
@@ -2052,15 +2022,21 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/clearbutton.js~clearbutton#onclick",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-method-onClick",
-    "src/modules/clearButton.js~ClearButton#onClick",
-    "method"
+    "src/modules/clearbutton.js~clearbutton#targetid",
+    "class/src/modules/clearButton.js~ClearButton.html#instance-member-targetId",
+    "src/modules/clearButton.js~ClearButton#targetId",
+    "member"
   ],
   [
-    "src/modules/clearbutton.js~clearbutton#prfxresetspan",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-member-prfxResetSpan",
-    "src/modules/clearButton.js~ClearButton#prfxResetSpan",
+    "src/modules/clearbutton.js~clearbutton#text",
+    "class/src/modules/clearButton.js~ClearButton.html#instance-member-text",
+    "src/modules/clearButton.js~ClearButton#text",
+    "member"
+  ],
+  [
+    "src/modules/clearbutton.js~clearbutton#tooltip",
+    "class/src/modules/clearButton.js~ClearButton.html#instance-member-tooltip",
+    "src/modules/clearButton.js~ClearButton#tooltip",
     "member"
   ],
   [

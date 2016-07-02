@@ -1,7 +1,7 @@
 {
-  "coverage": "38.27%",
-  "expectCount": 776,
-  "actualCount": 297,
+  "coverage": "38.98%",
+  "expectCount": 772,
+  "actualCount": 301,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -60,25 +60,17 @@
       ]
     },
     "src/modules/checkList.js": {
-      "expectCount": 22,
-      "actualCount": 21,
+      "expectCount": 21,
+      "actualCount": 20,
       "undocumentLines": [
-        196
+        190
       ]
     },
     "src/modules/clearButton.js": {
-      "expectCount": 12,
-      "actualCount": 3,
+      "expectCount": 9,
+      "actualCount": 8,
       "undocumentLines": [
-        5,
-        20,
-        26,
-        22,
-        18,
-        24,
-        73,
-        34,
-        31
+        104
       ]
     },
     "src/extensions/colOps/colOps.js": {

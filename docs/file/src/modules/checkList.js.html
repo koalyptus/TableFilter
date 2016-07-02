@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/checkList.js | tablefilter v0.2.40 API Document</title>
+  <title data-ice="title">src/modules/checkList.js | tablefilter v0.2.41 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -234,22 +234,16 @@ export class CheckList extends Feature {
     }
 
     /**
-     * Checklist change event handler
-     * @param {Event} evt
-     */
-    onChange(evt) {
-        let elm = targetEvt(evt);
-        let tf = this.tf;
-        this.emitter.emit(&apos;filter-focus&apos;, tf, elm);
-        tf.filter();
-    }
-
-    /**
      * Checklist option click event handler
      * @param {Event} evt
      */
     optionClick(evt) {
-        this.setCheckListValues(evt.target);
+        let elm = targetEvt(evt);
+        let tf = this.tf;
+
+        this.emitter.emit(&apos;filter-focus&apos;, tf, elm);
+        this.setCheckListValues(elm);
+        tf.filter();
     }
 
     /**
@@ -302,7 +296,7 @@ export class CheckList extends Feature {
 
         this.emitter.on(
             [&apos;build-checklist-filter&apos;],
-            (tf, colIndex, isExternal) =&gt; this.build(colIndex, isExternal)
+            (tf, colIndex) =&gt; this.build(colIndex)
         );
 
         this.emitter.on(
@@ -330,7 +324,6 @@ export class CheckList extends Feature {
         let ul = createElm(&apos;ul&apos;, [&apos;id&apos;, tf.fltIds[colIndex]],
             [&apos;colIndex&apos;, colIndex]);
         ul.className = this.filterCssClass;
-        addEvt(ul, &apos;change&apos;, (evt) =&gt; this.onChange(evt));
 
         let rows = tf.tbl.rows;
         let nbRows = tf.getRowsNb(true);
