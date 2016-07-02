@@ -65,11 +65,11 @@
 
     function tearDown() {
         tf.emitter.off(['after-populating-filter'], checkFilters);
-        // test('Tear down', function () {
-        //     tf.destroy();
+        test('Tear down', function () {
+            tf.destroy();
 
-        //     deepEqual(tf.isInitialized(), false, 'Filters removed');
-        // });
+            deepEqual(tf.isInitialized(), false, 'Filters removed');
+        });
     }
 
 })(window, TableFilter);
