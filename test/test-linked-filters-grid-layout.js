@@ -54,7 +54,7 @@
             tf.clearFilters();
 
             deepEqual(tf.getFilterableRowsNb(), 7,
-                'Nb of valid rows after filters are cleared');
+                'Nb of filterable rows after filters are cleared');
         });
 
         testDestroy();
