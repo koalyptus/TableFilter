@@ -1370,8 +1370,8 @@ export class TableFilter {
             // already filtered rows display re-init
             row[k].style.display = '';
 
-            let cells = row[k].cells,
-                nchilds = cells.length;
+            let cells = row[k].cells;
+            let nchilds = cells.length;
 
             // checks if row has exact cell #
             if (nchilds !== this.nbCells) {
