@@ -97,15 +97,17 @@
         });
         tf.init();
 
-        var flt0 = id(tf.fltIds[0]);
-        var flt1 = id(tf.fltIds[1]);
+        var flt0 = tf.getFilterElement(0);
+        var flt1 = tf.getFilterElement(1);
+
         var evObj = document.createEvent('HTMLEvents');
-        evObj.initEvent('change', true, true);
+        evObj.initEvent('click', true, true);
 
         tf.setFilterValue(0, 'Sydney');
-        flt0.dispatchEvent(evObj);
+        flt0.querySelectorAll('input')[1].dispatchEvent(evObj);
         tf.setFilterValue(1, 'Adelaide');
-        flt1.dispatchEvent(evObj);
+        flt1.querySelectorAll('input')[0].dispatchEvent(evObj);
+
         setTimeout(testWithChecklistFilters.call(null, tf), 50);
     }
 
@@ -116,7 +118,6 @@
 
         deepEqual(flt0.getElementsByTagName('li').length, 2, 'Nb of options');
         deepEqual(flt1.getElementsByTagName('li').length, 2, 'Nb of options');
-        tf.clearFilters();
         tf.destroy();
         tf = null;
         setExcludedOptions();

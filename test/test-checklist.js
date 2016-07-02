@@ -25,13 +25,13 @@ test('CheckList UI elements', function() {
 });
 
 module('Behaviour');
-test('Can filter on checkList change', function() {
-    var flt1 = id(tf.fltIds[3]);
+test('Can filter on checkList item click', function() {
+    var flt3 = tf.getFilterElement(3);
 
     var evObj = document.createEvent('HTMLEvents');
-    evObj.initEvent('change', true, true);
+    evObj.initEvent('click', true, true);
     tf.setFilterValue(3, '1.1');
-    flt1.dispatchEvent(evObj);
+    flt3.querySelectorAll('input')[1].dispatchEvent(evObj);
 
     deepEqual(tf.getValidRows().length, 1, 'Table filtered');
     deepEqual(tf.getFilteredData()[0][1][3], '1.1', 'Matched value');

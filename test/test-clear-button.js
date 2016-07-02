@@ -9,7 +9,7 @@ var clearButton = tf.feature('clearButton');
 module('Sanity checks');
 test('Clear button component', function() {
     deepEqual(typeof clearButton, 'object', 'ClearButton instanciated');
-    notEqual(clearButton.btnResetEl, null, 'btnResetEl property');
+    notEqual(clearButton.element, null, 'element property');
 });
 
 module('Feature interface');
@@ -59,11 +59,11 @@ test('Can check is enabled', function() {
 
 module('UI elements');
 test('ClearButton UI elements', function() {
-    var container = clearButton.btnResetEl;
+    var container = clearButton.element;
     deepEqual(container.nodeName, 'INPUT', 'Clear button container');
     deepEqual(
         container.parentNode.id,
-        clearButton.prfxResetSpan+tf.id,
+        clearButton.prfxCont+tf.id,
         'Container id'
     );
 });
@@ -71,18 +71,18 @@ test('ClearButton UI elements', function() {
 module('Destroy and re-init');
 test('Remove UI', function() {
     clearButton.destroy();
-    var btnResetEl = tf.feature('clearButton').btnResetEl;
+    var btnResetEl = tf.feature('clearButton').element;
     deepEqual(btnResetEl, null, 'Clear button is removed');
 });
 
 test('Re-set UI', function() {
+    clearButton.destroy();
     tf.enableIcons = false;
-    clearButton = tf.feature('clearButton');
-    clearButton.btnResetHtml = null;
-    clearButton.btnResetText = 'Clear';
+    clearButton.html = null;
+    clearButton.text = 'Clear';
     clearButton.init();
 
-    var btnResetEl = clearButton.btnResetEl;
+    var btnResetEl = clearButton.element;
     deepEqual(btnResetEl.nodeName, 'A', 'Clear button tag changed');
     deepEqual(btnResetEl.innerText, 'Clear', 'Clear button text');
 });

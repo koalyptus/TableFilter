@@ -28,10 +28,13 @@
         var evObj = document.createEvent('HTMLEvents');
         evObj.initEvent('change', true, true);
 
+        var evObj1 = document.createEvent('HTMLEvents');
+        evObj1.initEvent('click', true, true);
+
         tf.setFilterValue(0, 'Sydney');
         flt0.dispatchEvent(evObj);
         tf.setFilterValue(1, 'Adelaide');
-        flt1.dispatchEvent(evObj);
+        flt1.querySelectorAll('input')[1].dispatchEvent(evObj1);
     }
 
     function checkFilters(tf, colIndex, flt) {
@@ -46,8 +49,6 @@
                 testClearFilters();
             }
         });
-
-
     }
 
     // Tests for https://github.com/koalyptus/TableFilter/pull/42 issue
@@ -57,18 +58,18 @@
 
             deepEqual(tf.getFilterableRowsNb(), 7,
                 'Nb of valid rows after filters are cleared');
-        });
 
-        testDestroy();
+            tearDown();
+        });
     }
 
-    function testDestroy() {
-        test('Tear down', function () {
-            tf.destroy();
-
-            deepEqual(tf.isInitialized(), false, 'Filters removed');
-        });
+    function tearDown() {
         tf.emitter.off(['after-populating-filter'], checkFilters);
+        // test('Tear down', function () {
+        //     tf.destroy();
+
+        //     deepEqual(tf.isInitialized(), false, 'Filters removed');
+        // });
     }
 
 })(window, TableFilter);

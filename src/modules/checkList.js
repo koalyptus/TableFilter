@@ -117,22 +117,16 @@ export class CheckList extends Feature {
     }
 
     /**
-     * Checklist change event handler
-     * @param {Event} evt
-     */
-    onChange(evt) {
-        let elm = targetEvt(evt);
-        let tf = this.tf;
-        this.emitter.emit('filter-focus', tf, elm);
-        tf.filter();
-    }
-
-    /**
      * Checklist option click event handler
      * @param {Event} evt
      */
     optionClick(evt) {
-        this.setCheckListValues(evt.target);
+        let elm = targetEvt(evt);
+        let tf = this.tf;
+
+        this.emitter.emit('filter-focus', tf, elm);
+        this.setCheckListValues(elm);
+        tf.filter();
     }
 
     /**
@@ -185,7 +179,7 @@ export class CheckList extends Feature {
 
         this.emitter.on(
             ['build-checklist-filter'],
-            (tf, colIndex, isExternal) => this.build(colIndex, isExternal)
+            (tf, colIndex) => this.build(colIndex)
         );
 
         this.emitter.on(
@@ -213,7 +207,6 @@ export class CheckList extends Feature {
         let ul = createElm('ul', ['id', tf.fltIds[colIndex]],
             ['colIndex', colIndex]);
         ul.className = this.filterCssClass;
-        addEvt(ul, 'change', (evt) => this.onChange(evt));
 
         let rows = tf.tbl.rows;
         let nbRows = tf.getRowsNb(true);
