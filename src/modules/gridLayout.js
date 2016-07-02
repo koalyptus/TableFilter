@@ -171,15 +171,16 @@ export class GridLayout extends Feature {
         // Assign default column widths
         this.setDefaultColWidths();
 
-        let tblW;//initial table width
-        if (tbl.width !== '') {
-            tblW = tbl.width;
-        }
-        else if (tbl.style.width !== '') {
-            tblW = parseInt(tbl.style.width, 10);
-        } else {
-            tblW = tbl.clientWidth;
-        }
+        // Initial table width
+        let tblW = this.initialTableWidth();
+        // if (tbl.width !== '') {
+        //     tblW = tbl.width;
+        // }
+        // else if (tbl.style.width !== '') {
+        //     tblW = parseInt(tbl.style.width, 10);
+        // } else {
+        //     tblW = tbl.clientWidth;
+        // }
 
         //Main container: it will contain all the elements
         this.tblMainCont = createElm('div',
@@ -395,6 +396,26 @@ export class GridLayout extends Feature {
         }
         tf.hasColWidths = true;
         tf.setColWidths();
+    }
+
+    /**
+     * Initial table width
+     * @returns {Number}
+     * @private
+     */
+    initialTableWidth() {
+        let tbl = this.tf.tbl;
+        let width; //initial table width
+
+        if (tbl.width !== '') {
+            width = tbl.width;
+        }
+        else if (tbl.style.width !== '') {
+            width = tbl.style.width;
+        } else {
+            width = tbl.clientWidth;
+        }
+        return parseInt(width, 10);
     }
 
     /**
