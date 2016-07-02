@@ -3584,14 +3584,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                // Initial table width
 	                var tblW = this.initialTableWidth();
-	                // if (tbl.width !== '') {
-	                //     tblW = tbl.width;
-	                // }
-	                // else if (tbl.style.width !== '') {
-	                //     tblW = parseInt(tbl.style.width, 10);
-	                // } else {
-	                //     tblW = tbl.clientWidth;
-	                // }
 	
 	                //Main container: it will contain all the elements
 	                this.tblMainCont = (0, _dom.createElm)('div', ['id', this.prfxMainTblCont + tf.id]);
