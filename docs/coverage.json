@@ -1,7 +1,7 @@
 {
-  "coverage": "38.98%",
-  "expectCount": 772,
-  "actualCount": 301,
+  "coverage": "40.05%",
+  "expectCount": 764,
+  "actualCount": 306,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -140,22 +140,10 @@
       ]
     },
     "src/modules/dropdown.js": {
-      "expectCount": 20,
-      "actualCount": 7,
+      "expectCount": 13,
+      "actualCount": 12,
       "undocumentLines": [
-        12,
-        29,
-        380,
-        24,
-        113,
-        35,
-        32,
-        27,
-        52,
-        41,
-        36,
-        37,
-        38
+        151
       ]
     },
     "src/emitter.js": {
@@ -344,15 +332,14 @@
       ]
     },
     "src/modules/gridLayout.js": {
-      "expectCount": 21,
+      "expectCount": 20,
       "actualCount": 15,
       "undocumentLines": [
-        232,
-        220,
-        372,
-        194,
-        339,
-        185
+        212,
+        207,
+        301,
+        187,
+        179
       ]
     },
     "src/modules/hash.js": {

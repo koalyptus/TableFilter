@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/cookie.js | tablefilter v0.2.41 API Document</title>
+  <title data-ice="title">src/cookie.js | tablefilter v0.2.42 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -125,6 +125,12 @@ const doc = root.document;
 
 export default {
 
+    /**
+     * Write a cookie
+     * @param {String} name Name of the cookie
+     * @param {String} value Value of the cookie
+     * @param {Number} hours Cookie duration in hours
+     */
     write(name, value, hours) {
         let expire = &apos;&apos;;
         if (hours) {
@@ -134,6 +140,11 @@ export default {
         doc.cookie = name + &apos;=&apos; + escape(value) + expire;
     },
 
+    /**
+     * Read a cookie
+     * @param {String} name Name of the cookie
+     * @returns {String} Value of the cookie
+     */
     read(name) {
         let cookieValue = &apos;&apos;,
             search = name + &apos;=&apos;;
@@ -152,28 +163,12 @@ export default {
         return cookieValue;
     },
 
+    /**
+     * Remove a cookie
+     * @param {String} name Name of the cookie
+     */
     remove(name) {
         this.write(name, &apos;&apos;, -1);
-    },
-
-    valueToArray(name, separator) {
-        if (!separator) {
-            separator = &apos;,&apos;;
-        }
-        //reads the cookie
-        let val = this.read(name);
-        //creates an array with filters&apos; values
-        let arr = val.split(separator);
-        return arr;
-    },
-
-    getValueByIndex(name, index, separator) {
-        if (!separator) {
-            separator = &apos;,&apos;;
-        }
-        //reads the cookie
-        let val = this.valueToArray(name, separator);
-        return val[index];
     }
 
 };

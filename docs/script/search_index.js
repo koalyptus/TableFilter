@@ -2046,12 +2046,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/modules/dropdown.js~dropdown#activateslctooltip",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-member-activateSlcTooltip",
-    "src/modules/dropdown.js~Dropdown#activateSlcTooltip",
-    "member"
-  ],
-  [
     "src/modules/dropdown.js~dropdown#addfirstoption",
     "class/src/modules/dropdown.js~Dropdown.html#instance-method-addFirstOption",
     "src/modules/dropdown.js~Dropdown#addFirstOption",
@@ -2106,12 +2100,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/dropdown.js~dropdown#iscustom",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-member-isCustom",
-    "src/modules/dropdown.js~Dropdown#isCustom",
-    "member"
-  ],
-  [
     "src/modules/dropdown.js~dropdown#multipleslctooltip",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-multipleSlcTooltip",
     "src/modules/dropdown.js~Dropdown#multipleSlcTooltip",
@@ -2124,40 +2112,10 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/dropdown.js~dropdown#onslcchange",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-method-onSlcChange",
-    "src/modules/dropdown.js~Dropdown#onSlcChange",
-    "method"
-  ],
-  [
-    "src/modules/dropdown.js~dropdown#onslcfocus",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-method-onSlcFocus",
-    "src/modules/dropdown.js~Dropdown#onSlcFocus",
-    "method"
-  ],
-  [
-    "src/modules/dropdown.js~dropdown#opts",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-member-opts",
-    "src/modules/dropdown.js~Dropdown#opts",
-    "member"
-  ],
-  [
-    "src/modules/dropdown.js~dropdown#optstxt",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-member-optsTxt",
-    "src/modules/dropdown.js~Dropdown#optsTxt",
-    "member"
-  ],
-  [
     "src/modules/dropdown.js~dropdown#selectoptions",
     "class/src/modules/dropdown.js~Dropdown.html#instance-method-selectOptions",
     "src/modules/dropdown.js~Dropdown#selectOptions",
     "method"
-  ],
-  [
-    "src/modules/dropdown.js~dropdown#slcinnerhtml",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-member-slcInnerHtml",
-    "src/modules/dropdown.js~Dropdown#slcInnerHtml",
-    "member"
   ],
   [
     "src/modules/gridlayout.js",
@@ -2265,12 +2223,6 @@ window.esdocSearchIndex = [
     "src/modules/gridlayout.js~gridlayout#tblcont",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblCont",
     "src/modules/gridLayout.js~GridLayout#tblCont",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#tblhascoltag",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblHasColTag",
-    "src/modules/gridLayout.js~GridLayout#tblHasColTag",
     "member"
   ],
   [
