@@ -9,35 +9,69 @@ import {SELECT, MULTIPLE, NONE} from '../const';
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
     '{1} manner.';
 
+/**
+ * Dropdown filter UI component
+ * @param {Object} tf TableFilter instance
+ */
 export class Dropdown extends Feature {
 
     /**
-     * Dropdown UI component
+     * Creates an instance of Dropdown
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'dropdown');
 
         // Configuration object
-        let f = tf.config();
+        let f = this.config;
 
+        /**
+         * Enable the reset filter option as first item
+         * @type {Boolean}
+         */
         this.enableSlcResetFilter = f.enable_slc_reset_filter === false ?
             false : true;
-        //defines empty option text
-        this.nonEmptyText = f.non_empty_text || '(Non empty)';
-        //IE only, tooltip text appearing on select before it is populated
-        this.activateSlcTooltip = f.activate_slc_tooltip ||
-            'Click to activate';
-        //tooltip text appearing on multiple select
-        this.multipleSlcTooltip = f.multiple_slc_tooltip ||
-            'Use Ctrl key for multiple selections';
 
+        /**
+         * Non empty option text
+         * @type {String}
+         */
+        this.nonEmptyText = f.non_empty_text || '(Non empty)';
+
+        /**
+         * Tooltip text appearing on multiple select
+         * @type {String}
+         */
+        this.multipleSlcTooltip = f.multiple_slc_tooltip ||
+            'Use Ctrl/Cmd key for multiple selections';
+
+        /**
+         * Indicates drop-down has custom options
+         * @private
+         */
         this.isCustom = null;
+
+        /**
+         * List of options values
+         * @type {Array}
+         * @private
+         */
         this.opts = null;
+
+        /**
+         * List of options texts for custom values
+         * @type {Array}
+         * @private
+         */
         this.optsTxt = null;
-        this.slcInnerHtml = null;
     }
 
+
+    /**
+     * Drop-down filter focus event handler
+     * @param {Event} e DOM Event
+     * @private
+     */
     onSlcFocus(e) {
         let elm = targetEvt(e);
         let tf = this.tf;
@@ -49,6 +83,10 @@ export class Dropdown extends Feature {
         this.emitter.emit('filter-focus', tf, elm);
     }
 
+    /**
+     * Drop-down filter change event handler
+     * @private
+     */
     onSlcChange() {
         if (this.tf.onSlcChange) {
             this.tf.filter();
@@ -126,7 +164,6 @@ export class Dropdown extends Feature {
 
         this.opts = [];
         this.optsTxt = [];
-        this.slcInnerHtml = '';
 
         let slcId = tf.fltIds[colIndex];
         let slc = elm(slcId);
@@ -377,6 +414,9 @@ export class Dropdown extends Feature {
         return values;
     }
 
+    /**
+     * Destroy Dropdown instance
+     */
     destroy() {
         this.emitter.off(
             ['build-select-filter'],
