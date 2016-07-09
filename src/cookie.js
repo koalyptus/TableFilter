@@ -8,6 +8,12 @@ const doc = root.document;
 
 export default {
 
+    /**
+     * Write a cookie
+     * @param {String} name Name of the cookie
+     * @param {String} value Value of the cookie
+     * @param {Number} hours Cookie duration in hours
+     */
     write(name, value, hours) {
         let expire = '';
         if (hours) {
@@ -17,6 +23,11 @@ export default {
         doc.cookie = name + '=' + escape(value) + expire;
     },
 
+    /**
+     * Read a cookie
+     * @param {String} name Name of the cookie
+     * @returns {String} Value of the cookie
+     */
     read(name) {
         let cookieValue = '',
             search = name + '=';
@@ -35,28 +46,12 @@ export default {
         return cookieValue;
     },
 
+    /**
+     * Remove a cookie
+     * @param {String} name Name of the cookie
+     */
     remove(name) {
         this.write(name, '', -1);
-    },
-
-    valueToArray(name, separator) {
-        if (!separator) {
-            separator = ',';
-        }
-        //reads the cookie
-        let val = this.read(name);
-        //creates an array with filters' values
-        let arr = val.split(separator);
-        return arr;
-    },
-
-    getValueByIndex(name, index, separator) {
-        if (!separator) {
-            separator = ',';
-        }
-        //reads the cookie
-        let val = this.valueToArray(name, separator);
-        return val[index];
     }
 
 };
