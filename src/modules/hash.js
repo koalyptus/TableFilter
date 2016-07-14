@@ -38,7 +38,9 @@ export class Hash {
         }
 
         this.lastHash = location.hash;
-        this.boundSync = this.sync.bind(this); //Store a bound sync wrapper for future use.
+ 
+        //Store a bound sync wrapper for future use.
+        this.boundSync = this.sync.bind(this); 
 
         this.emitter.on(['state-changed'], (tf, state) => this.update(state));
         this.emitter.on(['initialized'], this.boundSync);
@@ -91,8 +93,8 @@ export class Hash {
      */
     destroy() {
         this.emitter.off(['state-changed'], (tf, state) => this.update(state));
-        this.emitter.off(['initialized'], () => this.boundSync);
-        removeEvt(root, 'hashchange', () => this.boundSync);
+        this.emitter.off(['initialized'], this.boundSync);
+        removeEvt(root, 'hashchange', this.boundSync);
 
         this.state = null;
         this.lastHash = null;
