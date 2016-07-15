@@ -39,7 +39,7 @@ export class Hash {
 
         this.lastHash = location.hash;
         //Store a bound sync wrapper for future use.
-        this.boundSync = this.sync.bind(this); 
+        this.boundSync = this.sync.bind(this);
         this.emitter.on(['state-changed'], (tf, state) => this.update(state));
         this.emitter.on(['initialized'], this.boundSync);
         addEvt(root, 'hashchange', this.boundSync);
