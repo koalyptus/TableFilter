@@ -2244,6 +2244,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/modules/hash.js~hash#boundsync",
+    "class/src/modules/hash.js~Hash.html#instance-member-boundSync",
+    "src/modules/hash.js~Hash#boundSync",
+    "member"
+  ],
+  [
     "src/modules/hash.js~hash#constructor",
     "class/src/modules/hash.js~Hash.html#instance-constructor-constructor",
     "src/modules/hash.js~Hash#constructor",

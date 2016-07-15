@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/hash.js | tablefilter v0.2.42 API Document</title>
+  <title data-ice="title">src/modules/hash.js | tablefilter v0.2.43 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -155,10 +155,11 @@ export class Hash {
         }
 
         this.lastHash = location.hash;
-
+        //Store a bound sync wrapper for future use.
+        this.boundSync = this.sync.bind(this);
         this.emitter.on([&apos;state-changed&apos;], (tf, state) =&gt; this.update(state));
-        this.emitter.on([&apos;initialized&apos;], () =&gt; this.sync());
-        addEvt(root, &apos;hashchange&apos;, () =&gt; this.sync());
+        this.emitter.on([&apos;initialized&apos;], this.boundSync);
+        addEvt(root, &apos;hashchange&apos;, this.boundSync);
     }
 
     /**
@@ -207,8 +208,8 @@ export class Hash {
      */
     destroy() {
         this.emitter.off([&apos;state-changed&apos;], (tf, state) =&gt; this.update(state));
-        this.emitter.off([&apos;initialized&apos;], () =&gt; this.sync());
-        removeEvt(root, &apos;hashchange&apos;, () =&gt; this.sync());
+        this.emitter.off([&apos;initialized&apos;], this.boundSync);
+        removeEvt(root, &apos;hashchange&apos;, this.boundSync);
 
         this.state = null;
         this.lastHash = null;

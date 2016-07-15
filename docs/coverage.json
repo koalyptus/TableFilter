@@ -1,6 +1,6 @@
 {
-  "coverage": "40.05%",
-  "expectCount": 764,
+  "coverage": "40%",
+  "expectCount": 765,
   "actualCount": 306,
   "files": {
     "src/const.js": {
@@ -343,9 +343,10 @@
       ]
     },
     "src/modules/hash.js": {
-      "expectCount": 11,
+      "expectCount": 12,
       "actualCount": 7,
       "undocumentLines": [
+        42,
         29,
         8,
         28,
