@@ -1,5 +1,7 @@
-TableFilter [![Build Status](https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master)](https://travis-ci.org/koalyptus/TableFilter)
-===========================
+[![Build Status](https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master)](https://travis-ci.org/koalyptus/TableFilter)
+[![Document](http://koalyptus.github.io/TableFilter/docs/badge.svg)](https://koalyptus.github.io/TableFilter/docs/source)
+
+# TableFilter
 
 > A Javascript library making HTML tables filterable
 
