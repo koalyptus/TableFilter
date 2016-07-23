@@ -7,23 +7,37 @@ const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
     '4.-Filter-operators';
 const WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';
 
+/**
+ * Help UI component
+ */
 export class Help extends Feature {
 
     /**
-     * Help UI component
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of Help.
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'help');
 
         var f = this.config;
 
-        //id of custom container element for instructions
+        /**
+         * ID of main custom container element
+         * @type {String}
+         */
         this.tgtId = f.help_instructions_target_id || null;
-        //id of custom container element for instructions
+
+        /**
+         * ID of custom container element for instructions
+         * @type {String}
+         */
         this.contTgtId = f.help_instructions_container_target_id ||
             null;
-        //defines help text
+
+        /**
+         * Instructions text (accepts HTML)
+         * @type {String}
+         */
         this.instrText = f.help_instructions_text ?
             f.help_instructions_text :
             'Use the filters above each column to filter and limit table ' +
@@ -33,21 +47,54 @@ export class Help extends Feature {
             '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
             '<b>rgx:</b><br/><a href="' + WIKI_URL + '" target="_blank">' +
             'Learn more</a><hr/>';
-        //defines help innerHtml
+
+        /**
+         * Instructions HTML
+         * @type {String}
+         */
         this.instrHtml = f.help_instructions_html || null;
-        //defines reset button text
+
+        /**
+         * Help button text ('?')
+         * @type {String}
+         */
         this.btnText = f.help_instructions_btn_text || '?';
-        //defines reset button innerHtml
+
+        /**
+         * Custom help button HTML
+         * @type {String}
+         */
         this.btnHtml = f.help_instructions_btn_html || null;
-        //defines css class for help button
+
+        /**
+         * Css class for help button
+         * @type {String}
+         */
         this.btnCssClass = f.help_instructions_btn_css_class || 'helpBtn';
-        //defines css class for help container
+
+        /**
+         * Css class for help container element
+         * @type {String}
+         */
         this.contCssClass = f.help_instructions_container_css_class ||
             'helpCont';
-        //help button element
+
+        /**
+         * Stores button DOM element
+         * @type {DOMElement}
+         */
         this.btn = null;
-        //help content div
+
+        /**
+         * Stores help container DOM element
+         * @type {DOMElement}
+         */
         this.cont = null;
+
+        /**
+         * Default HTML appended to instructions text
+         * @type {String}
+         */
         this.defaultHtml = '<div class="helpFooter"><h4>TableFilter ' +
             'v' + tf.version + '</h4>' + '<a href="' + WEBSITE_URL +
             '" target="_blank">' + WEBSITE_URL + '</a>' +
@@ -55,9 +102,18 @@ export class Help extends Feature {
             '<div align="center" style="margin-top:8px;">' +
             '<a href="javascript:void(0);" class="close">Close</a></div></div>';
 
-        //id prefix for help elements
+        /**
+         * Prefix for help main container ID
+         * @type {String}
+         * @private
+         */
         this.prfxHelpSpan = 'helpSpan_';
-        //id prefix for help elements
+
+        /**
+         * Prefix for help instructions container ID
+         * @type {String}
+         * @private
+         */
         this.prfxHelpDiv = 'helpDiv_';
 
         this.emitter.on(['init-help'], () => this.init());
@@ -65,7 +121,6 @@ export class Help extends Feature {
 
     /**
      * Initialise Help instance
-     *
      * @returns (description)
      */
     init() {
@@ -120,6 +175,9 @@ export class Help extends Feature {
 
         this.cont = helpdiv;
         this.btn = helpspan;
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 
