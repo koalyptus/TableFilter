@@ -2244,12 +2244,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/modules/hash.js~hash#boundsync",
-    "class/src/modules/hash.js~Hash.html#instance-member-boundSync",
-    "src/modules/hash.js~Hash#boundSync",
-    "member"
-  ],
-  [
     "src/modules/hash.js~hash#constructor",
     "class/src/modules/hash.js~Hash.html#instance-constructor-constructor",
     "src/modules/hash.js~Hash#constructor",
@@ -2272,12 +2266,6 @@ window.esdocSearchIndex = [
     "class/src/modules/hash.js~Hash.html#instance-method-init",
     "src/modules/hash.js~Hash#init",
     "method"
-  ],
-  [
-    "src/modules/hash.js~hash#lasthash",
-    "class/src/modules/hash.js~Hash.html#instance-member-lastHash",
-    "src/modules/hash.js~Hash#lastHash",
-    "member"
   ],
   [
     "src/modules/hash.js~hash#parse",
@@ -2391,18 +2379,6 @@ window.esdocSearchIndex = [
     "src/modules/help.js~help#instrtext",
     "class/src/modules/help.js~Help.html#instance-member-instrText",
     "src/modules/help.js~Help#instrText",
-    "member"
-  ],
-  [
-    "src/modules/help.js~help#prfxhelpdiv",
-    "class/src/modules/help.js~Help.html#instance-member-prfxHelpDiv",
-    "src/modules/help.js~Help#prfxHelpDiv",
-    "member"
-  ],
-  [
-    "src/modules/help.js~help#prfxhelpspan",
-    "class/src/modules/help.js~Help.html#instance-member-prfxHelpSpan",
-    "src/modules/help.js~Help#prfxHelpSpan",
     "member"
   ],
   [

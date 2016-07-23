@@ -1,7 +1,7 @@
 {
-  "coverage": "40%",
-  "expectCount": 765,
-  "actualCount": 306,
+  "coverage": "42.31%",
+  "expectCount": 761,
+  "actualCount": 322,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -343,36 +343,14 @@
       ]
     },
     "src/modules/hash.js": {
-      "expectCount": 12,
-      "actualCount": 7,
-      "undocumentLines": [
-        42,
-        29,
-        8,
-        28,
-        27
-      ]
+      "expectCount": 10,
+      "actualCount": 10,
+      "undocumentLines": []
     },
     "src/modules/help.js": {
-      "expectCount": 19,
-      "actualCount": 4,
-      "undocumentLines": [
-        10,
-        48,
-        43,
-        41,
-        39,
-        50,
-        45,
-        24,
-        51,
-        123,
-        37,
-        27,
-        61,
-        59,
-        22
-      ]
+      "expectCount": 17,
+      "actualCount": 17,
+      "undocumentLines": []
     },
     "src/modules/highlightKeywords.js": {
       "expectCount": 10,
@@ -536,30 +514,30 @@
       "expectCount": 37,
       "actualCount": 13,
       "undocumentLines": [
-        39,
-        31,
-        27,
-        29,
-        42,
-        54,
-        48,
-        43,
-        47,
-        90,
-        45,
+        38,
+        30,
+        26,
+        28,
+        41,
         53,
+        47,
+        42,
+        46,
+        89,
         44,
         52,
-        37,
-        33,
-        38,
-        35,
-        34,
-        36,
+        43,
         51,
-        46,
+        36,
+        32,
+        37,
+        34,
+        33,
+        35,
         50,
-        87
+        45,
+        49,
+        86
       ]
     },
     "src/modules/statusBar.js": {
