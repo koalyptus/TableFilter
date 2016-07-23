@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>External filters generation | TableFilter</title>
+    <title>Dynamically populate additional external filters | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -179,81 +179,39 @@
 
       
 
-<h1>External filters generation</h1>
+<h1>Dynamically populate additional external filters</h1>
+
 <p>
-    <code>TableFilter</code> can also generate the filters in the desired
-    elements of your page.
+    This demo shows how to dynamically populate additional external filters by
+    taking advantage of <code>TableFilter</code>'s API and custom events.
 </p>
 
-<div data-config>
-  <div id="extGrid" class="panel panel-info pull-left">
-      <div class="panel-heading">Filters</div>
+<style data-config>
+  .year{
+    padding: 1em;
+  }
+  .year label{
+    margin-top: 0.2em;
+    margin-right: 1em;
+  }
+</style>
 
-      <div class="panel-body bg-info">
-          <label>Choose Country:</label><br>
-          <span id="slcCountry"></span><br>
-
-          <span>Keep Ctrl/Cmd key pressed for multiple selections</span><br><br>
-          <label>Choose Country code:</label><br>
-          <span id="slcCode"></span><br><br>
-
-          <label>Choose year:</label><br>
-          <span id="slcYear"></span><br><br>
-
-          <label for="inpPop">POP:</label><br>
-          <span id="inpPop"></span><br><br>
-
-          <form id="frmRadioInps" name="frmRadioInps">
-              <label for="rdoXRat">XRAT:</label><br>
-              <input type="checkbox" id="rdoXRat" name="rdoXRat" value="!NA"
-                  onclick="
-                      if(this.checked){
-                          tf.setFilterValue(4, this.value);
-                      } else tf.setFilterValue(4, '');
-                      tf.filter();"  >Not NA
-
-              <br><br>
-
-              <label for="chkCI">CI:</label><br>
-              <input type="radio" id="chkCI" name="chkCI" value=">0 && <=10"
-                  onclick="
-                      if(this.checked){
-                          tf.setFilterValue(8, this.value);
-                          tf.filter();
-                      }" > 0 - 10
-              <input type="radio" id="chkCI" name="chkCI" value=">10 && <=20"
-                  onclick="
-                      if(this.checked){
-                          tf.setFilterValue(8, this.value);
-                          tf.filter();
-                      }" > 10 - 20
-              <input type="radio" id="chkCI" name="chkCI" value=">20 && <=30"
-                  onclick="
-                      if(this.checked){
-                          tf.setFilterValue(8, this.value);
-                          tf.filter();
-                      }" > 20 - 30
-          </form>
-      </div>
-      <div class="panel-footer">
-          <input id="btnFlt" value="Filter" type="button"
-            class="btn btn-default" onclick="tf.filter();" >&nbsp;
-          <input id="btnClr" value="Clear" type="button" class="btn btn-link"
-              onclick="tf.clearFilters();
-                  //clears radio btns
-                  for(var o=frmRadioInps.elements, p=o.length - 1; p > -1; p--){
-                      if (o[p].type){
-                          o[p].checked = false;
-                      }
-                  }
-              " >
-          <div id="statusDiv" class="pull-right"></div>
-      </div>
-  </div>
+<div class="navbar navbar-default" data-config>
+  <form class="navbar-form navbar-left">
+    <div class="form-group">
+      <label for="extCountry">Country:</label>
+      <select id="extCountry" name="extCountry" class="form-control"
+        onchange="filterCountry(event);">
+      </select>
+    </div>
+    <div class="form-group year">
+      <label>Year:</label>
+      <span id="extYear"></span>
+    </div>
+  </form>
 </div>
 
-<div class="pull-left" style="margin-left: 0.5em;">
-    
+
 
 <table id="demo" class="countries-tiny">
     <thead>
@@ -691,50 +649,131 @@
     </tbody>
 </table>
 
-</div>
 
 
 <script src="tablefilter/tablefilter.js"></script>
 
 
 <script data-config>
+    // TableFilter settings
     var tfConfig = {
         base_path: 'tablefilter/',
+        col_0: 'select',
+        col_2: 'checklist',
+        popup_filters: true,
         alternate_rows: true,
+        mark_active_columns: true,
         rows_counter: true,
-        rows_counter_text: "Displayed rows: ",
+        btn_reset: true,
         loader: true,
-        status_bar: true,
-        status_bar_target_id: 'statusDiv',
-        col_number_format: [
-            null, null, 'US',
-            'US', 'US', 'US',
-            'US', 'US', 'US'
-        ],
-        display_all_text: " [ Show all ] ",
-        col_0: "multiple",
-        col_1: "select",
-        col_2: "checklist",
-        col_4: "none",
-        col_8: "none",
-
-        /* external filters */
-        external_flt_grid: true,
-        external_flt_grid_ids: [
-            'slcCountry',
-            'slcCode',
-            'slcYear',
-            'inpPop'
-        ],
-
-        /* sorting feature */
-        extensions: [{ name: 'sort' }]
+        col_widths: [
+          '150px', '75', '100px',
+          null, null, null,
+          null, null, null
+        ]
     };
-    var tf = new TableFilter('demo', tfConfig);
-    tf.init();
-</script>
 
-<p class="clearfix"></p>
+    // Instantiate TableFilter
+    var tf = new TableFilter('demo', tfConfig);
+
+    // Subscribe to a custom event triggered when a select or checklist filter is populated
+    tf.emitter.on(['after-populating-filter'], populateExternalFilters);
+
+    // Subscribe to a custom event fired after the table is filtered
+    tf.emitter.on(['after-filtering'], syncExternalFilters);
+
+    // Ininialiaze TableFilter instance
+    tf.init();
+
+    // Populate external filters callback
+    function populateExternalFilters(tf, colIndex, filter){
+      if(colIndex === 0){
+        populateCountryFilter(tf, colIndex);
+      }
+      if(colIndex === 2){
+        populateYearFilter(tf, colIndex, filter);
+      }
+    }
+
+    // Populate the external country filter using the dropdown feature API
+    function populateCountryFilter(tf, colIndex){
+      var extCountry = document.querySelector('#extCountry');
+      var feature = tf.feature('dropdown');
+
+      // Populate any given select filter for a specified column
+      feature.addOptions(colIndex, extCountry);
+    }
+
+    // Populate the external year checkbox filters
+    function populateYearFilter(tf, colIndex, filter){
+      var extYear = document.querySelector('#extYear');
+
+      // iterate all options and generate checkboxes with associated labels
+      // TODO: provide an API to easily get all the checklist options
+      [].forEach.call(filter.querySelectorAll('input'), function(input, idx){
+        if(idx > 0) {
+          // clone the existing input inside a checklist option and modify its attributes
+          var cbx = input.cloneNode(true);
+          cbx.name = 'extCbxYear';
+          cbx.className = 'extCbxYear';
+          cbx.removeAttribute('id');
+
+          // create the corresponding label with its value
+          var label = document.createElement('label');
+
+          // append the newly cloned checkbox into label
+          label.appendChild(cbx);
+          label.appendChild(document.createTextNode(cbx.value));
+          // append the label into the filter container
+          extYear.appendChild(label);
+
+          // add a click event handler to the checkbox
+          cbx.addEventListener('click', filterYear);
+        }
+      });
+    }
+
+    // Sync the external filters when the default table filters are used
+    function syncExternalFilters(tf, searchTerms){
+      // sync the external country filter
+      var extCountry = document.querySelector('#extCountry');
+      extCountry.value = searchTerms[0];
+
+      // sync the external year checkboxes
+      var selectedYears = searchTerms[2];
+      var extYearCheckboxes = document.querySelectorAll('.extCbxYear');
+      [].forEach.call(extYearCheckboxes, function(input){
+          input.checked = false;
+          if(selectedYears.indexOf(input.value) !== -1){
+            input.checked = true;
+          }
+      });
+    }
+
+    // External country filter onchange handler
+    function filterCountry(evt){
+      var extCountry = evt.target;
+
+      // set corresponding filter value and filter the table
+      tf.setFilterValue(0, extCountry.value);
+      tf.filter();
+    }
+
+    // External year filter click handler
+    function filterYear(evt){
+      var values = [];
+      var checkedOptions = document.querySelectorAll('.extCbxYear:checked');
+
+      // extract values of selected checkboxes
+      [].forEach.call(checkedOptions, function(input){
+        values.push(input.value);
+      });
+
+      // set corresponding filter value and filter the table
+      tf.setFilterValue(2, values);
+      tf.filter();
+    }
+</script>
 
 <hr>
 <ul class="nav nav-pills">
@@ -863,11 +902,6 @@
     </div>
 </div>
 
-
-<div class="alert alert-warning" role="alert">
-    NOTE: the filters panel on the left is designed using Bootstrap's
-    panel classes.
-</div>
 
 
     </div>
