@@ -5,13 +5,16 @@ const JSON = root.JSON;
 const location = root.location;
 const decodeURIComponent = root.decodeURIComponent;
 
+/**
+ * Checks if browser has onhashchange event
+ */
 export const hasHashChange = () => {
     let docMode = root.documentMode;
     return ('onhashchange' in root) && (docMode === undefined || docMode > 7);
 };
 
 /**
- * Manages the URL hash reflecting the features state to be persisted
+ * Manages state via URL hash changes
  *
  * @export
  * @class Hash
@@ -24,9 +27,30 @@ export class Hash {
      * @param {State} state Instance of State
      */
     constructor(state) {
+        /**
+         * State object
+         * @type {State} State
+         */
         this.state = state;
+
+        /**
+         * Cached URL hash
+         * @type {String} Hash string
+         * @private
+         */
         this.lastHash = null;
+
+        /**
+         * Application event emitter instance
+         * @type {Emitter}
+         */
         this.emitter = state.emitter;
+
+        /**
+         * Bound sync wrapper for future use
+         * @private
+         */
+        this.boundSync = null;
     }
 
     /**
@@ -38,7 +62,7 @@ export class Hash {
         }
 
         this.lastHash = location.hash;
-        //Store a bound sync wrapper for future use.
+        //Store a bound sync wrapper
         this.boundSync = this.sync.bind(this);
         this.emitter.on(['state-changed'], (tf, state) => this.update(state));
         this.emitter.on(['initialized'], this.boundSync);

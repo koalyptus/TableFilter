@@ -5,8 +5,7 @@ import {isEmpty} from '../string';
 import {isArray, isNull, isString, isUndef} from '../types';
 
 /**
- * Reflects the state of features to be persisted via hash, localStorage or
- * cookie
+ * State persistence via hash, localStorage or cookie
  *
  * @export
  * @class State
