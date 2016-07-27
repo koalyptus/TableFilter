@@ -12,7 +12,7 @@ export class GridLayout extends Feature {
 
     /**
      * Creates an instance of GridLayout
-     * @param {Object} tf TableFilter instance
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'gridLayout');

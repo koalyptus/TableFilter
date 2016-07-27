@@ -4,38 +4,84 @@ import {isFn} from '../types';
 import {root} from '../root';
 import {NONE} from '../const';
 
+/**
+ * Activity indicator
+ *
+ * @export
+ * @class Loader
+ * @extends {Feature}
+ */
 export class Loader extends Feature {
 
     /**
-     * Loading message/spinner
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of Loader.
+     *
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'loader');
 
-        // TableFilter configuration
         let f = this.config;
 
-        //id of container element
-        this.loaderTgtId = f.loader_target_id || null;
-        //div containing loader
-        this.loaderDiv = null;
-        //defines loader text
-        this.loaderText = f.loader_text || 'Loading...';
-        //defines loader innerHtml
-        this.loaderHtml = f.loader_html || null;
-        //defines css class for loader div
-        this.loaderCssClass = f.loader_css_class || 'loader';
-        //delay for hiding loader
-        this.loaderCloseDelay = 250;
-        //callback function before loader is displayed
-        this.onShowLoader = isFn(f.on_show_loader) ? f.on_show_loader : null;
-        //callback function after loader is closed
-        this.onHideLoader = isFn(f.on_hide_loader) ? f.on_hide_loader : null;
-        //loader div
-        this.prfxLoader = 'load_';
+        /**
+         * ID of custom container element
+         * @type {String}
+         */
+        this.targetId = f.loader_target_id || null;
+
+         /**
+         * Loader container DOM element
+         * @type {DOMElement}
+         */
+        this.cont = null;
+
+        /**
+         * Text displayed when indicator is visible
+         * @type {String}
+         */
+        this.text = f.loader_text || 'Loading...';
+
+        /**
+         * Custom HTML injected in Loader's container element
+         * @type {String}
+         */
+        this.html = f.loader_html || null;
+
+        /**
+         * Css class for Loader's container element
+         * @type {String}
+         */
+        this.cssClass = f.loader_css_class || 'loader';
+
+        /**
+         * Close delay in milliseconds
+         * @type {Number}
+         */
+        this.closeDelay = 250;
+
+        /**
+         * Callback fired when loader is displayed
+         * @type {Function}
+         */
+        this.onShow = isFn(f.on_show_loader) ? f.on_show_loader : null;
+
+        /**
+         * Callback fired when loader is closed
+         * @type {Function}
+         */
+        this.onHide = isFn(f.on_hide_loader) ? f.on_hide_loader : null;
+
+        /**
+         * Prefix for container ID
+         * @type {String}
+         * @private
+         */
+        this.prfx = 'load_';
     }
 
+    /**
+     * Initializes Loader instance
+     */
     init() {
         if (this.initialized) {
             return;
@@ -44,21 +90,21 @@ export class Loader extends Feature {
         let tf = this.tf;
         let emitter = this.emitter;
 
-        let containerDiv = createElm('div', ['id', this.prfxLoader + tf.id]);
-        containerDiv.className = this.loaderCssClass;
+        let containerDiv = createElm('div', ['id', this.prfx + tf.id]);
+        containerDiv.className = this.cssClass;
 
-        let targetEl = !this.loaderTgtId ?
-            tf.tbl.parentNode : elm(this.loaderTgtId);
-        if (!this.loaderTgtId) {
+        let targetEl = !this.targetId ?
+            tf.tbl.parentNode : elm(this.targetId);
+        if (!this.targetId) {
             targetEl.insertBefore(containerDiv, tf.tbl);
         } else {
             targetEl.appendChild(containerDiv);
         }
-        this.loaderDiv = containerDiv;
-        if (!this.loaderHtml) {
-            this.loaderDiv.appendChild(createText(this.loaderText));
+        this.cont = containerDiv;
+        if (!this.html) {
+            this.cont.appendChild(createText(this.text));
         } else {
-            this.loaderDiv.innerHTML = this.loaderHtml;
+            this.cont.innerHTML = this.html;
         }
 
         this.show(NONE);
@@ -92,28 +138,35 @@ export class Loader extends Feature {
         this.initialized = true;
     }
 
+    /**
+     * Shows or hides activity indicator
+     * @param {String} Two possible values: '' or 'none'
+     */
     show(p) {
         if (!this.isEnabled()) {
             return;
         }
 
         let displayLoader = () => {
-            if (!this.loaderDiv) {
+            if (!this.cont) {
                 return;
             }
-            if (this.onShowLoader && p !== NONE) {
-                this.onShowLoader.call(null, this);
+            if (this.onShow && p !== NONE) {
+                this.onShow.call(null, this);
             }
-            this.loaderDiv.style.display = p;
-            if (this.onHideLoader && p === NONE) {
-                this.onHideLoader.call(null, this);
+            this.cont.style.display = p;
+            if (this.onHide && p === NONE) {
+                this.onHide.call(null, this);
             }
         };
 
-        let t = p === NONE ? this.loaderCloseDelay : 1;
+        let t = p === NONE ? this.closeDelay : 1;
         root.setTimeout(displayLoader, t);
     }
 
+    /**
+     * Removes feature
+     */
     destroy() {
         if (!this.initialized) {
             return;
@@ -121,8 +174,8 @@ export class Loader extends Feature {
 
         let emitter = this.emitter;
 
-        removeElm(this.loaderDiv);
-        this.loaderDiv = null;
+        removeElm(this.cont);
+        this.cont = null;
 
         // Unsubscribe to events
         emitter.off([

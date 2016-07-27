@@ -1,21 +1,43 @@
 import {createText, createElm, getText} from '../dom';
 import {isArray} from '../types';
 
+/**
+ * Highlight matched keywords upon filtering
+ *
+ * @export
+ * @class HighlightKeyword
+ */
 export class HighlightKeyword {
 
     /**
-     * HighlightKeyword, highlight matched keyword
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of HighlightKeyword
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         let f = tf.config();
-        //defines css class for highlighting
+
+        /**
+         * Css class for highlighted term
+         * @type {String}
+         */
         this.highlightCssClass = f.highlight_css_class || 'keyword';
 
+        /**
+         * TableFilter instance
+         * @type {TableFilter}
+         */
         this.tf = tf;
+
+        /**
+         * TableFilter's emitter instance
+         * @type {Emitter}
+         */
         this.emitter = tf.emitter;
     }
 
+    /**
+     * Initializes HighlightKeyword instance
+     */
     init() {
         this.emitter.on(
             ['before-filtering', 'destroy'],
@@ -29,7 +51,7 @@ export class HighlightKeyword {
     }
 
     /**
-     * highlight occurences of searched term in passed node
+     * Highlight occurences of searched term in passed node
      * @param  {Node} node
      * @param  {String} word     Searched term
      * @param  {String} cssClass Css class name
@@ -108,6 +130,9 @@ export class HighlightKeyword {
         });
     }
 
+    /**
+     * Remove feature
+     */
     destroy() {
         this.emitter.off(
             ['before-filtering', 'destroy'],

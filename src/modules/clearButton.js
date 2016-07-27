@@ -51,7 +51,7 @@ export class ClearButton extends Feature {
                 '" ' + 'title="' + this.tooltip + '" />');
 
         /**
-         * Prefix fot ID of container element
+         * Prefix for container ID
          * @type {String}
          * @private
          */
