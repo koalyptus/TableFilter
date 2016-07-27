@@ -121,7 +121,6 @@ export class Help extends Feature {
 
     /**
      * Initialise Help instance
-     * @returns (description)
      */
     init() {
         if (this.initialized) {

@@ -11,7 +11,7 @@ module('Sanity checks');
 test('Loader component', function() {
     notEqual(loader, null, 'Loader instanciated');
     notEqual(
-        document.getElementById(loader.prfxLoader+tf.id),
+        document.getElementById(loader.prfx + tf.id),
         null,
         'Loader DOM container'
     );
@@ -61,7 +61,7 @@ test('Can check is enabled', function() {
 module('Behaviour');
 test('Can show loader', function() {
     loader.show('');
-    deepEqual(loader.loaderDiv.style.display, '', 'Loader is displayed');
+    deepEqual(loader.cont.style.display, '', 'Loader is displayed');
 });
 
 module('Tear-down');
