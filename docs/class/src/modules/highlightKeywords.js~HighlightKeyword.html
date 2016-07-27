@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">HighlightKeyword | tablefilter v0.2.45 API Document</title>
+  <title data-ice="title">HighlightKeyword | tablefilter v0.2.46 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -115,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {HighlightKeyword} from &apos;<span><a href="file/src/modules/highlightKeywords.js.html#lineNumber4">tablefilter/src/modules/highlightKeywords.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {HighlightKeyword} from &apos;<span><a href="file/src/modules/highlightKeywords.js.html#lineNumber10">tablefilter/src/modules/highlightKeywords.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/highlightKeywords.js.html#lineNumber4">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/highlightKeywords.js.html#lineNumber10">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -141,7 +141,8 @@
 
   
   
-  
+  <div class="description" data-ice="description"><p>Highlight matched keywords upon filtering</p>
+</div>
 
   
 
@@ -169,13 +170,13 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(tf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+           <span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(tf: <span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>HighlightKeyword, highlight matched keyword</p>
+        <div data-ice="description"><p>Creates an instance of HighlightKeyword</p>
 </div>
       </div>
     </td>
@@ -202,13 +203,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-member-emitter">emitter</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-member-emitter">emitter</a></span></span><span data-ice="signature">: <span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>TableFilter&apos;s emitter instance</p>
+</div>
       </div>
     </td>
     <td>
@@ -227,13 +229,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-member-highlightCssClass">highlightCssClass</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-member-highlightCssClass">highlightCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Css class for highlighted term</p>
+</div>
       </div>
     </td>
     <td>
@@ -252,13 +255,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-member-tf">tf</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-member-tf">tf</a></span></span><span data-ice="signature">: <span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>TableFilter instance</p>
+</div>
       </div>
     </td>
     <td>
@@ -290,7 +294,8 @@
       <div>
         
         
-        
+        <div data-ice="description"><p>Remove feature</p>
+</div>
       </div>
     </td>
     <td>
@@ -315,7 +320,7 @@
       <div>
         
         
-        <div data-ice="description"><p>highlight occurences of searched term in passed node</p>
+        <div data-ice="description"><p>Highlight occurences of searched term in passed node</p>
 </div>
       </div>
     </td>
@@ -341,7 +346,8 @@
       <div>
         
         
-        
+        <div data-ice="description"><p>Initializes HighlightKeyword instance</p>
+</div>
       </div>
     </td>
     <td>
@@ -418,18 +424,18 @@
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">(tf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">(tf: <span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber10">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber16">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>HighlightKeyword, highlight matched keyword</p>
+  <div data-ice="description"><p>Creates an instance of HighlightKeyword</p>
 </div>
 
   
@@ -444,7 +450,7 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">tf</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="type"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>TableFilter instance</p>
 </td>
@@ -479,18 +485,19 @@
     
     
     
-    <span data-ice="name">emitter</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">emitter</span><span data-ice="signature">: <span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber16">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber35">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>TableFilter&apos;s emitter instance</p>
+</div>
 
   
 
@@ -519,18 +526,19 @@
     
     
     
-    <span data-ice="name">highlightCssClass</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">highlightCssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber13">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Css class for highlighted term</p>
+</div>
 
   
 
@@ -559,18 +567,19 @@
     
     
     
-    <span data-ice="name">tf</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">tf</span><span data-ice="signature">: <span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber15">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>TableFilter instance</p>
+</div>
 
   
 
@@ -606,14 +615,15 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber136">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Remove feature</p>
+</div>
 
   
 
@@ -646,14 +656,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber39">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber61">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>highlight occurences of searched term in passed node</p>
+  <div data-ice="description"><p>Highlight occurences of searched term in passed node</p>
 </div>
 
   
@@ -718,14 +728,15 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber19">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Initializes HighlightKeyword instance</p>
+</div>
 
   
 
@@ -758,7 +769,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber79">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber101">source</a></span></span>
     </span>
   </h3>
 
@@ -822,7 +833,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber96">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/highlightKeywords.js.html#lineNumber118">source</a></span></span>
     </span>
   </h3>
 

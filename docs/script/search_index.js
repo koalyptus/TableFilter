@@ -2460,16 +2460,40 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/modules/loader.js~loader#closedelay",
+    "class/src/modules/loader.js~Loader.html#instance-member-closeDelay",
+    "src/modules/loader.js~Loader#closeDelay",
+    "member"
+  ],
+  [
     "src/modules/loader.js~loader#constructor",
     "class/src/modules/loader.js~Loader.html#instance-constructor-constructor",
     "src/modules/loader.js~Loader#constructor",
     "method"
   ],
   [
+    "src/modules/loader.js~loader#cont",
+    "class/src/modules/loader.js~Loader.html#instance-member-cont",
+    "src/modules/loader.js~Loader#cont",
+    "member"
+  ],
+  [
+    "src/modules/loader.js~loader#cssclass",
+    "class/src/modules/loader.js~Loader.html#instance-member-cssClass",
+    "src/modules/loader.js~Loader#cssClass",
+    "member"
+  ],
+  [
     "src/modules/loader.js~loader#destroy",
     "class/src/modules/loader.js~Loader.html#instance-method-destroy",
     "src/modules/loader.js~Loader#destroy",
     "method"
+  ],
+  [
+    "src/modules/loader.js~loader#html",
+    "class/src/modules/loader.js~Loader.html#instance-member-html",
+    "src/modules/loader.js~Loader#html",
+    "member"
   ],
   [
     "src/modules/loader.js~loader#init",
@@ -2484,57 +2508,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/loader.js~loader#loaderclosedelay",
-    "class/src/modules/loader.js~Loader.html#instance-member-loaderCloseDelay",
-    "src/modules/loader.js~Loader#loaderCloseDelay",
+    "src/modules/loader.js~loader#onhide",
+    "class/src/modules/loader.js~Loader.html#instance-member-onHide",
+    "src/modules/loader.js~Loader#onHide",
     "member"
   ],
   [
-    "src/modules/loader.js~loader#loadercssclass",
-    "class/src/modules/loader.js~Loader.html#instance-member-loaderCssClass",
-    "src/modules/loader.js~Loader#loaderCssClass",
-    "member"
-  ],
-  [
-    "src/modules/loader.js~loader#loaderdiv",
-    "class/src/modules/loader.js~Loader.html#instance-member-loaderDiv",
-    "src/modules/loader.js~Loader#loaderDiv",
-    "member"
-  ],
-  [
-    "src/modules/loader.js~loader#loaderhtml",
-    "class/src/modules/loader.js~Loader.html#instance-member-loaderHtml",
-    "src/modules/loader.js~Loader#loaderHtml",
-    "member"
-  ],
-  [
-    "src/modules/loader.js~loader#loadertext",
-    "class/src/modules/loader.js~Loader.html#instance-member-loaderText",
-    "src/modules/loader.js~Loader#loaderText",
-    "member"
-  ],
-  [
-    "src/modules/loader.js~loader#loadertgtid",
-    "class/src/modules/loader.js~Loader.html#instance-member-loaderTgtId",
-    "src/modules/loader.js~Loader#loaderTgtId",
-    "member"
-  ],
-  [
-    "src/modules/loader.js~loader#onhideloader",
-    "class/src/modules/loader.js~Loader.html#instance-member-onHideLoader",
-    "src/modules/loader.js~Loader#onHideLoader",
-    "member"
-  ],
-  [
-    "src/modules/loader.js~loader#onshowloader",
-    "class/src/modules/loader.js~Loader.html#instance-member-onShowLoader",
-    "src/modules/loader.js~Loader#onShowLoader",
-    "member"
-  ],
-  [
-    "src/modules/loader.js~loader#prfxloader",
-    "class/src/modules/loader.js~Loader.html#instance-member-prfxLoader",
-    "src/modules/loader.js~Loader#prfxLoader",
+    "src/modules/loader.js~loader#onshow",
+    "class/src/modules/loader.js~Loader.html#instance-member-onShow",
+    "src/modules/loader.js~Loader#onShow",
     "member"
   ],
   [
@@ -2542,6 +2524,18 @@ window.esdocSearchIndex = [
     "class/src/modules/loader.js~Loader.html#instance-method-show",
     "src/modules/loader.js~Loader#show",
     "method"
+  ],
+  [
+    "src/modules/loader.js~loader#targetid",
+    "class/src/modules/loader.js~Loader.html#instance-member-targetId",
+    "src/modules/loader.js~Loader#targetId",
+    "member"
+  ],
+  [
+    "src/modules/loader.js~loader#text",
+    "class/src/modules/loader.js~Loader.html#instance-member-text",
+    "src/modules/loader.js~Loader#text",
+    "member"
   ],
   [
     "src/modules/noresults.js",

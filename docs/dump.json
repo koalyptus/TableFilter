@@ -6608,7 +6608,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {addEvt} from '../event';\n\n/**\n * Clear button UI component\n */\nexport class ClearButton extends Feature {\n\n    /**\n     * Creates an instance of ClearButton\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'btnReset');\n\n        let f = this.config;\n\n        /**\n         * Container element ID\n         * @type {String}\n         */\n        this.targetId = f.btn_reset_target_id || null;\n\n        /**\n         * Clear button element\n         * @type {DOMElement}\n         * @private\n         */\n        this.element = null;\n\n        /**\n         * Text for the clear button\n         * @type {String}\n         */\n        this.text = f.btn_reset_text || 'Reset';\n\n        /**\n         * Tooltip text for the clear button\n         * @type {String}\n         */\n        this.tooltip = f.btn_reset_tooltip || 'Clear filters';\n\n        /**\n         * Custom Html string for the clear button\n         * @type {String}\n         */\n        this.html = f.btn_reset_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + tf.btnResetCssClass +\n                '\" ' + 'title=\"' + this.tooltip + '\" />');\n\n        /**\n         * Prefix fot ID of container element\n         * @type {String}\n         * @private\n         */\n        this.prfxCont = 'resetspan_';\n    }\n\n    /**\n     * Click event handler for clear button\n     * @private\n     */\n    onClick() {\n        if (!this.isEnabled()) {\n            return;\n        }\n        this.tf.clearFilters();\n    }\n\n    /**\n     * Initialize clear button component\n     */\n    init() {\n        let tf = this.tf;\n\n        if (this.initialized) {\n            return;\n        }\n\n        let resetspan = createElm('span', ['id', this.prfxCont + tf.id]);\n\n        // reset button is added to defined element\n        if (!this.targetId) {\n            tf.setToolbar();\n        }\n        let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);\n        targetEl.appendChild(resetspan);\n\n        if (!this.html) {\n            let fltreset = createElm('a', ['href', 'javascript:void(0);']);\n            fltreset.className = tf.btnResetCssClass;\n            fltreset.appendChild(createText(this.text));\n            resetspan.appendChild(fltreset);\n            addEvt(fltreset, 'click', () => this.onClick());\n        } else {\n            resetspan.innerHTML = this.html;\n            let resetEl = resetspan.firstChild;\n            addEvt(resetEl, 'click', () => this.onClick());\n        }\n        this.element = resetspan.firstChild;\n\n        this.initialized = true;\n    }\n\n    /**\n     * Destroy ClearButton instance\n     */\n    destroy() {\n        let tf = this.tf;\n\n        if (!this.initialized) {\n            return;\n        }\n\n        let resetspan = elm(this.prfxCont + tf.id);\n        if (resetspan) {\n            removeElm(resetspan);\n        }\n        this.element = null;\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {addEvt} from '../event';\n\n/**\n * Clear button UI component\n */\nexport class ClearButton extends Feature {\n\n    /**\n     * Creates an instance of ClearButton\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'btnReset');\n\n        let f = this.config;\n\n        /**\n         * Container element ID\n         * @type {String}\n         */\n        this.targetId = f.btn_reset_target_id || null;\n\n        /**\n         * Clear button element\n         * @type {DOMElement}\n         * @private\n         */\n        this.element = null;\n\n        /**\n         * Text for the clear button\n         * @type {String}\n         */\n        this.text = f.btn_reset_text || 'Reset';\n\n        /**\n         * Tooltip text for the clear button\n         * @type {String}\n         */\n        this.tooltip = f.btn_reset_tooltip || 'Clear filters';\n\n        /**\n         * Custom Html string for the clear button\n         * @type {String}\n         */\n        this.html = f.btn_reset_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + tf.btnResetCssClass +\n                '\" ' + 'title=\"' + this.tooltip + '\" />');\n\n        /**\n         * Prefix for container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxCont = 'resetspan_';\n    }\n\n    /**\n     * Click event handler for clear button\n     * @private\n     */\n    onClick() {\n        if (!this.isEnabled()) {\n            return;\n        }\n        this.tf.clearFilters();\n    }\n\n    /**\n     * Initialize clear button component\n     */\n    init() {\n        let tf = this.tf;\n\n        if (this.initialized) {\n            return;\n        }\n\n        let resetspan = createElm('span', ['id', this.prfxCont + tf.id]);\n\n        // reset button is added to defined element\n        if (!this.targetId) {\n            tf.setToolbar();\n        }\n        let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);\n        targetEl.appendChild(resetspan);\n\n        if (!this.html) {\n            let fltreset = createElm('a', ['href', 'javascript:void(0);']);\n            fltreset.className = tf.btnResetCssClass;\n            fltreset.appendChild(createText(this.text));\n            resetspan.appendChild(fltreset);\n            addEvt(fltreset, 'click', () => this.onClick());\n        } else {\n            resetspan.innerHTML = this.html;\n            let resetEl = resetspan.firstChild;\n            addEvt(resetEl, 'click', () => this.onClick());\n        }\n        this.element = resetspan.firstChild;\n\n        this.initialized = true;\n    }\n\n    /**\n     * Destroy ClearButton instance\n     */\n    destroy() {\n        let tf = this.tf;\n\n        if (!this.initialized) {\n            return;\n        }\n\n        let resetspan = elm(this.prfxCont + tf.id);\n        if (resetspan) {\n            removeElm(resetspan);\n        }\n        this.element = null;\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 304,
@@ -6763,7 +6763,7 @@
     "memberof": "src/modules/clearButton.js~ClearButton",
     "longname": "src/modules/clearButton.js~ClearButton#prfxCont",
     "access": "private",
-    "description": "Prefix fot ID of container element",
+    "description": "Prefix for container ID",
     "lineNumber": 58,
     "type": {
       "nullable": null,
@@ -7506,7 +7506,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {createElm, removeElm, elm, tag} from '../dom';\nimport {isNull} from '../types';\nimport {addEvt, targetEvt} from '../event';\nimport {contains} from '../string';\nimport {NONE} from '../const';\n\n/**\n * Grid layout, table with fixed headers\n */\nexport class GridLayout extends Feature {\n\n    /**\n     * Creates an instance of GridLayout\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'gridLayout');\n\n        let f = this.config;\n\n        /**\n         * Grid-layout container width as CSS string\n         * @type {String}\n         */\n        this.width = f.grid_width || null;\n\n        /**\n         * Grid-layout container height as CSS string\n         * @type {String}\n         */\n        this.height = f.grid_height || null;\n\n        /**\n         * Css class for main container element\n         * @type {String}\n         */\n        this.mainContCssClass = f.grid_cont_css_class || 'grd_Cont';\n\n        /**\n         * Css class for body table container element\n         * @type {String}\n         */\n        this.contCssClass = f.grid_tbl_cont_css_class || 'grd_tblCont';\n\n        /**\n         * Css class for headers table container element\n         * @type {String}\n         */\n        this.headContCssClass = f.grid_tblHead_cont_css_class ||\n            'grd_headTblCont';\n\n        /**\n         * Css class for toolbar container element (rows counter, paging etc.)\n         * @type {String}\n         */\n        this.infDivCssClass = f.grid_inf_grid_css_class || 'grd_inf';\n\n        /**\n         * Index of the headers row, default: 0\n         * @type {Number}\n         */\n        this.headRowIndex = f.grid_headers_row_index || 0;\n\n        /**\n         * Collection of the header row indexes to be moved into headers table\n         * @type {Array}\n         */\n        this.headRows = f.grid_headers_rows || [0];\n\n        /**\n         * Enable or disable column filters generation, default: true\n         * @type {Boolean}\n         */\n        this.enableFilters = f.grid_enable_default_filters === false ?\n            false : true;\n\n        /**\n         * Enable or disable column headers, default: false\n         * @type {Boolean}\n         */\n        this.noHeaders = Boolean(f.grid_no_headers);\n\n        /**\n         * Grid-layout default column widht as CSS string\n         * @type {String}\n         */\n        this.defaultColWidth = f.grid_default_col_width || '100px';\n\n        /**\n         * List of column elements\n         * @type {Array}\n         * @private\n         */\n        this.colElms = [];\n\n        /**\n         * Prefix for grid-layout main container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxMainTblCont = 'gridCont_';\n\n        /**\n         * Prefix for grid-layout body table container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxTblCont = 'tblCont_';\n\n        /**\n         * Prefix for grid-layout headers table container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxHeadTblCont = 'tblHeadCont_';\n\n        /**\n         * Prefix for grid-layout headers table ID\n         * @type {String}\n         * @private\n         */\n        this.prfxHeadTbl = 'tblHead_';\n\n        /**\n         * Prefix for grid-layout filter's cell ID\n         * @type {String}\n         * @private\n         */\n        this.prfxGridFltTd = '_td_';\n\n        /**\n         * Prefix for grid-layout header's cell ID\n         * @type {String}\n         * @private\n         */\n        this.prfxGridTh = 'tblHeadTh_';\n\n        /**\n         * Mark-up of original HTML table\n         * @type {String}\n         * @private\n         */\n        this.sourceTblHtml = tf.tbl.outerHTML;\n\n        /**\n         * Indicates if working table has column elements\n         * @type {Boolean}\n         * @private\n         */\n        this.tblHasColTag = tag(tf.tbl, 'col').length > 0 ? true : false;\n\n        // filters flag at TF level\n        tf.fltGrid = this.enableFilters;\n    }\n\n    /**\n     * Generates a grid with fixed headers\n     * TODO: reduce size of init by extracting single purposed methods\n     */\n    init() {\n        let tf = this.tf;\n        let tbl = tf.tbl;\n\n        if (this.initialized) {\n            return;\n        }\n\n        // Override relevant TableFilter properties\n        this.setOverrides();\n\n        // Assign default column widths\n        this.setDefaultColWidths();\n\n        // Initial table width\n        let tblW = this.initialTableWidth();\n\n        //Main container: it will contain all the elements\n        this.tblMainCont = this.createContainer(this.prfxMainTblCont + tf.id,\n            'div', this.mainContCssClass);\n        if (this.width) {\n            this.tblMainCont.style.width = this.width;\n        }\n        tbl.parentNode.insertBefore(this.tblMainCont, tbl);\n\n        //Table container: div wrapping content table\n        this.tblCont = this.createContainer(this.prfxTblCont + tf.id, 'div',\n            this.contCssClass);\n        this.setConfigWidth(this.tblCont);\n        if (this.height) {\n            this.tblCont.style.height = this.height;\n        }\n        tbl.parentNode.insertBefore(this.tblCont, tbl);\n        let t = removeElm(tbl);\n        this.tblCont.appendChild(t);\n\n        //In case table width is expressed in %\n        if (tbl.style.width === '') {\n            tbl.style.width = (contains('%', tblW) ?\n                tbl.clientWidth : tblW) + 'px';\n        }\n\n        let d = removeElm(this.tblCont);\n        this.tblMainCont.appendChild(d);\n\n        //Headers table container: div wrapping headers table\n        this.headTblCont = this.createContainer(this.prfxHeadTblCont + tf.id,\n            'div', this.headContCssClass);\n        this.setConfigWidth(this.headTblCont);\n\n        //Headers table\n        this.headTbl = createElm('table', ['id', this.prfxHeadTbl + tf.id]);\n        let tH = createElm('tHead');\n\n        //1st row should be headers row, ids are added if not set\n        //Those ids are used by the sort feature\n        let hRow = tbl.rows[this.headRowIndex];\n        let sortTriggers = this.getSortTriggerIds(hRow);\n\n        //Filters row is created\n        let filtersRow = this.createFiltersRow();\n\n        //Headers row are moved from content table to headers table\n        this.setHeadersRow(tH);\n\n        this.headTbl.appendChild(tH);\n        if (tf.filtersRowIndex === 0) {\n            tH.insertBefore(filtersRow, hRow);\n        } else {\n            tH.appendChild(filtersRow);\n        }\n\n        this.headTblCont.appendChild(this.headTbl);\n        this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);\n\n        //THead needs to be removed in content table for sort feature\n        let thead = tag(tbl, 'thead');\n        if (thead.length > 0) {\n            tbl.removeChild(thead[0]);\n        }\n\n        //Headers table style\n        this.headTbl.style.tableLayout = 'fixed';\n        tbl.style.tableLayout = 'fixed';\n        this.headTbl.cellPadding = tbl.cellPadding;\n        this.headTbl.cellSpacing = tbl.cellSpacing;\n        // this.headTbl.style.width = tbl.style.width;\n\n        //content table without headers needs col widths to be reset\n        tf.setColWidths(this.headTbl);\n\n        //Headers container width\n        // this.headTblCont.style.width = this.tblCont.clientWidth+'px';\n\n        tbl.style.width = '';\n        //\n        this.headTbl.style.width = tbl.clientWidth + 'px';\n        //\n\n        //scroll synchronisation\n        addEvt(this.tblCont, 'scroll', (evt) => {\n            let elm = targetEvt(evt);\n            let scrollLeft = elm.scrollLeft;\n            this.headTblCont.scrollLeft = scrollLeft;\n            //New pointerX calc taking into account scrollLeft\n            // if(!o.isPointerXOverwritten){\n            //     try{\n            //         o.Evt.pointerX = function(evt){\n            //             let e = evt || global.event;\n            //             let bdScrollLeft = tf_StandardBody().scrollLeft +\n            //                 scrollLeft;\n            //             return (e.pageX + scrollLeft) ||\n            //                 (e.clientX + bdScrollLeft);\n            //         };\n            //         o.isPointerXOverwritten = true;\n            //     } catch(err) {\n            //         o.isPointerXOverwritten = false;\n            //     }\n            // }\n        });\n\n        // TODO: Trigger a custom event handled by sort extension\n        let sort = tf.extension('sort');\n        if (sort) {\n            sort.asyncSort = true;\n            sort.triggerIds = sortTriggers;\n        }\n\n        //Col elements are enough to keep column widths after sorting and\n        //filtering\n        this.setColumnElements();\n\n        if (tf.popupFilters) {\n            filtersRow.style.display = NONE;\n        }\n\n        if (tbl.clientWidth !== this.headTbl.clientWidth) {\n            tbl.style.width = this.headTbl.clientWidth + 'px';\n        }\n\n        this.initialized = true;\n    }\n\n    /**\n     * Overrides TableFilter instance properties to adjust to grid layout mode\n     * @private\n     */\n    setOverrides() {\n        let tf = this.tf;\n        tf.refRow = isNull(tf.startRow) ? 0 : tf.startRow;\n        tf.headersRow = 0;\n        tf.filtersRowIndex = 1;\n        tf.isExternalFlt = true;\n    }\n\n    /**\n     * Set grid-layout default column widths if column widths are not defined\n     * @private\n     */\n    setDefaultColWidths() {\n        let tf = this.tf;\n        if (tf.hasColWidths) {\n            return;\n        }\n        for (let k = 0, len = tf.getCellsNb(); k < len; k++) {\n            let colW;\n            let cell = tf.tbl.rows[tf.getHeadersRowIndex()].cells[k];\n            if (cell.width !== '') {\n                colW = cell.width;\n            } else if (cell.style.width !== '') {\n                colW = parseInt(cell.style.width, 10);\n            } else {\n                colW = this.defaultColWidth;\n            }\n            tf.colWidths[k] = colW;\n        }\n        tf.hasColWidths = true;\n        tf.setColWidths();\n    }\n\n    /**\n     * Initial table width\n     * @returns {Number}\n     * @private\n     */\n    initialTableWidth() {\n        let tbl = this.tf.tbl;\n        let width; //initial table width\n\n        if (tbl.width !== '') {\n            width = tbl.width;\n        }\n        else if (tbl.style.width !== '') {\n            width = tbl.style.width;\n        } else {\n            width = tbl.clientWidth;\n        }\n        return parseInt(width, 10);\n    }\n\n    /**\n     * Creates container element\n     * @param {String} id Element ID\n     * @param {String} tag Tag name\n     * @param {String} className Css class to assign to element\n     * @returns {DOMElement}\n     * @private\n     */\n    createContainer(id, tag, className) {\n        let element = createElm(tag, ['id', id]);\n        element.className = className;\n        return element;\n    }\n\n    /**\n     * Creates filters row with cells\n     * @returns {HTMLTableRowElement}\n     * @private\n     */\n    createFiltersRow() {\n        let tf = this.tf;\n        let filtersRow = createElm('tr');\n        if (this.enableFilters && tf.fltGrid) {\n            tf.externalFltTgtIds = [];\n            for (let j = 0; j < tf.getCellsNb(); j++) {\n                let fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;\n                let cl = createElm(tf.fltCellTag, ['id', fltTdId]);\n                filtersRow.appendChild(cl);\n                tf.externalFltTgtIds[j] = fltTdId;\n            }\n        }\n        return filtersRow;\n    }\n\n    /**\n     * Generates column elements if necessary and assigns their widths\n     * @private\n     */\n    setColumnElements() {\n        let tf = this.tf;\n        let cols = tag(tf.tbl, 'col');\n        this.tblHasColTag = cols.length > 0;\n\n        for (let k = (tf.nbCells - 1); k >= 0; k--) {\n            let col;\n            let id = `${tf.id}_col_${k}`;\n\n            if (!this.tblHasColTag) {\n                col = createElm('col', ['id', id]);\n                tf.tbl.insertBefore(col, tf.tbl.firstChild);\n            } else {\n                col = cols[k];\n                col.setAttribute('id', id);\n            }\n            col.style.width = tf.colWidths[k];\n            this.colElms[k] = col;\n        }\n        this.tblHasColTag = true;\n    }\n\n    /**\n     * Sets headers row in headers table\n     * @param {HTMLHeadElement} tableHead Table head element\n     * @private\n     */\n    setHeadersRow(tableHead) {\n        if (this.noHeaders) {\n            // Handle table with no headers, assuming here headers do not\n            // exist\n            tableHead.appendChild(createElm('tr'));\n        } else {\n            // Headers row are moved from content table to headers table\n            for (let i = 0; i < this.headRows.length; i++) {\n                let row = this.tf.tbl.rows[this.headRows[i]];\n                tableHead.appendChild(row);\n            }\n        }\n    }\n\n    /**\n     * Sets width defined in configuration to passed element\n     * @param {DOMElement} element DOM element\n     * @private\n     */\n    setConfigWidth(element) {\n        if (!this.width) {\n            return;\n        }\n        if (this.width.indexOf('%') !== -1) {\n            element.style.width = '100%';\n        } else {\n            element.style.width = this.width;\n        }\n    }\n\n    /**\n     * Returns a list of header IDs used for specifing external sort triggers\n     * @param {HTMLTableRowElement} row DOM row element\n     * @returns {Array} List of IDs\n     * @private\n     */\n    getSortTriggerIds(row) {\n        let tf = this.tf;\n        let sortTriggers = [];\n        for (let n = 0; n < tf.getCellsNb(); n++) {\n            let c = row.cells[n];\n            let thId = c.getAttribute('id');\n            if (!thId || thId === '') {\n                thId = this.prfxGridTh + n + '_' + tf.id;\n                c.setAttribute('id', thId);\n            }\n            sortTriggers.push(thId);\n        }\n        return sortTriggers;\n    }\n\n    /**\n     * Removes the grid layout\n     */\n    destroy() {\n        let tf = this.tf;\n        let tbl = tf.tbl;\n\n        if (!this.initialized) {\n            return;\n        }\n        let t = removeElm(tbl);\n        this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);\n        removeElm(this.tblMainCont);\n\n        this.tblMainCont = null;\n        this.headTblCont = null;\n        this.headTbl = null;\n        this.tblCont = null;\n\n        tbl.outerHTML = this.sourceTblHtml;\n        //needed to keep reference of table element for future usage\n        this.tf.tbl = elm(tf.id);\n\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {createElm, removeElm, elm, tag} from '../dom';\nimport {isNull} from '../types';\nimport {addEvt, targetEvt} from '../event';\nimport {contains} from '../string';\nimport {NONE} from '../const';\n\n/**\n * Grid layout, table with fixed headers\n */\nexport class GridLayout extends Feature {\n\n    /**\n     * Creates an instance of GridLayout\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'gridLayout');\n\n        let f = this.config;\n\n        /**\n         * Grid-layout container width as CSS string\n         * @type {String}\n         */\n        this.width = f.grid_width || null;\n\n        /**\n         * Grid-layout container height as CSS string\n         * @type {String}\n         */\n        this.height = f.grid_height || null;\n\n        /**\n         * Css class for main container element\n         * @type {String}\n         */\n        this.mainContCssClass = f.grid_cont_css_class || 'grd_Cont';\n\n        /**\n         * Css class for body table container element\n         * @type {String}\n         */\n        this.contCssClass = f.grid_tbl_cont_css_class || 'grd_tblCont';\n\n        /**\n         * Css class for headers table container element\n         * @type {String}\n         */\n        this.headContCssClass = f.grid_tblHead_cont_css_class ||\n            'grd_headTblCont';\n\n        /**\n         * Css class for toolbar container element (rows counter, paging etc.)\n         * @type {String}\n         */\n        this.infDivCssClass = f.grid_inf_grid_css_class || 'grd_inf';\n\n        /**\n         * Index of the headers row, default: 0\n         * @type {Number}\n         */\n        this.headRowIndex = f.grid_headers_row_index || 0;\n\n        /**\n         * Collection of the header row indexes to be moved into headers table\n         * @type {Array}\n         */\n        this.headRows = f.grid_headers_rows || [0];\n\n        /**\n         * Enable or disable column filters generation, default: true\n         * @type {Boolean}\n         */\n        this.enableFilters = f.grid_enable_default_filters === false ?\n            false : true;\n\n        /**\n         * Enable or disable column headers, default: false\n         * @type {Boolean}\n         */\n        this.noHeaders = Boolean(f.grid_no_headers);\n\n        /**\n         * Grid-layout default column widht as CSS string\n         * @type {String}\n         */\n        this.defaultColWidth = f.grid_default_col_width || '100px';\n\n        /**\n         * List of column elements\n         * @type {Array}\n         * @private\n         */\n        this.colElms = [];\n\n        /**\n         * Prefix for grid-layout main container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxMainTblCont = 'gridCont_';\n\n        /**\n         * Prefix for grid-layout body table container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxTblCont = 'tblCont_';\n\n        /**\n         * Prefix for grid-layout headers table container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxHeadTblCont = 'tblHeadCont_';\n\n        /**\n         * Prefix for grid-layout headers table ID\n         * @type {String}\n         * @private\n         */\n        this.prfxHeadTbl = 'tblHead_';\n\n        /**\n         * Prefix for grid-layout filter's cell ID\n         * @type {String}\n         * @private\n         */\n        this.prfxGridFltTd = '_td_';\n\n        /**\n         * Prefix for grid-layout header's cell ID\n         * @type {String}\n         * @private\n         */\n        this.prfxGridTh = 'tblHeadTh_';\n\n        /**\n         * Mark-up of original HTML table\n         * @type {String}\n         * @private\n         */\n        this.sourceTblHtml = tf.tbl.outerHTML;\n\n        /**\n         * Indicates if working table has column elements\n         * @type {Boolean}\n         * @private\n         */\n        this.tblHasColTag = tag(tf.tbl, 'col').length > 0 ? true : false;\n\n        // filters flag at TF level\n        tf.fltGrid = this.enableFilters;\n    }\n\n    /**\n     * Generates a grid with fixed headers\n     * TODO: reduce size of init by extracting single purposed methods\n     */\n    init() {\n        let tf = this.tf;\n        let tbl = tf.tbl;\n\n        if (this.initialized) {\n            return;\n        }\n\n        // Override relevant TableFilter properties\n        this.setOverrides();\n\n        // Assign default column widths\n        this.setDefaultColWidths();\n\n        // Initial table width\n        let tblW = this.initialTableWidth();\n\n        //Main container: it will contain all the elements\n        this.tblMainCont = this.createContainer(this.prfxMainTblCont + tf.id,\n            'div', this.mainContCssClass);\n        if (this.width) {\n            this.tblMainCont.style.width = this.width;\n        }\n        tbl.parentNode.insertBefore(this.tblMainCont, tbl);\n\n        //Table container: div wrapping content table\n        this.tblCont = this.createContainer(this.prfxTblCont + tf.id, 'div',\n            this.contCssClass);\n        this.setConfigWidth(this.tblCont);\n        if (this.height) {\n            this.tblCont.style.height = this.height;\n        }\n        tbl.parentNode.insertBefore(this.tblCont, tbl);\n        let t = removeElm(tbl);\n        this.tblCont.appendChild(t);\n\n        //In case table width is expressed in %\n        if (tbl.style.width === '') {\n            tbl.style.width = (contains('%', tblW) ?\n                tbl.clientWidth : tblW) + 'px';\n        }\n\n        let d = removeElm(this.tblCont);\n        this.tblMainCont.appendChild(d);\n\n        //Headers table container: div wrapping headers table\n        this.headTblCont = this.createContainer(this.prfxHeadTblCont + tf.id,\n            'div', this.headContCssClass);\n        this.setConfigWidth(this.headTblCont);\n\n        //Headers table\n        this.headTbl = createElm('table', ['id', this.prfxHeadTbl + tf.id]);\n        let tH = createElm('tHead');\n\n        //1st row should be headers row, ids are added if not set\n        //Those ids are used by the sort feature\n        let hRow = tbl.rows[this.headRowIndex];\n        let sortTriggers = this.getSortTriggerIds(hRow);\n\n        //Filters row is created\n        let filtersRow = this.createFiltersRow();\n\n        //Headers row are moved from content table to headers table\n        this.setHeadersRow(tH);\n\n        this.headTbl.appendChild(tH);\n        if (tf.filtersRowIndex === 0) {\n            tH.insertBefore(filtersRow, hRow);\n        } else {\n            tH.appendChild(filtersRow);\n        }\n\n        this.headTblCont.appendChild(this.headTbl);\n        this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);\n\n        //THead needs to be removed in content table for sort feature\n        let thead = tag(tbl, 'thead');\n        if (thead.length > 0) {\n            tbl.removeChild(thead[0]);\n        }\n\n        //Headers table style\n        this.headTbl.style.tableLayout = 'fixed';\n        tbl.style.tableLayout = 'fixed';\n        this.headTbl.cellPadding = tbl.cellPadding;\n        this.headTbl.cellSpacing = tbl.cellSpacing;\n        // this.headTbl.style.width = tbl.style.width;\n\n        //content table without headers needs col widths to be reset\n        tf.setColWidths(this.headTbl);\n\n        //Headers container width\n        // this.headTblCont.style.width = this.tblCont.clientWidth+'px';\n\n        tbl.style.width = '';\n        //\n        this.headTbl.style.width = tbl.clientWidth + 'px';\n        //\n\n        //scroll synchronisation\n        addEvt(this.tblCont, 'scroll', (evt) => {\n            let elm = targetEvt(evt);\n            let scrollLeft = elm.scrollLeft;\n            this.headTblCont.scrollLeft = scrollLeft;\n            //New pointerX calc taking into account scrollLeft\n            // if(!o.isPointerXOverwritten){\n            //     try{\n            //         o.Evt.pointerX = function(evt){\n            //             let e = evt || global.event;\n            //             let bdScrollLeft = tf_StandardBody().scrollLeft +\n            //                 scrollLeft;\n            //             return (e.pageX + scrollLeft) ||\n            //                 (e.clientX + bdScrollLeft);\n            //         };\n            //         o.isPointerXOverwritten = true;\n            //     } catch(err) {\n            //         o.isPointerXOverwritten = false;\n            //     }\n            // }\n        });\n\n        // TODO: Trigger a custom event handled by sort extension\n        let sort = tf.extension('sort');\n        if (sort) {\n            sort.asyncSort = true;\n            sort.triggerIds = sortTriggers;\n        }\n\n        //Col elements are enough to keep column widths after sorting and\n        //filtering\n        this.setColumnElements();\n\n        if (tf.popupFilters) {\n            filtersRow.style.display = NONE;\n        }\n\n        if (tbl.clientWidth !== this.headTbl.clientWidth) {\n            tbl.style.width = this.headTbl.clientWidth + 'px';\n        }\n\n        this.initialized = true;\n    }\n\n    /**\n     * Overrides TableFilter instance properties to adjust to grid layout mode\n     * @private\n     */\n    setOverrides() {\n        let tf = this.tf;\n        tf.refRow = isNull(tf.startRow) ? 0 : tf.startRow;\n        tf.headersRow = 0;\n        tf.filtersRowIndex = 1;\n        tf.isExternalFlt = true;\n    }\n\n    /**\n     * Set grid-layout default column widths if column widths are not defined\n     * @private\n     */\n    setDefaultColWidths() {\n        let tf = this.tf;\n        if (tf.hasColWidths) {\n            return;\n        }\n        for (let k = 0, len = tf.getCellsNb(); k < len; k++) {\n            let colW;\n            let cell = tf.tbl.rows[tf.getHeadersRowIndex()].cells[k];\n            if (cell.width !== '') {\n                colW = cell.width;\n            } else if (cell.style.width !== '') {\n                colW = parseInt(cell.style.width, 10);\n            } else {\n                colW = this.defaultColWidth;\n            }\n            tf.colWidths[k] = colW;\n        }\n        tf.hasColWidths = true;\n        tf.setColWidths();\n    }\n\n    /**\n     * Initial table width\n     * @returns {Number}\n     * @private\n     */\n    initialTableWidth() {\n        let tbl = this.tf.tbl;\n        let width; //initial table width\n\n        if (tbl.width !== '') {\n            width = tbl.width;\n        }\n        else if (tbl.style.width !== '') {\n            width = tbl.style.width;\n        } else {\n            width = tbl.clientWidth;\n        }\n        return parseInt(width, 10);\n    }\n\n    /**\n     * Creates container element\n     * @param {String} id Element ID\n     * @param {String} tag Tag name\n     * @param {String} className Css class to assign to element\n     * @returns {DOMElement}\n     * @private\n     */\n    createContainer(id, tag, className) {\n        let element = createElm(tag, ['id', id]);\n        element.className = className;\n        return element;\n    }\n\n    /**\n     * Creates filters row with cells\n     * @returns {HTMLTableRowElement}\n     * @private\n     */\n    createFiltersRow() {\n        let tf = this.tf;\n        let filtersRow = createElm('tr');\n        if (this.enableFilters && tf.fltGrid) {\n            tf.externalFltTgtIds = [];\n            for (let j = 0; j < tf.getCellsNb(); j++) {\n                let fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;\n                let cl = createElm(tf.fltCellTag, ['id', fltTdId]);\n                filtersRow.appendChild(cl);\n                tf.externalFltTgtIds[j] = fltTdId;\n            }\n        }\n        return filtersRow;\n    }\n\n    /**\n     * Generates column elements if necessary and assigns their widths\n     * @private\n     */\n    setColumnElements() {\n        let tf = this.tf;\n        let cols = tag(tf.tbl, 'col');\n        this.tblHasColTag = cols.length > 0;\n\n        for (let k = (tf.nbCells - 1); k >= 0; k--) {\n            let col;\n            let id = `${tf.id}_col_${k}`;\n\n            if (!this.tblHasColTag) {\n                col = createElm('col', ['id', id]);\n                tf.tbl.insertBefore(col, tf.tbl.firstChild);\n            } else {\n                col = cols[k];\n                col.setAttribute('id', id);\n            }\n            col.style.width = tf.colWidths[k];\n            this.colElms[k] = col;\n        }\n        this.tblHasColTag = true;\n    }\n\n    /**\n     * Sets headers row in headers table\n     * @param {HTMLHeadElement} tableHead Table head element\n     * @private\n     */\n    setHeadersRow(tableHead) {\n        if (this.noHeaders) {\n            // Handle table with no headers, assuming here headers do not\n            // exist\n            tableHead.appendChild(createElm('tr'));\n        } else {\n            // Headers row are moved from content table to headers table\n            for (let i = 0; i < this.headRows.length; i++) {\n                let row = this.tf.tbl.rows[this.headRows[i]];\n                tableHead.appendChild(row);\n            }\n        }\n    }\n\n    /**\n     * Sets width defined in configuration to passed element\n     * @param {DOMElement} element DOM element\n     * @private\n     */\n    setConfigWidth(element) {\n        if (!this.width) {\n            return;\n        }\n        if (this.width.indexOf('%') !== -1) {\n            element.style.width = '100%';\n        } else {\n            element.style.width = this.width;\n        }\n    }\n\n    /**\n     * Returns a list of header IDs used for specifing external sort triggers\n     * @param {HTMLTableRowElement} row DOM row element\n     * @returns {Array} List of IDs\n     * @private\n     */\n    getSortTriggerIds(row) {\n        let tf = this.tf;\n        let sortTriggers = [];\n        for (let n = 0; n < tf.getCellsNb(); n++) {\n            let c = row.cells[n];\n            let thId = c.getAttribute('id');\n            if (!thId || thId === '') {\n                thId = this.prfxGridTh + n + '_' + tf.id;\n                c.setAttribute('id', thId);\n            }\n            sortTriggers.push(thId);\n        }\n        return sortTriggers;\n    }\n\n    /**\n     * Removes the grid layout\n     */\n    destroy() {\n        let tf = this.tf;\n        let tbl = tf.tbl;\n\n        if (!this.initialized) {\n            return;\n        }\n        let t = removeElm(tbl);\n        this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);\n        removeElm(this.tblMainCont);\n\n        this.tblMainCont = null;\n        this.headTblCont = null;\n        this.headTbl = null;\n        this.tblCont = null;\n\n        tbl.outerHTML = this.sourceTblHtml;\n        //needed to keep reference of table element for future usage\n        this.tf.tbl = elm(tf.id);\n\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 345,
@@ -7542,7 +7542,7 @@
       {
         "nullable": null,
         "types": [
-          "Object"
+          "TableFilter"
         ],
         "spread": false,
         "optional": false,
@@ -8891,7 +8891,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {addEvt} from '../event';\nimport {NONE} from '../const';\n\nconst WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +\n    '4.-Filter-operators';\nconst WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';\n\n/**\n * Help UI component\n */\nexport class Help extends Feature {\n\n    /**\n     * Creates an instance of Help.\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'help');\n\n        var f = this.config;\n\n        /**\n         * ID of main custom container element\n         * @type {String}\n         */\n        this.tgtId = f.help_instructions_target_id || null;\n\n        /**\n         * ID of custom container element for instructions\n         * @type {String}\n         */\n        this.contTgtId = f.help_instructions_container_target_id ||\n            null;\n\n        /**\n         * Instructions text (accepts HTML)\n         * @type {String}\n         */\n        this.instrText = f.help_instructions_text ?\n            f.help_instructions_text :\n            'Use the filters above each column to filter and limit table ' +\n            'data. Advanced searches can be performed by using the following ' +\n            'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +\n            '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +\n            '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +\n            '<b>rgx:</b><br/><a href=\"' + WIKI_URL + '\" target=\"_blank\">' +\n            'Learn more</a><hr/>';\n\n        /**\n         * Instructions HTML\n         * @type {String}\n         */\n        this.instrHtml = f.help_instructions_html || null;\n\n        /**\n         * Help button text ('?')\n         * @type {String}\n         */\n        this.btnText = f.help_instructions_btn_text || '?';\n\n        /**\n         * Custom help button HTML\n         * @type {String}\n         */\n        this.btnHtml = f.help_instructions_btn_html || null;\n\n        /**\n         * Css class for help button\n         * @type {String}\n         */\n        this.btnCssClass = f.help_instructions_btn_css_class || 'helpBtn';\n\n        /**\n         * Css class for help container element\n         * @type {String}\n         */\n        this.contCssClass = f.help_instructions_container_css_class ||\n            'helpCont';\n\n        /**\n         * Stores button DOM element\n         * @type {DOMElement}\n         */\n        this.btn = null;\n\n        /**\n         * Stores help container DOM element\n         * @type {DOMElement}\n         */\n        this.cont = null;\n\n        /**\n         * Default HTML appended to instructions text\n         * @type {String}\n         */\n        this.defaultHtml = '<div class=\"helpFooter\"><h4>TableFilter ' +\n            'v' + tf.version + '</h4>' + '<a href=\"' + WEBSITE_URL +\n            '\" target=\"_blank\">' + WEBSITE_URL + '</a>' +\n            '<br/><span>&copy;2015-' + tf.year + ' {AUTHOR}</span>' +\n            '<div align=\"center\" style=\"margin-top:8px;\">' +\n            '<a href=\"javascript:void(0);\" class=\"close\">Close</a></div></div>';\n\n        /**\n         * Prefix for help main container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxHelpSpan = 'helpSpan_';\n\n        /**\n         * Prefix for help instructions container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxHelpDiv = 'helpDiv_';\n\n        this.emitter.on(['init-help'], () => this.init());\n    }\n\n    /**\n     * Initialise Help instance\n     * @returns (description)\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        var tf = this.tf;\n\n        var helpspan = createElm('span', ['id', this.prfxHelpSpan + tf.id]);\n        var helpdiv = createElm('div', ['id', this.prfxHelpDiv + tf.id]);\n\n        //help button is added to defined element\n        if (!this.tgtId) {\n            tf.setToolbar();\n        }\n        var targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);\n        targetEl.appendChild(helpspan);\n\n        var divContainer = !this.contTgtId ? helpspan : elm(this.contTgtId);\n\n        if (!this.btnHtml) {\n            divContainer.appendChild(helpdiv);\n            var helplink = createElm('a', ['href', 'javascript:void(0);']);\n            helplink.className = this.btnCssClass;\n            helplink.appendChild(createText(this.btnText));\n            helpspan.appendChild(helplink);\n            addEvt(helplink, 'click', () => this.toggle());\n        } else {\n            helpspan.innerHTML = this.btnHtml;\n            var helpEl = helpspan.firstChild;\n            addEvt(helpEl, 'click', () => this.toggle());\n            divContainer.appendChild(helpdiv);\n        }\n\n        if (!this.instrHtml) {\n            helpdiv.innerHTML = this.instrText;\n            helpdiv.className = this.contCssClass;\n            addEvt(helpdiv, 'dblclick', () => this.toggle());\n        } else {\n            if (this.contTgtId) {\n                divContainer.appendChild(helpdiv);\n            }\n            helpdiv.innerHTML = this.instrHtml;\n            if (!this.contTgtId) {\n                helpdiv.className = this.contCssClass;\n                addEvt(helpdiv, 'dblclick', () => this.toggle());\n            }\n        }\n        helpdiv.innerHTML += this.defaultHtml;\n        addEvt(helpdiv, 'click', () => this.toggle());\n\n        this.cont = helpdiv;\n        this.btn = helpspan;\n        /**\n         * @inherited\n         */\n        this.initialized = true;\n    }\n\n    /**\n     * Toggle help pop-up\n     */\n    toggle() {\n        // check only if explicitily set to false as in this case undefined\n        // signifies the help feature is enabled by default\n        if (this.enabled === false) {\n            return;\n        }\n        var divDisplay = this.cont.style.display;\n        if (divDisplay === '' || divDisplay === NONE) {\n            this.cont.style.display = 'inline';\n        } else {\n            this.cont.style.display = NONE;\n        }\n    }\n\n    /**\n     * Remove help UI\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        removeElm(this.btn);\n        this.btn = null;\n        if (!this.cont) {\n            return;\n        }\n        removeElm(this.cont);\n        this.cont = null;\n        this.initialized = false;\n    }\n\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {addEvt} from '../event';\nimport {NONE} from '../const';\n\nconst WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +\n    '4.-Filter-operators';\nconst WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';\n\n/**\n * Help UI component\n */\nexport class Help extends Feature {\n\n    /**\n     * Creates an instance of Help.\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'help');\n\n        var f = this.config;\n\n        /**\n         * ID of main custom container element\n         * @type {String}\n         */\n        this.tgtId = f.help_instructions_target_id || null;\n\n        /**\n         * ID of custom container element for instructions\n         * @type {String}\n         */\n        this.contTgtId = f.help_instructions_container_target_id ||\n            null;\n\n        /**\n         * Instructions text (accepts HTML)\n         * @type {String}\n         */\n        this.instrText = f.help_instructions_text ?\n            f.help_instructions_text :\n            'Use the filters above each column to filter and limit table ' +\n            'data. Advanced searches can be performed by using the following ' +\n            'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +\n            '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +\n            '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +\n            '<b>rgx:</b><br/><a href=\"' + WIKI_URL + '\" target=\"_blank\">' +\n            'Learn more</a><hr/>';\n\n        /**\n         * Instructions HTML\n         * @type {String}\n         */\n        this.instrHtml = f.help_instructions_html || null;\n\n        /**\n         * Help button text ('?')\n         * @type {String}\n         */\n        this.btnText = f.help_instructions_btn_text || '?';\n\n        /**\n         * Custom help button HTML\n         * @type {String}\n         */\n        this.btnHtml = f.help_instructions_btn_html || null;\n\n        /**\n         * Css class for help button\n         * @type {String}\n         */\n        this.btnCssClass = f.help_instructions_btn_css_class || 'helpBtn';\n\n        /**\n         * Css class for help container element\n         * @type {String}\n         */\n        this.contCssClass = f.help_instructions_container_css_class ||\n            'helpCont';\n\n        /**\n         * Stores button DOM element\n         * @type {DOMElement}\n         */\n        this.btn = null;\n\n        /**\n         * Stores help container DOM element\n         * @type {DOMElement}\n         */\n        this.cont = null;\n\n        /**\n         * Default HTML appended to instructions text\n         * @type {String}\n         */\n        this.defaultHtml = '<div class=\"helpFooter\"><h4>TableFilter ' +\n            'v' + tf.version + '</h4>' + '<a href=\"' + WEBSITE_URL +\n            '\" target=\"_blank\">' + WEBSITE_URL + '</a>' +\n            '<br/><span>&copy;2015-' + tf.year + ' {AUTHOR}</span>' +\n            '<div align=\"center\" style=\"margin-top:8px;\">' +\n            '<a href=\"javascript:void(0);\" class=\"close\">Close</a></div></div>';\n\n        /**\n         * Prefix for help main container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxHelpSpan = 'helpSpan_';\n\n        /**\n         * Prefix for help instructions container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxHelpDiv = 'helpDiv_';\n\n        this.emitter.on(['init-help'], () => this.init());\n    }\n\n    /**\n     * Initialise Help instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        var tf = this.tf;\n\n        var helpspan = createElm('span', ['id', this.prfxHelpSpan + tf.id]);\n        var helpdiv = createElm('div', ['id', this.prfxHelpDiv + tf.id]);\n\n        //help button is added to defined element\n        if (!this.tgtId) {\n            tf.setToolbar();\n        }\n        var targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);\n        targetEl.appendChild(helpspan);\n\n        var divContainer = !this.contTgtId ? helpspan : elm(this.contTgtId);\n\n        if (!this.btnHtml) {\n            divContainer.appendChild(helpdiv);\n            var helplink = createElm('a', ['href', 'javascript:void(0);']);\n            helplink.className = this.btnCssClass;\n            helplink.appendChild(createText(this.btnText));\n            helpspan.appendChild(helplink);\n            addEvt(helplink, 'click', () => this.toggle());\n        } else {\n            helpspan.innerHTML = this.btnHtml;\n            var helpEl = helpspan.firstChild;\n            addEvt(helpEl, 'click', () => this.toggle());\n            divContainer.appendChild(helpdiv);\n        }\n\n        if (!this.instrHtml) {\n            helpdiv.innerHTML = this.instrText;\n            helpdiv.className = this.contCssClass;\n            addEvt(helpdiv, 'dblclick', () => this.toggle());\n        } else {\n            if (this.contTgtId) {\n                divContainer.appendChild(helpdiv);\n            }\n            helpdiv.innerHTML = this.instrHtml;\n            if (!this.contTgtId) {\n                helpdiv.className = this.contCssClass;\n                addEvt(helpdiv, 'dblclick', () => this.toggle());\n            }\n        }\n        helpdiv.innerHTML += this.defaultHtml;\n        addEvt(helpdiv, 'click', () => this.toggle());\n\n        this.cont = helpdiv;\n        this.btn = helpspan;\n        /**\n         * @inherited\n         */\n        this.initialized = true;\n    }\n\n    /**\n     * Toggle help pop-up\n     */\n    toggle() {\n        // check only if explicitily set to false as in this case undefined\n        // signifies the help feature is enabled by default\n        if (this.enabled === false) {\n            return;\n        }\n        var divDisplay = this.cont.style.display;\n        if (divDisplay === '' || divDisplay === NONE) {\n            this.cont.style.display = 'inline';\n        } else {\n            this.cont.style.display = NONE;\n        }\n    }\n\n    /**\n     * Remove help UI\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        removeElm(this.btn);\n        this.btn = null;\n        if (!this.cont) {\n            return;\n        }\n        removeElm(this.cont);\n        this.cont = null;\n        this.initialized = false;\n    }\n\n}\n"
   },
   {
     "__docId__": 413,
@@ -9249,22 +9249,8 @@
     "longname": "src/modules/help.js~Help#init",
     "access": null,
     "description": "Initialise Help instance",
-    "lineNumber": 126,
-    "unknown": [
-      {
-        "tagName": "@returns",
-        "tagValue": "(description)"
-      }
-    ],
+    "lineNumber": 125,
     "params": [],
-    "return": {
-      "nullable": null,
-      "types": [
-        "*"
-      ],
-      "spread": false,
-      "description": "(description)"
-    },
     "generator": false
   },
   {
@@ -9277,7 +9263,7 @@
     "longname": "src/modules/help.js~Help#cont",
     "access": null,
     "description": null,
-    "lineNumber": 176,
+    "lineNumber": 175,
     "undocument": true,
     "type": {
       "types": [
@@ -9295,7 +9281,7 @@
     "longname": "src/modules/help.js~Help#btn",
     "access": null,
     "description": null,
-    "lineNumber": 177,
+    "lineNumber": 176,
     "undocument": true,
     "type": {
       "types": [
@@ -9313,7 +9299,7 @@
     "longname": "src/modules/help.js~Help#initialized",
     "access": null,
     "description": "",
-    "lineNumber": 181,
+    "lineNumber": 180,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -9336,7 +9322,7 @@
     "longname": "src/modules/help.js~Help#toggle",
     "access": null,
     "description": "Toggle help pop-up",
-    "lineNumber": 187,
+    "lineNumber": 186,
     "params": [],
     "generator": false
   },
@@ -9350,7 +9336,7 @@
     "longname": "src/modules/help.js~Help#destroy",
     "access": null,
     "description": "Remove help UI",
-    "lineNumber": 204,
+    "lineNumber": 203,
     "params": [],
     "generator": false
   },
@@ -9364,7 +9350,7 @@
     "longname": "src/modules/help.js~Help#btn",
     "access": null,
     "description": null,
-    "lineNumber": 209,
+    "lineNumber": 208,
     "undocument": true,
     "type": {
       "types": [
@@ -9382,7 +9368,7 @@
     "longname": "src/modules/help.js~Help#cont",
     "access": null,
     "description": null,
-    "lineNumber": 214,
+    "lineNumber": 213,
     "undocument": true,
     "type": {
       "types": [
@@ -9400,7 +9386,7 @@
     "longname": "src/modules/help.js~Help#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 215,
+    "lineNumber": 214,
     "undocument": true,
     "type": {
       "types": [
@@ -9419,7 +9405,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {createText, createElm, getText} from '../dom';\nimport {isArray} from '../types';\n\nexport class HighlightKeyword {\n\n    /**\n     * HighlightKeyword, highlight matched keyword\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf) {\n        let f = tf.config();\n        //defines css class for highlighting\n        this.highlightCssClass = f.highlight_css_class || 'keyword';\n\n        this.tf = tf;\n        this.emitter = tf.emitter;\n    }\n\n    init() {\n        this.emitter.on(\n            ['before-filtering', 'destroy'],\n            () => this.unhighlightAll()\n        );\n        this.emitter.on(\n            ['highlight-keyword'],\n            (tf, cell, word) =>\n                this.highlight(cell, word, this.highlightCssClass)\n        );\n    }\n\n    /**\n     * highlight occurences of searched term in passed node\n     * @param  {Node} node\n     * @param  {String} word     Searched term\n     * @param  {String} cssClass Css class name\n     *\n     * TODO: refactor this method\n     */\n    highlight(node, word, cssClass) {\n        // Iterate into this nodes childNodes\n        if (node.hasChildNodes) {\n            let children = node.childNodes;\n            for (let i = 0; i < children.length; i++) {\n                this.highlight(children[i], word, cssClass);\n            }\n        }\n\n        if (node.nodeType === 3) {\n            let tempNodeVal = node.nodeValue.toLowerCase();\n            let tempWordVal = word.toLowerCase();\n            if (tempNodeVal.indexOf(tempWordVal) !== -1) {\n                let pn = node.parentNode;\n                if (pn && pn.className !== cssClass) {\n                    // word not highlighted yet\n                    let nv = node.nodeValue,\n                        ni = tempNodeVal.indexOf(tempWordVal),\n                        // Create a load of replacement nodes\n                        before = createText(nv.substr(0, ni)),\n                        docWordVal = nv.substr(ni, word.length),\n                        after = createText(nv.substr(ni + word.length)),\n                        hiwordtext = createText(docWordVal),\n                        hiword = createElm('span');\n                    hiword.className = cssClass;\n                    hiword.appendChild(hiwordtext);\n                    pn.insertBefore(before, node);\n                    pn.insertBefore(hiword, node);\n                    pn.insertBefore(after, node);\n                    pn.removeChild(node);\n                }\n            }\n        }\n    }\n\n    /**\n     * Removes highlight to nodes matching passed string\n     * @param  {String} word\n     * @param  {String} cssClass Css class to remove\n     */\n    unhighlight(word, cssClass) {\n        let highlightedNodes = this.tf.tbl.querySelectorAll(`.${cssClass}`);\n        for (let i = 0; i < highlightedNodes.length; i++) {\n            let n = highlightedNodes[i];\n            let nodeVal = getText(n),\n                tempNodeVal = nodeVal.toLowerCase(),\n                tempWordVal = word.toLowerCase();\n\n            if (tempNodeVal.indexOf(tempWordVal) !== -1) {\n                n.parentNode.replaceChild(createText(nodeVal), n);\n            }\n        }\n    }\n\n    /**\n     * Clear all occurrences of highlighted nodes\n     */\n    unhighlightAll() {\n        if (!this.tf.highlightKeywords) {\n            return;\n        }\n        // iterate filters values to unhighlight all values\n        this.tf.getFiltersValue().forEach((val) => {\n            if (isArray(val)) {\n                val.forEach((item) =>\n                    this.unhighlight(item, this.highlightCssClass));\n            } else {\n                this.unhighlight(val, this.highlightCssClass);\n            }\n        });\n    }\n\n    destroy() {\n        this.emitter.off(\n            ['before-filtering', 'destroy'],\n            () => this.unhighlightAll()\n        );\n        this.emitter.off(\n            ['highlight-keyword'],\n            (tf, cell, word) =>\n                this.highlight(cell, word, this.highlightCssClass)\n        );\n    }\n}\n"
+    "content": "import {createText, createElm, getText} from '../dom';\nimport {isArray} from '../types';\n\n/**\n * Highlight matched keywords upon filtering\n *\n * @export\n * @class HighlightKeyword\n */\nexport class HighlightKeyword {\n\n    /**\n     * Creates an instance of HighlightKeyword\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        let f = tf.config();\n\n        /**\n         * Css class for highlighted term\n         * @type {String}\n         */\n        this.highlightCssClass = f.highlight_css_class || 'keyword';\n\n        /**\n         * TableFilter instance\n         * @type {TableFilter}\n         */\n        this.tf = tf;\n\n        /**\n         * TableFilter's emitter instance\n         * @type {Emitter}\n         */\n        this.emitter = tf.emitter;\n    }\n\n    /**\n     * Initializes HighlightKeyword instance\n     */\n    init() {\n        this.emitter.on(\n            ['before-filtering', 'destroy'],\n            () => this.unhighlightAll()\n        );\n        this.emitter.on(\n            ['highlight-keyword'],\n            (tf, cell, word) =>\n                this.highlight(cell, word, this.highlightCssClass)\n        );\n    }\n\n    /**\n     * Highlight occurences of searched term in passed node\n     * @param  {Node} node\n     * @param  {String} word     Searched term\n     * @param  {String} cssClass Css class name\n     *\n     * TODO: refactor this method\n     */\n    highlight(node, word, cssClass) {\n        // Iterate into this nodes childNodes\n        if (node.hasChildNodes) {\n            let children = node.childNodes;\n            for (let i = 0; i < children.length; i++) {\n                this.highlight(children[i], word, cssClass);\n            }\n        }\n\n        if (node.nodeType === 3) {\n            let tempNodeVal = node.nodeValue.toLowerCase();\n            let tempWordVal = word.toLowerCase();\n            if (tempNodeVal.indexOf(tempWordVal) !== -1) {\n                let pn = node.parentNode;\n                if (pn && pn.className !== cssClass) {\n                    // word not highlighted yet\n                    let nv = node.nodeValue,\n                        ni = tempNodeVal.indexOf(tempWordVal),\n                        // Create a load of replacement nodes\n                        before = createText(nv.substr(0, ni)),\n                        docWordVal = nv.substr(ni, word.length),\n                        after = createText(nv.substr(ni + word.length)),\n                        hiwordtext = createText(docWordVal),\n                        hiword = createElm('span');\n                    hiword.className = cssClass;\n                    hiword.appendChild(hiwordtext);\n                    pn.insertBefore(before, node);\n                    pn.insertBefore(hiword, node);\n                    pn.insertBefore(after, node);\n                    pn.removeChild(node);\n                }\n            }\n        }\n    }\n\n    /**\n     * Removes highlight to nodes matching passed string\n     * @param  {String} word\n     * @param  {String} cssClass Css class to remove\n     */\n    unhighlight(word, cssClass) {\n        let highlightedNodes = this.tf.tbl.querySelectorAll(`.${cssClass}`);\n        for (let i = 0; i < highlightedNodes.length; i++) {\n            let n = highlightedNodes[i];\n            let nodeVal = getText(n),\n                tempNodeVal = nodeVal.toLowerCase(),\n                tempWordVal = word.toLowerCase();\n\n            if (tempNodeVal.indexOf(tempWordVal) !== -1) {\n                n.parentNode.replaceChild(createText(nodeVal), n);\n            }\n        }\n    }\n\n    /**\n     * Clear all occurrences of highlighted nodes\n     */\n    unhighlightAll() {\n        if (!this.tf.highlightKeywords) {\n            return;\n        }\n        // iterate filters values to unhighlight all values\n        this.tf.getFiltersValue().forEach((val) => {\n            if (isArray(val)) {\n                val.forEach((item) =>\n                    this.unhighlight(item, this.highlightCssClass));\n            } else {\n                this.unhighlight(val, this.highlightCssClass);\n            }\n        });\n    }\n\n    /**\n     * Remove feature\n     */\n    destroy() {\n        this.emitter.off(\n            ['before-filtering', 'destroy'],\n            () => this.unhighlightAll()\n        );\n        this.emitter.off(\n            ['highlight-keyword'],\n            (tf, cell, word) =>\n                this.highlight(cell, word, this.highlightCssClass)\n        );\n    }\n}\n"
   },
   {
     "__docId__": 440,
@@ -9433,9 +9419,18 @@
     "export": true,
     "importPath": "tablefilter/src/modules/highlightKeywords.js",
     "importStyle": "{HighlightKeyword}",
-    "description": null,
-    "lineNumber": 4,
-    "undocument": true,
+    "description": "Highlight matched keywords upon filtering",
+    "lineNumber": 10,
+    "unknown": [
+      {
+        "tagName": "@export",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@class",
+        "tagValue": "HighlightKeyword"
+      }
+    ],
     "interface": false
   },
   {
@@ -9447,13 +9442,13 @@
     "memberof": "src/modules/highlightKeywords.js~HighlightKeyword",
     "longname": "src/modules/highlightKeywords.js~HighlightKeyword#constructor",
     "access": null,
-    "description": "HighlightKeyword, highlight matched keyword",
-    "lineNumber": 10,
+    "description": "Creates an instance of HighlightKeyword",
+    "lineNumber": 16,
     "params": [
       {
         "nullable": null,
         "types": [
-          "Object"
+          "TableFilter"
         ],
         "spread": false,
         "optional": false,
@@ -9472,13 +9467,15 @@
     "memberof": "src/modules/highlightKeywords.js~HighlightKeyword",
     "longname": "src/modules/highlightKeywords.js~HighlightKeyword#highlightCssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 13,
-    "undocument": true,
+    "description": "Css class for highlighted term",
+    "lineNumber": 23,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9490,13 +9487,15 @@
     "memberof": "src/modules/highlightKeywords.js~HighlightKeyword",
     "longname": "src/modules/highlightKeywords.js~HighlightKeyword#tf",
     "access": null,
-    "description": null,
-    "lineNumber": 15,
-    "undocument": true,
+    "description": "TableFilter instance",
+    "lineNumber": 29,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "TableFilter"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9508,13 +9507,15 @@
     "memberof": "src/modules/highlightKeywords.js~HighlightKeyword",
     "longname": "src/modules/highlightKeywords.js~HighlightKeyword#emitter",
     "access": null,
-    "description": null,
-    "lineNumber": 16,
-    "undocument": true,
+    "description": "TableFilter's emitter instance",
+    "lineNumber": 35,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Emitter"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9526,9 +9527,8 @@
     "memberof": "src/modules/highlightKeywords.js~HighlightKeyword",
     "longname": "src/modules/highlightKeywords.js~HighlightKeyword#init",
     "access": null,
-    "description": null,
-    "lineNumber": 19,
-    "undocument": true,
+    "description": "Initializes HighlightKeyword instance",
+    "lineNumber": 41,
     "params": [],
     "generator": false
   },
@@ -9541,8 +9541,8 @@
     "memberof": "src/modules/highlightKeywords.js~HighlightKeyword",
     "longname": "src/modules/highlightKeywords.js~HighlightKeyword#highlight",
     "access": null,
-    "description": "highlight occurences of searched term in passed node",
-    "lineNumber": 39,
+    "description": "Highlight occurences of searched term in passed node",
+    "lineNumber": 61,
     "params": [
       {
         "nullable": null,
@@ -9587,7 +9587,7 @@
     "longname": "src/modules/highlightKeywords.js~HighlightKeyword#unhighlight",
     "access": null,
     "description": "Removes highlight to nodes matching passed string",
-    "lineNumber": 79,
+    "lineNumber": 101,
     "params": [
       {
         "nullable": null,
@@ -9622,7 +9622,7 @@
     "longname": "src/modules/highlightKeywords.js~HighlightKeyword#unhighlightAll",
     "access": null,
     "description": "Clear all occurrences of highlighted nodes",
-    "lineNumber": 96,
+    "lineNumber": 118,
     "params": [],
     "generator": false
   },
@@ -9635,9 +9635,8 @@
     "memberof": "src/modules/highlightKeywords.js~HighlightKeyword",
     "longname": "src/modules/highlightKeywords.js~HighlightKeyword#destroy",
     "access": null,
-    "description": null,
-    "lineNumber": 111,
-    "undocument": true,
+    "description": "Remove feature",
+    "lineNumber": 136,
     "params": [],
     "generator": false
   },
@@ -9652,7 +9651,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {isFn} from '../types';\nimport {root} from '../root';\nimport {NONE} from '../const';\n\nexport class Loader extends Feature {\n\n    /**\n     * Loading message/spinner\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'loader');\n\n        // TableFilter configuration\n        let f = this.config;\n\n        //id of container element\n        this.loaderTgtId = f.loader_target_id || null;\n        //div containing loader\n        this.loaderDiv = null;\n        //defines loader text\n        this.loaderText = f.loader_text || 'Loading...';\n        //defines loader innerHtml\n        this.loaderHtml = f.loader_html || null;\n        //defines css class for loader div\n        this.loaderCssClass = f.loader_css_class || 'loader';\n        //delay for hiding loader\n        this.loaderCloseDelay = 250;\n        //callback function before loader is displayed\n        this.onShowLoader = isFn(f.on_show_loader) ? f.on_show_loader : null;\n        //callback function after loader is closed\n        this.onHideLoader = isFn(f.on_hide_loader) ? f.on_hide_loader : null;\n        //loader div\n        this.prfxLoader = 'load_';\n    }\n\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        let tf = this.tf;\n        let emitter = this.emitter;\n\n        let containerDiv = createElm('div', ['id', this.prfxLoader + tf.id]);\n        containerDiv.className = this.loaderCssClass;\n\n        let targetEl = !this.loaderTgtId ?\n            tf.tbl.parentNode : elm(this.loaderTgtId);\n        if (!this.loaderTgtId) {\n            targetEl.insertBefore(containerDiv, tf.tbl);\n        } else {\n            targetEl.appendChild(containerDiv);\n        }\n        this.loaderDiv = containerDiv;\n        if (!this.loaderHtml) {\n            this.loaderDiv.appendChild(createText(this.loaderText));\n        } else {\n            this.loaderDiv.innerHTML = this.loaderHtml;\n        }\n\n        this.show(NONE);\n\n        // Subscribe to events\n        emitter.on([\n            'before-filtering',\n            'before-populating-filter',\n            'before-page-change',\n            'before-clearing-filters',\n            'before-page-length-change',\n            'before-reset-page',\n            'before-reset-page-length',\n            'before-loading-extensions',\n            'before-loading-themes'],\n            () => this.show('')\n        );\n        emitter.on([\n            'after-filtering',\n            'after-populating-filter',\n            'after-page-change',\n            'after-clearing-filters',\n            'after-page-length-change',\n            'after-reset-page',\n            'after-reset-page-length',\n            'after-loading-extensions',\n            'after-loading-themes'],\n            () => this.show(NONE)\n        );\n\n        this.initialized = true;\n    }\n\n    show(p) {\n        if (!this.isEnabled()) {\n            return;\n        }\n\n        let displayLoader = () => {\n            if (!this.loaderDiv) {\n                return;\n            }\n            if (this.onShowLoader && p !== NONE) {\n                this.onShowLoader.call(null, this);\n            }\n            this.loaderDiv.style.display = p;\n            if (this.onHideLoader && p === NONE) {\n                this.onHideLoader.call(null, this);\n            }\n        };\n\n        let t = p === NONE ? this.loaderCloseDelay : 1;\n        root.setTimeout(displayLoader, t);\n    }\n\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        let emitter = this.emitter;\n\n        removeElm(this.loaderDiv);\n        this.loaderDiv = null;\n\n        // Unsubscribe to events\n        emitter.off([\n            'before-filtering',\n            'before-populating-filter',\n            'before-page-change',\n            'before-clearing-filters',\n            'before-page-length-change',\n            'before-reset-page',\n            'before-reset-page-length',\n            'before-loading-extensions',\n            'before-loading-themes'],\n            () => this.show('')\n        );\n        emitter.off([\n            'after-filtering',\n            'after-populating-filter',\n            'after-page-change',\n            'after-clearing-filters',\n            'after-page-length-change',\n            'after-reset-page',\n            'after-reset-page-length',\n            'after-loading-extensions',\n            'after-loading-themes'],\n            () => this.show(NONE)\n        );\n\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {isFn} from '../types';\nimport {root} from '../root';\nimport {NONE} from '../const';\n\n/**\n * Activity indicator\n *\n * @export\n * @class Loader\n * @extends {Feature}\n */\nexport class Loader extends Feature {\n\n    /**\n     * Creates an instance of Loader.\n     *\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'loader');\n\n        let f = this.config;\n\n        /**\n         * ID of custom container element\n         * @type {String}\n         */\n        this.targetId = f.loader_target_id || null;\n\n         /**\n         * Loader container DOM element\n         * @type {DOMElement}\n         */\n        this.cont = null;\n\n        /**\n         * Text displayed when indicator is visible\n         * @type {String}\n         */\n        this.text = f.loader_text || 'Loading...';\n\n        /**\n         * Custom HTML injected in Loader's container element\n         * @type {String}\n         */\n        this.html = f.loader_html || null;\n\n        /**\n         * Css class for Loader's container element\n         * @type {String}\n         */\n        this.cssClass = f.loader_css_class || 'loader';\n\n        /**\n         * Close delay in milliseconds\n         * @type {Number}\n         */\n        this.closeDelay = 250;\n\n        /**\n         * Callback fired when loader is displayed\n         * @type {Function}\n         */\n        this.onShow = isFn(f.on_show_loader) ? f.on_show_loader : null;\n\n        /**\n         * Callback fired when loader is closed\n         * @type {Function}\n         */\n        this.onHide = isFn(f.on_hide_loader) ? f.on_hide_loader : null;\n\n        /**\n         * Prefix for container ID\n         * @type {String}\n         * @private\n         */\n        this.prfx = 'load_';\n    }\n\n    /**\n     * Initializes Loader instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        let tf = this.tf;\n        let emitter = this.emitter;\n\n        let containerDiv = createElm('div', ['id', this.prfx + tf.id]);\n        containerDiv.className = this.cssClass;\n\n        let targetEl = !this.targetId ?\n            tf.tbl.parentNode : elm(this.targetId);\n        if (!this.targetId) {\n            targetEl.insertBefore(containerDiv, tf.tbl);\n        } else {\n            targetEl.appendChild(containerDiv);\n        }\n        this.cont = containerDiv;\n        if (!this.html) {\n            this.cont.appendChild(createText(this.text));\n        } else {\n            this.cont.innerHTML = this.html;\n        }\n\n        this.show(NONE);\n\n        // Subscribe to events\n        emitter.on([\n            'before-filtering',\n            'before-populating-filter',\n            'before-page-change',\n            'before-clearing-filters',\n            'before-page-length-change',\n            'before-reset-page',\n            'before-reset-page-length',\n            'before-loading-extensions',\n            'before-loading-themes'],\n            () => this.show('')\n        );\n        emitter.on([\n            'after-filtering',\n            'after-populating-filter',\n            'after-page-change',\n            'after-clearing-filters',\n            'after-page-length-change',\n            'after-reset-page',\n            'after-reset-page-length',\n            'after-loading-extensions',\n            'after-loading-themes'],\n            () => this.show(NONE)\n        );\n\n        this.initialized = true;\n    }\n\n    /**\n     * Shows or hides activity indicator\n     * @param {String} Two possible values: '' or 'none'\n     */\n    show(p) {\n        if (!this.isEnabled()) {\n            return;\n        }\n\n        let displayLoader = () => {\n            if (!this.cont) {\n                return;\n            }\n            if (this.onShow && p !== NONE) {\n                this.onShow.call(null, this);\n            }\n            this.cont.style.display = p;\n            if (this.onHide && p === NONE) {\n                this.onHide.call(null, this);\n            }\n        };\n\n        let t = p === NONE ? this.closeDelay : 1;\n        root.setTimeout(displayLoader, t);\n    }\n\n    /**\n     * Removes feature\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        let emitter = this.emitter;\n\n        removeElm(this.cont);\n        this.cont = null;\n\n        // Unsubscribe to events\n        emitter.off([\n            'before-filtering',\n            'before-populating-filter',\n            'before-page-change',\n            'before-clearing-filters',\n            'before-page-length-change',\n            'before-reset-page',\n            'before-reset-page-length',\n            'before-loading-extensions',\n            'before-loading-themes'],\n            () => this.show('')\n        );\n        emitter.off([\n            'after-filtering',\n            'after-populating-filter',\n            'after-page-change',\n            'after-clearing-filters',\n            'after-page-length-change',\n            'after-reset-page',\n            'after-reset-page-length',\n            'after-loading-extensions',\n            'after-loading-themes'],\n            () => this.show(NONE)\n        );\n\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 451,
@@ -9666,12 +9665,21 @@
     "export": true,
     "importPath": "tablefilter/src/modules/loader.js",
     "importStyle": "{Loader}",
-    "description": null,
-    "lineNumber": 7,
-    "undocument": true,
+    "description": "Activity indicator",
+    "lineNumber": 14,
+    "unknown": [
+      {
+        "tagName": "@export",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@class",
+        "tagValue": "Loader"
+      }
+    ],
     "interface": false,
     "extends": [
-      "src/feature.js~Feature"
+      "Feature"
     ]
   },
   {
@@ -9683,13 +9691,13 @@
     "memberof": "src/modules/loader.js~Loader",
     "longname": "src/modules/loader.js~Loader#constructor",
     "access": null,
-    "description": "Loading message/spinner",
-    "lineNumber": 13,
+    "description": "Creates an instance of Loader.",
+    "lineNumber": 21,
     "params": [
       {
         "nullable": null,
         "types": [
-          "Object"
+          "TableFilter"
         ],
         "spread": false,
         "optional": false,
@@ -9704,17 +9712,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "loaderTgtId",
+    "name": "targetId",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#loaderTgtId",
+    "longname": "src/modules/loader.js~Loader#targetId",
     "access": null,
-    "description": null,
-    "lineNumber": 20,
-    "undocument": true,
+    "description": "ID of custom container element",
+    "lineNumber": 30,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9722,17 +9732,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "loaderDiv",
+    "name": "cont",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#loaderDiv",
+    "longname": "src/modules/loader.js~Loader#cont",
     "access": null,
-    "description": null,
-    "lineNumber": 22,
-    "undocument": true,
+    "description": "Loader container DOM element",
+    "lineNumber": 36,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "DOMElement"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9740,17 +9752,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "loaderText",
+    "name": "text",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#loaderText",
+    "longname": "src/modules/loader.js~Loader#text",
     "access": null,
-    "description": null,
-    "lineNumber": 24,
-    "undocument": true,
+    "description": "Text displayed when indicator is visible",
+    "lineNumber": 42,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9758,17 +9772,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "loaderHtml",
+    "name": "html",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#loaderHtml",
+    "longname": "src/modules/loader.js~Loader#html",
     "access": null,
-    "description": null,
-    "lineNumber": 26,
-    "undocument": true,
+    "description": "Custom HTML injected in Loader's container element",
+    "lineNumber": 48,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9776,17 +9792,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "loaderCssClass",
+    "name": "cssClass",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#loaderCssClass",
+    "longname": "src/modules/loader.js~Loader#cssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 28,
-    "undocument": true,
+    "description": "Css class for Loader's container element",
+    "lineNumber": 54,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9794,17 +9812,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "loaderCloseDelay",
+    "name": "closeDelay",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#loaderCloseDelay",
+    "longname": "src/modules/loader.js~Loader#closeDelay",
     "access": null,
-    "description": null,
-    "lineNumber": 30,
-    "undocument": true,
+    "description": "Close delay in milliseconds",
+    "lineNumber": 60,
     "type": {
+      "nullable": null,
       "types": [
-        "number"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9812,17 +9832,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "onShowLoader",
+    "name": "onShow",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#onShowLoader",
+    "longname": "src/modules/loader.js~Loader#onShow",
     "access": null,
-    "description": null,
-    "lineNumber": 32,
-    "undocument": true,
+    "description": "Callback fired when loader is displayed",
+    "lineNumber": 66,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9830,17 +9852,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "onHideLoader",
+    "name": "onHide",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#onHideLoader",
+    "longname": "src/modules/loader.js~Loader#onHide",
     "access": null,
-    "description": null,
-    "lineNumber": 34,
-    "undocument": true,
+    "description": "Callback fired when loader is closed",
+    "lineNumber": 72,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9848,17 +9872,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "prfxLoader",
+    "name": "prfx",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#prfxLoader",
-    "access": null,
-    "description": null,
-    "lineNumber": 36,
-    "undocument": true,
+    "longname": "src/modules/loader.js~Loader#prfx",
+    "access": "private",
+    "description": "Prefix for container ID",
+    "lineNumber": 79,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9870,9 +9896,8 @@
     "memberof": "src/modules/loader.js~Loader",
     "longname": "src/modules/loader.js~Loader#init",
     "access": null,
-    "description": null,
-    "lineNumber": 39,
-    "undocument": true,
+    "description": "Initializes Loader instance",
+    "lineNumber": 85,
     "params": [],
     "generator": false
   },
@@ -9881,12 +9906,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "loaderDiv",
+    "name": "cont",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#loaderDiv",
+    "longname": "src/modules/loader.js~Loader#cont",
     "access": null,
     "description": null,
-    "lineNumber": 57,
+    "lineNumber": 103,
     "undocument": true,
     "type": {
       "types": [
@@ -9904,7 +9929,7 @@
     "longname": "src/modules/loader.js~Loader#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 92,
+    "lineNumber": 138,
     "undocument": true,
     "type": {
       "types": [
@@ -9921,15 +9946,18 @@
     "memberof": "src/modules/loader.js~Loader",
     "longname": "src/modules/loader.js~Loader#show",
     "access": null,
-    "description": null,
-    "lineNumber": 95,
-    "undocument": true,
+    "description": "Shows or hides activity indicator",
+    "lineNumber": 145,
     "params": [
       {
-        "name": "p",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "Two",
+        "description": "possible values: '' or 'none'"
       }
     ],
     "generator": false
@@ -9943,9 +9971,8 @@
     "memberof": "src/modules/loader.js~Loader",
     "longname": "src/modules/loader.js~Loader#destroy",
     "access": null,
-    "description": null,
-    "lineNumber": 117,
-    "undocument": true,
+    "description": "Removes feature",
+    "lineNumber": 170,
     "params": [],
     "generator": false
   },
@@ -9954,12 +9981,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "loaderDiv",
+    "name": "cont",
     "memberof": "src/modules/loader.js~Loader",
-    "longname": "src/modules/loader.js~Loader#loaderDiv",
+    "longname": "src/modules/loader.js~Loader#cont",
     "access": null,
     "description": null,
-    "lineNumber": 125,
+    "lineNumber": 178,
     "undocument": true,
     "type": {
       "types": [
@@ -9977,7 +10004,7 @@
     "longname": "src/modules/loader.js~Loader#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 153,
+    "lineNumber": 206,
     "undocument": true,
     "type": {
       "types": [
