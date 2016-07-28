@@ -29,7 +29,7 @@ export class Loader extends Feature {
          */
         this.targetId = f.loader_target_id || null;
 
-         /**
+        /**
          * Loader container DOM element
          * @type {DOMElement}
          */
