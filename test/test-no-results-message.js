@@ -209,7 +209,7 @@ test('External container sanity checks', function() {
         test(type, function() {
             deepEqual(tfCall instanceof TableFilter, true,
                 'First argument type');
-            deepEqual(typeof noResultsCall.onBeforeShowMsg, 'function',
+            deepEqual(typeof noResultsCall.onBeforeShow, 'function',
                 'Second argument type');
         });
     }

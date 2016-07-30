@@ -3,11 +3,17 @@ import {createElm, elm, removeElm} from '../dom';
 import {isEmpty, isFn} from '../types';
 import {NONE} from '../const';
 
+/**
+ * UI when filtering yields no matches
+ * @export
+ * @class NoResults
+ * @extends {Feature}
+ */
 export class NoResults extends Feature {
 
     /**
-     * No results message UI component
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of NoResults
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'noResults');
@@ -15,31 +21,83 @@ export class NoResults extends Feature {
         //configuration object
         let f = this.config.no_results_message;
 
+        /**
+         * Text (accepts HTML)
+         * @type {String}
+         */
         this.content = f.content || 'No results';
+
+        /**
+         * Custom container DOM element
+         * @type {DOMElement}
+         */
         this.customContainer = f.custom_container || null;
+
+        /**
+         * ID of custom container element
+         * @type {String}
+         */
         this.customContainerId = f.custom_container_id || null;
+
+        /**
+         * Indicates if UI is contained in a external element
+         * @type {Boolean}
+         * @private
+         */
         this.isExternal = !isEmpty(this.customContainer) ||
             !isEmpty(this.customContainerId);
+
+        /**
+         * Css class assigned to container element
+         * @type {String}
+         */
         this.cssClass = f.css_class || 'no-results';
 
+        /**
+         * Stores container DOM element
+         * @type {DOMElement}
+         */
         this.cont = null;
 
-        //callback before message is displayed
-        this.onBeforeShowMsg = isFn(f.on_before_show_msg) ?
+        /**
+         * Callback fired before the  message is displayed
+         * @type {Function}
+         */
+        this.onBeforeShow = isFn(f.on_before_show_msg) ?
             f.on_before_show_msg : null;
-        //callback after message is displayed
-        this.onAfterShowMsg = isFn(f.on_after_show_msg) ?
+
+        /**
+         * Callback fired after the  message is displayed
+         * @type {Function}
+         */
+        this.onAfterShow = isFn(f.on_after_show_msg) ?
             f.on_after_show_msg : null;
-        //callback before message is hidden
-        this.onBeforeHideMsg = isFn(f.on_before_hide_msg) ?
+
+        /**
+         * Callback fired before the  message is hidden
+         * @type {Function}
+         */
+        this.onBeforeHide = isFn(f.on_before_hide_msg) ?
             f.on_before_hide_msg : null;
-        //callback after message is hidden
-        this.onAfterHideMsg = isFn(f.on_after_hide_msg) ?
+
+        /**
+         * Callback fired after the  message is hidden
+         * @type {Function}
+         */
+        this.onAfterHide = isFn(f.on_after_hide_msg) ?
             f.on_after_hide_msg : null;
 
-        this.prfxNoResults = 'nores_';
+        /**
+         * Prefix for container ID
+         * @type {String}
+         * @private
+         */
+        this.prfx = 'nores_';
     }
 
+    /**
+     * Initializes NoResults instance
+     */
     init() {
         if (this.initialized) {
             return;
@@ -49,7 +107,7 @@ export class NoResults extends Feature {
             tf.tbl;
 
         //container
-        let cont = createElm('div', ['id', this.prfxNoResults + tf.id]);
+        let cont = createElm('div', ['id', this.prfx + tf.id]);
         cont.className = this.cssClass;
         cont.innerHTML = this.content;
 
@@ -64,10 +122,17 @@ export class NoResults extends Feature {
         // subscribe to after-filtering event
         this.emitter.on(['after-filtering'], () => this.toggle());
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
+
         this.hide();
     }
 
+    /**
+     * Toggle no results message
+     */
     toggle() {
         if (this.tf.getValidRowsNb() > 0) {
             this.hide();
@@ -76,39 +141,49 @@ export class NoResults extends Feature {
         }
     }
 
+    /**
+     * Show no results message
+     */
     show() {
         if (!this.initialized || !this.isEnabled()) {
             return;
         }
 
-        if (this.onBeforeShowMsg) {
-            this.onBeforeShowMsg.call(null, this.tf, this);
+        if (this.onBeforeShow) {
+            this.onBeforeShow.call(null, this.tf, this);
         }
 
         this.setWidth();
         this.cont.style.display = 'block';
 
-        if (this.onAfterShowMsg) {
-            this.onAfterShowMsg.call(null, this.tf, this);
+        if (this.onAfterShow) {
+            this.onAfterShow.call(null, this.tf, this);
         }
     }
 
+    /**
+     * Hide no results message
+     */
     hide() {
         if (!this.initialized || !this.isEnabled()) {
             return;
         }
 
-        if (this.onBeforeHideMsg) {
-            this.onBeforeHideMsg.call(null, this.tf, this);
+        if (this.onBeforeHide) {
+            this.onBeforeHide.call(null, this.tf, this);
         }
 
         this.cont.style.display = NONE;
 
-        if (this.onBeforeHideMsg) {
-            this.onBeforeHideMsg.call(null, this.tf, this);
+        if (this.onAfterHide) {
+            this.onAfterHide.call(null, this.tf, this);
         }
     }
 
+    /**
+     * Sets no results container width
+     * @private
+     */
     setWidth() {
         if (!this.initialized || this.isExternal || !this.isEnabled()) {
             return;
@@ -117,11 +192,14 @@ export class NoResults extends Feature {
             let gridLayout = this.tf.feature('gridLayout');
             this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';
         } else {
-            this.cont.style.width = this.tf.tbl.clientWidth + 'px';
+            this.cont.style.width =
+                this.tf.tbl.tBodies[0].clientWidth + 'px';
         }
-
     }
 
+    /**
+     * Remove feature
+     */
     destroy() {
         if (!this.initialized) {
             return;

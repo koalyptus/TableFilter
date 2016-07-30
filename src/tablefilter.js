@@ -1351,7 +1351,10 @@ export class TableFilter {
                     // fallback to unformatted number string comparison
                     if (numCellData && this.hasColNbFormat &&
                         this.colNbFormat[j] && !this.singleSearchFlt) {
-                        sA = removeNbFormat(sA, nbFormat);
+                        // removeNbFormat can return 0 for strings which are not
+                        // formatted numbers, in that case return the original
+                        // string. TODO: handle this in removeNbFormat
+                        sA = removeNbFormat(sA, nbFormat) || sA;
                         occurence = numCellData === sA ||
                             contains(sA.toString(), numCellData.toString(),
                                 this.isExactMatch(j), this.caseSensitive);
