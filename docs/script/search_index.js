@@ -2604,46 +2604,28 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/noresults.js~noresults#isexternal",
-    "class/src/modules/noResults.js~NoResults.html#instance-member-isExternal",
-    "src/modules/noResults.js~NoResults#isExternal",
+    "src/modules/noresults.js~noresults#onafterhide",
+    "class/src/modules/noResults.js~NoResults.html#instance-member-onAfterHide",
+    "src/modules/noResults.js~NoResults#onAfterHide",
     "member"
   ],
   [
-    "src/modules/noresults.js~noresults#onafterhidemsg",
-    "class/src/modules/noResults.js~NoResults.html#instance-member-onAfterHideMsg",
-    "src/modules/noResults.js~NoResults#onAfterHideMsg",
+    "src/modules/noresults.js~noresults#onaftershow",
+    "class/src/modules/noResults.js~NoResults.html#instance-member-onAfterShow",
+    "src/modules/noResults.js~NoResults#onAfterShow",
     "member"
   ],
   [
-    "src/modules/noresults.js~noresults#onaftershowmsg",
-    "class/src/modules/noResults.js~NoResults.html#instance-member-onAfterShowMsg",
-    "src/modules/noResults.js~NoResults#onAfterShowMsg",
+    "src/modules/noresults.js~noresults#onbeforehide",
+    "class/src/modules/noResults.js~NoResults.html#instance-member-onBeforeHide",
+    "src/modules/noResults.js~NoResults#onBeforeHide",
     "member"
   ],
   [
-    "src/modules/noresults.js~noresults#onbeforehidemsg",
-    "class/src/modules/noResults.js~NoResults.html#instance-member-onBeforeHideMsg",
-    "src/modules/noResults.js~NoResults#onBeforeHideMsg",
+    "src/modules/noresults.js~noresults#onbeforeshow",
+    "class/src/modules/noResults.js~NoResults.html#instance-member-onBeforeShow",
+    "src/modules/noResults.js~NoResults#onBeforeShow",
     "member"
-  ],
-  [
-    "src/modules/noresults.js~noresults#onbeforeshowmsg",
-    "class/src/modules/noResults.js~NoResults.html#instance-member-onBeforeShowMsg",
-    "src/modules/noResults.js~NoResults#onBeforeShowMsg",
-    "member"
-  ],
-  [
-    "src/modules/noresults.js~noresults#prfxnoresults",
-    "class/src/modules/noResults.js~NoResults.html#instance-member-prfxNoResults",
-    "src/modules/noResults.js~NoResults#prfxNoResults",
-    "member"
-  ],
-  [
-    "src/modules/noresults.js~noresults#setwidth",
-    "class/src/modules/noResults.js~NoResults.html#instance-method-setWidth",
-    "src/modules/noResults.js~NoResults#setWidth",
-    "method"
   ],
   [
     "src/modules/noresults.js~noresults#show",
