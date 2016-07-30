@@ -9,10 +9,6 @@
  * @return {String} Unformatted number
  */
 export const removeNbFormat = (data, format = 'us') => {
-    if (!data) {
-        return;
-    }
-
     let n = data;
     if (format.toLowerCase() === 'us') {
         n = + n.replace(/[^\d\.-]/g, '');

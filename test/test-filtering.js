@@ -1,6 +1,13 @@
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
-    col_date_type: [null, null, 'ddmmmyyyy']
+    col_date_type: [
+        null, null, 'ddmmmyyyy',
+        null, null, null
+    ],
+    col_number_format: [
+        null, null, null,
+        null, null, 'US'
+    ]
 });
 tf.init();
 
@@ -72,6 +79,28 @@ test('can filter columns with alpha numeric values (2)', function(){
     tf.setFilterValue(4, 'numeric');
     tf.filter();
     deepEqual(tf.getValidRows().length, 3, 'Expected number of matches');
+});
+test('can filter numeric value (6)', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(5, 2767);
+    tf.filter();
+
+    // assert
+    deepEqual(tf.getFilteredDataCol(5), ['2767'], 'Expected match');
+});
+test('Should return no results for an unmatched term (6)', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(5, 'hello world');
+    tf.filter();
+
+    // assert
+    deepEqual(tf.getValidRows().length, 0, 'No matches');
 });
 
 module('Tear-down');
