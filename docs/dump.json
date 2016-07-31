@@ -10023,7 +10023,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {createElm, elm, removeElm} from '../dom';\nimport {isEmpty, isFn} from '../types';\nimport {NONE} from '../const';\n\n/**\n * UI when filtering yields no matches\n * @export\n * @class NoResults\n * @extends {Feature}\n */\nexport class NoResults extends Feature {\n\n    /**\n     * Creates an instance of NoResults\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'noResults');\n\n        //configuration object\n        let f = this.config.no_results_message;\n\n        /**\n         * Text (accepts HTML)\n         * @type {String}\n         */\n        this.content = f.content || 'No results';\n\n        /**\n         * Custom container DOM element\n         * @type {DOMElement}\n         */\n        this.customContainer = f.custom_container || null;\n\n        /**\n         * ID of custom container element\n         * @type {String}\n         */\n        this.customContainerId = f.custom_container_id || null;\n\n        /**\n         * Indicates if UI is contained in a external element\n         * @type {Boolean}\n         * @private\n         */\n        this.isExternal = !isEmpty(this.customContainer) ||\n            !isEmpty(this.customContainerId);\n\n        /**\n         * Css class assigned to container element\n         * @type {String}\n         */\n        this.cssClass = f.css_class || 'no-results';\n\n        /**\n         * Stores container DOM element\n         * @type {DOMElement}\n         */\n        this.cont = null;\n\n        /**\n         * Callback fired before the  message is displayed\n         * @type {Function}\n         */\n        this.onBeforeShow = isFn(f.on_before_show_msg) ?\n            f.on_before_show_msg : null;\n\n        /**\n         * Callback fired after the  message is displayed\n         * @type {Function}\n         */\n        this.onAfterShow = isFn(f.on_after_show_msg) ?\n            f.on_after_show_msg : null;\n\n        /**\n         * Callback fired before the  message is hidden\n         * @type {Function}\n         */\n        this.onBeforeHide = isFn(f.on_before_hide_msg) ?\n            f.on_before_hide_msg : null;\n\n        /**\n         * Callback fired after the  message is hidden\n         * @type {Function}\n         */\n        this.onAfterHide = isFn(f.on_after_hide_msg) ?\n            f.on_after_hide_msg : null;\n\n        /**\n         * Prefix for container ID\n         * @type {String}\n         * @private\n         */\n        this.prfx = 'nores_';\n    }\n\n    /**\n     * Initializes NoResults instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n        let tf = this.tf;\n        let target = this.customContainer || elm(this.customContainerId) ||\n            tf.tbl;\n\n        //container\n        let cont = createElm('div', ['id', this.prfx + tf.id]);\n        cont.className = this.cssClass;\n        cont.innerHTML = this.content;\n\n        if (this.isExternal) {\n            target.appendChild(cont);\n        } else {\n            target.parentNode.insertBefore(cont, target.nextSibling);\n        }\n\n        this.cont = cont;\n\n        // subscribe to after-filtering event\n        this.emitter.on(['after-filtering'], () => this.toggle());\n\n        /**\n         * @inherited\n         */\n        this.initialized = true;\n\n        this.hide();\n    }\n\n    /**\n     * Toggle no results message\n     */\n    toggle() {\n        if (this.tf.getValidRowsNb() > 0) {\n            this.hide();\n        } else {\n            this.show();\n        }\n    }\n\n    /**\n     * Show no results message\n     */\n    show() {\n        if (!this.initialized || !this.isEnabled()) {\n            return;\n        }\n\n        if (this.onBeforeShow) {\n            this.onBeforeShow.call(null, this.tf, this);\n        }\n\n        this.setWidth();\n        this.cont.style.display = 'block';\n\n        if (this.onAfterShow) {\n            this.onAfterShow.call(null, this.tf, this);\n        }\n    }\n\n    /**\n     * Hide no results message\n     */\n    hide() {\n        if (!this.initialized || !this.isEnabled()) {\n            return;\n        }\n\n        if (this.onBeforeHide) {\n            this.onBeforeHide.call(null, this.tf, this);\n        }\n\n        this.cont.style.display = NONE;\n\n        if (this.onAfterHide) {\n            this.onAfterHide.call(null, this.tf, this);\n        }\n    }\n\n    /**\n     * Sets no results container width\n     * @private\n     */\n    setWidth() {\n        if (!this.initialized || this.isExternal || !this.isEnabled()) {\n            return;\n        }\n        if (this.tf.gridLayout) {\n            let gridLayout = this.tf.feature('gridLayout');\n            this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';\n        } else {\n            this.cont.style.width =\n                this.tf.tbl.tBodies[0].clientWidth + 'px';\n        }\n    }\n\n    /**\n     * Remove feature\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        removeElm(this.cont);\n        this.cont = null;\n        // unsubscribe to after-filtering event\n        this.emitter.off(['after-filtering'], () => this.toggle());\n\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {createElm, elm, removeElm} from '../dom';\nimport {isEmpty, isFn} from '../types';\nimport {NONE} from '../const';\n\n/**\n * UI when filtering yields no matches\n * @export\n * @class NoResults\n * @extends {Feature}\n */\nexport class NoResults extends Feature {\n\n    /**\n     * Creates an instance of NoResults\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'noResults');\n\n        //configuration object\n        let f = this.config.no_results_message;\n\n        /**\n         * Text (accepts HTML)\n         * @type {String}\n         */\n        this.content = f.content || 'No results';\n\n        /**\n         * Custom container DOM element\n         * @type {DOMElement}\n         */\n        this.customContainer = f.custom_container || null;\n\n        /**\n         * ID of custom container element\n         * @type {String}\n         */\n        this.customContainerId = f.custom_container_id || null;\n\n        /**\n         * Indicates if UI is contained in a external element\n         * @type {Boolean}\n         * @private\n         */\n        this.isExternal = !isEmpty(this.customContainer) ||\n            !isEmpty(this.customContainerId);\n\n        /**\n         * Css class assigned to container element\n         * @type {String}\n         */\n        this.cssClass = f.css_class || 'no-results';\n\n        /**\n         * Stores container DOM element\n         * @type {DOMElement}\n         */\n        this.cont = null;\n\n        /**\n         * Callback fired before the message is displayed\n         * @type {Function}\n         */\n        this.onBeforeShow = isFn(f.on_before_show_msg) ?\n            f.on_before_show_msg : null;\n\n        /**\n         * Callback fired after the message is displayed\n         * @type {Function}\n         */\n        this.onAfterShow = isFn(f.on_after_show_msg) ?\n            f.on_after_show_msg : null;\n\n        /**\n         * Callback fired before the message is hidden\n         * @type {Function}\n         */\n        this.onBeforeHide = isFn(f.on_before_hide_msg) ?\n            f.on_before_hide_msg : null;\n\n        /**\n         * Callback fired after the message is hidden\n         * @type {Function}\n         */\n        this.onAfterHide = isFn(f.on_after_hide_msg) ?\n            f.on_after_hide_msg : null;\n\n        /**\n         * Prefix for container ID\n         * @type {String}\n         * @private\n         */\n        this.prfx = 'nores_';\n    }\n\n    /**\n     * Initializes NoResults instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n        let tf = this.tf;\n        let target = this.customContainer || elm(this.customContainerId) ||\n            tf.tbl;\n\n        //container\n        let cont = createElm('div', ['id', this.prfx + tf.id]);\n        cont.className = this.cssClass;\n        cont.innerHTML = this.content;\n\n        if (this.isExternal) {\n            target.appendChild(cont);\n        } else {\n            target.parentNode.insertBefore(cont, target.nextSibling);\n        }\n\n        this.cont = cont;\n\n        // subscribe to after-filtering event\n        this.emitter.on(['after-filtering'], () => this.toggle());\n\n        /**\n         * @inherited\n         */\n        this.initialized = true;\n\n        this.hide();\n    }\n\n    /**\n     * Toggle no results message\n     */\n    toggle() {\n        if (this.tf.getValidRowsNb() > 0) {\n            this.hide();\n        } else {\n            this.show();\n        }\n    }\n\n    /**\n     * Show no results message\n     */\n    show() {\n        if (!this.initialized || !this.isEnabled()) {\n            return;\n        }\n\n        if (this.onBeforeShow) {\n            this.onBeforeShow.call(null, this.tf, this);\n        }\n\n        this.setWidth();\n        this.cont.style.display = 'block';\n\n        if (this.onAfterShow) {\n            this.onAfterShow.call(null, this.tf, this);\n        }\n    }\n\n    /**\n     * Hide no results message\n     */\n    hide() {\n        if (!this.initialized || !this.isEnabled()) {\n            return;\n        }\n\n        if (this.onBeforeHide) {\n            this.onBeforeHide.call(null, this.tf, this);\n        }\n\n        this.cont.style.display = NONE;\n\n        if (this.onAfterHide) {\n            this.onAfterHide.call(null, this.tf, this);\n        }\n    }\n\n    /**\n     * Sets no results container width\n     * @private\n     */\n    setWidth() {\n        if (!this.initialized || this.isExternal || !this.isEnabled()) {\n            return;\n        }\n        let tf = this.tf;\n        if (tf.gridLayout) {\n            let gridLayout = tf.feature('gridLayout');\n            this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';\n        } else {\n            this.cont.style.width = (tf.tbl.tHead ? tf.tbl.tHead.clientWidth :\n                tf.tbl.tBodies[0].clientWidth) + 'px';\n        }\n    }\n\n    /**\n     * Remove feature\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        removeElm(this.cont);\n        this.cont = null;\n        // unsubscribe to after-filtering event\n        this.emitter.off(['after-filtering'], () => this.toggle());\n\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 470,
@@ -10208,7 +10208,7 @@
     "memberof": "src/modules/noResults.js~NoResults",
     "longname": "src/modules/noResults.js~NoResults#onBeforeShow",
     "access": null,
-    "description": "Callback fired before the  message is displayed",
+    "description": "Callback fired before the message is displayed",
     "lineNumber": 66,
     "type": {
       "nullable": null,
@@ -10228,7 +10228,7 @@
     "memberof": "src/modules/noResults.js~NoResults",
     "longname": "src/modules/noResults.js~NoResults#onAfterShow",
     "access": null,
-    "description": "Callback fired after the  message is displayed",
+    "description": "Callback fired after the message is displayed",
     "lineNumber": 73,
     "type": {
       "nullable": null,
@@ -10248,7 +10248,7 @@
     "memberof": "src/modules/noResults.js~NoResults",
     "longname": "src/modules/noResults.js~NoResults#onBeforeHide",
     "access": null,
-    "description": "Callback fired before the  message is hidden",
+    "description": "Callback fired before the message is hidden",
     "lineNumber": 80,
     "type": {
       "nullable": null,
@@ -10268,7 +10268,7 @@
     "memberof": "src/modules/noResults.js~NoResults",
     "longname": "src/modules/noResults.js~NoResults#onAfterHide",
     "access": null,
-    "description": "Callback fired after the  message is hidden",
+    "description": "Callback fired after the message is hidden",
     "lineNumber": 87,
     "type": {
       "nullable": null,
@@ -10420,7 +10420,7 @@
     "longname": "src/modules/noResults.js~NoResults#destroy",
     "access": null,
     "description": "Remove feature",
-    "lineNumber": 203,
+    "lineNumber": 204,
     "params": [],
     "generator": false
   },
@@ -10434,7 +10434,7 @@
     "longname": "src/modules/noResults.js~NoResults#cont",
     "access": null,
     "description": null,
-    "lineNumber": 208,
+    "lineNumber": 209,
     "undocument": true,
     "type": {
       "types": [
@@ -10452,7 +10452,7 @@
     "longname": "src/modules/noResults.js~NoResults#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 212,
+    "lineNumber": 213,
     "undocument": true,
     "type": {
       "types": [
@@ -10471,7 +10471,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {createElm, createOpt, createText, elm, removeElm} from '../dom';\nimport {isArray, isFn, isNull} from '../types';\nimport {addEvt, keyCode, removeEvt} from '../event';\nimport {INPUT, SELECT, NONE, ENTER_KEY} from '../const';\n\nexport class Paging extends Feature {\n\n    /**\n     * Pagination component\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'paging');\n\n        // Configuration object\n        var f = this.config;\n\n        //css class for paging buttons (previous,next,etc.)\n        this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';\n        //stores paging select element\n        this.pagingSlc = null;\n        //results per page select element\n        this.resultsPerPageSlc = null;\n        //id of container element\n        this.pagingTgtId = f.paging_target_id || null;\n        //defines table paging length\n        this.pagingLength = !isNaN(f.paging_length) ? f.paging_length : 10;\n        //id of container element\n        this.resultsPerPageTgtId = f.results_per_page_target_id || null;\n        //css class for paging select element\n        this.pgSlcCssClass = f.paging_slc_css_class || 'pgSlc';\n        //css class for paging input element\n        this.pgInpCssClass = f.paging_inp_css_class || 'pgNbInp';\n        //stores results per page text and values\n        this.resultsPerPage = f.results_per_page || null;\n        //enables/disables results per page drop-down\n        this.hasResultsPerPage = isArray(this.resultsPerPage);\n        //defines css class for results per page select\n        this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';\n        //css class for label preceding results per page select\n        this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';\n        //1st row index of current page\n        this.startPagingRow = 0;\n        //total nb of pages\n        this.nbPages = 0;\n        //current page nb\n        this.currentPageNb = 1;\n        //defines next page button text\n        this.btnNextPageText = f.btn_next_page_text || '>';\n        //defines previous page button text\n        this.btnPrevPageText = f.btn_prev_page_text || '<';\n        //defines last page button text\n        this.btnLastPageText = f.btn_last_page_text || '>|';\n        //defines first page button text\n        this.btnFirstPageText = f.btn_first_page_text || '|<';\n        //defines next page button html\n        this.btnNextPageHtml = f.btn_next_page_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + this.btnPageCssClass +\n                ' nextPage\" title=\"Next page\" />');\n        //defines previous page button html\n        this.btnPrevPageHtml = f.btn_prev_page_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + this.btnPageCssClass +\n                ' previousPage\" title=\"Previous page\" />');\n        //defines last page button html\n        this.btnFirstPageHtml = f.btn_first_page_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + this.btnPageCssClass +\n                ' firstPage\" title=\"First page\" />');\n        //defines previous page button html\n        this.btnLastPageHtml = f.btn_last_page_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + this.btnPageCssClass +\n                ' lastPage\" title=\"Last page\" />');\n        //defines text preceeding page selector drop-down\n        this.pageText = f.page_text || ' Page ';\n        //defines text after page selector drop-down\n        this.ofText = f.of_text || ' of ';\n        //css class for span containing tot nb of pages\n        this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';\n        //enables/disables paging buttons\n        this.hasPagingBtns = f.paging_btns === false ? false : true;\n        //defines previous page button html\n        this.pageSelectorType = f.page_selector_type || SELECT;\n        //calls function before page is changed\n        this.onBeforeChangePage = isFn(f.on_before_change_page) ?\n            f.on_before_change_page : null;\n        //calls function before page is changed\n        this.onAfterChangePage = isFn(f.on_after_change_page) ?\n            f.on_after_change_page : null;\n\n        //pages select\n        this.prfxSlcPages = 'slcPages_';\n        //results per page select\n        this.prfxSlcResults = 'slcResults_';\n        //label preciding results per page select\n        this.prfxSlcResultsTxt = 'slcResultsTxt_';\n        //span containing next page button\n        this.prfxBtnNextSpan = 'btnNextSpan_';\n        //span containing previous page button\n        this.prfxBtnPrevSpan = 'btnPrevSpan_';\n        //span containing last page button\n        this.prfxBtnLastSpan = 'btnLastSpan_';\n        //span containing first page button\n        this.prfxBtnFirstSpan = 'btnFirstSpan_';\n        //next button\n        this.prfxBtnNext = 'btnNext_';\n        //previous button\n        this.prfxBtnPrev = 'btnPrev_';\n        //last button\n        this.prfxBtnLast = 'btnLast_';\n        //first button\n        this.prfxBtnFirst = 'btnFirst_';\n        //span for tot nb pages\n        this.prfxPgSpan = 'pgspan_';\n        //span preceding pages select (contains 'Page')\n        this.prfxPgBeforeSpan = 'pgbeforespan_';\n        //span following pages select (contains ' of ')\n        this.prfxPgAfterSpan = 'pgafterspan_';\n\n        var start_row = tf.refRow;\n        var nrows = tf.getRowsNb(true);\n        //calculates page nb\n        this.nbPages = Math.ceil((nrows - start_row) / this.pagingLength);\n\n        //Paging elements events\n        var o = this;\n        // Paging DOM events\n        this.evt = {\n            slcIndex() {\n                return (o.pageSelectorType === SELECT) ?\n                    o.pagingSlc.options.selectedIndex :\n                    parseInt(o.pagingSlc.value, 10) - 1;\n            },\n            nbOpts() {\n                return (o.pageSelectorType === SELECT) ?\n                    parseInt(o.pagingSlc.options.length, 10) - 1 :\n                    (o.nbPages - 1);\n            },\n            next() {\n                var nextIndex = o.evt.slcIndex() < o.evt.nbOpts() ?\n                    o.evt.slcIndex() + 1 : 0;\n                o.changePage(nextIndex);\n            },\n            prev() {\n                var prevIndex = o.evt.slcIndex() > 0 ?\n                    o.evt.slcIndex() - 1 : o.evt.nbOpts();\n                o.changePage(prevIndex);\n            },\n            last() {\n                o.changePage(o.evt.nbOpts());\n            },\n            first() {\n                o.changePage(0);\n            },\n            _detectKey(e) {\n                var key = keyCode(e);\n                if (key === ENTER_KEY) {\n                    if (tf.sorted) {\n                        tf.filter();\n                        o.changePage(o.evt.slcIndex());\n                    } else {\n                        o.changePage();\n                    }\n                    this.blur();\n                }\n            },\n            slcPagesChange: null,\n            nextEvt: null,\n            prevEvt: null,\n            lastEvt: null,\n            firstEvt: null\n        };\n    }\n\n    /**\n     * Initialize DOM elements\n     */\n    init() {\n        var slcPages;\n        var tf = this.tf;\n        var evt = this.evt;\n\n        if (this.initialized) {\n            return;\n        }\n\n        // Check resultsPerPage is in expected format and initialise the\n        // results per page component\n        if (this.hasResultsPerPage) {\n            if (this.resultsPerPage.length < 2) {\n                this.hasResultsPerPage = false;\n            } else {\n                this.pagingLength = this.resultsPerPage[1][0];\n                this.setResultsPerPage();\n            }\n        }\n\n        evt.slcPagesChange = (event) => {\n            var slc = event.target;\n            this.changePage(slc.selectedIndex);\n        };\n\n        // Paging drop-down list selector\n        if (this.pageSelectorType === SELECT) {\n            slcPages = createElm(SELECT, ['id', this.prfxSlcPages + tf.id]);\n            slcPages.className = this.pgSlcCssClass;\n            addEvt(slcPages, 'change', evt.slcPagesChange);\n        }\n\n        // Paging input selector\n        if (this.pageSelectorType === INPUT) {\n            slcPages = createElm(INPUT,\n                ['id', this.prfxSlcPages + tf.id],\n                ['value', this.currentPageNb]\n            );\n            slcPages.className = this.pgInpCssClass;\n            addEvt(slcPages, 'keypress', evt._detectKey);\n        }\n\n        // btns containers\n        var btnNextSpan = createElm(\n            'span', ['id', this.prfxBtnNextSpan + tf.id]);\n        var btnPrevSpan = createElm(\n            'span', ['id', this.prfxBtnPrevSpan + tf.id]);\n        var btnLastSpan = createElm(\n            'span', ['id', this.prfxBtnLastSpan + tf.id]);\n        var btnFirstSpan = createElm(\n            'span', ['id', this.prfxBtnFirstSpan + tf.id]);\n\n        if (this.hasPagingBtns) {\n            // Next button\n            if (!this.btnNextPageHtml) {\n                var btn_next = createElm(INPUT,\n                    ['id', this.prfxBtnNext + tf.id],\n                    ['type', 'button'],\n                    ['value', this.btnNextPageText],\n                    ['title', 'Next']\n                );\n                btn_next.className = this.btnPageCssClass;\n                addEvt(btn_next, 'click', evt.next);\n                btnNextSpan.appendChild(btn_next);\n            } else {\n                btnNextSpan.innerHTML = this.btnNextPageHtml;\n                addEvt(btnNextSpan, 'click', evt.next);\n            }\n            // Previous button\n            if (!this.btnPrevPageHtml) {\n                var btn_prev = createElm(INPUT,\n                    ['id', this.prfxBtnPrev + tf.id],\n                    ['type', 'button'],\n                    ['value', this.btnPrevPageText],\n                    ['title', 'Previous']\n                );\n                btn_prev.className = this.btnPageCssClass;\n                addEvt(btn_prev, 'click', evt.prev);\n                btnPrevSpan.appendChild(btn_prev);\n            } else {\n                btnPrevSpan.innerHTML = this.btnPrevPageHtml;\n                addEvt(btnPrevSpan, 'click', evt.prev);\n            }\n            // Last button\n            if (!this.btnLastPageHtml) {\n                var btn_last = createElm(INPUT,\n                    ['id', this.prfxBtnLast + tf.id],\n                    ['type', 'button'],\n                    ['value', this.btnLastPageText],\n                    ['title', 'Last']\n                );\n                btn_last.className = this.btnPageCssClass;\n                addEvt(btn_last, 'click', evt.last);\n                btnLastSpan.appendChild(btn_last);\n            } else {\n                btnLastSpan.innerHTML = this.btnLastPageHtml;\n                addEvt(btnLastSpan, 'click', evt.last);\n            }\n            // First button\n            if (!this.btnFirstPageHtml) {\n                var btn_first = createElm(INPUT,\n                    ['id', this.prfxBtnFirst + tf.id],\n                    ['type', 'button'],\n                    ['value', this.btnFirstPageText],\n                    ['title', 'First']\n                );\n                btn_first.className = this.btnPageCssClass;\n                addEvt(btn_first, 'click', evt.first);\n                btnFirstSpan.appendChild(btn_first);\n            } else {\n                btnFirstSpan.innerHTML = this.btnFirstPageHtml;\n                addEvt(btnFirstSpan, 'click', evt.first);\n            }\n        }\n\n        // paging elements (buttons+drop-down list) are added to defined element\n        if (!this.pagingTgtId) {\n            tf.setToolbar();\n        }\n        var targetEl = !this.pagingTgtId ? tf.mDiv : elm(this.pagingTgtId);\n        targetEl.appendChild(btnFirstSpan);\n        targetEl.appendChild(btnPrevSpan);\n\n        var pgBeforeSpan = createElm(\n            'span', ['id', this.prfxPgBeforeSpan + tf.id]);\n        pgBeforeSpan.appendChild(createText(this.pageText));\n        pgBeforeSpan.className = this.nbPgSpanCssClass;\n        targetEl.appendChild(pgBeforeSpan);\n        targetEl.appendChild(slcPages);\n        var pgAfterSpan = createElm(\n            'span', ['id', this.prfxPgAfterSpan + tf.id]);\n        pgAfterSpan.appendChild(createText(this.ofText));\n        pgAfterSpan.className = this.nbPgSpanCssClass;\n        targetEl.appendChild(pgAfterSpan);\n        var pgspan = createElm('span', ['id', this.prfxPgSpan + tf.id]);\n        pgspan.className = this.nbPgSpanCssClass;\n        pgspan.appendChild(createText(' ' + this.nbPages + ' '));\n        targetEl.appendChild(pgspan);\n        targetEl.appendChild(btnNextSpan);\n        targetEl.appendChild(btnLastSpan);\n        this.pagingSlc = elm(this.prfxSlcPages + tf.id);\n\n        this.setPagingInfo();\n\n        if (!tf.fltGrid) {\n            tf.validateAllRows();\n            this.setPagingInfo(tf.validRowsIndex);\n        }\n\n        this.emitter.on(['after-filtering'], () => this.resetPagingInfo());\n        this.emitter.on(['change-page'],\n            (tf, pageNumber) => this.setPage(pageNumber));\n        this.emitter.on(['change-page-results'],\n            (tf, pageLength) => this.changeResultsPerPage(pageLength));\n\n        this.initialized = true;\n    }\n\n    /**\n     * Reset paging when filters are already instantiated\n     * @param {Boolean} filterTable Execute filtering once paging instanciated\n     */\n    reset(filterTable = false) {\n        var tf = this.tf;\n        if (this.isEnabled()) {\n            return;\n        }\n        this.enable();\n        this.init();\n\n        if (filterTable) {\n            tf.filter();\n        }\n    }\n\n    /**\n     * Reset paging info from scratch after a filtering process\n     */\n    resetPagingInfo() {\n        this.startPagingRow = 0;\n        this.currentPageNb = 1;\n        this.setPagingInfo(this.tf.validRowsIndex);\n    }\n\n    /**\n     * Calculate number of pages based on valid rows\n     * Refresh paging select according to number of pages\n     * @param {Array} validRows Collection of valid rows\n     */\n    setPagingInfo(validRows) {\n        var tf = this.tf;\n        var mdiv = !this.pagingTgtId ? tf.mDiv : elm(this.pagingTgtId);\n        var pgspan = elm(this.prfxPgSpan + tf.id);\n\n        //store valid rows indexes\n        tf.validRowsIndex = validRows || tf.getValidRows(true);\n\n        //calculate nb of pages\n        this.nbPages = Math.ceil(tf.validRowsIndex.length / this.pagingLength);\n        //refresh page nb span\n        pgspan.innerHTML = this.nbPages;\n        //select clearing shortcut\n        if (this.pageSelectorType === SELECT) {\n            this.pagingSlc.innerHTML = '';\n        }\n\n        if (this.nbPages > 0) {\n            mdiv.style.visibility = 'visible';\n            if (this.pageSelectorType === SELECT) {\n                for (var z = 0; z < this.nbPages; z++) {\n                    var opt = createOpt(z + 1, z * this.pagingLength, false);\n                    this.pagingSlc.options[z] = opt;\n                }\n            } else {\n                //input type\n                this.pagingSlc.value = this.currentPageNb;\n            }\n\n        } else {\n            /*** if no results paging select and buttons are hidden ***/\n            mdiv.style.visibility = 'hidden';\n        }\n        this.groupByPage(tf.validRowsIndex);\n    }\n\n    /**\n     * Group table rows by page and display valid rows\n     * @param  {Array} validRows Collection of valid rows\n     */\n    groupByPage(validRows) {\n        var tf = this.tf;\n        var rows = tf.tbl.rows;\n        var startPagingRow = parseInt(this.startPagingRow, 10);\n        var endPagingRow = startPagingRow + parseInt(this.pagingLength, 10);\n\n        //store valid rows indexes\n        if (validRows) {\n            tf.validRowsIndex = validRows;\n        }\n\n        //this loop shows valid rows of current page\n        for (var h = 0, len = tf.getValidRowsNb(true); h < len; h++) {\n            var validRowIdx = tf.validRowsIndex[h];\n            var r = rows[validRowIdx];\n            var isRowValid = r.getAttribute('validRow');\n            var rowDisplayed = false;\n\n            if (h >= startPagingRow && h < endPagingRow) {\n                if (isNull(isRowValid) || Boolean(isRowValid === 'true')) {\n                    r.style.display = '';\n                    rowDisplayed = true;\n                }\n            } else {\n                r.style.display = NONE;\n            }\n            this.emitter.emit('row-paged', tf, validRowIdx, h, rowDisplayed);\n        }\n\n        // broadcast grouping by page\n        this.emitter.emit('grouped-by-page', tf, this);\n    }\n\n    /**\n     * Return the current page number\n     * @return {Number} Page number\n     */\n    getPage() {\n        return this.currentPageNb;\n    }\n\n    /**\n     * Show page defined by passed argument (string or number):\n     * @param {String}/{Number} cmd possible string values: 'next',\n     *   'previous', 'last', 'first' or page number as per param\n     */\n    setPage(cmd) {\n        var tf = this.tf;\n        if (!tf.isInitialized() || !this.isEnabled()) {\n            return;\n        }\n        var btnEvt = this.evt,\n            cmdtype = typeof cmd;\n        if (cmdtype === 'string') {\n            switch (cmd.toLowerCase()) {\n                case 'next':\n                    btnEvt.next();\n                    break;\n                case 'previous':\n                    btnEvt.prev();\n                    break;\n                case 'last':\n                    btnEvt.last();\n                    break;\n                case 'first':\n                    btnEvt.first();\n                    break;\n                default:\n                    btnEvt.next();\n                    break;\n            }\n        }\n        else if (cmdtype === 'number') {\n            this.changePage(cmd - 1);\n        }\n    }\n\n    /**\n     * Generates UI elements for the number of results per page drop-down\n     */\n    setResultsPerPage() {\n        var tf = this.tf;\n        var evt = this.evt;\n\n        if (this.resultsPerPageSlc || !this.resultsPerPage) {\n            return;\n        }\n\n        evt.slcResultsChange = (ev) => {\n            this.onChangeResultsPerPage();\n            ev.target.blur();\n        };\n\n        var slcR = createElm(SELECT, ['id', this.prfxSlcResults + tf.id]);\n        slcR.className = this.resultsSlcCssClass;\n        var slcRText = this.resultsPerPage[0],\n            slcROpts = this.resultsPerPage[1];\n        var slcRSpan = createElm(\n            'span', ['id', this.prfxSlcResultsTxt + tf.id]);\n        slcRSpan.className = this.resultsSpanCssClass;\n\n        // results per page select is added to external element\n        if (!this.resultsPerPageTgtId) {\n            tf.setToolbar();\n        }\n        var targetEl = !this.resultsPerPageTgtId ?\n            tf.rDiv : elm(this.resultsPerPageTgtId);\n        slcRSpan.appendChild(createText(slcRText));\n\n        var help = tf.feature('help');\n        if (help && help.btn) {\n            help.btn.parentNode.insertBefore(slcRSpan, help.btn);\n            help.btn.parentNode.insertBefore(slcR, help.btn);\n        } else {\n            targetEl.appendChild(slcRSpan);\n            targetEl.appendChild(slcR);\n        }\n\n        for (var r = 0; r < slcROpts.length; r++) {\n            var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);\n            slcR.options[r] = currOpt;\n        }\n        addEvt(slcR, 'change', evt.slcResultsChange);\n        this.resultsPerPageSlc = slcR;\n    }\n\n    /**\n     * Remove number of results per page UI elements\n     */\n    removeResultsPerPage() {\n        var tf = this.tf;\n        if (!tf.isInitialized() || !this.resultsPerPageSlc ||\n            !this.resultsPerPage) {\n            return;\n        }\n        var slcR = this.resultsPerPageSlc,\n            slcRSpan = elm(this.prfxSlcResultsTxt + tf.id);\n        if (slcR) {\n            removeElm(slcR);\n        }\n        if (slcRSpan) {\n            removeElm(slcRSpan);\n        }\n        this.resultsPerPageSlc = null;\n    }\n\n    /**\n     * Change the page according to passed index\n     * @param  {Number} index Index of the page (0-n)\n     */\n    changePage(index) {\n        var tf = this.tf;\n\n        if (!this.isEnabled()) {\n            return;\n        }\n\n        this.emitter.emit('before-page-change', tf, (index + 1));\n\n        if (index === null) {\n            index = this.pageSelectorType === SELECT ?\n                this.pagingSlc.options.selectedIndex : this.pagingSlc.value - 1;\n        }\n        if (index >= 0 && index <= (this.nbPages - 1)) {\n            if (this.onBeforeChangePage) {\n                this.onBeforeChangePage.call(null, this, (index + 1));\n            }\n            this.currentPageNb = parseInt(index, 10) + 1;\n            if (this.pageSelectorType === SELECT) {\n                this.pagingSlc.options[index].selected = true;\n            } else {\n                this.pagingSlc.value = this.currentPageNb;\n            }\n\n            this.startPagingRow = (this.pageSelectorType === SELECT) ?\n                this.pagingSlc.value : (index * this.pagingLength);\n\n            this.groupByPage();\n\n            if (this.onAfterChangePage) {\n                this.onAfterChangePage.call(null, this, (index + 1));\n            }\n        }\n\n        this.emitter.emit('after-page-change', tf, (index + 1));\n    }\n\n    changeResultsPerPage(val) {\n        if (!this.isEnabled() || isNaN(val)) {\n            return;\n        }\n\n        this.resultsPerPageSlc.value = val;\n        this.onChangeResultsPerPage();\n    }\n\n    /**\n     * Change rows according to page results drop-down\n     */\n    onChangeResultsPerPage() {\n        var tf = this.tf;\n\n        if (!this.isEnabled()) {\n            return;\n        }\n\n        this.emitter.emit('before-page-length-change', tf);\n\n        var slcR = this.resultsPerPageSlc;\n        var slcIndex = slcR.selectedIndex;\n        var slcPagesSelIndex = (this.pageSelectorType === SELECT) ?\n            this.pagingSlc.selectedIndex :\n            parseInt(this.pagingSlc.value - 1, 10);\n        this.pagingLength = parseInt(slcR.options[slcIndex].value, 10);\n        this.startPagingRow = this.pagingLength * slcPagesSelIndex;\n\n        if (!isNaN(this.pagingLength)) {\n            if (this.startPagingRow >= tf.nbFilterableRows) {\n                this.startPagingRow = (tf.nbFilterableRows - this.pagingLength);\n            }\n            this.setPagingInfo();\n\n            if (this.pageSelectorType === SELECT) {\n                var slcIdx =\n                    (this.pagingSlc.options.length - 1 <= slcPagesSelIndex) ?\n                        (this.pagingSlc.options.length - 1) : slcPagesSelIndex;\n                this.pagingSlc.options[slcIdx].selected = true;\n            }\n        }\n\n        this.emitter.emit('after-page-length-change', tf, this.pagingLength);\n    }\n\n    /**\n     * Re-set page nb at page re-load\n     */\n    resetPage() {\n        var tf = this.tf;\n        if (!this.isEnabled()) {\n            return;\n        }\n        this.emitter.emit('before-reset-page', tf);\n        var pgNb = tf.feature('store').getPageNb();\n        if (pgNb !== '') {\n            this.changePage((pgNb - 1));\n        }\n        this.emitter.emit('after-reset-page', tf, pgNb);\n    }\n\n    /**\n     * Re-set page length value at page re-load\n     */\n    resetPageLength() {\n        var tf = this.tf;\n        if (!this.isEnabled()) {\n            return;\n        }\n        this.emitter.emit('before-reset-page-length', tf);\n        var pglenIndex = tf.feature('store').getPageLength();\n\n        if (pglenIndex !== '') {\n            this.resultsPerPageSlc.options[pglenIndex].selected = true;\n            this.changeResultsPerPage();\n        }\n        this.emitter.emit('after-reset-page-length', tf, pglenIndex);\n    }\n\n    /**\n     * Remove paging feature\n     */\n    destroy() {\n        var tf = this.tf;\n\n        if (!this.initialized) {\n            return;\n        }\n        // btns containers\n        var btnNextSpan = elm(this.prfxBtnNextSpan + tf.id);\n        var btnPrevSpan = elm(this.prfxBtnPrevSpan + tf.id);\n        var btnLastSpan = elm(this.prfxBtnLastSpan + tf.id);\n        var btnFirstSpan = elm(this.prfxBtnFirstSpan + tf.id);\n        //span containing 'Page' text\n        var pgBeforeSpan = elm(this.prfxPgBeforeSpan + tf.id);\n        //span containing 'of' text\n        var pgAfterSpan = elm(this.prfxPgAfterSpan + tf.id);\n        //span containing nb of pages\n        var pgspan = elm(this.prfxPgSpan + tf.id);\n\n        var evt = this.evt;\n\n        if (this.pagingSlc) {\n            if (this.pageSelectorType === SELECT) {\n                removeEvt(this.pagingSlc, 'change', evt.slcPagesChange);\n            }\n            else if (this.pageSelectorType === INPUT) {\n                removeEvt(this.pagingSlc, 'keypress', evt._detectKey);\n            }\n            removeElm(this.pagingSlc);\n        }\n\n        if (btnNextSpan) {\n            removeEvt(btnNextSpan, 'click', evt.next);\n            removeElm(btnNextSpan);\n        }\n\n        if (btnPrevSpan) {\n            removeEvt(btnPrevSpan, 'click', evt.prev);\n            removeElm(btnPrevSpan);\n        }\n\n        if (btnLastSpan) {\n            removeEvt(btnLastSpan, 'click', evt.last);\n            removeElm(btnLastSpan);\n        }\n\n        if (btnFirstSpan) {\n            removeEvt(btnFirstSpan, 'click', evt.first);\n            removeElm(btnFirstSpan);\n        }\n\n        if (pgBeforeSpan) {\n            removeElm(pgBeforeSpan);\n        }\n\n        if (pgAfterSpan) {\n            removeElm(pgAfterSpan);\n        }\n\n        if (pgspan) {\n            removeElm(pgspan);\n        }\n\n        if (this.hasResultsPerPage) {\n            this.removeResultsPerPage();\n        }\n\n        this.emitter.off(['after-filtering'], () => this.resetPagingInfo());\n        this.emitter.off(['change-page'],\n            (tf, pageNumber) => this.setPage(pageNumber));\n        this.emitter.off(['change-page-results'],\n            (tf, pageLength) => this.changeResultsPerPage(pageLength));\n\n        this.pagingSlc = null;\n        this.nbPages = 0;\n        this.disable();\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {createElm, createOpt, createText, elm, removeElm} from '../dom';\nimport {isArray, isFn, isNull} from '../types';\nimport {addEvt, keyCode, removeEvt} from '../event';\nimport {INPUT, SELECT, NONE, ENTER_KEY} from '../const';\n\n/**\n * Paging UI component\n * @export\n * @class Paging\n * @extends {Feature}\n */\nexport class Paging extends Feature {\n\n    /**\n     * Creates an instance of Paging\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'paging');\n\n        // Configuration object\n        var f = this.config;\n\n        /**\n         * Css class for the paging buttons (previous, next, etc.)\n         * @type {String}\n         */\n        this.btnPageCssClass = f.paging_btn_css_class || 'pgInp';\n\n         /**\n         * Main select DOM element\n         * @type {DOMElement}\n         */\n        this.pagingSlc = null;\n\n        /**\n         * Results per page select DOM element\n         * @type {DOMElement}\n         */\n        this.resultsPerPageSlc = null;\n\n        /**\n         * ID of custom container element\n         * @type {String}\n         */\n        this.pagingTgtId = f.paging_target_id || null;\n\n        /**\n         * Number of rows contained in a page\n         * @type {Number}\n         */\n        this.pagingLength = !isNaN(f.paging_length) ? f.paging_length : 10;\n\n        /**\n         * ID of custom container element for the results per page selector\n         * @type {String}\n         */\n        this.resultsPerPageTgtId = f.results_per_page_target_id || null;\n\n        /**\n         * Css class for the paging select element\n         * @type {String}\n         */\n        this.pgSlcCssClass = f.paging_slc_css_class || 'pgSlc';\n\n        /**\n         * Css class for the paging input element\n         * @type {String}\n         */\n        this.pgInpCssClass = f.paging_inp_css_class || 'pgNbInp';\n\n        /**\n         * Label and values for the results per page select, example of usage:\n         * ['Records: ', [10,25,50,100]]\n         * @type {Array}\n         */\n        this.resultsPerPage = f.results_per_page || null;\n\n        /**\n         * Determines if results per page is configured\n         * @type {Boolean}\n         */\n        this.hasResultsPerPage = isArray(this.resultsPerPage);\n\n        /**\n         * Css class for the results per page select\n         * @type {String}\n         */\n        this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';\n\n        /**\n         * Css class for the label preceding results per page select\n         * @type {String}\n         */\n        this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';\n\n        /**\n         * Index of the first row of current page\n         * @type {Number}\n         * @private\n         */\n        this.startPagingRow = 0;\n\n        /**\n         * Total number of pages\n         * @type {Number}\n         * @private\n         */\n        this.nbPages = 0;\n\n        /**\n         * Current page number\n         * @type {Number}\n         * @private\n         */\n        this.currentPageNb = 1;\n\n        /**\n         * Next page button text\n         * @type {String}\n         */\n        this.btnNextPageText = f.btn_next_page_text || '>';\n\n        /**\n         * Previous page button text\n         * @type {String}\n         */\n        this.btnPrevPageText = f.btn_prev_page_text || '<';\n\n        /**\n         * Last page button text\n         * @type {String}\n         */\n        this.btnLastPageText = f.btn_last_page_text || '>|';\n\n        /**\n         * First page button text\n         * @type {String}\n         */\n        this.btnFirstPageText = f.btn_first_page_text || '|<';\n\n        /**\n         * Next page button HTML\n         * @type {String}\n         */\n        this.btnNextPageHtml = f.btn_next_page_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + this.btnPageCssClass +\n                ' nextPage\" title=\"Next page\" />');\n\n        /**\n         * Previous page button HTML\n         * @type {String}\n         */\n        this.btnPrevPageHtml = f.btn_prev_page_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + this.btnPageCssClass +\n                ' previousPage\" title=\"Previous page\" />');\n\n        /**\n         * First page button HTML\n         * @type {String}\n         */\n        this.btnFirstPageHtml = f.btn_first_page_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + this.btnPageCssClass +\n                ' firstPage\" title=\"First page\" />');\n\n        /**\n         * Last page button HTML\n         * @type {String}\n         */\n        this.btnLastPageHtml = f.btn_last_page_html ||\n            (!tf.enableIcons ? null :\n                '<input type=\"button\" value=\"\" class=\"' + this.btnPageCssClass +\n                ' lastPage\" title=\"Last page\" />');\n\n        /**\n         * Text preceeding page selector drop-down\n         * @type {String}\n         */\n        this.pageText = f.page_text || ' Page ';\n\n        /**\n         * Text after page selector drop-down\n         * @type {String}\n         */\n        this.ofText = f.of_text || ' of ';\n\n        /**\n         * Css class for the span containing total number of pages\n         * @type {String}\n         */\n        this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';\n\n        /**\n         * Determines if paging buttons are enabled (default: true)\n         * @type {Boolean}\n         */\n        this.hasPagingBtns = f.paging_btns === false ? false : true;\n\n        /**\n         * Defines page selector type, two possible values: 'select', 'input'\n         * @type {String}\n         */\n        this.pageSelectorType = f.page_selector_type || SELECT;\n\n        /**\n         * Callback fired before the page is changed\n         * @type {Function}\n         */\n        this.onBeforeChangePage = isFn(f.on_before_change_page) ?\n            f.on_before_change_page : null;\n\n        /**\n         * Callback fired after the page is changed\n         * @type {Function}\n         */\n        this.onAfterChangePage = isFn(f.on_after_change_page) ?\n            f.on_after_change_page : null;\n\n        /**\n         * Element IDs prefixes\n         */\n        /**\n         * Page select\n         * @type {String}\n         * @private\n         */\n        this.prfxSlcPages = 'slcPages_';\n        /**\n         * Results per page select\n         * @type {String}\n         * @private\n         */\n        this.prfxSlcResults = 'slcResults_';\n        /**\n         * Label preciding results per page select\n         * @type {String}\n         * @private\n         */\n        this.prfxSlcResultsTxt = 'slcResultsTxt_';\n        /**\n         * Span containing next page button\n         * @type {String}\n         * @private\n         */\n        this.prfxBtnNextSpan = 'btnNextSpan_';\n        /**\n         * Span containing previous page button\n         * @type {String}\n         * @private\n         */\n        this.prfxBtnPrevSpan = 'btnPrevSpan_';\n        /**\n         * Span containing last page button\n         * @type {String}\n         * @private\n         */\n        this.prfxBtnLastSpan = 'btnLastSpan_';\n        /**\n         * Span containing first page button\n         * @type {String}\n         * @private\n         */\n        this.prfxBtnFirstSpan = 'btnFirstSpan_';\n        /**\n         * Next button\n         * @type {String}\n         * @private\n         */\n        this.prfxBtnNext = 'btnNext_';\n        /**\n         * Previous button\n         * @type {String}\n         * @private\n         */\n        this.prfxBtnPrev = 'btnPrev_';\n        /**\n         * Last button\n         * @type {String}\n         * @private\n         */\n        this.prfxBtnLast = 'btnLast_';\n        /**\n         * First button\n         * @type {String}\n         * @private\n         */\n        this.prfxBtnFirst = 'btnFirst_';\n        /**\n         * Span for tot nb pages\n         * @type {String}\n         * @private\n         */\n        this.prfxPgSpan = 'pgspan_';\n        /**\n         * Span preceding pages select (contains 'Page')\n         * @type {String}\n         * @private\n         */\n        this.prfxPgBeforeSpan = 'pgbeforespan_';\n        /**\n         * Span following pages select (contains ' of ')\n         * @type {String}\n         * @private\n         */\n        this.prfxPgAfterSpan = 'pgafterspan_';\n\n        var start_row = tf.refRow;\n        var nrows = tf.getRowsNb(true);\n        //calculates page nb\n        this.nbPages = Math.ceil((nrows - start_row) / this.pagingLength);\n\n        var o = this;\n        /**\n         * Paging DOM events handlers\n         * @type {String}\n         * @private\n         */\n        this.evt = {\n            slcIndex() {\n                return (o.pageSelectorType === SELECT) ?\n                    o.pagingSlc.options.selectedIndex :\n                    parseInt(o.pagingSlc.value, 10) - 1;\n            },\n            nbOpts() {\n                return (o.pageSelectorType === SELECT) ?\n                    parseInt(o.pagingSlc.options.length, 10) - 1 :\n                    (o.nbPages - 1);\n            },\n            next() {\n                var nextIndex = o.evt.slcIndex() < o.evt.nbOpts() ?\n                    o.evt.slcIndex() + 1 : 0;\n                o.changePage(nextIndex);\n            },\n            prev() {\n                var prevIndex = o.evt.slcIndex() > 0 ?\n                    o.evt.slcIndex() - 1 : o.evt.nbOpts();\n                o.changePage(prevIndex);\n            },\n            last() {\n                o.changePage(o.evt.nbOpts());\n            },\n            first() {\n                o.changePage(0);\n            },\n            _detectKey(e) {\n                var key = keyCode(e);\n                if (key === ENTER_KEY) {\n                    if (tf.sorted) {\n                        tf.filter();\n                        o.changePage(o.evt.slcIndex());\n                    } else {\n                        o.changePage();\n                    }\n                    this.blur();\n                }\n            },\n            slcPagesChange: null,\n            nextEvt: null,\n            prevEvt: null,\n            lastEvt: null,\n            firstEvt: null\n        };\n    }\n\n    /**\n     * Initialize DOM elements\n     */\n    init() {\n        var slcPages;\n        var tf = this.tf;\n        var evt = this.evt;\n\n        if (this.initialized) {\n            return;\n        }\n\n        // Check resultsPerPage is in expected format and initialise the\n        // results per page component\n        if (this.hasResultsPerPage) {\n            if (this.resultsPerPage.length < 2) {\n                this.hasResultsPerPage = false;\n            } else {\n                this.pagingLength = this.resultsPerPage[1][0];\n                this.setResultsPerPage();\n            }\n        }\n\n        evt.slcPagesChange = (event) => {\n            var slc = event.target;\n            this.changePage(slc.selectedIndex);\n        };\n\n        // Paging drop-down list selector\n        if (this.pageSelectorType === SELECT) {\n            slcPages = createElm(SELECT, ['id', this.prfxSlcPages + tf.id]);\n            slcPages.className = this.pgSlcCssClass;\n            addEvt(slcPages, 'change', evt.slcPagesChange);\n        }\n\n        // Paging input selector\n        if (this.pageSelectorType === INPUT) {\n            slcPages = createElm(INPUT,\n                ['id', this.prfxSlcPages + tf.id],\n                ['value', this.currentPageNb]\n            );\n            slcPages.className = this.pgInpCssClass;\n            addEvt(slcPages, 'keypress', evt._detectKey);\n        }\n\n        // btns containers\n        var btnNextSpan = createElm(\n            'span', ['id', this.prfxBtnNextSpan + tf.id]);\n        var btnPrevSpan = createElm(\n            'span', ['id', this.prfxBtnPrevSpan + tf.id]);\n        var btnLastSpan = createElm(\n            'span', ['id', this.prfxBtnLastSpan + tf.id]);\n        var btnFirstSpan = createElm(\n            'span', ['id', this.prfxBtnFirstSpan + tf.id]);\n\n        if (this.hasPagingBtns) {\n            // Next button\n            if (!this.btnNextPageHtml) {\n                var btn_next = createElm(INPUT,\n                    ['id', this.prfxBtnNext + tf.id],\n                    ['type', 'button'],\n                    ['value', this.btnNextPageText],\n                    ['title', 'Next']\n                );\n                btn_next.className = this.btnPageCssClass;\n                addEvt(btn_next, 'click', evt.next);\n                btnNextSpan.appendChild(btn_next);\n            } else {\n                btnNextSpan.innerHTML = this.btnNextPageHtml;\n                addEvt(btnNextSpan, 'click', evt.next);\n            }\n            // Previous button\n            if (!this.btnPrevPageHtml) {\n                var btn_prev = createElm(INPUT,\n                    ['id', this.prfxBtnPrev + tf.id],\n                    ['type', 'button'],\n                    ['value', this.btnPrevPageText],\n                    ['title', 'Previous']\n                );\n                btn_prev.className = this.btnPageCssClass;\n                addEvt(btn_prev, 'click', evt.prev);\n                btnPrevSpan.appendChild(btn_prev);\n            } else {\n                btnPrevSpan.innerHTML = this.btnPrevPageHtml;\n                addEvt(btnPrevSpan, 'click', evt.prev);\n            }\n            // Last button\n            if (!this.btnLastPageHtml) {\n                var btn_last = createElm(INPUT,\n                    ['id', this.prfxBtnLast + tf.id],\n                    ['type', 'button'],\n                    ['value', this.btnLastPageText],\n                    ['title', 'Last']\n                );\n                btn_last.className = this.btnPageCssClass;\n                addEvt(btn_last, 'click', evt.last);\n                btnLastSpan.appendChild(btn_last);\n            } else {\n                btnLastSpan.innerHTML = this.btnLastPageHtml;\n                addEvt(btnLastSpan, 'click', evt.last);\n            }\n            // First button\n            if (!this.btnFirstPageHtml) {\n                var btn_first = createElm(INPUT,\n                    ['id', this.prfxBtnFirst + tf.id],\n                    ['type', 'button'],\n                    ['value', this.btnFirstPageText],\n                    ['title', 'First']\n                );\n                btn_first.className = this.btnPageCssClass;\n                addEvt(btn_first, 'click', evt.first);\n                btnFirstSpan.appendChild(btn_first);\n            } else {\n                btnFirstSpan.innerHTML = this.btnFirstPageHtml;\n                addEvt(btnFirstSpan, 'click', evt.first);\n            }\n        }\n\n        // paging elements (buttons+drop-down list) are added to defined element\n        if (!this.pagingTgtId) {\n            tf.setToolbar();\n        }\n        var targetEl = !this.pagingTgtId ? tf.mDiv : elm(this.pagingTgtId);\n        targetEl.appendChild(btnFirstSpan);\n        targetEl.appendChild(btnPrevSpan);\n\n        var pgBeforeSpan = createElm(\n            'span', ['id', this.prfxPgBeforeSpan + tf.id]);\n        pgBeforeSpan.appendChild(createText(this.pageText));\n        pgBeforeSpan.className = this.nbPgSpanCssClass;\n        targetEl.appendChild(pgBeforeSpan);\n        targetEl.appendChild(slcPages);\n        var pgAfterSpan = createElm(\n            'span', ['id', this.prfxPgAfterSpan + tf.id]);\n        pgAfterSpan.appendChild(createText(this.ofText));\n        pgAfterSpan.className = this.nbPgSpanCssClass;\n        targetEl.appendChild(pgAfterSpan);\n        var pgspan = createElm('span', ['id', this.prfxPgSpan + tf.id]);\n        pgspan.className = this.nbPgSpanCssClass;\n        pgspan.appendChild(createText(' ' + this.nbPages + ' '));\n        targetEl.appendChild(pgspan);\n        targetEl.appendChild(btnNextSpan);\n        targetEl.appendChild(btnLastSpan);\n        this.pagingSlc = elm(this.prfxSlcPages + tf.id);\n\n        this.setPagingInfo();\n\n        if (!tf.fltGrid) {\n            tf.validateAllRows();\n            this.setPagingInfo(tf.validRowsIndex);\n        }\n\n        this.emitter.on(['after-filtering'], () => this.resetPagingInfo());\n        this.emitter.on(['change-page'],\n            (tf, pageNumber) => this.setPage(pageNumber));\n        this.emitter.on(['change-page-results'],\n            (tf, pageLength) => this.changeResultsPerPage(pageLength));\n\n        this.initialized = true;\n    }\n\n    /**\n     * Reset paging when filters are already instantiated\n     * @param {Boolean} filterTable Execute filtering once paging instanciated\n     */\n    reset(filterTable = false) {\n        var tf = this.tf;\n        if (this.isEnabled()) {\n            return;\n        }\n        this.enable();\n        this.init();\n\n        if (filterTable) {\n            tf.filter();\n        }\n    }\n\n    /**\n     * Reset paging info from scratch after a filtering process\n     */\n    resetPagingInfo() {\n        this.startPagingRow = 0;\n        this.currentPageNb = 1;\n        this.setPagingInfo(this.tf.validRowsIndex);\n    }\n\n    /**\n     * Calculate number of pages based on valid rows\n     * Refresh paging select according to number of pages\n     * @param {Array} validRows Collection of valid rows\n     */\n    setPagingInfo(validRows) {\n        var tf = this.tf;\n        var mdiv = !this.pagingTgtId ? tf.mDiv : elm(this.pagingTgtId);\n        var pgspan = elm(this.prfxPgSpan + tf.id);\n\n        //store valid rows indexes\n        tf.validRowsIndex = validRows || tf.getValidRows(true);\n\n        //calculate nb of pages\n        this.nbPages = Math.ceil(tf.validRowsIndex.length / this.pagingLength);\n        //refresh page nb span\n        pgspan.innerHTML = this.nbPages;\n        //select clearing shortcut\n        if (this.pageSelectorType === SELECT) {\n            this.pagingSlc.innerHTML = '';\n        }\n\n        if (this.nbPages > 0) {\n            mdiv.style.visibility = 'visible';\n            if (this.pageSelectorType === SELECT) {\n                for (var z = 0; z < this.nbPages; z++) {\n                    var opt = createOpt(z + 1, z * this.pagingLength, false);\n                    this.pagingSlc.options[z] = opt;\n                }\n            } else {\n                //input type\n                this.pagingSlc.value = this.currentPageNb;\n            }\n\n        } else {\n            /*** if no results paging select and buttons are hidden ***/\n            mdiv.style.visibility = 'hidden';\n        }\n        this.groupByPage(tf.validRowsIndex);\n    }\n\n    /**\n     * Group table rows by page and display valid rows\n     * @param  {Array} validRows Collection of valid rows\n     */\n    groupByPage(validRows) {\n        var tf = this.tf;\n        var rows = tf.tbl.rows;\n        var startPagingRow = parseInt(this.startPagingRow, 10);\n        var endPagingRow = startPagingRow + parseInt(this.pagingLength, 10);\n\n        //store valid rows indexes\n        if (validRows) {\n            tf.validRowsIndex = validRows;\n        }\n\n        //this loop shows valid rows of current page\n        for (var h = 0, len = tf.getValidRowsNb(true); h < len; h++) {\n            var validRowIdx = tf.validRowsIndex[h];\n            var r = rows[validRowIdx];\n            var isRowValid = r.getAttribute('validRow');\n            var rowDisplayed = false;\n\n            if (h >= startPagingRow && h < endPagingRow) {\n                if (isNull(isRowValid) || Boolean(isRowValid === 'true')) {\n                    r.style.display = '';\n                    rowDisplayed = true;\n                }\n            } else {\n                r.style.display = NONE;\n            }\n            this.emitter.emit('row-paged', tf, validRowIdx, h, rowDisplayed);\n        }\n\n        // broadcast grouping by page\n        this.emitter.emit('grouped-by-page', tf, this);\n    }\n\n    /**\n     * Return the current page number\n     * @return {Number} Page number\n     */\n    getPage() {\n        return this.currentPageNb;\n    }\n\n    /**\n     * Show page defined by passed argument (string or number):\n     * @param {String}/{Number} cmd possible string values: 'next',\n     *   'previous', 'last', 'first' or page number as per param\n     */\n    setPage(cmd) {\n        var tf = this.tf;\n        if (!tf.isInitialized() || !this.isEnabled()) {\n            return;\n        }\n        var btnEvt = this.evt,\n            cmdtype = typeof cmd;\n        if (cmdtype === 'string') {\n            switch (cmd.toLowerCase()) {\n                case 'next':\n                    btnEvt.next();\n                    break;\n                case 'previous':\n                    btnEvt.prev();\n                    break;\n                case 'last':\n                    btnEvt.last();\n                    break;\n                case 'first':\n                    btnEvt.first();\n                    break;\n                default:\n                    btnEvt.next();\n                    break;\n            }\n        }\n        else if (cmdtype === 'number') {\n            this.changePage(cmd - 1);\n        }\n    }\n\n    /**\n     * Generates UI elements for the number of results per page drop-down\n     */\n    setResultsPerPage() {\n        var tf = this.tf;\n        var evt = this.evt;\n\n        if (this.resultsPerPageSlc || !this.resultsPerPage) {\n            return;\n        }\n\n        evt.slcResultsChange = (ev) => {\n            this.onChangeResultsPerPage();\n            ev.target.blur();\n        };\n\n        var slcR = createElm(SELECT, ['id', this.prfxSlcResults + tf.id]);\n        slcR.className = this.resultsSlcCssClass;\n        var slcRText = this.resultsPerPage[0],\n            slcROpts = this.resultsPerPage[1];\n        var slcRSpan = createElm(\n            'span', ['id', this.prfxSlcResultsTxt + tf.id]);\n        slcRSpan.className = this.resultsSpanCssClass;\n\n        // results per page select is added to external element\n        if (!this.resultsPerPageTgtId) {\n            tf.setToolbar();\n        }\n        var targetEl = !this.resultsPerPageTgtId ?\n            tf.rDiv : elm(this.resultsPerPageTgtId);\n        slcRSpan.appendChild(createText(slcRText));\n\n        var help = tf.feature('help');\n        if (help && help.btn) {\n            help.btn.parentNode.insertBefore(slcRSpan, help.btn);\n            help.btn.parentNode.insertBefore(slcR, help.btn);\n        } else {\n            targetEl.appendChild(slcRSpan);\n            targetEl.appendChild(slcR);\n        }\n\n        for (var r = 0; r < slcROpts.length; r++) {\n            var currOpt = new Option(slcROpts[r], slcROpts[r], false, false);\n            slcR.options[r] = currOpt;\n        }\n        addEvt(slcR, 'change', evt.slcResultsChange);\n        this.resultsPerPageSlc = slcR;\n    }\n\n    /**\n     * Remove number of results per page UI elements\n     */\n    removeResultsPerPage() {\n        var tf = this.tf;\n        if (!tf.isInitialized() || !this.resultsPerPageSlc ||\n            !this.resultsPerPage) {\n            return;\n        }\n        var slcR = this.resultsPerPageSlc,\n            slcRSpan = elm(this.prfxSlcResultsTxt + tf.id);\n        if (slcR) {\n            removeElm(slcR);\n        }\n        if (slcRSpan) {\n            removeElm(slcRSpan);\n        }\n        this.resultsPerPageSlc = null;\n    }\n\n    /**\n     * Change the page based on passed index\n     * @param {Number} index Index of the page (0-n)\n     */\n    changePage(index) {\n        var tf = this.tf;\n\n        if (!this.isEnabled()) {\n            return;\n        }\n\n        this.emitter.emit('before-page-change', tf, (index + 1));\n\n        if (index === null) {\n            index = this.pageSelectorType === SELECT ?\n                this.pagingSlc.options.selectedIndex : this.pagingSlc.value - 1;\n        }\n        if (index >= 0 && index <= (this.nbPages - 1)) {\n            if (this.onBeforeChangePage) {\n                this.onBeforeChangePage.call(null, this, (index + 1));\n            }\n            this.currentPageNb = parseInt(index, 10) + 1;\n            if (this.pageSelectorType === SELECT) {\n                this.pagingSlc.options[index].selected = true;\n            } else {\n                this.pagingSlc.value = this.currentPageNb;\n            }\n\n            this.startPagingRow = (this.pageSelectorType === SELECT) ?\n                this.pagingSlc.value : (index * this.pagingLength);\n\n            this.groupByPage();\n\n            if (this.onAfterChangePage) {\n                this.onAfterChangePage.call(null, this, (index + 1));\n            }\n        }\n\n        this.emitter.emit('after-page-change', tf, (index + 1));\n    }\n\n    /**\n     * Change the number of results per page based on passed value\n     * @param {String} val The number of results per page\n     */\n    changeResultsPerPage(val) {\n        if (!this.isEnabled() || isNaN(val)) {\n            return;\n        }\n\n        this.resultsPerPageSlc.value = val;\n        this.onChangeResultsPerPage();\n    }\n\n    /**\n     * Change rows according to page results drop-down\n     */\n    onChangeResultsPerPage() {\n        var tf = this.tf;\n\n        if (!this.isEnabled()) {\n            return;\n        }\n\n        this.emitter.emit('before-page-length-change', tf);\n\n        var slcR = this.resultsPerPageSlc;\n        var slcIndex = slcR.selectedIndex;\n        var slcPagesSelIndex = (this.pageSelectorType === SELECT) ?\n            this.pagingSlc.selectedIndex :\n            parseInt(this.pagingSlc.value - 1, 10);\n        this.pagingLength = parseInt(slcR.options[slcIndex].value, 10);\n        this.startPagingRow = this.pagingLength * slcPagesSelIndex;\n\n        if (!isNaN(this.pagingLength)) {\n            if (this.startPagingRow >= tf.nbFilterableRows) {\n                this.startPagingRow = (tf.nbFilterableRows - this.pagingLength);\n            }\n            this.setPagingInfo();\n\n            if (this.pageSelectorType === SELECT) {\n                var slcIdx =\n                    (this.pagingSlc.options.length - 1 <= slcPagesSelIndex) ?\n                        (this.pagingSlc.options.length - 1) : slcPagesSelIndex;\n                this.pagingSlc.options[slcIdx].selected = true;\n            }\n        }\n\n        this.emitter.emit('after-page-length-change', tf, this.pagingLength);\n    }\n\n    /**\n     * Re-set page nb at page re-load\n     */\n    resetPage() {\n        var tf = this.tf;\n        if (!this.isEnabled()) {\n            return;\n        }\n        this.emitter.emit('before-reset-page', tf);\n        var pgNb = tf.feature('store').getPageNb();\n        if (pgNb !== '') {\n            this.changePage((pgNb - 1));\n        }\n        this.emitter.emit('after-reset-page', tf, pgNb);\n    }\n\n    /**\n     * Re-set page length value at page re-load\n     */\n    resetPageLength() {\n        var tf = this.tf;\n        if (!this.isEnabled()) {\n            return;\n        }\n        this.emitter.emit('before-reset-page-length', tf);\n        var pglenIndex = tf.feature('store').getPageLength();\n\n        if (pglenIndex !== '') {\n            this.resultsPerPageSlc.options[pglenIndex].selected = true;\n            this.changeResultsPerPage();\n        }\n        this.emitter.emit('after-reset-page-length', tf, pglenIndex);\n    }\n\n    /**\n     * Remove paging feature\n     */\n    destroy() {\n        var tf = this.tf;\n\n        if (!this.initialized) {\n            return;\n        }\n        // btns containers\n        var btnNextSpan = elm(this.prfxBtnNextSpan + tf.id);\n        var btnPrevSpan = elm(this.prfxBtnPrevSpan + tf.id);\n        var btnLastSpan = elm(this.prfxBtnLastSpan + tf.id);\n        var btnFirstSpan = elm(this.prfxBtnFirstSpan + tf.id);\n        //span containing 'Page' text\n        var pgBeforeSpan = elm(this.prfxPgBeforeSpan + tf.id);\n        //span containing 'of' text\n        var pgAfterSpan = elm(this.prfxPgAfterSpan + tf.id);\n        //span containing nb of pages\n        var pgspan = elm(this.prfxPgSpan + tf.id);\n\n        var evt = this.evt;\n\n        if (this.pagingSlc) {\n            if (this.pageSelectorType === SELECT) {\n                removeEvt(this.pagingSlc, 'change', evt.slcPagesChange);\n            }\n            else if (this.pageSelectorType === INPUT) {\n                removeEvt(this.pagingSlc, 'keypress', evt._detectKey);\n            }\n            removeElm(this.pagingSlc);\n        }\n\n        if (btnNextSpan) {\n            removeEvt(btnNextSpan, 'click', evt.next);\n            removeElm(btnNextSpan);\n        }\n\n        if (btnPrevSpan) {\n            removeEvt(btnPrevSpan, 'click', evt.prev);\n            removeElm(btnPrevSpan);\n        }\n\n        if (btnLastSpan) {\n            removeEvt(btnLastSpan, 'click', evt.last);\n            removeElm(btnLastSpan);\n        }\n\n        if (btnFirstSpan) {\n            removeEvt(btnFirstSpan, 'click', evt.first);\n            removeElm(btnFirstSpan);\n        }\n\n        if (pgBeforeSpan) {\n            removeElm(pgBeforeSpan);\n        }\n\n        if (pgAfterSpan) {\n            removeElm(pgAfterSpan);\n        }\n\n        if (pgspan) {\n            removeElm(pgspan);\n        }\n\n        if (this.hasResultsPerPage) {\n            this.removeResultsPerPage();\n        }\n\n        this.emitter.off(['after-filtering'], () => this.resetPagingInfo());\n        this.emitter.off(['change-page'],\n            (tf, pageNumber) => this.setPage(pageNumber));\n        this.emitter.off(['change-page-results'],\n            (tf, pageLength) => this.changeResultsPerPage(pageLength));\n\n        this.pagingSlc = null;\n        this.nbPages = 0;\n        this.disable();\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 494,
@@ -10485,12 +10485,21 @@
     "export": true,
     "importPath": "tablefilter/src/modules/paging.js",
     "importStyle": "{Paging}",
-    "description": null,
-    "lineNumber": 7,
-    "undocument": true,
+    "description": "Paging UI component",
+    "lineNumber": 13,
+    "unknown": [
+      {
+        "tagName": "@export",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@class",
+        "tagValue": "Paging"
+      }
+    ],
     "interface": false,
     "extends": [
-      "src/feature.js~Feature"
+      "Feature"
     ]
   },
   {
@@ -10502,13 +10511,13 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#constructor",
     "access": null,
-    "description": "Pagination component",
-    "lineNumber": 13,
+    "description": "Creates an instance of Paging",
+    "lineNumber": 19,
     "params": [
       {
         "nullable": null,
         "types": [
-          "Object"
+          "TableFilter"
         ],
         "spread": false,
         "optional": false,
@@ -10527,13 +10536,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#btnPageCssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 20,
-    "undocument": true,
+    "description": "Css class for the paging buttons (previous, next, etc.)",
+    "lineNumber": 29,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10545,13 +10556,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#pagingSlc",
     "access": null,
-    "description": null,
-    "lineNumber": 22,
-    "undocument": true,
+    "description": "Main select DOM element",
+    "lineNumber": 35,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "DOMElement"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10563,13 +10576,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#resultsPerPageSlc",
     "access": null,
-    "description": null,
-    "lineNumber": 24,
-    "undocument": true,
+    "description": "Results per page select DOM element",
+    "lineNumber": 41,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "DOMElement"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10581,13 +10596,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#pagingTgtId",
     "access": null,
-    "description": null,
-    "lineNumber": 26,
-    "undocument": true,
+    "description": "ID of custom container element",
+    "lineNumber": 47,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10599,13 +10616,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#pagingLength",
     "access": null,
-    "description": null,
-    "lineNumber": 28,
-    "undocument": true,
+    "description": "Number of rows contained in a page",
+    "lineNumber": 53,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10617,13 +10636,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#resultsPerPageTgtId",
     "access": null,
-    "description": null,
-    "lineNumber": 30,
-    "undocument": true,
+    "description": "ID of custom container element for the results per page selector",
+    "lineNumber": 59,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10635,13 +10656,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#pgSlcCssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 32,
-    "undocument": true,
+    "description": "Css class for the paging select element",
+    "lineNumber": 65,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10653,13 +10676,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#pgInpCssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 34,
-    "undocument": true,
+    "description": "Css class for the paging input element",
+    "lineNumber": 71,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10671,13 +10696,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#resultsPerPage",
     "access": null,
-    "description": null,
-    "lineNumber": 36,
-    "undocument": true,
+    "description": "Label and values for the results per page select, example of usage:\n['Records: ', [10,25,50,100]]",
+    "lineNumber": 78,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Array"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10689,13 +10716,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#hasResultsPerPage",
     "access": null,
-    "description": null,
-    "lineNumber": 38,
-    "undocument": true,
+    "description": "Determines if results per page is configured",
+    "lineNumber": 84,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Boolean"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10707,13 +10736,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#resultsSlcCssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 40,
-    "undocument": true,
+    "description": "Css class for the results per page select",
+    "lineNumber": 90,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10725,13 +10756,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#resultsSpanCssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 42,
-    "undocument": true,
+    "description": "Css class for the label preceding results per page select",
+    "lineNumber": 96,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10742,14 +10775,16 @@
     "name": "startPagingRow",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#startPagingRow",
-    "access": null,
-    "description": null,
-    "lineNumber": 44,
-    "undocument": true,
+    "access": "private",
+    "description": "Index of the first row of current page",
+    "lineNumber": 103,
     "type": {
+      "nullable": null,
       "types": [
-        "number"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10760,14 +10795,16 @@
     "name": "nbPages",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#nbPages",
-    "access": null,
-    "description": null,
-    "lineNumber": 46,
-    "undocument": true,
+    "access": "private",
+    "description": "Total number of pages",
+    "lineNumber": 110,
     "type": {
+      "nullable": null,
       "types": [
-        "number"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10778,14 +10815,16 @@
     "name": "currentPageNb",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#currentPageNb",
-    "access": null,
-    "description": null,
-    "lineNumber": 48,
-    "undocument": true,
+    "access": "private",
+    "description": "Current page number",
+    "lineNumber": 117,
     "type": {
+      "nullable": null,
       "types": [
-        "number"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10797,13 +10836,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#btnNextPageText",
     "access": null,
-    "description": null,
-    "lineNumber": 50,
-    "undocument": true,
+    "description": "Next page button text",
+    "lineNumber": 123,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10815,13 +10856,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#btnPrevPageText",
     "access": null,
-    "description": null,
-    "lineNumber": 52,
-    "undocument": true,
+    "description": "Previous page button text",
+    "lineNumber": 129,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10833,13 +10876,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#btnLastPageText",
     "access": null,
-    "description": null,
-    "lineNumber": 54,
-    "undocument": true,
+    "description": "Last page button text",
+    "lineNumber": 135,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10851,13 +10896,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#btnFirstPageText",
     "access": null,
-    "description": null,
-    "lineNumber": 56,
-    "undocument": true,
+    "description": "First page button text",
+    "lineNumber": 141,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10869,13 +10916,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#btnNextPageHtml",
     "access": null,
-    "description": null,
-    "lineNumber": 58,
-    "undocument": true,
+    "description": "Next page button HTML",
+    "lineNumber": 147,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10887,13 +10936,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#btnPrevPageHtml",
     "access": null,
-    "description": null,
-    "lineNumber": 63,
-    "undocument": true,
+    "description": "Previous page button HTML",
+    "lineNumber": 156,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10905,13 +10956,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#btnFirstPageHtml",
     "access": null,
-    "description": null,
-    "lineNumber": 68,
-    "undocument": true,
+    "description": "First page button HTML",
+    "lineNumber": 165,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10923,13 +10976,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#btnLastPageHtml",
     "access": null,
-    "description": null,
-    "lineNumber": 73,
-    "undocument": true,
+    "description": "Last page button HTML",
+    "lineNumber": 174,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10941,13 +10996,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#pageText",
     "access": null,
-    "description": null,
-    "lineNumber": 78,
-    "undocument": true,
+    "description": "Text preceeding page selector drop-down",
+    "lineNumber": 183,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10959,13 +11016,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#ofText",
     "access": null,
-    "description": null,
-    "lineNumber": 80,
-    "undocument": true,
+    "description": "Text after page selector drop-down",
+    "lineNumber": 189,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10977,13 +11036,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#nbPgSpanCssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 82,
-    "undocument": true,
+    "description": "Css class for the span containing total number of pages",
+    "lineNumber": 195,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -10995,13 +11056,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#hasPagingBtns",
     "access": null,
-    "description": null,
-    "lineNumber": 84,
-    "undocument": true,
+    "description": "Determines if paging buttons are enabled (default: true)",
+    "lineNumber": 201,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Boolean"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11013,13 +11076,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#pageSelectorType",
     "access": null,
-    "description": null,
-    "lineNumber": 86,
-    "undocument": true,
+    "description": "Defines page selector type, two possible values: 'select', 'input'",
+    "lineNumber": 207,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11031,13 +11096,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#onBeforeChangePage",
     "access": null,
-    "description": null,
-    "lineNumber": 88,
-    "undocument": true,
+    "description": "Callback fired before the page is changed",
+    "lineNumber": 213,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11049,13 +11116,15 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#onAfterChangePage",
     "access": null,
-    "description": null,
-    "lineNumber": 91,
-    "undocument": true,
+    "description": "Callback fired after the page is changed",
+    "lineNumber": 220,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11066,14 +11135,16 @@
     "name": "prfxSlcPages",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxSlcPages",
-    "access": null,
-    "description": null,
-    "lineNumber": 95,
-    "undocument": true,
+    "access": "private",
+    "description": "Page select",
+    "lineNumber": 231,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11084,14 +11155,16 @@
     "name": "prfxSlcResults",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxSlcResults",
-    "access": null,
-    "description": null,
-    "lineNumber": 97,
-    "undocument": true,
+    "access": "private",
+    "description": "Results per page select",
+    "lineNumber": 237,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11102,14 +11175,16 @@
     "name": "prfxSlcResultsTxt",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxSlcResultsTxt",
-    "access": null,
-    "description": null,
-    "lineNumber": 99,
-    "undocument": true,
+    "access": "private",
+    "description": "Label preciding results per page select",
+    "lineNumber": 243,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11120,14 +11195,16 @@
     "name": "prfxBtnNextSpan",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxBtnNextSpan",
-    "access": null,
-    "description": null,
-    "lineNumber": 101,
-    "undocument": true,
+    "access": "private",
+    "description": "Span containing next page button",
+    "lineNumber": 249,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11138,14 +11215,16 @@
     "name": "prfxBtnPrevSpan",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxBtnPrevSpan",
-    "access": null,
-    "description": null,
-    "lineNumber": 103,
-    "undocument": true,
+    "access": "private",
+    "description": "Span containing previous page button",
+    "lineNumber": 255,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11156,14 +11235,16 @@
     "name": "prfxBtnLastSpan",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxBtnLastSpan",
-    "access": null,
-    "description": null,
-    "lineNumber": 105,
-    "undocument": true,
+    "access": "private",
+    "description": "Span containing last page button",
+    "lineNumber": 261,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11174,14 +11255,16 @@
     "name": "prfxBtnFirstSpan",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxBtnFirstSpan",
-    "access": null,
-    "description": null,
-    "lineNumber": 107,
-    "undocument": true,
+    "access": "private",
+    "description": "Span containing first page button",
+    "lineNumber": 267,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11192,14 +11275,16 @@
     "name": "prfxBtnNext",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxBtnNext",
-    "access": null,
-    "description": null,
-    "lineNumber": 109,
-    "undocument": true,
+    "access": "private",
+    "description": "Next button",
+    "lineNumber": 273,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11210,14 +11295,16 @@
     "name": "prfxBtnPrev",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxBtnPrev",
-    "access": null,
-    "description": null,
-    "lineNumber": 111,
-    "undocument": true,
+    "access": "private",
+    "description": "Previous button",
+    "lineNumber": 279,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11228,14 +11315,16 @@
     "name": "prfxBtnLast",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxBtnLast",
-    "access": null,
-    "description": null,
-    "lineNumber": 113,
-    "undocument": true,
+    "access": "private",
+    "description": "Last button",
+    "lineNumber": 285,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11246,14 +11335,16 @@
     "name": "prfxBtnFirst",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxBtnFirst",
-    "access": null,
-    "description": null,
-    "lineNumber": 115,
-    "undocument": true,
+    "access": "private",
+    "description": "First button",
+    "lineNumber": 291,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11264,14 +11355,16 @@
     "name": "prfxPgSpan",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxPgSpan",
-    "access": null,
-    "description": null,
-    "lineNumber": 117,
-    "undocument": true,
+    "access": "private",
+    "description": "Span for tot nb pages",
+    "lineNumber": 297,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11282,14 +11375,16 @@
     "name": "prfxPgBeforeSpan",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxPgBeforeSpan",
-    "access": null,
-    "description": null,
-    "lineNumber": 119,
-    "undocument": true,
+    "access": "private",
+    "description": "Span preceding pages select (contains 'Page')",
+    "lineNumber": 303,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11300,14 +11395,16 @@
     "name": "prfxPgAfterSpan",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#prfxPgAfterSpan",
-    "access": null,
-    "description": null,
-    "lineNumber": 121,
-    "undocument": true,
+    "access": "private",
+    "description": "Span following pages select (contains ' of ')",
+    "lineNumber": 309,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11320,7 +11417,7 @@
     "longname": "src/modules/paging.js~Paging#nbPages",
     "access": null,
     "description": null,
-    "lineNumber": 126,
+    "lineNumber": 314,
     "undocument": true,
     "type": {
       "types": [
@@ -11336,14 +11433,16 @@
     "name": "evt",
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#evt",
-    "access": null,
-    "description": null,
-    "lineNumber": 131,
-    "undocument": true,
+    "access": "private",
+    "description": "Paging DOM events handlers",
+    "lineNumber": 322,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -11356,7 +11455,7 @@
     "longname": "src/modules/paging.js~Paging#init",
     "access": null,
     "description": "Initialize DOM elements",
-    "lineNumber": 181,
+    "lineNumber": 372,
     "params": [],
     "generator": false
   },
@@ -11370,7 +11469,7 @@
     "longname": "src/modules/paging.js~Paging#hasResultsPerPage",
     "access": null,
     "description": null,
-    "lineNumber": 194,
+    "lineNumber": 385,
     "undocument": true,
     "type": {
       "types": [
@@ -11388,7 +11487,7 @@
     "longname": "src/modules/paging.js~Paging#pagingLength",
     "access": null,
     "description": null,
-    "lineNumber": 196,
+    "lineNumber": 387,
     "undocument": true,
     "type": {
       "types": [
@@ -11406,7 +11505,7 @@
     "longname": "src/modules/paging.js~Paging#pagingSlc",
     "access": null,
     "description": null,
-    "lineNumber": 321,
+    "lineNumber": 512,
     "undocument": true,
     "type": {
       "types": [
@@ -11424,7 +11523,7 @@
     "longname": "src/modules/paging.js~Paging#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 336,
+    "lineNumber": 527,
     "undocument": true,
     "type": {
       "types": [
@@ -11442,7 +11541,7 @@
     "longname": "src/modules/paging.js~Paging#reset",
     "access": null,
     "description": "Reset paging when filters are already instantiated",
-    "lineNumber": 343,
+    "lineNumber": 534,
     "params": [
       {
         "nullable": null,
@@ -11467,7 +11566,7 @@
     "longname": "src/modules/paging.js~Paging#resetPagingInfo",
     "access": null,
     "description": "Reset paging info from scratch after a filtering process",
-    "lineNumber": 359,
+    "lineNumber": 550,
     "params": [],
     "generator": false
   },
@@ -11481,7 +11580,7 @@
     "longname": "src/modules/paging.js~Paging#startPagingRow",
     "access": null,
     "description": null,
-    "lineNumber": 360,
+    "lineNumber": 551,
     "undocument": true,
     "type": {
       "types": [
@@ -11499,7 +11598,7 @@
     "longname": "src/modules/paging.js~Paging#currentPageNb",
     "access": null,
     "description": null,
-    "lineNumber": 361,
+    "lineNumber": 552,
     "undocument": true,
     "type": {
       "types": [
@@ -11517,7 +11616,7 @@
     "longname": "src/modules/paging.js~Paging#setPagingInfo",
     "access": null,
     "description": "Calculate number of pages based on valid rows\nRefresh paging select according to number of pages",
-    "lineNumber": 370,
+    "lineNumber": 561,
     "params": [
       {
         "nullable": null,
@@ -11542,7 +11641,7 @@
     "longname": "src/modules/paging.js~Paging#nbPages",
     "access": null,
     "description": null,
-    "lineNumber": 379,
+    "lineNumber": 570,
     "undocument": true,
     "type": {
       "types": [
@@ -11560,7 +11659,7 @@
     "longname": "src/modules/paging.js~Paging#groupByPage",
     "access": null,
     "description": "Group table rows by page and display valid rows",
-    "lineNumber": 410,
+    "lineNumber": 601,
     "params": [
       {
         "nullable": null,
@@ -11585,7 +11684,7 @@
     "longname": "src/modules/paging.js~Paging#getPage",
     "access": null,
     "description": "Return the current page number",
-    "lineNumber": 447,
+    "lineNumber": 638,
     "params": [],
     "return": {
       "nullable": null,
@@ -11607,7 +11706,7 @@
     "longname": "src/modules/paging.js~Paging#setPage",
     "access": null,
     "description": "Show page defined by passed argument (string or number):",
-    "lineNumber": 456,
+    "lineNumber": 647,
     "params": [
       {
         "nullable": null,
@@ -11632,7 +11731,7 @@
     "longname": "src/modules/paging.js~Paging#setResultsPerPage",
     "access": null,
     "description": "Generates UI elements for the number of results per page drop-down",
-    "lineNumber": 490,
+    "lineNumber": 681,
     "params": [],
     "generator": false
   },
@@ -11646,7 +11745,7 @@
     "longname": "src/modules/paging.js~Paging#resultsPerPageSlc",
     "access": null,
     "description": null,
-    "lineNumber": 533,
+    "lineNumber": 724,
     "undocument": true,
     "type": {
       "types": [
@@ -11664,7 +11763,7 @@
     "longname": "src/modules/paging.js~Paging#removeResultsPerPage",
     "access": null,
     "description": "Remove number of results per page UI elements",
-    "lineNumber": 539,
+    "lineNumber": 730,
     "params": [],
     "generator": false
   },
@@ -11678,7 +11777,7 @@
     "longname": "src/modules/paging.js~Paging#resultsPerPageSlc",
     "access": null,
     "description": null,
-    "lineNumber": 553,
+    "lineNumber": 744,
     "undocument": true,
     "type": {
       "types": [
@@ -11695,8 +11794,8 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#changePage",
     "access": null,
-    "description": "Change the page according to passed index",
-    "lineNumber": 560,
+    "description": "Change the page based on passed index",
+    "lineNumber": 751,
     "params": [
       {
         "nullable": null,
@@ -11721,7 +11820,7 @@
     "longname": "src/modules/paging.js~Paging#currentPageNb",
     "access": null,
     "description": null,
-    "lineNumber": 577,
+    "lineNumber": 768,
     "undocument": true,
     "type": {
       "types": [
@@ -11739,7 +11838,7 @@
     "longname": "src/modules/paging.js~Paging#startPagingRow",
     "access": null,
     "description": null,
-    "lineNumber": 584,
+    "lineNumber": 775,
     "undocument": true,
     "type": {
       "types": [
@@ -11756,15 +11855,18 @@
     "memberof": "src/modules/paging.js~Paging",
     "longname": "src/modules/paging.js~Paging#changeResultsPerPage",
     "access": null,
-    "description": null,
-    "lineNumber": 597,
-    "undocument": true,
+    "description": "Change the number of results per page based on passed value",
+    "lineNumber": 792,
     "params": [
       {
-        "name": "val",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "val",
+        "description": "The number of results per page"
       }
     ],
     "generator": false
@@ -11779,7 +11881,7 @@
     "longname": "src/modules/paging.js~Paging#onChangeResultsPerPage",
     "access": null,
     "description": "Change rows according to page results drop-down",
-    "lineNumber": 609,
+    "lineNumber": 804,
     "params": [],
     "generator": false
   },
@@ -11793,7 +11895,7 @@
     "longname": "src/modules/paging.js~Paging#pagingLength",
     "access": null,
     "description": null,
-    "lineNumber": 623,
+    "lineNumber": 818,
     "undocument": true,
     "type": {
       "types": [
@@ -11811,7 +11913,7 @@
     "longname": "src/modules/paging.js~Paging#startPagingRow",
     "access": null,
     "description": null,
-    "lineNumber": 624,
+    "lineNumber": 819,
     "undocument": true,
     "type": {
       "types": [
@@ -11829,7 +11931,7 @@
     "longname": "src/modules/paging.js~Paging#startPagingRow",
     "access": null,
     "description": null,
-    "lineNumber": 628,
+    "lineNumber": 823,
     "undocument": true,
     "type": {
       "types": [
@@ -11847,7 +11949,7 @@
     "longname": "src/modules/paging.js~Paging#resetPage",
     "access": null,
     "description": "Re-set page nb at page re-load",
-    "lineNumber": 646,
+    "lineNumber": 841,
     "params": [],
     "generator": false
   },
@@ -11861,7 +11963,7 @@
     "longname": "src/modules/paging.js~Paging#resetPageLength",
     "access": null,
     "description": "Re-set page length value at page re-load",
-    "lineNumber": 662,
+    "lineNumber": 857,
     "params": [],
     "generator": false
   },
@@ -11875,7 +11977,7 @@
     "longname": "src/modules/paging.js~Paging#destroy",
     "access": null,
     "description": "Remove paging feature",
-    "lineNumber": 680,
+    "lineNumber": 875,
     "params": [],
     "generator": false
   },
@@ -11889,7 +11991,7 @@
     "longname": "src/modules/paging.js~Paging#pagingSlc",
     "access": null,
     "description": null,
-    "lineNumber": 752,
+    "lineNumber": 947,
     "undocument": true,
     "type": {
       "types": [
@@ -11907,7 +12009,7 @@
     "longname": "src/modules/paging.js~Paging#nbPages",
     "access": null,
     "description": null,
-    "lineNumber": 753,
+    "lineNumber": 948,
     "undocument": true,
     "type": {
       "types": [
@@ -11925,7 +12027,7 @@
     "longname": "src/modules/paging.js~Paging#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 755,
+    "lineNumber": 950,
     "undocument": true,
     "type": {
       "types": [

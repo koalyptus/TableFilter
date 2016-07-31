@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.2.47 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.2.48 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -121,11 +121,17 @@ import {isArray, isFn, isNull} from &apos;../types&apos;;
 import {addEvt, keyCode, removeEvt} from &apos;../event&apos;;
 import {INPUT, SELECT, NONE, ENTER_KEY} from &apos;../const&apos;;
 
+/**
+ * Paging UI component
+ * @export
+ * @class Paging
+ * @extends {Feature}
+ */
 export class Paging extends Feature {
 
     /**
-     * Pagination component
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of Paging
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, &apos;paging&apos;);
@@ -133,108 +139,290 @@ export class Paging extends Feature {
         // Configuration object
         var f = this.config;
 
-        //css class for paging buttons (previous,next,etc.)
+        /**
+         * Css class for the paging buttons (previous, next, etc.)
+         * @type {String}
+         */
         this.btnPageCssClass = f.paging_btn_css_class || &apos;pgInp&apos;;
-        //stores paging select element
+
+         /**
+         * Main select DOM element
+         * @type {DOMElement}
+         */
         this.pagingSlc = null;
-        //results per page select element
+
+        /**
+         * Results per page select DOM element
+         * @type {DOMElement}
+         */
         this.resultsPerPageSlc = null;
-        //id of container element
+
+        /**
+         * ID of custom container element
+         * @type {String}
+         */
         this.pagingTgtId = f.paging_target_id || null;
-        //defines table paging length
+
+        /**
+         * Number of rows contained in a page
+         * @type {Number}
+         */
         this.pagingLength = !isNaN(f.paging_length) ? f.paging_length : 10;
-        //id of container element
+
+        /**
+         * ID of custom container element for the results per page selector
+         * @type {String}
+         */
         this.resultsPerPageTgtId = f.results_per_page_target_id || null;
-        //css class for paging select element
+
+        /**
+         * Css class for the paging select element
+         * @type {String}
+         */
         this.pgSlcCssClass = f.paging_slc_css_class || &apos;pgSlc&apos;;
-        //css class for paging input element
+
+        /**
+         * Css class for the paging input element
+         * @type {String}
+         */
         this.pgInpCssClass = f.paging_inp_css_class || &apos;pgNbInp&apos;;
-        //stores results per page text and values
+
+        /**
+         * Label and values for the results per page select, example of usage:
+         * [&apos;Records: &apos;, [10,25,50,100]]
+         * @type {Array}
+         */
         this.resultsPerPage = f.results_per_page || null;
-        //enables/disables results per page drop-down
+
+        /**
+         * Determines if results per page is configured
+         * @type {Boolean}
+         */
         this.hasResultsPerPage = isArray(this.resultsPerPage);
-        //defines css class for results per page select
+
+        /**
+         * Css class for the results per page select
+         * @type {String}
+         */
         this.resultsSlcCssClass = f.results_slc_css_class || &apos;rspg&apos;;
-        //css class for label preceding results per page select
+
+        /**
+         * Css class for the label preceding results per page select
+         * @type {String}
+         */
         this.resultsSpanCssClass = f.results_span_css_class || &apos;rspgSpan&apos;;
-        //1st row index of current page
+
+        /**
+         * Index of the first row of current page
+         * @type {Number}
+         * @private
+         */
         this.startPagingRow = 0;
-        //total nb of pages
+
+        /**
+         * Total number of pages
+         * @type {Number}
+         * @private
+         */
         this.nbPages = 0;
-        //current page nb
+
+        /**
+         * Current page number
+         * @type {Number}
+         * @private
+         */
         this.currentPageNb = 1;
-        //defines next page button text
+
+        /**
+         * Next page button text
+         * @type {String}
+         */
         this.btnNextPageText = f.btn_next_page_text || &apos;&gt;&apos;;
-        //defines previous page button text
+
+        /**
+         * Previous page button text
+         * @type {String}
+         */
         this.btnPrevPageText = f.btn_prev_page_text || &apos;&lt;&apos;;
-        //defines last page button text
+
+        /**
+         * Last page button text
+         * @type {String}
+         */
         this.btnLastPageText = f.btn_last_page_text || &apos;&gt;|&apos;;
-        //defines first page button text
+
+        /**
+         * First page button text
+         * @type {String}
+         */
         this.btnFirstPageText = f.btn_first_page_text || &apos;|&lt;&apos;;
-        //defines next page button html
+
+        /**
+         * Next page button HTML
+         * @type {String}
+         */
         this.btnNextPageHtml = f.btn_next_page_html ||
             (!tf.enableIcons ? null :
                 &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.btnPageCssClass +
                 &apos; nextPage&quot; title=&quot;Next page&quot; /&gt;&apos;);
-        //defines previous page button html
+
+        /**
+         * Previous page button HTML
+         * @type {String}
+         */
         this.btnPrevPageHtml = f.btn_prev_page_html ||
             (!tf.enableIcons ? null :
                 &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.btnPageCssClass +
                 &apos; previousPage&quot; title=&quot;Previous page&quot; /&gt;&apos;);
-        //defines last page button html
+
+        /**
+         * First page button HTML
+         * @type {String}
+         */
         this.btnFirstPageHtml = f.btn_first_page_html ||
             (!tf.enableIcons ? null :
                 &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.btnPageCssClass +
                 &apos; firstPage&quot; title=&quot;First page&quot; /&gt;&apos;);
-        //defines previous page button html
+
+        /**
+         * Last page button HTML
+         * @type {String}
+         */
         this.btnLastPageHtml = f.btn_last_page_html ||
             (!tf.enableIcons ? null :
                 &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.btnPageCssClass +
                 &apos; lastPage&quot; title=&quot;Last page&quot; /&gt;&apos;);
-        //defines text preceeding page selector drop-down
+
+        /**
+         * Text preceeding page selector drop-down
+         * @type {String}
+         */
         this.pageText = f.page_text || &apos; Page &apos;;
-        //defines text after page selector drop-down
+
+        /**
+         * Text after page selector drop-down
+         * @type {String}
+         */
         this.ofText = f.of_text || &apos; of &apos;;
-        //css class for span containing tot nb of pages
+
+        /**
+         * Css class for the span containing total number of pages
+         * @type {String}
+         */
         this.nbPgSpanCssClass = f.nb_pages_css_class || &apos;nbpg&apos;;
-        //enables/disables paging buttons
+
+        /**
+         * Determines if paging buttons are enabled (default: true)
+         * @type {Boolean}
+         */
         this.hasPagingBtns = f.paging_btns === false ? false : true;
-        //defines previous page button html
+
+        /**
+         * Defines page selector type, two possible values: &apos;select&apos;, &apos;input&apos;
+         * @type {String}
+         */
         this.pageSelectorType = f.page_selector_type || SELECT;
-        //calls function before page is changed
+
+        /**
+         * Callback fired before the page is changed
+         * @type {Function}
+         */
         this.onBeforeChangePage = isFn(f.on_before_change_page) ?
             f.on_before_change_page : null;
-        //calls function before page is changed
+
+        /**
+         * Callback fired after the page is changed
+         * @type {Function}
+         */
         this.onAfterChangePage = isFn(f.on_after_change_page) ?
             f.on_after_change_page : null;
 
-        //pages select
+        /**
+         * Element IDs prefixes
+         */
+        /**
+         * Page select
+         * @type {String}
+         * @private
+         */
         this.prfxSlcPages = &apos;slcPages_&apos;;
-        //results per page select
+        /**
+         * Results per page select
+         * @type {String}
+         * @private
+         */
         this.prfxSlcResults = &apos;slcResults_&apos;;
-        //label preciding results per page select
+        /**
+         * Label preciding results per page select
+         * @type {String}
+         * @private
+         */
         this.prfxSlcResultsTxt = &apos;slcResultsTxt_&apos;;
-        //span containing next page button
+        /**
+         * Span containing next page button
+         * @type {String}
+         * @private
+         */
         this.prfxBtnNextSpan = &apos;btnNextSpan_&apos;;
-        //span containing previous page button
+        /**
+         * Span containing previous page button
+         * @type {String}
+         * @private
+         */
         this.prfxBtnPrevSpan = &apos;btnPrevSpan_&apos;;
-        //span containing last page button
+        /**
+         * Span containing last page button
+         * @type {String}
+         * @private
+         */
         this.prfxBtnLastSpan = &apos;btnLastSpan_&apos;;
-        //span containing first page button
+        /**
+         * Span containing first page button
+         * @type {String}
+         * @private
+         */
         this.prfxBtnFirstSpan = &apos;btnFirstSpan_&apos;;
-        //next button
+        /**
+         * Next button
+         * @type {String}
+         * @private
+         */
         this.prfxBtnNext = &apos;btnNext_&apos;;
-        //previous button
+        /**
+         * Previous button
+         * @type {String}
+         * @private
+         */
         this.prfxBtnPrev = &apos;btnPrev_&apos;;
-        //last button
+        /**
+         * Last button
+         * @type {String}
+         * @private
+         */
         this.prfxBtnLast = &apos;btnLast_&apos;;
-        //first button
+        /**
+         * First button
+         * @type {String}
+         * @private
+         */
         this.prfxBtnFirst = &apos;btnFirst_&apos;;
-        //span for tot nb pages
+        /**
+         * Span for tot nb pages
+         * @type {String}
+         * @private
+         */
         this.prfxPgSpan = &apos;pgspan_&apos;;
-        //span preceding pages select (contains &apos;Page&apos;)
+        /**
+         * Span preceding pages select (contains &apos;Page&apos;)
+         * @type {String}
+         * @private
+         */
         this.prfxPgBeforeSpan = &apos;pgbeforespan_&apos;;
-        //span following pages select (contains &apos; of &apos;)
+        /**
+         * Span following pages select (contains &apos; of &apos;)
+         * @type {String}
+         * @private
+         */
         this.prfxPgAfterSpan = &apos;pgafterspan_&apos;;
 
         var start_row = tf.refRow;
@@ -242,9 +430,12 @@ export class Paging extends Feature {
         //calculates page nb
         this.nbPages = Math.ceil((nrows - start_row) / this.pagingLength);
 
-        //Paging elements events
         var o = this;
-        // Paging DOM events
+        /**
+         * Paging DOM events handlers
+         * @type {String}
+         * @private
+         */
         this.evt = {
             slcIndex() {
                 return (o.pageSelectorType === SELECT) ?
@@ -671,8 +862,8 @@ export class Paging extends Feature {
     }
 
     /**
-     * Change the page according to passed index
-     * @param  {Number} index Index of the page (0-n)
+     * Change the page based on passed index
+     * @param {Number} index Index of the page (0-n)
      */
     changePage(index) {
         var tf = this.tf;
@@ -711,6 +902,10 @@ export class Paging extends Feature {
         this.emitter.emit(&apos;after-page-change&apos;, tf, (index + 1));
     }
 
+    /**
+     * Change the number of results per page based on passed value
+     * @param {String} val The number of results per page
+     */
     changeResultsPerPage(val) {
         if (!this.isEnabled() || isNaN(val)) {
             return;

@@ -2718,22 +2718,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/paging.js~paging#currentpagenb",
-    "class/src/modules/paging.js~Paging.html#instance-member-currentPageNb",
-    "src/modules/paging.js~Paging#currentPageNb",
-    "member"
-  ],
-  [
     "src/modules/paging.js~paging#destroy",
     "class/src/modules/paging.js~Paging.html#instance-method-destroy",
     "src/modules/paging.js~Paging#destroy",
     "method"
-  ],
-  [
-    "src/modules/paging.js~paging#evt",
-    "class/src/modules/paging.js~Paging.html#instance-member-evt",
-    "src/modules/paging.js~Paging#evt",
-    "member"
   ],
   [
     "src/modules/paging.js~paging#getpage",
@@ -2769,12 +2757,6 @@ window.esdocSearchIndex = [
     "src/modules/paging.js~paging#initialized",
     "class/src/modules/paging.js~Paging.html#instance-member-initialized",
     "src/modules/paging.js~Paging#initialized",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#nbpages",
-    "class/src/modules/paging.js~Paging.html#instance-member-nbPages",
-    "src/modules/paging.js~Paging#nbPages",
     "member"
   ],
   [
@@ -2847,90 +2829,6 @@ window.esdocSearchIndex = [
     "src/modules/paging.js~paging#pgslccssclass",
     "class/src/modules/paging.js~Paging.html#instance-member-pgSlcCssClass",
     "src/modules/paging.js~Paging#pgSlcCssClass",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxbtnfirst",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxBtnFirst",
-    "src/modules/paging.js~Paging#prfxBtnFirst",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxbtnfirstspan",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxBtnFirstSpan",
-    "src/modules/paging.js~Paging#prfxBtnFirstSpan",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxbtnlast",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxBtnLast",
-    "src/modules/paging.js~Paging#prfxBtnLast",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxbtnlastspan",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxBtnLastSpan",
-    "src/modules/paging.js~Paging#prfxBtnLastSpan",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxbtnnext",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxBtnNext",
-    "src/modules/paging.js~Paging#prfxBtnNext",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxbtnnextspan",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxBtnNextSpan",
-    "src/modules/paging.js~Paging#prfxBtnNextSpan",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxbtnprev",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxBtnPrev",
-    "src/modules/paging.js~Paging#prfxBtnPrev",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxbtnprevspan",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxBtnPrevSpan",
-    "src/modules/paging.js~Paging#prfxBtnPrevSpan",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxpgafterspan",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxPgAfterSpan",
-    "src/modules/paging.js~Paging#prfxPgAfterSpan",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxpgbeforespan",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxPgBeforeSpan",
-    "src/modules/paging.js~Paging#prfxPgBeforeSpan",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxpgspan",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxPgSpan",
-    "src/modules/paging.js~Paging#prfxPgSpan",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxslcpages",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxSlcPages",
-    "src/modules/paging.js~Paging#prfxSlcPages",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxslcresults",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxSlcResults",
-    "src/modules/paging.js~Paging#prfxSlcResults",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#prfxslcresultstxt",
-    "class/src/modules/paging.js~Paging.html#instance-member-prfxSlcResultsTxt",
-    "src/modules/paging.js~Paging#prfxSlcResultsTxt",
     "member"
   ],
   [
@@ -3010,12 +2908,6 @@ window.esdocSearchIndex = [
     "class/src/modules/paging.js~Paging.html#instance-method-setResultsPerPage",
     "src/modules/paging.js~Paging#setResultsPerPage",
     "method"
-  ],
-  [
-    "src/modules/paging.js~paging#startpagingrow",
-    "class/src/modules/paging.js~Paging.html#instance-member-startPagingRow",
-    "src/modules/paging.js~Paging#startPagingRow",
-    "member"
   ],
   [
     "src/modules/popupfilter.js",

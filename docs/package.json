@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.2.47",
+  "version": "0.2.48",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -46,7 +46,7 @@
     "grunt-eslint": "19.0.0",
     "grunt-gh-pages": "^1.0.0",
     "grunt-string-replace": "^1.2.1",
-    "grunt-webpack": "^1.0.8",
+    "grunt-webpack": "^1.0.14",
     "script-loader": "^0.7.0",
     "string-replace-webpack-plugin": "^0.0.3",
     "webpack": "^1.13.1",
