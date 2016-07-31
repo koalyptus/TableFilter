@@ -60,28 +60,28 @@ export class NoResults extends Feature {
         this.cont = null;
 
         /**
-         * Callback fired before the  message is displayed
+         * Callback fired before the message is displayed
          * @type {Function}
          */
         this.onBeforeShow = isFn(f.on_before_show_msg) ?
             f.on_before_show_msg : null;
 
         /**
-         * Callback fired after the  message is displayed
+         * Callback fired after the message is displayed
          * @type {Function}
          */
         this.onAfterShow = isFn(f.on_after_show_msg) ?
             f.on_after_show_msg : null;
 
         /**
-         * Callback fired before the  message is hidden
+         * Callback fired before the message is hidden
          * @type {Function}
          */
         this.onBeforeHide = isFn(f.on_before_hide_msg) ?
             f.on_before_hide_msg : null;
 
         /**
-         * Callback fired after the  message is hidden
+         * Callback fired after the message is hidden
          * @type {Function}
          */
         this.onAfterHide = isFn(f.on_after_hide_msg) ?
@@ -188,12 +188,13 @@ export class NoResults extends Feature {
         if (!this.initialized || this.isExternal || !this.isEnabled()) {
             return;
         }
-        if (this.tf.gridLayout) {
-            let gridLayout = this.tf.feature('gridLayout');
+        let tf = this.tf;
+        if (tf.gridLayout) {
+            let gridLayout = tf.feature('gridLayout');
             this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';
         } else {
-            this.cont.style.width =
-                this.tf.tbl.tBodies[0].clientWidth + 'px';
+            this.cont.style.width = (tf.tbl.tHead ? tf.tbl.tHead.clientWidth :
+                tf.tbl.tBodies[0].clientWidth) + 'px';
         }
     }
 
