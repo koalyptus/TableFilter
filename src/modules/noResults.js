@@ -188,12 +188,12 @@ export class NoResults extends Feature {
         if (!this.initialized || this.isExternal || !this.isEnabled()) {
             return;
         }
-        if (this.tf.gridLayout) {
-            let gridLayout = this.tf.feature('gridLayout');
+        let tf = this.tf;
+        if (tf.gridLayout) {
+            let gridLayout = tf.feature('gridLayout');
             this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';
         } else {
-            this.cont.style.width =
-                this.tf.tbl.tBodies[0].clientWidth + 'px';
+            this.cont.style.width = tf.tbl.tHead.clientWidth + 'px';
         }
     }
 
