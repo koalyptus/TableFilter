@@ -42,7 +42,7 @@
     "grunt-contrib-qunit": "^1.1.0",
     "grunt-contrib-stylus": "^1.2.0",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-esdoc": "^0.0.3",
+    "grunt-esdoc": "^0.0.4",
     "grunt-eslint": "19.0.0",
     "grunt-gh-pages": "^1.0.0",
     "grunt-string-replace": "^1.2.1",
