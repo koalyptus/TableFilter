@@ -2916,6 +2916,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/modules/popupfilter.js~popupfilter#activeiconpath",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-activeIconPath",
+    "src/modules/popupFilter.js~PopupFilter#activeIconPath",
+    "member"
+  ],
+  [
+    "src/modules/popupfilter.js~popupfilter#adjusttocontainer",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-adjustToContainer",
+    "src/modules/popupFilter.js~PopupFilter#adjustToContainer",
+    "member"
+  ],
+  [
     "src/modules/popupfilter.js~popupfilter#build",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-build",
     "src/modules/popupFilter.js~PopupFilter#build",
@@ -2952,10 +2964,28 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/popupfilter.js~popupfilter#containercssclass",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-containerCssClass",
+    "src/modules/popupFilter.js~PopupFilter#containerCssClass",
+    "member"
+  ],
+  [
     "src/modules/popupfilter.js~popupfilter#destroy",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-destroy",
     "src/modules/popupFilter.js~PopupFilter#destroy",
     "method"
+  ],
+  [
+    "src/modules/popupfilter.js~popupfilter#iconhtml",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-iconHtml",
+    "src/modules/popupFilter.js~PopupFilter#iconHtml",
+    "member"
+  ],
+  [
+    "src/modules/popupfilter.js~popupfilter#iconpath",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-iconPath",
+    "src/modules/popupFilter.js~PopupFilter#iconPath",
+    "member"
   ],
   [
     "src/modules/popupfilter.js~popupfilter#init",
@@ -2970,99 +3000,27 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/popupfilter.js~popupfilter#onafterpopupclose",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onAfterPopUpClose",
-    "src/modules/popupFilter.js~PopupFilter#onAfterPopUpClose",
+    "src/modules/popupfilter.js~popupfilter#onafterclose",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onAfterClose",
+    "src/modules/popupFilter.js~PopupFilter#onAfterClose",
     "member"
   ],
   [
-    "src/modules/popupfilter.js~popupfilter#onafterpopupopen",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onAfterPopUpOpen",
-    "src/modules/popupFilter.js~PopupFilter#onAfterPopUpOpen",
+    "src/modules/popupfilter.js~popupfilter#onafteropen",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onAfterOpen",
+    "src/modules/popupFilter.js~PopupFilter#onAfterOpen",
     "member"
   ],
   [
-    "src/modules/popupfilter.js~popupfilter#onbeforepopupclose",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onBeforePopUpClose",
-    "src/modules/popupFilter.js~PopupFilter#onBeforePopUpClose",
+    "src/modules/popupfilter.js~popupfilter#onbeforeclose",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onBeforeClose",
+    "src/modules/popupFilter.js~PopupFilter#onBeforeClose",
     "member"
   ],
   [
-    "src/modules/popupfilter.js~popupfilter#onbeforepopupopen",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onBeforePopUpOpen",
-    "src/modules/popupFilter.js~PopupFilter#onBeforePopUpOpen",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#onclick",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-onClick",
-    "src/modules/popupFilter.js~PopupFilter#onClick",
-    "method"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#popupdivcssclass",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-popUpDivCssClass",
-    "src/modules/popupFilter.js~PopupFilter#popUpDivCssClass",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#popupfltadjusttocontainer",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-popUpFltAdjustToContainer",
-    "src/modules/popupFilter.js~PopupFilter#popUpFltAdjustToContainer",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#popupfltelmcache",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-popUpFltElmCache",
-    "src/modules/popupFilter.js~PopupFilter#popUpFltElmCache",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#popupfltelms",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-popUpFltElms",
-    "src/modules/popupFilter.js~PopupFilter#popUpFltElms",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#popupfltimgs",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-popUpFltImgs",
-    "src/modules/popupFilter.js~PopupFilter#popUpFltImgs",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#popupfltspans",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-popUpFltSpans",
-    "src/modules/popupFilter.js~PopupFilter#popUpFltSpans",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#popupimgflt",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-popUpImgFlt",
-    "src/modules/popupFilter.js~PopupFilter#popUpImgFlt",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#popupimgfltactive",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-popUpImgFltActive",
-    "src/modules/popupFilter.js~PopupFilter#popUpImgFltActive",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#popupimgflthtml",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-popUpImgFltHtml",
-    "src/modules/popupFilter.js~PopupFilter#popUpImgFltHtml",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#prfxpopupdiv",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-prfxPopUpDiv",
-    "src/modules/popupFilter.js~PopupFilter#prfxPopUpDiv",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#prfxpopupspan",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-prfxPopUpSpan",
-    "src/modules/popupFilter.js~PopupFilter#prfxPopUpSpan",
+    "src/modules/popupfilter.js~popupfilter#onbeforeopen",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onBeforeOpen",
+    "src/modules/popupFilter.js~PopupFilter#onBeforeOpen",
     "member"
   ],
   [

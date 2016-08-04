@@ -1,7 +1,7 @@
 {
-  "coverage": "52.09%",
-  "expectCount": 739,
-  "actualCount": 385,
+  "coverage": "55.05%",
+  "expectCount": 732,
+  "actualCount": 403,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -54,24 +54,18 @@
     },
     "src/modules/alternateRows.js": {
       "expectCount": 9,
-      "actualCount": 8,
-      "undocumentLines": [
-        47
-      ]
+      "actualCount": 9,
+      "undocumentLines": []
     },
     "src/modules/checkList.js": {
       "expectCount": 21,
-      "actualCount": 20,
-      "undocumentLines": [
-        190
-      ]
+      "actualCount": 21,
+      "undocumentLines": []
     },
     "src/modules/clearButton.js": {
       "expectCount": 9,
-      "actualCount": 8,
-      "undocumentLines": [
-        104
-      ]
+      "actualCount": 9,
+      "undocumentLines": []
     },
     "src/extensions/colOps/colOps.js": {
       "expectCount": 9,
@@ -141,10 +135,8 @@
     },
     "src/modules/dropdown.js": {
       "expectCount": 13,
-      "actualCount": 12,
-      "undocumentLines": [
-        151
-      ]
+      "actualCount": 13,
+      "undocumentLines": []
     },
     "src/emitter.js": {
       "expectCount": 6,
@@ -333,11 +325,10 @@
     },
     "src/modules/gridLayout.js": {
       "expectCount": 20,
-      "actualCount": 15,
+      "actualCount": 16,
       "undocumentLines": [
         212,
         207,
-        301,
         187,
         179
       ]
@@ -359,10 +350,8 @@
     },
     "src/modules/loader.js": {
       "expectCount": 14,
-      "actualCount": 13,
-      "undocumentLines": [
-        138
-      ]
+      "actualCount": 14,
+      "undocumentLines": []
     },
     "src/modules/noResults.js": {
       "expectCount": 17,
@@ -371,34 +360,13 @@
     },
     "src/modules/paging.js": {
       "expectCount": 45,
-      "actualCount": 44,
-      "undocumentLines": [
-        527
-      ]
+      "actualCount": 45,
+      "undocumentLines": []
     },
     "src/modules/popupFilter.js": {
-      "expectCount": 28,
-      "actualCount": 10,
-      "undocumentLines": [
-        7,
-        118,
-        43,
-        37,
-        40,
-        34,
-        60,
-        32,
-        52,
-        241,
-        51,
-        49,
-        47,
-        24,
-        27,
-        29,
-        57,
-        55
-      ]
+      "expectCount": 21,
+      "actualCount": 21,
+      "undocumentLines": []
     },
     "src/modules/rowsCounter.js": {
       "expectCount": 18,
