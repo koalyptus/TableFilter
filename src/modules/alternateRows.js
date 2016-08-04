@@ -44,6 +44,9 @@ export class AlternateRows extends Feature {
                 this.processRow(rowIndex, arrIndex, isValid));
         this.emitter.on(['column-sorted'], () => this.processAll());
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 

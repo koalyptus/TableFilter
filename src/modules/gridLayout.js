@@ -298,6 +298,9 @@ export class GridLayout extends Feature {
             tbl.style.width = this.headTbl.clientWidth + 'px';
         }
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 

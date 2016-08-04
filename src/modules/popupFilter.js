@@ -4,11 +4,17 @@ import {createElm, removeElm} from '../dom';
 import {addEvt, cancelEvt, stopEvt, targetEvt} from '../event';
 import {INPUT, NONE} from '../const';
 
+/**
+ * Pop-up filter component
+ * @export
+ * @class PopupFilter
+ * @extends {Feature}
+ */
 export class PopupFilter extends Feature {
 
     /**
-     * Pop-up filter component
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of PopupFilter
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'popupFilters');
@@ -20,43 +26,114 @@ export class PopupFilter extends Feature {
         tf.isExternalFlt = true;
         tf.externalFltTgtIds = [];
 
-        //filter icon path
+        /**
+         * Filter icon path
+         * @type {String}
+         */
         this.popUpImgFlt = f.popup_filters_image ||
             tf.themesPath + 'icn_filter.gif';
-        //active filter icon path
+
+        /**
+         * Active filter icon path
+         * @type {string}
+         */
         this.popUpImgFltActive = f.popup_filters_image_active ||
             tf.themesPath + 'icn_filterActive.gif';
+
+        /**
+         * HTML for the filter icon
+         * @type {string}
+         */
         this.popUpImgFltHtml = f.popup_filters_image_html ||
             '<img src="' + this.popUpImgFlt + '" alt="Column filter" />';
-        //defines css class for popup div containing filter
+
+        /**
+         * Css class assigned to filter container element
+         * @type {String}
+         */
         this.popUpDivCssClass = f.popup_div_css_class || 'popUpFilter';
-        //callback function before popup filtes is opened
+
+        /**
+         * Callback fired before a popup filter is opened
+         * @type {Function}
+         */
         this.onBeforePopUpOpen = isFn(f.on_before_popup_filter_open) ?
             f.on_before_popup_filter_open : null;
-        //callback function after popup filtes is opened
+
+        /**
+         * Callback fired after a popup filter is opened
+         * @type {Function}
+         */
         this.onAfterPopUpOpen = isFn(f.on_after_popup_filter_open) ?
             f.on_after_popup_filter_open : null;
-        //callback function before popup filtes is closed
+
+        /**
+         * Callback fired before a popup filter is closed
+         * @type {Function}
+         */
         this.onBeforePopUpClose = isFn(f.on_before_popup_filter_close) ?
             f.on_before_popup_filter_close : null;
-        //callback function after popup filtes is closed
+
+        /**
+         * Callback fired after a popup filter is closed
+         * @type {Function}
+         */
         this.onAfterPopUpClose = isFn(f.on_after_popup_filter_close) ?
             f.on_after_popup_filter_close : null;
 
-        //stores filters spans
+        /**
+         * Collection of filters spans
+         * @type {Array}
+         * @private
+         */
         this.popUpFltSpans = [];
-        //stores filters icons
+
+        /**
+         * Collection of filters icons
+         * @type {Array}
+         * @private
+         */
         this.popUpFltImgs = [];
-        //stores filters containers
+
+        /**
+         * Collection of filters icons cached after pop-up filters are removed
+         * @type {Array}
+         * @private
+         */
+        this.popUpFltElmCache = null;
+
+        /**
+         * Collection of filters containers
+         * @type {Array}
+         * @private
+         */
         this.popUpFltElms = this.popUpFltElmCache || [];
+
+        /**
+         * Ensure filter's container element width matches column width
+         * @type {Boolean}
+         */
         this.popUpFltAdjustToContainer = true;
 
-        //id prefix for pop-up filter span
+        /**
+         * Prefix for pop-up filter span ID
+         * @type {String}
+         * @private
+         */
         this.prfxPopUpSpan = 'popUpSpan_';
-        //id prefix for pop-up div containing filter
+
+        /**
+         * Prefix for pop-up filter container ID
+         * @type {String}
+         * @private
+         */
         this.prfxPopUpDiv = 'popUpDiv_';
     }
 
+    /**
+     * Click event handler for pop-up filter icon
+     * @private
+     */
     onClick(evt) {
         let elm = targetEvt(evt).parentNode,
             colIndex = parseInt(elm.getAttribute('ci'), 10);
@@ -115,6 +192,9 @@ export class PopupFilter extends Feature {
         this.emitter.on(['before-filter-init'],
             (tf, colIndex) => this.build(colIndex));
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 
