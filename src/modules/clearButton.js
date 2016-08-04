@@ -101,6 +101,9 @@ export class ClearButton extends Feature {
         }
         this.element = resetspan.firstChild;
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 

@@ -14,8 +14,8 @@ var popupFilter = tf.feature('popupFilter');
 module('Sanity checks');
 test('Pop-up filter component', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
-    deepEqual(popupFilter.popUpFltElms instanceof Array,
-        true, 'Type of popUpFltElms property');
+    deepEqual(popupFilter.fltElms instanceof Array,
+        true, 'Type of fltElms property');
     deepEqual(tf.headersRow, 1, 'Headers row index');
     // issue 99: getHeadersText for pick-list filter types
     deepEqual(
@@ -34,9 +34,9 @@ module('UI elements');
 test('Pop-up filter UI elements', function() {
     var flt1 = id(tf.fltIds[3]);
     var flt2 = id(tf.fltIds[2]);
-    var fltIcn1 = popupFilter.popUpFltImgs[3];
-    var fltIcn2 = popupFilter.popUpFltImgs[2];
-    var fltIcn3 = popupFilter.popUpFltImgs[4];
+    var fltIcn1 = popupFilter.fltIcons[3];
+    var fltIcn2 = popupFilter.fltIcons[2];
+    var fltIcn3 = popupFilter.fltIcons[4];
 
     notEqual(flt1, null, 'Filter element exists');
     notEqual(flt2, null, 'Filter element exists');
@@ -47,7 +47,7 @@ test('Pop-up filter UI elements', function() {
 });
 
 test('Pop-up filter state after filtering', function(){
-    var fltIcn0 = popupFilter.popUpFltImgs[0];
+    var fltIcn0 = popupFilter.fltIcons[0];
     tf.setFilterValue(0, 'syd');
     tf.filter();
 
@@ -56,10 +56,10 @@ test('Pop-up filter state after filtering', function(){
 });
 
 test('Pop-up filter state after clearing', function(){
-    var fltIcn0 = popupFilter.popUpFltImgs[0];
-    var fltIcn1 = popupFilter.popUpFltImgs[1];
-    var fltIcn2 = popupFilter.popUpFltImgs[2];
-    var fltIcn3 = popupFilter.popUpFltImgs[3];
+    var fltIcn0 = popupFilter.fltIcons[0];
+    var fltIcn1 = popupFilter.fltIcons[1];
+    var fltIcn2 = popupFilter.fltIcons[2];
+    var fltIcn3 = popupFilter.fltIcons[3];
     tf.clearFilters();
 
     deepEqual(fltIcn0.src.indexOf('icn_filterActive') === -1,
@@ -74,14 +74,14 @@ test('Pop-up filter state after clearing', function(){
 
 test('TableFilter removed', function() {
     tf.destroy();
-    var fltIcn1 = popupFilter.popUpFltImgs[3];
+    var fltIcn1 = popupFilter.fltIcons[3];
     deepEqual(fltIcn1, undefined, 'Filter icon is removed');
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
 });
 
 test('TableFilter re-initialised', function() {
     tf.init();
-    var fltIcn1 = popupFilter.popUpFltImgs[3];
+    var fltIcn1 = popupFilter.fltIcons[3];
     deepEqual(fltIcn1.nodeName, 'IMG', 'Filter icon exists');
     deepEqual(id(tf.fltIds[3]).nodeName, 'SELECT', 'Filter exists');
 });
@@ -101,8 +101,8 @@ test('Re-instantiated with grid-layout', function() {
     tf.init();
 
     notEqual(popupFilter, null, 'PopupFilter instanciated');
-    deepEqual(popupFilter.popUpFltElms instanceof Array,
-        true, 'Type of popUpFltElms property');
+    deepEqual(popupFilter.fltElms instanceof Array,
+        true, 'Type of fltElms property');
     deepEqual(tf.headersRow, 0, 'Headers row index');
     // issue 99: getHeadersText for pick-list filter types
     deepEqual(
@@ -121,9 +121,9 @@ test('Pop-up filter UI elements with grid-layout', function() {
     var popupFilter = tf.feature('popupFilter');
     var flt1 = id(tf.fltIds[3]);
     var flt2 = id(tf.fltIds[2]);
-    var fltIcn1 = popupFilter.popUpFltImgs[3];
-    var fltIcn2 = popupFilter.popUpFltImgs[2];
-    var fltIcn3 = popupFilter.popUpFltImgs[4];
+    var fltIcn1 = popupFilter.fltIcons[3];
+    var fltIcn2 = popupFilter.fltIcons[2];
+    var fltIcn3 = popupFilter.fltIcons[4];
 
     notEqual(flt1, null, 'Filter element exists');
     notEqual(flt2, null, 'Filter element exists');
@@ -135,7 +135,7 @@ test('Pop-up filter UI elements with grid-layout', function() {
 
 test('Pop-up filter state after filtering', function(){
     var popupFilter = tf.feature('popupFilter');
-    var fltIcn0 = popupFilter.popUpFltImgs[0];
+    var fltIcn0 = popupFilter.fltIcons[0];
     tf.setFilterValue(0, 'syd');
     tf.filter();
 
@@ -145,10 +145,10 @@ test('Pop-up filter state after filtering', function(){
 
 test('Pop-up filter state after clearing', function(){
     var popupFilter = tf.feature('popupFilter');
-    var fltIcn0 = popupFilter.popUpFltImgs[0];
-    var fltIcn1 = popupFilter.popUpFltImgs[1];
-    var fltIcn2 = popupFilter.popUpFltImgs[2];
-    var fltIcn3 = popupFilter.popUpFltImgs[3];
+    var fltIcn0 = popupFilter.fltIcons[0];
+    var fltIcn1 = popupFilter.fltIcons[1];
+    var fltIcn2 = popupFilter.fltIcons[2];
+    var fltIcn3 = popupFilter.fltIcons[3];
     tf.clearFilters();
 
     deepEqual(fltIcn0.src.indexOf('icn_filterActive') === -1,
@@ -185,7 +185,7 @@ test('Properties', function() {
 module('Tear-down');
 test('TableFilter removed', function() {
     tf.destroy();
-    var fltIcn1 = popupFilter.popUpFltImgs[3];
+    var fltIcn1 = popupFilter.fltIcons[3];
     deepEqual(fltIcn1, undefined, 'Filter icon is removed');
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
     deepEqual(tf.isInitialized(), false, 'Filters removed');

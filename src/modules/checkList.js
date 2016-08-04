@@ -187,6 +187,9 @@ export class CheckList extends Feature {
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 

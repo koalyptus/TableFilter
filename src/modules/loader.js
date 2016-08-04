@@ -135,6 +135,9 @@ export class Loader extends Feature {
             () => this.show(NONE)
         );
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 

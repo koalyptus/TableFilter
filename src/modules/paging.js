@@ -524,6 +524,9 @@ export class Paging extends Feature {
         this.emitter.on(['change-page-results'],
             (tf, pageLength) => this.changeResultsPerPage(pageLength));
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 
