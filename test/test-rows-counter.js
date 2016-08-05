@@ -58,7 +58,7 @@ test('Can check is enabled', function() {
 
 module('Behaviour');
 test('RowsCounter value', function() {
-    equal(rowsCounter.rowsCounterSpan.innerHTML,
+    equal(rowsCounter.label.innerHTML,
         7, 'Counter value');
 });
 
@@ -66,7 +66,7 @@ test('RowsCounter component with filtered table', function() {
     tf.setFilterValue(0, 'Syd');
     tf.filter();
 
-    equal(rowsCounter.rowsCounterSpan.innerHTML,
+    equal(rowsCounter.label.innerHTML,
         4, 'Counter value');
 
     tf.clearFilters();
@@ -83,7 +83,7 @@ test('RowsCounter component with paging', function() {
         paging_length: 3
     });
     tf.init();
-    equal(tf.feature('rowsCounter').rowsCounterSpan.innerHTML,
+    equal(tf.feature('rowsCounter').label.innerHTML,
         '1-3 / 7', 'Counter value with paging');
 });
 test('Can calculate page on page change', function() {
@@ -94,7 +94,7 @@ test('Can calculate page on page change', function() {
     paging.setPage(2);
 
     //assert
-    equal(tf.feature('rowsCounter').rowsCounterSpan.innerHTML,
+    equal(tf.feature('rowsCounter').label.innerHTML,
         '4-6 / 7', 'Counter value with paging');
 });
 
