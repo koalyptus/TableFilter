@@ -1,7 +1,7 @@
 {
-  "coverage": "55.05%",
-  "expectCount": 732,
-  "actualCount": 403,
+  "coverage": "57.08%",
+  "expectCount": 727,
+  "actualCount": 415,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -369,27 +369,9 @@
       "undocumentLines": []
     },
     "src/modules/rowsCounter.js": {
-      "expectCount": 18,
-      "actualCount": 1,
-      "undocumentLines": [
-        5,
-        129,
-        25,
-        43,
-        84,
-        39,
-        36,
-        26,
-        30,
-        32,
-        34,
-        88,
-        20,
-        22,
-        24,
-        18,
-        28
-      ]
+      "expectCount": 13,
+      "actualCount": 13,
+      "undocumentLines": []
     },
     "src/modules/state.js": {
       "expectCount": 37,

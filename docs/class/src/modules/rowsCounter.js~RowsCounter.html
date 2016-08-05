@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">RowsCounter | tablefilter v0.2.49 API Document</title>
+  <title data-ice="title">RowsCounter | tablefilter v0.2.50 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -115,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {RowsCounter} from &apos;<span><a href="file/src/modules/rowsCounter.js.html#lineNumber5">tablefilter/src/modules/rowsCounter.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {RowsCounter} from &apos;<span><a href="file/src/modules/rowsCounter.js.html#lineNumber11">tablefilter/src/modules/rowsCounter.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/rowsCounter.js.html#lineNumber5">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/rowsCounter.js.html#lineNumber11">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -141,7 +141,8 @@
 
   
   
-  
+  <div class="description" data-ice="description"><p>Rows counter UI component</p>
+</div>
 
   
 
@@ -169,13 +170,13 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(tf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(tf: <span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Rows counter</p>
+        <div data-ice="description"><p>Creates an instance of RowsCounter</p>
 </div>
       </div>
     </td>
@@ -202,13 +203,41 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-fromToTextSeparator">fromToTextSeparator</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-cssClass">cssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
+        <div data-ice="description"><p>Css class for container element</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-fromToTextSeparator">fromToTextSeparator</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
         
+        
+        <div data-ice="description"><p>Separator symbol appearing between the first and last visible rows of
+current page when paging is enabled.</p>
+</div>
       </div>
     </td>
     <td>
@@ -252,13 +281,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-onAfterRefreshCounter">onAfterRefreshCounter</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-onAfterRefreshCounter">onAfterRefreshCounter</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Callback fired after the counter is refreshed</p>
+</div>
       </div>
     </td>
     <td>
@@ -277,13 +307,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-onBeforeRefreshCounter">onBeforeRefreshCounter</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-onBeforeRefreshCounter">onBeforeRefreshCounter</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Callback fired before the counter is refreshed</p>
+</div>
       </div>
     </td>
     <td>
@@ -302,13 +333,16 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-overText">overText</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-overText">overText</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Separator symbol appearing between the first and last visible rows of
+current page and the total number of filterable rows when paging is
+enabled.</p>
+</div>
       </div>
     </td>
     <td>
@@ -327,13 +361,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-prfxCounter">prfxCounter</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-targetId">targetId</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>ID of custom container element</p>
+</div>
       </div>
     </td>
     <td>
@@ -352,163 +387,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-prfxTotRows">prfxTotRows</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-text">text</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-prfxTotRowsTxt">prfxTotRowsTxt</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-rowsCounterDiv">rowsCounterDiv</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-rowsCounterSpan">rowsCounterSpan</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-rowsCounterText">rowsCounterText</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-rowsCounterTgtId">rowsCounterTgtId</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-totRowsCssClass">totRowsCssClass</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Text preceding the total number of rows</p>
+</div>
       </div>
     </td>
     <td>
@@ -540,7 +426,8 @@
       <div>
         
         
-        
+        <div data-ice="description"><p>Remove feature</p>
+</div>
       </div>
     </td>
     <td>
@@ -565,7 +452,8 @@
       <div>
         
         
-        
+        <div data-ice="description"><p>Initializes RowsCounter instance</p>
+</div>
       </div>
     </td>
     <td>
@@ -584,13 +472,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-method-refresh">refresh</a></span></span><span data-ice="signature">(p: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html#instance-method-refresh">refresh</a></span></span><span data-ice="signature">(p: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Refreshes the rows counter</p>
+</div>
       </div>
     </td>
     <td>
@@ -933,18 +822,18 @@
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">(tf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">(tf: <span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber11">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber17">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Rows counter</p>
+  <div data-ice="description"><p>Creates an instance of RowsCounter</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/feature.js~Feature.html#instance-constructor-constructor">Feature#constructor</a></span></div>
@@ -959,7 +848,7 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">tf</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="type"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>TableFilter instance</p>
 </td>
@@ -988,24 +877,67 @@
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-fromToTextSeparator">
+  <h3 data-ice="anchor" id="instance-member-cssClass">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">fromToTextSeparator</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">cssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber25">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
   
   
   
+  <div data-ice="description"><p>Css class for container element</p>
+</div>
+
   
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-fromToTextSeparator">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">fromToTextSeparator</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber54">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Separator symbol appearing between the first and last visible rows of
+current page when paging is enabled. ie: Rows: 31-40 / 70</p>
+</div>
 
   
 
@@ -1038,7 +970,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber84">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber152">source</a></span></span>
     </span>
   </h3>
 
@@ -1074,18 +1006,19 @@
     
     
     
-    <span data-ice="name">onAfterRefreshCounter</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">onAfterRefreshCounter</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber39">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Callback fired after the counter is refreshed</p>
+</div>
 
   
 
@@ -1114,18 +1047,19 @@
     
     
     
-    <span data-ice="name">onBeforeRefreshCounter</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">onBeforeRefreshCounter</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Callback fired before the counter is refreshed</p>
+</div>
 
   
 
@@ -1154,18 +1088,21 @@
     
     
     
-    <span data-ice="name">overText</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">overText</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber26">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber62">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Separator symbol appearing between the first and last visible rows of
+current page and the total number of filterable rows when paging is
+enabled. ie: Rows: 31-40 / 70</p>
+</div>
 
   
 
@@ -1188,24 +1125,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxCounter">
+  <h3 data-ice="anchor" id="instance-member-targetId">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">prfxCounter</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span data-ice="name">targetId</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber27">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>ID of custom container element</p>
+</div>
 
   
 
@@ -1228,264 +1166,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxTotRows">
+  <h3 data-ice="anchor" id="instance-member-text">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">prfxTotRows</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span data-ice="name">text</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber32">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
-
-  
-
-  <div data-ice="properties">
+  <div data-ice="description"><p>Text preceding the total number of rows</p>
 </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxTotRowsTxt">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">prfxTotRowsTxt</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber34">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-rowsCounterDiv">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">rowsCounterDiv</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber20">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-rowsCounterSpan">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">rowsCounterSpan</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber22">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-rowsCounterText">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">rowsCounterText</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber24">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-rowsCounterTgtId">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">rowsCounterTgtId</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber18">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-totRowsCssClass">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">totRowsCssClass</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber28">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -1521,14 +1220,15 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber129">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber204">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Remove feature</p>
+</div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/feature.js~Feature.html#instance-method-destroy">Feature#destroy</a></span></div>
 
@@ -1561,14 +1261,15 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber43">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber109">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Initializes RowsCounter instance</p>
+</div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/feature.js~Feature.html#instance-method-init">Feature#init</a></span></div>
 
@@ -1597,18 +1298,19 @@
     
     
     
-    <span data-ice="name">refresh</span><span data-ice="signature">(p: <span>*</span>)</span>
+    <span data-ice="name">refresh</span><span data-ice="signature">(p: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber88">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/rowsCounter.js.html#lineNumber161">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Refreshes the rows counter</p>
+</div>
 
   
 
@@ -1622,9 +1324,10 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">p</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Optional parameter the total number of rows to display</p>
+</td>
     </tr>
 </tbody>
   </table>

@@ -3048,6 +3048,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/rowscounter.js~rowscounter#cssclass",
+    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-cssClass",
+    "src/modules/rowsCounter.js~RowsCounter#cssClass",
+    "member"
+  ],
+  [
     "src/modules/rowscounter.js~rowscounter#destroy",
     "class/src/modules/rowsCounter.js~RowsCounter.html#instance-method-destroy",
     "src/modules/rowsCounter.js~RowsCounter#destroy",
@@ -3090,57 +3096,21 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/rowscounter.js~rowscounter#prfxcounter",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-prfxCounter",
-    "src/modules/rowsCounter.js~RowsCounter#prfxCounter",
-    "member"
-  ],
-  [
-    "src/modules/rowscounter.js~rowscounter#prfxtotrows",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-prfxTotRows",
-    "src/modules/rowsCounter.js~RowsCounter#prfxTotRows",
-    "member"
-  ],
-  [
-    "src/modules/rowscounter.js~rowscounter#prfxtotrowstxt",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-prfxTotRowsTxt",
-    "src/modules/rowsCounter.js~RowsCounter#prfxTotRowsTxt",
-    "member"
-  ],
-  [
     "src/modules/rowscounter.js~rowscounter#refresh",
     "class/src/modules/rowsCounter.js~RowsCounter.html#instance-method-refresh",
     "src/modules/rowsCounter.js~RowsCounter#refresh",
     "method"
   ],
   [
-    "src/modules/rowscounter.js~rowscounter#rowscounterdiv",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-rowsCounterDiv",
-    "src/modules/rowsCounter.js~RowsCounter#rowsCounterDiv",
+    "src/modules/rowscounter.js~rowscounter#targetid",
+    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-targetId",
+    "src/modules/rowsCounter.js~RowsCounter#targetId",
     "member"
   ],
   [
-    "src/modules/rowscounter.js~rowscounter#rowscounterspan",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-rowsCounterSpan",
-    "src/modules/rowsCounter.js~RowsCounter#rowsCounterSpan",
-    "member"
-  ],
-  [
-    "src/modules/rowscounter.js~rowscounter#rowscountertext",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-rowsCounterText",
-    "src/modules/rowsCounter.js~RowsCounter#rowsCounterText",
-    "member"
-  ],
-  [
-    "src/modules/rowscounter.js~rowscounter#rowscountertgtid",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-rowsCounterTgtId",
-    "src/modules/rowsCounter.js~RowsCounter#rowsCounterTgtId",
-    "member"
-  ],
-  [
-    "src/modules/rowscounter.js~rowscounter#totrowscssclass",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-totRowsCssClass",
-    "src/modules/rowsCounter.js~RowsCounter#totRowsCssClass",
+    "src/modules/rowscounter.js~rowscounter#text",
+    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-text",
+    "src/modules/rowsCounter.js~RowsCounter#text",
     "member"
   ],
   [

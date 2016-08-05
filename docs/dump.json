@@ -12772,7 +12772,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {isFn} from '../types';\n\nexport class RowsCounter extends Feature {\n\n    /**\n     * Rows counter\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'rowsCounter');\n\n        // TableFilter configuration\n        var f = this.config;\n\n        //id of custom container element\n        this.rowsCounterTgtId = f.rows_counter_target_id || null;\n        //element containing tot nb rows\n        this.rowsCounterDiv = null;\n        //element containing tot nb rows label\n        this.rowsCounterSpan = null;\n        //defines rows counter text\n        this.rowsCounterText = f.rows_counter_text || 'Rows: ';\n        this.fromToTextSeparator = f.from_to_text_separator || '-';\n        this.overText = f.over_text || ' / ';\n        //defines css class rows counter\n        this.totRowsCssClass = f.tot_rows_css_class || 'tot';\n        //rows counter div\n        this.prfxCounter = 'counter_';\n        //nb displayed rows label\n        this.prfxTotRows = 'totrows_span_';\n        //label preceding nb rows label\n        this.prfxTotRowsTxt = 'totRowsTextSpan_';\n        //callback raised before counter is refreshed\n        this.onBeforeRefreshCounter = isFn(f.on_before_refresh_counter) ?\n            f.on_before_refresh_counter : null;\n        //callback raised after counter is refreshed\n        this.onAfterRefreshCounter = isFn(f.on_after_refresh_counter) ?\n            f.on_after_refresh_counter : null;\n    }\n\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        var tf = this.tf;\n\n        //rows counter container\n        var countDiv = createElm('div', ['id', this.prfxCounter + tf.id]);\n        countDiv.className = this.totRowsCssClass;\n        //rows counter label\n        var countSpan = createElm('span', ['id', this.prfxTotRows + tf.id]);\n        var countText = createElm('span', ['id', this.prfxTotRowsTxt + tf.id]);\n        countText.appendChild(createText(this.rowsCounterText));\n\n        // counter is added to defined element\n        if (!this.rowsCounterTgtId) {\n            tf.setToolbar();\n        }\n        var targetEl = !this.rowsCounterTgtId ?\n            tf.lDiv : elm(this.rowsCounterTgtId);\n\n        //default container: 'lDiv'\n        if (!this.rowsCounterTgtId) {\n            countDiv.appendChild(countText);\n            countDiv.appendChild(countSpan);\n            targetEl.appendChild(countDiv);\n        }\n        else {\n            //custom container, no need to append statusDiv\n            targetEl.appendChild(countText);\n            targetEl.appendChild(countSpan);\n        }\n        this.rowsCounterDiv = countDiv;\n        this.rowsCounterSpan = countSpan;\n\n        // subscribe to events\n        this.emitter.on(['after-filtering', 'grouped-by-page'],\n            () => this.refresh(tf.getValidRowsNb()));\n        this.emitter.on(['rows-changed'], () => this.refresh());\n\n        this.initialized = true;\n        this.refresh();\n    }\n\n    refresh(p) {\n        if (!this.initialized || !this.isEnabled()) {\n            return;\n        }\n\n        var tf = this.tf;\n\n        if (this.onBeforeRefreshCounter) {\n            this.onBeforeRefreshCounter.call(null, tf, this.rowsCounterSpan);\n        }\n\n        var totTxt;\n        if (!tf.paging) {\n            if (p && p !== '') {\n                totTxt = p;\n            } else {\n                totTxt = tf.getFilterableRowsNb() - tf.nbHiddenRows;\n            }\n        } else {\n            var paging = tf.feature('paging');\n            if (paging) {\n                //paging start row\n                var pagingStartRow = parseInt(paging.startPagingRow, 10) +\n                    ((tf.getValidRowsNb() > 0) ? 1 : 0);\n                var pagingEndRow =\n                    (pagingStartRow + paging.pagingLength) - 1 <=\n                    tf.getValidRowsNb() ?\n                        pagingStartRow + paging.pagingLength - 1 :\n                        tf.getValidRowsNb();\n                totTxt = pagingStartRow + this.fromToTextSeparator +\n                    pagingEndRow + this.overText + tf.getValidRowsNb();\n            }\n        }\n\n        this.rowsCounterSpan.innerHTML = totTxt;\n        if (this.onAfterRefreshCounter) {\n            this.onAfterRefreshCounter.call(\n                null, tf, this.rowsCounterSpan, totTxt);\n        }\n    }\n\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        if (!this.rowsCounterTgtId && this.rowsCounterDiv) {\n            removeElm(this.rowsCounterDiv);\n        } else {\n            elm(this.rowsCounterTgtId).innerHTML = '';\n        }\n        this.rowsCounterSpan = null;\n        this.rowsCounterDiv = null;\n\n        // unsubscribe to events\n        this.emitter.off(['after-filtering', 'grouped-by-page'],\n            () => this.refresh(tf.getValidRowsNb()));\n        this.emitter.off(['rows-changed'], () => this.refresh());\n\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {isFn} from '../types';\n\n/**\n * Rows counter UI component\n * @export\n * @class RowsCounter\n * @extends {Feature}\n */\nexport class RowsCounter extends Feature {\n\n    /**\n     * Creates an instance of RowsCounter\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'rowsCounter');\n\n        // TableFilter configuration\n        let f = this.config;\n\n        /**\n         * ID of custom container element\n         * @type {string}\n         */\n        this.targetId = f.rows_counter_target_id || null;\n\n        /**\n         * Container DOM element\n         * @type {DOMElement}\n         * @private\n         */\n        this.container = null;\n\n        /**\n         * Container DOM element for label displaying the total number of rows\n         * @type {DOMElement}\n         * @private\n         */\n        this.label = null;\n\n        /**\n         * Text preceding the total number of rows\n         * @type {String}\n         */\n        this.text = f.rows_counter_text || 'Rows: ';\n\n        /**\n         * Separator symbol appearing between the first and last visible rows of\n         * current page when paging is enabled. ie: Rows: 31-40 / 70\n         * @type {String}\n         */\n        this.fromToTextSeparator = f.from_to_text_separator || '-';\n\n        /**\n         * Separator symbol appearing between the first and last visible rows of\n         * current page and the total number of filterable rows when paging is\n         * enabled. ie: Rows: 31-40 / 70\n         * @type {String}\n         */\n        this.overText = f.over_text || ' / ';\n\n        /**\n         * Css class for container element\n         * @type {String}\n         */\n        this.cssClass = f.tot_rows_css_class || 'tot';\n\n        /**\n         * Prefix for container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxCounter = 'counter_';\n\n        /**\n         * Prefix for DOM element containing the counter\n         * @type {String}\n         * @private\n         */\n        this.prfxLabel = 'totrows_span_';\n\n        /**\n         * Prefix for label preceding the counter\n         * @type {String}\n         * @private\n         */\n        this.prfxText = 'totRowsTextSpan_';\n\n        /**\n         * Callback fired before the counter is refreshed\n         * @type {Function}\n         */\n        this.onBeforeRefreshCounter = isFn(f.on_before_refresh_counter) ?\n            f.on_before_refresh_counter : null;\n\n        /**\n         * Callback fired after the counter is refreshed\n         * @type {Function}\n         */\n        this.onAfterRefreshCounter = isFn(f.on_after_refresh_counter) ?\n            f.on_after_refresh_counter : null;\n    }\n\n    /**\n     * Initializes RowsCounter instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        let tf = this.tf;\n\n        //rows counter container\n        let countDiv = createElm('div', ['id', this.prfxCounter + tf.id]);\n        countDiv.className = this.cssClass;\n        //rows counter label\n        let countSpan = createElm('span', ['id', this.prfxLabel + tf.id]);\n        let countText = createElm('span', ['id', this.prfxText + tf.id]);\n        countText.appendChild(createText(this.text));\n\n        // counter is added to defined element\n        if (!this.targetId) {\n            tf.setToolbar();\n        }\n        let targetEl = !this.targetId ? tf.lDiv : elm(this.targetId);\n\n        //default container: 'lDiv'\n        if (!this.targetId) {\n            countDiv.appendChild(countText);\n            countDiv.appendChild(countSpan);\n            targetEl.appendChild(countDiv);\n        }\n        else {\n            //custom container, no need to append statusDiv\n            targetEl.appendChild(countText);\n            targetEl.appendChild(countSpan);\n        }\n        this.container = countDiv;\n        this.label = countSpan;\n\n        // subscribe to events\n        this.emitter.on(['after-filtering', 'grouped-by-page'],\n            () => this.refresh(tf.getValidRowsNb()));\n        this.emitter.on(['rows-changed'], () => this.refresh());\n\n        /**\n         * @inherited\n         */\n        this.initialized = true;\n        this.refresh();\n    }\n\n    /**\n     * Refreshes the rows counter\n     * @param {Number} p Optional parameter the total number of rows to display\n     * @returns\n     */\n    refresh(p) {\n        if (!this.initialized || !this.isEnabled()) {\n            return;\n        }\n\n        let tf = this.tf;\n\n        if (this.onBeforeRefreshCounter) {\n            this.onBeforeRefreshCounter.call(null, tf, this.label);\n        }\n\n        let totTxt;\n        if (!tf.paging) {\n            if (p && p !== '') {\n                totTxt = p;\n            } else {\n                totTxt = tf.getFilterableRowsNb() - tf.nbHiddenRows;\n            }\n        } else {\n            let paging = tf.feature('paging');\n            if (paging) {\n                //paging start row\n                let pagingStartRow = parseInt(paging.startPagingRow, 10) +\n                    ((tf.getValidRowsNb() > 0) ? 1 : 0);\n                let pagingEndRow =\n                    (pagingStartRow + paging.pagingLength) - 1 <=\n                    tf.getValidRowsNb() ?\n                        pagingStartRow + paging.pagingLength - 1 :\n                        tf.getValidRowsNb();\n                totTxt = pagingStartRow + this.fromToTextSeparator +\n                    pagingEndRow + this.overText + tf.getValidRowsNb();\n            }\n        }\n\n        this.label.innerHTML = totTxt;\n        if (this.onAfterRefreshCounter) {\n            this.onAfterRefreshCounter.call(null, tf, this.label, totTxt);\n        }\n    }\n\n    /**\n     * Remove feature\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        if (!this.targetId && this.container) {\n            removeElm(this.container);\n        } else {\n            elm(this.targetId).innerHTML = '';\n        }\n        this.label = null;\n        this.container = null;\n\n        // unsubscribe to events\n        this.emitter.off(['after-filtering', 'grouped-by-page'],\n            () => this.refresh(tf.getValidRowsNb()));\n        this.emitter.off(['rows-changed'], () => this.refresh());\n\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 609,
@@ -12786,12 +12786,21 @@
     "export": true,
     "importPath": "tablefilter/src/modules/rowsCounter.js",
     "importStyle": "{RowsCounter}",
-    "description": null,
-    "lineNumber": 5,
-    "undocument": true,
+    "description": "Rows counter UI component",
+    "lineNumber": 11,
+    "unknown": [
+      {
+        "tagName": "@export",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@class",
+        "tagValue": "RowsCounter"
+      }
+    ],
     "interface": false,
     "extends": [
-      "src/feature.js~Feature"
+      "Feature"
     ]
   },
   {
@@ -12803,13 +12812,13 @@
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#constructor",
     "access": null,
-    "description": "Rows counter",
-    "lineNumber": 11,
+    "description": "Creates an instance of RowsCounter",
+    "lineNumber": 17,
     "params": [
       {
         "nullable": null,
         "types": [
-          "Object"
+          "TableFilter"
         ],
         "spread": false,
         "optional": false,
@@ -12824,17 +12833,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "rowsCounterTgtId",
+    "name": "targetId",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#rowsCounterTgtId",
+    "longname": "src/modules/rowsCounter.js~RowsCounter#targetId",
     "access": null,
-    "description": null,
-    "lineNumber": 18,
-    "undocument": true,
+    "description": "ID of custom container element",
+    "lineNumber": 27,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "string"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -12842,17 +12853,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "rowsCounterDiv",
+    "name": "container",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#rowsCounterDiv",
-    "access": null,
-    "description": null,
-    "lineNumber": 20,
-    "undocument": true,
+    "longname": "src/modules/rowsCounter.js~RowsCounter#container",
+    "access": "private",
+    "description": "Container DOM element",
+    "lineNumber": 34,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "DOMElement"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -12860,17 +12873,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "rowsCounterSpan",
+    "name": "label",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#rowsCounterSpan",
-    "access": null,
-    "description": null,
-    "lineNumber": 22,
-    "undocument": true,
+    "longname": "src/modules/rowsCounter.js~RowsCounter#label",
+    "access": "private",
+    "description": "Container DOM element for label displaying the total number of rows",
+    "lineNumber": 41,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "DOMElement"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -12878,17 +12893,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "rowsCounterText",
+    "name": "text",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#rowsCounterText",
+    "longname": "src/modules/rowsCounter.js~RowsCounter#text",
     "access": null,
-    "description": null,
-    "lineNumber": 24,
-    "undocument": true,
+    "description": "Text preceding the total number of rows",
+    "lineNumber": 47,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -12900,13 +12917,15 @@
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#fromToTextSeparator",
     "access": null,
-    "description": null,
-    "lineNumber": 25,
-    "undocument": true,
+    "description": "Separator symbol appearing between the first and last visible rows of\ncurrent page when paging is enabled. ie: Rows: 31-40 / 70",
+    "lineNumber": 54,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -12918,13 +12937,15 @@
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#overText",
     "access": null,
-    "description": null,
-    "lineNumber": 26,
-    "undocument": true,
+    "description": "Separator symbol appearing between the first and last visible rows of\ncurrent page and the total number of filterable rows when paging is\nenabled. ie: Rows: 31-40 / 70",
+    "lineNumber": 62,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -12932,17 +12953,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "totRowsCssClass",
+    "name": "cssClass",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#totRowsCssClass",
+    "longname": "src/modules/rowsCounter.js~RowsCounter#cssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 28,
-    "undocument": true,
+    "description": "Css class for container element",
+    "lineNumber": 68,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -12953,14 +12976,16 @@
     "name": "prfxCounter",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#prfxCounter",
-    "access": null,
-    "description": null,
-    "lineNumber": 30,
-    "undocument": true,
+    "access": "private",
+    "description": "Prefix for container ID",
+    "lineNumber": 75,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -12968,17 +12993,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "prfxTotRows",
+    "name": "prfxLabel",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#prfxTotRows",
-    "access": null,
-    "description": null,
-    "lineNumber": 32,
-    "undocument": true,
+    "longname": "src/modules/rowsCounter.js~RowsCounter#prfxLabel",
+    "access": "private",
+    "description": "Prefix for DOM element containing the counter",
+    "lineNumber": 82,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -12986,17 +13013,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "prfxTotRowsTxt",
+    "name": "prfxText",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#prfxTotRowsTxt",
-    "access": null,
-    "description": null,
-    "lineNumber": 34,
-    "undocument": true,
+    "longname": "src/modules/rowsCounter.js~RowsCounter#prfxText",
+    "access": "private",
+    "description": "Prefix for label preceding the counter",
+    "lineNumber": 89,
     "type": {
+      "nullable": null,
       "types": [
-        "string"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -13008,13 +13037,15 @@
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#onBeforeRefreshCounter",
     "access": null,
-    "description": null,
-    "lineNumber": 36,
-    "undocument": true,
+    "description": "Callback fired before the counter is refreshed",
+    "lineNumber": 95,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -13026,13 +13057,15 @@
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#onAfterRefreshCounter",
     "access": null,
-    "description": null,
-    "lineNumber": 39,
-    "undocument": true,
+    "description": "Callback fired after the counter is refreshed",
+    "lineNumber": 102,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -13044,9 +13077,8 @@
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#init",
     "access": null,
-    "description": null,
-    "lineNumber": 43,
-    "undocument": true,
+    "description": "Initializes RowsCounter instance",
+    "lineNumber": 109,
     "params": [],
     "generator": false
   },
@@ -13055,12 +13087,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "rowsCounterDiv",
+    "name": "container",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#rowsCounterDiv",
+    "longname": "src/modules/rowsCounter.js~RowsCounter#container",
     "access": null,
     "description": null,
-    "lineNumber": 76,
+    "lineNumber": 141,
     "undocument": true,
     "type": {
       "types": [
@@ -13073,12 +13105,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "rowsCounterSpan",
+    "name": "label",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#rowsCounterSpan",
+    "longname": "src/modules/rowsCounter.js~RowsCounter#label",
     "access": null,
     "description": null,
-    "lineNumber": 77,
+    "lineNumber": 142,
     "undocument": true,
     "type": {
       "types": [
@@ -13095,9 +13127,14 @@
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#initialized",
     "access": null,
-    "description": null,
-    "lineNumber": 84,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 152,
+    "unknown": [
+      {
+        "tagName": "@inherited",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "types": [
         "boolean"
@@ -13113,15 +13150,24 @@
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#refresh",
     "access": null,
-    "description": null,
-    "lineNumber": 88,
-    "undocument": true,
+    "description": "Refreshes the rows counter",
+    "lineNumber": 161,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": ""
+      }
+    ],
     "params": [
       {
-        "name": "p",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "p",
+        "description": "Optional parameter the total number of rows to display"
       }
     ],
     "generator": false
@@ -13135,9 +13181,8 @@
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
     "longname": "src/modules/rowsCounter.js~RowsCounter#destroy",
     "access": null,
-    "description": null,
-    "lineNumber": 129,
-    "undocument": true,
+    "description": "Remove feature",
+    "lineNumber": 204,
     "params": [],
     "generator": false
   },
@@ -13146,12 +13191,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "rowsCounterSpan",
+    "name": "label",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#rowsCounterSpan",
+    "longname": "src/modules/rowsCounter.js~RowsCounter#label",
     "access": null,
     "description": null,
-    "lineNumber": 139,
+    "lineNumber": 214,
     "undocument": true,
     "type": {
       "types": [
@@ -13164,12 +13209,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "rowsCounterDiv",
+    "name": "container",
     "memberof": "src/modules/rowsCounter.js~RowsCounter",
-    "longname": "src/modules/rowsCounter.js~RowsCounter#rowsCounterDiv",
+    "longname": "src/modules/rowsCounter.js~RowsCounter#container",
     "access": null,
     "description": null,
-    "lineNumber": 140,
+    "lineNumber": 215,
     "undocument": true,
     "type": {
       "types": [
@@ -13187,7 +13232,7 @@
     "longname": "src/modules/rowsCounter.js~RowsCounter#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 147,
+    "lineNumber": 222,
     "undocument": true,
     "type": {
       "types": [
