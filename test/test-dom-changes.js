@@ -20,7 +20,7 @@ test('Initial verifications', function() {
     deepEqual(tf.getFilterableRowsNb(), 7, 'Initial number of filterable rows');
     deepEqual(tf.getValidRowsNb(), 0, 'Initial number of valid rows');
     notEqual(rowsCounter, null, 'RowsCounter instanciated');
-    deepEqual(rowsCounter.rowsCounterSpan.innerHTML, '7', 'Initial rows count');
+    deepEqual(rowsCounter.label.innerHTML, '7', 'Initial rows count');
 });
 
 module('DOM changes');
@@ -37,7 +37,7 @@ test('Can filter after row is removed', function() {
         'Number of filterable rows after row is removed');
     deepEqual(tf.getValidRowsNb(), 6,
         'Number of valid rows after row is removed');
-    deepEqual(rowsCounter.rowsCounterSpan.innerHTML, '6',
+    deepEqual(rowsCounter.label.innerHTML, '6',
         'Rows count after row is removed');
 });
 
@@ -54,7 +54,7 @@ test('Can filter after row is added', function() {
         'Number of filterable rows after row is added');
     deepEqual(tf.getValidRowsNb(), 7,
         'Number of valid rows after row is added');
-    deepEqual(rowsCounter.rowsCounterSpan.innerHTML, '7',
+    deepEqual(rowsCounter.label.innerHTML, '7',
         'Rows count after row is added');
 });
 
@@ -72,7 +72,7 @@ test('Can filter the added row', function() {
         'Number of filterable rows after row is added');
     deepEqual(tf.getValidRowsNb(), 1,
         'Number of valid rows after row is added');
-    deepEqual(rowsCounter.rowsCounterSpan.innerHTML, '1',
+    deepEqual(rowsCounter.label.innerHTML, '1',
         'Rows count after row is added');
 });
 
@@ -95,7 +95,7 @@ test('Sanity checks', function() {
         'Initial number of filterable rows');
     deepEqual(tf1.getValidRowsNb(), 7, 'Initial number of valid rows');
     notEqual(rowsCounter, null, 'RowsCounter instanciated');
-    deepEqual(rowsCounter.rowsCounterSpan.innerHTML, '1-3 / 7',
+    deepEqual(rowsCounter.label.innerHTML, '1-3 / 7',
         'Initial rows count');
 });
 
@@ -115,7 +115,7 @@ test('Can filter and change a page after row is removed', function() {
         'Number of filterable rows after row is removed');
     deepEqual(tf1.getValidRowsNb(), 6,
         'Number of valid rows after row is removed');
-    deepEqual(rowsCounter.rowsCounterSpan.innerHTML, '4-6 / 6',
+    deepEqual(rowsCounter.label.innerHTML, '4-6 / 6',
         'Rows count after row is removed');
 });
 
@@ -135,7 +135,7 @@ test('Can filter and change page after row is added', function() {
         'Number of filterable rows after row is added');
     deepEqual(tf1.getValidRowsNb(), 7,
         'Number of valid rows after row is added');
-    deepEqual(rowsCounter.rowsCounterSpan.innerHTML, '7-7 / 7',
+    deepEqual(rowsCounter.label.innerHTML, '7-7 / 7',
         'Rows count after row is added');
 });
 
@@ -155,7 +155,7 @@ test('Can filter the added row with paging', function() {
         'Number of filterable rows after row is added');
     deepEqual(tf1.getValidRowsNb(), 1,
         'Number of valid rows after row is added');
-    deepEqual(rowsCounter.rowsCounterSpan.innerHTML, '1-1 / 1',
+    deepEqual(rowsCounter.label.innerHTML, '1-1 / 1',
         'Rows count after row is added');
 });
 

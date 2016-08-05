@@ -24,27 +24,27 @@ export class RowsCounter extends Feature {
          * ID of custom container element
          * @type {string}
          */
-        this.rowsCounterTgtId = f.rows_counter_target_id || null;
+        this.targetId = f.rows_counter_target_id || null;
 
         /**
          * Container DOM element
          * @type {DOMElement}
          * @private
          */
-        this.rowsCounterDiv = null;
+        this.container = null;
 
         /**
-         * Container DOM element for label indicating the total number of rows
+         * Container DOM element for label displaying the total number of rows
          * @type {DOMElement}
          * @private
          */
-        this.rowsCounterSpan = null;
+        this.label = null;
 
         /**
          * Text preceding the total number of rows
          * @type {String}
          */
-        this.rowsCounterText = f.rows_counter_text || 'Rows: ';
+        this.text = f.rows_counter_text || 'Rows: ';
 
         /**
          * Separator symbol appearing between the first and last visible rows of
@@ -65,7 +65,7 @@ export class RowsCounter extends Feature {
          * Css class for container element
          * @type {String}
          */
-        this.totRowsCssClass = f.tot_rows_css_class || 'tot';
+        this.cssClass = f.tot_rows_css_class || 'tot';
 
         /**
          * Prefix for container ID
@@ -79,14 +79,14 @@ export class RowsCounter extends Feature {
          * @type {String}
          * @private
          */
-        this.prfxTotRows = 'totrows_span_';
+        this.prfxLabel = 'totrows_span_';
 
         /**
          * Prefix for label preceding the counter
          * @type {String}
          * @private
          */
-        this.prfxTotRowsTxt = 'totRowsTextSpan_';
+        this.prfxText = 'totRowsTextSpan_';
 
         /**
          * Callback fired before the counter is refreshed
@@ -115,21 +115,20 @@ export class RowsCounter extends Feature {
 
         //rows counter container
         let countDiv = createElm('div', ['id', this.prfxCounter + tf.id]);
-        countDiv.className = this.totRowsCssClass;
+        countDiv.className = this.cssClass;
         //rows counter label
-        let countSpan = createElm('span', ['id', this.prfxTotRows + tf.id]);
-        let countText = createElm('span', ['id', this.prfxTotRowsTxt + tf.id]);
-        countText.appendChild(createText(this.rowsCounterText));
+        let countSpan = createElm('span', ['id', this.prfxLabel + tf.id]);
+        let countText = createElm('span', ['id', this.prfxText + tf.id]);
+        countText.appendChild(createText(this.text));
 
         // counter is added to defined element
-        if (!this.rowsCounterTgtId) {
+        if (!this.targetId) {
             tf.setToolbar();
         }
-        let targetEl = !this.rowsCounterTgtId ?
-            tf.lDiv : elm(this.rowsCounterTgtId);
+        let targetEl = !this.targetId ? tf.lDiv : elm(this.targetId);
 
         //default container: 'lDiv'
-        if (!this.rowsCounterTgtId) {
+        if (!this.targetId) {
             countDiv.appendChild(countText);
             countDiv.appendChild(countSpan);
             targetEl.appendChild(countDiv);
@@ -139,8 +138,8 @@ export class RowsCounter extends Feature {
             targetEl.appendChild(countText);
             targetEl.appendChild(countSpan);
         }
-        this.rowsCounterDiv = countDiv;
-        this.rowsCounterSpan = countSpan;
+        this.container = countDiv;
+        this.label = countSpan;
 
         // subscribe to events
         this.emitter.on(['after-filtering', 'grouped-by-page'],
@@ -153,7 +152,6 @@ export class RowsCounter extends Feature {
         this.initialized = true;
         this.refresh();
     }
-
 
     /**
      * Refreshes the rows counter
@@ -168,7 +166,7 @@ export class RowsCounter extends Feature {
         let tf = this.tf;
 
         if (this.onBeforeRefreshCounter) {
-            this.onBeforeRefreshCounter.call(null, tf, this.rowsCounterSpan);
+            this.onBeforeRefreshCounter.call(null, tf, this.label);
         }
 
         let totTxt;
@@ -194,10 +192,9 @@ export class RowsCounter extends Feature {
             }
         }
 
-        this.rowsCounterSpan.innerHTML = totTxt;
+        this.label.innerHTML = totTxt;
         if (this.onAfterRefreshCounter) {
-            this.onAfterRefreshCounter.call(
-                null, tf, this.rowsCounterSpan, totTxt);
+            this.onAfterRefreshCounter.call(null, tf, this.label, totTxt);
         }
     }
 
@@ -209,13 +206,13 @@ export class RowsCounter extends Feature {
             return;
         }
 
-        if (!this.rowsCounterTgtId && this.rowsCounterDiv) {
-            removeElm(this.rowsCounterDiv);
+        if (!this.targetId && this.container) {
+            removeElm(this.container);
         } else {
-            elm(this.rowsCounterTgtId).innerHTML = '';
+            elm(this.targetId).innerHTML = '';
         }
-        this.rowsCounterSpan = null;
-        this.rowsCounterDiv = null;
+        this.label = null;
+        this.container = null;
 
         // unsubscribe to events
         this.emitter.off(['after-filtering', 'grouped-by-page'],
