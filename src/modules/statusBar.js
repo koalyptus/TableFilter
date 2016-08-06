@@ -3,11 +3,17 @@ import {root} from '../root';
 import {createElm, createText, elm, removeElm} from '../dom';
 import {isFn} from '../types';
 
+/**
+ * Status bar UI component
+ * @export
+ * @class StatusBar
+ * @extends {Feature}
+ */
 export class StatusBar extends Feature {
 
     /**
-     * Status bar UI component
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of StatusBar
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'statusBar');
@@ -15,63 +21,161 @@ export class StatusBar extends Feature {
         // Configuration object
         let f = this.config;
 
-        //id of custom container element
-        this.statusBarTgtId = f.status_bar_target_id || null;
-        //element containing status bar label
-        this.statusBarDiv = null;
-        //status bar
-        this.statusBarSpan = null;
-        //status bar label
-        this.statusBarSpanText = null;
-        //defines status bar text
-        this.statusBarText = f.status_bar_text || '';
-        //defines css class status bar
-        this.statusBarCssClass = f.status_bar_css_class || 'status';
-        //delay for status bar clearing
-        this.statusBarCloseDelay = 250;
+        /**
+         * ID of custom container element
+         * @type {String}
+         */
+        this.targetId = f.status_bar_target_id || null;
 
-        //calls function before message is displayed
+        /**
+         * Container DOM element
+         * @type {DOMElement}
+         * @private
+         */
+        this.container = null;
+
+        /**
+         * Message container DOM element
+         * @type {DOMElement}
+         * @private
+         */
+        this.msgContainer = null;
+
+        /**
+         * Label container DOM element
+         * @type {DOMElement}
+         * @private
+         */
+        this.labelContainer = null;
+
+        /**
+         * Text preceding status message
+         * @type {String}
+         */
+        this.text = f.status_bar_text || '';
+
+        /**
+         * Css class for container element
+         * @type {String}
+         */
+        this.cssClass = f.status_bar_css_class || 'status';
+
+        /**
+         * Message visibility duration in milliseconds
+         * @type {Number}
+         * @private
+         */
+        this.delay = 250;
+
+        /**
+         * Callback fired before the message is displayed
+         * @type {Function}
+         */
         this.onBeforeShowMsg = isFn(f.on_before_show_msg) ?
             f.on_before_show_msg : null;
-        //calls function after message is displayed
+
+        /**
+         * Callback fired after the message is displayed
+         * @type {Function}
+         */
         this.onAfterShowMsg = isFn(f.on_after_show_msg) ?
             f.on_after_show_msg : null;
 
-        //status messages
+        /**
+         * Message appearing upon filtering
+         * @type {String}
+         */
         this.msgFilter = f.msg_filter || 'Filtering data...';
-        //populating drop-downs
+
+        /**
+         * Message appearing when a drop-down filter is populated
+         * @type {String}
+         */
         this.msgPopulate = f.msg_populate || 'Populating filter...';
-        //populating drop-downs
+
+        /**
+         * Message appearing when a checklist filter is populated
+         * @type {String}
+         */
         this.msgPopulateCheckList = f.msg_populate_checklist ||
             'Populating list...';
-        //changing paging page
+
+        /**
+         * Message appearing when a pagination page is changed
+         * @type {String}
+         */
         this.msgChangePage = f.msg_change_page || 'Collecting paging data...';
-        //clearing filters
+
+        /**
+         * Message appearing when filters are cleared
+         * @type {String}
+         */
         this.msgClear = f.msg_clear || 'Clearing filters...';
-        //changing nb results/page
+
+        /**
+         * Message appearing when the page length is changed
+         * @type {String}
+         */
         this.msgChangeResults = f.msg_change_results ||
             'Changing results per page...';
-        //re-setting page
+
+        /**
+         * Message appearing when the page is re-set
+         * @type {String}
+         */
         this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
-        //re-setting page length
+
+        /**
+         * Message appearing when the page length is re-set
+         * @type {String}
+         */
         this.msgResetPageLength = f.msg_reset_page_length ||
             'Re-setting page length...';
-        //table sorting
+
+        /**
+         * Message appearing upon column sorting
+         * @type {String}
+         */
         this.msgSort = f.msg_sort || 'Sorting data...';
-        //extensions loading
+
+        /**
+         * Message appearing when extensions are loading
+         * @type {String}
+         */
         this.msgLoadExtensions = f.msg_load_extensions ||
             'Loading extensions...';
-        //themes loading
+
+        /**
+         * Message appearing when themes are loading
+         * @type {String}
+         */
         this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
 
-        // status bar div
-        this.prfxStatus = 'status_';
-        // status bar label
-        this.prfxStatusSpan = 'statusSpan_';
-        // text preceding status bar label
-        this.prfxStatusTxt = 'statusText_';
+        /**
+         * Prefix for container ID
+         * @type {String}
+         * @private
+         */
+        this.prfxCont = 'status_';
+
+        /**
+         * Prefix for label container ID
+         * @type {String}
+         * @private
+         */
+        this.prfxLabel = 'statusSpan_';
+
+        /**
+         * Prefix for text preceding the message
+         * @type {String}
+         * @private
+         */
+        this.prfxText = 'statusText_';
     }
 
+    /**
+     * Initializes StatusBar instance
+     */
     init() {
         if (this.initialized) {
             return;
@@ -81,25 +185,23 @@ export class StatusBar extends Feature {
         let emitter = this.emitter;
 
         //status bar container
-        let statusDiv = createElm('div', ['id', this.prfxStatus + tf.id]);
-        statusDiv.className = this.statusBarCssClass;
+        let statusDiv = createElm('div', ['id', this.prfxCont + tf.id]);
+        statusDiv.className = this.cssClass;
 
         //status bar label
-        let statusSpan = createElm('span', ['id', this.prfxStatusSpan + tf.id]);
+        let statusSpan = createElm('span', ['id', this.prfxLabel + tf.id]);
         //preceding text
-        let statusSpanText = createElm('span',
-            ['id', this.prfxStatusTxt + tf.id]);
-        statusSpanText.appendChild(createText(this.statusBarText));
+        let statusSpanText = createElm('span', ['id', this.prfxText + tf.id]);
+        statusSpanText.appendChild(createText(this.text));
 
         // target element container
-        if (!this.statusBarTgtId) {
+        if (!this.targetId) {
             tf.setToolbar();
         }
-        let targetEl = (!this.statusBarTgtId) ?
-            tf.lDiv : elm(this.statusBarTgtId);
+        let targetEl = (!this.targetId) ? tf.lDiv : elm(this.targetId);
 
         //default container: 'lDiv'
-        if (!this.statusBarTgtId) {
+        if (!this.targetId) {
             statusDiv.appendChild(statusSpanText);
             statusDiv.appendChild(statusSpan);
             targetEl.appendChild(statusDiv);
@@ -109,9 +211,9 @@ export class StatusBar extends Feature {
             targetEl.appendChild(statusSpan);
         }
 
-        this.statusBarDiv = statusDiv;
-        this.statusBarSpan = statusSpan;
-        this.statusBarSpanText = statusSpanText;
+        this.container = statusDiv;
+        this.msgContainer = statusSpan;
+        this.labelContainer = statusSpanText;
 
         // Subscribe to events
         emitter.on(['before-filtering'], () => this.message(this.msgFilter));
@@ -145,9 +247,16 @@ export class StatusBar extends Feature {
             () => this.message('')
         );
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 
+    /**
+     * Display status message
+     * @param {String} [t=''] Message to be displayed
+     */
     message(t = '') {
         if (!this.isEnabled()) {
             return;
@@ -157,18 +266,21 @@ export class StatusBar extends Feature {
             this.onBeforeShowMsg.call(null, this.tf, t);
         }
 
-        let d = t === '' ? this.statusBarCloseDelay : 1;
+        let d = t === '' ? this.delay : 1;
         root.setTimeout(() => {
             if (!this.initialized) {
                 return;
             }
-            this.statusBarSpan.innerHTML = t;
+            this.msgContainer.innerHTML = t;
             if (this.onAfterShowMsg) {
                 this.onAfterShowMsg.call(null, this.tf, t);
             }
         }, d);
     }
 
+    /**
+     * Destroy StatusBar instance
+     */
     destroy() {
         if (!this.initialized) {
             return;
@@ -176,13 +288,13 @@ export class StatusBar extends Feature {
 
         let emitter = this.emitter;
 
-        this.statusBarDiv.innerHTML = '';
-        if (!this.statusBarTgtId) {
-            removeElm(this.statusBarDiv);
+        this.container.innerHTML = '';
+        if (!this.targetId) {
+            removeElm(this.container);
         }
-        this.statusBarSpan = null;
-        this.statusBarSpanText = null;
-        this.statusBarDiv = null;
+        this.labelContainer = null;
+        this.msgContainer = null;
+        this.container = null;
 
         // Unsubscribe to events
         emitter.off(['before-filtering'], () => this.message(this.msgFilter));
@@ -218,5 +330,4 @@ export class StatusBar extends Feature {
 
         this.initialized = false;
     }
-
 }

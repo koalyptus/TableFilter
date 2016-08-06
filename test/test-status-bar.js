@@ -8,7 +8,7 @@ var statusBar = tf.feature('statusBar');
 module('Sanity checks');
 test('Status bar component', function() {
     deepEqual(typeof statusBar, 'object', 'StatusBar instantiated');
-    notEqual(statusBar.statusBarDiv, null, 'statusBarDiv property');
+    notEqual(statusBar.container, null, 'container property');
 });
 
 module('Feature interface');
@@ -57,8 +57,8 @@ test('Can check is enabled', function() {
 
 module('UI elements');
 test('Status bar  UI elements', function() {
-    var container = statusBar.statusBarDiv,
-        label = statusBar.statusBarSpanText;
+    var container = statusBar.container,
+        label = statusBar.msgContainer;
     deepEqual(container.nodeName, 'DIV', 'Status bar container');
     deepEqual(label.nodeName, 'SPAN', 'Status bar label');
 });
@@ -66,17 +66,17 @@ test('Status bar  UI elements', function() {
 module('Destroy');
 test('Remove UI', function() {
     statusBar.destroy();
-    var container = statusBar.statusBarDiv,
-        label = statusBar.statusBarSpanText;
+    var container = statusBar.container,
+        label = statusBar.msgContainer;
     deepEqual(container, null, 'Status bar container removed');
     deepEqual(label, null, 'Status bar button removed');
 });
 
 test('Re-set UI', function() {
-    statusBar.statusBarText = '→←';
+    statusBar.text = '→←';
     statusBar.init();
 
-    var label = statusBar.statusBarSpanText;
+    var label = statusBar.labelContainer;
     notEqual(
         label.innerHTML.indexOf('→←'), -1, 'Status bar text');
 });
