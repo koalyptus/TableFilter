@@ -5,7 +5,7 @@ import {isEmpty} from '../string';
 import {isArray, isNull, isString, isUndef} from '../types';
 
 /**
- * State persistence via hash, localStorage or cookie
+ * Features state object persistable with localStorage, cookie or URL hash
  *
  * @export
  * @class State
@@ -15,7 +15,6 @@ export class State extends Feature {
 
     /**
      * Creates an instance of State
-     *
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
@@ -23,38 +22,164 @@ export class State extends Feature {
 
         let cfg = this.config.state;
 
+        /**
+         * Determines whether state is persisted with URL hash
+         * @type {Boolean}
+         */
         this.enableHash = cfg === true ||
             (isArray(cfg.types) && cfg.types.indexOf('hash') !== -1);
+
+        /**
+         * Determines whether state is persisted with localStorage
+         * @type {Boolean}
+         */
         this.enableLocalStorage = isArray(cfg.types) &&
             cfg.types.indexOf('local_storage') !== -1;
+
+        /**
+         * Determines whether state is persisted with localStorage
+         * @type {Boolean}
+         */
         this.enableCookie = isArray(cfg.types) &&
             cfg.types.indexOf('cookie') !== -1;
+
+        /**
+         * Persist filters values, enabled by default
+         * @type {Boolean}
+         */
         this.persistFilters = cfg.filters === false ? false : true;
+
+        /**
+         * Persist current page number when paging is enabled
+         * @type {Boolean}
+         */
         this.persistPageNumber = Boolean(cfg.page_number);
+
+        /**
+         * Persist page length when paging is enabled
+         * @type {Boolean}
+         */
         this.persistPageLength = Boolean(cfg.page_length);
+
+        /**
+         * Persist column sorting
+         * @type {Boolean}
+         */
         this.persistSort = Boolean(cfg.sort);
+
+        /**
+         * Persist columns visibility
+         * @type {Boolean}
+         */
         this.persistColsVisibility = Boolean(cfg.columns_visibility);
+
+        /**
+         * Persist filters row visibility
+         * @type {Boolean}
+         */
         this.persistFiltersVisibility = Boolean(cfg.filters_visibility);
+
+        /**
+         * Cookie duration in hours
+         * @type {Boolean}
+         */
         this.cookieDuration = !isNaN(cfg.cookie_duration) ?
             parseInt(cfg.cookie_duration, 10) : 87600;
 
+        /**
+         * Enable Storage if localStorage or cookie is required
+         * @type {Boolean}
+         * @private
+         */
         this.enableStorage = this.enableLocalStorage || this.enableCookie;
+
+        /**
+         * Storage instance if storage is required
+         * @type {Storage}
+         * @private
+         */
+        this.storage = null;
+
+        /**
+         * Hash instance if URL hash is required
+         * @type {Boolean}
+         * @private
+         */
         this.hash = null;
+
+        /**
+         * Current page number
+         * @type {Number}
+         * @private
+         */
         this.pageNb = null;
+
+        /**
+         * Current page length
+         * @type {Number}
+         * @private
+         */
         this.pageLength = null;
+
+        /**
+         * Current column sorting
+         * @type {Object}
+         * @private
+         */
         this.sort = null;
+
+        /**
+         * Current hidden columns
+         * @type {Object}
+         * @private
+         */
         this.hiddenCols = null;
+
+        /**
+         * Filters row visibility
+         * @type {Boolean}
+         * @private
+         */
         this.filtersVisibility = null;
 
+        /**
+         * State object
+         * @type {Object}
+         * @private
+         */
         this.state = {};
+
+        /**
+         * Prefix for column ID
+         * @type {String}
+         * @private
+         */
         this.prfxCol = 'col_';
+
+        /**
+         * Prefix for page number ID
+         * @type {String}
+         * @private
+         */
         this.pageNbKey = 'page';
+
+        /**
+         * Prefix for page length ID
+         * @type {String}
+         * @private
+         */
         this.pageLengthKey = 'page_length';
+
+        /**
+         * Prefix for filters visibility ID
+         * @type {String}
+         * @private
+         */
         this.filtersVisKey = 'filters_visibility';
     }
 
     /**
-     * Initializes the State object
+     * Initializes State instance
      */
     init() {
         if (this.initialized) {
@@ -86,6 +211,10 @@ export class State extends Feature {
             this.storage = new Storage(this);
             this.storage.init();
         }
+
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 

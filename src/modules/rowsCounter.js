@@ -22,7 +22,7 @@ export class RowsCounter extends Feature {
 
         /**
          * ID of custom container element
-         * @type {string}
+         * @type {String}
          */
         this.targetId = f.rows_counter_target_id || null;
 
