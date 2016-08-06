@@ -782,7 +782,7 @@
                       "trailingComments": [
                         {
                           "type": "Block",
-                          "value": "*\n         * ID of custom container element\n         * @type {string}\n         ",
+                          "value": "*\n         * ID of custom container element\n         * @type {String}\n         ",
                           "range": [
                             508,
                             591
@@ -981,7 +981,7 @@
                       "leadingComments": [
                         {
                           "type": "Block",
-                          "value": "*\n         * ID of custom container element\n         * @type {string}\n         ",
+                          "value": "*\n         * ID of custom container element\n         * @type {String}\n         ",
                           "range": [
                             508,
                             591
@@ -12298,7 +12298,7 @@
     },
     {
       "type": "Block",
-      "value": "*\n         * ID of custom container element\n         * @type {string}\n         ",
+      "value": "*\n         * ID of custom container element\n         * @type {String}\n         ",
       "range": [
         508,
         591

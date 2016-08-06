@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">State | tablefilter v0.2.50 API Document</title>
+  <title data-ice="title">State | tablefilter v0.2.51 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -141,7 +141,7 @@
 
   
   
-  <div class="description" data-ice="description"><p>State persistence via hash, localStorage or cookie</p>
+  <div class="description" data-ice="description"><p>Features state object persistable with localStorage, cookie or URL hash</p>
 </div>
 
   
@@ -203,13 +203,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-cookieDuration">cookieDuration</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-cookieDuration">cookieDuration</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Cookie duration in hours</p>
+</div>
       </div>
     </td>
     <td>
@@ -228,13 +229,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableCookie">enableCookie</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableCookie">enableCookie</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Determines whether state is persisted with localStorage</p>
+</div>
       </div>
     </td>
     <td>
@@ -253,13 +255,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableHash">enableHash</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableHash">enableHash</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Determines whether state is persisted with URL hash</p>
+</div>
       </div>
     </td>
     <td>
@@ -278,138 +281,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableLocalStorage">enableLocalStorage</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableLocalStorage">enableLocalStorage</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-enableStorage">enableStorage</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-filtersVisKey">filtersVisKey</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-filtersVisibility">filtersVisibility</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-hash">hash</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-hiddenCols">hiddenCols</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Determines whether state is persisted with localStorage</p>
+</div>
       </div>
     </td>
     <td>
@@ -453,13 +332,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-pageLength">pageLength</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistColsVisibility">persistColsVisibility</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Persist columns visibility</p>
+</div>
       </div>
     </td>
     <td>
@@ -478,13 +358,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-pageLengthKey">pageLengthKey</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistFilters">persistFilters</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Persist filters values, enabled by default</p>
+</div>
       </div>
     </td>
     <td>
@@ -503,13 +384,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-pageNb">pageNb</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistFiltersVisibility">persistFiltersVisibility</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Persist filters row visibility</p>
+</div>
       </div>
     </td>
     <td>
@@ -528,13 +410,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-pageNbKey">pageNbKey</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistPageLength">persistPageLength</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Persist page length when paging is enabled</p>
+</div>
       </div>
     </td>
     <td>
@@ -553,13 +436,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistColsVisibility">persistColsVisibility</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistPageNumber">persistPageNumber</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Persist current page number when paging is enabled</p>
+</div>
       </div>
     </td>
     <td>
@@ -578,213 +462,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistFilters">persistFilters</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistSort">persistSort</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistFiltersVisibility">persistFiltersVisibility</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistPageLength">persistPageLength</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistPageNumber">persistPageNumber</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-persistSort">persistSort</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-prfxCol">prfxCol</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-sort">sort</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-state">state</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/modules/state.js~State.html#instance-member-storage">storage</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Persist column sorting</p>
+</div>
       </div>
     </td>
     <td>
@@ -842,7 +527,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Initializes the State object</p>
+        <div data-ice="description"><p>Initializes State instance</p>
 </div>
       </div>
     </td>
@@ -1424,7 +1109,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber20">source</a></span></span>
     </span>
   </h3>
 
@@ -1481,18 +1166,19 @@
     
     
     
-    <span data-ice="name">cookieDuration</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">cookieDuration</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber38">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber86">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Cookie duration in hours</p>
+</div>
 
   
 
@@ -1521,18 +1207,19 @@
     
     
     
-    <span data-ice="name">enableCookie</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">enableCookie</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Determines whether state is persisted with localStorage</p>
+</div>
 
   
 
@@ -1561,18 +1248,19 @@
     
     
     
-    <span data-ice="name">enableHash</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">enableHash</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber26">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Determines whether state is persisted with URL hash</p>
+</div>
 
   
 
@@ -1601,218 +1289,19 @@
     
     
     
-    <span data-ice="name">enableLocalStorage</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">enableLocalStorage</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber36">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
-
-  
-
-  <div data-ice="properties">
+  <div data-ice="description"><p>Determines whether state is persisted with localStorage</p>
 </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-enableStorage">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">enableStorage</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber41">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-filtersVisKey">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">filtersVisKey</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber53">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-filtersVisibility">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">filtersVisibility</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber47">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-hash">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">hash</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber42">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-hiddenCols">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">hiddenCols</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber46">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -1845,7 +1334,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber89">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber218">source</a></span></span>
     </span>
   </h3>
 
@@ -1875,184 +1364,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-pageLength">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">pageLength</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber44">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-pageLengthKey">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">pageLengthKey</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber52">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-pageNb">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">pageNb</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber43">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-pageNbKey">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">pageNbKey</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber51">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-persistColsVisibility">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">persistColsVisibility</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">persistColsVisibility</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Persist columns visibility</p>
+</div>
 
   
 
@@ -2081,18 +1411,19 @@
     
     
     
-    <span data-ice="name">persistFilters</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">persistFilters</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber32">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber50">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Persist filters values, enabled by default</p>
+</div>
 
   
 
@@ -2121,18 +1452,19 @@
     
     
     
-    <span data-ice="name">persistFiltersVisibility</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">persistFiltersVisibility</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber37">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber80">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Persist filters row visibility</p>
+</div>
 
   
 
@@ -2161,18 +1493,19 @@
     
     
     
-    <span data-ice="name">persistPageLength</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">persistPageLength</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber34">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber62">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Persist page length when paging is enabled</p>
+</div>
 
   
 
@@ -2201,18 +1534,19 @@
     
     
     
-    <span data-ice="name">persistPageNumber</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">persistPageNumber</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber56">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Persist current page number when paging is enabled</p>
+</div>
 
   
 
@@ -2241,178 +1575,19 @@
     
     
     
-    <span data-ice="name">persistSort</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">persistSort</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber35">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
-
-  
-
-  <div data-ice="properties">
+  <div data-ice="description"><p>Persist column sorting</p>
 </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-prfxCol">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">prfxCol</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber50">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-sort">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">sort</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber45">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-state">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">state</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber49">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-storage">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">storage</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber86">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -2448,7 +1623,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber376">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber505">source</a></span></span>
     </span>
   </h3>
 
@@ -2489,14 +1664,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber59">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber184">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Initializes the State object</p>
+  <div data-ice="description"><p>Initializes State instance</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/feature.js~Feature.html#instance-method-init">Feature#init</a></span></div>
@@ -2530,7 +1705,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber238">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber367">source</a></span></span>
     </span>
   </h3>
 
@@ -2588,7 +1763,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber271">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber400">source</a></span></span>
     </span>
   </h3>
 
@@ -2646,7 +1821,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber245">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber374">source</a></span></span>
     </span>
   </h3>
 
@@ -2687,7 +1862,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber96">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber225">source</a></span></span>
     </span>
   </h3>
 
@@ -2728,7 +1903,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber218">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber347">source</a></span></span>
     </span>
   </h3>
 
@@ -2786,7 +1961,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber228">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber357">source</a></span></span>
     </span>
   </h3>
 
@@ -2844,7 +2019,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber184">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber313">source</a></span></span>
     </span>
   </h3>
 
@@ -2902,7 +2077,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber194">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber323">source</a></span></span>
     </span>
   </h3>
 
@@ -2960,7 +2135,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber205">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/state.js.html#lineNumber334">source</a></span></span>
     </span>
   </h3>
 

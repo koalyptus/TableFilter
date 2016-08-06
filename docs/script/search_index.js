@@ -3156,36 +3156,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/state.js~state#enablestorage",
-    "class/src/modules/state.js~State.html#instance-member-enableStorage",
-    "src/modules/state.js~State#enableStorage",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#filtersviskey",
-    "class/src/modules/state.js~State.html#instance-member-filtersVisKey",
-    "src/modules/state.js~State#filtersVisKey",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#filtersvisibility",
-    "class/src/modules/state.js~State.html#instance-member-filtersVisibility",
-    "src/modules/state.js~State#filtersVisibility",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#hash",
-    "class/src/modules/state.js~State.html#instance-member-hash",
-    "src/modules/state.js~State#hash",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#hiddencols",
-    "class/src/modules/state.js~State.html#instance-member-hiddenCols",
-    "src/modules/state.js~State#hiddenCols",
-    "member"
-  ],
-  [
     "src/modules/state.js~state#init",
     "class/src/modules/state.js~State.html#instance-method-init",
     "src/modules/state.js~State#init",
@@ -3208,30 +3178,6 @@ window.esdocSearchIndex = [
     "class/src/modules/state.js~State.html#instance-method-overrideAndSync",
     "src/modules/state.js~State#overrideAndSync",
     "method"
-  ],
-  [
-    "src/modules/state.js~state#pagelength",
-    "class/src/modules/state.js~State.html#instance-member-pageLength",
-    "src/modules/state.js~State#pageLength",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#pagelengthkey",
-    "class/src/modules/state.js~State.html#instance-member-pageLengthKey",
-    "src/modules/state.js~State#pageLengthKey",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#pagenb",
-    "class/src/modules/state.js~State.html#instance-member-pageNb",
-    "src/modules/state.js~State#pageNb",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#pagenbkey",
-    "class/src/modules/state.js~State.html#instance-member-pageNbKey",
-    "src/modules/state.js~State#pageNbKey",
-    "member"
   ],
   [
     "src/modules/state.js~state#persistcolsvisibility",
@@ -3267,30 +3213,6 @@ window.esdocSearchIndex = [
     "src/modules/state.js~state#persistsort",
     "class/src/modules/state.js~State.html#instance-member-persistSort",
     "src/modules/state.js~State#persistSort",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#prfxcol",
-    "class/src/modules/state.js~State.html#instance-member-prfxCol",
-    "src/modules/state.js~State#prfxCol",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#sort",
-    "class/src/modules/state.js~State.html#instance-member-sort",
-    "src/modules/state.js~State#sort",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#state",
-    "class/src/modules/state.js~State.html#instance-member-state",
-    "src/modules/state.js~State#state",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#storage",
-    "class/src/modules/state.js~State.html#instance-member-storage",
-    "src/modules/state.js~State#storage",
     "member"
   ],
   [
@@ -3346,6 +3268,12 @@ window.esdocSearchIndex = [
     "class/src/modules/statusBar.js~StatusBar.html#instance-constructor-constructor",
     "src/modules/statusBar.js~StatusBar#constructor",
     "method"
+  ],
+  [
+    "src/modules/statusbar.js~statusbar#cssclass",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-cssClass",
+    "src/modules/statusBar.js~StatusBar#cssClass",
+    "member"
   ],
   [
     "src/modules/statusbar.js~statusbar#destroy",
@@ -3450,63 +3378,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/statusbar.js~statusbar#prfxstatus",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-prfxStatus",
-    "src/modules/statusBar.js~StatusBar#prfxStatus",
+    "src/modules/statusbar.js~statusbar#targetid",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-targetId",
+    "src/modules/statusBar.js~StatusBar#targetId",
     "member"
   ],
   [
-    "src/modules/statusbar.js~statusbar#prfxstatusspan",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-prfxStatusSpan",
-    "src/modules/statusBar.js~StatusBar#prfxStatusSpan",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#prfxstatustxt",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-prfxStatusTxt",
-    "src/modules/statusBar.js~StatusBar#prfxStatusTxt",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#statusbarclosedelay",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-statusBarCloseDelay",
-    "src/modules/statusBar.js~StatusBar#statusBarCloseDelay",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#statusbarcssclass",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-statusBarCssClass",
-    "src/modules/statusBar.js~StatusBar#statusBarCssClass",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#statusbardiv",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-statusBarDiv",
-    "src/modules/statusBar.js~StatusBar#statusBarDiv",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#statusbarspan",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-statusBarSpan",
-    "src/modules/statusBar.js~StatusBar#statusBarSpan",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#statusbarspantext",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-statusBarSpanText",
-    "src/modules/statusBar.js~StatusBar#statusBarSpanText",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#statusbartext",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-statusBarText",
-    "src/modules/statusBar.js~StatusBar#statusBarText",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#statusbartgtid",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-statusBarTgtId",
-    "src/modules/statusBar.js~StatusBar#statusBarTgtId",
+    "src/modules/statusbar.js~statusbar#text",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-text",
+    "src/modules/statusBar.js~StatusBar#text",
     "member"
   ],
   [

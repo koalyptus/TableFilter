@@ -1,7 +1,7 @@
 {
-  "coverage": "57.08%",
-  "expectCount": 727,
-  "actualCount": 415,
+  "coverage": "63.22%",
+  "expectCount": 707,
+  "actualCount": 447,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -374,68 +374,14 @@
       "undocumentLines": []
     },
     "src/modules/state.js": {
-      "expectCount": 37,
-      "actualCount": 13,
-      "undocumentLines": [
-        38,
-        30,
-        26,
-        28,
-        41,
-        53,
-        47,
-        42,
-        46,
-        89,
-        44,
-        52,
-        43,
-        51,
-        36,
-        32,
-        37,
-        34,
-        33,
-        35,
-        50,
-        45,
-        49,
-        86
-      ]
+      "expectCount": 24,
+      "actualCount": 24,
+      "undocumentLines": []
     },
     "src/modules/statusBar.js": {
-      "expectCount": 29,
-      "actualCount": 1,
-      "undocumentLines": [
-        6,
-        172,
-        75,
-        148,
-        151,
-        48,
-        52,
-        50,
-        41,
-        62,
-        65,
-        43,
-        45,
-        55,
-        57,
-        60,
-        37,
-        34,
-        68,
-        70,
-        72,
-        31,
-        29,
-        21,
-        23,
-        25,
-        27,
-        19
-      ]
+      "expectCount": 22,
+      "actualCount": 22,
+      "undocumentLines": []
     },
     "src/modules/storage.js": {
       "expectCount": 16,
