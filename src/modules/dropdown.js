@@ -11,13 +11,12 @@ const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
 
 /**
  * Dropdown filter UI component
- * @param {Object} tf TableFilter instance
  */
 export class Dropdown extends Feature {
 
     /**
      * Creates an instance of Dropdown
-     * @param {Object} tf TableFilter instance
+     * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'dropdown');
