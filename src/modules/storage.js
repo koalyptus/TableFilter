@@ -6,6 +6,9 @@ const JSON = root.JSON;
 const localStorage = root.localStorage;
 const location = root.location;
 
+/**
+ * Checks if browser has Storage feature
+ */
 export const hasStorage = () => {
     return 'Storage' in root;
 };
@@ -24,11 +27,47 @@ export class Storage {
      * @param {State} state Instance of State
      */
     constructor(state) {
+
+        /**
+         * State object
+         * @type {State}
+         * @private
+         */
         this.state = state;
+
+        /**
+         * TableFilter object
+         * @type {TableFilter}
+         * @private
+         */
         this.tf = state.tf;
+
+        /**
+         * Persist with local storage
+         * @type {Boolean}
+         * @private
+         */
         this.enableLocalStorage = state.enableLocalStorage && hasStorage();
+
+        /**
+         * Persist with cookie
+         * @type {Boolean}
+         * @private
+         */
         this.enableCookie = state.enableCookie && !this.enableLocalStorage;
+
+        /**
+         * Emitter object
+         * @type {Emitter}
+         * @private
+         */
         this.emitter = state.emitter;
+
+        /**
+         * Cookie duration in hours from state object
+         * @type {Number}
+         * @private
+         */
         this.duration = state.cookieDuration;
     }
 
@@ -44,7 +83,7 @@ export class Storage {
     /**
      * Persists the features state on state changes
      *
-      * @param {State} state Instance of State
+     * @param {State} state Instance of State
      */
     save(state) {
         if (this.enableLocalStorage) {

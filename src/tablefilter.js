@@ -35,10 +35,16 @@ import {
 
 let doc = root.document;
 
+/**
+ * Makes HTML tables filterable and a bit more :)
+ *
+ * @export
+ * @class TableFilter
+ */
 export class TableFilter {
 
     /**
-     * TableFilter object constructor
+     * Creates an instance of TableFilter
      * requires `table` or `id` arguments, `row` and `configuration` optional
      * @param {DOMElement} table Table DOM element
      * @param {String} id Table id

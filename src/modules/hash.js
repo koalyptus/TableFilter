@@ -29,7 +29,7 @@ export class Hash {
     constructor(state) {
         /**
          * State object
-         * @type {State} State
+         * @type {State}
          */
         this.state = state;
 
