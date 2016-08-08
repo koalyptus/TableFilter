@@ -1186,8 +1186,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              705,
-                              709
+                              699,
+                              703
                             ],
                             "loc": {
                               "start": {
@@ -1204,8 +1204,8 @@
                             "type": "Identifier",
                             "name": "state",
                             "range": [
-                              710,
-                              715
+                              704,
+                              709
                             ],
                             "loc": {
                               "start": {
@@ -1219,8 +1219,8 @@
                             }
                           },
                           "range": [
-                            705,
-                            715
+                            699,
+                            709
                           ],
                           "loc": {
                             "start": {
@@ -1237,8 +1237,8 @@
                           "type": "Identifier",
                           "name": "state",
                           "range": [
-                            718,
-                            723
+                            712,
+                            717
                           ],
                           "loc": {
                             "start": {
@@ -1252,8 +1252,8 @@
                           }
                         },
                         "range": [
-                          705,
-                          723
+                          699,
+                          717
                         ],
                         "loc": {
                           "start": {
@@ -1267,8 +1267,8 @@
                         }
                       },
                       "range": [
-                        705,
-                        724
+                        699,
+                        718
                       ],
                       "loc": {
                         "start": {
@@ -1283,10 +1283,10 @@
                       "leadingComments": [
                         {
                           "type": "Block",
-                          "value": "*\n         * State object\n         * @type {State} State\n         ",
+                          "value": "*\n         * State object\n         * @type {State}\n         ",
                           "range": [
                             626,
-                            696
+                            690
                           ],
                           "loc": {
                             "start": {
@@ -1305,8 +1305,8 @@
                           "type": "Block",
                           "value": "*\n         * Cached URL hash\n         * @type {String} Hash string\n         * @private\n         ",
                           "range": [
-                            734,
-                            834
+                            728,
+                            828
                           ],
                           "loc": {
                             "start": {
@@ -1332,8 +1332,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              843,
-                              847
+                              837,
+                              841
                             ],
                             "loc": {
                               "start": {
@@ -1350,8 +1350,8 @@
                             "type": "Identifier",
                             "name": "lastHash",
                             "range": [
-                              848,
-                              856
+                              842,
+                              850
                             ],
                             "loc": {
                               "start": {
@@ -1365,8 +1365,8 @@
                             }
                           },
                           "range": [
-                            843,
-                            856
+                            837,
+                            850
                           ],
                           "loc": {
                             "start": {
@@ -1384,8 +1384,8 @@
                           "value": null,
                           "raw": "null",
                           "range": [
-                            859,
-                            863
+                            853,
+                            857
                           ],
                           "loc": {
                             "start": {
@@ -1399,8 +1399,8 @@
                           }
                         },
                         "range": [
-                          843,
-                          863
+                          837,
+                          857
                         ],
                         "loc": {
                           "start": {
@@ -1414,8 +1414,8 @@
                         }
                       },
                       "range": [
-                        843,
-                        864
+                        837,
+                        858
                       ],
                       "loc": {
                         "start": {
@@ -1432,8 +1432,8 @@
                           "type": "Block",
                           "value": "*\n         * Cached URL hash\n         * @type {String} Hash string\n         * @private\n         ",
                           "range": [
-                            734,
-                            834
+                            728,
+                            828
                           ],
                           "loc": {
                             "start": {
@@ -1452,8 +1452,8 @@
                           "type": "Block",
                           "value": "*\n         * Application event emitter instance\n         * @type {Emitter}\n         ",
                           "range": [
-                            874,
-                            962
+                            868,
+                            956
                           ],
                           "loc": {
                             "start": {
@@ -1479,8 +1479,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              971,
-                              975
+                              965,
+                              969
                             ],
                             "loc": {
                               "start": {
@@ -1497,8 +1497,8 @@
                             "type": "Identifier",
                             "name": "emitter",
                             "range": [
-                              976,
-                              983
+                              970,
+                              977
                             ],
                             "loc": {
                               "start": {
@@ -1512,8 +1512,8 @@
                             }
                           },
                           "range": [
-                            971,
-                            983
+                            965,
+                            977
                           ],
                           "loc": {
                             "start": {
@@ -1533,8 +1533,8 @@
                             "type": "Identifier",
                             "name": "state",
                             "range": [
-                              986,
-                              991
+                              980,
+                              985
                             ],
                             "loc": {
                               "start": {
@@ -1551,8 +1551,8 @@
                             "type": "Identifier",
                             "name": "emitter",
                             "range": [
-                              992,
-                              999
+                              986,
+                              993
                             ],
                             "loc": {
                               "start": {
@@ -1566,8 +1566,8 @@
                             }
                           },
                           "range": [
-                            986,
-                            999
+                            980,
+                            993
                           ],
                           "loc": {
                             "start": {
@@ -1581,8 +1581,8 @@
                           }
                         },
                         "range": [
-                          971,
-                          999
+                          965,
+                          993
                         ],
                         "loc": {
                           "start": {
@@ -1596,8 +1596,8 @@
                         }
                       },
                       "range": [
-                        971,
-                        1000
+                        965,
+                        994
                       ],
                       "loc": {
                         "start": {
@@ -1614,8 +1614,8 @@
                           "type": "Block",
                           "value": "*\n         * Application event emitter instance\n         * @type {Emitter}\n         ",
                           "range": [
-                            874,
-                            962
+                            868,
+                            956
                           ],
                           "loc": {
                             "start": {
@@ -1634,8 +1634,8 @@
                           "type": "Block",
                           "value": "*\n         * Bound sync wrapper for future use\n         * @private\n         ",
                           "range": [
-                            1010,
-                            1090
+                            1004,
+                            1084
                           ],
                           "loc": {
                             "start": {
@@ -1661,8 +1661,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              1099,
-                              1103
+                              1093,
+                              1097
                             ],
                             "loc": {
                               "start": {
@@ -1679,8 +1679,8 @@
                             "type": "Identifier",
                             "name": "boundSync",
                             "range": [
-                              1104,
-                              1113
+                              1098,
+                              1107
                             ],
                             "loc": {
                               "start": {
@@ -1694,8 +1694,8 @@
                             }
                           },
                           "range": [
-                            1099,
-                            1113
+                            1093,
+                            1107
                           ],
                           "loc": {
                             "start": {
@@ -1713,8 +1713,8 @@
                           "value": null,
                           "raw": "null",
                           "range": [
-                            1116,
-                            1120
+                            1110,
+                            1114
                           ],
                           "loc": {
                             "start": {
@@ -1728,8 +1728,8 @@
                           }
                         },
                         "range": [
-                          1099,
-                          1120
+                          1093,
+                          1114
                         ],
                         "loc": {
                           "start": {
@@ -1743,8 +1743,8 @@
                         }
                       },
                       "range": [
-                        1099,
-                        1121
+                        1093,
+                        1115
                       ],
                       "loc": {
                         "start": {
@@ -1761,8 +1761,8 @@
                           "type": "Block",
                           "value": "*\n         * Bound sync wrapper for future use\n         * @private\n         ",
                           "range": [
-                            1010,
-                            1090
+                            1004,
+                            1084
                           ],
                           "loc": {
                             "start": {
@@ -1780,7 +1780,7 @@
                   ],
                   "range": [
                     616,
-                    1127
+                    1121
                   ],
                   "loc": {
                     "start": {
@@ -1797,7 +1797,7 @@
                 "expression": false,
                 "range": [
                   608,
-                  1127
+                  1121
                 ],
                 "loc": {
                   "start": {
@@ -1814,7 +1814,7 @@
               "computed": false,
               "range": [
                 597,
-                1127
+                1121
               ],
               "loc": {
                 "start": {
@@ -1851,8 +1851,8 @@
                   "type": "Block",
                   "value": "*\n     * Initializes the Hash object\n     ",
                   "range": [
-                    1133,
-                    1179
+                    1127,
+                    1173
                   ],
                   "loc": {
                     "start": {
@@ -1874,8 +1874,8 @@
                 "type": "Identifier",
                 "name": "init",
                 "range": [
-                  1184,
-                  1188
+                  1178,
+                  1182
                 ],
                 "loc": {
                   "start": {
@@ -1906,8 +1906,8 @@
                             "type": "Identifier",
                             "name": "hasHashChange",
                             "range": [
-                              1206,
-                              1219
+                              1200,
+                              1213
                             ],
                             "loc": {
                               "start": {
@@ -1922,8 +1922,8 @@
                           },
                           "arguments": [],
                           "range": [
-                            1206,
-                            1221
+                            1200,
+                            1215
                           ],
                           "loc": {
                             "start": {
@@ -1938,8 +1938,8 @@
                         },
                         "prefix": true,
                         "range": [
-                          1205,
-                          1221
+                          1199,
+                          1215
                         ],
                         "loc": {
                           "start": {
@@ -1959,8 +1959,8 @@
                             "type": "ReturnStatement",
                             "argument": null,
                             "range": [
-                              1237,
-                              1244
+                              1231,
+                              1238
                             ],
                             "loc": {
                               "start": {
@@ -1975,8 +1975,8 @@
                           }
                         ],
                         "range": [
-                          1223,
-                          1254
+                          1217,
+                          1248
                         ],
                         "loc": {
                           "start": {
@@ -1991,8 +1991,8 @@
                       },
                       "alternate": null,
                       "range": [
-                        1201,
-                        1254
+                        1195,
+                        1248
                       ],
                       "loc": {
                         "start": {
@@ -2016,8 +2016,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              1264,
-                              1268
+                              1258,
+                              1262
                             ],
                             "loc": {
                               "start": {
@@ -2034,8 +2034,8 @@
                             "type": "Identifier",
                             "name": "lastHash",
                             "range": [
-                              1269,
-                              1277
+                              1263,
+                              1271
                             ],
                             "loc": {
                               "start": {
@@ -2049,8 +2049,8 @@
                             }
                           },
                           "range": [
-                            1264,
-                            1277
+                            1258,
+                            1271
                           ],
                           "loc": {
                             "start": {
@@ -2070,8 +2070,8 @@
                             "type": "Identifier",
                             "name": "location",
                             "range": [
-                              1280,
-                              1288
+                              1274,
+                              1282
                             ],
                             "loc": {
                               "start": {
@@ -2088,8 +2088,8 @@
                             "type": "Identifier",
                             "name": "hash",
                             "range": [
-                              1289,
-                              1293
+                              1283,
+                              1287
                             ],
                             "loc": {
                               "start": {
@@ -2103,8 +2103,8 @@
                             }
                           },
                           "range": [
-                            1280,
-                            1293
+                            1274,
+                            1287
                           ],
                           "loc": {
                             "start": {
@@ -2118,8 +2118,8 @@
                           }
                         },
                         "range": [
-                          1264,
-                          1293
+                          1258,
+                          1287
                         ],
                         "loc": {
                           "start": {
@@ -2133,8 +2133,8 @@
                         }
                       },
                       "range": [
-                        1264,
-                        1294
+                        1258,
+                        1288
                       ],
                       "loc": {
                         "start": {
@@ -2151,8 +2151,8 @@
                           "type": "Line",
                           "value": "Store a bound sync wrapper",
                           "range": [
-                            1303,
-                            1331
+                            1297,
+                            1325
                           ],
                           "loc": {
                             "start": {
@@ -2178,8 +2178,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              1340,
-                              1344
+                              1334,
+                              1338
                             ],
                             "loc": {
                               "start": {
@@ -2196,8 +2196,8 @@
                             "type": "Identifier",
                             "name": "boundSync",
                             "range": [
-                              1345,
-                              1354
+                              1339,
+                              1348
                             ],
                             "loc": {
                               "start": {
@@ -2211,8 +2211,8 @@
                             }
                           },
                           "range": [
-                            1340,
-                            1354
+                            1334,
+                            1348
                           ],
                           "loc": {
                             "start": {
@@ -2236,8 +2236,8 @@
                               "object": {
                                 "type": "ThisExpression",
                                 "range": [
-                                  1357,
-                                  1361
+                                  1351,
+                                  1355
                                 ],
                                 "loc": {
                                   "start": {
@@ -2254,8 +2254,8 @@
                                 "type": "Identifier",
                                 "name": "sync",
                                 "range": [
-                                  1362,
-                                  1366
+                                  1356,
+                                  1360
                                 ],
                                 "loc": {
                                   "start": {
@@ -2269,8 +2269,8 @@
                                 }
                               },
                               "range": [
-                                1357,
-                                1366
+                                1351,
+                                1360
                               ],
                               "loc": {
                                 "start": {
@@ -2287,8 +2287,8 @@
                               "type": "Identifier",
                               "name": "bind",
                               "range": [
-                                1367,
-                                1371
+                                1361,
+                                1365
                               ],
                               "loc": {
                                 "start": {
@@ -2302,8 +2302,8 @@
                               }
                             },
                             "range": [
-                              1357,
-                              1371
+                              1351,
+                              1365
                             ],
                             "loc": {
                               "start": {
@@ -2320,8 +2320,8 @@
                             {
                               "type": "ThisExpression",
                               "range": [
-                                1372,
-                                1376
+                                1366,
+                                1370
                               ],
                               "loc": {
                                 "start": {
@@ -2336,8 +2336,8 @@
                             }
                           ],
                           "range": [
-                            1357,
-                            1377
+                            1351,
+                            1371
                           ],
                           "loc": {
                             "start": {
@@ -2351,8 +2351,8 @@
                           }
                         },
                         "range": [
-                          1340,
-                          1377
+                          1334,
+                          1371
                         ],
                         "loc": {
                           "start": {
@@ -2366,8 +2366,8 @@
                         }
                       },
                       "range": [
-                        1340,
-                        1378
+                        1334,
+                        1372
                       ],
                       "loc": {
                         "start": {
@@ -2384,8 +2384,8 @@
                           "type": "Line",
                           "value": "Store a bound sync wrapper",
                           "range": [
-                            1303,
-                            1331
+                            1297,
+                            1325
                           ],
                           "loc": {
                             "start": {
@@ -2413,8 +2413,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                1387,
-                                1391
+                                1381,
+                                1385
                               ],
                               "loc": {
                                 "start": {
@@ -2431,8 +2431,8 @@
                               "type": "Identifier",
                               "name": "emitter",
                               "range": [
-                                1392,
-                                1399
+                                1386,
+                                1393
                               ],
                               "loc": {
                                 "start": {
@@ -2446,8 +2446,8 @@
                               }
                             },
                             "range": [
-                              1387,
-                              1399
+                              1381,
+                              1393
                             ],
                             "loc": {
                               "start": {
@@ -2464,8 +2464,8 @@
                             "type": "Identifier",
                             "name": "on",
                             "range": [
-                              1400,
-                              1402
+                              1394,
+                              1396
                             ],
                             "loc": {
                               "start": {
@@ -2479,8 +2479,8 @@
                             }
                           },
                           "range": [
-                            1387,
-                            1402
+                            1381,
+                            1396
                           ],
                           "loc": {
                             "start": {
@@ -2502,8 +2502,8 @@
                                 "value": "state-changed",
                                 "raw": "'state-changed'",
                                 "range": [
-                                  1404,
-                                  1419
+                                  1398,
+                                  1413
                                 ],
                                 "loc": {
                                   "start": {
@@ -2518,8 +2518,8 @@
                               }
                             ],
                             "range": [
-                              1403,
-                              1420
+                              1397,
+                              1414
                             ],
                             "loc": {
                               "start": {
@@ -2540,8 +2540,8 @@
                                 "type": "Identifier",
                                 "name": "tf",
                                 "range": [
-                                  1423,
-                                  1425
+                                  1417,
+                                  1419
                                 ],
                                 "loc": {
                                   "start": {
@@ -2558,8 +2558,8 @@
                                 "type": "Identifier",
                                 "name": "state",
                                 "range": [
-                                  1427,
-                                  1432
+                                  1421,
+                                  1426
                                 ],
                                 "loc": {
                                   "start": {
@@ -2581,8 +2581,8 @@
                                 "object": {
                                   "type": "ThisExpression",
                                   "range": [
-                                    1437,
-                                    1441
+                                    1431,
+                                    1435
                                   ],
                                   "loc": {
                                     "start": {
@@ -2599,8 +2599,8 @@
                                   "type": "Identifier",
                                   "name": "update",
                                   "range": [
-                                    1442,
-                                    1448
+                                    1436,
+                                    1442
                                   ],
                                   "loc": {
                                     "start": {
@@ -2614,8 +2614,8 @@
                                   }
                                 },
                                 "range": [
-                                  1437,
-                                  1448
+                                  1431,
+                                  1442
                                 ],
                                 "loc": {
                                   "start": {
@@ -2633,8 +2633,8 @@
                                   "type": "Identifier",
                                   "name": "state",
                                   "range": [
-                                    1449,
-                                    1454
+                                    1443,
+                                    1448
                                   ],
                                   "loc": {
                                     "start": {
@@ -2649,8 +2649,8 @@
                                 }
                               ],
                               "range": [
-                                1437,
-                                1455
+                                1431,
+                                1449
                               ],
                               "loc": {
                                 "start": {
@@ -2666,8 +2666,8 @@
                             "generator": false,
                             "expression": true,
                             "range": [
-                              1422,
-                              1455
+                              1416,
+                              1449
                             ],
                             "loc": {
                               "start": {
@@ -2682,8 +2682,8 @@
                           }
                         ],
                         "range": [
-                          1387,
-                          1456
+                          1381,
+                          1450
                         ],
                         "loc": {
                           "start": {
@@ -2697,8 +2697,8 @@
                         }
                       },
                       "range": [
-                        1387,
-                        1457
+                        1381,
+                        1451
                       ],
                       "loc": {
                         "start": {
@@ -2724,8 +2724,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                1466,
-                                1470
+                                1460,
+                                1464
                               ],
                               "loc": {
                                 "start": {
@@ -2742,8 +2742,8 @@
                               "type": "Identifier",
                               "name": "emitter",
                               "range": [
-                                1471,
-                                1478
+                                1465,
+                                1472
                               ],
                               "loc": {
                                 "start": {
@@ -2757,8 +2757,8 @@
                               }
                             },
                             "range": [
-                              1466,
-                              1478
+                              1460,
+                              1472
                             ],
                             "loc": {
                               "start": {
@@ -2775,8 +2775,8 @@
                             "type": "Identifier",
                             "name": "on",
                             "range": [
-                              1479,
-                              1481
+                              1473,
+                              1475
                             ],
                             "loc": {
                               "start": {
@@ -2790,8 +2790,8 @@
                             }
                           },
                           "range": [
-                            1466,
-                            1481
+                            1460,
+                            1475
                           ],
                           "loc": {
                             "start": {
@@ -2813,8 +2813,8 @@
                                 "value": "initialized",
                                 "raw": "'initialized'",
                                 "range": [
-                                  1483,
-                                  1496
+                                  1477,
+                                  1490
                                 ],
                                 "loc": {
                                   "start": {
@@ -2829,8 +2829,8 @@
                               }
                             ],
                             "range": [
-                              1482,
-                              1497
+                              1476,
+                              1491
                             ],
                             "loc": {
                               "start": {
@@ -2849,8 +2849,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                1499,
-                                1503
+                                1493,
+                                1497
                               ],
                               "loc": {
                                 "start": {
@@ -2867,8 +2867,8 @@
                               "type": "Identifier",
                               "name": "boundSync",
                               "range": [
-                                1504,
-                                1513
+                                1498,
+                                1507
                               ],
                               "loc": {
                                 "start": {
@@ -2882,8 +2882,8 @@
                               }
                             },
                             "range": [
-                              1499,
-                              1513
+                              1493,
+                              1507
                             ],
                             "loc": {
                               "start": {
@@ -2898,8 +2898,8 @@
                           }
                         ],
                         "range": [
-                          1466,
-                          1514
+                          1460,
+                          1508
                         ],
                         "loc": {
                           "start": {
@@ -2913,8 +2913,8 @@
                         }
                       },
                       "range": [
-                        1466,
-                        1515
+                        1460,
+                        1509
                       ],
                       "loc": {
                         "start": {
@@ -2935,8 +2935,8 @@
                           "type": "Identifier",
                           "name": "addEvt",
                           "range": [
-                            1524,
-                            1530
+                            1518,
+                            1524
                           ],
                           "loc": {
                             "start": {
@@ -2954,8 +2954,8 @@
                             "type": "Identifier",
                             "name": "root",
                             "range": [
-                              1531,
-                              1535
+                              1525,
+                              1529
                             ],
                             "loc": {
                               "start": {
@@ -2973,8 +2973,8 @@
                             "value": "hashchange",
                             "raw": "'hashchange'",
                             "range": [
-                              1537,
-                              1549
+                              1531,
+                              1543
                             ],
                             "loc": {
                               "start": {
@@ -2993,8 +2993,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                1551,
-                                1555
+                                1545,
+                                1549
                               ],
                               "loc": {
                                 "start": {
@@ -3011,8 +3011,8 @@
                               "type": "Identifier",
                               "name": "boundSync",
                               "range": [
-                                1556,
-                                1565
+                                1550,
+                                1559
                               ],
                               "loc": {
                                 "start": {
@@ -3026,8 +3026,8 @@
                               }
                             },
                             "range": [
-                              1551,
-                              1565
+                              1545,
+                              1559
                             ],
                             "loc": {
                               "start": {
@@ -3042,8 +3042,8 @@
                           }
                         ],
                         "range": [
-                          1524,
-                          1566
+                          1518,
+                          1560
                         ],
                         "loc": {
                           "start": {
@@ -3057,8 +3057,8 @@
                         }
                       },
                       "range": [
-                        1524,
-                        1567
+                        1518,
+                        1561
                       ],
                       "loc": {
                         "start": {
@@ -3073,8 +3073,8 @@
                     }
                   ],
                   "range": [
-                    1191,
-                    1573
+                    1185,
+                    1567
                   ],
                   "loc": {
                     "start": {
@@ -3090,8 +3090,8 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  1188,
-                  1573
+                  1182,
+                  1567
                 ],
                 "loc": {
                   "start": {
@@ -3107,8 +3107,8 @@
               "kind": "method",
               "computed": false,
               "range": [
-                1184,
-                1573
+                1178,
+                1567
               ],
               "loc": {
                 "start": {
@@ -3125,8 +3125,8 @@
                   "type": "Block",
                   "value": "*\n     * Initializes the Hash object\n     ",
                   "range": [
-                    1133,
-                    1179
+                    1127,
+                    1173
                   ],
                   "loc": {
                     "start": {
@@ -3145,8 +3145,8 @@
                   "type": "Block",
                   "value": "*\n     * Updates the URL hash based on a state change\n     *\n     * @param {State} state Instance of State\n     ",
                   "range": [
-                    1579,
-                    1695
+                    1573,
+                    1689
                   ],
                   "loc": {
                     "start": {
@@ -3168,8 +3168,8 @@
                 "type": "Identifier",
                 "name": "update",
                 "range": [
-                  1700,
-                  1706
+                  1694,
+                  1700
                 ],
                 "loc": {
                   "start": {
@@ -3190,8 +3190,8 @@
                     "type": "Identifier",
                     "name": "state",
                     "range": [
-                      1707,
-                      1712
+                      1701,
+                      1706
                     ],
                     "loc": {
                       "start": {
@@ -3217,8 +3217,8 @@
                             "type": "Identifier",
                             "name": "hash",
                             "range": [
-                              1728,
-                              1732
+                              1722,
+                              1726
                             ],
                             "loc": {
                               "start": {
@@ -3242,8 +3242,8 @@
                                 },
                                 "tail": false,
                                 "range": [
-                                  1735,
-                                  1739
+                                  1729,
+                                  1733
                                 ],
                                 "loc": {
                                   "start": {
@@ -3264,8 +3264,8 @@
                                 },
                                 "tail": true,
                                 "range": [
-                                  1760,
-                                  1762
+                                  1754,
+                                  1756
                                 ],
                                 "loc": {
                                   "start": {
@@ -3289,8 +3289,8 @@
                                     "type": "Identifier",
                                     "name": "JSON",
                                     "range": [
-                                      1739,
-                                      1743
+                                      1733,
+                                      1737
                                     ],
                                     "loc": {
                                       "start": {
@@ -3307,8 +3307,8 @@
                                     "type": "Identifier",
                                     "name": "stringify",
                                     "range": [
-                                      1744,
-                                      1753
+                                      1738,
+                                      1747
                                     ],
                                     "loc": {
                                       "start": {
@@ -3322,8 +3322,8 @@
                                     }
                                   },
                                   "range": [
-                                    1739,
-                                    1753
+                                    1733,
+                                    1747
                                   ],
                                   "loc": {
                                     "start": {
@@ -3341,8 +3341,8 @@
                                     "type": "Identifier",
                                     "name": "state",
                                     "range": [
-                                      1754,
-                                      1759
+                                      1748,
+                                      1753
                                     ],
                                     "loc": {
                                       "start": {
@@ -3357,8 +3357,8 @@
                                   }
                                 ],
                                 "range": [
-                                  1739,
-                                  1760
+                                  1733,
+                                  1754
                                 ],
                                 "loc": {
                                   "start": {
@@ -3373,8 +3373,8 @@
                               }
                             ],
                             "range": [
-                              1735,
-                              1762
+                              1729,
+                              1756
                             ],
                             "loc": {
                               "start": {
@@ -3388,8 +3388,8 @@
                             }
                           },
                           "range": [
-                            1728,
-                            1762
+                            1722,
+                            1756
                           ],
                           "loc": {
                             "start": {
@@ -3405,8 +3405,8 @@
                       ],
                       "kind": "let",
                       "range": [
-                        1724,
-                        1763
+                        1718,
+                        1757
                       ],
                       "loc": {
                         "start": {
@@ -3430,8 +3430,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              1776,
-                              1780
+                              1770,
+                              1774
                             ],
                             "loc": {
                               "start": {
@@ -3448,8 +3448,8 @@
                             "type": "Identifier",
                             "name": "lastHash",
                             "range": [
-                              1781,
-                              1789
+                              1775,
+                              1783
                             ],
                             "loc": {
                               "start": {
@@ -3463,8 +3463,8 @@
                             }
                           },
                           "range": [
-                            1776,
-                            1789
+                            1770,
+                            1783
                           ],
                           "loc": {
                             "start": {
@@ -3481,8 +3481,8 @@
                           "type": "Identifier",
                           "name": "hash",
                           "range": [
-                            1794,
-                            1798
+                            1788,
+                            1792
                           ],
                           "loc": {
                             "start": {
@@ -3496,8 +3496,8 @@
                           }
                         },
                         "range": [
-                          1776,
-                          1798
+                          1770,
+                          1792
                         ],
                         "loc": {
                           "start": {
@@ -3517,8 +3517,8 @@
                             "type": "ReturnStatement",
                             "argument": null,
                             "range": [
-                              1814,
-                              1821
+                              1808,
+                              1815
                             ],
                             "loc": {
                               "start": {
@@ -3533,8 +3533,8 @@
                           }
                         ],
                         "range": [
-                          1800,
-                          1831
+                          1794,
+                          1825
                         ],
                         "loc": {
                           "start": {
@@ -3549,8 +3549,8 @@
                       },
                       "alternate": null,
                       "range": [
-                        1772,
-                        1831
+                        1766,
+                        1825
                       ],
                       "loc": {
                         "start": {
@@ -3575,8 +3575,8 @@
                             "type": "Identifier",
                             "name": "location",
                             "range": [
-                              1841,
-                              1849
+                              1835,
+                              1843
                             ],
                             "loc": {
                               "start": {
@@ -3593,8 +3593,8 @@
                             "type": "Identifier",
                             "name": "hash",
                             "range": [
-                              1850,
-                              1854
+                              1844,
+                              1848
                             ],
                             "loc": {
                               "start": {
@@ -3608,8 +3608,8 @@
                             }
                           },
                           "range": [
-                            1841,
-                            1854
+                            1835,
+                            1848
                           ],
                           "loc": {
                             "start": {
@@ -3626,8 +3626,8 @@
                           "type": "Identifier",
                           "name": "hash",
                           "range": [
-                            1857,
-                            1861
+                            1851,
+                            1855
                           ],
                           "loc": {
                             "start": {
@@ -3641,8 +3641,8 @@
                           }
                         },
                         "range": [
-                          1841,
-                          1861
+                          1835,
+                          1855
                         ],
                         "loc": {
                           "start": {
@@ -3656,8 +3656,8 @@
                         }
                       },
                       "range": [
-                        1841,
-                        1862
+                        1835,
+                        1856
                       ],
                       "loc": {
                         "start": {
@@ -3681,8 +3681,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              1871,
-                              1875
+                              1865,
+                              1869
                             ],
                             "loc": {
                               "start": {
@@ -3699,8 +3699,8 @@
                             "type": "Identifier",
                             "name": "lastHash",
                             "range": [
-                              1876,
-                              1884
+                              1870,
+                              1878
                             ],
                             "loc": {
                               "start": {
@@ -3714,8 +3714,8 @@
                             }
                           },
                           "range": [
-                            1871,
-                            1884
+                            1865,
+                            1878
                           ],
                           "loc": {
                             "start": {
@@ -3732,8 +3732,8 @@
                           "type": "Identifier",
                           "name": "hash",
                           "range": [
-                            1887,
-                            1891
+                            1881,
+                            1885
                           ],
                           "loc": {
                             "start": {
@@ -3747,8 +3747,8 @@
                           }
                         },
                         "range": [
-                          1871,
-                          1891
+                          1865,
+                          1885
                         ],
                         "loc": {
                           "start": {
@@ -3762,8 +3762,8 @@
                         }
                       },
                       "range": [
-                        1871,
-                        1892
+                        1865,
+                        1886
                       ],
                       "loc": {
                         "start": {
@@ -3778,8 +3778,8 @@
                     }
                   ],
                   "range": [
-                    1714,
-                    1898
+                    1708,
+                    1892
                   ],
                   "loc": {
                     "start": {
@@ -3795,8 +3795,8 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  1706,
-                  1898
+                  1700,
+                  1892
                 ],
                 "loc": {
                   "start": {
@@ -3812,8 +3812,8 @@
               "kind": "method",
               "computed": false,
               "range": [
-                1700,
-                1898
+                1694,
+                1892
               ],
               "loc": {
                 "start": {
@@ -3830,8 +3830,8 @@
                   "type": "Block",
                   "value": "*\n     * Updates the URL hash based on a state change\n     *\n     * @param {State} state Instance of State\n     ",
                   "range": [
-                    1579,
-                    1695
+                    1573,
+                    1689
                   ],
                   "loc": {
                     "start": {
@@ -3850,8 +3850,8 @@
                   "type": "Block",
                   "value": "*\n     * Converts a URL hash into a state JSON object\n     *\n     * @param {String} hash URL hash fragment\n     * @returns {Object} JSON object\n     ",
                   "range": [
-                    1904,
-                    2057
+                    1898,
+                    2051
                   ],
                   "loc": {
                     "start": {
@@ -3873,8 +3873,8 @@
                 "type": "Identifier",
                 "name": "parse",
                 "range": [
-                  2062,
-                  2067
+                  2056,
+                  2061
                 ],
                 "loc": {
                   "start": {
@@ -3895,8 +3895,8 @@
                     "type": "Identifier",
                     "name": "hash",
                     "range": [
-                      2068,
-                      2072
+                      2062,
+                      2066
                     ],
                     "loc": {
                       "start": {
@@ -3927,8 +3927,8 @@
                               "type": "Identifier",
                               "name": "hash",
                               "range": [
-                                2088,
-                                2092
+                                2082,
+                                2086
                               ],
                               "loc": {
                                 "start": {
@@ -3945,8 +3945,8 @@
                               "type": "Identifier",
                               "name": "indexOf",
                               "range": [
-                                2093,
-                                2100
+                                2087,
+                                2094
                               ],
                               "loc": {
                                 "start": {
@@ -3960,8 +3960,8 @@
                               }
                             },
                             "range": [
-                              2088,
-                              2100
+                              2082,
+                              2094
                             ],
                             "loc": {
                               "start": {
@@ -3980,8 +3980,8 @@
                               "value": "#",
                               "raw": "'#'",
                               "range": [
-                                2101,
-                                2104
+                                2095,
+                                2098
                               ],
                               "loc": {
                                 "start": {
@@ -3996,8 +3996,8 @@
                             }
                           ],
                           "range": [
-                            2088,
-                            2105
+                            2082,
+                            2099
                           ],
                           "loc": {
                             "start": {
@@ -4018,8 +4018,8 @@
                             "value": 1,
                             "raw": "1",
                             "range": [
-                              2111,
-                              2112
+                              2105,
+                              2106
                             ],
                             "loc": {
                               "start": {
@@ -4034,8 +4034,8 @@
                           },
                           "prefix": true,
                           "range": [
-                            2110,
-                            2112
+                            2104,
+                            2106
                           ],
                           "loc": {
                             "start": {
@@ -4049,8 +4049,8 @@
                           }
                         },
                         "range": [
-                          2088,
-                          2112
+                          2082,
+                          2106
                         ],
                         "loc": {
                           "start": {
@@ -4073,8 +4073,8 @@
                               "value": null,
                               "raw": "null",
                               "range": [
-                                2135,
-                                2139
+                                2129,
+                                2133
                               ],
                               "loc": {
                                 "start": {
@@ -4088,8 +4088,8 @@
                               }
                             },
                             "range": [
-                              2128,
-                              2140
+                              2122,
+                              2134
                             ],
                             "loc": {
                               "start": {
@@ -4104,8 +4104,8 @@
                           }
                         ],
                         "range": [
-                          2114,
-                          2150
+                          2108,
+                          2144
                         ],
                         "loc": {
                           "start": {
@@ -4120,8 +4120,8 @@
                       },
                       "alternate": null,
                       "range": [
-                        2084,
-                        2150
+                        2078,
+                        2144
                       ],
                       "loc": {
                         "start": {
@@ -4143,8 +4143,8 @@
                           "type": "Identifier",
                           "name": "hash",
                           "range": [
-                            2159,
-                            2163
+                            2153,
+                            2157
                           ],
                           "loc": {
                             "start": {
@@ -4166,8 +4166,8 @@
                               "type": "Identifier",
                               "name": "hash",
                               "range": [
-                                2166,
-                                2170
+                                2160,
+                                2164
                               ],
                               "loc": {
                                 "start": {
@@ -4184,8 +4184,8 @@
                               "type": "Identifier",
                               "name": "substr",
                               "range": [
-                                2171,
-                                2177
+                                2165,
+                                2171
                               ],
                               "loc": {
                                 "start": {
@@ -4199,8 +4199,8 @@
                               }
                             },
                             "range": [
-                              2166,
-                              2177
+                              2160,
+                              2171
                             ],
                             "loc": {
                               "start": {
@@ -4219,8 +4219,8 @@
                               "value": 1,
                               "raw": "1",
                               "range": [
-                                2178,
-                                2179
+                                2172,
+                                2173
                               ],
                               "loc": {
                                 "start": {
@@ -4235,8 +4235,8 @@
                             }
                           ],
                           "range": [
-                            2166,
-                            2180
+                            2160,
+                            2174
                           ],
                           "loc": {
                             "start": {
@@ -4250,8 +4250,8 @@
                           }
                         },
                         "range": [
-                          2159,
-                          2180
+                          2153,
+                          2174
                         ],
                         "loc": {
                           "start": {
@@ -4265,8 +4265,8 @@
                         }
                       },
                       "range": [
-                        2159,
-                        2181
+                        2153,
+                        2175
                       ],
                       "loc": {
                         "start": {
@@ -4290,8 +4290,8 @@
                             "type": "Identifier",
                             "name": "JSON",
                             "range": [
-                              2197,
-                              2201
+                              2191,
+                              2195
                             ],
                             "loc": {
                               "start": {
@@ -4308,8 +4308,8 @@
                             "type": "Identifier",
                             "name": "parse",
                             "range": [
-                              2202,
-                              2207
+                              2196,
+                              2201
                             ],
                             "loc": {
                               "start": {
@@ -4323,8 +4323,8 @@
                             }
                           },
                           "range": [
-                            2197,
-                            2207
+                            2191,
+                            2201
                           ],
                           "loc": {
                             "start": {
@@ -4344,8 +4344,8 @@
                               "type": "Identifier",
                               "name": "decodeURIComponent",
                               "range": [
-                                2208,
-                                2226
+                                2202,
+                                2220
                               ],
                               "loc": {
                                 "start": {
@@ -4363,8 +4363,8 @@
                                 "type": "Identifier",
                                 "name": "hash",
                                 "range": [
-                                  2227,
-                                  2231
+                                  2221,
+                                  2225
                                 ],
                                 "loc": {
                                   "start": {
@@ -4379,8 +4379,8 @@
                               }
                             ],
                             "range": [
-                              2208,
-                              2232
+                              2202,
+                              2226
                             ],
                             "loc": {
                               "start": {
@@ -4395,8 +4395,8 @@
                           }
                         ],
                         "range": [
-                          2197,
-                          2233
+                          2191,
+                          2227
                         ],
                         "loc": {
                           "start": {
@@ -4410,8 +4410,8 @@
                         }
                       },
                       "range": [
-                        2190,
-                        2234
+                        2184,
+                        2228
                       ],
                       "loc": {
                         "start": {
@@ -4426,8 +4426,8 @@
                     }
                   ],
                   "range": [
-                    2074,
-                    2240
+                    2068,
+                    2234
                   ],
                   "loc": {
                     "start": {
@@ -4443,8 +4443,8 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  2067,
-                  2240
+                  2061,
+                  2234
                 ],
                 "loc": {
                   "start": {
@@ -4460,8 +4460,8 @@
               "kind": "method",
               "computed": false,
               "range": [
-                2062,
-                2240
+                2056,
+                2234
               ],
               "loc": {
                 "start": {
@@ -4478,8 +4478,8 @@
                   "type": "Block",
                   "value": "*\n     * Converts a URL hash into a state JSON object\n     *\n     * @param {String} hash URL hash fragment\n     * @returns {Object} JSON object\n     ",
                   "range": [
-                    1904,
-                    2057
+                    1898,
+                    2051
                   ],
                   "loc": {
                     "start": {
@@ -4498,8 +4498,8 @@
                   "type": "Block",
                   "value": "*\n     * Applies current hash state to features\n     ",
                   "range": [
-                    2246,
-                    2303
+                    2240,
+                    2297
                   ],
                   "loc": {
                     "start": {
@@ -4521,8 +4521,8 @@
                 "type": "Identifier",
                 "name": "sync",
                 "range": [
-                  2308,
-                  2312
+                  2302,
+                  2306
                 ],
                 "loc": {
                   "start": {
@@ -4551,8 +4551,8 @@
                             "type": "Identifier",
                             "name": "state",
                             "range": [
-                              2329,
-                              2334
+                              2323,
+                              2328
                             ],
                             "loc": {
                               "start": {
@@ -4573,8 +4573,8 @@
                               "object": {
                                 "type": "ThisExpression",
                                 "range": [
-                                  2337,
-                                  2341
+                                  2331,
+                                  2335
                                 ],
                                 "loc": {
                                   "start": {
@@ -4591,8 +4591,8 @@
                                 "type": "Identifier",
                                 "name": "parse",
                                 "range": [
-                                  2342,
-                                  2347
+                                  2336,
+                                  2341
                                 ],
                                 "loc": {
                                   "start": {
@@ -4606,8 +4606,8 @@
                                 }
                               },
                               "range": [
-                                2337,
-                                2347
+                                2331,
+                                2341
                               ],
                               "loc": {
                                 "start": {
@@ -4628,8 +4628,8 @@
                                   "type": "Identifier",
                                   "name": "location",
                                   "range": [
-                                    2348,
-                                    2356
+                                    2342,
+                                    2350
                                   ],
                                   "loc": {
                                     "start": {
@@ -4646,8 +4646,8 @@
                                   "type": "Identifier",
                                   "name": "hash",
                                   "range": [
-                                    2357,
-                                    2361
+                                    2351,
+                                    2355
                                   ],
                                   "loc": {
                                     "start": {
@@ -4661,8 +4661,8 @@
                                   }
                                 },
                                 "range": [
-                                  2348,
-                                  2361
+                                  2342,
+                                  2355
                                 ],
                                 "loc": {
                                   "start": {
@@ -4677,8 +4677,8 @@
                               }
                             ],
                             "range": [
-                              2337,
-                              2362
+                              2331,
+                              2356
                             ],
                             "loc": {
                               "start": {
@@ -4692,8 +4692,8 @@
                             }
                           },
                           "range": [
-                            2329,
-                            2362
+                            2323,
+                            2356
                           ],
                           "loc": {
                             "start": {
@@ -4709,8 +4709,8 @@
                       ],
                       "kind": "let",
                       "range": [
-                        2325,
-                        2363
+                        2319,
+                        2357
                       ],
                       "loc": {
                         "start": {
@@ -4732,8 +4732,8 @@
                           "type": "Identifier",
                           "name": "state",
                           "range": [
-                            2377,
-                            2382
+                            2371,
+                            2376
                           ],
                           "loc": {
                             "start": {
@@ -4748,8 +4748,8 @@
                         },
                         "prefix": true,
                         "range": [
-                          2376,
-                          2382
+                          2370,
+                          2376
                         ],
                         "loc": {
                           "start": {
@@ -4769,8 +4769,8 @@
                             "type": "ReturnStatement",
                             "argument": null,
                             "range": [
-                              2398,
-                              2405
+                              2392,
+                              2399
                             ],
                             "loc": {
                               "start": {
@@ -4785,8 +4785,8 @@
                           }
                         ],
                         "range": [
-                          2384,
-                          2415
+                          2378,
+                          2409
                         ],
                         "loc": {
                           "start": {
@@ -4801,8 +4801,8 @@
                       },
                       "alternate": null,
                       "range": [
-                        2372,
-                        2415
+                        2366,
+                        2409
                       ],
                       "loc": {
                         "start": {
@@ -4819,8 +4819,8 @@
                           "type": "Line",
                           "value": " override current state with persisted one and sync features",
                           "range": [
-                            2424,
-                            2486
+                            2418,
+                            2480
                           ],
                           "loc": {
                             "start": {
@@ -4848,8 +4848,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                2495,
-                                2499
+                                2489,
+                                2493
                               ],
                               "loc": {
                                 "start": {
@@ -4866,8 +4866,8 @@
                               "type": "Identifier",
                               "name": "state",
                               "range": [
-                                2500,
-                                2505
+                                2494,
+                                2499
                               ],
                               "loc": {
                                 "start": {
@@ -4881,8 +4881,8 @@
                               }
                             },
                             "range": [
-                              2495,
-                              2505
+                              2489,
+                              2499
                             ],
                             "loc": {
                               "start": {
@@ -4899,8 +4899,8 @@
                             "type": "Identifier",
                             "name": "overrideAndSync",
                             "range": [
-                              2506,
-                              2521
+                              2500,
+                              2515
                             ],
                             "loc": {
                               "start": {
@@ -4914,8 +4914,8 @@
                             }
                           },
                           "range": [
-                            2495,
-                            2521
+                            2489,
+                            2515
                           ],
                           "loc": {
                             "start": {
@@ -4933,8 +4933,8 @@
                             "type": "Identifier",
                             "name": "state",
                             "range": [
-                              2522,
-                              2527
+                              2516,
+                              2521
                             ],
                             "loc": {
                               "start": {
@@ -4949,8 +4949,8 @@
                           }
                         ],
                         "range": [
-                          2495,
-                          2528
+                          2489,
+                          2522
                         ],
                         "loc": {
                           "start": {
@@ -4964,8 +4964,8 @@
                         }
                       },
                       "range": [
-                        2495,
-                        2529
+                        2489,
+                        2523
                       ],
                       "loc": {
                         "start": {
@@ -4982,8 +4982,8 @@
                           "type": "Line",
                           "value": " override current state with persisted one and sync features",
                           "range": [
-                            2424,
-                            2486
+                            2418,
+                            2480
                           ],
                           "loc": {
                             "start": {
@@ -5000,8 +5000,8 @@
                     }
                   ],
                   "range": [
-                    2315,
-                    2535
+                    2309,
+                    2529
                   ],
                   "loc": {
                     "start": {
@@ -5017,8 +5017,8 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  2312,
-                  2535
+                  2306,
+                  2529
                 ],
                 "loc": {
                   "start": {
@@ -5034,8 +5034,8 @@
               "kind": "method",
               "computed": false,
               "range": [
-                2308,
-                2535
+                2302,
+                2529
               ],
               "loc": {
                 "start": {
@@ -5052,8 +5052,8 @@
                   "type": "Block",
                   "value": "*\n     * Applies current hash state to features\n     ",
                   "range": [
-                    2246,
-                    2303
+                    2240,
+                    2297
                   ],
                   "loc": {
                     "start": {
@@ -5072,8 +5072,8 @@
                   "type": "Block",
                   "value": "*\n     * Release Hash event subscriptions and clear fields\n     ",
                   "range": [
-                    2541,
-                    2609
+                    2535,
+                    2603
                   ],
                   "loc": {
                     "start": {
@@ -5095,8 +5095,8 @@
                 "type": "Identifier",
                 "name": "destroy",
                 "range": [
-                  2614,
-                  2621
+                  2608,
+                  2615
                 ],
                 "loc": {
                   "start": {
@@ -5129,8 +5129,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                2634,
-                                2638
+                                2628,
+                                2632
                               ],
                               "loc": {
                                 "start": {
@@ -5147,8 +5147,8 @@
                               "type": "Identifier",
                               "name": "emitter",
                               "range": [
-                                2639,
-                                2646
+                                2633,
+                                2640
                               ],
                               "loc": {
                                 "start": {
@@ -5162,8 +5162,8 @@
                               }
                             },
                             "range": [
-                              2634,
-                              2646
+                              2628,
+                              2640
                             ],
                             "loc": {
                               "start": {
@@ -5180,8 +5180,8 @@
                             "type": "Identifier",
                             "name": "off",
                             "range": [
-                              2647,
-                              2650
+                              2641,
+                              2644
                             ],
                             "loc": {
                               "start": {
@@ -5195,8 +5195,8 @@
                             }
                           },
                           "range": [
-                            2634,
-                            2650
+                            2628,
+                            2644
                           ],
                           "loc": {
                             "start": {
@@ -5218,8 +5218,8 @@
                                 "value": "state-changed",
                                 "raw": "'state-changed'",
                                 "range": [
-                                  2652,
-                                  2667
+                                  2646,
+                                  2661
                                 ],
                                 "loc": {
                                   "start": {
@@ -5234,8 +5234,8 @@
                               }
                             ],
                             "range": [
-                              2651,
-                              2668
+                              2645,
+                              2662
                             ],
                             "loc": {
                               "start": {
@@ -5256,8 +5256,8 @@
                                 "type": "Identifier",
                                 "name": "tf",
                                 "range": [
-                                  2671,
-                                  2673
+                                  2665,
+                                  2667
                                 ],
                                 "loc": {
                                   "start": {
@@ -5274,8 +5274,8 @@
                                 "type": "Identifier",
                                 "name": "state",
                                 "range": [
-                                  2675,
-                                  2680
+                                  2669,
+                                  2674
                                 ],
                                 "loc": {
                                   "start": {
@@ -5297,8 +5297,8 @@
                                 "object": {
                                   "type": "ThisExpression",
                                   "range": [
-                                    2685,
-                                    2689
+                                    2679,
+                                    2683
                                   ],
                                   "loc": {
                                     "start": {
@@ -5315,8 +5315,8 @@
                                   "type": "Identifier",
                                   "name": "update",
                                   "range": [
-                                    2690,
-                                    2696
+                                    2684,
+                                    2690
                                   ],
                                   "loc": {
                                     "start": {
@@ -5330,8 +5330,8 @@
                                   }
                                 },
                                 "range": [
-                                  2685,
-                                  2696
+                                  2679,
+                                  2690
                                 ],
                                 "loc": {
                                   "start": {
@@ -5349,8 +5349,8 @@
                                   "type": "Identifier",
                                   "name": "state",
                                   "range": [
-                                    2697,
-                                    2702
+                                    2691,
+                                    2696
                                   ],
                                   "loc": {
                                     "start": {
@@ -5365,8 +5365,8 @@
                                 }
                               ],
                               "range": [
-                                2685,
-                                2703
+                                2679,
+                                2697
                               ],
                               "loc": {
                                 "start": {
@@ -5382,8 +5382,8 @@
                             "generator": false,
                             "expression": true,
                             "range": [
-                              2670,
-                              2703
+                              2664,
+                              2697
                             ],
                             "loc": {
                               "start": {
@@ -5398,8 +5398,8 @@
                           }
                         ],
                         "range": [
-                          2634,
-                          2704
+                          2628,
+                          2698
                         ],
                         "loc": {
                           "start": {
@@ -5413,8 +5413,8 @@
                         }
                       },
                       "range": [
-                        2634,
-                        2705
+                        2628,
+                        2699
                       ],
                       "loc": {
                         "start": {
@@ -5440,8 +5440,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                2714,
-                                2718
+                                2708,
+                                2712
                               ],
                               "loc": {
                                 "start": {
@@ -5458,8 +5458,8 @@
                               "type": "Identifier",
                               "name": "emitter",
                               "range": [
-                                2719,
-                                2726
+                                2713,
+                                2720
                               ],
                               "loc": {
                                 "start": {
@@ -5473,8 +5473,8 @@
                               }
                             },
                             "range": [
-                              2714,
-                              2726
+                              2708,
+                              2720
                             ],
                             "loc": {
                               "start": {
@@ -5491,8 +5491,8 @@
                             "type": "Identifier",
                             "name": "off",
                             "range": [
-                              2727,
-                              2730
+                              2721,
+                              2724
                             ],
                             "loc": {
                               "start": {
@@ -5506,8 +5506,8 @@
                             }
                           },
                           "range": [
-                            2714,
-                            2730
+                            2708,
+                            2724
                           ],
                           "loc": {
                             "start": {
@@ -5529,8 +5529,8 @@
                                 "value": "initialized",
                                 "raw": "'initialized'",
                                 "range": [
-                                  2732,
-                                  2745
+                                  2726,
+                                  2739
                                 ],
                                 "loc": {
                                   "start": {
@@ -5545,8 +5545,8 @@
                               }
                             ],
                             "range": [
-                              2731,
-                              2746
+                              2725,
+                              2740
                             ],
                             "loc": {
                               "start": {
@@ -5565,8 +5565,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                2748,
-                                2752
+                                2742,
+                                2746
                               ],
                               "loc": {
                                 "start": {
@@ -5583,8 +5583,8 @@
                               "type": "Identifier",
                               "name": "boundSync",
                               "range": [
-                                2753,
-                                2762
+                                2747,
+                                2756
                               ],
                               "loc": {
                                 "start": {
@@ -5598,8 +5598,8 @@
                               }
                             },
                             "range": [
-                              2748,
-                              2762
+                              2742,
+                              2756
                             ],
                             "loc": {
                               "start": {
@@ -5614,8 +5614,8 @@
                           }
                         ],
                         "range": [
-                          2714,
-                          2763
+                          2708,
+                          2757
                         ],
                         "loc": {
                           "start": {
@@ -5629,8 +5629,8 @@
                         }
                       },
                       "range": [
-                        2714,
-                        2764
+                        2708,
+                        2758
                       ],
                       "loc": {
                         "start": {
@@ -5651,8 +5651,8 @@
                           "type": "Identifier",
                           "name": "removeEvt",
                           "range": [
-                            2773,
-                            2782
+                            2767,
+                            2776
                           ],
                           "loc": {
                             "start": {
@@ -5670,8 +5670,8 @@
                             "type": "Identifier",
                             "name": "root",
                             "range": [
-                              2783,
-                              2787
+                              2777,
+                              2781
                             ],
                             "loc": {
                               "start": {
@@ -5689,8 +5689,8 @@
                             "value": "hashchange",
                             "raw": "'hashchange'",
                             "range": [
-                              2789,
-                              2801
+                              2783,
+                              2795
                             ],
                             "loc": {
                               "start": {
@@ -5709,8 +5709,8 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                2803,
-                                2807
+                                2797,
+                                2801
                               ],
                               "loc": {
                                 "start": {
@@ -5727,8 +5727,8 @@
                               "type": "Identifier",
                               "name": "boundSync",
                               "range": [
-                                2808,
-                                2817
+                                2802,
+                                2811
                               ],
                               "loc": {
                                 "start": {
@@ -5742,8 +5742,8 @@
                               }
                             },
                             "range": [
-                              2803,
-                              2817
+                              2797,
+                              2811
                             ],
                             "loc": {
                               "start": {
@@ -5758,8 +5758,8 @@
                           }
                         ],
                         "range": [
-                          2773,
-                          2818
+                          2767,
+                          2812
                         ],
                         "loc": {
                           "start": {
@@ -5773,8 +5773,8 @@
                         }
                       },
                       "range": [
-                        2773,
-                        2819
+                        2767,
+                        2813
                       ],
                       "loc": {
                         "start": {
@@ -5798,8 +5798,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              2829,
-                              2833
+                              2823,
+                              2827
                             ],
                             "loc": {
                               "start": {
@@ -5816,8 +5816,8 @@
                             "type": "Identifier",
                             "name": "state",
                             "range": [
-                              2834,
-                              2839
+                              2828,
+                              2833
                             ],
                             "loc": {
                               "start": {
@@ -5831,8 +5831,8 @@
                             }
                           },
                           "range": [
-                            2829,
-                            2839
+                            2823,
+                            2833
                           ],
                           "loc": {
                             "start": {
@@ -5850,8 +5850,8 @@
                           "value": null,
                           "raw": "null",
                           "range": [
-                            2842,
-                            2846
+                            2836,
+                            2840
                           ],
                           "loc": {
                             "start": {
@@ -5865,8 +5865,8 @@
                           }
                         },
                         "range": [
-                          2829,
-                          2846
+                          2823,
+                          2840
                         ],
                         "loc": {
                           "start": {
@@ -5880,8 +5880,8 @@
                         }
                       },
                       "range": [
-                        2829,
-                        2847
+                        2823,
+                        2841
                       ],
                       "loc": {
                         "start": {
@@ -5905,8 +5905,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              2856,
-                              2860
+                              2850,
+                              2854
                             ],
                             "loc": {
                               "start": {
@@ -5923,8 +5923,8 @@
                             "type": "Identifier",
                             "name": "lastHash",
                             "range": [
-                              2861,
-                              2869
+                              2855,
+                              2863
                             ],
                             "loc": {
                               "start": {
@@ -5938,8 +5938,8 @@
                             }
                           },
                           "range": [
-                            2856,
-                            2869
+                            2850,
+                            2863
                           ],
                           "loc": {
                             "start": {
@@ -5957,8 +5957,8 @@
                           "value": null,
                           "raw": "null",
                           "range": [
-                            2872,
-                            2876
+                            2866,
+                            2870
                           ],
                           "loc": {
                             "start": {
@@ -5972,8 +5972,8 @@
                           }
                         },
                         "range": [
-                          2856,
-                          2876
+                          2850,
+                          2870
                         ],
                         "loc": {
                           "start": {
@@ -5987,8 +5987,8 @@
                         }
                       },
                       "range": [
-                        2856,
-                        2877
+                        2850,
+                        2871
                       ],
                       "loc": {
                         "start": {
@@ -6012,8 +6012,8 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              2886,
-                              2890
+                              2880,
+                              2884
                             ],
                             "loc": {
                               "start": {
@@ -6030,8 +6030,8 @@
                             "type": "Identifier",
                             "name": "emitter",
                             "range": [
-                              2891,
-                              2898
+                              2885,
+                              2892
                             ],
                             "loc": {
                               "start": {
@@ -6045,8 +6045,8 @@
                             }
                           },
                           "range": [
-                            2886,
-                            2898
+                            2880,
+                            2892
                           ],
                           "loc": {
                             "start": {
@@ -6064,8 +6064,8 @@
                           "value": null,
                           "raw": "null",
                           "range": [
-                            2901,
-                            2905
+                            2895,
+                            2899
                           ],
                           "loc": {
                             "start": {
@@ -6079,8 +6079,8 @@
                           }
                         },
                         "range": [
-                          2886,
-                          2905
+                          2880,
+                          2899
                         ],
                         "loc": {
                           "start": {
@@ -6094,8 +6094,8 @@
                         }
                       },
                       "range": [
-                        2886,
-                        2906
+                        2880,
+                        2900
                       ],
                       "loc": {
                         "start": {
@@ -6110,8 +6110,8 @@
                     }
                   ],
                   "range": [
-                    2624,
-                    2912
+                    2618,
+                    2906
                   ],
                   "loc": {
                     "start": {
@@ -6127,8 +6127,8 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  2621,
-                  2912
+                  2615,
+                  2906
                 ],
                 "loc": {
                   "start": {
@@ -6144,8 +6144,8 @@
               "kind": "method",
               "computed": false,
               "range": [
-                2614,
-                2912
+                2608,
+                2906
               ],
               "loc": {
                 "start": {
@@ -6162,8 +6162,8 @@
                   "type": "Block",
                   "value": "*\n     * Release Hash event subscriptions and clear fields\n     ",
                   "range": [
-                    2541,
-                    2609
+                    2535,
+                    2603
                   ],
                   "loc": {
                     "start": {
@@ -6182,7 +6182,7 @@
           ],
           "range": [
             486,
-            2914
+            2908
           ],
           "loc": {
             "start": {
@@ -6197,7 +6197,7 @@
         },
         "range": [
           475,
-          2914
+          2908
         ],
         "loc": {
           "start": {
@@ -6235,7 +6235,7 @@
       "source": null,
       "range": [
         468,
-        2914
+        2908
       ],
       "loc": {
         "start": {
@@ -6272,7 +6272,7 @@
   "sourceType": "module",
   "range": [
     0,
-    2914
+    2908
   ],
   "loc": {
     "start": {
@@ -6341,10 +6341,10 @@
     },
     {
       "type": "Block",
-      "value": "*\n         * State object\n         * @type {State} State\n         ",
+      "value": "*\n         * State object\n         * @type {State}\n         ",
       "range": [
         626,
-        696
+        690
       ],
       "loc": {
         "start": {
@@ -6361,8 +6361,8 @@
       "type": "Block",
       "value": "*\n         * Cached URL hash\n         * @type {String} Hash string\n         * @private\n         ",
       "range": [
-        734,
-        834
+        728,
+        828
       ],
       "loc": {
         "start": {
@@ -6379,8 +6379,8 @@
       "type": "Block",
       "value": "*\n         * Application event emitter instance\n         * @type {Emitter}\n         ",
       "range": [
-        874,
-        962
+        868,
+        956
       ],
       "loc": {
         "start": {
@@ -6397,8 +6397,8 @@
       "type": "Block",
       "value": "*\n         * Bound sync wrapper for future use\n         * @private\n         ",
       "range": [
-        1010,
-        1090
+        1004,
+        1084
       ],
       "loc": {
         "start": {
@@ -6415,8 +6415,8 @@
       "type": "Block",
       "value": "*\n     * Initializes the Hash object\n     ",
       "range": [
-        1133,
-        1179
+        1127,
+        1173
       ],
       "loc": {
         "start": {
@@ -6433,8 +6433,8 @@
       "type": "Line",
       "value": "Store a bound sync wrapper",
       "range": [
-        1303,
-        1331
+        1297,
+        1325
       ],
       "loc": {
         "start": {
@@ -6451,8 +6451,8 @@
       "type": "Block",
       "value": "*\n     * Updates the URL hash based on a state change\n     *\n     * @param {State} state Instance of State\n     ",
       "range": [
-        1579,
-        1695
+        1573,
+        1689
       ],
       "loc": {
         "start": {
@@ -6469,8 +6469,8 @@
       "type": "Block",
       "value": "*\n     * Converts a URL hash into a state JSON object\n     *\n     * @param {String} hash URL hash fragment\n     * @returns {Object} JSON object\n     ",
       "range": [
-        1904,
-        2057
+        1898,
+        2051
       ],
       "loc": {
         "start": {
@@ -6487,8 +6487,8 @@
       "type": "Block",
       "value": "*\n     * Applies current hash state to features\n     ",
       "range": [
-        2246,
-        2303
+        2240,
+        2297
       ],
       "loc": {
         "start": {
@@ -6505,8 +6505,8 @@
       "type": "Line",
       "value": " override current state with persisted one and sync features",
       "range": [
-        2424,
-        2486
+        2418,
+        2480
       ],
       "loc": {
         "start": {
@@ -6523,8 +6523,8 @@
       "type": "Block",
       "value": "*\n     * Release Hash event subscriptions and clear fields\n     ",
       "range": [
-        2541,
-        2609
+        2535,
+        2603
       ],
       "loc": {
         "start": {

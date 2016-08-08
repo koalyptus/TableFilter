@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/storage.js | tablefilter v0.2.51 API Document</title>
+  <title data-ice="title">src/modules/storage.js | tablefilter v0.2.52 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -123,6 +123,9 @@ const JSON = root.JSON;
 const localStorage = root.localStorage;
 const location = root.location;
 
+/**
+ * Checks if browser has Storage feature
+ */
 export const hasStorage = () =&gt; {
     return &apos;Storage&apos; in root;
 };
@@ -141,11 +144,47 @@ export class Storage {
      * @param {State} state Instance of State
      */
     constructor(state) {
+
+        /**
+         * State object
+         * @type {State}
+         * @private
+         */
         this.state = state;
+
+        /**
+         * TableFilter object
+         * @type {TableFilter}
+         * @private
+         */
         this.tf = state.tf;
+
+        /**
+         * Persist with local storage
+         * @type {Boolean}
+         * @private
+         */
         this.enableLocalStorage = state.enableLocalStorage &amp;&amp; hasStorage();
+
+        /**
+         * Persist with cookie
+         * @type {Boolean}
+         * @private
+         */
         this.enableCookie = state.enableCookie &amp;&amp; !this.enableLocalStorage;
+
+        /**
+         * Emitter object
+         * @type {Emitter}
+         * @private
+         */
         this.emitter = state.emitter;
+
+        /**
+         * Cookie duration in hours from state object
+         * @type {Number}
+         * @private
+         */
         this.duration = state.cookieDuration;
     }
 
@@ -161,7 +200,7 @@ export class Storage {
     /**
      * Persists the features state on state changes
      *
-      * @param {State} state Instance of State
+     * @param {State} state Instance of State
      */
     save(state) {
         if (this.enableLocalStorage) {

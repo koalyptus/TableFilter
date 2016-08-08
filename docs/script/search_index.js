@@ -3408,30 +3408,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/storage.js~storage#duration",
-    "class/src/modules/storage.js~Storage.html#instance-member-duration",
-    "src/modules/storage.js~Storage#duration",
-    "member"
-  ],
-  [
-    "src/modules/storage.js~storage#emitter",
-    "class/src/modules/storage.js~Storage.html#instance-member-emitter",
-    "src/modules/storage.js~Storage#emitter",
-    "member"
-  ],
-  [
-    "src/modules/storage.js~storage#enablecookie",
-    "class/src/modules/storage.js~Storage.html#instance-member-enableCookie",
-    "src/modules/storage.js~Storage#enableCookie",
-    "member"
-  ],
-  [
-    "src/modules/storage.js~storage#enablelocalstorage",
-    "class/src/modules/storage.js~Storage.html#instance-member-enableLocalStorage",
-    "src/modules/storage.js~Storage#enableLocalStorage",
-    "member"
-  ],
-  [
     "src/modules/storage.js~storage#getkey",
     "class/src/modules/storage.js~Storage.html#instance-method-getKey",
     "src/modules/storage.js~Storage#getKey",
@@ -3462,22 +3438,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/storage.js~storage#state",
-    "class/src/modules/storage.js~Storage.html#instance-member-state",
-    "src/modules/storage.js~Storage#state",
-    "member"
-  ],
-  [
     "src/modules/storage.js~storage#sync",
     "class/src/modules/storage.js~Storage.html#instance-method-sync",
     "src/modules/storage.js~Storage#sync",
     "method"
-  ],
-  [
-    "src/modules/storage.js~storage#tf",
-    "class/src/modules/storage.js~Storage.html#instance-member-tf",
-    "src/modules/storage.js~Storage#tf",
-    "member"
   ],
   [
     "src/root.js",
