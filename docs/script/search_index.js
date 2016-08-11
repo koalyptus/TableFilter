@@ -3600,12 +3600,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#cfg",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-cfg",
-    "src/tablefilter.js~TableFilter#cfg",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#clearactivecolumns",
     "class/src/tablefilter.js~TableFilter.html#instance-method-clearActiveColumns",
     "src/tablefilter.js~TableFilter#clearActiveColumns",
@@ -4134,12 +4128,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#headersrow",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-headersRow",
-    "src/tablefilter.js~TableFilter#headersRow",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#help",
     "class/src/tablefilter.js~TableFilter.html#instance-member-help",
     "src/tablefilter.js~TableFilter#help",
@@ -4149,12 +4137,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#highlightkeywords",
     "class/src/tablefilter.js~TableFilter.html#instance-member-highlightKeywords",
     "src/tablefilter.js~TableFilter#highlightKeywords",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#id",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-id",
-    "src/tablefilter.js~TableFilter#id",
     "member"
   ],
   [
@@ -4347,18 +4329,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#markactivecolumns",
     "class/src/tablefilter.js~TableFilter.html#instance-member-markActiveColumns",
     "src/tablefilter.js~TableFilter#markActiveColumns",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#nbcells",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-nbCells",
-    "src/tablefilter.js~TableFilter#nbCells",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#nbfilterablerows",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-nbFilterableRows",
-    "src/tablefilter.js~TableFilter#nbFilterableRows",
     "member"
   ],
   [
@@ -4644,12 +4614,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#startrow",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-startRow",
-    "src/tablefilter.js~TableFilter#startRow",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#state",
     "class/src/tablefilter.js~TableFilter.html#instance-member-state",
     "src/tablefilter.js~TableFilter#state",
@@ -4743,12 +4707,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#watermark",
     "class/src/tablefilter.js~TableFilter.html#instance-member-watermark",
     "src/tablefilter.js~TableFilter#watermark",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#year",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-year",
-    "src/tablefilter.js~TableFilter#year",
     "member"
   ],
   [
