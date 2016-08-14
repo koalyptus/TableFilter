@@ -79,14 +79,6 @@ export class TableFilter {
         this.tbl = null;
 
         /**
-         * Index of the row from which starts filtering as per constructor's'
-         * parameter
-         * @type {Number}
-         * @private
-         */
-        this.startRow = null;
-
-        /**
          * Calculated row's index from which starts filtering once filters
          * are generated
          * @type {Number}
@@ -121,6 +113,8 @@ export class TableFilter {
          */
         this.nbCells = null;
 
+        let startRow;
+
         // TODO: use for-of
         args.forEach((arg) => {
             if (typeof arg === 'object' && arg.nodeName === 'TABLE') {
@@ -130,7 +124,7 @@ export class TableFilter {
                 this.id = arg;
                 this.tbl = elm(arg);
             } else if (isNumber(arg)) {
-                this.startRow = arg;
+                startRow = arg;
             } else if (isObj(arg)) {
                 this.cfg = arg;
             }
@@ -152,7 +146,7 @@ export class TableFilter {
         this.emitter = new Emitter();
 
         //Start row et cols nb
-        this.refRow = this.startRow === null ? 2 : (this.startRow + 1);
+        this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
         try { this.nbCells = this.getCellsNb(this.refRow); }
         catch (e) { this.nbCells = this.getCellsNb(0); }
 
@@ -163,117 +157,322 @@ export class TableFilter {
         this.basePath = f.base_path || 'tablefilter/';
 
         /*** filters' grid properties ***/
-        //enables/disables filter grid
+
+        /**
+         * Enable/disable filters
+         * @type {Boolean}
+         */
         this.fltGrid = f.grid === false ? false : true;
 
-        //enables/disables grid layout (fixed headers)
+        /**
+         * Enable/disable grid layout (fixed headers)
+         * @type {Boolean}
+         */
         this.gridLayout = Boolean(f.grid_layout);
 
+        /**
+         * Filters row index
+         * @type {Number}
+         */
         this.filtersRowIndex = isNaN(f.filters_row_index) ?
             0 : f.filters_row_index;
+
+        /**
+         * Headers row index
+         * @type {Number}
+         */
         this.headersRow = isNaN(f.headers_row_index) ?
             (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
 
-        //defines tag of the cells containing filters (td/th)
+        /**
+         * Define the type of cell containing a filter (td/th)
+         * @type {String}
+         */
         this.fltCellTag = isString(f.filters_cell_tag) ?
             f.filters_cell_tag : CELL_TAG;
 
-        //stores filters ids
+        /**
+         * List of filters IDs
+         * @type {Array}
+         * @private
+         */
         this.fltIds = [];
-        //stores valid rows indexes (rows visible upon filtering)
+
+        /**
+         * List of valid rows indexes (rows visible upon filtering)
+         * @type {Array}
+         * @private
+         */
         this.validRowsIndex = [];
-        //container div for paging elements, reset btn etc.
+
+        /**
+         * Toolbar's container DOM element
+         * @type {DOMElement}
+         * @private
+         */
         this.infDiv = null;
-        //div for rows counter
+
+        /**
+         * Left-side inner container DOM element (rows counter in toolbar)
+         * @type {DOMElement}
+         * @private
+         */
         this.lDiv = null;
-        //div for reset button and results per page select
+
+        /**
+         * Right-side inner container DOM element (reset button,
+         * page length selector in toolbar)
+         * @type {DOMElement}
+         * @private
+         */
         this.rDiv = null;
-        //div for paging elements
+
+        /**
+         * Middle inner container DOM element (paging elements in toolbar)
+         * @type {DOMElement}
+         * @private
+         */
         this.mDiv = null;
 
-        //defines css class for div containing paging elements, rows counter etc
+        /**
+         * Css class for toolbar's container DOM element
+         * @type {String}
+         */
         this.infDivCssClass = f.inf_div_css_class || 'inf';
-        //defines css class for left div
+
+        /**
+         * Css class for left-side inner container DOM element
+         * @type {String}
+         */
         this.lDivCssClass = f.left_div_css_class || 'ldiv';
-        //defines css class for right div
+
+        /**
+         * Css class for right-side inner container DOM element
+         * @type {String}
+         */
         this.rDivCssClass = f.right_div_css_class || 'rdiv';
-        //defines css class for mid div
+
+        /**
+         * Css class for middle inner container DOM element
+         * @type {String}
+         */
         this.mDivCssClass = f.middle_div_css_class || 'mdiv';
-        //table container div css class
-        this.contDivCssClass = f.content_div_css_class || 'cont';
 
         /*** filters' grid appearance ***/
-        //stylesheet file
+        /**
+         * Path for stylesheets
+         * @type {String}
+         */
         this.stylePath = f.style_path || this.basePath + 'style/';
+
+        /**
+         * Main stylesheet path
+         * @type {String}
+         */
         this.stylesheet = f.stylesheet || this.stylePath + 'tablefilter.css';
+
+        /**
+         * Main stylesheet ID
+         * @type {String}
+         * @private
+         */
         this.stylesheetId = this.id + '_style';
-        //defines css class for filters row
+
+        /**
+         * Css class for the filters row
+         * @type {String}
+         */
         this.fltsRowCssClass = f.flts_row_css_class || 'fltrow';
-        //enables/disables icons (paging, reset button)
+
+        /**
+         * Enable/disable icons (paging, reset button)
+         * @type {Boolean}
+         */
         this.enableIcons = f.enable_icons === false ? false : true;
-        //enables/disbles rows alternating bg colors
+
+        /**
+         * Enable/disable alternating rows
+         * @type {Boolean}
+         */
         this.alternateRows = Boolean(f.alternate_rows);
-        //defines widths of columns
+
+        /**
+         * Indicate whether columns widths are set
+         * @type {Boolean}
+         * @private
+         */
         this.hasColWidths = isArray(f.col_widths);
+
+        /**
+         * Columns widths array
+         * @type {Array}
+         */
         this.colWidths = this.hasColWidths ? f.col_widths : [];
-        //defines css class for filters
+
+        /**
+         * Css class for a filter element
+         * @type {String}
+         */
         this.fltCssClass = f.flt_css_class || 'flt';
-        //defines css class for multiple selects filters
+
+        /**
+         * Css class for multiple select filters
+         * @type {String}
+         */
         this.fltMultiCssClass = f.flt_multi_css_class || 'flt_multi';
-        //defines css class for filters
+
+        /**
+         * Css class for small filter (when submit button is active)
+         * @type {String}
+         */
         this.fltSmallCssClass = f.flt_small_css_class || 'flt_s';
-        //defines css class for single-filter
+
+        /**
+         * Css class for single filter type
+         * @type {String}
+         */
         this.singleFltCssClass = f.single_flt_css_class || 'single_flt';
 
         /*** filters' grid behaviours ***/
-        //enables/disables enter key
+
+        /**
+         * Enable/disable enter key for input type filters
+         * @type {Boolean}
+         */
         this.enterKey = f.enter_key === false ? false : true;
-        //calls function before filtering starts
+
+        /**
+         * Callback fired before filtering process starts
+         * @type {Function}
+         */
         this.onBeforeFilter = isFn(f.on_before_filter) ?
             f.on_before_filter : null;
-        //calls function after filtering
+
+        /**
+         * Callback fired after filtering process is completed
+         * @type {Function}
+         */
         this.onAfterFilter = isFn(f.on_after_filter) ? f.on_after_filter : null;
-        //enables/disables case sensitivity
+
+        /**
+         * Enable/disable case sensitivity filtering
+         * @type {Boolean}
+         */
         this.caseSensitive = Boolean(f.case_sensitive);
-        //has exact match per column
+
+        /**
+         * Indicate whether exact match filtering is enabled on a per column
+         * basis
+         * @type {Boolean}
+         * @private
+         */
         this.hasExactMatchByCol = isArray(f.columns_exact_match);
+
+        /**
+         * Exact match filtering per column array
+         * @type {Array}
+         */
         this.exactMatchByCol = this.hasExactMatchByCol ?
             f.columns_exact_match : [];
-        //enables/disbles exact match for search
+
+        /**
+         * Globally enable/disable exact match filtering
+         * @type {Boolean}
+         */
         this.exactMatch = Boolean(f.exact_match);
-        //refreshes drop-down lists upon validation
+
+        /**
+         * Enable/disable linked filters filtering mode
+         * @type {Boolean}
+         */
         this.linkedFilters = Boolean(f.linked_filters);
-        //wheter excluded options are disabled
+
+        /**
+         * Enable/disable readonly state for excluded options when
+         * linked filters filtering mode is on
+         * @type {Boolean}
+         */
         this.disableExcludedOptions = Boolean(f.disable_excluded_options);
-        //id of active filter
+
+        /**
+         * Active filter ID
+         * @type {String}
+         * @private
+         */
         this.activeFilterId = null;
-        //enables always visible rows
+
+        /**
+         * Enable/disable always visible rows, excluded from filtering
+         * @type {Boolean}
+         */
         this.hasVisibleRows = Boolean(f.rows_always_visible);
-        //array containing always visible rows
+
+        /**
+         * List of row indexes to be excluded from filtering
+         * @type {Array}
+         */
         this.visibleRows = this.hasVisibleRows ? f.rows_always_visible : [];
-        //enables/disables external filters generation
+
+        /**
+         * Enable/disable external filters generation
+         * @type {Boolean}
+         */
         this.isExternalFlt = Boolean(f.external_flt_grid);
-        //array containing ids of external elements containing filters
+
+        /**
+         * List of containers IDs where external filters will be generated
+         * @type {Array}
+         */
         this.externalFltTgtIds = f.external_flt_grid_ids || [];
-        //stores filters elements if isExternalFlt is true
-        this.externalFltEls = [];
-        //calls function when filters grid loaded
+
+        /**
+         * Callback fired after filters are generated
+         * @type {Function}
+         */
         this.onFiltersLoaded = isFn(f.on_filters_loaded) ?
             f.on_filters_loaded : null;
-        //enables/disables single filter search
+
+        /**
+         * Enable/disable single filter filtering all columns
+         * @type {Boolean}
+         */
         this.singleSearchFlt = Boolean(f.single_filter);
-        //calls function after row is validated
+
+        /**
+         * Callback fired after a row is validated during filtering
+         * @type {Function}
+         */
         this.onRowValidated = isFn(f.on_row_validated) ?
             f.on_row_validated : null;
-        //array defining columns for customCellData event
+
+        /**
+         * List of columns implementing custom filtering
+         * @type {Array}
+         */
         this.customCellDataCols = f.custom_cell_data_cols ?
             f.custom_cell_data_cols : [];
-        //calls custom function for retrieving cell data
+
+        /**
+         * Delegate function for retrieving cell data with custom logic
+         * @type {Function}
+         */
         this.customCellData = isFn(f.custom_cell_data) ?
             f.custom_cell_data : null;
-        //input watermark text array
+
+        /**
+         * Global watermark text for input filter type or watermark for each
+         * filter if an array is supplied
+         * @type {String|Array}
+         */
         this.watermark = f.watermark || '';
+
+        /**
+         * Indicate whether watermark is on a per column basis
+         * @type {Boolean}
+         * @private
+         */
         this.isWatermarkArray = isArray(this.watermark);
+
         //id of toolbar container element
         this.toolBarTgtId = f.toolbar_target_id || null;
         //enables/disables help div
@@ -790,7 +989,6 @@ export class TableFilter {
         //filter is appended in custom element
         if (externalFltTgtId) {
             elm(externalFltTgtId).appendChild(inp);
-            this.externalFltEls.push(inp);
         } else {
             container.appendChild(inp);
         }
