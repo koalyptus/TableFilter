@@ -15,7 +15,6 @@ test('GridLayout component', function() {
     notEqual(gridLayout.headTblCont, null,
         'GridLayout headers container element');
     notEqual(gridLayout.headTbl, null, 'GridLayout headers HTML table');
-    deepEqual(tf.startRow, null, 'Optional startRow row index');
     deepEqual(tf.refRow, 0, 'Reference row index');
     deepEqual(tf.headersRow, 0, 'Headers row index');
     deepEqual(tf.filtersRowIndex, 1, 'Filters row index');

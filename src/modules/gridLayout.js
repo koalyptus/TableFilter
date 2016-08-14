@@ -1,6 +1,5 @@
 import {Feature} from '../feature';
 import {createElm, removeElm, elm, tag} from '../dom';
-import {isNull} from '../types';
 import {addEvt, targetEvt} from '../event';
 import {contains} from '../string';
 import {NONE} from '../const';
@@ -310,7 +309,7 @@ export class GridLayout extends Feature {
      */
     setOverrides() {
         let tf = this.tf;
-        tf.refRow = isNull(tf.startRow) ? 0 : tf.startRow;
+        tf.refRow = 0;
         tf.headersRow = 0;
         tf.filtersRowIndex = 1;
         tf.isExternalFlt = true;

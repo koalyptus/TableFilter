@@ -162,7 +162,6 @@ export class CheckList extends Feature {
         //filter is appended in desired element
         if (externalFltTgtId) {
             elm(externalFltTgtId).appendChild(divCont);
-            tf.externalFltEls.push(divCont);
         } else {
             container.appendChild(divCont);
         }

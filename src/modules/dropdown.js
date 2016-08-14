@@ -119,7 +119,6 @@ export class Dropdown extends Feature {
         //filter is appended in container element
         if (externalFltTgtId) {
             elm(externalFltTgtId).appendChild(slc);
-            tf.externalFltEls.push(slc);
         } else {
             container.appendChild(slc);
         }
