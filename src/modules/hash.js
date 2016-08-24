@@ -4,6 +4,7 @@ import {root} from '../root';
 const JSON = root.JSON;
 const location = root.location;
 const decodeURIComponent = root.decodeURIComponent;
+const encodeURIComponent = root.encodeURIComponent;
 
 /**
  * Checks if browser has onhashchange event
@@ -75,7 +76,7 @@ export class Hash {
      * @param {State} state Instance of State
      */
     update(state) {
-        let hash = `#${JSON.stringify(state)}`;
+        let hash = `#${encodeURIComponent(JSON.stringify(state))}`;
         if (this.lastHash === hash) {
             return;
         }
