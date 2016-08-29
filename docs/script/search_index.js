@@ -3468,18 +3468,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/tablefilter.js~tablefilter#extregistry",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-ExtRegistry",
-    "src/tablefilter.js~TableFilter#ExtRegistry",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#mod",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-Mod",
-    "src/tablefilter.js~TableFilter#Mod",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#activatefilter",
     "class/src/tablefilter.js~TableFilter.html#instance-method-activateFilter",
     "src/tablefilter.js~TableFilter#activateFilter",
@@ -3513,12 +3501,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#autofilterdelay",
     "class/src/tablefilter.js~TableFilter.html#instance-member-autoFilterDelay",
     "src/tablefilter.js~TableFilter#autoFilterDelay",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#autofiltertimer",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-autoFilterTimer",
-    "src/tablefilter.js~TableFilter#autoFilterTimer",
     "member"
   ],
   [
@@ -3634,12 +3616,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-constructor-constructor",
     "src/tablefilter.js~TableFilter#constructor",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#curexp",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-curExp",
-    "src/tablefilter.js~TableFilter#curExp",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#customcelldata",
@@ -3796,12 +3772,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-extension",
     "src/tablefilter.js~TableFilter#extension",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#extensions",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-extensions",
-    "src/tablefilter.js~TableFilter#extensions",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#externalflttgtids",
@@ -4050,18 +4020,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#hascoldatetype",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasColDateType",
-    "src/tablefilter.js~TableFilter#hasColDateType",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#hascolnbformat",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasColNbFormat",
-    "src/tablefilter.js~TableFilter#hasColNbFormat",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#hascustomoptions",
     "class/src/tablefilter.js~TableFilter.html#instance-member-hasCustomOptions",
     "src/tablefilter.js~TableFilter#hasCustomOptions",
@@ -4072,18 +4030,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-hasExtension",
     "src/tablefilter.js~TableFilter#hasExtension",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#hasextensions",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasExtensions",
-    "src/tablefilter.js~TableFilter#hasExtensions",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#hasthemes",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasThemes",
-    "src/tablefilter.js~TableFilter#hasThemes",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#hasvisiblerows",
@@ -4162,24 +4108,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-isInitialized",
     "src/tablefilter.js~TableFilter#isInitialized",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#issortnumasc",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isSortNumAsc",
-    "src/tablefilter.js~TableFilter#isSortNumAsc",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#issortnumdesc",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isSortNumDesc",
-    "src/tablefilter.js~TableFilter#isSortNumDesc",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#isusertyping",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isUserTyping",
-    "src/tablefilter.js~TableFilter#isUserTyping",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#ldivcssclass",
@@ -4269,12 +4197,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#markactivecolumns",
     "class/src/tablefilter.js~TableFilter.html#instance-member-markActiveColumns",
     "src/tablefilter.js~TableFilter#markActiveColumns",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#nbhiddenrows",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-nbHiddenRows",
-    "src/tablefilter.js~TableFilter#nbHiddenRows",
     "member"
   ],
   [
@@ -4389,54 +4311,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#popupfilters",
     "class/src/tablefilter.js~TableFilter.html#instance-member-popupFilters",
     "src/tablefilter.js~TableFilter#popupFilters",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxflt",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxFlt",
-    "src/tablefilter.js~TableFilter#prfxFlt",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxinfdiv",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxInfDiv",
-    "src/tablefilter.js~TableFilter#prfxInfDiv",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxldiv",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxLDiv",
-    "src/tablefilter.js~TableFilter#prfxLDiv",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxmdiv",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxMDiv",
-    "src/tablefilter.js~TableFilter#prfxMDiv",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxrdiv",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxRDiv",
-    "src/tablefilter.js~TableFilter#prfxRDiv",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxresponsive",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxResponsive",
-    "src/tablefilter.js~TableFilter#prfxResponsive",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxtf",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxTf",
-    "src/tablefilter.js~TableFilter#prfxTf",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxvalbutton",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxValButton",
-    "src/tablefilter.js~TableFilter#prfxValButton",
     "member"
   ],
   [

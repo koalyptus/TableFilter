@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.57 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.58 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -686,6 +686,7 @@ export class TableFilter {
          * Indicate whether options in drop-down filter types are sorted in a
          * ascending numeric manner
          * @type {Boolean}
+         * @private
          */
         this.isSortNumAsc = Boolean(f.sort_num_asc);
 
@@ -700,6 +701,7 @@ export class TableFilter {
          * Indicate whether options in drop-down filter types are sorted in a
          * descending numeric manner
          * @type {Boolean}
+         * @private
          */
         this.isSortNumDesc = Boolean(f.sort_num_desc);
 
@@ -743,131 +745,379 @@ export class TableFilter {
         this.customOptions = f.custom_options;
 
         /*** Filter operators ***/
+        /**
+         * Regular expression operator for input filter. Defaults to &apos;rgx:&apos;
+         * @type {String}
+         */
         this.rgxOperator = f.regexp_operator || &apos;rgx:&apos;;
+
+        /**
+         * Empty cells operator for input filter. Defaults to &apos;[empty]&apos;
+         * @type {String}
+         */
         this.emOperator = f.empty_operator || &apos;[empty]&apos;;
+
+        /**
+         * Non-empty cells operator for input filter. Defaults to &apos;[nonempty]&apos;
+         * @type {String}
+         */
         this.nmOperator = f.nonempty_operator || &apos;[nonempty]&apos;;
+
+        /**
+         * Logical OR operator for input filter. Defaults to &apos;||&apos;
+         * @type {String}
+         */
         this.orOperator = f.or_operator || &apos;||&apos;;
+
+        /**
+         * Logical AND operator for input filter. Defaults to &apos;&amp;&amp;&apos;
+         * @type {String}
+         */
         this.anOperator = f.and_operator || &apos;&amp;&amp;&apos;;
+
+        /**
+         * Greater than operator for input filter. Defaults to &apos;&gt;&apos;
+         * @type {String}
+         */
         this.grOperator = f.greater_operator || &apos;&gt;&apos;;
+
+        /**
+         * Lower than operator for input filter. Defaults to &apos;&lt;&apos;
+         * @type {String}
+         */
         this.lwOperator = f.lower_operator || &apos;&lt;&apos;;
+
+        /**
+         * Lower than or equal operator for input filter. Defaults to &apos;&lt;=&apos;
+         * @type {String}
+         */
         this.leOperator = f.lower_equal_operator || &apos;&lt;=&apos;;
+
+        /**
+         * Greater than or equal operator for input filter. Defaults to &apos;&gt;=&apos;
+         * @type {String}
+         */
         this.geOperator = f.greater_equal_operator || &apos;&gt;=&apos;;
+
+        /**
+         * Inequality operator for input filter. Defaults to &apos;!&apos;
+         * @type {String}
+         */
         this.dfOperator = f.different_operator || &apos;!&apos;;
+
+        /**
+         * Like operator for input filter. Defaults to &apos;!&apos;
+         * @type {String}
+         */
         this.lkOperator = f.like_operator || &apos;*&apos;;
+
+        /**
+         * Strict equality operator for input filter. Defaults to &apos;=&apos;
+         * @type {String}
+         */
         this.eqOperator = f.equal_operator || &apos;=&apos;;
+
+        /**
+         * Starts with operator for input filter. Defaults to &apos;=&apos;
+         * @type {String}
+         */
         this.stOperator = f.start_with_operator || &apos;{&apos;;
+
+        /**
+         * Ends with operator for input filter. Defaults to &apos;=&apos;
+         * @type {String}
+         */
         this.enOperator = f.end_with_operator || &apos;}&apos;;
-        this.curExp = f.cur_exp || &apos;^[&#xA5;&#xA3;&#x20AC;$]&apos;;
+
+        // this.curExp = f.cur_exp || &apos;^[&#xA5;&#xA3;&#x20AC;$]&apos;;
+
+        /**
+         * Stored values separator
+         * @type {String}
+         */
         this.separator = f.separator || &apos;,&apos;;
 
-        //show/hides rows counter
+        /**
+         * Enable rows counter UI component
+         * @type {Boolean}
+         */
         this.rowsCounter = Boolean(f.rows_counter);
 
-        //show/hides status bar
+        /**
+         * Enable status bar UI component
+         * @type {Boolean}
+         */
         this.statusBar = Boolean(f.status_bar);
 
-        //enables/disables loader/spinner indicator
+        /**
+         * Enable activity/spinner indicator UI component
+         * @type {Boolean}
+         */
         this.loader = Boolean(f.loader);
 
         /*** validation - reset buttons/links ***/
-        //show/hides filter&apos;s validation button
+        /**
+         * Enable filters submission button
+         * @type {Boolean}
+         */
         this.displayBtn = Boolean(f.btn);
-        //defines validation button text
+
+        /**
+         * Define filters submission button text
+         * @type {String}
+         */
         this.btnText = f.btn_text || (!this.enableIcons ? &apos;Go&apos; : &apos;&apos;);
-        //defines css class for validation button
+
+        /**
+         * Css class for filters submission button
+         * @type {String}
+         */
         this.btnCssClass = f.btn_css_class ||
             (!this.enableIcons ? &apos;btnflt&apos; : &apos;btnflt_icon&apos;);
-        //show/hides reset link
+
+        /**
+         * Enable clear button
+         * @type {Boolean}
+         */
         this.btnReset = Boolean(f.btn_reset);
-        //defines css class for reset button
+
+        /**
+         * Css class for reset button
+         * @type {String}
+         */
         this.btnResetCssClass = f.btn_reset_css_class || &apos;reset&apos;;
-        //callback function before filters are cleared
+
+        /**
+         * Callback fired before filters are cleared
+         * @type {Function}
+         */
         this.onBeforeReset = isFn(f.on_before_reset) ?
             f.on_before_reset : null;
-        //callback function after filters are cleared
+
+        /**
+         * Callback fired after filters are cleared
+         * @type {Function}
+         */
         this.onAfterReset = isFn(f.on_after_reset) ? f.on_after_reset : null;
 
-        /*** paging ***/
-        //enables/disables table paging
+        /**
+         * Enable paging component
+         * @type {Boolean}
+         */
         this.paging = Boolean(f.paging);
-        this.nbHiddenRows = 0; //nb hidden rows
 
-        /*** autofilter on typing ***/
-        //Auto filtering, table is filtered when user stops typing
+        /**
+         * Number of hidden rows
+         * @type {Number}
+         * @private
+         */
+        this.nbHiddenRows = 0;
+
+        /**
+         * Enable auto-filter behaviour, table is filtered when a user
+         * stops typing
+         * @type {Boolean}
+         */
         this.autoFilter = Boolean(f.auto_filter);
-        //onkeyup delay timer (msecs)
+
+        /**
+         * Auto-filter delay in msecs
+         * @type {Number}
+         */
         this.autoFilterDelay = !isNaN(f.auto_filter_delay) ?
             f.auto_filter_delay : AUTO_FILTER_DELAY;
-        //typing indicator
+
+        /**
+         * Indicate whether user is typing
+         * @type {Boolean}
+         * @private
+         */
         this.isUserTyping = null;
+
+        /**
+         * Auto-filter interval ID
+         * @type {String}
+         * @private
+         */
         this.autoFilterTimer = null;
 
-        /*** keyword highlighting ***/
-        //enables/disables keyword highlighting
+        /**
+         * Enable keyword highlighting behaviour
+         * @type {Boolean}
+         */
         this.highlightKeywords = Boolean(f.highlight_keywords);
 
-        /*** No results feature ***/
+        /**
+         * Enable no results message UI component
+         * @type {Boolean}
+         */
         this.noResults = isObj(f.no_results_message) ||
             Boolean(f.no_results_message);
 
-        // state persisstence
+        /**
+         * Enable state persistence
+         * @type {Boolean}
+         */
         this.state = isObj(f.state) || Boolean(f.state);
 
         /*** data types ***/
-        //defines default date type (european DMY)
+        /**
+         * Define default date type (DMY)
+         * @type {String}
+         */
         this.defaultDateType = f.default_date_type || &apos;DMY&apos;;
-        //defines default thousands separator US = &apos;,&apos; EU = &apos;.&apos;
+
+        /**
+         * Define thousands separator &apos;,&apos; or &apos;.&apos;, defaults to &apos;,&apos;
+         * @type {String}
+         */
         this.thousandsSeparator = f.thousands_separator || &apos;,&apos;;
-        //defines default decimal separator
-        //US &amp; javascript = &apos;.&apos; EU = &apos;,&apos;
+
+        /**
+         * Define decimal separator &apos;,&apos; or &apos;.&apos;, defaults to &apos;.&apos;
+         * @type {String}
+         */
         this.decimalSeparator = f.decimal_separator || &apos;.&apos;;
-        //enables number format per column
+
+        /**
+         * Determine whether table has columns with numeric formats
+         * @type {Boolean}
+         * @private
+         */
         this.hasColNbFormat = isArray(f.col_number_format);
-        //array containing columns nb formats
+
+        /**
+         * Define numeric format on a column basis, two possible values &apos;EU&apos; and
+         * &apos;US&apos;, ie:
+         * col_number_format : [null, &apos;US&apos;, &apos;EU&apos;, null]
+         * @type {Array}
+         */
         this.colNbFormat = this.hasColNbFormat ? f.col_number_format : null;
-        //enables date type per column
+
+        /**
+         * Determine whether table has columns with date types
+         * @type {Boolean}
+         * @private
+         */
         this.hasColDateType = isArray(f.col_date_type);
-        //array containing columns date type
+
+        /**
+         * Define date format on a column basis, possible values &apos;DMY&apos;, &apos;MDY&apos;,
+         * &apos;YMD&apos;, &apos;DDMMMYYYY&apos;, ie:
+         * col_date_type : [null, &apos;DMY&apos;, &apos;MDY&apos;, &apos;YMD&apos;, null, &apos;DDMMMYYYY&apos;]
+         * @type {Array}
+         */
         this.colDateType = this.hasColDateType ? f.col_date_type : null;
 
         /*** ids prefixes ***/
-        //css class name added to table
+        /**
+         * Main prefix
+         * @private
+         */
         this.prfxTf = &apos;TF&apos;;
-        //filters (inputs - selects)
+
+        /**
+         * Filter&apos;s ID prefix (inputs - selects)
+         * @private
+         */
         this.prfxFlt = &apos;flt&apos;;
-        //validation button
+
+        /**
+         * Button&apos;s ID prefix
+         * @private
+         */
         this.prfxValButton = &apos;btn&apos;;
-        //container div for paging elements, rows counter etc.
+
+        /**
+         * Toolbar container ID prefix
+         * @private
+         */
         this.prfxInfDiv = &apos;inf_&apos;;
-        //left div
+
+        /**
+         * Toolbar left element ID prefix
+         * @private
+         */
         this.prfxLDiv = &apos;ldiv_&apos;;
-        //right div
+
+        /**
+         * Toolbar right element ID prefix
+         * @private
+         */
         this.prfxRDiv = &apos;rdiv_&apos;;
-        //middle div
+
+        /**
+         * Toolbar middle element ID prefix
+         * @private
+         */
         this.prfxMDiv = &apos;mdiv_&apos;;
-        //responsive table css class
+
+        /**
+         * Responsive Css class
+         * @private
+         */
         this.prfxResponsive = &apos;resp&apos;;
 
         /*** extensions ***/
-        //imports external script
+        /**
+         * List of loaded extensions
+         * @type {Array}
+         * @private
+         */
         this.extensions = f.extensions;
+
+        /**
+         * Determine whether extensions are loaded
+         * @type {Boolean}
+         * @private
+         */
         this.hasExtensions = isArray(this.extensions);
 
         /*** themes ***/
+        /**
+         * Enable default theme
+         * @type {Boolean}
+         */
         this.enableDefaultTheme = Boolean(f.enable_default_theme);
-        //imports themes
+
+        /**
+         * Determine whether themes are enables
+         * @type {Boolean}
+         * @private
+         */
         this.hasThemes = (this.enableDefaultTheme || isArray(f.themes));
+
+        /**
+         * List of themes, ie:
+         * themes: [{ name: &apos;skyblue&apos; }]
+         * @type {Array}
+         */
         this.themes = f.themes || [];
-        //themes path
+
+        /**
+         * Define path to themes assets, defaults to
+         * &apos;tablefilter/style/themes/&apos;. Usage:
+         * themes: [{ name: &apos;skyblue&apos; }]
+         * @type {Array}
+         */
         this.themesPath = f.themes_path || this.stylePath + &apos;themes/&apos;;
 
-        //responsive table
+        /**
+         * Enable responsive layout
+         * @type {Boolean}
+         */
         this.responsive = Boolean(f.responsive);
 
-        // Features registry
+        /**
+         * Features registry
+         * @private
+         */
         this.Mod = {};
 
-        // Extensions registry
+        /**
+         * Extensions registry
+         * @private
+         */
         this.ExtRegistry = {};
     }
 
