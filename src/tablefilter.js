@@ -1190,6 +1190,9 @@ export class TableFilter {
             this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
 
         if (this.onFiltersLoaded) {
@@ -1503,26 +1506,8 @@ export class TableFilter {
             }
         }
 
-        //Some elements need to be overriden for default theme
-        //Reset button
-        this.btnResetText = null;
-        this.btnResetHtml = '<input type="button" value="" class="' +
-            this.btnResetCssClass + '" title="Clear filters" />';
-
-        //Paging buttons
-        this.btnPrevPageHtml = '<input type="button" value="" class="' +
-            this.btnPageCssClass + ' previousPage" title="Previous page" />';
-        this.btnNextPageHtml = '<input type="button" value="" class="' +
-            this.btnPageCssClass + ' nextPage" title="Next page" />';
-        this.btnFirstPageHtml = '<input type="button" value="" class="' +
-            this.btnPageCssClass + ' firstPage" title="First page" />';
-        this.btnLastPageHtml = '<input type="button" value="" class="' +
-            this.btnPageCssClass + ' lastPage" title="Last page" />';
-
-        //Loader
+        // Enable loader indicator
         this.loader = true;
-        this.loaderHtml = '<div class="defaultLoader"></div>';
-        this.loaderText = null;
 
         this.emitter.emit('after-loading-themes', this);
     }
