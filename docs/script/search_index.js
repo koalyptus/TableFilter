@@ -3516,30 +3516,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#btnfirstpagehtml",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-btnFirstPageHtml",
-    "src/tablefilter.js~TableFilter#btnFirstPageHtml",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#btnlastpagehtml",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-btnLastPageHtml",
-    "src/tablefilter.js~TableFilter#btnLastPageHtml",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#btnnextpagehtml",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-btnNextPageHtml",
-    "src/tablefilter.js~TableFilter#btnNextPageHtml",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#btnprevpagehtml",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-btnPrevPageHtml",
-    "src/tablefilter.js~TableFilter#btnPrevPageHtml",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#btnreset",
     "class/src/tablefilter.js~TableFilter.html#instance-member-btnReset",
     "src/tablefilter.js~TableFilter#btnReset",
@@ -3549,18 +3525,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#btnresetcssclass",
     "class/src/tablefilter.js~TableFilter.html#instance-member-btnResetCssClass",
     "src/tablefilter.js~TableFilter#btnResetCssClass",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#btnresethtml",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-btnResetHtml",
-    "src/tablefilter.js~TableFilter#btnResetHtml",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#btnresettext",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-btnResetText",
-    "src/tablefilter.js~TableFilter#btnResetText",
     "member"
   ],
   [
@@ -4161,18 +4125,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#loader",
     "class/src/tablefilter.js~TableFilter.html#instance-member-loader",
     "src/tablefilter.js~TableFilter#loader",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#loaderhtml",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-loaderHtml",
-    "src/tablefilter.js~TableFilter#loaderHtml",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#loadertext",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-loaderText",
-    "src/tablefilter.js~TableFilter#loaderText",
     "member"
   ],
   [

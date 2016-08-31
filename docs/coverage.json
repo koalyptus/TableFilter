@@ -1,7 +1,7 @@
 {
-  "coverage": "80.9%",
-  "expectCount": 660,
-  "actualCount": 534,
+  "coverage": "82.05%",
+  "expectCount": 652,
+  "actualCount": 535,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -247,19 +247,9 @@
       "undocumentLines": []
     },
     "src/tablefilter.js": {
-      "expectCount": 174,
-      "actualCount": 165,
-      "undocumentLines": [
-        1517,
-        1519,
-        1515,
-        1513,
-        1509,
-        1508,
-        1193,
-        1524,
-        1525
-      ]
+      "expectCount": 166,
+      "actualCount": 166,
+      "undocumentLines": []
     },
     "src/dom.js": {
       "expectCount": 12,
