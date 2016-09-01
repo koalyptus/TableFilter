@@ -625,24 +625,41 @@ webpackJsonp([1],{
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	/**
+	 * Column calculations extension
+	 */
 	var ColOps = function (_Feature) {
 	    _inherits(ColOps, _Feature);
 	
 	    /**
-	     * Column calculations
-	     * @param {Object} tf TableFilter instance
+	     * Creates an instance of ColOps
+	     *
+	     * @param {TableFilter} tf TableFilter instance
+	     * @param {Object} opts Configuration object
 	     */
 	    function ColOps(tf, opts) {
 	        _classCallCheck(this, ColOps);
 	
-	        //calls function before col operation
+	        /**
+	         * Callback fired before columns operations start
+	         * @type {Function}
+	         */
 	        var _this = _possibleConstructorReturn(this, _Feature.call(this, tf, opts.name));
 	
 	        _this.onBeforeOperation = (0, _types.isFn)(opts.on_before_operation) ? opts.on_before_operation : null;
-	        //calls function after col operation
+	
+	        /**
+	         * Callback fired after columns operations are completed
+	         * @type {Function}
+	         */
 	        _this.onAfterOperation = (0, _types.isFn)(opts.on_after_operation) ? opts.on_after_operation : null;
 	
+	        /**
+	         * Configuration options
+	         * @type {Object}
+	         */
 	        _this.opts = opts;
+	
 	        _this.enable();
 	        return _this;
 	    }
@@ -659,6 +676,10 @@ webpackJsonp([1],{
 	        });
 	
 	        this.calc();
+	
+	        /**
+	         * @inherited
+	         */
 	        this.initialized = true;
 	    };
 	
@@ -730,9 +751,9 @@ webpackJsonp([1],{
 	                colvalues.push(tf.getColValues(ucolIndex[ucol], false, true, excludeRow));
 	
 	                //next: calculate all operations for this column
-	                var result,
+	                var result = void 0,
 	                    nbvalues = 0,
-	                    temp,
+	                    temp = void 0,
 	                    meanValue = 0,
 	                    sumValue = 0,
 	                    minValue = null,
@@ -754,13 +775,13 @@ webpackJsonp([1],{
 	                    oTypeThisCol = [],
 	                    mThisCol = -1;
 	
-	                for (var k = 0; k < colIndex.length; k++) {
-	                    if (colIndex[k] === ucolIndex[ucol]) {
+	                for (var _k = 0; _k < colIndex.length; _k++) {
+	                    if (colIndex[_k] === ucolIndex[ucol]) {
 	                        mThisCol++;
-	                        opsThisCol[mThisCol] = operation[k].toLowerCase();
-	                        decThisCol[mThisCol] = decimalPrecision[k];
-	                        labThisCol[mThisCol] = labelId[k];
-	                        oTypeThisCol = (0, _types.isArray)(outputType) ? outputType[k] : null;
+	                        opsThisCol[mThisCol] = operation[_k].toLowerCase();
+	                        decThisCol[mThisCol] = decimalPrecision[_k];
+	                        labThisCol[mThisCol] = labelId[_k];
+	                        oTypeThisCol = (0, _types.isArray)(outputType) ? outputType[_k] : null;
 	
 	                        switch (opsThisCol[mThisCol]) {
 	                            case 'mean':
@@ -839,7 +860,7 @@ webpackJsonp([1],{
 	                        medValue = (theList[nbvalues / 2] + theList[nbvalues / 2 - 1]) / 2;
 	                    }
 	                }
-	                var posa;
+	                var posa = void 0;
 	                if (q1Flag === 1) {
 	                    posa = 0.0;
 	                    posa = Math.floor(nbvalues / 4);

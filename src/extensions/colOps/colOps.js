@@ -2,23 +2,40 @@ import {Feature} from '../../feature';
 import {createText, elm} from '../../dom';
 import {isArray, isFn, isUndef} from '../../types';
 
+/**
+ * Column calculations extension
+ */
 export default class ColOps extends Feature {
 
     /**
-     * Column calculations
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of ColOps
+     *
+     * @param {TableFilter} tf TableFilter instance
+     * @param {Object} opts Configuration object
      */
     constructor(tf, opts) {
         super(tf, opts.name);
 
-        //calls function before col operation
+        /**
+         * Callback fired before columns operations start
+         * @type {Function}
+         */
         this.onBeforeOperation = isFn(opts.on_before_operation) ?
             opts.on_before_operation : null;
-        //calls function after col operation
+
+        /**
+         * Callback fired after columns operations are completed
+         * @type {Function}
+         */
         this.onAfterOperation = isFn(opts.on_after_operation) ?
             opts.on_after_operation : null;
 
+        /**
+         * Configuration options
+         * @type {Object}
+         */
         this.opts = opts;
+
         this.enable();
     }
 
@@ -30,6 +47,10 @@ export default class ColOps extends Feature {
         this.tf.emitter.on(['after-filtering'], () => this.calc());
 
         this.calc();
+
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 
@@ -50,7 +71,7 @@ export default class ColOps extends Feature {
      * (2) added calculations for the median, lower and upper quartile.
      */
     calc() {
-        var tf = this.tf;
+        let tf = this.tf;
         if (!tf.isInitialized()) {
             return;
         }
@@ -59,7 +80,7 @@ export default class ColOps extends Feature {
             this.onBeforeOperation.call(null, tf);
         }
 
-        var opts = this.opts,
+        let opts = this.opts,
             labelId = opts.id,
             colIndex = opts.col,
             operation = opts.operation,
@@ -70,14 +91,14 @@ export default class ColOps extends Feature {
                 2 : opts.decimal_precision;
 
         //nuovella: determine unique list of columns to operate on
-        var ucolIndex = [],
+        let ucolIndex = [],
             ucolMax = 0;
         ucolIndex[ucolMax] = colIndex[0];
 
-        for (var ii = 1; ii < colIndex.length; ii++) {
-            var saved = 0;
+        for (let ii = 1; ii < colIndex.length; ii++) {
+            let saved = 0;
             //see if colIndex[ii] is already in the list of unique indexes
-            for (var jj = 0; jj <= ucolMax; jj++) {
+            for (let jj = 0; jj <= ucolMax; jj++) {
                 if (ucolIndex[jj] === colIndex[ii]) {
                     saved = 1;
                 }
@@ -90,10 +111,10 @@ export default class ColOps extends Feature {
         }
 
         if (isArray(labelId) && isArray(colIndex) && isArray(operation)) {
-            var rows = tf.tbl.rows,
+            let rows = tf.tbl.rows,
                 colvalues = [];
 
-            for (var ucol = 0; ucol <= ucolMax; ucol++) {
+            for (let ucol = 0; ucol <= ucolMax; ucol++) {
                 //this retrieves col values
                 //use ucolIndex because we only want to pass through this loop
                 //once for each column get the values in this unique column
@@ -101,7 +122,7 @@ export default class ColOps extends Feature {
                     tf.getColValues(ucolIndex[ucol], false, true, excludeRow));
 
                 //next: calculate all operations for this column
-                var result,
+                let result,
                     nbvalues = 0,
                     temp,
                     meanValue = 0,
@@ -125,7 +146,7 @@ export default class ColOps extends Feature {
                     oTypeThisCol = [],
                     mThisCol = -1;
 
-                for (var k = 0; k < colIndex.length; k++) {
+                for (let k = 0; k < colIndex.length; k++) {
                     if (colIndex[k] === ucolIndex[ucol]) {
                         mThisCol++;
                         opsThisCol[mThisCol] = operation[k].toLowerCase();
@@ -160,7 +181,7 @@ export default class ColOps extends Feature {
                     }
                 }
 
-                for (var j = 0; j < colvalues[ucol].length; j++) {
+                for (let j = 0; j < colvalues[ucol].length; j++) {
                     //sort the list for calculation of median and quartiles
                     if ((q1Flag === 1) || (q3Flag === 1) || (medFlag === 1)) {
                         if (j < colvalues[ucol].length - 1) {
@@ -176,7 +197,7 @@ export default class ColOps extends Feature {
                             }
                         }
                     }
-                    var cvalue = parseFloat(colvalues[ucol][j]);
+                    let cvalue = parseFloat(colvalues[ucol][j]);
                     theList[j] = parseFloat(cvalue);
 
                     if (!isNaN(cvalue)) {
@@ -206,7 +227,7 @@ export default class ColOps extends Feature {
                     meanValue = sumValue / nbvalues;
                 }
                 if (medFlag === 1) {
-                    var aux = 0;
+                    let aux = 0;
                     if (nbvalues % 2 === 1) {
                         aux = Math.floor(nbvalues / 2);
                         medValue = theList[aux];
@@ -215,7 +236,7 @@ export default class ColOps extends Feature {
                             theList[((nbvalues / 2) - 1)]) / 2;
                     }
                 }
-                var posa;
+                let posa;
                 if (q1Flag === 1) {
                     posa = 0.0;
                     posa = Math.floor(nbvalues / 4);
@@ -227,7 +248,7 @@ export default class ColOps extends Feature {
                 }
                 if (q3Flag === 1) {
                     posa = 0.0;
-                    var posb = 0.0;
+                    let posb = 0.0;
                     posa = Math.floor(nbvalues / 4);
                     if (4 * posa === nbvalues) {
                         posb = 3 * posa;
@@ -237,7 +258,7 @@ export default class ColOps extends Feature {
                     }
                 }
 
-                for (var i = 0; i <= mThisCol; i++) {
+                for (let i = 0; i <= mThisCol; i++) {
                     switch (opsThisCol[i]) {
                         case 'mean':
                             result = meanValue;
@@ -262,7 +283,7 @@ export default class ColOps extends Feature {
                             break;
                     }
 
-                    var precision = !isNaN(decThisCol[i]) ? decThisCol[i] : 2;
+                    let precision = !isNaN(decThisCol[i]) ? decThisCol[i] : 2;
 
                     //if outputType is defined
                     if (oTypeThisCol && result) {
@@ -282,9 +303,9 @@ export default class ColOps extends Feature {
                                     elm(labThisCol[i]).value = result;
                                     break;
                                 case 'createtextnode':
-                                    var oldnode =
+                                    let oldnode =
                                         elm(labThisCol[i]).firstChild;
-                                    var txtnode = createText(result);
+                                    let txtnode = createText(result);
                                     elm(labThisCol[i])
                                         .replaceChild(txtnode, oldnode);
                                     break;
@@ -304,7 +325,7 @@ export default class ColOps extends Feature {
                 }//for i
 
                 // row(s) with result are always visible
-                var totRow = totRowIndex && totRowIndex[ucol] ?
+                let totRow = totRowIndex && totRowIndex[ucol] ?
                     rows[totRowIndex[ucol]] : null;
                 if (totRow) {
                     totRow.style.display = '';
