@@ -765,12 +765,6 @@ export class TableFilter {
         this.btnReset = Boolean(f.btn_reset);
 
         /**
-         * Css class for reset button
-         * @type {String}
-         */
-        this.btnResetCssClass = f.btn_reset_css_class || 'reset';
-
-        /**
          * Callback fired before filters are cleared
          * @type {Function}
          */
