@@ -1,7 +1,7 @@
 {
-  "coverage": "82.05%",
+  "coverage": "83.12%",
   "expectCount": 652,
-  "actualCount": 535,
+  "actualCount": 542,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -63,22 +63,14 @@
       "undocumentLines": []
     },
     "src/modules/clearButton.js": {
-      "expectCount": 9,
-      "actualCount": 9,
+      "expectCount": 10,
+      "actualCount": 10,
       "undocumentLines": []
     },
     "src/extensions/colOps/colOps.js": {
       "expectCount": 9,
-      "actualCount": 2,
-      "undocumentLines": [
-        5,
-        320,
-        25,
-        33,
-        18,
-        15,
-        21
-      ]
+      "actualCount": 9,
+      "undocumentLines": []
     },
     "src/extensions/colsVisibility/colsVisibility.js": {
       "expectCount": 57,
@@ -247,8 +239,8 @@
       "undocumentLines": []
     },
     "src/tablefilter.js": {
-      "expectCount": 166,
-      "actualCount": 166,
+      "expectCount": 165,
+      "actualCount": 165,
       "undocumentLines": []
     },
     "src/dom.js": {

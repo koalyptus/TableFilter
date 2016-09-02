@@ -1998,6 +1998,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/clearbutton.js~clearbutton#cssclass",
+    "class/src/modules/clearButton.js~ClearButton.html#instance-member-cssClass",
+    "src/modules/clearButton.js~ClearButton#cssClass",
+    "member"
+  ],
+  [
     "src/modules/clearbutton.js~clearbutton#destroy",
     "class/src/modules/clearButton.js~ClearButton.html#instance-method-destroy",
     "src/modules/clearButton.js~ClearButton#destroy",
@@ -3519,12 +3525,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#btnreset",
     "class/src/tablefilter.js~TableFilter.html#instance-member-btnReset",
     "src/tablefilter.js~TableFilter#btnReset",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#btnresetcssclass",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-btnResetCssClass",
-    "src/tablefilter.js~TableFilter#btnResetCssClass",
     "member"
   ],
   [
