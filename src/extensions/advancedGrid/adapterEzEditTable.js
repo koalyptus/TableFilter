@@ -6,48 +6,90 @@ import {root} from '../../root';
 const INSTANTIATION_ERROR = `Failed to instantiate EditTable object.
     \n"ezEditTable" dependency not found.`;
 
+/**
+ * Adapter module for ezEditTable, an external library providing advanced
+ * grid features (selection and edition):
+ * http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus
+ */
 export default class AdapterEzEditTable extends Feature {
+
     /**
-     * Adapter module for ezEditTable, an external library providing advanced
-     * grid features (selection and edition):
-     * http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus
+     * Creates an instance of AdapterEzEditTable
      *
-     * @param {Object} tf TableFilter instance
+     * @param {TableFilter} tf TableFilter instance
+     * @param {Object} cfg Configuration options for ezEditTable library
      */
     constructor(tf, cfg) {
         super(tf, cfg.name);
 
-        // ezEditTable config
-        this.initialized = false;
+        /**
+         * Module description
+         * @type {String}
+         */
         this.desc = cfg.description || 'ezEditTable adapter';
+
+        /**
+         * Filename of ezEditTable library
+         * @type {String}
+         */
         this.filename = cfg.filename || 'ezEditTable.js';
+
+        /**
+         * Path to ezEditTable library
+         * @type {String}
+         */
         this.vendorPath = cfg.vendor_path;
+
+        /**
+         * Load ezEditTable stylesheet
+         * @type {Boolean}
+         */
         this.loadStylesheet = Boolean(cfg.load_stylesheet);
+
+        /**
+         * Path to ezEditTable stylesheet
+         * @type {String}
+         */
         this.stylesheet = cfg.stylesheet || this.vendorPath + 'ezEditTable.css';
+
+        /**
+         * Name of ezEditTable stylesheet
+         * @type {String}
+         */
         this.stylesheetName = cfg.stylesheet_name || 'ezEditTableCss';
 
         // Enable the ezEditTable's scroll into view behaviour if grid layout on
         cfg.scroll_into_view = cfg.scroll_into_view === false ?
             false : tf.gridLayout;
 
+        /**
+         * ezEditTable instance
+         * @type {EditTable}
+         * @private
+         */
         this._ezEditTable = null;
+
+        /**
+         * ezEditTable configuration
+         * @private
+         */
         this.cfg = cfg;
+
         this.enable();
     }
 
     /**
      * Conditionally load ezEditTable library and set advanced grid
-     * @return {[type]} [description]
      */
     init() {
         if (this.initialized) {
             return;
         }
-        var tf = this.tf;
+        let tf = this.tf;
         if (root.EditTable) {
             this._setAdvancedGrid();
         } else {
-            var path = this.vendorPath + this.filename;
+            let path = this.vendorPath + this.filename;
             tf.import(this.filename, path, () => this._setAdvancedGrid());
         }
         if (this.loadStylesheet && !tf.isImported(this.stylesheet, 'link')) {
@@ -59,6 +101,9 @@ export default class AdapterEzEditTable extends Feature {
         this.emitter.on(['filter-focus', 'filter-blur'],
             () => this._toggleForInputFilter());
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
     }
 
@@ -67,10 +112,10 @@ export default class AdapterEzEditTable extends Feature {
      * @private
      */
     _setAdvancedGrid() {
-        var tf = this.tf;
+        let tf = this.tf;
 
         //start row for EditTable constructor needs to be calculated
-        var startRow,
+        let startRow,
             cfg = this.cfg,
             thead = tag(tf.tbl, 'thead');
 
@@ -85,8 +130,8 @@ export default class AdapterEzEditTable extends Feature {
         }
 
         cfg.base_path = cfg.base_path || tf.basePath + 'ezEditTable/';
-        var editable = cfg.editable;
-        var selectable = cfg.selection;
+        let editable = cfg.editable;
+        let selectable = cfg.selection;
 
         if (selectable) {
             cfg.default_selection = cfg.default_selection || 'row';
@@ -94,16 +139,16 @@ export default class AdapterEzEditTable extends Feature {
         //CSS Styles
         cfg.active_cell_css = cfg.active_cell_css || 'ezETSelectedCell';
 
-        var _lastValidRowIndex = 0;
-        var _lastRowIndex = 0;
+        let _lastValidRowIndex = 0;
+        let _lastRowIndex = 0;
 
         if (selectable) {
             //Row navigation needs to be calculated according to TableFilter's
             //validRowsIndex array
-            var onAfterSelection = function (et, selectedElm, e) {
-                var slc = et.Selection;
+            let onAfterSelection = function (et, selectedElm, e) {
+                let slc = et.Selection;
                 //Next valid filtered row needs to be selected
-                var doSelect = function (nextRowIndex) {
+                let doSelect = function (nextRowIndex) {
                     if (et.defaultSelection === 'row') {
                         /* eslint-disable */
                         slc.SelectRowByIndex(nextRowIndex);
@@ -112,7 +157,7 @@ export default class AdapterEzEditTable extends Feature {
                         /* eslint-disable */
                         et.ClearSelections();
                         /* eslint-enable */
-                        var cellIndex = selectedElm.cellIndex,
+                        let cellIndex = selectedElm.cellIndex,
                             row = tf.tbl.rows[nextRowIndex];
                         if (et.defaultSelection === 'both') {
                             /* eslint-disable */
@@ -127,7 +172,7 @@ export default class AdapterEzEditTable extends Feature {
                     }
                     //Table is filtered
                     if (tf.validRowsIndex.length !== tf.getRowsNb()) {
-                        var r = tf.tbl.rows[nextRowIndex];
+                        let r = tf.tbl.rows[nextRowIndex];
                         if (r) {
                             r.scrollIntoView(false);
                         }
@@ -149,7 +194,7 @@ export default class AdapterEzEditTable extends Feature {
                 if (!tf.validRowsIndex) {
                     return;
                 }
-                var validIndexes = tf.validRowsIndex,
+                let validIndexes = tf.validRowsIndex,
                     validIdxLen = validIndexes.length,
                     row = et.defaultSelection !== 'row' ?
                         selectedElm.parentNode : selectedElm,
@@ -175,7 +220,7 @@ export default class AdapterEzEditTable extends Feature {
                         if (row.rowIndex >= validIndexes[validIdxLen - 1]) {
                             nextRowIndex = validIndexes[validIdxLen - 1];
                         } else {
-                            var calcRowIndex = (_lastValidRowIndex + d);
+                            let calcRowIndex = (_lastValidRowIndex + d);
                             if (calcRowIndex > (validIdxLen - 1)) {
                                 nextRowIndex = validIndexes[validIdxLen - 1];
                             } else {
@@ -187,7 +232,7 @@ export default class AdapterEzEditTable extends Feature {
                         if (row.rowIndex <= validIndexes[0]) {
                             nextRowIndex = validIndexes[0];
                         } else {
-                            var v = validIndexes[_lastValidRowIndex - d];
+                            let v = validIndexes[_lastValidRowIndex - d];
                             nextRowIndex = v ? v : validIndexes[0];
                         }
                     }
@@ -226,19 +271,19 @@ export default class AdapterEzEditTable extends Feature {
 
             //Page navigation has to be enforced whenever selected row is out of
             //the current page range
-            var onBeforeSelection = function (et, selectedElm) {
-                var row = et.defaultSelection !== 'row' ?
+            let onBeforeSelection = function (et, selectedElm) {
+                let row = et.defaultSelection !== 'row' ?
                     selectedElm.parentNode : selectedElm;
                 if (tf.paging) {
                     if (tf.feature('paging').nbPages > 1) {
-                        var paging = tf.feature('paging');
+                        let paging = tf.feature('paging');
                         //page length is re-assigned in case it has changed
                         et.nbRowsPerPage = paging.pagingLength;
-                        var validIndexes = tf.validRowsIndex,
+                        let validIndexes = tf.validRowsIndex,
                             validIdxLen = validIndexes.length,
                             pagingEndRow = parseInt(paging.startPagingRow, 10) +
                                 parseInt(paging.pagingLength, 10);
-                        var rowIndex = row.rowIndex;
+                        let rowIndex = row.rowIndex;
 
                         if ((rowIndex === validIndexes[validIdxLen - 1]) &&
                             paging.currentPageNb !== paging.nbPages) {
@@ -264,17 +309,17 @@ export default class AdapterEzEditTable extends Feature {
             //Selected row needs to be visible when paging is activated
             if (tf.paging) {
                 tf.feature('paging').onAfterChangePage = function (paging) {
-                    var advGrid = paging.tf.extension('advancedGrid');
-                    var et = advGrid._ezEditTable;
-                    var slc = et.Selection;
+                    let advGrid = paging.tf.extension('advancedGrid');
+                    let et = advGrid._ezEditTable;
+                    let slc = et.Selection;
                     /* eslint-disable */
-                    var row = slc.GetActiveRow();
+                    let row = slc.GetActiveRow();
                     /* eslint-enable */
                     if (row) {
                         row.scrollIntoView(false);
                     }
                     /* eslint-disable */
-                    var cell = slc.GetActiveCell();
+                    let cell = slc.GetActiveCell();
                     /* eslint-enable */
                     if (cell) {
                         cell.scrollIntoView(false);
@@ -285,7 +330,7 @@ export default class AdapterEzEditTable extends Feature {
             //Rows navigation when rows are filtered is performed with the
             //EditTable row selection callback events
             if (cfg.default_selection === 'row') {
-                var fnB = cfg.on_before_selected_row;
+                let fnB = cfg.on_before_selected_row;
                 cfg.on_before_selected_row = function () {
                     onBeforeSelection(arguments[0], arguments[1], arguments[2]);
                     if (fnB) {
@@ -293,7 +338,7 @@ export default class AdapterEzEditTable extends Feature {
                             null, arguments[0], arguments[1], arguments[2]);
                     }
                 };
-                var fnA = cfg.on_after_selected_row;
+                let fnA = cfg.on_after_selected_row;
                 cfg.on_after_selected_row = function () {
                     onAfterSelection(arguments[0], arguments[1], arguments[2]);
                     if (fnA) {
@@ -302,7 +347,7 @@ export default class AdapterEzEditTable extends Feature {
                     }
                 };
             } else {
-                var fnD = cfg.on_before_selected_cell;
+                let fnD = cfg.on_before_selected_cell;
                 cfg.on_before_selected_cell = function () {
                     onBeforeSelection(arguments[0], arguments[1], arguments[2]);
                     if (fnD) {
@@ -310,7 +355,7 @@ export default class AdapterEzEditTable extends Feature {
                             null, arguments[0], arguments[1], arguments[2]);
                     }
                 };
-                var fnC = cfg.on_after_selected_cell;
+                let fnC = cfg.on_after_selected_cell;
                 cfg.on_after_selected_cell = function () {
                     onAfterSelection(arguments[0], arguments[1], arguments[2]);
                     if (fnC) {
@@ -322,12 +367,11 @@ export default class AdapterEzEditTable extends Feature {
         }
         if (editable) {
             //Added or removed rows, TF rows number needs to be re-calculated
-            var fnE = cfg.on_added_dom_row;
+            let fnE = cfg.on_added_dom_row;
             cfg.on_added_dom_row = function () {
                 tf.nbFilterableRows++;
                 if (!tf.paging) {
                     tf.emitter.emit('rows-changed', tf, this);
-                    //tf.feature('rowsCounter').refresh();
                 } else {
                     tf.nbFilterableRows++;
                     tf.paging = false;
@@ -342,11 +386,10 @@ export default class AdapterEzEditTable extends Feature {
                 }
             };
             if (cfg.actions && cfg.actions['delete']) {
-                var fnF = cfg.actions['delete'].on_after_submit;
+                let fnF = cfg.actions['delete'].on_after_submit;
                 cfg.actions['delete'].on_after_submit = function () {
                     tf.nbFilterableRows--;
                     if (!tf.paging) {
-                        // tf.feature('rowsCounter').refresh();
                         tf.emitter.emit('rows-changed', tf, this);
                     } else {
                         tf.nbFilterableRows--;
@@ -378,7 +421,7 @@ export default class AdapterEzEditTable extends Feature {
      * Reset advanced grid when previously removed
      */
     reset() {
-        var ezEditTable = this._ezEditTable;
+        let ezEditTable = this._ezEditTable;
         if (ezEditTable) {
             if (this.cfg.selection) {
                 /* eslint-disable */
@@ -397,7 +440,7 @@ export default class AdapterEzEditTable extends Feature {
      * Toggle behaviour
      */
     toggle() {
-        var ezEditTable = this._ezEditTable;
+        let ezEditTable = this._ezEditTable;
         if (ezEditTable.editable) {
             /* eslint-disable */
             ezEditTable.Editable.Remove();
@@ -419,12 +462,12 @@ export default class AdapterEzEditTable extends Feature {
     }
 
     _toggleForInputFilter() {
-        var tf = this.tf;
+        let tf = this.tf;
         if (!tf.getActiveFilterId()) {
             return;
         }
-        var colIndex = tf.getColumnIndexFromFilterId(tf.getActiveFilterId());
-        var filterType = tf.getFilterType(colIndex);
+        let colIndex = tf.getColumnIndexFromFilterId(tf.getActiveFilterId());
+        let filterType = tf.getFilterType(colIndex);
         if (filterType === INPUT) {
             this.toggle();
         }
@@ -437,7 +480,7 @@ export default class AdapterEzEditTable extends Feature {
         if (!this.initialized) {
             return;
         }
-        var ezEditTable = this._ezEditTable;
+        let ezEditTable = this._ezEditTable;
         if (ezEditTable) {
             if (this.cfg.selection) {
                 /* eslint-disable */
