@@ -39,12 +39,15 @@ export default class ColOps extends Feature {
         this.enable();
     }
 
+    /**
+     * Initializes ColOps instance
+     */
     init() {
         if (this.initialized) {
             return;
         }
         // subscribe to events
-        this.tf.emitter.on(['after-filtering'], () => this.calc());
+        this.emitter.on(['after-filtering'], () => this.calc());
 
         this.calc();
 
@@ -77,8 +80,9 @@ export default class ColOps extends Feature {
         }
 
         if (this.onBeforeOperation) {
-            this.onBeforeOperation.call(null, tf);
+            this.onBeforeOperation.call(null, tf, this);
         }
+        this.emitter.emit('before-column-operation', tf, this);
 
         let opts = this.opts,
             labelId = opts.id,
@@ -334,16 +338,20 @@ export default class ColOps extends Feature {
         }//if typeof
 
         if (this.onAfterOperation) {
-            this.onAfterOperation.call(null, tf);
+            this.onAfterOperation.call(null, tf, this);
         }
+        this.emitter.emit('after-column-operation', tf, this);
     }
 
+    /**
+     * Remove extension
+     */
     destroy() {
         if (!this.initialized) {
             return;
         }
         // unsubscribe to events
-        this.tf.emitter.off(['after-filtering'], () => this.calc());
+        this.emitter.off(['after-filtering'], () => this.calc());
         this.initialized = false;
     }
 
