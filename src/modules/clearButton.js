@@ -36,6 +36,12 @@ export class ClearButton extends Feature {
         this.text = f.btn_reset_text || 'Reset';
 
         /**
+         * Css class for reset button
+         * @type {String}
+         */
+        this.cssClass = f.btn_reset_css_class || 'reset';
+
+        /**
          * Tooltip text for the clear button
          * @type {String}
          */
@@ -47,7 +53,7 @@ export class ClearButton extends Feature {
          */
         this.html = f.btn_reset_html ||
             (!tf.enableIcons ? null :
-                '<input type="button" value="" class="' + tf.btnResetCssClass +
+                '<input type="button" value="" class="' + this.cssClass +
                 '" ' + 'title="' + this.tooltip + '" />');
 
         /**
@@ -90,7 +96,7 @@ export class ClearButton extends Feature {
 
         if (!this.html) {
             let fltreset = createElm('a', ['href', 'javascript:void(0);']);
-            fltreset.className = tf.btnResetCssClass;
+            fltreset.className = this.cssClass;
             fltreset.appendChild(createText(this.text));
             resetspan.appendChild(fltreset);
             addEvt(fltreset, 'click', () => this.onClick());
