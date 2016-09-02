@@ -876,12 +876,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#cfg",
-    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-cfg",
-    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#cfg",
-    "member"
-  ],
-  [
     "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#constructor",
     "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-constructor-constructor",
     "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#constructor",

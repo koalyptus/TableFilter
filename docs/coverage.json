@@ -1,7 +1,7 @@
 {
-  "coverage": "83.12%",
-  "expectCount": 652,
-  "actualCount": 542,
+  "coverage": "84.48%",
+  "expectCount": 651,
+  "actualCount": 550,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -9,19 +9,9 @@
       "undocumentLines": []
     },
     "src/extensions/advancedGrid/adapterEzEditTable.js": {
-      "expectCount": 14,
-      "actualCount": 5,
-      "undocumentLines": [
-        9,
-        34,
-        22,
-        23,
-        21,
-        25,
-        26,
-        27,
-        24
-      ]
+      "expectCount": 13,
+      "actualCount": 13,
+      "undocumentLines": []
     },
     "src/extensions/sort/adapterSortabletable.js": {
       "expectCount": 26,
