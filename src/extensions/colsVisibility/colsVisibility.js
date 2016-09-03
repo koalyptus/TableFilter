@@ -6,12 +6,16 @@ import {
 import {isFn} from '../../types';
 import {addEvt, targetEvt} from '../../event';
 
+/**
+ * Columns Visibility extension
+ */
 export default class ColsVisibility extends Feature {
 
     /**
-     * Columns Visibility extension
-     * @param {Object} tf TableFilter instance
-     * @param {Object} f Extension's configuration
+     * Creates an instance of ColsVisibility
+     *
+     * @param {TableFilter} tf TableFilter instance
+     * @param {Object} Configuration object
      */
     constructor(tf, f) {
         super(tf, f.name);
@@ -19,20 +23,46 @@ export default class ColsVisibility extends Feature {
         // Configuration object
         let cfg = tf.config();
 
-        this.initialized = false;
+        /**
+         * Module name
+         * @type {String}
+         */
         this.name = f.name;
+
+        /**
+         * Module description
+         * @type {String}
+         */
         this.desc = f.description || 'Columns visibility manager';
 
-        //show/hide cols span element
+        /**
+         * show/hide columns container element
+         * @private
+         */
         this.spanEl = null;
-        //show/hide cols button element
+
+        /**
+         * show/hide columns button element
+         * @private
+         */
         this.btnEl = null;
-        //show/hide cols container div element
+
+        /**
+         * show/hide columns main container element
+         * @private
+         */
         this.contEl = null;
 
-        //tick to hide or show column
+        /**
+         * Enable tick to hide a column, defaults to true
+         * @type {Boolean}
+         */
         this.tickToHide = f.tick_to_hide === false ? false : true;
-        //enables/disables cols manager generation
+
+        /**
+         * Enable columns manager UI, defaults to true
+         * @type {Boolean}
+         */
         this.manager = f.manager === false ? false : true;
         //only if external headers
         this.headersTbl = f.headers_table || false;
