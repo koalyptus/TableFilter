@@ -4204,7 +4204,7 @@
                                 "type": "VariableDeclarator",
                                 "id": {
                                   "type": "Identifier",
-                                  "name": "fltreset",
+                                  "name": "fltReset",
                                   "range": [
                                     2291,
                                     2299
@@ -4375,7 +4375,7 @@
                                 "computed": false,
                                 "object": {
                                   "type": "Identifier",
-                                  "name": "fltreset",
+                                  "name": "fltReset",
                                   "range": [
                                     2363,
                                     2371
@@ -4516,7 +4516,7 @@
                                 "computed": false,
                                 "object": {
                                   "type": "Identifier",
-                                  "name": "fltreset",
+                                  "name": "fltReset",
                                   "range": [
                                     2411,
                                     2419
@@ -4748,7 +4748,7 @@
                               "arguments": [
                                 {
                                   "type": "Identifier",
-                                  "name": "fltreset",
+                                  "name": "fltReset",
                                   "range": [
                                     2490,
                                     2498
@@ -4820,7 +4820,7 @@
                               "arguments": [
                                 {
                                   "type": "Identifier",
-                                  "name": "fltreset",
+                                  "name": "fltReset",
                                   "range": [
                                     2520,
                                     2528

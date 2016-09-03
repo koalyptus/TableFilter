@@ -1044,12 +1044,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#btnel",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-btnEl",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnEl",
-    "member"
-  ],
-  [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#btnhtml",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-btnHtml",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnHtml",
@@ -1080,12 +1074,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#checkitem",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-checkItem",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#checkItem",
-    "method"
-  ],
-  [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#constructor",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-constructor-constructor",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#constructor",
@@ -1095,12 +1083,6 @@ window.esdocSearchIndex = [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#contcssclass",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-contCssClass",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#contCssClass",
-    "member"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#contel",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-contEl",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#contEl",
     "member"
   ],
   [
@@ -1155,12 +1137,6 @@ window.esdocSearchIndex = [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#headerstext",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-headersText",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#headersText",
-    "member"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#hiddencols",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-hiddenCols",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#hiddenCols",
     "member"
   ],
   [
@@ -1272,18 +1248,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#prfx",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-prfx",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#prfx",
-    "member"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#prfxcont",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-prfxCont",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#prfxCont",
-    "member"
-  ],
-  [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#sethidden",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-setHidden",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#setHidden",
@@ -1302,21 +1266,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#spanel",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-spanEl",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#spanEl",
-    "member"
-  ],
-  [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#stylesheet",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-stylesheet",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#stylesheet",
-    "member"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#tblhascoltag",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-tblHasColTag",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#tblHasColTag",
     "member"
   ],
   [
