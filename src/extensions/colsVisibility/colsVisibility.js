@@ -1,115 +1,282 @@
 import {Feature} from '../../feature';
 import {
     addClass, removeClass, createCheckItem, createElm, elm, removeElm,
-    getText, tag
+    getText
 } from '../../dom';
 import {isFn} from '../../types';
 import {addEvt, targetEvt} from '../../event';
 
+/**
+ * Columns Visibility extension
+ */
 export default class ColsVisibility extends Feature {
 
     /**
-     * Columns Visibility extension
-     * @param {Object} tf TableFilter instance
-     * @param {Object} f Extension's configuration
+     * Creates an instance of ColsVisibility
+     *
+     * @param {TableFilter} tf TableFilter instance
+     * @param {Object} Configuration object
      */
     constructor(tf, f) {
         super(tf, f.name);
 
         // Configuration object
-        let cfg = tf.config();
+        let cfg = this.config;
 
-        this.initialized = false;
+        /**
+         * Module name
+         * @type {String}
+         */
         this.name = f.name;
+
+        /**
+         * Module description
+         * @type {String}
+         */
         this.desc = f.description || 'Columns visibility manager';
 
-        //show/hide cols span element
+        /**
+         * show/hide columns container element
+         * @private
+         */
         this.spanEl = null;
-        //show/hide cols button element
+
+        /**
+         * show/hide columns button element
+         * @private
+         */
         this.btnEl = null;
-        //show/hide cols container div element
+
+        /**
+         * show/hide columns main container element
+         * @private
+         */
         this.contEl = null;
 
-        //tick to hide or show column
+        /**
+         * Enable tick to hide a column, defaults to true
+         * @type {Boolean}
+         */
         this.tickToHide = f.tick_to_hide === false ? false : true;
-        //enables/disables cols manager generation
+
+        /**
+         * Enable columns manager UI, defaults to true
+         * @type {Boolean}
+         */
         this.manager = f.manager === false ? false : true;
-        //only if external headers
-        this.headersTbl = f.headers_table || false;
-        //only if external headers
+
+        /**
+         * Headers HTML table reference only if headers are external
+         * @type {DOMElement}
+         */
+        this.headersTbl = f.headers_table || null;
+
+        /**
+         * Headers row index only if headers are external
+         * @type {Number}
+         */
         this.headersIndex = f.headers_index || 1;
-        //id of container element
+
+        /**
+         * ID of main container element
+         * @type {String}
+         */
         this.contElTgtId = f.container_target_id || null;
-        //alternative headers text
+
+        /**
+         * Alternative text for column headers in column manager UI
+         * @type {Array}
+         */
         this.headersText = f.headers_text || null;
-        //id of button container element
+
+        /**
+         * ID of button's container element
+         * @type {String}
+         */
         this.btnTgtId = f.btn_target_id || null;
-        //defines show/hide cols text
+
+        /**
+         * Button's text, defaults to Columns&#9660;
+         * @type {String}
+         */
         this.btnText = f.btn_text || 'Columns&#9660;';
-        //defines show/hide cols button innerHtml
+
+        /**
+         * Button's inner HTML
+         * @type {String}
+         */
         this.btnHtml = f.btn_html || null;
-        //defines css class for show/hide cols button
+
+        /**
+         * Css class for button
+         * @type {String}
+         */
         this.btnCssClass = f.btn_css_class || 'colVis';
-        //defines close link text
+
+        /**
+         * Columns manager UI close link text, defaults to 'Close'
+         * @type {String}
+         */
         this.btnCloseText = f.btn_close_text || 'Close';
-        //defines close button innerHtml
+
+        /**
+         * Columns manager UI close link HTML
+         * @type {String}
+         */
         this.btnCloseHtml = f.btn_close_html || null;
-        //defines css class for close button
+
+        /**
+         * Css for columns manager UI close link
+         * @type {String}
+         */
         this.btnCloseCssClass = f.btn_close_css_class || this.btnCssClass;
+
+        /**
+         * Extension's stylesheet filename
+         * @type {String}
+         */
         this.stylesheet = f.stylesheet || 'colsVisibility.css';
-        //span containing show/hide cols button
+
+        /**
+         * Extension's prefix
+         * @private
+         */
         this.prfx = 'colVis_';
-        //defines css class span containing show/hide cols
+
+        /**
+         * Css for columns manager UI span
+         * @type {String}
+         */
         this.spanCssClass = f.span_css_class || 'colVisSpan';
+
+        /**
+         * Main container prefix
+         * @private
+         */
         this.prfxCont = this.prfx + 'Cont_';
-        //defines css class div containing show/hide cols
+
+        /**
+         * Css for columns manager UI main container
+         * @type {String}
+         */
         this.contCssClass = f.cont_css_class || 'colVisCont';
-        //defines css class for cols list (ul)
+
+        /**
+         * Css for columns manager UI checklist (ul)
+         * @type {String}
+         */
         this.listCssClass = cfg.list_css_class || 'cols_checklist';
-        //defines css class for list item (li)
+
+        /**
+         * Css for columns manager UI checklist item (li)
+         * @type {String}
+         */
         this.listItemCssClass = cfg.checklist_item_css_class ||
             'cols_checklist_item';
-        //defines css class for selected list item (li)
+
+        /**
+         * Css for columns manager UI checklist item selected state (li)
+         * @type {String}
+         */
         this.listSlcItemCssClass = cfg.checklist_selected_item_css_class ||
             'cols_checklist_slc_item';
-        //text preceding columns list
+
+        /**
+         * Text preceding the columns list, defaults to 'Hide' or 'Show'
+         * depending on tick mode (tick_to_hide option)
+         * @type {String}
+         */
         this.text = f.text || (this.tickToHide ? 'Hide: ' : 'Show: ');
-        this.atStart = f.at_start || null;
+
+        /**
+         * List of columns indexes to be hidden at initialization
+         * @type {Array}
+         */
+        this.atStart = f.at_start || [];
+
+        /**
+         * Enable hover behaviour on columns manager button/link
+         * @type {Boolean}
+         */
         this.enableHover = Boolean(f.enable_hover);
-        //enables select all option
+
+        /**
+         * Enable select all option, disabled by default
+         * @type {Boolean}
+         */
         this.enableTickAll = Boolean(f.enable_tick_all);
-        //text preceding columns list
+
+        /**
+         * Text for select all option, defaults to 'Select all:'
+         * @type {String}
+         */
         this.tickAllText = f.tick_all_text || 'Select all:';
 
-        //array containing hidden columns indexes
+        /**
+         * List of indexes of hidden columns
+         * @private
+         */
         this.hiddenCols = [];
-        this.tblHasColTag = tag(tf.tbl, 'col').length > 0;
 
-        //callback invoked just after cols manager is loaded
+        /**
+         * Callback fired when the extension is initialized
+         * @type {Function}
+         */
         this.onLoaded = isFn(f.on_loaded) ? f.on_loaded : null;
-        //calls function before cols manager is opened
+
+        /**
+         * Callback fired before the columns manager is opened
+         * @type {Function}
+         */
         this.onBeforeOpen = isFn(f.on_before_open) ? f.on_before_open : null;
-        //calls function after cols manager is opened
+
+        /**
+         * Callback fired after the columns manager is opened
+         * @type {Function}
+         */
         this.onAfterOpen = isFn(f.on_after_open) ? f.on_after_open : null;
-        //calls function before cols manager is closed
+
+        /**
+         * Callback fired before the columns manager is closed
+         * @type {Function}
+         */
         this.onBeforeClose = isFn(f.on_before_close) ? f.on_before_close : null;
-        //calls function after cols manager is closed
+
+        /**
+         * Callback fired after the columns manager is closed
+         * @type {Function}
+         */
         this.onAfterClose = isFn(f.on_after_close) ? f.on_after_close : null;
 
-        //callback before col is hidden
+        /**
+         * Callback fired before a column is hidden
+         * @type {Function}
+         */
         this.onBeforeColHidden = isFn(f.on_before_col_hidden) ?
             f.on_before_col_hidden : null;
-        //callback after col is hidden
+
+        /**
+         * Callback fired after a column is hidden
+         * @type {Function}
+         */
         this.onAfterColHidden = isFn(f.on_after_col_hidden) ?
             f.on_after_col_hidden : null;
-        //callback before col is displayed
+
+        /**
+         * Callback fired before a column is displayed
+         * @type {Function}
+         */
         this.onBeforeColDisplayed = isFn(f.on_before_col_displayed) ?
             f.on_before_col_displayed : null;
-        //callback after col is displayed
+
+        /**
+         * Callback fired after a column is displayed
+         * @type {Function}
+         */
         this.onAfterColDisplayed = isFn(f.on_after_col_displayed) ?
             f.on_after_col_displayed : null;
 
-        //Grid layout compatibility
+        //Grid layout support
         if (tf.gridLayout) {
             this.headersTbl = tf.feature('gridLayout').headTbl; //headers table
             this.headersIndex = 0; //headers index
@@ -124,6 +291,9 @@ export default class ColsVisibility extends Feature {
         this.enable();
     }
 
+    /**
+     * Toggle columns manager UI
+     */
     toggle() {
         let contDisplay = this.contEl.style.display;
         let onBeforeOpen = this.onBeforeOpen;
@@ -149,6 +319,10 @@ export default class ColsVisibility extends Feature {
         }
     }
 
+    /**
+     * Check an item in columns manager UI
+     * @private
+     */
     checkItem(lbl) {
         let li = lbl.parentNode;
         if (!li || !lbl) {
@@ -171,6 +345,9 @@ export default class ColsVisibility extends Feature {
         this.setHidden(colIndex, hide);
     }
 
+    /**
+     * Initializes ColsVisibility instance
+     */
     init() {
         if (this.initialized || !this.manager) {
             return;
@@ -185,7 +362,8 @@ export default class ColsVisibility extends Feature {
         this.initialized = true;
         this.emitter.emit('columns-visibility-initialized', this.tf, this);
 
-        // Hide columns at start at very end of initialization
+        // Hide columns at start at very end of initialization, do not move
+        // as order is important
         this._hideAtStart();
     }
 
@@ -334,7 +512,7 @@ export default class ColsVisibility extends Feature {
 
     /**
      * Hide or show specified columns
-     * @param {Numner} colIndex Column index
+     * @param {Number} colIndex Column index
      * @param {Boolean} hide    Hide column if true or show if false
      */
     setHidden(colIndex, hide) {
@@ -536,9 +714,6 @@ export default class ColsVisibility extends Feature {
     }
 
     _hideAtStart() {
-        if (!this.atStart) {
-            return;
-        }
         this.atStart.forEach((colIdx) => {
             this.hideCol(colIdx);
         });

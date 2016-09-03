@@ -95,11 +95,11 @@ export class ClearButton extends Feature {
         targetEl.appendChild(resetspan);
 
         if (!this.html) {
-            let fltreset = createElm('a', ['href', 'javascript:void(0);']);
-            fltreset.className = this.cssClass;
-            fltreset.appendChild(createText(this.text));
-            resetspan.appendChild(fltreset);
-            addEvt(fltreset, 'click', () => this.onClick());
+            let fltReset = createElm('a', ['href', 'javascript:void(0);']);
+            fltReset.className = this.cssClass;
+            fltReset.appendChild(createText(this.text));
+            resetspan.appendChild(fltReset);
+            addEvt(fltReset, 'click', () => this.onClick());
         } else {
             resetspan.innerHTML = this.html;
             let resetEl = resetspan.firstChild;
