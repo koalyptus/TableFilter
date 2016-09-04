@@ -13,7 +13,6 @@ export default class ColsVisibility extends Feature {
 
     /**
      * Creates an instance of ColsVisibility
-     *
      * @param {TableFilter} tf TableFilter instance
      * @param {Object} Configuration object
      */
@@ -359,7 +358,11 @@ export default class ColsVisibility extends Feature {
         this.buildBtn();
         this.buildManager();
 
+        /**
+         * @inherited
+         */
         this.initialized = true;
+
         this.emitter.emit('columns-visibility-initialized', this.tf, this);
 
         // Hide columns at start at very end of initialization, do not move
