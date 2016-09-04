@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/filtersVisibility/filtersVisibility.js | tablefilter v0.2.62 API Document</title>
+  <title data-ice="title">src/extensions/filtersVisibility/filtersVisibility.js | tablefilter v0.2.63 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -120,74 +120,178 @@ import {createElm, removeElm, elm} from &apos;../../dom&apos;;
 import {isFn, isUndef} from &apos;../../types&apos;;
 import {addEvt} from &apos;../../event&apos;;
 
+/**
+ * Filters Visibility extension
+ */
 export default class FiltersVisibility extends Feature {
 
     /**
-     * Filters Row Visibility extension
-     * @param {Object} tf TableFilter instance
-     * @param {Object} f Config
+     * Creates an instance of FiltersVisibility
+     * @param {TableFilter} tf TableFilter instance
+     * @param {Object} Configuration object
      */
     constructor(tf, f) {
         super(tf, f.name);
 
+        /**
+         * Module name
+         * @type {String}
+         */
         this.name = f.name;
+
+        /**
+         * Module description
+         * @type {String}
+         */
         this.desc = f.description || &apos;Filters row visibility manager&apos;;
 
-        // Path and image filenames
+        /**
+         * Extension&apos;s stylesheet filename
+         * @type {String}
+         */
         this.stylesheet = f.stylesheet || &apos;filtersVisibility.css&apos;;
+
+        /**
+         * Expand icon filename
+         * @type {String}
+         */
         this.icnExpand = f.expand_icon_name || &apos;icn_exp.png&apos;;
+
+        /**
+         * Collapse icon filename
+         * @type {String}
+         */
         this.icnCollapse = f.collapse_icon_name || &apos;icn_clp.png&apos;;
 
-        //expand/collapse filters span element
+        /**
+         * Main container element
+         * @private
+         */
         this.contEl = null;
-        //expand/collapse filters btn element
+
+        /**
+         * Button element
+         * @private
+         */
         this.btnEl = null;
 
+        /**
+         * Expand icon HTML
+         * @private
+         */
         this.icnExpandHtml = &apos;&lt;img src=&quot;&apos; + tf.themesPath + this.icnExpand +
             &apos;&quot; alt=&quot;Expand filters&quot; &gt;&apos;;
+
+        /**
+         * Collapse icon HTML
+         * @private
+         */
         this.icnCollapseHtml = &apos;&lt;img src=&quot;&apos; + tf.themesPath + this.icnCollapse +
             &apos;&quot; alt=&quot;Collapse filters&quot; &gt;&apos;;
+
+        /**
+         * Default text
+         * @private
+         */
         this.defaultText = &apos;Toggle filters&apos;;
 
-        //id of container element
+        /**
+         * ID of main container element
+         * @type {String}
+         */
         this.targetId = f.target_id || null;
-        //enables/disables expand/collapse icon
+
+        /**
+         * Enable expand/collapse icon, defaults to true
+         * @type {Boolean}
+         */
         this.enableIcon = f.enable_icon === false ? false : true;
+
+        /**
+         * Custom text for button
+         * @type {String}
+         */
         this.btnText = f.btn_text || &apos;&apos;;
 
-        //defines expand/collapse filters text
+        /**
+         * Collapse button HTML
+         * @private
+         */
         this.collapseBtnHtml = this.enableIcon ?
             this.icnCollapseHtml + this.btnText :
             this.btnText || this.defaultText;
+
+        /**
+         * Expand button HTML
+         * @private
+         */
         this.expandBtnHtml = this.enableIcon ?
             this.icnExpandHtml + this.btnText :
             this.btnText || this.defaultText;
 
-        //defines expand/collapse filters button innerHtml
+        /**
+         * Button&apos;s custom HTML
+         * @type {String}
+         */
         this.btnHtml = f.btn_html || null;
-        //defines css class for expand/collapse filters button
+
+        /**
+         * Css class for expand/collapse filters button
+         * @type {String}
+         */
         this.btnCssClass = f.btn_css_class || &apos;btnExpClpFlt&apos;;
-        //defines css class span containing expand/collapse filters
+
+        /**
+         * Css class for main container
+         * @type {String}
+         */
         this.contCssClass = f.cont_css_class || &apos;expClpFlt&apos;;
+
+        /**
+         * Filters row index
+         * @type {Number}
+         */
         this.filtersRowIndex = !isUndef(f.filters_row_index) ?
             f.filters_row_index : tf.getFiltersRowIndex();
 
+        /**
+         * Make filters visible at initialization, defaults to true
+         * @type {Boolean}
+         */
         this.visibleAtStart = !isUndef(f.visible_at_start) ?
             Boolean(f.visible_at_start) : true;
 
-        // Prefix
+        /**
+         * Extension&apos;s prefix
+         * @private
+         */
         this.prfx = &apos;fltsVis_&apos;;
 
-        //callback before filters row is shown
+        /**
+         * Callback fired before filters row is shown
+         * @type {Function}
+         */
         this.onBeforeShow = isFn(f.on_before_show) ? f.on_before_show : null;
-        //callback after filters row is shown
+
+        /**
+         * Callback fired after filters row is shown
+         * @type {Function}
+         */
         this.onAfterShow = isFn(f.on_after_show) ? f.on_after_show : null;
-        //callback before filters row is hidden
+
+        /**
+         * Callback fired before filters row is hidden
+         * @type {Function}
+         */
         this.onBeforeHide = isFn(f.on_before_hide) ? f.on_before_hide : null;
-        //callback after filters row is hidden
+
+        /**
+         * Callback fired after filters row is hidden
+         * @type {Function}
+         */
         this.onAfterHide = isFn(f.on_after_hide) ? f.on_after_hide : null;
 
-        //Loads extension stylesheet
+        //Import extension&apos;s stylesheet
         tf.import(f.name + &apos;Style&apos;, tf.stylePath + this.stylesheet, null,
             &apos;link&apos;);
 
@@ -203,7 +307,12 @@ export default class FiltersVisibility extends Feature {
         }
 
         this.buildUI();
+
+        /**
+         * @inherited
+         */
         this.initialized = true;
+
         this.emitter.on([&apos;show-filters&apos;], (tf, visible) =&gt; this.show(visible));
         this.emitter.emit(&apos;filters-visibility-initialized&apos;, this.tf, this);
     }

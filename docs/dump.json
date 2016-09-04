@@ -2288,7 +2288,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../../feature';\nimport {\n    addClass, removeClass, createCheckItem, createElm, elm, removeElm,\n    getText\n} from '../../dom';\nimport {isFn} from '../../types';\nimport {addEvt, targetEvt} from '../../event';\n\n/**\n * Columns Visibility extension\n */\nexport default class ColsVisibility extends Feature {\n\n    /**\n     * Creates an instance of ColsVisibility\n     *\n     * @param {TableFilter} tf TableFilter instance\n     * @param {Object} Configuration object\n     */\n    constructor(tf, f) {\n        super(tf, f.name);\n\n        // Configuration object\n        let cfg = this.config;\n\n        /**\n         * Module name\n         * @type {String}\n         */\n        this.name = f.name;\n\n        /**\n         * Module description\n         * @type {String}\n         */\n        this.desc = f.description || 'Columns visibility manager';\n\n        /**\n         * show/hide columns container element\n         * @private\n         */\n        this.spanEl = null;\n\n        /**\n         * show/hide columns button element\n         * @private\n         */\n        this.btnEl = null;\n\n        /**\n         * show/hide columns main container element\n         * @private\n         */\n        this.contEl = null;\n\n        /**\n         * Enable tick to hide a column, defaults to true\n         * @type {Boolean}\n         */\n        this.tickToHide = f.tick_to_hide === false ? false : true;\n\n        /**\n         * Enable columns manager UI, defaults to true\n         * @type {Boolean}\n         */\n        this.manager = f.manager === false ? false : true;\n\n        /**\n         * Headers HTML table reference only if headers are external\n         * @type {DOMElement}\n         */\n        this.headersTbl = f.headers_table || null;\n\n        /**\n         * Headers row index only if headers are external\n         * @type {Number}\n         */\n        this.headersIndex = f.headers_index || 1;\n\n        /**\n         * ID of main container element\n         * @type {String}\n         */\n        this.contElTgtId = f.container_target_id || null;\n\n        /**\n         * Alternative text for column headers in column manager UI\n         * @type {Array}\n         */\n        this.headersText = f.headers_text || null;\n\n        /**\n         * ID of button's container element\n         * @type {String}\n         */\n        this.btnTgtId = f.btn_target_id || null;\n\n        /**\n         * Button's text, defaults to Columns&#9660;\n         * @type {String}\n         */\n        this.btnText = f.btn_text || 'Columns&#9660;';\n\n        /**\n         * Button's inner HTML\n         * @type {String}\n         */\n        this.btnHtml = f.btn_html || null;\n\n        /**\n         * Css class for button\n         * @type {String}\n         */\n        this.btnCssClass = f.btn_css_class || 'colVis';\n\n        /**\n         * Columns manager UI close link text, defaults to 'Close'\n         * @type {String}\n         */\n        this.btnCloseText = f.btn_close_text || 'Close';\n\n        /**\n         * Columns manager UI close link HTML\n         * @type {String}\n         */\n        this.btnCloseHtml = f.btn_close_html || null;\n\n        /**\n         * Css for columns manager UI close link\n         * @type {String}\n         */\n        this.btnCloseCssClass = f.btn_close_css_class || this.btnCssClass;\n\n        /**\n         * Extension's stylesheet filename\n         * @type {String}\n         */\n        this.stylesheet = f.stylesheet || 'colsVisibility.css';\n\n        /**\n         * Extension's prefix\n         * @private\n         */\n        this.prfx = 'colVis_';\n\n        /**\n         * Css for columns manager UI span\n         * @type {String}\n         */\n        this.spanCssClass = f.span_css_class || 'colVisSpan';\n\n        /**\n         * Main container prefix\n         * @private\n         */\n        this.prfxCont = this.prfx + 'Cont_';\n\n        /**\n         * Css for columns manager UI main container\n         * @type {String}\n         */\n        this.contCssClass = f.cont_css_class || 'colVisCont';\n\n        /**\n         * Css for columns manager UI checklist (ul)\n         * @type {String}\n         */\n        this.listCssClass = cfg.list_css_class || 'cols_checklist';\n\n        /**\n         * Css for columns manager UI checklist item (li)\n         * @type {String}\n         */\n        this.listItemCssClass = cfg.checklist_item_css_class ||\n            'cols_checklist_item';\n\n        /**\n         * Css for columns manager UI checklist item selected state (li)\n         * @type {String}\n         */\n        this.listSlcItemCssClass = cfg.checklist_selected_item_css_class ||\n            'cols_checklist_slc_item';\n\n        /**\n         * Text preceding the columns list, defaults to 'Hide' or 'Show'\n         * depending on tick mode (tick_to_hide option)\n         * @type {String}\n         */\n        this.text = f.text || (this.tickToHide ? 'Hide: ' : 'Show: ');\n\n        /**\n         * List of columns indexes to be hidden at initialization\n         * @type {Array}\n         */\n        this.atStart = f.at_start || [];\n\n        /**\n         * Enable hover behaviour on columns manager button/link\n         * @type {Boolean}\n         */\n        this.enableHover = Boolean(f.enable_hover);\n\n        /**\n         * Enable select all option, disabled by default\n         * @type {Boolean}\n         */\n        this.enableTickAll = Boolean(f.enable_tick_all);\n\n        /**\n         * Text for select all option, defaults to 'Select all:'\n         * @type {String}\n         */\n        this.tickAllText = f.tick_all_text || 'Select all:';\n\n        /**\n         * List of indexes of hidden columns\n         * @private\n         */\n        this.hiddenCols = [];\n\n        /**\n         * Callback fired when the extension is initialized\n         * @type {Function}\n         */\n        this.onLoaded = isFn(f.on_loaded) ? f.on_loaded : null;\n\n        /**\n         * Callback fired before the columns manager is opened\n         * @type {Function}\n         */\n        this.onBeforeOpen = isFn(f.on_before_open) ? f.on_before_open : null;\n\n        /**\n         * Callback fired after the columns manager is opened\n         * @type {Function}\n         */\n        this.onAfterOpen = isFn(f.on_after_open) ? f.on_after_open : null;\n\n        /**\n         * Callback fired before the columns manager is closed\n         * @type {Function}\n         */\n        this.onBeforeClose = isFn(f.on_before_close) ? f.on_before_close : null;\n\n        /**\n         * Callback fired after the columns manager is closed\n         * @type {Function}\n         */\n        this.onAfterClose = isFn(f.on_after_close) ? f.on_after_close : null;\n\n        /**\n         * Callback fired before a column is hidden\n         * @type {Function}\n         */\n        this.onBeforeColHidden = isFn(f.on_before_col_hidden) ?\n            f.on_before_col_hidden : null;\n\n        /**\n         * Callback fired after a column is hidden\n         * @type {Function}\n         */\n        this.onAfterColHidden = isFn(f.on_after_col_hidden) ?\n            f.on_after_col_hidden : null;\n\n        /**\n         * Callback fired before a column is displayed\n         * @type {Function}\n         */\n        this.onBeforeColDisplayed = isFn(f.on_before_col_displayed) ?\n            f.on_before_col_displayed : null;\n\n        /**\n         * Callback fired after a column is displayed\n         * @type {Function}\n         */\n        this.onAfterColDisplayed = isFn(f.on_after_col_displayed) ?\n            f.on_after_col_displayed : null;\n\n        //Grid layout support\n        if (tf.gridLayout) {\n            this.headersTbl = tf.feature('gridLayout').headTbl; //headers table\n            this.headersIndex = 0; //headers index\n            this.onAfterColDisplayed = function () { };\n            this.onAfterColHidden = function () { };\n        }\n\n        //Loads extension stylesheet\n        tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,\n            'link');\n\n        this.enable();\n    }\n\n    /**\n     * Toggle columns manager UI\n     */\n    toggle() {\n        let contDisplay = this.contEl.style.display;\n        let onBeforeOpen = this.onBeforeOpen;\n        let onBeforeClose = this.onBeforeClose;\n        let onAfterOpen = this.onAfterOpen;\n        let onAfterClose = this.onAfterClose;\n\n        if (onBeforeOpen && contDisplay !== 'inline') {\n            onBeforeOpen.call(null, this);\n        }\n        if (onBeforeClose && contDisplay === 'inline') {\n            onBeforeClose.call(null, this);\n        }\n\n        this.contEl.style.display = contDisplay === 'inline' ?\n            'none' : 'inline';\n\n        if (onAfterOpen && contDisplay !== 'inline') {\n            onAfterOpen.call(null, this);\n        }\n        if (onAfterClose && contDisplay === 'inline') {\n            onAfterClose.call(null, this);\n        }\n    }\n\n    /**\n     * Check an item in columns manager UI\n     * @private\n     */\n    checkItem(lbl) {\n        let li = lbl.parentNode;\n        if (!li || !lbl) {\n            return;\n        }\n        let isChecked = lbl.firstChild.checked;\n        let colIndex = lbl.firstChild.getAttribute('id').split('_')[1];\n        colIndex = parseInt(colIndex, 10);\n        if (isChecked) {\n            addClass(li, this.listSlcItemCssClass);\n        } else {\n            removeClass(li, this.listSlcItemCssClass);\n        }\n\n        let hide = false;\n        if ((this.tickToHide && isChecked) ||\n            (!this.tickToHide && !isChecked)) {\n            hide = true;\n        }\n        this.setHidden(colIndex, hide);\n    }\n\n    /**\n     * Initializes ColsVisibility instance\n     */\n    init() {\n        if (this.initialized || !this.manager) {\n            return;\n        }\n\n        this.emitter.on(['hide-column'],\n            (tf, colIndex) => this.hideCol(colIndex));\n\n        this.buildBtn();\n        this.buildManager();\n\n        this.initialized = true;\n        this.emitter.emit('columns-visibility-initialized', this.tf, this);\n\n        // Hide columns at start at very end of initialization, do not move\n        // as order is important\n        this._hideAtStart();\n    }\n\n    /**\n     * Build main button UI\n     */\n    buildBtn() {\n        if (this.btnEl) {\n            return;\n        }\n        let tf = this.tf;\n        let span = createElm('span', ['id', this.prfx + tf.id]);\n        span.className = this.spanCssClass;\n\n        //Container element (rdiv or custom element)\n        if (!this.btnTgtId) {\n            tf.setToolbar();\n        }\n        let targetEl = !this.btnTgtId ? tf.rDiv : elm(this.btnTgtId);\n\n        if (!this.btnTgtId) {\n            let firstChild = targetEl.firstChild;\n            firstChild.parentNode.insertBefore(span, firstChild);\n        } else {\n            targetEl.appendChild(span);\n        }\n\n        if (!this.btnHtml) {\n            let btn = createElm('a', ['href', 'javascript:;']);\n            btn.className = this.btnCssClass;\n            btn.title = this.desc;\n\n            btn.innerHTML = this.btnText;\n            span.appendChild(btn);\n            if (!this.enableHover) {\n                addEvt(btn, 'click', (evt) => this.toggle(evt));\n            } else {\n                addEvt(btn, 'mouseover', (evt) => this.toggle(evt));\n            }\n        } else { //Custom html\n            span.innerHTML = this.btnHtml;\n            let colVisEl = span.firstChild;\n            if (!this.enableHover) {\n                addEvt(colVisEl, 'click', (evt) => this.toggle(evt));\n            } else {\n                addEvt(colVisEl, 'mouseover', (evt) => this.toggle(evt));\n            }\n        }\n\n        this.spanEl = span;\n        this.btnEl = this.spanEl.firstChild;\n\n        if (this.onLoaded) {\n            this.onLoaded.call(null, this);\n        }\n    }\n\n    /**\n     * Build columns manager UI\n     */\n    buildManager() {\n        let tf = this.tf;\n\n        let container = !this.contElTgtId ?\n            createElm('div', ['id', this.prfxCont + tf.id]) :\n            elm(this.contElTgtId);\n        container.className = this.contCssClass;\n\n        //Extension description\n        let extNameLabel = createElm('p');\n        extNameLabel.innerHTML = this.text;\n        container.appendChild(extNameLabel);\n\n        //Headers list\n        let ul = createElm('ul', ['id', 'ul' + this.name + '_' + tf.id]);\n        ul.className = this.listCssClass;\n\n        let tbl = this.headersTbl ? this.headersTbl : tf.tbl;\n        let headerIndex = this.headersTbl ?\n            this.headersIndex : tf.getHeadersRowIndex();\n        let headerRow = tbl.rows[headerIndex];\n\n        //Tick all option\n        if (this.enableTickAll) {\n            let li = createCheckItem('col__' + tf.id, this.tickAllText,\n                this.tickAllText);\n            addClass(li, this.listItemCssClass);\n            ul.appendChild(li);\n            li.check.checked = !this.tickToHide;\n\n            addEvt(li.check, 'click', () => {\n                for (let h = 0; h < headerRow.cells.length; h++) {\n                    let itm = elm('col_' + h + '_' + tf.id);\n                    if (itm && li.check.checked !== itm.checked) {\n                        itm.click();\n                        itm.checked = li.check.checked;\n                    }\n                }\n            });\n        }\n\n        for (let i = 0; i < headerRow.cells.length; i++) {\n            let cell = headerRow.cells[i];\n            let cellText = this.headersText && this.headersText[i] ?\n                this.headersText[i] : this._getHeaderText(cell);\n            let liElm = createCheckItem('col_' + i + '_' + tf.id, cellText,\n                cellText);\n            addClass(liElm, this.listItemCssClass);\n            if (!this.tickToHide) {\n                addClass(liElm, this.listSlcItemCssClass);\n            }\n            ul.appendChild(liElm);\n            if (!this.tickToHide) {\n                liElm.check.checked = true;\n            }\n\n            addEvt(liElm.check, 'click', (evt) => {\n                let elm = targetEvt(evt);\n                let lbl = elm.parentNode;\n                this.checkItem(lbl);\n            });\n        }\n\n        //separator\n        let p = createElm('p', ['align', 'center']);\n        let btn;\n        //Close link\n        if (!this.btnCloseHtml) {\n            btn = createElm('a', ['href', 'javascript:;']);\n            btn.className = this.btnCloseCssClass;\n            btn.innerHTML = this.btnCloseText;\n            addEvt(btn, 'click', (evt) => this.toggle(evt));\n            p.appendChild(btn);\n        } else {\n            p.innerHTML = this.btnCloseHtml;\n            btn = p.firstChild;\n            addEvt(btn, 'click', (evt) => this.toggle(evt));\n        }\n\n        container.appendChild(ul);\n        container.appendChild(p);\n\n        this.btnEl.parentNode.insertBefore(container, this.btnEl);\n        this.contEl = container;\n    }\n\n    /**\n     * Hide or show specified columns\n     * @param {Number} colIndex Column index\n     * @param {Boolean} hide    Hide column if true or show if false\n     */\n    setHidden(colIndex, hide) {\n        let tf = this.tf;\n        let tbl = tf.tbl;\n\n        if (this.onBeforeColHidden && hide) {\n            this.onBeforeColHidden.call(null, this, colIndex);\n        }\n        if (this.onBeforeColDisplayed && !hide) {\n            this.onBeforeColDisplayed.call(null, this, colIndex);\n        }\n\n        this._hideCells(tbl, colIndex, hide);\n        if (this.headersTbl) {\n            this._hideCells(this.headersTbl, colIndex, hide);\n        }\n\n        let hiddenCols = this.hiddenCols;\n        let itemIndex = hiddenCols.indexOf(colIndex);\n        if (hide) {\n            if (itemIndex === -1) {\n                this.hiddenCols.push(colIndex);\n            }\n        } else {\n            if (itemIndex !== -1) {\n                this.hiddenCols.splice(itemIndex, 1);\n            }\n        }\n\n        let gridLayout;\n        let headTbl;\n        let gridColElms;\n        if (hide) {\n            //This event is fired just after a column is displayed for\n            //grid_layout support\n            //TODO: grid layout module should be responsible for those\n            //calculations\n            if (tf.gridLayout) {\n                gridLayout = tf.feature('gridLayout');\n                headTbl = gridLayout.headTbl;\n                gridColElms = gridLayout.colElms;\n                let hiddenWidth = parseInt(\n                    gridColElms[colIndex].style.width, 10);\n\n                let headTblW = parseInt(headTbl.style.width, 10);\n                headTbl.style.width = headTblW - hiddenWidth + 'px';\n                tbl.style.width = headTbl.style.width;\n            }\n            if (this.onAfterColHidden) {\n                this.onAfterColHidden.call(null, this, colIndex);\n            }\n            this.emitter.emit('column-hidden', tf, this, colIndex,\n                this.hiddenCols);\n        }\n\n        if (!hide) {\n            //This event is fired just after a column is displayed for\n            //grid_layout support\n            //TODO: grid layout module should be responsible for those\n            //calculations\n            if (tf.gridLayout) {\n                gridLayout = tf.feature('gridLayout');\n                headTbl = gridLayout.headTbl;\n                gridColElms = gridLayout.colElms;\n                let width = parseInt(gridColElms[colIndex].style.width, 10);\n                headTbl.style.width =\n                    (parseInt(headTbl.style.width, 10) + width) + 'px';\n                tf.tbl.style.width = headTbl.style.width;\n            }\n            if (this.onAfterColDisplayed) {\n                this.onAfterColDisplayed.call(null, this, colIndex);\n            }\n            this.emitter.emit('column-shown', tf, this, colIndex,\n                this.hiddenCols);\n        }\n    }\n\n    /**\n     * Show specified column\n     * @param  {Number} colIndex Column index\n     */\n    showCol(colIndex) {\n        if (colIndex === undefined || !this.isColHidden(colIndex)) {\n            return;\n        }\n        if (this.manager && this.contEl) {\n            let itm = elm('col_' + colIndex + '_' + this.tf.id);\n            if (itm) {\n                itm.click();\n            }\n        } else {\n            this.setHidden(colIndex, false);\n        }\n    }\n\n    /**\n     * Hide specified column\n     * @param  {Number} colIndex Column index\n     */\n    hideCol(colIndex) {\n        if (colIndex === undefined || this.isColHidden(colIndex)) {\n            return;\n        }\n        if (this.manager && this.contEl) {\n            let itm = elm('col_' + colIndex + '_' + this.tf.id);\n            if (itm) {\n                itm.click();\n            }\n        } else {\n            this.setHidden(colIndex, true);\n        }\n    }\n\n    /**\n     * Determine if specified column is hidden\n     * @param  {Number} colIndex Column index\n     */\n    isColHidden(colIndex) {\n        if (this.hiddenCols.indexOf(colIndex) !== -1) {\n            return true;\n        }\n        return false;\n    }\n\n    /**\n     * Toggle visibility of specified column\n     * @param  {Number} colIndex Column index\n     */\n    toggleCol(colIndex) {\n        if (colIndex === undefined || this.isColHidden(colIndex)) {\n            this.showCol(colIndex);\n        } else {\n            this.hideCol(colIndex);\n        }\n    }\n\n    /**\n     * Return the indexes of the columns currently hidden\n     * @return {Array} column indexes\n     */\n    getHiddenCols() {\n        return this.hiddenCols;\n    }\n\n    /**\n     * Remove the columns manager\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        if (elm(this.contElTgtId)) {\n            elm(this.contElTgtId).innerHTML = '';\n        } else {\n            this.contEl.innerHTML = '';\n            removeElm(this.contEl);\n            this.contEl = null;\n        }\n        this.btnEl.innerHTML = '';\n        removeElm(this.btnEl);\n        this.btnEl = null;\n\n        this.emitter.off(['hide-column'],\n            (tf, colIndex) => this.hideCol(colIndex));\n\n        this.initialized = false;\n    }\n\n    _getHeaderText(cell) {\n        if (!cell.hasChildNodes) {\n            return '';\n        }\n\n        for (let i = 0; i < cell.childNodes.length; i++) {\n            let n = cell.childNodes[i];\n            if (n.nodeType === 3) {\n                return n.nodeValue;\n            } else if (n.nodeType === 1) {\n                if (n.id && n.id.indexOf('popUp') !== -1) {\n                    continue;\n                } else {\n                    return getText(n);\n                }\n            }\n            continue;\n        }\n        return '';\n    }\n\n    _hideCells(tbl, colIndex, hide) {\n        for (let i = 0; i < tbl.rows.length; i++) {\n            let row = tbl.rows[i];\n            let cell = row.cells[colIndex];\n            if (cell) {\n                cell.style.display = hide ? 'none' : '';\n            }\n        }\n    }\n\n    _hideAtStart() {\n        this.atStart.forEach((colIdx) => {\n            this.hideCol(colIdx);\n        });\n    }\n}\n"
+    "content": "import {Feature} from '../../feature';\nimport {\n    addClass, removeClass, createCheckItem, createElm, elm, removeElm,\n    getText\n} from '../../dom';\nimport {isFn} from '../../types';\nimport {addEvt, targetEvt} from '../../event';\n\n/**\n * Columns Visibility extension\n */\nexport default class ColsVisibility extends Feature {\n\n    /**\n     * Creates an instance of ColsVisibility\n     * @param {TableFilter} tf TableFilter instance\n     * @param {Object} Configuration object\n     */\n    constructor(tf, f) {\n        super(tf, f.name);\n\n        // Configuration object\n        let cfg = this.config;\n\n        /**\n         * Module name\n         * @type {String}\n         */\n        this.name = f.name;\n\n        /**\n         * Module description\n         * @type {String}\n         */\n        this.desc = f.description || 'Columns visibility manager';\n\n        /**\n         * show/hide columns container element\n         * @private\n         */\n        this.spanEl = null;\n\n        /**\n         * show/hide columns button element\n         * @private\n         */\n        this.btnEl = null;\n\n        /**\n         * show/hide columns main container element\n         * @private\n         */\n        this.contEl = null;\n\n        /**\n         * Enable tick to hide a column, defaults to true\n         * @type {Boolean}\n         */\n        this.tickToHide = f.tick_to_hide === false ? false : true;\n\n        /**\n         * Enable columns manager UI, defaults to true\n         * @type {Boolean}\n         */\n        this.manager = f.manager === false ? false : true;\n\n        /**\n         * Headers HTML table reference only if headers are external\n         * @type {DOMElement}\n         */\n        this.headersTbl = f.headers_table || null;\n\n        /**\n         * Headers row index only if headers are external\n         * @type {Number}\n         */\n        this.headersIndex = f.headers_index || 1;\n\n        /**\n         * ID of main container element\n         * @type {String}\n         */\n        this.contElTgtId = f.container_target_id || null;\n\n        /**\n         * Alternative text for column headers in column manager UI\n         * @type {Array}\n         */\n        this.headersText = f.headers_text || null;\n\n        /**\n         * ID of button's container element\n         * @type {String}\n         */\n        this.btnTgtId = f.btn_target_id || null;\n\n        /**\n         * Button's text, defaults to Columns&#9660;\n         * @type {String}\n         */\n        this.btnText = f.btn_text || 'Columns&#9660;';\n\n        /**\n         * Button's inner HTML\n         * @type {String}\n         */\n        this.btnHtml = f.btn_html || null;\n\n        /**\n         * Css class for button\n         * @type {String}\n         */\n        this.btnCssClass = f.btn_css_class || 'colVis';\n\n        /**\n         * Columns manager UI close link text, defaults to 'Close'\n         * @type {String}\n         */\n        this.btnCloseText = f.btn_close_text || 'Close';\n\n        /**\n         * Columns manager UI close link HTML\n         * @type {String}\n         */\n        this.btnCloseHtml = f.btn_close_html || null;\n\n        /**\n         * Css for columns manager UI close link\n         * @type {String}\n         */\n        this.btnCloseCssClass = f.btn_close_css_class || this.btnCssClass;\n\n        /**\n         * Extension's stylesheet filename\n         * @type {String}\n         */\n        this.stylesheet = f.stylesheet || 'colsVisibility.css';\n\n        /**\n         * Extension's prefix\n         * @private\n         */\n        this.prfx = 'colVis_';\n\n        /**\n         * Css for columns manager UI span\n         * @type {String}\n         */\n        this.spanCssClass = f.span_css_class || 'colVisSpan';\n\n        /**\n         * Main container prefix\n         * @private\n         */\n        this.prfxCont = this.prfx + 'Cont_';\n\n        /**\n         * Css for columns manager UI main container\n         * @type {String}\n         */\n        this.contCssClass = f.cont_css_class || 'colVisCont';\n\n        /**\n         * Css for columns manager UI checklist (ul)\n         * @type {String}\n         */\n        this.listCssClass = cfg.list_css_class || 'cols_checklist';\n\n        /**\n         * Css for columns manager UI checklist item (li)\n         * @type {String}\n         */\n        this.listItemCssClass = cfg.checklist_item_css_class ||\n            'cols_checklist_item';\n\n        /**\n         * Css for columns manager UI checklist item selected state (li)\n         * @type {String}\n         */\n        this.listSlcItemCssClass = cfg.checklist_selected_item_css_class ||\n            'cols_checklist_slc_item';\n\n        /**\n         * Text preceding the columns list, defaults to 'Hide' or 'Show'\n         * depending on tick mode (tick_to_hide option)\n         * @type {String}\n         */\n        this.text = f.text || (this.tickToHide ? 'Hide: ' : 'Show: ');\n\n        /**\n         * List of columns indexes to be hidden at initialization\n         * @type {Array}\n         */\n        this.atStart = f.at_start || [];\n\n        /**\n         * Enable hover behaviour on columns manager button/link\n         * @type {Boolean}\n         */\n        this.enableHover = Boolean(f.enable_hover);\n\n        /**\n         * Enable select all option, disabled by default\n         * @type {Boolean}\n         */\n        this.enableTickAll = Boolean(f.enable_tick_all);\n\n        /**\n         * Text for select all option, defaults to 'Select all:'\n         * @type {String}\n         */\n        this.tickAllText = f.tick_all_text || 'Select all:';\n\n        /**\n         * List of indexes of hidden columns\n         * @private\n         */\n        this.hiddenCols = [];\n\n        /**\n         * Callback fired when the extension is initialized\n         * @type {Function}\n         */\n        this.onLoaded = isFn(f.on_loaded) ? f.on_loaded : null;\n\n        /**\n         * Callback fired before the columns manager is opened\n         * @type {Function}\n         */\n        this.onBeforeOpen = isFn(f.on_before_open) ? f.on_before_open : null;\n\n        /**\n         * Callback fired after the columns manager is opened\n         * @type {Function}\n         */\n        this.onAfterOpen = isFn(f.on_after_open) ? f.on_after_open : null;\n\n        /**\n         * Callback fired before the columns manager is closed\n         * @type {Function}\n         */\n        this.onBeforeClose = isFn(f.on_before_close) ? f.on_before_close : null;\n\n        /**\n         * Callback fired after the columns manager is closed\n         * @type {Function}\n         */\n        this.onAfterClose = isFn(f.on_after_close) ? f.on_after_close : null;\n\n        /**\n         * Callback fired before a column is hidden\n         * @type {Function}\n         */\n        this.onBeforeColHidden = isFn(f.on_before_col_hidden) ?\n            f.on_before_col_hidden : null;\n\n        /**\n         * Callback fired after a column is hidden\n         * @type {Function}\n         */\n        this.onAfterColHidden = isFn(f.on_after_col_hidden) ?\n            f.on_after_col_hidden : null;\n\n        /**\n         * Callback fired before a column is displayed\n         * @type {Function}\n         */\n        this.onBeforeColDisplayed = isFn(f.on_before_col_displayed) ?\n            f.on_before_col_displayed : null;\n\n        /**\n         * Callback fired after a column is displayed\n         * @type {Function}\n         */\n        this.onAfterColDisplayed = isFn(f.on_after_col_displayed) ?\n            f.on_after_col_displayed : null;\n\n        //Grid layout support\n        if (tf.gridLayout) {\n            this.headersTbl = tf.feature('gridLayout').headTbl; //headers table\n            this.headersIndex = 0; //headers index\n            this.onAfterColDisplayed = function () { };\n            this.onAfterColHidden = function () { };\n        }\n\n        //Loads extension stylesheet\n        tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,\n            'link');\n\n        this.enable();\n    }\n\n    /**\n     * Toggle columns manager UI\n     */\n    toggle() {\n        let contDisplay = this.contEl.style.display;\n        let onBeforeOpen = this.onBeforeOpen;\n        let onBeforeClose = this.onBeforeClose;\n        let onAfterOpen = this.onAfterOpen;\n        let onAfterClose = this.onAfterClose;\n\n        if (onBeforeOpen && contDisplay !== 'inline') {\n            onBeforeOpen.call(null, this);\n        }\n        if (onBeforeClose && contDisplay === 'inline') {\n            onBeforeClose.call(null, this);\n        }\n\n        this.contEl.style.display = contDisplay === 'inline' ?\n            'none' : 'inline';\n\n        if (onAfterOpen && contDisplay !== 'inline') {\n            onAfterOpen.call(null, this);\n        }\n        if (onAfterClose && contDisplay === 'inline') {\n            onAfterClose.call(null, this);\n        }\n    }\n\n    /**\n     * Check an item in columns manager UI\n     * @private\n     */\n    checkItem(lbl) {\n        let li = lbl.parentNode;\n        if (!li || !lbl) {\n            return;\n        }\n        let isChecked = lbl.firstChild.checked;\n        let colIndex = lbl.firstChild.getAttribute('id').split('_')[1];\n        colIndex = parseInt(colIndex, 10);\n        if (isChecked) {\n            addClass(li, this.listSlcItemCssClass);\n        } else {\n            removeClass(li, this.listSlcItemCssClass);\n        }\n\n        let hide = false;\n        if ((this.tickToHide && isChecked) ||\n            (!this.tickToHide && !isChecked)) {\n            hide = true;\n        }\n        this.setHidden(colIndex, hide);\n    }\n\n    /**\n     * Initializes ColsVisibility instance\n     */\n    init() {\n        if (this.initialized || !this.manager) {\n            return;\n        }\n\n        this.emitter.on(['hide-column'],\n            (tf, colIndex) => this.hideCol(colIndex));\n\n        this.buildBtn();\n        this.buildManager();\n\n        /**\n         * @inherited\n         */\n        this.initialized = true;\n\n        this.emitter.emit('columns-visibility-initialized', this.tf, this);\n\n        // Hide columns at start at very end of initialization, do not move\n        // as order is important\n        this._hideAtStart();\n    }\n\n    /**\n     * Build main button UI\n     */\n    buildBtn() {\n        if (this.btnEl) {\n            return;\n        }\n        let tf = this.tf;\n        let span = createElm('span', ['id', this.prfx + tf.id]);\n        span.className = this.spanCssClass;\n\n        //Container element (rdiv or custom element)\n        if (!this.btnTgtId) {\n            tf.setToolbar();\n        }\n        let targetEl = !this.btnTgtId ? tf.rDiv : elm(this.btnTgtId);\n\n        if (!this.btnTgtId) {\n            let firstChild = targetEl.firstChild;\n            firstChild.parentNode.insertBefore(span, firstChild);\n        } else {\n            targetEl.appendChild(span);\n        }\n\n        if (!this.btnHtml) {\n            let btn = createElm('a', ['href', 'javascript:;']);\n            btn.className = this.btnCssClass;\n            btn.title = this.desc;\n\n            btn.innerHTML = this.btnText;\n            span.appendChild(btn);\n            if (!this.enableHover) {\n                addEvt(btn, 'click', (evt) => this.toggle(evt));\n            } else {\n                addEvt(btn, 'mouseover', (evt) => this.toggle(evt));\n            }\n        } else { //Custom html\n            span.innerHTML = this.btnHtml;\n            let colVisEl = span.firstChild;\n            if (!this.enableHover) {\n                addEvt(colVisEl, 'click', (evt) => this.toggle(evt));\n            } else {\n                addEvt(colVisEl, 'mouseover', (evt) => this.toggle(evt));\n            }\n        }\n\n        this.spanEl = span;\n        this.btnEl = this.spanEl.firstChild;\n\n        if (this.onLoaded) {\n            this.onLoaded.call(null, this);\n        }\n    }\n\n    /**\n     * Build columns manager UI\n     */\n    buildManager() {\n        let tf = this.tf;\n\n        let container = !this.contElTgtId ?\n            createElm('div', ['id', this.prfxCont + tf.id]) :\n            elm(this.contElTgtId);\n        container.className = this.contCssClass;\n\n        //Extension description\n        let extNameLabel = createElm('p');\n        extNameLabel.innerHTML = this.text;\n        container.appendChild(extNameLabel);\n\n        //Headers list\n        let ul = createElm('ul', ['id', 'ul' + this.name + '_' + tf.id]);\n        ul.className = this.listCssClass;\n\n        let tbl = this.headersTbl ? this.headersTbl : tf.tbl;\n        let headerIndex = this.headersTbl ?\n            this.headersIndex : tf.getHeadersRowIndex();\n        let headerRow = tbl.rows[headerIndex];\n\n        //Tick all option\n        if (this.enableTickAll) {\n            let li = createCheckItem('col__' + tf.id, this.tickAllText,\n                this.tickAllText);\n            addClass(li, this.listItemCssClass);\n            ul.appendChild(li);\n            li.check.checked = !this.tickToHide;\n\n            addEvt(li.check, 'click', () => {\n                for (let h = 0; h < headerRow.cells.length; h++) {\n                    let itm = elm('col_' + h + '_' + tf.id);\n                    if (itm && li.check.checked !== itm.checked) {\n                        itm.click();\n                        itm.checked = li.check.checked;\n                    }\n                }\n            });\n        }\n\n        for (let i = 0; i < headerRow.cells.length; i++) {\n            let cell = headerRow.cells[i];\n            let cellText = this.headersText && this.headersText[i] ?\n                this.headersText[i] : this._getHeaderText(cell);\n            let liElm = createCheckItem('col_' + i + '_' + tf.id, cellText,\n                cellText);\n            addClass(liElm, this.listItemCssClass);\n            if (!this.tickToHide) {\n                addClass(liElm, this.listSlcItemCssClass);\n            }\n            ul.appendChild(liElm);\n            if (!this.tickToHide) {\n                liElm.check.checked = true;\n            }\n\n            addEvt(liElm.check, 'click', (evt) => {\n                let elm = targetEvt(evt);\n                let lbl = elm.parentNode;\n                this.checkItem(lbl);\n            });\n        }\n\n        //separator\n        let p = createElm('p', ['align', 'center']);\n        let btn;\n        //Close link\n        if (!this.btnCloseHtml) {\n            btn = createElm('a', ['href', 'javascript:;']);\n            btn.className = this.btnCloseCssClass;\n            btn.innerHTML = this.btnCloseText;\n            addEvt(btn, 'click', (evt) => this.toggle(evt));\n            p.appendChild(btn);\n        } else {\n            p.innerHTML = this.btnCloseHtml;\n            btn = p.firstChild;\n            addEvt(btn, 'click', (evt) => this.toggle(evt));\n        }\n\n        container.appendChild(ul);\n        container.appendChild(p);\n\n        this.btnEl.parentNode.insertBefore(container, this.btnEl);\n        this.contEl = container;\n    }\n\n    /**\n     * Hide or show specified columns\n     * @param {Number} colIndex Column index\n     * @param {Boolean} hide    Hide column if true or show if false\n     */\n    setHidden(colIndex, hide) {\n        let tf = this.tf;\n        let tbl = tf.tbl;\n\n        if (this.onBeforeColHidden && hide) {\n            this.onBeforeColHidden.call(null, this, colIndex);\n        }\n        if (this.onBeforeColDisplayed && !hide) {\n            this.onBeforeColDisplayed.call(null, this, colIndex);\n        }\n\n        this._hideCells(tbl, colIndex, hide);\n        if (this.headersTbl) {\n            this._hideCells(this.headersTbl, colIndex, hide);\n        }\n\n        let hiddenCols = this.hiddenCols;\n        let itemIndex = hiddenCols.indexOf(colIndex);\n        if (hide) {\n            if (itemIndex === -1) {\n                this.hiddenCols.push(colIndex);\n            }\n        } else {\n            if (itemIndex !== -1) {\n                this.hiddenCols.splice(itemIndex, 1);\n            }\n        }\n\n        let gridLayout;\n        let headTbl;\n        let gridColElms;\n        if (hide) {\n            //This event is fired just after a column is displayed for\n            //grid_layout support\n            //TODO: grid layout module should be responsible for those\n            //calculations\n            if (tf.gridLayout) {\n                gridLayout = tf.feature('gridLayout');\n                headTbl = gridLayout.headTbl;\n                gridColElms = gridLayout.colElms;\n                let hiddenWidth = parseInt(\n                    gridColElms[colIndex].style.width, 10);\n\n                let headTblW = parseInt(headTbl.style.width, 10);\n                headTbl.style.width = headTblW - hiddenWidth + 'px';\n                tbl.style.width = headTbl.style.width;\n            }\n            if (this.onAfterColHidden) {\n                this.onAfterColHidden.call(null, this, colIndex);\n            }\n            this.emitter.emit('column-hidden', tf, this, colIndex,\n                this.hiddenCols);\n        }\n\n        if (!hide) {\n            //This event is fired just after a column is displayed for\n            //grid_layout support\n            //TODO: grid layout module should be responsible for those\n            //calculations\n            if (tf.gridLayout) {\n                gridLayout = tf.feature('gridLayout');\n                headTbl = gridLayout.headTbl;\n                gridColElms = gridLayout.colElms;\n                let width = parseInt(gridColElms[colIndex].style.width, 10);\n                headTbl.style.width =\n                    (parseInt(headTbl.style.width, 10) + width) + 'px';\n                tf.tbl.style.width = headTbl.style.width;\n            }\n            if (this.onAfterColDisplayed) {\n                this.onAfterColDisplayed.call(null, this, colIndex);\n            }\n            this.emitter.emit('column-shown', tf, this, colIndex,\n                this.hiddenCols);\n        }\n    }\n\n    /**\n     * Show specified column\n     * @param  {Number} colIndex Column index\n     */\n    showCol(colIndex) {\n        if (colIndex === undefined || !this.isColHidden(colIndex)) {\n            return;\n        }\n        if (this.manager && this.contEl) {\n            let itm = elm('col_' + colIndex + '_' + this.tf.id);\n            if (itm) {\n                itm.click();\n            }\n        } else {\n            this.setHidden(colIndex, false);\n        }\n    }\n\n    /**\n     * Hide specified column\n     * @param  {Number} colIndex Column index\n     */\n    hideCol(colIndex) {\n        if (colIndex === undefined || this.isColHidden(colIndex)) {\n            return;\n        }\n        if (this.manager && this.contEl) {\n            let itm = elm('col_' + colIndex + '_' + this.tf.id);\n            if (itm) {\n                itm.click();\n            }\n        } else {\n            this.setHidden(colIndex, true);\n        }\n    }\n\n    /**\n     * Determine if specified column is hidden\n     * @param  {Number} colIndex Column index\n     */\n    isColHidden(colIndex) {\n        if (this.hiddenCols.indexOf(colIndex) !== -1) {\n            return true;\n        }\n        return false;\n    }\n\n    /**\n     * Toggle visibility of specified column\n     * @param  {Number} colIndex Column index\n     */\n    toggleCol(colIndex) {\n        if (colIndex === undefined || this.isColHidden(colIndex)) {\n            this.showCol(colIndex);\n        } else {\n            this.hideCol(colIndex);\n        }\n    }\n\n    /**\n     * Return the indexes of the columns currently hidden\n     * @return {Array} column indexes\n     */\n    getHiddenCols() {\n        return this.hiddenCols;\n    }\n\n    /**\n     * Remove the columns manager\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        if (elm(this.contElTgtId)) {\n            elm(this.contElTgtId).innerHTML = '';\n        } else {\n            this.contEl.innerHTML = '';\n            removeElm(this.contEl);\n            this.contEl = null;\n        }\n        this.btnEl.innerHTML = '';\n        removeElm(this.btnEl);\n        this.btnEl = null;\n\n        this.emitter.off(['hide-column'],\n            (tf, colIndex) => this.hideCol(colIndex));\n\n        this.initialized = false;\n    }\n\n    _getHeaderText(cell) {\n        if (!cell.hasChildNodes) {\n            return '';\n        }\n\n        for (let i = 0; i < cell.childNodes.length; i++) {\n            let n = cell.childNodes[i];\n            if (n.nodeType === 3) {\n                return n.nodeValue;\n            } else if (n.nodeType === 1) {\n                if (n.id && n.id.indexOf('popUp') !== -1) {\n                    continue;\n                } else {\n                    return getText(n);\n                }\n            }\n            continue;\n        }\n        return '';\n    }\n\n    _hideCells(tbl, colIndex, hide) {\n        for (let i = 0; i < tbl.rows.length; i++) {\n            let row = tbl.rows[i];\n            let cell = row.cells[colIndex];\n            if (cell) {\n                cell.style.display = hide ? 'none' : '';\n            }\n        }\n    }\n\n    _hideAtStart() {\n        this.atStart.forEach((colIdx) => {\n            this.hideCol(colIdx);\n        });\n    }\n}\n"
   },
   {
     "__docId__": 87,
@@ -2319,7 +2319,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#constructor",
     "access": null,
     "description": "Creates an instance of ColsVisibility",
-    "lineNumber": 20,
+    "lineNumber": 19,
     "params": [
       {
         "nullable": null,
@@ -2354,7 +2354,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#name",
     "access": null,
     "description": "Module name",
-    "lineNumber": 30,
+    "lineNumber": 29,
     "type": {
       "nullable": null,
       "types": [
@@ -2374,7 +2374,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#desc",
     "access": null,
     "description": "Module description",
-    "lineNumber": 36,
+    "lineNumber": 35,
     "type": {
       "nullable": null,
       "types": [
@@ -2394,7 +2394,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#spanEl",
     "access": "private",
     "description": "show/hide columns container element",
-    "lineNumber": 42,
+    "lineNumber": 41,
     "type": {
       "types": [
         "*"
@@ -2411,7 +2411,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnEl",
     "access": "private",
     "description": "show/hide columns button element",
-    "lineNumber": 48,
+    "lineNumber": 47,
     "type": {
       "types": [
         "*"
@@ -2428,7 +2428,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#contEl",
     "access": "private",
     "description": "show/hide columns main container element",
-    "lineNumber": 54,
+    "lineNumber": 53,
     "type": {
       "types": [
         "*"
@@ -2445,7 +2445,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#tickToHide",
     "access": null,
     "description": "Enable tick to hide a column, defaults to true",
-    "lineNumber": 60,
+    "lineNumber": 59,
     "type": {
       "nullable": null,
       "types": [
@@ -2465,7 +2465,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#manager",
     "access": null,
     "description": "Enable columns manager UI, defaults to true",
-    "lineNumber": 66,
+    "lineNumber": 65,
     "type": {
       "nullable": null,
       "types": [
@@ -2485,7 +2485,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#headersTbl",
     "access": null,
     "description": "Headers HTML table reference only if headers are external",
-    "lineNumber": 72,
+    "lineNumber": 71,
     "type": {
       "nullable": null,
       "types": [
@@ -2505,7 +2505,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#headersIndex",
     "access": null,
     "description": "Headers row index only if headers are external",
-    "lineNumber": 78,
+    "lineNumber": 77,
     "type": {
       "nullable": null,
       "types": [
@@ -2525,7 +2525,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#contElTgtId",
     "access": null,
     "description": "ID of main container element",
-    "lineNumber": 84,
+    "lineNumber": 83,
     "type": {
       "nullable": null,
       "types": [
@@ -2545,7 +2545,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#headersText",
     "access": null,
     "description": "Alternative text for column headers in column manager UI",
-    "lineNumber": 90,
+    "lineNumber": 89,
     "type": {
       "nullable": null,
       "types": [
@@ -2565,7 +2565,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnTgtId",
     "access": null,
     "description": "ID of button's container element",
-    "lineNumber": 96,
+    "lineNumber": 95,
     "type": {
       "nullable": null,
       "types": [
@@ -2585,7 +2585,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnText",
     "access": null,
     "description": "Button's text, defaults to Columns&#9660;",
-    "lineNumber": 102,
+    "lineNumber": 101,
     "type": {
       "nullable": null,
       "types": [
@@ -2605,7 +2605,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnHtml",
     "access": null,
     "description": "Button's inner HTML",
-    "lineNumber": 108,
+    "lineNumber": 107,
     "type": {
       "nullable": null,
       "types": [
@@ -2625,7 +2625,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnCssClass",
     "access": null,
     "description": "Css class for button",
-    "lineNumber": 114,
+    "lineNumber": 113,
     "type": {
       "nullable": null,
       "types": [
@@ -2645,7 +2645,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnCloseText",
     "access": null,
     "description": "Columns manager UI close link text, defaults to 'Close'",
-    "lineNumber": 120,
+    "lineNumber": 119,
     "type": {
       "nullable": null,
       "types": [
@@ -2665,7 +2665,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnCloseHtml",
     "access": null,
     "description": "Columns manager UI close link HTML",
-    "lineNumber": 126,
+    "lineNumber": 125,
     "type": {
       "nullable": null,
       "types": [
@@ -2685,7 +2685,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnCloseCssClass",
     "access": null,
     "description": "Css for columns manager UI close link",
-    "lineNumber": 132,
+    "lineNumber": 131,
     "type": {
       "nullable": null,
       "types": [
@@ -2705,7 +2705,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#stylesheet",
     "access": null,
     "description": "Extension's stylesheet filename",
-    "lineNumber": 138,
+    "lineNumber": 137,
     "type": {
       "nullable": null,
       "types": [
@@ -2725,7 +2725,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#prfx",
     "access": "private",
     "description": "Extension's prefix",
-    "lineNumber": 144,
+    "lineNumber": 143,
     "type": {
       "types": [
         "string"
@@ -2742,7 +2742,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#spanCssClass",
     "access": null,
     "description": "Css for columns manager UI span",
-    "lineNumber": 150,
+    "lineNumber": 149,
     "type": {
       "nullable": null,
       "types": [
@@ -2762,7 +2762,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#prfxCont",
     "access": "private",
     "description": "Main container prefix",
-    "lineNumber": 156,
+    "lineNumber": 155,
     "type": {
       "types": [
         "*"
@@ -2779,7 +2779,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#contCssClass",
     "access": null,
     "description": "Css for columns manager UI main container",
-    "lineNumber": 162,
+    "lineNumber": 161,
     "type": {
       "nullable": null,
       "types": [
@@ -2799,7 +2799,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#listCssClass",
     "access": null,
     "description": "Css for columns manager UI checklist (ul)",
-    "lineNumber": 168,
+    "lineNumber": 167,
     "type": {
       "nullable": null,
       "types": [
@@ -2819,7 +2819,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#listItemCssClass",
     "access": null,
     "description": "Css for columns manager UI checklist item (li)",
-    "lineNumber": 174,
+    "lineNumber": 173,
     "type": {
       "nullable": null,
       "types": [
@@ -2839,7 +2839,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#listSlcItemCssClass",
     "access": null,
     "description": "Css for columns manager UI checklist item selected state (li)",
-    "lineNumber": 181,
+    "lineNumber": 180,
     "type": {
       "nullable": null,
       "types": [
@@ -2859,7 +2859,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#text",
     "access": null,
     "description": "Text preceding the columns list, defaults to 'Hide' or 'Show'\ndepending on tick mode (tick_to_hide option)",
-    "lineNumber": 189,
+    "lineNumber": 188,
     "type": {
       "nullable": null,
       "types": [
@@ -2879,7 +2879,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#atStart",
     "access": null,
     "description": "List of columns indexes to be hidden at initialization",
-    "lineNumber": 195,
+    "lineNumber": 194,
     "type": {
       "nullable": null,
       "types": [
@@ -2899,7 +2899,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#enableHover",
     "access": null,
     "description": "Enable hover behaviour on columns manager button/link",
-    "lineNumber": 201,
+    "lineNumber": 200,
     "type": {
       "nullable": null,
       "types": [
@@ -2919,7 +2919,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#enableTickAll",
     "access": null,
     "description": "Enable select all option, disabled by default",
-    "lineNumber": 207,
+    "lineNumber": 206,
     "type": {
       "nullable": null,
       "types": [
@@ -2939,7 +2939,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#tickAllText",
     "access": null,
     "description": "Text for select all option, defaults to 'Select all:'",
-    "lineNumber": 213,
+    "lineNumber": 212,
     "type": {
       "nullable": null,
       "types": [
@@ -2959,7 +2959,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#hiddenCols",
     "access": "private",
     "description": "List of indexes of hidden columns",
-    "lineNumber": 219,
+    "lineNumber": 218,
     "type": {
       "types": [
         "*"
@@ -2976,7 +2976,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onLoaded",
     "access": null,
     "description": "Callback fired when the extension is initialized",
-    "lineNumber": 225,
+    "lineNumber": 224,
     "type": {
       "nullable": null,
       "types": [
@@ -2996,7 +2996,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onBeforeOpen",
     "access": null,
     "description": "Callback fired before the columns manager is opened",
-    "lineNumber": 231,
+    "lineNumber": 230,
     "type": {
       "nullable": null,
       "types": [
@@ -3016,7 +3016,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onAfterOpen",
     "access": null,
     "description": "Callback fired after the columns manager is opened",
-    "lineNumber": 237,
+    "lineNumber": 236,
     "type": {
       "nullable": null,
       "types": [
@@ -3036,7 +3036,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onBeforeClose",
     "access": null,
     "description": "Callback fired before the columns manager is closed",
-    "lineNumber": 243,
+    "lineNumber": 242,
     "type": {
       "nullable": null,
       "types": [
@@ -3056,7 +3056,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onAfterClose",
     "access": null,
     "description": "Callback fired after the columns manager is closed",
-    "lineNumber": 249,
+    "lineNumber": 248,
     "type": {
       "nullable": null,
       "types": [
@@ -3076,7 +3076,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onBeforeColHidden",
     "access": null,
     "description": "Callback fired before a column is hidden",
-    "lineNumber": 255,
+    "lineNumber": 254,
     "type": {
       "nullable": null,
       "types": [
@@ -3096,7 +3096,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onAfterColHidden",
     "access": null,
     "description": "Callback fired after a column is hidden",
-    "lineNumber": 262,
+    "lineNumber": 261,
     "type": {
       "nullable": null,
       "types": [
@@ -3116,7 +3116,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onBeforeColDisplayed",
     "access": null,
     "description": "Callback fired before a column is displayed",
-    "lineNumber": 269,
+    "lineNumber": 268,
     "type": {
       "nullable": null,
       "types": [
@@ -3136,7 +3136,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onAfterColDisplayed",
     "access": null,
     "description": "Callback fired after a column is displayed",
-    "lineNumber": 276,
+    "lineNumber": 275,
     "type": {
       "nullable": null,
       "types": [
@@ -3156,7 +3156,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#headersTbl",
     "access": null,
     "description": null,
-    "lineNumber": 281,
+    "lineNumber": 280,
     "undocument": true,
     "type": {
       "types": [
@@ -3174,7 +3174,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#headersIndex",
     "access": null,
     "description": null,
-    "lineNumber": 282,
+    "lineNumber": 281,
     "undocument": true,
     "type": {
       "types": [
@@ -3192,7 +3192,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#toggle",
     "access": null,
     "description": "Toggle columns manager UI",
-    "lineNumber": 297,
+    "lineNumber": 296,
     "params": [],
     "generator": false
   },
@@ -3206,7 +3206,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#checkItem",
     "access": "private",
     "description": "Check an item in columns manager UI",
-    "lineNumber": 326,
+    "lineNumber": 325,
     "params": [
       {
         "name": "lbl",
@@ -3227,7 +3227,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#init",
     "access": null,
     "description": "Initializes ColsVisibility instance",
-    "lineNumber": 351,
+    "lineNumber": 350,
     "params": [],
     "generator": false
   },
@@ -3240,9 +3240,14 @@
     "memberof": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility",
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#initialized",
     "access": null,
-    "description": null,
-    "lineNumber": 362,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 364,
+    "unknown": [
+      {
+        "tagName": "@inherited",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "types": [
         "boolean"
@@ -3259,7 +3264,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#buildBtn",
     "access": null,
     "description": "Build main button UI",
-    "lineNumber": 373,
+    "lineNumber": 376,
     "params": [],
     "generator": false
   },
@@ -3273,7 +3278,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#spanEl",
     "access": null,
     "description": null,
-    "lineNumber": 416,
+    "lineNumber": 419,
     "undocument": true,
     "type": {
       "types": [
@@ -3291,7 +3296,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnEl",
     "access": null,
     "description": null,
-    "lineNumber": 417,
+    "lineNumber": 420,
     "undocument": true,
     "type": {
       "types": [
@@ -3309,7 +3314,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#buildManager",
     "access": null,
     "description": "Build columns manager UI",
-    "lineNumber": 427,
+    "lineNumber": 430,
     "params": [],
     "generator": false
   },
@@ -3323,7 +3328,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#contEl",
     "access": null,
     "description": null,
-    "lineNumber": 510,
+    "lineNumber": 513,
     "undocument": true,
     "type": {
       "types": [
@@ -3341,7 +3346,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#setHidden",
     "access": null,
     "description": "Hide or show specified columns",
-    "lineNumber": 518,
+    "lineNumber": 521,
     "params": [
       {
         "nullable": null,
@@ -3376,7 +3381,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#showCol",
     "access": null,
     "description": "Show specified column",
-    "lineNumber": 598,
+    "lineNumber": 601,
     "params": [
       {
         "nullable": null,
@@ -3401,7 +3406,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#hideCol",
     "access": null,
     "description": "Hide specified column",
-    "lineNumber": 616,
+    "lineNumber": 619,
     "params": [
       {
         "nullable": null,
@@ -3426,7 +3431,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#isColHidden",
     "access": null,
     "description": "Determine if specified column is hidden",
-    "lineNumber": 634,
+    "lineNumber": 637,
     "params": [
       {
         "nullable": null,
@@ -3456,7 +3461,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#toggleCol",
     "access": null,
     "description": "Toggle visibility of specified column",
-    "lineNumber": 645,
+    "lineNumber": 648,
     "params": [
       {
         "nullable": null,
@@ -3481,7 +3486,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#getHiddenCols",
     "access": null,
     "description": "Return the indexes of the columns currently hidden",
-    "lineNumber": 657,
+    "lineNumber": 660,
     "params": [],
     "return": {
       "nullable": null,
@@ -3503,7 +3508,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#destroy",
     "access": null,
     "description": "Remove the columns manager",
-    "lineNumber": 664,
+    "lineNumber": 667,
     "params": [],
     "generator": false
   },
@@ -3517,7 +3522,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#contEl",
     "access": null,
     "description": null,
-    "lineNumber": 673,
+    "lineNumber": 676,
     "undocument": true,
     "type": {
       "types": [
@@ -3535,7 +3540,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnEl",
     "access": null,
     "description": null,
-    "lineNumber": 677,
+    "lineNumber": 680,
     "undocument": true,
     "type": {
       "types": [
@@ -3553,7 +3558,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 682,
+    "lineNumber": 685,
     "undocument": true,
     "type": {
       "types": [
@@ -3571,7 +3576,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#_getHeaderText",
     "access": null,
     "description": null,
-    "lineNumber": 685,
+    "lineNumber": 688,
     "undocument": true,
     "params": [
       {
@@ -3598,7 +3603,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#_hideCells",
     "access": null,
     "description": null,
-    "lineNumber": 706,
+    "lineNumber": 709,
     "undocument": true,
     "params": [
       {
@@ -3632,7 +3637,7 @@
     "longname": "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#_hideAtStart",
     "access": null,
     "description": null,
-    "lineNumber": 716,
+    "lineNumber": 719,
     "undocument": true,
     "params": [],
     "generator": false
@@ -3648,7 +3653,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../../feature';\nimport {createElm, removeElm, elm} from '../../dom';\nimport {isFn, isUndef} from '../../types';\nimport {addEvt} from '../../event';\n\nexport default class FiltersVisibility extends Feature {\n\n    /**\n     * Filters Row Visibility extension\n     * @param {Object} tf TableFilter instance\n     * @param {Object} f Config\n     */\n    constructor(tf, f) {\n        super(tf, f.name);\n\n        this.name = f.name;\n        this.desc = f.description || 'Filters row visibility manager';\n\n        // Path and image filenames\n        this.stylesheet = f.stylesheet || 'filtersVisibility.css';\n        this.icnExpand = f.expand_icon_name || 'icn_exp.png';\n        this.icnCollapse = f.collapse_icon_name || 'icn_clp.png';\n\n        //expand/collapse filters span element\n        this.contEl = null;\n        //expand/collapse filters btn element\n        this.btnEl = null;\n\n        this.icnExpandHtml = '<img src=\"' + tf.themesPath + this.icnExpand +\n            '\" alt=\"Expand filters\" >';\n        this.icnCollapseHtml = '<img src=\"' + tf.themesPath + this.icnCollapse +\n            '\" alt=\"Collapse filters\" >';\n        this.defaultText = 'Toggle filters';\n\n        //id of container element\n        this.targetId = f.target_id || null;\n        //enables/disables expand/collapse icon\n        this.enableIcon = f.enable_icon === false ? false : true;\n        this.btnText = f.btn_text || '';\n\n        //defines expand/collapse filters text\n        this.collapseBtnHtml = this.enableIcon ?\n            this.icnCollapseHtml + this.btnText :\n            this.btnText || this.defaultText;\n        this.expandBtnHtml = this.enableIcon ?\n            this.icnExpandHtml + this.btnText :\n            this.btnText || this.defaultText;\n\n        //defines expand/collapse filters button innerHtml\n        this.btnHtml = f.btn_html || null;\n        //defines css class for expand/collapse filters button\n        this.btnCssClass = f.btn_css_class || 'btnExpClpFlt';\n        //defines css class span containing expand/collapse filters\n        this.contCssClass = f.cont_css_class || 'expClpFlt';\n        this.filtersRowIndex = !isUndef(f.filters_row_index) ?\n            f.filters_row_index : tf.getFiltersRowIndex();\n\n        this.visibleAtStart = !isUndef(f.visible_at_start) ?\n            Boolean(f.visible_at_start) : true;\n\n        // Prefix\n        this.prfx = 'fltsVis_';\n\n        //callback before filters row is shown\n        this.onBeforeShow = isFn(f.on_before_show) ? f.on_before_show : null;\n        //callback after filters row is shown\n        this.onAfterShow = isFn(f.on_after_show) ? f.on_after_show : null;\n        //callback before filters row is hidden\n        this.onBeforeHide = isFn(f.on_before_hide) ? f.on_before_hide : null;\n        //callback after filters row is hidden\n        this.onAfterHide = isFn(f.on_after_hide) ? f.on_after_hide : null;\n\n        //Loads extension stylesheet\n        tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,\n            'link');\n\n        this.enable();\n    }\n\n    /**\n     * Initialise extension\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        this.buildUI();\n        this.initialized = true;\n        this.emitter.on(['show-filters'], (tf, visible) => this.show(visible));\n        this.emitter.emit('filters-visibility-initialized', this.tf, this);\n    }\n\n    /**\n     * Build UI elements\n     */\n    buildUI() {\n        let tf = this.tf;\n        let span = createElm('span', ['id', this.prfx + tf.id]);\n        span.className = this.contCssClass;\n\n        //Container element (rdiv or custom element)\n        if (!this.targetId) {\n            tf.setToolbar();\n        }\n        let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);\n\n        if (!this.targetId) {\n            let firstChild = targetEl.firstChild;\n            firstChild.parentNode.insertBefore(span, firstChild);\n        } else {\n            targetEl.appendChild(span);\n        }\n\n        let btn;\n        if (!this.btnHtml) {\n            btn = createElm('a', ['href', 'javascript:void(0);']);\n            btn.className = this.btnCssClass;\n            btn.title = this.btnText || this.defaultText;\n            btn.innerHTML = this.collapseBtnHtml;\n            span.appendChild(btn);\n        } else { //Custom html\n            span.innerHTML = this.btnHtml;\n            btn = span.firstChild;\n        }\n\n        addEvt(btn, 'click', () => this.toggle());\n\n        this.contEl = span;\n        this.btnEl = btn;\n\n        if (!this.visibleAtStart) {\n            this.toggle();\n        }\n    }\n\n    /**\n     * Toggle filters visibility\n     */\n    toggle() {\n        let tf = this.tf;\n        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;\n        let fltRow = tbl.rows[this.filtersRowIndex];\n        let isDisplayed = fltRow.style.display === '';\n\n        this.show(!isDisplayed);\n    }\n\n    /**\n     * Show or hide filters\n     *\n     * @param {boolean} [visible=true] Visibility flag\n     */\n    show(visible = true) {\n        let tf = this.tf;\n        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;\n        let fltRow = tbl.rows[this.filtersRowIndex];\n\n        if (this.onBeforeShow && visible) {\n            this.onBeforeShow.call(this, this);\n        }\n        if (this.onBeforeHide && !visible) {\n            this.onBeforeHide.call(null, this);\n        }\n\n        fltRow.style.display = visible ? '' : 'none';\n        if (this.enableIcon && !this.btnHtml) {\n            this.btnEl.innerHTML = visible ?\n                this.collapseBtnHtml : this.expandBtnHtml;\n        }\n\n        if (this.onAfterShow && visible) {\n            this.onAfterShow.call(null, this);\n        }\n        if (this.onAfterHide && !visible) {\n            this.onAfterHide.call(null, this);\n        }\n\n        this.emitter.emit('filters-toggled', tf, this, visible);\n    }\n\n    /**\n     * Destroy the UI\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        this.emitter.off(['show-filters'], (tf, visible) => this.show(visible));\n\n        this.btnEl.innerHTML = '';\n        removeElm(this.btnEl);\n        this.btnEl = null;\n\n        this.contEl.innerHTML = '';\n        removeElm(this.contEl);\n        this.contEl = null;\n        this.initialized = false;\n    }\n\n}\n"
+    "content": "import {Feature} from '../../feature';\nimport {createElm, removeElm, elm} from '../../dom';\nimport {isFn, isUndef} from '../../types';\nimport {addEvt} from '../../event';\n\n/**\n * Filters Visibility extension\n */\nexport default class FiltersVisibility extends Feature {\n\n    /**\n     * Creates an instance of FiltersVisibility\n     * @param {TableFilter} tf TableFilter instance\n     * @param {Object} Configuration object\n     */\n    constructor(tf, f) {\n        super(tf, f.name);\n\n        /**\n         * Module name\n         * @type {String}\n         */\n        this.name = f.name;\n\n        /**\n         * Module description\n         * @type {String}\n         */\n        this.desc = f.description || 'Filters row visibility manager';\n\n        /**\n         * Extension's stylesheet filename\n         * @type {String}\n         */\n        this.stylesheet = f.stylesheet || 'filtersVisibility.css';\n\n        /**\n         * Expand icon filename\n         * @type {String}\n         */\n        this.icnExpand = f.expand_icon_name || 'icn_exp.png';\n\n        /**\n         * Collapse icon filename\n         * @type {String}\n         */\n        this.icnCollapse = f.collapse_icon_name || 'icn_clp.png';\n\n        /**\n         * Main container element\n         * @private\n         */\n        this.contEl = null;\n\n        /**\n         * Button element\n         * @private\n         */\n        this.btnEl = null;\n\n        /**\n         * Expand icon HTML\n         * @private\n         */\n        this.icnExpandHtml = '<img src=\"' + tf.themesPath + this.icnExpand +\n            '\" alt=\"Expand filters\" >';\n\n        /**\n         * Collapse icon HTML\n         * @private\n         */\n        this.icnCollapseHtml = '<img src=\"' + tf.themesPath + this.icnCollapse +\n            '\" alt=\"Collapse filters\" >';\n\n        /**\n         * Default text\n         * @private\n         */\n        this.defaultText = 'Toggle filters';\n\n        /**\n         * ID of main container element\n         * @type {String}\n         */\n        this.targetId = f.target_id || null;\n\n        /**\n         * Enable expand/collapse icon, defaults to true\n         * @type {Boolean}\n         */\n        this.enableIcon = f.enable_icon === false ? false : true;\n\n        /**\n         * Custom text for button\n         * @type {String}\n         */\n        this.btnText = f.btn_text || '';\n\n        /**\n         * Collapse button HTML\n         * @private\n         */\n        this.collapseBtnHtml = this.enableIcon ?\n            this.icnCollapseHtml + this.btnText :\n            this.btnText || this.defaultText;\n\n        /**\n         * Expand button HTML\n         * @private\n         */\n        this.expandBtnHtml = this.enableIcon ?\n            this.icnExpandHtml + this.btnText :\n            this.btnText || this.defaultText;\n\n        /**\n         * Button's custom HTML\n         * @type {String}\n         */\n        this.btnHtml = f.btn_html || null;\n\n        /**\n         * Css class for expand/collapse filters button\n         * @type {String}\n         */\n        this.btnCssClass = f.btn_css_class || 'btnExpClpFlt';\n\n        /**\n         * Css class for main container\n         * @type {String}\n         */\n        this.contCssClass = f.cont_css_class || 'expClpFlt';\n\n        /**\n         * Filters row index\n         * @type {Number}\n         */\n        this.filtersRowIndex = !isUndef(f.filters_row_index) ?\n            f.filters_row_index : tf.getFiltersRowIndex();\n\n        /**\n         * Make filters visible at initialization, defaults to true\n         * @type {Boolean}\n         */\n        this.visibleAtStart = !isUndef(f.visible_at_start) ?\n            Boolean(f.visible_at_start) : true;\n\n        /**\n         * Extension's prefix\n         * @private\n         */\n        this.prfx = 'fltsVis_';\n\n        /**\n         * Callback fired before filters row is shown\n         * @type {Function}\n         */\n        this.onBeforeShow = isFn(f.on_before_show) ? f.on_before_show : null;\n\n        /**\n         * Callback fired after filters row is shown\n         * @type {Function}\n         */\n        this.onAfterShow = isFn(f.on_after_show) ? f.on_after_show : null;\n\n        /**\n         * Callback fired before filters row is hidden\n         * @type {Function}\n         */\n        this.onBeforeHide = isFn(f.on_before_hide) ? f.on_before_hide : null;\n\n        /**\n         * Callback fired after filters row is hidden\n         * @type {Function}\n         */\n        this.onAfterHide = isFn(f.on_after_hide) ? f.on_after_hide : null;\n\n        //Import extension's stylesheet\n        tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,\n            'link');\n\n        this.enable();\n    }\n\n    /**\n     * Initialise extension\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        this.buildUI();\n\n        /**\n         * @inherited\n         */\n        this.initialized = true;\n\n        this.emitter.on(['show-filters'], (tf, visible) => this.show(visible));\n        this.emitter.emit('filters-visibility-initialized', this.tf, this);\n    }\n\n    /**\n     * Build UI elements\n     */\n    buildUI() {\n        let tf = this.tf;\n        let span = createElm('span', ['id', this.prfx + tf.id]);\n        span.className = this.contCssClass;\n\n        //Container element (rdiv or custom element)\n        if (!this.targetId) {\n            tf.setToolbar();\n        }\n        let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);\n\n        if (!this.targetId) {\n            let firstChild = targetEl.firstChild;\n            firstChild.parentNode.insertBefore(span, firstChild);\n        } else {\n            targetEl.appendChild(span);\n        }\n\n        let btn;\n        if (!this.btnHtml) {\n            btn = createElm('a', ['href', 'javascript:void(0);']);\n            btn.className = this.btnCssClass;\n            btn.title = this.btnText || this.defaultText;\n            btn.innerHTML = this.collapseBtnHtml;\n            span.appendChild(btn);\n        } else { //Custom html\n            span.innerHTML = this.btnHtml;\n            btn = span.firstChild;\n        }\n\n        addEvt(btn, 'click', () => this.toggle());\n\n        this.contEl = span;\n        this.btnEl = btn;\n\n        if (!this.visibleAtStart) {\n            this.toggle();\n        }\n    }\n\n    /**\n     * Toggle filters visibility\n     */\n    toggle() {\n        let tf = this.tf;\n        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;\n        let fltRow = tbl.rows[this.filtersRowIndex];\n        let isDisplayed = fltRow.style.display === '';\n\n        this.show(!isDisplayed);\n    }\n\n    /**\n     * Show or hide filters\n     *\n     * @param {boolean} [visible=true] Visibility flag\n     */\n    show(visible = true) {\n        let tf = this.tf;\n        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;\n        let fltRow = tbl.rows[this.filtersRowIndex];\n\n        if (this.onBeforeShow && visible) {\n            this.onBeforeShow.call(this, this);\n        }\n        if (this.onBeforeHide && !visible) {\n            this.onBeforeHide.call(null, this);\n        }\n\n        fltRow.style.display = visible ? '' : 'none';\n        if (this.enableIcon && !this.btnHtml) {\n            this.btnEl.innerHTML = visible ?\n                this.collapseBtnHtml : this.expandBtnHtml;\n        }\n\n        if (this.onAfterShow && visible) {\n            this.onAfterShow.call(null, this);\n        }\n        if (this.onAfterHide && !visible) {\n            this.onAfterHide.call(null, this);\n        }\n\n        this.emitter.emit('filters-toggled', tf, this, visible);\n    }\n\n    /**\n     * Destroy the UI\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        this.emitter.off(['show-filters'], (tf, visible) => this.show(visible));\n\n        this.btnEl.innerHTML = '';\n        removeElm(this.btnEl);\n        this.btnEl = null;\n\n        this.contEl.innerHTML = '';\n        removeElm(this.contEl);\n        this.contEl = null;\n        this.initialized = false;\n    }\n\n}\n"
   },
   {
     "__docId__": 155,
@@ -3662,9 +3667,8 @@
     "export": true,
     "importPath": "tablefilter/src/extensions/filtersVisibility/filtersVisibility.js",
     "importStyle": "FiltersVisibility",
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true,
+    "description": "Filters Visibility extension",
+    "lineNumber": 9,
     "interface": false,
     "extends": [
       "src/feature.js~Feature"
@@ -3679,13 +3683,13 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#constructor",
     "access": null,
-    "description": "Filters Row Visibility extension",
-    "lineNumber": 13,
+    "description": "Creates an instance of FiltersVisibility",
+    "lineNumber": 16,
     "params": [
       {
         "nullable": null,
         "types": [
-          "Object"
+          "TableFilter"
         ],
         "spread": false,
         "optional": false,
@@ -3699,8 +3703,8 @@
         ],
         "spread": false,
         "optional": false,
-        "name": "f",
-        "description": "Config"
+        "name": "Configuration",
+        "description": "object"
       }
     ],
     "generator": false
@@ -3714,13 +3718,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#name",
     "access": null,
-    "description": null,
-    "lineNumber": 16,
-    "undocument": true,
+    "description": "Module name",
+    "lineNumber": 23,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -3732,13 +3738,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#desc",
     "access": null,
-    "description": null,
-    "lineNumber": 17,
-    "undocument": true,
+    "description": "Module description",
+    "lineNumber": 29,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -3750,13 +3758,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#stylesheet",
     "access": null,
-    "description": null,
-    "lineNumber": 20,
-    "undocument": true,
+    "description": "Extension's stylesheet filename",
+    "lineNumber": 35,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -3768,13 +3778,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnExpand",
     "access": null,
-    "description": null,
-    "lineNumber": 21,
-    "undocument": true,
+    "description": "Expand icon filename",
+    "lineNumber": 41,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -3786,13 +3798,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnCollapse",
     "access": null,
-    "description": null,
-    "lineNumber": 22,
-    "undocument": true,
+    "description": "Collapse icon filename",
+    "lineNumber": 47,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -3803,10 +3817,9 @@
     "name": "contEl",
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#contEl",
-    "access": null,
-    "description": null,
-    "lineNumber": 25,
-    "undocument": true,
+    "access": "private",
+    "description": "Main container element",
+    "lineNumber": 53,
     "type": {
       "types": [
         "*"
@@ -3821,10 +3834,9 @@
     "name": "btnEl",
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnEl",
-    "access": null,
-    "description": null,
-    "lineNumber": 27,
-    "undocument": true,
+    "access": "private",
+    "description": "Button element",
+    "lineNumber": 59,
     "type": {
       "types": [
         "*"
@@ -3839,10 +3851,9 @@
     "name": "icnExpandHtml",
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnExpandHtml",
-    "access": null,
-    "description": null,
-    "lineNumber": 29,
-    "undocument": true,
+    "access": "private",
+    "description": "Expand icon HTML",
+    "lineNumber": 65,
     "type": {
       "types": [
         "*"
@@ -3857,10 +3868,9 @@
     "name": "icnCollapseHtml",
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnCollapseHtml",
-    "access": null,
-    "description": null,
-    "lineNumber": 31,
-    "undocument": true,
+    "access": "private",
+    "description": "Collapse icon HTML",
+    "lineNumber": 72,
     "type": {
       "types": [
         "*"
@@ -3875,10 +3885,9 @@
     "name": "defaultText",
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#defaultText",
-    "access": null,
-    "description": null,
-    "lineNumber": 33,
-    "undocument": true,
+    "access": "private",
+    "description": "Default text",
+    "lineNumber": 79,
     "type": {
       "types": [
         "string"
@@ -3894,13 +3903,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#targetId",
     "access": null,
-    "description": null,
-    "lineNumber": 36,
-    "undocument": true,
+    "description": "ID of main container element",
+    "lineNumber": 85,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -3912,13 +3923,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#enableIcon",
     "access": null,
-    "description": null,
-    "lineNumber": 38,
-    "undocument": true,
+    "description": "Enable expand/collapse icon, defaults to true",
+    "lineNumber": 91,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Boolean"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -3930,13 +3943,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnText",
     "access": null,
-    "description": null,
-    "lineNumber": 39,
-    "undocument": true,
+    "description": "Custom text for button",
+    "lineNumber": 97,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -3947,10 +3962,9 @@
     "name": "collapseBtnHtml",
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#collapseBtnHtml",
-    "access": null,
-    "description": null,
-    "lineNumber": 42,
-    "undocument": true,
+    "access": "private",
+    "description": "Collapse button HTML",
+    "lineNumber": 103,
     "type": {
       "types": [
         "*"
@@ -3965,10 +3979,9 @@
     "name": "expandBtnHtml",
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#expandBtnHtml",
-    "access": null,
-    "description": null,
-    "lineNumber": 45,
-    "undocument": true,
+    "access": "private",
+    "description": "Expand button HTML",
+    "lineNumber": 111,
     "type": {
       "types": [
         "*"
@@ -3984,13 +3997,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnHtml",
     "access": null,
-    "description": null,
-    "lineNumber": 50,
-    "undocument": true,
+    "description": "Button's custom HTML",
+    "lineNumber": 119,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4002,13 +4017,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnCssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 52,
-    "undocument": true,
+    "description": "Css class for expand/collapse filters button",
+    "lineNumber": 125,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4020,13 +4037,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#contCssClass",
     "access": null,
-    "description": null,
-    "lineNumber": 54,
-    "undocument": true,
+    "description": "Css class for main container",
+    "lineNumber": 131,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4038,13 +4057,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#filtersRowIndex",
     "access": null,
-    "description": null,
-    "lineNumber": 55,
-    "undocument": true,
+    "description": "Filters row index",
+    "lineNumber": 137,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4056,13 +4077,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#visibleAtStart",
     "access": null,
-    "description": null,
-    "lineNumber": 58,
-    "undocument": true,
+    "description": "Make filters visible at initialization, defaults to true",
+    "lineNumber": 144,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Boolean"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4073,10 +4096,9 @@
     "name": "prfx",
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#prfx",
-    "access": null,
-    "description": null,
-    "lineNumber": 62,
-    "undocument": true,
+    "access": "private",
+    "description": "Extension's prefix",
+    "lineNumber": 151,
     "type": {
       "types": [
         "string"
@@ -4092,13 +4114,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#onBeforeShow",
     "access": null,
-    "description": null,
-    "lineNumber": 65,
-    "undocument": true,
+    "description": "Callback fired before filters row is shown",
+    "lineNumber": 157,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4110,13 +4134,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#onAfterShow",
     "access": null,
-    "description": null,
-    "lineNumber": 67,
-    "undocument": true,
+    "description": "Callback fired after filters row is shown",
+    "lineNumber": 163,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4128,13 +4154,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#onBeforeHide",
     "access": null,
-    "description": null,
-    "lineNumber": 69,
-    "undocument": true,
+    "description": "Callback fired before filters row is hidden",
+    "lineNumber": 169,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4146,13 +4174,15 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#onAfterHide",
     "access": null,
-    "description": null,
-    "lineNumber": 71,
-    "undocument": true,
+    "description": "Callback fired after filters row is hidden",
+    "lineNumber": 175,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4165,7 +4195,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#init",
     "access": null,
     "description": "Initialise extension",
-    "lineNumber": 83,
+    "lineNumber": 187,
     "params": [],
     "generator": false
   },
@@ -4178,9 +4208,14 @@
     "memberof": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility",
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#initialized",
     "access": null,
-    "description": null,
-    "lineNumber": 89,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 197,
+    "unknown": [
+      {
+        "tagName": "@inherited",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "types": [
         "boolean"
@@ -4197,7 +4232,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#buildUI",
     "access": null,
     "description": "Build UI elements",
-    "lineNumber": 97,
+    "lineNumber": 206,
     "params": [],
     "generator": false
   },
@@ -4211,7 +4246,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#contEl",
     "access": null,
     "description": null,
-    "lineNumber": 129,
+    "lineNumber": 238,
     "undocument": true,
     "type": {
       "types": [
@@ -4229,7 +4264,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnEl",
     "access": null,
     "description": null,
-    "lineNumber": 130,
+    "lineNumber": 239,
     "undocument": true,
     "type": {
       "types": [
@@ -4247,7 +4282,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#toggle",
     "access": null,
     "description": "Toggle filters visibility",
-    "lineNumber": 140,
+    "lineNumber": 249,
     "params": [],
     "generator": false
   },
@@ -4261,7 +4296,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#show",
     "access": null,
     "description": "Show or hide filters",
-    "lineNumber": 154,
+    "lineNumber": 263,
     "params": [
       {
         "nullable": null,
@@ -4288,7 +4323,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#destroy",
     "access": null,
     "description": "Destroy the UI",
-    "lineNumber": 185,
+    "lineNumber": 294,
     "params": [],
     "generator": false
   },
@@ -4302,7 +4337,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnEl",
     "access": null,
     "description": null,
-    "lineNumber": 194,
+    "lineNumber": 303,
     "undocument": true,
     "type": {
       "types": [
@@ -4320,7 +4355,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#contEl",
     "access": null,
     "description": null,
-    "lineNumber": 198,
+    "lineNumber": 307,
     "undocument": true,
     "type": {
       "types": [
@@ -4338,7 +4373,7 @@
     "longname": "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 199,
+    "lineNumber": 308,
     "undocument": true,
     "type": {
       "types": [

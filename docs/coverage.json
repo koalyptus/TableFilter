@@ -1,7 +1,7 @@
 {
-  "coverage": "91.44%",
-  "expectCount": 643,
-  "actualCount": 588,
+  "coverage": "95.74%",
+  "expectCount": 635,
+  "actualCount": 608,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -64,10 +64,8 @@
     },
     "src/extensions/colsVisibility/colsVisibility.js": {
       "expectCount": 49,
-      "actualCount": 48,
-      "undocumentLines": [
-        362
-      ]
+      "actualCount": 49,
+      "undocumentLines": []
     },
     "src/modules/dropdown.js": {
       "expectCount": 13,
@@ -85,37 +83,9 @@
       "undocumentLines": []
     },
     "src/extensions/filtersVisibility/filtersVisibility.js": {
-      "expectCount": 33,
-      "actualCount": 6,
-      "undocumentLines": [
-        6,
-        52,
-        27,
-        50,
-        39,
-        42,
-        54,
-        25,
-        33,
-        17,
-        38,
-        45,
-        55,
-        22,
-        31,
-        21,
-        29,
-        89,
-        16,
-        71,
-        67,
-        69,
-        65,
-        62,
-        20,
-        36,
-        58
-      ]
+      "expectCount": 25,
+      "actualCount": 25,
+      "undocumentLines": []
     },
     "src/modules/gridLayout.js": {
       "expectCount": 20,

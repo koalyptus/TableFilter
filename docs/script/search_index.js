@@ -1314,12 +1314,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#btnel",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-btnEl",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnEl",
-    "member"
-  ],
-  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#btnhtml",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-btnHtml",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnHtml",
@@ -1338,12 +1332,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#collapsebtnhtml",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-collapseBtnHtml",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#collapseBtnHtml",
-    "member"
-  ],
-  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#constructor",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-constructor-constructor",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#constructor",
@@ -1353,18 +1341,6 @@ window.esdocSearchIndex = [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#contcssclass",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-contCssClass",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#contCssClass",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#contel",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-contEl",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#contEl",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#defaulttext",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-defaultText",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#defaultText",
     "member"
   ],
   [
@@ -1386,12 +1362,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#expandbtnhtml",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-expandBtnHtml",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#expandBtnHtml",
-    "member"
-  ],
-  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#filtersrowindex",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-filtersRowIndex",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#filtersRowIndex",
@@ -1404,21 +1374,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#icncollapsehtml",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-icnCollapseHtml",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnCollapseHtml",
-    "member"
-  ],
-  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#icnexpand",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-icnExpand",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnExpand",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#icnexpandhtml",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-icnExpandHtml",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnExpandHtml",
     "member"
   ],
   [
@@ -1461,12 +1419,6 @@ window.esdocSearchIndex = [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#onbeforeshow",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-onBeforeShow",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#onBeforeShow",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#prfx",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-prfx",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#prfx",
     "member"
   ],
   [
