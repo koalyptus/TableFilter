@@ -6,25 +6,61 @@ import {formatDate} from '../../date';
 import {removeNbFormat} from '../../helpers';
 import {NONE, CELL_TAG, HEADER_TAG} from '../../const';
 
+/**
+ * SortableTable Adapter module
+ */
 export default class AdapterSortableTable extends Feature {
 
     /**
-     * SortableTable Adapter module
-     * @param {Object} tf TableFilter instance
+     * Creates an instance of AdapterSortableTable
+     * @param {TableFilter} tf TableFilter instance
+     * @param {Object} opts Configuration object
      */
     constructor(tf, opts) {
         super(tf, opts.name);
 
+        /**
+         * Module name
+         * @type {String}
+         */
         this.name = opts.name;
+
+        /**
+         * Module description
+         * @type {String}
+         */
         this.desc = opts.description || 'Sortable table';
 
-        //indicates if table previously sorted
+        /**
+         * Indicate whether table previously sorted
+         * @type {Boolean}
+         * @private
+         */
         this.sorted = false;
 
+        /**
+         * List of sort type per column basis
+         * @type {Array}
+         */
         this.sortTypes = isArray(opts.types) ? opts.types : [];
+
+        /**
+         * Column to be sorted at initialization
+         * @type {Array}
+         */
         this.sortColAtStart = isArray(opts.sort_col_at_start) ?
             opts.sort_col_at_start : null;
+
+        /**
+         * Enable asynchronous sort, if triggers are external
+         * @type {Boolean}
+         */
         this.asyncSort = Boolean(opts.async_sort);
+
+        /**
+         * List of of element IDs triggering sort on a per column basis
+         * @type {Array}
+         */
         this.triggerIds = isArray(opts.trigger_ids) ? opts.trigger_ids : [];
 
         // edit .sort-arrow.descending / .sort-arrow.ascending in
