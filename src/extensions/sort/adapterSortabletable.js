@@ -45,7 +45,8 @@ export default class AdapterSortableTable extends Feature {
         this.sortTypes = isArray(opts.types) ? opts.types : [];
 
         /**
-         * Column to be sorted at initialization
+         * Column to be sorted at initialization, ie:
+         * sort_col_at_start: [1, true]
          * @type {Array}
          */
         this.sortColAtStart = isArray(opts.sort_col_at_start) ?
@@ -58,33 +59,81 @@ export default class AdapterSortableTable extends Feature {
         this.asyncSort = Boolean(opts.async_sort);
 
         /**
-         * List of of element IDs triggering sort on a per column basis
+         * List of element IDs triggering sort on a per column basis
          * @type {Array}
          */
         this.triggerIds = isArray(opts.trigger_ids) ? opts.trigger_ids : [];
 
         // edit .sort-arrow.descending / .sort-arrow.ascending in
         // tablefilter.css to reflect any path change
+        /**
+         * Path to images
+         * @type {String}
+         */
         this.imgPath = opts.images_path || tf.themesPath;
+
+        /**
+         * Blank image file name
+         * @type {String}
+         */
         this.imgBlank = opts.image_blank || 'blank.png';
+
+        /**
+         * Css class for sort indicator image
+         * @type {String}
+         */
         this.imgClassName = opts.image_class_name || 'sort-arrow';
+
+        /**
+         * Css class for ascending sort indicator image
+         * @type {String}
+         */
         this.imgAscClassName = opts.image_asc_class_name || 'ascending';
+
+        /**
+         * Css class for descending sort indicator image
+         * @type {String}
+         */
         this.imgDescClassName = opts.image_desc_class_name || 'descending';
-        //cell attribute storing custom key
+
+        /**
+         * Cell attribute key storing custom value used for sorting
+         * @type {String}
+         */
         this.customKey = opts.custom_key || 'data-tf-sortKey';
 
-        // callback invoked after sort is loaded and instanciated
+        /**
+         * Callback fired when sort extension is instanciated
+         * @type {Function}
+         */
         this.onSortLoaded = isFn(opts.on_sort_loaded) ?
             opts.on_sort_loaded : null;
-        // callback invoked before table is sorted
+
+        /**
+         * Callback fired before a table column is sorted
+         * @type {Function}
+         */
         this.onBeforeSort = isFn(opts.on_before_sort) ?
             opts.on_before_sort : null;
-        // callback invoked after table is sorted
+
+        /**
+         * Callback fired after a table column is sorted
+         * @type {Function}
+         */
         this.onAfterSort = isFn(opts.on_after_sort) ? opts.on_after_sort : null;
+
+        /**
+         * SortableTable instance
+         * @private
+         */
+        this.stt = null;
 
         this.enable();
     }
 
+    /**
+     * Initializes AdapterSortableTable instance
+     */
     init() {
         if (this.initialized) {
             return;
@@ -146,7 +195,9 @@ export default class AdapterSortableTable extends Feature {
         this.emitter.on(['sort'],
             (tf, colIdx, desc) => this.sortByColumnIndex(colIdx, desc));
 
+        /** @inherited */
         this.initialized = true;
+
         this.emitter.emit('sort-initialized', tf, this);
     }
 
@@ -159,6 +210,9 @@ export default class AdapterSortableTable extends Feature {
         this.stt.sort(colIdx, desc);
     }
 
+    /**
+     * Set SortableTable overrides for TableFilter integration
+     */
     overrideSortableTable() {
         let adpt = this,
             tf = this.tf;
@@ -321,11 +375,18 @@ export default class AdapterSortableTable extends Feature {
         };
     }
 
+    /**
+     * Adds a sort type
+     */
     addSortType() {
         var args = arguments;
         SortableTable.prototype.addSortType(args[0], args[1], args[2], args[3]);
     }
 
+    /**
+     * Sets the sort types on a column basis
+     * @private
+     */
     setSortTypes() {
         let tf = this.tf,
             sortTypes = this.sortTypes,
@@ -393,7 +454,7 @@ export default class AdapterSortableTable extends Feature {
     }
 
     /**
-     * Destroy sort
+     * Remove extension
      */
     destroy() {
         if (!this.initialized) {
