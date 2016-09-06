@@ -1,7 +1,7 @@
 {
-  "coverage": "95.74%",
-  "expectCount": 635,
-  "actualCount": 608,
+  "coverage": "100%",
+  "expectCount": 628,
+  "actualCount": 628,
   "files": {
     "src/const.js": {
       "expectCount": 13,
@@ -14,33 +14,9 @@
       "undocumentLines": []
     },
     "src/extensions/sort/adapterSortabletable.js": {
-      "expectCount": 26,
-      "actualCount": 3,
-      "undocumentLines": [
-        9,
-        288,
-        27,
-        38,
-        19,
-        35,
-        33,
-        34,
-        36,
-        32,
-        52,
-        113,
-        18,
-        47,
-        44,
-        41,
-        126,
-        293,
-        25,
-        24,
-        22,
-        333,
-        28
-      ]
+      "expectCount": 23,
+      "actualCount": 23,
+      "undocumentLines": []
     },
     "src/modules/alternateRows.js": {
       "expectCount": 9,
@@ -88,14 +64,9 @@
       "undocumentLines": []
     },
     "src/modules/gridLayout.js": {
-      "expectCount": 20,
+      "expectCount": 16,
       "actualCount": 16,
-      "undocumentLines": [
-        211,
-        206,
-        186,
-        178
-      ]
+      "undocumentLines": []
     },
     "src/modules/hash.js": {
       "expectCount": 10,

@@ -1566,12 +1566,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#setsorttypes",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-method-setSortTypes",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#setSortTypes",
-    "method"
-  ],
-  [
     "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#sortbycolumnindex",
     "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-method-sortByColumnIndex",
     "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sortByColumnIndex",
@@ -1587,18 +1581,6 @@ window.esdocSearchIndex = [
     "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#sorttypes",
     "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-sortTypes",
     "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sortTypes",
-    "member"
-  ],
-  [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#sorted",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-sorted",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sorted",
-    "member"
-  ],
-  [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#stt",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-stt",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#stt",
     "member"
   ],
   [
@@ -2076,18 +2058,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#headtbl",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-headTbl",
-    "src/modules/gridLayout.js~GridLayout#headTbl",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#headtblcont",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-headTblCont",
-    "src/modules/gridLayout.js~GridLayout#headTblCont",
-    "member"
-  ],
-  [
     "src/modules/gridlayout.js~gridlayout#height",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-height",
     "src/modules/gridLayout.js~GridLayout#height",
@@ -2121,18 +2091,6 @@ window.esdocSearchIndex = [
     "src/modules/gridlayout.js~gridlayout#noheaders",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-noHeaders",
     "src/modules/gridLayout.js~GridLayout#noHeaders",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#tblcont",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblCont",
-    "src/modules/gridLayout.js~GridLayout#tblCont",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#tblmaincont",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblMainCont",
-    "src/modules/gridLayout.js~GridLayout#tblMainCont",
     "member"
   ],
   [
