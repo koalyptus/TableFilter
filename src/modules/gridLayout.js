@@ -149,6 +149,30 @@ export class GridLayout extends Feature {
          */
         this.tblHasColTag = tag(tf.tbl, 'col').length > 0 ? true : false;
 
+        /**
+         * Main container element
+         * @private
+         */
+        this.tblMainCont = null;
+
+        /**
+         * Table container element
+         * @private
+         */
+        this.tblCont = null;
+
+        /**
+         * Headers' table container element
+         * @private
+         */
+        this.headTblCont = null;
+
+        /**
+         * Headers' table element
+         * @private
+         */
+        this.headTbl = null;
+
         // filters flag at TF level
         tf.fltGrid = this.enableFilters;
     }
