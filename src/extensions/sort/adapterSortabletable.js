@@ -3,8 +3,11 @@ import {isArray, isFn, isUndef} from '../../types';
 import {createElm, elm, getText, tag} from '../../dom';
 import {addEvt} from '../../event';
 import {formatDate} from '../../date';
-import {removeNbFormat} from '../../helpers';
-import {NONE, CELL_TAG, HEADER_TAG} from '../../const';
+import {unformat as unformatNb} from '../../number';
+import {
+    NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, FORMATTED_NUMBER,
+    FORMATTED_NUMBER_EU, IP_ADDRESS
+} from '../../const';
 
 /**
  * SortableTable Adapter module
@@ -401,8 +404,9 @@ export default class AdapterSortableTable extends Feature {
                     colType = 'None';
                 }
             } else { // resolve column types
-                if (tf.hasColNbFormat && tf.colNbFormat[i] !== null) {
-                    colType = tf.colNbFormat[i].toLowerCase();
+                if (tf.hasType(i, [NUMBER, FORMATTED_NUMBER,
+                    FORMATTED_NUMBER_EU, IP_ADDRESS])) {
+                    colType = tf.colTypes[i].toLowerCase();
                 } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
                     colType = tf.colDateType[i].toLowerCase() + 'date';
                 } else {
@@ -415,17 +419,17 @@ export default class AdapterSortableTable extends Feature {
         //Public TF method to add sort type
 
         //Custom sort types
-        this.addSortType('number', Number);
+        this.addSortType(NUMBER, Number);
         this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
         this.addSortType('date', SortableTable.toDate);
-        this.addSortType('string');
-        this.addSortType('us', usNumberConverter);
-        this.addSortType('eu', euNumberConverter);
+        this.addSortType(STRING);
+        this.addSortType(FORMATTED_NUMBER, usNumberConverter);
+        this.addSortType(FORMATTED_NUMBER_EU, euNumberConverter);
         this.addSortType('dmydate', dmyDateConverter);
         this.addSortType('ymddate', ymdDateConverter);
         this.addSortType('mdydate', mdyDateConverter);
         this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
-        this.addSortType('ipaddress', ipAddress, sortIP);
+        this.addSortType(IP_ADDRESS, ipAddress, sortIP);
 
         this.stt = new SortableTable(tf.tbl, _sortTypes);
 
@@ -483,10 +487,10 @@ export default class AdapterSortableTable extends Feature {
 
 //Converters
 function usNumberConverter(s) {
-    return removeNbFormat(s, 'us');
+    return unformatNb(s, FORMATTED_NUMBER);
 }
 function euNumberConverter(s) {
-    return removeNbFormat(s, 'eu');
+    return unformatNb(s, FORMATTED_NUMBER_EU);
 }
 function dateConverter(s, format) {
     return formatDate(s, format);

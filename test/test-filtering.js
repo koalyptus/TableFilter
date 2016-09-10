@@ -4,9 +4,9 @@ var tf = new TableFilter('demo', {
         null, null, 'ddmmmyyyy',
         null, null, null
     ],
-    col_number_format: [
+    col_types: [
         null, null, null,
-        null, null, 'US'
+        null, null, 'formatted-number'
     ]
 });
 tf.init();

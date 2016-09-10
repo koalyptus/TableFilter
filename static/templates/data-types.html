@@ -15,8 +15,8 @@
     <li>"," thousands separator and "." decimal separator for US$</li>
 </ul>
 <p>
-    Use the <code>col_number_format</code> property to set numeric formats
-    ('EU', 'US' or 'IPADDRESS') and <code>col_date_type</code> to set date
+    Use the <code>col_types</code> property to set numeric formats
+    ('formatted-number', 'formatted-number-eu' or 'ipaddress') and <code>col_date_type</code> to set date
     types.
 </p>
 
@@ -75,11 +75,11 @@ var tfConfig = {
     btn_reset: true,
     loader: true,
     status_bar: true,
-    col_number_format: [
+    col_types: [
         null, null, null,
-        'EU', 'US', null,
+        'formatted-number-eu', 'formatted-number', null,
         null, null, null,
-        'IpAddress'
+        'ipaddress'
     ],
     col_date_type: [
         null, null, null,

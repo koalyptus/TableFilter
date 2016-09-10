@@ -8,7 +8,7 @@ import {isEmpty as isEmptyString} from './string';
 import {isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef}
 from './types';
 import {formatDate, isValidDate} from './date';
-import {removeNbFormat} from './helpers';
+import {unformat as unformatNb} from './number'
 
 import {root} from './root';
 import {Emitter} from './emitter';
@@ -30,7 +30,7 @@ import {State} from './modules/state';
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
     ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
-    CELL_TAG, AUTO_FILTER_DELAY
+    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, FORMATTED_NUMBER, FORMATTED_NUMBER_EU
 } from './const';
 
 let doc = root.document;
@@ -857,21 +857,6 @@ export class TableFilter {
         this.decimalSeparator = f.decimal_separator || '.';
 
         /**
-         * Determine whether table has columns with numeric formats
-         * @type {Boolean}
-         * @private
-         */
-        this.hasColNbFormat = isArray(f.col_number_format);
-
-        /**
-         * Define numeric format on a column basis, two possible values 'EU' and
-         * 'US', ie:
-         * col_number_format : [null, 'US', 'EU', null]
-         * @type {Array}
-         */
-        this.colNbFormat = this.hasColNbFormat ? f.col_number_format : null;
-
-        /**
          * Determine whether table has columns with date types
          * @type {Boolean}
          * @private
@@ -885,6 +870,23 @@ export class TableFilter {
          * @type {Array}
          */
         this.colDateType = this.hasColDateType ? f.col_date_type : null;
+
+        /**
+         * Determine whether table has columns data types
+         * @type {Boolean}
+         * @private
+         */
+        this.hasColTypes = isArray(f.col_types);
+
+        /**
+         * Define data types on a column basis, possible values 'string',
+         * 'number', 'formatted-number', 'formatted-number-eu', 'DMY', 'MDY',
+         * 'YMD', 'DDMMMYYYY', 'ipaddress' ie:
+         * col_types : ['formatted-number', 'DMY', 'MDY', 'YMD', null,
+         * 'DDMMMYYYY']
+         * @type {Array}
+         */
+        this.colTypes = this.hasColTypes ? f.col_types : [];
 
         /*** ids prefixes ***/
         /**
@@ -1862,42 +1864,53 @@ export class TableFilter {
             }
 
             else {
-                //first numbers need to be formated
-                if (this.hasColNbFormat && this.colNbFormat[j]) {
-                    numCellData = removeNbFormat(cellData, this.colNbFormat[j]);
-                    nbFormat = this.colNbFormat[j];
+                //first numbers need to be unformatted
+                if (this.hasType(j, [NUMBER])) {
+                    numCellData = Number(cellData);
+                }
+                else if (this.hasType(j,
+                    [FORMATTED_NUMBER, FORMATTED_NUMBER_EU])) {
+                    numCellData = unformatNb(cellData, this.colTypes[j]);
+                    nbFormat = this.colTypes[j];
                 } else {
                     if (this.thousandsSeparator === ',' &&
                         this.decimalSeparator === '.') {
-                        numCellData = removeNbFormat(cellData, 'us');
-                        nbFormat = 'us';
+                        nbFormat = FORMATTED_NUMBER;
                     } else {
-                        numCellData = removeNbFormat(cellData, 'eu');
-                        nbFormat = 'eu';
+                        nbFormat = FORMATTED_NUMBER_EU;
                     }
+                    numCellData = unformatNb(cellData, nbFormat);
                 }
 
                 // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
                 // rgx:)
                 // lower equal
                 if (hasLE) {
-                    occurence = numCellData <= removeNbFormat(
-                        sA.replace(re_le, ''), nbFormat);
+                    occurence = numCellData <= unformatNb(
+                        sA.replace(re_le, ''),
+                        nbFormat
+                    );
                 }
                 //greater equal
                 else if (hasGE) {
-                    occurence = numCellData >= removeNbFormat(
-                        sA.replace(re_ge, ''), nbFormat);
+                    occurence = numCellData >= unformatNb(
+                        sA.replace(re_ge, ''),
+                        nbFormat
+                    );
                 }
                 //lower
                 else if (hasLO) {
-                    occurence = numCellData < removeNbFormat(
-                        sA.replace(re_l, ''), nbFormat);
+                    occurence = numCellData < unformatNb(
+                        sA.replace(re_l, ''),
+                        nbFormat
+                    );
                 }
                 //greater
                 else if (hasGR) {
-                    occurence = numCellData > removeNbFormat(
-                        sA.replace(re_g, ''), nbFormat);
+                    occurence = numCellData > unformatNb(
+                        sA.replace(re_g, ''),
+                        nbFormat
+                    );
                 }
                 //different
                 else if (hasDF) {
@@ -1950,12 +1963,14 @@ export class TableFilter {
                 } else {
                     // If numeric type data, perform a strict equality test and
                     // fallback to unformatted number string comparison
-                    if (numCellData && this.hasColNbFormat &&
-                        this.colNbFormat[j] && !this.singleSearchFlt) {
-                        // removeNbFormat can return 0 for strings which are not
+                    if (numCellData &&
+                        this.hasType(j,
+                            [NUMBER, FORMATTED_NUMBER, FORMATTED_NUMBER_EU]) &&
+                        !this.singleSearchFlt) {
+                        // unformatNb can return 0 for strings which are not
                         // formatted numbers, in that case return the original
-                        // string. TODO: handle this in removeNbFormat
-                        sA = removeNbFormat(sA, nbFormat) || sA;
+                        // string. TODO: handle this in unformatNb
+                        sA = unformatNb(sA, nbFormat) || sA;
                         occurence = numCellData === sA ||
                             contains(sA.toString(), numCellData.toString(),
                                 this.isExactMatch(j), this.caseSensitive);
@@ -2111,11 +2126,11 @@ export class TableFilter {
                     if (j !== colIndex || row[i].style.display !== '') {
                         continue;
                     }
-                    let cellData = this.getCellData(cell[j]),
-                        nbFormat = this.colNbFormat ?
-                            this.colNbFormat[colIndex] : undefined,
-                        data = num ? removeNbFormat(cellData, nbFormat) :
-                            cellData;
+                    let cellData = this.getCellData(cell[j]);
+                    let nbFormat = this.hasType(colIndex,
+                        [FORMATTED_NUMBER, FORMATTED_NUMBER_EU]) ?
+                        this.colTypes[colIndex] : undefined;
+                    let data = num ? unformatNb(cellData, nbFormat) : cellData;
                     colValues.push(data);
                 }
             }
@@ -2821,6 +2836,17 @@ export class TableFilter {
     getLastRowIndex() {
         let nbRows = this.getRowsNb(true);
         return (nbRows - 1);
+    }
+
+    /**
+     * Determine whether the specified column has one of the passed types
+     * @param {Number} colIndex Column index
+     * @param {Array} [types=[]] List of column types
+     * @returns {Boolean}
+     */
+    hasType(colIndex, types = []) {
+        return this.hasColTypes &&
+            types.indexOf(this.colTypes[colIndex]) !== -1;
     }
 
     /**
