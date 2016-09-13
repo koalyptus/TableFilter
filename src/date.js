@@ -1,6 +1,24 @@
+// import moment from 'moment';
+// console.log(moment, moment());
+// import 'datejs';
+
+// import {DateType} from 'safe_datejs';
+// console.log(DateType);
+
+import {Date as sugarDate} from 'sugar-date';
+import 'sugar-date/locales';
+
+// console.log(sugarDate.create, sugarDate.isValid);
+
 /**
  * Date utilities
  */
+
+// export const
+
+// export const dateFormatFromSetting = (setting) => {
+//     return setting.indexOf('=') !== -1 ? setting.split('=')[1] : null;
+// }
 
 /**
  * Verifies passed formatted date string is valid
@@ -9,6 +27,16 @@
  * @return {Boolean}
  */
 export const isValidDate = (dateStr, format) => {
+    sugarDate.setLocale('it');
+    console.log( sugarDate.getAllLocales() );
+    // sugarDate.getLocale('en').addFormat('{dd}/{MM}/{yyyy}');
+    // sugarDate.getLocale('en').addFormat('{MM}/{dd}/{yyyy}');
+    // sugarDate.getLocale('en').addFormat('{dd}-{months}-{yyyy|yy}');
+    // sugarDate.getLocale('en').addFormat('{dd}-{MM}-{yyyy|yy}');
+    var d = sugarDate.create(dateStr);
+    console.log(dateStr + ' is valid date', d, sugarDate.isValid(d));
+    // console.log(dateStr + ' is valid date', Date.parse(dateStr));
+    // console.log(dateStr + ' is valid date', moment(dateStr, 'DD/MM/YYYY'));
     if (!format) {
         format = 'DMY';
     }

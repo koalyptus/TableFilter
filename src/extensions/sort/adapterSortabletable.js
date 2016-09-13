@@ -5,7 +5,7 @@ import {addEvt} from '../../event';
 import {formatDate} from '../../date';
 import {unformat as unformatNb} from '../../number';
 import {
-    NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, FORMATTED_NUMBER,
+    NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, DATE, FORMATTED_NUMBER,
     FORMATTED_NUMBER_EU, IP_ADDRESS
 } from '../../const';
 
@@ -421,7 +421,7 @@ export default class AdapterSortableTable extends Feature {
         //Custom sort types
         this.addSortType(NUMBER, Number);
         this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
-        this.addSortType('date', SortableTable.toDate);
+        this.addSortType(DATE, SortableTable.toDate);
         this.addSortType(STRING);
         this.addSortType(FORMATTED_NUMBER, usNumberConverter);
         this.addSortType(FORMATTED_NUMBER_EU, euNumberConverter);

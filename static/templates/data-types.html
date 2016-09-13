@@ -78,15 +78,17 @@ var tfConfig = {
     col_types: [
         null, null, null,
         'formatted-number-eu', 'formatted-number', null,
-        null, null, null,
+        { type: 'date', locale: 'fr'/*, format: '{dd}/{MM}/{yyyy}'*/},
+        { type: 'date', locale: 'en'/*, format: '{MM}/{dd}/{yyyy}'*/},
+        'date',
         'ipaddress'
     ],
-    col_date_type: [
-        null, null, null,
-        null, null, null,
-        'dmy', 'mdy', 'ddmmmyyyy',
-        null
-    ],
+    // col_date_type: [
+    //     null, null, null,
+    //     null, null, null,
+    //     'dmy', 'mdy', 'ddmmmyyyy',
+    //     null
+    // ],
     rows_always_visible: [totRowIndex],
     on_filters_loaded: function(o){
         o.setFilterValue(3, '>1.000');

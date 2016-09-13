@@ -5,9 +5,10 @@ import {
 } from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
 import {isEmpty as isEmptyString} from './string';
-import {isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef}
-from './types';
-import {formatDate, isValidDate} from './date';
+import {
+    isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef
+} from './types';
+// import {formatDate, isValidDate} from './date';
 import {unformat as unformatNb} from './number'
 
 import {root} from './root';
@@ -26,11 +27,13 @@ import {Help} from './modules/help';
 import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
 import {State} from './modules/state';
+import {DateType} from './modules/dateType';
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
     ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
-    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, FORMATTED_NUMBER, FORMATTED_NUMBER_EU
+    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER,
+    FORMATTED_NUMBER_EU
 } from './const';
 
 let doc = root.document;
@@ -838,11 +841,15 @@ export class TableFilter {
         this.state = isObj(f.state) || Boolean(f.state);
 
         /*** data types ***/
+
+
+        this.locale = f.locale || 'en';
+
         /**
          * Define default date type (DMY)
          * @type {String}
          */
-        this.defaultDateType = f.default_date_type || 'DMY';
+        this.defaultDateType = f.default_date_type || 'ISO8601';
 
         /**
          * Define thousands separator ',' or '.', defaults to ','
@@ -861,7 +868,7 @@ export class TableFilter {
          * @type {Boolean}
          * @private
          */
-        this.hasColDateType = isArray(f.col_date_type);
+        // this.hasColDateType = isArray(f.col_date_type);
 
         /**
          * Define date format on a column basis, possible values 'DMY', 'MDY',
@@ -869,7 +876,7 @@ export class TableFilter {
          * col_date_type : [null, 'DMY', 'MDY', 'YMD', null, 'DDMMMYYYY']
          * @type {Array}
          */
-        this.colDateType = this.hasColDateType ? f.col_date_type : null;
+        // this.colDateType = this.hasColDateType ? f.col_date_type : null;
 
         /**
          * Determine whether table has columns data types
@@ -1018,6 +1025,12 @@ export class TableFilter {
         //loads theme
         if (this.hasThemes) {
             this.loadThemes();
+        }
+
+        // Instanciate sugar date wrapper
+        if (!Mod.dateType) {
+            Mod.dateType = new DateType(this);
+            Mod.dateType.init();
         }
 
         // Instantiate help feature and initialise only if set true
@@ -1777,12 +1790,15 @@ export class TableFilter {
         }
 
         //looks for search argument in current row
-        function hasArg(sA, cellData, j) {
+        function hasArg(sA, cellData, colIdx) {
             sA = matchCase(sA, this.caseSensitive);
 
             let occurence;
-            let dtType = this.hasColDateType ?
-                this.colDateType[j] : this.defaultDateType;
+            let dateType = this.Mod.dateType;
+            // let dtType = this.hasColDateType ?
+            //     this.colDateType[colIdx] : this.defaultDateType;
+            // let dtType = this.hasType(colIdx, [DATE]) ?
+            //     this.colTypes[colIdx] : this.defaultDateType;
 
             //Search arg operator tests
             let hasLO = re_l.test(sA),
@@ -1800,45 +1816,60 @@ export class TableFilter {
                 hasRE = re_re.test(sA);
 
             //Search arg dates tests
-            let isLDate = hasLO && isValidDate(sA.replace(re_l, ''), dtType);
-            let isLEDate = hasLE && isValidDate(sA.replace(re_le, ''), dtType);
-            let isGDate = hasGR && isValidDate(sA.replace(re_g, ''), dtType);
-            let isGEDate = hasGE && isValidDate(sA.replace(re_ge, ''), dtType);
-            let isDFDate = hasDF && isValidDate(sA.replace(re_d, ''), dtType);
-            let isEQDate = hasEQ && isValidDate(sA.replace(re_eq, ''), dtType);
+            // let isLDate = hasLO && isValidDate(sA.replace(re_l, ''), dtType);
+            // let isLEDate=hasLE && isValidDate(sA.replace(re_le, ''), dtType);
+            // let isGDate = hasGR && isValidDate(sA.replace(re_g, ''), dtType);
+            // let isGEDate=hasGE && isValidDate(sA.replace(re_ge, ''), dtType);
+            // let isDFDate=hasDF && isValidDate(sA.replace(re_d, ''), dtType);
+            // let isEQDate=hasEQ && isValidDate(sA.replace(re_eq, ''), dtType);
+            let isLDate = hasLO && dateType.isValid(sA.replace(re_l, ''));
+            let isLEDate = hasLE && dateType.isValid(sA.replace(re_le, ''));
+            let isGDate = hasGR && dateType.isValid(sA.replace(re_g, ''));
+            let isGEDate = hasGE && dateType.isValid(sA.replace(re_ge, ''));
+            let isDFDate = hasDF && dateType.isValid(sA.replace(re_d, ''));
+            let isEQDate = hasEQ && dateType.isValid(sA.replace(re_eq, ''));
 
             let dte1, dte2;
             //dates
-            if (isValidDate(cellData, dtType)) {
-                dte1 = formatDate(cellData, dtType);
+            if (this.hasType(colIdx, [DATE]) && dateType.isValid(cellData)
+                /*isValidDate(cellData, dtType)*/) {
+                let locale = dateType.getOptions(colIdx).locale || this.locale;
+                // dte1 = formatDate(cellData, dtType);
+                dte1 = dateType.parse(cellData, locale);
                 // lower date
                 if (isLDate) {
-                    dte2 = formatDate(sA.replace(re_l, ''), dtType);
+                    dte2 = dateType.parse(sA.replace(re_l, ''), locale);
+                    // dte2 = formatDate(sA.replace(re_l, ''), dtType);
                     occurence = dte1 < dte2;
                 }
                 // lower equal date
                 else if (isLEDate) {
-                    dte2 = formatDate(sA.replace(re_le, ''), dtType);
+                    dte2 = dateType.parse(sA.replace(re_le, ''), locale);
+                    // dte2 = formatDate(sA.replace(re_le, ''), dtType);
                     occurence = dte1 <= dte2;
                 }
                 // greater equal date
                 else if (isGEDate) {
-                    dte2 = formatDate(sA.replace(re_ge, ''), dtType);
+                    dte2 = dateType.parse(sA.replace(re_ge, ''), locale);
+                    // dte2 = formatDate(sA.replace(re_ge, ''), dtType);
                     occurence = dte1 >= dte2;
                 }
                 // greater date
                 else if (isGDate) {
-                    dte2 = formatDate(sA.replace(re_g, ''), dtType);
+                    dte2 = dateType.parse(sA.replace(re_g, ''), locale);
+                    // dte2 = formatDate(sA.replace(re_g, ''), dtType);
                     occurence = dte1 > dte2;
                 }
                 // different date
                 else if (isDFDate) {
-                    dte2 = formatDate(sA.replace(re_d, ''), dtType);
+                    dte2 = dateType.parse(sA.replace(re_d, ''), locale);
+                    // dte2 = formatDate(sA.replace(re_d, ''), dtType);
                     occurence = dte1.toString() !== dte2.toString();
                 }
                 // equal date
                 else if (isEQDate) {
-                    dte2 = formatDate(sA.replace(re_eq, ''), dtType);
+                    dte2 = dateType.parse(sA.replace(re_eq, ''), locale);
+                    // dte2 = formatDate(sA.replace(re_eq, ''), dtType);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 // searched keyword with * operator doesn't have to be a date
@@ -1846,8 +1877,10 @@ export class TableFilter {
                     occurence = contains(sA.replace(re_lk, ''), cellData,
                         false, this.caseSensitive);
                 }
-                else if (isValidDate(sA, dtType)) {
-                    dte2 = formatDate(sA, dtType);
+                else if (dateType.isValid(sA)
+                    /*isValidDate(sA, dtType)*/) {
+                    // dte2 = formatDate(sA, dtType);
+                    dte2 = dateType.parse(sA, locale);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 //empty
@@ -1858,20 +1891,20 @@ export class TableFilter {
                 else if (hasNM) {
                     occurence = !isEmptyString(cellData);
                 } else {
-                    occurence = contains(sA, cellData, this.isExactMatch(j),
-                        this.caseSensitive);
+                    occurence = contains(sA, cellData,
+                        this.isExactMatch(colIdx), this.caseSensitive);
                 }
             }
 
             else {
                 //first numbers need to be unformatted
-                if (this.hasType(j, [NUMBER])) {
+                if (this.hasType(colIdx, [NUMBER])) {
                     numCellData = Number(cellData);
                 }
-                else if (this.hasType(j,
+                else if (this.hasType(colIdx,
                     [FORMATTED_NUMBER, FORMATTED_NUMBER_EU])) {
-                    numCellData = unformatNb(cellData, this.colTypes[j]);
-                    nbFormat = this.colTypes[j];
+                    numCellData = unformatNb(cellData, this.colTypes[colIdx]);
+                    nbFormat = this.colTypes[colIdx];
                 } else {
                     if (this.thousandsSeparator === ',' &&
                         this.decimalSeparator === '.') {
@@ -1964,7 +1997,7 @@ export class TableFilter {
                     // If numeric type data, perform a strict equality test and
                     // fallback to unformatted number string comparison
                     if (numCellData &&
-                        this.hasType(j,
+                        this.hasType(colIdx,
                             [NUMBER, FORMATTED_NUMBER, FORMATTED_NUMBER_EU]) &&
                         !this.singleSearchFlt) {
                         // unformatNb can return 0 for strings which are not
@@ -1973,11 +2006,11 @@ export class TableFilter {
                         sA = unformatNb(sA, nbFormat) || sA;
                         occurence = numCellData === sA ||
                             contains(sA.toString(), numCellData.toString(),
-                                this.isExactMatch(j), this.caseSensitive);
+                                this.isExactMatch(colIdx), this.caseSensitive);
                     } else {
                         // Finally test search term is contained in cell data
-                        occurence = contains(sA, cellData, this.isExactMatch(j),
-                            this.caseSensitive);
+                        occurence = contains(sA, cellData,
+                            this.isExactMatch(colIdx), this.caseSensitive);
                     }
                 }
 
@@ -2845,8 +2878,14 @@ export class TableFilter {
      * @returns {Boolean}
      */
     hasType(colIndex, types = []) {
-        return this.hasColTypes &&
-            types.indexOf(this.colTypes[colIndex]) !== -1;
+        if (!this.hasColTypes) {
+            return false;
+        }
+        let colType = this.colTypes[colIndex];
+        if (isObj(colType)) {
+            colType = colType.type;
+        }
+        return types.indexOf(colType) !== -1;
     }
 
     /**

@@ -102,6 +102,12 @@ export const FORMATTED_NUMBER = 'formatted-number';
 export const FORMATTED_NUMBER_EU = 'formatted-number-eu';
 
 /**
+ *Date
+ * @type {String}
+ */
+export const DATE = 'date';
+
+/**
  *IP address
  * @type {String}
  */
