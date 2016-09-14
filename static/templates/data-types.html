@@ -16,8 +16,7 @@
 </ul>
 <p>
     Use the <code>col_types</code> property to set numeric formats
-    ('formatted-number', 'formatted-number-eu' or 'ipaddress') and <code>col_date_type</code> to set date
-    types.
+    ('formatted-number', 'formatted-number-eu' or 'ipaddress') and date types.
 </p>
 
 <!-- @import partials/pre.html -->
@@ -76,19 +75,16 @@ var tfConfig = {
     loader: true,
     status_bar: true,
     col_types: [
-        null, null, null,
-        'formatted-number-eu', 'formatted-number', null,
-        { type: 'date', locale: 'fr'/*, format: '{dd}/{MM}/{yyyy}'*/},
-        { type: 'date', locale: 'en'/*, format: '{MM}/{dd}/{yyyy}'*/},
+        'string', 'string', 'string',
+        'formatted-number-eu', 'formatted-number', 'string',
+        {
+            type: 'date', locale: 'fr'/*,
+            format: ['{dd}/{MM}/{yyyy}', '{dd}-{MM}-{yyyy|yy}']*/
+        },
+        { type: 'date', locale: 'en'/*, format: '{dd}-{MM}-{yyyy|yy}'*/ },
         'date',
         'ipaddress'
     ],
-    // col_date_type: [
-    //     null, null, null,
-    //     null, null, null,
-    //     'dmy', 'mdy', 'ddmmmyyyy',
-    //     null
-    // ],
     rows_always_visible: [totRowIndex],
     on_filters_loaded: function(o){
         o.setFilterValue(3, '>1.000');
@@ -132,7 +128,11 @@ var tf2Config = {
     btn_reset: true,
     loader: true,
     status_bar: true,
-    default_date_type: 'YMD',
+    locale: 'en-us',
+    col_types: [
+        'string', 'number', 'string',
+        'number', 'string', 'date'
+    ],
     on_filters_loaded: function(o){
         o.setFilterValue(5, '>95-05-18');
         o.filter();

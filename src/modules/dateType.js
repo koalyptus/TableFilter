@@ -1,38 +1,48 @@
-import {Date as SuDate} from 'sugar-date';
+import {Date as SugarDate} from 'sugar-date';
 import 'sugar-date/locales';
-import {isObj} from '../types';
+import {isObj, isArray} from '../types';
 
 export class DateType {
 
     constructor(tf) {
         this.tf = tf;
         this.locale = tf.locale;
-        this.suDate = SuDate;
+        this.datetime = SugarDate;
         this.emitter = tf.emitter;
-
-        // Global locale
-        this.suDate.setLocale(this.locale);
     }
 
     init() {
-        // let locale = this.suDate.getLocale(this.locale);
+        if (this.initialized) {
+            return;
+        }
 
-        // Add formats from column types configuration
+        // Global locale
+        this.datetime.setLocale(this.locale);
+
+        // let locale = this.datetime.getLocale(this.locale);
+
+        // Add formats from column types configuration if any
         this._addConfigFormats();
         // locale.addFormat('{dd}/{MM}/{yyyy}');
         // locale.addFormat('{MM}/{dd}/{yyyy}');
         // locale.addFormat('{dd}-{months}-{yyyy|yy}');
         // locale.addFormat('{dd}-{MM}-{yyyy|yy}');
+
+        this.initialized = true;
+
+        this.emitter.emit('date-type-initialized', this.tf, this);
     }
 
-    parse(dateStr, localeCode) {console.log('parse', localeCode);
-        return this.suDate.create(dateStr, localeCode);
+    parse(dateStr, localeCode) {
+        // console.log('parse', dateStr, localeCode,
+        //     this.datetime.create(dateStr, localeCode));
+        return this.datetime.create(dateStr, localeCode);
     }
 
     isValid(dateStr, localeCode) {
-        console.log(dateStr, localeCode, this.parse(dateStr, localeCode),
-            this.suDate.isValid(this.parse(dateStr, localeCode)));
-        return this.suDate.isValid(this.parse(dateStr, localeCode));
+        // console.log(dateStr, localeCode, this.parse(dateStr, localeCode),
+        //     this.datetime.isValid(this.parse(dateStr, localeCode)));
+        return this.datetime.isValid(this.parse(dateStr, localeCode));
     }
 
     getOptions(colIndex) {
@@ -44,12 +54,21 @@ export class DateType {
         this.tf.colTypes.forEach((type, idx) => {
             let options = this.getOptions(idx);
             if (options.hasOwnProperty('format')) {
-                let locale = this.suDate.getLocale(
+                let locale = this.datetime.getLocale(
                     options.locale || this.locale
                 );
-                console.log(options.format);
-                locale.addFormat(options.format);
+                if (isArray(options.format)) {
+                    options.format.forEach((format) => {
+                        locale.addFormat(format);
+                    });
+                } else {
+                    locale.addFormat(options.format);
+                }
             }
         });
+    }
+
+    destroy() {
+        this.initialized = false;
     }
 }

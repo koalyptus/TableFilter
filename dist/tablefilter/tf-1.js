@@ -2416,8 +2416,6 @@ webpackJsonp([1],{
 	
 	var _event = __webpack_require__(1);
 	
-	var _date = __webpack_require__(435);
-	
 	var _number = __webpack_require__(6);
 	
 	var _const = __webpack_require__(7);
@@ -2427,6 +2425,8 @@ webpackJsonp([1],{
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// import {formatDate} from '../../date';
+	
 	
 	/**
 	 * SortableTable Adapter module
@@ -2836,10 +2836,19 @@ webpackJsonp([1],{
 	                // resolve column types
 	                if (tf.hasType(i, [_const.NUMBER, _const.FORMATTED_NUMBER, _const.FORMATTED_NUMBER_EU, _const.IP_ADDRESS])) {
 	                    colType = tf.colTypes[i].toLowerCase();
-	                } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
-	                    colType = tf.colDateType[i].toLowerCase() + 'date';
+	                    // } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
+	                    // colType = tf.colDateType[i].toLowerCase() + 'date';
+	                } else if (tf.hasType(i, [_const.DATE])) {
+	                    (function () {
+	                        var dateType = tf.feature('dateType');
+	                        var locale = dateType.getOptions(i).locale || tf.locale;
+	                        colType = _const.DATE + '-' + locale;
+	                        _this3.addSortType(colType, function (dateStr) {
+	                            return dateType.parse(dateStr, locale);
+	                        });
+	                    })();
 	                } else {
-	                    colType = 'String';
+	                    colType = _const.STRING;
 	                }
 	            }
 	            _sortTypes.push(colType);
@@ -2850,14 +2859,14 @@ webpackJsonp([1],{
 	        //Custom sort types
 	        this.addSortType(_const.NUMBER, Number);
 	        this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
-	        this.addSortType(_const.DATE, SortableTable.toDate);
+	        // this.addSortType(DATE, SortableTable.toDate);
 	        this.addSortType(_const.STRING);
 	        this.addSortType(_const.FORMATTED_NUMBER, usNumberConverter);
 	        this.addSortType(_const.FORMATTED_NUMBER_EU, euNumberConverter);
-	        this.addSortType('dmydate', dmyDateConverter);
-	        this.addSortType('ymddate', ymdDateConverter);
-	        this.addSortType('mdydate', mdyDateConverter);
-	        this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
+	        // this.addSortType('dmydate', dmyDateConverter);
+	        // this.addSortType('ymddate', ymdDateConverter);
+	        // this.addSortType('mdydate', mdyDateConverter);
+	        // this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
 	        this.addSortType(_const.IP_ADDRESS, ipAddress, sortIP);
 	
 	        this.stt = new SortableTable(tf.tbl, _sortTypes);
@@ -2932,21 +2941,21 @@ webpackJsonp([1],{
 	function euNumberConverter(s) {
 	    return (0, _number.unformat)(s, _const.FORMATTED_NUMBER_EU);
 	}
-	function dateConverter(s, format) {
-	    return (0, _date.formatDate)(s, format);
-	}
-	function dmyDateConverter(s) {
-	    return dateConverter(s, 'DMY');
-	}
-	function mdyDateConverter(s) {
-	    return dateConverter(s, 'MDY');
-	}
-	function ymdDateConverter(s) {
-	    return dateConverter(s, 'YMD');
-	}
-	function ddmmmyyyyDateConverter(s) {
-	    return dateConverter(s, 'DDMMMYYYY');
-	}
+	// function dateConverter(s, format) {
+	//     return formatDate(s, format);
+	// }
+	// function dmyDateConverter(s) {
+	//     return dateConverter(s, 'DMY');
+	// }
+	// function mdyDateConverter(s) {
+	//     return dateConverter(s, 'MDY');
+	// }
+	// function ymdDateConverter(s) {
+	//     return dateConverter(s, 'YMD');
+	// }
+	// function ddmmmyyyyDateConverter(s) {
+	//     return dateConverter(s, 'DDMMMYYYY');
+	// }
 	
 	function ipAddress(value) {
 	    var vals = value.split('.');

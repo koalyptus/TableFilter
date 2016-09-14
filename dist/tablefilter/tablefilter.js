@@ -1990,8 +1990,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        function hasArg(sA, cellData, colIdx) {
 	            sA = (0, _string.matchCase)(sA, this.caseSensitive);
 	
-	            var occurence = void 0;
-	            var dateType = this.Mod.dateType;
+	            var occurence = false;
 	            // let dtType = this.hasColDateType ?
 	            //     this.colDateType[colIdx] : this.defaultDateType;
 	            // let dtType = this.hasType(colIdx, [DATE]) ?
@@ -2020,54 +2019,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // let isGEDate=hasGE && isValidDate(sA.replace(re_ge, ''), dtType);
 	            // let isDFDate=hasDF && isValidDate(sA.replace(re_d, ''), dtType);
 	            // let isEQDate=hasEQ && isValidDate(sA.replace(re_eq, ''), dtType);
-	            var isLDate = hasLO && dateType.isValid(sA.replace(re_l, ''));
-	            var isLEDate = hasLE && dateType.isValid(sA.replace(re_le, ''));
-	            var isGDate = hasGR && dateType.isValid(sA.replace(re_g, ''));
-	            var isGEDate = hasGE && dateType.isValid(sA.replace(re_ge, ''));
-	            var isDFDate = hasDF && dateType.isValid(sA.replace(re_d, ''));
-	            var isEQDate = hasEQ && dateType.isValid(sA.replace(re_eq, ''));
 	
-	            var dte1 = void 0,
-	                dte2 = void 0;
 	            //dates
-	            if (this.hasType(colIdx, [_const.DATE]) && dateType.isValid(cellData)
+	            if (this.hasType(colIdx, [_const.DATE]) /*&& isValidDate(cellData)*/
 	            /*isValidDate(cellData, dtType)*/) {
+	                    var dte1 = void 0,
+	                        dte2 = void 0;
+	                    var dateType = this.Mod.dateType;
+	                    var isValidDate = dateType.isValid.bind(dateType);
+	                    var parseDate = dateType.parse.bind(dateType);
 	                    var locale = dateType.getOptions(colIdx).locale || this.locale;
+	
+	                    var isLDate = hasLO && isValidDate(sA.replace(re_l, ''), locale);
+	                    var isLEDate = hasLE && isValidDate(sA.replace(re_le, ''), locale);
+	                    var isGDate = hasGR && isValidDate(sA.replace(re_g, ''), locale);
+	                    var isGEDate = hasGE && isValidDate(sA.replace(re_ge, ''), locale);
+	                    var isDFDate = hasDF && isValidDate(sA.replace(re_d, ''), locale);
+	                    var isEQDate = hasEQ && isValidDate(sA.replace(re_eq, ''), locale);
+	
 	                    // dte1 = formatDate(cellData, dtType);
-	                    dte1 = dateType.parse(cellData, locale);
+	                    dte1 = parseDate(cellData, locale);
 	                    // lower date
 	                    if (isLDate) {
-	                        dte2 = dateType.parse(sA.replace(re_l, ''), locale);
+	                        dte2 = parseDate(sA.replace(re_l, ''), locale);
 	                        // dte2 = formatDate(sA.replace(re_l, ''), dtType);
 	                        occurence = dte1 < dte2;
 	                    }
 	                    // lower equal date
 	                    else if (isLEDate) {
-	                            dte2 = dateType.parse(sA.replace(re_le, ''), locale);
+	                            dte2 = parseDate(sA.replace(re_le, ''), locale);
 	                            // dte2 = formatDate(sA.replace(re_le, ''), dtType);
 	                            occurence = dte1 <= dte2;
 	                        }
 	                        // greater equal date
 	                        else if (isGEDate) {
-	                                dte2 = dateType.parse(sA.replace(re_ge, ''), locale);
+	                                dte2 = parseDate(sA.replace(re_ge, ''), locale);
 	                                // dte2 = formatDate(sA.replace(re_ge, ''), dtType);
 	                                occurence = dte1 >= dte2;
 	                            }
 	                            // greater date
 	                            else if (isGDate) {
-	                                    dte2 = dateType.parse(sA.replace(re_g, ''), locale);
+	                                    dte2 = parseDate(sA.replace(re_g, ''), locale);
 	                                    // dte2 = formatDate(sA.replace(re_g, ''), dtType);
 	                                    occurence = dte1 > dte2;
 	                                }
 	                                // different date
 	                                else if (isDFDate) {
-	                                        dte2 = dateType.parse(sA.replace(re_d, ''), locale);
+	                                        dte2 = parseDate(sA.replace(re_d, ''), locale);
 	                                        // dte2 = formatDate(sA.replace(re_d, ''), dtType);
 	                                        occurence = dte1.toString() !== dte2.toString();
 	                                    }
 	                                    // equal date
 	                                    else if (isEQDate) {
-	                                            dte2 = dateType.parse(sA.replace(re_eq, ''), locale);
+	                                            dte2 = parseDate(sA.replace(re_eq, ''), locale);
 	                                            // dte2 = formatDate(sA.replace(re_eq, ''), dtType);
 	                                            occurence = dte1.toString() === dte2.toString();
 	                                        }
@@ -2075,10 +2079,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                        else if (re_lk.test(sA)) {
 	                                                // like date
 	                                                occurence = (0, _string.contains)(sA.replace(re_lk, ''), cellData, false, this.caseSensitive);
-	                                            } else if (dateType.isValid(sA)
+	                                            } else if (isValidDate(sA)
 	                                            /*isValidDate(sA, dtType)*/) {
 	                                                    // dte2 = formatDate(sA, dtType);
-	                                                    dte2 = dateType.parse(sA, locale);
+	                                                    dte2 = parseDate(sA, locale);
 	                                                    occurence = dte1.toString() === dte2.toString();
 	                                                }
 	                                                //empty
@@ -10184,32 +10188,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        this.tf = tf;
 	        this.locale = tf.locale;
-	        this.suDate = _sugarDate.Date;
+	        this.datetime = _sugarDate.Date;
 	        this.emitter = tf.emitter;
-	
-	        // Global locale
-	        this.suDate.setLocale(this.locale);
 	    }
 	
 	    DateType.prototype.init = function init() {
-	        // let locale = this.suDate.getLocale(this.locale);
+	        if (this.initialized) {
+	            return;
+	        }
 	
-	        // Add formats from column types configuration
+	        // Global locale
+	        this.datetime.setLocale(this.locale);
+	
+	        // let locale = this.datetime.getLocale(this.locale);
+	
+	        // Add formats from column types configuration if any
 	        this._addConfigFormats();
 	        // locale.addFormat('{dd}/{MM}/{yyyy}');
 	        // locale.addFormat('{MM}/{dd}/{yyyy}');
 	        // locale.addFormat('{dd}-{months}-{yyyy|yy}');
 	        // locale.addFormat('{dd}-{MM}-{yyyy|yy}');
+	
+	        this.initialized = true;
+	
+	        this.emitter.emit('date-type-initialized', this.tf, this);
 	    };
 	
 	    DateType.prototype.parse = function parse(dateStr, localeCode) {
-	        console.log('parse', localeCode);
-	        return this.suDate.create(dateStr, localeCode);
+	        // console.log('parse', dateStr, localeCode,
+	        //     this.datetime.create(dateStr, localeCode));
+	        return this.datetime.create(dateStr, localeCode);
 	    };
 	
 	    DateType.prototype.isValid = function isValid(dateStr, localeCode) {
-	        console.log(dateStr, localeCode, this.parse(dateStr, localeCode), this.suDate.isValid(this.parse(dateStr, localeCode)));
-	        return this.suDate.isValid(this.parse(dateStr, localeCode));
+	        // console.log(dateStr, localeCode, this.parse(dateStr, localeCode),
+	        //     this.datetime.isValid(this.parse(dateStr, localeCode)));
+	        return this.datetime.isValid(this.parse(dateStr, localeCode));
 	    };
 	
 	    DateType.prototype.getOptions = function getOptions(colIndex) {
@@ -10223,11 +10237,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.tf.colTypes.forEach(function (type, idx) {
 	            var options = _this.getOptions(idx);
 	            if (options.hasOwnProperty('format')) {
-	                var locale = _this.suDate.getLocale(options.locale || _this.locale);
-	                console.log(options.format);
-	                locale.addFormat(options.format);
+	                (function () {
+	                    var locale = _this.datetime.getLocale(options.locale || _this.locale);
+	                    if ((0, _types.isArray)(options.format)) {
+	                        options.format.forEach(function (format) {
+	                            locale.addFormat(format);
+	                        });
+	                    } else {
+	                        locale.addFormat(options.format);
+	                    }
+	                })();
 	            }
 	        });
+	    };
+	
+	    DateType.prototype.destroy = function destroy() {
+	        this.initialized = false;
 	    };
 	
 	    return DateType;

@@ -2,7 +2,7 @@ import {Feature} from '../../feature';
 import {isArray, isFn, isUndef} from '../../types';
 import {createElm, elm, getText, tag} from '../../dom';
 import {addEvt} from '../../event';
-import {formatDate} from '../../date';
+// import {formatDate} from '../../date';
 import {unformat as unformatNb} from '../../number';
 import {
     NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, DATE, FORMATTED_NUMBER,
@@ -407,10 +407,17 @@ export default class AdapterSortableTable extends Feature {
                 if (tf.hasType(i, [NUMBER, FORMATTED_NUMBER,
                     FORMATTED_NUMBER_EU, IP_ADDRESS])) {
                     colType = tf.colTypes[i].toLowerCase();
-                } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
-                    colType = tf.colDateType[i].toLowerCase() + 'date';
+                // } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
+                    // colType = tf.colDateType[i].toLowerCase() + 'date';
+                } else if (tf.hasType(i, [DATE])) {
+                    let dateType = tf.feature('dateType');
+                    let locale = dateType.getOptions(i).locale || tf.locale;
+                    colType = `${DATE}-${locale}`;
+                    this.addSortType(colType, (dateStr) => {
+                        return dateType.parse(dateStr, locale);
+                    });
                 } else {
-                    colType = 'String';
+                    colType = STRING;
                 }
             }
             _sortTypes.push(colType);
@@ -421,14 +428,14 @@ export default class AdapterSortableTable extends Feature {
         //Custom sort types
         this.addSortType(NUMBER, Number);
         this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
-        this.addSortType(DATE, SortableTable.toDate);
+        // this.addSortType(DATE, SortableTable.toDate);
         this.addSortType(STRING);
         this.addSortType(FORMATTED_NUMBER, usNumberConverter);
         this.addSortType(FORMATTED_NUMBER_EU, euNumberConverter);
-        this.addSortType('dmydate', dmyDateConverter);
-        this.addSortType('ymddate', ymdDateConverter);
-        this.addSortType('mdydate', mdyDateConverter);
-        this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
+        // this.addSortType('dmydate', dmyDateConverter);
+        // this.addSortType('ymddate', ymdDateConverter);
+        // this.addSortType('mdydate', mdyDateConverter);
+        // this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
         this.addSortType(IP_ADDRESS, ipAddress, sortIP);
 
         this.stt = new SortableTable(tf.tbl, _sortTypes);
@@ -492,21 +499,21 @@ function usNumberConverter(s) {
 function euNumberConverter(s) {
     return unformatNb(s, FORMATTED_NUMBER_EU);
 }
-function dateConverter(s, format) {
-    return formatDate(s, format);
-}
-function dmyDateConverter(s) {
-    return dateConverter(s, 'DMY');
-}
-function mdyDateConverter(s) {
-    return dateConverter(s, 'MDY');
-}
-function ymdDateConverter(s) {
-    return dateConverter(s, 'YMD');
-}
-function ddmmmyyyyDateConverter(s) {
-    return dateConverter(s, 'DDMMMYYYY');
-}
+// function dateConverter(s, format) {
+//     return formatDate(s, format);
+// }
+// function dmyDateConverter(s) {
+//     return dateConverter(s, 'DMY');
+// }
+// function mdyDateConverter(s) {
+//     return dateConverter(s, 'MDY');
+// }
+// function ymdDateConverter(s) {
+//     return dateConverter(s, 'YMD');
+// }
+// function ddmmmyyyyDateConverter(s) {
+//     return dateConverter(s, 'DDMMMYYYY');
+// }
 
 function ipAddress(value) {
     let vals = value.split('.');

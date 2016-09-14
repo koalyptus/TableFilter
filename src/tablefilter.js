@@ -1793,8 +1793,7 @@ export class TableFilter {
         function hasArg(sA, cellData, colIdx) {
             sA = matchCase(sA, this.caseSensitive);
 
-            let occurence;
-            let dateType = this.Mod.dateType;
+            let occurence = false;
             // let dtType = this.hasColDateType ?
             //     this.colDateType[colIdx] : this.defaultDateType;
             // let dtType = this.hasType(colIdx, [DATE]) ?
@@ -1822,53 +1821,64 @@ export class TableFilter {
             // let isGEDate=hasGE && isValidDate(sA.replace(re_ge, ''), dtType);
             // let isDFDate=hasDF && isValidDate(sA.replace(re_d, ''), dtType);
             // let isEQDate=hasEQ && isValidDate(sA.replace(re_eq, ''), dtType);
-            let isLDate = hasLO && dateType.isValid(sA.replace(re_l, ''));
-            let isLEDate = hasLE && dateType.isValid(sA.replace(re_le, ''));
-            let isGDate = hasGR && dateType.isValid(sA.replace(re_g, ''));
-            let isGEDate = hasGE && dateType.isValid(sA.replace(re_ge, ''));
-            let isDFDate = hasDF && dateType.isValid(sA.replace(re_d, ''));
-            let isEQDate = hasEQ && dateType.isValid(sA.replace(re_eq, ''));
 
-            let dte1, dte2;
             //dates
-            if (this.hasType(colIdx, [DATE]) && dateType.isValid(cellData)
+            if (this.hasType(colIdx, [DATE]) /*&& isValidDate(cellData)*/
                 /*isValidDate(cellData, dtType)*/) {
+                let dte1, dte2;
+                let dateType = this.Mod.dateType;
+                let isValidDate = dateType.isValid.bind(dateType);
+                let parseDate = dateType.parse.bind(dateType);
                 let locale = dateType.getOptions(colIdx).locale || this.locale;
+
+                let isLDate = hasLO &&
+                    isValidDate(sA.replace(re_l, ''), locale);
+                let isLEDate = hasLE &&
+                    isValidDate(sA.replace(re_le, ''), locale);
+                let isGDate = hasGR &&
+                    isValidDate(sA.replace(re_g, ''), locale);
+                let isGEDate = hasGE &&
+                    isValidDate(sA.replace(re_ge, ''), locale);
+                let isDFDate = hasDF &&
+                    isValidDate(sA.replace(re_d, ''), locale);
+                let isEQDate = hasEQ &&
+                    isValidDate(sA.replace(re_eq, ''), locale);
+
                 // dte1 = formatDate(cellData, dtType);
-                dte1 = dateType.parse(cellData, locale);
+                dte1 = parseDate(cellData, locale);
                 // lower date
                 if (isLDate) {
-                    dte2 = dateType.parse(sA.replace(re_l, ''), locale);
+                    dte2 = parseDate(sA.replace(re_l, ''), locale);
                     // dte2 = formatDate(sA.replace(re_l, ''), dtType);
                     occurence = dte1 < dte2;
                 }
                 // lower equal date
                 else if (isLEDate) {
-                    dte2 = dateType.parse(sA.replace(re_le, ''), locale);
+                    dte2 = parseDate(sA.replace(re_le, ''), locale);
                     // dte2 = formatDate(sA.replace(re_le, ''), dtType);
                     occurence = dte1 <= dte2;
                 }
                 // greater equal date
                 else if (isGEDate) {
-                    dte2 = dateType.parse(sA.replace(re_ge, ''), locale);
+                    dte2 = parseDate(sA.replace(re_ge, ''), locale);
                     // dte2 = formatDate(sA.replace(re_ge, ''), dtType);
                     occurence = dte1 >= dte2;
                 }
                 // greater date
                 else if (isGDate) {
-                    dte2 = dateType.parse(sA.replace(re_g, ''), locale);
+                    dte2 = parseDate(sA.replace(re_g, ''), locale);
                     // dte2 = formatDate(sA.replace(re_g, ''), dtType);
                     occurence = dte1 > dte2;
                 }
                 // different date
                 else if (isDFDate) {
-                    dte2 = dateType.parse(sA.replace(re_d, ''), locale);
+                    dte2 = parseDate(sA.replace(re_d, ''), locale);
                     // dte2 = formatDate(sA.replace(re_d, ''), dtType);
                     occurence = dte1.toString() !== dte2.toString();
                 }
                 // equal date
                 else if (isEQDate) {
-                    dte2 = dateType.parse(sA.replace(re_eq, ''), locale);
+                    dte2 = parseDate(sA.replace(re_eq, ''), locale);
                     // dte2 = formatDate(sA.replace(re_eq, ''), dtType);
                     occurence = dte1.toString() === dte2.toString();
                 }
@@ -1877,10 +1887,10 @@ export class TableFilter {
                     occurence = contains(sA.replace(re_lk, ''), cellData,
                         false, this.caseSensitive);
                 }
-                else if (dateType.isValid(sA)
+                else if (isValidDate(sA)
                     /*isValidDate(sA, dtType)*/) {
                     // dte2 = formatDate(sA, dtType);
-                    dte2 = dateType.parse(sA, locale);
+                    dte2 = parseDate(sA, locale);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 //empty
