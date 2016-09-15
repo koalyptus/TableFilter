@@ -2824,11 +2824,25 @@ webpackJsonp([1],{
 	            sortTypes = this.sortTypes,
 	            _sortTypes = [];
 	
-	        for (var i = 0; i < tf.nbCells; i++) {
+	        for (var i = 0; i < tf.getCellsNb(); i++) {
 	            var colType = void 0;
 	
 	            if (sortTypes[i]) {
-	                colType = sortTypes[i].toLowerCase();
+	                colType = sortTypes[i];
+	                if (isObj(colType)) {
+	                    // colType = colType.type;
+	                    if (colType.type === _const.DATE) {
+	                        // let dateType = tf.feature('dateType');
+	                        // let locale=dateType.getOptions(i,sortTypes).locale ||
+	                        //     tf.locale;
+	                        // colType = `${DATE}-${locale}`;
+	                        // this.addSortType(colType, (dateStr) => {
+	                        //     return dateType.parse(dateStr, locale);
+	                        // });
+	                        colType = this._addDateType(i, sortTypes);
+	                    }
+	                }
+	                colType = colType.toLowerCase();
 	                if (colType === _const.NONE) {
 	                    colType = 'None';
 	                }
@@ -2839,14 +2853,13 @@ webpackJsonp([1],{
 	                    // } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
 	                    // colType = tf.colDateType[i].toLowerCase() + 'date';
 	                } else if (tf.hasType(i, [_const.DATE])) {
-	                    (function () {
-	                        var dateType = tf.feature('dateType');
-	                        var locale = dateType.getOptions(i).locale || tf.locale;
-	                        colType = _const.DATE + '-' + locale;
-	                        _this3.addSortType(colType, function (dateStr) {
-	                            return dateType.parse(dateStr, locale);
-	                        });
-	                    })();
+	                    // let dateType = tf.feature('dateType');
+	                    // let locale = dateType.getOptions(i).locale || tf.locale;
+	                    // colType = `${DATE}-${locale}`;
+	                    // this.addSortType(colType, (dateStr) => {
+	                    //     return dateType.parse(dateStr, locale);
+	                    // });
+	                    colType = this._addDateType(i);
 	                } else {
 	                    colType = _const.STRING;
 	                }
@@ -2895,6 +2908,18 @@ webpackJsonp([1],{
 	                }
 	            })();
 	        }
+	    };
+	
+	    AdapterSortableTable.prototype._addDateType = function _addDateType(colIndex, types) {
+	        var tf = this.tf;
+	        var dateType = tf.feature('dateType');
+	        var locale = dateType.getOptions(colIndex, types).locale || tf.locale;
+	        var colType = _const.DATE + '-' + locale;
+	
+	        this.addSortType(colType, function (dateStr) {
+	            return dateType.parse(dateStr, locale);
+	        });
+	        return colType;
 	    };
 	
 	    /**

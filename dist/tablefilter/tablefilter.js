@@ -3899,13 +3899,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var FORMATTED_NUMBER_EU = exports.FORMATTED_NUMBER_EU = 'formatted-number-eu';
 	
 	/**
-	 *Date
+	 * Date
 	 * @type {String}
 	 */
 	var DATE = exports.DATE = 'date';
 	
 	/**
-	 *IP address
+	 * IP address
 	 * @type {String}
 	 */
 	var IP_ADDRESS = exports.IP_ADDRESS = 'ipaddress';
@@ -10203,7 +10203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // let locale = this.datetime.getLocale(this.locale);
 	
 	        // Add formats from column types configuration if any
-	        this._addConfigFormats();
+	        this.addConfigFormats(this.tf.colTypes);
 	        // locale.addFormat('{dd}/{MM}/{yyyy}');
 	        // locale.addFormat('{MM}/{dd}/{yyyy}');
 	        // locale.addFormat('{dd}-{months}-{yyyy|yy}');
@@ -10226,16 +10226,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.datetime.isValid(this.parse(dateStr, localeCode));
 	    };
 	
-	    DateType.prototype.getOptions = function getOptions(colIndex) {
-	        var colType = this.tf.colTypes[colIndex];
+	    DateType.prototype.getOptions = function getOptions(colIndex, types) {
+	        types = types || this.tf.colTypes;
+	        var colType = types[colIndex];
 	        return (0, _types.isObj)(colType) ? colType : {};
 	    };
 	
-	    DateType.prototype._addConfigFormats = function _addConfigFormats() {
+	    DateType.prototype.addConfigFormats = function addConfigFormats() {
 	        var _this = this;
 	
-	        this.tf.colTypes.forEach(function (type, idx) {
-	            var options = _this.getOptions(idx);
+	        var types = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	
+	        types.forEach(function (type, idx) {
+	            var options = _this.getOptions(idx, types);
 	            if (options.hasOwnProperty('format')) {
 	                (function () {
 	                    var locale = _this.datetime.getLocale(options.locale || _this.locale);

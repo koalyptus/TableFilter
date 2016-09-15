@@ -102,13 +102,13 @@ export const FORMATTED_NUMBER = 'formatted-number';
 export const FORMATTED_NUMBER_EU = 'formatted-number-eu';
 
 /**
- *Date
+ * Date
  * @type {String}
  */
 export const DATE = 'date';
 
 /**
- *IP address
+ * IP address
  * @type {String}
  */
 export const IP_ADDRESS = 'ipaddress';

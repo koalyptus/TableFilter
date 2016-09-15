@@ -395,11 +395,25 @@ export default class AdapterSortableTable extends Feature {
             sortTypes = this.sortTypes,
             _sortTypes = [];
 
-        for (let i = 0; i < tf.nbCells; i++) {
+        for (let i = 0; i < tf.getCellsNb(); i++) {
             let colType;
 
             if (sortTypes[i]) {
-                colType = sortTypes[i].toLowerCase();
+                colType = sortTypes[i];
+                if (isObj(colType)) {
+                    // colType = colType.type;
+                    if (colType.type === DATE) {
+                        // let dateType = tf.feature('dateType');
+                        // let locale=dateType.getOptions(i,sortTypes).locale ||
+                        //     tf.locale;
+                        // colType = `${DATE}-${locale}`;
+                        // this.addSortType(colType, (dateStr) => {
+                        //     return dateType.parse(dateStr, locale);
+                        // });
+                        colType = this._addDateType(i, sortTypes);
+                    }
+                }
+                colType = colType.toLowerCase();
                 if (colType === NONE) {
                     colType = 'None';
                 }
@@ -410,12 +424,13 @@ export default class AdapterSortableTable extends Feature {
                 // } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
                     // colType = tf.colDateType[i].toLowerCase() + 'date';
                 } else if (tf.hasType(i, [DATE])) {
-                    let dateType = tf.feature('dateType');
-                    let locale = dateType.getOptions(i).locale || tf.locale;
-                    colType = `${DATE}-${locale}`;
-                    this.addSortType(colType, (dateStr) => {
-                        return dateType.parse(dateStr, locale);
-                    });
+                    // let dateType = tf.feature('dateType');
+                    // let locale = dateType.getOptions(i).locale || tf.locale;
+                    // colType = `${DATE}-${locale}`;
+                    // this.addSortType(colType, (dateStr) => {
+                    //     return dateType.parse(dateStr, locale);
+                    // });
+                    colType = this._addDateType(i);
                 } else {
                     colType = STRING;
                 }
@@ -462,6 +477,18 @@ export default class AdapterSortableTable extends Feature {
                 }
             }
         }
+    }
+
+    _addDateType(colIndex, types) {
+        let tf = this.tf;
+        let dateType = tf.feature('dateType');
+        let locale = dateType.getOptions(colIndex, types).locale || tf.locale;
+        let colType = `${DATE}-${locale}`;
+
+        this.addSortType(colType, (dateStr) => {
+            return dateType.parse(dateStr, locale);
+        });
+        return colType;
     }
 
     /**

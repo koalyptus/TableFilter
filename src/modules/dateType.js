@@ -22,7 +22,7 @@ export class DateType {
         // let locale = this.datetime.getLocale(this.locale);
 
         // Add formats from column types configuration if any
-        this._addConfigFormats();
+        this.addConfigFormats(this.tf.colTypes);
         // locale.addFormat('{dd}/{MM}/{yyyy}');
         // locale.addFormat('{MM}/{dd}/{yyyy}');
         // locale.addFormat('{dd}-{months}-{yyyy|yy}');
@@ -45,14 +45,15 @@ export class DateType {
         return this.datetime.isValid(this.parse(dateStr, localeCode));
     }
 
-    getOptions(colIndex) {
-        let colType = this.tf.colTypes[colIndex];
+    getOptions(colIndex, types) {
+        types = types || this.tf.colTypes;
+        let colType = types[colIndex];
         return isObj(colType) ? colType : {};
     }
 
-    _addConfigFormats() {
-        this.tf.colTypes.forEach((type, idx) => {
-            let options = this.getOptions(idx);
+    addConfigFormats(types=[]) {
+        types.forEach((type, idx) => {
+            let options = this.getOptions(idx, types);
             if (options.hasOwnProperty('format')) {
                 let locale = this.datetime.getLocale(
                     options.locale || this.locale
