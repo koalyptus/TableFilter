@@ -51,7 +51,7 @@ export class DateType {
         return isObj(colType) ? colType : {};
     }
 
-    addConfigFormats(types=[]) {
+    addConfigFormats(types=[]) {console.log(types);
         types.forEach((type, idx) => {
             let options = this.getOptions(idx, types);
             if (options.hasOwnProperty('format')) {

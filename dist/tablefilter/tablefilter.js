@@ -161,8 +161,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _const = __webpack_require__(7);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	// import {formatDate, isValidDate} from './date';
-	
 	
 	var doc = _root.root.document;
 	
@@ -1991,10 +1989,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sA = (0, _string.matchCase)(sA, this.caseSensitive);
 	
 	            var occurence = false;
-	            // let dtType = this.hasColDateType ?
-	            //     this.colDateType[colIdx] : this.defaultDateType;
-	            // let dtType = this.hasType(colIdx, [DATE]) ?
-	            //     this.colTypes[colIdx] : this.defaultDateType;
 	
 	            //Search arg operator tests
 	            var hasLO = re_l.test(sA),
@@ -10236,7 +10230,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 	
 	        var types = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	
+	        console.log(types);
 	        types.forEach(function (type, idx) {
 	            var options = _this.getOptions(idx, types);
 	            if (options.hasOwnProperty('format')) {

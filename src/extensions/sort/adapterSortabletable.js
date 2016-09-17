@@ -1,8 +1,7 @@
 import {Feature} from '../../feature';
-import {isArray, isFn, isUndef} from '../../types';
+import {isArray, isFn, isUndef, isObj} from '../../types';
 import {createElm, elm, getText, tag} from '../../dom';
 import {addEvt} from '../../event';
-// import {formatDate} from '../../date';
 import {unformat as unformatNb} from '../../number';
 import {
     NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, DATE, FORMATTED_NUMBER,
@@ -381,9 +380,10 @@ export default class AdapterSortableTable extends Feature {
     /**
      * Adds a sort type
      */
-    addSortType() {
-        var args = arguments;
-        SortableTable.prototype.addSortType(args[0], args[1], args[2], args[3]);
+    addSortType(...args) {
+        // Extract the arguments
+        let [id, caster, sorter] = args;
+        SortableTable.prototype.addSortType(id, caster, sorter);
     }
 
     /**
@@ -393,7 +393,9 @@ export default class AdapterSortableTable extends Feature {
     setSortTypes() {
         let tf = this.tf,
             sortTypes = this.sortTypes,
-            _sortTypes = [];
+            _sortTypes = [],
+            dateType = tf.feature('dateType');
+        dateType.addConfigFormats(sortTypes);
 
         for (let i = 0; i < tf.getCellsNb(); i++) {
             let colType;
@@ -401,15 +403,7 @@ export default class AdapterSortableTable extends Feature {
             if (sortTypes[i]) {
                 colType = sortTypes[i];
                 if (isObj(colType)) {
-                    // colType = colType.type;
                     if (colType.type === DATE) {
-                        // let dateType = tf.feature('dateType');
-                        // let locale=dateType.getOptions(i,sortTypes).locale ||
-                        //     tf.locale;
-                        // colType = `${DATE}-${locale}`;
-                        // this.addSortType(colType, (dateStr) => {
-                        //     return dateType.parse(dateStr, locale);
-                        // });
                         colType = this._addDateType(i, sortTypes);
                     }
                 }
@@ -421,15 +415,7 @@ export default class AdapterSortableTable extends Feature {
                 if (tf.hasType(i, [NUMBER, FORMATTED_NUMBER,
                     FORMATTED_NUMBER_EU, IP_ADDRESS])) {
                     colType = tf.colTypes[i].toLowerCase();
-                // } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
-                    // colType = tf.colDateType[i].toLowerCase() + 'date';
                 } else if (tf.hasType(i, [DATE])) {
-                    // let dateType = tf.feature('dateType');
-                    // let locale = dateType.getOptions(i).locale || tf.locale;
-                    // colType = `${DATE}-${locale}`;
-                    // this.addSortType(colType, (dateStr) => {
-                    //     return dateType.parse(dateStr, locale);
-                    // });
                     colType = this._addDateType(i);
                 } else {
                     colType = STRING;
@@ -443,14 +429,9 @@ export default class AdapterSortableTable extends Feature {
         //Custom sort types
         this.addSortType(NUMBER, Number);
         this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
-        // this.addSortType(DATE, SortableTable.toDate);
         this.addSortType(STRING);
         this.addSortType(FORMATTED_NUMBER, usNumberConverter);
         this.addSortType(FORMATTED_NUMBER_EU, euNumberConverter);
-        // this.addSortType('dmydate', dmyDateConverter);
-        // this.addSortType('ymddate', ymdDateConverter);
-        // this.addSortType('mdydate', mdyDateConverter);
-        // this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
         this.addSortType(IP_ADDRESS, ipAddress, sortIP);
 
         this.stt = new SortableTable(tf.tbl, _sortTypes);
@@ -526,21 +507,6 @@ function usNumberConverter(s) {
 function euNumberConverter(s) {
     return unformatNb(s, FORMATTED_NUMBER_EU);
 }
-// function dateConverter(s, format) {
-//     return formatDate(s, format);
-// }
-// function dmyDateConverter(s) {
-//     return dateConverter(s, 'DMY');
-// }
-// function mdyDateConverter(s) {
-//     return dateConverter(s, 'MDY');
-// }
-// function ymdDateConverter(s) {
-//     return dateConverter(s, 'YMD');
-// }
-// function ddmmmyyyyDateConverter(s) {
-//     return dateConverter(s, 'DDMMMYYYY');
-// }
 
 function ipAddress(value) {
     let vals = value.split('.');

@@ -8,7 +8,6 @@ import {isEmpty as isEmptyString} from './string';
 import {
     isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef
 } from './types';
-// import {formatDate, isValidDate} from './date';
 import {unformat as unformatNb} from './number'
 
 import {root} from './root';
@@ -1794,10 +1793,6 @@ export class TableFilter {
             sA = matchCase(sA, this.caseSensitive);
 
             let occurence = false;
-            // let dtType = this.hasColDateType ?
-            //     this.colDateType[colIdx] : this.defaultDateType;
-            // let dtType = this.hasType(colIdx, [DATE]) ?
-            //     this.colTypes[colIdx] : this.defaultDateType;
 
             //Search arg operator tests
             let hasLO = re_l.test(sA),

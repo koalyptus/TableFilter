@@ -76,13 +76,15 @@ var tfConfig = {
     status_bar: true,
     col_types: [
         'string', 'string', 'string',
-        'formatted-number-eu', 'formatted-number', 'string',
         {
-            type: 'date', locale: 'fr'/*,
-            format: ['{dd}/{MM}/{yyyy}', '{dd}-{MM}-{yyyy|yy}']*/
+            type: 'number', decimal: ',', thousands: '.'
+        }, 'formatted-number', 'string',
+        {
+            type: 'date', locale: 'en',
+            format: ['{dd}/{MM}/{yyyy}', '{dd}-{MM}-{yyyy|yy}']
         },
-        { type: 'date', locale: 'en'/*, format: '{dd}-{MM}-{yyyy|yy}'*/ },
-        'date',
+        { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}' },
+        { type: 'date', locale: 'en', format: '{dd}-{months}-{yyyy|yy}' },
         'ipaddress'
     ],
     rows_always_visible: [totRowIndex],
@@ -93,9 +95,8 @@ var tfConfig = {
         o.filter();
     },
     extensions:[
+        { name: 'sort' },
         {
-            name: 'sort'
-        },{
             name: 'colOps',
             id: ['sum1', 'sum2'],
             col: [3, 4],
