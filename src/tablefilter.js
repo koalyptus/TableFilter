@@ -31,8 +31,7 @@ import {DateType} from './modules/dateType';
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
     ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
-    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE/*, FORMATTED_NUMBER,
-    FORMATTED_NUMBER_EU*/
+    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER
 } from './const';
 
 let doc = root.document;
@@ -1753,7 +1752,7 @@ export class TableFilter {
         let searchArgs = this.getFiltersValue();
 
         let numData;
-        let nbFormat = this.decimalSeparator;
+        let decimal = this.decimalSeparator;
         let re_le = new RegExp(this.leOperator),
             re_ge = new RegExp(this.geOperator),
             re_l = new RegExp(this.lwOperator),
@@ -1826,6 +1825,7 @@ export class TableFilter {
                 let parseDate = dateType.parse.bind(dateType);
                 let locale = dateType.getOptions(colIdx).locale || this.locale;
 
+                // Search arg dates tests
                 let isLDate = hasLO &&
                     isValidDate(sA.replace(re_l, ''), locale);
                 let isLEDate = hasLE &&
@@ -1902,36 +1902,18 @@ export class TableFilter {
             }
 
             else {
-                //first numbers need to be unformatted
-                // if (this.hasType(colIdx, [NUMBER])) {
-                //     numData = Number(cellData);
-                // }
-                // else if (this.hasType(colIdx,
-                //     [FORMATTED_NUMBER, FORMATTED_NUMBER_EU])) {
-                //     numData =unformatNb(cellData, this.colTypes[colIdx]);
-                //     nbFormat = this.colTypes[colIdx];
-                // } else {
-                //     if (this.thousandsSeparator === ',' &&
-                //         this.decimalSeparator === '.') {
-                //         nbFormat = FORMATTED_NUMBER;
-                //     } else {
-                //         nbFormat = FORMATTED_NUMBER_EU;
-                //     }
-                //     numData = unformatNb(cellData, nbFormat);
-                // }
-
-                if (this.hasType(colIdx, [NUMBER])) {
+                if (this.hasType(colIdx, [FORMATTED_NUMBER])) {
                     let colType = this.colTypes[colIdx];
                     if (colType.hasOwnProperty('decimal')) {
-                        nbFormat = colType.decimal;
+                        decimal = colType.decimal;
                     }
-                    // numData = Number(cellData) ||parseNb(cellData, nbFormat);
+                    // numData = Number(cellData) ||parseNb(cellData, decimal);
                 }
                 // else {
                 //     numData = Number(cellData) ||
                 //         parseNb(cellData, tf.decimalSeparator);
                 // }
-                numData = Number(cellData) || parseNb(cellData, nbFormat);
+                numData = Number(cellData) || parseNb(cellData, decimal);
 
                 // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
                 // rgx:)
@@ -1939,28 +1921,28 @@ export class TableFilter {
                 if (hasLE) {
                     occurence = numData <= parseNb(
                         sA.replace(re_le, ''),
-                        nbFormat
+                        decimal
                     );
                 }
                 //greater equal
                 else if (hasGE) {
                     occurence = numData >= parseNb(
                         sA.replace(re_ge, ''),
-                        nbFormat
+                        decimal
                     );
                 }
                 //lower
                 else if (hasLO) {
                     occurence = numData < parseNb(
                         sA.replace(re_l, ''),
-                        nbFormat
+                        decimal
                     );
                 }
                 //greater
                 else if (hasGR) {
                     occurence = numData > parseNb(
                         sA.replace(re_g, ''),
-                        nbFormat
+                        decimal
                     );
                 }
                 //different
@@ -2015,14 +1997,12 @@ export class TableFilter {
                     // If numeric type data, perform a strict equality test and
                     // fallback to unformatted number string comparison
                     if (numData &&
-                        this.hasType(colIdx,
-                            [NUMBER
-                            /*, FORMATTED_NUMBER, FORMATTED_NUMBER_EU*/]) &&
+                        this.hasType(colIdx, [NUMBER, FORMATTED_NUMBER]) &&
                         !this.singleSearchFlt) {
                         // parseNb can return 0 for strings which are not
                         // formatted numbers, in that case return the original
                         // string. TODO: handle this in parseNb
-                        sA = parseNb(sA, nbFormat) || sA;
+                        sA = parseNb(sA, decimal) || sA;
                         occurence = numData === sA ||
                             contains(sA.toString(), numData.toString(),
                                 this.isExactMatch(colIdx), this.caseSensitive);
@@ -2179,17 +2159,19 @@ export class TableFilter {
                         continue;
                     }
                     let cellData = this.getCellData(cell[j]);
-                    // let nbFormat = this.hasType(colIndex,
+                    // let decimal = this.hasType(colIndex,
                     //     [FORMATTED_NUMBER, FORMATTED_NUMBER_EU]) ?
                     //     this.colTypes[colIndex] : undefined;
                     let decimal = this.decimalSeparator;
-                    if (this.hasType(colIndex, [NUMBER])) {
+                    if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
                         let colType = this.colTypes[colIndex];
                         if (colType.hasOwnProperty('decimal')) {
                             decimal = colType.decimal;
                         }
                     }
-                    let data = num ? parseNb(cellData, decimal) : cellData;
+                    let data = num ?
+                        Number(cellData) || parseNb(cellData, decimal) :
+                        cellData;
                     colValues.push(data);
                 }
             }

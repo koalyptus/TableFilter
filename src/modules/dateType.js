@@ -19,8 +19,6 @@ export class DateType {
         // Global locale
         this.datetime.setLocale(this.locale);
 
-        // let locale = this.datetime.getLocale(this.locale);
-
         // Add formats from column types configuration if any
         this.addConfigFormats(this.tf.colTypes);
         // locale.addFormat('{dd}/{MM}/{yyyy}');
@@ -51,7 +49,7 @@ export class DateType {
         return isObj(colType) ? colType : {};
     }
 
-    addConfigFormats(types=[]) {console.log(types);
+    addConfigFormats(types=[]) {
         types.forEach((type, idx) => {
             let options = this.getOptions(idx, types);
             if (options.hasOwnProperty('format')) {

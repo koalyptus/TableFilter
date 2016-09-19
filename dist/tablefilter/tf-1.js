@@ -2841,12 +2841,13 @@ webpackJsonp([1],{
 	                if ((0, _types.isObj)(colType)) {
 	                    if (colType.type === _const.DATE) {
 	                        colType = this._addDateType(i, sortTypes);
-	                    } else if (colType.type === _const.NUMBER) {
+	                    } else if (colType.type === _const.FORMATTED_NUMBER) {
 	                        var decimal = colType.decimal || tf.decimalSeparator;
 	                        colType = this._addNumberType(i, decimal);
 	                    }
 	                } else {
 	                    colType = colType.toLowerCase();
+	                    // TODO: normalise 'none' vs 'None'
 	                    if (colType === _const.NONE) {
 	                        colType = 'None';
 	                    }
@@ -2854,30 +2855,6 @@ webpackJsonp([1],{
 	            } else {
 	                colType = _const.STRING;
 	            }
-	            // if (sortTypes[i]) {
-	            //     colType = sortTypes[i];
-	            //     if (isObj(colType)) {
-	            //         if (colType.type === DATE) {
-	            //             colType = this._addDateType(i, sortTypes);
-	            //         }
-	            //         else if (colType.type === NUMBER) {
-	
-	            //         }
-	            //     }
-	            //     colType = colType.toLowerCase();
-	            //     if (colType === NONE) {
-	            //         colType = 'None';
-	            //     }
-	            // } else { // resolve column types
-	            //     if (tf.hasType(i, [NUMBER/*, FORMATTED_NUMBER,
-	            //         FORMATTED_NUMBER_EU, IP_ADDRESS*/])) {
-	            //         colType = tf.colTypes[i].toLowerCase();
-	            //     } else if (tf.hasType(i, [DATE])) {
-	            //         colType = this._addDateType(i);
-	            //     } else {
-	            //         colType = STRING;
-	            //     }
-	            // }
 	            _sortTypes.push(colType);
 	        }
 	
@@ -2887,10 +2864,8 @@ webpackJsonp([1],{
 	        this.addSortType(_const.NUMBER, Number);
 	        this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
 	        this.addSortType(_const.STRING);
-	        // this.addSortType(FORMATTED_NUMBER, usNumberConverter);
-	        // this.addSortType(FORMATTED_NUMBER_EU, euNumberConverter);
 	        this.addSortType(_const.IP_ADDRESS, ipAddress, sortIP);
-	        console.log(_sortTypes);
+	
 	        this.stt = new SortableTable(tf.tbl, _sortTypes);
 	
 	        /*** external table headers adapter ***/
@@ -2932,7 +2907,7 @@ webpackJsonp([1],{
 	    };
 	
 	    AdapterSortableTable.prototype._addNumberType = function _addNumberType(colIndex, decimal) {
-	        var colType = _const.NUMBER + '-format' + (decimal === '.' ? '' : '-custom');
+	        var colType = '' + _const.FORMATTED_NUMBER + (decimal === '.' ? '' : '-custom');
 	
 	        this.addSortType(colType, function (value) {
 	            return (0, _number.parse)(value, decimal);
@@ -2975,12 +2950,7 @@ webpackJsonp([1],{
 	}(_feature.Feature);
 	
 	//Converters
-	// function usNumberConverter(s) {
-	//     return parseNb(s, FORMATTED_NUMBER);
-	// }
-	// function euNumberConverter(s) {
-	//     return parseNb(s, FORMATTED_NUMBER_EU);
-	// }
+	
 	
 	exports.default = AdapterSortableTable;
 	function ipAddress(value) {

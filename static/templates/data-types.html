@@ -77,26 +77,24 @@ var tfConfig = {
     col_types: [
         'string', 'string', 'string',
         {
-            type: 'number', decimal: ',', thousands: '.'
+            type: 'formatted-number', decimal: ',', thousands: '.'
         },
+        'formatted-number', 'string',
         {
-            type: 'number', decimal: '.', thousands: ','
-        },
-        'string',
-        {
-            type: 'date', locale: 'en',
-            format: ['{dd}/{MM}/{yyyy}', '{dd}-{MM}-{yyyy|yy}']
+            type: 'date', locale: 'fr'/*,
+            format: ['{dd}/{MM}/{yyyy}', '{dd}-{MM}-{yyyy|yy}']*/
         },
         { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}' },
-        { type: 'date', locale: 'en', format: '{dd}-{months}-{yyyy|yy}' },
+        { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
         'ipaddress'
     ],
     rows_always_visible: [totRowIndex],
-    on_filters_loaded: function(o){
-        o.setFilterValue(3, '>1.000');
-        o.setFilterValue(4, '<2,500');
-        o.setFilterValue(6, '>23-01-95');
-        o.filter();
+    on_filters_loaded: function(tf){
+        tf.setFilterValue(3, '>1.000');
+        tf.setFilterValue(4, '<2,500');
+        tf.setFilterValue(6, '>23-01-95');
+        tf.setFilterValue(8, '<2000');
+        tf.filter();
     },
     extensions:[
         { name: 'sort' },
@@ -138,9 +136,9 @@ var tf2Config = {
         'string', 'number', 'string',
         'number', 'string', 'date'
     ],
-    on_filters_loaded: function(o){
-        o.setFilterValue(5, '>95-05-18');
-        o.filter();
+    on_filters_loaded: function(tf){
+        tf.setFilterValue(5, '>95-05-18');
+        tf.filter();
     }
 };
 var tf2 = new TableFilter('demo', tf2Config);

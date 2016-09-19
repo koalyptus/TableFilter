@@ -4,8 +4,8 @@ import {createElm, elm, getText, tag} from '../../dom';
 import {addEvt} from '../../event';
 import {parse as parseNb} from '../../number';
 import {
-    NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, DATE, /*FORMATTED_NUMBER,
-    FORMATTED_NUMBER_EU,*/ IP_ADDRESS
+    NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, DATE, FORMATTED_NUMBER,
+    IP_ADDRESS
 } from '../../const';
 
 /**
@@ -407,12 +407,13 @@ export default class AdapterSortableTable extends Feature {
                     if (colType.type === DATE) {
                         colType = this._addDateType(i, sortTypes);
                     }
-                    else if (colType.type === NUMBER) {
+                    else if (colType.type === FORMATTED_NUMBER) {
                         let decimal = colType.decimal || tf.decimalSeparator;
                         colType = this._addNumberType(i, decimal);
                     }
                 } else {
                     colType = colType.toLowerCase();
+                    // TODO: normalise 'none' vs 'None'
                     if (colType === NONE) {
                         colType = 'None';
                     }
@@ -420,30 +421,6 @@ export default class AdapterSortableTable extends Feature {
             } else {
                 colType = STRING;
             }
-            // if (sortTypes[i]) {
-            //     colType = sortTypes[i];
-            //     if (isObj(colType)) {
-            //         if (colType.type === DATE) {
-            //             colType = this._addDateType(i, sortTypes);
-            //         }
-            //         else if (colType.type === NUMBER) {
-
-            //         }
-            //     }
-            //     colType = colType.toLowerCase();
-            //     if (colType === NONE) {
-            //         colType = 'None';
-            //     }
-            // } else { // resolve column types
-            //     if (tf.hasType(i, [NUMBER/*, FORMATTED_NUMBER,
-            //         FORMATTED_NUMBER_EU, IP_ADDRESS*/])) {
-            //         colType = tf.colTypes[i].toLowerCase();
-            //     } else if (tf.hasType(i, [DATE])) {
-            //         colType = this._addDateType(i);
-            //     } else {
-            //         colType = STRING;
-            //     }
-            // }
             _sortTypes.push(colType);
         }
 
@@ -453,10 +430,8 @@ export default class AdapterSortableTable extends Feature {
         this.addSortType(NUMBER, Number);
         this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
         this.addSortType(STRING);
-        // this.addSortType(FORMATTED_NUMBER, usNumberConverter);
-        // this.addSortType(FORMATTED_NUMBER_EU, euNumberConverter);
         this.addSortType(IP_ADDRESS, ipAddress, sortIP);
-        console.log(_sortTypes);
+
         this.stt = new SortableTable(tf.tbl, _sortTypes);
 
         /*** external table headers adapter ***/
@@ -496,7 +471,7 @@ export default class AdapterSortableTable extends Feature {
     }
 
     _addNumberType(colIndex, decimal) {
-        let colType = `${NUMBER}-format${decimal === '.' ? '' : '-custom'}`;
+        let colType = `${FORMATTED_NUMBER}${decimal === '.' ? '' : '-custom'}`;
 
         this.addSortType(colType, (value) => {
             return parseNb(value, decimal);
@@ -533,13 +508,6 @@ export default class AdapterSortableTable extends Feature {
 }
 
 //Converters
-// function usNumberConverter(s) {
-//     return parseNb(s, FORMATTED_NUMBER);
-// }
-// function euNumberConverter(s) {
-//     return parseNb(s, FORMATTED_NUMBER_EU);
-// }
-
 function ipAddress(value) {
     let vals = value.split('.');
     for (let x in vals) {

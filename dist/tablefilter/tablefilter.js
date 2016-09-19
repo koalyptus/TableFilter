@@ -1949,7 +1949,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var searchArgs = this.getFiltersValue();
 	
 	        var numData = void 0;
-	        var nbFormat = this.decimalSeparator;
+	        var decimal = this.decimalSeparator;
 	        var re_le = new RegExp(this.leOperator),
 	            re_ge = new RegExp(this.geOperator),
 	            re_l = new RegExp(this.lwOperator),
@@ -2024,6 +2024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var parseDate = dateType.parse.bind(dateType);
 	                    var locale = dateType.getOptions(colIdx).locale || this.locale;
 	
+	                    // Search arg dates tests
 	                    var isLDate = hasLO && isValidDate(sA.replace(re_l, ''), locale);
 	                    var isLEDate = hasLE && isValidDate(sA.replace(re_le, ''), locale);
 	                    var isGDate = hasGR && isValidDate(sA.replace(re_g, ''), locale);
@@ -2090,55 +2091,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                        occurence = (0, _string.contains)(sA, cellData, this.isExactMatch(colIdx), this.caseSensitive);
 	                                                    }
 	                } else {
-	                //first numbers need to be unformatted
-	                // if (this.hasType(colIdx, [NUMBER])) {
-	                //     numData = Number(cellData);
-	                // }
-	                // else if (this.hasType(colIdx,
-	                //     [FORMATTED_NUMBER, FORMATTED_NUMBER_EU])) {
-	                //     numData =unformatNb(cellData, this.colTypes[colIdx]);
-	                //     nbFormat = this.colTypes[colIdx];
-	                // } else {
-	                //     if (this.thousandsSeparator === ',' &&
-	                //         this.decimalSeparator === '.') {
-	                //         nbFormat = FORMATTED_NUMBER;
-	                //     } else {
-	                //         nbFormat = FORMATTED_NUMBER_EU;
-	                //     }
-	                //     numData = unformatNb(cellData, nbFormat);
-	                // }
-	
-	                if (this.hasType(colIdx, [_const.NUMBER
-	                /*, FORMATTED_NUMBER, FORMATTED_NUMBER_EU*/])) {
+	                if (this.hasType(colIdx, [_const.FORMATTED_NUMBER])) {
 	                    var colType = this.colTypes[colIdx];
 	                    if (colType.hasOwnProperty('decimal')) {
-	                        nbFormat = colType.decimal;
+	                        decimal = colType.decimal;
 	                    }
-	                    // numData = Number(cellData) ||parseNb(cellData, nbFormat);
+	                    // numData = Number(cellData) ||parseNb(cellData, decimal);
 	                }
 	                // else {
 	                //     numData = Number(cellData) ||
 	                //         parseNb(cellData, tf.decimalSeparator);
 	                // }
-	                numData = Number(cellData) || (0, _number.parse)(cellData, nbFormat);
+	                numData = Number(cellData) || (0, _number.parse)(cellData, decimal);
 	
 	                // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
 	                // rgx:)
 	                // lower equal
 	                if (hasLE) {
-	                    occurence = numData <= (0, _number.parse)(sA.replace(re_le, ''), nbFormat);
+	                    occurence = numData <= (0, _number.parse)(sA.replace(re_le, ''), decimal);
 	                }
 	                //greater equal
 	                else if (hasGE) {
-	                        occurence = numData >= (0, _number.parse)(sA.replace(re_ge, ''), nbFormat);
+	                        occurence = numData >= (0, _number.parse)(sA.replace(re_ge, ''), decimal);
 	                    }
 	                    //lower
 	                    else if (hasLO) {
-	                            occurence = numData < (0, _number.parse)(sA.replace(re_l, ''), nbFormat);
+	                            occurence = numData < (0, _number.parse)(sA.replace(re_l, ''), decimal);
 	                        }
 	                        //greater
 	                        else if (hasGR) {
-	                                occurence = numData > (0, _number.parse)(sA.replace(re_g, ''), nbFormat);
+	                                occurence = numData > (0, _number.parse)(sA.replace(re_g, ''), decimal);
 	                            }
 	                            //different
 	                            else if (hasDF) {
@@ -2183,11 +2165,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                            } else {
 	                                                                // If numeric type data, perform a strict equality test and
 	                                                                // fallback to unformatted number string comparison
-	                                                                if (numData && this.hasType(colIdx, [_const.NUMBER]) && !this.singleSearchFlt) {
+	                                                                if (numData && this.hasType(colIdx, [_const.NUMBER, _const.FORMATTED_NUMBER]) && !this.singleSearchFlt) {
 	                                                                    // parseNb can return 0 for strings which are not
 	                                                                    // formatted numbers, in that case return the original
 	                                                                    // string. TODO: handle this in parseNb
-	                                                                    sA = (0, _number.parse)(sA, nbFormat) || sA;
+	                                                                    sA = (0, _number.parse)(sA, decimal) || sA;
 	                                                                    occurence = numData === sA || (0, _string.contains)(sA.toString(), numData.toString(), this.isExactMatch(colIdx), this.caseSensitive);
 	                                                                } else {
 	                                                                    // Finally test search term is contained in cell data
@@ -2346,17 +2328,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        continue;
 	                    }
 	                    var cellData = this.getCellData(cell[j]);
-	                    // let nbFormat = this.hasType(colIndex,
+	                    // let decimal = this.hasType(colIndex,
 	                    //     [FORMATTED_NUMBER, FORMATTED_NUMBER_EU]) ?
 	                    //     this.colTypes[colIndex] : undefined;
 	                    var decimal = this.decimalSeparator;
-	                    if (this.hasType(colIndex, [_const.NUMBER])) {
+	                    if (this.hasType(colIndex, [_const.FORMATTED_NUMBER])) {
 	                        var colType = this.colTypes[colIndex];
 	                        if (colType.hasOwnProperty('decimal')) {
 	                            decimal = colType.decimal;
 	                        }
 	                    }
-	                    var data = num ? (0, _number.parse)(cellData, decimal) : cellData;
+	                    var data = num ? Number(cellData) || (0, _number.parse)(cellData, decimal) : cellData;
 	                    colValues.push(data);
 	                }
 	            }
@@ -4687,12 +4669,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @type {String}
 	 */
 	var FORMATTED_NUMBER = exports.FORMATTED_NUMBER = 'formatted-number';
-	
-	/**
-	 * Formatted number
-	 * @type {String}
-	 */
-	var FORMATTED_NUMBER_EU = exports.FORMATTED_NUMBER_EU = 'formatted-number-eu';
 	
 	/**
 	 * Date
@@ -10220,8 +10196,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Global locale
 	        this.datetime.setLocale(this.locale);
 	
-	        // let locale = this.datetime.getLocale(this.locale);
-	
 	        // Add formats from column types configuration if any
 	        this.addConfigFormats(this.tf.colTypes);
 	        // locale.addFormat('{dd}/{MM}/{yyyy}');
@@ -10256,7 +10230,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 	
 	        var types = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	        console.log(types);
+	
 	        types.forEach(function (type, idx) {
 	            var options = _this.getOptions(idx, types);
 	            if (options.hasOwnProperty('format')) {

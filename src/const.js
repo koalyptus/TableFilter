@@ -96,12 +96,6 @@ export const NUMBER = 'number';
 export const FORMATTED_NUMBER = 'formatted-number';
 
 /**
- * Formatted number
- * @type {String}
- */
-export const FORMATTED_NUMBER_EU = 'formatted-number-eu';
-
-/**
  * Date
  * @type {String}
  */
