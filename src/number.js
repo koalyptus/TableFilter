@@ -1,5 +1,5 @@
 import {isNumber} from './types';
-import {FORMATTED_NUMBER} from './const';
+// import {FORMATTED_NUMBER} from './const';
 
 /**
  * Returns a number for a formatted number
@@ -8,7 +8,7 @@ import {FORMATTED_NUMBER} from './const';
  * 'formatted-number-eu'
  * @return {Number} Unformatted number
  */
-export const unformat = (value, format = FORMATTED_NUMBER) => {
+export const parse = (value, decimal = '.') => {
     // Return the value as-is if it's already a number
     if (isNumber(value)) {
         return value;
@@ -16,7 +16,7 @@ export const unformat = (value, format = FORMATTED_NUMBER) => {
 
     // Build regex to strip out everything except digits, decimal point and
     // minus sign
-    let decimal = format !== FORMATTED_NUMBER ? ',' : '.';
+    // let decimal = format !== FORMATTED_NUMBER ? ',' : '.';
     let regex = new RegExp('[^0-9-' + decimal + ']', ['g']);
     let unformatted = parseFloat(
         ('' + value)

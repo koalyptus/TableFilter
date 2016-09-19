@@ -52,7 +52,9 @@ var tfConfig = {
             name: 'sort',
             types: [
                 'number', 'string', 'string',
-                'formatted-number', 'none', 'string'
+                { type: 'number', decimal: '.' },
+                // 'number',
+                'none', 'string'
             ]
         }
     ]

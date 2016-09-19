@@ -6,16 +6,16 @@ webpackJsonp([1],{
 	var map = {
 		"./array": 15,
 		"./array.js": 15,
-		"./const": 7,
-		"./const.js": 7,
+		"./const": 10,
+		"./const.js": 10,
 		"./cookie": 28,
 		"./cookie.js": 28,
 		"./date": 435,
 		"./date.js": 435,
 		"./dom": 3,
 		"./dom.js": 3,
-		"./emitter": 8,
-		"./emitter.js": 8,
+		"./emitter": 7,
+		"./emitter.js": 7,
 		"./event": 1,
 		"./event.js": 1,
 		"./extensions/advancedGrid/adapterEzEditTable": 436,
@@ -32,8 +32,8 @@ webpackJsonp([1],{
 		"./extensions/sort/adapterSortabletable.js": 441,
 		"./extensions/sort/sort": 442,
 		"./extensions/sort/sort.js": 442,
-		"./feature": 10,
-		"./feature.js": 10,
+		"./feature": 9,
+		"./feature.js": 9,
 		"./modules/alternateRows": 23,
 		"./modules/alternateRows.js": 23,
 		"./modules/checkList": 17,
@@ -44,8 +44,8 @@ webpackJsonp([1],{
 		"./modules/dateType.js": 29,
 		"./modules/dropdown": 14,
 		"./modules/dropdown.js": 14,
-		"./modules/gridLayout": 9,
-		"./modules/gridLayout.js": 9,
+		"./modules/gridLayout": 8,
+		"./modules/gridLayout.js": 8,
 		"./modules/hash": 26,
 		"./modules/hash.js": 26,
 		"./modules/help": 22,
@@ -324,11 +324,11 @@ webpackJsonp([1],{
 	    value: true
 	});
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	var _root = __webpack_require__(2);
 	
@@ -888,7 +888,7 @@ webpackJsonp([1],{
 	    value: true
 	});
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -1272,7 +1272,7 @@ webpackJsonp([1],{
 	    value: true
 	});
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -2054,7 +2054,7 @@ webpackJsonp([1],{
 	        value: true
 	});
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -2408,7 +2408,7 @@ webpackJsonp([1],{
 	    value: true
 	});
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _types = __webpack_require__(4);
 	
@@ -2418,7 +2418,7 @@ webpackJsonp([1],{
 	
 	var _number = __webpack_require__(6);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -2465,7 +2465,7 @@ webpackJsonp([1],{
 	         * List of sort type per column basis
 	         * @type {Array}
 	         */
-	        _this.sortTypes = (0, _types.isArray)(opts.types) ? opts.types : [];
+	        _this.sortTypes = (0, _types.isArray)(opts.types) ? opts.types : tf.colTypes;
 	
 	        /**
 	         * Column to be sorted at initialization, ie:
@@ -2571,10 +2571,14 @@ webpackJsonp([1],{
 	            throw new Error('SortableTable class not found.');
 	        }
 	
+	        // Add any date format if needed
+	        var dateType = tf.feature('dateType');
+	        dateType.addConfigFormats(this.sortTypes);
+	
 	        this.overrideSortableTable();
 	        this.setSortTypes();
 	
-	        //Column sort at start
+	        // Column sort at start
 	        var sortColAtStart = adpt.sortColAtStart;
 	        if (sortColAtStart) {
 	            this.stt.sort(sortColAtStart[0], sortColAtStart[1]);
@@ -2828,34 +2832,52 @@ webpackJsonp([1],{
 	
 	        var tf = this.tf,
 	            sortTypes = this.sortTypes,
-	            _sortTypes = [],
-	            dateType = tf.feature('dateType');
-	        dateType.addConfigFormats(sortTypes);
+	            _sortTypes = [];
 	
 	        for (var i = 0; i < tf.getCellsNb(); i++) {
 	            var colType = void 0;
-	
 	            if (sortTypes[i]) {
 	                colType = sortTypes[i];
 	                if ((0, _types.isObj)(colType)) {
 	                    if (colType.type === _const.DATE) {
 	                        colType = this._addDateType(i, sortTypes);
+	                    } else if (colType.type === _const.NUMBER) {
+	                        var decimal = colType.decimal || tf.decimalSeparator;
+	                        colType = this._addNumberType(i, decimal);
+	                    }
+	                } else {
+	                    colType = colType.toLowerCase();
+	                    if (colType === _const.NONE) {
+	                        colType = 'None';
 	                    }
 	                }
-	                colType = colType.toLowerCase();
-	                if (colType === _const.NONE) {
-	                    colType = 'None';
-	                }
 	            } else {
-	                // resolve column types
-	                if (tf.hasType(i, [_const.NUMBER, _const.FORMATTED_NUMBER, _const.FORMATTED_NUMBER_EU, _const.IP_ADDRESS])) {
-	                    colType = tf.colTypes[i].toLowerCase();
-	                } else if (tf.hasType(i, [_const.DATE])) {
-	                    colType = this._addDateType(i);
-	                } else {
-	                    colType = _const.STRING;
-	                }
+	                colType = _const.STRING;
 	            }
+	            // if (sortTypes[i]) {
+	            //     colType = sortTypes[i];
+	            //     if (isObj(colType)) {
+	            //         if (colType.type === DATE) {
+	            //             colType = this._addDateType(i, sortTypes);
+	            //         }
+	            //         else if (colType.type === NUMBER) {
+	
+	            //         }
+	            //     }
+	            //     colType = colType.toLowerCase();
+	            //     if (colType === NONE) {
+	            //         colType = 'None';
+	            //     }
+	            // } else { // resolve column types
+	            //     if (tf.hasType(i, [NUMBER/*, FORMATTED_NUMBER,
+	            //         FORMATTED_NUMBER_EU, IP_ADDRESS*/])) {
+	            //         colType = tf.colTypes[i].toLowerCase();
+	            //     } else if (tf.hasType(i, [DATE])) {
+	            //         colType = this._addDateType(i);
+	            //     } else {
+	            //         colType = STRING;
+	            //     }
+	            // }
 	            _sortTypes.push(colType);
 	        }
 	
@@ -2865,10 +2887,10 @@ webpackJsonp([1],{
 	        this.addSortType(_const.NUMBER, Number);
 	        this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
 	        this.addSortType(_const.STRING);
-	        this.addSortType(_const.FORMATTED_NUMBER, usNumberConverter);
-	        this.addSortType(_const.FORMATTED_NUMBER_EU, euNumberConverter);
+	        // this.addSortType(FORMATTED_NUMBER, usNumberConverter);
+	        // this.addSortType(FORMATTED_NUMBER_EU, euNumberConverter);
 	        this.addSortType(_const.IP_ADDRESS, ipAddress, sortIP);
-	
+	        console.log(_sortTypes);
 	        this.stt = new SortableTable(tf.tbl, _sortTypes);
 	
 	        /*** external table headers adapter ***/
@@ -2903,8 +2925,17 @@ webpackJsonp([1],{
 	        var locale = dateType.getOptions(colIndex, types).locale || tf.locale;
 	        var colType = _const.DATE + '-' + locale;
 	
-	        this.addSortType(colType, function (dateStr) {
-	            return dateType.parse(dateStr, locale);
+	        this.addSortType(colType, function (value) {
+	            return dateType.parse(value, locale);
+	        });
+	        return colType;
+	    };
+	
+	    AdapterSortableTable.prototype._addNumberType = function _addNumberType(colIndex, decimal) {
+	        var colType = _const.NUMBER + '-format' + (decimal === '.' ? '' : '-custom');
+	
+	        this.addSortType(colType, function (value) {
+	            return (0, _number.parse)(value, decimal);
 	        });
 	        return colType;
 	    };
@@ -2944,16 +2975,14 @@ webpackJsonp([1],{
 	}(_feature.Feature);
 	
 	//Converters
-	
+	// function usNumberConverter(s) {
+	//     return parseNb(s, FORMATTED_NUMBER);
+	// }
+	// function euNumberConverter(s) {
+	//     return parseNb(s, FORMATTED_NUMBER_EU);
+	// }
 	
 	exports.default = AdapterSortableTable;
-	function usNumberConverter(s) {
-	    return (0, _number.unformat)(s, _const.FORMATTED_NUMBER);
-	}
-	function euNumberConverter(s) {
-	    return (0, _number.unformat)(s, _const.FORMATTED_NUMBER_EU);
-	}
-	
 	function ipAddress(value) {
 	    var vals = value.split('.');
 	    for (var x in vals) {

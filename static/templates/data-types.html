@@ -78,7 +78,11 @@ var tfConfig = {
         'string', 'string', 'string',
         {
             type: 'number', decimal: ',', thousands: '.'
-        }, 'formatted-number', 'string',
+        },
+        {
+            type: 'number', decimal: '.', thousands: ','
+        },
+        'string',
         {
             type: 'date', locale: 'en',
             format: ['{dd}/{MM}/{yyyy}', '{dd}-{MM}-{yyyy|yy}']

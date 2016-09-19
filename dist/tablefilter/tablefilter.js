@@ -126,9 +126,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _root = __webpack_require__(2);
 	
-	var _emitter = __webpack_require__(8);
+	var _emitter = __webpack_require__(7);
 	
-	var _gridLayout = __webpack_require__(9);
+	var _gridLayout = __webpack_require__(8);
 	
 	var _loader = __webpack_require__(11);
 	
@@ -158,7 +158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _dateType = __webpack_require__(29);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1948,8 +1948,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // search args re-init
 	        var searchArgs = this.getFiltersValue();
 	
-	        var numCellData = void 0;
-	        var nbFormat = void 0;
+	        var numData = void 0;
+	        var nbFormat = this.decimalSeparator;
 	        var re_le = new RegExp(this.leOperator),
 	            re_ge = new RegExp(this.geOperator),
 	            re_l = new RegExp(this.lwOperator),
@@ -2091,37 +2091,54 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                    }
 	                } else {
 	                //first numbers need to be unformatted
-	                if (this.hasType(colIdx, [_const.NUMBER])) {
-	                    numCellData = Number(cellData);
-	                } else if (this.hasType(colIdx, [_const.FORMATTED_NUMBER, _const.FORMATTED_NUMBER_EU])) {
-	                    numCellData = (0, _number.unformat)(cellData, this.colTypes[colIdx]);
-	                    nbFormat = this.colTypes[colIdx];
-	                } else {
-	                    if (this.thousandsSeparator === ',' && this.decimalSeparator === '.') {
-	                        nbFormat = _const.FORMATTED_NUMBER;
-	                    } else {
-	                        nbFormat = _const.FORMATTED_NUMBER_EU;
+	                // if (this.hasType(colIdx, [NUMBER])) {
+	                //     numData = Number(cellData);
+	                // }
+	                // else if (this.hasType(colIdx,
+	                //     [FORMATTED_NUMBER, FORMATTED_NUMBER_EU])) {
+	                //     numData =unformatNb(cellData, this.colTypes[colIdx]);
+	                //     nbFormat = this.colTypes[colIdx];
+	                // } else {
+	                //     if (this.thousandsSeparator === ',' &&
+	                //         this.decimalSeparator === '.') {
+	                //         nbFormat = FORMATTED_NUMBER;
+	                //     } else {
+	                //         nbFormat = FORMATTED_NUMBER_EU;
+	                //     }
+	                //     numData = unformatNb(cellData, nbFormat);
+	                // }
+	
+	                if (this.hasType(colIdx, [_const.NUMBER
+	                /*, FORMATTED_NUMBER, FORMATTED_NUMBER_EU*/])) {
+	                    var colType = this.colTypes[colIdx];
+	                    if (colType.hasOwnProperty('decimal')) {
+	                        nbFormat = colType.decimal;
 	                    }
-	                    numCellData = (0, _number.unformat)(cellData, nbFormat);
+	                    // numData = Number(cellData) ||parseNb(cellData, nbFormat);
 	                }
+	                // else {
+	                //     numData = Number(cellData) ||
+	                //         parseNb(cellData, tf.decimalSeparator);
+	                // }
+	                numData = Number(cellData) || (0, _number.parse)(cellData, nbFormat);
 	
 	                // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
 	                // rgx:)
 	                // lower equal
 	                if (hasLE) {
-	                    occurence = numCellData <= (0, _number.unformat)(sA.replace(re_le, ''), nbFormat);
+	                    occurence = numData <= (0, _number.parse)(sA.replace(re_le, ''), nbFormat);
 	                }
 	                //greater equal
 	                else if (hasGE) {
-	                        occurence = numCellData >= (0, _number.unformat)(sA.replace(re_ge, ''), nbFormat);
+	                        occurence = numData >= (0, _number.parse)(sA.replace(re_ge, ''), nbFormat);
 	                    }
 	                    //lower
 	                    else if (hasLO) {
-	                            occurence = numCellData < (0, _number.unformat)(sA.replace(re_l, ''), nbFormat);
+	                            occurence = numData < (0, _number.parse)(sA.replace(re_l, ''), nbFormat);
 	                        }
 	                        //greater
 	                        else if (hasGR) {
-	                                occurence = numCellData > (0, _number.unformat)(sA.replace(re_g, ''), nbFormat);
+	                                occurence = numData > (0, _number.parse)(sA.replace(re_g, ''), nbFormat);
 	                            }
 	                            //different
 	                            else if (hasDF) {
@@ -2166,12 +2183,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                            } else {
 	                                                                // If numeric type data, perform a strict equality test and
 	                                                                // fallback to unformatted number string comparison
-	                                                                if (numCellData && this.hasType(colIdx, [_const.NUMBER, _const.FORMATTED_NUMBER, _const.FORMATTED_NUMBER_EU]) && !this.singleSearchFlt) {
-	                                                                    // unformatNb can return 0 for strings which are not
+	                                                                if (numData && this.hasType(colIdx, [_const.NUMBER]) && !this.singleSearchFlt) {
+	                                                                    // parseNb can return 0 for strings which are not
 	                                                                    // formatted numbers, in that case return the original
-	                                                                    // string. TODO: handle this in unformatNb
-	                                                                    sA = (0, _number.unformat)(sA, nbFormat) || sA;
-	                                                                    occurence = numCellData === sA || (0, _string.contains)(sA.toString(), numCellData.toString(), this.isExactMatch(colIdx), this.caseSensitive);
+	                                                                    // string. TODO: handle this in parseNb
+	                                                                    sA = (0, _number.parse)(sA, nbFormat) || sA;
+	                                                                    occurence = numData === sA || (0, _string.contains)(sA.toString(), numData.toString(), this.isExactMatch(colIdx), this.caseSensitive);
 	                                                                } else {
 	                                                                    // Finally test search term is contained in cell data
 	                                                                    occurence = (0, _string.contains)(sA, cellData, this.isExactMatch(colIdx), this.caseSensitive);
@@ -2329,8 +2346,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        continue;
 	                    }
 	                    var cellData = this.getCellData(cell[j]);
-	                    var nbFormat = this.hasType(colIndex, [_const.FORMATTED_NUMBER, _const.FORMATTED_NUMBER_EU]) ? this.colTypes[colIndex] : undefined;
-	                    var data = num ? (0, _number.unformat)(cellData, nbFormat) : cellData;
+	                    // let nbFormat = this.hasType(colIndex,
+	                    //     [FORMATTED_NUMBER, FORMATTED_NUMBER_EU]) ?
+	                    //     this.colTypes[colIndex] : undefined;
+	                    var decimal = this.decimalSeparator;
+	                    if (this.hasType(colIndex, [_const.NUMBER])) {
+	                        var colType = this.colTypes[colIndex];
+	                        if (colType.hasOwnProperty('decimal')) {
+	                            decimal = colType.decimal;
+	                        }
+	                    }
+	                    var data = num ? (0, _number.parse)(cellData, decimal) : cellData;
 	                    colValues.push(data);
 	                }
 	            }
@@ -3746,11 +3772,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.unformat = undefined;
+	exports.parse = undefined;
 	
 	var _types = __webpack_require__(4);
 	
-	var _const = __webpack_require__(7);
+	// import {FORMATTED_NUMBER} from './const';
 	
 	/**
 	 * Returns a number for a formatted number
@@ -3759,8 +3785,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * 'formatted-number-eu'
 	 * @return {Number} Unformatted number
 	 */
-	var unformat = exports.unformat = function unformat(value) {
-	    var format = arguments.length <= 1 || arguments[1] === undefined ? _const.FORMATTED_NUMBER : arguments[1];
+	var parse = exports.parse = function parse(value) {
+	    var decimal = arguments.length <= 1 || arguments[1] === undefined ? '.' : arguments[1];
 	
 	    // Return the value as-is if it's already a number
 	    if ((0, _types.isNumber)(value)) {
@@ -3769,7 +3795,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    // Build regex to strip out everything except digits, decimal point and
 	    // minus sign
-	    var decimal = format !== _const.FORMATTED_NUMBER ? ',' : '.';
+	    // let decimal = format !== FORMATTED_NUMBER ? ',' : '.';
 	    var regex = new RegExp('[^0-9-' + decimal + ']', ['g']);
 	    var unformatted = parseFloat(('' + value).replace(/\((.*)\)/, '-$1') // replace bracketed values with negatives
 	    .replace(regex, '') // strip out any cruft
@@ -3782,140 +3808,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 7 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	/**
-	 * Filter types
-	 */
-	
-	/**
-	 * Input filter type
-	 * @type {String}
-	 */
-	var INPUT = exports.INPUT = 'input';
-	/**
-	 * Select filter type
-	 * @type {String}
-	 */
-	var SELECT = exports.SELECT = 'select';
-	/**
-	 * Multiple select filter type
-	 * @type {String}
-	 */
-	var MULTIPLE = exports.MULTIPLE = 'multiple';
-	/**
-	 * Checklist filter type
-	 * @type {String}
-	 */
-	var CHECKLIST = exports.CHECKLIST = 'checklist';
-	/**
-	 * None filter type
-	 * @type {String}
-	 */
-	var NONE = exports.NONE = 'none';
-	
-	/**
-	 * Key codes
-	 */
-	
-	/**
-	 * Enter key code
-	 * @type {Number}
-	 */
-	var ENTER_KEY = exports.ENTER_KEY = 13;
-	/**
-	 * Tab key code
-	 * @type {Number}
-	 */
-	var TAB_KEY = exports.TAB_KEY = 9;
-	/**
-	 * Escape key code
-	 * @type {Number}
-	 */
-	var ESC_KEY = exports.ESC_KEY = 27;
-	/**
-	 * Up arrow key code
-	 * @type {Number}
-	 */
-	var UP_ARROW_KEY = exports.UP_ARROW_KEY = 38;
-	/**
-	 * Down arrow key code
-	 * @type {Number}
-	 */
-	var DOWN_ARROW_KEY = exports.DOWN_ARROW_KEY = 40;
-	
-	/**
-	 * HTML tags
-	 */
-	
-	/**
-	 * Header cell tag
-	 * @type {String}
-	 */
-	var HEADER_TAG = exports.HEADER_TAG = 'TH';
-	/**
-	 * Cell tag
-	 * @type {String}
-	 */
-	var CELL_TAG = exports.CELL_TAG = 'TD';
-	
-	/**
-	 * Data types
-	 */
-	
-	/**
-	 * String
-	 * @type {String}
-	 */
-	var STRING = exports.STRING = 'string';
-	
-	/**
-	 * Number
-	 * @type {String}
-	 */
-	var NUMBER = exports.NUMBER = 'number';
-	
-	/**
-	 * Formatted number
-	 * @type {String}
-	 */
-	var FORMATTED_NUMBER = exports.FORMATTED_NUMBER = 'formatted-number';
-	
-	/**
-	 * Formatted number
-	 * @type {String}
-	 */
-	var FORMATTED_NUMBER_EU = exports.FORMATTED_NUMBER_EU = 'formatted-number-eu';
-	
-	/**
-	 * Date
-	 * @type {String}
-	 */
-	var DATE = exports.DATE = 'date';
-	
-	/**
-	 * IP address
-	 * @type {String}
-	 */
-	var IP_ADDRESS = exports.IP_ADDRESS = 'ipaddress';
-	
-	/**
-	 * Default values
-	 */
-	
-	/**
-	 * Auto filter delay in milliseconds
-	 * @type {Number}
-	 */
-	var AUTO_FILTER_DELAY = exports.AUTO_FILTER_DELAY = 750;
-
-/***/ },
-/* 8 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3995,7 +3887,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4005,7 +3897,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.GridLayout = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -4013,7 +3905,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _string = __webpack_require__(5);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -4568,7 +4460,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_feature.Feature);
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -4691,6 +4583,140 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/**
+	 * Filter types
+	 */
+	
+	/**
+	 * Input filter type
+	 * @type {String}
+	 */
+	var INPUT = exports.INPUT = 'input';
+	/**
+	 * Select filter type
+	 * @type {String}
+	 */
+	var SELECT = exports.SELECT = 'select';
+	/**
+	 * Multiple select filter type
+	 * @type {String}
+	 */
+	var MULTIPLE = exports.MULTIPLE = 'multiple';
+	/**
+	 * Checklist filter type
+	 * @type {String}
+	 */
+	var CHECKLIST = exports.CHECKLIST = 'checklist';
+	/**
+	 * None filter type
+	 * @type {String}
+	 */
+	var NONE = exports.NONE = 'none';
+	
+	/**
+	 * Key codes
+	 */
+	
+	/**
+	 * Enter key code
+	 * @type {Number}
+	 */
+	var ENTER_KEY = exports.ENTER_KEY = 13;
+	/**
+	 * Tab key code
+	 * @type {Number}
+	 */
+	var TAB_KEY = exports.TAB_KEY = 9;
+	/**
+	 * Escape key code
+	 * @type {Number}
+	 */
+	var ESC_KEY = exports.ESC_KEY = 27;
+	/**
+	 * Up arrow key code
+	 * @type {Number}
+	 */
+	var UP_ARROW_KEY = exports.UP_ARROW_KEY = 38;
+	/**
+	 * Down arrow key code
+	 * @type {Number}
+	 */
+	var DOWN_ARROW_KEY = exports.DOWN_ARROW_KEY = 40;
+	
+	/**
+	 * HTML tags
+	 */
+	
+	/**
+	 * Header cell tag
+	 * @type {String}
+	 */
+	var HEADER_TAG = exports.HEADER_TAG = 'TH';
+	/**
+	 * Cell tag
+	 * @type {String}
+	 */
+	var CELL_TAG = exports.CELL_TAG = 'TD';
+	
+	/**
+	 * Data types
+	 */
+	
+	/**
+	 * String
+	 * @type {String}
+	 */
+	var STRING = exports.STRING = 'string';
+	
+	/**
+	 * Number
+	 * @type {String}
+	 */
+	var NUMBER = exports.NUMBER = 'number';
+	
+	/**
+	 * Formatted number
+	 * @type {String}
+	 */
+	var FORMATTED_NUMBER = exports.FORMATTED_NUMBER = 'formatted-number';
+	
+	/**
+	 * Formatted number
+	 * @type {String}
+	 */
+	var FORMATTED_NUMBER_EU = exports.FORMATTED_NUMBER_EU = 'formatted-number-eu';
+	
+	/**
+	 * Date
+	 * @type {String}
+	 */
+	var DATE = exports.DATE = 'date';
+	
+	/**
+	 * IP address
+	 * @type {String}
+	 */
+	var IP_ADDRESS = exports.IP_ADDRESS = 'ipaddress';
+	
+	/**
+	 * Default values
+	 */
+	
+	/**
+	 * Auto filter delay in milliseconds
+	 * @type {Number}
+	 */
+	var AUTO_FILTER_DELAY = exports.AUTO_FILTER_DELAY = 750;
+
+/***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -4701,7 +4727,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.Loader = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -4709,7 +4735,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _root = __webpack_require__(2);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -5093,7 +5119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.PopupFilter = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _types = __webpack_require__(4);
 	
@@ -5101,7 +5127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _event = __webpack_require__(1);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -5500,7 +5526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.Dropdown = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -5512,7 +5538,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _event = __webpack_require__(1);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -6043,7 +6069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.CheckList = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -6057,7 +6083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _types = __webpack_require__(4);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -6645,7 +6671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.RowsCounter = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -6902,7 +6928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.StatusBar = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _root = __webpack_require__(2);
 	
@@ -7274,7 +7300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -7282,7 +7308,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _event = __webpack_require__(1);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -8243,7 +8269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.ClearButton = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -8411,13 +8437,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.Help = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
 	var _event = __webpack_require__(1);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -8659,7 +8685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.AlternateRows = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
@@ -8843,13 +8869,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.NoResults = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _dom = __webpack_require__(3);
 	
 	var _types = __webpack_require__(4);
 	
-	var _const = __webpack_require__(7);
+	var _const = __webpack_require__(10);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -9098,7 +9124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.State = undefined;
 	
-	var _feature = __webpack_require__(10);
+	var _feature = __webpack_require__(9);
 	
 	var _hash = __webpack_require__(26);
 	
