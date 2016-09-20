@@ -1,54 +1,103 @@
 import {Date as SugarDate} from 'sugar-date';
 import 'sugar-date/locales';
+import {Feature} from '../feature';
 import {isObj, isArray} from '../types';
 
-export class DateType {
+/**
+ * Wrapper for Sugar Date module providing datetime helpers and locales
+ * @export
+ * @class DateType
+ */
+export class DateType extends Feature {
 
+    /**
+     * Creates an instance of DateType
+     * @param {TableFilter} tf TableFilter instance
+     */
     constructor(tf) {
-        this.tf = tf;
+        super(tf, 'dateType');
+
+        /**
+         * Global locale
+         * @type {String}
+         */
         this.locale = tf.locale;
+
+        /**
+         * Sugar Date instance
+         * @type {Object}
+         */
         this.datetime = SugarDate;
-        this.emitter = tf.emitter;
+
+        this.enable();
     }
 
+    /**
+     * Initialize DateType instance
+     */
     init() {
         if (this.initialized) {
             return;
         }
 
-        // Global locale
+        // Set global locale
         this.datetime.setLocale(this.locale);
 
         // Add formats from column types configuration if any
         this.addConfigFormats(this.tf.colTypes);
-        // locale.addFormat('{dd}/{MM}/{yyyy}');
-        // locale.addFormat('{MM}/{dd}/{yyyy}');
-        // locale.addFormat('{dd}-{months}-{yyyy|yy}');
-        // locale.addFormat('{dd}-{MM}-{yyyy|yy}');
 
-        this.initialized = true;
-
+        // Broadcast date-type initialization
         this.emitter.emit('date-type-initialized', this.tf, this);
+
+        /** @inherited */
+        this.initialized = true;
     }
 
+    /**
+     * Parse a string representation of a date for a specified locale and return
+     * a date object
+     * @param {String} dateStr String representation of a date
+     * @param {String} localeCode Locale code (ie 'en-us')
+     * @returns {Date}
+     */
     parse(dateStr, localeCode) {
-        // console.log('parse', dateStr, localeCode,
-        //     this.datetime.create(dateStr, localeCode));
         return this.datetime.create(dateStr, localeCode);
     }
 
+    /**
+     * Check string representation of a date for a specified locale is valid
+     * @param {any} dateStr String representation of a date
+     * @param {any} localeCode Locale code (ie 'en-us')
+     * @returns {Boolean}
+     */
     isValid(dateStr, localeCode) {
-        // console.log(dateStr, localeCode, this.parse(dateStr, localeCode),
-        //     this.datetime.isValid(this.parse(dateStr, localeCode)));
         return this.datetime.isValid(this.parse(dateStr, localeCode));
     }
 
+    /**
+     * Return the type object of a specified column as per configuration or
+     * passed collection
+     * @param {Number} colIndex Column index
+     * @param {Array} types Collection of column types, optional
+     * @returns {Object}
+     */
     getOptions(colIndex, types) {
         types = types || this.tf.colTypes;
         let colType = types[colIndex];
         return isObj(colType) ? colType : {};
     }
 
+    /**
+     * Add date time format(s) to a locale as specified by the passed
+     * collection of column types, ie:
+     *  [
+     *      'string',
+     *      'number',
+     *      { type: 'date', locale: 'en', format: ['{dd}/{MM}/{yyyy}']}
+     * ]
+     *
+     * @param {Array} [types=[]] Collection of column types
+     */
     addConfigFormats(types=[]) {
         types.forEach((type, idx) => {
             let options = this.getOptions(idx, types);
@@ -67,7 +116,16 @@ export class DateType {
         });
     }
 
+    /**
+     * Remove DateType instance
+     */
     destroy() {
+        if (!this.initialized) {
+            return;
+        }
+        this.datetime.removeLocale(this.locale);
+        // TODO: remove added formats
+
         this.initialized = false;
     }
 }

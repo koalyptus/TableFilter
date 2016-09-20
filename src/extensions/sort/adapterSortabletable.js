@@ -490,7 +490,6 @@ export default class AdapterSortableTable extends Feature {
         this.emitter.off(['sort'],
             (tf, colIdx, desc) => this.sortByColumnIndex(colIdx, desc));
         this.sorted = false;
-        this.initialized = false;
         this.stt.destroy();
 
         let ids = tf.getFiltersId();

@@ -76,6 +76,27 @@
         deepEqual(tf.getValidRows(), [7], 'Filtered rows');
     });
 
+    module('Pop-up filters, issue #295');
+    test('Sanity checks', function() {
+        var tf2 = new TableFilter('demo2', 2, {
+            base_path: '../dist/tablefilter/',
+            headers_row_index: 1,
+            popup_filters: true
+        });
+        tf2.init();
+        tf2.setFilterValue(1, 'Melb');
+        tf2.filter();
+
+        deepEqual(tf2 instanceof TableFilter, true, 'TableFilter instanciated');
+        deepEqual(tf2.getHeadersRowIndex(), 2, 'Headers row index');
+        deepEqual(tf2.getStartRowIndex(), 3, 'Reference row index');
+        deepEqual(tf2.getValidRows(), [6], 'Filtered rows');
+
+        tf2.clearFilters();
+        tf2.destroy();
+        deepEqual(tf2.isInitialized(), false, 'Filters removed');
+    });
+
     //Grid-layout currently does not support grouped headers
 
     module('Tear-down');

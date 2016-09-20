@@ -1296,6 +1296,9 @@ export class TableFilter {
      * Insert filters row at initialization
      */
     _insertFiltersRow() {
+        // TODO: prevent filters row generation for popup filters too,
+        // to reduce and simplify headers row index adjusting across lib modules
+        // (GridLayout, PopupFilter etc)
         if (this.gridLayout) {
             return;
         }

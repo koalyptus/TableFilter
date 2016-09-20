@@ -1435,6 +1435,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	    TableFilter.prototype._insertFiltersRow = function _insertFiltersRow() {
+	        // TODO: prevent filters row generation for popup filters too,
+	        // to reduce and simplify headers row index adjusting across lib modules
+	        // (GridLayout, PopupFilter etc)
 	        if (this.gridLayout) {
 	            return;
 	        }
@@ -5272,37 +5275,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var tf = this.tf;
 	
 	        // Override headers row index if no grouped headers
-	        if (tf.headersRow <= 1) {
+	        // TODO: Because of the filters row generation, headers row index needs
+	        // adjusting: prevent useless row generation
+	        if (tf.headersRow <= 1 && isNaN(tf.config().headers_row_index)) {
 	            tf.headersRow = 0;
 	        }
 	
-	        for (var i = 0; i < tf.nbCells; i++) {
-	            if (tf.getFilterType(i) === _const.NONE) {
-	                continue;
-	            }
-	            var popUpSpan = (0, _dom.createElm)('span', ['id', this.prfxSpan + tf.id + '_' + i], ['ci', i]);
-	            popUpSpan.innerHTML = this.iconHtml;
-	            var header = tf.getHeaderElement(i);
-	            header.appendChild(popUpSpan);
-	            (0, _event.addEvt)(popUpSpan, 'click', function (evt) {
-	                return _this2.onClick(evt);
-	            });
-	            this.fltSpans[i] = popUpSpan;
-	            this.fltIcons[i] = popUpSpan.firstChild;
+	        // Adjust headers row index for grid-layout mode
+	        // TODO: Because of the filters row generation, headers row index needs
+	        // adjusting: prevent useless row generation
+	        if (tf.gridLayout) {
+	            tf.headersRow--;
+	            this.buildIcons();
 	        }
 	
 	        // subscribe to events
 	        this.emitter.on(['before-filtering'], function () {
-	            return _this2.buildIcons();
+	            return _this2.setIconsState();
 	        });
 	        this.emitter.on(['after-filtering'], function () {
 	            return _this2.closeAll();
 	        });
 	        this.emitter.on(['cell-processed'], function (tf, cellIndex) {
-	            return _this2.buildIcon(cellIndex, true);
+	            return _this2.changeState(cellIndex, true);
 	        });
 	        this.emitter.on(['filters-row-inserted'], function () {
-	            return _this2.tf.headersRow++;
+	            return _this2.buildIcons();
 	        });
 	        this.emitter.on(['before-filter-init'], function (tf, colIndex) {
 	            return _this2.build(colIndex);
@@ -5323,6 +5321,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.enable();
 	        this.init();
 	        this.buildAll();
+	    };
+	
+	    /**
+	     * Build all filters icons
+	     */
+	
+	
+	    PopupFilter.prototype.buildIcons = function buildIcons() {
+	        var _this3 = this;
+	
+	        var tf = this.tf;
+	
+	        // TODO: Because of the filters row generation, headers row index needs
+	        // adjusting: prevent useless row generation
+	        tf.headersRow++;
+	
+	        for (var i = 0; i < tf.nbCells; i++) {
+	            if (tf.getFilterType(i) === _const.NONE) {
+	                continue;
+	            }
+	            var popUpSpan = (0, _dom.createElm)('span', ['id', this.prfxSpan + tf.id + '_' + i], ['ci', i]);
+	            popUpSpan.innerHTML = this.iconHtml;
+	            var header = tf.getHeaderElement(i);
+	            header.appendChild(popUpSpan);
+	            (0, _event.addEvt)(popUpSpan, 'click', function (evt) {
+	                return _this3.onClick(evt);
+	            });
+	            this.fltSpans[i] = popUpSpan;
+	            this.fltIcons[i] = popUpSpan.firstChild;
+	        }
 	    };
 	
 	    /**
@@ -5414,9 +5442,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	
 	
-	    PopupFilter.prototype.buildIcons = function buildIcons() {
+	    PopupFilter.prototype.setIconsState = function setIconsState() {
 	        for (var i = 0; i < this.fltIcons.length; i++) {
-	            this.buildIcon(i, false);
+	            this.changeState(i, false);
 	        }
 	    };
 	
@@ -5427,7 +5455,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	
 	
-	    PopupFilter.prototype.buildIcon = function buildIcon(colIndex, active) {
+	    PopupFilter.prototype.changeState = function changeState(colIndex, active) {
 	        if (this.fltIcons[colIndex]) {
 	            this.fltIcons[colIndex].src = active ? this.activeIconPath : this.iconPath;
 	        }
@@ -5439,7 +5467,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	    PopupFilter.prototype.destroy = function destroy() {
-	        var _this3 = this;
+	        var _this4 = this;
 	
 	        if (!this.initialized) {
 	            return;
@@ -5470,19 +5498,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        // unsubscribe to events
 	        this.emitter.off(['before-filtering'], function () {
-	            return _this3.buildIcons();
+	            return _this4.setIconsState();
 	        });
 	        this.emitter.off(['after-filtering'], function () {
-	            return _this3.closeAll();
+	            return _this4.closeAll();
 	        });
 	        this.emitter.off(['cell-processed'], function (tf, cellIndex) {
-	            return _this3.buildIcon(cellIndex, true);
+	            return _this4.changeState(cellIndex, true);
 	        });
 	        this.emitter.off(['filters-row-inserted'], function () {
-	            return _this3.tf.headersRow++;
+	            return _this4.buildIcons();
 	        });
 	        this.emitter.off(['before-filter-init'], function (tf, colIndex) {
-	            return _this3.build(colIndex);
+	            return _this4.build(colIndex);
 	        });
 	
 	        this.initialized = false;
@@ -10174,51 +10202,105 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	__webpack_require__(416);
 	
+	var _feature = __webpack_require__(9);
+	
 	var _types = __webpack_require__(4);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var DateType = exports.DateType = function () {
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	/**
+	 * Wrapper for Sugar Date module providing datetime helpers and locales
+	 * @export
+	 * @class DateType
+	 */
+	var DateType = exports.DateType = function (_Feature) {
+	    _inherits(DateType, _Feature);
+	
+	    /**
+	     * Creates an instance of DateType
+	     * @param {TableFilter} tf TableFilter instance
+	     */
 	    function DateType(tf) {
 	        _classCallCheck(this, DateType);
 	
-	        this.tf = tf;
-	        this.locale = tf.locale;
-	        this.datetime = _sugarDate.Date;
-	        this.emitter = tf.emitter;
+	        /**
+	         * Global locale
+	         * @type {String}
+	         */
+	        var _this = _possibleConstructorReturn(this, _Feature.call(this, tf, 'dateType'));
+	
+	        _this.locale = tf.locale;
+	
+	        /**
+	         * Sugar Date instance
+	         * @type {Object}
+	         */
+	        _this.datetime = _sugarDate.Date;
+	
+	        _this.enable();
+	        return _this;
 	    }
+	
+	    /**
+	     * Initialize DateType instance
+	     */
+	
 	
 	    DateType.prototype.init = function init() {
 	        if (this.initialized) {
 	            return;
 	        }
 	
-	        // Global locale
+	        // Set global locale
 	        this.datetime.setLocale(this.locale);
 	
 	        // Add formats from column types configuration if any
 	        this.addConfigFormats(this.tf.colTypes);
-	        // locale.addFormat('{dd}/{MM}/{yyyy}');
-	        // locale.addFormat('{MM}/{dd}/{yyyy}');
-	        // locale.addFormat('{dd}-{months}-{yyyy|yy}');
-	        // locale.addFormat('{dd}-{MM}-{yyyy|yy}');
 	
-	        this.initialized = true;
-	
+	        // Broadcast date-type initialization
 	        this.emitter.emit('date-type-initialized', this.tf, this);
+	
+	        /** @inherited */
+	        this.initialized = true;
 	    };
 	
+	    /**
+	     * Parse a string representation of a date for a specified locale and return
+	     * a date object
+	     * @param {String} dateStr String representation of a date
+	     * @param {String} localeCode Locale code (ie 'en-us')
+	     * @returns {Date}
+	     */
+	
+	
 	    DateType.prototype.parse = function parse(dateStr, localeCode) {
-	        // console.log('parse', dateStr, localeCode,
-	        //     this.datetime.create(dateStr, localeCode));
 	        return this.datetime.create(dateStr, localeCode);
 	    };
 	
+	    /**
+	     * Check string representation of a date for a specified locale is valid
+	     * @param {any} dateStr String representation of a date
+	     * @param {any} localeCode Locale code (ie 'en-us')
+	     * @returns {Boolean}
+	     */
+	
+	
 	    DateType.prototype.isValid = function isValid(dateStr, localeCode) {
-	        // console.log(dateStr, localeCode, this.parse(dateStr, localeCode),
-	        //     this.datetime.isValid(this.parse(dateStr, localeCode)));
 	        return this.datetime.isValid(this.parse(dateStr, localeCode));
 	    };
+	
+	    /**
+	     * Return the type object of a specified column as per configuration or
+	     * passed collection
+	     * @param {Number} colIndex Column index
+	     * @param {Array} types Collection of column types, optional
+	     * @returns {Object}
+	     */
+	
 	
 	    DateType.prototype.getOptions = function getOptions(colIndex, types) {
 	        types = types || this.tf.colTypes;
@@ -10226,16 +10308,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return (0, _types.isObj)(colType) ? colType : {};
 	    };
 	
+	    /**
+	     * Add date time format(s) to a locale as specified by the passed
+	     * collection of column types, ie:
+	     *  [
+	     *      'string',
+	     *      'number',
+	     *      { type: 'date', locale: 'en', format: ['{dd}/{MM}/{yyyy}']}
+	     * ]
+	     *
+	     * @param {Array} [types=[]] Collection of column types
+	     */
+	
+	
 	    DateType.prototype.addConfigFormats = function addConfigFormats() {
-	        var _this = this;
+	        var _this2 = this;
 	
 	        var types = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 	
 	        types.forEach(function (type, idx) {
-	            var options = _this.getOptions(idx, types);
+	            var options = _this2.getOptions(idx, types);
 	            if (options.hasOwnProperty('format')) {
 	                (function () {
-	                    var locale = _this.datetime.getLocale(options.locale || _this.locale);
+	                    var locale = _this2.datetime.getLocale(options.locale || _this2.locale);
 	                    if ((0, _types.isArray)(options.format)) {
 	                        options.format.forEach(function (format) {
 	                            locale.addFormat(format);
@@ -10248,12 +10343,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	
+	    /**
+	     * Remove DateType instance
+	     */
+	
+	
 	    DateType.prototype.destroy = function destroy() {
+	        if (!this.initialized) {
+	            return;
+	        }
+	        this.datetime.removeLocale(this.locale);
+	        // TODO: remove added formats
+	
 	        this.initialized = false;
 	    };
 	
 	    return DateType;
-	}();
+	}(_feature.Feature);
 
 /***/ },
 /* 30 */

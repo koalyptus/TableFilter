@@ -2931,7 +2931,6 @@ webpackJsonp([1],{
 	            return _this4.sortByColumnIndex(colIdx, desc);
 	        });
 	        this.sorted = false;
-	        this.initialized = false;
 	        this.stt.destroy();
 	
 	        var ids = tf.getFiltersId();
