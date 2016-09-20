@@ -2802,15 +2802,15 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/popupfilter.js~popupfilter#buildicon",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-buildIcon",
-    "src/modules/popupFilter.js~PopupFilter#buildIcon",
-    "method"
-  ],
-  [
     "src/modules/popupfilter.js~popupfilter#buildicons",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-buildIcons",
     "src/modules/popupFilter.js~PopupFilter#buildIcons",
+    "method"
+  ],
+  [
+    "src/modules/popupfilter.js~popupfilter#changestate",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-changeState",
+    "src/modules/popupFilter.js~PopupFilter#changeState",
     "method"
   ],
   [
@@ -2889,6 +2889,12 @@ window.esdocSearchIndex = [
     "src/modules/popupfilter.js~popupfilter#reset",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-reset",
     "src/modules/popupFilter.js~PopupFilter#reset",
+    "method"
+  ],
+  [
+    "src/modules/popupfilter.js~popupfilter#seticonsstate",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-setIconsState",
+    "src/modules/popupFilter.js~PopupFilter#setIconsState",
     "method"
   ],
   [

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.2.65 API Document</title>
+  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.2.66 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -279,9 +279,51 @@ export class PopupFilter extends Feature {
         let tf = this.tf;
 
         // Override headers row index if no grouped headers
-        if (tf.headersRow &lt;= 1) {
+        // TODO: Prevent the filters row to simplify headers row index adjusting
+        if (tf.headersRow &lt;= 1 &amp;&amp; isNaN(tf.config().headers_row_index)) {
             tf.headersRow = 0;
         }
+
+        // Adjust headers row index for grid-layout mode
+        // TODO: Prevent the filters row to simplify headers row index adjusting
+        if (tf.gridLayout) {
+            tf.headersRow--;
+            this.buildIcons();
+        }
+
+        // subscribe to events
+        this.emitter.on([&apos;before-filtering&apos;], () =&gt; this.setIconsState());
+        this.emitter.on([&apos;after-filtering&apos;], () =&gt; this.closeAll());
+        this.emitter.on([&apos;cell-processed&apos;],
+            (tf, cellIndex) =&gt; this.changeState(cellIndex, true));
+        this.emitter.on([&apos;filters-row-inserted&apos;], () =&gt; this.buildIcons());
+        this.emitter.on([&apos;before-filter-init&apos;],
+            (tf, colIndex) =&gt; this.build(colIndex));
+
+        /**
+         * @inherited
+         */
+        this.initialized = true;
+    }
+
+    /**
+     * Reset previously destroyed feature
+     */
+    reset() {
+        this.enable();
+        this.init();
+        this.buildAll();
+    }
+
+    /**
+     * Build all filters icons
+     */
+    buildIcons() {
+        let tf = this.tf;
+
+        // Filters row is added to the DOM, adjust headers row index
+        // TODO: Prevent the filters row to simplify headers row index adjusting
+        tf.headersRow++;
 
         for (let i = 0; i &lt; tf.nbCells; i++) {
             if (tf.getFilterType(i) === NONE) {
@@ -299,29 +341,6 @@ export class PopupFilter extends Feature {
             this.fltSpans[i] = popUpSpan;
             this.fltIcons[i] = popUpSpan.firstChild;
         }
-
-        // subscribe to events
-        this.emitter.on([&apos;before-filtering&apos;], () =&gt; this.buildIcons());
-        this.emitter.on([&apos;after-filtering&apos;], () =&gt; this.closeAll());
-        this.emitter.on([&apos;cell-processed&apos;],
-            (tf, cellIndex) =&gt; this.buildIcon(cellIndex, true));
-        this.emitter.on([&apos;filters-row-inserted&apos;], () =&gt; this.tf.headersRow++);
-        this.emitter.on([&apos;before-filter-init&apos;],
-            (tf, colIndex) =&gt; this.build(colIndex));
-
-        /**
-         * @inherited
-         */
-        this.initialized = true;
-    }
-
-    /**
-     * Reset previously destroyed feature
-     */
-    reset() {
-        this.enable();
-        this.init();
-        this.buildAll();
     }
 
     /**
@@ -409,9 +428,9 @@ export class PopupFilter extends Feature {
     /**
      * Build all the icons representing the pop-up filters
      */
-    buildIcons() {
+    setIconsState() {
         for (let i = 0; i &lt; this.fltIcons.length; i++) {
-            this.buildIcon(i, false);
+            this.changeState(i, false);
         }
     }
 
@@ -420,7 +439,7 @@ export class PopupFilter extends Feature {
      * @param  {Number} colIndex Column index
      * @param  {Boolean} active   Apply active state
      */
-    buildIcon(colIndex, active) {
+    changeState(colIndex, active) {
         if (this.fltIcons[colIndex]) {
             this.fltIcons[colIndex].src = active ?
                 this.activeIconPath : this.iconPath;
@@ -459,11 +478,11 @@ export class PopupFilter extends Feature {
         this.fltIcons = [];
 
         // unsubscribe to events
-        this.emitter.off([&apos;before-filtering&apos;], () =&gt; this.buildIcons());
+        this.emitter.off([&apos;before-filtering&apos;], () =&gt; this.setIconsState());
         this.emitter.off([&apos;after-filtering&apos;], () =&gt; this.closeAll());
         this.emitter.off([&apos;cell-processed&apos;],
-            (tf, cellIndex) =&gt; this.buildIcon(cellIndex, true));
-        this.emitter.off([&apos;filters-row-inserted&apos;], () =&gt; this.tf.headersRow++);
+            (tf, cellIndex) =&gt; this.changeState(cellIndex, true));
+        this.emitter.off([&apos;filters-row-inserted&apos;], () =&gt; this.buildIcons());
         this.emitter.off([&apos;before-filter-init&apos;],
             (tf, colIndex) =&gt; this.build(colIndex));
 
