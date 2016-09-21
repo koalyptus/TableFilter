@@ -399,7 +399,7 @@ export default class AdapterSortableTable extends Feature {
             sortTypes = this.sortTypes,
             _sortTypes = [];
 
-        for (let i = 0; i < tf.getCellsNb(); i++) {
+        for (let i = 0; i < tf.nbCells; i++) {
             let colType;
             if (sortTypes[i]) {
                 colType = sortTypes[i];
@@ -413,8 +413,11 @@ export default class AdapterSortableTable extends Feature {
                     }
                 } else {
                     colType = colType.toLowerCase();
-                    // TODO: normalise 'none' vs 'None'
-                    if (colType === NONE) {
+                    if (colType === DATE) {
+                        colType = this._addDateType(i, sortTypes);
+                    }
+                    else if (colType === NONE) {
+                        // TODO: normalise 'none' vs 'None'
                         colType = 'None';
                     }
                 }

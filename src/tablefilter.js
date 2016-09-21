@@ -840,14 +840,12 @@ export class TableFilter {
 
         /*** data types ***/
 
-
-        this.locale = f.locale || 'en';
-
         /**
-         * Define default date type (DMY)
+         * Define default locale, default to 'en' as per Sugar Date module:
+         * https://sugarjs.com/docs/#/DateLocales
          * @type {String}
          */
-        this.defaultDateType = f.default_date_type || 'ISO8601';
+        this.locale = f.locale || 'en';
 
         /**
          * Define thousands separator ',' or '.', defaults to ','
@@ -862,21 +860,6 @@ export class TableFilter {
         this.decimalSeparator = f.decimal_separator || '.';
 
         /**
-         * Determine whether table has columns with date types
-         * @type {Boolean}
-         * @private
-         */
-        // this.hasColDateType = isArray(f.col_date_type);
-
-        /**
-         * Define date format on a column basis, possible values 'DMY', 'MDY',
-         * 'YMD', 'DDMMMYYYY', ie:
-         * col_date_type : [null, 'DMY', 'MDY', 'YMD', null, 'DDMMMYYYY']
-         * @type {Array}
-         */
-        // this.colDateType = this.hasColDateType ? f.col_date_type : null;
-
-        /**
          * Determine whether table has columns data types
          * @type {Boolean}
          * @private
@@ -885,10 +868,16 @@ export class TableFilter {
 
         /**
          * Define data types on a column basis, possible values 'string',
-         * 'number', 'formatted-number', 'formatted-number-eu', 'DMY', 'MDY',
-         * 'YMD', 'DDMMMYYYY', 'ipaddress' ie:
-         * col_types : ['formatted-number', 'DMY', 'MDY', 'YMD', null,
-         * 'DDMMMYYYY']
+         * 'number', 'formatted-number', 'date', 'ipaddress' ie:
+         * col_types : [
+         *  'string', 'date', 'number',
+         *  { type: 'formatted-number', decimal: ',', thousands: '.' },
+         *  { type: 'date', locale: 'en-gb' },
+         *  { type: 'date', format: ['{dd}-{months}-{yyyy|yy}'] }
+         * ]
+         *
+         * Refer to https://sugarjs.com/docs/#/DateParsing for exhaustive
+         * information on date parsing formats supported by Sugar Date
          * @type {Array}
          */
         this.colTypes = this.hasColTypes ? f.col_types : [];
@@ -1811,17 +1800,8 @@ export class TableFilter {
                 hasNM = (re_nm === sA),
                 hasRE = re_re.test(sA);
 
-            //Search arg dates tests
-            // let isLDate = hasLO && isValidDate(sA.replace(re_l, ''), dtType);
-            // let isLEDate=hasLE && isValidDate(sA.replace(re_le, ''), dtType);
-            // let isGDate = hasGR && isValidDate(sA.replace(re_g, ''), dtType);
-            // let isGEDate=hasGE && isValidDate(sA.replace(re_ge, ''), dtType);
-            // let isDFDate=hasDF && isValidDate(sA.replace(re_d, ''), dtType);
-            // let isEQDate=hasEQ && isValidDate(sA.replace(re_eq, ''), dtType);
-
-            //dates
-            if (this.hasType(colIdx, [DATE]) /*&& isValidDate(cellData)*/
-                /*isValidDate(cellData, dtType)*/) {
+            // Check for dates
+            if (this.hasType(colIdx, [DATE])) {
                 let dte1, dte2;
                 let dateType = this.Mod.dateType;
                 let isValidDate = dateType.isValid.bind(dateType);
@@ -1842,42 +1822,35 @@ export class TableFilter {
                 let isEQDate = hasEQ &&
                     isValidDate(sA.replace(re_eq, ''), locale);
 
-                // dte1 = formatDate(cellData, dtType);
                 dte1 = parseDate(cellData, locale);
                 // lower date
                 if (isLDate) {
                     dte2 = parseDate(sA.replace(re_l, ''), locale);
-                    // dte2 = formatDate(sA.replace(re_l, ''), dtType);
                     occurence = dte1 < dte2;
                 }
                 // lower equal date
                 else if (isLEDate) {
                     dte2 = parseDate(sA.replace(re_le, ''), locale);
-                    // dte2 = formatDate(sA.replace(re_le, ''), dtType);
                     occurence = dte1 <= dte2;
                 }
                 // greater equal date
                 else if (isGEDate) {
                     dte2 = parseDate(sA.replace(re_ge, ''), locale);
-                    // dte2 = formatDate(sA.replace(re_ge, ''), dtType);
                     occurence = dte1 >= dte2;
                 }
                 // greater date
                 else if (isGDate) {
                     dte2 = parseDate(sA.replace(re_g, ''), locale);
-                    // dte2 = formatDate(sA.replace(re_g, ''), dtType);
                     occurence = dte1 > dte2;
                 }
                 // different date
                 else if (isDFDate) {
                     dte2 = parseDate(sA.replace(re_d, ''), locale);
-                    // dte2 = formatDate(sA.replace(re_d, ''), dtType);
                     occurence = dte1.toString() !== dte2.toString();
                 }
                 // equal date
                 else if (isEQDate) {
                     dte2 = parseDate(sA.replace(re_eq, ''), locale);
-                    // dte2 = formatDate(sA.replace(re_eq, ''), dtType);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 // searched keyword with * operator doesn't have to be a date
@@ -1910,12 +1883,9 @@ export class TableFilter {
                     if (colType.hasOwnProperty('decimal')) {
                         decimal = colType.decimal;
                     }
-                    // numData = Number(cellData) ||parseNb(cellData, decimal);
                 }
-                // else {
-                //     numData = Number(cellData) ||
-                //         parseNb(cellData, tf.decimalSeparator);
-                // }
+                // Convert to number anyways to auto-resolve type in case not
+                // defined by configuration
                 numData = Number(cellData) || parseNb(cellData, decimal);
 
                 // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
@@ -2162,9 +2132,6 @@ export class TableFilter {
                         continue;
                     }
                     let cellData = this.getCellData(cell[j]);
-                    // let decimal = this.hasType(colIndex,
-                    //     [FORMATTED_NUMBER, FORMATTED_NUMBER_EU]) ?
-                    //     this.colTypes[colIndex] : undefined;
                     let decimal = this.decimalSeparator;
                     if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
                         let colType = this.colTypes[colIndex];

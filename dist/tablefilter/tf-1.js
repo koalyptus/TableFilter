@@ -2834,7 +2834,7 @@ webpackJsonp([1],{
 	            sortTypes = this.sortTypes,
 	            _sortTypes = [];
 	
-	        for (var i = 0; i < tf.getCellsNb(); i++) {
+	        for (var i = 0; i < tf.nbCells; i++) {
 	            var colType = void 0;
 	            if (sortTypes[i]) {
 	                colType = sortTypes[i];
@@ -2847,8 +2847,10 @@ webpackJsonp([1],{
 	                    }
 	                } else {
 	                    colType = colType.toLowerCase();
-	                    // TODO: normalise 'none' vs 'None'
-	                    if (colType === _const.NONE) {
+	                    if (colType === _const.DATE) {
+	                        colType = this._addDateType(i, sortTypes);
+	                    } else if (colType === _const.NONE) {
+	                        // TODO: normalise 'none' vs 'None'
 	                        colType = 'None';
 	                    }
 	                }

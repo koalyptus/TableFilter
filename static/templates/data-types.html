@@ -8,15 +8,17 @@
 <h1>{NAME} v{VERSION}</h1>
 <h2>Data types demo</h2>
 
-<p>This example features 3 date types and 2 numeric formatting for the currency
-    columns:</p>
+<p>
+    This example shows how to define column types with the
+    <code>col_types</code> option and specifically numeric formats with:
+</p>
 <ul>
-    <li>"." thousands separator and "," decimal separator for &euro;</li>
-    <li>"," thousands separator and "." decimal separator for US$</li>
+    <li>"." thousands separator and "," decimal separator for &euro; column</li>
+    <li>"," thousands separator and "." decimal separator for US$ column</li>
 </ul>
 <p>
-    Use the <code>col_types</code> property to set numeric formats
-    ('formatted-number', 'formatted-number-eu' or 'ipaddress') and date types.
+    along with date types with <code>locale</code> and <code>format</code> specified on
+    a column basis.
 </p>
 
 <!-- @import partials/pre.html -->
@@ -75,15 +77,13 @@ var tfConfig = {
     loader: true,
     status_bar: true,
     col_types: [
-        'string', 'string', 'string',
-        {
-            type: 'formatted-number', decimal: ',', thousands: '.'
-        },
-        'formatted-number', 'string',
-        {
-            type: 'date', locale: 'fr'/*,
-            format: ['{dd}/{MM}/{yyyy}', '{dd}-{MM}-{yyyy|yy}']*/
-        },
+        'string',
+        'string',
+        'string',
+        { type: 'formatted-number', decimal: ',', thousands: '.' },
+        'formatted-number', // defaults to '.' for decimal and ',' for thousands
+        'string',
+        { type: 'date', locale: 'fr', },
         { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}' },
         { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
         'ipaddress'
@@ -117,8 +117,11 @@ tf.init();
 
 </script>
 
-<p>Below an example of ISO date support (YMD). Use <code>default_date_type</code>
-  to set a date type for a whole table ('DMY','MDY','YMD').</p>
+<p>
+    Below an example of ISO date support ({yyyy|yy}/{MM}/{dd}).
+    Use <code>locale</code> to set a locale globally
+    (defaults to 'en').
+</p>
 
 <!-- @import partials/dummy-table.html -->
 <script data-config>
@@ -131,7 +134,7 @@ var tf2Config = {
     btn_reset: true,
     loader: true,
     status_bar: true,
-    locale: 'en-us',
+    locale: 'en-US',
     col_types: [
         'string', 'number', 'string',
         'number', 'string', 'date'
