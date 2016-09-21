@@ -4,15 +4,12 @@
         base_path: '../dist/tablefilter/',
         col_types: [
             null, null, null,
-            'formatted-number-eu', 'formatted-number', null,
-            null, null, null,
+            { type: 'formatted-number', decimal: ',', thousands: ','},
+            'formatted-number', null,
+            { type: 'date', locale: 'fr', },
+            { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}' },
+            { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
             'IpAddress'
-        ],
-        col_date_type: [
-            null, null, null,
-            null, null, null,
-            'dmy', 'mdy', 'ddmmmyyyy',
-            null
         ]
     });
     tf.init();
@@ -22,11 +19,16 @@
     test('Data types', function() {
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(
-            tf.hasType(3, ['formatted-number-eu', 'formatted-number']) &&
-            tf.hasType(4, ['formatted-number-eu', 'formatted-number']),
+            tf.hasType(3, ['formatted-number']) &&
+            tf.hasType(4, ['formatted-number']),
             true, 'Has number column types'
         );
-        deepEqual(tf.hasColDateType, true, 'Has date column tyoes');
+        deepEqual(
+            tf.hasType(6, ['date']) &&
+            tf.hasType(7, ['date']) &&
+            tf.hasType(8, ['date']),
+            true, 'Has date column types'
+        );
     });
 
     module('Data types filtering');

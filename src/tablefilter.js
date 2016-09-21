@@ -1784,6 +1784,10 @@ export class TableFilter {
             sA = matchCase(sA, this.caseSensitive);
 
             let occurence = false;
+            let dateType = this.Mod.dateType;
+            let isValidDate = dateType.isValid.bind(dateType);
+            let parseDate = dateType.parse.bind(dateType);
+            let locale = dateType.getOptions(colIdx).locale || this.locale;
 
             //Search arg operator tests
             let hasLO = re_l.test(sA),
@@ -1800,13 +1804,9 @@ export class TableFilter {
                 hasNM = (re_nm === sA),
                 hasRE = re_re.test(sA);
 
-            // Check for dates
-            if (this.hasType(colIdx, [DATE])) {
+            // Check for dates or resolve date type
+            if (this.hasType(colIdx, [DATE]) || isValidDate(cellData, locale)) {
                 let dte1, dte2;
-                let dateType = this.Mod.dateType;
-                let isValidDate = dateType.isValid.bind(dateType);
-                let parseDate = dateType.parse.bind(dateType);
-                let locale = dateType.getOptions(colIdx).locale || this.locale;
 
                 // Search arg dates tests
                 let isLDate = hasLO &&
@@ -1823,6 +1823,7 @@ export class TableFilter {
                     isValidDate(sA.replace(re_eq, ''), locale);
 
                 dte1 = parseDate(cellData, locale);
+
                 // lower date
                 if (isLDate) {
                     dte2 = parseDate(sA.replace(re_l, ''), locale);
@@ -1858,9 +1859,7 @@ export class TableFilter {
                     occurence = contains(sA.replace(re_lk, ''), cellData,
                         false, this.caseSensitive);
                 }
-                else if (isValidDate(sA)
-                    /*isValidDate(sA, dtType)*/) {
-                    // dte2 = formatDate(sA, dtType);
+                else if (isValidDate(sA)) {
                     dte2 = parseDate(sA, locale);
                     occurence = dte1.toString() === dte2.toString();
                 }

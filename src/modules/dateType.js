@@ -123,7 +123,7 @@ export class DateType extends Feature {
         if (!this.initialized) {
             return;
         }
-        this.datetime.removeLocale(this.locale);
+
         // TODO: remove added formats
 
         this.initialized = false;

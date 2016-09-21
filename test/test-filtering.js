@@ -1,11 +1,13 @@
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
-    col_date_type: [
-        null, null, 'ddmmmyyyy',
-        null, null, null
-    ],
+    // col_date_type: [
+    //     null, null, 'ddmmmyyyy',
+    //     null, null, null
+    // ],
     col_types: [
-        null, null, null,
+        null,
+        null,
+        { type: 'date', format: ['{dd}.{MM}.{yyyy|yy}'] },
         null, null, 'formatted-number'
     ]
 });
@@ -103,8 +105,8 @@ test('Should return no results for an unmatched term (6)', function(){
     deepEqual(tf.getValidRows().length, 0, 'No matches');
 });
 
-module('Tear-down');
-test('can destroy TableFilter DOM elements', function() {
-    tf.destroy();
-    deepEqual(tf.isInitialized(), false, 'Filters removed');
-});
+// module('Tear-down');
+// test('can destroy TableFilter DOM elements', function() {
+//     tf.destroy();
+//     deepEqual(tf.isInitialized(), false, 'Filters removed');
+// });
