@@ -266,7 +266,7 @@ export default class ColOps extends Feature {
                     }
                 }
 
-                for (i = 0; i <= mThisCol; i++) {
+                for (; i <= mThisCol; i++) {
                     switch (opsThisCol[i]) {
                         case 'mean':
                             result = meanValue;
