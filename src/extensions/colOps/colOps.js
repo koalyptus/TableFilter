@@ -116,9 +116,10 @@ export default class ColOps extends Feature {
 
         if (isArray(labelId) && isArray(colIndex) && isArray(operation)) {
             let rows = tf.tbl.rows,
-                colvalues = [];
+                colvalues = [],
+                ucol = 0;
 
-            for (let ucol = 0; ucol <= ucolMax; ucol++) {
+            for (; ucol <= ucolMax; ucol++) {
                 //this retrieves col values
                 //use ucolIndex because we only want to pass through this loop
                 //once for each column get the values in this unique column
@@ -148,9 +149,12 @@ export default class ColOps extends Feature {
                     decThisCol = [],
                     labThisCol = [],
                     oTypeThisCol = [],
-                    mThisCol = -1;
+                    mThisCol = -1,
+                    k = 0,
+                    j = 0,
+                    i = 0;
 
-                for (let k = 0; k < colIndex.length; k++) {
+                for (; k < colIndex.length; k++) {
                     if (colIndex[k] === ucolIndex[ucol]) {
                         mThisCol++;
                         opsThisCol[mThisCol] = operation[k].toLowerCase();
@@ -185,7 +189,7 @@ export default class ColOps extends Feature {
                     }
                 }
 
-                for (let j = 0; j < colvalues[ucol].length; j++) {
+                for (; j < colvalues[ucol].length; j++) {
                     //sort the list for calculation of median and quartiles
                     if ((q1Flag === 1) || (q3Flag === 1) || (medFlag === 1)) {
                         if (j < colvalues[ucol].length - 1) {
@@ -262,7 +266,7 @@ export default class ColOps extends Feature {
                     }
                 }
 
-                for (let i = 0; i <= mThisCol; i++) {
+                for (; i <= mThisCol; i++) {
                     switch (opsThisCol[i]) {
                         case 'mean':
                             result = meanValue;
