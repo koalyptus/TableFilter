@@ -83,7 +83,7 @@ var tfConfig = {
         { type: 'formatted-number', decimal: ',', thousands: '.' },
         'formatted-number', // defaults to '.' for decimal and ',' for thousands
         'string',
-        { type: 'date', locale: 'fr', },
+        { type: 'date', locale: 'fr' },
         { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}' },
         { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
         'ipaddress'
@@ -144,6 +144,7 @@ var tf2Config = {
         tf.filter();
     }
 };
+
 var tf2 = new TableFilter('demo', tf2Config);
 tf2.init();
 </script>

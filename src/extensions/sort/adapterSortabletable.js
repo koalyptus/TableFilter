@@ -416,6 +416,10 @@ export default class AdapterSortableTable extends Feature {
                     if (colType === DATE) {
                         colType = this._addDateType(i, sortTypes);
                     }
+                    else if (colType === FORMATTED_NUMBER ||
+                        colType === NUMBER) {
+                        colType = this._addNumberType(i, tf.decimalSeparator);
+                    }
                     else if (colType === NONE) {
                         // TODO: normalise 'none' vs 'None'
                         colType = 'None';
@@ -430,7 +434,6 @@ export default class AdapterSortableTable extends Feature {
         //Public TF method to add sort type
 
         //Custom sort types
-        this.addSortType(NUMBER, Number);
         this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
         this.addSortType(STRING);
         this.addSortType(IP_ADDRESS, ipAddress, sortIP);
