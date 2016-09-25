@@ -2,7 +2,8 @@
     // issue 162 - https://github.com/koalyptus/TableFilter/issues/162
     var tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
-        col_date_type: ['DMY']
+        locale: 'en-GB',
+        col_types: ['date', 'string']
     });
     tf.init();
 
@@ -17,7 +18,7 @@
         // assert
         deepEqual(tf.getValidRows().length, 0, 'Expected filtered rows');
     });
-    test('Can filter DMY date type', function(){
+    test('Can filter dd.MM.yyyy date type', function(){
         // setup
         tf.clearFilters();
         // act
