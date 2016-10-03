@@ -1,12 +1,12 @@
 import {isNumber} from './types';
-// import {FORMATTED_NUMBER} from './const';
 
 /**
- * Returns a number for a formatted number
+ * Takes a string, removes all formatting/cruft and returns the raw float value
  * @param {String} Formatted number
- * @param {String} Format type, currently 'formatted-number' or
- * 'formatted-number-eu'
+ * @param {String} Decimal type '.' or ','
  * @return {Number} Unformatted number
+ *
+ * https://github.com/openexchangerates/accounting.js/blob/master/accounting.js
  */
 export const parse = (value, decimal = '.') => {
     // Return the value as-is if it's already a number
@@ -16,7 +16,6 @@ export const parse = (value, decimal = '.') => {
 
     // Build regex to strip out everything except digits, decimal point and
     // minus sign
-    // let decimal = format !== FORMATTED_NUMBER ? ',' : '.';
     let regex = new RegExp('[^0-9-' + decimal + ']', ['g']);
     let unformatted = parseFloat(
         ('' + value)
