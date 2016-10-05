@@ -2182,10 +2182,10 @@
         "trailingComments": [
           {
             "type": "Block",
-            "value": "*\n * Default values\n ",
+            "value": "*\n * Data types\n ",
             "range": [
               1005,
-              1030
+              1026
             ],
             "loc": {
               "start": {
@@ -2200,10 +2200,10 @@
           },
           {
             "type": "Block",
-            "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+            "value": "*\n * String\n * @type {String}\n ",
             "range": [
-              1032,
-              1094
+              1028,
+              1063
             ],
             "loc": {
               "start": {
@@ -2257,10 +2257,10 @@
       "trailingComments": [
         {
           "type": "Block",
-          "value": "*\n * Default values\n ",
+          "value": "*\n * Data types\n ",
           "range": [
             1005,
-            1030
+            1026
           ],
           "loc": {
             "start": {
@@ -2275,10 +2275,10 @@
         },
         {
           "type": "Block",
-          "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+          "value": "*\n * String\n * @type {String}\n ",
           "range": [
-            1032,
-            1094
+            1028,
+            1063
           ],
           "loc": {
             "start": {
@@ -2302,10 +2302,10 @@
             "type": "VariableDeclarator",
             "id": {
               "type": "Identifier",
-              "name": "AUTO_FILTER_DELAY",
+              "name": "STRING",
               "range": [
-                1108,
-                1125
+                1077,
+                1083
               ],
               "loc": {
                 "start": {
@@ -2314,32 +2314,32 @@
                 },
                 "end": {
                   "line": 84,
-                  "column": 30
+                  "column": 19
                 }
               }
             },
             "init": {
               "type": "Literal",
-              "value": 750,
-              "raw": "750",
+              "value": "string",
+              "raw": "'string'",
               "range": [
-                1128,
-                1131
+                1086,
+                1094
               ],
               "loc": {
                 "start": {
                   "line": 84,
-                  "column": 33
+                  "column": 22
                 },
                 "end": {
                   "line": 84,
-                  "column": 36
+                  "column": 30
                 }
               }
             },
             "range": [
-              1108,
-              1131
+              1077,
+              1094
             ],
             "loc": {
               "start": {
@@ -2348,15 +2348,15 @@
               },
               "end": {
                 "line": 84,
-                "column": 36
+                "column": 30
               }
             }
           }
         ],
         "kind": "const",
         "range": [
-          1102,
-          1132
+          1071,
+          1095
         ],
         "loc": {
           "start": {
@@ -2365,16 +2365,16 @@
           },
           "end": {
             "line": 84,
-            "column": 37
+            "column": 31
           }
         },
         "leadingComments": [
           {
             "type": "Block",
-            "value": "*\n * Default values\n ",
+            "value": "*\n * Data types\n ",
             "range": [
               1005,
-              1030
+              1026
             ],
             "loc": {
               "start": {
@@ -2389,10 +2389,10 @@
           },
           {
             "type": "Block",
-            "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+            "value": "*\n * String\n * @type {String}\n ",
             "range": [
-              1032,
-              1094
+              1028,
+              1063
             ],
             "loc": {
               "start": {
@@ -2406,13 +2406,32 @@
             }
           }
         ],
-        "trailingComments": []
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Number\n * @type {String}\n ",
+            "range": [
+              1097,
+              1132
+            ],
+            "loc": {
+              "start": {
+                "line": 86,
+                "column": 0
+              },
+              "end": {
+                "line": 89,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        1095,
-        1132
+        1064,
+        1095
       ],
       "loc": {
         "start": {
@@ -2421,16 +2440,16 @@
         },
         "end": {
           "line": 84,
-          "column": 37
+          "column": 31
         }
       },
       "leadingComments": [
         {
           "type": "Block",
-          "value": "*\n * Default values\n ",
+          "value": "*\n * Data types\n ",
           "range": [
             1005,
-            1030
+            1026
           ],
           "loc": {
             "start": {
@@ -2445,10 +2464,10 @@
         },
         {
           "type": "Block",
-          "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+          "value": "*\n * String\n * @type {String}\n ",
           "range": [
-            1032,
-            1094
+            1028,
+            1063
           ],
           "loc": {
             "start": {
@@ -2461,13 +2480,931 @@
             }
           }
         }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Number\n * @type {String}\n ",
+          "range": [
+            1097,
+            1132
+          ],
+          "loc": {
+            "start": {
+              "line": 86,
+              "column": 0
+            },
+            "end": {
+              "line": 89,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "NUMBER",
+              "range": [
+                1146,
+                1152
+              ],
+              "loc": {
+                "start": {
+                  "line": 90,
+                  "column": 13
+                },
+                "end": {
+                  "line": 90,
+                  "column": 19
+                }
+              }
+            },
+            "init": {
+              "type": "Literal",
+              "value": "number",
+              "raw": "'number'",
+              "range": [
+                1155,
+                1163
+              ],
+              "loc": {
+                "start": {
+                  "line": 90,
+                  "column": 22
+                },
+                "end": {
+                  "line": 90,
+                  "column": 30
+                }
+              }
+            },
+            "range": [
+              1146,
+              1163
+            ],
+            "loc": {
+              "start": {
+                "line": 90,
+                "column": 13
+              },
+              "end": {
+                "line": 90,
+                "column": 30
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          1140,
+          1164
+        ],
+        "loc": {
+          "start": {
+            "line": 90,
+            "column": 7
+          },
+          "end": {
+            "line": 90,
+            "column": 31
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Number\n * @type {String}\n ",
+            "range": [
+              1097,
+              1132
+            ],
+            "loc": {
+              "start": {
+                "line": 86,
+                "column": 0
+              },
+              "end": {
+                "line": 89,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Formatted number\n * @type {String}\n ",
+            "range": [
+              1166,
+              1211
+            ],
+            "loc": {
+              "start": {
+                "line": 92,
+                "column": 0
+              },
+              "end": {
+                "line": 95,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        1133,
+        1164
+      ],
+      "loc": {
+        "start": {
+          "line": 90,
+          "column": 0
+        },
+        "end": {
+          "line": 90,
+          "column": 31
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Number\n * @type {String}\n ",
+          "range": [
+            1097,
+            1132
+          ],
+          "loc": {
+            "start": {
+              "line": 86,
+              "column": 0
+            },
+            "end": {
+              "line": 89,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Formatted number\n * @type {String}\n ",
+          "range": [
+            1166,
+            1211
+          ],
+          "loc": {
+            "start": {
+              "line": 92,
+              "column": 0
+            },
+            "end": {
+              "line": 95,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "FORMATTED_NUMBER",
+              "range": [
+                1225,
+                1241
+              ],
+              "loc": {
+                "start": {
+                  "line": 96,
+                  "column": 13
+                },
+                "end": {
+                  "line": 96,
+                  "column": 29
+                }
+              }
+            },
+            "init": {
+              "type": "Literal",
+              "value": "formatted-number",
+              "raw": "'formatted-number'",
+              "range": [
+                1244,
+                1262
+              ],
+              "loc": {
+                "start": {
+                  "line": 96,
+                  "column": 32
+                },
+                "end": {
+                  "line": 96,
+                  "column": 50
+                }
+              }
+            },
+            "range": [
+              1225,
+              1262
+            ],
+            "loc": {
+              "start": {
+                "line": 96,
+                "column": 13
+              },
+              "end": {
+                "line": 96,
+                "column": 50
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          1219,
+          1263
+        ],
+        "loc": {
+          "start": {
+            "line": 96,
+            "column": 7
+          },
+          "end": {
+            "line": 96,
+            "column": 51
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Formatted number\n * @type {String}\n ",
+            "range": [
+              1166,
+              1211
+            ],
+            "loc": {
+              "start": {
+                "line": 92,
+                "column": 0
+              },
+              "end": {
+                "line": 95,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Date\n * @type {String}\n ",
+            "range": [
+              1265,
+              1298
+            ],
+            "loc": {
+              "start": {
+                "line": 98,
+                "column": 0
+              },
+              "end": {
+                "line": 101,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        1212,
+        1263
+      ],
+      "loc": {
+        "start": {
+          "line": 96,
+          "column": 0
+        },
+        "end": {
+          "line": 96,
+          "column": 51
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Formatted number\n * @type {String}\n ",
+          "range": [
+            1166,
+            1211
+          ],
+          "loc": {
+            "start": {
+              "line": 92,
+              "column": 0
+            },
+            "end": {
+              "line": 95,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Date\n * @type {String}\n ",
+          "range": [
+            1265,
+            1298
+          ],
+          "loc": {
+            "start": {
+              "line": 98,
+              "column": 0
+            },
+            "end": {
+              "line": 101,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "DATE",
+              "range": [
+                1312,
+                1316
+              ],
+              "loc": {
+                "start": {
+                  "line": 102,
+                  "column": 13
+                },
+                "end": {
+                  "line": 102,
+                  "column": 17
+                }
+              }
+            },
+            "init": {
+              "type": "Literal",
+              "value": "date",
+              "raw": "'date'",
+              "range": [
+                1319,
+                1325
+              ],
+              "loc": {
+                "start": {
+                  "line": 102,
+                  "column": 20
+                },
+                "end": {
+                  "line": 102,
+                  "column": 26
+                }
+              }
+            },
+            "range": [
+              1312,
+              1325
+            ],
+            "loc": {
+              "start": {
+                "line": 102,
+                "column": 13
+              },
+              "end": {
+                "line": 102,
+                "column": 26
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          1306,
+          1326
+        ],
+        "loc": {
+          "start": {
+            "line": 102,
+            "column": 7
+          },
+          "end": {
+            "line": 102,
+            "column": 27
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Date\n * @type {String}\n ",
+            "range": [
+              1265,
+              1298
+            ],
+            "loc": {
+              "start": {
+                "line": 98,
+                "column": 0
+              },
+              "end": {
+                "line": 101,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * IP address\n * @type {String}\n ",
+            "range": [
+              1328,
+              1367
+            ],
+            "loc": {
+              "start": {
+                "line": 104,
+                "column": 0
+              },
+              "end": {
+                "line": 107,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        1299,
+        1326
+      ],
+      "loc": {
+        "start": {
+          "line": 102,
+          "column": 0
+        },
+        "end": {
+          "line": 102,
+          "column": 27
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Date\n * @type {String}\n ",
+          "range": [
+            1265,
+            1298
+          ],
+          "loc": {
+            "start": {
+              "line": 98,
+              "column": 0
+            },
+            "end": {
+              "line": 101,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * IP address\n * @type {String}\n ",
+          "range": [
+            1328,
+            1367
+          ],
+          "loc": {
+            "start": {
+              "line": 104,
+              "column": 0
+            },
+            "end": {
+              "line": 107,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "IP_ADDRESS",
+              "range": [
+                1381,
+                1391
+              ],
+              "loc": {
+                "start": {
+                  "line": 108,
+                  "column": 13
+                },
+                "end": {
+                  "line": 108,
+                  "column": 23
+                }
+              }
+            },
+            "init": {
+              "type": "Literal",
+              "value": "ipaddress",
+              "raw": "'ipaddress'",
+              "range": [
+                1394,
+                1405
+              ],
+              "loc": {
+                "start": {
+                  "line": 108,
+                  "column": 26
+                },
+                "end": {
+                  "line": 108,
+                  "column": 37
+                }
+              }
+            },
+            "range": [
+              1381,
+              1405
+            ],
+            "loc": {
+              "start": {
+                "line": 108,
+                "column": 13
+              },
+              "end": {
+                "line": 108,
+                "column": 37
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          1375,
+          1406
+        ],
+        "loc": {
+          "start": {
+            "line": 108,
+            "column": 7
+          },
+          "end": {
+            "line": 108,
+            "column": 38
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * IP address\n * @type {String}\n ",
+            "range": [
+              1328,
+              1367
+            ],
+            "loc": {
+              "start": {
+                "line": 104,
+                "column": 0
+              },
+              "end": {
+                "line": 107,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Default values\n ",
+            "range": [
+              1408,
+              1433
+            ],
+            "loc": {
+              "start": {
+                "line": 110,
+                "column": 0
+              },
+              "end": {
+                "line": 112,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+            "range": [
+              1435,
+              1497
+            ],
+            "loc": {
+              "start": {
+                "line": 114,
+                "column": 0
+              },
+              "end": {
+                "line": 117,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        1368,
+        1406
+      ],
+      "loc": {
+        "start": {
+          "line": 108,
+          "column": 0
+        },
+        "end": {
+          "line": 108,
+          "column": 38
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * IP address\n * @type {String}\n ",
+          "range": [
+            1328,
+            1367
+          ],
+          "loc": {
+            "start": {
+              "line": 104,
+              "column": 0
+            },
+            "end": {
+              "line": 107,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Default values\n ",
+          "range": [
+            1408,
+            1433
+          ],
+          "loc": {
+            "start": {
+              "line": 110,
+              "column": 0
+            },
+            "end": {
+              "line": 112,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+          "range": [
+            1435,
+            1497
+          ],
+          "loc": {
+            "start": {
+              "line": 114,
+              "column": 0
+            },
+            "end": {
+              "line": 117,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "AUTO_FILTER_DELAY",
+              "range": [
+                1511,
+                1528
+              ],
+              "loc": {
+                "start": {
+                  "line": 118,
+                  "column": 13
+                },
+                "end": {
+                  "line": 118,
+                  "column": 30
+                }
+              }
+            },
+            "init": {
+              "type": "Literal",
+              "value": 750,
+              "raw": "750",
+              "range": [
+                1531,
+                1534
+              ],
+              "loc": {
+                "start": {
+                  "line": 118,
+                  "column": 33
+                },
+                "end": {
+                  "line": 118,
+                  "column": 36
+                }
+              }
+            },
+            "range": [
+              1511,
+              1534
+            ],
+            "loc": {
+              "start": {
+                "line": 118,
+                "column": 13
+              },
+              "end": {
+                "line": 118,
+                "column": 36
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          1505,
+          1535
+        ],
+        "loc": {
+          "start": {
+            "line": 118,
+            "column": 7
+          },
+          "end": {
+            "line": 118,
+            "column": 37
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Default values\n ",
+            "range": [
+              1408,
+              1433
+            ],
+            "loc": {
+              "start": {
+                "line": 110,
+                "column": 0
+              },
+              "end": {
+                "line": 112,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+            "range": [
+              1435,
+              1497
+            ],
+            "loc": {
+              "start": {
+                "line": 114,
+                "column": 0
+              },
+              "end": {
+                "line": 117,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": []
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        1498,
+        1535
+      ],
+      "loc": {
+        "start": {
+          "line": 118,
+          "column": 0
+        },
+        "end": {
+          "line": 118,
+          "column": 37
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Default values\n ",
+          "range": [
+            1408,
+            1433
+          ],
+          "loc": {
+            "start": {
+              "line": 110,
+              "column": 0
+            },
+            "end": {
+              "line": 112,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+          "range": [
+            1435,
+            1497
+          ],
+          "loc": {
+            "start": {
+              "line": 114,
+              "column": 0
+            },
+            "end": {
+              "line": 117,
+              "column": 3
+            }
+          }
+        }
       ]
     }
   ],
   "sourceType": "module",
   "range": [
     72,
-    1132
+    1535
   ],
   "loc": {
     "start": {
@@ -2475,7 +3412,7 @@
       "column": 0
     },
     "end": {
-      "line": 84,
+      "line": 118,
       "column": 37
     }
   },
@@ -2752,10 +3689,10 @@
     },
     {
       "type": "Block",
-      "value": "*\n * Default values\n ",
+      "value": "*\n * Data types\n ",
       "range": [
         1005,
-        1030
+        1026
       ],
       "loc": {
         "start": {
@@ -2770,10 +3707,10 @@
     },
     {
       "type": "Block",
-      "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+      "value": "*\n * String\n * @type {String}\n ",
       "range": [
-        1032,
-        1094
+        1028,
+        1063
       ],
       "loc": {
         "start": {
@@ -2782,6 +3719,114 @@
         },
         "end": {
           "line": 83,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Number\n * @type {String}\n ",
+      "range": [
+        1097,
+        1132
+      ],
+      "loc": {
+        "start": {
+          "line": 86,
+          "column": 0
+        },
+        "end": {
+          "line": 89,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Formatted number\n * @type {String}\n ",
+      "range": [
+        1166,
+        1211
+      ],
+      "loc": {
+        "start": {
+          "line": 92,
+          "column": 0
+        },
+        "end": {
+          "line": 95,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Date\n * @type {String}\n ",
+      "range": [
+        1265,
+        1298
+      ],
+      "loc": {
+        "start": {
+          "line": 98,
+          "column": 0
+        },
+        "end": {
+          "line": 101,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * IP address\n * @type {String}\n ",
+      "range": [
+        1328,
+        1367
+      ],
+      "loc": {
+        "start": {
+          "line": 104,
+          "column": 0
+        },
+        "end": {
+          "line": 107,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Default values\n ",
+      "range": [
+        1408,
+        1433
+      ],
+      "loc": {
+        "start": {
+          "line": 110,
+          "column": 0
+        },
+        "end": {
+          "line": 112,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Auto filter delay in milliseconds\n * @type {Number}\n ",
+      "range": [
+        1435,
+        1497
+      ],
+      "loc": {
+        "start": {
+          "line": 114,
+          "column": 0
+        },
+        "end": {
+          "line": 117,
           "column": 3
         }
       }

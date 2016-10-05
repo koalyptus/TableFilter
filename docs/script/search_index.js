@@ -60,10 +60,22 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/const.js~date",
+    "variable/index.html#static-variable-DATE",
+    "<span>DATE</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/const.js~down_arrow_key",
     "variable/index.html#static-variable-DOWN_ARROW_KEY",
     "<span>DOWN_ARROW_KEY</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
     "variable"
+  ],
+  [
+    "tablefilter/src/modules/datetype.js~datetype",
+    "class/src/modules/dateType.js~DateType.html",
+    "<span>DateType</span> <span class=\"search-result-import-path\">tablefilter/src/modules/dateType.js</span>",
+    "class"
   ],
   [
     "tablefilter/src/modules/dropdown.js~dropdown",
@@ -88,6 +100,12 @@ window.esdocSearchIndex = [
     "class/src/emitter.js~Emitter.html",
     "<span>Emitter</span> <span class=\"search-result-import-path\">tablefilter/src/emitter.js</span>",
     "class"
+  ],
+  [
+    "tablefilter/src/const.js~formatted_number",
+    "variable/index.html#static-variable-FORMATTED_NUMBER",
+    "<span>FORMATTED_NUMBER</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
   ],
   [
     "tablefilter/src/feature.js~feature",
@@ -138,6 +156,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/const.js~ip_address",
+    "variable/index.html#static-variable-IP_ADDRESS",
+    "<span>IP_ADDRESS</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/modules/loader.js~loader",
     "class/src/modules/loader.js~Loader.html",
     "<span>Loader</span> <span class=\"search-result-import-path\">tablefilter/src/modules/loader.js</span>",
@@ -153,6 +177,12 @@ window.esdocSearchIndex = [
     "tablefilter/src/const.js~none",
     "variable/index.html#static-variable-NONE",
     "<span>NONE</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/const.js~number",
+    "variable/index.html#static-variable-NUMBER",
+    "<span>NUMBER</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
     "variable"
   ],
   [
@@ -183,6 +213,12 @@ window.esdocSearchIndex = [
     "tablefilter/src/const.js~select",
     "variable/index.html#static-variable-SELECT",
     "<span>SELECT</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/const.js~string",
+    "variable/index.html#static-variable-STRING",
+    "<span>STRING</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
     "variable"
   ],
   [
@@ -273,12 +309,6 @@ window.esdocSearchIndex = [
     "tablefilter/src/dom.js~elm",
     "variable/index.html#static-variable-elm",
     "<span>elm</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
-    "variable"
-  ],
-  [
-    "tablefilter/src/date.js~formatdate",
-    "variable/index.html#static-variable-formatDate",
-    "<span>formatDate</span> <span class=\"search-result-import-path\">tablefilter/src/date.js</span>",
     "variable"
   ],
   [
@@ -378,12 +408,6 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "tablefilter/src/date.js~isvaliddate",
-    "variable/index.html#static-variable-isValidDate",
-    "<span>isValidDate</span> <span class=\"search-result-import-path\">tablefilter/src/date.js</span>",
-    "variable"
-  ],
-  [
     "tablefilter/src/event.js~keycode",
     "variable/index.html#static-variable-keyCode",
     "<span>keyCode</span> <span class=\"search-result-import-path\">tablefilter/src/event.js</span>",
@@ -408,6 +432,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/number.js~parse",
+    "variable/index.html#static-variable-parse",
+    "<span>parse</span> <span class=\"search-result-import-path\">tablefilter/src/number.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/dom.js~removeclass",
     "variable/index.html#static-variable-removeClass",
     "<span>removeClass</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
@@ -423,12 +453,6 @@ window.esdocSearchIndex = [
     "tablefilter/src/event.js~removeevt",
     "variable/index.html#static-variable-removeEvt",
     "<span>removeEvt</span> <span class=\"search-result-import-path\">tablefilter/src/event.js</span>",
-    "variable"
-  ],
-  [
-    "tablefilter/src/helpers.js~removenbformat",
-    "variable/index.html#static-variable-removeNbFormat",
-    "<span>removeNbFormat</span> <span class=\"search-result-import-path\">tablefilter/src/helpers.js</span>",
     "variable"
   ],
   [
@@ -813,12 +837,6 @@ window.esdocSearchIndex = [
     "src/cookie.js",
     "file/src/cookie.js.html",
     "src/cookie.js",
-    "file"
-  ],
-  [
-    "src/date.js",
-    "file/src/date.js.html",
-    "src/date.js",
     "file"
   ],
   [
@@ -1680,12 +1698,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/helpers.js",
-    "file/src/helpers.js.html",
-    "src/helpers.js",
-    "file"
-  ],
-  [
     "src/modules/alternaterows.js",
     "file/src/modules/alternateRows.js.html",
     "src/modules/alternateRows.js",
@@ -1924,6 +1936,72 @@ window.esdocSearchIndex = [
     "class/src/modules/clearButton.js~ClearButton.html#instance-member-tooltip",
     "src/modules/clearButton.js~ClearButton#tooltip",
     "member"
+  ],
+  [
+    "src/modules/datetype.js",
+    "file/src/modules/dateType.js.html",
+    "src/modules/dateType.js",
+    "file"
+  ],
+  [
+    "src/modules/datetype.js~datetype#addconfigformats",
+    "class/src/modules/dateType.js~DateType.html#instance-method-addConfigFormats",
+    "src/modules/dateType.js~DateType#addConfigFormats",
+    "method"
+  ],
+  [
+    "src/modules/datetype.js~datetype#constructor",
+    "class/src/modules/dateType.js~DateType.html#instance-constructor-constructor",
+    "src/modules/dateType.js~DateType#constructor",
+    "method"
+  ],
+  [
+    "src/modules/datetype.js~datetype#datetime",
+    "class/src/modules/dateType.js~DateType.html#instance-member-datetime",
+    "src/modules/dateType.js~DateType#datetime",
+    "member"
+  ],
+  [
+    "src/modules/datetype.js~datetype#destroy",
+    "class/src/modules/dateType.js~DateType.html#instance-method-destroy",
+    "src/modules/dateType.js~DateType#destroy",
+    "method"
+  ],
+  [
+    "src/modules/datetype.js~datetype#getoptions",
+    "class/src/modules/dateType.js~DateType.html#instance-method-getOptions",
+    "src/modules/dateType.js~DateType#getOptions",
+    "method"
+  ],
+  [
+    "src/modules/datetype.js~datetype#init",
+    "class/src/modules/dateType.js~DateType.html#instance-method-init",
+    "src/modules/dateType.js~DateType#init",
+    "method"
+  ],
+  [
+    "src/modules/datetype.js~datetype#initialized",
+    "class/src/modules/dateType.js~DateType.html#instance-member-initialized",
+    "src/modules/dateType.js~DateType#initialized",
+    "member"
+  ],
+  [
+    "src/modules/datetype.js~datetype#isvalid",
+    "class/src/modules/dateType.js~DateType.html#instance-method-isValid",
+    "src/modules/dateType.js~DateType#isValid",
+    "method"
+  ],
+  [
+    "src/modules/datetype.js~datetype#locale",
+    "class/src/modules/dateType.js~DateType.html#instance-member-locale",
+    "src/modules/dateType.js~DateType#locale",
+    "member"
+  ],
+  [
+    "src/modules/datetype.js~datetype#parse",
+    "class/src/modules/dateType.js~DateType.html#instance-method-parse",
+    "src/modules/dateType.js~DateType#parse",
+    "method"
   ],
   [
     "src/modules/dropdown.js",
@@ -3312,6 +3390,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/number.js",
+    "file/src/number.js.html",
+    "src/number.js",
+    "file"
+  ],
+  [
     "src/root.js",
     "file/src/root.js.html",
     "src/root.js",
@@ -3414,15 +3498,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#coldatetype",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-colDateType",
-    "src/tablefilter.js~TableFilter#colDateType",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#colnbformat",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-colNbFormat",
-    "src/tablefilter.js~TableFilter#colNbFormat",
+    "src/tablefilter.js~tablefilter#coltypes",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-colTypes",
+    "src/tablefilter.js~TableFilter#colTypes",
     "member"
   ],
   [
@@ -3465,12 +3543,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#decimalseparator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-decimalSeparator",
     "src/tablefilter.js~TableFilter#decimalSeparator",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#defaultdatetype",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-defaultDateType",
-    "src/tablefilter.js~TableFilter#defaultDateType",
     "member"
   ],
   [
@@ -3858,6 +3930,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#hastype",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-hasType",
+    "src/tablefilter.js~TableFilter#hasType",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#hasvisiblerows",
     "class/src/tablefilter.js~TableFilter.html#instance-member-hasVisibleRows",
     "src/tablefilter.js~TableFilter#hasVisibleRows",
@@ -3987,6 +4065,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#loader",
     "class/src/tablefilter.js~TableFilter.html#instance-member-loader",
     "src/tablefilter.js~TableFilter#loader",
+    "member"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#locale",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-locale",
+    "src/tablefilter.js~TableFilter#locale",
     "member"
   ],
   [

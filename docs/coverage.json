@@ -1,11 +1,11 @@
 {
   "coverage": "100%",
-  "expectCount": 629,
-  "actualCount": 629,
+  "expectCount": 643,
+  "actualCount": 643,
   "files": {
     "src/const.js": {
-      "expectCount": 13,
-      "actualCount": 13,
+      "expectCount": 18,
+      "actualCount": 18,
       "undocumentLines": []
     },
     "src/extensions/advancedGrid/adapterEzEditTable.js": {
@@ -41,6 +41,11 @@
     "src/extensions/colsVisibility/colsVisibility.js": {
       "expectCount": 49,
       "actualCount": 49,
+      "undocumentLines": []
+    },
+    "src/modules/dateType.js": {
+      "expectCount": 11,
+      "actualCount": 11,
       "undocumentLines": []
     },
     "src/modules/dropdown.js": {
@@ -143,11 +148,6 @@
       "actualCount": 5,
       "undocumentLines": []
     },
-    "src/date.js": {
-      "expectCount": 2,
-      "actualCount": 2,
-      "undocumentLines": []
-    },
     "src/array.js": {
       "expectCount": 1,
       "actualCount": 1,
@@ -163,7 +163,7 @@
       "actualCount": 8,
       "undocumentLines": []
     },
-    "src/helpers.js": {
+    "src/number.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []

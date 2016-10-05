@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.2.67 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.3.0 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,18 +39,21 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHECKLIST">CHECKLIST</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DATE">DATE</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DOWN_ARROW_KEY">DOWN_ARROW_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ENTER_KEY">ENTER_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ESC_KEY">ESC_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FORMATTED_NUMBER">FORMATTED_NUMBER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HEADER_TAG">HEADER_TAG</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INPUT">INPUT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IP_ADDRESS">IP_ADDRESS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MULTIPLE">MULTIPLE</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NONE">NONE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NUMBER">NUMBER</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT">SELECT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRING">STRING</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-formatDate">formatDate</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isValidDate">isValidDate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
@@ -69,7 +72,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeEvt">removeEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stopEvt">stopEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeNbFormat">removeNbFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-parse">parse</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortAsc">numSortAsc</a></span></span></li>
@@ -95,6 +98,7 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">modules</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dateType.js~DateType.html">DateType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/hash.js~Hash.html">Hash</a></span></span></li>
@@ -122,10 +126,10 @@ import {
 } from &apos;./dom&apos;;
 import {contains, matchCase, rgxEsc, trim} from &apos;./string&apos;;
 import {isEmpty as isEmptyString} from &apos;./string&apos;;
-import {isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef}
-from &apos;./types&apos;;
-import {formatDate, isValidDate} from &apos;./date&apos;;
-import {removeNbFormat} from &apos;./helpers&apos;;
+import {
+    isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef
+} from &apos;./types&apos;;
+import {parse as parseNb} from &apos;./number&apos;
 
 import {root} from &apos;./root&apos;;
 import {Emitter} from &apos;./emitter&apos;;
@@ -143,11 +147,12 @@ import {Help} from &apos;./modules/help&apos;;
 import {AlternateRows} from &apos;./modules/alternateRows&apos;;
 import {NoResults} from &apos;./modules/noResults&apos;;
 import {State} from &apos;./modules/state&apos;;
+import {DateType} from &apos;./modules/dateType&apos;;
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
     ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
-    CELL_TAG, AUTO_FILTER_DELAY
+    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER
 } from &apos;./const&apos;;
 
 let doc = root.document;
@@ -955,11 +960,13 @@ export class TableFilter {
         this.state = isObj(f.state) || Boolean(f.state);
 
         /*** data types ***/
+
         /**
-         * Define default date type (DMY)
+         * Define default locale, default to &apos;en&apos; as per Sugar Date module:
+         * https://sugarjs.com/docs/#/DateLocales
          * @type {String}
          */
-        this.defaultDateType = f.default_date_type || &apos;DMY&apos;;
+        this.locale = f.locale || &apos;en&apos;;
 
         /**
          * Define thousands separator &apos;,&apos; or &apos;.&apos;, defaults to &apos;,&apos;
@@ -974,34 +981,27 @@ export class TableFilter {
         this.decimalSeparator = f.decimal_separator || &apos;.&apos;;
 
         /**
-         * Determine whether table has columns with numeric formats
+         * Determine whether table has columns data types
          * @type {Boolean}
          * @private
          */
-        this.hasColNbFormat = isArray(f.col_number_format);
+        this.hasColTypes = isArray(f.col_types);
 
         /**
-         * Define numeric format on a column basis, two possible values &apos;EU&apos; and
-         * &apos;US&apos;, ie:
-         * col_number_format : [null, &apos;US&apos;, &apos;EU&apos;, null]
+         * Define data types on a column basis, possible values &apos;string&apos;,
+         * &apos;number&apos;, &apos;formatted-number&apos;, &apos;date&apos;, &apos;ipaddress&apos; ie:
+         * col_types : [
+         *  &apos;string&apos;, &apos;date&apos;, &apos;number&apos;,
+         *  { type: &apos;formatted-number&apos;, decimal: &apos;,&apos;, thousands: &apos;.&apos; },
+         *  { type: &apos;date&apos;, locale: &apos;en-gb&apos; },
+         *  { type: &apos;date&apos;, format: [&apos;{dd}-{months}-{yyyy|yy}&apos;] }
+         * ]
+         *
+         * Refer to https://sugarjs.com/docs/#/DateParsing for exhaustive
+         * information on date parsing formats supported by Sugar Date
          * @type {Array}
          */
-        this.colNbFormat = this.hasColNbFormat ? f.col_number_format : null;
-
-        /**
-         * Determine whether table has columns with date types
-         * @type {Boolean}
-         * @private
-         */
-        this.hasColDateType = isArray(f.col_date_type);
-
-        /**
-         * Define date format on a column basis, possible values &apos;DMY&apos;, &apos;MDY&apos;,
-         * &apos;YMD&apos;, &apos;DDMMMYYYY&apos;, ie:
-         * col_date_type : [null, &apos;DMY&apos;, &apos;MDY&apos;, &apos;YMD&apos;, null, &apos;DDMMMYYYY&apos;]
-         * @type {Array}
-         */
-        this.colDateType = this.hasColDateType ? f.col_date_type : null;
+        this.colTypes = this.hasColTypes ? f.col_types : [];
 
         /*** ids prefixes ***/
         /**
@@ -1133,6 +1133,12 @@ export class TableFilter {
         //loads theme
         if (this.hasThemes) {
             this.loadThemes();
+        }
+
+        // Instanciate sugar date wrapper
+        if (!Mod.dateType) {
+            Mod.dateType = new DateType(this);
+            Mod.dateType.init();
         }
 
         // Instantiate help feature and initialise only if set true
@@ -1400,6 +1406,9 @@ export class TableFilter {
      * Insert filters row at initialization
      */
     _insertFiltersRow() {
+        // TODO: prevent filters row generation for popup filters too,
+        // to reduce and simplify headers row index adjusting across lib modules
+        // (GridLayout, PopupFilter etc)
         if (this.gridLayout) {
             return;
         }
@@ -1855,8 +1864,8 @@ export class TableFilter {
         // search args re-init
         let searchArgs = this.getFiltersValue();
 
-        let numCellData;
-        let nbFormat;
+        let numData;
+        let decimal = this.decimalSeparator;
         let re_le = new RegExp(this.leOperator),
             re_ge = new RegExp(this.geOperator),
             re_l = new RegExp(this.lwOperator),
@@ -1892,12 +1901,10 @@ export class TableFilter {
         }
 
         //looks for search argument in current row
-        function hasArg(sA, cellData, j) {
+        function hasArg(sA, cellData, colIdx) {
             sA = matchCase(sA, this.caseSensitive);
 
-            let occurence;
-            let dtType = this.hasColDateType ?
-                this.colDateType[j] : this.defaultDateType;
+            let occurence = false;
 
             //Search arg operator tests
             let hasLO = re_l.test(sA),
@@ -1914,46 +1921,59 @@ export class TableFilter {
                 hasNM = (re_nm === sA),
                 hasRE = re_re.test(sA);
 
-            //Search arg dates tests
-            let isLDate = hasLO &amp;&amp; isValidDate(sA.replace(re_l, &apos;&apos;), dtType);
-            let isLEDate = hasLE &amp;&amp; isValidDate(sA.replace(re_le, &apos;&apos;), dtType);
-            let isGDate = hasGR &amp;&amp; isValidDate(sA.replace(re_g, &apos;&apos;), dtType);
-            let isGEDate = hasGE &amp;&amp; isValidDate(sA.replace(re_ge, &apos;&apos;), dtType);
-            let isDFDate = hasDF &amp;&amp; isValidDate(sA.replace(re_d, &apos;&apos;), dtType);
-            let isEQDate = hasEQ &amp;&amp; isValidDate(sA.replace(re_eq, &apos;&apos;), dtType);
+            // Check for dates or resolve date type
+            if (this.hasType(colIdx, [DATE])) {
+                let dte1, dte2;
 
-            let dte1, dte2;
-            //dates
-            if (isValidDate(cellData, dtType)) {
-                dte1 = formatDate(cellData, dtType);
+                let dateType = this.Mod.dateType;
+                let isValidDate = dateType.isValid.bind(dateType);
+                let parseDate = dateType.parse.bind(dateType);
+                let locale = dateType.getOptions(colIdx).locale || this.locale;
+
+                // Search arg dates tests
+                let isLDate = hasLO &amp;&amp;
+                    isValidDate(sA.replace(re_l, &apos;&apos;), locale);
+                let isLEDate = hasLE &amp;&amp;
+                    isValidDate(sA.replace(re_le, &apos;&apos;), locale);
+                let isGDate = hasGR &amp;&amp;
+                    isValidDate(sA.replace(re_g, &apos;&apos;), locale);
+                let isGEDate = hasGE &amp;&amp;
+                    isValidDate(sA.replace(re_ge, &apos;&apos;), locale);
+                let isDFDate = hasDF &amp;&amp;
+                    isValidDate(sA.replace(re_d, &apos;&apos;), locale);
+                let isEQDate = hasEQ &amp;&amp;
+                    isValidDate(sA.replace(re_eq, &apos;&apos;), locale);
+
+                dte1 = parseDate(cellData, locale);
+
                 // lower date
                 if (isLDate) {
-                    dte2 = formatDate(sA.replace(re_l, &apos;&apos;), dtType);
+                    dte2 = parseDate(sA.replace(re_l, &apos;&apos;), locale);
                     occurence = dte1 &lt; dte2;
                 }
                 // lower equal date
                 else if (isLEDate) {
-                    dte2 = formatDate(sA.replace(re_le, &apos;&apos;), dtType);
+                    dte2 = parseDate(sA.replace(re_le, &apos;&apos;), locale);
                     occurence = dte1 &lt;= dte2;
                 }
                 // greater equal date
                 else if (isGEDate) {
-                    dte2 = formatDate(sA.replace(re_ge, &apos;&apos;), dtType);
+                    dte2 = parseDate(sA.replace(re_ge, &apos;&apos;), locale);
                     occurence = dte1 &gt;= dte2;
                 }
                 // greater date
                 else if (isGDate) {
-                    dte2 = formatDate(sA.replace(re_g, &apos;&apos;), dtType);
+                    dte2 = parseDate(sA.replace(re_g, &apos;&apos;), locale);
                     occurence = dte1 &gt; dte2;
                 }
                 // different date
                 else if (isDFDate) {
-                    dte2 = formatDate(sA.replace(re_d, &apos;&apos;), dtType);
+                    dte2 = parseDate(sA.replace(re_d, &apos;&apos;), locale);
                     occurence = dte1.toString() !== dte2.toString();
                 }
                 // equal date
                 else if (isEQDate) {
-                    dte2 = formatDate(sA.replace(re_eq, &apos;&apos;), dtType);
+                    dte2 = parseDate(sA.replace(re_eq, &apos;&apos;), locale);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 // searched keyword with * operator doesn&apos;t have to be a date
@@ -1961,8 +1981,8 @@ export class TableFilter {
                     occurence = contains(sA.replace(re_lk, &apos;&apos;), cellData,
                         false, this.caseSensitive);
                 }
-                else if (isValidDate(sA, dtType)) {
-                    dte2 = formatDate(sA, dtType);
+                else if (isValidDate(sA)) {
+                    dte2 = parseDate(sA, locale);
                     occurence = dte1.toString() === dte2.toString();
                 }
                 //empty
@@ -1973,48 +1993,51 @@ export class TableFilter {
                 else if (hasNM) {
                     occurence = !isEmptyString(cellData);
                 } else {
-                    occurence = contains(sA, cellData, this.isExactMatch(j),
-                        this.caseSensitive);
+                    occurence = contains(sA, cellData,
+                        this.isExactMatch(colIdx), this.caseSensitive);
                 }
             }
 
             else {
-                //first numbers need to be formated
-                if (this.hasColNbFormat &amp;&amp; this.colNbFormat[j]) {
-                    numCellData = removeNbFormat(cellData, this.colNbFormat[j]);
-                    nbFormat = this.colNbFormat[j];
-                } else {
-                    if (this.thousandsSeparator === &apos;,&apos; &amp;&amp;
-                        this.decimalSeparator === &apos;.&apos;) {
-                        numCellData = removeNbFormat(cellData, &apos;us&apos;);
-                        nbFormat = &apos;us&apos;;
-                    } else {
-                        numCellData = removeNbFormat(cellData, &apos;eu&apos;);
-                        nbFormat = &apos;eu&apos;;
+                if (this.hasType(colIdx, [FORMATTED_NUMBER])) {
+                    let colType = this.colTypes[colIdx];
+                    if (colType.hasOwnProperty(&apos;decimal&apos;)) {
+                        decimal = colType.decimal;
                     }
                 }
+                // Convert to number anyways to auto-resolve type in case not
+                // defined by configuration
+                numData = Number(cellData) || parseNb(cellData, decimal);
 
                 // first checks if there is any operator (&lt;,&gt;,&lt;=,&gt;=,!,*,=,{,},
                 // rgx:)
                 // lower equal
                 if (hasLE) {
-                    occurence = numCellData &lt;= removeNbFormat(
-                        sA.replace(re_le, &apos;&apos;), nbFormat);
+                    occurence = numData &lt;= parseNb(
+                        sA.replace(re_le, &apos;&apos;),
+                        decimal
+                    );
                 }
                 //greater equal
                 else if (hasGE) {
-                    occurence = numCellData &gt;= removeNbFormat(
-                        sA.replace(re_ge, &apos;&apos;), nbFormat);
+                    occurence = numData &gt;= parseNb(
+                        sA.replace(re_ge, &apos;&apos;),
+                        decimal
+                    );
                 }
                 //lower
                 else if (hasLO) {
-                    occurence = numCellData &lt; removeNbFormat(
-                        sA.replace(re_l, &apos;&apos;), nbFormat);
+                    occurence = numData &lt; parseNb(
+                        sA.replace(re_l, &apos;&apos;),
+                        decimal
+                    );
                 }
                 //greater
                 else if (hasGR) {
-                    occurence = numCellData &gt; removeNbFormat(
-                        sA.replace(re_g, &apos;&apos;), nbFormat);
+                    occurence = numData &gt; parseNb(
+                        sA.replace(re_g, &apos;&apos;),
+                        decimal
+                    );
                 }
                 //different
                 else if (hasDF) {
@@ -2067,19 +2090,20 @@ export class TableFilter {
                 } else {
                     // If numeric type data, perform a strict equality test and
                     // fallback to unformatted number string comparison
-                    if (numCellData &amp;&amp; this.hasColNbFormat &amp;&amp;
-                        this.colNbFormat[j] &amp;&amp; !this.singleSearchFlt) {
-                        // removeNbFormat can return 0 for strings which are not
+                    if (numData &amp;&amp;
+                        this.hasType(colIdx, [NUMBER, FORMATTED_NUMBER]) &amp;&amp;
+                        !this.singleSearchFlt) {
+                        // parseNb can return 0 for strings which are not
                         // formatted numbers, in that case return the original
-                        // string. TODO: handle this in removeNbFormat
-                        sA = removeNbFormat(sA, nbFormat) || sA;
-                        occurence = numCellData === sA ||
-                            contains(sA.toString(), numCellData.toString(),
-                                this.isExactMatch(j), this.caseSensitive);
+                        // string. TODO: handle this in parseNb
+                        sA = parseNb(sA, decimal) || sA;
+                        occurence = numData === sA ||
+                            contains(sA.toString(), numData.toString(),
+                                this.isExactMatch(colIdx), this.caseSensitive);
                     } else {
                         // Finally test search term is contained in cell data
-                        occurence = contains(sA, cellData, this.isExactMatch(j),
-                            this.caseSensitive);
+                        occurence = contains(sA, cellData,
+                            this.isExactMatch(colIdx), this.caseSensitive);
                     }
                 }
 
@@ -2228,11 +2252,17 @@ export class TableFilter {
                     if (j !== colIndex || row[i].style.display !== &apos;&apos;) {
                         continue;
                     }
-                    let cellData = this.getCellData(cell[j]),
-                        nbFormat = this.colNbFormat ?
-                            this.colNbFormat[colIndex] : undefined,
-                        data = num ? removeNbFormat(cellData, nbFormat) :
-                            cellData;
+                    let cellData = this.getCellData(cell[j]);
+                    let decimal = this.decimalSeparator;
+                    if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
+                        let colType = this.colTypes[colIndex];
+                        if (colType.hasOwnProperty(&apos;decimal&apos;)) {
+                            decimal = colType.decimal;
+                        }
+                    }
+                    let data = num ?
+                        Number(cellData) || parseNb(cellData, decimal) :
+                        cellData;
                     colValues.push(data);
                 }
             }
@@ -2938,6 +2968,23 @@ export class TableFilter {
     getLastRowIndex() {
         let nbRows = this.getRowsNb(true);
         return (nbRows - 1);
+    }
+
+    /**
+     * Determine whether the specified column has one of the passed types
+     * @param {Number} colIndex Column index
+     * @param {Array} [types=[]] List of column types
+     * @returns {Boolean}
+     */
+    hasType(colIndex, types = []) {
+        if (!this.hasColTypes) {
+            return false;
+        }
+        let colType = this.colTypes[colIndex];
+        if (isObj(colType)) {
+            colType = colType.type;
+        }
+        return types.indexOf(colType) !== -1;
     }
 
     /**
