@@ -1,10 +1,12 @@
 import {Feature} from '../../feature';
-import {isArray, isFn, isUndef} from '../../types';
+import {isArray, isFn, isUndef, isObj} from '../../types';
 import {createElm, elm, getText, tag} from '../../dom';
 import {addEvt} from '../../event';
-import {formatDate} from '../../date';
-import {removeNbFormat} from '../../helpers';
-import {NONE, CELL_TAG, HEADER_TAG} from '../../const';
+import {parse as parseNb} from '../../number';
+import {
+    NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, DATE, FORMATTED_NUMBER,
+    IP_ADDRESS
+} from '../../const';
 
 /**
  * SortableTable Adapter module
@@ -42,7 +44,7 @@ export default class AdapterSortableTable extends Feature {
          * List of sort type per column basis
          * @type {Array}
          */
-        this.sortTypes = isArray(opts.types) ? opts.types : [];
+        this.sortTypes = isArray(opts.types) ? opts.types : tf.colTypes;
 
         /**
          * Column to be sorted at initialization, ie:
@@ -146,10 +148,14 @@ export default class AdapterSortableTable extends Feature {
             throw new Error('SortableTable class not found.');
         }
 
+        // Add any date format if needed
+        let dateType = tf.feature('dateType');
+        dateType.addConfigFormats(this.sortTypes);
+
         this.overrideSortableTable();
         this.setSortTypes();
 
-        //Column sort at start
+        // Column sort at start
         let sortColAtStart = adpt.sortColAtStart;
         if (sortColAtStart) {
             this.stt.sort(sortColAtStart[0], sortColAtStart[1]);
@@ -378,9 +384,10 @@ export default class AdapterSortableTable extends Feature {
     /**
      * Adds a sort type
      */
-    addSortType() {
-        var args = arguments;
-        SortableTable.prototype.addSortType(args[0], args[1], args[2], args[3]);
+    addSortType(...args) {
+        // Extract the arguments
+        let [id, caster, sorter] = args;
+        SortableTable.prototype.addSortType(id, caster, sorter);
     }
 
     /**
@@ -394,20 +401,32 @@ export default class AdapterSortableTable extends Feature {
 
         for (let i = 0; i < tf.nbCells; i++) {
             let colType;
-
             if (sortTypes[i]) {
-                colType = sortTypes[i].toLowerCase();
-                if (colType === NONE) {
-                    colType = 'None';
-                }
-            } else { // resolve column types
-                if (tf.hasColNbFormat && tf.colNbFormat[i] !== null) {
-                    colType = tf.colNbFormat[i].toLowerCase();
-                } else if (tf.hasColDateType && tf.colDateType[i] !== null) {
-                    colType = tf.colDateType[i].toLowerCase() + 'date';
+                colType = sortTypes[i];
+                if (isObj(colType)) {
+                    if (colType.type === DATE) {
+                        colType = this._addDateType(i, sortTypes);
+                    }
+                    else if (colType.type === FORMATTED_NUMBER) {
+                        let decimal = colType.decimal || tf.decimalSeparator;
+                        colType = this._addNumberType(i, decimal);
+                    }
                 } else {
-                    colType = 'String';
+                    colType = colType.toLowerCase();
+                    if (colType === DATE) {
+                        colType = this._addDateType(i, sortTypes);
+                    }
+                    else if (colType === FORMATTED_NUMBER ||
+                        colType === NUMBER) {
+                        colType = this._addNumberType(i, tf.decimalSeparator);
+                    }
+                    else if (colType === NONE) {
+                        // TODO: normalise 'none' vs 'None'
+                        colType = 'None';
+                    }
                 }
+            } else {
+                colType = STRING;
             }
             _sortTypes.push(colType);
         }
@@ -415,17 +434,9 @@ export default class AdapterSortableTable extends Feature {
         //Public TF method to add sort type
 
         //Custom sort types
-        this.addSortType('number', Number);
         this.addSortType('caseinsensitivestring', SortableTable.toUpperCase);
-        this.addSortType('date', SortableTable.toDate);
-        this.addSortType('string');
-        this.addSortType('us', usNumberConverter);
-        this.addSortType('eu', euNumberConverter);
-        this.addSortType('dmydate', dmyDateConverter);
-        this.addSortType('ymddate', ymdDateConverter);
-        this.addSortType('mdydate', mdyDateConverter);
-        this.addSortType('ddmmmyyyydate', ddmmmyyyyDateConverter);
-        this.addSortType('ipaddress', ipAddress, sortIP);
+        this.addSortType(STRING);
+        this.addSortType(IP_ADDRESS, ipAddress, sortIP);
 
         this.stt = new SortableTable(tf.tbl, _sortTypes);
 
@@ -453,6 +464,27 @@ export default class AdapterSortableTable extends Feature {
         }
     }
 
+    _addDateType(colIndex, types) {
+        let tf = this.tf;
+        let dateType = tf.feature('dateType');
+        let locale = dateType.getOptions(colIndex, types).locale || tf.locale;
+        let colType = `${DATE}-${locale}`;
+
+        this.addSortType(colType, (value) => {
+            return dateType.parse(value, locale);
+        });
+        return colType;
+    }
+
+    _addNumberType(colIndex, decimal) {
+        let colType = `${FORMATTED_NUMBER}${decimal === '.' ? '' : '-custom'}`;
+
+        this.addSortType(colType, (value) => {
+            return parseNb(value, decimal);
+        });
+        return colType;
+    }
+
     /**
      * Remove extension
      */
@@ -464,7 +496,6 @@ export default class AdapterSortableTable extends Feature {
         this.emitter.off(['sort'],
             (tf, colIdx, desc) => this.sortByColumnIndex(colIdx, desc));
         this.sorted = false;
-        this.initialized = false;
         this.stt.destroy();
 
         let ids = tf.getFiltersId();
@@ -482,28 +513,6 @@ export default class AdapterSortableTable extends Feature {
 }
 
 //Converters
-function usNumberConverter(s) {
-    return removeNbFormat(s, 'us');
-}
-function euNumberConverter(s) {
-    return removeNbFormat(s, 'eu');
-}
-function dateConverter(s, format) {
-    return formatDate(s, format);
-}
-function dmyDateConverter(s) {
-    return dateConverter(s, 'DMY');
-}
-function mdyDateConverter(s) {
-    return dateConverter(s, 'MDY');
-}
-function ymdDateConverter(s) {
-    return dateConverter(s, 'YMD');
-}
-function ddmmmyyyyDateConverter(s) {
-    return dateConverter(s, 'DDMMMYYYY');
-}
-
 function ipAddress(value) {
     let vals = value.split('.');
     for (let x in vals) {

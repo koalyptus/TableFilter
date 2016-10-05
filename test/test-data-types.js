@@ -2,17 +2,14 @@
     // TODO: add sort to test it with different column types
     var tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
-        col_number_format: [
+        col_types: [
             null, null, null,
-            'EU', 'US', null,
-            null, null, null,
+            { type: 'formatted-number', decimal: ',', thousands: ','},
+            'formatted-number', null,
+            { type: 'date', locale: 'fr', },
+            { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}' },
+            { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
             'IpAddress'
-        ],
-        col_date_type: [
-            null, null, null,
-            null, null, null,
-            'dmy', 'mdy', 'ddmmmyyyy',
-            null
         ]
     });
     tf.init();
@@ -21,8 +18,17 @@
     module('Sanity checks');
     test('Data types', function() {
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
-        deepEqual(tf.hasColNbFormat, true, 'Has number column types');
-        deepEqual(tf.hasColDateType, true, 'Has date column tyoes');
+        deepEqual(
+            tf.hasType(3, ['formatted-number']) &&
+            tf.hasType(4, ['formatted-number']),
+            true, 'Has number column types'
+        );
+        deepEqual(
+            tf.hasType(6, ['date']) &&
+            tf.hasType(7, ['date']) &&
+            tf.hasType(8, ['date']),
+            true, 'Has date column types'
+        );
     });
 
     module('Data types filtering');
@@ -86,7 +92,7 @@
         deepEqual(tf.getValidRows(), [7], 'Expected rows');
     });
 
-    test('Can filter a US formatted number', function() {
+    test('Can filter a formatted number', function() {
         // setup
         tf.clearFilters();
 
@@ -98,7 +104,7 @@
         deepEqual(tf.getValidRows(), [6], 'Expected rows');
     });
 
-    test('Can filter a US formatted number column with a number', function() {
+    test('Can filter a formatted number column with a number', function() {
         // setup
         tf.clearFilters();
 
@@ -110,7 +116,7 @@
         deepEqual(tf.getValidRows(), [14], 'Expected rows');
     });
 
-    test('Can filter a US formatted number column with a number without ' +
+    test('Can filter a formatted number column with a number without ' +
         'thousands separator', function() {
         // setup
         tf.clearFilters();
@@ -123,7 +129,7 @@
         deepEqual(tf.getValidRows(), [13], 'Expected rows');
     });
 
-    test('Can filter a US formatted number column with a number without ' +
+    test('Can filter a formatted number column with a number without ' +
         'decimals', function() {
         // setup
         tf.clearFilters();
@@ -161,7 +167,7 @@
             deepEqual(tf.getValidRows(), [17], 'Expected rows');
         });
 
-    test('Can filter a US formatted date column', function() {
+    test('Can filter a formatted date column', function() {
         // setup
         tf.clearFilters();
 
@@ -173,7 +179,7 @@
         deepEqual(tf.getValidRows(), [16], 'Expected rows');
     });
 
-    test('Can filter a US formatted date column with different date separator',
+    test('Can filter a formatted date column with different date separator',
         function() {
             // setup
             tf.clearFilters();

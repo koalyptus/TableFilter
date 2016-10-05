@@ -27,6 +27,10 @@
 <script data-config>
 var tfConfig = {
     base_path: '../dist/tablefilter/',
+    col_types: [
+        'number', 'string', 'string',
+        'formatted-number', 'formatted-number', 'string'
+    ],
     paging: true,
     state: {
         types: ['cookie'],
@@ -49,11 +53,7 @@ var tfConfig = {
             text: 'Columns: ',
             enable_tick_all: true
         }, {
-            name: 'sort',
-            types: [
-                'number', 'string', 'string',
-                'US', 'none', 'string'
-            ]
+            name: 'sort'
         }
     ]
 };

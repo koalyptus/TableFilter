@@ -1,12 +1,12 @@
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
-    col_date_type: [
-        null, null, 'ddmmmyyyy',
-        null, null, null
-    ],
-    col_number_format: [
-        null, null, null,
-        null, null, 'US'
+    col_types: [
+        null,
+        { type: 'date', format: ['{dd}.{MM}.{yyyy|yy}'] },
+        { type: 'date', format: ['{dd}.{months}.{yyyy}'] },
+        null,
+        null,
+        'formatted-number'
     ]
 });
 tf.init();

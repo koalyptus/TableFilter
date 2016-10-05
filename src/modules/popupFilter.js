@@ -162,13 +162,15 @@ export class PopupFilter extends Feature {
         let tf = this.tf;
 
         // Override headers row index if no grouped headers
-        // TODO: Prevent the filters row to simplify headers row index adjusting
+        // TODO: Because of the filters row generation, headers row index needs
+        // adjusting: prevent useless row generation
         if (tf.headersRow <= 1 && isNaN(tf.config().headers_row_index)) {
             tf.headersRow = 0;
         }
 
         // Adjust headers row index for grid-layout mode
-        // TODO: Prevent the filters row to simplify headers row index adjusting
+        // TODO: Because of the filters row generation, headers row index needs
+        // adjusting: prevent useless row generation
         if (tf.gridLayout) {
             tf.headersRow--;
             this.buildIcons();
@@ -204,8 +206,8 @@ export class PopupFilter extends Feature {
     buildIcons() {
         let tf = this.tf;
 
-        // Filters row is added to the DOM, adjust headers row index
-        // TODO: Prevent the filters row to simplify headers row index adjusting
+        // TODO: Because of the filters row generation, headers row index needs
+        // adjusting: prevent useless row generation
         tf.headersRow++;
 
         for (let i = 0; i < tf.nbCells; i++) {

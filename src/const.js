@@ -74,6 +74,40 @@ export const HEADER_TAG = 'TH';
 export const CELL_TAG = 'TD';
 
 /**
+ * Data types
+ */
+
+/**
+ * String
+ * @type {String}
+ */
+export const STRING = 'string';
+
+/**
+ * Number
+ * @type {String}
+ */
+export const NUMBER = 'number';
+
+/**
+ * Formatted number
+ * @type {String}
+ */
+export const FORMATTED_NUMBER = 'formatted-number';
+
+/**
+ * Date
+ * @type {String}
+ */
+export const DATE = 'date';
+
+/**
+ * IP address
+ * @type {String}
+ */
+export const IP_ADDRESS = 'ipaddress';
+
+/**
  * Default values
  */
 

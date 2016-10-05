@@ -22,13 +22,9 @@ var tfConfig = {
     base_path: '../dist/tablefilter/',
     filters_row_index: 2,
     headers_row_index: 1,
-    col_number_format: [
-        null, null, null,
-        'US', null, null, null
-    ],
-    col_date_type: [
-        null, null, null,
-        null, null, null, 'mdy'
+    col_types: [
+        'string', 'string', 'string',
+        'number', 'string', 'string', 'date'
     ],
     rows_counter: true,
     rows_counter_text: 'Books: ',
