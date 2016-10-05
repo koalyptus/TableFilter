@@ -543,24 +543,24 @@ var tfConfig = {
     no_results_message: true,
 
     // columns data types
-    col_number_format: [
-        null, null, null,
-        'EU', 'US', null,
-        null, null, null,
-        'IpAddress'
-    ],
-    col_date_type: [
-        null, null, null,
-        null, null, null,
-        'dmy', 'mdy', 'ddmmmyyyy',
-        null
+    col_types: [
+        'string',
+        'string',
+        'string',
+        { type: 'formatted-number', decimal: ',', thousands: '.' },
+        'formatted-number', // defaults to '.' for decimal and ',' for thousands
+        'string',
+        { type: 'date', locale: 'fr' },
+        { type: 'date', locale: 'en-US' },
+        { type: 'date', locale: 'en-US', format: ['{dd}-{months}-{yyyy|yy}'] },
+        'ipaddress'
     ],
 
     // Sort extension: in this example the column data types are provided by the
-    // 'col_number_format' and 'col_date_type' properties. The sort extension
-    // also has a 'types' property defining the columns data type. If the
-    // 'types' property is not defined, the sorting extension will check for
-    // 'col_number_format' and 'col_date_type' properties.
+    // 'col_types' property. The sort extension also has a 'types' property
+    // defining the columns data type for column sorting. If the 'types'
+    // property is not defined, the sorting extension will fallback to
+    // the 'col_types' definitions.
     extensions: [{ name: 'sort' }]
 };
 var tf = new TableFilter('data-types', tfConfig);

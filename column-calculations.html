@@ -1101,22 +1101,21 @@
             rows_counter_text: 'Items: ',
             btn_reset: true,
             status_bar: true,
-
+            col_types: [
+                'none', 'string', 'number',
+                'number', 'number', 'number',
+                'number', 'number', 'number',
+                'number', 'number', 'number',
+                'number', 'number', 'number',
+                'number'
+            ],
             sort_select: true,
             col_1: 'select',
 
             // extensions: sort and column operations
             extensions: [
                 {
-                    name: 'sort',
-                    types: [
-                        'none', 'string', 'number',
-                        'number', 'number', 'number',
-                        'number', 'number', 'number',
-                        'number', 'number', 'number',
-                        'number', 'number', 'number',
-                        'number'
-                    ]
+                    name: 'sort'
                 }, {
                     name: 'colOps',
                     id: [

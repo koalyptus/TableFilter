@@ -2806,6 +2806,10 @@
         status_bar: true,
         col_1: 'select',
         col_2: 'select',
+        col_types: [
+            'number', 'string', 'string',
+            'formatted-number', 'formatted-number', 'string'
+        ],
 
         /* columns visibility and sort extension */
         extensions: [{
@@ -2814,11 +2818,7 @@
               text: 'Columns: ',
               enable_tick_all: true
           }, {
-              name: 'sort',
-              types: [
-                  'number', 'string', 'string',
-                  'US', 'none', 'string'
-              ]
+              name: 'sort'
         }]
     };
     var tf = new TableFilter('demo', tfConfig);

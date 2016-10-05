@@ -2800,12 +2800,12 @@
             '75px', '150px', '200px',
             '100px', '100px', '350px'
         ],
+        col_types: [
+            'number', 'string', 'string',
+            'formatted-number', 'number', 'none'
+        ],
         extensions:[{
-            name: 'sort',
-            types: [
-                'number', 'string', 'string',
-                'US', 'none', 'none'
-            ]
+            name: 'sort'
         }]
     };
     var tf = new TableFilter('demo', filtersConfig);

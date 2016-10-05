@@ -181,16 +181,59 @@
 
 <h1>Data types, column operations</h1>
 
-<p>This example features 3 date types and 2 numeric formatting for the currency
-    columns:</p>
+<p>
+    This example shows how to define column types with the
+    <code>col_types</code> option and specifically numeric formats with:
+</p>
 <ul>
-    <li>"." thousands separator and "," decimal separator for &euro;</li>
-    <li>"," thousands separator and "." decimal separator for US$</li>
+    <li>"." thousands separator and "," decimal separator for &euro; column</li>
+    <li>"," thousands separator and "." decimal separator for US$ column</li>
 </ul>
+<p>
+    along with date types with <code>locale</code> and <code>format</code> specified on
+    a column basis.
+</p>
+
 <div class="alert alert-info" role="alert">
-    Use the <code>col_number_format</code> property to set numeric formats
-    ('EU', 'US' or 'IPADDRESS') and <code>col_date_type</code> to set date
-    types.
+    <code>col_type</code> property sets data types on a column basis, below a list
+    of types it can now support:
+    <ul>
+      <li><code>string</code> (default column type if none specified)</li>
+      <li><code>number</code> (unformatted number)</li>
+      <li>
+        <code>formatted-number</code>
+        (formatted number with '.' decimal separator and
+        ',' thousands separator) or
+
+        <ul>
+          <li>
+            <code>{ type: 'formatted-number', decimal: ',', thousands: '.' }</code>
+            for extended customisation
+          </li>
+        </ul>
+      </li>
+      <li>
+        <code>date</code>
+        defaulting to <code>en</code> locale or
+
+        <ul>
+          <li>
+            <code>{ type: 'date', locale: 'en-GB', format: ['{dd}-{months}-{yyyy|yy}'] }</code>
+            for extended customisation <sup><strong>*</strong></sup>
+          </li>
+        </ul>
+      </li>
+      <li><code>ipaddress</code> (specific to column sorting)</li>
+      <li><code>caseinsensitivestring</code> (specific to column sorting)</li>
+      <li><code>none</code> (specific to column sorting)</li>
+    </ul>
+    <hr>
+    <p>
+      <sup><strong>*</strong></sup>
+      To learn more about supported date formats and locales:<br>
+      <a href="https://sugarjs.com/docs/#/DateFormatting" target="_blank">
+        https://sugarjs.com/docs/#/DateFormatting</a>
+    </p>
 </div>
 
 
@@ -598,29 +641,29 @@
         btn_reset: true,
         loader: true,
         status_bar: true,
-        col_number_format: [
-            null, null, null,
-            'EU', 'US', null,
-            null, null, null,
-            'IpAddress'
-        ],
-        col_date_type: [
-            null, null, null,
-            null, null, null,
-            'dmy', 'mdy', 'ddmmmyyyy',
-            null
+        col_types: [
+            'string',
+            'string',
+            'string',
+            { type: 'formatted-number', decimal: ',', thousands: '.' },
+            'formatted-number', // defaults to '.' for decimal and ',' for thousands
+            'string',
+            { type: 'date', locale: 'fr' },
+            { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}' }, // extends 'en' locale with additional format
+            { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
+            'ipaddress'
         ],
         rows_always_visible: [totRowIndex],
-        on_filters_loaded: function(o){
-            o.setFilterValue(3, '>1.000');
-            o.setFilterValue(4, '<2,500');
-            o.setFilterValue(6, '>23-01-95');
-            o.filter();
+        on_filters_loaded: function(tf){
+            tf.setFilterValue(3, '>1.000');
+            tf.setFilterValue(4, '<2,500');
+            tf.setFilterValue(6, '>23-01-95');
+            tf.setFilterValue(8, '<2000');
+            tf.filter();
         },
         extensions:[
+            { name: 'sort' },
             {
-                name: 'sort'
-            },{
                 name: 'colOps',
                 id: ['sum1', 'sum2'],
                 col: [3, 4],
@@ -633,14 +676,18 @@
             }
         ]
     };
+
     var tf = new TableFilter('demo-tot', tfConfig);
     tf.init();
 </script>
 
 <hr style="visibility:hidden;">
 <p></p>
-<p>Below an example of ISO date support (YMD). Use <code>default_date_type</code>
-  to set a date type for a whole table ('DMY','MDY','YMD').</p>
+<p>
+    Below an example of ISO date support ({yyyy|yy}/{MM}/{dd}).
+    Use <code>locale</code> to set a locale globally
+    (defaults to 'en').
+</p>
 
 
 <table id="demo" class="dummy">
@@ -1157,12 +1204,17 @@
         btn_reset: true,
         loader: true,
         status_bar: true,
-        default_date_type: 'YMD',
-        on_filters_loaded: function(o){
-            o.setFilterValue(5, '>95-05-18');
-            o.filter();
+        locale: 'en-US',
+        col_types: [
+            'string', 'number', 'string',
+            'number', 'string', 'date'
+        ],
+        on_filters_loaded: function(tf){
+            tf.setFilterValue(5, '>95-05-18');
+            tf.filter();
         }
     };
+
     var tf2 = new TableFilter('demo', tf2Config);
     tf2.init();
 </script>

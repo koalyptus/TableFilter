@@ -183,18 +183,19 @@
 
 <p>
     This demo shows how to filter and sort a column containing images by using
-    the <code>custom_cell_data</code> delegate and defining a
-    <code>data-tf-sortKey</code> attribute in the cells of the column.
+    the <code>custom_cell_data</code> cell parser delegate and by defining the
+    <code>data-tf-sortKey</code> custom DOM attribute.
 </p>
 
 <div class="alert alert-info" role="alert">
     <code>TableFilter</code> automatically detects the presence of the
     <code>data-tf-sortKey</code> attibute in a cell. If the <code>sort</code>
-    extension is enabled the sort mechanism will sort based the column on the
+    extension is enabled the sort mechanism will sort that column based on the
     value specified in the <code>data-tf-sortKey</code> attibute.
 </div>
 
-
+<div data-config>
+  
 <table id="demo">
     <thead>
         <tr>
@@ -523,6 +524,7 @@
     </tbody>
 </table>
 
+</div>
 
 
 <script src="tablefilter/tablefilter.js"></script>
@@ -533,13 +535,9 @@ var tfConfig = {
     base_path: './tablefilter/',
     filters_row_index: 2,
     headers_row_index: 1,
-    col_number_format: [
-        null, null, null,
-        'US', null, null, null
-    ],
-    col_date_type: [
-        null, null, null,
-        null, null, null, 'mdy'
+    col_types: [
+        'string', 'string', 'string',
+        'number', 'string', 'string', 'date'
     ],
     rows_counter: true,
     rows_counter_text: 'Books: ',

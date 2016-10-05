@@ -698,15 +698,15 @@
         col_0: 'multiple',
         col_1: 'select',
         col_2: 'checklist',
+        col_types: [
+            'string', 'string', 'number',
+            'number', 'number', 'number',
+            'number', 'number', 'number'
+        ],
 
         // sorting extension
         extensions: [{
             name: 'sort',
-            types: [
-                'string', 'string', 'number',
-                'number', 'number', 'number',
-                'number', 'number', 'number'
-            ],
             async_sort: true,
             on_after_sort: function(o, colIndex){
                 document.querySelector('.badge').innerHTML =

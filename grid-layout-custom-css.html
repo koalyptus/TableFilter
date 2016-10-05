@@ -762,6 +762,10 @@
             '200px','60px','125px',
             '100px','250px','100px'
         ],
+        col_types: [
+            'string', 'number', 'string',
+            'number', 'string', 'date'
+        ],
         alternate_rows: true,
         btn_reset: true,
         rows_counter: true,
@@ -777,11 +781,7 @@
         grid_tbl_cont_css_class: 'grd-cont',
 
         extensions:[{
-            name: 'sort',
-            types: [
-                'string', 'string', 'string',
-                'us', 'string', 'ymd'
-            ]
+            name: 'sort'
         }]
     };
     var tf = new TableFilter(

@@ -13180,13 +13180,13 @@
         col_0: 'select',
         col_1: 'select',
         col_2: 'select',
+        col_types: [
+            'string', 'string', 'number',
+            'number', 'number', 'number',
+            'number', 'number', 'number'
+        ],
         extensions:[{
-            name: 'sort',
-            types: [
-                'string', 'string', 'number',
-                'number', 'number', 'number',
-                'number', 'number', 'number'
-            ]
+            name: 'sort'
         }]
     };
     var tf = new TableFilter(document.querySelector('#demo'), tfConfig);

@@ -633,7 +633,7 @@
 
 <script data-config>
 var tfConfig = {
-    base_path: './tablefilter/',
+    base_path: 'tablefilter/',
     col_0: 'select',
     col_9: 'select',
     filters_row_index: 1,
@@ -643,17 +643,17 @@ var tfConfig = {
     btn_reset: true,
     btn_reset_text: "Clear",
     loader: true,
-    col_number_format: [
-        null, null, null,
-        null, 'EU', 'US',
-        null, null, null,
-        null
-    ],
-    col_date_type: [
-        null, null, null,
-        null, null, null,
-        null, 'dmy', 'mdy',
-        null
+    col_types: [
+        'none',
+        'string',
+        'number',
+        'string',
+        { type: 'formatted-number', decimal: ',', thousands: '.' },
+        'formatted-number',
+        'string',
+        { type: 'date', locale: 'en-GB' },
+        'date',
+        'none'
     ],
 
     /* custom filtering with custom_cell_data delegate */
@@ -675,13 +675,7 @@ var tfConfig = {
 
     /* Column sorting extension */
     extensions: [{
-        name: 'sort',
-        types: [
-            'none', 'string', 'string',
-            'string', 'eu', 'us',
-            'string', 'dmydate', 'mdydate',
-            'none'
-        ]
+        name: 'sort'
     }]
 };
 var tf = new TableFilter('demo', tfConfig);

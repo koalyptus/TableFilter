@@ -13177,13 +13177,13 @@
             "120px", "120px", "100px",
             "100px", "100px", "100px"
         ],
+        col_types: [
+            'string', 'string', 'number',
+            'number', 'number', 'number',
+            'number', 'number', 'number'
+        ],
         extensions:[{
-            name: 'sort',
-            types: [
-                'string', 'string', 'number',
-                'number', 'number', 'number',
-                'number', 'number', 'number'
-            ]
+            name: 'sort'
         }]
     };
     var tf = new TableFilter('demo', filtersConfig);

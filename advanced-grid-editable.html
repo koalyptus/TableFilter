@@ -13216,6 +13216,11 @@ ezEditTable</a>
         status_bar: true,
         col_1: 'select',
         col_2: 'select',
+        col_types: [
+            'string', 'string', 'number',
+            'number', 'number', 'number',
+            'number', 'number', 'number'
+        ],
         col_widths: [
             '150px', '90px', '70px',
             '120px', '120px', '100px',
@@ -13283,12 +13288,7 @@ ezEditTable</a>
                     }
                 }
             }, {
-                name: 'sort',
-                types: [
-                    'string', 'string', 'number',
-                    'number', 'number', 'number',
-                    'number', 'number', 'number'
-                ]
+                name: 'sort'
             }
         ]
     };

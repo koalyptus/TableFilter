@@ -472,15 +472,22 @@
         rows_counter: true,
         btn_reset: true,
         status_bar: true,
+        col_types: [
+            'string',
+            'customtype',
+            'number',
+            'string',
+            { type: 'formatted-number', decimal: ',', thousands: '.' },
+            'formatted-number',
+            'string',
+            { type: 'date', locale: 'fr' },
+            { type: 'date', locale: 'en' }
+        ],
 
         // Sort extension
         extensions: [{
             name: 'sort',
-            types: [
-                'string', 'customtype', 'string',
-                'string', 'eu', 'us',
-                'string', 'dmydate','mdydate'
-            ],
+
             // Register custom sorter when sort extension is loaded
             on_sort_loaded: function(o, sort) {
                 // addSortType accepts:

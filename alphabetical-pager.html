@@ -1942,7 +1942,10 @@
             paging_length: 10,
             rows_counter: true,
             rows_counter_text: 'Countries: ',
-
+            col_types: [
+              'string', 'string', 'string',
+              'string', 'number'
+            ],
             col_widths: [
                 '75px','350px','350px',
                 '75px','75px'
@@ -1955,8 +1958,7 @@
 
             // sorting feature
             extensions: [{
-                name: 'sort',
-                types: ['string', 'string', 'string', 'string', 'number']
+                name: 'sort'
             }]
         }
     );
