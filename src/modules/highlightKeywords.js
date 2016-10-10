@@ -70,6 +70,7 @@ export class HighlightKeyword {
         if (node.nodeType === 3) {
             let tempNodeVal = node.nodeValue.toLowerCase();
             let tempWordVal = word.toLowerCase();
+
             if (tempNodeVal.indexOf(tempWordVal) !== -1) {
                 let pn = node.parentNode;
                 if (pn && pn.className !== cssClass) {
@@ -107,7 +108,9 @@ export class HighlightKeyword {
                 tempWordVal = word.toLowerCase();
 
             if (tempNodeVal.indexOf(tempWordVal) !== -1) {
-                n.parentNode.replaceChild(createText(nodeVal), n);
+                let parentNode = n.parentNode;
+                parentNode.replaceChild(createText(nodeVal), n);
+                parentNode.normalize();
             }
         }
     }
