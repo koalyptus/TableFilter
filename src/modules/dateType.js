@@ -47,6 +47,11 @@ export class DateType extends Feature {
         // Add formats from column types configuration if any
         this.addConfigFormats(this.tf.colTypes);
 
+        this.emitter.on(
+            ['add-date-type-formats'],
+            (tf, types) => this.addConfigFormats(types)
+        );
+
         // Broadcast date-type initialization
         this.emitter.emit('date-type-initialized', this.tf, this);
 
@@ -126,6 +131,11 @@ export class DateType extends Feature {
         }
 
         // TODO: remove added formats
+
+        this.emitter.off(
+            ['add-date-type-formats'],
+            (tf, types) => this.addConfigFormats(types)
+        );
 
         this.initialized = false;
     }

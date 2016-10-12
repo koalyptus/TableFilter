@@ -149,8 +149,7 @@ export default class AdapterSortableTable extends Feature {
         }
 
         // Add any date format if needed
-        let dateType = tf.feature('dateType');
-        dateType.addConfigFormats(this.sortTypes);
+        this.emitter.emit('add-date-type-formats', this.tf, this.sortTypes);
 
         this.overrideSortableTable();
         this.setSortTypes();
