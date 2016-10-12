@@ -28,7 +28,8 @@ test('Properties', function() {
     deepEqual(dateType.feature, 'dateType', 'Feature name');
     deepEqual(dateType.enabled, true, 'Feature enabled');
     deepEqual(dateType.initialized, true, 'Feature enabled');
-    deepEqual(typeof dateType.emitter, 'object', 'Feature has emitter instance');
+    deepEqual(typeof dateType.emitter, 'object',
+        'Feature has emitter instance');
     deepEqual(typeof dateType.config, 'object', 'TF configuration object');
     deepEqual(typeof dateType.init, 'function', 'Feature init method');
     deepEqual(typeof dateType.destroy, 'function', 'Feature destroy method');
@@ -66,246 +67,75 @@ test('Can check is enabled', function() {
 });
 
 module('Behaviour');
- test('Can parse date', function() {
-     var date0 = dateType.parse('10/25/2017', 'en-US');
-     var date1 = dateType.parse('25/10/2017', 'en-GB');
-     var date2 = dateType.parse('1997-07-16T19:20:30+01:00', 'en');
-     var date3 = dateType.parse('14-Jul-2005', 'fr');
+test('Can parse date', function() {
+    var date0 = dateType.parse('10/25/2017', 'en-US');
+    var date1 = dateType.parse('25/10/2017', 'en-GB');
+    var date2 = dateType.parse('1997-07-16T19:20:30+01:00', 'en');
+    var date3 = dateType.parse('14-Jul-2005', 'fr');
+    var date4 = dateType.parse(null);
+    var date5 = dateType.parse(undefined);
 
-     deepEqual(date0.toISOString(), '2017-10-24T13:00:00.000Z', 'en-US date');
-     deepEqual(date1.toISOString(), '2017-10-24T13:00:00.000Z', 'en-GB date');
-     deepEqual(date2.toISOString(), '1997-07-16T18:20:30.000Z', 'ISO date');
-     deepEqual(date3.getTime(), 1121263200000, 'fr date');
- });
-// module('Sanity checks');
-// test('Data types', function() {
-//     deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
-//     deepEqual(
-//         tf.hasType(3, ['formatted-number']) &&
-//         tf.hasType(4, ['formatted-number']),
-//         true, 'Has number column types'
-//     );
-//     deepEqual(
-//         tf.hasType(6, ['date']) &&
-//         tf.hasType(7, ['date']) &&
-//         tf.hasType(8, ['date']),
-//         true, 'Has date column types'
-//     );
-// });
+    deepEqual(date0.toISOString(), '2017-10-24T13:00:00.000Z', 'en-US date');
+    deepEqual(date1.toISOString(), '2017-10-24T13:00:00.000Z', 'en-GB date');
+    deepEqual(date2.toISOString(), '1997-07-16T18:20:30.000Z', 'ISO date');
+    deepEqual(date3.getTime(), 1121263200000, 'fr date');
+    deepEqual(date4.toISOString(), '1970-01-01T00:00:00.000Z', 'null date');
+    deepEqual(date5 instanceof Date, true, 'undefined date');
+});
 
-// module('Data types filtering');
-// test('Can filter a column with a string', function() {
-//     // act
-//     tf.setFilterValue(0, 'carl');
-//     tf.filter();
+test('Can validate date', function() {
+    var v0 = dateType.isValid('10/25/2017', 'en-US');
+    var v1 = dateType.isValid('25/10/2017', 'en-GB');
+    var v2 = dateType.isValid('1997-07-16T19:20:30+01:00', 'en');
+    var v3 = dateType.isValid('14-Jul-2005', 'fr');
+    var v4 = dateType.isValid('hello', 'en');
+    var v5 = dateType.isValid(null, 'en');
+    var v6 = dateType.isValid(undefined, 'en');
+    var v7 = dateType.isValid('');
 
-//     // assert
-//     deepEqual(tf.getValidRows(), [14, 18], 'Expected rows');
+    deepEqual(v0, true, 'valid en-US date');
+    deepEqual(v1, true, 'valid en-GB date');
+    deepEqual(v2, true, 'valid ISO date');
+    deepEqual(v3, true, 'valid fr date');
+    deepEqual(v4, false, 'Invalid date');
+    deepEqual(v5, true, 'Valid date');
+    deepEqual(v6, true, 'Valid date');
+    deepEqual(v7, false, 'Invalid date');
+});
 
-// });
+test('Can get column date type options', function() {
+    var opts0 = dateType.getOptions(0);
+    var opts8 = dateType.getOptions(8);
+    var opts99 = dateType.getOptions(99);
+    var opts = dateType.getOptions(0, [{ type: 'date'}]);
 
-// test('Can filter a EU formatted number', function() {
-//     // setup
-//     tf.clearFilters();
+    deepEqual(opts0, {}, 'no column date type options');
+    deepEqual(
+        opts8,
+        { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
+        'column options'
+    );
+    deepEqual(opts99, {}, 'out of range column index');
+    deepEqual(opts, {type: 'date'}, 'column date type from passed collection');
+});
 
-//     // act
-//     tf.setFilterValue(3, '1.836,09');
-//     tf.filter();
+test('Can add date formats from config', function() {
+    var nbFormats = dateType.datetime.getLocale('fr').compiledFormats.length;
 
-//     // assert
-//     deepEqual(tf.getValidRows(), [6], 'Expected rows');
-// });
+    dateType.addConfigFormats([{
+        type: 'date', locale: 'fr',
+        format: ['{dd}-{months}-{yyyy|yy}']
+    }]);
 
-// test('Can filter a EU formatted number column with a number', function() {
-//     // setup
-//     tf.clearFilters();
+    deepEqual(
+        dateType.datetime.getLocale('fr').compiledFormats.length,
+        nbFormats+1,
+        'Expected number of formats for current locale'
+    );
+});
 
-//     // act
-//     tf.setFilterValue(3, 3876);
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [14], 'Expected rows');
-// });
-
-// test('Can filter a EU formatted number column with a number without ' +
-//     'thousands separator', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(3, '1393,52');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [13], 'Expected rows');
-// });
-
-// test('Can filter a EU formatted number column with a number without ' +
-//     'decimals', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(3, '2.805');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [7], 'Expected rows');
-// });
-
-// test('Can filter a formatted number', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(4, '1,836.09');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [6], 'Expected rows');
-// });
-
-// test('Can filter a formatted number column with a number', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(4, 3876);
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [14], 'Expected rows');
-// });
-
-// test('Can filter a formatted number column with a number without ' +
-//     'thousands separator', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(4, '1393.52');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [13], 'Expected rows');
-// });
-
-// test('Can filter a formatted number column with a number without ' +
-//     'decimals', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(4, '2,805');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [7], 'Expected rows');
-// });
-
-// test('Can filter a EU formatted date column', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(6, '14/7/1994');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [16], 'Expected rows');
-// });
-
-// test('Can filter a EU formatted date column with different date separator',
-//     function() {
-//         // setup
-//         tf.clearFilters();
-
-//         // act
-//         tf.setFilterValue(6, '20-10-97');
-//         tf.filter();
-
-//         // assert
-//         deepEqual(tf.getValidRows(), [17], 'Expected rows');
-//     });
-
-// test('Can filter a formatted date column', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(7, '7/14/1994');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [16], 'Expected rows');
-// });
-
-// test('Can filter a formatted date column with different date separator',
-//     function() {
-//         // setup
-//         tf.clearFilters();
-
-//         // act
-//         tf.setFilterValue(7, '10-20-97');
-//         tf.filter();
-
-//         // assert
-//         deepEqual(tf.getValidRows(), [17], 'Expected rows');
-//     });
-
-// test('Can filter a dd-MMM-yyy formatted date column', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(8, '3-Jul-2002');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [8], 'Expected rows');
-// });
-
-// test('Can filter a dd-MMM-yyy formatted date column with different date ' +
-//     'separator', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(8, '25.Mar.2000');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [4], 'Expected rows');
-// });
-
-// test('Can filter an IP address column', function() {
-//     // setup
-//     tf.clearFilters();
-
-//     // act
-//     tf.setFilterValue(9, '219.115.156.145');
-//     tf.filter();
-
-//     // assert
-//     deepEqual(tf.getValidRows(), [8], 'Expected rows');
-// });
-
-// test('Can filter an IP address column with a truncated IP address',
-//     function() {
-//         // setup
-//         tf.clearFilters();
-
-//         // act
-//         tf.setFilterValue(9, '219.115.15');
-//         tf.filter();
-
-//         // assert
-//         deepEqual(tf.getValidRows(), [4, 8, 14], 'Expected rows');
-//     });
-
-// module('Tear-down');
-// test('can destroy TableFilter DOM elements', function() {
-//     tf.destroy();
-//     deepEqual(tf.isInitialized(), false, 'Filters removed');
-// });
+module('Tear-down');
+test('can destroy TableFilter DOM elements', function() {
+    tf.destroy();
+    deepEqual(tf.isInitialized(), false, 'Filters removed');
+});
