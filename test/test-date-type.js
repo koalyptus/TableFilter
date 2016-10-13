@@ -75,10 +75,10 @@ test('Can parse date', function() {
     var date4 = dateType.parse(null);
     var date5 = dateType.parse(undefined);
 
-    deepEqual(date0.toISOString(), '2017-10-24T13:00:00.000Z', 'en-US date');
-    deepEqual(date1.toISOString(), '2017-10-24T13:00:00.000Z', 'en-GB date');
+    deepEqual(date0, new Date(2017, 9, 25, 0, 0, 0, 0), 'en-US date');
+    deepEqual(date1, new Date(2017, 9, 25, 0, 0, 0, 0), 'en-GB date');
     deepEqual(date2.toISOString(), '1997-07-16T18:20:30.000Z', 'ISO date');
-    deepEqual(date3.getTime(), 1121263200000, 'fr date');
+    deepEqual(date3, new Date(2005, 6, 14, 0, 0, 0, 0), 'fr date');
     deepEqual(date4.toISOString(), '1970-01-01T00:00:00.000Z', 'null date');
     deepEqual(date5 instanceof Date, true, 'undefined date');
 });
