@@ -1017,8 +1017,8 @@ export class TableFilter {
         // Instanciate sugar date wrapper
         if (!Mod.dateType) {
             Mod.dateType = new DateType(this);
-            Mod.dateType.init();
         }
+        Mod.dateType.init();
 
         // Instantiate help feature and initialise only if set true
         if (!Mod.help) {

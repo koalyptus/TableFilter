@@ -45,48 +45,47 @@ export class HighlightKeyword {
         );
         this.emitter.on(
             ['highlight-keyword'],
-            (tf, cell, word) =>
-                this.highlight(cell, word, this.highlightCssClass)
+            (tf, cell, term) =>
+                this.highlight(cell, term, this.highlightCssClass)
         );
     }
 
     /**
      * Highlight occurences of searched term in passed node
      * @param  {Node} node
-     * @param  {String} word     Searched term
+     * @param  {String} term     Searched term
      * @param  {String} cssClass Css class name
      *
      * TODO: refactor this method
      */
-    highlight(node, word, cssClass) {
+    highlight(node, term, cssClass) {
         // Iterate into this nodes childNodes
         if (node.hasChildNodes) {
             let children = node.childNodes;
             for (let i = 0; i < children.length; i++) {
-                this.highlight(children[i], word, cssClass);
+                this.highlight(children[i], term, cssClass);
             }
         }
 
         if (node.nodeType === 3) {
-            let tempNodeVal = node.nodeValue.toLowerCase();
-            let tempWordVal = word.toLowerCase();
+            let nodeVal = node.nodeValue.toLowerCase();
+            let termIdx = nodeVal.indexOf(term.toLowerCase());
 
-            if (tempNodeVal.indexOf(tempWordVal) !== -1) {
+            if (termIdx !== -1) {
                 let pn = node.parentNode;
                 if (pn && pn.className !== cssClass) {
-                    // word not highlighted yet
+                    // term not highlighted yet
                     let nv = node.nodeValue,
-                        ni = tempNodeVal.indexOf(tempWordVal),
                         // Create a load of replacement nodes
-                        before = createText(nv.substr(0, ni)),
-                        docWordVal = nv.substr(ni, word.length),
-                        after = createText(nv.substr(ni + word.length)),
-                        hiwordtext = createText(docWordVal),
-                        hiword = createElm('span');
-                    hiword.className = cssClass;
-                    hiword.appendChild(hiwordtext);
+                        before = createText(nv.substr(0, termIdx)),
+                        value = nv.substr(termIdx, term.length),
+                        after = createText(nv.substr(termIdx + term.length)),
+                        text = createText(value),
+                        container = createElm('span');
+                    container.className = cssClass;
+                    container.appendChild(text);
                     pn.insertBefore(before, node);
-                    pn.insertBefore(hiword, node);
+                    pn.insertBefore(container, node);
                     pn.insertBefore(after, node);
                     pn.removeChild(node);
                 }
@@ -96,18 +95,16 @@ export class HighlightKeyword {
 
     /**
      * Removes highlight to nodes matching passed string
-     * @param  {String} word
+     * @param  {String} term
      * @param  {String} cssClass Css class to remove
      */
-    unhighlight(word, cssClass) {
+    unhighlight(term, cssClass) {
         let highlightedNodes = this.tf.tbl.querySelectorAll(`.${cssClass}`);
         for (let i = 0; i < highlightedNodes.length; i++) {
             let n = highlightedNodes[i];
-            let nodeVal = getText(n),
-                tempNodeVal = nodeVal.toLowerCase(),
-                tempWordVal = word.toLowerCase();
+            let nodeVal = getText(n);
 
-            if (tempNodeVal.indexOf(tempWordVal) !== -1) {
+            if (nodeVal.toLowerCase().indexOf(term.toLowerCase()) !== -1) {
                 let parentNode = n.parentNode;
                 parentNode.replaceChild(createText(nodeVal), n);
                 parentNode.normalize();
@@ -143,8 +140,8 @@ export class HighlightKeyword {
         );
         this.emitter.off(
             ['highlight-keyword'],
-            (tf, cell, word) =>
-                this.highlight(cell, word, this.highlightCssClass)
+            (tf, cell, term) =>
+                this.highlight(cell, term, this.highlightCssClass)
         );
     }
 }
