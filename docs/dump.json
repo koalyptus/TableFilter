@@ -6790,7 +6790,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Date as SugarDate} from 'sugar-date';\nimport 'sugar-date/locales';\nimport {Feature} from '../feature';\nimport {isObj, isArray} from '../types';\nimport {DATE} from '../const';\n\n/**\n * Wrapper for Sugar Date module providing datetime helpers and locales\n * @export\n * @class DateType\n */\nexport class DateType extends Feature {\n\n    /**\n     * Creates an instance of DateType\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'dateType');\n\n        /**\n         * Global locale\n         * @type {String}\n         */\n        this.locale = tf.locale;\n\n        /**\n         * Sugar Date instance\n         * @type {Object}\n         */\n        this.datetime = SugarDate;\n\n        this.enable();\n    }\n\n    /**\n     * Initialize DateType instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        // Set global locale\n        this.datetime.setLocale(this.locale);\n\n        // Add formats from column types configuration if any\n        this.addConfigFormats(this.tf.colTypes);\n\n        this.emitter.on(\n            ['add-date-type-formats'],\n            (tf, types) => this.addConfigFormats(types)\n        );\n\n        // Broadcast date-type initialization\n        this.emitter.emit('date-type-initialized', this.tf, this);\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Parse a string representation of a date for a specified locale and return\n     * a date object\n     * @param {String} dateStr String representation of a date\n     * @param {String} localeCode Locale code (ie 'en-us')\n     * @returns {Date}\n     */\n    parse(dateStr, localeCode) {\n        return this.datetime.create(dateStr, localeCode);\n    }\n\n    /**\n     * Check string representation of a date for a specified locale is valid\n     * @param {any} dateStr String representation of a date\n     * @param {any} localeCode Locale code (ie 'en-us')\n     * @returns {Boolean}\n     */\n    isValid(dateStr, localeCode) {\n        return this.datetime.isValid(this.parse(dateStr, localeCode));\n    }\n\n    /**\n     * Return the type object of a specified column as per configuration or\n     * passed collection\n     * @param {Number} colIndex Column index\n     * @param {Array} types Collection of column types, optional\n     * @returns {Object}\n     */\n    getOptions(colIndex, types) {\n        types = types || this.tf.colTypes;\n        let colType = types[colIndex];\n        return isObj(colType) ? colType : {};\n    }\n\n    /**\n     * Add date time format(s) to a locale as specified by the passed\n     * collection of column types, ie:\n     *  [\n     *      'string',\n     *      'number',\n     *      { type: 'date', locale: 'en', format: ['{dd}/{MM}/{yyyy}']}\n     * ]\n     *\n     * @param {Array} [types=[]] Collection of column types\n     */\n    addConfigFormats(types=[]) {\n        types.forEach((type, idx) => {\n            let options = this.getOptions(idx, types);\n            if (options.type === DATE && options.hasOwnProperty('format')) {\n                let locale = this.datetime.getLocale(\n                    options.locale || this.locale\n                );\n                if (isArray(options.format)) {\n                    options.format.forEach((format) => {\n                        locale.addFormat(format);\n                    });\n                } else {\n                    locale.addFormat(options.format);\n                }\n            }\n        });\n    }\n\n    /**\n     * Remove DateType instance\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        // TODO: remove added formats\n\n        this.emitter.off(\n            ['add-date-type-formats'],\n            (tf, types) => this.addConfigFormats(types)\n        );\n\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Date as SugarDate} from 'sugar-date';\nimport 'sugar-date/locales';\nimport {Feature} from '../feature';\nimport {isObj, isArray} from '../types';\nimport {DATE} from '../const';\nimport {root} from '../root';\n\n/**\n * Wrapper for Sugar Date module providing datetime helpers and locales\n * @export\n * @class DateType\n */\nexport class DateType extends Feature {\n\n    /**\n     * Creates an instance of DateType\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'dateType');\n\n        /**\n         * Global locale\n         * @type {String}\n         */\n        this.locale = tf.locale;\n\n        /**\n         * Sugar Date instance\n         * @type {Object}\n         */\n        this.datetime = SugarDate;\n\n        this.enable();\n    }\n\n    /**\n     * Initialize DateType instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        // Set global locale\n        this.datetime.setLocale(this.locale);\n\n        // Add formats from column types configuration if any\n        this.addConfigFormats(this.tf.colTypes);\n\n        this.emitter.on(\n            ['add-date-type-formats'],\n            (tf, types) => this.addConfigFormats(types)\n        );\n\n        // Broadcast date-type initialization\n        this.emitter.emit('date-type-initialized', this.tf, this);\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Parse a string representation of a date for a specified locale and return\n     * a date object\n     * @param {String} dateStr String representation of a date\n     * @param {String} localeCode Locale code (ie 'en-us')\n     * @returns {Date}\n     */\n    parse(dateStr, localeCode) {\n        return this.datetime.create(dateStr, localeCode);\n    }\n\n    /**\n     * Check string representation of a date for a specified locale is valid\n     * @param {any} dateStr String representation of a date\n     * @param {any} localeCode Locale code (ie 'en-us')\n     * @returns {Boolean}\n     */\n    isValid(dateStr, localeCode) {\n        return this.datetime.isValid(this.parse(dateStr, localeCode));\n    }\n\n    /**\n     * Return the type object of a specified column as per configuration or\n     * passed collection\n     * @param {Number} colIndex Column index\n     * @param {Array} types Collection of column types, optional\n     * @returns {Object}\n     */\n    getOptions(colIndex, types) {\n        types = types || this.tf.colTypes;\n        let colType = types[colIndex];\n        return isObj(colType) ? colType : {};\n    }\n\n    /**\n     * Add date time format(s) to a locale as specified by the passed\n     * collection of column types, ie:\n     *  [\n     *      'string',\n     *      'number',\n     *      { type: 'date', locale: 'en', format: ['{dd}/{MM}/{yyyy}']}\n     * ]\n     *\n     * @param {Array} [types=[]] Collection of column types\n     */\n    addConfigFormats(types=[]) {\n        types.forEach((type, idx) => {\n            let options = this.getOptions(idx, types);\n            if (options.type === DATE && options.hasOwnProperty('format')) {\n                let locale = this.datetime.getLocale(\n                    options.locale || this.locale\n                );\n                let formats = isArray(options.format) ?\n                    options.format : [options.format];\n\n                // Sugar date module throws exceptions with locale.addFormat\n                try {\n                    formats.forEach((format) => {\n                        locale.addFormat(format);\n                    });\n                } catch (ex) {\n                    root.console.error(ex);\n                }\n            }\n        });\n    }\n\n    /**\n     * Remove DateType instance\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        // TODO: remove added formats\n\n        this.emitter.off(\n            ['add-date-type-formats'],\n            (tf, types) => this.addConfigFormats(types)\n        );\n\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 311,
@@ -6805,7 +6805,7 @@
     "importPath": "tablefilter/src/modules/dateType.js",
     "importStyle": "{DateType}",
     "description": "Wrapper for Sugar Date module providing datetime helpers and locales",
-    "lineNumber": 12,
+    "lineNumber": 13,
     "unknown": [
       {
         "tagName": "@export",
@@ -6831,7 +6831,7 @@
     "longname": "src/modules/dateType.js~DateType#constructor",
     "access": null,
     "description": "Creates an instance of DateType",
-    "lineNumber": 18,
+    "lineNumber": 19,
     "params": [
       {
         "nullable": null,
@@ -6856,7 +6856,7 @@
     "longname": "src/modules/dateType.js~DateType#locale",
     "access": null,
     "description": "Global locale",
-    "lineNumber": 25,
+    "lineNumber": 26,
     "type": {
       "nullable": null,
       "types": [
@@ -6876,7 +6876,7 @@
     "longname": "src/modules/dateType.js~DateType#datetime",
     "access": null,
     "description": "Sugar Date instance",
-    "lineNumber": 31,
+    "lineNumber": 32,
     "type": {
       "nullable": null,
       "types": [
@@ -6896,7 +6896,7 @@
     "longname": "src/modules/dateType.js~DateType#init",
     "access": null,
     "description": "Initialize DateType instance",
-    "lineNumber": 39,
+    "lineNumber": 40,
     "params": [],
     "generator": false
   },
@@ -6910,7 +6910,7 @@
     "longname": "src/modules/dateType.js~DateType#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 59,
+    "lineNumber": 60,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -6933,7 +6933,7 @@
     "longname": "src/modules/dateType.js~DateType#parse",
     "access": null,
     "description": "Parse a string representation of a date for a specified locale and return\na date object",
-    "lineNumber": 69,
+    "lineNumber": 70,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6982,7 +6982,7 @@
     "longname": "src/modules/dateType.js~DateType#isValid",
     "access": null,
     "description": "Check string representation of a date for a specified locale is valid",
-    "lineNumber": 79,
+    "lineNumber": 80,
     "unknown": [
       {
         "tagName": "@returns",
@@ -7031,7 +7031,7 @@
     "longname": "src/modules/dateType.js~DateType#getOptions",
     "access": null,
     "description": "Return the type object of a specified column as per configuration or\npassed collection",
-    "lineNumber": 90,
+    "lineNumber": 91,
     "unknown": [
       {
         "tagName": "@returns",
@@ -7080,7 +7080,7 @@
     "longname": "src/modules/dateType.js~DateType#addConfigFormats",
     "access": null,
     "description": "Add date time format(s) to a locale as specified by the passed\ncollection of column types, ie:\n [\n     'string',\n     'number',\n     { type: 'date', locale: 'en', format: ['{dd}/{MM}/{yyyy}']}\n]",
-    "lineNumber": 107,
+    "lineNumber": 108,
     "params": [
       {
         "nullable": null,
@@ -7107,7 +7107,7 @@
     "longname": "src/modules/dateType.js~DateType#destroy",
     "access": null,
     "description": "Remove DateType instance",
-    "lineNumber": 128,
+    "lineNumber": 133,
     "params": [],
     "generator": false
   },
@@ -7121,7 +7121,7 @@
     "longname": "src/modules/dateType.js~DateType#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 140,
+    "lineNumber": 145,
     "undocument": true,
     "type": {
       "types": [

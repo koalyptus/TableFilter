@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/dateType.js | tablefilter v0.3.3 API Document</title>
+  <title data-ice="title">src/modules/dateType.js | tablefilter v0.3.4 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -124,6 +124,7 @@ import &apos;sugar-date/locales&apos;;
 import {Feature} from &apos;../feature&apos;;
 import {isObj, isArray} from &apos;../types&apos;;
 import {DATE} from &apos;../const&apos;;
+import {root} from &apos;../root&apos;;
 
 /**
  * Wrapper for Sugar Date module providing datetime helpers and locales
@@ -232,12 +233,16 @@ export class DateType extends Feature {
                 let locale = this.datetime.getLocale(
                     options.locale || this.locale
                 );
-                if (isArray(options.format)) {
-                    options.format.forEach((format) =&gt; {
+                let formats = isArray(options.format) ?
+                    options.format : [options.format];
+
+                // Sugar date module throws exceptions with locale.addFormat
+                try {
+                    formats.forEach((format) =&gt; {
                         locale.addFormat(format);
                     });
-                } else {
-                    locale.addFormat(options.format);
+                } catch (ex) {
+                    root.console.error(ex);
                 }
             }
         });
