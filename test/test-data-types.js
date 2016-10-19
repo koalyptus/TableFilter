@@ -9,7 +9,11 @@
             { type: 'date', locale: 'fr', },
             { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}' },
             { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
-            'IpAddress'
+            'IpAddress',
+            {
+                type: 'date', locale: 'en',
+                format: ['{yyyy|yy}-{MM}-{dd} {HH}:{mm}:{ss}']
+            }
         ]
     });
     tf.init();
@@ -241,6 +245,30 @@
             // assert
             deepEqual(tf.getValidRows(), [4, 8, 14], 'Expected rows');
         });
+
+    test('Can filter datetime format', function() {
+        // setup
+        tf.clearFilters();
+
+        // act
+        tf.setFilterValue(10, '2006-06-03 11:59:48');
+        tf.filter();
+
+        // assert
+        deepEqual(tf.getValidRows(), [8], 'Expected rows');
+    });
+
+    test('Can filter datetime format with operator', function() {
+        // setup
+        tf.clearFilters();
+
+        // act
+        tf.setFilterValue(10, '>2006-06-03 11:59:48');
+        tf.filter();
+
+        // assert
+        deepEqual(tf.getValidRows().length, 8, 'Expected rows');
+    });
 
     module('Tear-down');
     test('can destroy TableFilter DOM elements', function() {

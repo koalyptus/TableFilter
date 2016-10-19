@@ -3,6 +3,7 @@ import 'sugar-date/locales';
 import {Feature} from '../feature';
 import {isObj, isArray} from '../types';
 import {DATE} from '../const';
+import {root} from '../root';
 
 /**
  * Wrapper for Sugar Date module providing datetime helpers and locales
@@ -111,12 +112,16 @@ export class DateType extends Feature {
                 let locale = this.datetime.getLocale(
                     options.locale || this.locale
                 );
-                if (isArray(options.format)) {
-                    options.format.forEach((format) => {
+                let formats = isArray(options.format) ?
+                    options.format : [options.format];
+
+                // Sugar date module throws exceptions with locale.addFormat
+                try {
+                    formats.forEach((format) => {
                         locale.addFormat(format);
                     });
-                } else {
-                    locale.addFormat(options.format);
+                } catch (ex) {
+                    root.console.error(ex);
                 }
             }
         });
