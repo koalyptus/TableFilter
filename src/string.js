@@ -1,3 +1,5 @@
+import {remove as removeDiacritics} from 'diacritics';
+
 /**
  * String utilities
  */
@@ -7,7 +9,7 @@
  * @param  {String} text
  * @return {String}
  */
-export const trim = text => {
+export const trim = (text) => {
     if (text.trim) {
         return text.trim();
     }
@@ -26,7 +28,7 @@ export const isEmpty = (text) => trim(text) === '';
  * @param {String} text
  * @return {String} escaped string
  */
-export const rgxEsc = text => {
+export const rgxEsc = (text) => {
     let chars = /[-\/\\^$*+?.()|[\]{}]/g;
     let escMatch = '\\$&';
     return String(text).replace(chars, escMatch);
@@ -47,23 +49,28 @@ export const matchCase = (text, caseSensitive = false) => {
 
 /**
  * Checks if passed data contains the searched term
- * @param  {String} term           Searched term
- * @param  {String} data           Data string
- * @param  {Boolean} exactMatch    Exact match
- * @param  {Boolean} caseSensitive Case sensitive
+ * @param  {String} term                Searched term
+ * @param  {String} data                Data string
+ * @param  {Boolean} exactMatch         Exact match
+ * @param  {Boolean} caseSensitive      Case sensitive
+ * @param  {Boolean} ignoreDiacritics   Ignore diacritics
  * @return {Boolean}
  */
-export const contains =
-    (term, data, exactMatch = false, caseSensitive = false) => {
-        // Improved by Cedric Wartel (cwl) automatic exact match for selects and
-        // special characters are now filtered
-        let regexp;
-        let modifier = caseSensitive ? 'g' : 'gi';
-        if (exactMatch) {
-            regexp = new RegExp('(^\\s*)' + rgxEsc(term) + '(\\s*$)',
-                modifier);
-        } else {
-            regexp = new RegExp(rgxEsc(term), modifier);
-        }
-        return regexp.test(data);
+export const contains = (term, data, exactMatch = false, caseSensitive = false,
+    ignoreDiacritics = false) => {
+    // Improved by Cedric Wartel (cwl) automatic exact match for selects and
+    // special characters are now filtered
+    let regexp;
+    let modifier = caseSensitive ? 'g' : 'gi';
+    if (ignoreDiacritics) {
+        term = removeDiacritics(term);
+        data = removeDiacritics(data);
     }
+    if (exactMatch) {
+        regexp = new RegExp('(^\\s*)' + rgxEsc(term) + '(\\s*$)',
+            modifier);
+    } else {
+        regexp = new RegExp(rgxEsc(term), modifier);
+    }
+    return regexp.test(data);
+}

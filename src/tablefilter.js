@@ -383,6 +383,12 @@ export class TableFilter {
         this.exactMatch = Boolean(f.exact_match);
 
         /**
+         * Ignore diacritics globally or on a column basis
+         * @type {Boolean|Array}
+         */
+        this.ignoreDiacritics = f.ignore_diacritics;
+
+        /**
          * Enable/disable linked filters filtering mode
          * @type {Boolean}
          */
@@ -1957,7 +1963,7 @@ export class TableFilter {
                 }
                 //regexp
                 else if (hasRE) {
-                    //in case regexp fires an exception
+                    //in case regexp throws
                     try {
                         //operator is removed
                         let srchArg = sA.replace(re_re, '');
@@ -1981,8 +1987,13 @@ export class TableFilter {
                                 this.isExactMatch(colIdx), this.caseSensitive);
                     } else {
                         // Finally test search term is contained in cell data
-                        occurence = contains(sA, cellData,
-                            this.isExactMatch(colIdx), this.caseSensitive);
+                        occurence = contains(
+                            sA,
+                            cellData,
+                            this.isExactMatch(colIdx),
+                            this.caseSensitive,
+                            this.ignoresDiacritics(colIdx)
+                        );
                     }
                 }
 
@@ -2695,13 +2706,27 @@ export class TableFilter {
 
     /**
      * Determines if passed filter column implements exact query match
-     * @param  {Number}  colIndex [description]
-     * @return {Boolean}          [description]
+     * @param  {Number}  colIndex   Column index
+     * @return {Boolean}
      */
     isExactMatch(colIndex) {
         let fltType = this.getFilterType(colIndex);
         return this.exactMatchByCol[colIndex] || this.exactMatch ||
             fltType !== INPUT;
+    }
+
+    /**
+     * Checks if specified column filter ignores diacritics.
+     * Note this is only valid for input filter types.
+     * @param {any} colIndex    Column index
+     * @returns {Boolean}
+     */
+    ignoresDiacritics(colIndex) {
+        let ignoreDiac = this.ignoreDiacritics;
+        if (isArray(ignoreDiac)) {
+            return ignoreDiac[colIndex];
+        }
+        return Boolean(ignoreDiac);
     }
 
     /**
