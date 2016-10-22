@@ -3954,6 +3954,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#ignorediacritics",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-ignoreDiacritics",
+    "src/tablefilter.js~TableFilter#ignoreDiacritics",
+    "member"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#ignoresdiacritics",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-ignoresDiacritics",
+    "src/tablefilter.js~TableFilter#ignoresDiacritics",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#import",
     "class/src/tablefilter.js~TableFilter.html#instance-method-import",
     "src/tablefilter.js~TableFilter#import",
