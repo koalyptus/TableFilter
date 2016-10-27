@@ -4,6 +4,19 @@ import {isFn} from '../types';
 import {root} from '../root';
 import {NONE} from '../const';
 
+
+const EVENTS = [
+    'before-filtering',
+    'before-populating-filter',
+    'before-page-change',
+    'before-clearing-filters',
+    'before-page-length-change',
+    'before-reset-page',
+    'before-reset-page-length',
+    'before-loading-extensions',
+    'before-loading-themes'
+];
+
 /**
  * Activity indicator
  *
@@ -110,28 +123,10 @@ export class Loader extends Feature {
         this.show(NONE);
 
         // Subscribe to events
-        emitter.on([
-            'before-filtering',
-            'before-populating-filter',
-            'before-page-change',
-            'before-clearing-filters',
-            'before-page-length-change',
-            'before-reset-page',
-            'before-reset-page-length',
-            'before-loading-extensions',
-            'before-loading-themes'],
+        emitter.on(EVENTS,
             () => this.show('')
         );
-        emitter.on([
-            'after-filtering',
-            'after-populating-filter',
-            'after-page-change',
-            'after-clearing-filters',
-            'after-page-length-change',
-            'after-reset-page',
-            'after-reset-page-length',
-            'after-loading-extensions',
-            'after-loading-themes'],
+        emitter.on(EVENTS,
             () => this.show(NONE)
         );
 
@@ -181,28 +176,10 @@ export class Loader extends Feature {
         this.cont = null;
 
         // Unsubscribe to events
-        emitter.off([
-            'before-filtering',
-            'before-populating-filter',
-            'before-page-change',
-            'before-clearing-filters',
-            'before-page-length-change',
-            'before-reset-page',
-            'before-reset-page-length',
-            'before-loading-extensions',
-            'before-loading-themes'],
+        emitter.off(EVENTS,
             () => this.show('')
         );
-        emitter.off([
-            'after-filtering',
-            'after-populating-filter',
-            'after-page-change',
-            'after-clearing-filters',
-            'after-page-length-change',
-            'after-reset-page',
-            'after-reset-page-length',
-            'after-loading-extensions',
-            'after-loading-themes'],
+        emitter.off(EVENTS,
             () => this.show(NONE)
         );
 
