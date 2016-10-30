@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Single filter | TableFilter</title>
+    <title>Ignore diacritics | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -183,72 +183,54 @@
 
       
 
-<h1>Single filter</h1>
+<h1>Ignore diacritics</h1>
 <p>
-    Use the <code>single_filter</code> option to generate a single
-    <code>input</code> filter type filtering all the columns of the table.
+    With the <code>ignore_diacritics</code> option you can perform searches by
+    ignoring the diacritics.
 </p>
 
+<div class="alert alert-info" role="alert">
+    Search for <code>jero</code> or <code>bru</code> and then for
+    <code>Zoë</code> in the <code>contact</code> column.
+</div>
 
-<table id="demo" class="cities">
-    <thead>
-        <tr>
-            <th>From</th>
-            <th>Destination</th>
-            <th>Road Distance (km)</th>
-            <th>By Air (hrs)</th>
-            <th>By Rail (hrs)</th>
-        </tr>
-    </thead>
+
+<table id="demo">
     <tbody>
         <tr>
-            <td>Sydney</td>
-            <td>Adelaide</td>
-            <td>1412</td>
-            <td>1.4</td>
-            <td>25.3</td>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
         </tr>
         <tr>
-            <td>Sydney</td>
-            <td>Brisbane</td>
-            <td>982</td>
-            <td>1.5</td>
-            <td>16</td>
+            <td>Alfreds Futterkiste</td>
+            <td>BRÜNHILD Anders</td>
+            <td>Germany</td>
         </tr>
         <tr>
-            <td>Sydney</td>
-            <td>Canberra</td>
-            <td>286</td>
-            <td>.6</td>
-            <td>4.3</td>
+            <td>La baguette</td>
+            <td>Jérôme Dupont</td>
+            <td>France</td>
         </tr>
         <tr>
-            <td>Sydney</td>
-            <td>Melbourne</td>
-            <td>872</td>
-            <td>1.1</td>
-            <td>10.5</td>
+            <td>Ernst Handel</td>
+            <td>Zoë Punkt</td>
+            <td>Austria</td>
         </tr>
         <tr>
-            <td>Adelaide</td>
-            <td>Perth</td>
-            <td>2781</td>
-            <td>3.1</td>
-            <td>38</td>
+            <td>Island Trading</td>
+            <td>Helen Bennett</td>
+            <td>UK</td>
         </tr>
         <tr>
-            <td>Adelaide</td>
-            <td>Alice Springs</td>
-            <td>1533</td>
-            <td>2</td>
-            <td>20.25</td>
+            <td>Laughing Bacchus Winecellars</td>
+            <td>Yoshi Tannamuri</td>
+            <td>Canada</td>
         </tr>
         <tr>
-            <td>Adelaide</td>
-            <td>Brisbane</td>
-            <td>2045</td>
-            <td>2.15</td>
-            <td>40</td>
+            <td>Falò Alimentari Riuniti</td>
+            <td>Giovanni Rovelli</td>
+            <td>Italy</td>
         </tr>
     </tbody>
 </table>
@@ -261,7 +243,7 @@
 <script data-config>
     var tf = new TableFilter('demo', {
         base_path: 'tablefilter/',
-        single_filter: true
+        ignore_diacritics: true
     });
     tf.init();
 </script>
