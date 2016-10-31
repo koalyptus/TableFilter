@@ -23,6 +23,13 @@ export class ClearButton extends Feature {
         this.targetId = f.btn_reset_target_id || null;
 
         /**
+         * Clear button container element
+         * @type {DOMElement}
+         * @private
+         */
+        this.container = null;
+
+        /**
          * Clear button element
          * @type {DOMElement}
          * @private
@@ -55,13 +62,6 @@ export class ClearButton extends Feature {
             (!tf.enableIcons ? null :
                 '<input type="button" value="" class="' + this.cssClass +
                 '" ' + 'title="' + this.tooltip + '" />');
-
-        /**
-         * Prefix for container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxCont = 'resetspan_';
     }
 
     /**
@@ -85,31 +85,30 @@ export class ClearButton extends Feature {
             return;
         }
 
-        let resetspan = createElm('span', ['id', this.prfxCont + tf.id]);
+        let cont = createElm('span');
 
         // reset button is added to defined element
         if (!this.targetId) {
             tf.setToolbar();
         }
         let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);
-        targetEl.appendChild(resetspan);
+        targetEl.appendChild(cont);
 
         if (!this.html) {
             let fltReset = createElm('a', ['href', 'javascript:void(0);']);
             fltReset.className = this.cssClass;
             fltReset.appendChild(createText(this.text));
-            resetspan.appendChild(fltReset);
+            cont.appendChild(fltReset);
             addEvt(fltReset, 'click', () => this.onClick());
         } else {
-            resetspan.innerHTML = this.html;
-            let resetEl = resetspan.firstChild;
+            cont.innerHTML = this.html;
+            let resetEl = cont.firstChild;
             addEvt(resetEl, 'click', () => this.onClick());
         }
-        this.element = resetspan.firstChild;
+        this.element = cont.firstChild;
+        this.container = cont;
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
     }
 
@@ -117,17 +116,13 @@ export class ClearButton extends Feature {
      * Destroy ClearButton instance
      */
     destroy() {
-        let tf = this.tf;
-
         if (!this.initialized) {
             return;
         }
-
-        let resetspan = elm(this.prfxCont + tf.id);
-        if (resetspan) {
-            removeElm(resetspan);
-        }
+        removeElm(this.element);
+        removeElm(this.container);
         this.element = null;
+        this.container = null;
         this.initialized = false;
     }
 }
