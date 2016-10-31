@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/clearButton.js | tablefilter v0.4.1 API Document</title>
+  <title data-ice="title">src/modules/clearButton.js | tablefilter v0.4.2 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -144,6 +144,13 @@ export class ClearButton extends Feature {
         this.targetId = f.btn_reset_target_id || null;
 
         /**
+         * Clear button container element
+         * @type {DOMElement}
+         * @private
+         */
+        this.container = null;
+
+        /**
          * Clear button element
          * @type {DOMElement}
          * @private
@@ -176,13 +183,6 @@ export class ClearButton extends Feature {
             (!tf.enableIcons ? null :
                 &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.cssClass +
                 &apos;&quot; &apos; + &apos;title=&quot;&apos; + this.tooltip + &apos;&quot; /&gt;&apos;);
-
-        /**
-         * Prefix for container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxCont = &apos;resetspan_&apos;;
     }
 
     /**
@@ -206,31 +206,30 @@ export class ClearButton extends Feature {
             return;
         }
 
-        let resetspan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxCont + tf.id]);
+        let cont = createElm(&apos;span&apos;);
 
         // reset button is added to defined element
         if (!this.targetId) {
             tf.setToolbar();
         }
         let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);
-        targetEl.appendChild(resetspan);
+        targetEl.appendChild(cont);
 
         if (!this.html) {
             let fltReset = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
             fltReset.className = this.cssClass;
             fltReset.appendChild(createText(this.text));
-            resetspan.appendChild(fltReset);
+            cont.appendChild(fltReset);
             addEvt(fltReset, &apos;click&apos;, () =&gt; this.onClick());
         } else {
-            resetspan.innerHTML = this.html;
-            let resetEl = resetspan.firstChild;
+            cont.innerHTML = this.html;
+            let resetEl = cont.firstChild;
             addEvt(resetEl, &apos;click&apos;, () =&gt; this.onClick());
         }
-        this.element = resetspan.firstChild;
+        this.element = cont.firstChild;
+        this.container = cont;
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
     }
 
@@ -238,17 +237,13 @@ export class ClearButton extends Feature {
      * Destroy ClearButton instance
      */
     destroy() {
-        let tf = this.tf;
-
         if (!this.initialized) {
             return;
         }
-
-        let resetspan = elm(this.prfxCont + tf.id);
-        if (resetspan) {
-            removeElm(resetspan);
-        }
+        removeElm(this.element);
+        removeElm(this.container);
         this.element = null;
+        this.container = null;
         this.initialized = false;
     }
 }
