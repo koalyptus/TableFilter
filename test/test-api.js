@@ -28,8 +28,10 @@ test('TableFilter object', function() {
     deepEqual(tf.getLastRowIndex(), 8, 'Last row index');
     deepEqual(
         tf.getHeadersText(),
-        ['From','Destination','Road Distance (km)', 'By Air (hrs)',
-        'By Rail (hrs)'],
+        [
+            'From','Destination','Road Distance (km)', 'By Air (hrs)',
+            'By Rail (hrs)'
+        ],
         'Headers text');
     deepEqual(
         tf.getCellData(tf.getHeaderElement(1)),
@@ -524,8 +526,10 @@ function colsVisibilityTests() { // issue 94
 
         deepEqual(
             tf1.getHeadersText(false),
-            ['From','Destination','Road Distance (km)', 'By Air (hrs)',
-            'By Rail (hrs)'],
+            [
+                'From','Destination','Road Distance (km)', 'By Air (hrs)',
+                'By Rail (hrs)'
+            ],
             'Headers text'
         );
 

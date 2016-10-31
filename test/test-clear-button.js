@@ -9,6 +9,7 @@ var clearButton = tf.feature('clearButton');
 module('Sanity checks');
 test('Clear button component', function() {
     deepEqual(typeof clearButton, 'object', 'ClearButton instanciated');
+    notEqual(clearButton.container, null, 'container property');
     notEqual(clearButton.element, null, 'element property');
 });
 
@@ -59,13 +60,10 @@ test('Can check is enabled', function() {
 
 module('UI elements');
 test('ClearButton UI elements', function() {
-    var container = clearButton.element;
-    deepEqual(container.nodeName, 'INPUT', 'Clear button container');
-    deepEqual(
-        container.parentNode.id,
-        clearButton.prfxCont+tf.id,
-        'Container id'
-    );
+    var container = clearButton.container;
+    var element = clearButton.element;
+    deepEqual(container.nodeName, 'SPAN', 'Clear button container');
+    deepEqual(element.nodeName, 'INPUT', 'Clear button element');
 });
 
 module('Destroy and re-init');
