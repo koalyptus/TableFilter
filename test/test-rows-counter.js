@@ -9,6 +9,8 @@ var rowsCounter = tf.feature('rowsCounter');
 module('Sanity checks');
 test('RowsCounter component', function() {
     notEqual(rowsCounter, null, 'RowsCounter instanciated');
+    notEqual(rowsCounter.container, null, 'RowsCounter container element');
+    notEqual(rowsCounter.label, null, 'RowsCounter label element');
 });
 
 module('Feature interface');

@@ -68,27 +68,6 @@ export class RowsCounter extends Feature {
         this.cssClass = f.tot_rows_css_class || 'tot';
 
         /**
-         * Prefix for container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxCounter = 'counter_';
-
-        /**
-         * Prefix for DOM element containing the counter
-         * @type {String}
-         * @private
-         */
-        this.prfxLabel = 'totrows_span_';
-
-        /**
-         * Prefix for label preceding the counter
-         * @type {String}
-         * @private
-         */
-        this.prfxText = 'totRowsTextSpan_';
-
-        /**
          * Callback fired before the counter is refreshed
          * @type {Function}
          */
@@ -114,11 +93,11 @@ export class RowsCounter extends Feature {
         let tf = this.tf;
 
         //rows counter container
-        let countDiv = createElm('div', ['id', this.prfxCounter + tf.id]);
+        let countDiv = createElm('div');
         countDiv.className = this.cssClass;
         //rows counter label
-        let countSpan = createElm('span', ['id', this.prfxLabel + tf.id]);
-        let countText = createElm('span', ['id', this.prfxText + tf.id]);
+        let countSpan = createElm('span');
+        let countText = createElm('span');
         countText.appendChild(createText(this.text));
 
         // counter is added to defined element
@@ -146,9 +125,7 @@ export class RowsCounter extends Feature {
             () => this.refresh(tf.getValidRowsNb()));
         this.emitter.on(['rows-changed'], () => this.refresh());
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
         this.refresh();
     }
