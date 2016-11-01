@@ -86,13 +86,6 @@ export class NoResults extends Feature {
          */
         this.onAfterHide = isFn(f.on_after_hide_msg) ?
             f.on_after_hide_msg : null;
-
-        /**
-         * Prefix for container ID
-         * @type {String}
-         * @private
-         */
-        this.prfx = 'nores_';
     }
 
     /**
@@ -107,7 +100,7 @@ export class NoResults extends Feature {
             tf.tbl;
 
         //container
-        let cont = createElm('div', ['id', this.prfx + tf.id]);
+        let cont = createElm('div');
         cont.className = this.cssClass;
         cont.innerHTML = this.content;
 

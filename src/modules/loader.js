@@ -4,7 +4,6 @@ import {isFn} from '../types';
 import {root} from '../root';
 import {NONE} from '../const';
 
-
 const EVENTS = [
     'before-filtering',
     'before-populating-filter',
@@ -83,13 +82,6 @@ export class Loader extends Feature {
          * @type {Function}
          */
         this.onHide = isFn(f.on_hide_loader) ? f.on_hide_loader : null;
-
-        /**
-         * Prefix for container ID
-         * @type {String}
-         * @private
-         */
-        this.prfx = 'load_';
     }
 
     /**
@@ -103,7 +95,7 @@ export class Loader extends Feature {
         let tf = this.tf;
         let emitter = this.emitter;
 
-        let containerDiv = createElm('div', ['id', this.prfx + tf.id]);
+        let containerDiv = createElm('div');
         containerDiv.className = this.cssClass;
 
         let targetEl = !this.targetId ?
@@ -123,12 +115,8 @@ export class Loader extends Feature {
         this.show(NONE);
 
         // Subscribe to events
-        emitter.on(EVENTS,
-            () => this.show('')
-        );
-        emitter.on(EVENTS,
-            () => this.show(NONE)
-        );
+        emitter.on(EVENTS, () => this.show(''));
+        emitter.on(EVENTS, () => this.show(NONE));
 
         /**
          * @inherited
@@ -176,12 +164,8 @@ export class Loader extends Feature {
         this.cont = null;
 
         // Unsubscribe to events
-        emitter.off(EVENTS,
-            () => this.show('')
-        );
-        emitter.off(EVENTS,
-            () => this.show(NONE)
-        );
+        emitter.off(EVENTS, () => this.show(''));
+        emitter.off(EVENTS, () => this.show(NONE));
 
         this.initialized = false;
     }

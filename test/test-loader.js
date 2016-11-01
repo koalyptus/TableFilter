@@ -10,11 +10,7 @@ var loader = tf.feature('loader');
 module('Sanity checks');
 test('Loader component', function() {
     notEqual(loader, null, 'Loader instanciated');
-    notEqual(
-        document.getElementById(loader.prfx + tf.id),
-        null,
-        'Loader DOM container'
-    );
+    equal(loader.cont.nodeName, 'DIV', 'Loader DOM container');
 });
 
 module('Feature interface');
