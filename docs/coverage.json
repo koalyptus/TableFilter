@@ -1,7 +1,7 @@
 {
   "coverage": "100%",
-  "expectCount": 645,
-  "actualCount": 645,
+  "expectCount": 642,
+  "actualCount": 642,
   "files": {
     "src/const.js": {
       "expectCount": 18,
@@ -24,8 +24,8 @@
       "undocumentLines": []
     },
     "src/modules/checkList.js": {
-      "expectCount": 21,
-      "actualCount": 21,
+      "expectCount": 18,
+      "actualCount": 18,
       "undocumentLines": []
     },
     "src/modules/clearButton.js": {

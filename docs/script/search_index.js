@@ -1764,18 +1764,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/checklist.js~checklist#addchecks",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-addChecks",
-    "src/modules/checkList.js~CheckList#addChecks",
-    "method"
-  ],
-  [
-    "src/modules/checklist.js~checklist#addtchecks",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-addTChecks",
-    "src/modules/checkList.js~CheckList#addTChecks",
-    "method"
-  ],
-  [
     "src/modules/checklist.js~checklist#build",
     "class/src/modules/checkList.js~CheckList.html#instance-method-build",
     "src/modules/checkList.js~CheckList#build",
@@ -1870,12 +1858,6 @@ window.esdocSearchIndex = [
     "class/src/modules/checkList.js~CheckList.html#instance-member-selectedItemCssClass",
     "src/modules/checkList.js~CheckList#selectedItemCssClass",
     "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#setchecklistvalues",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-setCheckListValues",
-    "src/modules/checkList.js~CheckList#setCheckListValues",
-    "method"
   ],
   [
     "src/modules/clearbutton.js",

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/help.js | tablefilter v0.4.2 API Document</title>
+  <title data-ice="title">src/modules/help.js | tablefilter v0.4.3 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -134,13 +134,13 @@ const WEBSITE_URL = &apos;http://koalyptus.github.io/TableFilter/&apos;;
 export class Help extends Feature {
 
     /**
-     * Creates an instance of Help.
+     * Creates an instance of Help
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, &apos;help&apos;);
 
-        var f = this.config;
+        let f = this.config;
 
         /**
          * ID of main custom container element
@@ -223,20 +223,6 @@ export class Help extends Feature {
             &apos;&lt;div align=&quot;center&quot; style=&quot;margin-top:8px;&quot;&gt;&apos; +
             &apos;&lt;a href=&quot;javascript:void(0);&quot; class=&quot;close&quot;&gt;Close&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&apos;;
 
-        /**
-         * Prefix for help main container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxHelpSpan = &apos;helpSpan_&apos;;
-
-        /**
-         * Prefix for help instructions container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxHelpDiv = &apos;helpDiv_&apos;;
-
         this.emitter.on([&apos;init-help&apos;], () =&gt; this.init());
     }
 
@@ -248,56 +234,54 @@ export class Help extends Feature {
             return;
         }
 
-        var tf = this.tf;
+        let tf = this.tf;
 
-        var helpspan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxHelpSpan + tf.id]);
-        var helpdiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxHelpDiv + tf.id]);
+        let btn = createElm(&apos;span&apos;);
+        let cont = createElm(&apos;div&apos;);
 
         //help button is added to defined element
         if (!this.tgtId) {
             tf.setToolbar();
         }
-        var targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
-        targetEl.appendChild(helpspan);
+        let targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
+        targetEl.appendChild(btn);
 
-        var divContainer = !this.contTgtId ? helpspan : elm(this.contTgtId);
+        let divContainer = !this.contTgtId ? btn : elm(this.contTgtId);
 
         if (!this.btnHtml) {
-            divContainer.appendChild(helpdiv);
-            var helplink = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
+            divContainer.appendChild(cont);
+            let helplink = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
             helplink.className = this.btnCssClass;
             helplink.appendChild(createText(this.btnText));
-            helpspan.appendChild(helplink);
+            btn.appendChild(helplink);
             addEvt(helplink, &apos;click&apos;, () =&gt; this.toggle());
         } else {
-            helpspan.innerHTML = this.btnHtml;
-            var helpEl = helpspan.firstChild;
+            btn.innerHTML = this.btnHtml;
+            let helpEl = btn.firstChild;
             addEvt(helpEl, &apos;click&apos;, () =&gt; this.toggle());
-            divContainer.appendChild(helpdiv);
+            divContainer.appendChild(cont);
         }
 
         if (!this.instrHtml) {
-            helpdiv.innerHTML = this.instrText;
-            helpdiv.className = this.contCssClass;
-            addEvt(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
+            cont.innerHTML = this.instrText;
+            cont.className = this.contCssClass;
+            addEvt(cont, &apos;dblclick&apos;, () =&gt; this.toggle());
         } else {
             if (this.contTgtId) {
-                divContainer.appendChild(helpdiv);
+                divContainer.appendChild(cont);
             }
-            helpdiv.innerHTML = this.instrHtml;
+            cont.innerHTML = this.instrHtml;
             if (!this.contTgtId) {
-                helpdiv.className = this.contCssClass;
-                addEvt(helpdiv, &apos;dblclick&apos;, () =&gt; this.toggle());
+                cont.className = this.contCssClass;
+                addEvt(cont, &apos;dblclick&apos;, () =&gt; this.toggle());
             }
         }
-        helpdiv.innerHTML += this.defaultHtml;
-        addEvt(helpdiv, &apos;click&apos;, () =&gt; this.toggle());
+        cont.innerHTML += this.defaultHtml;
+        addEvt(cont, &apos;click&apos;, () =&gt; this.toggle());
 
-        this.cont = helpdiv;
-        this.btn = helpspan;
-        /**
-         * @inherited
-         */
+        this.cont = cont;
+        this.btn = btn;
+        /** @inherited */
         this.initialized = true;
     }
 
@@ -310,7 +294,7 @@ export class Help extends Feature {
         if (this.enabled === false) {
             return;
         }
-        var divDisplay = this.cont.style.display;
+        let divDisplay = this.cont.style.display;
         if (divDisplay === &apos;&apos; || divDisplay === NONE) {
             this.cont.style.display = &apos;inline&apos;;
         } else {
@@ -327,11 +311,10 @@ export class Help extends Feature {
         }
         removeElm(this.btn);
         this.btn = null;
-        if (!this.cont) {
-            return;
-        }
+
         removeElm(this.cont);
         this.cont = null;
+
         this.initialized = false;
     }
 

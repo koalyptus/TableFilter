@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/rowsCounter.js | tablefilter v0.4.2 API Document</title>
+  <title data-ice="title">src/modules/rowsCounter.js | tablefilter v0.4.3 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -189,27 +189,6 @@ export class RowsCounter extends Feature {
         this.cssClass = f.tot_rows_css_class || &apos;tot&apos;;
 
         /**
-         * Prefix for container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxCounter = &apos;counter_&apos;;
-
-        /**
-         * Prefix for DOM element containing the counter
-         * @type {String}
-         * @private
-         */
-        this.prfxLabel = &apos;totrows_span_&apos;;
-
-        /**
-         * Prefix for label preceding the counter
-         * @type {String}
-         * @private
-         */
-        this.prfxText = &apos;totRowsTextSpan_&apos;;
-
-        /**
          * Callback fired before the counter is refreshed
          * @type {Function}
          */
@@ -235,11 +214,11 @@ export class RowsCounter extends Feature {
         let tf = this.tf;
 
         //rows counter container
-        let countDiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxCounter + tf.id]);
+        let countDiv = createElm(&apos;div&apos;);
         countDiv.className = this.cssClass;
         //rows counter label
-        let countSpan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxLabel + tf.id]);
-        let countText = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxText + tf.id]);
+        let countSpan = createElm(&apos;span&apos;);
+        let countText = createElm(&apos;span&apos;);
         countText.appendChild(createText(this.text));
 
         // counter is added to defined element
@@ -267,9 +246,7 @@ export class RowsCounter extends Feature {
             () =&gt; this.refresh(tf.getValidRowsNb()));
         this.emitter.on([&apos;rows-changed&apos;], () =&gt; this.refresh());
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
         this.refresh();
     }
