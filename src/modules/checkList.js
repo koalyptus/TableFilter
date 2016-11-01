@@ -343,6 +343,7 @@ export class CheckList extends Feature {
      * Add checklist options
      * @param {Number} colIndex  Column index
      * @param {Object} ul        Ul element
+     * @private
      */
     addChecks(colIndex, ul) {
         let tf = this.tf;
@@ -377,6 +378,7 @@ export class CheckList extends Feature {
      * Add checklist header option
      * @param {Number} colIndex Column index
      * @param {Object} ul       Ul element
+     * @private
      */
     addTChecks(colIndex, ul) {
         let tf = this.tf;
@@ -415,6 +417,7 @@ export class CheckList extends Feature {
     /**
      * Store checked options in DOM element attribute
      * @param {Object} o checklist option DOM element
+     * @private
      */
     setCheckListValues(o) {
         if (!o) {

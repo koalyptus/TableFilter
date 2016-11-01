@@ -13,13 +13,13 @@ const WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';
 export class Help extends Feature {
 
     /**
-     * Creates an instance of Help.
+     * Creates an instance of Help
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
         super(tf, 'help');
 
-        var f = this.config;
+        let f = this.config;
 
         /**
          * ID of main custom container element
@@ -102,20 +102,6 @@ export class Help extends Feature {
             '<div align="center" style="margin-top:8px;">' +
             '<a href="javascript:void(0);" class="close">Close</a></div></div>';
 
-        /**
-         * Prefix for help main container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxHelpSpan = 'helpSpan_';
-
-        /**
-         * Prefix for help instructions container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxHelpDiv = 'helpDiv_';
-
         this.emitter.on(['init-help'], () => this.init());
     }
 
@@ -127,56 +113,54 @@ export class Help extends Feature {
             return;
         }
 
-        var tf = this.tf;
+        let tf = this.tf;
 
-        var helpspan = createElm('span', ['id', this.prfxHelpSpan + tf.id]);
-        var helpdiv = createElm('div', ['id', this.prfxHelpDiv + tf.id]);
+        let btn = createElm('span');
+        let cont = createElm('div');
 
         //help button is added to defined element
         if (!this.tgtId) {
             tf.setToolbar();
         }
-        var targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
-        targetEl.appendChild(helpspan);
+        let targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
+        targetEl.appendChild(btn);
 
-        var divContainer = !this.contTgtId ? helpspan : elm(this.contTgtId);
+        let divContainer = !this.contTgtId ? btn : elm(this.contTgtId);
 
         if (!this.btnHtml) {
-            divContainer.appendChild(helpdiv);
-            var helplink = createElm('a', ['href', 'javascript:void(0);']);
+            divContainer.appendChild(cont);
+            let helplink = createElm('a', ['href', 'javascript:void(0);']);
             helplink.className = this.btnCssClass;
             helplink.appendChild(createText(this.btnText));
-            helpspan.appendChild(helplink);
+            btn.appendChild(helplink);
             addEvt(helplink, 'click', () => this.toggle());
         } else {
-            helpspan.innerHTML = this.btnHtml;
-            var helpEl = helpspan.firstChild;
+            btn.innerHTML = this.btnHtml;
+            let helpEl = btn.firstChild;
             addEvt(helpEl, 'click', () => this.toggle());
-            divContainer.appendChild(helpdiv);
+            divContainer.appendChild(cont);
         }
 
         if (!this.instrHtml) {
-            helpdiv.innerHTML = this.instrText;
-            helpdiv.className = this.contCssClass;
-            addEvt(helpdiv, 'dblclick', () => this.toggle());
+            cont.innerHTML = this.instrText;
+            cont.className = this.contCssClass;
+            addEvt(cont, 'dblclick', () => this.toggle());
         } else {
             if (this.contTgtId) {
-                divContainer.appendChild(helpdiv);
+                divContainer.appendChild(cont);
             }
-            helpdiv.innerHTML = this.instrHtml;
+            cont.innerHTML = this.instrHtml;
             if (!this.contTgtId) {
-                helpdiv.className = this.contCssClass;
-                addEvt(helpdiv, 'dblclick', () => this.toggle());
+                cont.className = this.contCssClass;
+                addEvt(cont, 'dblclick', () => this.toggle());
             }
         }
-        helpdiv.innerHTML += this.defaultHtml;
-        addEvt(helpdiv, 'click', () => this.toggle());
+        cont.innerHTML += this.defaultHtml;
+        addEvt(cont, 'click', () => this.toggle());
 
-        this.cont = helpdiv;
-        this.btn = helpspan;
-        /**
-         * @inherited
-         */
+        this.cont = cont;
+        this.btn = btn;
+        /** @inherited */
         this.initialized = true;
     }
 
@@ -189,7 +173,7 @@ export class Help extends Feature {
         if (this.enabled === false) {
             return;
         }
-        var divDisplay = this.cont.style.display;
+        let divDisplay = this.cont.style.display;
         if (divDisplay === '' || divDisplay === NONE) {
             this.cont.style.display = 'inline';
         } else {
@@ -206,11 +190,10 @@ export class Help extends Feature {
         }
         removeElm(this.btn);
         this.btn = null;
-        if (!this.cont) {
-            return;
-        }
+
         removeElm(this.cont);
         this.cont = null;
+
         this.initialized = false;
     }
 
