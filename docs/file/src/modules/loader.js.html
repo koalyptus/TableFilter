@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/loader.js | tablefilter v0.4.3 API Document</title>
+  <title data-ice="title">src/modules/loader.js | tablefilter v0.4.4 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -125,7 +125,6 @@ import {isFn} from &apos;../types&apos;;
 import {root} from &apos;../root&apos;;
 import {NONE} from &apos;../const&apos;;
 
-
 const EVENTS = [
     &apos;before-filtering&apos;,
     &apos;before-populating-filter&apos;,
@@ -204,13 +203,6 @@ export class Loader extends Feature {
          * @type {Function}
          */
         this.onHide = isFn(f.on_hide_loader) ? f.on_hide_loader : null;
-
-        /**
-         * Prefix for container ID
-         * @type {String}
-         * @private
-         */
-        this.prfx = &apos;load_&apos;;
     }
 
     /**
@@ -224,7 +216,7 @@ export class Loader extends Feature {
         let tf = this.tf;
         let emitter = this.emitter;
 
-        let containerDiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfx + tf.id]);
+        let containerDiv = createElm(&apos;div&apos;);
         containerDiv.className = this.cssClass;
 
         let targetEl = !this.targetId ?
@@ -244,12 +236,8 @@ export class Loader extends Feature {
         this.show(NONE);
 
         // Subscribe to events
-        emitter.on(EVENTS,
-            () =&gt; this.show(&apos;&apos;)
-        );
-        emitter.on(EVENTS,
-            () =&gt; this.show(NONE)
-        );
+        emitter.on(EVENTS, () =&gt; this.show(&apos;&apos;));
+        emitter.on(EVENTS, () =&gt; this.show(NONE));
 
         /**
          * @inherited
@@ -297,12 +285,8 @@ export class Loader extends Feature {
         this.cont = null;
 
         // Unsubscribe to events
-        emitter.off(EVENTS,
-            () =&gt; this.show(&apos;&apos;)
-        );
-        emitter.off(EVENTS,
-            () =&gt; this.show(NONE)
-        );
+        emitter.off(EVENTS, () =&gt; this.show(&apos;&apos;));
+        emitter.off(EVENTS, () =&gt; this.show(NONE));
 
         this.initialized = false;
     }
