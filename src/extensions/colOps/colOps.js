@@ -2,6 +2,12 @@ import {Feature} from '../../feature';
 import {createText, elm} from '../../dom';
 import {isArray, isFn, isUndef} from '../../types';
 
+const EVENTS = [
+    'after-filtering',
+    'after-page-change',
+    'after-page-length-change'
+];
+
 /**
  * Column calculations extension
  */
@@ -47,7 +53,7 @@ export default class ColOps extends Feature {
             return;
         }
         // subscribe to events
-        this.emitter.on(['after-filtering'], () => this.calc());
+        this.emitter.on(EVENTS, () => this.calc());
 
         this.calc();
 
@@ -124,7 +130,8 @@ export default class ColOps extends Feature {
                 //use ucolIndex because we only want to pass through this loop
                 //once for each column get the values in this unique column
                 colvalues.push(
-                    tf.getColValues(ucolIndex[ucol], false, true, excludeRow));
+                    tf.getColValues(ucolIndex[ucol], false, true, excludeRow)
+                );
 
                 //next: calculate all operations for this column
                 let result,
@@ -355,7 +362,8 @@ export default class ColOps extends Feature {
             return;
         }
         // unsubscribe to events
-        this.emitter.off(['after-filtering'], () => this.calc());
+        this.emitter.off(EVENTS, () => this.calc());
+
         this.initialized = false;
     }
 

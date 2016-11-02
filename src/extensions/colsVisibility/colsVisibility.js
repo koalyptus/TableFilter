@@ -137,22 +137,10 @@ export default class ColsVisibility extends Feature {
         this.stylesheet = f.stylesheet || 'colsVisibility.css';
 
         /**
-         * Extension's prefix
-         * @private
-         */
-        this.prfx = 'colVis_';
-
-        /**
          * Css for columns manager UI span
          * @type {String}
          */
         this.spanCssClass = f.span_css_class || 'colVisSpan';
-
-        /**
-         * Main container prefix
-         * @private
-         */
-        this.prfxCont = this.prfx + 'Cont_';
 
         /**
          * Css for columns manager UI main container
@@ -378,7 +366,7 @@ export default class ColsVisibility extends Feature {
             return;
         }
         let tf = this.tf;
-        let span = createElm('span', ['id', this.prfx + tf.id]);
+        let span = createElm('span');
         span.className = this.spanCssClass;
 
         //Container element (rdiv or custom element)
@@ -431,7 +419,7 @@ export default class ColsVisibility extends Feature {
         let tf = this.tf;
 
         let container = !this.contElTgtId ?
-            createElm('div', ['id', this.prfxCont + tf.id]) :
+            createElm('div') :
             elm(this.contElTgtId);
         container.className = this.contCssClass;
 
@@ -441,7 +429,7 @@ export default class ColsVisibility extends Feature {
         container.appendChild(extNameLabel);
 
         //Headers list
-        let ul = createElm('ul', ['id', 'ul' + this.name + '_' + tf.id]);
+        let ul = createElm('ul');
         ul.className = this.listCssClass;
 
         let tbl = this.headersTbl ? this.headersTbl : tf.tbl;
