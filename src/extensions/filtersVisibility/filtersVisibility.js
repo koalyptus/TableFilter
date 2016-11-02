@@ -145,12 +145,6 @@ export default class FiltersVisibility extends Feature {
             Boolean(f.visible_at_start) : true;
 
         /**
-         * Extension's prefix
-         * @private
-         */
-        this.prfx = 'fltsVis_';
-
-        /**
          * Callback fired before filters row is shown
          * @type {Function}
          */
@@ -205,7 +199,7 @@ export default class FiltersVisibility extends Feature {
      */
     buildUI() {
         let tf = this.tf;
-        let span = createElm('span', ['id', this.prfx + tf.id]);
+        let span = createElm('span');
         span.className = this.contCssClass;
 
         //Container element (rdiv or custom element)
