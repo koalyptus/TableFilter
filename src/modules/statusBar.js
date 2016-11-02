@@ -3,6 +3,18 @@ import {root} from '../root';
 import {createElm, createText, elm, removeElm} from '../dom';
 import {isFn} from '../types';
 
+const EVENTS = [
+    'after-filtering',
+    'after-populating-filter',
+    'after-page-change',
+    'after-clearing-filters',
+    'after-page-length-change',
+    'after-reset-page',
+    'after-reset-page-length',
+    'after-loading-extensions',
+    'after-loading-themes'
+];
+
 /**
  * Status bar UI component
  * @export
@@ -150,27 +162,6 @@ export class StatusBar extends Feature {
          * @type {String}
          */
         this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
-
-        /**
-         * Prefix for container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxCont = 'status_';
-
-        /**
-         * Prefix for label container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxLabel = 'statusSpan_';
-
-        /**
-         * Prefix for text preceding the message
-         * @type {String}
-         * @private
-         */
-        this.prfxText = 'statusText_';
     }
 
     /**
@@ -185,13 +176,13 @@ export class StatusBar extends Feature {
         let emitter = this.emitter;
 
         //status bar container
-        let statusDiv = createElm('div', ['id', this.prfxCont + tf.id]);
+        let statusDiv = createElm('div');
         statusDiv.className = this.cssClass;
 
         //status bar label
-        let statusSpan = createElm('span', ['id', this.prfxLabel + tf.id]);
+        let statusSpan = createElm('span');
         //preceding text
-        let statusSpanText = createElm('span', ['id', this.prfxText + tf.id]);
+        let statusSpanText = createElm('span');
         statusSpanText.appendChild(createText(this.text));
 
         // target element container
@@ -234,18 +225,7 @@ export class StatusBar extends Feature {
         emitter.on(['before-loading-themes'],
             () => this.message(this.msgLoadThemes));
 
-        emitter.on([
-            'after-filtering',
-            'after-populating-filter',
-            'after-page-change',
-            'after-clearing-filters',
-            'after-page-length-change',
-            'after-reset-page',
-            'after-reset-page-length',
-            'after-loading-extensions',
-            'after-loading-themes'],
-            () => this.message('')
-        );
+        emitter.on(EVENTS, () => this.message(''));
 
         /**
          * @inherited
@@ -315,18 +295,7 @@ export class StatusBar extends Feature {
         emitter.off(['before-loading-themes'],
             () => this.message(this.msgLoadThemes));
 
-        emitter.off([
-            'after-filtering',
-            'after-populating-filter',
-            'after-page-change',
-            'after-clearing-filters',
-            'after-page-length-change',
-            'after-reset-page',
-            'after-reset-page-length',
-            'after-loading-extensions',
-            'after-loading-themes'],
-            () => this.message('')
-        );
+        emitter.off(EVENTS, () => this.message(''));
 
         this.initialized = false;
     }

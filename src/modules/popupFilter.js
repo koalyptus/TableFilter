@@ -116,13 +116,6 @@ export class PopupFilter extends Feature {
         this.adjustToContainer = true;
 
         /**
-         * Prefix for pop-up filter span ID
-         * @type {String}
-         * @private
-         */
-        this.prfxSpan = 'popUpSpan_';
-
-        /**
          * Prefix for pop-up filter container ID
          * @type {String}
          * @private
@@ -214,11 +207,7 @@ export class PopupFilter extends Feature {
             if (tf.getFilterType(i) === NONE) {
                 continue;
             }
-            let popUpSpan = createElm(
-                'span',
-                ['id', this.prfxSpan + tf.id + '_' + i],
-                ['ci', i]
-            );
+            let popUpSpan = createElm('span', ['ci', i]);
             popUpSpan.innerHTML = this.iconHtml;
             let header = tf.getHeaderElement(i);
             header.appendChild(popUpSpan);
@@ -244,10 +233,8 @@ export class PopupFilter extends Feature {
      */
     build(colIndex, div) {
         let tf = this.tf;
-        let popUpDiv = !div ?
-            createElm('div',
-                ['id', this.prfxDiv + tf.id + '_' + colIndex]) :
-            div;
+        let popUpDiv = div ||
+            createElm('div', ['id', this.prfxDiv + tf.id + '_' + colIndex]);
         popUpDiv.className = this.containerCssClass;
         tf.externalFltTgtIds.push(popUpDiv.id);
         let header = tf.getHeaderElement(colIndex);
