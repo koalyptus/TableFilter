@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/statusBar.js | tablefilter v0.4.4 API Document</title>
+  <title data-ice="title">src/modules/statusBar.js | tablefilter v0.4.5 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -123,6 +123,18 @@
 import {root} from &apos;../root&apos;;
 import {createElm, createText, elm, removeElm} from &apos;../dom&apos;;
 import {isFn} from &apos;../types&apos;;
+
+const EVENTS = [
+    &apos;after-filtering&apos;,
+    &apos;after-populating-filter&apos;,
+    &apos;after-page-change&apos;,
+    &apos;after-clearing-filters&apos;,
+    &apos;after-page-length-change&apos;,
+    &apos;after-reset-page&apos;,
+    &apos;after-reset-page-length&apos;,
+    &apos;after-loading-extensions&apos;,
+    &apos;after-loading-themes&apos;
+];
 
 /**
  * Status bar UI component
@@ -271,27 +283,6 @@ export class StatusBar extends Feature {
          * @type {String}
          */
         this.msgLoadThemes = f.msg_load_themes || &apos;Loading theme(s)...&apos;;
-
-        /**
-         * Prefix for container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxCont = &apos;status_&apos;;
-
-        /**
-         * Prefix for label container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxLabel = &apos;statusSpan_&apos;;
-
-        /**
-         * Prefix for text preceding the message
-         * @type {String}
-         * @private
-         */
-        this.prfxText = &apos;statusText_&apos;;
     }
 
     /**
@@ -306,13 +297,13 @@ export class StatusBar extends Feature {
         let emitter = this.emitter;
 
         //status bar container
-        let statusDiv = createElm(&apos;div&apos;, [&apos;id&apos;, this.prfxCont + tf.id]);
+        let statusDiv = createElm(&apos;div&apos;);
         statusDiv.className = this.cssClass;
 
         //status bar label
-        let statusSpan = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxLabel + tf.id]);
+        let statusSpan = createElm(&apos;span&apos;);
         //preceding text
-        let statusSpanText = createElm(&apos;span&apos;, [&apos;id&apos;, this.prfxText + tf.id]);
+        let statusSpanText = createElm(&apos;span&apos;);
         statusSpanText.appendChild(createText(this.text));
 
         // target element container
@@ -355,18 +346,7 @@ export class StatusBar extends Feature {
         emitter.on([&apos;before-loading-themes&apos;],
             () =&gt; this.message(this.msgLoadThemes));
 
-        emitter.on([
-            &apos;after-filtering&apos;,
-            &apos;after-populating-filter&apos;,
-            &apos;after-page-change&apos;,
-            &apos;after-clearing-filters&apos;,
-            &apos;after-page-length-change&apos;,
-            &apos;after-reset-page&apos;,
-            &apos;after-reset-page-length&apos;,
-            &apos;after-loading-extensions&apos;,
-            &apos;after-loading-themes&apos;],
-            () =&gt; this.message(&apos;&apos;)
-        );
+        emitter.on(EVENTS, () =&gt; this.message(&apos;&apos;));
 
         /**
          * @inherited
@@ -436,18 +416,7 @@ export class StatusBar extends Feature {
         emitter.off([&apos;before-loading-themes&apos;],
             () =&gt; this.message(this.msgLoadThemes));
 
-        emitter.off([
-            &apos;after-filtering&apos;,
-            &apos;after-populating-filter&apos;,
-            &apos;after-page-change&apos;,
-            &apos;after-clearing-filters&apos;,
-            &apos;after-page-length-change&apos;,
-            &apos;after-reset-page&apos;,
-            &apos;after-reset-page-length&apos;,
-            &apos;after-loading-extensions&apos;,
-            &apos;after-loading-themes&apos;],
-            () =&gt; this.message(&apos;&apos;)
-        );
+        emitter.off(EVENTS, () =&gt; this.message(&apos;&apos;));
 
         this.initialized = false;
     }
