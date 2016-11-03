@@ -94,34 +94,6 @@ export class GridLayout extends Feature {
         this.colElms = [];
 
         /**
-         * Prefix for grid-layout main container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxMainTblCont = 'gridCont_';
-
-        /**
-         * Prefix for grid-layout body table container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxTblCont = 'tblCont_';
-
-        /**
-         * Prefix for grid-layout headers table container ID
-         * @type {String}
-         * @private
-         */
-        this.prfxHeadTblCont = 'tblHeadCont_';
-
-        /**
-         * Prefix for grid-layout headers table ID
-         * @type {String}
-         * @private
-         */
-        this.prfxHeadTbl = 'tblHead_';
-
-        /**
          * Prefix for grid-layout filter's cell ID
          * @type {String}
          * @private
@@ -199,7 +171,7 @@ export class GridLayout extends Feature {
         let tblW = this.initialTableWidth();
 
         //Main container: it will contain all the elements
-        this.tblMainCont = this.createContainer(this.prfxMainTblCont + tf.id,
+        this.tblMainCont = this.createContainer(
             'div', this.mainContCssClass);
         if (this.width) {
             this.tblMainCont.style.width = this.width;
@@ -207,8 +179,7 @@ export class GridLayout extends Feature {
         tbl.parentNode.insertBefore(this.tblMainCont, tbl);
 
         //Table container: div wrapping content table
-        this.tblCont = this.createContainer(this.prfxTblCont + tf.id, 'div',
-            this.contCssClass);
+        this.tblCont = this.createContainer('div', this.contCssClass);
         this.setConfigWidth(this.tblCont);
         if (this.height) {
             this.tblCont.style.height = this.height;
@@ -227,12 +198,12 @@ export class GridLayout extends Feature {
         this.tblMainCont.appendChild(d);
 
         //Headers table container: div wrapping headers table
-        this.headTblCont = this.createContainer(this.prfxHeadTblCont + tf.id,
+        this.headTblCont = this.createContainer(
             'div', this.headContCssClass);
         this.setConfigWidth(this.headTblCont);
 
         //Headers table
-        this.headTbl = createElm('table', ['id', this.prfxHeadTbl + tf.id]);
+        this.headTbl = createElm('table');
         let tH = createElm('tHead');
 
         //1st row should be headers row, ids are added if not set
@@ -321,9 +292,7 @@ export class GridLayout extends Feature {
             tbl.style.width = this.headTbl.clientWidth + 'px';
         }
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
     }
 
@@ -386,14 +355,13 @@ export class GridLayout extends Feature {
 
     /**
      * Creates container element
-     * @param {String} id Element ID
      * @param {String} tag Tag name
      * @param {String} className Css class to assign to element
      * @returns {DOMElement}
      * @private
      */
-    createContainer(id, tag, className) {
-        let element = createElm(tag, ['id', id]);
+    createContainer(tag, className) {
+        let element = createElm(tag);
         element.className = className;
         return element;
     }
@@ -429,14 +397,12 @@ export class GridLayout extends Feature {
 
         for (let k = (tf.nbCells - 1); k >= 0; k--) {
             let col;
-            let id = `${tf.id}_col_${k}`;
 
             if (!this.tblHasColTag) {
-                col = createElm('col', ['id', id]);
+                col = createElm('col');
                 tf.tbl.insertBefore(col, tf.tbl.firstChild);
             } else {
                 col = cols[k];
-                col.setAttribute('id', id);
             }
             col.style.width = tf.colWidths[k];
             this.colElms[k] = col;
