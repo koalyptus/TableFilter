@@ -4,6 +4,8 @@ import {createElm, removeElm} from '../dom';
 import {addEvt, cancelEvt, stopEvt, targetEvt} from '../event';
 import {INPUT, NONE} from '../const';
 
+const CONTAINER_ID_TPL = '{prefix}{id}_{colIndex}';
+
 /**
  * Pop-up filter component
  * @export
@@ -120,7 +122,7 @@ export class PopupFilter extends Feature {
          * @type {String}
          * @private
          */
-        this.prfxDiv = 'popUpDiv_';
+        this.prfxDiv = 'popup_';
     }
 
     /**
@@ -233,8 +235,11 @@ export class PopupFilter extends Feature {
      */
     build(colIndex, div) {
         let tf = this.tf;
+        let contId = tf.buildId(CONTAINER_ID_TPL,
+            {colIndex, prefix: this.prfxDiv})
         let popUpDiv = div ||
-            createElm('div', ['id', this.prfxDiv + tf.id + '_' + colIndex]);
+            createElm('div', /*['id', this.prfxDiv + tf.id + '_' + colIndex]*/
+            ['id', contId]);
         popUpDiv.className = this.containerCssClass;
         tf.externalFltTgtIds.push(popUpDiv.id);
         let header = tf.getHeaderElement(colIndex);

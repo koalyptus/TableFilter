@@ -2644,6 +2644,14 @@ export class TableFilter {
         return parseInt(idx, 10);
     }
 
+    buildId(tpl, data = {}) {
+        data.id = tf.id;
+        data.prfxFlt = tf.prfxFlt;
+        return tpl.replace(/\{([\w\.]*)\}/g, (str, key) => {
+            return data[key];
+        });
+    }
+
     /**
      * Make specified column's filter active
      * @param colIndex Index of a column

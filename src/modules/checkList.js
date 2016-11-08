@@ -8,10 +8,12 @@ import {matchCase, trim, rgxEsc} from '../string';
 import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
 import {addEvt, removeEvt, targetEvt} from '../event';
 import {isEmpty} from '../types';
-import {CHECKLIST, NONE} from '../const';
+import {CHECKLIST, NONE, FILTER_ID_TPL} from '../const';
 
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
     '{1} manner.';
+
+const CONTAINER_ID_TPL = '{prefix}{colIndex}_{id}';
 
 /**
  * Checklist filter UI component
@@ -155,7 +157,8 @@ export class CheckList extends Feature {
             tf.externalFltTgtIds[colIndex] : null;
 
         let divCont = createElm('div',
-            ['id', this.prfx + colIndex + '_' + tf.id],
+            // ['id', this.prfx + colIndex + '_' + tf.id],
+            ['id', tf.buildId(CONTAINER_ID_TPL, {colIndex, prefix: this.prfx})],
             ['ct', colIndex], ['filled', '0']);
         divCont.className = this.containerCssClass;
 
@@ -167,7 +170,8 @@ export class CheckList extends Feature {
         }
 
         this.containers[colIndex] = divCont;
-        tf.fltIds.push(tf.prfxFlt + colIndex + '_' + tf.id);
+        // tf.fltIds.push(tf.prfxFlt + colIndex + '_' + tf.id);
+        tf.fltIds.push(tf.buildId(FILTER_ID_TPL, {colIndex}));
 
         if (!tf.loadFltOnDemand) {
             this.build(colIndex);
