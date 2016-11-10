@@ -2655,14 +2655,6 @@ export class TableFilter {
         return `${this.prfxFlt}${colIndex}_${this.id}`;
     }
 
-    buildId(tpl, data = {}) {
-        data.id = this.id;
-        data.prfxFlt = this.prfxFlt;
-        return tpl.replace(/\{([\w\.]*)\}/g, (str, key) => {
-            return data[key];
-        });
-    }
-
     /**
      * Make specified column's filter active
      * @param colIndex Index of a column

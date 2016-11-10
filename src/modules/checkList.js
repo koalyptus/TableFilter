@@ -13,8 +13,6 @@ import {CHECKLIST, NONE} from '../const';
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
     '{1} manner.';
 
-const CONTAINER_ID_TPL = '{prefix}{colIndex}_{id}';
-
 /**
  * Checklist filter UI component
  */
@@ -157,7 +155,7 @@ export class CheckList extends Feature {
             tf.externalFltTgtIds[colIndex] : null;
 
         let divCont = createElm('div',
-            ['id', tf.buildId(CONTAINER_ID_TPL, {colIndex, prefix: this.prfx})],
+            ['id', `${this.prfx}${colIndex}_${tf.id}`],
             ['ct', colIndex], ['filled', '0']);
         divCont.className = this.containerCssClass;
 
