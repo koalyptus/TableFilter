@@ -354,9 +354,7 @@ export class CheckList extends Feature {
             let val = this.opts[y]; //item value
             let lbl = this.isCustom ? this.optsTxt[y] : val; //item text
             let fltId = tf.fltIds[colIndex];
-            let li = createCheckItem(`${fltId}_${(y + chkCt)}`,
-                /*tf.fltIds[colIndex] + '_' + (y + chkCt),*/
-                val, lbl);
+            let li = createCheckItem(`${fltId}_${(y + chkCt)}`, val, lbl);
             li.className = this.itemCssClass;
 
             if (tf.linkedFilters && tf.disableExcludedOptions &&

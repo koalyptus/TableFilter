@@ -459,7 +459,6 @@ export class GridLayout extends Feature {
             let c = row.cells[n];
             let thId = c.getAttribute('id');
             if (!thId || thId === '') {
-                // thId = this.prfxGridTh + n + '_' + tf.id;
                 thId = `${this.prfxGridTh + n}_${tf.id}`;
                 c.setAttribute('id', thId);
             }
