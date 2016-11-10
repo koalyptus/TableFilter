@@ -377,7 +377,6 @@ export class GridLayout extends Feature {
         if (this.enableFilters && tf.fltGrid) {
             tf.externalFltTgtIds = [];
             for (let j = 0; j < tf.getCellsNb(); j++) {
-                // let fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;
                 let fltTdId = `${tf.prfxFlt + j + this.prfxGridFltTd + tf.id}`;
                 let cl = createElm(tf.fltCellTag, ['id', fltTdId]);
                 filtersRow.appendChild(cl);
