@@ -1337,12 +1337,12 @@ export class TableFilter {
         let col = this.getFilterType(colIndex);
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
-        let inptype = col === INPUT ? 'text' : 'hidden';
+        let inpType = col === INPUT ? 'text' : 'hidden';
         let inp = createElm(INPUT,
-            ['id', this.prfxFlt + colIndex + '_' + this.id],
-            ['type', inptype], ['ct', colIndex]);
+            ['id', this.buildFilterId(colIndex)],
+            ['type', inpType], ['ct', colIndex]);
 
-        if (inptype !== 'hidden' && this.watermark) {
+        if (inpType !== 'hidden' && this.watermark) {
             inp.setAttribute('placeholder',
                 this.isWatermarkArray ? (this.watermark[colIndex] || '') :
                     this.watermark
@@ -1375,8 +1375,9 @@ export class TableFilter {
         let externalFltTgtId = this.isExternalFlt ?
             this.externalFltTgtIds[colIndex] : null;
         let btn = createElm(INPUT,
-            ['id', this.prfxValButton + colIndex + '_' + this.id],
-            ['type', 'button'], ['value', this.btnText]);
+            ['type', 'button'],
+            ['value', this.btnText]
+        );
         btn.className = this.btnCssClass;
 
         //filter is appended in custom element
@@ -1598,45 +1599,45 @@ export class TableFilter {
         }
 
         /*** container div ***/
-        let infdiv = createElm('div', ['id', this.prfxInfDiv + this.id]);
-        infdiv.className = this.infDivCssClass;
+        let infDiv = createElm('div');
+        infDiv.className = this.infDivCssClass;
 
         //custom container
         if (this.toolBarTgtId) {
-            elm(this.toolBarTgtId).appendChild(infdiv);
+            elm(this.toolBarTgtId).appendChild(infDiv);
         }
         //grid-layout
         else if (this.gridLayout) {
             let gridLayout = this.Mod.gridLayout;
-            gridLayout.tblMainCont.appendChild(infdiv);
-            infdiv.className = gridLayout.infDivCssClass;
+            gridLayout.tblMainCont.appendChild(infDiv);
+            infDiv.className = gridLayout.infDivCssClass;
         }
         //default location: just above the table
         else {
             let cont = createElm('caption');
-            cont.appendChild(infdiv);
+            cont.appendChild(infDiv);
             this.tbl.insertBefore(cont, this.tbl.firstChild);
         }
-        this.infDiv = elm(this.prfxInfDiv + this.id);
+        this.infDiv = infDiv;
 
         /*** left div containing rows # displayer ***/
-        let ldiv = createElm('div', ['id', this.prfxLDiv + this.id]);
-        ldiv.className = this.lDivCssClass;
-        infdiv.appendChild(ldiv);
-        this.lDiv = elm(this.prfxLDiv + this.id);
+        let lDiv = createElm('div');
+        lDiv.className = this.lDivCssClass;
+        infDiv.appendChild(lDiv);
+        this.lDiv = lDiv;
 
         /***    right div containing reset button
                 + nb results per page select    ***/
-        let rdiv = createElm('div', ['id', this.prfxRDiv + this.id]);
-        rdiv.className = this.rDivCssClass;
-        infdiv.appendChild(rdiv);
-        this.rDiv = elm(this.prfxRDiv + this.id);
+        let rDiv = createElm('div');
+        rDiv.className = this.rDivCssClass;
+        infDiv.appendChild(rDiv);
+        this.rDiv = rDiv;
 
         /*** mid div containing paging elements ***/
-        let mdiv = createElm('div', ['id', this.prfxMDiv + this.id]);
-        mdiv.className = this.mDivCssClass;
-        infdiv.appendChild(mdiv);
-        this.mDiv = elm(this.prfxMDiv + this.id);
+        let mDiv = createElm('div');
+        mDiv.className = this.mDivCssClass;
+        infDiv.appendChild(mDiv);
+        this.mDiv = mDiv;
 
         // emit help initialisation only if undefined
         if (isUndef(this.help)) {
@@ -2538,7 +2539,7 @@ export class TableFilter {
             if (tblHasColTag) {
                 col = colTags[k];
             } else {
-                col = createElm('col', ['id', this.id + '_col_' + k]);
+                col = createElm('col');
                 frag.appendChild(col);
             }
             col.style.width = colWidths[k];
@@ -2642,6 +2643,16 @@ export class TableFilter {
         let idx = filterId.split('_')[0];
         idx = idx.split(this.prfxFlt)[1];
         return parseInt(idx, 10);
+    }
+
+    /**
+     * Builds filter element ID for a given column index
+     * @param {any} colIndex
+     * @returns {String} Filter element ID string
+     * @private
+     */
+    buildFilterId(colIndex) {
+        return `${this.prfxFlt}${colIndex}_${this.id}`;
     }
 
     /**

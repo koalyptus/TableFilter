@@ -155,7 +155,7 @@ export class CheckList extends Feature {
             tf.externalFltTgtIds[colIndex] : null;
 
         let divCont = createElm('div',
-            ['id', this.prfx + colIndex + '_' + tf.id],
+            ['id', `${this.prfx}${colIndex}_${tf.id}`],
             ['ct', colIndex], ['filled', '0']);
         divCont.className = this.containerCssClass;
 
@@ -167,7 +167,7 @@ export class CheckList extends Feature {
         }
 
         this.containers[colIndex] = divCont;
-        tf.fltIds.push(tf.prfxFlt + colIndex + '_' + tf.id);
+        tf.fltIds.push(tf.buildFilterId(colIndex));
 
         if (!tf.loadFltOnDemand) {
             this.build(colIndex);
@@ -206,7 +206,8 @@ export class CheckList extends Feature {
         this.optsTxt = [];
 
         let flt = this.containers[colIndex];
-        let ul = createElm('ul', ['id', tf.fltIds[colIndex]],
+        let ul = createElm('ul',
+            ['id', tf.fltIds[colIndex]],
             ['colIndex', colIndex]);
         ul.className = this.filterCssClass;
 
@@ -352,8 +353,8 @@ export class CheckList extends Feature {
         for (let y = 0; y < this.opts.length; y++) {
             let val = this.opts[y]; //item value
             let lbl = this.isCustom ? this.optsTxt[y] : val; //item text
-            let li = createCheckItem(tf.fltIds[colIndex] + '_' + (y + chkCt),
-                val, lbl);
+            let fltId = tf.fltIds[colIndex];
+            let li = createCheckItem(`${fltId}_${(y + chkCt)}`, val, lbl);
             li.className = this.itemCssClass;
 
             if (tf.linkedFilters && tf.disableExcludedOptions &&
@@ -383,8 +384,8 @@ export class CheckList extends Feature {
     addTChecks(colIndex, ul) {
         let tf = this.tf;
         let chkCt = 1;
-        let li0 = createCheckItem(tf.fltIds[colIndex] + '_0', '',
-            tf.displayAllText);
+        let fltId = tf.fltIds[colIndex];
+        let li0 = createCheckItem(`${fltId}_0`, '', tf.displayAllText);
         li0.className = this.itemCssClass;
         ul.appendChild(li0);
 
@@ -395,8 +396,8 @@ export class CheckList extends Feature {
         }
 
         if (tf.enableEmptyOption) {
-            let li1 = createCheckItem(tf.fltIds[colIndex] + '_1',
-                tf.emOperator, tf.emptyText);
+            let li1 = createCheckItem(`${fltId}_1`, tf.emOperator,
+                tf.emptyText);
             li1.className = this.itemCssClass;
             ul.appendChild(li1);
             addEvt(li1.check, 'click', evt => this.optionClick(evt));
@@ -404,7 +405,7 @@ export class CheckList extends Feature {
         }
 
         if (tf.enableNonEmptyOption) {
-            let li2 = createCheckItem(tf.fltIds[colIndex] + '_2', tf.nmOperator,
+            let li2 = createCheckItem(`${fltId}_2`, tf.nmOperator,
                 tf.nonEmptyText);
             li2.className = this.itemCssClass;
             ul.appendChild(li2);

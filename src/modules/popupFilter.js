@@ -120,7 +120,7 @@ export class PopupFilter extends Feature {
          * @type {String}
          * @private
          */
-        this.prfxDiv = 'popUpDiv_';
+        this.prfxDiv = 'popup_';
     }
 
     /**
@@ -233,10 +233,11 @@ export class PopupFilter extends Feature {
      */
     build(colIndex, div) {
         let tf = this.tf;
-        let popUpDiv = div ||
-            createElm('div', ['id', this.prfxDiv + tf.id + '_' + colIndex]);
+        let contId = `${this.prfxDiv}${tf.id}_${colIndex}`;
+        let popUpDiv = div || createElm('div', ['id', contId]);
         popUpDiv.className = this.containerCssClass;
         tf.externalFltTgtIds.push(popUpDiv.id);
+
         let header = tf.getHeaderElement(colIndex);
         header.insertBefore(popUpDiv, header.firstChild);
         addEvt(popUpDiv, 'click', (evt) => stopEvt(evt));

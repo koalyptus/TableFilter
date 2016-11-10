@@ -105,7 +105,7 @@ export class Dropdown extends Feature {
             tf.externalFltTgtIds[colIndex] : null;
 
         let slc = createElm(SELECT,
-            ['id', tf.prfxFlt + colIndex + '_' + tf.id],
+            ['id', tf.buildFilterId(colIndex)],
             ['ct', colIndex], ['filled', '0']
         );
 
