@@ -235,11 +235,11 @@ export class PopupFilter extends Feature {
      */
     build(colIndex, div) {
         let tf = this.tf;
-        let contId = tf.buildId(CONTAINER_ID_TPL,
-            {colIndex, prefix: this.prfxDiv})
-        let popUpDiv = div ||
-            createElm('div', /*['id', this.prfxDiv + tf.id + '_' + colIndex]*/
-            ['id', contId]);
+        let contId = tf.buildId(
+            CONTAINER_ID_TPL,
+            {colIndex, prefix: this.prfxDiv}
+        );
+        let popUpDiv = div || createElm('div', ['id', contId]);
         popUpDiv.className = this.containerCssClass;
         tf.externalFltTgtIds.push(popUpDiv.id);
         let header = tf.getHeaderElement(colIndex);

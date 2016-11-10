@@ -34,7 +34,8 @@
         }
     );
     tf1.init();
-    var btn = document.querySelector('#'+tf1.prfxValButton+'4_'+tf1.id);
+
+    var btn = document.querySelector('.' + tf1.btnCssClass);
 
     module('Table 2: sanity checks');
     test('TableFilter instance', function() {

@@ -116,9 +116,3 @@ export const IP_ADDRESS = 'ipaddress';
  * @type {Number}
  */
 export const AUTO_FILTER_DELAY = 750;
-
-/**
- * Filter ID template
- * @type {String}
- */
-export const FILTER_ID_TPL = '{prfxFlt}{colIndex}_{id}';

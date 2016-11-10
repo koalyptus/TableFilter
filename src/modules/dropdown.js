@@ -4,7 +4,7 @@ import {has} from '../array';
 import {matchCase} from '../string';
 import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
 import {addEvt, targetEvt} from '../event';
-import {SELECT, MULTIPLE, NONE, FILTER_ID_TPL} from '../const';
+import {SELECT, MULTIPLE, NONE} from '../const';
 
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
     '{1} manner.';
@@ -105,8 +105,7 @@ export class Dropdown extends Feature {
             tf.externalFltTgtIds[colIndex] : null;
 
         let slc = createElm(SELECT,
-            //['id', tf.prfxFlt + colIndex + '_' + tf.id],
-            ['id', tf.buildId(FILTER_ID_TPL, {colIndex})],
+            ['id', tf.buildFilterId(colIndex)],
             ['ct', colIndex], ['filled', '0']
         );
 

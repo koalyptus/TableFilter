@@ -13,7 +13,7 @@ const doc = root.document;
  * @param  {NodeElement} node
  * @return {String}
  */
-export const getText = node => {
+export const getText = (node) => {
     if (isUndef(node.textContent)) {
         return trim(node.innerText);
     }
@@ -25,7 +25,7 @@ export const getText = node => {
  * @param  {NodeElement} node node
  * @return {String}
  */
-export const getFirstTextNode = node => {
+export const getFirstTextNode = (node) => {
     for (let i = 0; i < node.childNodes.length; i++) {
         let n = node.childNodes[i];
         if (n.nodeType === 3) {
@@ -64,14 +64,14 @@ export const createElm = (...args) => {
  * @param  {DOMElement} node
  * @return {DOMElement} old node reference
  */
-export const removeElm = node => node.parentNode.removeChild(node);
+export const removeElm = (node) => node.parentNode.removeChild(node);
 
 /**
  * Returns a text node with given text
  * @param  {String} txt
  * @return {Object}
  */
-export const createText = txt => doc.createTextNode(txt);
+export const createText = (txt) => doc.createTextNode(txt);
 
 /**
  * Determine whether the passed elements is assigned the given class
@@ -149,17 +149,17 @@ export const createOpt = (text, value, isSel) => {
 
 /**
  * Creates and returns a checklist item
- * @param  {Number} chkIndex  index of check item
+ * @param  {String} id  index of check item
  * @param  {String} chkValue  check item value
  * @param  {String} labelText check item label text
  * @return {Object}           li DOM element
  */
-export const createCheckItem = (chkIndex, chkValue, labelText) => {
+export const createCheckItem = (id, chkValue, labelText) => {
     let li = createElm('li');
-    let label = createElm('label', ['for', chkIndex]);
+    let label = createElm('label', ['for', id]);
     let check = createElm('input',
-        ['id', chkIndex],
-        ['name', chkIndex],
+        ['id', id],
+        ['name', id],
         ['type', 'checkbox'],
         ['value', chkValue]
     );
@@ -176,7 +176,7 @@ export const createCheckItem = (chkIndex, chkValue, labelText) => {
  * @param  {String} id  Element identifier
  * @return {DOMElement}
  */
-export const elm = id => doc.getElementById(id);
+export const elm = (id) => doc.getElementById(id);
 
 /**
  * Returns list of element matching the supplied tag name

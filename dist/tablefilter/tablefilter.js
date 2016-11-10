@@ -1482,10 +1482,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var col = this.getFilterType(colIndex);
 	        var externalFltTgtId = this.isExternalFlt ? this.externalFltTgtIds[colIndex] : null;
-	        var inptype = col === _const.INPUT ? 'text' : 'hidden';
-	        var inp = (0, _dom.createElm)(_const.INPUT, ['id', this.prfxFlt + colIndex + '_' + this.id], ['type', inptype], ['ct', colIndex]);
+	        var inpType = col === _const.INPUT ? 'text' : 'hidden';
+	        var inp = (0, _dom.createElm)(_const.INPUT, ['id', this.buildFilterId(colIndex)], ['type', inpType], ['ct', colIndex]);
 	
-	        if (inptype !== 'hidden' && this.watermark) {
+	        if (inpType !== 'hidden' && this.watermark) {
 	            inp.setAttribute('placeholder', this.isWatermarkArray ? this.watermark[colIndex] || '' : this.watermark);
 	        }
 	        inp.className = cssClass || this.fltCssClass;
@@ -1527,7 +1527,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this4 = this;
 	
 	        var externalFltTgtId = this.isExternalFlt ? this.externalFltTgtIds[colIndex] : null;
-	        var btn = (0, _dom.createElm)(_const.INPUT, ['id', this.prfxValButton + colIndex + '_' + this.id], ['type', 'button'], ['value', this.btnText]);
+	        var btn = (0, _dom.createElm)(_const.INPUT, ['type', 'button'], ['value', this.btnText]);
 	        btn.className = this.btnCssClass;
 	
 	        //filter is appended in custom element
@@ -1784,45 +1784,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        /*** container div ***/
-	        var infdiv = (0, _dom.createElm)('div', ['id', this.prfxInfDiv + this.id]);
-	        infdiv.className = this.infDivCssClass;
+	        var infDiv = (0, _dom.createElm)('div');
+	        infDiv.className = this.infDivCssClass;
 	
 	        //custom container
 	        if (this.toolBarTgtId) {
-	            (0, _dom.elm)(this.toolBarTgtId).appendChild(infdiv);
+	            (0, _dom.elm)(this.toolBarTgtId).appendChild(infDiv);
 	        }
 	        //grid-layout
 	        else if (this.gridLayout) {
 	                var gridLayout = this.Mod.gridLayout;
-	                gridLayout.tblMainCont.appendChild(infdiv);
-	                infdiv.className = gridLayout.infDivCssClass;
+	                gridLayout.tblMainCont.appendChild(infDiv);
+	                infDiv.className = gridLayout.infDivCssClass;
 	            }
 	            //default location: just above the table
 	            else {
 	                    var cont = (0, _dom.createElm)('caption');
-	                    cont.appendChild(infdiv);
+	                    cont.appendChild(infDiv);
 	                    this.tbl.insertBefore(cont, this.tbl.firstChild);
 	                }
-	        this.infDiv = (0, _dom.elm)(this.prfxInfDiv + this.id);
+	        this.infDiv = infDiv;
 	
 	        /*** left div containing rows # displayer ***/
-	        var ldiv = (0, _dom.createElm)('div', ['id', this.prfxLDiv + this.id]);
-	        ldiv.className = this.lDivCssClass;
-	        infdiv.appendChild(ldiv);
-	        this.lDiv = (0, _dom.elm)(this.prfxLDiv + this.id);
+	        var lDiv = (0, _dom.createElm)('div');
+	        lDiv.className = this.lDivCssClass;
+	        infDiv.appendChild(lDiv);
+	        this.lDiv = lDiv;
 	
 	        /***    right div containing reset button
 	                + nb results per page select    ***/
-	        var rdiv = (0, _dom.createElm)('div', ['id', this.prfxRDiv + this.id]);
-	        rdiv.className = this.rDivCssClass;
-	        infdiv.appendChild(rdiv);
-	        this.rDiv = (0, _dom.elm)(this.prfxRDiv + this.id);
+	        var rDiv = (0, _dom.createElm)('div');
+	        rDiv.className = this.rDivCssClass;
+	        infDiv.appendChild(rDiv);
+	        this.rDiv = rDiv;
 	
 	        /*** mid div containing paging elements ***/
-	        var mdiv = (0, _dom.createElm)('div', ['id', this.prfxMDiv + this.id]);
-	        mdiv.className = this.mDivCssClass;
-	        infdiv.appendChild(mdiv);
-	        this.mDiv = (0, _dom.elm)(this.prfxMDiv + this.id);
+	        var mDiv = (0, _dom.createElm)('div');
+	        mDiv.className = this.mDivCssClass;
+	        infDiv.appendChild(mDiv);
+	        this.mDiv = mDiv;
 	
 	        // emit help initialisation only if undefined
 	        if ((0, _types.isUndef)(this.help)) {
@@ -2741,7 +2741,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (tblHasColTag) {
 	                col = colTags[k];
 	            } else {
-	                col = (0, _dom.createElm)('col', ['id', this.id + '_col_' + k]);
+	                col = (0, _dom.createElm)('col');
 	                frag.appendChild(col);
 	            }
 	            col.style.width = colWidths[k];
@@ -2863,11 +2863,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return parseInt(idx, 10);
 	    };
 	
+	    /**
+	     * Builds filter element ID for a given column index
+	     * @param {any} colIndex
+	     * @returns {String} Filter element ID string
+	     * @private
+	     */
+	
+	
+	    TableFilter.prototype.buildFilterId = function buildFilterId(colIndex) {
+	        return '' + this.prfxFlt + colIndex + '_' + this.id;
+	    };
+	
 	    TableFilter.prototype.buildId = function buildId(tpl) {
 	        var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	
-	        data.id = tf.id;
-	        data.prfxFlt = tf.prfxFlt;
+	        data.id = this.id;
+	        data.prfxFlt = this.prfxFlt;
 	        return tpl.replace(/\{([\w\.]*)\}/g, function (str, key) {
 	            return data[key];
 	        });
@@ -3536,15 +3548,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/**
 	 * Creates and returns a checklist item
-	 * @param  {Number} chkIndex  index of check item
+	 * @param  {String} id  index of check item
 	 * @param  {String} chkValue  check item value
 	 * @param  {String} labelText check item label text
 	 * @return {Object}           li DOM element
 	 */
-	var createCheckItem = exports.createCheckItem = function createCheckItem(chkIndex, chkValue, labelText) {
+	var createCheckItem = exports.createCheckItem = function createCheckItem(id, chkValue, labelText) {
 	    var li = createElm('li');
-	    var label = createElm('label', ['for', chkIndex]);
-	    var check = createElm('input', ['id', chkIndex], ['name', chkIndex], ['type', 'checkbox'], ['value', chkValue]);
+	    var label = createElm('label', ['for', id]);
+	    var check = createElm('input', ['id', id], ['name', id], ['type', 'checkbox'], ['value', chkValue]);
 	    label.appendChild(check);
 	    label.appendChild(createText(labelText));
 	    li.appendChild(label);
@@ -4610,7 +4622,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.enableFilters && tf.fltGrid) {
 	            tf.externalFltTgtIds = [];
 	            for (var j = 0; j < tf.getCellsNb(); j++) {
-	                var fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;
+	                // let fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;
+	                var fltTdId = '' + (tf.prfxFlt + j + this.prfxGridFltTd + tf.id);
 	                var cl = (0, _dom.createElm)(tf.fltCellTag, ['id', fltTdId]);
 	                filtersRow.appendChild(cl);
 	                tf.externalFltTgtIds[j] = fltTdId;
@@ -4699,6 +4712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var c = row.cells[n];
 	            var thId = c.getAttribute('id');
 	            if (!thId || thId === '') {
+	                // thId = this.prfxGridTh + n + '_' + tf.id;
 	                thId = this.prfxGridTh + n + '_' + tf.id;
 	                c.setAttribute('id', thId);
 	            }
@@ -4988,12 +5002,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @type {Number}
 	 */
 	var AUTO_FILTER_DELAY = exports.AUTO_FILTER_DELAY = 750;
-	
-	/**
-	 * Filter ID template
-	 * @type {String}
-	 */
-	var FILTER_ID_TPL = exports.FILTER_ID_TPL = '{prfxFlt}{colIndex}_{id}';
 
 /***/ },
 /* 12 */
@@ -5666,8 +5674,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    PopupFilter.prototype.build = function build(colIndex, div) {
 	        var tf = this.tf;
 	        var contId = tf.buildId(CONTAINER_ID_TPL, { colIndex: colIndex, prefix: this.prfxDiv });
-	        var popUpDiv = div || (0, _dom.createElm)('div', /*['id', this.prfxDiv + tf.id + '_' + colIndex]*/
-	        ['id', contId]);
+	        var popUpDiv = div || (0, _dom.createElm)('div', ['id', contId]);
 	        popUpDiv.className = this.containerCssClass;
 	        tf.externalFltTgtIds.push(popUpDiv.id);
 	        var header = tf.getHeaderElement(colIndex);
@@ -5950,9 +5957,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var col = tf.getFilterType(colIndex);
 	        var externalFltTgtId = isExternal ? tf.externalFltTgtIds[colIndex] : null;
 	
-	        var slc = (0, _dom.createElm)(_const.SELECT,
-	        //['id', tf.prfxFlt + colIndex + '_' + tf.id],
-	        ['id', tf.buildId(_const.FILTER_ID_TPL, { colIndex: colIndex })], ['ct', colIndex], ['filled', '0']);
+	        var slc = (0, _dom.createElm)(_const.SELECT, ['id', tf.buildFilterId(colIndex)], ['ct', colIndex], ['filled', '0']);
 	
 	        if (col === _const.MULTIPLE) {
 	            slc.multiple = _const.MULTIPLE;
@@ -6548,9 +6553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var tf = this.tf;
 	        var externalFltTgtId = isExternal ? tf.externalFltTgtIds[colIndex] : null;
 	
-	        var divCont = (0, _dom.createElm)('div',
-	        // ['id', this.prfx + colIndex + '_' + tf.id],
-	        ['id', tf.buildId(CONTAINER_ID_TPL, { colIndex: colIndex, prefix: this.prfx })], ['ct', colIndex], ['filled', '0']);
+	        var divCont = (0, _dom.createElm)('div', ['id', tf.buildId(CONTAINER_ID_TPL, { colIndex: colIndex, prefix: this.prfx })], ['ct', colIndex], ['filled', '0']);
 	        divCont.className = this.containerCssClass;
 	
 	        //filter is appended in desired element
@@ -6561,8 +6564,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        this.containers[colIndex] = divCont;
-	        // tf.fltIds.push(tf.prfxFlt + colIndex + '_' + tf.id);
-	        tf.fltIds.push(tf.buildId(_const.FILTER_ID_TPL, { colIndex: colIndex }));
+	        tf.fltIds.push(tf.buildFilterId(colIndex));
 	
 	        if (!tf.loadFltOnDemand) {
 	            this.build(colIndex);
@@ -6741,7 +6743,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var y = 0; y < this.opts.length; y++) {
 	            var val = this.opts[y]; //item value
 	            var lbl = this.isCustom ? this.optsTxt[y] : val; //item text
-	            var li = (0, _dom.createCheckItem)(tf.fltIds[colIndex] + '_' + (y + chkCt), val, lbl);
+	            var fltId = tf.fltIds[colIndex];
+	            var li = (0, _dom.createCheckItem)(fltId + '_' + (y + chkCt),
+	            /*tf.fltIds[colIndex] + '_' + (y + chkCt),*/
+	            val, lbl);
 	            li.className = this.itemCssClass;
 	
 	            if (tf.linkedFilters && tf.disableExcludedOptions && (0, _array.has)(this.excludedOpts, (0, _string.matchCase)(val, tf.caseSensitive), tf.caseSensitive)) {
@@ -6775,7 +6780,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var tf = this.tf;
 	        var chkCt = 1;
-	        var li0 = (0, _dom.createCheckItem)(tf.fltIds[colIndex] + '_0', '', tf.displayAllText);
+	        var fltId = tf.fltIds[colIndex];
+	        var li0 = (0, _dom.createCheckItem)(fltId + '_0', '', tf.displayAllText);
 	        li0.className = this.itemCssClass;
 	        ul.appendChild(li0);
 	
@@ -6788,7 +6794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        if (tf.enableEmptyOption) {
-	            var li1 = (0, _dom.createCheckItem)(tf.fltIds[colIndex] + '_1', tf.emOperator, tf.emptyText);
+	            var li1 = (0, _dom.createCheckItem)(fltId + '_1', tf.emOperator, tf.emptyText);
 	            li1.className = this.itemCssClass;
 	            ul.appendChild(li1);
 	            (0, _event.addEvt)(li1.check, 'click', function (evt) {
@@ -6798,7 +6804,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        if (tf.enableNonEmptyOption) {
-	            var li2 = (0, _dom.createCheckItem)(tf.fltIds[colIndex] + '_2', tf.nmOperator, tf.nonEmptyText);
+	            var li2 = (0, _dom.createCheckItem)(fltId + '_2', tf.nmOperator, tf.nonEmptyText);
 	            li2.className = this.itemCssClass;
 	            ul.appendChild(li2);
 	            (0, _event.addEvt)(li2.check, 'click', function (evt) {

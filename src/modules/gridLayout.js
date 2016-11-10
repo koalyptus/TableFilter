@@ -377,7 +377,8 @@ export class GridLayout extends Feature {
         if (this.enableFilters && tf.fltGrid) {
             tf.externalFltTgtIds = [];
             for (let j = 0; j < tf.getCellsNb(); j++) {
-                let fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;
+                // let fltTdId = tf.prfxFlt + j + this.prfxGridFltTd + tf.id;
+                let fltTdId = `${tf.prfxFlt + j + this.prfxGridFltTd + tf.id}`;
                 let cl = createElm(tf.fltCellTag, ['id', fltTdId]);
                 filtersRow.appendChild(cl);
                 tf.externalFltTgtIds[j] = fltTdId;
@@ -458,7 +459,8 @@ export class GridLayout extends Feature {
             let c = row.cells[n];
             let thId = c.getAttribute('id');
             if (!thId || thId === '') {
-                thId = this.prfxGridTh + n + '_' + tf.id;
+                // thId = this.prfxGridTh + n + '_' + tf.id;
+                thId = `${this.prfxGridTh + n}_${tf.id}`;
                 c.setAttribute('id', thId);
             }
             sortTriggers.push(thId);
