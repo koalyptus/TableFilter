@@ -216,11 +216,11 @@ export class CheckList extends Feature {
         let caseSensitive = tf.caseSensitive;
         this.isCustom = tf.isCustomOptions(colIndex);
 
-        let activeIdx;
-        let activeFilterId = tf.getActiveFilterId();
-        if (tf.linkedFilters && activeFilterId) {
-            activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
-        }
+        // let activeIdx;
+        // let activeFilterId = tf.getActiveFilterId();
+        // if (tf.linkedFilters && activeFilterId) {
+        //     activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
+        // }
 
         let filteredDataCol = [];
         if (tf.linkedFilters && tf.disableExcludedOptions) {
@@ -247,34 +247,48 @@ export class CheckList extends Feature {
             // this loop retrieves cell data
             for (let j = 0; j < ncells; j++) {
                 // WTF: cyclomatic complexity hell :)
-                if ((colIndex === j && (!tf.linkedFilters ||
-                    (tf.linkedFilters && tf.disableExcludedOptions))) ||
-                    (colIndex === j && tf.linkedFilters &&
-                        ((rows[k].style.display === '' && !tf.paging) ||
-                            (tf.paging && ((!activeIdx ||
-                                activeIdx === colIndex) ||
-                                (activeIdx !== colIndex &&
-                                    tf.validRowsIndex.indexOf(k) !== -1)))))) {
+                // if ((colIndex === j && (!tf.linkedFilters ||
+                //     (tf.linkedFilters && tf.disableExcludedOptions))) ||
+                //     (colIndex === j && tf.linkedFilters &&
+                //         ((rows[k].style.display === '' && !tf.paging) ||
+                //             (tf.paging && ((!activeIdx ||
+                //                 activeIdx === colIndex) ||
+                //                 (activeIdx !== colIndex &&
+                //                     tf.validRowsIndex.indexOf(k) !== -1))))))
+                // {
+                // console.log(k, colIndex === j, tf.getValidRows());
+                // if (colIndex === j /*&& tf.getValidRows().indexOf(k) !== -1*/
+                //     ||
+                //     (colIndex === j && tf.linkedFilters &&
+                //         tf.getRowDisplay(rows[k]) === '')) {
+                if (colIndex !== j) {
+                    continue;
+                }
+                if (tf.linkedFilters && tf.getRowDisplay(rows[k]) !== '' &&
+                    !tf.disableExcludedOptions) {
+                    continue;
+                }
 
-                    let cellData = tf.getCellData(cells[j]);
-                    //Vary Peter's patch
-                    let cellString = matchCase(cellData, caseSensitive);
-                    // checks if celldata is already in array
-                    if (!has(this.opts, cellString, caseSensitive)) {
-                        this.opts.push(cellData);
+
+                let cellData = tf.getCellData(cells[j]);
+                //Vary Peter's patch
+                let cellString = matchCase(cellData, caseSensitive);
+                // checks if celldata is already in array
+                if (!has(this.opts, cellString, caseSensitive)) {
+                    this.opts.push(cellData);
+                }
+                let filteredCol = filteredDataCol[j];
+                if (tf.linkedFilters && tf.disableExcludedOptions) {
+                    if (!filteredCol) {
+                        filteredCol = tf.getFilteredDataCol(j);
                     }
-                    let filteredCol = filteredDataCol[j];
-                    if (tf.linkedFilters && tf.disableExcludedOptions) {
-                        if (!filteredCol) {
-                            filteredCol = tf.getFilteredDataCol(j);
-                        }
-                        if (!has(filteredCol, cellString, caseSensitive) &&
-                            !has(this.excludedOpts, cellString,
-                                caseSensitive)) {
-                            this.excludedOpts.push(cellData);
-                        }
+                    if (!has(filteredCol, cellString, caseSensitive) &&
+                        !has(this.excludedOpts, cellString,
+                            caseSensitive)) {
+                        this.excludedOpts.push(cellData);
                     }
                 }
+                // }
             }
         }
 
