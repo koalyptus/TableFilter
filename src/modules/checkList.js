@@ -264,7 +264,7 @@ export class CheckList extends Feature {
                     this.opts.push(cellData);
                 }
                 let filteredCol = filteredDataCol[j];
-                if (tf.linkedFilters && tf.disableExcludedOptions) {
+                if (isLinked && tf.disableExcludedOptions) {
                     if (!filteredCol) {
                         filteredCol = tf.getFilteredDataCol(j);
                     }
