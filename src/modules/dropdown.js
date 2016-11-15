@@ -205,33 +205,12 @@ export class Dropdown extends Feature {
 
             // this loop retrieves cell data
             for (let j = 0; j < nchilds; j++) {
-                // WTF: cyclomatic complexity hell
-                // TODO: simplify hell below
-                // if ((colIndex === j &&
-                //     (!isLinked ||
-                //         (isLinked && tf.disableExcludedOptions))) ||
-                //     (colIndex === j && isLinked &&
-                //         ((rows[k].style.display === '' && !tf.paging) ||
-                //             (tf.paging && (!tf.validRowsIndex ||
-                //                 (tf.validRowsIndex &&
-                //                     tf.validRowsIndex.indexOf(k) !== -1)) &&
-                //                 ((activeIdx === undefined ||
-                //                     activeIdx === colIndex) ||
-                //                     (activeIdx !== colIndex &&
-                //                     tf.validRowsIndex.indexOf(k) !== -1)))))
-                // ) {
                 if (colIndex !== j) {
                     continue;
                 }
-                // if (isLinked && tf.getRowDisplay(rows[k]) !== '' &&
-                //     !tf.disableExcludedOptions) {
-                //     continue;
-                // }
-
                 if (isLinked && !tf.disableExcludedOptions &&
-                    (!tf.paging && tf.getRowDisplay(rows[k]) !== '') ||
-                    (tf.paging && activeIdx &&
-                        tf.getValidRows().indexOf(k) === -1)) {
+                    (!tf.paging && !tf.isRowDisplayed(k)) ||
+                    (tf.paging && activeIdx && !tf.isRowValid(k))) {
                     continue;
                 }
 
@@ -254,7 +233,6 @@ export class Dropdown extends Feature {
                         excludedOpts.push(cellData);
                     }
                 }
-                // }//if colIndex==j
             }//for j
         }//for k
 

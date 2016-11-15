@@ -2727,6 +2727,25 @@ export class TableFilter {
     }
 
     /**
+     * Checks if passed row is valid
+     * @param {Number} rowIndex Row index
+     * @returns {Boolean}
+     */
+    isRowValid(rowIndex) {
+        return this.getValidRows().indexOf(rowIndex) !== -1;
+    }
+
+    /**
+     * Checks if passed row is visible
+     * @param {Number} rowIndex Row index
+     * @returns {Boolean}
+     */
+    isRowDisplayed(rowIndex) {
+        let row = this.tbl.rows[rowIndex];
+        return this.getRowDisplay(row) === '';
+    }
+
+    /**
      * Checks if specified column filter ignores diacritics.
      * Note this is only valid for input filter types.
      * @param {any} colIndex    Column index

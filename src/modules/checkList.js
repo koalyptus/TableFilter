@@ -247,39 +247,12 @@ export class CheckList extends Feature {
 
             // this loop retrieves cell data
             for (let j = 0; j < ncells; j++) {
-                // WTF: cyclomatic complexity hell :)
-                // if ((colIndex === j && (!isLinked ||
-                //     (isLinked && tf.disableExcludedOptions))) ||
-                //     (colIndex === j && isLinked &&
-                //         ((rows[k].style.display === '' && !tf.paging) ||
-                //             (tf.paging && ((!activeIdx ||
-                //                 activeIdx === colIndex) ||
-                //                 (activeIdx !== colIndex &&
-                //                     tf.validRowsIndex.indexOf(k) !== -1))))))
-                // {
-
                 if (colIndex !== j) {
                     continue;
                 }
-
-                // if (isLinked && tf.getRowDisplay(rows[k]) !== '' &&
-                //     !tf.disableExcludedOptions) {
-                //     continue;
-                // }
-                // if (isLinked && tf.paging && /*activeIdx === colIndex &&*/
-                //     tf.getValidRows().indexOf(k) === -1) {
-                //     continue;
-                // }
-
-                // if (tf.getRowDisplay(rows[k]) !== '' &&
-                //     tf.getValidRows().indexOf(k) === -1) {
-                //     continue;
-                // }
-
                 if (isLinked && !tf.disableExcludedOptions &&
-                    (!tf.paging && tf.getRowDisplay(rows[k]) !== '') ||
-                    (tf.paging && activeIdx &&
-                        tf.getValidRows().indexOf(k) === -1)) {
+                    (!tf.paging && !tf.isRowDisplayed(k)) ||
+                    (tf.paging && activeIdx && !tf.isRowValid(k))) {
                     continue;
                 }
 
@@ -301,7 +274,6 @@ export class CheckList extends Feature {
                         this.excludedOpts.push(cellData);
                     }
                 }
-                // }
             }
         }
 
