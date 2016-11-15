@@ -4008,6 +4008,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#isrowdisplayed",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-isRowDisplayed",
+    "src/tablefilter.js~TableFilter#isRowDisplayed",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#isrowvalid",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-isRowValid",
+    "src/tablefilter.js~TableFilter#isRowValid",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#ldivcssclass",
     "class/src/tablefilter.js~TableFilter.html#instance-member-lDivCssClass",
     "src/tablefilter.js~TableFilter#lDivCssClass",

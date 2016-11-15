@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.4.9 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.4.10 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -2627,7 +2627,7 @@ export class TableFilter {
             let values = [];
             if (this.loadFltOnDemand &amp;&amp; !this.initialized) {
                 this.emitter.emit(&apos;build-checklist-filter&apos;, this, index,
-                    this.isExternalFlt);
+                    this.linkedFilters);
             }
             if (isArray(query)) {
                 values = query;
@@ -2825,7 +2825,7 @@ export class TableFilter {
 
                 if (slcA3.indexOf(slcIndex[i]) !== -1) {
                     this.emitter.emit(&apos;build-checklist-filter&apos;, this,
-                        slcIndex[i]);
+                        slcIndex[i], true);
                 } else {
                     this.emitter.emit(&apos;build-select-filter&apos;, this, slcIndex[i],
                         true);
@@ -2845,6 +2845,25 @@ export class TableFilter {
         let fltType = this.getFilterType(colIndex);
         return this.exactMatchByCol[colIndex] || this.exactMatch ||
             fltType !== INPUT;
+    }
+
+    /**
+     * Checks if passed row is valid
+     * @param {Number} rowIndex Row index
+     * @returns {Boolean}
+     */
+    isRowValid(rowIndex) {
+        return this.getValidRows().indexOf(rowIndex) !== -1;
+    }
+
+    /**
+     * Checks if passed row is visible
+     * @param {Number} rowIndex Row index
+     * @returns {Boolean}
+     */
+    isRowDisplayed(rowIndex) {
+        let row = this.tbl.rows[rowIndex];
+        return this.getRowDisplay(row) === &apos;&apos;;
     }
 
     /**
