@@ -2506,7 +2506,7 @@ export class TableFilter {
             let values = [];
             if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-checklist-filter', this, index,
-                    this.isExternalFlt);
+                    this.linkedFilters);
             }
             if (isArray(query)) {
                 values = query;
@@ -2704,7 +2704,7 @@ export class TableFilter {
 
                 if (slcA3.indexOf(slcIndex[i]) !== -1) {
                     this.emitter.emit('build-checklist-filter', this,
-                        slcIndex[i]);
+                        slcIndex[i], true);
                 } else {
                     this.emitter.emit('build-select-filter', this, slcIndex[i],
                         true);
@@ -2724,6 +2724,25 @@ export class TableFilter {
         let fltType = this.getFilterType(colIndex);
         return this.exactMatchByCol[colIndex] || this.exactMatch ||
             fltType !== INPUT;
+    }
+
+    /**
+     * Checks if passed row is valid
+     * @param {Number} rowIndex Row index
+     * @returns {Boolean}
+     */
+    isRowValid(rowIndex) {
+        return this.getValidRows().indexOf(rowIndex) !== -1;
+    }
+
+    /**
+     * Checks if passed row is visible
+     * @param {Number} rowIndex Row index
+     * @returns {Boolean}
+     */
+    isRowDisplayed(rowIndex) {
+        let row = this.tbl.rows[rowIndex];
+        return this.getRowDisplay(row) === '';
     }
 
     /**

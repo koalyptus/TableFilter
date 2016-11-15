@@ -155,7 +155,7 @@ export class Dropdown extends Feature {
     /**
      * Build drop-down filter UI
      * @param  {Number}  colIndex    Column index
-     * @param  {Boolean} isLinked    Enable linked refresh behaviour
+     * @param  {Boolean} isLinked    Enable linked filters behaviour
      */
     build(colIndex, isLinked = false) {
         let tf = this.tf;
@@ -205,40 +205,34 @@ export class Dropdown extends Feature {
 
             // this loop retrieves cell data
             for (let j = 0; j < nchilds; j++) {
-                // WTF: cyclomatic complexity hell
-                // TODO: simplify hell below
-                if ((colIndex === j &&
-                    (!isLinked ||
-                        (isLinked && tf.disableExcludedOptions))) ||
-                    (colIndex === j && isLinked &&
-                        ((rows[k].style.display === '' && !tf.paging) ||
-                            (tf.paging && (!tf.validRowsIndex ||
-                                (tf.validRowsIndex &&
-                                    tf.validRowsIndex.indexOf(k) !== -1)) &&
-                                ((activeIdx === undefined ||
-                                    activeIdx === colIndex) ||
-                                    (activeIdx !== colIndex &&
-                                    tf.validRowsIndex.indexOf(k) !== -1)))))) {
-                    let cellData = tf.getCellData(cell[j]),
-                        //Vary Peter's patch
-                        cellString = matchCase(cellData, tf.caseSensitive);
+                if (colIndex !== j) {
+                    continue;
+                }
+                if (isLinked && !tf.disableExcludedOptions &&
+                    (!tf.paging && !tf.isRowDisplayed(k)) ||
+                    (tf.paging && activeIdx && !tf.isRowValid(k))) {
+                    continue;
+                }
 
-                    // checks if celldata is already in array
-                    if (!has(this.opts, cellString, tf.caseSensitive)) {
-                        this.opts.push(cellData);
-                    }
+                let cellData = tf.getCellData(cell[j]),
+                    //Vary Peter's patch
+                    cellString = matchCase(cellData, tf.caseSensitive);
 
-                    if (isLinked && tf.disableExcludedOptions) {
-                        let filteredCol = filteredDataCol[j];
-                        if (!filteredCol) {
-                            filteredCol = tf.getFilteredDataCol(j);
-                        }
-                        if (!has(filteredCol, cellString, tf.caseSensitive) &&
-                            !has(excludedOpts, cellString, tf.caseSensitive)) {
-                            excludedOpts.push(cellData);
-                        }
+                // checks if celldata is already in array
+                if (!has(this.opts, cellString, tf.caseSensitive)) {
+                    this.opts.push(cellData);
+                }
+
+                if (isLinked && tf.disableExcludedOptions) {
+                    let filteredCol = filteredDataCol[j];
+                    if (!filteredCol) {
+                        filteredCol = tf.getFilteredDataCol(j);
                     }
-                }//if colIndex==j
+                    if (!has(filteredCol, cellString, tf.caseSensitive) &&
+                        !has(excludedOpts, cellString, tf.caseSensitive)) {
+                        excludedOpts.push(cellData);
+                    }
+                }
             }//for j
         }//for k
 

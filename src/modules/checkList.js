@@ -178,7 +178,7 @@ export class CheckList extends Feature {
 
         this.emitter.on(
             ['build-checklist-filter'],
-            (tf, colIndex) => this.build(colIndex)
+            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)
         );
 
         this.emitter.on(
@@ -195,8 +195,9 @@ export class CheckList extends Feature {
     /**
      * Build checklist UI
      * @param  {Number}  colIndex   Column index
+     * @param  {Boolean} isLinked    Enable linked filters behaviour
      */
-    build(colIndex) {
+    build(colIndex, isLinked = false) {
         let tf = this.tf;
         colIndex = parseInt(colIndex, 10);
 
@@ -218,12 +219,12 @@ export class CheckList extends Feature {
 
         let activeIdx;
         let activeFilterId = tf.getActiveFilterId();
-        if (tf.linkedFilters && activeFilterId) {
+        if (isLinked && activeFilterId) {
             activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
         }
 
         let filteredDataCol = [];
-        if (tf.linkedFilters && tf.disableExcludedOptions) {
+        if (isLinked && tf.disableExcludedOptions) {
             this.excludedOpts = [];
         }
 
@@ -246,33 +247,31 @@ export class CheckList extends Feature {
 
             // this loop retrieves cell data
             for (let j = 0; j < ncells; j++) {
-                // WTF: cyclomatic complexity hell :)
-                if ((colIndex === j && (!tf.linkedFilters ||
-                    (tf.linkedFilters && tf.disableExcludedOptions))) ||
-                    (colIndex === j && tf.linkedFilters &&
-                        ((rows[k].style.display === '' && !tf.paging) ||
-                            (tf.paging && ((!activeIdx ||
-                                activeIdx === colIndex) ||
-                                (activeIdx !== colIndex &&
-                                    tf.validRowsIndex.indexOf(k) !== -1)))))) {
+                if (colIndex !== j) {
+                    continue;
+                }
+                if (isLinked && !tf.disableExcludedOptions &&
+                    (!tf.paging && !tf.isRowDisplayed(k)) ||
+                    (tf.paging && activeIdx && !tf.isRowValid(k))) {
+                    continue;
+                }
 
-                    let cellData = tf.getCellData(cells[j]);
-                    //Vary Peter's patch
-                    let cellString = matchCase(cellData, caseSensitive);
-                    // checks if celldata is already in array
-                    if (!has(this.opts, cellString, caseSensitive)) {
-                        this.opts.push(cellData);
+                let cellData = tf.getCellData(cells[j]);
+                //Vary Peter's patch
+                let cellString = matchCase(cellData, caseSensitive);
+                // checks if celldata is already in array
+                if (!has(this.opts, cellString, caseSensitive)) {
+                    this.opts.push(cellData);
+                }
+                let filteredCol = filteredDataCol[j];
+                if (isLinked && tf.disableExcludedOptions) {
+                    if (!filteredCol) {
+                        filteredCol = tf.getFilteredDataCol(j);
                     }
-                    let filteredCol = filteredDataCol[j];
-                    if (tf.linkedFilters && tf.disableExcludedOptions) {
-                        if (!filteredCol) {
-                            filteredCol = tf.getFilteredDataCol(j);
-                        }
-                        if (!has(filteredCol, cellString, caseSensitive) &&
-                            !has(this.excludedOpts, cellString,
-                                caseSensitive)) {
-                            this.excludedOpts.push(cellData);
-                        }
+                    if (!has(filteredCol, cellString, caseSensitive) &&
+                        !has(this.excludedOpts, cellString,
+                            caseSensitive)) {
+                        this.excludedOpts.push(cellData);
                     }
                 }
             }
@@ -561,7 +560,7 @@ export class CheckList extends Feature {
     destroy() {
         this.emitter.off(
             ['build-checklist-filter'],
-            (tf, colIndex, isExternal) => this.build(colIndex, isExternal)
+            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)
         );
         this.emitter.off(
             ['select-checklist-options'],
