@@ -178,7 +178,7 @@ export class CheckList extends Feature {
 
         this.emitter.on(
             ['build-checklist-filter'],
-            (tf, colIndex) => this.build(colIndex)
+            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)
         );
 
         this.emitter.on(
@@ -195,8 +195,9 @@ export class CheckList extends Feature {
     /**
      * Build checklist UI
      * @param  {Number}  colIndex   Column index
+     * @param  {Boolean} isLinked    Enable linked filters behaviour
      */
-    build(colIndex) {
+    build(colIndex, isLinked = false) {
         let tf = this.tf;
         colIndex = parseInt(colIndex, 10);
 
@@ -216,14 +217,14 @@ export class CheckList extends Feature {
         let caseSensitive = tf.caseSensitive;
         this.isCustom = tf.isCustomOptions(colIndex);
 
-        // let activeIdx;
-        // let activeFilterId = tf.getActiveFilterId();
-        // if (tf.linkedFilters && activeFilterId) {
-        //     activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
-        // }
+        let activeIdx;
+        let activeFilterId = tf.getActiveFilterId();
+        if (isLinked && activeFilterId) {
+            activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
+        }
 
         let filteredDataCol = [];
-        if (tf.linkedFilters && tf.disableExcludedOptions) {
+        if (isLinked && tf.disableExcludedOptions) {
             this.excludedOpts = [];
         }
 
@@ -247,28 +248,40 @@ export class CheckList extends Feature {
             // this loop retrieves cell data
             for (let j = 0; j < ncells; j++) {
                 // WTF: cyclomatic complexity hell :)
-                // if ((colIndex === j && (!tf.linkedFilters ||
-                //     (tf.linkedFilters && tf.disableExcludedOptions))) ||
-                //     (colIndex === j && tf.linkedFilters &&
+                // if ((colIndex === j && (!isLinked ||
+                //     (isLinked && tf.disableExcludedOptions))) ||
+                //     (colIndex === j && isLinked &&
                 //         ((rows[k].style.display === '' && !tf.paging) ||
                 //             (tf.paging && ((!activeIdx ||
                 //                 activeIdx === colIndex) ||
                 //                 (activeIdx !== colIndex &&
                 //                     tf.validRowsIndex.indexOf(k) !== -1))))))
                 // {
-                // console.log(k, colIndex === j, tf.getValidRows());
-                // if (colIndex === j /*&& tf.getValidRows().indexOf(k) !== -1*/
-                //     ||
-                //     (colIndex === j && tf.linkedFilters &&
-                //         tf.getRowDisplay(rows[k]) === '')) {
+
                 if (colIndex !== j) {
                     continue;
                 }
-                if (tf.linkedFilters && tf.getRowDisplay(rows[k]) !== '' &&
-                    !tf.disableExcludedOptions) {
+
+                // if (isLinked && tf.getRowDisplay(rows[k]) !== '' &&
+                //     !tf.disableExcludedOptions) {
+                //     continue;
+                // }
+                // if (isLinked && tf.paging && /*activeIdx === colIndex &&*/
+                //     tf.getValidRows().indexOf(k) === -1) {
+                //     continue;
+                // }
+
+                // if (tf.getRowDisplay(rows[k]) !== '' &&
+                //     tf.getValidRows().indexOf(k) === -1) {
+                //     continue;
+                // }
+
+                if (isLinked && !tf.disableExcludedOptions &&
+                    (!tf.paging && tf.getRowDisplay(rows[k]) !== '') ||
+                    (tf.paging && activeIdx &&
+                        tf.getValidRows().indexOf(k) === -1)) {
                     continue;
                 }
-
 
                 let cellData = tf.getCellData(cells[j]);
                 //Vary Peter's patch
@@ -575,7 +588,7 @@ export class CheckList extends Feature {
     destroy() {
         this.emitter.off(
             ['build-checklist-filter'],
-            (tf, colIndex, isExternal) => this.build(colIndex, isExternal)
+            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)
         );
         this.emitter.off(
             ['select-checklist-options'],

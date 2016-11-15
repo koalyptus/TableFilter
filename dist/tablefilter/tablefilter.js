@@ -2706,7 +2706,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            else if (fltColType === _const.CHECKLIST) {
 	                    var _values = [];
 	                    if (this.loadFltOnDemand && !this.initialized) {
-	                        this.emitter.emit('build-checklist-filter', this, index, this.isExternalFlt);
+	                        this.emitter.emit('build-checklist-filter', this, index, this.linkedFilters);
 	                    }
 	                    if ((0, _types.isArray)(query)) {
 	                        _values = query;
@@ -2922,7 +2922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	
 	                if (slcA3.indexOf(slcIndex[i]) !== -1) {
-	                    this.emitter.emit('build-checklist-filter', this, slcIndex[i]);
+	                    this.emitter.emit('build-checklist-filter', this, slcIndex[i], true);
 	                } else {
 	                    this.emitter.emit('build-select-filter', this, slcIndex[i], true);
 	                }
@@ -5991,7 +5991,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Build drop-down filter UI
 	     * @param  {Number}  colIndex    Column index
-	     * @param  {Boolean} isLinked    Enable linked refresh behaviour
+	     * @param  {Boolean} isLinked    Enable linked filters behaviour
 	     */
 	
 	
@@ -6047,27 +6047,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var j = 0; j < nchilds; j++) {
 	                // WTF: cyclomatic complexity hell
 	                // TODO: simplify hell below
-	                if (colIndex === j && (!isLinked || isLinked && tf.disableExcludedOptions) || colIndex === j && isLinked && (rows[k].style.display === '' && !tf.paging || tf.paging && (!tf.validRowsIndex || tf.validRowsIndex && tf.validRowsIndex.indexOf(k) !== -1) && (activeIdx === undefined || activeIdx === colIndex || activeIdx !== colIndex && tf.validRowsIndex.indexOf(k) !== -1))) {
-	                    var cellData = tf.getCellData(cell[j]),
+	                // if ((colIndex === j &&
+	                //     (!isLinked ||
+	                //         (isLinked && tf.disableExcludedOptions))) ||
+	                //     (colIndex === j && isLinked &&
+	                //         ((rows[k].style.display === '' && !tf.paging) ||
+	                //             (tf.paging && (!tf.validRowsIndex ||
+	                //                 (tf.validRowsIndex &&
+	                //                     tf.validRowsIndex.indexOf(k) !== -1)) &&
+	                //                 ((activeIdx === undefined ||
+	                //                     activeIdx === colIndex) ||
+	                //                     (activeIdx !== colIndex &&
+	                //                     tf.validRowsIndex.indexOf(k) !== -1)))))
+	                // ) {
+	                if (colIndex !== j) {
+	                    continue;
+	                }
+	                // if (isLinked && tf.getRowDisplay(rows[k]) !== '' &&
+	                //     !tf.disableExcludedOptions) {
+	                //     continue;
+	                // }
 	
-	                    //Vary Peter's patch
-	                    cellString = (0, _string.matchCase)(cellData, tf.caseSensitive);
+	                if (isLinked && !tf.disableExcludedOptions && !tf.paging && tf.getRowDisplay(rows[k]) !== '' || tf.paging && activeIdx && tf.getValidRows().indexOf(k) === -1) {
+	                    continue;
+	                }
 	
-	                    // checks if celldata is already in array
-	                    if (!(0, _array.has)(this.opts, cellString, tf.caseSensitive)) {
-	                        this.opts.push(cellData);
+	                var cellData = tf.getCellData(cell[j]),
+	
+	                //Vary Peter's patch
+	                cellString = (0, _string.matchCase)(cellData, tf.caseSensitive);
+	
+	                // checks if celldata is already in array
+	                if (!(0, _array.has)(this.opts, cellString, tf.caseSensitive)) {
+	                    this.opts.push(cellData);
+	                }
+	
+	                if (isLinked && tf.disableExcludedOptions) {
+	                    var filteredCol = filteredDataCol[j];
+	                    if (!filteredCol) {
+	                        filteredCol = tf.getFilteredDataCol(j);
 	                    }
-	
-	                    if (isLinked && tf.disableExcludedOptions) {
-	                        var filteredCol = filteredDataCol[j];
-	                        if (!filteredCol) {
-	                            filteredCol = tf.getFilteredDataCol(j);
-	                        }
-	                        if (!(0, _array.has)(filteredCol, cellString, tf.caseSensitive) && !(0, _array.has)(excludedOpts, cellString, tf.caseSensitive)) {
-	                            excludedOpts.push(cellData);
-	                        }
+	                    if (!(0, _array.has)(filteredCol, cellString, tf.caseSensitive) && !(0, _array.has)(excludedOpts, cellString, tf.caseSensitive)) {
+	                        excludedOpts.push(cellData);
 	                    }
-	                } //if colIndex==j
+	                }
+	                // }//if colIndex==j
 	            } //for j
 	        } //for k
 	
@@ -6559,8 +6583,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            divCont.appendChild((0, _dom.createText)(this.activateText));
 	        }
 	
-	        this.emitter.on(['build-checklist-filter'], function (tf, colIndex) {
-	            return _this3.build(colIndex);
+	        this.emitter.on(['build-checklist-filter'], function (tf, colIndex, isLinked) {
+	            return _this3.build(colIndex, isLinked);
 	        });
 	
 	        this.emitter.on(['select-checklist-options'], function (tf, colIndex, values) {
@@ -6576,10 +6600,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Build checklist UI
 	     * @param  {Number}  colIndex   Column index
+	     * @param  {Boolean} isLinked    Enable linked filters behaviour
 	     */
 	
 	
 	    CheckList.prototype.build = function build(colIndex) {
+	        var isLinked = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
 	        var tf = this.tf;
 	        colIndex = parseInt(colIndex, 10);
 	
@@ -6597,14 +6624,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var caseSensitive = tf.caseSensitive;
 	        this.isCustom = tf.isCustomOptions(colIndex);
 	
-	        // let activeIdx;
-	        // let activeFilterId = tf.getActiveFilterId();
-	        // if (tf.linkedFilters && activeFilterId) {
-	        //     activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
-	        // }
+	        var activeIdx = void 0;
+	        var activeFilterId = tf.getActiveFilterId();
+	        if (isLinked && activeFilterId) {
+	            activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
+	        }
 	
 	        var filteredDataCol = [];
-	        if (tf.linkedFilters && tf.disableExcludedOptions) {
+	        if (isLinked && tf.disableExcludedOptions) {
 	            this.excludedOpts = [];
 	        }
 	
@@ -6628,24 +6655,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // this loop retrieves cell data
 	            for (var j = 0; j < ncells; j++) {
 	                // WTF: cyclomatic complexity hell :)
-	                // if ((colIndex === j && (!tf.linkedFilters ||
-	                //     (tf.linkedFilters && tf.disableExcludedOptions))) ||
-	                //     (colIndex === j && tf.linkedFilters &&
+	                // if ((colIndex === j && (!isLinked ||
+	                //     (isLinked && tf.disableExcludedOptions))) ||
+	                //     (colIndex === j && isLinked &&
 	                //         ((rows[k].style.display === '' && !tf.paging) ||
 	                //             (tf.paging && ((!activeIdx ||
 	                //                 activeIdx === colIndex) ||
 	                //                 (activeIdx !== colIndex &&
 	                //                     tf.validRowsIndex.indexOf(k) !== -1))))))
 	                // {
-	                // console.log(k, colIndex === j, tf.getValidRows());
-	                // if (colIndex === j /*&& tf.getValidRows().indexOf(k) !== -1*/
-	                //     ||
-	                //     (colIndex === j && tf.linkedFilters &&
-	                //         tf.getRowDisplay(rows[k]) === '')) {
+	
 	                if (colIndex !== j) {
 	                    continue;
 	                }
-	                if (tf.linkedFilters && tf.getRowDisplay(rows[k]) !== '' && !tf.disableExcludedOptions) {
+	
+	                // if (isLinked && tf.getRowDisplay(rows[k]) !== '' &&
+	                //     !tf.disableExcludedOptions) {
+	                //     continue;
+	                // }
+	                // if (isLinked && tf.paging && /*activeIdx === colIndex &&*/
+	                //     tf.getValidRows().indexOf(k) === -1) {
+	                //     continue;
+	                // }
+	
+	                // if (tf.getRowDisplay(rows[k]) !== '' &&
+	                //     tf.getValidRows().indexOf(k) === -1) {
+	                //     continue;
+	                // }
+	
+	                if (isLinked && !tf.disableExcludedOptions && !tf.paging && tf.getRowDisplay(rows[k]) !== '' || tf.paging && activeIdx && tf.getValidRows().indexOf(k) === -1) {
 	                    continue;
 	                }
 	
@@ -6964,8 +7002,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    CheckList.prototype.destroy = function destroy() {
 	        var _this6 = this;
 	
-	        this.emitter.off(['build-checklist-filter'], function (tf, colIndex, isExternal) {
-	            return _this6.build(colIndex, isExternal);
+	        this.emitter.off(['build-checklist-filter'], function (tf, colIndex, isLinked) {
+	            return _this6.build(colIndex, isLinked);
 	        });
 	        this.emitter.off(['select-checklist-options'], function (tf, colIndex, values) {
 	            return _this6.selectOptions(colIndex, values);

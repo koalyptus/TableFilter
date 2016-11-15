@@ -2506,7 +2506,7 @@ export class TableFilter {
             let values = [];
             if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-checklist-filter', this, index,
-                    this.isExternalFlt);
+                    this.linkedFilters);
             }
             if (isArray(query)) {
                 values = query;
@@ -2704,7 +2704,7 @@ export class TableFilter {
 
                 if (slcA3.indexOf(slcIndex[i]) !== -1) {
                     this.emitter.emit('build-checklist-filter', this,
-                        slcIndex[i]);
+                        slcIndex[i], true);
                 } else {
                     this.emitter.emit('build-select-filter', this, slcIndex[i],
                         true);
