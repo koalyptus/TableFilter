@@ -72,6 +72,61 @@ test('Pop-up filter state after clearing', function(){
         true, 'Icon state');
 });
 
+test('Can open pop-up filter', function(){
+    // act
+    popupFilter.open(1);
+
+    // assert
+    deepEqual(popupFilter.fltElms[1].style.display, 'block',
+        'Popup filter is open');
+});
+
+test('Can close pop-up filter', function(){
+    // act
+    popupFilter.close(1);
+
+    // assert
+    deepEqual(popupFilter.fltElms[1].style.display, 'none',
+        'Popup filter is open');
+});
+
+test('Can toggle pop-up filter (initially closed)', function(){
+    // setup
+    popupFilter.close(2);
+
+    // act
+    popupFilter.toggle(2);
+
+    // assert
+    deepEqual(popupFilter.fltElms[2].style.display, 'block',
+        'Popup filter is toggled');
+});
+
+test('Can toggle pop-up filter (initially opened)', function(){
+    // setup
+    popupFilter.open(2);
+
+    // act
+    popupFilter.toggle(2);
+
+    // assert
+    deepEqual(popupFilter.fltElms[2].style.display, 'none',
+        'Popup filter is toggled');
+});
+
+test('Can destroy and reset', function(){
+    // setup
+    popupFilter.destroy();
+
+    // act
+    popupFilter.reset();
+
+    // assert
+    deepEqual(popupFilter.fltElms.length, 5, 'Filters are generated');
+    deepEqual(popupFilter.fltIcons.length, 4, 'Icons are generated');
+    deepEqual(popupFilter.fltSpans.length, 4, 'Icon containers are generated');
+});
+
 test('TableFilter removed', function() {
     tf.destroy();
     var fltIcn1 = popupFilter.fltIcons[3];
