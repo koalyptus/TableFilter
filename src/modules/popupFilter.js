@@ -1,8 +1,9 @@
 import {Feature} from '../feature';
 import {isFn, isUndef} from '../types';
 import {createElm, removeElm} from '../dom';
-import {addEvt, cancelEvt, stopEvt, targetEvt} from '../event';
+import {addEvt, cancelEvt, stopEvt, targetEvt, removeEvt} from '../event';
 import {INPUT, NONE, CHECKLIST, MULTIPLE} from '../const';
+import {root} from '../root';
 
 /**
  * Pop-up filter component
@@ -25,6 +26,13 @@ export class PopupFilter extends Feature {
         // Enable external filters
         tf.isExternalFlt = true;
         tf.externalFltTgtIds = [];
+
+        /**
+         * Close active popup filter upon filtering, enabled by default
+         * @type {Boolean}
+         */
+        this.closeOnFiltering = f.popup_filters_close_on_filtering === false ?
+            false : true;
 
         /**
          * Filter icon path
@@ -122,6 +130,11 @@ export class PopupFilter extends Feature {
          */
         this.prfxDiv = 'popup_';
 
+        /**
+         * Column index of popup filter currently active
+         * @type {Number}
+         * @private
+         */
         this.activeFilterIdx = -1;
     }
 
@@ -144,6 +157,33 @@ export class PopupFilter extends Feature {
         }
         cancelEvt(evt);
         stopEvt(evt);
+    }
+
+    /**
+     * Mouse-up event handler handling popup filter auto-close behaviour
+     * @private
+     */
+    onMouseup(evt) {
+        if (this.activeFilterIdx === -1) {
+            return;
+        }
+        let targetElm = targetEvt(evt);
+        let activeFlt = this.fltElms[this.activeFilterIdx];
+        let icon = this.fltIcons[this.activeFilterIdx];
+
+        if (icon === targetElm) {
+            return;
+        }
+
+        while (targetElm && targetElm !== activeFlt) {
+            targetElm = targetElm.parentNode;
+        }
+
+        if (targetElm === activeFlt) {
+            return;
+        } else {
+            this.close(this.activeFilterIdx);
+        }
     }
 
     /**
@@ -190,6 +230,7 @@ export class PopupFilter extends Feature {
     reset() {
         this.enable();
         this.init();
+        this.buildIcons();
         this.buildAll();
     }
 
@@ -249,39 +290,65 @@ export class PopupFilter extends Feature {
      * @param  {Number} colIndex Column index
      */
     toggle(colIndex) {
+        if (!this.isOpen(colIndex)) {
+            this.open(colIndex);
+        } else {
+            this.close(colIndex);
+        }
+    }
+
+    /**
+     * Open popup filter of specified column
+     * @param {Number} colIndex Column index
+     */
+    open(colIndex) {
         let tf = this.tf,
             container = this.fltElms[colIndex];
 
-        if (container.style.display === NONE ||
-            container.style.display === '') {
-            if (this.onBeforeOpen) {
-                this.onBeforeOpen.call(
-                    null, this, this.fltElms[colIndex], colIndex);
-            }
-            container.style.display = 'block';
-            this.activeFilterIdx = colIndex;
-            if (tf.getFilterType(colIndex) === INPUT) {
-                let flt = tf.getFilterElement(colIndex);
-                if (flt) {
-                    flt.focus();
-                }
-            }
-            if (this.onAfterOpen) {
-                this.onAfterOpen.call(
-                    null, this, this.fltElms[colIndex], colIndex);
-            }
-        } else {
-            if (this.onBeforeClose) {
-                this.onBeforeClose.call(
-                    null, this, this.fltElms[colIndex], colIndex);
-            }
-            container.style.display = NONE;
-            this.activeFilterIdx = -1;
-            if (this.onAfterClose) {
-                this.onAfterClose.call(
-                    null, this, this.fltElms[colIndex], colIndex);
+        if (this.onBeforeOpen) {
+            this.onBeforeOpen.call(null, this, container, colIndex);
+        }
+        container.style.display = 'block';
+        this.activeFilterIdx = colIndex;
+        addEvt(root, 'mouseup', (evt) => this.onMouseup(evt));
+
+        if (tf.getFilterType(colIndex) === INPUT) {
+            let flt = tf.getFilterElement(colIndex);
+            if (flt) {
+                flt.focus();
             }
         }
+        if (this.onAfterOpen) {
+            this.onAfterOpen.call(null, this, container, colIndex);
+        }
+    }
+
+    /**
+     * Close popup filter of specified column
+     * @param {Number} colIndex Column index
+     */
+    close(colIndex) {
+        let container = this.fltElms[colIndex];
+        if (this.onBeforeClose) {
+            this.onBeforeClose.call(null, this, container, colIndex);
+        }
+        container.style.display = NONE;
+        if (this.activeFilterIdx === colIndex) {
+            this.activeFilterIdx = -1;
+        }
+        removeEvt(root, 'mouseup', (evt) => this.onMouseup(evt));
+        if (this.onAfterClose) {
+            this.onAfterClose.call(null, this, container, colIndex);
+        }
+    }
+
+    /**
+     * Check if popup filter for specified column is open
+     * @param {Number} colIndex Column index
+     * @returns {Boolean}
+     */
+    isOpen(colIndex) {
+        return this.fltElms[colIndex].style.display === 'block';
     }
 
     /**
@@ -289,18 +356,24 @@ export class PopupFilter extends Feature {
      * @param  {Number} exceptIdx Column index of the filter to not close
      */
     closeAll(exceptIdx) {
+        // Do not close filters only if argument is undefined and close on
+        // filtering option is disabled
+        if (isUndef(exceptIdx) && !this.closeOnFiltering) {
+            return;
+        }
         for (let i = 0; i < this.fltElms.length; i++) {
             if (i === exceptIdx) {
                 continue;
             }
-            let container = this.fltElms[i];
+            // let container = this.fltElms[i];
             let fltType = tf.getFilterType(i);
+            let isMultipleFilter =
+                (fltType === CHECKLIST || fltType === MULTIPLE);
 
             // Always hide all single selection filter types but hide multiple
             // selection filter types only if index set
-            if ((fltType !== CHECKLIST && fltType !== MULTIPLE) ||
-                !isUndef(exceptIdx)) {
-                container.style.display = NONE;
+            if (!isMultipleFilter || !isUndef(exceptIdx)) {
+                this.close(i);
             }
         }
     }
@@ -320,9 +393,9 @@ export class PopupFilter extends Feature {
      * @param  {Boolean} active   Apply active state
      */
     changeState(colIndex, active) {
-        if (this.fltIcons[colIndex]) {
-            this.fltIcons[colIndex].src = active ?
-                this.activeIconPath : this.iconPath;
+        let icon = this.fltIcons[colIndex];
+        if (icon) {
+            icon.src = active ? this.activeIconPath : this.iconPath;
         }
     }
 
@@ -356,6 +429,9 @@ export class PopupFilter extends Feature {
         this.fltElms = [];
         this.fltSpans = [];
         this.fltIcons = [];
+
+        // TODO: expose an API to handle external filter IDs
+        tf.externalFltTgtIds = [];
 
         // unsubscribe to events
         this.emitter.off(['before-filtering'], () => this.setIconsState());
