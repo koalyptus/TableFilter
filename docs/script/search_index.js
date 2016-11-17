@@ -2874,10 +2874,22 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/popupfilter.js~popupfilter#close",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-close",
+    "src/modules/popupFilter.js~PopupFilter#close",
+    "method"
+  ],
+  [
     "src/modules/popupfilter.js~popupfilter#closeall",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-closeAll",
     "src/modules/popupFilter.js~PopupFilter#closeAll",
     "method"
+  ],
+  [
+    "src/modules/popupfilter.js~popupfilter#closeonfiltering",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-closeOnFiltering",
+    "src/modules/popupFilter.js~PopupFilter#closeOnFiltering",
+    "member"
   ],
   [
     "src/modules/popupfilter.js~popupfilter#constructor",
@@ -2922,6 +2934,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/popupfilter.js~popupfilter#isopen",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-isOpen",
+    "src/modules/popupFilter.js~PopupFilter#isOpen",
+    "method"
+  ],
+  [
     "src/modules/popupfilter.js~popupfilter#onafterclose",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onAfterClose",
     "src/modules/popupFilter.js~PopupFilter#onAfterClose",
@@ -2944,6 +2962,12 @@ window.esdocSearchIndex = [
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-onBeforeOpen",
     "src/modules/popupFilter.js~PopupFilter#onBeforeOpen",
     "member"
+  ],
+  [
+    "src/modules/popupfilter.js~popupfilter#open",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-open",
+    "src/modules/popupFilter.js~PopupFilter#open",
+    "method"
   ],
   [
     "src/modules/popupfilter.js~popupfilter#reset",
