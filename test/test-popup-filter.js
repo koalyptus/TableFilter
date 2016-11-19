@@ -114,6 +114,51 @@ test('Can toggle pop-up filter (initially opened)', function(){
         'Popup filter is toggled');
 });
 
+test('Multiple selection pop-up filter remains open upon filtering', function(){
+    // setup
+    popupFilter.open(2);
+
+    // act
+    tf.setFilterValue(2, ['1412', '982']);
+    tf.filter();
+
+    // assert
+    deepEqual(
+        popupFilter.isOpen(2),
+        true,
+        'Multiple selection pop-up filter still open after filtering'
+    );
+});
+
+test('Pop-up filter closes upon filtering', function(){
+    // setup
+    popupFilter.open(1);
+
+    // act
+    tf.setFilterValue(1, 'Adelaide');
+    tf.filter();
+
+    // assert
+    deepEqual(popupFilter.isOpen(1), false,
+        'Pop-up filter closed after filtering'
+    );
+});
+
+test('Pop-up filter auto-closes when user clicks away', function(){
+    // setup
+    popupFilter.open(0);
+
+    // act
+    var evObj = document.createEvent('HTMLEvents');
+    evObj.initEvent('mouseup', true, true);
+    tf.tbl.rows[4].cells[2].dispatchEvent(evObj);
+
+    // assert
+    deepEqual(popupFilter.isOpen(0), false,
+        'Pop-up filter closed after user clicks away'
+    );
+});
+
 test('Can destroy and reset', function(){
     // setup
     popupFilter.destroy();
