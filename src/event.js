@@ -33,7 +33,7 @@ export const addEvt = (obj, type, func, capture) => {
  * @param {Boolean} capture Specifiy whether the event should be executed in
  * the capturing or in the bubbling phase
  */
-export const removeEvt = (obj, type, func, capture) =>{
+export const removeEvt = (obj, type, func, capture) => {
     if (obj.detachEvent) {
         obj.detachEvent('on' + type, func);
     }

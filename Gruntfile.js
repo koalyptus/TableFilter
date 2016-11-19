@@ -8,6 +8,7 @@ module.exports = function (grunt) {
     var testHost = 'http://localhost:8000/';
     var pkg = grunt.file.readJSON('package.json');
     var repo = 'github.com/koalyptus/TableFilter';
+    var styleDirDist = 'dist/tablefilter/style/';
 
     grunt.initConfig({
 
@@ -187,25 +188,26 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: ['static/style/*.styl'],
-                        dest: 'dist/tablefilter/style/tablefilter.css'
+                        dest: styleDirDist + 'tablefilter.css'
                     }, {
                         src: ['static/style/extensions/colsVisibility.styl'],
-                        dest: 'dist/tablefilter/style/colsVisibility.css'
+                        dest: styleDirDist + 'colsVisibility.css'
                     }, {
                         src: ['static/style/extensions/filtersVisibility.styl'],
-                        dest: 'dist/tablefilter/style/filtersVisibility.css'
+                        dest: styleDirDist + 'filtersVisibility.css'
                     }, {
                         src: ['static/style/themes/default/*.styl'],
-                        dest:
-                        'dist/tablefilter/style/themes/default/default.css'
+                        dest: styleDirDist + 'themes/default/default.css'
                     }, {
                         src: ['static/style/themes/mytheme/*.styl'],
-                        dest:
-                        'dist/tablefilter/style/themes/mytheme/mytheme.css'
+                        dest: styleDirDist + 'themes/mytheme/mytheme.css'
                     }, {
                         src: ['static/style/themes/skyblue/*.styl'],
+                        dest: styleDirDist + 'themes/skyblue/skyblue.css'
+                    }, {
+                        src: ['static/style/themes/transparent/*.styl'],
                         dest:
-                        'dist/tablefilter/style/themes/skyblue/skyblue.css'
+                            styleDirDist + 'themes/transparent/transparent.css'
                     }
                 ]
             }
