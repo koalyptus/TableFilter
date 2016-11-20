@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Toggle features | TableFilter</title>
+    <title>Using Bootstrap | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -185,62 +185,30 @@
 
       
 
-<h1>Toggle features</h1>
+<h1>Using Bootstrap</h1>
 
 <p>
-    <code>TableFilter</code> exposes an exhaustive API allowing to perform most
-    of the actions in a programmatic manner. This example show how to filter
-    the table programmatically with a custom form and how to toggle the features
-    enabled by the configuration object.
+    This demo shows how to configure TableFilter to integrate with Bootstrap.
 </p>
 
-<div data-config>
-  <div class="navbar navbar-default">
-      <form class="navbar-form navbar-left" onsubmit="filter(event);">
-          <div class="form-group">
-              <label for="slcColumns">Column:</label>
-              <select id="slcColumns" name="slcColumns" class="form-control">
-                  <option value="0">Country</option>
-                  <option value="1">ISO</option>
-                  <option value="2">Year</option>
-                  <option value="3">POP</option>
-                  <option value="4">XRAT</option>
-                  <option value="5">PPP</option>
-                  <option value="6">cgdp</option>
-                  <option value="7">cc</option>
-                  <option value="8">ci</option>
-              </select>
-              <input name="inpSearch" type="text"
-                  class="form-control" placeholder="Search">
-
-              <button type="submit" class="btn btn-default">Filter</button>
-              <button type="reset" class="btn btn-link"
-                  onclick="tf.clearFilters();">Clear</button>
-          </div>
-      </form>
-
-      <div class="navbar-form navbar-left">
-          <label for="chxPager">Pagination:</label>
-          <input id="chxPager" type="checkbox" checked class="form-control"
-              onclick="togglePagination(event);">
-      </div>
-
-      <div class="navbar-form navbar-left">
-          <label for="chxAlternate">Alternating rows:</label>
-          <input id="chxAlternate" type="checkbox" checked class="form-control"
-              onclick="toggleAlternatingRows(event);">
-      </div>
-
-      <div class="navbar-form navbar-left">
-          <label for="chxCounter">Rows counter:</label>
-          <input id="chxCounter" type="checkbox" checked class="form-control"
-              onclick="toggleRowsCounter(event);">
-      </div>
-  </div>
+<div class="alert alert-info" role="alert">
+Assuming your project is <a href="http://getbootstrap.com/">Bootstrap</a>
+enabled, follow the following steps to take advantage of Bootstrap styling:
+<ol>
+    <li>
+        Add the <code>table</code> CSS class to the working HTML table
+    </li>
+    <li>
+        Use TableFilter's <code>tranparent</code> theme* to allow
+        Bootstrap's table styling
+    </li>
+</ol>
+* Available starting from TableFilter v0.4.12
 </div>
 
 
-<table id="demo" class="countries-tiny">
+
+<table id="demo" class="table">
     <thead>
         <tr>
             <th>Country</th>
@@ -677,97 +645,47 @@
 </table>
 
 
-<p> </p>
-<div class="alert alert-info" role="alert">
-    NOTE: Toolbar above the HTML table is styled with Bootstrap.
-</div>
-
 
 <script src="tablefilter/tablefilter.js"></script>
 
 
 <script data-config>
-    // Form submission logic for filtering the table
-    function filter(evt){
-        var frm = document.forms[0];
-        var slc = frm.slcColumns;
-        var inp = frm.inpSearch;
+    var tfConfig = {
+        base_path: 'tablefilter/',
+        alternate_rows: true,
+        btn_reset: true,
+        rows_counter: true,
+        loader: true,
+        status_bar: true,
+        col_0: 'checklist',
+        col_1: 'select',
+        col_2: 'multiple',
+        col_types: [
+            'string', 'string', 'number',
+            'number', 'number', 'number',
+            'number', 'number', 'number'
+        ],
+        col_widths: [
+            '180px', '120px', '120px',
+            '100px', '100px', '100px',
+            '100px', '100px', '100px'
+        ],
+        extensions: [{
+            name: 'sort'
+        }],
 
-        // Set the column's filter value
-        tf.setFilterValue(slc.value, inp.value);
+        /** Bootstrap integration */
 
-        // Filter the table
-        tf.filter();
+        // aligns filter at cell bottom when Bootstrap is enabled
+        filters_cell_tag: 'th',
 
-        // Prevent form submission
-        evt.preventDefault();
-    }
+        // allows Bootstrap table styling
+        themes: [{
+            name: 'transparent'
+        }]
+    };
 
-    // Toggle pagination
-    function togglePagination(evt){
-        var chx = evt.target;
-        // Get paging feature instance
-        var feature = tf.feature('paging');
-
-        if(chx.checked){
-            tf.paging = true;
-            feature.reset();
-        } else {
-            tf.paging = false;
-            feature.destroy();
-            // Display all rows
-            tf.filter();
-        }
-    }
-
-    // Toggle alternating rows
-    function toggleAlternatingRows(evt){
-        var chx = evt.target;
-        // Get alternating rows feature instance
-        var feature = tf.feature('alternateRows');
-
-        if(chx.checked){
-            tf.alternateRows = true;
-            feature.reset();
-        } else {
-            tf.alternateRows = false;
-            feature.destroy();
-        }
-    }
-
-    // Toggle rows counter
-    function toggleRowsCounter(evt){
-        var chx = evt.target;
-        // Get rows counter feature instance
-        var feature = tf.feature('rowsCounter');
-
-        if(chx.checked){
-            tf.rowsCounter = true;
-            feature.reset();
-        } else {
-            tf.rowsCounter = false;
-            feature.destroy();
-        }
-    }
-
-    var tf = new TableFilter(
-        document.querySelector('.countries-tiny'),
-        {
-            base_path: 'tablefilter/',
-            alternate_rows: true,
-            rows_counter: true,
-            paging: true,
-            col_widths: [
-                '120px','120px','120px',
-                '120px','120px','120px',
-                '120px','120px','120px'
-            ],
-            on_filters_loaded: function(o){
-                // hide the filters row
-                o.tbl.rows[o.getFiltersRowIndex()].style.display = 'none';
-            }
-        }
-    );
+    var tf = new TableFilter(document.querySelector('.table'), tfConfig);
     tf.init();
 </script>
 
