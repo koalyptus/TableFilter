@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pop-up filters | TableFilter</title>
+    <title>Using Material Design Lite | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -187,16 +187,32 @@
 
       
 
-<h1>Pop-up filters</h1>
+<h1>Using Material Design Lite</h1>
 
 <p>
-    This demo features the pop-up filter type enabled by the
-    <code>popup_filters</code> option.
+    This demo shows how to configure TableFilter to integrate with Material
+    Design Lite.
 </p>
 
+<div class="alert alert-info" role="alert">
+Assuming your project is <a href="https://getmdl.io/">Material Design Lite</a>
+enabled, follow the following steps to take advantage of Material Design Lite
+styling:
+<ol>
+    <li>
+        Add the <code>mdl-data-table</code> CSS class to the working HTML table
+    </li>
+    <li>
+        Use TableFilter's <code>tranparent</code> theme* to allow
+        Material Design Lite's table styling
+    </li>
+</ol>
+* Available starting from TableFilter v0.4.12
+</div>
 
 
-<table id="demo" class="countries-tiny">
+
+<table id="demo" class="mdl-data-table mdl-shadow--2dp">
     <thead>
         <tr>
             <th>Country</th>
@@ -634,31 +650,65 @@
 
 
 
+<!-- Material Design Lite -->
+<div data-config>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+</div>
+
+<style data-config>
+    /* Material Design Lite integration */
+    /* help container override */
+    .helpCont{
+        z-index: 1000;
+        white-space: normal;
+    }
+</style>
+
+
 <script src="tablefilter/tablefilter.js"></script>
 
 
 <script data-config>
-    var filtersConfig = {
+    var tfConfig = {
         base_path: 'tablefilter/',
-        col_1: 'select',
-        col_2: 'checklist',
-        col_8: 'none',
-        popup_filters: true,
-        auto_filter: true,
-        auto_filter_delay: 1100, //milliseconds
         alternate_rows: true,
-        rows_counter: true,
-        rows_counter_text: "Rows: ",
         btn_reset: true,
+        rows_counter: true,
+        loader: true,
         status_bar: true,
-        msg_filter: 'Filtering...',
-        col_widths:[
-            '125px', '90px', '100px',
-            '90px', '90px', '90px',
-            '90px', '90px', '90px'
-        ]
+        mark_active_columns: true,
+        highlight_keywords: true,
+        no_results_message: true,
+        col_0: 'checklist',
+        col_1: 'select',
+        col_2: 'multiple',
+        col_types: [
+            'string', 'string', 'number',
+            'number', 'number', 'number',
+            'number', 'number', 'number'
+        ],
+        col_widths: [
+            '180px', '120px', '120px',
+            '100px', '100px', '100px',
+            '100px', '100px', '100px'
+        ],
+        extensions: [{
+            name: 'sort'
+        }],
+
+        /** Material Design Lite integration */
+
+        // aligns filter at cell bottom when Material Design Lite is enabled
+        filters_cell_tag: 'th',
+
+        // allows Material Design Lite table styling
+        themes: [{
+            name: 'transparent'
+        }]
     };
-    var tf = new TableFilter('demo', filtersConfig);
+
+    var tf = new TableFilter(document.querySelector('#demo'), tfConfig);
     tf.init();
 </script>
 
