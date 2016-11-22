@@ -62,6 +62,14 @@ export class PopupFilter extends Feature {
         this.containerCssClass = f.popup_div_css_class || 'popUpFilter';
 
         /**
+         * Ensure filter's container element width matches column width, enabled
+         * by default
+         * @type {Boolean}
+         */
+        this.adjustToContainer =
+            f.popup_adjust_to_container === false ? false : true;
+
+        /**
          * Callback fired before a popup filter is opened
          * @type {Function}
          */
@@ -116,12 +124,6 @@ export class PopupFilter extends Feature {
          * @private
          */
         this.fltElms = this.filtersCache || [];
-
-        /**
-         * Ensure filter's container element width matches column width
-         * @type {Boolean}
-         */
-        this.adjustToContainer = true;
 
         /**
          * Prefix for pop-up filter container ID

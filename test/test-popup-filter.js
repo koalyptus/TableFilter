@@ -16,6 +16,11 @@ test('Pop-up filter component', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
     deepEqual(popupFilter.fltElms instanceof Array,
         true, 'Type of fltElms property');
+    deepEqual(
+        popupFilter.adjustToContainer,
+        true,
+        'Popup filter width adjusts to container'
+    );
     deepEqual(tf.headersRow, 1, 'Headers row index');
     // issue 99: getHeadersText for pick-list filter types
     deepEqual(
