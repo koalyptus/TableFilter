@@ -67,7 +67,7 @@ export class PopupFilter extends Feature {
          * @type {Boolean}
          */
         this.adjustToContainer =
-            f.popup_adjust_to_container === false ? false : true;
+            f.popup_filters_adjust_to_container === false ? false : true;
 
         /**
          * Callback fired before a popup filter is opened
