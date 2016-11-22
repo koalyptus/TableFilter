@@ -12419,7 +12419,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {isFn, isUndef} from '../types';\nimport {createElm, removeElm} from '../dom';\nimport {addEvt, cancelEvt, stopEvt, targetEvt, removeEvt} from '../event';\nimport {INPUT, NONE, CHECKLIST, MULTIPLE} from '../const';\nimport {root} from '../root';\n\n/**\n * Pop-up filter component\n * @export\n * @class PopupFilter\n * @extends {Feature}\n */\nexport class PopupFilter extends Feature {\n\n    /**\n     * Creates an instance of PopupFilter\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'popupFilters');\n\n        // Configuration object\n        let f = this.config;\n\n        // Enable external filters\n        tf.isExternalFlt = true;\n        tf.externalFltTgtIds = [];\n\n        /**\n         * Close active popup filter upon filtering, enabled by default\n         * @type {Boolean}\n         */\n        this.closeOnFiltering = f.popup_filters_close_on_filtering === false ?\n            false : true;\n\n        /**\n         * Filter icon path\n         * @type {String}\n         */\n        this.iconPath = f.popup_filters_image ||\n            tf.themesPath + 'icn_filter.gif';\n\n        /**\n         * Active filter icon path\n         * @type {string}\n         */\n        this.activeIconPath = f.popup_filters_image_active ||\n            tf.themesPath + 'icn_filterActive.gif';\n\n        /**\n         * HTML for the filter icon\n         * @type {string}\n         */\n        this.iconHtml = f.popup_filters_image_html ||\n            '<img src=\"' + this.iconPath + '\" alt=\"Column filter\" />';\n\n        /**\n         * Css class assigned to filter container element\n         * @type {String}\n         */\n        this.containerCssClass = f.popup_div_css_class || 'popUpFilter';\n\n        /**\n         * Callback fired before a popup filter is opened\n         * @type {Function}\n         */\n        this.onBeforeOpen = isFn(f.on_before_popup_filter_open) ?\n            f.on_before_popup_filter_open : null;\n\n        /**\n         * Callback fired after a popup filter is opened\n         * @type {Function}\n         */\n        this.onAfterOpen = isFn(f.on_after_popup_filter_open) ?\n            f.on_after_popup_filter_open : null;\n\n        /**\n         * Callback fired before a popup filter is closed\n         * @type {Function}\n         */\n        this.onBeforeClose = isFn(f.on_before_popup_filter_close) ?\n            f.on_before_popup_filter_close : null;\n\n        /**\n         * Callback fired after a popup filter is closed\n         * @type {Function}\n         */\n        this.onAfterClose = isFn(f.on_after_popup_filter_close) ?\n            f.on_after_popup_filter_close : null;\n\n        /**\n         * Collection of filters spans\n         * @type {Array}\n         * @private\n         */\n        this.fltSpans = [];\n\n        /**\n         * Collection of filters icons\n         * @type {Array}\n         * @private\n         */\n        this.fltIcons = [];\n\n        /**\n         * Collection of filters icons cached after pop-up filters are removed\n         * @type {Array}\n         * @private\n         */\n        this.filtersCache = null;\n\n        /**\n         * Collection of filters containers\n         * @type {Array}\n         * @private\n         */\n        this.fltElms = this.filtersCache || [];\n\n        /**\n         * Ensure filter's container element width matches column width\n         * @type {Boolean}\n         */\n        this.adjustToContainer = true;\n\n        /**\n         * Prefix for pop-up filter container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxDiv = 'popup_';\n\n        /**\n         * Column index of popup filter currently active\n         * @type {Number}\n         * @private\n         */\n        this.activeFilterIdx = -1;\n    }\n\n    /**\n     * Click event handler for pop-up filter icon\n     * @private\n     */\n    onClick(evt) {\n        let elm = targetEvt(evt).parentNode;\n        let colIndex = parseInt(elm.getAttribute('ci'), 10);\n\n        this.closeAll(colIndex);\n        this.toggle(colIndex);\n\n        if (this.adjustToContainer) {\n            let cont = this.fltElms[colIndex],\n                header = this.tf.getHeaderElement(colIndex),\n                headerWidth = header.clientWidth * 0.95;\n            cont.style.width = parseInt(headerWidth, 10) + 'px';\n        }\n        cancelEvt(evt);\n        stopEvt(evt);\n    }\n\n    /**\n     * Mouse-up event handler handling popup filter auto-close behaviour\n     * @private\n     */\n    onMouseup(evt) {\n        if (this.activeFilterIdx === -1) {\n            return;\n        }\n        let targetElm = targetEvt(evt);\n        let activeFlt = this.fltElms[this.activeFilterIdx];\n        let icon = this.fltIcons[this.activeFilterIdx];\n\n        if (icon === targetElm) {\n            return;\n        }\n\n        while (targetElm && targetElm !== activeFlt) {\n            targetElm = targetElm.parentNode;\n        }\n\n        if (targetElm === activeFlt) {\n            return;\n        } else {\n            this.close(this.activeFilterIdx);\n        }\n    }\n\n    /**\n     * Initialize DOM elements\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        let tf = this.tf;\n\n        // Override headers row index if no grouped headers\n        // TODO: Because of the filters row generation, headers row index needs\n        // adjusting: prevent useless row generation\n        if (tf.headersRow <= 1 && isNaN(tf.config().headers_row_index)) {\n            tf.headersRow = 0;\n        }\n\n        // Adjust headers row index for grid-layout mode\n        // TODO: Because of the filters row generation, headers row index needs\n        // adjusting: prevent useless row generation\n        if (tf.gridLayout) {\n            tf.headersRow--;\n            this.buildIcons();\n        }\n\n        // subscribe to events\n        this.emitter.on(['before-filtering'], () => this.setIconsState());\n        this.emitter.on(['after-filtering'], () => this.closeAll());\n        this.emitter.on(['cell-processed'],\n            (tf, cellIndex) => this.changeState(cellIndex, true));\n        this.emitter.on(['filters-row-inserted'], () => this.buildIcons());\n        this.emitter.on(['before-filter-init'],\n            (tf, colIndex) => this.build(colIndex));\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Reset previously destroyed feature\n     */\n    reset() {\n        this.enable();\n        this.init();\n        this.buildIcons();\n        this.buildAll();\n    }\n\n    /**\n     * Build all filters icons\n     */\n    buildIcons() {\n        let tf = this.tf;\n\n        // TODO: Because of the filters row generation, headers row index needs\n        // adjusting: prevent useless row generation\n        tf.headersRow++;\n\n        for (let i = 0; i < tf.nbCells; i++) {\n            if (tf.getFilterType(i) === NONE) {\n                continue;\n            }\n            let icon = createElm('span', ['ci', i]);\n            icon.innerHTML = this.iconHtml;\n            let header = tf.getHeaderElement(i);\n            header.appendChild(icon);\n            addEvt(icon, 'click', (evt) => this.onClick(evt));\n            this.fltSpans[i] = icon;\n            this.fltIcons[i] = icon.firstChild;\n        }\n    }\n\n    /**\n     * Build all pop-up filters elements\n     */\n    buildAll() {\n        for (let i = 0; i < this.filtersCache.length; i++) {\n            this.build(i, this.filtersCache[i]);\n        }\n    }\n\n    /**\n     * Build a specified pop-up filter elements\n     * @param  {Number} colIndex Column index\n     * @param  {Object} div      Optional container DOM element\n     */\n    build(colIndex, div) {\n        let tf = this.tf;\n        let contId = `${this.prfxDiv}${tf.id}_${colIndex}`;\n        let cont = div || createElm('div', ['id', contId]);\n        cont.className = this.containerCssClass;\n        tf.externalFltTgtIds.push(cont.id);\n\n        let header = tf.getHeaderElement(colIndex);\n        header.insertBefore(cont, header.firstChild);\n        addEvt(cont, 'click', (evt) => stopEvt(evt));\n        this.fltElms[colIndex] = cont;\n    }\n\n    /**\n     * Toggle visibility of specified filter\n     * @param  {Number} colIndex Column index\n     */\n    toggle(colIndex) {\n        if (!this.isOpen(colIndex)) {\n            this.open(colIndex);\n        } else {\n            this.close(colIndex);\n        }\n    }\n\n    /**\n     * Open popup filter of specified column\n     * @param {Number} colIndex Column index\n     */\n    open(colIndex) {\n        let tf = this.tf,\n            container = this.fltElms[colIndex];\n\n        if (this.onBeforeOpen) {\n            this.onBeforeOpen.call(null, this, container, colIndex);\n        }\n        container.style.display = 'block';\n        this.activeFilterIdx = colIndex;\n        addEvt(root, 'mouseup', (evt) => this.onMouseup(evt));\n\n        if (tf.getFilterType(colIndex) === INPUT) {\n            let flt = tf.getFilterElement(colIndex);\n            if (flt) {\n                flt.focus();\n            }\n        }\n        if (this.onAfterOpen) {\n            this.onAfterOpen.call(null, this, container, colIndex);\n        }\n    }\n\n    /**\n     * Close popup filter of specified column\n     * @param {Number} colIndex Column index\n     */\n    close(colIndex) {\n        let container = this.fltElms[colIndex];\n        if (this.onBeforeClose) {\n            this.onBeforeClose.call(null, this, container, colIndex);\n        }\n        container.style.display = NONE;\n        if (this.activeFilterIdx === colIndex) {\n            this.activeFilterIdx = -1;\n        }\n        removeEvt(root, 'mouseup', (evt) => this.onMouseup(evt));\n        if (this.onAfterClose) {\n            this.onAfterClose.call(null, this, container, colIndex);\n        }\n    }\n\n    /**\n     * Check if popup filter for specified column is open\n     * @param {Number} colIndex Column index\n     * @returns {Boolean}\n     */\n    isOpen(colIndex) {\n        return this.fltElms[colIndex].style.display === 'block';\n    }\n\n    /**\n     * Close all filters excepted for the specified one if any\n     * @param  {Number} exceptIdx Column index of the filter to not close\n     */\n    closeAll(exceptIdx) {\n        // Do not close filters only if argument is undefined and close on\n        // filtering option is disabled\n        if (isUndef(exceptIdx) && !this.closeOnFiltering) {\n            return;\n        }\n        for (let i = 0; i < this.fltElms.length; i++) {\n            if (i === exceptIdx) {\n                continue;\n            }\n            // let container = this.fltElms[i];\n            let fltType = tf.getFilterType(i);\n            let isMultipleFilter =\n                (fltType === CHECKLIST || fltType === MULTIPLE);\n\n            // Always hide all single selection filter types but hide multiple\n            // selection filter types only if index set\n            if (!isMultipleFilter || !isUndef(exceptIdx)) {\n                this.close(i);\n            }\n        }\n    }\n\n    /**\n     * Build all the icons representing the pop-up filters\n     */\n    setIconsState() {\n        for (let i = 0; i < this.fltIcons.length; i++) {\n            this.changeState(i, false);\n        }\n    }\n\n    /**\n     * Apply specified icon state\n     * @param  {Number} colIndex Column index\n     * @param  {Boolean} active   Apply active state\n     */\n    changeState(colIndex, active) {\n        let icon = this.fltIcons[colIndex];\n        if (icon) {\n            icon.src = active ? this.activeIconPath : this.iconPath;\n        }\n    }\n\n    /**\n     * Remove pop-up filters\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        this.filtersCache = [];\n        for (let i = 0; i < this.fltElms.length; i++) {\n            let container = this.fltElms[i],\n                icon = this.fltSpans[i],\n                iconImg = this.fltIcons[i];\n            if (container) {\n                removeElm(container);\n                this.filtersCache[i] = container;\n            }\n            container = null;\n            if (icon) {\n                removeElm(icon);\n            }\n            icon = null;\n            if (iconImg) {\n                removeElm(iconImg);\n            }\n            iconImg = null;\n        }\n        this.fltElms = [];\n        this.fltSpans = [];\n        this.fltIcons = [];\n\n        // TODO: expose an API to handle external filter IDs\n        tf.externalFltTgtIds = [];\n\n        // unsubscribe to events\n        this.emitter.off(['before-filtering'], () => this.setIconsState());\n        this.emitter.off(['after-filtering'], () => this.closeAll());\n        this.emitter.off(['cell-processed'],\n            (tf, cellIndex) => this.changeState(cellIndex, true));\n        this.emitter.off(['filters-row-inserted'], () => this.buildIcons());\n        this.emitter.off(['before-filter-init'],\n            (tf, colIndex) => this.build(colIndex));\n\n        this.initialized = false;\n    }\n\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {isFn, isUndef} from '../types';\nimport {createElm, removeElm} from '../dom';\nimport {addEvt, cancelEvt, stopEvt, targetEvt, removeEvt} from '../event';\nimport {INPUT, NONE, CHECKLIST, MULTIPLE} from '../const';\nimport {root} from '../root';\n\n/**\n * Pop-up filter component\n * @export\n * @class PopupFilter\n * @extends {Feature}\n */\nexport class PopupFilter extends Feature {\n\n    /**\n     * Creates an instance of PopupFilter\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'popupFilters');\n\n        // Configuration object\n        let f = this.config;\n\n        // Enable external filters\n        tf.isExternalFlt = true;\n        tf.externalFltTgtIds = [];\n\n        /**\n         * Close active popup filter upon filtering, enabled by default\n         * @type {Boolean}\n         */\n        this.closeOnFiltering = f.popup_filters_close_on_filtering === false ?\n            false : true;\n\n        /**\n         * Filter icon path\n         * @type {String}\n         */\n        this.iconPath = f.popup_filters_image ||\n            tf.themesPath + 'icn_filter.gif';\n\n        /**\n         * Active filter icon path\n         * @type {string}\n         */\n        this.activeIconPath = f.popup_filters_image_active ||\n            tf.themesPath + 'icn_filterActive.gif';\n\n        /**\n         * HTML for the filter icon\n         * @type {string}\n         */\n        this.iconHtml = f.popup_filters_image_html ||\n            '<img src=\"' + this.iconPath + '\" alt=\"Column filter\" />';\n\n        /**\n         * Css class assigned to filter container element\n         * @type {String}\n         */\n        this.containerCssClass = f.popup_div_css_class || 'popUpFilter';\n\n        /**\n         * Ensure filter's container element width matches column width, enabled\n         * by default\n         * @type {Boolean}\n         */\n        this.adjustToContainer =\n            f.popup_filters_adjust_to_container === false ? false : true;\n\n        /**\n         * Callback fired before a popup filter is opened\n         * @type {Function}\n         */\n        this.onBeforeOpen = isFn(f.on_before_popup_filter_open) ?\n            f.on_before_popup_filter_open : null;\n\n        /**\n         * Callback fired after a popup filter is opened\n         * @type {Function}\n         */\n        this.onAfterOpen = isFn(f.on_after_popup_filter_open) ?\n            f.on_after_popup_filter_open : null;\n\n        /**\n         * Callback fired before a popup filter is closed\n         * @type {Function}\n         */\n        this.onBeforeClose = isFn(f.on_before_popup_filter_close) ?\n            f.on_before_popup_filter_close : null;\n\n        /**\n         * Callback fired after a popup filter is closed\n         * @type {Function}\n         */\n        this.onAfterClose = isFn(f.on_after_popup_filter_close) ?\n            f.on_after_popup_filter_close : null;\n\n        /**\n         * Collection of filters spans\n         * @type {Array}\n         * @private\n         */\n        this.fltSpans = [];\n\n        /**\n         * Collection of filters icons\n         * @type {Array}\n         * @private\n         */\n        this.fltIcons = [];\n\n        /**\n         * Collection of filters icons cached after pop-up filters are removed\n         * @type {Array}\n         * @private\n         */\n        this.filtersCache = null;\n\n        /**\n         * Collection of filters containers\n         * @type {Array}\n         * @private\n         */\n        this.fltElms = this.filtersCache || [];\n\n        /**\n         * Prefix for pop-up filter container ID\n         * @type {String}\n         * @private\n         */\n        this.prfxDiv = 'popup_';\n\n        /**\n         * Column index of popup filter currently active\n         * @type {Number}\n         * @private\n         */\n        this.activeFilterIdx = -1;\n    }\n\n    /**\n     * Click event handler for pop-up filter icon\n     * @private\n     */\n    onClick(evt) {\n        let elm = targetEvt(evt).parentNode;\n        let colIndex = parseInt(elm.getAttribute('ci'), 10);\n\n        this.closeAll(colIndex);\n        this.toggle(colIndex);\n\n        if (this.adjustToContainer) {\n            let cont = this.fltElms[colIndex],\n                header = this.tf.getHeaderElement(colIndex),\n                headerWidth = header.clientWidth * 0.95;\n            cont.style.width = parseInt(headerWidth, 10) + 'px';\n        }\n        cancelEvt(evt);\n        stopEvt(evt);\n    }\n\n    /**\n     * Mouse-up event handler handling popup filter auto-close behaviour\n     * @private\n     */\n    onMouseup(evt) {\n        if (this.activeFilterIdx === -1) {\n            return;\n        }\n        let targetElm = targetEvt(evt);\n        let activeFlt = this.fltElms[this.activeFilterIdx];\n        let icon = this.fltIcons[this.activeFilterIdx];\n\n        if (icon === targetElm) {\n            return;\n        }\n\n        while (targetElm && targetElm !== activeFlt) {\n            targetElm = targetElm.parentNode;\n        }\n\n        if (targetElm === activeFlt) {\n            return;\n        } else {\n            this.close(this.activeFilterIdx);\n        }\n    }\n\n    /**\n     * Initialize DOM elements\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        let tf = this.tf;\n\n        // Override headers row index if no grouped headers\n        // TODO: Because of the filters row generation, headers row index needs\n        // adjusting: prevent useless row generation\n        if (tf.headersRow <= 1 && isNaN(tf.config().headers_row_index)) {\n            tf.headersRow = 0;\n        }\n\n        // Adjust headers row index for grid-layout mode\n        // TODO: Because of the filters row generation, headers row index needs\n        // adjusting: prevent useless row generation\n        if (tf.gridLayout) {\n            tf.headersRow--;\n            this.buildIcons();\n        }\n\n        // subscribe to events\n        this.emitter.on(['before-filtering'], () => this.setIconsState());\n        this.emitter.on(['after-filtering'], () => this.closeAll());\n        this.emitter.on(['cell-processed'],\n            (tf, cellIndex) => this.changeState(cellIndex, true));\n        this.emitter.on(['filters-row-inserted'], () => this.buildIcons());\n        this.emitter.on(['before-filter-init'],\n            (tf, colIndex) => this.build(colIndex));\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Reset previously destroyed feature\n     */\n    reset() {\n        this.enable();\n        this.init();\n        this.buildIcons();\n        this.buildAll();\n    }\n\n    /**\n     * Build all filters icons\n     */\n    buildIcons() {\n        let tf = this.tf;\n\n        // TODO: Because of the filters row generation, headers row index needs\n        // adjusting: prevent useless row generation\n        tf.headersRow++;\n\n        for (let i = 0; i < tf.nbCells; i++) {\n            if (tf.getFilterType(i) === NONE) {\n                continue;\n            }\n            let icon = createElm('span', ['ci', i]);\n            icon.innerHTML = this.iconHtml;\n            let header = tf.getHeaderElement(i);\n            header.appendChild(icon);\n            addEvt(icon, 'click', (evt) => this.onClick(evt));\n            this.fltSpans[i] = icon;\n            this.fltIcons[i] = icon.firstChild;\n        }\n    }\n\n    /**\n     * Build all pop-up filters elements\n     */\n    buildAll() {\n        for (let i = 0; i < this.filtersCache.length; i++) {\n            this.build(i, this.filtersCache[i]);\n        }\n    }\n\n    /**\n     * Build a specified pop-up filter elements\n     * @param  {Number} colIndex Column index\n     * @param  {Object} div      Optional container DOM element\n     */\n    build(colIndex, div) {\n        let tf = this.tf;\n        let contId = `${this.prfxDiv}${tf.id}_${colIndex}`;\n        let cont = div || createElm('div', ['id', contId]);\n        cont.className = this.containerCssClass;\n        tf.externalFltTgtIds.push(cont.id);\n\n        let header = tf.getHeaderElement(colIndex);\n        header.insertBefore(cont, header.firstChild);\n        addEvt(cont, 'click', (evt) => stopEvt(evt));\n        this.fltElms[colIndex] = cont;\n    }\n\n    /**\n     * Toggle visibility of specified filter\n     * @param  {Number} colIndex Column index\n     */\n    toggle(colIndex) {\n        if (!this.isOpen(colIndex)) {\n            this.open(colIndex);\n        } else {\n            this.close(colIndex);\n        }\n    }\n\n    /**\n     * Open popup filter of specified column\n     * @param {Number} colIndex Column index\n     */\n    open(colIndex) {\n        let tf = this.tf,\n            container = this.fltElms[colIndex];\n\n        if (this.onBeforeOpen) {\n            this.onBeforeOpen.call(null, this, container, colIndex);\n        }\n        container.style.display = 'block';\n        this.activeFilterIdx = colIndex;\n        addEvt(root, 'mouseup', (evt) => this.onMouseup(evt));\n\n        if (tf.getFilterType(colIndex) === INPUT) {\n            let flt = tf.getFilterElement(colIndex);\n            if (flt) {\n                flt.focus();\n            }\n        }\n        if (this.onAfterOpen) {\n            this.onAfterOpen.call(null, this, container, colIndex);\n        }\n    }\n\n    /**\n     * Close popup filter of specified column\n     * @param {Number} colIndex Column index\n     */\n    close(colIndex) {\n        let container = this.fltElms[colIndex];\n        if (this.onBeforeClose) {\n            this.onBeforeClose.call(null, this, container, colIndex);\n        }\n        container.style.display = NONE;\n        if (this.activeFilterIdx === colIndex) {\n            this.activeFilterIdx = -1;\n        }\n        removeEvt(root, 'mouseup', (evt) => this.onMouseup(evt));\n        if (this.onAfterClose) {\n            this.onAfterClose.call(null, this, container, colIndex);\n        }\n    }\n\n    /**\n     * Check if popup filter for specified column is open\n     * @param {Number} colIndex Column index\n     * @returns {Boolean}\n     */\n    isOpen(colIndex) {\n        return this.fltElms[colIndex].style.display === 'block';\n    }\n\n    /**\n     * Close all filters excepted for the specified one if any\n     * @param  {Number} exceptIdx Column index of the filter to not close\n     */\n    closeAll(exceptIdx) {\n        // Do not close filters only if argument is undefined and close on\n        // filtering option is disabled\n        if (isUndef(exceptIdx) && !this.closeOnFiltering) {\n            return;\n        }\n        for (let i = 0; i < this.fltElms.length; i++) {\n            if (i === exceptIdx) {\n                continue;\n            }\n            // let container = this.fltElms[i];\n            let fltType = tf.getFilterType(i);\n            let isMultipleFilter =\n                (fltType === CHECKLIST || fltType === MULTIPLE);\n\n            // Always hide all single selection filter types but hide multiple\n            // selection filter types only if index set\n            if (!isMultipleFilter || !isUndef(exceptIdx)) {\n                this.close(i);\n            }\n        }\n    }\n\n    /**\n     * Build all the icons representing the pop-up filters\n     */\n    setIconsState() {\n        for (let i = 0; i < this.fltIcons.length; i++) {\n            this.changeState(i, false);\n        }\n    }\n\n    /**\n     * Apply specified icon state\n     * @param  {Number} colIndex Column index\n     * @param  {Boolean} active   Apply active state\n     */\n    changeState(colIndex, active) {\n        let icon = this.fltIcons[colIndex];\n        if (icon) {\n            icon.src = active ? this.activeIconPath : this.iconPath;\n        }\n    }\n\n    /**\n     * Remove pop-up filters\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        this.filtersCache = [];\n        for (let i = 0; i < this.fltElms.length; i++) {\n            let container = this.fltElms[i],\n                icon = this.fltSpans[i],\n                iconImg = this.fltIcons[i];\n            if (container) {\n                removeElm(container);\n                this.filtersCache[i] = container;\n            }\n            container = null;\n            if (icon) {\n                removeElm(icon);\n            }\n            icon = null;\n            if (iconImg) {\n                removeElm(iconImg);\n            }\n            iconImg = null;\n        }\n        this.fltElms = [];\n        this.fltSpans = [];\n        this.fltIcons = [];\n\n        // TODO: expose an API to handle external filter IDs\n        tf.externalFltTgtIds = [];\n\n        // unsubscribe to events\n        this.emitter.off(['before-filtering'], () => this.setIconsState());\n        this.emitter.off(['after-filtering'], () => this.closeAll());\n        this.emitter.off(['cell-processed'],\n            (tf, cellIndex) => this.changeState(cellIndex, true));\n        this.emitter.off(['filters-row-inserted'], () => this.buildIcons());\n        this.emitter.off(['before-filter-init'],\n            (tf, colIndex) => this.build(colIndex));\n\n        this.initialized = false;\n    }\n\n}\n"
   },
   {
     "__docId__": 587,
@@ -12580,16 +12580,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "onBeforeOpen",
+    "name": "adjustToContainer",
     "memberof": "src/modules/popupFilter.js~PopupFilter",
-    "longname": "src/modules/popupFilter.js~PopupFilter#onBeforeOpen",
+    "longname": "src/modules/popupFilter.js~PopupFilter#adjustToContainer",
     "access": null,
-    "description": "Callback fired before a popup filter is opened",
-    "lineNumber": 68,
+    "description": "Ensure filter's container element width matches column width, enabled\nby default",
+    "lineNumber": 69,
     "type": {
       "nullable": null,
       "types": [
-        "Function"
+        "Boolean"
       ],
       "spread": false,
       "description": null
@@ -12600,12 +12600,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "onAfterOpen",
+    "name": "onBeforeOpen",
     "memberof": "src/modules/popupFilter.js~PopupFilter",
-    "longname": "src/modules/popupFilter.js~PopupFilter#onAfterOpen",
+    "longname": "src/modules/popupFilter.js~PopupFilter#onBeforeOpen",
     "access": null,
-    "description": "Callback fired after a popup filter is opened",
-    "lineNumber": 75,
+    "description": "Callback fired before a popup filter is opened",
+    "lineNumber": 76,
     "type": {
       "nullable": null,
       "types": [
@@ -12620,12 +12620,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "onBeforeClose",
+    "name": "onAfterOpen",
     "memberof": "src/modules/popupFilter.js~PopupFilter",
-    "longname": "src/modules/popupFilter.js~PopupFilter#onBeforeClose",
+    "longname": "src/modules/popupFilter.js~PopupFilter#onAfterOpen",
     "access": null,
-    "description": "Callback fired before a popup filter is closed",
-    "lineNumber": 82,
+    "description": "Callback fired after a popup filter is opened",
+    "lineNumber": 83,
     "type": {
       "nullable": null,
       "types": [
@@ -12640,12 +12640,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "onAfterClose",
+    "name": "onBeforeClose",
     "memberof": "src/modules/popupFilter.js~PopupFilter",
-    "longname": "src/modules/popupFilter.js~PopupFilter#onAfterClose",
+    "longname": "src/modules/popupFilter.js~PopupFilter#onBeforeClose",
     "access": null,
-    "description": "Callback fired after a popup filter is closed",
-    "lineNumber": 89,
+    "description": "Callback fired before a popup filter is closed",
+    "lineNumber": 90,
     "type": {
       "nullable": null,
       "types": [
@@ -12660,16 +12660,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "fltSpans",
+    "name": "onAfterClose",
     "memberof": "src/modules/popupFilter.js~PopupFilter",
-    "longname": "src/modules/popupFilter.js~PopupFilter#fltSpans",
-    "access": "private",
-    "description": "Collection of filters spans",
+    "longname": "src/modules/popupFilter.js~PopupFilter#onAfterClose",
+    "access": null,
+    "description": "Callback fired after a popup filter is closed",
     "lineNumber": 97,
     "type": {
       "nullable": null,
       "types": [
-        "Array"
+        "Function"
       ],
       "spread": false,
       "description": null
@@ -12680,12 +12680,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "fltIcons",
+    "name": "fltSpans",
     "memberof": "src/modules/popupFilter.js~PopupFilter",
-    "longname": "src/modules/popupFilter.js~PopupFilter#fltIcons",
+    "longname": "src/modules/popupFilter.js~PopupFilter#fltSpans",
     "access": "private",
-    "description": "Collection of filters icons",
-    "lineNumber": 104,
+    "description": "Collection of filters spans",
+    "lineNumber": 105,
     "type": {
       "nullable": null,
       "types": [
@@ -12700,12 +12700,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "filtersCache",
+    "name": "fltIcons",
     "memberof": "src/modules/popupFilter.js~PopupFilter",
-    "longname": "src/modules/popupFilter.js~PopupFilter#filtersCache",
+    "longname": "src/modules/popupFilter.js~PopupFilter#fltIcons",
     "access": "private",
-    "description": "Collection of filters icons cached after pop-up filters are removed",
-    "lineNumber": 111,
+    "description": "Collection of filters icons",
+    "lineNumber": 112,
     "type": {
       "nullable": null,
       "types": [
@@ -12720,12 +12720,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "fltElms",
+    "name": "filtersCache",
     "memberof": "src/modules/popupFilter.js~PopupFilter",
-    "longname": "src/modules/popupFilter.js~PopupFilter#fltElms",
+    "longname": "src/modules/popupFilter.js~PopupFilter#filtersCache",
     "access": "private",
-    "description": "Collection of filters containers",
-    "lineNumber": 118,
+    "description": "Collection of filters icons cached after pop-up filters are removed",
+    "lineNumber": 119,
     "type": {
       "nullable": null,
       "types": [
@@ -12740,16 +12740,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "adjustToContainer",
+    "name": "fltElms",
     "memberof": "src/modules/popupFilter.js~PopupFilter",
-    "longname": "src/modules/popupFilter.js~PopupFilter#adjustToContainer",
-    "access": null,
-    "description": "Ensure filter's container element width matches column width",
-    "lineNumber": 124,
+    "longname": "src/modules/popupFilter.js~PopupFilter#fltElms",
+    "access": "private",
+    "description": "Collection of filters containers",
+    "lineNumber": 126,
     "type": {
       "nullable": null,
       "types": [
-        "Boolean"
+        "Array"
       ],
       "spread": false,
       "description": null
@@ -12765,7 +12765,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#prfxDiv",
     "access": "private",
     "description": "Prefix for pop-up filter container ID",
-    "lineNumber": 131,
+    "lineNumber": 133,
     "type": {
       "nullable": null,
       "types": [
@@ -12785,7 +12785,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#activeFilterIdx",
     "access": "private",
     "description": "Column index of popup filter currently active",
-    "lineNumber": 138,
+    "lineNumber": 140,
     "type": {
       "nullable": null,
       "types": [
@@ -12805,7 +12805,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#onClick",
     "access": "private",
     "description": "Click event handler for pop-up filter icon",
-    "lineNumber": 145,
+    "lineNumber": 147,
     "params": [
       {
         "name": "evt",
@@ -12826,7 +12826,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#onMouseup",
     "access": "private",
     "description": "Mouse-up event handler handling popup filter auto-close behaviour",
-    "lineNumber": 166,
+    "lineNumber": 168,
     "params": [
       {
         "name": "evt",
@@ -12847,7 +12847,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#init",
     "access": null,
     "description": "Initialize DOM elements",
-    "lineNumber": 192,
+    "lineNumber": 194,
     "params": [],
     "generator": false
   },
@@ -12861,7 +12861,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 224,
+    "lineNumber": 226,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -12884,7 +12884,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#reset",
     "access": null,
     "description": "Reset previously destroyed feature",
-    "lineNumber": 230,
+    "lineNumber": 232,
     "params": [],
     "generator": false
   },
@@ -12898,7 +12898,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#buildIcons",
     "access": null,
     "description": "Build all filters icons",
-    "lineNumber": 240,
+    "lineNumber": 242,
     "params": [],
     "generator": false
   },
@@ -12912,7 +12912,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#buildAll",
     "access": null,
     "description": "Build all pop-up filters elements",
-    "lineNumber": 264,
+    "lineNumber": 266,
     "params": [],
     "generator": false
   },
@@ -12926,7 +12926,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#build",
     "access": null,
     "description": "Build a specified pop-up filter elements",
-    "lineNumber": 275,
+    "lineNumber": 277,
     "params": [
       {
         "nullable": null,
@@ -12961,7 +12961,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#toggle",
     "access": null,
     "description": "Toggle visibility of specified filter",
-    "lineNumber": 292,
+    "lineNumber": 294,
     "params": [
       {
         "nullable": null,
@@ -12986,7 +12986,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#open",
     "access": null,
     "description": "Open popup filter of specified column",
-    "lineNumber": 304,
+    "lineNumber": 306,
     "params": [
       {
         "nullable": null,
@@ -13011,7 +13011,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#activeFilterIdx",
     "access": null,
     "description": null,
-    "lineNumber": 312,
+    "lineNumber": 314,
     "undocument": true,
     "type": {
       "types": [
@@ -13029,7 +13029,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#close",
     "access": null,
     "description": "Close popup filter of specified column",
-    "lineNumber": 330,
+    "lineNumber": 332,
     "params": [
       {
         "nullable": null,
@@ -13054,7 +13054,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#activeFilterIdx",
     "access": null,
     "description": null,
-    "lineNumber": 337,
+    "lineNumber": 339,
     "undocument": true,
     "type": {
       "types": [
@@ -13072,7 +13072,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#isOpen",
     "access": null,
     "description": "Check if popup filter for specified column is open",
-    "lineNumber": 350,
+    "lineNumber": 352,
     "unknown": [
       {
         "tagName": "@returns",
@@ -13111,7 +13111,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#closeAll",
     "access": null,
     "description": "Close all filters excepted for the specified one if any",
-    "lineNumber": 358,
+    "lineNumber": 360,
     "params": [
       {
         "nullable": null,
@@ -13136,7 +13136,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#setIconsState",
     "access": null,
     "description": "Build all the icons representing the pop-up filters",
-    "lineNumber": 384,
+    "lineNumber": 386,
     "params": [],
     "generator": false
   },
@@ -13150,7 +13150,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#changeState",
     "access": null,
     "description": "Apply specified icon state",
-    "lineNumber": 395,
+    "lineNumber": 397,
     "params": [
       {
         "nullable": null,
@@ -13185,7 +13185,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#destroy",
     "access": null,
     "description": "Remove pop-up filters",
-    "lineNumber": 405,
+    "lineNumber": 407,
     "params": [],
     "generator": false
   },
@@ -13199,7 +13199,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#filtersCache",
     "access": null,
     "description": null,
-    "lineNumber": 410,
+    "lineNumber": 412,
     "undocument": true,
     "type": {
       "types": [
@@ -13217,7 +13217,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#fltElms",
     "access": null,
     "description": null,
-    "lineNumber": 429,
+    "lineNumber": 431,
     "undocument": true,
     "type": {
       "types": [
@@ -13235,7 +13235,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#fltSpans",
     "access": null,
     "description": null,
-    "lineNumber": 430,
+    "lineNumber": 432,
     "undocument": true,
     "type": {
       "types": [
@@ -13253,7 +13253,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#fltIcons",
     "access": null,
     "description": null,
-    "lineNumber": 431,
+    "lineNumber": 433,
     "undocument": true,
     "type": {
       "types": [
@@ -13271,7 +13271,7 @@
     "longname": "src/modules/popupFilter.js~PopupFilter#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 445,
+    "lineNumber": 447,
     "undocument": true,
     "type": {
       "types": [
