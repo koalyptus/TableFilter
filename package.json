@@ -57,7 +57,7 @@
     "grunt-webpack": "^1.0.18",
     "script-loader": "^0.7.0",
     "string-replace-webpack-plugin": "^0.0.4",
-    "sugar-date": "2.0.2",
+    "sugar-date": "2.0.4",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2"
   },
