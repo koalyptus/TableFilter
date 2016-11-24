@@ -74,6 +74,7 @@ test('Can parse date', function() {
     var date3 = dateType.parse('14-Jul-2005', 'fr');
     var date4 = dateType.parse(null);
     var date5 = dateType.parse(undefined);
+    var date6 = dateType.parse('');
 
     deepEqual(date0, new Date(2017, 9, 25, 0, 0, 0, 0), 'en-US date');
     deepEqual(date1, new Date(2017, 9, 25, 0, 0, 0, 0), 'en-GB date');
@@ -81,6 +82,7 @@ test('Can parse date', function() {
     deepEqual(date3, new Date(2005, 6, 14, 0, 0, 0, 0), 'fr date');
     deepEqual(date4.toISOString(), '1970-01-01T00:00:00.000Z', 'null date');
     deepEqual(date5 instanceof Date, true, 'undefined date');
+    deepEqual(isNaN(date6), true, 'Invalid date');
 });
 
 test('Can validate date', function() {
