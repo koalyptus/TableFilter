@@ -470,7 +470,9 @@ export default class AdapterSortableTable extends Feature {
         let colType = `${DATE}-${locale}`;
 
         this.addSortType(colType, (value) => {
-            return dateType.parse(value, locale);
+            let parsedDate = dateType.parse(value, locale);
+            // Invalid date defaults to Wed Feb 04 -768 11:00:00
+            return isNaN(+parsedDate) ? new Date(-86400000000000) : parsedDate;
         });
         return colType;
     }
