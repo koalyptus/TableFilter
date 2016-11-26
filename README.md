@@ -12,7 +12,7 @@ users to filter and limit the data displayed within a long table. By default, th
 ## Features
 * Convert a regular HTML table into an advanced grid component providing:
     * Advanced columns filtering model
-    * Sorting and pagination facilities
+    * Sorting and pagination capabilities
     * Complete selection model ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
     * Extended keyboard navigation ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
     * Inline cell or row editing ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
@@ -26,7 +26,7 @@ solution
 ## Getting started
 * Clone the repo using Git:
 ```shell
-git clone --bare https://github.com/koalyptus/TableFilter.git
+git clone https://github.com/koalyptus/TableFilter.git
 ```
 
 * You can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
@@ -76,12 +76,25 @@ Start by installing any dependencies.
 ```shell
 npm install
 ```
-Use ``npm run dev`` command to launch a build / watch cycle and start the local
+Use 
+```shell
+npm run dev
+``` 
+command to launch a build / watch cycle and start the local
 sever on port ``8080``.
 
-Use ``npm run build`` command to generate a production build.
+Use 
+```shell
+npm run build
+``` 
+command to generate a production build.
 
-The ``npm run build-all`` command will create a production build, run the tests and finally generate the demos:
+The 
+```shell
+npm run build-all
+``` 
+command will create a production build, run the tests and finally generate 
+the demos:
 
 To run all the tests:
 
@@ -97,7 +110,8 @@ grunt test-only:test.html,test-sort.html
 ```
 
 ## Demos
-Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) or generate the demos locally:
+Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) 
+or generate the demos locally:
 ```shell
 npm run build-demos
 ```

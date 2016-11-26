@@ -114,14 +114,17 @@ In general, we follow the "fork-and-pull" Git workflow.
  1. **Fork** the repo on GitHub
  2. **Clone** the project to your own machine
  3. **Commit** changes to your own branch 
-    3.1 **Add** unit tests covering your change in the `test` folder
-    3.2 **Run** the tests with the `npm run eslint test` command
-    3.3 **Ensure** build is working with `npm run build-all` command
+    - 3.1. **Add** unit tests covering your change in the `test` folder
+    - 3.2. **Run** the tests with the `npm run eslint test` command
+    - 3.3. **Ensure** build is working with `npm run build-all` command
  4. **Push** your work back up to your fork
  5. Submit a **Pull request** so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Donations
-If you would like to support this project:
-[PayPal](http://koalyptus.github.io/TableFilter/)
+To support this project simply locate the `Donate` button in the [project's 
+website](http://koalyptus.github.io/TableFilter/)
+which points to PayPal.
+Thanks to all those who supported this project in the past and to those who will
+in the future!
