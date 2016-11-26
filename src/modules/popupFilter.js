@@ -181,11 +181,11 @@ export class PopupFilter extends Feature {
             targetElm = targetElm.parentNode;
         }
 
-        if (targetElm === activeFlt) {
-            return;
-        } else {
+        if (targetElm !== activeFlt) {
             this.close(this.activeFilterIdx);
         }
+
+        return;
     }
 
     /**
@@ -367,7 +367,6 @@ export class PopupFilter extends Feature {
             if (i === exceptIdx) {
                 continue;
             }
-            // let container = this.fltElms[i];
             let fltType = tf.getFilterType(i);
             let isMultipleFilter =
                 (fltType === CHECKLIST || fltType === MULTIPLE);

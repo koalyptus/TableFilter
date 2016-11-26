@@ -76,29 +76,17 @@ Start by installing any dependencies.
 ```shell
 npm install
 ```
-Use the Grunt ``dev`` task to launch a build / watch cycle and start the local
-sever on port ``8080``:
+Use ``npm run dev`` command to launch a build / watch cycle and start the local
+sever on port ``8080``.
 
-```shell
-grunt dev
-```
+Use ``npm run build`` command to generate a production build.
 
-Use the ``build`` task to generate a production build:
-
-```shell
-grunt build
-```
-
-The ``default`` Grunt task will create a production build, run the tests and finally generate the demos:
-
-```shell
-grunt
-```
+The ``npm run build-all`` command will create a production build, run the tests and finally generate the demos:
 
 To run all the tests:
 
 ```shell
-grunt test
+npm test
 ```
 
 and to run specific test(s):
@@ -111,11 +99,11 @@ grunt test-only:test.html,test-sort.html
 ## Demos
 Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) or generate the demos locally:
 ```shell
-grunt build-demos
+npm run build-demos
 ```
 then run the local webserver:
 ```shell
-grunt server
+npm start
 ```
 then pick a demo from:
 ```shell
@@ -132,7 +120,7 @@ options you are using are still supported: [Obsolete](https://github.com/koalypt
 
 Run this task to generate the documentation in the ``docs/docs`` directory:
 ```shell
-grunt esdoc
+npm run esdoc
 ```
 
 ## Support
