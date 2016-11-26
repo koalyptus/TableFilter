@@ -12,7 +12,7 @@ users to filter and limit the data displayed within a long table. By default, th
 ## Features
 * Convert a regular HTML table into an advanced grid component providing:
     * Advanced columns filtering model
-    * Sorting and pagination facilities
+    * Sorting and pagination capabilities
     * Complete selection model ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
     * Extended keyboard navigation ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
     * Inline cell or row editing ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
@@ -26,7 +26,7 @@ solution
 ## Getting started
 * Clone the repo using Git:
 ```shell
-git clone --bare https://github.com/koalyptus/TableFilter.git
+git clone https://github.com/koalyptus/TableFilter.git
 ```
 
 * You can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
@@ -76,29 +76,30 @@ Start by installing any dependencies.
 ```shell
 npm install
 ```
-Use the Grunt ``dev`` task to launch a build / watch cycle and start the local
-sever on port ``8080``:
-
+Use 
 ```shell
-grunt dev
-```
+npm run dev
+``` 
+command to launch a build / watch cycle and start the local
+sever on port ``8080``.
 
-Use the ``build`` task to generate a production build:
-
+Use 
 ```shell
-grunt build
-```
+npm run build
+``` 
+command to generate a production build.
 
-The ``default`` Grunt task will create a production build, run the tests and finally generate the demos:
-
+The 
 ```shell
-grunt
-```
+npm run build-all
+``` 
+command will create a production build, run the tests and finally generate 
+the demos:
 
 To run all the tests:
 
 ```shell
-grunt test
+npm test
 ```
 
 and to run specific test(s):
@@ -109,13 +110,14 @@ grunt test-only:test.html,test-sort.html
 ```
 
 ## Demos
-Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) or generate the demos locally:
+Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) 
+or generate the demos locally:
 ```shell
-grunt build-demos
+npm run build-demos
 ```
 then run the local webserver:
 ```shell
-grunt server
+npm start
 ```
 then pick a demo from:
 ```shell
@@ -132,7 +134,7 @@ options you are using are still supported: [Obsolete](https://github.com/koalypt
 
 Run this task to generate the documentation in the ``docs/docs`` directory:
 ```shell
-grunt esdoc
+npm run esdoc
 ```
 
 ## Support

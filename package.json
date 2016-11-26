@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.4.14",
+  "version": "0.4.15",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -29,7 +29,9 @@
     "eslint": "grunt eslint",
     "test": "grunt test",
     "esdoc": "grunt esdoc",
-    "all": "grunt"
+    "build-all": "grunt",
+    "deploy": "grunt deploy",
+    "start": "npm run server"
   },
   "publishConfig": {
     "tag": "next"
@@ -44,6 +46,7 @@
     "diacritics": "1.2.3",
     "grunt": "^1.0.1",
     "grunt-babel": "^6.0.0",
+    "grunt-cli": "1.2.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-copy": "^1.0.0",
