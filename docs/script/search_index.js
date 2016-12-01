@@ -3498,6 +3498,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#clearfiltertext",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-clearFilterText",
+    "src/tablefilter.js~TableFilter#clearFilterText",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#clearfilters",
     "class/src/tablefilter.js~TableFilter.html#instance-method-clearFilters",
     "src/tablefilter.js~TableFilter#clearFilters",
@@ -3579,12 +3585,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#disableexcludedoptions",
     "class/src/tablefilter.js~TableFilter.html#instance-member-disableExcludedOptions",
     "src/tablefilter.js~TableFilter#disableExcludedOptions",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#displayalltext",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-displayAllText",
-    "src/tablefilter.js~TableFilter#displayAllText",
     "member"
   ],
   [
@@ -3759,6 +3759,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#getcellsnb",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getCellsNb",
     "src/tablefilter.js~TableFilter#getCellsNb",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#getclearfiltertext",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getClearFilterText",
+    "src/tablefilter.js~TableFilter#getClearFilterText",
     "method"
   ],
   [
