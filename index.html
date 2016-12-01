@@ -201,7 +201,7 @@ users to filter and limit the data displayed within a long table. By default, th
 <ul>
 <li>Convert a regular HTML table into an advanced grid component providing:<ul>
 <li>Advanced columns filtering model</li>
-<li>Sorting and pagination facilities</li>
+<li>Sorting and pagination capabilities</li>
 <li>Complete selection model (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus">ezEditTable</a> extension)</li>
 <li>Extended keyboard navigation (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus">ezEditTable</a> extension)</li>
 <li>Inline cell or row editing (<a href="http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus">ezEditTable</a> extension)</li>
@@ -217,7 +217,7 @@ solution</li>
 <h2 id="getting-started">Getting started</h2>
 <ul>
 <li><p>Clone the repo using Git:</p>
-<pre><code class="language-shell">git clone --bare https://github.com/koalyptus/TableFilter.git</code></pre>
+<pre><code class="language-shell">git clone https://github.com/koalyptus/TableFilter.git</code></pre>
 </li>
 <li><p>You can <a href="https://github.com/koalyptus/TableFilter/archive/master.zip">download</a> this repository.</p>
 </li>
@@ -252,23 +252,28 @@ Once <code>Grunt</code> is sorted out you can follow the instructions below.
 Start by installing any dependencies.</li>
 </ul>
 <pre><code class="language-shell">npm install</code></pre>
-<p>Use the Grunt <code>dev</code> task to launch a build / watch cycle and start the local
-sever on port <code>8080</code>:</p>
-<pre><code class="language-shell">grunt dev</code></pre>
-<p>Use the <code>build</code> task to generate a production build:</p>
-<pre><code class="language-shell">grunt build</code></pre>
-<p>The <code>default</code> Grunt task will create a production build, run the tests and finally generate the demos:</p>
-<pre><code class="language-shell">grunt</code></pre>
+<p>Use </p>
+<pre><code class="language-shell">npm run dev</code></pre>
+<p>command to launch a build / watch cycle and start the local
+sever on port <code>8080</code>.</p>
+<p>Use </p>
+<pre><code class="language-shell">npm run build</code></pre>
+<p>command to generate a production build.</p>
+<p>The </p>
+<pre><code class="language-shell">npm run build-all</code></pre>
+<p>command will create a production build, run the tests and finally generate 
+the demos:</p>
 <p>To run all the tests:</p>
-<pre><code class="language-shell">grunt test</code></pre>
+<pre><code class="language-shell">npm test</code></pre>
 <p>and to run specific test(s):</p>
 <pre><code class="language-shell">grunt test-only:test.html
 grunt test-only:test.html,test-sort.html</code></pre>
 <h2 id="demos">Demos</h2>
-<p>Check out the online <a href="http://koalyptus.github.io/TableFilter/examples">examples</a> or generate the demos locally:</p>
-<pre><code class="language-shell">grunt build-demos</code></pre>
+<p>Check out the online <a href="http://koalyptus.github.io/TableFilter/examples">examples</a> 
+or generate the demos locally:</p>
+<pre><code class="language-shell">npm run build-demos</code></pre>
 <p>then run the local webserver:</p>
-<pre><code class="language-shell">grunt server</code></pre>
+<pre><code class="language-shell">npm start</code></pre>
 <p>then pick a demo from:</p>
 <pre><code class="language-shell">http://localhost:8080/demos/</code></pre>
 <h2 id="documentation">Documentation</h2>
@@ -277,7 +282,7 @@ grunt test-only:test.html,test-sort.html</code></pre>
 <p>If you previously used the HTML Table Filter Generator plugin, verify the configuration
 options you are using are still supported: <a href="https://github.com/koalyptus/TableFilter/wiki/Obsolete">Obsolete</a></p>
 <p>Run this task to generate the documentation in the <code>docs/docs</code> directory:</p>
-<pre><code class="language-shell">grunt esdoc</code></pre>
+<pre><code class="language-shell">npm run esdoc</code></pre>
 <h2 id="support">Support</h2>
 <ul>
 <li>GitHub for reporting bugs and feature requests.</li>
