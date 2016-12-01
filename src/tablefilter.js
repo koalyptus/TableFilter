@@ -2762,7 +2762,7 @@ export class TableFilter {
 
     /**
      * Returns clear all text for specified filter column
-     * @param {number} colIndex    Column index
+     * @param {Number} colIndex    Column index
      * @returns {String}
      */
     getClearFilterText(colIndex) {
