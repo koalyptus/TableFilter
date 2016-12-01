@@ -529,9 +529,9 @@ export class TableFilter {
         /*** select filter's customisation and behaviours ***/
         /**
          * Text for clear option in drop-down filter types (1st option)
-         * @type {String}
+         * @type {String|Array}
          */
-        this.displayAllText = f.display_all_text || 'Clear';
+        this.clearFilterText = f.clear_filter_text || 'Clear';
 
         /**
          * Indicate whether empty option is enabled in drop-down filter types
@@ -2683,34 +2683,35 @@ export class TableFilter {
         let activeIdx = this.getColumnIndexFromFilterId(this.activeFilterId);
 
         for (let i = 0, len = slcIndex.length; i < len; i++) {
-            let curSlc = elm(this.fltIds[slcIndex[i]]);
-            let slcSelectedValue = this.getFilterValue(slcIndex[i]);
+            let colIdx = slcIndex[i];
+            let curSlc = elm(this.fltIds[colIdx]);
+            let slcSelectedValue = this.getFilterValue(colIdx);
 
             // Welcome to cyclomatic complexity hell :)
             // TODO: simplify/refactor if statement
-            if (activeIdx !== slcIndex[i] ||
-                (this.paging && slcA1.indexOf(slcIndex[i]) !== -1 &&
-                    activeIdx === slcIndex[i]) ||
-                (!this.paging && (slcA3.indexOf(slcIndex[i]) !== -1 ||
-                    slcA2.indexOf(slcIndex[i]) !== -1)) ||
-                slcSelectedValue === this.displayAllText) {
+            if (activeIdx !== colIdx ||
+                (this.paging && slcA1.indexOf(colIdx) !== -1 &&
+                    activeIdx === colIdx) ||
+                (!this.paging && (slcA3.indexOf(colIdx) !== -1 ||
+                    slcA2.indexOf(colIdx) !== -1)) ||
+                slcSelectedValue === this.getClearFilterText(colIdx)) {
 
                 //1st option needs to be inserted
                 if (this.loadFltOnDemand) {
-                    let opt0 = createOpt(this.displayAllText, '');
+                    let opt0 = createOpt(this.getClearFilterText(colIdx), '');
                     curSlc.innerHTML = '';
                     curSlc.appendChild(opt0);
                 }
 
-                if (slcA3.indexOf(slcIndex[i]) !== -1) {
-                    this.emitter.emit('build-checklist-filter', this,
-                        slcIndex[i], true);
+                if (slcA3.indexOf(colIdx) !== -1) {
+                    this.emitter.emit('build-checklist-filter', this, colIdx,
+                        true);
                 } else {
-                    this.emitter.emit('build-select-filter', this, slcIndex[i],
+                    this.emitter.emit('build-select-filter', this,colIdx,
                         true);
                 }
 
-                this.setFilterValue(slcIndex[i], slcSelectedValue);
+                this.setFilterValue(colIdx, slcSelectedValue);
             }
         }
     }
@@ -2748,7 +2749,7 @@ export class TableFilter {
     /**
      * Checks if specified column filter ignores diacritics.
      * Note this is only valid for input filter types.
-     * @param {any} colIndex    Column index
+     * @param {Number} colIndex    Column index
      * @returns {Boolean}
      */
     ignoresDiacritics(colIndex) {
@@ -2757,6 +2758,19 @@ export class TableFilter {
             return ignoreDiac[colIndex];
         }
         return Boolean(ignoreDiac);
+    }
+
+    /**
+     * Returns clear all text for specified filter column
+     * @param {Number} colIndex    Column index
+     * @returns {String}
+     */
+    getClearFilterText(colIndex) {
+        let clearText = this.clearFilterText;
+        if (isArray(clearText)) {
+            return clearText[colIndex];
+        }
+        return clearText;
     }
 
     /**

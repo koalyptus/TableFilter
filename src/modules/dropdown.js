@@ -129,7 +129,7 @@ export class Dropdown extends Feature {
             this.build(colIndex);
         } else {
             //1st option is created here since build isn't invoked
-            let opt0 = createOpt(tf.displayAllText, '');
+            let opt0 = createOpt(tf.getClearFilterText(colIndex), '');
             slc.appendChild(opt0);
         }
 
@@ -342,9 +342,9 @@ export class Dropdown extends Feature {
      */
     addFirstOption(slc) {
         let tf = this.tf;
-
-        let opt0 = createOpt(
-            (!this.enableSlcResetFilter ? '' : tf.displayAllText), '');
+        let colIdx = tf.getColumnIndexFromFilterId(slc.id);
+        let opt0 = createOpt((!this.enableSlcResetFilter ?
+            '' : tf.getClearFilterText(colIdx)), '');
         if (!this.enableSlcResetFilter) {
             opt0.style.display = NONE;
         }
