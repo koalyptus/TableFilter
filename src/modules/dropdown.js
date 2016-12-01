@@ -129,7 +129,7 @@ export class Dropdown extends Feature {
             this.build(colIndex);
         } else {
             //1st option is created here since build isn't invoked
-            let opt0 = createOpt(tf.displayAllText, '');
+            let opt0 = createOpt(tf.getClearFilterText(colIndex), '');
             slc.appendChild(opt0);
         }
 
