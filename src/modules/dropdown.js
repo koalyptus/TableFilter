@@ -342,9 +342,9 @@ export class Dropdown extends Feature {
      */
     addFirstOption(slc) {
         let tf = this.tf;
-
-        let opt0 = createOpt(
-            (!this.enableSlcResetFilter ? '' : tf.displayAllText), '');
+        let colIdx = tf.getColumnIndexFromFilterId(slc.id);
+        let opt0 = createOpt((!this.enableSlcResetFilter ?
+            '' : tf.getClearFilterText(colIdx)), '');
         if (!this.enableSlcResetFilter) {
             opt0.style.display = NONE;
         }
