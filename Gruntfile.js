@@ -2,6 +2,7 @@ module.exports = function (grunt) {
 
     var webpack = require('webpack');
     var webpackConfig = require('./webpack.config.js');
+    var webpackTestConfig = require('./webpack.test.config.js');
     var fs = require('fs');
     var path = require('path');
     var testDir = 'test';
@@ -24,17 +25,42 @@ module.exports = function (grunt) {
             ]
         },
 
+        // qunit: {
+        //     all: {
+        //         options: {
+        //             urls: getTestFiles(testDir, testHost)
+        //         }
+        //     },
+        //     only: {
+        //         options: {
+        //             urls: []
+        //         }
+        //     }
+        // },
+
         qunit: {
+            options: {
+                '--web-security': 'no',
+                coverage: {
+                    disposeCollector: true,
+                    src: ['dist/tablefilter/*.js'],
+                    instrumentedFiles: 'temp/',
+                    htmlReport: 'report/coverage',
+                    coberturaReport: 'report/',
+                    linesThresholdPct: 85
+                }
+            },
+            // all: ['test/**/*.html']
             all: {
                 options: {
                     urls: getTestFiles(testDir, testHost)
                 }
             },
-            only: {
-                options: {
-                    urls: []
-                }
-            }
+            // only: {
+            //     options: {
+            //         urls: []
+            //     }
+            // }
         },
 
         connect: {
@@ -128,7 +154,8 @@ module.exports = function (grunt) {
         webpack: {
             options: webpackConfig,
             build: webpackConfig.build,
-            dev: webpackConfig.dev
+            dev: webpackConfig.dev,
+            test: webpackTestConfig.test
         },
 
         watch: {
@@ -321,6 +348,9 @@ module.exports = function (grunt) {
 
     // Tests
     grunt.registerTask('test', ['eslint', 'connect', 'qunit:all']);
+    grunt.registerTask('coverage',
+        ['webpack:test', 'copy:dist', 'stylus:compile', 'eslint'/*, 'connect',
+        'qunit'*/]);
 
     // Publish to gh-pages
     grunt.registerTask('publish', 'Publish from CLI', [
