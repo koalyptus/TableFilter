@@ -1,6 +1,7 @@
 demos
 docs
 node_modules
+report
 .grunt
 
 npm-debug.log

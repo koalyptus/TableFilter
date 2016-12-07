@@ -23,19 +23,22 @@ module.exports = {
             sortabletable: '../../../libs/sortabletable.js'
         }
     },
+    isparta: {
+        embedSource: true,
+        noAutoWrap: true,
+        babel: {
+            compact: false,
+            presets: ['es2015'],
+            plugins: [['transform-es2015-classes', {loose: true}]]
+        }
+    },
     module: {
-        preLoaders: [
+        loaders: [
             {
-                // test: path.join(__dirname, 'src'),
                 test: /\.js$/,
                 include: path.join(__dirname, 'src'),
                 exclude: /tablefilter\/node_modules/,
-                query: {
-                    compact: false,
-                    presets: ['es2015'],
-                    plugins: [['transform-es2015-classes', {loose: true}]]
-                },
-                loader: 'babel-istanbul-loader'
+                loader: 'isparta'
             },
             {
                 test: path.join(__dirname, 'src'),
@@ -55,13 +58,11 @@ module.exports = {
             }
         ]
     },
-    test: {
-        devtool: 'sourcemap',
-        debug: true,
-        plugins: [
-            new Clean(['dist']),
-            new webpack.optimize.DedupePlugin(),
-            new StringReplacePlugin()
-        ]
-    }
+    devtool: 'sourcemap',
+    debug: true,
+    plugins: [
+        new Clean(['dist']),
+        new webpack.optimize.DedupePlugin(),
+        new StringReplacePlugin()
+    ]
 };

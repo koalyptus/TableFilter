@@ -3,8 +3,9 @@ node_js:
 - '6.3.0'
 before_script:
 - npm install grunt-cli -g
+- npm install codecov -g
 script:
-- npm test deploy
+- npm test codecov deploy
 branches:
   only:
   - master

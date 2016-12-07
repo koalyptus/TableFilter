@@ -25,19 +25,6 @@ module.exports = function (grunt) {
             ]
         },
 
-        // qunit: {
-        //     all: {
-        //         options: {
-        //             urls: getTestFiles(testDir, testHost)
-        //         }
-        //     },
-        //     only: {
-        //         options: {
-        //             urls: []
-        //         }
-        //     }
-        // },
-
         qunit: {
             options: {
                 '--web-security': 'no',
@@ -47,20 +34,21 @@ module.exports = function (grunt) {
                     instrumentedFiles: 'temp/',
                     htmlReport: 'report/coverage',
                     coberturaReport: 'report/',
-                    linesThresholdPct: 85
+                    lcovReport: 'report/',
+                    jsonReport: 'report',
+                    linesThresholdPct: 80
                 }
             },
-            // all: ['test/**/*.html']
             all: {
                 options: {
                     urls: getTestFiles(testDir, testHost)
                 }
             },
-            // only: {
-            //     options: {
-            //         urls: []
-            //     }
-            // }
+            only: {
+                options: {
+                    urls: []
+                }
+            }
         },
 
         connect: {
@@ -155,7 +143,7 @@ module.exports = function (grunt) {
             options: webpackConfig,
             build: webpackConfig.build,
             dev: webpackConfig.dev,
-            test: webpackTestConfig.test
+            test: webpackTestConfig
         },
 
         watch: {
@@ -313,7 +301,6 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-eslint');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -322,10 +309,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-esdoc');
+    grunt.loadNpmTasks('grunt-qunit-istanbul');
     grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-gh-pages');
 
-    grunt.registerTask('default', ['build', 'test', 'build-demos']);
+    grunt.registerTask('default', ['test', 'build', 'build-demos']);
 
     // Development server
     grunt.registerTask('server', ['webpack-dev-server:start']);
@@ -343,14 +331,15 @@ module.exports = function (grunt) {
     grunt.registerTask('build-demos', ['copy:templates', 'copy:assets',
         'string-replace:demos', 'copy:starter', 'clean']);
 
+    // Build tests
+    grunt.registerTask('build-test',
+        ['eslint', 'webpack:test', 'copy:dist', 'stylus:compile']);
+
     // Transpile with Babel
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
 
-    // Tests
-    grunt.registerTask('test', ['eslint', 'connect', 'qunit:all']);
-    grunt.registerTask('coverage',
-        ['webpack:test', 'copy:dist', 'stylus:compile', 'eslint'/*, 'connect',
-        'qunit'*/]);
+    // Tests with coverage
+    grunt.registerTask('test', ['build-test', 'connect', 'qunit:all']);
 
     // Publish to gh-pages
     grunt.registerTask('publish', 'Publish from CLI', [
@@ -406,7 +395,6 @@ module.exports = function (grunt) {
 
     // Returns the list of test files from the test folder for qunit task
     function getTestFiles(testDir, host) {
-
         var getFiles = function (dir, host) {
             var res = [];
             var items = fs.readdirSync(dir);
