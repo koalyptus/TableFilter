@@ -1,5 +1,6 @@
 [![Build Status](https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master)](https://travis-ci.org/koalyptus/TableFilter)
 [![Document](http://koalyptus.github.io/TableFilter/docs/badge.svg)](https://koalyptus.github.io/TableFilter/docs/source)
+[![codecov](https://codecov.io/gh/koalyptus/TableFilter/branch/master/graph/badge.svg)](https://codecov.io/gh/koalyptus/TableFilter)
 
 # TableFilter
 
@@ -96,18 +97,22 @@ npm run build-all
 command will create a production build, run the tests and finally generate 
 the demos:
 
-To run all the tests:
+To run all the tests and generate the coverage report:
 
 ```shell
 npm test
 ```
 
-and to run specific test(s):
+or to run specific test(s):
 
 ```shell
 grunt test-only:test.html
 grunt test-only:test.html,test-sort.html
 ```
+
+to view the coverage report(s), open the `index.html` under the
+`report/coverage` folder or
+[online](https://codecov.io/gh/koalyptus/TableFilter).
 
 ## Demos
 Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) 
