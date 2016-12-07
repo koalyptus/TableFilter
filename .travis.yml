@@ -5,7 +5,9 @@ before_script:
 - npm install grunt-cli -g
 - npm install codecov -g
 script:
-- npm test codecov deploy
+- npm test
+- npm run codecov
+- npm run deploy
 branches:
   only:
   - master
