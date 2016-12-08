@@ -108,6 +108,18 @@
         deepEqual(tf.getValidRows(), [6], 'Expected rows');
     });
 
+    test('Can filter a number', function() {
+        // setup
+        tf.clearFilters();
+
+        // act
+        tf.setFilterValue(4, 1836.09);
+        tf.filter();
+
+        // assert
+        deepEqual(tf.getValidRows(), [6], 'Expected rows');
+    });
+
     test('Can filter a formatted number column with a number', function() {
         // setup
         tf.clearFilters();

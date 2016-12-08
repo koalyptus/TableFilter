@@ -127,6 +127,12 @@ test('Clear filters', function() {
     deepEqual(tf.getFiltersValue(), ['', '', '', '', '']);
 });
 
+test('Can get feature', function() {
+    var feature = tf.feature('help');
+    deepEqual(typeof feature, 'object', 'Feature instance');
+    deepEqual(feature.feature, 'help', 'Feature name');
+});
+
 test('Get table data', function() {
     deepEqual(tf.getColValues(0),
         [
