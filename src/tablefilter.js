@@ -148,8 +148,7 @@ export class TableFilter {
 
         //Start row et cols nb
         this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
-        try { this.nbCells = this.getCellsNb(this.refRow); }
-        catch (e) { this.nbCells = this.getCellsNb(0); }
+        this.nbCells = this.getCellsNb(this.refRow);
 
         /**
          * Base path for static assets
@@ -1021,9 +1020,7 @@ export class TableFilter {
         }
 
         // Instanciate sugar date wrapper
-        if (!Mod.dateType) {
-            Mod.dateType = new DateType(this);
-        }
+        Mod.dateType = Mod.dateType || new DateType(this);
         Mod.dateType.init();
 
         // Instantiate help feature and initialise only if set true
@@ -1035,9 +1032,7 @@ export class TableFilter {
         }
 
         if (this.state) {
-            if (!Mod.state) {
-                Mod.state = new State(this);
-            }
+            Mod.state = Mod.state || new State(this);
             Mod.state.init();
         }
 
@@ -2270,7 +2265,7 @@ export class TableFilter {
      * @return {Number}          Number of cells
      */
     getCellsNb(rowIndex = 0) {
-        let tr = this.tbl.rows[rowIndex];
+        let tr = this.tbl.rows[rowIndex >= 0 ? rowIndex : 0];
         return tr.cells.length;
     }
 
