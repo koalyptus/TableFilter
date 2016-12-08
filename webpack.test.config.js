@@ -1,4 +1,4 @@
-var webpack = require('webpack');
+var webpackConfig = require('./webpack.config.js');
 var path = require('path');
 var Clean = require('clean-webpack-plugin');
 var StringReplacePlugin = require('string-replace-webpack-plugin');
@@ -7,22 +7,9 @@ var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 module.exports = {
     cache: true,
-    entry: {
-        'main': path.join(__dirname, '/src/tablefilter.js')
-    },
-    output: {
-        path: path.join(__dirname, '/dist/tablefilter'),
-        filename: 'tablefilter.js',
-        // chunkFilename: '[name]-[chunkhash].js',
-        chunkFilename: 'tf-[name].js',
-        libraryTarget: 'umd'
-    },
-    resolve: {
-        extensions: ['', '.js'],
-        alias: {
-            sortabletable: '../../../libs/sortabletable.js'
-        }
-    },
+    entry: webpackConfig.entry,
+    output: webpackConfig.output,
+    resolve: webpackConfig.resolve,
     isparta: {
         embedSource: true,
         noAutoWrap: true,
@@ -60,9 +47,5 @@ module.exports = {
     },
     devtool: 'sourcemap',
     debug: true,
-    plugins: [
-        new Clean(['dist']),
-        new webpack.optimize.DedupePlugin(),
-        new StringReplacePlugin()
-    ]
+    plugins: [new Clean(['dist'])].concat(webpackConfig.dev.plugins)
 };
