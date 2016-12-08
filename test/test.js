@@ -70,4 +70,22 @@
         deepEqual(tf1.getValidRows().length, 2, 'Filter button event result');
     });
 
+    module('Tear-down');
+    test('can destroy TableFilter DOM elements', function() {
+        tf.destroy();
+        tf1.destroy();
+
+        deepEqual(tf.isInitialized(), false, 'Instance no longer initialised');
+        deepEqual(tf1.getFilterElement(0), null, 'Filter 0 removed');
+    });
+
+    module('DOM table does not exist');
+    test('throws when no working DOM element', function() {
+        throws(
+            function() { new TableFilter('xyz'); },
+            Error,
+            'Throws Error when no DOM table'
+        );
+    });
+
 })(window, TableFilter);
