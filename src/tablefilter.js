@@ -1024,9 +1024,7 @@ export class TableFilter {
         Mod.dateType.init();
 
         // Instantiate help feature and initialise only if set true
-        if (!Mod.help) {
-            Mod.help = new Help(this);
-        }
+        Mod.help = Mod.help || new Help(this);
         if (this.help) {
             Mod.help.init();
         }
@@ -1037,16 +1035,12 @@ export class TableFilter {
         }
 
         if (this.gridLayout) {
-            if (!Mod.gridLayout) {
-                Mod.gridLayout = new GridLayout(this);
-            }
+            Mod.gridLayout = Mod.gridLayout || new GridLayout(this);
             Mod.gridLayout.init();
         }
 
         if (this.loader) {
-            if (!Mod.loader) {
-                Mod.loader = new Loader(this);
-            }
+            Mod.loader = Mod.loader || new Loader(this);
             Mod.loader.init();
         }
 
@@ -1056,9 +1050,7 @@ export class TableFilter {
         }
 
         if (this.popupFilters) {
-            if (!Mod.popupFilter) {
-                Mod.popupFilter = new PopupFilter(this);
-            }
+            Mod.popupFilter = Mod.popupFilter || new PopupFilter(this);
             Mod.popupFilter.init();
         }
 
@@ -1157,9 +1149,7 @@ export class TableFilter {
             Mod.alternateRows.init();
         }
         if (this.noResults) {
-            if (!Mod.noResults) {
-                Mod.noResults = new NoResults(this);
-            }
+            Mod.noResults = Mod.noResults || new NoResults(this);
             Mod.noResults.init();
         }
 
