@@ -86,8 +86,91 @@ test('Remove background on a row', function() {
         0, 'Bg set on expected row');
 });
 
-test('Remove alternating rows', function() {
+test('Cannot init if initialised', function() {
+    // setup
+    var processAll = altRows.processAll;
+    var hit = 0;
+    altRows.processAll = function() { hit++ };
+    altRows.initialized = true;
+
+    // act
+    altRows.init();
+
+    // assert
+    deepEqual(hit, 0, 'processAll not called');
+
+    altRows.processAll = processAll;
+});
+
+test('Cannot processAll if not enabled', function() {
+    // setup
+    var setRowBg = altRows.setRowBg;
+    var hit = 0;
+    altRows.setRowBg = function() { hit++ };
+    altRows.enabled = false;
+
+    // act
+    altRows.processAll();
+
+    // assert
+    deepEqual(hit, 0, 'setRowBg not called');
+
+    altRows.setRowBg = setRowBg;
+});
+
+test('Cannot setRowBg if not enabled', function() {
+    // setup
+    var removeRowBg = altRows.removeRowBg;
+    var hit = 0;
+    altRows.removeRowBg = function() { hit++ };
+    altRows.enabled = false;
+
+    // act
+    altRows.setRowBg(3, 5);
+
+    // assert
+    deepEqual(hit, 0, 'removeRowBg not called');
+
+    altRows.removeRowBg = removeRowBg;
+});
+
+test('Cannot removeRowBg if row index is NaN', function() {
+    // setup
+    tf.clearFilters();
+    tf.filter();
+
+    // act
+    altRows.removeRowBg('hello');
+
+    // assert
+    deepEqual(tbl.querySelectorAll('tr.odd').length, 3, 'Expected odd bgs');
+    deepEqual(tbl.querySelectorAll('tr.even').length, 3, 'Expected even bg');
+});
+
+test('Cannot destroy if not initialised', function() {
+    // setup
+    var getRowsNb = altRows.tf.getRowsNb;
+    var hit = 0;
+    altRows.tf.getRowsNb = function() { hit++ };
+    altRows.initialized = false;
+
+    // act
     altRows.destroy();
+
+    // assert
+    deepEqual(hit, 0, 'tf.getRowsNb not called');
+
+    altRows.tf.getRowsNb = getRowsNb;
+});
+
+test('Remove alternating rows', function() {
+    // setup
+    altRows.initialized = true;
+
+    // act
+    altRows.destroy();
+
+    // assert
     deepEqual(tbl.querySelectorAll('tr.odd').length, 0, 'Odd bgs removed');
     deepEqual(tbl.querySelectorAll('tr.even').length, 0, 'Even bg removed');
 });

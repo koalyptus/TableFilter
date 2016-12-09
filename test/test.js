@@ -70,6 +70,22 @@
         deepEqual(tf1.getValidRows().length, 2, 'Filter button event result');
     });
 
+    test('Cannot init if initialised', function() {
+        // setup
+        var importFile = tf1.import;
+        var hit = 0;
+        tf1.import = function() { hit++ };
+        tf1.initialized = true;
+
+        // act
+        tf1.init();
+
+        // assert
+        deepEqual(hit, 0, 'import not called');
+
+        tf1.import = importFile;
+    });
+
     module('Tear-down');
     test('can destroy TableFilter DOM elements', function() {
         tf.destroy();
