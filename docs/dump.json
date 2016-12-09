@@ -5382,7 +5382,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {addClass, removeClass} from '../dom';\n\n/**\n * Rows with alternating background color for improved readability\n */\nexport class AlternateRows extends Feature {\n\n    /**\n     * Creates an instance of AlternateRows.\n     *\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'alternateRows');\n\n        let config = this.config;\n        /**\n         * Css class for even rows (default: 'even')\n         * @type {String}\n         */\n        this.evenCss = config.even_row_css_class || 'even';\n\n        /**\n         * Css class for odd rows (default: 'odd')\n         * @type {String}\n         */\n        this.oddCss = config.odd_row_css_class || 'odd';\n    }\n\n    /**\n     * Sets alternating rows color\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        this.processAll();\n\n        // Subscribe to events\n        this.emitter.on(['row-processed', 'row-paged'],\n            (tf, rowIndex, arrIndex, isValid) =>\n                this.processRow(rowIndex, arrIndex, isValid));\n        this.emitter.on(['column-sorted'], () => this.processAll());\n\n        /**\n         * @inherited\n         */\n        this.initialized = true;\n    }\n\n    /**\n     * Apply background to all valid rows\n     */\n    processAll() {\n        if (!this.isEnabled()) {\n            return;\n        }\n        let tf = this.tf;\n        let validRowsIndex = tf.getValidRows(true);\n        let indexLen = validRowsIndex.length;\n        let idx = 0;\n\n        //alternates bg color\n        for (let j = 0; j < indexLen; j++) {\n            let rowIdx = validRowsIndex[j];\n            this.setRowBg(rowIdx, idx);\n            idx++;\n        }\n    }\n\n    /**\n     * Set/remove row background based on row validation\n     * @param  {Number}  rowIdx  Row index\n     * @param  {Number}  arrIdx  Array index\n     * @param  {Boolean} isValid Valid row flag\n     */\n    processRow(rowIdx, arrIdx, isValid) {\n        if (isValid) {\n            this.setRowBg(rowIdx, arrIdx);\n        } else {\n            this.removeRowBg(rowIdx);\n        }\n    }\n\n    /**\n     * Sets row background color\n     * @param {Number} rowIdx Row index\n     * @param {Number} idx    Valid rows collection index needed to calculate bg\n     * color\n     * @private\n     */\n    setRowBg(rowIdx, idx) {\n        if (!this.isEnabled() || isNaN(rowIdx)) {\n            return;\n        }\n        let rows = this.tf.tbl.rows;\n        let i = isNaN(idx) ? rowIdx : idx;\n        this.removeRowBg(rowIdx);\n\n        addClass(rows[rowIdx], (i % 2) ? this.evenCss : this.oddCss);\n    }\n\n    /**\n     * Removes row background color\n     * @param  {Number} idx Row index\n     * @private\n     */\n    removeRowBg(idx) {\n        if (isNaN(idx)) {\n            return;\n        }\n        let rows = this.tf.tbl.rows;\n        removeClass(rows[idx], this.oddCss);\n        removeClass(rows[idx], this.evenCss);\n    }\n\n    /**\n     * Removes all alternating backgrounds\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        let nbRows = this.tf.getRowsNb(true);\n        for (let i = 0; i < nbRows; i++) {\n            this.removeRowBg(i);\n        }\n\n        // Unsubscribe to events\n        this.emitter.off(['row-processed', 'row-paged'],\n            (tf, rowIndex, arrIndex, isValid) =>\n                this.processRow(rowIndex, arrIndex, isValid));\n        this.emitter.off(['column-sorted'], () => this.processAll());\n\n        this.initialized = false;\n    }\n\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {addClass, removeClass} from '../dom';\n\n/**\n * Rows with alternating background color for improved readability\n */\nexport class AlternateRows extends Feature {\n\n    /**\n     * Creates an instance of AlternateRows.\n     *\n     * @param {Object} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'alternateRows');\n\n        let config = this.config;\n        /**\n         * Css class for even rows (default: 'even')\n         * @type {String}\n         */\n        this.evenCss = config.even_row_css_class || 'even';\n\n        /**\n         * Css class for odd rows (default: 'odd')\n         * @type {String}\n         */\n        this.oddCss = config.odd_row_css_class || 'odd';\n    }\n\n    /**\n     * Sets alternating rows color\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        this.processAll();\n\n        // Subscribe to events\n        this.emitter.on(['row-processed', 'row-paged'],\n            (tf, rowIndex, arrIndex, isValid) =>\n                this.processRow(rowIndex, arrIndex, isValid));\n        this.emitter.on(['column-sorted'], () => this.processAll());\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Apply background to all valid rows\n     */\n    processAll() {\n        if (!this.isEnabled()) {\n            return;\n        }\n        let tf = this.tf;\n        let validRowsIndex = tf.getValidRows(true);\n        let indexLen = validRowsIndex.length;\n        let idx = 0;\n\n        //alternates bg color\n        for (let j = 0; j < indexLen; j++) {\n            let rowIdx = validRowsIndex[j];\n            this.setRowBg(rowIdx, idx);\n            idx++;\n        }\n    }\n\n    /**\n     * Set/remove row background based on row validation\n     * @param  {Number}  rowIdx  Row index\n     * @param  {Number}  arrIdx  Array index\n     * @param  {Boolean} isValid Valid row flag\n     */\n    processRow(rowIdx, arrIdx, isValid) {\n        if (isValid) {\n            this.setRowBg(rowIdx, arrIdx);\n        } else {\n            this.removeRowBg(rowIdx);\n        }\n    }\n\n    /**\n     * Sets row background color\n     * @param {Number} rowIdx Row index\n     * @param {Number} idx    Valid rows collection index needed to calculate bg\n     * color\n     * @private\n     */\n    setRowBg(rowIdx, idx) {\n        if (!this.isEnabled() || isNaN(rowIdx)) {\n            return;\n        }\n        let rows = this.tf.tbl.rows;\n        let i = isNaN(idx) ? rowIdx : idx;\n        this.removeRowBg(rowIdx);\n\n        addClass(rows[rowIdx], (i % 2) ? this.evenCss : this.oddCss);\n    }\n\n    /**\n     * Removes row background color\n     * @param  {Number} idx Row index\n     * @private\n     */\n    removeRowBg(idx) {\n        if (isNaN(idx)) {\n            return;\n        }\n        let rows = this.tf.tbl.rows;\n        removeClass(rows[idx], this.oddCss);\n        removeClass(rows[idx], this.evenCss);\n    }\n\n    /**\n     * Removes all alternating backgrounds\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        let nbRows = this.tf.getRowsNb(true);\n        for (let i = 0; i < nbRows; i++) {\n            this.removeRowBg(i);\n        }\n\n        // Unsubscribe to events\n        this.emitter.off(['row-processed', 'row-paged'],\n            (tf, rowIndex, arrIndex, isValid) =>\n                this.processRow(rowIndex, arrIndex, isValid));\n        this.emitter.off(['column-sorted'], () => this.processAll());\n\n        this.initialized = false;\n    }\n\n}\n"
   },
   {
     "__docId__": 245,
@@ -5491,8 +5491,8 @@
     "memberof": "src/modules/alternateRows.js~AlternateRows",
     "longname": "src/modules/alternateRows.js~AlternateRows#initialized",
     "access": null,
-    "description": "",
-    "lineNumber": 50,
+    "description": null,
+    "lineNumber": 48,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -5515,7 +5515,7 @@
     "longname": "src/modules/alternateRows.js~AlternateRows#processAll",
     "access": null,
     "description": "Apply background to all valid rows",
-    "lineNumber": 56,
+    "lineNumber": 54,
     "params": [],
     "generator": false
   },
@@ -5529,7 +5529,7 @@
     "longname": "src/modules/alternateRows.js~AlternateRows#processRow",
     "access": null,
     "description": "Set/remove row background based on row validation",
-    "lineNumber": 79,
+    "lineNumber": 77,
     "params": [
       {
         "nullable": null,
@@ -5574,7 +5574,7 @@
     "longname": "src/modules/alternateRows.js~AlternateRows#setRowBg",
     "access": "private",
     "description": "Sets row background color",
-    "lineNumber": 94,
+    "lineNumber": 92,
     "params": [
       {
         "nullable": null,
@@ -5609,7 +5609,7 @@
     "longname": "src/modules/alternateRows.js~AlternateRows#removeRowBg",
     "access": "private",
     "description": "Removes row background color",
-    "lineNumber": 110,
+    "lineNumber": 108,
     "params": [
       {
         "nullable": null,
@@ -5634,7 +5634,7 @@
     "longname": "src/modules/alternateRows.js~AlternateRows#destroy",
     "access": null,
     "description": "Removes all alternating backgrounds",
-    "lineNumber": 122,
+    "lineNumber": 120,
     "params": [],
     "generator": false
   },
@@ -5648,7 +5648,7 @@
     "longname": "src/modules/alternateRows.js~AlternateRows#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 137,
+    "lineNumber": 135,
     "undocument": true,
     "type": {
       "types": [
