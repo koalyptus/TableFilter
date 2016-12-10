@@ -1,5 +1,6 @@
 [![Build Status](https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master)](https://travis-ci.org/koalyptus/TableFilter)
 [![Document](http://koalyptus.github.io/TableFilter/docs/badge.svg)](https://koalyptus.github.io/TableFilter/docs/source)
+[![codecov](https://codecov.io/gh/koalyptus/TableFilter/branch/master/graph/badge.svg)](https://codecov.io/gh/koalyptus/TableFilter)
 
 # TableFilter
 
@@ -12,7 +13,7 @@ users to filter and limit the data displayed within a long table. By default, th
 ## Features
 * Convert a regular HTML table into an advanced grid component providing:
     * Advanced columns filtering model
-    * Sorting and pagination facilities
+    * Sorting and pagination capabilities
     * Complete selection model ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
     * Extended keyboard navigation ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
     * Inline cell or row editing ([ezEditTable](http://codecanyon.net/item/ezedittable-enhance-html-tables/2425123?ref=koalyptus) extension)
@@ -26,7 +27,7 @@ solution
 ## Getting started
 * Clone the repo using Git:
 ```shell
-git clone --bare https://github.com/koalyptus/TableFilter.git
+git clone https://github.com/koalyptus/TableFilter.git
 ```
 
 * You can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
@@ -76,46 +77,52 @@ Start by installing any dependencies.
 ```shell
 npm install
 ```
-Use the Grunt ``dev`` task to launch a build / watch cycle and start the local
-sever on port ``8080``:
+Use 
+```shell
+npm run dev
+``` 
+command to launch a build / watch cycle and start the local
+sever on port ``8080``.
+
+Use 
+```shell
+npm run build
+``` 
+command to generate a production build.
+
+The 
+```shell
+npm run build-all
+``` 
+command will create a production build, run the tests and finally generate 
+the demos:
+
+To run all the tests and generate the coverage report:
 
 ```shell
-grunt dev
+npm test
 ```
 
-Use the ``build`` task to generate a production build:
-
-```shell
-grunt build
-```
-
-The ``default`` Grunt task will create a production build, run the tests and finally generate the demos:
-
-```shell
-grunt
-```
-
-To run all the tests:
-
-```shell
-grunt test
-```
-
-and to run specific test(s):
+or to run specific test(s):
 
 ```shell
 grunt test-only:test.html
 grunt test-only:test.html,test-sort.html
 ```
 
+to view the coverage report(s), open the `index.html` under the
+`report/coverage` folder or
+[online](https://codecov.io/gh/koalyptus/TableFilter).
+
 ## Demos
-Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) or generate the demos locally:
+Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) 
+or generate the demos locally:
 ```shell
-grunt build-demos
+npm run build-demos
 ```
 then run the local webserver:
 ```shell
-grunt server
+npm start
 ```
 then pick a demo from:
 ```shell
@@ -132,7 +139,7 @@ options you are using are still supported: [Obsolete](https://github.com/koalypt
 
 Run this task to generate the documentation in the ``docs/docs`` directory:
 ```shell
-grunt esdoc
+npm run esdoc
 ```
 
 ## Support

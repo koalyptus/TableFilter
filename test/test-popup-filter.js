@@ -16,6 +16,11 @@ test('Pop-up filter component', function() {
     notEqual(popupFilter, null, 'PopupFilter instanciated');
     deepEqual(popupFilter.fltElms instanceof Array,
         true, 'Type of fltElms property');
+    deepEqual(
+        popupFilter.adjustToContainer,
+        true,
+        'Popup filter width adjusts to container'
+    );
     deepEqual(tf.headersRow, 1, 'Headers row index');
     // issue 99: getHeadersText for pick-list filter types
     deepEqual(
@@ -70,6 +75,106 @@ test('Pop-up filter state after clearing', function(){
         true, 'Icon state');
     deepEqual(fltIcn3.src.indexOf('icn_filterActive') === -1,
         true, 'Icon state');
+});
+
+test('Can open pop-up filter', function(){
+    // act
+    popupFilter.open(1);
+
+    // assert
+    deepEqual(popupFilter.fltElms[1].style.display, 'block',
+        'Popup filter is open');
+});
+
+test('Can close pop-up filter', function(){
+    // act
+    popupFilter.close(1);
+
+    // assert
+    deepEqual(popupFilter.fltElms[1].style.display, 'none',
+        'Popup filter is open');
+});
+
+test('Can toggle pop-up filter (initially closed)', function(){
+    // setup
+    popupFilter.close(2);
+
+    // act
+    popupFilter.toggle(2);
+
+    // assert
+    deepEqual(popupFilter.fltElms[2].style.display, 'block',
+        'Popup filter is toggled');
+});
+
+test('Can toggle pop-up filter (initially opened)', function(){
+    // setup
+    popupFilter.open(2);
+
+    // act
+    popupFilter.toggle(2);
+
+    // assert
+    deepEqual(popupFilter.fltElms[2].style.display, 'none',
+        'Popup filter is toggled');
+});
+
+test('Multiple selection pop-up filter remains open upon filtering', function(){
+    // setup
+    popupFilter.open(2);
+
+    // act
+    tf.setFilterValue(2, ['1412', '982']);
+    tf.filter();
+
+    // assert
+    deepEqual(
+        popupFilter.isOpen(2),
+        true,
+        'Multiple selection pop-up filter still open after filtering'
+    );
+});
+
+test('Pop-up filter closes upon filtering', function(){
+    // setup
+    popupFilter.open(1);
+
+    // act
+    tf.setFilterValue(1, 'Adelaide');
+    tf.filter();
+
+    // assert
+    deepEqual(popupFilter.isOpen(1), false,
+        'Pop-up filter closed after filtering'
+    );
+});
+
+test('Pop-up filter auto-closes when user clicks away', function(){
+    // setup
+    popupFilter.open(0);
+
+    // act
+    var evObj = document.createEvent('HTMLEvents');
+    evObj.initEvent('mouseup', true, true);
+    tf.tbl.rows[4].cells[2].dispatchEvent(evObj);
+
+    // assert
+    deepEqual(popupFilter.isOpen(0), false,
+        'Pop-up filter closed after user clicks away'
+    );
+});
+
+test('Can destroy and reset', function(){
+    // setup
+    popupFilter.destroy();
+
+    // act
+    popupFilter.reset();
+
+    // assert
+    deepEqual(popupFilter.fltElms.length, 5, 'Filters are generated');
+    deepEqual(popupFilter.fltIcons.length, 4, 'Icons are generated');
+    deepEqual(popupFilter.fltSpans.length, 4, 'Icon containers are generated');
 });
 
 test('TableFilter removed', function() {

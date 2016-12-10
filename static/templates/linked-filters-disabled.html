@@ -29,21 +29,21 @@ var filtersConfig = {
     disable_excluded_options: true,
     col_1: 'multiple',
     col_2: 'checklist',
+    col_types: [
+        'number', 'string', 'string',
+        'formatted-number', 'none', 'string'
+    ],
     col_widths: [
         '60px', '160px', '160px',
         '85px', '70px', '270px'
     ],
     btn_reset: true,
-    display_all_text: '< Clear >',
+    clear_filter_text: '< Clear >',
     alternate_rows: true,
     rows_counter: true,
     enable_default_theme: true,
     extensions:[{
-        name: 'sort',
-        types: [
-            'number', 'string', 'string',
-            'US', 'none', 'string'
-        ]
+        name: 'sort'
     }]
 };
 

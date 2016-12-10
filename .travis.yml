@@ -1,10 +1,13 @@
 language: node_js
 node_js:
-- '4.4.5'
+- '6.3.0'
 before_script:
 - npm install grunt-cli -g
+- npm install codecov -g
 script:
-- grunt test deploy
+- npm test
+- npm run codecov
+- npm run deploy
 branches:
   only:
   - master

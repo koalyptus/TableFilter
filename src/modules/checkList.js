@@ -384,7 +384,8 @@ export class CheckList extends Feature {
         let tf = this.tf;
         let chkCt = 1;
         let fltId = tf.fltIds[colIndex];
-        let li0 = createCheckItem(`${fltId}_0`, '', tf.displayAllText);
+        let li0 = createCheckItem(`${fltId}_0`, '',
+            tf.getClearFilterText(colIndex));
         li0.className = this.itemCssClass;
         ul.appendChild(li0);
 
