@@ -158,6 +158,8 @@ export default class AdapterSortableTable extends Feature {
         let sortColAtStart = adpt.sortColAtStart;
         if (sortColAtStart) {
             this.stt.sort(sortColAtStart[0], sortColAtStart[1]);
+            this.emitter.emit('column-sorted', this.tf, sortColAtStart[0],
+                sortColAtStart[1]);
         }
 
         if (this.onSortLoaded) {
