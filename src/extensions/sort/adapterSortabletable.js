@@ -154,14 +154,6 @@ export default class AdapterSortableTable extends Feature {
         this.overrideSortableTable();
         this.setSortTypes();
 
-        // Column sort at start
-        let sortColAtStart = adpt.sortColAtStart;
-        if (sortColAtStart) {
-            this.stt.sort(sortColAtStart[0], sortColAtStart[1]);
-            this.emitter.emit('column-sorted', this.tf, sortColAtStart[0],
-                sortColAtStart[1]);
-        }
-
         if (this.onSortLoaded) {
             this.onSortLoaded.call(null, tf, this);
         }
@@ -198,6 +190,12 @@ export default class AdapterSortableTable extends Feature {
             adpt.emitter.emit('column-sorted', tf, adpt.stt.sortColumn,
                 adpt.stt.descending);
         };
+
+        // Column sort at start
+        let sortColAtStart = adpt.sortColAtStart;
+        if (sortColAtStart) {
+            this.stt.sort(sortColAtStart[0], sortColAtStart[1]);
+        }
 
         this.emitter.on(['sort'],
             (tf, colIdx, desc) => this.sortByColumnIndex(colIdx, desc));

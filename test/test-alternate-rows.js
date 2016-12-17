@@ -144,7 +144,7 @@ test('Cannot removeRowBg if row index is NaN', function() {
 
     // assert
     deepEqual(tbl.querySelectorAll('tr.odd').length, 3, 'Expected odd bgs');
-    deepEqual(tbl.querySelectorAll('tr.even').length, 3, 'Expected even bg');
+    deepEqual(tbl.querySelectorAll('tr.even').length, 3, 'Expected even bgs');
 });
 
 test('Cannot destroy if not initialised', function() {
@@ -188,9 +188,9 @@ test('Grid layout: initialising alternating rows', function() {
     altRows = tf.feature('alternateRows');
 
     deepEqual(
-        tbl.querySelectorAll('tr.odd').length, 4, 'Expected bg for odd rows');
+      tbl.querySelectorAll('tr.odd').length, 4, 'Expected bg for odd rows');
     deepEqual(
-        tbl.querySelectorAll('tr.even').length, 3, 'Expected bg for even rows');
+     tbl.querySelectorAll('tr.even').length, 3, 'Expected bg for even rows');
 });
 
 test('Grid layout: filter column', function() {
@@ -226,8 +226,41 @@ test('Grid layout: remove alternating rows', function() {
     deepEqual(tbl.querySelectorAll('tr.even').length, 0, 'Even bg removed');
 });
 
-module('Tear-down');
-test('can destroy TableFilter DOM elements', function() {
+// Issue 365: alternating rows with column sorted at start
+test('Sort: alternating rows with column sorted at start', function() {
     tf.destroy();
-    deepEqual(tf.isInitialized(), false, 'Filters removed');
+    tf = null;
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        alternate_rows: true,
+        extensions:[{
+            name: 'sort',
+            sort_col_at_start: [2, true],
+            on_sort_loaded: checkAlternateRows
+        }]
+    });
+    tf.init();
+    altRows = tf.feature('alternateRows');
+
+    deepEqual(typeof altRows, 'object', 'AlternateRows instanciated');
+    deepEqual(altRows.evenCss, 'even', 'Expected even css class');
+    deepEqual(altRows.oddCss, 'odd', 'Expected odd css class');
+
+    function checkAlternateRows(tf) {
+        tbl = tf.tbl;
+        altRows = tf.feature('alternateRows');
+
+        test('Alternate rows with sort column at start option', function() {
+            deepEqual(
+                tbl.rows[2].classList.contains('odd'),
+                true,
+                'Expected bg for rows[2]'
+            );
+            deepEqual(
+                tbl.rows[5].classList.contains('even'),
+                true,
+                'Expected bg for rows[5]'
+            );
+        });
+    }
 });
