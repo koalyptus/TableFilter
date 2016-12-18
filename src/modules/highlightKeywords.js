@@ -1,5 +1,6 @@
 import {createText, createElm, getText} from '../dom';
 import {isArray} from '../types';
+import {rgxEsc} from '../string';
 
 /**
  * Highlight matched keywords upon filtering
@@ -43,11 +44,31 @@ export class HighlightKeyword {
             ['before-filtering', 'destroy'],
             () => this.unhighlightAll()
         );
+        // this.emitter.on(
+        //     ['highlight-keyword'],
+        //     (tf, cell, term) =>
+        //         this.highlight(cell, term, this.highlightCssClass)
+        // );
         this.emitter.on(
             ['highlight-keyword'],
-            (tf, cell, term) =>
-                this.highlight(cell, term, this.highlightCssClass)
+            (tf, cell, term) => this._processKeyword(cell, term)
         );
+    }
+
+    _processKeyword(cell, term) {
+        let tf = this.tf;
+        let reLk = new RegExp(rgxEsc(tf.lkOperator));
+        let reEq = new RegExp(tf.eqOperator);
+        let reSt = new RegExp(tf.stOperator);
+        let reEn = new RegExp(tf.enOperator);
+
+        term = term
+            .replace(reLk, '')
+            .replace(reEq, '')
+            .replace(reSt, '')
+            .replace(reEn, '');
+
+        this.highlight(cell, term, this.highlightCssClass);
     }
 
     /**

@@ -1753,23 +1753,23 @@ export class TableFilter {
             re_re = new RegExp(rgxEsc(this.rgxOperator));
 
         //keyword highlighting
-        function highlight(str, ok, cell) {
-            /*jshint validthis:true */
-            if (this.highlightKeywords && ok) {
-                str = str.replace(re_lk, '');
-                str = str.replace(re_eq, '');
-                str = str.replace(re_st, '');
-                str = str.replace(re_en, '');
-                let w = str;
-                if (re_le.test(str) || re_ge.test(str) || re_l.test(str) ||
-                    re_g.test(str) || re_d.test(str)) {
-                    w = getText(cell);
-                }
-                if (w !== '') {
-                    this.emitter.emit('highlight-keyword', this, cell, w);
-                }
-            }
-        }
+        // function highlight(str, ok, cell) {
+        //     /*jshint validthis:true */
+        //     if (this.highlightKeywords && ok) {
+        //         str = str.replace(re_lk, '');
+        //         str = str.replace(re_eq, '');
+        //         str = str.replace(re_st, '');
+        //         str = str.replace(re_en, '');
+        //         let w = str;
+        //         if (re_le.test(str) || re_ge.test(str) || re_l.test(str) ||
+        //             re_g.test(str) || re_d.test(str)) {
+        //             w = getText(cell);
+        //         }
+        //         if (w !== '') {
+        //             this.emitter.emit('highlight-keyword', this, cell, w);
+        //         }
+        //     }
+        // }
 
         //looks for search argument in current row
         function hasArg(sA, cellData, colIdx) {
@@ -2039,7 +2039,11 @@ export class TableFilter {
                     for (let w = 0, len = s.length; w < len; w++) {
                         cS = trim(s[w]);
                         occur = hasArg.call(this, cS, cellData, j);
-                        highlight.call(this, cS, occur, cells[j]);
+                        if (occur) {
+                            this.emitter.emit('highlight-keyword', this,
+                                cells[j], cS);
+                        }
+                        // highlight.call(this, cS, occur, cells[j]);
                         if ((hasMultiOrSA && occur) ||
                             (hasMultiAndSA && !occur)) {
                             break;
@@ -2054,7 +2058,11 @@ export class TableFilter {
                 //single search parameter
                 else {
                     occurence[j] = hasArg.call(this, trim(sA), cellData, j);
-                    highlight.call(this, sA, occurence[j], cells[j]);
+                    if (occurence[j]) {
+                        this.emitter.emit('highlight-keyword', this, cells[j],
+                            sA);
+                    }
+                    // highlight.call(this, sA, occurence[j], cells[j]);
                 }//else single param
 
                 if (!occurence[j]) {
