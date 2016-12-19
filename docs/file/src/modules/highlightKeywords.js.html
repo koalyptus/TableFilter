@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/highlightKeywords.js | tablefilter v0.4.22 API Document</title>
+  <title data-ice="title">src/modules/highlightKeywords.js | tablefilter v0.4.23 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -121,6 +121,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/highlightKeywords.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {createText, createElm, getText} from &apos;../dom&apos;;
 import {isArray} from &apos;../types&apos;;
+import {rgxEsc} from &apos;../string&apos;;
 
 /**
  * Highlight matched keywords upon filtering
@@ -166,8 +167,7 @@ export class HighlightKeyword {
         );
         this.emitter.on(
             [&apos;highlight-keyword&apos;],
-            (tf, cell, term) =&gt;
-                this.highlight(cell, term, this.highlightCssClass)
+            (tf, cell, term) =&gt; this._processTerm(cell, term)
         );
     }
 
@@ -251,9 +251,7 @@ export class HighlightKeyword {
         });
     }
 
-    /**
-     * Remove feature
-     */
+    /**  Remove feature */
     destroy() {
         this.emitter.off(
             [&apos;before-filtering&apos;, &apos;destroy&apos;],
@@ -261,9 +259,43 @@ export class HighlightKeyword {
         );
         this.emitter.off(
             [&apos;highlight-keyword&apos;],
-            (tf, cell, term) =&gt;
-                this.highlight(cell, term, this.highlightCssClass)
+            (tf, cell, term) =&gt; this._processTerm(cell, term)
         );
+    }
+
+    /**
+     * Ensure filtering operators are handled before highlighting any match
+     * @param {any} Table cell to look searched term into
+     * @param {any} Searched termIdx
+     */
+    _processTerm(cell, term) {
+        let tf = this.tf;
+        let reLk = new RegExp(rgxEsc(tf.lkOperator));
+        let reEq = new RegExp(tf.eqOperator);
+        let reSt = new RegExp(tf.stOperator);
+        let reEn = new RegExp(tf.enOperator);
+        let reLe = new RegExp(tf.leOperator);
+        let reGe = new RegExp(tf.geOperator);
+        let reL = new RegExp(tf.lwOperator);
+        let reG = new RegExp(tf.grOperator);
+        let reD = new RegExp(tf.dfOperator);
+
+        term = term
+            .replace(reLk, &apos;&apos;)
+            .replace(reEq, &apos;&apos;)
+            .replace(reSt, &apos;&apos;)
+            .replace(reEn, &apos;&apos;);
+
+        if (reLe.test(term) || reGe.test(term) || reL.test(term) ||
+            reG.test(term) || reD.test(term)) {
+            term = getText(cell);
+        }
+
+        if (term === &apos;&apos;) {
+            return;
+        }
+
+        this.highlight(cell, term, this.highlightCssClass);
     }
 }
 </code></pre>
