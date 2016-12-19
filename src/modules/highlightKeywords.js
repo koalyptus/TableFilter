@@ -44,31 +44,10 @@ export class HighlightKeyword {
             ['before-filtering', 'destroy'],
             () => this.unhighlightAll()
         );
-        // this.emitter.on(
-        //     ['highlight-keyword'],
-        //     (tf, cell, term) =>
-        //         this.highlight(cell, term, this.highlightCssClass)
-        // );
         this.emitter.on(
             ['highlight-keyword'],
-            (tf, cell, term) => this._processKeyword(cell, term)
+            (tf, cell, term) => this._processTerm(cell, term)
         );
-    }
-
-    _processKeyword(cell, term) {
-        let tf = this.tf;
-        let reLk = new RegExp(rgxEsc(tf.lkOperator));
-        let reEq = new RegExp(tf.eqOperator);
-        let reSt = new RegExp(tf.stOperator);
-        let reEn = new RegExp(tf.enOperator);
-
-        term = term
-            .replace(reLk, '')
-            .replace(reEq, '')
-            .replace(reSt, '')
-            .replace(reEn, '');
-
-        this.highlight(cell, term, this.highlightCssClass);
     }
 
     /**
@@ -151,9 +130,7 @@ export class HighlightKeyword {
         });
     }
 
-    /**
-     * Remove feature
-     */
+    /**  Remove feature */
     destroy() {
         this.emitter.off(
             ['before-filtering', 'destroy'],
@@ -161,8 +138,42 @@ export class HighlightKeyword {
         );
         this.emitter.off(
             ['highlight-keyword'],
-            (tf, cell, term) =>
-                this.highlight(cell, term, this.highlightCssClass)
+            (tf, cell, term) => this._processTerm(cell, term)
         );
+    }
+
+    /**
+     * Ensure filtering operators are handled before highlighting any match
+     * @param {any} Table cell to look searched term into
+     * @param {any} Searched termIdx
+     */
+    _processTerm(cell, term) {
+        let tf = this.tf;
+        let reLk = new RegExp(rgxEsc(tf.lkOperator));
+        let reEq = new RegExp(tf.eqOperator);
+        let reSt = new RegExp(tf.stOperator);
+        let reEn = new RegExp(tf.enOperator);
+        let reLe = new RegExp(tf.leOperator);
+        let reGe = new RegExp(tf.geOperator);
+        let reL = new RegExp(tf.lwOperator);
+        let reG = new RegExp(tf.grOperator);
+        let reD = new RegExp(tf.dfOperator);
+
+        term = term
+            .replace(reLk, '')
+            .replace(reEq, '')
+            .replace(reSt, '')
+            .replace(reEn, '');
+
+        if (reLe.test(term) || reGe.test(term) || reL.test(term) ||
+            reG.test(term) || reD.test(term)) {
+            term = getText(cell);
+        }
+
+        if (term === '') {
+            return;
+        }
+
+        this.highlight(cell, term, this.highlightCssClass);
     }
 }
