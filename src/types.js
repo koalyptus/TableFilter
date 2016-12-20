@@ -5,6 +5,8 @@
 
 const UNDEFINED = void 0;
 
+export const EMPTY_FN = function(){};
+
 /**
  * Check passed argument is an object
  * @param  {Object}  obj
