@@ -352,7 +352,8 @@ export class TableFilter {
          * Callback fired after filtering process is completed
          * @type {Function}
          */
-        this.onAfterFilter = isFn(f.on_after_filter) ? f.on_after_filter : null;
+        this.onAfterFilter = isFn(f.on_after_filter) ?
+            f.on_after_filter : EMPTY_FN;
 
         /**
          * Enable/disable case sensitivity filtering
@@ -436,7 +437,7 @@ export class TableFilter {
          * @type {Function}
          */
         this.onFiltersLoaded = isFn(f.on_filters_loaded) ?
-            f.on_filters_loaded : null;
+            f.on_filters_loaded : EMPTY_FN;
 
         /**
          * Enable/disable single filter filtering all columns
@@ -449,7 +450,7 @@ export class TableFilter {
          * @type {Function}
          */
         this.onRowValidated = isFn(f.on_row_validated) ?
-            f.on_row_validated : null;
+            f.on_row_validated : EMPTY_FN;
 
         /**
          * List of columns implementing custom filtering
@@ -463,7 +464,7 @@ export class TableFilter {
          * @type {Function}
          */
         this.customCellData = isFn(f.custom_cell_data) ?
-            f.custom_cell_data : null;
+            f.custom_cell_data : EMPTY_FN;
 
         /**
          * Global watermark text for input filter type or watermark for each
@@ -516,14 +517,14 @@ export class TableFilter {
          * @type {Function}
          */
         this.onBeforeActiveColumn = isFn(f.on_before_active_column) ?
-            f.on_before_active_column : null;
+            f.on_before_active_column : EMPTY_FN;
 
         /**
          * Callback fired after a column is marked as filtered
          * @type {Function}
          */
         this.onAfterActiveColumn = isFn(f.on_after_active_column) ?
-            f.on_after_active_column : null;
+            f.on_after_active_column : EMPTY_FN;
 
         /*** select filter's customisation and behaviours ***/
         /**
@@ -775,13 +776,14 @@ export class TableFilter {
          * @type {Function}
          */
         this.onBeforeReset = isFn(f.on_before_reset) ?
-            f.on_before_reset : null;
+            f.on_before_reset : EMPTY_FN;
 
         /**
          * Callback fired after filters are cleared
          * @type {Function}
          */
-        this.onAfterReset = isFn(f.on_after_reset) ? f.on_after_reset : null;
+        this.onAfterReset = isFn(f.on_after_reset) ?
+            f.on_after_reset : EMPTY_FN;
 
         /**
          * Enable paging component
@@ -1177,14 +1179,11 @@ export class TableFilter {
             this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
 
-        if (this.onFiltersLoaded) {
-            this.onFiltersLoaded.call(null, this);
-        }
+        this.onFiltersLoaded(this);
+
         this.emitter.emit('initialized', this);
     }
 
@@ -1786,7 +1785,7 @@ export class TableFilter {
                     // TODO: improve clarity/readability of this block
                     for (let w = 0, len = s.length; w < len; w++) {
                         cS = trim(s[w]);
-                        occur = this._matchTerm(cS, cellData, j);
+                        occur = this._testTerm(cS, cellData, j);
 
                         if (occur) {
                             this.emitter.emit('highlight-keyword', this,
@@ -1805,7 +1804,7 @@ export class TableFilter {
                 }
                 //single search parameter
                 else {
-                    occurence[j] = this._matchTerm(trim(sA), cellData, j);
+                    occurence[j] = this._testTerm(trim(sA), cellData, j);
                     if (occurence[j]) {
                         this.emitter.emit('highlight-keyword', this, cells[j],
                             sA);
@@ -1828,10 +1827,7 @@ export class TableFilter {
 
             this.validateRow(k, isRowValid);
             if (!isRowValid) {
-                // this.validateRow(k, false);
                 hiddenRows++;
-            // } else {
-            //     this.validateRow(k, true);
             }
 
             this.emitter.emit('row-processed', this, k,
@@ -1841,14 +1837,19 @@ export class TableFilter {
         this.nbHiddenRows = hiddenRows;
 
         //fire onafterfilter callback
-        if (this.onAfterFilter) {
-            this.onAfterFilter.call(null, this);
-        }
+        this.onAfterFilter(this);
 
         this.emitter.emit('after-filtering', this, searchArgs);
     }
 
-    _matchTerm(term, cellData, colIdx) {
+    /**
+     * Test for a match of search term in cell data
+     * @param {String} term      Search term
+     * @param {String} cellData  Cell data
+     * @param {Number} colIdx    Column index
+     * @returns {Boolean}
+     */
+    _testTerm(term, cellData, colIdx) {
         let numData;
         let decimal = this.decimalSeparator;
         let reLe = new RegExp(this.leOperator),
@@ -2077,6 +2078,7 @@ export class TableFilter {
             }
 
         }//else
+
         return occurence;
     }
 
@@ -2269,10 +2271,9 @@ export class TableFilter {
      */
     getCellData(cell) {
         let idx = cell.cellIndex;
-        //Check for customCellData callback
-        if (this.customCellData &&
-            this.customCellDataCols.indexOf(idx) !== -1) {
-            return this.customCellData.call(null, this, cell, idx);
+        //Fire customCellData callback
+        if (this.customCellDataCols.indexOf(idx) !== -1) {
+            return this.customCellData(this, cell, idx);
         } else {
             return getText(cell);
         }
@@ -2422,9 +2423,7 @@ export class TableFilter {
                 this.validRowsIndex.push(rowIndex);
             }
 
-            if (this.onRowValidated) {
-                this.onRowValidated.call(null, this, rowIndex);
-            }
+            this.onRowValidated(this, rowIndex);
 
             this.emitter.emit('row-validated', this, rowIndex);
         }
@@ -2548,19 +2547,15 @@ export class TableFilter {
         }
 
         this.emitter.emit('before-clearing-filters', this);
+        this.onBeforeReset(this, this.getFiltersValue());
 
-        if (this.onBeforeReset) {
-            this.onBeforeReset.call(null, this, this.getFiltersValue());
-        }
         for (let i = 0, len = this.fltIds.length; i < len; i++) {
             this.setFilterValue(i, '');
         }
 
         this.filter();
 
-        if (this.onAfterReset) {
-            this.onAfterReset.call(null, this);
-        }
+        this.onAfterReset(this);
         this.emitter.emit('after-clearing-filters', this);
     }
 
@@ -2582,13 +2577,11 @@ export class TableFilter {
         if (hasClass(header, this.activeColumnsCssClass)) {
             return;
         }
-        if (this.onBeforeActiveColumn) {
-            this.onBeforeActiveColumn.call(null, this, colIndex);
-        }
+        this.onBeforeActiveColumn(this, colIndex);
+
         addClass(header, this.activeColumnsCssClass);
-        if (this.onAfterActiveColumn) {
-            this.onAfterActiveColumn.call(null, this, colIndex);
-        }
+
+        this.onAfterActiveColumn(this, colIndex);
     }
 
     /**
