@@ -1721,9 +1721,7 @@ export class TableFilter {
             return;
         }
         //fire onbefore callback
-        // if (this.onBeforeFilter) {
         this.onBeforeFilter(this);
-        // }
         this.emitter.emit('before-filtering', this);
 
         let row = this.tbl.rows,
