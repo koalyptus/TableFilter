@@ -6,12 +6,18 @@
 const UNDEFINED = void 0;
 
 /**
+ * Return an empty function
+ * @return {Function}
+ */
+export const EMPTY_FN = function() {};
+
+/**
  * Check passed argument is an object
  * @param  {Object}  obj
  * @return {Boolean}
  */
 export const isObj =
-    obj => Object.prototype.toString.call(obj) === '[object Object]';
+    (obj) => Object.prototype.toString.call(obj) === '[object Object]';
 
 /**
  * Check passed argument is a function
@@ -19,7 +25,7 @@ export const isObj =
  * @return {Boolean}
  */
 export const isFn =
-    obj => Object.prototype.toString.call(obj) === '[object Function]';
+    (obj) => Object.prototype.toString.call(obj) === '[object Function]';
 
 /**
  * Check passed argument is an array
@@ -27,7 +33,7 @@ export const isFn =
  * @return {Boolean}
  */
 export const isArray =
-    obj => Object.prototype.toString.call(obj) === '[object Array]';
+    (obj) => Object.prototype.toString.call(obj) === '[object Array]';
 
 /**
  * Check passed argument is a string
@@ -35,7 +41,7 @@ export const isArray =
  * @returns {Boolean}
  */
 export const isString =
-    obj => Object.prototype.toString.call(obj) === '[object String]';
+    (obj) => Object.prototype.toString.call(obj) === '[object String]';
 
 /**
  * Check passed argument is a number
@@ -43,14 +49,14 @@ export const isString =
  * @returns {Boolean}
  */
 export const isNumber =
-    obj => Object.prototype.toString.call(obj) === '[object Number]';
+    (obj) => Object.prototype.toString.call(obj) === '[object Number]';
 
 /**
  * Check passed argument is undefined
  * @param  {Any}  obj
  * @return {Boolean}
  */
-export const isUndef = obj => obj === UNDEFINED;
+export const isUndef = (obj) => obj === UNDEFINED;
 
 /**
  * Check passed argument is null
@@ -64,4 +70,4 @@ export const isNull = obj => obj === null;
  * @param  {Any}  obj
  * @return {Boolean}
  */
-export const isEmpty = obj => isUndef(obj) || isNull(obj) || obj.length === 0;
+export const isEmpty = (obj) => isUndef(obj) || isNull(obj) || obj.length === 0;
