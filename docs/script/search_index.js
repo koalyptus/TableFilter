@@ -84,6 +84,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/types.js~empty_fn",
+    "function/index.html#static-function-EMPTY_FN",
+    "<span>EMPTY_FN</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "function"
+  ],
+  [
     "tablefilter/src/const.js~enter_key",
     "variable/index.html#static-variable-ENTER_KEY",
     "<span>ENTER_KEY</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",

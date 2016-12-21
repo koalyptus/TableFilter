@@ -1,7 +1,7 @@
 {
   "coverage": "100%",
-  "expectCount": 649,
-  "actualCount": 649,
+  "expectCount": 650,
+  "actualCount": 650,
   "files": {
     "src/const.js": {
       "expectCount": 18,
@@ -51,6 +51,11 @@
     "src/modules/dropdown.js": {
       "expectCount": 13,
       "actualCount": 13,
+      "undocumentLines": []
+    },
+    "src/types.js": {
+      "expectCount": 9,
+      "actualCount": 9,
       "undocumentLines": []
     },
     "src/emitter.js": {
@@ -156,11 +161,6 @@
     "src/sort.js": {
       "expectCount": 3,
       "actualCount": 3,
-      "undocumentLines": []
-    },
-    "src/types.js": {
-      "expectCount": 8,
-      "actualCount": 8,
       "undocumentLines": []
     },
     "src/number.js": {

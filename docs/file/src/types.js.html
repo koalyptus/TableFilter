@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/types.js | tablefilter v0.4.23 API Document</title>
+  <title data-ice="title">src/types.js | tablefilter v0.4.24 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -35,6 +35,7 @@
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/feature.js~Feature.html">Feature</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-EMPTY_FN">EMPTY_FN</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-has">has</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
@@ -127,12 +128,18 @@
 const UNDEFINED = void 0;
 
 /**
+ * Return an empty function
+ * @return {Function}
+ */
+export const EMPTY_FN = function() {};
+
+/**
  * Check passed argument is an object
  * @param  {Object}  obj
  * @return {Boolean}
  */
 export const isObj =
-    obj =&gt; Object.prototype.toString.call(obj) === &apos;[object Object]&apos;;
+    (obj) =&gt; Object.prototype.toString.call(obj) === &apos;[object Object]&apos;;
 
 /**
  * Check passed argument is a function
@@ -140,7 +147,7 @@ export const isObj =
  * @return {Boolean}
  */
 export const isFn =
-    obj =&gt; Object.prototype.toString.call(obj) === &apos;[object Function]&apos;;
+    (obj) =&gt; Object.prototype.toString.call(obj) === &apos;[object Function]&apos;;
 
 /**
  * Check passed argument is an array
@@ -148,7 +155,7 @@ export const isFn =
  * @return {Boolean}
  */
 export const isArray =
-    obj =&gt; Object.prototype.toString.call(obj) === &apos;[object Array]&apos;;
+    (obj) =&gt; Object.prototype.toString.call(obj) === &apos;[object Array]&apos;;
 
 /**
  * Check passed argument is a string
@@ -156,7 +163,7 @@ export const isArray =
  * @returns {Boolean}
  */
 export const isString =
-    obj =&gt; Object.prototype.toString.call(obj) === &apos;[object String]&apos;;
+    (obj) =&gt; Object.prototype.toString.call(obj) === &apos;[object String]&apos;;
 
 /**
  * Check passed argument is a number
@@ -164,14 +171,14 @@ export const isString =
  * @returns {Boolean}
  */
 export const isNumber =
-    obj =&gt; Object.prototype.toString.call(obj) === &apos;[object Number]&apos;;
+    (obj) =&gt; Object.prototype.toString.call(obj) === &apos;[object Number]&apos;;
 
 /**
  * Check passed argument is undefined
  * @param  {Any}  obj
  * @return {Boolean}
  */
-export const isUndef = obj =&gt; obj === UNDEFINED;
+export const isUndef = (obj) =&gt; obj === UNDEFINED;
 
 /**
  * Check passed argument is null
@@ -185,7 +192,7 @@ export const isNull = obj =&gt; obj === null;
  * @param  {Any}  obj
  * @return {Boolean}
  */
-export const isEmpty = obj =&gt; isUndef(obj) || isNull(obj) || obj.length === 0;
+export const isEmpty = (obj) =&gt; isUndef(obj) || isNull(obj) || obj.length === 0;
 </code></pre>
 
 </div>
