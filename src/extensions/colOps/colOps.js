@@ -1,6 +1,6 @@
 import {Feature} from '../../feature';
 import {createText, elm} from '../../dom';
-import {isArray, isFn, isUndef} from '../../types';
+import {isArray, isFn, isUndef, EMPTY_FN} from '../../types';
 
 const EVENTS = [
     'after-filtering',
@@ -27,14 +27,14 @@ export default class ColOps extends Feature {
          * @type {Function}
          */
         this.onBeforeOperation = isFn(opts.on_before_operation) ?
-            opts.on_before_operation : null;
+            opts.on_before_operation : EMPTY_FN;
 
         /**
          * Callback fired after columns operations are completed
          * @type {Function}
          */
         this.onAfterOperation = isFn(opts.on_after_operation) ?
-            opts.on_after_operation : null;
+            opts.on_after_operation : EMPTY_FN;
 
         /**
          * Configuration options
@@ -85,9 +85,7 @@ export default class ColOps extends Feature {
             return;
         }
 
-        if (this.onBeforeOperation) {
-            this.onBeforeOperation.call(null, tf, this);
-        }
+        this.onBeforeOperation(tf, this);
         this.emitter.emit('before-column-operation', tf, this);
 
         let opts = this.opts,
@@ -348,9 +346,7 @@ export default class ColOps extends Feature {
             }//for ucol
         }//if typeof
 
-        if (this.onAfterOperation) {
-            this.onAfterOperation.call(null, tf, this);
-        }
+        this.onAfterOperation(tf, this);
         this.emitter.emit('after-column-operation', tf, this);
     }
 

@@ -3,7 +3,7 @@ import {
     addClass, removeClass, createCheckItem, createElm, elm, removeElm,
     getText
 } from '../../dom';
-import {isFn} from '../../types';
+import {isFn, EMPTY_FN} from '../../types';
 import {addEvt, targetEvt} from '../../event';
 
 /**
@@ -209,59 +209,62 @@ export default class ColsVisibility extends Feature {
          * Callback fired when the extension is initialized
          * @type {Function}
          */
-        this.onLoaded = isFn(f.on_loaded) ? f.on_loaded : null;
+        this.onLoaded = isFn(f.on_loaded) ? f.on_loaded : EMPTY_FN;
 
         /**
          * Callback fired before the columns manager is opened
          * @type {Function}
          */
-        this.onBeforeOpen = isFn(f.on_before_open) ? f.on_before_open : null;
+        this.onBeforeOpen = isFn(f.on_before_open) ?
+            f.on_before_open : EMPTY_FN;
 
         /**
          * Callback fired after the columns manager is opened
          * @type {Function}
          */
-        this.onAfterOpen = isFn(f.on_after_open) ? f.on_after_open : null;
+        this.onAfterOpen = isFn(f.on_after_open) ? f.on_after_open : EMPTY_FN;
 
         /**
          * Callback fired before the columns manager is closed
          * @type {Function}
          */
-        this.onBeforeClose = isFn(f.on_before_close) ? f.on_before_close : null;
+        this.onBeforeClose = isFn(f.on_before_close) ?
+            f.on_before_close : EMPTY_FN;
 
         /**
          * Callback fired after the columns manager is closed
          * @type {Function}
          */
-        this.onAfterClose = isFn(f.on_after_close) ? f.on_after_close : null;
+        this.onAfterClose = isFn(f.on_after_close) ?
+            f.on_after_close : EMPTY_FN;
 
         /**
          * Callback fired before a column is hidden
          * @type {Function}
          */
         this.onBeforeColHidden = isFn(f.on_before_col_hidden) ?
-            f.on_before_col_hidden : null;
+            f.on_before_col_hidden : EMPTY_FN;
 
         /**
          * Callback fired after a column is hidden
          * @type {Function}
          */
         this.onAfterColHidden = isFn(f.on_after_col_hidden) ?
-            f.on_after_col_hidden : null;
+            f.on_after_col_hidden : EMPTY_FN;
 
         /**
          * Callback fired before a column is displayed
          * @type {Function}
          */
         this.onBeforeColDisplayed = isFn(f.on_before_col_displayed) ?
-            f.on_before_col_displayed : null;
+            f.on_before_col_displayed : EMPTY_FN;
 
         /**
          * Callback fired after a column is displayed
          * @type {Function}
          */
         this.onAfterColDisplayed = isFn(f.on_after_col_displayed) ?
-            f.on_after_col_displayed : null;
+            f.on_after_col_displayed : EMPTY_FN;
 
         //Grid layout support
         if (tf.gridLayout) {
@@ -283,26 +286,22 @@ export default class ColsVisibility extends Feature {
      */
     toggle() {
         let contDisplay = this.contEl.style.display;
-        let onBeforeOpen = this.onBeforeOpen;
-        let onBeforeClose = this.onBeforeClose;
-        let onAfterOpen = this.onAfterOpen;
-        let onAfterClose = this.onAfterClose;
 
-        if (onBeforeOpen && contDisplay !== 'inline') {
-            onBeforeOpen.call(null, this);
+        if (contDisplay !== 'inline') {
+            this.onBeforeOpen(this);
         }
-        if (onBeforeClose && contDisplay === 'inline') {
-            onBeforeClose.call(null, this);
+        if (contDisplay === 'inline') {
+            this.onBeforeClose(this);
         }
 
         this.contEl.style.display = contDisplay === 'inline' ?
             'none' : 'inline';
 
-        if (onAfterOpen && contDisplay !== 'inline') {
-            onAfterOpen.call(null, this);
+        if (contDisplay !== 'inline') {
+            this.onAfterOpen(this);
         }
-        if (onAfterClose && contDisplay === 'inline') {
-            onAfterClose.call(null, this);
+        if (contDisplay === 'inline') {
+            this.onAfterClose(this);
         }
     }
 
@@ -407,9 +406,7 @@ export default class ColsVisibility extends Feature {
         this.spanEl = span;
         this.btnEl = this.spanEl.firstChild;
 
-        if (this.onLoaded) {
-            this.onLoaded.call(null, this);
-        }
+        this.onLoaded(this);
     }
 
     /**
@@ -510,11 +507,11 @@ export default class ColsVisibility extends Feature {
         let tf = this.tf;
         let tbl = tf.tbl;
 
-        if (this.onBeforeColHidden && hide) {
-            this.onBeforeColHidden.call(null, this, colIndex);
+        if (hide) {
+            this.onBeforeColHidden(this, colIndex);
         }
-        if (this.onBeforeColDisplayed && !hide) {
-            this.onBeforeColDisplayed.call(null, this, colIndex);
+        if (!hide) {
+            this.onBeforeColDisplayed(this, colIndex);
         }
 
         this._hideCells(tbl, colIndex, hide);
@@ -553,9 +550,8 @@ export default class ColsVisibility extends Feature {
                 headTbl.style.width = headTblW - hiddenWidth + 'px';
                 tbl.style.width = headTbl.style.width;
             }
-            if (this.onAfterColHidden) {
-                this.onAfterColHidden.call(null, this, colIndex);
-            }
+
+            this.onAfterColHidden(this, colIndex);
             this.emitter.emit('column-hidden', tf, this, colIndex,
                 this.hiddenCols);
         }
@@ -574,9 +570,8 @@ export default class ColsVisibility extends Feature {
                     (parseInt(headTbl.style.width, 10) + width) + 'px';
                 tf.tbl.style.width = headTbl.style.width;
             }
-            if (this.onAfterColDisplayed) {
-                this.onAfterColDisplayed.call(null, this, colIndex);
-            }
+
+            this.onAfterColDisplayed(this, colIndex);
             this.emitter.emit('column-shown', tf, this, colIndex,
                 this.hiddenCols);
         }

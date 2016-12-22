@@ -1,6 +1,6 @@
 import {Feature} from '../../feature';
 import {createElm, removeElm, elm} from '../../dom';
-import {isFn, isUndef} from '../../types';
+import {isFn, isUndef, EMPTY_FN} from '../../types';
 import {addEvt} from '../../event';
 
 /**
@@ -148,25 +148,27 @@ export default class FiltersVisibility extends Feature {
          * Callback fired before filters row is shown
          * @type {Function}
          */
-        this.onBeforeShow = isFn(f.on_before_show) ? f.on_before_show : null;
+        this.onBeforeShow = isFn(f.on_before_show) ?
+            f.on_before_show : EMPTY_FN;
 
         /**
          * Callback fired after filters row is shown
          * @type {Function}
          */
-        this.onAfterShow = isFn(f.on_after_show) ? f.on_after_show : null;
+        this.onAfterShow = isFn(f.on_after_show) ? f.on_after_show : EMPTY_FN;
 
         /**
          * Callback fired before filters row is hidden
          * @type {Function}
          */
-        this.onBeforeHide = isFn(f.on_before_hide) ? f.on_before_hide : null;
+        this.onBeforeHide = isFn(f.on_before_hide) ?
+            f.on_before_hide : EMPTY_FN;
 
         /**
          * Callback fired after filters row is hidden
          * @type {Function}
          */
-        this.onAfterHide = isFn(f.on_after_hide) ? f.on_after_hide : null;
+        this.onAfterHide = isFn(f.on_after_hide) ? f.on_after_hide : EMPTY_FN;
 
         //Import extension's stylesheet
         tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,
@@ -259,11 +261,11 @@ export default class FiltersVisibility extends Feature {
         let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
         let fltRow = tbl.rows[this.filtersRowIndex];
 
-        if (this.onBeforeShow && visible) {
-            this.onBeforeShow.call(this, this);
+        if (visible) {
+            this.onBeforeShow(this);
         }
-        if (this.onBeforeHide && !visible) {
-            this.onBeforeHide.call(null, this);
+        if (!visible) {
+            this.onBeforeHide(this);
         }
 
         fltRow.style.display = visible ? '' : 'none';
@@ -272,11 +274,11 @@ export default class FiltersVisibility extends Feature {
                 this.collapseBtnHtml : this.expandBtnHtml;
         }
 
-        if (this.onAfterShow && visible) {
-            this.onAfterShow.call(null, this);
+        if (visible) {
+            this.onAfterShow(this);
         }
-        if (this.onAfterHide && !visible) {
-            this.onAfterHide.call(null, this);
+        if (!visible) {
+            this.onAfterHide(this);
         }
 
         this.emitter.emit('filters-toggled', tf, this, visible);
