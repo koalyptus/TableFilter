@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.4.24 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.4.25 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -122,7 +122,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/paging.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {createElm, createOpt, createText, elm, removeElm} from &apos;../dom&apos;;
-import {isArray, isFn, isNull} from &apos;../types&apos;;
+import {isArray, isFn, isNull, EMPTY_FN} from &apos;../types&apos;;
 import {addEvt, keyCode, removeEvt} from &apos;../event&apos;;
 import {INPUT, SELECT, NONE, ENTER_KEY} from &apos;../const&apos;;
 
@@ -333,14 +333,14 @@ export class Paging extends Feature {
          * @type {Function}
          */
         this.onBeforeChangePage = isFn(f.on_before_change_page) ?
-            f.on_before_change_page : null;
+            f.on_before_change_page : EMPTY_FN;
 
         /**
          * Callback fired after the page is changed
          * @type {Function}
          */
         this.onAfterChangePage = isFn(f.on_after_change_page) ?
-            f.on_after_change_page : null;
+            f.on_after_change_page : EMPTY_FN;
 
         /**
          * Label preciding results per page select
@@ -839,9 +839,8 @@ export class Paging extends Feature {
                 this.pagingSlc.options.selectedIndex : this.pagingSlc.value - 1;
         }
         if (index &gt;= 0 &amp;&amp; index &lt;= (this.nbPages - 1)) {
-            if (this.onBeforeChangePage) {
-                this.onBeforeChangePage.call(null, this, (index + 1));
-            }
+            this.onBeforeChangePage(this, (index + 1));
+
             this.currentPageNb = parseInt(index, 10) + 1;
             if (this.pageSelectorType === SELECT) {
                 this.pagingSlc.options[index].selected = true;
@@ -854,9 +853,7 @@ export class Paging extends Feature {
 
             this.groupByPage();
 
-            if (this.onAfterChangePage) {
-                this.onAfterChangePage.call(null, this, (index + 1));
-            }
+            this.onAfterChangePage(this, (index + 1));
         }
 
         this.emitter.emit(&apos;after-page-change&apos;, tf, (index + 1));
