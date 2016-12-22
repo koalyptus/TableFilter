@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
-import {isFn} from '../types';
+import {isFn, EMPTY_FN} from '../types';
 
 /**
  * Rows counter UI component
@@ -72,14 +72,14 @@ export class RowsCounter extends Feature {
          * @type {Function}
          */
         this.onBeforeRefreshCounter = isFn(f.on_before_refresh_counter) ?
-            f.on_before_refresh_counter : null;
+            f.on_before_refresh_counter : EMPTY_FN;
 
         /**
          * Callback fired after the counter is refreshed
          * @type {Function}
          */
         this.onAfterRefreshCounter = isFn(f.on_after_refresh_counter) ?
-            f.on_after_refresh_counter : null;
+            f.on_after_refresh_counter : EMPTY_FN;
     }
 
     /**
@@ -142,9 +142,7 @@ export class RowsCounter extends Feature {
 
         let tf = this.tf;
 
-        if (this.onBeforeRefreshCounter) {
-            this.onBeforeRefreshCounter.call(null, tf, this.label);
-        }
+        this.onBeforeRefreshCounter(tf, this.label);
 
         let totTxt;
         if (!tf.paging) {
@@ -170,9 +168,7 @@ export class RowsCounter extends Feature {
         }
 
         this.label.innerHTML = totTxt;
-        if (this.onAfterRefreshCounter) {
-            this.onAfterRefreshCounter.call(null, tf, this.label, totTxt);
-        }
+        this.onAfterRefreshCounter(tf, this.label, totTxt);
     }
 
     /**

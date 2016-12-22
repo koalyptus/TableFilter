@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import {root} from '../root';
 import {createElm, createText, elm, removeElm} from '../dom';
-import {isFn} from '../types';
+import {isFn, EMPTY_FN} from '../types';
 
 const EVENTS = [
     'after-filtering',
@@ -84,14 +84,14 @@ export class StatusBar extends Feature {
          * @type {Function}
          */
         this.onBeforeShowMsg = isFn(f.on_before_show_msg) ?
-            f.on_before_show_msg : null;
+            f.on_before_show_msg : EMPTY_FN;
 
         /**
          * Callback fired after the message is displayed
          * @type {Function}
          */
         this.onAfterShowMsg = isFn(f.on_after_show_msg) ?
-            f.on_after_show_msg : null;
+            f.on_after_show_msg : EMPTY_FN;
 
         /**
          * Message appearing upon filtering
@@ -242,9 +242,7 @@ export class StatusBar extends Feature {
             return;
         }
 
-        if (this.onBeforeShowMsg) {
-            this.onBeforeShowMsg.call(null, this.tf, t);
-        }
+        this.onBeforeShowMsg(this.tf, t);
 
         let d = t === '' ? this.delay : 1;
         root.setTimeout(() => {
@@ -252,9 +250,8 @@ export class StatusBar extends Feature {
                 return;
             }
             this.msgContainer.innerHTML = t;
-            if (this.onAfterShowMsg) {
-                this.onAfterShowMsg.call(null, this.tf, t);
-            }
+
+            this.onAfterShowMsg(this.tf, t);
         }, d);
     }
 

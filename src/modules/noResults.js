@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import {createElm, elm, removeElm} from '../dom';
-import {isEmpty, isFn} from '../types';
+import {isEmpty, isFn, EMPTY_FN} from '../types';
 import {NONE} from '../const';
 
 /**
@@ -64,28 +64,28 @@ export class NoResults extends Feature {
          * @type {Function}
          */
         this.onBeforeShow = isFn(f.on_before_show_msg) ?
-            f.on_before_show_msg : null;
+            f.on_before_show_msg : EMPTY_FN;
 
         /**
          * Callback fired after the message is displayed
          * @type {Function}
          */
         this.onAfterShow = isFn(f.on_after_show_msg) ?
-            f.on_after_show_msg : null;
+            f.on_after_show_msg : EMPTY_FN;
 
         /**
          * Callback fired before the message is hidden
          * @type {Function}
          */
         this.onBeforeHide = isFn(f.on_before_hide_msg) ?
-            f.on_before_hide_msg : null;
+            f.on_before_hide_msg : EMPTY_FN;
 
         /**
          * Callback fired after the message is hidden
          * @type {Function}
          */
         this.onAfterHide = isFn(f.on_after_hide_msg) ?
-            f.on_after_hide_msg : null;
+            f.on_after_hide_msg : EMPTY_FN;
     }
 
     /**
@@ -141,17 +141,12 @@ export class NoResults extends Feature {
         if (!this.initialized || !this.isEnabled()) {
             return;
         }
-
-        if (this.onBeforeShow) {
-            this.onBeforeShow.call(null, this.tf, this);
-        }
+        this.onBeforeShow(this.tf, this);
 
         this.setWidth();
         this.cont.style.display = 'block';
 
-        if (this.onAfterShow) {
-            this.onAfterShow.call(null, this.tf, this);
-        }
+        this.onAfterShow(this.tf, this);
     }
 
     /**
@@ -161,16 +156,11 @@ export class NoResults extends Feature {
         if (!this.initialized || !this.isEnabled()) {
             return;
         }
-
-        if (this.onBeforeHide) {
-            this.onBeforeHide.call(null, this.tf, this);
-        }
+        this.onBeforeHide(this.tf, this);
 
         this.cont.style.display = NONE;
 
-        if (this.onAfterHide) {
-            this.onAfterHide.call(null, this.tf, this);
-        }
+        this.onAfterHide(this.tf, this);
     }
 
     /**

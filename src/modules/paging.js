@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import {createElm, createOpt, createText, elm, removeElm} from '../dom';
-import {isArray, isFn, isNull} from '../types';
+import {isArray, isFn, isNull, EMPTY_FN} from '../types';
 import {addEvt, keyCode, removeEvt} from '../event';
 import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
 
@@ -211,14 +211,14 @@ export class Paging extends Feature {
          * @type {Function}
          */
         this.onBeforeChangePage = isFn(f.on_before_change_page) ?
-            f.on_before_change_page : null;
+            f.on_before_change_page : EMPTY_FN;
 
         /**
          * Callback fired after the page is changed
          * @type {Function}
          */
         this.onAfterChangePage = isFn(f.on_after_change_page) ?
-            f.on_after_change_page : null;
+            f.on_after_change_page : EMPTY_FN;
 
         /**
          * Label preciding results per page select
@@ -717,9 +717,8 @@ export class Paging extends Feature {
                 this.pagingSlc.options.selectedIndex : this.pagingSlc.value - 1;
         }
         if (index >= 0 && index <= (this.nbPages - 1)) {
-            if (this.onBeforeChangePage) {
-                this.onBeforeChangePage.call(null, this, (index + 1));
-            }
+            this.onBeforeChangePage(this, (index + 1));
+
             this.currentPageNb = parseInt(index, 10) + 1;
             if (this.pageSelectorType === SELECT) {
                 this.pagingSlc.options[index].selected = true;
@@ -732,9 +731,7 @@ export class Paging extends Feature {
 
             this.groupByPage();
 
-            if (this.onAfterChangePage) {
-                this.onAfterChangePage.call(null, this, (index + 1));
-            }
+            this.onAfterChangePage(this, (index + 1));
         }
 
         this.emitter.emit('after-page-change', tf, (index + 1));

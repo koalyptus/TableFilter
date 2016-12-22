@@ -1,5 +1,5 @@
 import {Feature} from '../../feature';
-import {isArray, isFn, isUndef, isObj} from '../../types';
+import {isArray, isFn, isUndef, isObj, EMPTY_FN} from '../../types';
 import {createElm, elm, getText, tag} from '../../dom';
 import {addEvt} from '../../event';
 import {parse as parseNb} from '../../number';
@@ -109,20 +109,21 @@ export default class AdapterSortableTable extends Feature {
          * @type {Function}
          */
         this.onSortLoaded = isFn(opts.on_sort_loaded) ?
-            opts.on_sort_loaded : null;
+            opts.on_sort_loaded : EMPTY_FN;
 
         /**
          * Callback fired before a table column is sorted
          * @type {Function}
          */
         this.onBeforeSort = isFn(opts.on_before_sort) ?
-            opts.on_before_sort : null;
+            opts.on_before_sort : EMPTY_FN;
 
         /**
          * Callback fired after a table column is sorted
          * @type {Function}
          */
-        this.onAfterSort = isFn(opts.on_after_sort) ? opts.on_after_sort : null;
+        this.onAfterSort = isFn(opts.on_after_sort) ?
+            opts.on_after_sort : EMPTY_FN;
 
         /**
          * SortableTable instance
@@ -154,15 +155,11 @@ export default class AdapterSortableTable extends Feature {
         this.overrideSortableTable();
         this.setSortTypes();
 
-        if (this.onSortLoaded) {
-            this.onSortLoaded.call(null, tf, this);
-        }
+        this.onSortLoaded(tf, this);
 
         /*** SortableTable callbacks ***/
         this.stt.onbeforesort = function () {
-            if (adpt.onBeforeSort) {
-                adpt.onBeforeSort.call(null, tf, adpt.stt.sortColumn);
-            }
+            adpt.onBeforeSort(tf, adpt.stt.sortColumn);
 
             /*** sort behaviour for paging ***/
             if (tf.paging) {
@@ -182,11 +179,7 @@ export default class AdapterSortableTable extends Feature {
                 paginator.setPage(paginator.getPage());
             }
 
-            if (adpt.onAfterSort) {
-                adpt.onAfterSort.call(null, tf, adpt.stt.sortColumn,
-                    adpt.stt.descending);
-            }
-
+            adpt.onAfterSort(tf, adpt.stt.sortColumn, adpt.stt.descending);
             adpt.emitter.emit('column-sorted', tf, adpt.stt.sortColumn,
                 adpt.stt.descending);
         };
