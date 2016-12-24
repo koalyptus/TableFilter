@@ -5,7 +5,6 @@ report
 .grunt
 
 npm-debug.log
-*.js.map
 .codio
 .settings
 .vscode
