@@ -1518,7 +1518,6 @@ export class TableFilter {
             return;
         }
 
-        let Mod = this.Mod;
         let emitter = this.emitter;
 
         if (this.isExternalFlt && !this.popupFilters) {
@@ -1545,15 +1544,6 @@ export class TableFilter {
 
         // broadcast destroy event
         emitter.emit('destroy', this);
-
-        // Destroy modules
-        // TODO: subcribe modules to destroy event instead
-        Object.keys(Mod).forEach(function (key) {
-            let feature = Mod[key];
-            if (feature && isFn(feature.destroy)) {
-                feature.destroy();
-            }
-        });
 
         // unsubscribe to events
         if (this.hasVisibleRows) {
@@ -1780,7 +1770,7 @@ export class TableFilter {
                     } else {
                         s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
                     }
-                    // TODO: improve clarity/readability of this block
+                    // isolate search term and check occurence in cell data
                     for (let w = 0, len = s.length; w < len; w++) {
                         cS = trim(s[w]);
                         occur = this._testTerm(cS, cellData, j);
@@ -2671,7 +2661,7 @@ export class TableFilter {
                     this.emitter.emit('build-checklist-filter', this, colIdx,
                         true);
                 } else {
-                    this.emitter.emit('build-select-filter', this,colIdx,
+                    this.emitter.emit('build-select-filter', this, colIdx,
                         true);
                 }
 

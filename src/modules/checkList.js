@@ -186,9 +186,7 @@ export class CheckList extends Feature {
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
     }
 
@@ -567,5 +565,6 @@ export class CheckList extends Feature {
             ['select-checklist-options'],
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
+        this.initialized = false;
     }
 }

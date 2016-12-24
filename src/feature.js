@@ -46,6 +46,9 @@ export class Feature {
          * @type {Boolean}
          */
         this.initialized = false;
+
+        /** Subscribe to destroy event */
+        this.emitter.on(['destroy'], () => this.destroy());
     }
 
     /**

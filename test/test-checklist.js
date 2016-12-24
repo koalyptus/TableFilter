@@ -170,4 +170,9 @@ module('Tear down');
 test('TableFilter removed', function() {
     tf.destroy();
     deepEqual(id(tf.fltIds[3]), null, 'CheckList UL element');
+    deepEqual(
+        tf.feature('checkList').initialized,
+        false,
+        'CheckList not initialised'
+    );
 });
