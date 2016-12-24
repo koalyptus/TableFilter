@@ -99,4 +99,9 @@ test('Can sort options', function() {
 test('TableFilter removed', function() {
     tf.destroy();
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
+    deepEqual(
+        tf.feature('dropdown').initialized,
+        false,
+        'Drop-down not initialised'
+    );
 });

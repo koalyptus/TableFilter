@@ -146,9 +146,7 @@ export class Dropdown extends Feature {
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
     }
 
@@ -422,5 +420,6 @@ export class Dropdown extends Feature {
             ['select-options'],
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
+        this.initialized = false;
     }
 }
