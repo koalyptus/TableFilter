@@ -62,6 +62,22 @@ test('Help UI elements', function() {
     deepEqual(helpBtn.nodeName, 'SPAN', 'Help button');
 });
 
+test('Help container auto-closes when user clicks away', function() {
+    // setup
+    help.toggle();
+
+    // act
+    var evObj = document.createEvent('HTMLEvents');
+    evObj.initEvent('mouseup', true, true);
+    // mouseup fired from a table cell
+    tf.tbl.rows[3].cells[2].dispatchEvent(evObj);
+
+    // assert
+    deepEqual(help.cont.style.display, 'none',
+        'Help container closed after user clicks away'
+    );
+});
+
 module('Destroy and re-init');
 test('Remove UI', function() {
     help.destroy();
