@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/help.js | tablefilter v0.4.26 API Document</title>
+  <title data-ice="title">src/modules/help.js | tablefilter v0.4.27 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -122,8 +122,9 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/help.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {createElm, createText, elm, removeElm} from &apos;../dom&apos;;
-import {addEvt} from &apos;../event&apos;;
+import {addEvt, targetEvt, removeEvt} from &apos;../event&apos;;
 import {NONE} from &apos;../const&apos;;
+import {root} from &apos;../root&apos;;
 
 const WIKI_URL = &apos;https://github.com/koalyptus/TableFilter/wiki/&apos; +
     &apos;4.-Filter-operators&apos;;
@@ -202,16 +203,22 @@ export class Help extends Feature {
             &apos;helpCont&apos;;
 
         /**
-         * Stores button DOM element
+         * Button DOM element
          * @type {DOMElement}
          */
         this.btn = null;
 
         /**
-         * Stores help container DOM element
+         * Help container DOM element
          * @type {DOMElement}
          */
         this.cont = null;
+
+        /**
+         * Bound mouseup wrapper
+         * @private
+         */
+        this.boundMouseup = null;
 
         /**
          * Default HTML appended to instructions text
@@ -228,6 +235,18 @@ export class Help extends Feature {
     }
 
     /**
+     * Mouse-up event handler handling popup auto-close behaviour
+     * @private
+     */
+    onMouseup(evt) {
+        let targetElm = targetEvt(evt);
+        if (targetElm !== this.cont) {
+            this.toggle();
+        }
+        return;
+    }
+
+    /**
      * Initialise Help instance
      */
     init() {
@@ -239,6 +258,8 @@ export class Help extends Feature {
 
         let btn = createElm(&apos;span&apos;);
         let cont = createElm(&apos;div&apos;);
+
+        this.boundMouseup = this.onMouseup.bind(this);
 
         //help button is added to defined element
         if (!this.tgtId) {
@@ -295,9 +316,13 @@ export class Help extends Feature {
         if (this.enabled === false) {
             return;
         }
+        // ensure mouseup event handler is removed
+        removeEvt(root, &apos;mouseup&apos;, this.boundMouseup);
+
         let divDisplay = this.cont.style.display;
         if (divDisplay === &apos;&apos; || divDisplay === NONE) {
             this.cont.style.display = &apos;inline&apos;;
+            addEvt(root, &apos;mouseup&apos;, this.boundMouseup);
         } else {
             this.cont.style.display = NONE;
         }
@@ -315,6 +340,8 @@ export class Help extends Feature {
 
         removeElm(this.cont);
         this.cont = null;
+
+        this.boundMouseup = null;
 
         this.initialized = false;
     }
