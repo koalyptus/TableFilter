@@ -149,7 +149,7 @@ test('Pop-up filter closes upon filtering', function(){
     );
 });
 
-test('Pop-up filter auto-closes when user clicks away', function(){
+test('Pop-up filter auto-closes when user clicks away', function() {
     // setup
     popupFilter.open(0);
 

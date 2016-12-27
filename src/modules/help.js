@@ -1,7 +1,8 @@
 import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
-import {addEvt} from '../event';
+import {addEvt, targetEvt, removeEvt} from '../event';
 import {NONE} from '../const';
+import {root} from '../root';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
     '4.-Filter-operators';
@@ -80,16 +81,22 @@ export class Help extends Feature {
             'helpCont';
 
         /**
-         * Stores button DOM element
+         * Button DOM element
          * @type {DOMElement}
          */
         this.btn = null;
 
         /**
-         * Stores help container DOM element
+         * Help container DOM element
          * @type {DOMElement}
          */
         this.cont = null;
+
+        /**
+         * Bound mouseup wrapper
+         * @private
+         */
+        this.boundMouseup = null;
 
         /**
          * Default HTML appended to instructions text
@@ -106,6 +113,24 @@ export class Help extends Feature {
     }
 
     /**
+     * Mouse-up event handler handling popup auto-close behaviour
+     * @private
+     */
+    onMouseup(evt) {
+        let targetElm = targetEvt(evt);
+
+        while (targetElm && targetElm !== this.cont) {
+            targetElm = targetElm.parentNode;
+        }
+
+        if (targetElm !== this.cont) {
+            this.toggle();
+        }
+
+        return;
+    }
+
+    /**
      * Initialise Help instance
      */
     init() {
@@ -117,6 +142,8 @@ export class Help extends Feature {
 
         let btn = createElm('span');
         let cont = createElm('div');
+
+        this.boundMouseup = this.onMouseup.bind(this);
 
         //help button is added to defined element
         if (!this.tgtId) {
@@ -173,9 +200,13 @@ export class Help extends Feature {
         if (this.enabled === false) {
             return;
         }
+        // ensure mouseup event handler is removed
+        removeEvt(root, 'mouseup', this.boundMouseup);
+
         let divDisplay = this.cont.style.display;
         if (divDisplay === '' || divDisplay === NONE) {
             this.cont.style.display = 'inline';
+            addEvt(root, 'mouseup', this.boundMouseup);
         } else {
             this.cont.style.display = NONE;
         }
@@ -193,6 +224,8 @@ export class Help extends Feature {
 
         removeElm(this.cont);
         this.cont = null;
+
+        this.boundMouseup = null;
 
         this.initialized = false;
     }

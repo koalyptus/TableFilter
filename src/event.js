@@ -34,11 +34,10 @@ export const addEvt = (obj, type, func, capture) => {
  * the capturing or in the bubbling phase
  */
 export const removeEvt = (obj, type, func, capture) => {
-    if (obj.detachEvent) {
-        obj.detachEvent('on' + type, func);
-    }
-    else if (obj.removeEventListener) {
+    if (obj.removeEventListener) {
         obj.removeEventListener(type, func, capture);
+    } else if (obj.detachEvent) {
+        obj.detachEvent('on' + type, func);
     } else {
         obj['on' + type] = null;
     }
@@ -49,7 +48,7 @@ export const removeEvt = (obj, type, func, capture) => {
  *
  * @param {Event} evt Event on the DOM
  */
-export const stopEvt = evt =>{
+export const stopEvt = (evt) => {
     if (!evt) {
         evt = root.event;
     }
@@ -66,7 +65,7 @@ export const stopEvt = evt =>{
  *
  * @param {Event} evt Event on the DOM
  */
-export const cancelEvt = evt => {
+export const cancelEvt = (evt) => {
     if (!evt) {
         evt = root.event;
     }
@@ -83,7 +82,7 @@ export const cancelEvt = evt => {
  * @param {Event} evt Event on the DOM
  * @returns {DOMElement}
  */
-export const targetEvt = evt => {
+export const targetEvt = (evt) => {
     if (!evt) {
         evt = root.event;
     }
@@ -96,7 +95,7 @@ export const targetEvt = evt => {
  * @param {Event} evt Event on the DOM
  * @returns {Number}
  */
-export const keyCode = evt => {
+export const keyCode = (evt) => {
     return evt.charCode ? evt.charCode :
         (evt.keyCode ? evt.keyCode : (evt.which ? evt.which : 0));
 };
