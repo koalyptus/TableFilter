@@ -118,15 +118,9 @@ export class Help extends Feature {
      */
     onMouseup(evt) {
         let targetElm = targetEvt(evt);
-
-        while (targetElm && targetElm !== this.cont) {
-            targetElm = targetElm.parentNode;
-        }
-
         if (targetElm !== this.cont) {
             this.toggle();
         }
-
         return;
     }
 
