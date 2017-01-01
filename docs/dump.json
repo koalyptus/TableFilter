@@ -9209,7 +9209,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {addEvt, targetEvt, removeEvt} from '../event';\nimport {NONE} from '../const';\nimport {root} from '../root';\n\nconst WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +\n    '4.-Filter-operators';\nconst WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';\n\n/**\n * Help UI component\n */\nexport class Help extends Feature {\n\n    /**\n     * Creates an instance of Help\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'help');\n\n        let f = this.config;\n\n        /**\n         * ID of main custom container element\n         * @type {String}\n         */\n        this.tgtId = f.help_instructions_target_id || null;\n\n        /**\n         * ID of custom container element for instructions\n         * @type {String}\n         */\n        this.contTgtId = f.help_instructions_container_target_id ||\n            null;\n\n        /**\n         * Instructions text (accepts HTML)\n         * @type {String}\n         */\n        this.instrText = f.help_instructions_text ?\n            f.help_instructions_text :\n            'Use the filters above each column to filter and limit table ' +\n            'data. Advanced searches can be performed by using the following ' +\n            'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +\n            '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +\n            '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +\n            '<b>rgx:</b><br/><a href=\"' + WIKI_URL + '\" target=\"_blank\">' +\n            'Learn more</a><hr/>';\n\n        /**\n         * Instructions HTML\n         * @type {String}\n         */\n        this.instrHtml = f.help_instructions_html || null;\n\n        /**\n         * Help button text ('?')\n         * @type {String}\n         */\n        this.btnText = f.help_instructions_btn_text || '?';\n\n        /**\n         * Custom help button HTML\n         * @type {String}\n         */\n        this.btnHtml = f.help_instructions_btn_html || null;\n\n        /**\n         * Css class for help button\n         * @type {String}\n         */\n        this.btnCssClass = f.help_instructions_btn_css_class || 'helpBtn';\n\n        /**\n         * Css class for help container element\n         * @type {String}\n         */\n        this.contCssClass = f.help_instructions_container_css_class ||\n            'helpCont';\n\n        /**\n         * Button DOM element\n         * @type {DOMElement}\n         */\n        this.btn = null;\n\n        /**\n         * Help container DOM element\n         * @type {DOMElement}\n         */\n        this.cont = null;\n\n        /**\n         * Bound mouseup wrapper\n         * @private\n         */\n        this.boundMouseup = null;\n\n        /**\n         * Default HTML appended to instructions text\n         * @type {String}\n         */\n        this.defaultHtml = '<div class=\"helpFooter\"><h4>TableFilter ' +\n            'v' + tf.version + '</h4>' + '<a href=\"' + WEBSITE_URL +\n            '\" target=\"_blank\">' + WEBSITE_URL + '</a>' +\n            '<br/><span>&copy;2015-' + tf.year + ' {AUTHOR}</span>' +\n            '<div align=\"center\" style=\"margin-top:8px;\">' +\n            '<a href=\"javascript:void(0);\" class=\"close\">Close</a></div></div>';\n\n        this.emitter.on(['init-help'], () => this.init());\n    }\n\n    /**\n     * Mouse-up event handler handling popup auto-close behaviour\n     * @private\n     */\n    onMouseup(evt) {\n        let targetElm = targetEvt(evt);\n        if (targetElm !== this.cont) {\n            this.toggle();\n        }\n        return;\n    }\n\n    /**\n     * Initialise Help instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        let tf = this.tf;\n\n        let btn = createElm('span');\n        let cont = createElm('div');\n\n        this.boundMouseup = this.onMouseup.bind(this);\n\n        //help button is added to defined element\n        if (!this.tgtId) {\n            tf.setToolbar();\n        }\n        let targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);\n        targetEl.appendChild(btn);\n\n        let divContainer = !this.contTgtId ? btn : elm(this.contTgtId);\n\n        if (!this.btnHtml) {\n            divContainer.appendChild(cont);\n            let helplink = createElm('a', ['href', 'javascript:void(0);']);\n            helplink.className = this.btnCssClass;\n            helplink.appendChild(createText(this.btnText));\n            btn.appendChild(helplink);\n            addEvt(helplink, 'click', () => this.toggle());\n        } else {\n            btn.innerHTML = this.btnHtml;\n            let helpEl = btn.firstChild;\n            addEvt(helpEl, 'click', () => this.toggle());\n            divContainer.appendChild(cont);\n        }\n\n        if (!this.instrHtml) {\n            cont.innerHTML = this.instrText;\n            cont.className = this.contCssClass;\n            addEvt(cont, 'dblclick', () => this.toggle());\n        } else {\n            if (this.contTgtId) {\n                divContainer.appendChild(cont);\n            }\n            cont.innerHTML = this.instrHtml;\n            if (!this.contTgtId) {\n                cont.className = this.contCssClass;\n                addEvt(cont, 'dblclick', () => this.toggle());\n            }\n        }\n        cont.innerHTML += this.defaultHtml;\n        addEvt(cont, 'click', () => this.toggle());\n\n        this.cont = cont;\n        this.btn = btn;\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Toggle help pop-up\n     */\n    toggle() {\n        // check only if explicitily set to false as in this case undefined\n        // signifies the help feature is enabled by default\n        if (this.enabled === false) {\n            return;\n        }\n        // ensure mouseup event handler is removed\n        removeEvt(root, 'mouseup', this.boundMouseup);\n\n        let divDisplay = this.cont.style.display;\n        if (divDisplay === '' || divDisplay === NONE) {\n            this.cont.style.display = 'inline';\n            addEvt(root, 'mouseup', this.boundMouseup);\n        } else {\n            this.cont.style.display = NONE;\n        }\n    }\n\n    /**\n     * Remove help UI\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        removeElm(this.btn);\n        this.btn = null;\n\n        removeElm(this.cont);\n        this.cont = null;\n\n        this.boundMouseup = null;\n\n        this.initialized = false;\n    }\n\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {createElm, createText, elm, removeElm} from '../dom';\nimport {addEvt, targetEvt, removeEvt} from '../event';\nimport {NONE} from '../const';\nimport {root} from '../root';\n\nconst WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +\n    '4.-Filter-operators';\nconst WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';\n\n/**\n * Help UI component\n */\nexport class Help extends Feature {\n\n    /**\n     * Creates an instance of Help\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'help');\n\n        let f = this.config;\n\n        /**\n         * ID of main custom container element\n         * @type {String}\n         */\n        this.tgtId = f.help_instructions_target_id || null;\n\n        /**\n         * ID of custom container element for instructions\n         * @type {String}\n         */\n        this.contTgtId = f.help_instructions_container_target_id ||\n            null;\n\n        /**\n         * Instructions text (accepts HTML)\n         * @type {String}\n         */\n        this.instrText = f.help_instructions_text ?\n            f.help_instructions_text :\n            'Use the filters above each column to filter and limit table ' +\n            'data. Advanced searches can be performed by using the following ' +\n            'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +\n            '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +\n            '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +\n            '<b>rgx:</b><br/><a href=\"' + WIKI_URL + '\" target=\"_blank\">' +\n            'Learn more</a><hr/>';\n\n        /**\n         * Instructions HTML\n         * @type {String}\n         */\n        this.instrHtml = f.help_instructions_html || null;\n\n        /**\n         * Help button text ('?')\n         * @type {String}\n         */\n        this.btnText = f.help_instructions_btn_text || '?';\n\n        /**\n         * Custom help button HTML\n         * @type {String}\n         */\n        this.btnHtml = f.help_instructions_btn_html || null;\n\n        /**\n         * Css class for help button\n         * @type {String}\n         */\n        this.btnCssClass = f.help_instructions_btn_css_class || 'helpBtn';\n\n        /**\n         * Css class for help container element\n         * @type {String}\n         */\n        this.contCssClass = f.help_instructions_container_css_class ||\n            'helpCont';\n\n        /**\n         * Button DOM element\n         * @type {DOMElement}\n         */\n        this.btn = null;\n\n        /**\n         * Help container DOM element\n         * @type {DOMElement}\n         */\n        this.cont = null;\n\n        /**\n         * Bound mouseup wrapper\n         * @private\n         */\n        this.boundMouseup = null;\n\n        /**\n         * Default HTML appended to instructions text\n         * @type {String}\n         */\n        this.defaultHtml = '<div class=\"helpFooter\"><h4>TableFilter ' +\n            'v' + tf.version + '</h4>' + '<a href=\"' + WEBSITE_URL +\n            '\" target=\"_blank\">' + WEBSITE_URL + '</a>' +\n            '<br/><span>&copy;2015-' + tf.year + ' {AUTHOR}</span>' +\n            '<div align=\"center\" style=\"margin-top:8px;\">' +\n            '<a href=\"javascript:void(0);\" class=\"close\">Close</a></div></div>';\n\n        this.emitter.on(['init-help'], () => this.init());\n    }\n\n    /**\n     * Mouse-up event handler handling popup auto-close behaviour\n     * @private\n     */\n    onMouseup(evt) {\n        let targetElm = targetEvt(evt);\n\n        while (targetElm && targetElm !== this.cont && targetElm !== this.btn) {\n            targetElm = targetElm.parentNode;\n        }\n\n        if (targetElm !== this.cont && targetElm !== this.btn) {\n            this.toggle();\n        }\n\n        return;\n    }\n\n    /**\n     * Initialise Help instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        let tf = this.tf;\n\n        let btn = createElm('span');\n        let cont = createElm('div');\n\n        this.boundMouseup = this.onMouseup.bind(this);\n\n        //help button is added to defined element\n        if (!this.tgtId) {\n            tf.setToolbar();\n        }\n        let targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);\n        targetEl.appendChild(btn);\n\n        let divContainer = !this.contTgtId ? btn : elm(this.contTgtId);\n\n        if (!this.btnHtml) {\n            divContainer.appendChild(cont);\n            let helplink = createElm('a', ['href', 'javascript:void(0);']);\n            helplink.className = this.btnCssClass;\n            helplink.appendChild(createText(this.btnText));\n            btn.appendChild(helplink);\n            addEvt(helplink, 'click', () => this.toggle());\n        } else {\n            btn.innerHTML = this.btnHtml;\n            let helpEl = btn.firstChild;\n            addEvt(helpEl, 'click', () => this.toggle());\n            divContainer.appendChild(cont);\n        }\n\n        if (!this.instrHtml) {\n            cont.innerHTML = this.instrText;\n            cont.className = this.contCssClass;\n        } else {\n            if (this.contTgtId) {\n                divContainer.appendChild(cont);\n            }\n            cont.innerHTML = this.instrHtml;\n            if (!this.contTgtId) {\n                cont.className = this.contCssClass;\n            }\n        }\n        cont.innerHTML += this.defaultHtml;\n        addEvt(cont, 'click', () => this.toggle());\n\n        this.cont = cont;\n        this.btn = btn;\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Toggle help pop-up\n     */\n    toggle() {\n        // check only if explicitily set to false as in this case undefined\n        // signifies the help feature is enabled by default\n        if (this.enabled === false) {\n            return;\n        }\n\n        // ensure mouseup event handler is removed\n        removeEvt(root, 'mouseup', this.boundMouseup);\n\n        let divDisplay = this.cont.style.display;\n        if (divDisplay === '' || divDisplay === NONE) {\n            this.cont.style.display = 'inline';\n            addEvt(root, 'mouseup', this.boundMouseup);\n        } else {\n            this.cont.style.display = NONE;\n        }\n    }\n\n    /**\n     * Remove help UI\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n        removeElm(this.btn);\n        this.btn = null;\n\n        removeElm(this.cont);\n        this.cont = null;\n\n        this.boundMouseup = null;\n\n        this.initialized = false;\n    }\n\n}\n"
   },
   {
     "__docId__": 422,
@@ -9565,7 +9565,7 @@
     "longname": "src/modules/help.js~Help#init",
     "access": null,
     "description": "Initialise Help instance",
-    "lineNumber": 130,
+    "lineNumber": 136,
     "params": [],
     "generator": false
   },
@@ -9579,7 +9579,7 @@
     "longname": "src/modules/help.js~Help#boundMouseup",
     "access": null,
     "description": null,
-    "lineNumber": 140,
+    "lineNumber": 146,
     "undocument": true,
     "type": {
       "types": [
@@ -9597,7 +9597,7 @@
     "longname": "src/modules/help.js~Help#cont",
     "access": null,
     "description": null,
-    "lineNumber": 182,
+    "lineNumber": 186,
     "undocument": true,
     "type": {
       "types": [
@@ -9615,7 +9615,7 @@
     "longname": "src/modules/help.js~Help#btn",
     "access": null,
     "description": null,
-    "lineNumber": 183,
+    "lineNumber": 187,
     "undocument": true,
     "type": {
       "types": [
@@ -9633,7 +9633,7 @@
     "longname": "src/modules/help.js~Help#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 185,
+    "lineNumber": 189,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -9656,7 +9656,7 @@
     "longname": "src/modules/help.js~Help#toggle",
     "access": null,
     "description": "Toggle help pop-up",
-    "lineNumber": 191,
+    "lineNumber": 195,
     "params": [],
     "generator": false
   },
@@ -9670,7 +9670,7 @@
     "longname": "src/modules/help.js~Help#destroy",
     "access": null,
     "description": "Remove help UI",
-    "lineNumber": 212,
+    "lineNumber": 217,
     "params": [],
     "generator": false
   },
@@ -9684,7 +9684,7 @@
     "longname": "src/modules/help.js~Help#btn",
     "access": null,
     "description": null,
-    "lineNumber": 217,
+    "lineNumber": 222,
     "undocument": true,
     "type": {
       "types": [
@@ -9702,7 +9702,7 @@
     "longname": "src/modules/help.js~Help#cont",
     "access": null,
     "description": null,
-    "lineNumber": 220,
+    "lineNumber": 225,
     "undocument": true,
     "type": {
       "types": [
@@ -9720,7 +9720,7 @@
     "longname": "src/modules/help.js~Help#boundMouseup",
     "access": null,
     "description": null,
-    "lineNumber": 222,
+    "lineNumber": 227,
     "undocument": true,
     "type": {
       "types": [
@@ -9738,7 +9738,7 @@
     "longname": "src/modules/help.js~Help#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 224,
+    "lineNumber": 229,
     "undocument": true,
     "type": {
       "types": [
