@@ -118,9 +118,15 @@ export class Help extends Feature {
      */
     onMouseup(evt) {
         let targetElm = targetEvt(evt);
-        if (targetElm !== this.cont) {
+
+        while (targetElm && targetElm !== this.cont && targetElm !== this.btn) {
+            targetElm = targetElm.parentNode;
+        }
+
+        if (targetElm !== this.cont && targetElm !== this.btn) {
             this.toggle();
         }
+
         return;
     }
 
@@ -165,7 +171,6 @@ export class Help extends Feature {
         if (!this.instrHtml) {
             cont.innerHTML = this.instrText;
             cont.className = this.contCssClass;
-            addEvt(cont, 'dblclick', () => this.toggle());
         } else {
             if (this.contTgtId) {
                 divContainer.appendChild(cont);
@@ -173,7 +178,6 @@ export class Help extends Feature {
             cont.innerHTML = this.instrHtml;
             if (!this.contTgtId) {
                 cont.className = this.contCssClass;
-                addEvt(cont, 'dblclick', () => this.toggle());
             }
         }
         cont.innerHTML += this.defaultHtml;
@@ -194,6 +198,7 @@ export class Help extends Feature {
         if (this.enabled === false) {
             return;
         }
+
         // ensure mouseup event handler is removed
         removeEvt(root, 'mouseup', this.boundMouseup);
 

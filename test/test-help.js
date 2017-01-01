@@ -7,7 +7,7 @@ tf.init();
 
 var help = tf.feature('help');
 module('Sanity checks');
-test('Clear button component', function() {
+test('Button element', function() {
     deepEqual(typeof help, 'object', 'Help instanciated');
     notEqual(help.btn, null, 'btn property');
 });
@@ -75,6 +75,36 @@ test('Help container auto-closes when user clicks away', function() {
     // assert
     deepEqual(help.cont.style.display, 'none',
         'Help container closed after user clicks away'
+    );
+});
+
+// 376 issue: ensure close button closes popup
+test('Close button closes popup', function() {
+    // setup
+    help.toggle();
+
+    // act
+    var evObj = document.createEvent('HTMLEvents');
+    evObj.initEvent('click', true, true);
+    help.cont.querySelector('.close').dispatchEvent(evObj);
+
+    // assert
+    deepEqual(help.cont.style.display, 'none',
+        'Close button closes popup'
+    );
+});
+test('Help button closes popup when already open', function() {
+    // setup
+    help.toggle();
+
+    // act
+    var evObj = document.createEvent('HTMLEvents');
+    evObj.initEvent('click', true, true);
+    help.btn.querySelector('.helpBtn').dispatchEvent(evObj);
+
+    // assert
+    deepEqual(help.cont.style.display, 'none',
+        'Close button closes popup'
     );
 });
 
