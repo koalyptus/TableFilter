@@ -1,10 +1,10 @@
-import { Feature } from '../feature';
-import { createElm, createOpt, elm } from '../dom';
-import { has } from '../array';
-import { matchCase } from '../string';
-import { ignoreCase, numSortAsc, numSortDesc } from '../sort';
-import { addEvt, targetEvt } from '../event';
-import { SELECT, MULTIPLE, NONE } from '../const';
+import {Feature} from '../feature';
+import {createElm, createOpt, elm} from '../dom';
+import {has} from '../array';
+import {matchCase} from '../string';
+import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
+import {addEvt, targetEvt} from '../event';
+import {SELECT, MULTIPLE, NONE} from '../const';
 
 const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
     '{1} manner.';
@@ -381,8 +381,7 @@ export class Dropdown extends Feature {
      */
     selectOptions(colIndex, values = []) {
         let tf = this.tf;
-        if (/*tf.getFilterType(colIndex) !== MULTIPLE ||*/
-            values.length === 0) {
+        if (values.length === 0) {
             return;
         }
         let slc = tf.getFilterElement(colIndex);
