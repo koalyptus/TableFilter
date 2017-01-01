@@ -119,6 +119,7 @@ export class CheckList extends Feature {
     /**
      * Checklist option click event handler
      * @param {Event} evt
+     * @private
      */
     optionClick(evt) {
         let elm = targetEvt(evt);
@@ -132,6 +133,7 @@ export class CheckList extends Feature {
     /**
      * Checklist container click event handler for load-on-demand feature
      * @param {Event} evt
+     * @private
      */
     onCheckListClick(evt) {
         let elm = targetEvt(evt);
@@ -141,6 +143,19 @@ export class CheckList extends Feature {
             this.build(ct);
             removeEvt(div, 'click', (evt) => this.onCheckListClick(evt));
         }
+    }
+
+    /**
+     * Refresh all checklist filters
+     */
+    refreshAll() {
+        let tf = this.tf;
+        let fltsIdxs = tf.getFiltersByType(CHECKLIST, true);
+        fltsIdxs.forEach((colIdx) => {
+            let values = this.getValues(colIdx);
+            this.build(colIdx, tf.linkedFilters);
+            this.selectOptions(colIdx, values);
+        });
     }
 
     /**
@@ -185,6 +200,8 @@ export class CheckList extends Feature {
             ['select-checklist-options'],
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
+
+        this.emitter.on(['rows-changed'], () => this.refreshAll());
 
         /** @inherited */
         this.initialized = true;
@@ -500,7 +517,8 @@ export class CheckList extends Feature {
     selectOptions(colIndex, values = []) {
         let tf = this.tf;
         let flt = tf.getFilterElement(colIndex);
-        if (tf.getFilterType(colIndex) !== CHECKLIST || !flt) {
+        if (tf.getFilterType(colIndex) !== CHECKLIST || !flt ||
+            values.length === 0) {
             return;
         }
 
@@ -565,6 +583,8 @@ export class CheckList extends Feature {
             ['select-checklist-options'],
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
+        this.emitter.off(['rows-changed'], () => this.refreshAll());
+
         this.initialized = false;
     }
 }

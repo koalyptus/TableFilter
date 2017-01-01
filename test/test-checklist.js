@@ -36,6 +36,21 @@ test('Can filter on checkList item click', function() {
     deepEqual(tf.getValidRows().length, 1, 'Table filtered');
     deepEqual(tf.getFilteredData()[0][1][3], '1.1', 'Matched value');
 });
+test('Can refresh all drop-down filters', function() {
+    //setup
+    tf.clearFilters();
+    var build = checkList.build;
+    var hit = 0;
+    checkList.build = function() { hit++ };
+
+    //act
+    checkList.refreshAll();
+
+    //assert
+    deepEqual(hit, 1, 'build method called');
+
+    checkList.build = build;
+});
 test('Can select options', function() {
     tf.clearFilters();
     var flt1 = id(tf.fltIds[3]);
