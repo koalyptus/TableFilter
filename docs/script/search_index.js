@@ -1842,15 +1842,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/checklist.js~checklist#onchecklistclick",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-onCheckListClick",
-    "src/modules/checkList.js~CheckList#onCheckListClick",
-    "method"
-  ],
-  [
-    "src/modules/checklist.js~checklist#optionclick",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-optionClick",
-    "src/modules/checkList.js~CheckList#optionClick",
+    "src/modules/checklist.js~checklist#refreshall",
+    "class/src/modules/checkList.js~CheckList.html#instance-method-refreshAll",
+    "src/modules/checkList.js~CheckList#refreshAll",
     "method"
   ],
   [
@@ -2062,6 +2056,12 @@ window.esdocSearchIndex = [
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-nonEmptyText",
     "src/modules/dropdown.js~Dropdown#nonEmptyText",
     "member"
+  ],
+  [
+    "src/modules/dropdown.js~dropdown#refreshall",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-method-refreshAll",
+    "src/modules/dropdown.js~Dropdown#refreshAll",
+    "method"
   ],
   [
     "src/modules/dropdown.js~dropdown#selectoptions",

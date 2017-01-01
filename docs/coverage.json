@@ -24,8 +24,8 @@
       "undocumentLines": []
     },
     "src/modules/checkList.js": {
-      "expectCount": 18,
-      "actualCount": 18,
+      "expectCount": 17,
+      "actualCount": 17,
       "undocumentLines": []
     },
     "src/modules/clearButton.js": {
@@ -49,8 +49,8 @@
       "undocumentLines": []
     },
     "src/modules/dropdown.js": {
-      "expectCount": 13,
-      "actualCount": 13,
+      "expectCount": 14,
+      "actualCount": 14,
       "undocumentLines": []
     },
     "src/types.js": {
