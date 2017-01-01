@@ -93,6 +93,21 @@ export class Dropdown extends Feature {
     }
 
     /**
+     * Refresh all drop-down filters
+     */
+    refreshAll() {
+        let tf = this.tf;
+        let selectFlts = tf.getFiltersByType(SELECT, true);
+        let multipleFlts = tf.getFiltersByType(MULTIPLE, true);
+        let flts = selectFlts.concat(multipleFlts);
+        flts.forEach((colIdx) => {
+            let values = this.getValues(colIdx);
+            this.build(colIdx, tf.linkedFilters);
+            this.selectOptions(colIdx, values);
+        });
+    }
+
+    /**
      * Initialize drop-down filter
      * @param  {Number}     colIndex   Column index
      * @param  {Boolean}    isExternal External filter flag
@@ -145,6 +160,7 @@ export class Dropdown extends Feature {
             ['select-options'],
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
+        this.emitter.on(['rows-changed'], () => this.refreshAll());
 
         /** @inherited */
         this.initialized = true;
@@ -365,7 +381,7 @@ export class Dropdown extends Feature {
      */
     selectOptions(colIndex, values = []) {
         let tf = this.tf;
-        if (tf.getFilterType(colIndex) !== MULTIPLE || values.length === 0) {
+        if (values.length === 0) {
             return;
         }
         let slc = tf.getFilterElement(colIndex);
@@ -420,6 +436,7 @@ export class Dropdown extends Feature {
             ['select-options'],
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
+        this.emitter.off(['rows-changed'], () => this.refreshAll());
         this.initialized = false;
     }
 }

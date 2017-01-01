@@ -43,6 +43,7 @@ export class AlternateRows extends Feature {
             (tf, rowIndex, arrIndex, isValid) =>
                 this.processRow(rowIndex, arrIndex, isValid));
         this.emitter.on(['column-sorted'], () => this.processAll());
+        this.emitter.on(['rows-changed'], () => this.processAll());
 
         /** @inherited */
         this.initialized = true;
@@ -131,6 +132,7 @@ export class AlternateRows extends Feature {
             (tf, rowIndex, arrIndex, isValid) =>
                 this.processRow(rowIndex, arrIndex, isValid));
         this.emitter.off(['column-sorted'], () => this.processAll());
+        this.emitter.off(['rows-changed'], () => this.processAll());
 
         this.initialized = false;
     }

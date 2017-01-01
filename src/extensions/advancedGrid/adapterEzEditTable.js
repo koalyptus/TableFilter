@@ -207,9 +207,9 @@ export default class AdapterEzEditTable extends Feature {
                     nextRowIndex,
                     paging = tf.feature('paging'),
                     //pgup/pgdown keys
-                    d = (keyCode === 34 || keyCode === 33 ?
+                    d = keyCode === 34 || keyCode === 33 ?
                         (paging && paging.pagingLength || et.nbRowsPerPage) :
-                        1);
+                        1;
 
                 //If next row is not valid, next valid filtered row needs to be
                 //calculated
@@ -332,35 +332,35 @@ export default class AdapterEzEditTable extends Feature {
             if (cfg.default_selection === 'row') {
                 let fnB = cfg.on_before_selected_row;
                 cfg.on_before_selected_row = function () {
-                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);
+                    var args = arguments;
+                    onBeforeSelection(args[0], args[1], args[2]);
                     if (fnB) {
-                        fnB.call(
-                            null, arguments[0], arguments[1], arguments[2]);
+                        fnB.call(null, args[0], args[1], args[2]);
                     }
                 };
                 let fnA = cfg.on_after_selected_row;
                 cfg.on_after_selected_row = function () {
-                    onAfterSelection(arguments[0], arguments[1], arguments[2]);
+                    var args = arguments;
+                    onAfterSelection(args[0], args[1], args[2]);
                     if (fnA) {
-                        fnA.call(
-                            null, arguments[0], arguments[1], arguments[2]);
+                        fnA.call(null, args[0], args[1], args[2]);
                     }
                 };
             } else {
                 let fnD = cfg.on_before_selected_cell;
                 cfg.on_before_selected_cell = function () {
-                    onBeforeSelection(arguments[0], arguments[1], arguments[2]);
+                    var args = arguments;
+                    onBeforeSelection(args[0], args[1], args[2]);
                     if (fnD) {
-                        fnD.call(
-                            null, arguments[0], arguments[1], arguments[2]);
+                        fnD.call(null, args[0], args[1], args[2]);
                     }
                 };
                 let fnC = cfg.on_after_selected_cell;
                 cfg.on_after_selected_cell = function () {
-                    onAfterSelection(arguments[0], arguments[1], arguments[2]);
+                    var args = arguments;
+                    onAfterSelection(args[0], args[1], args[2]);
                     if (fnC) {
-                        fnC.call(
-                            null, arguments[0], arguments[1], arguments[2]);
+                        fnC.call(null, args[0], args[1], args[2]);
                     }
                 };
             }
@@ -369,6 +369,7 @@ export default class AdapterEzEditTable extends Feature {
             //Added or removed rows, TF rows number needs to be re-calculated
             let fnE = cfg.on_added_dom_row;
             cfg.on_added_dom_row = function () {
+                var args = arguments;
                 tf.nbFilterableRows++;
                 if (!tf.paging) {
                     tf.emitter.emit('rows-changed', tf, this);
@@ -382,12 +383,13 @@ export default class AdapterEzEditTable extends Feature {
                     tf.feature('alternateRows').init();
                 }
                 if (fnE) {
-                    fnE.call(null, arguments[0], arguments[1], arguments[2]);
+                    fnE.call(null, args[0], args[1], args[2]);
                 }
             };
             if (cfg.actions && cfg.actions['delete']) {
                 let fnF = cfg.actions['delete'].on_after_submit;
                 cfg.actions['delete'].on_after_submit = function () {
+                    var args = arguments;
                     tf.nbFilterableRows--;
                     if (!tf.paging) {
                         tf.emitter.emit('rows-changed', tf, this);
@@ -401,7 +403,7 @@ export default class AdapterEzEditTable extends Feature {
                         tf.feature('alternateRows').init();
                     }
                     if (fnF) {
-                        fnF.call(null, arguments[0], arguments[1]);
+                        fnF.call(null, args[0], args[1]);
                     }
                 };
             }
