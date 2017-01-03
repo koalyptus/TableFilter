@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
-import {isFn} from '../types';
+import {isFn, EMPTY_FN} from '../types';
 import {root} from '../root';
 import {NONE} from '../const';
 
@@ -75,13 +75,14 @@ export class Loader extends Feature {
          * Callback fired when loader is displayed
          * @type {Function}
          */
-        this.onShow = isFn(f.on_show_loader) ? f.on_show_loader : null;
+        this.onShow = isFn(f.on_show_loader) ?
+            f.on_show_loader : EMPTY_FN;
 
         /**
          * Callback fired when loader is closed
          * @type {Function}
          */
-        this.onHide = isFn(f.on_hide_loader) ? f.on_hide_loader : null;
+        this.onHide = isFn(f.on_hide_loader) ? f.on_hide_loader : EMPTY_FN;
     }
 
     /**
@@ -137,12 +138,12 @@ export class Loader extends Feature {
             if (!this.cont) {
                 return;
             }
-            if (this.onShow && p !== NONE) {
-                this.onShow.call(null, this);
+            if (p !== NONE) {
+                this.onShow(this);
             }
             this.cont.style.display = p;
-            if (this.onHide && p === NONE) {
-                this.onHide.call(null, this);
+            if (p === NONE) {
+                this.onHide(this);
             }
         };
 

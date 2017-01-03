@@ -36,6 +36,22 @@ test('Can filter on drop-down change', function() {
     deepEqual(tf.getFilteredData()[0][1][3], '1.1', 'Matched value');
 });
 
+test('Can refresh all drop-down filters', function() {
+    //setup
+    tf.clearFilters();
+    var build = dropdown.build;
+    var hit = 0;
+    dropdown.build = function() { hit++ };
+
+    //act
+    dropdown.refreshAll();
+
+    //assert
+    deepEqual(hit, 2, 'build method called');
+
+    dropdown.build = build;
+});
+
 test('Can select options', function() {
     tf.clearFilters();
     var flt1 = id(tf.fltIds[2]);
@@ -99,4 +115,9 @@ test('Can sort options', function() {
 test('TableFilter removed', function() {
     tf.destroy();
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
+    deepEqual(
+        tf.feature('dropdown').initialized,
+        false,
+        'Drop-down not initialised'
+    );
 });

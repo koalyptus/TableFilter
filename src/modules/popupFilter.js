@@ -1,5 +1,5 @@
 import {Feature} from '../feature';
-import {isFn, isUndef} from '../types';
+import {isFn, isUndef, EMPTY_FN} from '../types';
 import {createElm, removeElm} from '../dom';
 import {addEvt, cancelEvt, stopEvt, targetEvt, removeEvt} from '../event';
 import {INPUT, NONE, CHECKLIST, MULTIPLE} from '../const';
@@ -74,28 +74,28 @@ export class PopupFilter extends Feature {
          * @type {Function}
          */
         this.onBeforeOpen = isFn(f.on_before_popup_filter_open) ?
-            f.on_before_popup_filter_open : null;
+            f.on_before_popup_filter_open : EMPTY_FN;
 
         /**
          * Callback fired after a popup filter is opened
          * @type {Function}
          */
         this.onAfterOpen = isFn(f.on_after_popup_filter_open) ?
-            f.on_after_popup_filter_open : null;
+            f.on_after_popup_filter_open : EMPTY_FN;
 
         /**
          * Callback fired before a popup filter is closed
          * @type {Function}
          */
         this.onBeforeClose = isFn(f.on_before_popup_filter_close) ?
-            f.on_before_popup_filter_close : null;
+            f.on_before_popup_filter_close : EMPTY_FN;
 
         /**
          * Callback fired after a popup filter is closed
          * @type {Function}
          */
         this.onAfterClose = isFn(f.on_after_popup_filter_close) ?
-            f.on_after_popup_filter_close : null;
+            f.on_after_popup_filter_close : EMPTY_FN;
 
         /**
          * Collection of filters spans
@@ -307,9 +307,8 @@ export class PopupFilter extends Feature {
         let tf = this.tf,
             container = this.fltElms[colIndex];
 
-        if (this.onBeforeOpen) {
-            this.onBeforeOpen.call(null, this, container, colIndex);
-        }
+        this.onBeforeOpen(this, container, colIndex);
+
         container.style.display = 'block';
         this.activeFilterIdx = colIndex;
         addEvt(root, 'mouseup', (evt) => this.onMouseup(evt));
@@ -320,9 +319,8 @@ export class PopupFilter extends Feature {
                 flt.focus();
             }
         }
-        if (this.onAfterOpen) {
-            this.onAfterOpen.call(null, this, container, colIndex);
-        }
+
+        this.onAfterOpen(this, container, colIndex);
     }
 
     /**
@@ -331,17 +329,16 @@ export class PopupFilter extends Feature {
      */
     close(colIndex) {
         let container = this.fltElms[colIndex];
-        if (this.onBeforeClose) {
-            this.onBeforeClose.call(null, this, container, colIndex);
-        }
+
+        this.onBeforeClose(this, container, colIndex);
+
         container.style.display = NONE;
         if (this.activeFilterIdx === colIndex) {
             this.activeFilterIdx = -1;
         }
         removeEvt(root, 'mouseup', (evt) => this.onMouseup(evt));
-        if (this.onAfterClose) {
-            this.onAfterClose.call(null, this, container, colIndex);
-        }
+
+        this.onAfterClose(this, container, colIndex);
     }
 
     /**
