@@ -34,6 +34,26 @@ test('Properties', function() {
 test('Can destroy', function() {
     altRows.destroy();
     deepEqual(altRows.initialized, false, 'not initialised');
+    deepEqual(
+        altRows.emitter.events['row-processed'].length,
+        0,
+        '`row-processed` event handler removed'
+    );
+    deepEqual(
+        altRows.emitter.events['row-paged'].length,
+        0,
+        '`row-paged` event handler removed'
+    );
+    deepEqual(
+        altRows.emitter.events['column-sorted'].length,
+        0,
+        '`column-sorted` event handler removed'
+    );
+    deepEqual(
+        altRows.emitter.events['rows-changed'].length,
+        0,
+        '`rows-changed` event handler removed'
+    );
 });
 test('Can reset', function() {
     altRows.reset();
@@ -175,6 +195,90 @@ test('Remove alternating rows', function() {
     deepEqual(tbl.querySelectorAll('tr.even').length, 0, 'Even bg removed');
 });
 
+module('Events');
+test('Can handle `row-processed` event', function() {
+    // setup
+    var processRow = altRows.processRow;
+    var hit = 0;
+    var args;
+    altRows.processRow = function() {
+        args = [].slice.call(arguments);
+        hit++;
+    };
+
+    // act
+    altRows.init();
+    tf.emitter.emit('row-processed', tf, 1, 0, true);
+
+    // assert
+    deepEqual(hit, 1, 'processRow called');
+    deepEqual(args[0], 1, 'processRow called with expected row index');
+    deepEqual(args[1], 0, 'processRow called with expected array index');
+    deepEqual(args[2], true, 'processRow called with expected isValid value');
+
+    altRows.processRow = processRow;
+});
+
+test('Can handle `row-paged` event', function() {
+    // setup
+    var processRow = altRows.processRow;
+    var hit = 0;
+    var args;
+    altRows.processRow = function() {
+        args = [].slice.call(arguments);
+        hit++;
+    };
+
+    // act
+    altRows.init();
+    tf.emitter.emit('row-paged', tf, 1, 0, true);
+
+    // assert
+    deepEqual(hit, 1, 'processRow called');
+    deepEqual(args[0], 1, 'processRow called with expected row index');
+    deepEqual(args[1], 0, 'processRow called with expected array index');
+    deepEqual(args[2], true, 'processRow called with expected isValid value');
+
+    altRows.processRow = processRow;
+});
+
+test('Can handle `column-sorted` event', function() {
+    // setup
+    var processAll = altRows.processAll;
+    var hit = 0;
+    altRows.processAll = function() {
+        hit++;
+    };
+
+    // act
+    altRows.init();
+    tf.emitter.emit('column-sorted');
+
+    // assert
+    deepEqual(hit, 1, 'processAll called');
+
+    altRows.processAll = processAll;
+});
+
+test('Can handle `rows-changed` event', function() {
+    // setup
+    var processAll = altRows.processAll;
+    var hit = 0;
+    altRows.processAll = function() {
+        hit++;
+    };
+
+    // act
+    altRows.init();
+    tf.emitter.emit('rows-changed');
+
+    // assert
+    deepEqual(hit, 1, 'processAll called');
+
+    altRows.processAll = processAll;
+});
+
+module('Grid layout');
 test('Grid layout: initialising alternating rows', function() {
     tf.destroy();
     tf = null;
@@ -226,6 +330,7 @@ test('Grid layout: remove alternating rows', function() {
     deepEqual(tbl.querySelectorAll('tr.even').length, 0, 'Even bg removed');
 });
 
+module('Fixes');
 // Issue 365: alternating rows with column sorted at start
 test('Sort: alternating rows with column sorted at start', function() {
     tf.destroy();
