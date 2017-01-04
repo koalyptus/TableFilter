@@ -131,10 +131,14 @@ export class TableFilter {
             }
         });
 
-        if (!this.tbl || this.tbl.nodeName !== 'TABLE' ||
-            this.getRowsNb() === 0) {
+        if (!this.tbl || this.tbl.nodeName !== 'TABLE') {
             throw new Error(`Could not instantiate TableFilter: HTML table
                 DOM element not found.`);
+        }
+
+        if (this.getRowsNb() === 0) {
+            throw new Error(`Could not instantiate TableFilter: HTML table
+                requires at least 1 row.`);
         }
 
         // configuration object
@@ -148,7 +152,6 @@ export class TableFilter {
 
         //Start row et cols nb
         this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
-        this.nbCells = this.getCellsNb(this.refRow);
 
         /**
          * Base path for static assets
@@ -1009,6 +1012,7 @@ export class TableFilter {
             return;
         }
 
+        this.nbCells = this.getCellsNb(this.refRow);
         let Mod = this.Mod;
         let n = this.singleSearchFlt ? 1 : this.nbCells;
         let inpclass;
@@ -2234,7 +2238,7 @@ export class TableFilter {
      */
     getCellsNb(rowIndex = 0) {
         let tr = this.tbl.rows[rowIndex >= 0 ? rowIndex : 0];
-        return tr.cells.length;
+        return tr ? tr.cells.length : 0;
     }
 
     /**
