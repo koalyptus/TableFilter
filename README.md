@@ -92,7 +92,7 @@ command to generate a production build.
 
 The 
 ```shell
-npm run build-all
+npm run dist
 ``` 
 command will create a production build, run the tests and finally generate 
 the demos:
@@ -118,7 +118,7 @@ to view the coverage report(s), open the `index.html` under the
 Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) 
 or generate the demos locally:
 ```shell
-npm run build-demos
+npm run build:demos
 ```
 then run the local webserver:
 ```shell
