@@ -4,7 +4,8 @@ import {
     getText
 } from '../../dom';
 import {isFn, EMPTY_FN} from '../../types';
-import {addEvt, targetEvt} from '../../event';
+import {addEvt, targetEvt, removeEvt} from '../../event';
+import {root} from '../../root';
 
 /**
  * Columns Visibility extension
@@ -206,6 +207,12 @@ export default class ColsVisibility extends Feature {
         this.hiddenCols = [];
 
         /**
+         * Bound mouseup wrapper
+         * @private
+         */
+        this.boundMouseup = null;
+
+        /**
          * Callback fired when the extension is initialized
          * @type {Function}
          */
@@ -282,9 +289,31 @@ export default class ColsVisibility extends Feature {
     }
 
     /**
+     * Mouse-up event handler handling popup auto-close behaviour
+     * @private
+     */
+    onMouseup(evt) {
+        let targetElm = targetEvt(evt);
+
+        while (targetElm && targetElm !== this.contEl
+            && targetElm !== this.btnEl) {
+            targetElm = targetElm.parentNode;
+        }
+
+        if (targetElm !== this.contEl && targetElm !== this.btnEl) {
+            this.toggle();
+        }
+
+        return;
+    }
+
+    /**
      * Toggle columns manager UI
      */
     toggle() {
+        // ensure mouseup event handler is removed
+        removeEvt(root, 'mouseup', this.boundMouseup);
+
         let contDisplay = this.contEl.style.display;
 
         if (contDisplay !== 'inline') {
@@ -299,6 +328,7 @@ export default class ColsVisibility extends Feature {
 
         if (contDisplay !== 'inline') {
             this.onAfterOpen(this);
+            addEvt(root, 'mouseup', this.boundMouseup);
         }
         if (contDisplay === 'inline') {
             this.onAfterClose(this);
@@ -345,10 +375,10 @@ export default class ColsVisibility extends Feature {
         this.buildBtn();
         this.buildManager();
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
+
+        this.boundMouseup = this.onMouseup.bind(this);
 
         this.emitter.emit('columns-visibility-initialized', this.tf, this);
 
@@ -664,6 +694,8 @@ export default class ColsVisibility extends Feature {
 
         this.emitter.off(['hide-column'],
             (tf, colIndex) => this.hideCol(colIndex));
+
+        this.boundMouseup = null;
 
         this.initialized = false;
     }
