@@ -42,6 +42,21 @@ export default class ColOps extends Feature {
          */
         this.opts = opts;
 
+        /**
+         * List of results per column
+         * @type {Array}
+         * @private
+         */
+        // this.list = [];
+
+        // this.operations = [];
+
+        // this.precisions = [];
+
+        // this.labels = [];
+
+        // this.writeTypes = [];
+
         this.enable();
     }
 
@@ -99,36 +114,36 @@ export default class ColOps extends Feature {
                 2 : opts.decimal_precision;
 
         //nuovella: determine unique list of columns to operate on
-        let ucolIndex = [],
-            ucolMax = 0;
-        ucolIndex[ucolMax] = colIndex[0];
+        let uColIdx = [],
+            uColMax = 0;
+        uColIdx[uColMax] = colIndex[0];
 
         for (let ii = 1; ii < colIndex.length; ii++) {
             let saved = 0;
             //see if colIndex[ii] is already in the list of unique indexes
-            for (let jj = 0; jj <= ucolMax; jj++) {
-                if (ucolIndex[jj] === colIndex[ii]) {
+            for (let jj = 0; jj <= uColMax; jj++) {
+                if (uColIdx[jj] === colIndex[ii]) {
                     saved = 1;
                 }
             }
             //if not saved then, save the index;
             if (saved === 0) {
-                ucolMax++;
-                ucolIndex[ucolMax] = colIndex[ii];
+                uColMax++;
+                uColIdx[uColMax] = colIndex[ii];
             }
         }
 
         if (isArray(labelId) && isArray(colIndex) && isArray(operation)) {
             let rows = tf.tbl.rows,
-                colvalues = [],
-                ucol = 0;
+                colValues = [],
+                uCol = 0;
 
-            for (; ucol <= ucolMax; ucol++) {
+            for (; uCol <= uColMax; uCol++) {
                 //this retrieves col values
-                //use ucolIndex because we only want to pass through this loop
+                //use uColIdx because we only want to pass through this loop
                 //once for each column get the values in this unique column
-                colvalues.push(
-                    tf.getColValues(ucolIndex[ucol], false, true, excludeRow)
+                colValues.push(
+                    tf.getColValues(uColIdx[uCol], false, true, excludeRow)
                 );
 
                 //next: calculate all operations for this column
@@ -149,26 +164,31 @@ export default class ColOps extends Feature {
                     q1Flag = 0,
                     medFlag = 0,
                     q3Flag = 0,
-                    theList = [],
-                    opsThisCol = [],
-                    decThisCol = [],
-                    labThisCol = [],
-                    oTypeThisCol = [],
-                    mThisCol = -1,
+                    // theList = [],
+                    // opsThisCol = [],
+                    // decThisCol = [],
+                    // labThisCol = [],
+                    // oTypeThisCol = [],
+                    list = [],
+                    operations = [],
+                    precisions = [],
+                    labels = [],
+                    writeTypes = [],
+                    idx = -1,
                     k = 0,
                     j = 0,
                     i = 0;
 
                 for (; k < colIndex.length; k++) {
-                    if (colIndex[k] === ucolIndex[ucol]) {
-                        mThisCol++;
-                        opsThisCol[mThisCol] = operation[k].toLowerCase();
-                        decThisCol[mThisCol] = decimalPrecision[k];
-                        labThisCol[mThisCol] = labelId[k];
-                        oTypeThisCol = isArray(outputType) ?
+                    if (colIndex[k] === uColIdx[uCol]) {
+                        idx++;
+                        operations[idx] = operation[k].toLowerCase();
+                        precisions[idx] = decimalPrecision[k];
+                        labels[idx] = labelId[k];
+                        writeTypes = isArray(outputType) ?
                             outputType[k] : null;
 
-                        switch (opsThisCol[mThisCol]) {
+                        switch (operations[idx]) {
                             case 'mean':
                                 meanFlag = 1;
                                 break;
@@ -194,44 +214,44 @@ export default class ColOps extends Feature {
                     }
                 }
 
-                for (; j < colvalues[ucol].length; j++) {
+                for (; j < colValues[uCol].length; j++) {
                     //sort the list for calculation of median and quartiles
                     if ((q1Flag === 1) || (q3Flag === 1) || (medFlag === 1)) {
-                        if (j < colvalues[ucol].length - 1) {
-                            for (k = j + 1; k < colvalues[ucol].length; k++) {
+                        if (j < colValues[uCol].length - 1) {
+                            for (k = j + 1; k < colValues[uCol].length; k++) {
                                 /* eslint-disable */
-                                if (eval(colvalues[ucol][k]) <
-                                    eval(colvalues[ucol][j])) {
+                                if (eval(colValues[uCol][k]) <
+                                    eval(colValues[uCol][j])) {
                                     /* eslint-enable */
-                                    temp = colvalues[ucol][j];
-                                    colvalues[ucol][j] = colvalues[ucol][k];
-                                    colvalues[ucol][k] = temp;
+                                    temp = colValues[uCol][j];
+                                    colValues[uCol][j] = colValues[uCol][k];
+                                    colValues[uCol][k] = temp;
                                 }
                             }
                         }
                     }
-                    let cvalue = parseFloat(colvalues[ucol][j]);
-                    theList[j] = parseFloat(cvalue);
+                    let cValue = parseFloat(colValues[uCol][j]);
+                    list[j] = parseFloat(cValue);
 
-                    if (!isNaN(cvalue)) {
+                    if (!isNaN(cValue)) {
                         nbvalues++;
                         if (sumFlag === 1 || meanFlag === 1) {
-                            sumValue += parseFloat(cvalue);
+                            sumValue += parseFloat(cValue);
                         }
                         if (minFlag === 1) {
                             if (minValue === null) {
-                                minValue = parseFloat(cvalue);
+                                minValue = parseFloat(cValue);
                             } else {
-                                minValue = parseFloat(cvalue) < minValue ?
-                                    parseFloat(cvalue) : minValue;
+                                minValue = parseFloat(cValue) < minValue ?
+                                    parseFloat(cValue) : minValue;
                             }
                         }
                         if (maxFlag === 1) {
                             if (maxValue === null) {
-                                maxValue = parseFloat(cvalue);
+                                maxValue = parseFloat(cValue);
                             } else {
-                                maxValue = parseFloat(cvalue) > maxValue ?
-                                    parseFloat(cvalue) : maxValue;
+                                maxValue = parseFloat(cValue) > maxValue ?
+                                    parseFloat(cValue) : maxValue;
                             }
                         }
                     }
@@ -243,10 +263,10 @@ export default class ColOps extends Feature {
                     let aux = 0;
                     if (nbvalues % 2 === 1) {
                         aux = Math.floor(nbvalues / 2);
-                        medValue = theList[aux];
+                        medValue = list[aux];
                     } else {
-                        medValue = (theList[nbvalues / 2] +
-                            theList[((nbvalues / 2) - 1)]) / 2;
+                        medValue = (list[nbvalues / 2] +
+                            list[((nbvalues / 2) - 1)]) / 2;
                     }
                 }
                 let posa;
@@ -254,9 +274,9 @@ export default class ColOps extends Feature {
                     posa = 0.0;
                     posa = Math.floor(nbvalues / 4);
                     if (4 * posa === nbvalues) {
-                        q1Value = (theList[posa - 1] + theList[posa]) / 2;
+                        q1Value = (list[posa - 1] + list[posa]) / 2;
                     } else {
-                        q1Value = theList[posa];
+                        q1Value = list[posa];
                     }
                 }
                 if (q3Flag === 1) {
@@ -265,14 +285,14 @@ export default class ColOps extends Feature {
                     posa = Math.floor(nbvalues / 4);
                     if (4 * posa === nbvalues) {
                         posb = 3 * posa;
-                        q3Value = (theList[posb] + theList[posb - 1]) / 2;
+                        q3Value = (list[posb] + list[posb - 1]) / 2;
                     } else {
-                        q3Value = theList[nbvalues - posa - 1];
+                        q3Value = list[nbvalues - posa - 1];
                     }
                 }
 
-                for (; i <= mThisCol; i++) {
-                    switch (opsThisCol[i]) {
+                for (; i <= idx; i++) {
+                    switch (operations[i]) {
                         case 'mean':
                             result = meanValue;
                             break;
@@ -296,30 +316,31 @@ export default class ColOps extends Feature {
                             break;
                     }
 
-                    let precision = !isNaN(decThisCol[i]) ? decThisCol[i] : 2;
+                    let precision = !isNaN(precisions[i]) ?
+                        precisions[i] : 2;
 
                     //if outputType is defined
-                    if (oTypeThisCol && result) {
+                    if (writeTypes && result) {
                         result = result.toFixed(precision);
 
-                        if (elm(labThisCol[i])) {
-                            switch (oTypeThisCol.toLowerCase()) {
+                        if (elm(labels[i])) {
+                            switch (writeTypes.toLowerCase()) {
                                 case 'innerhtml':
                                     if (isNaN(result) || !isFinite(result) ||
                                         nbvalues === 0) {
-                                        elm(labThisCol[i]).innerHTML = '.';
+                                        elm(labels[i]).innerHTML = '.';
                                     } else {
-                                        elm(labThisCol[i]).innerHTML = result;
+                                        elm(labels[i]).innerHTML = result;
                                     }
                                     break;
                                 case 'setvalue':
-                                    elm(labThisCol[i]).value = result;
+                                    elm(labels[i]).value = result;
                                     break;
                                 case 'createtextnode':
                                     let oldnode =
-                                        elm(labThisCol[i]).firstChild;
+                                        elm(labels[i]).firstChild;
                                     let txtnode = createText(result);
-                                    elm(labThisCol[i])
+                                    elm(labels[i])
                                         .replaceChild(txtnode, oldnode);
                                     break;
                             }//switch
@@ -328,9 +349,9 @@ export default class ColOps extends Feature {
                         try {
                             if (isNaN(result) || !isFinite(result) ||
                                 nbvalues === 0) {
-                                elm(labThisCol[i]).innerHTML = '.';
+                                elm(labels[i]).innerHTML = '.';
                             } else {
-                                elm(labThisCol[i]).innerHTML =
+                                elm(labels[i]).innerHTML =
                                     result.toFixed(precision);
                             }
                         } catch (e) { }//catch
@@ -338,17 +359,21 @@ export default class ColOps extends Feature {
                 }//for i
 
                 // row(s) with result are always visible
-                let totRow = totRowIndex && totRowIndex[ucol] ?
-                    rows[totRowIndex[ucol]] : null;
+                let totRow = totRowIndex && totRowIndex[uCol] ?
+                    rows[totRowIndex[uCol]] : null;
                 if (totRow) {
                     totRow.style.display = '';
                 }
-            }//for ucol
+            }//for uCol
         }//if typeof
 
         this.onAfterOperation(tf, this);
         this.emitter.emit('after-column-operation', tf, this);
     }
+
+    // writeResult(colIdx) {
+
+    // }
 
     /**
      * Remove extension
