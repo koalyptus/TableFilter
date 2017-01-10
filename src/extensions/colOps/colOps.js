@@ -55,7 +55,7 @@ export default class ColOps extends Feature {
 
         // this.labels = [];
 
-        // this.writeTypes = [];
+        // this.writeType = null;
 
         this.enable();
     }
@@ -148,7 +148,7 @@ export default class ColOps extends Feature {
 
                 //next: calculate all operations for this column
                 let result,
-                    nbvalues = 0,
+                    nbValues = 0,
                     temp,
                     meanValue = 0,
                     sumValue = 0,
@@ -173,7 +173,7 @@ export default class ColOps extends Feature {
                     operations = [],
                     precisions = [],
                     labels = [],
-                    writeTypes = [],
+                    writeType,
                     idx = -1,
                     k = 0,
                     j = 0,
@@ -185,8 +185,7 @@ export default class ColOps extends Feature {
                         operations[idx] = operation[k].toLowerCase();
                         precisions[idx] = decimalPrecision[k];
                         labels[idx] = labelId[k];
-                        writeTypes = isArray(outputType) ?
-                            outputType[k] : null;
+                        writeType = isArray(outputType) ? outputType[k] : null;
 
                         switch (operations[idx]) {
                             case 'mean':
@@ -234,7 +233,7 @@ export default class ColOps extends Feature {
                     list[j] = parseFloat(cValue);
 
                     if (!isNaN(cValue)) {
-                        nbvalues++;
+                        nbValues++;
                         if (sumFlag === 1 || meanFlag === 1) {
                             sumValue += parseFloat(cValue);
                         }
@@ -257,23 +256,23 @@ export default class ColOps extends Feature {
                     }
                 }//for j
                 if (meanFlag === 1) {
-                    meanValue = sumValue / nbvalues;
+                    meanValue = sumValue / nbValues;
                 }
                 if (medFlag === 1) {
                     let aux = 0;
-                    if (nbvalues % 2 === 1) {
-                        aux = Math.floor(nbvalues / 2);
+                    if (nbValues % 2 === 1) {
+                        aux = Math.floor(nbValues / 2);
                         medValue = list[aux];
                     } else {
-                        medValue = (list[nbvalues / 2] +
-                            list[((nbvalues / 2) - 1)]) / 2;
+                        medValue = (list[nbValues / 2] +
+                            list[((nbValues / 2) - 1)]) / 2;
                     }
                 }
                 let posa;
                 if (q1Flag === 1) {
                     posa = 0.0;
-                    posa = Math.floor(nbvalues / 4);
-                    if (4 * posa === nbvalues) {
+                    posa = Math.floor(nbValues / 4);
+                    if (4 * posa === nbValues) {
                         q1Value = (list[posa - 1] + list[posa]) / 2;
                     } else {
                         q1Value = list[posa];
@@ -282,12 +281,12 @@ export default class ColOps extends Feature {
                 if (q3Flag === 1) {
                     posa = 0.0;
                     let posb = 0.0;
-                    posa = Math.floor(nbvalues / 4);
-                    if (4 * posa === nbvalues) {
+                    posa = Math.floor(nbValues / 4);
+                    if (4 * posa === nbValues) {
                         posb = 3 * posa;
                         q3Value = (list[posb] + list[posb - 1]) / 2;
                     } else {
-                        q3Value = list[nbvalues - posa - 1];
+                        q3Value = list[nbValues - posa - 1];
                     }
                 }
 
@@ -316,46 +315,53 @@ export default class ColOps extends Feature {
                             break;
                     }
 
-                    let precision = !isNaN(precisions[i]) ?
-                        precisions[i] : 2;
+                    // let precision = !isNaN(precisions[i]) ?
+                        // precisions[i] : 2;
+
+                    this.writeResult(
+                        result,
+                        labels[i],
+                        writeType,
+                        precisions[i]
+                    );
 
                     //if outputType is defined
-                    if (writeTypes && result) {
-                        result = result.toFixed(precision);
+                    // if (writeType && result) {
+                    //     result = result.toFixed(precision);
 
-                        if (elm(labels[i])) {
-                            switch (writeTypes.toLowerCase()) {
-                                case 'innerhtml':
-                                    if (isNaN(result) || !isFinite(result) ||
-                                        nbvalues === 0) {
-                                        elm(labels[i]).innerHTML = '.';
-                                    } else {
-                                        elm(labels[i]).innerHTML = result;
-                                    }
-                                    break;
-                                case 'setvalue':
-                                    elm(labels[i]).value = result;
-                                    break;
-                                case 'createtextnode':
-                                    let oldnode =
-                                        elm(labels[i]).firstChild;
-                                    let txtnode = createText(result);
-                                    elm(labels[i])
-                                        .replaceChild(txtnode, oldnode);
-                                    break;
-                            }//switch
-                        }
-                    } else {
-                        try {
-                            if (isNaN(result) || !isFinite(result) ||
-                                nbvalues === 0) {
-                                elm(labels[i]).innerHTML = '.';
-                            } else {
-                                elm(labels[i]).innerHTML =
-                                    result.toFixed(precision);
-                            }
-                        } catch (e) { }//catch
-                    }//else
+                    //     if (elm(labels[i])) {
+                    //         switch (writeType.toLowerCase()) {
+                    //             case 'innerhtml':
+                    //                 if (isNaN(result) || !isFinite(result) ||
+                    //                     nbValues === 0) {
+                    //                     elm(labels[i]).innerHTML = '.';
+                    //                 } else {
+                    //                     elm(labels[i]).innerHTML = result;
+                    //                 }
+                    //                 break;
+                    //             case 'setvalue':
+                    //                 elm(labels[i]).value = result;
+                    //                 break;
+                    //             case 'createtextnode':
+                    //                 let oldnode =
+                    //                     elm(labels[i]).firstChild;
+                    //                 let txtnode = createText(result);
+                    //                 elm(labels[i])
+                    //                     .replaceChild(txtnode, oldnode);
+                    //                 break;
+                    //         }//switch
+                    //     }
+                    // } else {
+                    //     try {
+                    //         if (isNaN(result) || !isFinite(result) ||
+                    //             nbValues === 0) {
+                    //             elm(labels[i]).innerHTML = '.';
+                    //         } else {
+                    //             elm(labels[i]).innerHTML =
+                    //                 result.toFixed(precision);
+                    //         }
+                    //     } catch (e) { }//catch
+                    // }//else
                 }//for i
 
                 // row(s) with result are always visible
@@ -371,9 +377,33 @@ export default class ColOps extends Feature {
         this.emitter.emit('after-column-operation', tf, this);
     }
 
-    // writeResult(colIdx) {
+    writeResult(result = 0, label, writeType, precision = 2) {
+        let labelElm = elm(label);
 
-    // }
+        if (!labelElm) {
+            return;
+        }
+
+        result = result.toFixed(precision);
+        if (isNaN(result) || !isFinite(result)) {
+            result = '';
+        }
+
+        switch (writeType.toLowerCase()) {
+            case 'innerhtml':
+                labelElm.innerHTML = result;
+                break;
+            case 'setvalue':
+                labelElm.value = result;
+                break;
+            case 'createtextnode':
+                let oldnode = labelElm.firstChild;
+                let txtnode = createText(result);
+                labelElm.replaceChild(txtnode, oldnode);
+                break;
+        }
+
+    }
 
     /**
      * Remove extension
