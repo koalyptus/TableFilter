@@ -237,14 +237,17 @@ export default class ColOps extends Feature {
                     //         }
                     //     }
                     // }
-                    let cValue = parseFloat(colValues[uCol][j]);
-                    list[j] = cValue;
+                    // let cValue = parseFloat(colValues[uCol][j]);
+                    // list[j] = cValue;
 
-                    if (!isNaN(cValue)) {
+                    list[j] = parseFloat(colValues[uCol][j]);
+                    console.log(j, list[j]);
+
+                    if (!isNaN(list[j])) {
                         nbValues++;
-                        if (sumFlag === 1 || meanFlag === 1) {
-                            sumValue += parseFloat(cValue);
-                        }
+                        // if (sumFlag === 1 || meanFlag === 1) {
+                        //     sumValue += parseFloat(cValue);
+                        // }
                         // if (minFlag === 1) {
                         //     if (minValue === null) {
                         //         minValue = parseFloat(cValue);
@@ -265,7 +268,7 @@ export default class ColOps extends Feature {
                 }//for j
 
                 if (sumFlag === 1 || meanFlag === 1) {
-
+                    sumValue = this.calcSum(colValues[uCol]);
                 }
                 if (maxFlag === 1) {
                     maxValue = this.calcMax(colValues[uCol]);
@@ -273,40 +276,42 @@ export default class ColOps extends Feature {
                 if (minFlag === 1) {
                     minValue = this.calcMin(colValues[uCol]);
                 }
-
                 if (meanFlag === 1) {
                     meanValue = sumValue / nbValues;
                 }
                 if (medFlag === 1) {
-                    let aux = 0;
-                    if (nbValues % 2 === 1) {
-                        aux = Math.floor(nbValues / 2);
-                        medValue = list[aux];
-                    } else {
-                        medValue = (list[nbValues / 2] +
-                            list[((nbValues / 2) - 1)]) / 2;
-                    }
+                    medValue = this.calcMedian(list, nbValues);
+                    // let aux = 0;
+                    // if (nbValues % 2 === 1) {
+                    //     aux = Math.floor(nbValues / 2);
+                    //     medValue = list[aux];
+                    // } else {
+                    //     medValue = (list[nbValues / 2] +
+                    //         list[((nbValues / 2) - 1)]) / 2;
+                    // }
                 }
                 let posa;
                 if (q1Flag === 1) {
-                    posa = 0.0;
-                    posa = Math.floor(nbValues / 4);
-                    if (4 * posa === nbValues) {
-                        q1Value = (list[posa - 1] + list[posa]) / 2;
-                    } else {
-                        q1Value = list[posa];
-                    }
+                    q1Value = this.calcQ1(list, nbValues);
+                    // posa = 0.0;
+                    // posa = Math.floor(nbValues / 4);
+                    // if (4 * posa === nbValues) {
+                    //     q1Value = (list[posa - 1] + list[posa]) / 2;
+                    // } else {
+                    //     q1Value = list[posa];
+                    // }
                 }
                 if (q3Flag === 1) {
-                    posa = 0.0;
-                    let posb = 0.0;
-                    posa = Math.floor(nbValues / 4);
-                    if (4 * posa === nbValues) {
-                        posb = 3 * posa;
-                        q3Value = (list[posb] + list[posb - 1]) / 2;
-                    } else {
-                        q3Value = list[nbValues - posa - 1];
-                    }
+                    q3Value = this.calcQ3(list, nbValues);
+                    // posa = 0.0;
+                    // let posb = 0.0;
+                    // posa = Math.floor(nbValues / 4);
+                    // if (4 * posa === nbValues) {
+                    //     posb = 3 * posa;
+                    //     q3Value = (list[posb] + list[posb - 1]) / 2;
+                    // } else {
+                    //     q3Value = list[nbValues - posa - 1];
+                    // }
                 }
 
                 for (; i <= idx; i++) {
@@ -396,12 +401,49 @@ export default class ColOps extends Feature {
         this.emitter.emit('after-column-operation', tf, this);
     }
 
+    calcSum(values = []) {
+        return values.reduce((x, y) => x + y);
+    }
+
     calcMax(values = []) {
         return Math.max.apply(null, values);
     }
 
     calcMin(values = []) {
         return Math.min.apply(null, values);
+    }
+
+    calcMedian(values = [], nbValues = 0) {
+        let aux = 0;
+        if (nbValues % 2 === 1) {
+            aux = Math.floor(nbValues / 2);
+            return values[aux];
+        } else {
+            return (values[nbValues / 2] +
+                values[((nbValues / 2) - 1)]) / 2;
+        }
+    }
+
+    calcQ1(values = [], nbValues) {
+        let posa = 0.0;
+        posa = Math.floor(nbValues / 4);
+        if (4 * posa === nbValues) {
+            return (values[posa - 1] + values[posa]) / 2;
+        } else {
+            return values[posa];
+        }
+    }
+
+    calcQ3(values = [], nbValues) {
+        let posa = 0.0;
+        let posb = 0.0;
+        posa = Math.floor(nbValues / 4);
+        if (4 * posa === nbValues) {
+            posb = 3 * posa;
+            return (values[posb] + values[posb - 1]) / 2;
+        } else {
+            return values[nbValues - posa - 1];
+        }
     }
 
     sortColumnValues(values = [], sorter) {
