@@ -1,6 +1,7 @@
 import {Feature} from '../../feature';
 import {createText, elm} from '../../dom';
 import {isArray, isFn, isUndef, EMPTY_FN} from '../../types';
+import {numSortAsc} from '../../sort';
 
 const EVENTS = [
     'after-filtering',
@@ -105,7 +106,7 @@ export default class ColOps extends Feature {
 
         let opts = this.opts,
             labelId = opts.id,
-            colIndex = opts.col,
+            colIndexes = opts.col,
             operation = opts.operation,
             outputType = opts.write_method,
             totRowIndex = opts.tot_row_index,
@@ -116,24 +117,24 @@ export default class ColOps extends Feature {
         //nuovella: determine unique list of columns to operate on
         let uColIdx = [],
             uColMax = 0;
-        uColIdx[uColMax] = colIndex[0];
+        uColIdx[uColMax] = colIndexes[0];
 
-        for (let ii = 1; ii < colIndex.length; ii++) {
+        for (let ii = 1; ii < colIndexes.length; ii++) {
             let saved = 0;
-            //see if colIndex[ii] is already in the list of unique indexes
+            //see if colIndexes[ii] is already in the list of unique indexes
             for (let jj = 0; jj <= uColMax; jj++) {
-                if (uColIdx[jj] === colIndex[ii]) {
+                if (uColIdx[jj] === colIndexes[ii]) {
                     saved = 1;
                 }
             }
             //if not saved then, save the index;
             if (saved === 0) {
                 uColMax++;
-                uColIdx[uColMax] = colIndex[ii];
+                uColIdx[uColMax] = colIndexes[ii];
             }
         }
 
-        if (isArray(labelId) && isArray(colIndex) && isArray(operation)) {
+        if (isArray(labelId) && isArray(colIndexes) && isArray(operation)) {
             let rows = tf.tbl.rows,
                 colValues = [],
                 uCol = 0;
@@ -149,7 +150,7 @@ export default class ColOps extends Feature {
                 //next: calculate all operations for this column
                 let result,
                     nbValues = 0,
-                    temp,
+                    // temp,
                     meanValue = 0,
                     sumValue = 0,
                     minValue = null,
@@ -179,8 +180,8 @@ export default class ColOps extends Feature {
                     j = 0,
                     i = 0;
 
-                for (; k < colIndex.length; k++) {
-                    if (colIndex[k] === uColIdx[uCol]) {
+                for (; k < colIndexes.length; k++) {
+                    if (colIndexes[k] === uColIdx[uCol]) {
                         idx++;
                         operations[idx] = operation[k].toLowerCase();
                         precisions[idx] = decimalPrecision[k];
@@ -213,48 +214,66 @@ export default class ColOps extends Feature {
                     }
                 }
 
+                //sort the list for calculation of median and quartiles
+                if ((q1Flag === 1) || (q3Flag === 1) || (medFlag === 1)) {
+                    colValues[uCol] =
+                        this.sortColumnValues(colValues[uCol], numSortAsc);
+                }
+
                 for (; j < colValues[uCol].length; j++) {
                     //sort the list for calculation of median and quartiles
-                    if ((q1Flag === 1) || (q3Flag === 1) || (medFlag === 1)) {
-                        if (j < colValues[uCol].length - 1) {
-                            for (k = j + 1; k < colValues[uCol].length; k++) {
-                                /* eslint-disable */
-                                if (eval(colValues[uCol][k]) <
-                                    eval(colValues[uCol][j])) {
-                                    /* eslint-enable */
-                                    temp = colValues[uCol][j];
-                                    colValues[uCol][j] = colValues[uCol][k];
-                                    colValues[uCol][k] = temp;
-                                }
-                            }
-                        }
-                    }
+                    // if ((q1Flag === 1) || (q3Flag === 1) ||
+                    // (medFlag === 1)) {
+                    //     if (j < colValues[uCol].length - 1) {
+                    //         for (k = j + 1; k < colValues[uCol].length; k++){
+                    //             /* eslint-disable */
+                    //             if (eval(colValues[uCol][k]) <
+                    //                 eval(colValues[uCol][j])) {
+                    //                 /* eslint-enable */
+                    //                 temp = colValues[uCol][j];
+                    //                 colValues[uCol][j] = colValues[uCol][k];
+                    //                 colValues[uCol][k] = temp;
+                    //             }
+                    //         }
+                    //     }
+                    // }
                     let cValue = parseFloat(colValues[uCol][j]);
-                    list[j] = parseFloat(cValue);
+                    list[j] = cValue;
 
                     if (!isNaN(cValue)) {
                         nbValues++;
                         if (sumFlag === 1 || meanFlag === 1) {
                             sumValue += parseFloat(cValue);
                         }
-                        if (minFlag === 1) {
-                            if (minValue === null) {
-                                minValue = parseFloat(cValue);
-                            } else {
-                                minValue = parseFloat(cValue) < minValue ?
-                                    parseFloat(cValue) : minValue;
-                            }
-                        }
-                        if (maxFlag === 1) {
-                            if (maxValue === null) {
-                                maxValue = parseFloat(cValue);
-                            } else {
-                                maxValue = parseFloat(cValue) > maxValue ?
-                                    parseFloat(cValue) : maxValue;
-                            }
-                        }
+                        // if (minFlag === 1) {
+                        //     if (minValue === null) {
+                        //         minValue = parseFloat(cValue);
+                        //     } else {
+                        //         minValue = parseFloat(cValue) < minValue ?
+                        //             parseFloat(cValue) : minValue;
+                        //     }
+                        // }
+                        // if (maxFlag === 1) {
+                        //     if (maxValue === null) {
+                        //         maxValue = parseFloat(cValue);
+                        //     } else {
+                        //         maxValue = parseFloat(cValue) > maxValue ?
+                        //             parseFloat(cValue) : maxValue;
+                        //     }
+                        // }
                     }
                 }//for j
+
+                if (sumFlag === 1 || meanFlag === 1) {
+
+                }
+                if (maxFlag === 1) {
+                    maxValue = this.calcMax(colValues[uCol]);
+                }
+                if (minFlag === 1) {
+                    minValue = this.calcMin(colValues[uCol]);
+                }
+
                 if (meanFlag === 1) {
                     meanValue = sumValue / nbValues;
                 }
@@ -377,7 +396,19 @@ export default class ColOps extends Feature {
         this.emitter.emit('after-column-operation', tf, this);
     }
 
-    writeResult(result = 0, label, writeType, precision = 2) {
+    calcMax(values = []) {
+        return Math.max.apply(null, values);
+    }
+
+    calcMin(values = []) {
+        return Math.min.apply(null, values);
+    }
+
+    sortColumnValues(values = [], sorter) {
+        return values.sort(sorter);
+    }
+
+    writeResult(result = 0, label, writeType = 'innerhtml', precision = 2) {
         let labelElm = elm(label);
 
         if (!labelElm) {
