@@ -2107,7 +2107,7 @@ export class TableFilter {
             if (nchilds === this.nbCells && !isExludedRow) {
                 // this loop retrieves cell data
                 for (let j = 0; j < nchilds; j++) {
-                    if (j !== colIndex || row[i].style.display !== '') {
+                    if (j !== colIndex /*|| row[i].style.display !== ''*/) {
                         continue;
                     }
                     let cellData = this.getCellData(cell[j]);
@@ -2357,24 +2357,81 @@ export class TableFilter {
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredDataCol(colIndex, includeHeaders = false) {
+    // getFilteredDataCol(colIndex, includeHeaders = false) {
+    //     if (isUndef(colIndex)) {
+    //         return [];
+    //     }
+    //     let data = this.getFilteredData(),
+    //         colData = [];
+    //     if (includeHeaders) {
+    //         colData.push(this.getHeadersText()[colIndex]);
+    //     }
+    //     for (let i = 0, len = data.length; i < len; i++) {
+    //         let r = data[i],
+    //             //cols values of current row
+    //             d = r[1],
+    //             //data of searched column
+    //             c = d[colIndex];
+    //         colData.push(c);
+    //     }
+    //     return colData;
+    // }
+
+    /**
+     * Return the filtered data for a given column index
+     * @param  {Number} colIndex Colmun's index
+     * @param  {Boolean} includeHeaders  Optional: include headers row
+     * @param  {Boolean} num     Optional: return unformatted number
+     * @param  {Array} exclude   Optional: list of row indexes to be excluded
+     * @return {Array}           Flat list of values ['val0','val1','val2'...]
+     *
+     * TODO: provide an API returning data in JSON format
+     */
+    getFilteredDataCol(
+        colIndex,
+        includeHeaders = false,
+        num = false,
+        exclude = []
+    ) {
         if (isUndef(colIndex)) {
             return [];
         }
-        let data = this.getFilteredData(),
-            colData = [];
+        // retrieve column values
+        let colValues =
+            this.getColValues(colIndex, includeHeaders, num, exclude);
+
+        let rows = this.tbl.rows;
+
+        // ensure valid rows index do not contain excluded rows and row is
+        // displayed
+        let validRows = this.getValidRows(true).filter((rowIdx) => {
+            return exclude.indexOf(rowIdx) === -1 &&
+                this.getRowDisplay(rows[rowIdx]) !== 'none';
+        });
+
+        let decimal = this.decimalSeparator;
+        if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
+            let colType = this.colTypes[colIndex];
+            if (colType.hasOwnProperty('decimal')) {
+                decimal = colType.decimal;
+            }
+        }
+
+        // convert column value to expected type if necessary
+        let validColValues = validRows.map((rowIdx) => {
+            let val = this.getCellData(rows[rowIdx].cells[colIndex]);
+            return num ? Number(val) || parseNb(val, decimal) : val;
+        });
+
+        // retain column values in valid rows only
+        colValues = colValues.filter((value) => {
+            return validColValues.indexOf(value) !== -1;
+        });
+
         if (includeHeaders) {
-            colData.push(this.getHeadersText()[colIndex]);
+            colValues.unshift(this.getHeadersText()[colIndex]);
         }
-        for (let i = 0, len = data.length; i < len; i++) {
-            let r = data[i],
-                //cols values of current row
-                d = r[1],
-                //data of searched column
-                c = d[colIndex];
-            colData.push(c);
-        }
-        return colData;
+        return colValues;
     }
 
     /**

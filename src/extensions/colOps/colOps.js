@@ -112,7 +112,7 @@ export default class ColOps extends Feature {
                     saved = 1;
                 }
             }
-            //if not saved then, save the index;
+            //if not saved then, save the index
             if (saved === 0) {
                 uColMax++;
                 uColIdx[uColMax] = colIndexes[ii];
@@ -128,8 +128,8 @@ export default class ColOps extends Feature {
                 //this retrieves col values
                 //use uColIdx because we only want to pass through this loop
                 //once for each column get the values in this unique column
-                colValues.push(
-                    tf.getColValues(uColIdx[uCol], false, true, excludeRow)
+                colValues.push(tf
+                    .getFilteredDataCol(uColIdx[uCol], false, true, excludeRow)
                 );
 
                 let curValues = colValues[uCol];
@@ -204,7 +204,7 @@ export default class ColOps extends Feature {
                 }
 
                 //sort the values for calculation of median and quartiles
-                if ((q1Flag === 1) || (q3Flag === 1) || (medFlag === 1)) {
+                if (q1Flag || q3Flag || medFlag) {
                     curValues = this.sortColumnValues(curValues, numSortAsc);
                 }
 
