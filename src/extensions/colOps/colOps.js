@@ -43,21 +43,6 @@ export default class ColOps extends Feature {
          */
         this.opts = opts;
 
-        /**
-         * List of results per column
-         * @type {Array}
-         * @private
-         */
-        // this.list = [];
-
-        // this.operations = [];
-
-        // this.precisions = [];
-
-        // this.labels = [];
-
-        // this.writeType = null;
-
         this.enable();
     }
 
@@ -147,9 +132,11 @@ export default class ColOps extends Feature {
                     tf.getColValues(uColIdx[uCol], false, true, excludeRow)
                 );
 
+                let curValues = colValues[uCol];
+
                 //next: calculate all operations for this column
                 let result,
-                    nbValues = 0,
+                    // nbValues = 0,
                     // temp,
                     meanValue = 0,
                     sumValue = 0,
@@ -158,160 +145,89 @@ export default class ColOps extends Feature {
                     q1Value = null,
                     medValue = null,
                     q3Value = null,
-                    meanFlag = 0,
-                    sumFlag = 0,
-                    minFlag = 0,
-                    maxFlag = 0,
-                    q1Flag = 0,
-                    medFlag = 0,
-                    q3Flag = 0,
+                    meanFlag = false,
+                    sumFlag = false,
+                    minFlag = false,
+                    maxFlag = false,
+                    q1Flag = false,
+                    medFlag = false,
+                    q3Flag = false,
                     // theList = [],
                     // opsThisCol = [],
                     // decThisCol = [],
                     // labThisCol = [],
                     // oTypeThisCol = [],
-                    list = [],
+                    // values = [],
                     operations = [],
                     precisions = [],
                     labels = [],
                     writeType,
                     idx = -1,
                     k = 0,
-                    j = 0,
+                    // j = 0,
                     i = 0;
 
                 for (; k < colIndexes.length; k++) {
-                    if (colIndexes[k] === uColIdx[uCol]) {
-                        idx++;
-                        operations[idx] = operation[k].toLowerCase();
-                        precisions[idx] = decimalPrecision[k];
-                        labels[idx] = labelId[k];
-                        writeType = isArray(outputType) ? outputType[k] : null;
+                    if (colIndexes[k] !== uColIdx[uCol]) {
+                        continue;
+                    }
 
-                        switch (operations[idx]) {
-                            case 'mean':
-                                meanFlag = 1;
-                                break;
-                            case 'sum':
-                                sumFlag = 1;
-                                break;
-                            case 'min':
-                                minFlag = 1;
-                                break;
-                            case 'max':
-                                maxFlag = 1;
-                                break;
-                            case 'median':
-                                medFlag = 1;
-                                break;
-                            case 'q1':
-                                q1Flag = 1;
-                                break;
-                            case 'q3':
-                                q3Flag = 1;
-                                break;
-                        }
+                    idx++;
+                    operations[idx] = operation[k].toLowerCase();
+                    precisions[idx] = decimalPrecision[k];
+                    labels[idx] = labelId[k];
+                    writeType = isArray(outputType) ? outputType[k] : null;
+
+                    switch (operations[idx]) {
+                        case 'mean':
+                            meanFlag = true;
+                            break;
+                        case 'sum':
+                            sumFlag = true;
+                            break;
+                        case 'min':
+                            minFlag = true;
+                            break;
+                        case 'max':
+                            maxFlag = true;
+                            break;
+                        case 'median':
+                            medFlag = true;
+                            break;
+                        case 'q1':
+                            q1Flag = true;
+                            break;
+                        case 'q3':
+                            q3Flag = true;
+                            break;
                     }
                 }
 
-                //sort the list for calculation of median and quartiles
+                //sort the values for calculation of median and quartiles
                 if ((q1Flag === 1) || (q3Flag === 1) || (medFlag === 1)) {
-                    colValues[uCol] =
-                        this.sortColumnValues(colValues[uCol], numSortAsc);
+                    curValues = this.sortColumnValues(curValues, numSortAsc);
                 }
 
-                for (; j < colValues[uCol].length; j++) {
-                    //sort the list for calculation of median and quartiles
-                    // if ((q1Flag === 1) || (q3Flag === 1) ||
-                    // (medFlag === 1)) {
-                    //     if (j < colValues[uCol].length - 1) {
-                    //         for (k = j + 1; k < colValues[uCol].length; k++){
-                    //             /* eslint-disable */
-                    //             if (eval(colValues[uCol][k]) <
-                    //                 eval(colValues[uCol][j])) {
-                    //                 /* eslint-enable */
-                    //                 temp = colValues[uCol][j];
-                    //                 colValues[uCol][j] = colValues[uCol][k];
-                    //                 colValues[uCol][k] = temp;
-                    //             }
-                    //         }
-                    //     }
-                    // }
-                    // let cValue = parseFloat(colValues[uCol][j]);
-                    // list[j] = cValue;
-
-                    list[j] = parseFloat(colValues[uCol][j]);
-                    console.log(j, list[j]);
-
-                    if (!isNaN(list[j])) {
-                        nbValues++;
-                        // if (sumFlag === 1 || meanFlag === 1) {
-                        //     sumValue += parseFloat(cValue);
-                        // }
-                        // if (minFlag === 1) {
-                        //     if (minValue === null) {
-                        //         minValue = parseFloat(cValue);
-                        //     } else {
-                        //         minValue = parseFloat(cValue) < minValue ?
-                        //             parseFloat(cValue) : minValue;
-                        //     }
-                        // }
-                        // if (maxFlag === 1) {
-                        //     if (maxValue === null) {
-                        //         maxValue = parseFloat(cValue);
-                        //     } else {
-                        //         maxValue = parseFloat(cValue) > maxValue ?
-                        //             parseFloat(cValue) : maxValue;
-                        //     }
-                        // }
-                    }
-                }//for j
-
-                if (sumFlag === 1 || meanFlag === 1) {
-                    sumValue = this.calcSum(colValues[uCol]);
+                if (sumFlag || meanFlag) {
+                    sumValue = this.calcSum(curValues);
                 }
-                if (maxFlag === 1) {
-                    maxValue = this.calcMax(colValues[uCol]);
+                if (maxFlag) {
+                    maxValue = this.calcMax(curValues);
                 }
-                if (minFlag === 1) {
-                    minValue = this.calcMin(colValues[uCol]);
+                if (minFlag) {
+                    minValue = this.calcMin(curValues);
                 }
-                if (meanFlag === 1) {
-                    meanValue = sumValue / nbValues;
+                if (meanFlag) {
+                    meanValue = sumValue / curValues.length;
                 }
-                if (medFlag === 1) {
-                    medValue = this.calcMedian(list, nbValues);
-                    // let aux = 0;
-                    // if (nbValues % 2 === 1) {
-                    //     aux = Math.floor(nbValues / 2);
-                    //     medValue = list[aux];
-                    // } else {
-                    //     medValue = (list[nbValues / 2] +
-                    //         list[((nbValues / 2) - 1)]) / 2;
-                    // }
+                if (medFlag) {
+                    medValue = this.calcMedian(curValues);
                 }
-                let posa;
-                if (q1Flag === 1) {
-                    q1Value = this.calcQ1(list, nbValues);
-                    // posa = 0.0;
-                    // posa = Math.floor(nbValues / 4);
-                    // if (4 * posa === nbValues) {
-                    //     q1Value = (list[posa - 1] + list[posa]) / 2;
-                    // } else {
-                    //     q1Value = list[posa];
-                    // }
+                if (q1Flag) {
+                    q1Value = this.calcQ1(curValues);
                 }
-                if (q3Flag === 1) {
-                    q3Value = this.calcQ3(list, nbValues);
-                    // posa = 0.0;
-                    // let posb = 0.0;
-                    // posa = Math.floor(nbValues / 4);
-                    // if (4 * posa === nbValues) {
-                    //     posb = 3 * posa;
-                    //     q3Value = (list[posb] + list[posb - 1]) / 2;
-                    // } else {
-                    //     q3Value = list[nbValues - posa - 1];
-                    // }
+                if (q3Flag) {
+                    q3Value = this.calcQ3(curValues);
                 }
 
                 for (; i <= idx; i++) {
@@ -339,9 +255,6 @@ export default class ColOps extends Feature {
                             break;
                     }
 
-                    // let precision = !isNaN(precisions[i]) ?
-                        // precisions[i] : 2;
-
                     this.writeResult(
                         result,
                         labels[i],
@@ -349,43 +262,6 @@ export default class ColOps extends Feature {
                         precisions[i]
                     );
 
-                    //if outputType is defined
-                    // if (writeType && result) {
-                    //     result = result.toFixed(precision);
-
-                    //     if (elm(labels[i])) {
-                    //         switch (writeType.toLowerCase()) {
-                    //             case 'innerhtml':
-                    //                 if (isNaN(result) || !isFinite(result) ||
-                    //                     nbValues === 0) {
-                    //                     elm(labels[i]).innerHTML = '.';
-                    //                 } else {
-                    //                     elm(labels[i]).innerHTML = result;
-                    //                 }
-                    //                 break;
-                    //             case 'setvalue':
-                    //                 elm(labels[i]).value = result;
-                    //                 break;
-                    //             case 'createtextnode':
-                    //                 let oldnode =
-                    //                     elm(labels[i]).firstChild;
-                    //                 let txtnode = createText(result);
-                    //                 elm(labels[i])
-                    //                     .replaceChild(txtnode, oldnode);
-                    //                 break;
-                    //         }//switch
-                    //     }
-                    // } else {
-                    //     try {
-                    //         if (isNaN(result) || !isFinite(result) ||
-                    //             nbValues === 0) {
-                    //             elm(labels[i]).innerHTML = '.';
-                    //         } else {
-                    //             elm(labels[i]).innerHTML =
-                    //                 result.toFixed(precision);
-                    //         }
-                    //     } catch (e) { }//catch
-                    // }//else
                 }//for i
 
                 // row(s) with result are always visible
@@ -413,7 +289,8 @@ export default class ColOps extends Feature {
         return Math.min.apply(null, values);
     }
 
-    calcMedian(values = [], nbValues = 0) {
+    calcMedian(values = []) {
+        let nbValues = values.length;
         let aux = 0;
         if (nbValues % 2 === 1) {
             aux = Math.floor(nbValues / 2);
@@ -424,7 +301,8 @@ export default class ColOps extends Feature {
         }
     }
 
-    calcQ1(values = [], nbValues) {
+    calcQ1(values = []) {
+        let nbValues = values.length;
         let posa = 0.0;
         posa = Math.floor(nbValues / 4);
         if (4 * posa === nbValues) {
@@ -434,7 +312,8 @@ export default class ColOps extends Feature {
         }
     }
 
-    calcQ3(values = [], nbValues) {
+    calcQ3(values = []) {
+        let nbValues = values.length;
         let posa = 0.0;
         let posb = 0.0;
         posa = Math.floor(nbValues / 4);
