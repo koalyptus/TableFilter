@@ -136,8 +136,6 @@ export default class ColOps extends Feature {
 
                 //next: calculate all operations for this column
                 let result,
-                    // nbValues = 0,
-                    // temp,
                     meanValue = 0,
                     sumValue = 0,
                     minValue = null,
@@ -152,19 +150,12 @@ export default class ColOps extends Feature {
                     q1Flag = false,
                     medFlag = false,
                     q3Flag = false,
-                    // theList = [],
-                    // opsThisCol = [],
-                    // decThisCol = [],
-                    // labThisCol = [],
-                    // oTypeThisCol = [],
-                    // values = [],
                     operations = [],
                     precisions = [],
                     labels = [],
                     writeType,
                     idx = -1,
                     k = 0,
-                    // j = 0,
                     i = 0;
 
                 for (; k < colIndexes.length; k++) {
@@ -277,7 +268,53 @@ export default class ColOps extends Feature {
         this.emitter.emit('after-column-operation', tf, this);
     }
 
+    columnCalc(colIndex, operation = 'sum', precision = 2) {
+        let result;
+        let colValues = [];
+        let excludeRows = this.opts.exclude_row || [];
+        let sumValue = 0;
+
+        colValues =
+            this.tf.getFilteredDataCol(colIndex, false, true, excludeRows);
+
+        if (operation === 'q1' || operation === 'q3' ||
+            operation === 'median') {
+            colValues = this.sortColumnValues(colValues, numSortAsc);
+        }
+
+        if (operation === 'sum' || operation === 'mean') {
+            sumValue = this.calcSum(colValues);
+        }
+
+        switch (operation) {
+            case 'mean':
+                result = sumValue / colValues.length;
+                break;
+            case 'sum':
+                result = sumValue;
+                break;
+            case 'min':
+                result = this.calcMin(colValues);
+                break;
+            case 'max':
+                result = this.calcMax(colValues);
+                break;
+            case 'median':
+                result = this.calcMedian(colValues);
+                break;
+            case 'q1':
+                result = this.calcQ1(colValues);
+                break;
+            case 'q3':
+                result = this.calcQ3(colValues);
+                break;
+        }
+
+        return result.toFixed(precision);
+    }
+
     calcSum(values = []) {
+        console.log(values);
         return values.reduce((x, y) => x + y);
     }
 

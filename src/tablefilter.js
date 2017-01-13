@@ -2431,6 +2431,7 @@ export class TableFilter {
         if (includeHeaders) {
             colValues.unshift(this.getHeadersText()[colIndex]);
         }
+
         return colValues;
     }
 
