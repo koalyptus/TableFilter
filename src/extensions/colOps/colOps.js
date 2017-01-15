@@ -149,17 +149,15 @@ export default class ColOps extends Feature {
                 2 : this.decimalPrecisions;
 
         //nuovella: determine unique list of columns to operate on
-        let uIndexes = [],
-            nbCols = 0;
-
+        let uIndexes = [];
         colIndexes.forEach((val) => {
             if (uIndexes.indexOf(val) === -1) {
                 uIndexes.push(val);
             }
         });
-        nbCols = uIndexes.length - 1;
 
-        let rows = tf.tbl.rows,
+        let nbCols = uIndexes.length - 1,
+            rows = tf.tbl.rows,
             colValues = [];
 
         for (let u = 0; u <= nbCols; u++) {
@@ -178,22 +176,21 @@ export default class ColOps extends Feature {
                 precisions = [],
                 labels = [],
                 writeType,
-                idx = -1;
+                idx = 0;
 
             for (let k = 0; k < colIndexes.length; k++) {
                 if (colIndexes[k] !== uIndexes[u]) {
                     continue;
                 }
-
-                idx++;
                 operations[idx] = colOperations[k].toLowerCase();
                 precisions[idx] = decimalPrecisions[k];
                 labels[idx] = this.labelIds[k];
                 writeType = isArray(outputTypes) ? outputTypes[k] : null;
+                idx++;
             }
 
             for (let i = 0; i <= idx; i++) {
-
+                // emit values before column calculation
                 this.emitter.emit(
                     'before-column-calc',
                     tf,
@@ -206,6 +203,7 @@ export default class ColOps extends Feature {
 
                 result = Number(this.calc(curValues, operations[i], null));
 
+                // emit column calculation result
                 this.emitter.emit(
                     'column-calc',
                     tf,
@@ -216,6 +214,7 @@ export default class ColOps extends Feature {
                     precisions[i]
                 );
 
+                // write result in expected DOM element
                 this.writeResult(
                     result,
                     labels[i],
