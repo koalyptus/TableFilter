@@ -984,9 +984,63 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/extensions/colops/colops.js~colops#calc",
-    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calc",
-    "src/extensions/colOps/colOps.js~ColOps#calc",
+    "src/extensions/colops/colops.js~colops#calcall",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calcAll",
+    "src/extensions/colOps/colOps.js~ColOps#calcAll",
+    "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#calcmax",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calcMax",
+    "src/extensions/colOps/colOps.js~ColOps#calcMax",
+    "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#calcmean",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calcMean",
+    "src/extensions/colOps/colOps.js~ColOps#calcMean",
+    "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#calcmedian",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calcMedian",
+    "src/extensions/colOps/colOps.js~ColOps#calcMedian",
+    "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#calcmin",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calcMin",
+    "src/extensions/colOps/colOps.js~ColOps#calcMin",
+    "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#calcq1",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calcQ1",
+    "src/extensions/colOps/colOps.js~ColOps#calcQ1",
+    "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#calcq3",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calcQ3",
+    "src/extensions/colOps/colOps.js~ColOps#calcQ3",
+    "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#calcsum",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calcSum",
+    "src/extensions/colOps/colOps.js~ColOps#calcSum",
+    "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#colindexes",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-colIndexes",
+    "src/extensions/colOps/colOps.js~ColOps#colIndexes",
+    "member"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#columncalc",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-columnCalc",
+    "src/extensions/colOps/colOps.js~ColOps#columnCalc",
     "method"
   ],
   [
@@ -996,10 +1050,22 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/extensions/colops/colops.js~colops#decimalprecisions",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-decimalPrecisions",
+    "src/extensions/colOps/colOps.js~ColOps#decimalPrecisions",
+    "member"
+  ],
+  [
     "src/extensions/colops/colops.js~colops#destroy",
     "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-destroy",
     "src/extensions/colOps/colOps.js~ColOps#destroy",
     "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#excluderows",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-excludeRows",
+    "src/extensions/colOps/colOps.js~ColOps#excludeRows",
+    "member"
   ],
   [
     "src/extensions/colops/colops.js~colops#init",
@@ -1011,6 +1077,12 @@ window.esdocSearchIndex = [
     "src/extensions/colops/colops.js~colops#initialized",
     "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-initialized",
     "src/extensions/colOps/colOps.js~ColOps#initialized",
+    "member"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#labelids",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-labelIds",
+    "src/extensions/colOps/colOps.js~ColOps#labelIds",
     "member"
   ],
   [
@@ -1026,9 +1098,33 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/extensions/colops/colops.js~colops#operations",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-operations",
+    "src/extensions/colOps/colOps.js~ColOps#operations",
+    "member"
+  ],
+  [
     "src/extensions/colops/colops.js~colops#opts",
     "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-opts",
     "src/extensions/colOps/colOps.js~ColOps#opts",
+    "member"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#outputtypes",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-outputTypes",
+    "src/extensions/colOps/colOps.js~ColOps#outputTypes",
+    "member"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#sortcolumnvalues",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-sortColumnValues",
+    "src/extensions/colOps/colOps.js~ColOps#sortColumnValues",
+    "method"
+  ],
+  [
+    "src/extensions/colops/colops.js~colops#totrowindexes",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-totRowIndexes",
+    "src/extensions/colOps/colOps.js~ColOps#totRowIndexes",
     "member"
   ],
   [

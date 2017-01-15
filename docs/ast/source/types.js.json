@@ -2595,17 +2595,17 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    1341,
-                    1344
+                    1342,
+                    1345
                   ],
                   "loc": {
                     "start": {
                       "line": 66,
-                      "column": 22
+                      "column": 23
                     },
                     "end": {
                       "line": 66,
-                      "column": 25
+                      "column": 26
                     }
                   }
                 }
@@ -2617,17 +2617,17 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    1348,
-                    1351
+                    1350,
+                    1353
                   ],
                   "loc": {
                     "start": {
                       "line": 66,
-                      "column": 29
+                      "column": 31
                     },
                     "end": {
                       "line": 66,
-                      "column": 32
+                      "column": 34
                     }
                   }
                 },
@@ -2636,32 +2636,32 @@
                   "value": null,
                   "raw": "null",
                   "range": [
-                    1356,
-                    1360
+                    1358,
+                    1362
                   ],
                   "loc": {
                     "start": {
                       "line": 66,
-                      "column": 37
+                      "column": 39
                     },
                     "end": {
                       "line": 66,
-                      "column": 41
+                      "column": 43
                     }
                   }
                 },
                 "range": [
-                  1348,
-                  1360
+                  1350,
+                  1362
                 ],
                 "loc": {
                   "start": {
                     "line": 66,
-                    "column": 29
+                    "column": 31
                   },
                   "end": {
                     "line": 66,
-                    "column": 41
+                    "column": 43
                   }
                 }
               },
@@ -2669,7 +2669,7 @@
               "expression": true,
               "range": [
                 1341,
-                1360
+                1362
               ],
               "loc": {
                 "start": {
@@ -2678,13 +2678,13 @@
                 },
                 "end": {
                   "line": 66,
-                  "column": 41
+                  "column": 43
                 }
               }
             },
             "range": [
               1332,
-              1360
+              1362
             ],
             "loc": {
               "start": {
@@ -2693,7 +2693,7 @@
               },
               "end": {
                 "line": 66,
-                "column": 41
+                "column": 43
               }
             }
           }
@@ -2701,7 +2701,7 @@
         "kind": "const",
         "range": [
           1326,
-          1361
+          1363
         ],
         "loc": {
           "start": {
@@ -2710,7 +2710,7 @@
           },
           "end": {
             "line": 66,
-            "column": 42
+            "column": 44
           }
         },
         "leadingComments": [
@@ -2738,8 +2738,8 @@
             "type": "Block",
             "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
             "range": [
-              1363,
-              1481
+              1365,
+              1483
             ],
             "loc": {
               "start": {
@@ -2758,7 +2758,7 @@
       "source": null,
       "range": [
         1319,
-        1361
+        1363
       ],
       "loc": {
         "start": {
@@ -2767,7 +2767,7 @@
         },
         "end": {
           "line": 66,
-          "column": 42
+          "column": 44
         }
       },
       "leadingComments": [
@@ -2795,8 +2795,8 @@
           "type": "Block",
           "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
           "range": [
-            1363,
-            1481
+            1365,
+            1483
           ],
           "loc": {
             "start": {
@@ -2822,8 +2822,8 @@
               "type": "Identifier",
               "name": "isEmpty",
               "range": [
-                1495,
-                1502
+                1497,
+                1504
               ],
               "loc": {
                 "start": {
@@ -2844,8 +2844,8 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    1506,
-                    1509
+                    1508,
+                    1511
                   ],
                   "loc": {
                     "start": {
@@ -2871,8 +2871,8 @@
                       "type": "Identifier",
                       "name": "isUndef",
                       "range": [
-                        1514,
-                        1521
+                        1516,
+                        1523
                       ],
                       "loc": {
                         "start": {
@@ -2890,8 +2890,8 @@
                         "type": "Identifier",
                         "name": "obj",
                         "range": [
-                          1522,
-                          1525
+                          1524,
+                          1527
                         ],
                         "loc": {
                           "start": {
@@ -2906,8 +2906,8 @@
                       }
                     ],
                     "range": [
-                      1514,
-                      1526
+                      1516,
+                      1528
                     ],
                     "loc": {
                       "start": {
@@ -2926,8 +2926,8 @@
                       "type": "Identifier",
                       "name": "isNull",
                       "range": [
-                        1530,
-                        1536
+                        1532,
+                        1538
                       ],
                       "loc": {
                         "start": {
@@ -2945,8 +2945,8 @@
                         "type": "Identifier",
                         "name": "obj",
                         "range": [
-                          1537,
-                          1540
+                          1539,
+                          1542
                         ],
                         "loc": {
                           "start": {
@@ -2961,8 +2961,8 @@
                       }
                     ],
                     "range": [
-                      1530,
-                      1541
+                      1532,
+                      1543
                     ],
                     "loc": {
                       "start": {
@@ -2976,8 +2976,8 @@
                     }
                   },
                   "range": [
-                    1514,
-                    1541
+                    1516,
+                    1543
                   ],
                   "loc": {
                     "start": {
@@ -3000,8 +3000,8 @@
                       "type": "Identifier",
                       "name": "obj",
                       "range": [
-                        1545,
-                        1548
+                        1547,
+                        1550
                       ],
                       "loc": {
                         "start": {
@@ -3018,8 +3018,8 @@
                       "type": "Identifier",
                       "name": "length",
                       "range": [
-                        1549,
-                        1555
+                        1551,
+                        1557
                       ],
                       "loc": {
                         "start": {
@@ -3033,8 +3033,8 @@
                       }
                     },
                     "range": [
-                      1545,
-                      1555
+                      1547,
+                      1557
                     ],
                     "loc": {
                       "start": {
@@ -3052,8 +3052,8 @@
                     "value": 0,
                     "raw": "0",
                     "range": [
-                      1560,
-                      1561
+                      1562,
+                      1563
                     ],
                     "loc": {
                       "start": {
@@ -3067,8 +3067,8 @@
                     }
                   },
                   "range": [
-                    1545,
-                    1561
+                    1547,
+                    1563
                   ],
                   "loc": {
                     "start": {
@@ -3082,8 +3082,8 @@
                   }
                 },
                 "range": [
-                  1514,
-                  1561
+                  1516,
+                  1563
                 ],
                 "loc": {
                   "start": {
@@ -3099,8 +3099,8 @@
               "generator": false,
               "expression": true,
               "range": [
-                1505,
-                1561
+                1507,
+                1563
               ],
               "loc": {
                 "start": {
@@ -3114,8 +3114,8 @@
               }
             },
             "range": [
-              1495,
-              1561
+              1497,
+              1563
             ],
             "loc": {
               "start": {
@@ -3131,8 +3131,8 @@
         ],
         "kind": "const",
         "range": [
-          1489,
-          1562
+          1491,
+          1564
         ],
         "loc": {
           "start": {
@@ -3149,8 +3149,8 @@
             "type": "Block",
             "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
             "range": [
-              1363,
-              1481
+              1365,
+              1483
             ],
             "loc": {
               "start": {
@@ -3169,8 +3169,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        1482,
-        1562
+        1484,
+        1564
       ],
       "loc": {
         "start": {
@@ -3187,8 +3187,8 @@
           "type": "Block",
           "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
           "range": [
-            1363,
-            1481
+            1365,
+            1483
           ],
           "loc": {
             "start": {
@@ -3207,7 +3207,7 @@
   "sourceType": "module",
   "range": [
     29,
-    1562
+    1564
   ],
   "loc": {
     "start": {
@@ -3386,8 +3386,8 @@
       "type": "Block",
       "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
       "range": [
-        1363,
-        1481
+        1365,
+        1483
       ],
       "loc": {
         "start": {
