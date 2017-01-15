@@ -2383,6 +2383,8 @@ export class TableFilter {
      * @param  {Boolean} includeHeaders  Optional: include headers row
      * @param  {Boolean} num     Optional: return unformatted number
      * @param  {Array} exclude   Optional: list of row indexes to be excluded
+     * @param  {Boolean} visible Optional: return only visible data
+     *                           (relevant for paging)
      * @return {Array}           Flat list of values ['val0','val1','val2'...]
      *
      * TODO: provide an API returning data in JSON format
@@ -2391,14 +2393,12 @@ export class TableFilter {
         colIndex,
         includeHeaders = false,
         num = false,
-        exclude = []
+        exclude = [],
+        visible = true
     ) {
         if (isUndef(colIndex)) {
             return [];
         }
-        // retrieve column values
-        let colValues =
-            this.getColValues(colIndex, includeHeaders, num, exclude);
 
         let rows = this.tbl.rows;
 
@@ -2406,7 +2406,9 @@ export class TableFilter {
         // displayed
         let validRows = this.getValidRows(true).filter((rowIdx) => {
             return exclude.indexOf(rowIdx) === -1 &&
-                this.getRowDisplay(rows[rowIdx]) !== 'none';
+                (visible ?
+                    this.getRowDisplay(rows[rowIdx]) !== 'none' :
+                    true);
         });
 
         let decimal = this.decimalSeparator;
@@ -2423,16 +2425,11 @@ export class TableFilter {
             return num ? Number(val) || parseNb(val, decimal) : val;
         });
 
-        // retain column values in valid rows only
-        colValues = colValues.filter((value) => {
-            return validColValues.indexOf(value) !== -1;
-        });
-
         if (includeHeaders) {
-            colValues.unshift(this.getHeadersText()[colIndex]);
+            validColValues.unshift(this.getHeadersText()[colIndex]);
         }
 
-        return colValues;
+        return validColValues;
     }
 
     /**

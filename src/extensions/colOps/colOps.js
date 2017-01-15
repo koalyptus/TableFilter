@@ -151,22 +151,6 @@ export default class ColOps extends Feature {
         //nuovella: determine unique list of columns to operate on
         let uIndexes = [],
             nbCols = 0;
-        // uIndexes[nbCols] = colIndexes[0];
-
-        // for (let ii = 1; ii < colIndexes.length; ii++) {
-        //     let saved = 0;
-        //     //see if colIndexes[ii] is already in the list of unique indexes
-        //     for (let jj = 0; jj <= nbCols; jj++) {
-        //         if (uIndexes[jj] === colIndexes[ii]) {
-        //             saved = 1;
-        //         }
-        //     }
-        //     //if not saved then, save the index
-        //     if (saved === 0) {
-        //         nbCols++;
-        //         uIndexes[nbCols] = colIndexes[ii];
-        //     }
-        // }
 
         colIndexes.forEach((val) => {
             if (uIndexes.indexOf(val) === -1) {
@@ -174,8 +158,6 @@ export default class ColOps extends Feature {
             }
         });
         nbCols = uIndexes.length - 1;
-
-        console.log('uIndexes',uIndexes, 'colIndexes',colIndexes)
 
         let rows = tf.tbl.rows,
             colValues = [];
@@ -192,27 +174,11 @@ export default class ColOps extends Feature {
 
             //next: calculate all operations for this column
             let result = 0,
-                // meanValue = 0,
-                // sumValue = 0,
-                // minValue = null,
-                // maxValue = null,
-                // q1Value = null,
-                // medValue = null,
-                // q3Value = null,
-                // meanFlag = false,
-                // sumFlag = false,
-                // minFlag = false,
-                // maxFlag = false,
-                // q1Flag = false,
-                // medFlag = false,
-                // q3Flag = false,
                 operations = [],
                 precisions = [],
                 labels = [],
                 writeType,
-                idx = -1/*,
-                k = 0,
-                i = 0*/;
+                idx = -1;
 
             for (let k = 0; k < colIndexes.length; k++) {
                 if (colIndexes[k] !== uIndexes[u]) {
@@ -224,102 +190,31 @@ export default class ColOps extends Feature {
                 precisions[idx] = decimalPrecisions[k];
                 labels[idx] = this.labelIds[k];
                 writeType = isArray(outputTypes) ? outputTypes[k] : null;
-
-                // switch (operations[idx]) {
-                //     case MEAN:
-                //         meanFlag = true;
-                //         break;
-                //     case SUM:
-                //         sumFlag = true;
-                //         break;
-                //     case MIN:
-                //         minFlag = true;
-                //         break;
-                //     case MAX:
-                //         maxFlag = true;
-                //         break;
-                //     case MEDIAN:
-                //         medFlag = true;
-                //         break;
-                //     case Q1:
-                //         q1Flag = true;
-                //         break;
-                //     case Q3:
-                //         q3Flag = true;
-                //         break;
-                // }
             }
 
-            //sort the values for calculation of median and quartiles
-            // if (q1Flag || q3Flag || medFlag) {
-            //     curValues = this.sortColumnValues(curValues, numSortAsc);
-            // }
-
-            // if (sumFlag || meanFlag) {
-            //     sumValue = this.calcSum(curValues);
-            // }
-            // if (maxFlag) {
-            //     maxValue = this.calcMax(curValues);
-            // }
-            // if (minFlag) {
-            //     minValue = this.calcMin(curValues);
-            // }
-            // if (meanFlag) {
-            //     meanValue = sumValue / curValues.length;
-            // }
-            // if (medFlag) {
-            //     medValue = this.calcMedian(curValues);
-            // }
-            // if (q1Flag) {
-            //     q1Value = this.calcQ1(curValues);
-            // }
-            // if (q3Flag) {
-            //     q3Value = this.calcQ3(curValues);
-            // }
-
             for (let i = 0; i <= idx; i++) {
-                result = this.calc(curValues, operations[i], null);
-                result = Number(result);
+
+                this.emitter.emit(
+                    'before-column-calc',
+                    tf,
+                    this,
+                    uIndexes[u],
+                    curValues,
+                    operations[i],
+                    precisions[i]
+                );
+
+                result = Number(this.calc(curValues, operations[i], null));
 
                 this.emitter.emit(
                     'column-calc',
-                    this.tf,
+                    tf,
                     this,
                     uIndexes[u],
                     result,
                     operations[i],
                     precisions[i]
                 );
-
-                // switch (operations[i]) {
-                    // case MEAN:
-                    //     result = this.columnCalc(null, MEAN, null,curValues);
-                    //     // result = meanValue;
-                    //     break;
-                    // case SUM:
-                    //     // result = sumValue;
-                    //     result = this.columnCalc(null, SUM, null, curValues);
-                    //     break;
-                    // case MIN:
-                    //     // result = minValue;
-                    //     result = this.columnCalc(null, MIN, null, curValues);
-                    //     break;
-                    // case MAX:
-                    //     // result = maxValue;
-                    //     result = this.columnCalc(null, MAX, null, curValues);
-                    //     break;
-                    // case MEDIAN:
-                    //     // result = medValue;
-                    //     result = this.columnCalc(null,MEDIAN,null,curValues);
-                    //     break;
-                    // case Q1:
-                    //     // result = q1Value;
-                    //     result = this.columnCalc(null, Q1, null, curValues);
-                    //     break;
-                    // case Q3:
-                    //     result = this.columnCalc(null, Q3, null, curValues);
-                    //     break;
-                // }
 
                 this.writeResult(
                     result,
@@ -367,22 +262,17 @@ export default class ColOps extends Feature {
      */
     calc(colValues, operation = SUM, precision) {
         let result = 0;
-        let sumValue = 0;
 
         if (operation === Q1 || operation === Q3 || operation === MEDIAN) {
             colValues = this.sortColumnValues(colValues, numSortAsc);
         }
 
-        if (operation === SUM || operation === MEAN) {
-            sumValue = this.calcSum(colValues);
-        }
-
         switch (operation) {
             case MEAN:
-                result = sumValue / colValues.length;
+                result = this.calcMean(colValues);
                 break;
             case SUM:
-                result = sumValue;
+                result = this.calcSum(colValues);
                 break;
             case MIN:
                 result = this.calcMin(colValues);
@@ -410,7 +300,20 @@ export default class ColOps extends Feature {
      * @returns {Number}
      */
     calcSum(values = []) {
+        if (isEmpty(values)) {
+            return 0;
+        }
         let result = values.reduce((x, y) => x + y);
+        return Number(result);
+    }
+
+    /**
+     * Calculate the mean of passed values.
+     * @param {Array} [values=[]] List of values
+     * @returns {Number}
+     */
+    calcMean(values = []) {
+        let result = this.calcSum(values) / values.length;
         return Number(result);
     }
 
