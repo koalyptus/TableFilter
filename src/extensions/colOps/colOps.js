@@ -164,8 +164,8 @@ export default class ColOps extends Feature {
             //this retrieves col values
             //use uIndexes because we only want to pass through this loop
             //once for each column get the values in this unique column
-            colValues.push(tf
-                .getFilteredDataCol(uIndexes[u], false, true, excludeRows)
+            colValues.push(
+                tf.getFilteredDataCol(uIndexes[u], false, true, excludeRows)
             );
 
             let curValues = colValues[u];

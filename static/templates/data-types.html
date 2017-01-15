@@ -88,7 +88,7 @@ var tfConfig = {
         { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
         'ipaddress'
     ],
-    rows_always_visible: [totRowIndex-1, totRowIndex],
+    rows_always_visible: [totRowIndex],
     on_filters_loaded: function(tf){
         tf.setFilterValue(3, '>1.000');
         tf.setFilterValue(4, '<2,500');
@@ -100,28 +100,13 @@ var tfConfig = {
         { name: 'sort' },
         {
             name: 'colOps',
-            id: [
-                'sum1', 'sum3',
-                'sum2', 'sum4'
-            ],
-            col: [
-                3, 3,
-                4, 4
-            ],
-            operation: [
-                'sum', 'mean',
-                'max', 'q3'
-            ],
-            write_method: [
-                'innerhtml', 'innerhtml',
-                'innerhtml', 'innerhtml'
-            ],
+            id: ['sum1', 'sum2'],
+            col: [3, 4],
+            operation: ['sum', 'sum'],
+            write_method: ['innerhtml', 'innerhtml'],
             exclude_row: [totRowIndex-1, totRowIndex],
-            decimal_precision: [
-                2, 1,
-                2, 1
-            ],
-            tot_row_index: [totRowIndex-1, totRowIndex],
+            decimal_precision: [2, 2],
+            tot_row_index: [totRowIndex],
             on_after_operation: formatTotals
         }
     ]

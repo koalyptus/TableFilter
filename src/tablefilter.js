@@ -2107,7 +2107,7 @@ export class TableFilter {
             if (nchilds === this.nbCells && !isExludedRow) {
                 // this loop retrieves cell data
                 for (let j = 0; j < nchilds; j++) {
-                    if (j !== colIndex /*|| row[i].style.display !== ''*/) {
+                    if (j !== colIndex) {
                         continue;
                     }
                     let cellData = this.getCellData(cell[j]);
@@ -2348,34 +2348,6 @@ export class TableFilter {
         }
         return filteredData;
     }
-
-    /**
-     * Return the filtered data for a given column index
-     * @param  {Number} colIndex Colmun's index
-     * @param  {Boolean} includeHeaders  Optional: include headers row
-     * @return {Array}           Flat list of values ['val0','val1','val2'...]
-     *
-     * TODO: provide an API returning data in JSON format
-     */
-    // getFilteredDataCol(colIndex, includeHeaders = false) {
-    //     if (isUndef(colIndex)) {
-    //         return [];
-    //     }
-    //     let data = this.getFilteredData(),
-    //         colData = [];
-    //     if (includeHeaders) {
-    //         colData.push(this.getHeadersText()[colIndex]);
-    //     }
-    //     for (let i = 0, len = data.length; i < len; i++) {
-    //         let r = data[i],
-    //             //cols values of current row
-    //             d = r[1],
-    //             //data of searched column
-    //             c = d[colIndex];
-    //         colData.push(c);
-    //     }
-    //     return colData;
-    // }
 
     /**
      * Return the filtered data for a given column index
