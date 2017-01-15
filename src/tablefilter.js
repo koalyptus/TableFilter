@@ -2107,7 +2107,7 @@ export class TableFilter {
             if (nchilds === this.nbCells && !isExludedRow) {
                 // this loop retrieves cell data
                 for (let j = 0; j < nchilds; j++) {
-                    if (j !== colIndex || row[i].style.display !== '') {
+                    if (j !== colIndex) {
                         continue;
                     }
                     let cellData = this.getCellData(cell[j]);
@@ -2353,28 +2353,55 @@ export class TableFilter {
      * Return the filtered data for a given column index
      * @param  {Number} colIndex Colmun's index
      * @param  {Boolean} includeHeaders  Optional: include headers row
+     * @param  {Boolean} num     Optional: return unformatted number
+     * @param  {Array} exclude   Optional: list of row indexes to be excluded
+     * @param  {Boolean} visible Optional: return only visible data
+     *                           (relevant for paging)
      * @return {Array}           Flat list of values ['val0','val1','val2'...]
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredDataCol(colIndex, includeHeaders = false) {
+    getFilteredDataCol(
+        colIndex,
+        includeHeaders = false,
+        num = false,
+        exclude = [],
+        visible = true
+    ) {
         if (isUndef(colIndex)) {
             return [];
         }
-        let data = this.getFilteredData(),
-            colData = [];
+
+        let rows = this.tbl.rows;
+
+        // ensure valid rows index do not contain excluded rows and row is
+        // displayed
+        let validRows = this.getValidRows(true).filter((rowIdx) => {
+            return exclude.indexOf(rowIdx) === -1 &&
+                (visible ?
+                    this.getRowDisplay(rows[rowIdx]) !== 'none' :
+                    true);
+        });
+
+        let decimal = this.decimalSeparator;
+        if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
+            let colType = this.colTypes[colIndex];
+            if (colType.hasOwnProperty('decimal')) {
+                decimal = colType.decimal;
+            }
+        }
+
+        // convert column value to expected type if necessary
+        let validColValues = validRows.map((rowIdx) => {
+            let val = this.getCellData(rows[rowIdx].cells[colIndex]);
+            return num ? Number(val) || parseNb(val, decimal) : val;
+        });
+
         if (includeHeaders) {
-            colData.push(this.getHeadersText()[colIndex]);
+            validColValues.unshift(this.getHeadersText()[colIndex]);
         }
-        for (let i = 0, len = data.length; i < len; i++) {
-            let r = data[i],
-                //cols values of current row
-                d = r[1],
-                //data of searched column
-                c = d[colIndex];
-            colData.push(c);
-        }
-        return colData;
+
+        return validColValues;
     }
 
     /**

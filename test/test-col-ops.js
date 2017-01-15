@@ -101,6 +101,7 @@ test('Column operations', function() {
     equal(id('q1-2').innerHTML, 1.10, 'Q1 result');
     equal(id('q3-1').innerHTML, 2045, 'Q3 result');
     equal(id('q3-2').innerHTML, 2.15, 'Q3 result');
+    tf.clearFilters();
 });
 
 module('Behaviour checks');
