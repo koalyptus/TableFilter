@@ -239,8 +239,8 @@ export default class ColOps extends Feature {
     /**
      * Make desired calculation on specified column.
      * @param {Number} colIndex Column index
-     * @param {any} [operation=SUM] Operation type
-     * @param {any} precision Decimal precision
+     * @param {String} [operation=SUM] Operation type
+     * @param {Number} precision Decimal precision
      * @returns {Number}
      */
     columnCalc(colIndex, operation = SUM, precision) {
