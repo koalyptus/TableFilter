@@ -34,7 +34,7 @@ test('TableFilter object', function() {
         ],
         'Headers text');
     deepEqual(
-        tf.getCellData(tf.getHeaderElement(1)),
+        tf.getCellValue(tf.getHeaderElement(1)),
         'Destination',
         'Column header text'
     );
@@ -329,13 +329,13 @@ test('Get filters values', function() {
 });
 
 // Test case for issue 165
-test('Test getCellData with white spaces', function() {
+test('Test getCellValue with white spaces', function() {
     // setup
     var cell = document.createElement('td');
     cell.textContent ='\t\thello world\t\t\t';
 
     // act
-    var result = tf.getCellData(cell);
+    var result = tf.getCellValue(cell);
 
     //assert
     deepEqual(result, 'hello world', 'Expected text with no white spaces');
