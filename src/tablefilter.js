@@ -2077,9 +2077,9 @@ export class TableFilter {
     /**
      * Return the data of a specified column
      * @param  {Number} colIndex Column index
-     * @param  {Boolean} includeHeaders  Optional: include headers row
-     * @param  {Boolean} typed   Optional: return a typed value
-     * @param  {Array} exclude   Optional: list of row indexes to be excluded
+     * @param  {Boolean} [includeHeaders=false] Include headers row
+     * @param  {Boolean} [typed=true] Return a typed value
+     * @param  {Array} [exclude=[]] List of row indexes to be excluded
      * @return {Array}           Flat list of data for a column
      */
     getColValues(
@@ -2118,16 +2118,6 @@ export class TableFilter {
                         continue;
                     }
                     let data = getContent(cell[j]);
-                    // let decimal = this.decimalSeparator;
-                    // if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
-                    //     let colType = this.colTypes[colIndex];
-                    //     if (colType.hasOwnProperty('decimal')) {
-                    //         decimal = colType.decimal;
-                    //     }
-                    // }
-                    // let data = num ?
-                    //     Number(cellValue) || parseNb(cellValue, decimal) :
-                    //     cellValue;
                     colValues.push(data);
                 }
             }
@@ -2309,16 +2299,24 @@ export class TableFilter {
      *     [rowIndex, [value0, value1...]],
      *     [rowIndex, [value0, value1...]]
      * ]
-     * @param  {Boolean} includeHeaders  Optional: include headers row
-     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
+     * @param  {Boolean} [includeHeaders=false] Include headers row
+     * @param  {Boolean} [excludeHiddenCols=false] Exclude hidden columns
+     * @param  {Boolean} [typed=false] Return typed value
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
      */
-    getTableData(includeHeaders = false, excludeHiddenCols = false) {
+    getTableData(
+        includeHeaders = false,
+        excludeHiddenCols = false,
+        typed = false
+    ) {
         let rows = this.tbl.rows;
         let nbRows = this.getRowsNb(true);
         let tblData = [];
+        let getContent = typed ? this.getCellData.bind(this) :
+            this.getCellValue.bind(this);
+
         if (includeHeaders) {
             let headers = this.getHeadersText(excludeHiddenCols);
             tblData.push([this.getHeadersRowIndex(), headers]);
@@ -2332,7 +2330,7 @@ export class TableFilter {
                         continue;
                     }
                 }
-                let cellValue = this.getCellValue(cells[j]);
+                let cellValue = getContent(cells[j]);
                 rowData[1].push(cellValue);
             }
             tblData.push(rowData);
@@ -2346,18 +2344,26 @@ export class TableFilter {
      *     [rowIndex, [value0, value1...]],
      *     [rowIndex, [value0, value1...]]
      * ]
-     * @param  {Boolean} includeHeaders  Optional: include headers row
-     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
+     * @param  {Boolean} [includeHeaders=false] Include headers row
+     * @param  {Boolean} [excludeHiddenCols=false] Exclude hidden columns
+     * @param  {Boolean} [typed=false] Return typed value
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredData(includeHeaders = false, excludeHiddenCols = false) {
+    getFilteredData(
+        includeHeaders = false,
+        excludeHiddenCols = false,
+        typed = false
+    ) {
         if (!this.validRowsIndex) {
             return [];
         }
         let rows = this.tbl.rows,
             filteredData = [];
+        let getContent = typed ? this.getCellData.bind(this) :
+            this.getCellValue.bind(this);
+
         if (includeHeaders) {
             let headers = this.getHeadersText(excludeHiddenCols);
             filteredData.push([this.getHeadersRowIndex(), headers]);
@@ -2373,7 +2379,7 @@ export class TableFilter {
                         continue;
                     }
                 }
-                let cellValue = this.getCellValue(cells[k]);
+                let cellValue = getContent(cells[k]);
                 rData[1].push(cellValue);
             }
             filteredData.push(rData);
@@ -2384,10 +2390,10 @@ export class TableFilter {
     /**
      * Return the filtered data for a given column index
      * @param  {Number} colIndex Colmun's index
-     * @param  {Boolean} includeHeaders  Optional: include headers row
-     * @param  {Boolean} typed   Optional: return type value
-     * @param  {Array} exclude   Optional: list of row indexes to be excluded
-     * @param  {Boolean} visible Optional: return only visible data
+     * @param  {Boolean} [includeHeaders=false] Include headers row
+     * @param  {Boolean} [typed=false] Return typed value
+     * @param  {Array} [exclude=[]] List of row indexes to be excluded
+     * @param  {Boolean} [visible=true] Return only filtered and visible data
      *                           (relevant for paging)
      * @return {Array}           Flat list of values ['val0','val1','val2'...]
      *
