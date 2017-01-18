@@ -1752,7 +1752,7 @@ export class TableFilter {
                     continue;
                 }
 
-                let cellData = matchCase(this.getCellData(cells[j]),
+                let cellValue = matchCase(this.getCellValue(cells[j]),
                     this.caseSensitive);
 
                 //multiple search parameter operator ||
@@ -1777,7 +1777,7 @@ export class TableFilter {
                     // isolate search term and check occurence in cell data
                     for (let w = 0, len = s.length; w < len; w++) {
                         cS = trim(s[w]);
-                        occur = this._testTerm(cS, cellData, j);
+                        occur = this._testTerm(cS, cellValue, j);
 
                         if (occur) {
                             this.emitter.emit('highlight-keyword', this,
@@ -1796,7 +1796,7 @@ export class TableFilter {
                 }
                 //single search parameter
                 else {
-                    occurence[j] = this._testTerm(trim(sA), cellData, j);
+                    occurence[j] = this._testTerm(trim(sA), cellValue, j);
                     if (occurence[j]) {
                         this.emitter.emit('highlight-keyword', this, cells[j],
                             sA);
@@ -1837,11 +1837,11 @@ export class TableFilter {
     /**
      * Test for a match of search term in cell data
      * @param {String} term      Search term
-     * @param {String} cellData  Cell data
+     * @param {String} cellValue  Cell data
      * @param {Number} colIdx    Column index
      * @returns {Boolean}
      */
-    _testTerm(term, cellData, colIdx) {
+    _testTerm(term, cellValue, colIdx) {
         let numData;
         let decimal = this.decimalSeparator;
         let reLe = new RegExp(this.leOperator),
@@ -1901,7 +1901,7 @@ export class TableFilter {
             let isEQDate = hasEQ &&
                 isValidDate(term.replace(reEq, ''), locale);
 
-            dte1 = parseDate(cellData, locale);
+            dte1 = parseDate(cellValue, locale);
 
             // lower date
             if (isLDate) {
@@ -1935,7 +1935,7 @@ export class TableFilter {
             }
             // searched keyword with * operator doesn't have to be a date
             else if (reLk.test(term)) {// like date
-                occurence = contains(term.replace(reLk, ''), cellData,
+                occurence = contains(term.replace(reLk, ''), cellValue,
                     false, this.caseSensitive);
             }
             else if (isValidDate(term)) {
@@ -1944,13 +1944,13 @@ export class TableFilter {
             }
             //empty
             else if (hasEM) {
-                occurence = isEmptyString(cellData);
+                occurence = isEmptyString(cellValue);
             }
             //non-empty
             else if (hasNM) {
-                occurence = !isEmptyString(cellData);
+                occurence = !isEmptyString(cellValue);
             } else {
-                occurence = contains(term, cellData,
+                occurence = contains(term, cellValue,
                     this.isExactMatch(colIdx), this.caseSensitive);
             }
         }
@@ -1964,7 +1964,7 @@ export class TableFilter {
             }
             // Convert to number anyways to auto-resolve type in case not
             // defined by configuration
-            numData = Number(cellData) || parseNb(cellData, decimal);
+            numData = Number(cellValue) || parseNb(cellValue, decimal);
 
             // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
             // rgx:)
@@ -1998,40 +1998,40 @@ export class TableFilter {
             }
             //different
             else if (hasDF) {
-                occurence = contains(term.replace(reD, ''), cellData,
+                occurence = contains(term.replace(reD, ''), cellValue,
                     false, this.caseSensitive) ? false : true;
             }
             //like
             else if (hasLK) {
-                occurence = contains(term.replace(reLk, ''), cellData,
+                occurence = contains(term.replace(reLk, ''), cellValue,
                     false, this.caseSensitive);
             }
             //equal
             else if (hasEQ) {
-                occurence = contains(term.replace(reEq, ''), cellData,
+                occurence = contains(term.replace(reEq, ''), cellValue,
                     true, this.caseSensitive);
             }
             //starts with
             else if (hasST) {
-                occurence = cellData.indexOf(term.replace(reSt, '')) === 0 ?
+                occurence = cellValue.indexOf(term.replace(reSt, '')) === 0 ?
                     true : false;
             }
             //ends with
             else if (hasEN) {
                 let searchArg = term.replace(reEn, '');
                 occurence =
-                    cellData.lastIndexOf(searchArg, cellData.length - 1) ===
-                        (cellData.length - 1) - (searchArg.length - 1) &&
-                        cellData.lastIndexOf(searchArg, cellData.length - 1)
+                    cellValue.lastIndexOf(searchArg, cellValue.length - 1) ===
+                        (cellValue.length - 1) - (searchArg.length - 1) &&
+                        cellValue.lastIndexOf(searchArg, cellValue.length - 1)
                         > -1 ? true : false;
             }
             //empty
             else if (hasEM) {
-                occurence = isEmptyString(cellData);
+                occurence = isEmptyString(cellValue);
             }
             //non-empty
             else if (hasNM) {
-                occurence = !isEmptyString(cellData);
+                occurence = !isEmptyString(cellValue);
             }
             //regexp
             else if (hasRE) {
@@ -2040,7 +2040,7 @@ export class TableFilter {
                     //operator is removed
                     let srchArg = term.replace(reRe, '');
                     let rgx = new RegExp(srchArg);
-                    occurence = rgx.test(cellData);
+                    occurence = rgx.test(cellValue);
                 } catch (ex) {
                     occurence = false;
                 }
@@ -2061,7 +2061,7 @@ export class TableFilter {
                     // Finally test search term is contained in cell data
                     occurence = contains(
                         term,
-                        cellData,
+                        cellValue,
                         this.isExactMatch(colIdx),
                         this.caseSensitive,
                         this.ignoresDiacritics(colIdx)
@@ -2077,18 +2077,25 @@ export class TableFilter {
     /**
      * Return the data of a specified column
      * @param  {Number} colIndex Column index
-     * @param  {Boolean} includeHeaders  Optional: include headers row
-     * @param  {Boolean} num     Optional: return unformatted number
-     * @param  {Array} exclude   Optional: list of row indexes to be excluded
+     * @param  {Boolean} [includeHeaders=false] Include headers row
+     * @param  {Boolean} [typed=true] Return a typed value
+     * @param  {Array} [exclude=[]] List of row indexes to be excluded
      * @return {Array}           Flat list of data for a column
      */
-    getColValues(colIndex, includeHeaders = false, num = false, exclude = []) {
+    getColValues(
+        colIndex,
+        includeHeaders = false,
+        typed = false,
+        exclude = []
+    ) {
         if (!this.fltGrid) {
             return;
         }
         let row = this.tbl.rows;
         let nbRows = this.getRowsNb(true);
         let colValues = [];
+        let getContent = typed ? this.getCellData.bind(this) :
+            this.getCellValue.bind(this);
 
         if (includeHeaders) {
             colValues.push(this.getHeadersText()[colIndex]);
@@ -2110,17 +2117,7 @@ export class TableFilter {
                     if (j !== colIndex) {
                         continue;
                     }
-                    let cellData = this.getCellData(cell[j]);
-                    let decimal = this.decimalSeparator;
-                    if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
-                        let colType = this.colTypes[colIndex];
-                        if (colType.hasOwnProperty('decimal')) {
-                            decimal = colType.decimal;
-                        }
-                    }
-                    let data = num ?
-                        Number(cellData) || parseNb(cellData, decimal) :
-                        cellData;
+                    let data = getContent(cell[j]);
                     colValues.push(data);
                 }
             }
@@ -2256,14 +2253,10 @@ export class TableFilter {
         return parseInt(ntrs - s, 10);
     }
 
-    /**
-     * Return the data of a given cell
-     * @param  {DOMElement} cell Cell's DOM object
-     * @return {String}
-     */
-    getCellData(cell) {
+
+    getCellValue(cell) {
         let idx = cell.cellIndex;
-        //Fire customCellData callback
+        //CallcustomCellData callback
         if (this.customCellDataCols.indexOf(idx) !== -1) {
             return this.customCellData(this, cell, idx);
         } else {
@@ -2272,21 +2265,58 @@ export class TableFilter {
     }
 
     /**
+     * Return the typed data of a given cell based on the column type definition
+     * @param  {DOMElement} cell Cell's DOM object
+     * @return {String|Number|Date}
+     */
+    getCellData(cell) {
+        let colIndex = cell.cellIndex;
+        let value = this.getCellValue(cell);
+
+        if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
+            let decimal = this.decimalSeparator;
+            let colType = this.colTypes[colIndex];
+            if (colType.hasOwnProperty('decimal')) {
+                decimal = colType.decimal;
+            }
+            return parseNb(value, decimal);
+        }
+        else if (this.hasType(colIndex, [NUMBER])) {
+            return Number(value);
+        }
+        else if (this.hasType(colIndex, [DATE])){
+            let dateType = this.Mod.dateType;
+            let locale = dateType.getOptions(colIndex).locale || this.locale;
+            return dateType.parse(value, locale);
+        }
+
+        return value;
+    }
+
+    /**
      * Return the table data with following format:
      * [
      *     [rowIndex, [value0, value1...]],
      *     [rowIndex, [value0, value1...]]
      * ]
-     * @param  {Boolean} includeHeaders  Optional: include headers row
-     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
+     * @param  {Boolean} [includeHeaders=false] Include headers row
+     * @param  {Boolean} [excludeHiddenCols=false] Exclude hidden columns
+     * @param  {Boolean} [typed=false] Return typed value
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
      */
-    getTableData(includeHeaders = false, excludeHiddenCols = false) {
+    getTableData(
+        includeHeaders = false,
+        excludeHiddenCols = false,
+        typed = false
+    ) {
         let rows = this.tbl.rows;
         let nbRows = this.getRowsNb(true);
         let tblData = [];
+        let getContent = typed ? this.getCellData.bind(this) :
+            this.getCellValue.bind(this);
+
         if (includeHeaders) {
             let headers = this.getHeadersText(excludeHiddenCols);
             tblData.push([this.getHeadersRowIndex(), headers]);
@@ -2300,8 +2330,8 @@ export class TableFilter {
                         continue;
                     }
                 }
-                let cellData = this.getCellData(cells[j]);
-                rowData[1].push(cellData);
+                let cellValue = getContent(cells[j]);
+                rowData[1].push(cellValue);
             }
             tblData.push(rowData);
         }
@@ -2314,18 +2344,26 @@ export class TableFilter {
      *     [rowIndex, [value0, value1...]],
      *     [rowIndex, [value0, value1...]]
      * ]
-     * @param  {Boolean} includeHeaders  Optional: include headers row
-     * @param  {Boolean} excludeHiddenCols  Optional: exclude hidden columns
+     * @param  {Boolean} [includeHeaders=false] Include headers row
+     * @param  {Boolean} [excludeHiddenCols=false] Exclude hidden columns
+     * @param  {Boolean} [typed=false] Return typed value
      * @return {Array}
      *
      * TODO: provide an API returning data in JSON format
      */
-    getFilteredData(includeHeaders = false, excludeHiddenCols = false) {
+    getFilteredData(
+        includeHeaders = false,
+        excludeHiddenCols = false,
+        typed = false
+    ) {
         if (!this.validRowsIndex) {
             return [];
         }
         let rows = this.tbl.rows,
             filteredData = [];
+        let getContent = typed ? this.getCellData.bind(this) :
+            this.getCellValue.bind(this);
+
         if (includeHeaders) {
             let headers = this.getHeadersText(excludeHiddenCols);
             filteredData.push([this.getHeadersRowIndex(), headers]);
@@ -2341,8 +2379,8 @@ export class TableFilter {
                         continue;
                     }
                 }
-                let cellData = this.getCellData(cells[k]);
-                rData[1].push(cellData);
+                let cellValue = getContent(cells[k]);
+                rData[1].push(cellValue);
             }
             filteredData.push(rData);
         }
@@ -2352,10 +2390,10 @@ export class TableFilter {
     /**
      * Return the filtered data for a given column index
      * @param  {Number} colIndex Colmun's index
-     * @param  {Boolean} includeHeaders  Optional: include headers row
-     * @param  {Boolean} num     Optional: return unformatted number
-     * @param  {Array} exclude   Optional: list of row indexes to be excluded
-     * @param  {Boolean} visible Optional: return only visible data
+     * @param  {Boolean} [includeHeaders=false] Include headers row
+     * @param  {Boolean} [typed=false] Return typed value
+     * @param  {Array} [exclude=[]] List of row indexes to be excluded
+     * @param  {Boolean} [visible=true] Return only filtered and visible data
      *                           (relevant for paging)
      * @return {Array}           Flat list of values ['val0','val1','val2'...]
      *
@@ -2364,7 +2402,7 @@ export class TableFilter {
     getFilteredDataCol(
         colIndex,
         includeHeaders = false,
-        num = false,
+        typed = false,
         exclude = [],
         visible = true
     ) {
@@ -2373,6 +2411,8 @@ export class TableFilter {
         }
 
         let rows = this.tbl.rows;
+        let getContent = typed ? this.getCellData.bind(this) :
+            this.getCellValue.bind(this);
 
         // ensure valid rows index do not contain excluded rows and row is
         // displayed
@@ -2383,18 +2423,9 @@ export class TableFilter {
                     true);
         });
 
-        let decimal = this.decimalSeparator;
-        if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
-            let colType = this.colTypes[colIndex];
-            if (colType.hasOwnProperty('decimal')) {
-                decimal = colType.decimal;
-            }
-        }
-
         // convert column value to expected type if necessary
         let validColValues = validRows.map((rowIdx) => {
-            let val = this.getCellData(rows[rowIdx].cells[colIndex]);
-            return num ? Number(val) || parseNb(val, decimal) : val;
+            return getContent(rows[rowIdx].cells[colIndex]);
         });
 
         if (includeHeaders) {
