@@ -3858,6 +3858,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#getcellvalue",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getCellValue",
+    "src/tablefilter.js~TableFilter#getCellValue",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#getcellsnb",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getCellsNb",
     "src/tablefilter.js~TableFilter#getCellsNb",

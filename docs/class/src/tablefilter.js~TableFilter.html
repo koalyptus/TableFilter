@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">TableFilter | tablefilter v0.4.34 API Document</title>
+  <title data-ice="title">TableFilter | tablefilter v0.4.35 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -3160,14 +3160,39 @@ row and comparing it to the search term for current column.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getCellData">getCellData</a></span></span><span data-ice="signature">(cell: <span>DOMElement</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getCellData">getCellData</a></span></span><span data-ice="signature">(cell: <span>DOMElement</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Return the data of a given cell</p>
+        <div data-ice="description"><p>Return the typed data of a given cell based on the column type definition</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getCellValue">getCellValue</a></span></span><span data-ice="signature">(cell: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -3238,7 +3263,7 @@ row and comparing it to the search term for current column.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getColValues">getColValues</a></span></span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, num: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, exclude: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getColValues">getColValues</a></span></span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, typed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, exclude: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
         </p>
       </div>
       <div>
@@ -3447,7 +3472,7 @@ custom options values and texts</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredData">getFilteredData</a></span></span><span data-ice="signature">(includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, excludeHiddenCols: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredData">getFilteredData</a></span></span><span data-ice="signature">(includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, excludeHiddenCols: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, typed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
         </p>
       </div>
       <div>
@@ -3477,7 +3502,7 @@ custom options values and texts</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredDataCol">getFilteredDataCol</a></span></span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, num: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, exclude: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>, visible: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredDataCol">getFilteredDataCol</a></span></span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, typed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, exclude: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>, visible: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
         </p>
       </div>
       <div>
@@ -3817,7 +3842,7 @@ row)</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getTableData">getTableData</a></span></span><span data-ice="signature">(includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, excludeHiddenCols: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-getTableData">getTableData</a></span></span><span data-ice="signature">(includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, excludeHiddenCols: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, typed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
         </p>
       </div>
       <div>
@@ -8859,7 +8884,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2647">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2678">source</a></span></span>
     </span>
   </h3>
 
@@ -8917,7 +8942,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2584">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2615">source</a></span></span>
     </span>
   </h3>
 
@@ -8958,7 +8983,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2563">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2594">source</a></span></span>
     </span>
   </h3>
 
@@ -8999,7 +9024,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2999">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3030">source</a></span></span>
     </span>
   </h3>
 
@@ -9189,7 +9214,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2546">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2577">source</a></span></span>
     </span>
   </h3>
 
@@ -9410,7 +9435,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2610">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2641">source</a></span></span>
     </span>
   </h3>
 
@@ -9457,18 +9482,18 @@ hidden when all the search terms are not found in inspected row.</p>
     
     
     
-    <span data-ice="name">getCellData</span><span data-ice="signature">(cell: <span>DOMElement</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span data-ice="name">getCellData</span><span data-ice="signature">(cell: <span>DOMElement</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2264">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2272">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Return the data of a given cell</p>
+  <div data-ice="description"><p>Return the typed data of a given cell based on the column type definition</p>
 </div>
 
   
@@ -9497,7 +9522,73 @@ hidden when all the search terms are not found in inspected row.</p>
     <h4>Return:</h4>
     <table>
       <tr>
-        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a></span></td>
+        
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getCellValue">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">getCellValue</span><span data-ice="signature">(cell: <span>*</span>): <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2257">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">cell</td>
+      <td data-ice="type"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span>*</span></td>
         
       </tr>
     </table>
@@ -9529,7 +9620,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2239">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2236">source</a></span></span>
     </span>
   </h3>
 
@@ -9598,7 +9689,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2753">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2784">source</a></span></span>
     </span>
   </h3>
 
@@ -9662,7 +9753,7 @@ hidden when all the search terms are not found in inspected row.</p>
     
     
     
-    <span data-ice="name">getColValues</span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, num: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, exclude: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+    <span data-ice="name">getColValues</span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, typed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, exclude: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
     <span class="right-info">
       
       
@@ -9696,22 +9787,25 @@ hidden when all the search terms are not found in inspected row.</p>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">includeHeaders</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: include headers row</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Include headers row</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">num</td>
+      <td data-ice="name" data-depth="0">typed</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: return unformatted number</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Return a typed value</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">exclude</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: list of row indexes to be excluded</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: []</li></ul></td>
+      <td data-ice="description"><p>List of row indexes to be excluded</p>
 </td>
     </tr>
 </tbody>
@@ -9756,7 +9850,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2627">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2658">source</a></span></span>
     </span>
   </h3>
 
@@ -9895,7 +9989,7 @@ custom options values and texts</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2226">source</a></span></span>
     </span>
   </h3>
 
@@ -9963,7 +10057,7 @@ custom options values and texts</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2193">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2190">source</a></span></span>
     </span>
   </h3>
 
@@ -10032,7 +10126,7 @@ custom options values and texts</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2973">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3004">source</a></span></span>
     </span>
   </h3>
 
@@ -10100,7 +10194,7 @@ custom options values and texts</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2133">source</a></span></span>
     </span>
   </h3>
 
@@ -10169,7 +10263,7 @@ custom options values and texts</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2982">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3013">source</a></span></span>
     </span>
   </h3>
 
@@ -10216,11 +10310,11 @@ custom options values and texts</p>
     
     
     
-    <span data-ice="name">getFilteredData</span><span data-ice="signature">(includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, excludeHiddenCols: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+    <span data-ice="name">getFilteredData</span><span data-ice="signature">(includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, excludeHiddenCols: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, typed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2323">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2354">source</a></span></span>
     </span>
   </h3>
 
@@ -10247,15 +10341,25 @@ custom options values and texts</p>
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">includeHeaders</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: include headers row</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Include headers row</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">excludeHiddenCols</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: exclude hidden columns</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Exclude hidden columns</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">typed</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Return typed value</p>
 </td>
     </tr>
 </tbody>
@@ -10296,11 +10400,11 @@ custom options values and texts</p>
     
     
     
-    <span data-ice="name">getFilteredDataCol</span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, num: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, exclude: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>, visible: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+    <span data-ice="name">getFilteredDataCol</span><span data-ice="signature">(colIndex: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, typed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, exclude: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>, visible: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2364">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2402">source</a></span></span>
     </span>
   </h3>
 
@@ -10330,29 +10434,33 @@ custom options values and texts</p>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">includeHeaders</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: include headers row</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Include headers row</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">num</td>
+      <td data-ice="name" data-depth="0">typed</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: return unformatted number</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Return typed value</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">exclude</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: list of row indexes to be excluded</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: []</li></ul></td>
+      <td data-ice="description"><p>List of row indexes to be excluded</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">visible</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: return only visible data
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Return only filtered and visible data
                           (relevant for paging)</p>
 </td>
     </tr>
@@ -10399,7 +10507,7 @@ custom options values and texts</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2209">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2206">source</a></span></span>
     </span>
   </h3>
 
@@ -10477,7 +10585,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2840">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2871">source</a></span></span>
     </span>
   </h3>
 
@@ -10529,7 +10637,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2876">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2907">source</a></span></span>
     </span>
   </h3>
 
@@ -10580,7 +10688,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2169">source</a></span></span>
     </span>
   </h3>
 
@@ -10632,7 +10740,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2928">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2959">source</a></span></span>
     </span>
   </h3>
 
@@ -10700,7 +10808,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2884">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2915">source</a></span></span>
     </span>
   </h3>
 
@@ -10751,7 +10859,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2953">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2984">source</a></span></span>
     </span>
   </h3>
 
@@ -10820,7 +10928,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2901">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2932">source</a></span></span>
     </span>
   </h3>
 
@@ -10871,7 +10979,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2412">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2443">source</a></span></span>
     </span>
   </h3>
 
@@ -10940,7 +11048,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2250">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2247">source</a></span></span>
     </span>
   </h3>
 
@@ -11010,7 +11118,7 @@ defined</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2893">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2924">source</a></span></span>
     </span>
   </h3>
 
@@ -11127,11 +11235,11 @@ row)</p>
     
     
     
-    <span data-ice="name">getTableData</span><span data-ice="signature">(includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, excludeHiddenCols: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+    <span data-ice="name">getTableData</span><span data-ice="signature">(includeHeaders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, excludeHiddenCols: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, typed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2286">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2309">source</a></span></span>
     </span>
   </h3>
 
@@ -11158,15 +11266,25 @@ row)</p>
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">includeHeaders</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: include headers row</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Include headers row</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">excludeHiddenCols</td>
       <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Optional: exclude hidden columns</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Exclude hidden columns</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">typed</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Return typed value</p>
 </td>
     </tr>
 </tbody>
@@ -11211,7 +11329,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2849">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2880">source</a></span></span>
     </span>
   </h3>
 
@@ -11280,7 +11398,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2991">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3022">source</a></span></span>
     </span>
   </h3>
 
@@ -11417,7 +11535,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2912">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2943">source</a></span></span>
     </span>
   </h3>
 
@@ -11493,7 +11611,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2740">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2771">source</a></span></span>
     </span>
   </h3>
 
@@ -11562,7 +11680,7 @@ Note this is only valid for input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2790">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2821">source</a></span></span>
     </span>
   </h3>
 
@@ -11791,7 +11909,7 @@ Note this is only valid for input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2709">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2740">source</a></span></span>
     </span>
   </h3>
 
@@ -11859,7 +11977,7 @@ Note this is only valid for input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2767">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2798">source</a></span></span>
     </span>
   </h3>
 
@@ -11934,7 +12052,7 @@ Note this is only valid for input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2832">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2863">source</a></span></span>
     </span>
   </h3>
 
@@ -11985,7 +12103,7 @@ Note this is only valid for input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2729">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2760">source</a></span></span>
     </span>
   </h3>
 
@@ -12053,7 +12171,7 @@ Note this is only valid for input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2720">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2751">source</a></span></span>
     </span>
   </h3>
 
@@ -12121,7 +12239,7 @@ Note this is only valid for input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2658">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2689">source</a></span></span>
     </span>
   </h3>
 
@@ -12262,7 +12380,7 @@ Note this is only valid for input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2594">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2625">source</a></span></span>
     </span>
   </h3>
 
@@ -12599,7 +12717,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2618">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2649">source</a></span></span>
     </span>
   </h3>
 
@@ -12657,7 +12775,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2517">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2548">source</a></span></span>
     </span>
   </h3>
 
@@ -12715,7 +12833,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2469">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2500">source</a></span></span>
     </span>
   </h3>
 
@@ -12821,7 +12939,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2454">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2485">source</a></span></span>
     </span>
   </h3>
 
@@ -12862,7 +12980,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2421">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2452">source</a></span></span>
     </span>
   </h3>
 
