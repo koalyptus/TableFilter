@@ -302,8 +302,8 @@ export default class ColOps extends Feature {
         if (isEmpty(values)) {
             return 0;
         }
-        let result = values.reduce((x, y) => x + y);
-        return Number(result);
+        let result = values.reduce((x, y) => Number(x) + Number(y));
+        return result;
     }
 
     /**
@@ -346,10 +346,8 @@ export default class ColOps extends Feature {
             aux = Math.floor(nbValues / 2);
             return Number(values[aux]);
         }
-        return Number(
-            (values[nbValues / 2] +
-            values[((nbValues / 2) - 1)]) / 2
-        );
+        return (Number(values[nbValues / 2]) +
+            Number(values[((nbValues / 2) - 1)])) / 2;
     }
 
     /**
@@ -362,9 +360,8 @@ export default class ColOps extends Feature {
         let posa = 0.0;
         posa = Math.floor(nbValues / 4);
         if (4 * posa === nbValues) {
-            return Number(
-                (values[posa - 1] + values[posa]) / 2
-            );
+            return (Number(values[posa - 1]) +
+                Number(values[posa])) / 2;
         }
         return Number(values[posa]);
     }
@@ -381,9 +378,8 @@ export default class ColOps extends Feature {
         posa = Math.floor(nbValues / 4);
         if (4 * posa === nbValues) {
             posb = 3 * posa;
-            return Number(
-                (values[posb] + values[posb - 1]) / 2
-            );
+            return (Number(values[posb]) +
+                Number(values[posb - 1])) / 2;
         }
         return Number(values[nbValues - posa - 1]);
     }

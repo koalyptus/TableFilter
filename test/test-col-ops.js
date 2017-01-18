@@ -130,6 +130,7 @@ test('Column operations', function() {
     tf.destroy();
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
+        col_types: ['string', 'string', 'number', 'number', 'number'],
         paging: true,
         paging_length: 4,
         rows_always_visible: [
@@ -237,6 +238,7 @@ test('Column operations', function() {
     totRowIndex = totRowIndex-2;
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
+        col_types: ['string', 'string', 'number', 'number', 'number'],
         grid_layout: true,
         rows_always_visible: [
             totRowIndex-6,
