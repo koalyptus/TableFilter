@@ -271,12 +271,12 @@ export class CheckList extends Feature {
                     continue;
                 }
 
-                let cellData = tf.getCellData(cells[j]);
+                let cellValue = tf.getCellValue(cells[j]);
                 //Vary Peter's patch
-                let cellString = matchCase(cellData, caseSensitive);
+                let cellString = matchCase(cellValue, caseSensitive);
                 // checks if celldata is already in array
                 if (!has(this.opts, cellString, caseSensitive)) {
-                    this.opts.push(cellData);
+                    this.opts.push(cellValue);
                 }
                 let filteredCol = filteredDataCol[j];
                 if (isLinked && tf.disableExcludedOptions) {
@@ -286,7 +286,7 @@ export class CheckList extends Feature {
                     if (!has(filteredCol, cellString, caseSensitive) &&
                         !has(this.excludedOpts, cellString,
                             caseSensitive)) {
-                        this.excludedOpts.push(cellData);
+                        this.excludedOpts.push(cellValue);
                     }
                 }
             }

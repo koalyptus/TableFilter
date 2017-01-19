@@ -101,6 +101,7 @@ test('Column operations', function() {
     equal(id('q1-2').innerHTML, 1.10, 'Q1 result');
     equal(id('q3-1').innerHTML, 2045, 'Q3 result');
     equal(id('q3-2').innerHTML, 2.15, 'Q3 result');
+    tf.clearFilters();
 });
 
 module('Behaviour checks');
@@ -129,6 +130,7 @@ test('Column operations', function() {
     tf.destroy();
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
+        col_types: ['string', 'string', 'number', 'number', 'number'],
         paging: true,
         paging_length: 4,
         rows_always_visible: [
@@ -236,6 +238,7 @@ test('Column operations', function() {
     totRowIndex = totRowIndex-2;
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
+        col_types: ['string', 'string', 'number', 'number', 'number'],
         grid_layout: true,
         rows_always_visible: [
             totRowIndex-6,

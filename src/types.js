@@ -63,7 +63,7 @@ export const isUndef = (obj) => obj === UNDEFINED;
  * @param  {Any}  obj
  * @return {Boolean}
  */
-export const isNull = obj => obj === null;
+export const isNull = (obj) => obj === null;
 
 /**
  * Check passed argument is empty (undefined, null or empty string)

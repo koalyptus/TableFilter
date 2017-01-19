@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.4.30",
+  "version": "0.4.35",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -24,13 +24,13 @@
   "scripts": {
     "dev": "grunt dev",
     "build": "grunt build",
-    "build-demos": "grunt build-demos",
+    "build:demos": "grunt build-demos",
     "server": "grunt server",
     "eslint": "grunt eslint",
     "test": "grunt test",
     "codecov": "./node_modules/.bin/codecov",
     "esdoc": "grunt esdoc",
-    "build-all": "grunt",
+    "dist": "grunt",
     "deploy": "grunt deploy",
     "start": "npm run server"
   },
@@ -43,9 +43,9 @@
     "babel-loader": "^6.2.9",
     "babel-plugin-transform-es2015-classes": "^6.18.0",
     "babel-preset-es2015": "^6.18.0",
-    "clean-webpack-plugin": "^0.1.14",
+    "clean-webpack-plugin": "^0.1.15",
     "codecov": "1.0.1",
-    "diacritics": "1.2.3",
+    "diacritics": "1.3.0",
     "grunt": "^1.0.1",
     "grunt-babel": "^6.0.0",
     "grunt-cli": "1.2.0",
@@ -62,7 +62,7 @@
     "grunt-webpack": "^1.0.18",
     "isparta-loader": "2.0.0",
     "script-loader": "^0.7.0",
-    "string-replace-webpack-plugin": "^0.0.4",
+    "string-replace-webpack-plugin": "^0.0.5",
     "sugar-date": "2.0.4",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"

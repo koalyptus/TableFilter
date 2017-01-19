@@ -228,13 +228,13 @@ export class Dropdown extends Feature {
                     continue;
                 }
 
-                let cellData = tf.getCellData(cell[j]),
+                let cellValue = tf.getCellValue(cell[j]),
                     //Vary Peter's patch
-                    cellString = matchCase(cellData, tf.caseSensitive);
+                    cellString = matchCase(cellValue, tf.caseSensitive);
 
                 // checks if celldata is already in array
                 if (!has(this.opts, cellString, tf.caseSensitive)) {
-                    this.opts.push(cellData);
+                    this.opts.push(cellValue);
                 }
 
                 if (isLinked && tf.disableExcludedOptions) {
@@ -244,7 +244,7 @@ export class Dropdown extends Feature {
                     }
                     if (!has(filteredCol, cellString, tf.caseSensitive) &&
                         !has(excludedOpts, cellString, tf.caseSensitive)) {
-                        excludedOpts.push(cellData);
+                        excludedOpts.push(cellValue);
                     }
                 }
             }//for j

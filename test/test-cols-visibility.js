@@ -60,6 +60,52 @@ test('Toggle column', function() {
     ext.toggleCol(2);
     deepEqual(ext.isColHidden(2), false, 'Expected column is displayed');
 });
+test('Popup container auto-closes when user clicks away', function() {
+    // setup
+    ext = tf.extension('colsVisibility');
+    ext.toggle();
+
+    // act
+    var evObj = document.createEvent('HTMLEvents');
+    evObj.initEvent('mouseup', true, true);
+    // mouseup fired from a table cell
+    tf.tbl.rows[3].cells[2].dispatchEvent(evObj);
+
+    // assert
+    deepEqual(ext.contEl.style.display, 'none',
+        'Popup container closed after user clicks away'
+    );
+});
+test('Close button closes popup', function() {
+    // setup
+    ext = tf.extension('colsVisibility');
+    ext.toggle();
+
+    // act
+    var evObj = document.createEvent('HTMLEvents');
+    evObj.initEvent('click', true, true);
+    ext.contEl.querySelector('.colVis').dispatchEvent(evObj);
+
+    // assert
+    deepEqual(ext.contEl.style.display, 'none',
+        'Close button closes popup'
+    );
+});
+test('Button closes popup when already open', function() {
+    // setup
+    ext = tf.extension('colsVisibility');
+    ext.toggle();
+
+    // act
+    var evObj = document.createEvent('HTMLEvents');
+    evObj.initEvent('click', true, true);
+    ext.btnEl.dispatchEvent(evObj);
+
+    // assert
+    deepEqual(ext.contEl.style.display, 'none',
+        'Close button closes popup'
+    );
+});
 test('Destroy extension', function() {
     ext = tf.extension('colsVisibility');
     ext.destroy();
