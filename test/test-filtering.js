@@ -270,8 +270,24 @@ test('can filter empty value with [nonempty] operator', function(){
     );
 });
 
-// module('Tear-down');
-// test('can destroy TableFilter DOM elements', function() {
-//     tf.destroy();
-//     deepEqual(tf.isInitialized(), false, 'Filters removed');
-// });
+test('can filter date with date range with operators', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '<3-jan-2014 && >=23-Oct-2007');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['23-Oct-2007', '14-Mar-2009'],
+        'Expected match'
+    );
+});
+
+module('Tear-down');
+test('can destroy TableFilter DOM elements', function() {
+    tf.destroy();
+    deepEqual(tf.isInitialized(), false, 'Filters removed');
+});
