@@ -1903,15 +1903,15 @@ export class TableFilter {
 
             dte1 = parseDate(cellValue, locale);
 
-            // lower date
-            if (isLDate) {
-                dte2 = parseDate(term.replace(reL, ''), locale);
-                occurence = dte1 < dte2;
-            }
             // lower equal date
-            else if (isLEDate) {
+            if (isLEDate) {
                 dte2 = parseDate(term.replace(reLe, ''), locale);
                 occurence = dte1 <= dte2;
+            }
+            // lower date
+            else if (isLDate) {
+                dte2 = parseDate(term.replace(reL, ''), locale);
+                occurence = dte1 < dte2;
             }
             // greater equal date
             else if (isGEDate) {
@@ -2254,6 +2254,11 @@ export class TableFilter {
     }
 
 
+    /**
+     * Return the text content of a given cell
+     * @param {DOMElement} Cell's DOM element
+     * @returns {String}
+     */
     getCellValue(cell) {
         let idx = cell.cellIndex;
         //CallcustomCellData callback
@@ -2266,7 +2271,7 @@ export class TableFilter {
 
     /**
      * Return the typed data of a given cell based on the column type definition
-     * @param  {DOMElement} cell Cell's DOM object
+     * @param  {DOMElement} cell Cell's DOM element
      * @return {String|Number|Date}
      */
     getCellData(cell) {
@@ -2764,7 +2769,7 @@ export class TableFilter {
 
     /**
      * Checks if specified column filter ignores diacritics.
-     * Note this is only valid for input filter types.
+     * Note this is only applicable to input filter types.
      * @param {Number} colIndex    Column index
      * @returns {Boolean}
      */
