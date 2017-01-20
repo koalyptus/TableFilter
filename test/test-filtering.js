@@ -103,8 +103,175 @@ test('Should return no results for an unmatched term (6)', function(){
     deepEqual(tf.getValidRows().length, 0, 'No matches');
 });
 
-module('Tear-down');
-test('can destroy TableFilter DOM elements', function() {
-    tf.destroy();
-    deepEqual(tf.isInitialized(), false, 'Filters removed');
+
+module('Filtering data types');
+module('Date types');
+test('can filter date with `<` operator', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '< 14-Mar-2009');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['23-Oct-2007'],
+        'Expected match'
+    );
 });
+
+test('can filter date with `<=` operator', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '<= 14-Mar-2009');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['23-Oct-2007', '14-Mar-2009'],
+        'Expected match'
+    );
+});
+
+test('can filter date with `>` operator', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '> 14/03/2009');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['3-Jan-2014'],
+        'Expected match'
+    );
+});
+
+test('can filter date with `>` operator', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '>= 14/03/2009');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['3-Jan-2014', '14-Mar-2009'],
+        'Expected match'
+    );
+});
+
+test('can filter date with `!` operator', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '! 14-Mar-2009');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['3-Jan-2014', '23-Oct-2007'],
+        'Expected match'
+    );
+});
+
+test('can filter date with `=` operator', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '= 14-Mar-2009');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['14-Mar-2009'],
+        'Expected match'
+    );
+});
+
+test('can filter date with `=` operator and different date format', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '= 14.03.2009');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['14-Mar-2009'],
+        'Expected match'
+    );
+});
+
+test('can filter date with different date format', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '2007-10-23');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['23-Oct-2007'],
+        'Expected match'
+    );
+});
+
+test('can filter empty value with [empty] operator', function(){
+    // setup
+    var cellValue = tf.getCellValue(tf.tbl.rows[2].cells[2]);
+    tf.clearFilters();
+    tf.tbl.rows[2].cells[2].innerHTML = '';
+
+    // act
+    tf.setFilterValue(2, '[empty]');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        [''],
+        'Expected match'
+    );
+
+    tf.tbl.rows[2].cells[2].innerHTML = cellValue;
+});
+
+test('can filter empty value with [nonempty] operator', function(){
+    // setup
+    tf.clearFilters();
+
+    // act
+    tf.setFilterValue(2, '[nonempty]');
+    tf.filter();
+
+    // assert
+    deepEqual(
+        tf.getFilteredDataCol(2),
+        ['3-Jan-2014', '23-Oct-2007', '14-Mar-2009'],
+        'Expected match'
+    );
+});
+
+// module('Tear-down');
+// test('can destroy TableFilter DOM elements', function() {
+//     tf.destroy();
+//     deepEqual(tf.isInitialized(), false, 'Filters removed');
+// });
