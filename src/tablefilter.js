@@ -2088,9 +2088,6 @@ export class TableFilter {
         typed = false,
         exclude = []
     ) {
-        if (!this.fltGrid) {
-            return;
-        }
         let row = this.tbl.rows;
         let nbRows = this.getRowsNb(true);
         let colValues = [];
