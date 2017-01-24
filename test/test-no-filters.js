@@ -85,6 +85,24 @@
         deepEqual(ct, 0, 'Filters not cleared');
     });
 
+    test('cannot _initNoFilters if there are filters', function() {
+        // setup
+        tf.fltGrid = true;
+        var getRowsNb = this.getRowsNb;
+        var ct = 0;
+        tf.getRowsNb = function(){
+            ct++;
+        };
+
+        // act
+        tf._initNoFilters();
+
+        // assert
+        deepEqual(ct, 0, '_initNoFilters not executed');
+
+        tf.getRowsNb = getRowsNb;
+    });
+
     module('Paging on');
     test('Paging with no filters', function() {
         // setup
