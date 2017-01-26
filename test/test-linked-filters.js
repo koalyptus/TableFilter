@@ -9,9 +9,17 @@
         col_1: 'checklist',
         on_after_reset: testClearFilters
     });
+
+    var ct = 0;
+    tf.emitter.on(['build-checklist-filter'], function() {
+        ct++;
+    });
+
     tf.init();
+
     tf.setFilterValue(0, 'Sydney');
     tf.getFilterElement(0).focus();
+
     tf.filter();
 
     module('Sanity checks');
@@ -19,7 +27,11 @@
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instantiated');
         deepEqual(tf.linkedFilters, true, 'Linked filters enabled');
 
+        tf.activateFilter(0);
         tf.clearFilters();
+
+        deepEqual(ct, 2,
+            'build-checklist-filter event emitted after filtering');
         tf.onAfterFilter = null;
         tf.destroy();
         tf = null;
