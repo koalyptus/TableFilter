@@ -18,13 +18,13 @@ module.exports = {
         libraryTarget: 'umd'
     },
     resolve: {
-        extensions: ['', '.js'],
+        extensions: ['.js'],
         alias: {
             sortabletable: '../../../libs/sortabletable.js'
         }
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: path.join(__dirname, 'src'),
                 exclude: /tablefilter\/node_modules/,
@@ -66,20 +66,22 @@ module.exports = {
                     warnings: false
                 }
             }),
-            new webpack.BannerPlugin(
-                '/** \n' +
+            new webpack.BannerPlugin({
+                banner: '/** \n' +
                 ' *\t '+pkg.name+' v'+pkg.version+' by '+pkg.author.name+'\n' +
                 ' *\t build date: '+ new Date().toISOString() +' \n' +
                 ' *\t MIT License  \n' +
                 ' */ \n',
-                { raw: true }
-            )
+                raw: true
+            })
         ]
     },
     dev: {
         devtool: 'source-map',
-        debug: true,
         plugins: [
+            new webpack.LoaderOptionsPlugin({
+                debug: true
+            }),
             new webpack.optimize.DedupePlugin(),
             new StringReplacePlugin()
         ]

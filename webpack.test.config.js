@@ -10,22 +10,31 @@ module.exports = {
     entry: webpackConfig.entry,
     output: webpackConfig.output,
     resolve: webpackConfig.resolve,
-    isparta: {
-        embedSource: true,
-        noAutoWrap: true,
-        babel: {
-            compact: false,
-            presets: ['es2015'],
-            plugins: [['transform-es2015-classes', {loose: true}]]
-        }
-    },
+    // isparta: {
+    //     embedSource: true,
+    //     noAutoWrap: true,
+    //     babel: {
+    //         compact: false,
+    //         presets: ['es2015'],
+    //         plugins: [['transform-es2015-classes', {loose: true}]]
+    //     }
+    // },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
                 include: path.join(__dirname, 'src'),
                 exclude: /tablefilter\/node_modules/,
-                loader: 'isparta'
+                loader: 'isparta-loader',
+                options: {
+                    embedSource: true,
+                    noAutoWrap: true,
+                    babel: {
+                        compact: false,
+                        presets: ['es2015'],
+                        plugins: [['transform-es2015-classes', {loose: true}]]
+                    }
+                }
             },
             {
                 test: path.join(__dirname, 'src'),
@@ -46,6 +55,8 @@ module.exports = {
         ]
     },
     devtool: 'sourcemap',
-    debug: true,
-    plugins: [new Clean(['dist'])].concat(webpackConfig.dev.plugins)
+    plugins: [
+        new Clean(['dist']),
+
+    ].concat(webpackConfig.dev.plugins)
 };
