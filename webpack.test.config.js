@@ -1,4 +1,6 @@
+var webpack = require('webpack');
 var webpackConfig = require('./webpack.config.js');
+var webpackDevConfig = require('./webpack.dev.config.js');
 var path = require('path');
 var Clean = require('clean-webpack-plugin');
 var StringReplacePlugin = require('string-replace-webpack-plugin');
@@ -10,33 +12,14 @@ module.exports = {
     entry: webpackConfig.entry,
     output: webpackConfig.output,
     resolve: webpackConfig.resolve,
-    // isparta: {
-    //     embedSource: true,
-    //     noAutoWrap: true,
-    //     babel: {
-    //         compact: false,
-    //         presets: ['es2015'],
-    //         plugins: [['transform-es2015-classes', {loose: true}]]
-    //     }
-    // },
     module: {
         rules: [
             {
                 test: /\.js$/,
                 include: path.join(__dirname, 'src'),
                 exclude: /tablefilter\/node_modules/,
-                loader: 'isparta-loader',
-                options: {
-                    embedSource: true,
-                    noAutoWrap: true,
-                    babel: {
-                        compact: false,
-                        presets: ['es2015'],
-                        plugins: [['transform-es2015-classes', {loose: true}]]
-                    }
-                }
-            },
-            {
+                loader: 'isparta-loader'
+            }, {
                 test: path.join(__dirname, 'src'),
                 loader: StringReplacePlugin.replace({
                     replacements: [{
@@ -44,7 +27,7 @@ module.exports = {
                         replacement: function () {
                             return pkg.version;
                         }
-                    },{
+                    }, {
                         pattern: /{AUTHOR}/ig,
                         replacement: function () {
                             return pkg.author.name;
@@ -54,9 +37,22 @@ module.exports = {
             }
         ]
     },
-    devtool: 'sourcemap',
+    devtool: 'source-map',
     plugins: [
         new Clean(['dist']),
-
-    ].concat(webpackConfig.dev.plugins)
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                isparta: {
+                    embedSource: true,
+                    noAutoWrap: true,
+                    babel: {
+                        compact: false,
+                        presets: ['es2015'],
+                        plugins: [['transform-es2015-classes', {loose: true}]]
+                    }
+                }
+            }
+        }),
+        // new StringReplacePlugin()
+    ].concat(webpackDevConfig.plugins)
 };
