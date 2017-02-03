@@ -1,11 +1,11 @@
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.config.js');
-var webpackDevConfig = require('./webpack.dev.config.js');
+// var webpackDevConfig = require('./webpack.dev.config.js');
 var path = require('path');
 var Clean = require('clean-webpack-plugin');
-var StringReplacePlugin = require('string-replace-webpack-plugin');
-var fs = require('fs');
-var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+// var StringReplacePlugin = require('string-replace-webpack-plugin');
+// var fs = require('fs');
+// var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 module.exports = {
     cache: true,
@@ -19,7 +19,7 @@ module.exports = {
                 include: path.join(__dirname, 'src'),
                 exclude: /tablefilter\/node_modules/,
                 loader: 'isparta-loader'
-            }, {
+            }/*, {
                 test: path.join(__dirname, 'src'),
                 loader: StringReplacePlugin.replace({
                     replacements: [{
@@ -34,13 +34,14 @@ module.exports = {
                         }
                     }]
                 })
-            }
+            }*/
         ]
     },
     devtool: 'source-map',
     plugins: [
         new Clean(['dist']),
         new webpack.LoaderOptionsPlugin({
+            debug: true,
             options: {
                 isparta: {
                     embedSource: true,
@@ -54,5 +55,6 @@ module.exports = {
             }
         }),
         // new StringReplacePlugin()
-    ].concat(webpackDevConfig.plugins)
+    ]
+    //.concat(webpackDevConfig.plugins)
 };

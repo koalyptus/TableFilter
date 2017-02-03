@@ -1,6 +1,6 @@
 var webpackConfig = require('./webpack.config.js');
 var webpack = require('webpack');
-var StringReplacePlugin = require('string-replace-webpack-plugin');
+// var StringReplacePlugin = require('string-replace-webpack-plugin');
 
 module.exports = {
     cache: true,
@@ -12,8 +12,7 @@ module.exports = {
     plugins: [
         new webpack.LoaderOptionsPlugin({
             debug: true
-        }),
-        // new webpack.optimize.DedupePlugin(),
-        new StringReplacePlugin()
+        })/*,
+        new StringReplacePlugin()*/
     ]
 };
