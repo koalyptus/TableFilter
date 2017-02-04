@@ -268,11 +268,11 @@
               "arguments": [
                 {
                   "type": "Literal",
-                  "value": "script!sortabletable",
-                  "raw": "'script!sortabletable'",
+                  "value": "script-loader!sortabletable",
+                  "raw": "'script-loader!sortabletable'",
                   "range": [
                     132,
-                    154
+                    161
                   ],
                   "loc": {
                     "start": {
@@ -281,14 +281,14 @@
                     },
                     "end": {
                       "line": 5,
-                      "column": 34
+                      "column": 41
                     }
                   }
                 }
               ],
               "range": [
                 124,
-                155
+                162
               ],
               "loc": {
                 "start": {
@@ -297,13 +297,13 @@
                 },
                 "end": {
                   "line": 5,
-                  "column": 35
+                  "column": 42
                 }
               }
             },
             "range": [
               124,
-              156
+              163
             ],
             "loc": {
               "start": {
@@ -312,14 +312,14 @@
               },
               "end": {
                 "line": 5,
-                "column": 36
+                "column": 43
               }
             }
           }
         ],
         "range": [
           118,
-          158
+          165
         ],
         "loc": {
           "start": {
@@ -335,7 +335,7 @@
       "alternate": null,
       "range": [
         93,
-        158
+        165
       ],
       "loc": {
         "start": {
@@ -354,8 +354,8 @@
         "type": "Identifier",
         "name": "AdapterSortableTable",
         "range": [
-          175,
-          195
+          182,
+          202
         ],
         "loc": {
           "start": {
@@ -371,8 +371,8 @@
         "trailingComments": []
       },
       "range": [
-        160,
-        196
+        167,
+        203
       ],
       "loc": {
         "start": {
@@ -389,7 +389,7 @@
   "sourceType": "module",
   "range": [
     0,
-    196
+    203
   ],
   "loc": {
     "start": {

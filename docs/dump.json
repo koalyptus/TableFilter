@@ -5912,7 +5912,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import AdapterSortableTable from './adapterSortabletable';\nimport {root} from '../../root';\n\nif (!root.SortableTable) {\n    require('script!sortabletable');\n}\n\nexport default AdapterSortableTable;\n"
+    "content": "import AdapterSortableTable from './adapterSortabletable';\nimport {root} from '../../root';\n\nif (!root.SortableTable) {\n    require('script-loader!sortabletable');\n}\n\nexport default AdapterSortableTable;\n"
   },
   {
     "__docId__": 255,
