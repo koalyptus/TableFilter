@@ -1,7 +1,6 @@
 module.exports = function (grunt) {
-
-    var webpack = require('webpack');
     var webpackConfig = require('./webpack.config.js');
+    var webpackDevConfig = require('./webpack.dev.config.js');
     var webpackTestConfig = require('./webpack.test.config.js');
     var fs = require('fs');
     var path = require('path');
@@ -20,6 +19,8 @@ module.exports = function (grunt) {
             target: [
                 'Gruntfile.js',
                 'webpack.config.js',
+                'webpack.dev.config.js',
+                'webpack.test.config.js',
                 'src/**/*.js',
                 'test/*.js'
             ]
@@ -127,22 +128,19 @@ module.exports = function (grunt) {
 
         'webpack-dev-server': {
             options: {
-                webpack: webpack.dev,
+                webpack: webpackDevConfig,
                 publicPath: '/dist/'
             },
             start: {
-                keepAlive: true,
                 webpack: {
-                    devtool: 'eval',
-                    debug: true
+                    devtool: 'eval'
                 }
             }
         },
 
         webpack: {
-            options: webpackConfig,
-            build: webpackConfig.build,
-            dev: webpackConfig.dev,
+            build: webpackConfig,
+            dev: webpackDevConfig,
             test: webpackTestConfig
         },
 
