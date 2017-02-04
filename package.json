@@ -65,7 +65,7 @@
     "string-replace-webpack-plugin": "^0.0.5",
     "sugar-date": "2.0.4",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.2.1"
+    "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {},
   "bugs": {

@@ -1,11 +1,7 @@
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.config.js');
-// var webpackDevConfig = require('./webpack.dev.config.js');
 var path = require('path');
 var Clean = require('clean-webpack-plugin');
-// var StringReplacePlugin = require('string-replace-webpack-plugin');
-// var fs = require('fs');
-// var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 module.exports = {
     cache: true,
@@ -19,23 +15,10 @@ module.exports = {
                 include: path.join(__dirname, 'src'),
                 exclude: /tablefilter\/node_modules/,
                 loader: 'isparta-loader'
-            }/*, {
-                test: path.join(__dirname, 'src'),
-                loader: StringReplacePlugin.replace({
-                    replacements: [{
-                        pattern: /{VERSION}/ig,
-                        replacement: function () {
-                            return pkg.version;
-                        }
-                    }, {
-                        pattern: /{AUTHOR}/ig,
-                        replacement: function () {
-                            return pkg.author.name;
-                        }
-                    }]
-                })
-            }*/
+            }
         ]
+        // TODO: re-instate StringReplacePlugin, currently failing
+        // in conjunction with 'isparta-loader'
     },
     devtool: 'source-map',
     plugins: [
@@ -53,8 +36,6 @@ module.exports = {
                     }
                 }
             }
-        }),
-        // new StringReplacePlugin()
+        })
     ]
-    //.concat(webpackDevConfig.plugins)
 };

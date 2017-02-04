@@ -51,7 +51,6 @@ module.exports = {
             }
         ]
     },
-    // build: {
     devtool: 'source-map',
     plugins: [
         new Clean(['dist']),
@@ -73,16 +72,4 @@ module.exports = {
             raw: true
         })
     ]
-    // }
-    // ,
-    // dev: {
-    //     devtool: 'source-map',
-    //     plugins: [
-    //         new webpack.LoaderOptionsPlugin({
-    //             debug: true
-    //         }),
-    //         new webpack.optimize.DedupePlugin(),
-    //         new StringReplacePlugin()
-    //     ]
-    // }
 };
