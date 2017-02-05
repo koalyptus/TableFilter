@@ -79,6 +79,8 @@
             
         
             
+        
+            
             <li>
               <a href="examples.html">Examples</a>
             </li>
@@ -189,7 +191,8 @@
 
 
   <p><a href="https://travis-ci.org/koalyptus/TableFilter"><img src="https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master" alt="Build Status"></a>
-<a href="https://koalyptus.github.io/TableFilter/docs/source"><img src="http://koalyptus.github.io/TableFilter/docs/badge.svg" alt="Document"></a></p>
+<a href="https://koalyptus.github.io/TableFilter/docs/source"><img src="http://koalyptus.github.io/TableFilter/docs/badge.svg" alt="Document"></a>
+<a href="https://codecov.io/gh/koalyptus/TableFilter"><img src="https://codecov.io/gh/koalyptus/TableFilter/branch/master/graph/badge.svg" alt="codecov"></a></p>
 <h1 id="tablefilter">TableFilter</h1>
 <blockquote>
 <p>A Javascript library making HTML tables filterable</p>
@@ -222,9 +225,9 @@ solution</li>
 <li><p>You can <a href="https://github.com/koalyptus/TableFilter/archive/master.zip">download</a> this repository.</p>
 </li>
 <li><p>Alternatively, install TableFilter files in your npm enabled project using:</p>
-<pre><code class="language-shell">npm install tablefilter --save</code></pre>
+<pre><code class="language-shell">npm install tablefilter --save-dev</code></pre>
 </li>
-<li>or get the future features from the <code>next</code> release channel:<pre><code class="language-shell">npm install tablefilter@next --save</code></pre>
+<li>or get the future features from the <code>next</code> release channel:<pre><code class="language-shell">npm install tablefilter@next --save-dev</code></pre>
 </li>
 <li>If you don&#39;t use <code>npm</code>, you can also 
 <a href="https://unpkg.com/tablefilter/">access these files on unpkg</a>, download them 
@@ -260,18 +263,21 @@ sever on port <code>8080</code>.</p>
 <pre><code class="language-shell">npm run build</code></pre>
 <p>command to generate a production build.</p>
 <p>The </p>
-<pre><code class="language-shell">npm run build-all</code></pre>
+<pre><code class="language-shell">npm run dist</code></pre>
 <p>command will create a production build, run the tests and finally generate 
 the demos:</p>
-<p>To run all the tests:</p>
+<p>To run all the tests and generate the coverage report:</p>
 <pre><code class="language-shell">npm test</code></pre>
-<p>and to run specific test(s):</p>
+<p>or to run specific test(s):</p>
 <pre><code class="language-shell">grunt test-only:test.html
 grunt test-only:test.html,test-sort.html</code></pre>
+<p>to view the coverage report(s), open the <code>index.html</code> under the
+<code>report/coverage</code> folder or
+<a href="https://codecov.io/gh/koalyptus/TableFilter">online</a>.</p>
 <h2 id="demos">Demos</h2>
 <p>Check out the online <a href="http://koalyptus.github.io/TableFilter/examples">examples</a> 
 or generate the demos locally:</p>
-<pre><code class="language-shell">npm run build-demos</code></pre>
+<pre><code class="language-shell">npm run build:demos</code></pre>
 <p>then run the local webserver:</p>
 <pre><code class="language-shell">npm start</code></pre>
 <p>then pick a demo from:</p>

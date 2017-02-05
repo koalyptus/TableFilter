@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Data types, column operations | TableFilter</title>
+    <title>Column calculations with API | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -189,515 +189,37 @@
 
       
 
-<h1>Data types, column operations</h1>
+<h1>Column calculations with API</h1>
 
 <p>
-    This example shows how to define column types with the
-    <code>col_types</code> option and specifically numeric formats with:
-</p>
-<ul>
-    <li>"." thousands separator and "," decimal separator for &euro; column</li>
-    <li>"," thousands separator and "." decimal separator for US$ column</li>
-</ul>
-<p>
-    and date types with <code>locale</code> and <code>format</code> specified on
-    a column basis.
+    This example shows how to get advantage of the <code>ColOps</code> API to
+    perform desired calculations on a specified column. Pagination is turned on
+    to specifically show the difference between visible filtered data and
+    filtered data (the filtered data displayed on current page vs filtered dataset).
 </p>
 
-<div class="alert alert-info" role="alert">
-    <code>col_type</code> property sets data types on a column basis, below a list
-    of types it can now support:
-    <ul>
-      <li><code>string</code> (default column type if none specified)</li>
-      <li><code>number</code> (unformatted number)</li>
-      <li>
-        <code>formatted-number</code>
-        (formatted number with '.' decimal separator and
-        ',' thousands separator) or
-
-        <ul>
-          <li>
-            <code>{ type: 'formatted-number', decimal: ',', thousands: '.' }</code>
-            for extended customisation
-          </li>
-        </ul>
-      </li>
-      <li>
-        <code>date</code>
-        defaulting to <code>en</code> locale or
-
-        <ul>
-          <li>
-            <code>{ type: 'date', locale: 'en-GB', format: ['{dd}-{months}-{yyyy|yy}'] }</code>
-            for extended customisation <sup><strong>*</strong></sup>
-          </li>
-        </ul>
-      </li>
-      <li><code>ipaddress</code> (specific to column sorting)</li>
-      <li><code>caseinsensitivestring</code> (specific to column sorting)</li>
-      <li><code>none</code> (specific to column sorting)</li>
-    </ul>
-    <hr>
-    <p>
-      <sup><strong>*</strong></sup>
-      To learn more about supported date formats and locales:<br>
-      <a href="https://sugarjs.com/docs/#/DateFormatting" target="_blank">
-        https://sugarjs.com/docs/#/DateFormatting</a>
-    </p>
+<div class="alert alert-warning" role="alert">
+    Instructions: filter a column, change a page or sort a column to see calculation
+    results changes.
 </div>
 
+<div style="font-size:1.2em;" data-config>
+    <p>Visible data:<br>
+        <code>Sum:</code> <span id="vis-sum" class="badge"></span>
+        <code>Mean:</code> <span id="vis-mean" class="badge"></span>
+        <code>Median:</code> <span id="vis-median" class="badge"></span>
+        <code>Min:</code> <span id="vis-min" class="badge"></span>
+        <code>max:</code> <span id="vis-max" class="badge"></span>
+    </p>
 
-<table id="demo-tot">
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Id</th>
-            <th>Phone</th>
-            <th>&euro;</th>
-            <th>US $</th>
-            <th>Url</th>
-            <th>EU Date</th>
-            <th>US Date</th>
-            <th>DD-MMM-YYYY Date</th>
-            <th>IP</th>
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <td>Tot</td>
-            <td></td>
-            <td></td>
-            <td id="sum1" align="right"></td>
-            <td id="sum2" align="right"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tfoot>
-    <tbody>
-        <tr>
-            <td>devo@flexomat.com</td>
-            <td>66672</td>
-            <td>941-964-8535</td>
-            <td>
-                <div align="right">2.482,79</div>
-            </td>
-            <td>
-                <div align="right">2,482.79</div>
-            </td>
-            <td>http://gmail.com</td>
-            <td>14/12/1988</td>
-            <td>12/14/1988</td>
-            <td>14-Dec-1988</td>
-            <td>186.114.137.213</td>
-        </tr>
-        <tr>
-            <td>henry@mountdev.net</td>
-            <td>35889</td>
-            <td>941-964-9543</td>
-            <td>
-                <div align="right">2.776,09</div>
-            </td>
-            <td>
-                <div align="right">2,776.09</div>
-            </td>
-            <td>http://www.gmail.com</td>
-            <td>19/1/1984</td>
-            <td>1/19/1984</td>
-            <td>19-Jan-1984</td>
-            <td>170.138.54.12</td>
-        </tr>
-        <tr>
-            <td>christian@reno.gov</td>
-            <td>60021</td>
-            <td>941-964-5617</td>
-            <td>
-                <div align="right">2.743,41</div>
-            </td>
-            <td>
-                <div align="right">2,743.41</div>
-            </td>
-            <td>http://www.dotnet.ca</td>
-            <td>25/3/2000</td>
-            <td>3/25/2000</td>
-            <td>25-Mar-2000</td>
-            <td>219.115.156.141</td>
-        </tr>
-        <tr>
-            <td>muffins@donuts.com</td>
-            <td>17927</td>
-            <td>941-964-9511</td>
-            <td>
-                <div align="right">2.998,18</div>
-            </td>
-            <td>
-                <div align="right">2,998.18</div>
-            </td>
-            <td>http://google.se</td>
-            <td>24/1/1993</td>
-            <td>1/24/1993</td>
-            <td>24-Jan-1993</td>
-            <td>252.253.244.189</td>
-        </tr>
-        <tr>
-            <td>muffins@reno.gov</td>
-            <td>76375</td>
-            <td>941-964-2757</td>
-            <td>
-                <div align="right">1.836,09</div>
-            </td>
-            <td>
-                <div align="right">1,836.09</div>
-            </td>
-            <td>http://www.samba.org</td>
-            <td>4/4/1988</td>
-            <td>4/4/1988</td>
-            <td>4-Apr-1988</td>
-            <td>88.233.9.89</td>
-        </tr>
-        <tr>
-            <td>mendez@gmail.com</td>
-            <td>45834</td>
-            <td>941-964-2575</td>
-            <td>
-                <div align="right">2.805,46</div>
-            </td>
-            <td>
-                <div align="right">2,805.46</div>
-            </td>
-            <td>http://flexomat.com</td>
-            <td>12/12/1985</td>
-            <td>12/12/1985</td>
-            <td>12-Dec-1985</td>
-            <td>88.233.9.89</td>
-        </tr>
-        <tr>
-            <td>dev@gmail.com</td>
-            <td>20022</td>
-            <td>941-964-4967</td>
-            <td>
-                <div align="right">3.296,54</div>
-            </td>
-            <td>
-                <div align="right">3,296.54</div>
-            </td>
-            <td>http://www.flexomat.com</td>
-            <td>3/7/2002</td>
-            <td>7/3/2002</td>
-            <td>3-Jul-2002</td>
-            <td>219.115.156.145</td>
-        </tr>
-        <tr>
-            <td>foo@polyester.se</td>
-            <td>55987</td>
-            <td>941-964-745</td>
-            <td>
-                <div align="right">2.953,73</div>
-            </td>
-            <td>
-                <div align="right">2,953.73</div>
-            </td>
-            <td>http://www.donuts.com</td>
-            <td>4/8/1987</td>
-            <td>8/4/1987</td>
-            <td>4-Aug-1987</td>
-            <td>88.233.9.87</td>
-        </tr>
-        <tr>
-            <td>adam@aftonbladet.se</td>
-            <td>38867</td>
-            <td>941-964-6302</td>
-            <td>
-                <div align="right">1.949,27</div>
-            </td>
-            <td>
-                <div align="right">1,949.27</div>
-            </td>
-            <td>http://flexomat.com</td>
-            <td>27/7/1995</td>
-            <td>7/27/1995</td>
-            <td>27-Jul-1995</td>
-            <td>170.138.54.16</td>
-        </tr>
-        <tr>
-            <td>devo@donuts.com</td>
-            <td>51426</td>
-            <td>941-964-1234</td>
-            <td>
-                <div align="right">1.067,00</div>
-            </td>
-            <td>
-                <div align="right">1,067.00</div>
-            </td>
-            <td>http://www.polyester.se</td>
-            <td>5/1/1986</td>
-            <td>1/5/1986</td>
-            <td>5-Jan-1986</td>
-            <td>252.253.244.186</td>
-        </tr>
-        <tr>
-            <td>henry@samba.org</td>
-            <td>40859</td>
-            <td>941-964-4856</td>
-            <td>
-                <div align="right">3.401,19</div>
-            </td>
-            <td>
-                <div align="right">3,401.19</div>
-            </td>
-            <td>http://www.flexomat.com</td>
-            <td>7/3/1990</td>
-            <td>3/7/1990</td>
-            <td>7-Mar-1990</td>
-            <td>88.233.9.85</td>
-        </tr>
-        <tr>
-            <td>found@dotnet.ca</td>
-            <td>23986</td>
-            <td>941-964-2686</td>
-            <td>
-                <div align="right">1.393,52</div>
-            </td>
-            <td>
-                <div align="right">1,393.52</div>
-            </td>
-            <td>http://lostnfound.org</td>
-            <td>22/7/1993</td>
-            <td>7/22/1993</td>
-            <td>22-Jul-1993</td>
-            <td>113.231.1.44</td>
-        </tr>
-        <tr>
-            <td>carl@fish.org</td>
-            <td>73392</td>
-            <td>941-964-5792</td>
-            <td>
-                <div align="right">3.876,04</div>
-            </td>
-            <td>
-                <div align="right">3,876.04</div>
-            </td>
-            <td>http://www.google.se</td>
-            <td>14/7/1984</td>
-            <td>7/14/1984</td>
-            <td>14-Jul-1984</td>
-            <td>219.115.156.137</td>
-        </tr>
-        <tr>
-            <td>found@mountdev.net</td>
-            <td>03519</td>
-            <td>941-964-1599</td>
-            <td>
-                <div align="right">1.176,48</div>
-            </td>
-            <td>
-                <div align="right">1,176.48</div>
-            </td>
-            <td>http://donuts.com</td>
-            <td>6/8/2000</td>
-            <td>8/6/2000</td>
-            <td>6-Aug-2000</td>
-            <td>88.233.9.86</td>
-        </tr>
-        <tr>
-            <td>lost@fish.org</td>
-            <td>36628</td>
-            <td>941-964-5985</td>
-            <td>
-                <div align="right">822,23</div>
-            </td>
-            <td>
-                <div align="right">822.23</div>
-            </td>
-            <td>http://www.gmail.com</td>
-            <td>14/7/1994</td>
-            <td>7/14/1994</td>
-            <td>14-Jul-1994</td>
-            <td>252.253.244.184</td>
-        </tr>
-        <tr>
-            <td>mendez@dotnet.ca</td>
-            <td>90442</td>
-            <td>941-964-1649</td>
-            <td>
-                <div align="right">1.985,72</div>
-            </td>
-            <td>
-                <div align="right">1,975.72</div>
-            </td>
-            <td>http://reno.gov</td>
-            <td>20/10/1997</td>
-            <td>10/20/1997</td>
-            <td>20-Oct-1997</td>
-            <td>113.231.1.79</td>
-        </tr>
-        <tr>
-            <td>carl@donuts.com</td>
-            <td>00412</td>
-            <td>941-964-6432</td>
-            <td>
-                <div align="right">1.834,77</div>
-            </td>
-            <td>
-                <div align="right">1,834.77</div>
-            </td>
-            <td>http://gmail.com</td>
-            <td>23/8/1997</td>
-            <td>8/23/1997</td>
-            <td>23-Aug-1997</td>
-            <td>170.138.54.19</td>
-        </tr>
-        <tr>
-            <td>foo@fish.org</td>
-            <td>80653</td>
-            <td>941-964-1022</td>
-            <td>
-                <div align="right">260,26</div>
-            </td>
-            <td>
-                <div align="right">260.26</div>
-            </td>
-            <td>http://samba.org</td>
-            <td>24/11/1991</td>
-            <td>11/24/1991</td>
-            <td>24-Nov-1991</td>
-            <td>88.233.9.89</td>
-        </tr>
-        <tr>
-            <td>found@fish.org</td>
-            <td>54635</td>
-            <td>941-964-6439</td>
-            <td>
-                <div align="right">1.442,80</div>
-            </td>
-            <td>
-                <div align="right">1,442.80</div>
-            </td>
-            <td>http://dotnet.ca</td>
-            <td>12/7/1987</td>
-            <td>7/12/1987</td>
-            <td>12-Jul-1987</td>
-            <td>88.233.9.90</td>
-        </tr>
-        <tr>
-            <td>found@flexomat.com</td>
-            <td>20953</td>
-            <td>941-964-5544</td>
-            <td>
-                <div align="right">575,42</div>
-            </td>
-            <td>
-                <div align="right">575.42</div>
-            </td>
-            <td>http://gmail.com</td>
-            <td>10/6/1988</td>
-            <td>6/10/1988</td>
-            <td>10-Jun-1988</td>
-            <td>88.233.19.89</td>
-        </tr>
-    </tbody>
-</table>
-
-
-
-<script src="tablefilter/tablefilter.js"></script>
-
-
-<script data-config>
-    var id = function (id){
-        return document.getElementById(id);
-    };
-    var table = id('demo-tot');
-    var totRowIndex = table.getElementsByTagName('tr').length;
-    function addCommas(nStr){
-        nStr += '';
-        var x = nStr.split('.');
-        var x1 = x[0];
-        var x2 = x.length > 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        }
-        return x1 + x2;
-    }
-    function addDots(nStr){
-        nStr += '';
-        var x = nStr.split('.');
-        var x1 = x[0];
-        var x2 = x.length > 1 ? ',' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + '.' + '$2');
-        }
-        return x1 + x2;
-    }
-    function formatTotals(){
-        var tot1 = id('sum1').innerHTML;
-        tot1 = addDots(tot1);
-        id('sum1').innerHTML = tot1;
-        var tot2 = id('sum2').innerHTML;
-        tot2 = addCommas(tot2);
-        id('sum2').innerHTML = tot2;
-    }
-    /* EXAMPLE 1
-     *********************** */
-    var tfConfig = {
-        base_path: 'tablefilter/',
-        filters_row_index: 1,
-        alternate_rows: true,
-        rows_counter: true,
-        btn_reset: true,
-        loader: true,
-        status_bar: true,
-        col_types: [
-            'string',
-            'string',
-            'string',
-            { type: 'formatted-number', decimal: ',', thousands: '.' },
-            'formatted-number', // defaults to '.' for decimal and ',' for thousands
-            'string',
-            { type: 'date', locale: 'fr' },
-            { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}' }, // extends 'en' locale with additional format
-            { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
-            'ipaddress'
-        ],
-        rows_always_visible: [totRowIndex],
-        on_filters_loaded: function(tf){
-            tf.setFilterValue(3, '>1.000');
-            tf.setFilterValue(4, '<2,500');
-            tf.setFilterValue(6, '>23-01-95');
-            tf.setFilterValue(8, '<2000');
-            tf.filter();
-        },
-        extensions:[
-            { name: 'sort' },
-            {
-                name: 'colOps',
-                id: ['sum1', 'sum2'],
-                col: [3, 4],
-                operation: ['sum', 'sum'],
-                write_method: ['innerhtml', 'innerhtml'],
-                exclude_row: [totRowIndex],
-                decimal_precision: [2, 2],
-                tot_row_index: [totRowIndex],
-                on_after_operation: formatTotals
-            }
-        ]
-    };
-
-    var tf = new TableFilter('demo-tot', tfConfig);
-    tf.init();
-</script>
-
-<hr style="visibility:hidden;">
-<p></p>
-<p>
-    Below an example of ISO date support ({yyyy|yy}/{MM}/{dd}).
-    Use <code>locale</code> to set a locale globally
-    (defaults to 'en').
-</p>
+    <p>Filtered data:<br>
+        <code>Sum:</code> <span id="flt-sum" class="badge"></span>
+        <code>Mean:</code> <span id="flt-mean" class="badge"></span>
+        <code>Median:</code> <span id="flt-median" class="badge"></span>
+        <code>Min:</code> <span id="flt-min" class="badge"></span>
+        <code>max:</code> <span id="flt-max" class="badge"></span>
+    </p>
+</div>
 
 
 <table id="demo" class="dummy">
@@ -1204,11 +726,14 @@
 </table>
 
 
+
+<script src="tablefilter/tablefilter.js"></script>
+
+
 <script data-config>
-    /* EXAMPLE 2
-     *********************** */
-    var tf2Config = {
+    var tfConfig = {
         base_path: 'tablefilter/',
+        paging: true,
         alternate_rows: true,
         rows_counter: true,
         btn_reset: true,
@@ -1217,16 +742,96 @@
         locale: 'en-US',
         col_types: [
             'string', 'number', 'string',
-            'number', 'string', 'date'
+            'formatted-number', 'string', 'date'
         ],
-        on_filters_loaded: function(tf){
-            tf.setFilterValue(5, '>95-05-18');
-            tf.filter();
-        }
+
+        // extensions: sort and column operations
+        extensions: [
+          { name: 'sort' },
+          {
+              // minimal configuration for column operation extension
+              name: 'colOps',
+              col: [3],
+              operation: ['sum']
+          }
+        ]
     };
 
-    var tf2 = new TableFilter('demo', tf2Config);
-    tf2.init();
+    var tf = new TableFilter('demo', tfConfig);
+
+    // subscribe to 'column-calc' event emitted whenever a calculation is
+    // performed on a column
+    tf.emitter.on(['column-calc'], calcAll);
+
+    tf.init();
+
+    /**
+     * Perform all calculations
+     * @param  {Object} tf       TableFilter instance
+     * @param  {Object} colOps   ColOps extension instance
+     * @param  {Number} colIndex Column index
+     */
+    function calcAll(tf, colOps, colIndex) {
+        calc(tf, colOps, colIndex, 'sum', true, 'vis-sum');
+        calc(tf, colOps, colIndex, 'sum', false, 'flt-sum');
+
+        calc(tf, colOps, colIndex, 'mean', true, 'vis-mean');
+        calc(tf, colOps, colIndex, 'mean', false, 'flt-mean');
+
+        calc(tf, colOps, colIndex, 'median', true, 'vis-median');
+        calc(tf, colOps, colIndex, 'median', false, 'flt-median');
+
+        calc(tf, colOps, colIndex, 'min', true, 'vis-min');
+        calc(tf, colOps, colIndex, 'min', false, 'flt-min');
+
+        calc(tf, colOps, colIndex, 'max', true, 'vis-max');
+        calc(tf, colOps, colIndex, 'max', false, 'flt-max');
+    }
+
+    /**
+     * Perform a specified calculation on a column and display result
+     * @param  {Object}  tf          TableFilter instance
+     * @param  {Object}  colOps      ColOps extension instance
+     * @param  {Number}  colIndex    Column index
+     * @param  {String}  operation   Calculation to be performed ('sum', 'mean', 'median'...)
+     * @param  {Boolean} onlyVisible Perform calculation on only visible data as opposed to filtered data
+     * @param  {String}  labelId     Id of DOM element displaying calculation result
+     */
+    function calc(tf, colOps, colIndex, operation, onlyVisible, labelId) {
+
+        /** getFilteredDataCol accepts in order of appearance:
+            - a column index
+            - an optional boolean indicating whether the returned dataset also includes the colunm header
+            - an optional boolean indicating whether the returned dataset should return numbers (string by default)
+            - an optional array of row indexes to be excluded from the returned dataset
+            - an optional boolean indicating whether the returned dataset should only include filtered and
+            visible data (true by default) or filtered only (paging can contain filtered data which is not visible)
+            Refer to: http://koalyptus.github.io/TableFilter/docs/class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredDataCol
+        */
+        var colValues = tf.getFilteredDataCol(colIndex, false, true, [], onlyVisible);
+        var result = 0;
+
+        // Refer to ColOps API to perform desired calculations
+        // http://koalyptus.github.io/TableFilter/docs/class/src/extensions/colOps/colOps.js~ColOps.html
+        if(operation === 'sum') {
+            result = colOps.calcSum(colValues);
+        }
+        else if(operation === 'mean') {
+            result = colOps.calcMean(colValues);
+        }
+        else if(operation === 'median') {
+            result = colOps.calcMedian(colValues);
+        }
+        else if(operation === 'min') {
+            result = colOps.calcMin(colValues);
+        }
+        else if(operation === 'max') {
+            result = colOps.calcMax(colValues);
+        }
+
+        // display result
+        document.getElementById(labelId).innerHTML = result.toFixed(2);
+    }
 </script>
 
 <hr>
