@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Alphabetical pager | TableFilter</title>
+    <title>Add an extension at runtime | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -191,41 +191,15 @@
 
       
 
-<h1>Alphabetical pager</h1>
+<h1>Add an extension at runtime</h1>
 
 <p>
-    This example shows how to easily implement an alphabetical paging component
-    by simply using the <code>start with</code> operator
+    This example shows how to add an extension at runtime.
 </p>
 
-<div class="row pagination" data-config>
-    <button class="btn" value="" onclick="filter(event);">All</button>
-    <button class="btn" value="A" onclick="filter(event);">A</button>
-    <button class="btn" value="B" onclick="filter(event);">B</button>
-    <button class="btn" value="C" onclick="filter(event);">C</button>
-    <button class="btn" value="D" onclick="filter(event);">D</button>
-    <button class="btn" value="E" onclick="filter(event);">E</button>
-    <button class="btn" value="F" onclick="filter(event);">F</button>
-    <button class="btn" value="G" onclick="filter(event);">G</button>
-    <button class="btn" value="H" onclick="filter(event);">H</button>
-    <button class="btn" value="I" onclick="filter(event);">I</button>
-    <button class="btn" value="J" onclick="filter(event);">J</button>
-    <button class="btn" value="K" onclick="filter(event);">K</button>
-    <button class="btn" value="L" onclick="filter(event);">L</button>
-    <button class="btn" value="M" onclick="filter(event);">M</button>
-    <button class="btn" value="N" onclick="filter(event);">N</button>
-    <button class="btn" value="O" onclick="filter(event);">O</button>
-    <button class="btn" value="P" onclick="filter(event);">P</button>
-    <button class="btn" value="Q" onclick="filter(event);">Q</button>
-    <button class="btn" value="R" onclick="filter(event);">R</button>
-    <button class="btn" value="S" onclick="filter(event);">S</button>
-    <button class="btn" value="T" onclick="filter(event);">T</button>
-    <button class="btn" value="U" onclick="filter(event);">U</button>
-    <button class="btn" value="V" onclick="filter(event);">V</button>
-    <button class="btn" value="W" onclick="filter(event);">W</button>
-    <button class="btn" value="X" onclick="filter(event);">X</button>
-    <button class="btn" value="Y" onclick="filter(event);">Y</button>
-    <button class="btn" value="Z" onclick="filter(event);">Z</button>
+<div class="alert alert-warning" role="alert">
+    Instructions: filter a column, change a page or sort a column to see actions
+    logged in the logging box.
 </div>
 
 
@@ -1921,39 +1895,103 @@
 <script src="tablefilter/tablefilter.js"></script>
 
 
+<br>
+
+<div data-config>
+    <button onclick="tf.destroy()">Remove TableFilter</button>
+    <button onclick="tf.init()">Reset TableFilter</button>
+</div>
+
+<br>
+<pre class="console"></pre>
+
 <script data-config>
-    // filter by first letter logic
-    function filter(evt){
-        var elm = evt.target;
-        var query = elm.value.length > 0 ? tf.stOperator + elm.value : '';
 
-        // set the column's filter value
-        tf.setFilterValue(1, query);
-
-        // filter the table
-        tf.filter();
-
-        // clear previously marked element
-        if(tf.selectedLetter) {
-            tf.selectedLetter.classList.remove('btn-primary');
-        }
-
-        // mark selected letter
-        elm.classList.add('btn-primary');
-
-        // keep reference of selected element
-        tf.selectedLetter = elm;
+    /**
+     * MyExtension class
+     * Implements an interface exposing a `init` and `destroy` methods, called
+     * when TableFilter instance is initialiazed or destroyed.
+     *
+     * @param {TableFilter} tf TableFilter instance
+     */
+    function MyExtension(tf) {
+        this.tf = tf;
+        this.container = document.querySelector('.console');
     }
 
+    MyExtension.prototype.init = function() {
+        var tf = this.tf;
+
+        // subscribe to events
+        tf.emitter.on(['after-filtering'], this.afterFiltering.bind(this));
+        tf.emitter.on(['after-page-change'], this.pageChanged.bind(this));
+        tf.emitter.on(['after-clearing-filters'], this.filtersCleared.bind(this));
+        tf.emitter.on(['column-sorted'], this.columnSorted.bind(this));
+        tf.emitter.on(['destroy'], this.destroy.bind(this));
+
+        this.log('MyExtension initialized');
+    };
+
+    MyExtension.prototype.log = function(msg) {
+        if(msg.length === 0) {
+            return;
+        }
+        this.container.innerHTML += msg + '\n';
+    };
+
+    MyExtension.prototype.afterFiltering = function(tf, terms) {
+        var msg = [];
+        terms.forEach(function(term, idx){
+            if(term.trim() !== '') {
+                msg.push(
+                    'Searched for `' + term + '` in `' +
+                    tf.getHeadersText()[idx] + '` column'
+                );
+            }
+        });
+        this.log(msg);
+    };
+
+    MyExtension.prototype.pageChanged = function(tf, pageNb) {
+        this.log('Selected page: ' + pageNb);
+    };
+
+    MyExtension.prototype.filtersCleared = function(tf) {
+        this.log('Filters cleared');
+    };
+
+    MyExtension.prototype.columnSorted = function(tf, columnIndex, descending) {
+        this.log(
+            'Sorted column `' + tf.getHeadersText()[columnIndex] + '` in ' +
+            ( descending ? 'descending ' : 'ascending') + ' manner'
+        );
+    };
+
+    MyExtension.prototype.destroy = function() {
+        var tf = this.tf;
+        tf.emitter.off(['after-filtering'], this.afterFiltering.bind(this));
+        tf.emitter.off(['after-page-change'], this.pageChanged.bind(this));
+        tf.emitter.off(['after-clearing-filters'], this.filtersCleared.bind(this));
+        tf.emitter.off(['column-sorted'], this.columnSorted.bind(this));
+        tf.emitter.off(['destroy'], this.destroy.bind(this));
+
+        this.log('MyExtension destroyed');
+    }
+    /**  MyExtension END */
+
+
+    /** TableFilter configuration and instantiation */
     var tf = new TableFilter(
         document.querySelector('#countries-codes'),
         {
             base_path: 'tablefilter/',
-            start_with_operator: '←',
             paging: true,
-            paging_length: 10,
             rows_counter: true,
             rows_counter_text: 'Countries: ',
+            btn_reset: true,
+            loader: true,
+            alternate_rows: true,
+            mark_active_columns: true,
             col_types: [
               'string', 'string', 'string',
               'string', 'number'
@@ -1963,20 +2001,25 @@
                 '75px','75px'
             ],
 
-            // hide filters
-            on_filters_loaded: function(o) {
-                o.tbl.rows[o.getFiltersRowIndex()].style.display = 'none';
-            },
-
             // sorting feature
-            extensions: [{
-                name: 'sort'
-            }]
+            extensions: [{ name: 'sort' }]
         }
     );
+
+    // subcribe to an event emitted just before the required extensions are loaded
+    tf.emitter.on(['before-loading-extensions'], addMyExtension);
+
     tf.init();
-    // keep reference of selected letter element
-    tf.selectedLetter = null;
+
+    // manually add a custom extension instance to the extensions registry
+    function addMyExtension(tf) {
+        var myExtension = new MyExtension(tf);
+        tf.ExtRegistry['myExtension'] = myExtension;
+
+        myExtension.init();
+    }
+
+
 </script>
 
 <hr>
@@ -2107,9 +2150,6 @@
 </div>
 
 
-<div class="alert alert-info" role="alert">
-    NOTE: Toolbar above the HTML table is styled with Bootstrap.
-</div>
 
 
     </div>
