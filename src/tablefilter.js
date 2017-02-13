@@ -1454,19 +1454,15 @@ export class TableFilter {
     }
 
     /**
-     * Destroy all the extensions defined in the configuration object
+     * Destroy all the extensions store in extensions registry
      */
     destroyExtensions() {
-        let exts = this.extensions;
+        let reg = this.ExtRegistry;
 
-        for (let i = 0, len = exts.length; i < len; i++) {
-            let ext = exts[i];
-            let extInstance = this.ExtRegistry[ext.name];
-            if (extInstance) {
-                extInstance.destroy();
-                this.ExtRegistry[ext.name] = undefined;
-            }
-        }
+        Object.keys(reg).forEach((key) => {
+            reg[key].destroy();
+            reg[key] = undefined;
+        });
     }
 
     /**
@@ -1546,7 +1542,7 @@ export class TableFilter {
             this.tbl.deleteRow(this.filtersRowIndex);
         }
 
-        // broadcast destroy event
+        // broadcast destroy event modules and extensions are subscribed to
         emitter.emit('destroy', this);
 
         // unsubscribe to events
