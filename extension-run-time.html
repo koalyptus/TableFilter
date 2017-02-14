@@ -1927,7 +1927,6 @@
         tf.emitter.on(['after-page-change'], this.pageChanged.bind(this));
         tf.emitter.on(['after-clearing-filters'], this.filtersCleared.bind(this));
         tf.emitter.on(['column-sorted'], this.columnSorted.bind(this));
-        tf.emitter.on(['destroy'], this.destroy.bind(this));
 
         this.log('MyExtension initialized');
     };
@@ -1973,7 +1972,6 @@
         tf.emitter.off(['after-page-change'], this.pageChanged.bind(this));
         tf.emitter.off(['after-clearing-filters'], this.filtersCleared.bind(this));
         tf.emitter.off(['column-sorted'], this.columnSorted.bind(this));
-        tf.emitter.off(['destroy'], this.destroy.bind(this));
 
         this.log('MyExtension destroyed');
     }
