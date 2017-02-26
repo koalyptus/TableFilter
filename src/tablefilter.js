@@ -456,13 +456,6 @@ export class TableFilter {
             f.on_row_validated : EMPTY_FN;
 
         /**
-         * List of columns implementing custom filtering
-         * @type {Array}
-         */
-        // this.cellParserCols = f.custom_cell_data_cols ?
-        //     f.custom_cell_data_cols : [];
-
-        /**
          * Specify which column implements a custom cell parser to retrieve the
          * cell value:
          * cell_parser: {
