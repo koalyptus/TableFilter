@@ -459,15 +459,24 @@ export class TableFilter {
          * List of columns implementing custom filtering
          * @type {Array}
          */
-        this.customCellDataCols = f.custom_cell_data_cols ?
-            f.custom_cell_data_cols : [];
+        // this.cellParserCols = f.custom_cell_data_cols ?
+        //     f.custom_cell_data_cols : [];
 
         /**
-         * Delegate function for retrieving cell data with custom logic
-         * @type {Function}
+         * Specify which column implements a custom cell parser to retrieve the
+         * cell value:
+         * cell_parser: {
+         *     cols: [0, 2],
+         *     parse: function(tf, cell, colIndex) {
+         *         // custom cell parser logic here
+         *         return cellValue;
+         *     }
+         * }
+         * @type {Object}
          */
-        this.customCellData = isFn(f.custom_cell_data) ?
-            f.custom_cell_data : EMPTY_FN;
+        this.cellParser = isObj(f.cell_parser) && isFn(f.cell_parser.parse) &&
+            isArray(f.cell_parser.cols) ?
+            f.cell_parser : { cols: [], parse: EMPTY_FN };
 
         /**
          * Global watermark text for input filter type or watermark for each
@@ -2254,9 +2263,10 @@ export class TableFilter {
      */
     getCellValue(cell) {
         let idx = cell.cellIndex;
-        //CallcustomCellData callback
-        if (this.customCellDataCols.indexOf(idx) !== -1) {
-            return this.customCellData(this, cell, idx);
+        let cellParser = this.cellParser;
+        // Invoke cellParser for this column if any
+        if (cellParser.cols.indexOf(idx) !== -1) {
+            return cellParser.parse(this, cell, idx);
         } else {
             return getText(cell);
         }

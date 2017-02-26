@@ -36,22 +36,23 @@ var tfConfig = {
     col_4: 'select',
     col_5: 'select',
 
-    /*  custom_cell_data delegate used for filtering
-        images in a column */
-    custom_cell_data_cols: [0, 4],
-    custom_cell_data: function(o, cell, colIndex){
-        if(colIndex === 0){
-            var img = cell.getElementsByTagName('img')[0];
-            if(!img){
-                return '';
-            }
-            return img.alt;
-        } else if(colIndex === 4){
-            var chk = cell.getElementsByTagName('input')[0];
-            if(chk.checked){
-                return 'yes';
-            } else {
-                return 'no';
+    /*  cell parser for filtering images in a column */
+    cell_parser: {
+        cols: [0, 4],
+        parse: function(o, cell, colIndex){
+            if(colIndex === 0){
+                var img = cell.getElementsByTagName('img')[0];
+                if(!img){
+                    return '';
+                }
+                return img.alt;
+            } else if(colIndex === 4){
+                var chk = cell.getElementsByTagName('input')[0];
+                if(chk.checked){
+                    return 'yes';
+                } else {
+                    return 'no';
+                }
             }
         }
     },
