@@ -3594,6 +3594,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#cellparser",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-cellParser",
+    "src/tablefilter.js~TableFilter#cellParser",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#clearactivecolumns",
     "class/src/tablefilter.js~TableFilter.html#instance-method-clearActiveColumns",
     "src/tablefilter.js~TableFilter#clearActiveColumns",
@@ -3634,18 +3640,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-constructor-constructor",
     "src/tablefilter.js~TableFilter#constructor",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#customcelldata",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-customCellData",
-    "src/tablefilter.js~TableFilter#customCellData",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#customcelldatacols",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-customCellDataCols",
-    "src/tablefilter.js~TableFilter#customCellDataCols",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#customoptions",
