@@ -50,6 +50,28 @@
         deepEqual(value, 'no', 'Value returned by custom cell parser');
     });
 
+    test('Should not parse with custom function if no columns defined',
+        function() {
+            // setup
+            var initialCellParser = tf.cellParser;
+            var hit = 0;
+            var cell = tf.tbl.rows[3].cells[0];
+
+            tf.cellParser.cols = [];
+            tf.cellParser.parse = function() {
+                hit++;
+            }
+
+            // act
+            tf.getCellValue(cell);
+
+            // assert
+            deepEqual(hit, 0, 'Cell parser not invoked');
+
+            tf.cellParser = initialCellParser;
+        }
+    );
+
     module('Tear-down');
     test('can destroy', function() {
         tf.destroy();
