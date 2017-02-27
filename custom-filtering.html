@@ -194,8 +194,9 @@
 <h1>Custom column filtering</h1>
 
 <p>
-    The <code>custom_cell_data</code> callback allows <code>TableFilter</code>
-    to filter specified columns with a custom filtering logic.
+    Use the <code>cell_parser</code> delegate to retrieve cells values with
+    custom logic. Filters will be populated with the value returned by the
+    <code>cell_parser</code> function.
 </p>
 
 
@@ -668,19 +669,21 @@ var tfConfig = {
         'none'
     ],
 
-    /* custom filtering with custom_cell_data delegate */
-    custom_cell_data_cols: [0,9],
-    custom_cell_data: function(o, cell, colIndex){
-        if(colIndex === 0){
-            var chk = cell.getElementsByTagName('input')[0];
-            if(chk.checked) return 'active';
-            else return 'inactive';
-        } else {
-            var slc = cell.getElementsByTagName('select')[0];
-            if(!slc){
-                return 'none';
+    /* custom filtering with cell_parser delegate */
+    cell_parser: {
+        cols: [0, 9],
+        parse: function(o, cell, colIndex){
+            if(colIndex === 0){
+                var chk = cell.getElementsByTagName('input')[0];
+                if(chk.checked) return 'active';
+                else return 'inactive';
             } else {
-                return slc.value;
+                var slc = cell.getElementsByTagName('select')[0];
+                if(!slc){
+                    return 'none';
+                } else {
+                    return slc.value;
+                }
             }
         }
     },

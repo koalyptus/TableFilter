@@ -505,18 +505,20 @@
         col_3: 'select',
         col_4: 'select',
 
-        /* delegate for filtering 'In store' column */
-        custom_cell_data_cols: [3],
-        custom_cell_data: function(o, cell, colIndex){
-            if(colIndex === 3){
-                var chk = cell.getElementsByTagName('input')[0];
-                if(!chk){
-                    return '';
-                }
-                if(chk.checked){
-                    return 'yes';
-                } else {
-                    return 'no';
+        /* cell_parser delegate for filtering 'In store' column */
+        cell_parser: {
+            cols: [3],
+            parse: function(o, cell, colIndex){
+                if(colIndex === 3){
+                    var chk = cell.getElementsByTagName('input')[0];
+                    if(!chk){
+                        return '';
+                    }
+                    if(chk.checked){
+                        return 'yes';
+                    } else {
+                        return 'no';
+                    }
                 }
             }
         },

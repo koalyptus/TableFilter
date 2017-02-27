@@ -195,7 +195,7 @@
 
 <p>
     This demo shows how to filter and sort a column containing images by using
-    the <code>custom_cell_data</code> cell parser delegate and by defining the
+    the <code>cell_parser</code> delegate and by defining the
     <code>data-tf-sortKey</code> custom DOM attribute.
 </p>
 
@@ -561,21 +561,23 @@ var tfConfig = {
     col_4: 'select',
     col_5: 'select',
 
-    /* custom_cell_data delegate used for filtering images in a column */
-    custom_cell_data_cols: [0, 4],
-    custom_cell_data: function(o, cell, colIndex){
-        if(colIndex === 0){
-            var img = cell.getElementsByTagName('img')[0];
-            if(!img){
-                return '';
-            }
-            return img.alt;
-        } else if(colIndex === 4){
-            var chk = cell.getElementsByTagName('input')[0];
-            if(chk.checked){
-                return 'yes';
-            } else {
-                return 'no';
+    /* cell_parser delegate used for filtering images in a column */
+    cell_parser: {
+        cols: [0, 4],
+        parse: function(o, cell, colIndex){
+            if(colIndex === 0){
+                var img = cell.getElementsByTagName('img')[0];
+                if(!img){
+                    return '';
+                }
+                return img.alt;
+            } else if(colIndex === 4){
+                var chk = cell.getElementsByTagName('input')[0];
+                if(chk.checked){
+                    return 'yes';
+                } else {
+                    return 'no';
+                }
             }
         }
     },
