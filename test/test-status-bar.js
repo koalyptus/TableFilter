@@ -10,6 +10,34 @@ test('Status bar component', function() {
     deepEqual(typeof statusBar, 'object', 'StatusBar instantiated');
     notEqual(statusBar.container, null, 'container property');
 });
+test('Should not initialize if already initialized', function() {
+    // setup
+    var hit = 0;
+    statusBar.initialized = true;
+    var initialSetToolbar = statusBar.tf.setToolbar;
+    statusBar.tf.setToolbar = function() {
+        hit++;
+    };
+
+    // act
+    statusBar.init();
+
+    // assert
+    deepEqual(hit, 0, 'setToolbar not called');
+
+    statusBar.tf.setToolbar = initialSetToolbar;
+});
+asyncTest('Can display message', function() {
+    // act
+    statusBar.message('hello world');
+
+    // assert
+    setTimeout(function(){
+        start();
+        deepEqual(statusBar.msgContainer.innerHTML,
+            'hello world', 'Message displayed');
+    }, 2);
+});
 
 module('Feature interface');
 test('Properties', function() {
