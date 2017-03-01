@@ -1,13 +1,16 @@
 
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
-    extensions: [{ name: 'filtersVisibility' }]
+    grid_layout: true,
+    extensions:[{
+        name: 'filtersVisibility',
+        visible_at_start: false
+    }]
 });
 tf.init();
 
-var extTargetElement = document.createElement('div');
-extTargetElement.setAttribute('id', 'test');
-document.body.insertBefore(extTargetElement, tf.tbl);
+var gridLayout = tf.feature('gridLayout');
+var filtersRow = gridLayout.headTbl.rows[tf.getFiltersRowIndex()];
 
 module('Sanity checks');
 test('Filters visibility extension', function() {
@@ -17,26 +20,25 @@ test('Filters visibility extension', function() {
     deepEqual(ext.initialized, true, 'Extension initialized');
 });
 
-module('Check UI');
-test('UI elements', function() {
+module('UI');
+test('Filters visibility extension', function() {
     var ext = tf.extension('filtersVisibility');
     var cont = ext.contEl;
     var btn = ext.btnEl;
+    deepEqual(filtersRow.style.display, 'none', 'Filters hidden');
     deepEqual(cont.nodeName, 'SPAN', 'Container element');
     deepEqual(btn.nodeName, 'A', 'Button element');
-    deepEqual(btn.title, 'Toggle filters', 'Button tooltip');
-    deepEqual(btn.firstChild.nodeName, 'IMG', 'Image element');
-    deepEqual(btn.firstChild.alt, 'Collapse filters', 'Button tooltip');
 });
 
 module('Check behaviours');
 test('Toggle filters', function() {
     var ext = tf.extension('filtersVisibility');
     ext.toggle();
-    var filtersRow = tf.tbl.rows[tf.getFiltersRowIndex()];
-    deepEqual(filtersRow.style.display, 'none', 'Filters hidden');
-    ext.toggle();
+
     deepEqual(filtersRow.style.display, '', 'Filters displayed');
+
+    ext.toggle();
+    deepEqual(filtersRow.style.display, 'none', 'Filters hidden');
 });
 
 test('Remove extension', function() {

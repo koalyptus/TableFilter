@@ -1,10 +1,12 @@
 
 var id = function (id){ return document.getElementById(id); };
 var table = id('demo');
-var totRowIndex = table.getElementsByTagName('tr').length;
+var totRowIndex = table.getElementsByTagName('tr').length -2;
 
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
+    col_types: ['string', 'string', 'number', 'number', 'number'],
+    grid_layout: true,
     rows_always_visible: [
         totRowIndex-6,
         totRowIndex-5,
@@ -123,21 +125,6 @@ test('Column operations after filtering', function() {
     equal(id('q3-1').innerHTML, 1197, 'Q3 result');
     equal(id('q3-2').innerHTML, 1.45, 'Q3 result');
     tf.clearFilters();
-});
-
-test('Can make column calculations', function() {
-    // setup
-    var colOps = tf.extension('colOps');
-
-    // act
-    var result0 = colOps.columnCalc(2, 'mean', 1);
-    var result1 = colOps.columnCalc(2, 'min', 2);
-    var result2 = colOps.columnCalc(2, 'max', 0);
-
-    // assert
-    deepEqual(result0, 1415.9, 'columnCalc mean');
-    deepEqual(result1, 286.00, 'columnCalc min');
-    deepEqual(result2, 2781, 'columnCalc max');
 });
 
 module('Tear-down');

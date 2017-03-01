@@ -456,18 +456,20 @@ export class TableFilter {
             f.on_row_validated : EMPTY_FN;
 
         /**
-         * List of columns implementing custom filtering
-         * @type {Array}
+         * Specify which column implements a custom cell parser to retrieve the
+         * cell value:
+         * cell_parser: {
+         *     cols: [0, 2],
+         *     parse: function(tf, cell, colIndex) {
+         *         // custom cell parser logic here
+         *         return cellValue;
+         *     }
+         * }
+         * @type {Object}
          */
-        this.customCellDataCols = f.custom_cell_data_cols ?
-            f.custom_cell_data_cols : [];
-
-        /**
-         * Delegate function for retrieving cell data with custom logic
-         * @type {Function}
-         */
-        this.customCellData = isFn(f.custom_cell_data) ?
-            f.custom_cell_data : EMPTY_FN;
+        this.cellParser = isObj(f.cell_parser) && isFn(f.cell_parser.parse) &&
+            isArray(f.cell_parser.cols) ?
+            f.cell_parser : { cols: [], parse: EMPTY_FN };
 
         /**
          * Global watermark text for input filter type or watermark for each
@@ -1454,19 +1456,15 @@ export class TableFilter {
     }
 
     /**
-     * Destroy all the extensions defined in the configuration object
+     * Destroy all the extensions store in extensions registry
      */
     destroyExtensions() {
-        let exts = this.extensions;
+        let reg = this.ExtRegistry;
 
-        for (let i = 0, len = exts.length; i < len; i++) {
-            let ext = exts[i];
-            let extInstance = this.ExtRegistry[ext.name];
-            if (extInstance) {
-                extInstance.destroy();
-                this.ExtRegistry[ext.name] = undefined;
-            }
-        }
+        Object.keys(reg).forEach((key) => {
+            reg[key].destroy();
+            reg[key] = undefined;
+        });
     }
 
     /**
@@ -1546,7 +1544,7 @@ export class TableFilter {
             this.tbl.deleteRow(this.filtersRowIndex);
         }
 
-        // broadcast destroy event
+        // broadcast destroy event modules and extensions are subscribed to
         emitter.emit('destroy', this);
 
         // unsubscribe to events
@@ -2258,9 +2256,10 @@ export class TableFilter {
      */
     getCellValue(cell) {
         let idx = cell.cellIndex;
-        //CallcustomCellData callback
-        if (this.customCellDataCols.indexOf(idx) !== -1) {
-            return this.customCellData(this, cell, idx);
+        let cellParser = this.cellParser;
+        // Invoke cellParser for this column if any
+        if (cellParser.cols.indexOf(idx) !== -1) {
+            return cellParser.parse(this, cell, idx);
         } else {
             return getText(cell);
         }

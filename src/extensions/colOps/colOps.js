@@ -156,11 +156,11 @@ export default class ColOps extends Feature {
             }
         });
 
-        let nbCols = uIndexes.length - 1,
+        let nbCols = uIndexes.length,
             rows = tf.tbl.rows,
             colValues = [];
 
-        for (let u = 0; u <= nbCols; u++) {
+        for (let u = 0; u < nbCols; u++) {
             //this retrieves col values
             //use uIndexes because we only want to pass through this loop
             //once for each column get the values in this unique column
@@ -182,14 +182,14 @@ export default class ColOps extends Feature {
                 if (colIndexes[k] !== uIndexes[u]) {
                     continue;
                 }
-                operations[idx] = colOperations[k].toLowerCase();
+                operations[idx] = (colOperations[k] || 'sum').toLowerCase();
                 precisions[idx] = decimalPrecisions[k];
                 labels[idx] = this.labelIds[k];
                 writeType = isArray(outputTypes) ? outputTypes[k] : null;
                 idx++;
             }
 
-            for (let i = 0; i <= idx; i++) {
+            for (let i = 0; i < idx; i++) {
                 // emit values before column calculation
                 this.emitter.emit(
                     'before-column-calc',
@@ -247,8 +247,7 @@ export default class ColOps extends Feature {
         let excludeRows = this.excludeRows || [];
         let colValues =
             this.tf.getFilteredDataCol(colIndex, false, true, excludeRows);
-
-        return this.calc(colValues, operation, precision);
+        return Number(this.calc(colValues, operation, precision));
     }
 
     /**
