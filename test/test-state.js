@@ -17,6 +17,24 @@ test('State instance', function() {
     deepEqual(typeof state.state, 'object', 'State field is an object');
 });
 
+test('Should not initialize if already initialized', function() {
+    // setup
+    var hit = 0;
+    state.initialized = true;
+    var initialHashInit = state.hash.init;
+    state.hash.init = function() {
+        hit++;
+    };
+
+    // act
+    state.init();
+
+    // assert
+    deepEqual(hit, 0, 'hash init not called');
+
+    state.hash.init = initialHashInit;
+});
+
 module('Behaviour');
 test('Can update', function() {
     // setup
