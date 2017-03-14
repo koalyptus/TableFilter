@@ -38,7 +38,7 @@
     "tag": "next"
   },
   "devDependencies": {
-    "babel-core": "^6.23.1",
+    "babel-core": "^6.24.0",
     "babel-eslint": "7.1.1",
     "babel-loader": "^6.3.2",
     "babel-plugin-transform-es2015-classes": "^6.23.0",
