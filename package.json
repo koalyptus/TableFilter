@@ -44,7 +44,7 @@
     "babel-plugin-transform-es2015-classes": "^6.23.0",
     "babel-preset-es2015": "^6.24.0",
     "clean-webpack-plugin": "^0.1.16",
-    "codecov": "2.0.1",
+    "codecov": "2.0.2",
     "diacritics": "1.3.0",
     "grunt": "^1.0.1",
     "grunt-babel": "^6.0.0",
