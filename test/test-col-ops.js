@@ -140,6 +140,61 @@ test('Can make column calculations', function() {
     deepEqual(result2, 2781, 'columnCalc max');
 });
 
+test('Can make column calculations with formated results', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    colOps.formatResults[2] = { suffix: ' Km' };
+    colOps.formatResults[4] = { suffix: ' Km' };
+    colOps.formatResults[6] = { suffix: ' Km' };
+    tf.colTypes[2] = { type: 'formatted-number', decimal: '.', thousands: ',' };
+
+    // act
+    colOps.calcAll();
+
+    // assert
+    deepEqual(id('mean1').innerHTML, '1,416 Km', 'Formatted mean result');
+    deepEqual(id('min1').innerHTML, '286 Km', 'Formatted min result');
+    deepEqual(id('max1').innerHTML, '2,781 Km', 'Formatted max result');
+
+    colOps.formatResults[2] = undefined;
+    colOps.formatResults[4] = undefined;
+    colOps.formatResults[6] = undefined;
+    tf.colTypes[2] = undefined;
+});
+
+test('Can configure result format', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    var format = { prefix: '$', suffix: '/item' };
+
+    // act
+    var format = colOps.configureFormat(2, format);
+
+    // assert
+    deepEqual(format.prefix, '$', 'prefix');
+    deepEqual(format.suffix, '/item', 'suffix');
+    deepEqual(format.decimal, '', 'decimal separator');
+    deepEqual(format.integerSeparator, '', 'thousands separator');
+});
+
+test('Can configure result format for formatted number column', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    var format = { prefix: '$', suffix: '/item' };
+    tf.colTypes = [null, null, null, null, null];
+    tf.colTypes[3] = { type: 'formatted-number', decimal: ',', thousands: '.' };
+
+    // act
+    var format = colOps.configureFormat(3, format);
+
+    // assert
+    deepEqual(format.prefix, '$', 'prefix');
+    deepEqual(format.suffix, '/item', 'suffix');
+    deepEqual(format.decimal, ',', 'decimal separator');
+    deepEqual(format.integerSeparator, '.', 'thousands separator');
+    tf.colTypes[3] = undefined;
+});
+
 module('Tear-down');
 test('can destroy', function() {
     tf.destroy();

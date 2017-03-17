@@ -2,6 +2,8 @@ import {Feature} from '../../feature';
 import {createText, elm} from '../../dom';
 import {isArray, isFn, isUndef, isEmpty, EMPTY_FN} from '../../types';
 import {numSortAsc} from '../../sort';
+import {FORMATTED_NUMBER} from '../../const';
+import formatNumber from 'format-number';
 
 const EVENTS = [
     'after-filtering',
@@ -78,6 +80,14 @@ export default class ColOps extends Feature {
         this.outputTypes = opts.write_method || [];
 
         /**
+         * List of format objects used for formatting the result -
+         * refer to https://github.com/componitable/format-number to check
+         * configuration options
+         * @type {Array}
+         */
+        this.formatResults = opts.format_result || [];
+
+        /**
          * List of row indexes displaying the results
          * @type {Array}
          */
@@ -140,12 +150,9 @@ export default class ColOps extends Feature {
         this.onBeforeOperation(tf, this);
         this.emitter.emit('before-column-operation', tf, this);
 
-        let colIndexes = this.colIndexes,
-            colOperations = this.operations,
-            outputTypes = this.outputTypes,
-            totRowIndexes = this.totRowIndexes,
-            excludeRows = this.excludeRows,
-            decimalPrecisions = isUndef(this.decimalPrecisions) ?
+        let { colIndexes, operations: colOperations, outputTypes,
+            totRowIndexes, excludeRows, formatResults } = this;
+        let decimalPrecisions = isUndef(this.decimalPrecisions) ?
                 2 : this.decimalPrecisions;
 
         //nuovella: determine unique list of columns to operate on
@@ -176,6 +183,7 @@ export default class ColOps extends Feature {
                 precisions = [],
                 labels = [],
                 writeType,
+                formatResult = [],
                 idx = 0;
 
             for (let k = 0; k < colIndexes.length; k++) {
@@ -186,6 +194,8 @@ export default class ColOps extends Feature {
                 precisions[idx] = decimalPrecisions[k];
                 labels[idx] = this.labelIds[k];
                 writeType = isArray(outputTypes) ? outputTypes[k] : null;
+                formatResult[idx] =
+                    this.configureFormat(uIndexes[u], formatResults[k]);
                 idx++;
             }
 
@@ -219,7 +229,8 @@ export default class ColOps extends Feature {
                     result,
                     labels[i],
                     writeType,
-                    precisions[i]
+                    precisions[i],
+                    formatResult[i]
                 );
 
             }//for i
@@ -402,7 +413,8 @@ export default class ColOps extends Feature {
      * @param {Number} [precision=2] Applied decimal precision
      * @private
      */
-    writeResult(result = 0, label, writeType = 'innerhtml', precision = 2) {
+    writeResult(result = 0, label, writeType = 'innerhtml',
+        precision = 2, format = {}) {
         let labelElm = elm(label);
 
         if (!labelElm) {
@@ -412,6 +424,8 @@ export default class ColOps extends Feature {
         result = result.toFixed(precision);
         if (isNaN(result) || !isFinite(result)) {
             result = '';
+        } else {
+            result = formatNumber(format)(result);
         }
 
         switch (writeType.toLowerCase()) {
@@ -427,6 +441,31 @@ export default class ColOps extends Feature {
                 labelElm.replaceChild(txtNode, oldNode);
                 break;
         }
+    }
+
+    /**
+     * Configure the format options used to format the operation result based
+     * on column type.
+     * @param {Number} colIndex Column index
+     * @param {Object} [format={}] Format object
+     * @returns {Object}
+     * @private
+     */
+    configureFormat(colIndex, format = {}) {
+        let tf = this.tf;
+        if (tf.hasType(colIndex, [FORMATTED_NUMBER])) {
+            let colType = tf.colTypes[colIndex];
+            if (colType.decimal && !format.decimal) {
+                format.decimal = colType.decimal;
+            }
+            if (colType.thousands && !format.integerSeparator) {
+                format.integerSeparator = colType.thousands;
+            }
+        } else {
+            format.decimal = format.decimal || '';
+            format.integerSeparator = format.integerSeparator || '';
+        }
+        return format;
     }
 
     /** Remove extension */
