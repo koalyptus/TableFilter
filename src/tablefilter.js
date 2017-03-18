@@ -872,13 +872,6 @@ export class TableFilter {
         this.decimalSeparator = f.decimal_separator || '.';
 
         /**
-         * Determine whether table has columns data types
-         * @type {Boolean}
-         * @private
-         */
-        this.hasColTypes = isArray(f.col_types);
-
-        /**
          * Define data types on a column basis, possible values 'string',
          * 'number', 'formatted-number', 'date', 'ipaddress' ie:
          * col_types : [
@@ -892,7 +885,7 @@ export class TableFilter {
          * information on date parsing formats supported by Sugar Date
          * @type {Array}
          */
-        this.colTypes = this.hasColTypes ? f.col_types : [];
+        this.colTypes = isArray(f.col_types) ? f.col_types : [];
 
         /*** ids prefixes ***/
         /**
@@ -2283,7 +2276,7 @@ export class TableFilter {
             return parseNb(value, decimal);
         }
         else if (this.hasType(colIndex, [NUMBER])) {
-            return Number(value);
+            return Number(value) || parseNb(value);
         }
         else if (this.hasType(colIndex, [DATE])){
             let dateType = this.Mod.dateType;
@@ -2942,7 +2935,7 @@ export class TableFilter {
      * @returns {Boolean}
      */
     hasType(colIndex, types = []) {
-        if (!this.hasColTypes) {
+        if (this.colTypes.length === 0) {
             return false;
         }
         let colType = this.colTypes[colIndex];

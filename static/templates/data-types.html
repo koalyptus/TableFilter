@@ -32,40 +32,6 @@ var id = function (id){
 var table = id('demo-tot');
 var totRowIndex = table.getElementsByTagName('tr').length;
 
-function addCommas(nStr){
-    nStr += '';
-    var x = nStr.split('.');
-    var x1 = x[0];
-    var x2 = x.length > 1 ? '.' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
-    while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + ',' + '$2');
-    }
-    return x1 + x2;
-}
-
-function addDots(nStr){
-    nStr += '';
-    var x = nStr.split('.');
-    var x1 = x[0];
-    var x2 = x.length > 1 ? ',' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
-    while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + '.' + '$2');
-    }
-    return x1 + x2;
-}
-
-function formatTotals(){
-    var tot1 = id('sum1').innerHTML;
-    tot1 = addDots(tot1);
-    id('sum1').innerHTML = tot1;
-
-    var tot2 = id('sum2').innerHTML;
-    tot2 = addCommas(tot2);
-    id('sum2').innerHTML = tot2;
-}
-
  /* EXAMPLE 1
  *********************** */
 var tfConfig = {
@@ -107,7 +73,10 @@ var tfConfig = {
             exclude_row: [totRowIndex],
             decimal_precision: [2, 2],
             tot_row_index: [totRowIndex],
-            on_after_operation: formatTotals
+            format_result: [
+                { prefix: '€ ' },
+                { prefix: '$ ' }
+            ]
         }
     ]
 };
