@@ -1068,6 +1068,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/extensions/colops/colops.js~colops#formatresults",
+    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-member-formatResults",
+    "src/extensions/colOps/colOps.js~ColOps#formatResults",
+    "member"
+  ],
+  [
     "src/extensions/colops/colops.js~colops#init",
     "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-init",
     "src/extensions/colOps/colOps.js~ColOps#init",

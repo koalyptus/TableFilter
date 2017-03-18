@@ -1,7 +1,7 @@
 {
   "coverage": "100%",
-  "expectCount": 666,
-  "actualCount": 666,
+  "expectCount": 667,
+  "actualCount": 667,
   "files": {
     "src/const.js": {
       "expectCount": 18,
@@ -34,8 +34,8 @@
       "undocumentLines": []
     },
     "src/extensions/colOps/colOps.js": {
-      "expectCount": 25,
-      "actualCount": 25,
+      "expectCount": 26,
+      "actualCount": 26,
       "undocumentLines": []
     },
     "src/extensions/colsVisibility/colsVisibility.js": {
