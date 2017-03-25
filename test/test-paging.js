@@ -96,6 +96,30 @@ test('Set page', function() {
         'Expected page number in paging drop-down selector');
 });
 
+test('Can set page with command', function() {
+    // setup
+    paging.setPage(1);
+    // act
+    paging.setPage('next');
+    // assert
+    deepEqual(paging.getPage(), 2, 'Expected page number for `next`');
+
+    // act
+    paging.setPage('previous');
+    // assert
+    deepEqual(paging.getPage(), 1, 'Expected page number for `previous`');
+
+    // act
+    paging.setPage('last');
+    // assert
+    deepEqual(paging.getPage(), 4, 'Expected page number for `last`');
+
+    // act
+    paging.setPage('first');
+    // assert
+    deepEqual(paging.getPage(), 1, 'Expected page number for `first`');
+});
+
 test('Set page via drop-down page selector', function() {
     paging.pagingSlc.selectedIndex = 3;
     paging.changePage(paging.pagingSlc.selectedIndex);
@@ -160,6 +184,30 @@ test('Set page', function() {
     deepEqual(paging.getPage(), 3, 'Expected page number');
 });
 
+test('Can set page with command', function() {
+    // setup
+    paging.setPage(1);
+    // act
+    paging.setPage('next');
+    // assert
+    deepEqual(paging.getPage(), 2, 'Expected page number for `next`');
+
+    // act
+    paging.setPage('previous');
+    // assert
+    deepEqual(paging.getPage(), 1, 'Expected page number for `previous`');
+
+    // act
+    paging.setPage('last');
+    // assert
+    deepEqual(paging.getPage(), 4, 'Expected page number for `last`');
+
+    // act
+    paging.setPage('first');
+    // assert
+    deepEqual(paging.getPage(), 1, 'Expected page number for `first`');
+});
+
 test('Set page via drop-down page selector', function() {
     paging.pagingSlc.selectedIndex = 3;
     paging.changePage(paging.pagingSlc.selectedIndex);
@@ -190,6 +238,21 @@ test('Set results per page', function() {
     paging.changeResultsPerPage('6');
     deepEqual(paging.pagingLength, 6, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
+});
+
+// issue 424: cannot set results per page when no valid rows
+test('Set results per page when no valid rows', function() {
+    // setup
+    tf.clearFilters();
+    tf.setFilterValue(2, 'hello world');
+    tf.filter();
+
+    // act
+    paging.changeResultsPerPage('4');
+
+    // assert
+    deepEqual(paging.resultsPerPageSlc.value, '4', 'Select page length option');
+    deepEqual(paging.getPage(), 1, 'Expected page number');
 });
 
 module('Reset feature');
