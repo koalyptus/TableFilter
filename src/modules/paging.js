@@ -754,19 +754,21 @@ export class Paging extends Feature {
      * Change rows according to page results drop-down
      */
     onChangeResultsPerPage() {
-        var tf = this.tf;
+        let tf = this.tf;
 
-        if (!this.isEnabled()) {
+        if (!this.isEnabled() || tf.getValidRowsNb() === 0) {
             return;
         }
 
-        this.emitter.emit('before-page-length-change', tf);
+        let {
+            resultsPerPageSlc: slcR, pageSelectorType, pagingSlc, emitter
+        } = this;
 
-        var slcR = this.resultsPerPageSlc;
-        var slcIndex = slcR.selectedIndex;
-        var slcPagesSelIndex = (this.pageSelectorType === SELECT) ?
-            this.pagingSlc.selectedIndex :
-            parseInt(this.pagingSlc.value - 1, 10);
+        emitter.emit('before-page-length-change', tf);
+
+        let slcIndex = slcR.selectedIndex;
+        let slcPagesSelIndex = (pageSelectorType === SELECT) ?
+            pagingSlc.selectedIndex : parseInt(pagingSlc.value - 1, 10);
         this.pagingLength = parseInt(slcR.options[slcIndex].value, 10);
         this.startPagingRow = this.pagingLength * slcPagesSelIndex;
 
@@ -776,15 +778,15 @@ export class Paging extends Feature {
             }
             this.setPagingInfo();
 
-            if (this.pageSelectorType === SELECT) {
-                var slcIdx =
-                    (this.pagingSlc.options.length - 1 <= slcPagesSelIndex) ?
-                        (this.pagingSlc.options.length - 1) : slcPagesSelIndex;
-                this.pagingSlc.options[slcIdx].selected = true;
+            if (pageSelectorType === SELECT) {
+                let slcIdx =
+                    (pagingSlc.options.length - 1 <= slcPagesSelIndex) ?
+                    (pagingSlc.options.length - 1) : slcPagesSelIndex;
+                pagingSlc.options[slcIdx].selected = true;
             }
         }
 
-        this.emitter.emit('after-page-length-change', tf, this.pagingLength);
+        emitter.emit('after-page-length-change', tf, this.pagingLength);
     }
 
     /**
