@@ -240,7 +240,8 @@ export class Dropdown extends Feature {
                 if (isLinked && tf.disableExcludedOptions) {
                     let filteredCol = filteredDataCol[j];
                     if (!filteredCol) {
-                        filteredCol = tf.getFilteredDataCol(j);
+                        // filteredCol = tf.getFilteredDataCol(j);
+                        filteredCol = tf.getVisibleColumnValues(j);
                     }
                     if (!has(filteredCol, cellString, tf.caseSensitive) &&
                         !has(excludedOpts, cellString, tf.caseSensitive)) {

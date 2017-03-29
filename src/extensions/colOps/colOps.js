@@ -172,7 +172,8 @@ export default class ColOps extends Feature {
             //use uIndexes because we only want to pass through this loop
             //once for each column get the values in this unique column
             colValues.push(
-                tf.getFilteredDataCol(uIndexes[u], false, true, excludeRows)
+                // tf.getFilteredDataCol(uIndexes[u], false, true, excludeRows)
+                tf.getFilteredColumnData(uIndexes[u], false, excludeRows)
             );
 
             let curValues = colValues[u];
@@ -256,8 +257,9 @@ export default class ColOps extends Feature {
      */
     columnCalc(colIndex, operation = SUM, precision) {
         let excludeRows = this.excludeRows || [];
-        let colValues =
-            this.tf.getFilteredDataCol(colIndex, false, true, excludeRows);
+        // let colValues =
+        //     this.tf.getFilteredDataCol(colIndex, false, true, excludeRows);
+        let colValues = tf.getFilteredColumnData(colIndex, false, excludeRows);
         return Number(this.calc(colValues, operation, precision));
     }
 

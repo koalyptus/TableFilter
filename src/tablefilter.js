@@ -2447,6 +2447,62 @@ export class TableFilter {
 
     /**
      * Return the filtered data for a given column index
+     * @param {any} colIndex Colmun's index
+     * @param {boolean} [includeHeaders=false] Optional Include headers row
+     * @param {any} [exclude=[]] Optional List of row indexes to be excluded
+     * @returns {Array} Flat list of typed values [data0, data1, data2...]
+     *
+     * TODO: provide an API returning data in JSON format
+     */
+    getFilteredColumnData(colIndex, includeHeaders = false, exclude = []) {
+        return this.getFilteredDataCol(
+            colIndex, includeHeaders, true, exclude, false);
+    }
+
+    /**
+     * Return the filtered and visible data for a given column index
+     * @param {any} colIndex Colmun's index
+     * @param {boolean} [includeHeaders=false] Optional Include headers row
+     * @param {any} [exclude=[]] Optional List of row indexes to be excluded
+     * @returns {Array} Flat list of typed values [data0, data1, data2...]
+     *
+     * TODO: provide an API returning data in JSON format
+     */
+    getVisibleColumnData(colIndex, includeHeaders = false, exclude = []) {
+        return this.getFilteredDataCol(
+            colIndex, includeHeaders, true, exclude, true);
+    }
+
+    /**
+     * Return the filtered values for a given column index
+     * @param {any} colIndex Colmun's index
+     * @param {boolean} [includeHeaders=false] Optional Include headers row
+     * @param {any} [exclude=[]] Optional List of row indexes to be excluded
+     * @returns {Array} Flat list of values ['value0', 'value1', 'value2'...]
+     *
+     * TODO: provide an API returning data in JSON format
+     */
+    getFilteredColumnValues(colIndex, includeHeaders = false, exclude = []) {
+        return this.getFilteredDataCol(
+            colIndex, includeHeaders, false, exclude, false);
+    }
+
+    /**
+     * Return the filtered and visible values for a given column index
+     * @param {any} colIndex Colmun's index
+     * @param {boolean} [includeHeaders=false] Optional Include headers row
+     * @param {any} [exclude=[]] Optional List of row indexes to be excluded
+     * @returns {Array} Flat list of values ['value0', 'value1', 'value2'...]
+     *
+     * TODO: provide an API returning data in JSON format
+     */
+    getVisibleColumnValues(colIndex, includeHeaders = false, exclude = []) {
+        return this.getFilteredDataCol(
+            colIndex, includeHeaders, false, exclude, true);
+    }
+
+    /**
+     * Return the filtered data for a given column index
      * @param  {Number} colIndex Colmun's index
      * @param  {Boolean} [includeHeaders=false] Include headers row
      * @param  {Boolean} [typed=false] Return typed value
@@ -2454,6 +2510,7 @@ export class TableFilter {
      * @param  {Boolean} [visible=true] Return only filtered and visible data
      *                           (relevant for paging)
      * @return {Array}           Flat list of values ['val0','val1','val2'...]
+     * @private
      *
      * TODO: provide an API returning data in JSON format
      */
