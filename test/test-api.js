@@ -204,7 +204,7 @@ test('Get table data', function() {
     tf.setFilterValue(0, 'Adelaide');
     tf.filter();
     deepEqual(
-        tf.getFilteredData(),
+        tf.getFilteredValues(),
         [
             [6, ['Adelaide','Perth','2781','3.1','38']],
             [7, ['Adelaide','Alice Springs','1533','2','20.25']],
@@ -213,7 +213,7 @@ test('Get table data', function() {
         'Get filtered table data'
     );
     deepEqual(
-        tf.getFilteredData(true),
+        tf.getFilteredValues(true),
         [
             [1, ['From','Destination','Road Distance (km)',
                 'By Air (hrs)','By Rail (hrs)']],
@@ -224,7 +224,7 @@ test('Get table data', function() {
         'Get filtered table data including columns headers'
     );
     deepEqual(
-        tf.getFilteredData(false, false, true),
+        tf.getFilteredData(),
         [
             [6, ['Adelaide','Perth',2781,3.1,38]],
             [7, ['Adelaide','Alice Springs',1533,2,20.25]],
@@ -473,16 +473,16 @@ test('Get table data', function() {
     tf.setFilterValue(0, 'Adelaide');
     tf.filter();
     deepEqual(
-        tf.getFilteredData(),
+        tf.getFilteredValues(),
         [
             [4, ['Adelaide','Perth','2781','3.1','38']],
             [5, ['Adelaide','Alice Springs','1533','2','20.25']],
             [6, ['Adelaide','Brisbane','2045','2.15','40']]
         ],
-        'Get filtered table data'
+        'Get filtered table values'
     );
     deepEqual(
-        tf.getFilteredData(true),
+        tf.getFilteredValues(true),
         [
             [0, ['From','Destination','Road Distance (km)',
                 'By Air (hrs)','By Rail (hrs)']],
@@ -490,7 +490,7 @@ test('Get table data', function() {
             [5, ['Adelaide','Alice Springs','1533','2','20.25']],
             [6, ['Adelaide','Brisbane','2045','2.15','40']]
         ],
-        'Get filtered table data including columns headers'
+        'Get filtered table values including columns headers'
     );
     deepEqual(
         tf.getFilteredDataCol(0),
@@ -520,7 +520,7 @@ function colsVisibilityTests() { // issue 94
         tf1.filter();
 
         deepEqual(
-            tf1.getFilteredData(false, true),
+            tf1.getFilteredValues(false, true),
             [
                 [6, ['Adelaide','3.1','38']],
                 [7, ['Adelaide','2','20.25']],
@@ -530,7 +530,7 @@ function colsVisibilityTests() { // issue 94
         );
 
         deepEqual(
-            tf1.getFilteredData(true, true),
+            tf1.getFilteredValues(true, true),
             [
                 [1, ['From','By Air (hrs)','By Rail (hrs)']],
                 [6, ['Adelaide','3.1','38']],
