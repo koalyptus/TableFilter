@@ -107,47 +107,47 @@ test('Column operations', function() {
     tf.clearFilters();
 });
 
-// module('Behaviour checks');
-// test('Column operations after filtering', function() {
-//     tf.setFilterValue(0, 'syd');
-//     tf.filter();
-//     equal(id('sum1').innerHTML, 3552, 'Sum result');
-//     equal(id('sum2').innerHTML, 4.60, 'Sum result');
-//     equal(id('mean1').innerHTML, 888, 'Mean result');
-//     equal(id('mean2').innerHTML, 1.15, 'Mean result');
-//     equal(id('min1').innerHTML, 286, 'Min result');
-//     equal(id('min2').innerHTML, 0.60, 'Min result');
-//     equal(id('max1').innerHTML, 1412, 'Max result');
-//     equal(id('max2').innerHTML, 1.50, 'Max result');
-//     equal(id('median1').innerHTML, 927, 'Median result');
-//     equal(id('median2').innerHTML, 1.25, 'Median result');
-//     equal(id('q1-1').innerHTML, 579, 'Q1 result');
-//     equal(id('q1-2').innerHTML, 0.85, 'Q1 result');
-//     equal(id('q3-1').innerHTML, 1197, 'Q3 result');
-//     equal(id('q3-2').innerHTML, 1.45, 'Q3 result');
-//     tf.clearFilters();
-// });
+module('Behaviour checks');
+test('Column operations after filtering', function() {
+    tf.setFilterValue(0, 'syd');
+    tf.filter();
+    equal(id('sum1').innerHTML, 3552, 'Sum result');
+    equal(id('sum2').innerHTML, 4.60, 'Sum result');
+    equal(id('mean1').innerHTML, 888, 'Mean result');
+    equal(id('mean2').innerHTML, 1.15, 'Mean result');
+    equal(id('min1').innerHTML, 286, 'Min result');
+    equal(id('min2').innerHTML, 0.60, 'Min result');
+    equal(id('max1').innerHTML, 1412, 'Max result');
+    equal(id('max2').innerHTML, 1.50, 'Max result');
+    equal(id('median1').innerHTML, 927, 'Median result');
+    equal(id('median2').innerHTML, 1.25, 'Median result');
+    equal(id('q1-1').innerHTML, 579, 'Q1 result');
+    equal(id('q1-2').innerHTML, 0.85, 'Q1 result');
+    equal(id('q3-1').innerHTML, 1197, 'Q3 result');
+    equal(id('q3-2').innerHTML, 1.45, 'Q3 result');
+    tf.clearFilters();
+});
 
-// test('Column operations after page changed', function() {
-//     var paging = tf.feature('paging');
+test('Column operations after page changed', function() {
+    var paging = tf.feature('paging');
 
-//     // change page
-//     paging.changePage(1);
+    // change page
+    paging.changePage(1);
 
-//     equal(id('sum1').innerHTML, 6359, 'Sum result after page change');
-//     equal(id('sum2').innerHTML, 7.25, 'Sum result after page change');
-//     equal(id('mean1').innerHTML, 2120, 'Mean result after page change');
-//     equal(id('mean2').innerHTML, 2.42, 'Mean result after page change');
-//     equal(id('min1').innerHTML, 1533, 'Min result after page change');
-//     equal(id('min2').innerHTML, 2.00, 'Min result after page change');
-//     equal(id('max1').innerHTML, 2781, 'Max result after page change');
-//     equal(id('max2').innerHTML, 3.10, 'Max result after page change');
-//     equal(id('median1').innerHTML, 2045, 'Median result after page change');
-//     equal(id('median2').innerHTML, 2.15, 'Median result after page change');
-//     equal(id('q1-1').innerHTML, 1533, 'Q1 result after page change');
-//     equal(id('q1-2').innerHTML, 2.00, 'Q1 result after page change');
-//     equal(id('q3-1').innerHTML, 2781, 'Q3 result after page change');
-//     equal(id('q3-2').innerHTML, 3.10, 'Q3 result after page change');
+    equal(id('sum1').innerHTML, 6359, 'Sum result after page change');
+    equal(id('sum2').innerHTML, 7.25, 'Sum result after page change');
+    equal(id('mean1').innerHTML, 2120, 'Mean result after page change');
+    equal(id('mean2').innerHTML, 2.42, 'Mean result after page change');
+    equal(id('min1').innerHTML, 1533, 'Min result after page change');
+    equal(id('min2').innerHTML, 2.00, 'Min result after page change');
+    equal(id('max1').innerHTML, 2781, 'Max result after page change');
+    equal(id('max2').innerHTML, 3.10, 'Max result after page change');
+    equal(id('median1').innerHTML, 2045, 'Median result after page change');
+    equal(id('median2').innerHTML, 2.15, 'Median result after page change');
+    equal(id('q1-1').innerHTML, 1533, 'Q1 result after page change');
+    equal(id('q1-2').innerHTML, 2.00, 'Q1 result after page change');
+    equal(id('q3-1').innerHTML, 2781, 'Q3 result after page change');
+    equal(id('q3-2').innerHTML, 3.10, 'Q3 result after page change');
 
-//     tf.destroy();
-// });
+    tf.destroy();
+});
