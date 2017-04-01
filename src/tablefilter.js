@@ -2067,11 +2067,34 @@ export class TableFilter {
 
     /**
      * Return the data of a specified column
+     * @param {Number} colIndex Column index
+     * @param {Boolean} [includeHeaders=false] Include headers row
+     * @param {Arrat} [exclude=[]] List of row indexes to be excluded
+     * @returns Flat list of data for a column
+     */
+    getColumnData(colIndex, includeHeaders = false, exclude = []) {
+        return this.getColValues(colIndex, includeHeaders, true, exclude);
+    }
+
+    /**
+     * Return the values of a specified column
+     * @param {Number} colIndex Column index
+     * @param {Boolean} [includeHeaders=false] Include headers row
+     * @param {Arrat} [exclude=[]] List of row indexes to be excluded
+     * @returns Flat list of values for a column
+     */
+    getColumnValues(colIndex, includeHeaders = false, exclude = []) {
+        return this.getColValues(colIndex, includeHeaders, false, exclude);
+    }
+
+    /**
+     * Return the data of a specified column
      * @param  {Number} colIndex Column index
      * @param  {Boolean} [includeHeaders=false] Include headers row
-     * @param  {Boolean} [typed=true] Return a typed value
+     * @param  {Boolean} [typed=false] Return a typed value
      * @param  {Array} [exclude=[]] List of row indexes to be excluded
      * @return {Array}           Flat list of data for a column
+     * @private
      */
     getColValues(
         colIndex,

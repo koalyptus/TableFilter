@@ -499,6 +499,28 @@ test('Get table data', function() {
         ],
         'Get specified column values including column header'
     );
+    deepEqual(tf.getColumnValues(0),
+        [
+            'Sydney','Sydney','Sydney',
+            'Sydney','Adelaide','Adelaide','Adelaide'
+        ],
+        'Get specified column values'
+    );
+    deepEqual(tf.getColumnValues(0, true),
+        [
+            'From','Sydney','Sydney','Sydney',
+            'Sydney','Adelaide','Adelaide','Adelaide'
+        ],
+        'Get specified column values including column header'
+    );
+    deepEqual(tf.getColumnData(2),
+        [1412, 982, 286, 872, 2781, 1533, 2045],
+        'Get specified column data'
+    );
+    deepEqual(tf.getColumnData(2, true),
+        ['Road Distance (km)', 1412, 982, 286, 872, 2781, 1533, 2045],
+        'Get specified column data including column header'
+    );
     deepEqual(
         tf.getTableData(),
         [
