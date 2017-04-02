@@ -3876,9 +3876,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#getcolvalues",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-getColValues",
-    "src/tablefilter.js~TableFilter#getColValues",
+    "src/tablefilter.js~tablefilter#getcolumndata",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getColumnData",
+    "src/tablefilter.js~TableFilter#getColumnData",
     "method"
   ],
   [
@@ -3888,9 +3888,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#getcolumnvalues",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getColumnValues",
+    "src/tablefilter.js~TableFilter#getColumnValues",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#getcustomoptions",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getCustomOptions",
     "src/tablefilter.js~TableFilter#getCustomOptions",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#getdata",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getData",
+    "src/tablefilter.js~TableFilter#getData",
     "method"
   ],
   [
@@ -3924,15 +3936,27 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#getfilteredcolumndata",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredColumnData",
+    "src/tablefilter.js~TableFilter#getFilteredColumnData",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#getfilteredcolumnvalues",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredColumnValues",
+    "src/tablefilter.js~TableFilter#getFilteredColumnValues",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#getfiltereddata",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredData",
     "src/tablefilter.js~TableFilter#getFilteredData",
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#getfiltereddatacol",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredDataCol",
-    "src/tablefilter.js~TableFilter#getFilteredDataCol",
+    "src/tablefilter.js~tablefilter#getfilteredvalues",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredValues",
+    "src/tablefilter.js~TableFilter#getFilteredValues",
     "method"
   ],
   [
@@ -4008,12 +4032,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#gettabledata",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-getTableData",
-    "src/tablefilter.js~TableFilter#getTableData",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#getvalidrows",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getValidRows",
     "src/tablefilter.js~TableFilter#getValidRows",
@@ -4023,6 +4041,24 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#getvalidrowsnb",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getValidRowsNb",
     "src/tablefilter.js~TableFilter#getValidRowsNb",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#getvalues",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getValues",
+    "src/tablefilter.js~TableFilter#getValues",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#getvisiblecolumndata",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getVisibleColumnData",
+    "src/tablefilter.js~TableFilter#getVisibleColumnData",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#getvisiblecolumnvalues",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getVisibleColumnValues",
+    "src/tablefilter.js~TableFilter#getVisibleColumnValues",
     "method"
   ],
   [
