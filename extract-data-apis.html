@@ -221,15 +221,29 @@
         <p>
             <button class="btn btn-default"
                 onclick="
-                    alert(tf.getTableData());">
+                    alert(tf.getData());">
                 Table data
             </button>
         </p>
         <p>
             <span class="badge">API</span>:
-            <code>getTableData()</code>
+            <code>getData()</code>
         </p>
         <hr>
+
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getValues());">
+                Table values
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getValues()</code>
+        </p>
+        <hr>
+
         <p>
             <button class="btn btn-default"
                 onclick="
@@ -242,28 +256,68 @@
             <code>getFilteredData()</code>
         </p>
         <hr>
+
         <p>
             <button class="btn btn-default"
                 onclick="
-                    alert(tf.getColValues(0));">
+                    alert(tf.getFilteredValues());">
+                Table filtered values
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getFilteredValues()</code>
+        </p>
+        <hr>
+
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getColumnData(0));">
                 Country column data
             </button>
         </p>
         <p>
             <span class="badge">API</span>:
-            <code>getColValues(columnIndex)</code>
+            <code>getColumnData(columnIndex)</code>
         </p>
         <hr>
+
         <p>
             <button class="btn btn-default"
                 onclick="
-                    alert(tf.getFilteredDataCol(0));">
+                    alert(tf.getColumnValues(0));">
+                Country column values
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getColumnValues(columnIndex)</code>
+        </p>
+        <hr>
+
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getFilteredColumnData(0));">
                 Country column filtered data
             </button>
         </p>
         <p>
             <span class="badge">API</span>:
-            <code>getFilteredDataCol(columnIndex)</code>
+            <code>getFilteredColumnData(columnIndex)</code>
+        </p>
+        <hr>
+        <p>
+            <button class="btn btn-default"
+                onclick="
+                    alert(tf.getFilteredColumnValues(0));">
+                Country column filtered values
+            </button>
+        </p>
+        <p>
+            <span class="badge">API</span>:
+            <code>getFilteredColumnValues(columnIndex)</code>
         </p>
         <hr>
         <p>

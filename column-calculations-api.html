@@ -201,8 +201,8 @@
 </p>
 
 <div class="alert alert-warning" role="alert">
-    Instructions: filter a column, change a page or sort a column to see calculation
-    results changes.
+    Instructions: filter or sort a column, change a page to see calculation
+    results for the <code>Total</code> column.
 </div>
 
 <div style="font-size:1.2em;" data-config>
@@ -818,16 +818,18 @@
             result = colOps.calcSum(colValues);
         }
         else if(operation === 'mean') {
-            result = colOps.calcMean(colValues);
+            result = colOps.calcMean(colValues) || 0;
         }
         else if(operation === 'median') {
-            result = colOps.calcMedian(colValues);
+            result = colOps.calcMedian(colValues) || 0;
         }
         else if(operation === 'min') {
-            result = colOps.calcMin(colValues);
+            let calc = colOps.calcMin(colValues);
+            result = isFinite(calc) ? calc : 0;
         }
         else if(operation === 'max') {
-            result = colOps.calcMax(colValues);
+            let calc = colOps.calcMax(colValues);
+            result = isFinite(calc) ? calc : 0;
         }
 
         // display result
