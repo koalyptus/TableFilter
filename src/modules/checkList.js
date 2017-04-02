@@ -281,7 +281,7 @@ export class CheckList extends Feature {
                 let filteredCol = filteredDataCol[j];
                 if (isLinked && tf.disableExcludedOptions) {
                     if (!filteredCol) {
-                        filteredCol = tf.getFilteredDataCol(j);
+                        filteredCol = tf.getVisibleColumnValues(j);
                     }
                     if (!has(filteredCol, cellString, caseSensitive) &&
                         !has(this.excludedOpts, cellString,
