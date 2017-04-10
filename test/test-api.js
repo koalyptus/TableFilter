@@ -204,7 +204,7 @@ test('Get table data', function() {
     tf.setFilterValue(0, 'Adelaide');
     tf.filter();
     deepEqual(
-        tf.getFilteredData(),
+        tf.getFilteredValues(),
         [
             [6, ['Adelaide','Perth','2781','3.1','38']],
             [7, ['Adelaide','Alice Springs','1533','2','20.25']],
@@ -213,7 +213,7 @@ test('Get table data', function() {
         'Get filtered table data'
     );
     deepEqual(
-        tf.getFilteredData(true),
+        tf.getFilteredValues(true),
         [
             [1, ['From','Destination','Road Distance (km)',
                 'By Air (hrs)','By Rail (hrs)']],
@@ -221,10 +221,10 @@ test('Get table data', function() {
             [7, ['Adelaide','Alice Springs','1533','2','20.25']],
             [8, ['Adelaide','Brisbane','2045','2.15','40']]
         ],
-        'Get filtered table data including columns headers'
+        'Get filtered table values including columns headers'
     );
     deepEqual(
-        tf.getFilteredData(false, false, true),
+        tf.getFilteredData(),
         [
             [6, ['Adelaide','Perth',2781,3.1,38]],
             [7, ['Adelaide','Alice Springs',1533,2,20.25]],
@@ -247,6 +247,46 @@ test('Get table data', function() {
         [2781,1533,2045],
         'Get specified column filtered typed values'
     );
+    deepEqual(
+        tf.getFilteredColumnData(2),
+        [2781,1533,2045],
+        'Get filtered column data'
+    );
+    deepEqual(
+        tf.getFilteredColumnData(2, true),
+        ['Road Distance (km)',2781,1533,2045],
+        'Get filtered column data with headers'
+    );
+    deepEqual(
+        tf.getVisibleColumnData(2),
+        [2781,1533,2045],
+        'Get visible column data'
+    );
+    deepEqual(
+        tf.getVisibleColumnData(2, true),
+        ['Road Distance (km)',2781,1533,2045],
+        'Get visible column data with headers'
+    );
+    deepEqual(
+        tf.getFilteredColumnValues(2),
+        ['2781','1533','2045'],
+        'Get filtered column data'
+    );
+    deepEqual(
+        tf.getFilteredColumnValues(2, true),
+       ['Road Distance (km)','2781','1533','2045'],
+        'Get filtered column data with headers'
+    );
+    deepEqual(
+        tf.getVisibleColumnValues(2),
+        ['2781','1533','2045'],
+        'Get visible column data'
+    );
+    deepEqual(
+        tf.getVisibleColumnValues(2, true),
+        ['Road Distance (km)','2781','1533','2045'],
+        'Get visible column data with headers'
+    );
     tf.clearFilters();
     tf.filter();
 });
@@ -264,7 +304,8 @@ test('Test filter types', function() {
         base_path: '../dist/tablefilter/',
         col_0: 'select',
         col_1: 'multiple',
-        col_2: 'checklist'
+        col_2: 'checklist',
+        col_types: ['string', 'string', 'number', 'number', 'number']
     });
     tf.init();
 
@@ -348,7 +389,8 @@ test('Sanity checks', function() {
     tf = null;
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
-        popup_filters: true
+        popup_filters: true,
+        col_types: ['string', 'string', 'number', 'number', 'number']
     });
     tf.init();
 
@@ -396,7 +438,8 @@ test('Sanity checks', function() {
         grid_layout: true,
         col_0: 'select',
         col_1: 'multiple',
-        col_2: 'checklist'
+        col_2: 'checklist',
+        col_types: ['string', 'string', 'number', 'number', 'number']
     });
     tf.init();
 
@@ -456,6 +499,28 @@ test('Get table data', function() {
         ],
         'Get specified column values including column header'
     );
+    deepEqual(tf.getColumnValues(0),
+        [
+            'Sydney','Sydney','Sydney',
+            'Sydney','Adelaide','Adelaide','Adelaide'
+        ],
+        'Get specified column values'
+    );
+    deepEqual(tf.getColumnValues(0, true),
+        [
+            'From','Sydney','Sydney','Sydney',
+            'Sydney','Adelaide','Adelaide','Adelaide'
+        ],
+        'Get specified column values including column header'
+    );
+    deepEqual(tf.getColumnData(2),
+        [1412, 982, 286, 872, 2781, 1533, 2045],
+        'Get specified column data'
+    );
+    deepEqual(tf.getColumnData(2, true),
+        ['Road Distance (km)', 1412, 982, 286, 872, 2781, 1533, 2045],
+        'Get specified column data including column header'
+    );
     deepEqual(
         tf.getTableData(),
         [
@@ -467,22 +532,49 @@ test('Get table data', function() {
             [5, ['Adelaide','Alice Springs','1533','2','20.25']],
             [6, ['Adelaide','Brisbane','2045','2.15','40']]
         ],
+        'Get table values with getTableData()'
+    );
+    deepEqual(
+        tf.getData(),
+        [
+            [0, ['Sydney','Adelaide',1412,1.4,25.3]],
+            [1, ['Sydney','Brisbane',982,1.5,16]],
+            [2, ['Sydney','Canberra',286,0.6,4.3]],
+            [3, ['Sydney','Melbourne',872,1.1,10.5]],
+            [4, ['Adelaide','Perth',2781,3.1,38]],
+            [5, ['Adelaide','Alice Springs',1533,2,20.25]],
+            [6, ['Adelaide','Brisbane',2045,2.15,40]]
+        ],
         'Get table data'
     );
+    deepEqual(
+        tf.getValues(),
+        [
+            [0, ['Sydney','Adelaide','1412','1.4','25.3']],
+            [1, ['Sydney','Brisbane','982','1.5','16']],
+            [2, ['Sydney','Canberra','286','.6','4.3']],
+            [3, ['Sydney','Melbourne','872','1.1','10.5']],
+            [4, ['Adelaide','Perth','2781','3.1','38']],
+            [5, ['Adelaide','Alice Springs','1533','2','20.25']],
+            [6, ['Adelaide','Brisbane','2045','2.15','40']]
+        ],
+        'Get table values'
+    );
+
     tf.clearFilters();
     tf.setFilterValue(0, 'Adelaide');
     tf.filter();
     deepEqual(
-        tf.getFilteredData(),
+        tf.getFilteredValues(),
         [
             [4, ['Adelaide','Perth','2781','3.1','38']],
             [5, ['Adelaide','Alice Springs','1533','2','20.25']],
             [6, ['Adelaide','Brisbane','2045','2.15','40']]
         ],
-        'Get filtered table data'
+        'Get filtered table values'
     );
     deepEqual(
-        tf.getFilteredData(true),
+        tf.getFilteredValues(true),
         [
             [0, ['From','Destination','Road Distance (km)',
                 'By Air (hrs)','By Rail (hrs)']],
@@ -490,7 +582,7 @@ test('Get table data', function() {
             [5, ['Adelaide','Alice Springs','1533','2','20.25']],
             [6, ['Adelaide','Brisbane','2045','2.15','40']]
         ],
-        'Get filtered table data including columns headers'
+        'Get filtered table values including columns headers'
     );
     deepEqual(
         tf.getFilteredDataCol(0),
@@ -501,6 +593,46 @@ test('Get table data', function() {
         tf.getFilteredDataCol(0, true),
         ['From','Adelaide','Adelaide','Adelaide'],
         'Get specified column filtered values including header'
+    );
+    deepEqual(
+        tf.getFilteredColumnData(2),
+        [2781,1533,2045],
+        'Get filtered column data'
+    );
+    deepEqual(
+        tf.getFilteredColumnData(2, true),
+        ['Road Distance (km)',2781,1533,2045],
+        'Get filtered column data with headers'
+    );
+    deepEqual(
+        tf.getVisibleColumnData(2),
+        [2781,1533,2045],
+        'Get visible column data'
+    );
+    deepEqual(
+        tf.getVisibleColumnData(2, true),
+        ['Road Distance (km)',2781,1533,2045],
+        'Get visible column data with headers'
+    );
+    deepEqual(
+        tf.getFilteredColumnValues(2),
+        ['2781','1533','2045'],
+        'Get filtered column data'
+    );
+    deepEqual(
+        tf.getFilteredColumnValues(2, true),
+       ['Road Distance (km)','2781','1533','2045'],
+        'Get filtered column data with headers'
+    );
+    deepEqual(
+        tf.getVisibleColumnValues(2),
+        ['2781','1533','2045'],
+        'Get visible column data'
+    );
+    deepEqual(
+        tf.getVisibleColumnValues(2, true),
+        ['Road Distance (km)','2781','1533','2045'],
+        'Get visible column data with headers'
     );
     tf.clearFilters();
     tf.filter();
@@ -520,24 +652,24 @@ function colsVisibilityTests() { // issue 94
         tf1.filter();
 
         deepEqual(
-            tf1.getFilteredData(false, true),
+            tf1.getFilteredValues(false, true),
             [
                 [6, ['Adelaide','3.1','38']],
                 [7, ['Adelaide','2','20.25']],
                 [8, ['Adelaide','2.15','40']]
             ],
-            'Get filtered table data with excluded columns'
+            'Get filtered table values with excluded columns'
         );
 
         deepEqual(
-            tf1.getFilteredData(true, true),
+            tf1.getFilteredValues(true, true),
             [
                 [1, ['From','By Air (hrs)','By Rail (hrs)']],
                 [6, ['Adelaide','3.1','38']],
                 [7, ['Adelaide','2','20.25']],
                 [8, ['Adelaide','2.15','40']]
             ],
-            'Get filtered table data with headers and excluded columns'
+            'Get filtered table values with headers and excluded columns'
         );
 
         deepEqual(
