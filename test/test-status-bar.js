@@ -36,7 +36,24 @@ asyncTest('Can display message', function() {
         start();
         deepEqual(statusBar.msgContainer.innerHTML,
             'hello world', 'Message displayed');
+        statusBar.msgContainer.innerHTML = '';
     }, 2);
+});
+asyncTest('Should not display message if not enabled', function() {
+    // setup
+    statusBar.enabled = false;
+
+    // act
+    statusBar.message('hello world');
+
+    // assert
+    setTimeout(function(){
+        start();
+        deepEqual(statusBar.msgContainer.innerHTML,
+            '', 'Message not displayed');
+    }, 2);
+
+    statusBar.enabled = true;
 });
 
 module('Feature interface');
@@ -100,13 +117,26 @@ test('Remove UI', function() {
     deepEqual(label, null, 'Status bar button removed');
 });
 
-test('Re-set UI', function() {
+module('Re-set UI');
+test('Status text', function() {
     statusBar.text = '→←';
     statusBar.init();
 
     var label = statusBar.labelContainer;
     notEqual(
         label.innerHTML.indexOf('→←'), -1, 'Status bar text');
+});
+test('Custom container', function() {
+    // setup
+    statusBar.destroy();
+    statusBar.targetId = 'custom-container';
+
+    // act
+    statusBar.init();
+
+    // assert
+    deepEqual(statusBar.msgContainer.nodeName,
+        'SPAN', 'Custom container element');
 });
 
 module('Tear-down');
