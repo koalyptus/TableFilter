@@ -117,7 +117,7 @@ export default class AdapterEzEditTable extends Feature {
         //start row for EditTable constructor needs to be calculated
         let startRow,
             cfg = this.cfg,
-            thead = tag(tf.tbl, 'thead');
+            thead = tag(tf.dom(), 'thead');
 
         //if thead exists and startRow not specified, startRow is calculated
         //automatically by EditTable
@@ -158,7 +158,7 @@ export default class AdapterEzEditTable extends Feature {
                         et.ClearSelections();
                         /* eslint-enable */
                         let cellIndex = selectedElm.cellIndex,
-                            row = tf.tbl.rows[nextRowIndex];
+                            row = tf.dom().rows[nextRowIndex];
                         if (et.defaultSelection === 'both') {
                             /* eslint-disable */
                             slc.SelectRowByIndex(nextRowIndex);
@@ -172,7 +172,7 @@ export default class AdapterEzEditTable extends Feature {
                     }
                     //Table is filtered
                     if (tf.validRowsIndex.length !== tf.getRowsNb()) {
-                        let r = tf.tbl.rows[nextRowIndex];
+                        let r = tf.dom().rows[nextRowIndex];
                         if (r) {
                             r.scrollIntoView(false);
                         }

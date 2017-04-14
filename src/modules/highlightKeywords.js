@@ -99,7 +99,7 @@ export class HighlightKeyword {
      * @param  {String} cssClass Css class to remove
      */
     unhighlight(term, cssClass) {
-        let highlightedNodes = this.tf.tbl.querySelectorAll(`.${cssClass}`);
+        let highlightedNodes = this.tf.dom().querySelectorAll(`.${cssClass}`);
         for (let i = 0; i < highlightedNodes.length; i++) {
             let n = highlightedNodes[i];
             let nodeVal = getText(n);

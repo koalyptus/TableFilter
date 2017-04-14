@@ -100,9 +100,9 @@ export class Loader extends Feature {
         containerDiv.className = this.cssClass;
 
         let targetEl = !this.targetId ?
-            tf.tbl.parentNode : elm(this.targetId);
+            tf.dom().parentNode : elm(this.targetId);
         if (!this.targetId) {
-            targetEl.insertBefore(containerDiv, tf.tbl);
+            targetEl.insertBefore(containerDiv, tf.dom());
         } else {
             targetEl.appendChild(containerDiv);
         }
@@ -119,9 +119,7 @@ export class Loader extends Feature {
         emitter.on(EVENTS, () => this.show(''));
         emitter.on(EVENTS, () => this.show(NONE));
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
     }
 

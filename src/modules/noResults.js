@@ -97,7 +97,7 @@ export class NoResults extends Feature {
         }
         let tf = this.tf;
         let target = this.customContainer || elm(this.customContainerId) ||
-            tf.tbl;
+            tf.dom();
 
         //container
         let cont = createElm('div');
@@ -176,8 +176,9 @@ export class NoResults extends Feature {
             let gridLayout = tf.feature('gridLayout');
             this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';
         } else {
-            this.cont.style.width = (tf.tbl.tHead ? tf.tbl.tHead.clientWidth :
-                tf.tbl.tBodies[0].clientWidth) + 'px';
+            this.cont.style.width = (tf.dom().tHead ?
+                tf.dom().tHead.clientWidth :
+                tf.dom().tBodies[0].clientWidth) + 'px';
         }
     }
 

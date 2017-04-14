@@ -28,6 +28,7 @@ test('TableFilter object', function() {
     deepEqual(tf.getFilterId(0), 'flt0_demo', 'Filter DOM element id');
     deepEqual(tf.getStartRowIndex(), 2, 'Start of filterable rows');
     deepEqual(tf.getLastRowIndex(), 8, 'Last row index');
+    deepEqual(tf.dom().nodeName, 'TABLE', 'Working DOM element type');
     deepEqual(
         tf.getHeadersText(),
         [
@@ -42,7 +43,7 @@ test('TableFilter object', function() {
     );
     deepEqual(tf.getValidRowsNb(), 0, 'Number of valid rows before filtering');
     deepEqual(
-        tf.getCellData(tf.tbl.rows[3].cells[2]),
+        tf.getCellData(tf.dom().rows[3].cells[2]),
         982,
         'getCellData returns typed value'
     );

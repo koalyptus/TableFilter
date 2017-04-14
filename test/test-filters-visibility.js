@@ -7,7 +7,7 @@ tf.init();
 
 var extTargetElement = document.createElement('div');
 extTargetElement.setAttribute('id', 'test');
-document.body.insertBefore(extTargetElement, tf.tbl);
+document.body.insertBefore(extTargetElement, tf.dom());
 
 module('Sanity checks');
 test('Filters visibility extension', function() {
@@ -33,7 +33,7 @@ module('Check behaviours');
 test('Toggle filters', function() {
     var ext = tf.extension('filtersVisibility');
     ext.toggle();
-    var filtersRow = tf.tbl.rows[tf.getFiltersRowIndex()];
+    var filtersRow = tf.dom().rows[tf.getFiltersRowIndex()];
     deepEqual(filtersRow.style.display, 'none', 'Filters hidden');
     ext.toggle();
     deepEqual(filtersRow.style.display, '', 'Filters displayed');

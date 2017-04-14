@@ -112,14 +112,14 @@ export class GridLayout extends Feature {
          * @type {String}
          * @private
          */
-        this.sourceTblHtml = tf.tbl.outerHTML;
+        this.sourceTblHtml = tf.dom().outerHTML;
 
         /**
          * Indicates if working table has column elements
          * @type {Boolean}
          * @private
          */
-        this.tblHasColTag = tag(tf.tbl, 'col').length > 0 ? true : false;
+        this.tblHasColTag = tag(tf.dom(), 'col').length > 0 ? true : false;
 
         /**
          * Main container element
@@ -155,7 +155,7 @@ export class GridLayout extends Feature {
      */
     init() {
         let tf = this.tf;
-        let tbl = tf.tbl;
+        let tbl = tf.dom();
 
         if (this.initialized) {
             return;
@@ -319,7 +319,7 @@ export class GridLayout extends Feature {
         }
         for (let k = 0, len = tf.getCellsNb(); k < len; k++) {
             let colW;
-            let cell = tf.tbl.rows[tf.getHeadersRowIndex()].cells[k];
+            let cell = tf.dom().rows[tf.getHeadersRowIndex()].cells[k];
             if (cell.width !== '') {
                 colW = cell.width;
             } else if (cell.style.width !== '') {
@@ -339,7 +339,7 @@ export class GridLayout extends Feature {
      * @private
      */
     initialTableWidth() {
-        let tbl = this.tf.tbl;
+        let tbl = this.tf.dom();
         let width; //initial table width
 
         if (tbl.width !== '') {
@@ -392,7 +392,7 @@ export class GridLayout extends Feature {
      */
     setColumnElements() {
         let tf = this.tf;
-        let cols = tag(tf.tbl, 'col');
+        let cols = tag(tf.dom(), 'col');
         this.tblHasColTag = cols.length > 0;
 
         for (let k = (tf.nbCells - 1); k >= 0; k--) {
@@ -400,7 +400,7 @@ export class GridLayout extends Feature {
 
             if (!this.tblHasColTag) {
                 col = createElm('col');
-                tf.tbl.insertBefore(col, tf.tbl.firstChild);
+                tf.dom().insertBefore(col, tf.dom().firstChild);
             } else {
                 col = cols[k];
             }
@@ -423,7 +423,7 @@ export class GridLayout extends Feature {
         } else {
             // Headers row are moved from content table to headers table
             for (let i = 0; i < this.headRows.length; i++) {
-                let row = this.tf.tbl.rows[this.headRows[i]];
+                let row = this.tf.dom().rows[this.headRows[i]];
                 tableHead.appendChild(row);
             }
         }
@@ -471,7 +471,7 @@ export class GridLayout extends Feature {
      */
     destroy() {
         let tf = this.tf;
-        let tbl = tf.tbl;
+        let tbl = tf.dom();
 
         if (!this.initialized) {
             return;

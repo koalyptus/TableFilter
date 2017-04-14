@@ -41,7 +41,7 @@
 
     test('Can parse with custom function', function() {
         // setup
-        var cell = tf.tbl.rows[3].cells[0];
+        var cell = tf.dom().rows[3].cells[0];
 
         // act
         var value = tf.getCellValue(cell);
@@ -55,7 +55,7 @@
             // setup
             var initialCellParser = tf.cellParser;
             var hit = 0;
-            var cell = tf.tbl.rows[3].cells[0];
+            var cell = tf.dom().rows[3].cells[0];
 
             tf.cellParser.cols = [];
             tf.cellParser.parse = function() {

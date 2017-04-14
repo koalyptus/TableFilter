@@ -76,6 +76,7 @@ export class TableFilter {
         /**
          * HTML Table DOM element
          * @type {DOMElement}
+         * @private
          */
         this.tbl = null;
 
@@ -997,6 +998,9 @@ export class TableFilter {
          * @private
          */
         this.ExtRegistry = {};
+
+        //load styles if necessary
+        this.import(this.stylesheetId, this.stylesheet, null, 'link');
     }
 
     /**
@@ -1012,13 +1016,8 @@ export class TableFilter {
         let n = this.singleSearchFlt ? 1 : this.nbCells;
         let inpclass;
 
-        //loads stylesheet if not imported
-        this.import(this.stylesheetId, this.stylesheet, null, 'link');
-
         //loads theme
-        if (this.hasThemes) {
-            this.loadThemes();
-        }
+        this.loadThemes();
 
         // Instanciate sugar date wrapper
         Mod.dateType = Mod.dateType || new DateType(this);
@@ -1156,16 +1155,14 @@ export class TableFilter {
 
         //TF css class is added to table
         if (!this.gridLayout) {
-            addClass(this.tbl, this.prfxTf);
+            addClass(this.dom(), this.prfxTf);
             if (this.responsive) {
-                addClass(this.tbl, this.prfxResponsive);
+                addClass(this.dom(), this.prfxResponsive);
             }
         }
 
-        /* Loads extensions */
-        if (this.hasExtensions) {
-            this.initExtensions();
-        }
+        /* Load extensions */
+        this.initExtensions();
 
         // Subscribe to events
         if (this.markActiveColumns) {
@@ -1282,11 +1279,11 @@ export class TableFilter {
         }
         let fltrow;
 
-        let thead = tag(this.tbl, 'thead');
+        let thead = tag(this.dom(), 'thead');
         if (thead.length > 0) {
             fltrow = thead[0].insertRow(this.filtersRowIndex);
         } else {
-            fltrow = this.tbl.insertRow(this.filtersRowIndex);
+            fltrow = this.dom().insertRow(this.filtersRowIndex);
         }
 
         fltrow.className = this.fltsRowCssClass;
@@ -1386,6 +1383,10 @@ export class TableFilter {
      * Initialise all the extensions defined in the configuration object
      */
     initExtensions() {
+        if (!this.hasExtensions) {
+            return;
+        }
+
         let exts = this.extensions;
         // Set config's publicPath dynamically for Webpack...
         __webpack_public_path__ = this.basePath;
@@ -1464,6 +1465,10 @@ export class TableFilter {
      * Load themes defined in the configuration object
      */
     loadThemes() {
+        if (!this.hasThemes) {
+            return;
+        }
+
         let themes = this.themes;
         this.emitter.emit('before-loading-themes', this);
 
@@ -1534,7 +1539,7 @@ export class TableFilter {
         this.validateAllRows();
 
         if (this.fltGrid && !this.gridLayout) {
-            this.tbl.deleteRow(this.filtersRowIndex);
+            this.dom().deleteRow(this.filtersRowIndex);
         }
 
         // broadcast destroy event modules and extensions are subscribed to
@@ -1550,8 +1555,8 @@ export class TableFilter {
         this.emitter.off(['filter-focus'],
             (tf, filter) => this.setActiveFilterId(filter.id));
 
-        removeClass(this.tbl, this.prfxTf);
-        removeClass(this.tbl, this.prfxResponsive);
+        removeClass(this.dom(), this.prfxTf);
+        removeClass(this.dom(), this.prfxResponsive);
 
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
@@ -1585,7 +1590,7 @@ export class TableFilter {
         else {
             let cont = createElm('caption');
             cont.appendChild(infDiv);
-            this.tbl.insertBefore(cont, this.tbl.firstChild);
+            this.dom().insertBefore(cont, this.dom().firstChild);
         }
         this.infDiv = infDiv;
 
@@ -1627,7 +1632,7 @@ export class TableFilter {
         removeElm(this.infDiv);
         this.infDiv = null;
 
-        let tbl = this.tbl;
+        let tbl = this.dom();
         let captions = tag(tbl, 'caption');
         if (captions.length > 0) {
             [].forEach.call(captions, (elm) => tbl.removeChild(elm));
@@ -1709,7 +1714,7 @@ export class TableFilter {
         this.onBeforeFilter(this);
         this.emitter.emit('before-filtering', this);
 
-        let row = this.tbl.rows,
+        let row = this.dom().rows,
             nbRows = this.getRowsNb(true),
             hiddenRows = 0;
 
@@ -2102,7 +2107,7 @@ export class TableFilter {
         typed = false,
         exclude = []
     ) {
-        let row = this.tbl.rows;
+        let row = this.dom().rows;
         let nbRows = this.getRowsNb(true);
         let colValues = [];
         let getContent = typed ? this.getCellData.bind(this) :
@@ -2245,7 +2250,7 @@ export class TableFilter {
      * @return {Number}          Number of cells
      */
     getCellsNb(rowIndex = 0) {
-        let tr = this.tbl.rows[rowIndex >= 0 ? rowIndex : 0];
+        let tr = this.dom().rows[rowIndex >= 0 ? rowIndex : 0];
         return tr ? tr.cells.length : 0;
     }
 
@@ -2257,7 +2262,7 @@ export class TableFilter {
      */
     getRowsNb(includeHeaders) {
         let s = isUndef(this.refRow) ? 0 : this.refRow;
-        let ntrs = this.tbl.rows.length;
+        let ntrs = this.dom().rows.length;
         if (includeHeaders) {
             s = 0;
         }
@@ -2358,7 +2363,7 @@ export class TableFilter {
         excludeHiddenCols = false,
         typed = false
     ) {
-        let rows = this.tbl.rows;
+        let rows = this.dom().rows;
         let nbRows = this.getRowsNb(true);
         let tblData = [];
         let getContent = typed ? this.getCellData.bind(this) :
@@ -2440,7 +2445,7 @@ export class TableFilter {
         if (this.validRowsIndex.length === 0) {
             return [];
         }
-        let rows = this.tbl.rows,
+        let rows = this.dom().rows,
             filteredData = [];
         let getContent = typed ? this.getCellData.bind(this) :
             this.getCellValue.bind(this);
@@ -2548,7 +2553,7 @@ export class TableFilter {
             return [];
         }
 
-        let rows = this.tbl.rows;
+        let rows = this.dom().rows;
         let getContent = typed ? this.getCellData.bind(this) :
             this.getCellValue.bind(this);
 
@@ -2588,7 +2593,7 @@ export class TableFilter {
      * @param  {Boolean} isValid
      */
     validateRow(rowIndex, isValid) {
-        let row = this.tbl.rows[rowIndex];
+        let row = this.dom().rows[rowIndex];
         if (!row || typeof isValid !== 'boolean') {
             return;
         }
@@ -2687,7 +2692,7 @@ export class TableFilter {
         if (!this.hasColWidths) {
             return;
         }
-        tbl = tbl || this.tbl;
+        tbl = tbl || this.dom();
 
         let nbCols = this.nbCells;
         let colWidths = this.colWidths;
@@ -2896,7 +2901,7 @@ export class TableFilter {
      * @returns {Boolean}
      */
     isRowDisplayed(rowIndex) {
-        let row = this.tbl.rows[rowIndex];
+        let row = this.dom().rows[rowIndex];
         return this.getRowDisplay(row) === '';
     }
 
@@ -3023,7 +3028,7 @@ export class TableFilter {
         let nbRows = this.getRowsNb(true);
         this.validRowsIndex = [];
         for (let k = this.refRow; k < nbRows; k++) {
-            let r = this.tbl.rows[k];
+            let r = this.dom().rows[k];
             if (!this.paging) {
                 if (this.getRowDisplay(r) !== NONE) {
                     this.validRowsIndex.push(r.rowIndex);
@@ -3095,7 +3100,7 @@ export class TableFilter {
      * @return {Element}
      */
     getHeaderElement(colIndex) {
-        let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl;
+        let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.dom();
         let tHead = tag(table, 'thead');
         let headersRow = this.headersRow;
         let header;
@@ -3159,6 +3164,14 @@ export class TableFilter {
      */
     getValidRowsNb(reCalc = false) {
         return this.getValidRows(reCalc).length;
+    }
+
+    /**
+     * Return the working DOM element
+     * @return {HTMLTableElement}
+     */
+    dom() {
+        return this.tbl;
     }
 
     /**

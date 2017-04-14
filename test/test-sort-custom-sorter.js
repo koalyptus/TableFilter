@@ -47,7 +47,7 @@ function startTest(tf, sort){
 
         deepEqual(indicator.length, 1, 'Sort indicator in header element');
         deepEqual(
-            (tf.tbl.rows[validRows[0]].cells[1]).innerHTML,
+            (tf.dom().rows[validRows[0]].cells[1]).innerHTML,
             'AUY78',
             'First custom key cell text before sorting');
     });
@@ -58,7 +58,7 @@ function startTest(tf, sort){
 
         deepEqual(sort.sorted, true, 'Table column sorted');
         deepEqual(
-            (tf.tbl.rows[validRows[0]].cells[1]).innerHTML,
+            (tf.dom().rows[validRows[0]].cells[1]).innerHTML,
             'QT1',
             'First custom key cell text after sorting');
     });

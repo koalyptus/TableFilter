@@ -430,7 +430,7 @@ export default class AdapterSortableTable extends Feature {
         this.addSortType(STRING);
         this.addSortType(IP_ADDRESS, ipAddress, sortIP);
 
-        this.stt = new SortableTable(tf.tbl, _sortTypes);
+        this.stt = new SortableTable(tf.dom(), _sortTypes);
 
         /*** external table headers adapter ***/
         if (this.asyncSort && this.triggerIds.length > 0) {
