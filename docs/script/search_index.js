@@ -3696,6 +3696,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#dom",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-dom",
+    "src/tablefilter.js~TableFilter#dom",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#emoperator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-emOperator",
     "src/tablefilter.js~TableFilter#emOperator",
@@ -4521,12 +4527,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#stylesheet",
     "class/src/tablefilter.js~TableFilter.html#instance-member-stylesheet",
     "src/tablefilter.js~TableFilter#stylesheet",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#tbl",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-tbl",
-    "src/tablefilter.js~TableFilter#tbl",
     "member"
   ],
   [

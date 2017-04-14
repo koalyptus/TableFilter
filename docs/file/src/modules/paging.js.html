@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.5.6 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.5.7 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -678,7 +678,7 @@ export class Paging extends Feature {
      */
     groupByPage(validRows) {
         var tf = this.tf;
-        var rows = tf.tbl.rows;
+        var rows = tf.dom().rows;
         var startPagingRow = parseInt(this.startPagingRow, 10);
         var endPagingRow = startPagingRow + parseInt(this.pagingLength, 10);
 
