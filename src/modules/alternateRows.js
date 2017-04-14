@@ -94,7 +94,7 @@ export class AlternateRows extends Feature {
         if (!this.isEnabled() || isNaN(rowIdx)) {
             return;
         }
-        let rows = this.tf.tbl.rows;
+        let rows = this.tf.dom().rows;
         let i = isNaN(idx) ? rowIdx : idx;
         this.removeRowBg(rowIdx);
 
@@ -110,7 +110,7 @@ export class AlternateRows extends Feature {
         if (isNaN(idx)) {
             return;
         }
-        let rows = this.tf.tbl.rows;
+        let rows = this.tf.dom().rows;
         removeClass(rows[idx], this.oddCss);
         removeClass(rows[idx], this.evenCss);
     }

@@ -182,7 +182,7 @@ export class Dropdown extends Feature {
 
         let slcId = tf.fltIds[colIndex];
         let slc = elm(slcId);
-        let rows = tf.tbl.rows;
+        let rows = tf.dom().rows;
         let nbRows = tf.getRowsNb(true);
 
         //custom select test

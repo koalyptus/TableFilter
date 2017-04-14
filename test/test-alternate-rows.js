@@ -4,7 +4,7 @@ var tf = new TableFilter('demo', {
     alternate_rows: true
 });
 tf.init();
-var tbl = tf.tbl;
+var tbl = tf.dom();
 var altRows = tf.feature('alternateRows');
 
 module('Sanity checks');
@@ -288,7 +288,7 @@ test('Grid layout: initialising alternating rows', function() {
         alternate_rows: true
     });
     tf.init();
-    tbl = tf.tbl;
+    tbl = tf.dom();
     altRows = tf.feature('alternateRows');
 
     deepEqual(
@@ -352,7 +352,7 @@ test('Sort: alternating rows with column sorted at start', function() {
     deepEqual(altRows.oddCss, 'odd', 'Expected odd css class');
 
     function checkAlternateRows(tf) {
-        tbl = tf.tbl;
+        tbl = tf.dom();
         altRows = tf.feature('alternateRows');
 
         test('Alternate rows with sort column at start option', function() {

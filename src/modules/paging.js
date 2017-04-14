@@ -556,7 +556,7 @@ export class Paging extends Feature {
      */
     groupByPage(validRows) {
         var tf = this.tf;
-        var rows = tf.tbl.rows;
+        var rows = tf.dom().rows;
         var startPagingRow = parseInt(this.startPagingRow, 10);
         var endPagingRow = startPagingRow + parseInt(this.pagingLength, 10);
 

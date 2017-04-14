@@ -156,7 +156,7 @@ test('Pop-up filter auto-closes when user clicks away', function() {
     // act
     var evObj = document.createEvent('HTMLEvents');
     evObj.initEvent('mouseup', true, true);
-    tf.tbl.rows[4].cells[2].dispatchEvent(evObj);
+    tf.dom().rows[4].cells[2].dispatchEvent(evObj);
 
     // assert
     deepEqual(popupFilter.isOpen(0), false,

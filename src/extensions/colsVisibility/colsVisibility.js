@@ -459,7 +459,7 @@ export default class ColsVisibility extends Feature {
         let ul = createElm('ul');
         ul.className = this.listCssClass;
 
-        let tbl = this.headersTbl ? this.headersTbl : tf.tbl;
+        let tbl = this.headersTbl ? this.headersTbl : tf.dom();
         let headerIndex = this.headersTbl ?
             this.headersIndex : tf.getHeadersRowIndex();
         let headerRow = tbl.rows[headerIndex];
@@ -535,7 +535,7 @@ export default class ColsVisibility extends Feature {
      */
     setHidden(colIndex, hide) {
         let tf = this.tf;
-        let tbl = tf.tbl;
+        let tbl = tf.dom();
 
         if (hide) {
             this.onBeforeColHidden(this, colIndex);
@@ -598,7 +598,7 @@ export default class ColsVisibility extends Feature {
                 let width = parseInt(gridColElms[colIndex].style.width, 10);
                 headTbl.style.width =
                     (parseInt(headTbl.style.width, 10) + width) + 'px';
-                tf.tbl.style.width = headTbl.style.width;
+                tf.dom().style.width = headTbl.style.width;
             }
 
             this.onAfterColDisplayed(this, colIndex);

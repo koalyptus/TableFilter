@@ -244,7 +244,7 @@ export default class FiltersVisibility extends Feature {
      */
     toggle() {
         let tf = this.tf;
-        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
+        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.dom();
         let fltRow = tbl.rows[this.filtersRowIndex];
         let isDisplayed = fltRow.style.display === '';
 
@@ -258,7 +258,7 @@ export default class FiltersVisibility extends Feature {
      */
     show(visible = true) {
         let tf = this.tf;
-        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
+        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.dom();
         let fltRow = tbl.rows[this.filtersRowIndex];
 
         if (visible) {

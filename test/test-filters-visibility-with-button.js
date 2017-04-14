@@ -11,7 +11,7 @@ tf.init();
 
 var extTargetElement = document.createElement('div');
 extTargetElement.setAttribute('id', 'test');
-document.body.insertBefore(extTargetElement, tf.tbl);
+document.body.insertBefore(extTargetElement, tf.dom());
 
 module('Sanity checks');
 test('Filters visibility extension', function() {

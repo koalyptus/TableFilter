@@ -70,7 +70,7 @@ test('Help container auto-closes when user clicks away', function() {
     var evObj = document.createEvent('HTMLEvents');
     evObj.initEvent('mouseup', true, true);
     // mouseup fired from a table cell
-    tf.tbl.rows[3].cells[2].dispatchEvent(evObj);
+    tf.dom().rows[3].cells[2].dispatchEvent(evObj);
 
     // assert
     deepEqual(help.cont.style.display, 'none',

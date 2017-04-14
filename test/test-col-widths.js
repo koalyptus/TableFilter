@@ -9,7 +9,7 @@
 
     module('Sanity checks');
     test('Column widths', function() {
-        var cols = tf.tbl.getElementsByTagName('col');
+        var cols = tf.dom().getElementsByTagName('col');
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(cols[1].style.width, '100px', 'Expected column width');
         deepEqual(cols[4].style.width, '', 'Expected column width');

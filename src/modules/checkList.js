@@ -227,7 +227,7 @@ export class CheckList extends Feature {
             ['colIndex', colIndex]);
         ul.className = this.filterCssClass;
 
-        let rows = tf.tbl.rows;
+        let rows = tf.dom().rows;
         let nbRows = tf.getRowsNb(true);
         let caseSensitive = tf.caseSensitive;
         this.isCustom = tf.isCustomOptions(colIndex);

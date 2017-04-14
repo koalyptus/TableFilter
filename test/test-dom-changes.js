@@ -5,7 +5,7 @@ var tf = new TableFilter('demo', {
 });
 tf.init();
 var rowsCounter = tf.feature('rowsCounter');
-var rowToAdd = tf.tbl.rows[8];
+var rowToAdd = tf.dom().rows[8];
 
 var tf1 = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
@@ -27,7 +27,7 @@ module('DOM changes');
 test('Can filter after row is removed', function() {
     // setup
     tf.clearFilters();
-    tf.tbl.deleteRow(-1);
+    tf.dom().deleteRow(-1);
 
     // act
     tf.filter();
@@ -44,7 +44,7 @@ test('Can filter after row is removed', function() {
 test('Can filter after row is added', function() {
     // setup
     tf.clearFilters();
-    tf.tbl.tBodies[0].appendChild(rowToAdd);
+    tf.dom().tBodies[0].appendChild(rowToAdd);
 
     // act
     tf.filter();
@@ -104,7 +104,7 @@ test('Can filter and change a page after row is removed', function() {
     var paging = tf1.feature('paging');
     var rowsCounter = tf1.feature('rowsCounter');
     tf1.clearFilters();
-    tf1.tbl.deleteRow(-1);
+    tf1.dom().deleteRow(-1);
 
     // act
     tf1.filter();
@@ -124,7 +124,7 @@ test('Can filter and change page after row is added', function() {
     var paging = tf1.feature('paging');
     var rowsCounter = tf1.feature('rowsCounter');
     tf1.clearFilters();
-    tf1.tbl.tBodies[0].appendChild(rowToAdd);
+    tf1.dom().tBodies[0].appendChild(rowToAdd);
 
     // act
     tf1.filter();

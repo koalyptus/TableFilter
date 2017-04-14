@@ -164,7 +164,7 @@ export default class ColOps extends Feature {
         });
 
         let nbCols = uIndexes.length,
-            rows = tf.tbl.rows,
+            rows = tf.dom().rows,
             colValues = [];
 
         for (let u = 0; u < nbCols; u++) {
