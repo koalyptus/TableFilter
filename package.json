@@ -65,7 +65,7 @@
     "script-loader": "^0.7.0",
     "string-replace-webpack-plugin": "^0.0.5",
     "sugar-date": "2.0.4",
-    "webpack": "^2.3.3",
+    "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {},
