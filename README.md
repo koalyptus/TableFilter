@@ -143,7 +143,7 @@ npm run esdoc
 ```
 
 ## Support
-* GitHub for reporting bugs and feature requests.
+* GitHub for [reporting bugs](https://github.com/koalyptus/TableFilter/blob/master/CONTRIBUTING.md#reporting-bugs) and [feature requests](https://github.com/koalyptus/TableFilter/blob/master/CONTRIBUTING.md#suggesting-enhancements-and-features).
 
 ## License
 [MIT](LICENSE)
