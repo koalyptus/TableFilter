@@ -768,9 +768,9 @@
                 '120px','120px','120px',
                 '120px','120px','120px'
             ],
-            on_filters_loaded: function(o){
+            on_filters_loaded: function(tf){
                 // hide the filters row
-                o.tbl.rows[o.getFiltersRowIndex()].style.display = 'none';
+                tf.dom().rows[tf.getFiltersRowIndex()].style.display = 'none';
             }
         }
     );

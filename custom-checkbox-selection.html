@@ -815,7 +815,7 @@
     // Initialize checkboxes listeners
     function initSelectionListeners(tf){
       var headerCheckbox = tf.getHeaderElement(0).querySelector('input');
-      var checkboxes = getBodyCheckboxes(tf.tbl);
+      var checkboxes = getBodyCheckboxes(tf.dom());
 
       // Add event listener to checkbox in table head
       headerCheckbox.addEventListener('change', toggleAll.bind(tf));
@@ -831,7 +831,7 @@
       var tf = this;
       var headerCheckbox = evt.target;
       var isChecked = headerCheckbox.checked;
-      var checkboxes = getBodyCheckboxes(tf.tbl);
+      var checkboxes = getBodyCheckboxes(tf.dom());
       var filteredRows = tf.getValidRows();
 
       [].forEach.call(checkboxes, function(checkbox){

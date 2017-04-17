@@ -13195,7 +13195,7 @@
         var cellIndex = 3; // POP column
         var rowsIdx = tf.getValidRows();
         rowsIdx.forEach(function(idx){
-            var row = tf.tbl.rows[idx];
+            var row = tf.dom().rows[idx];
             var cell = row.cells[cellIndex];
             formatCell(tf, cellIndex, cell);
         });

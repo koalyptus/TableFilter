@@ -1964,8 +1964,8 @@
             ],
 
             // hide filters
-            on_filters_loaded: function(o) {
-                o.tbl.rows[o.getFiltersRowIndex()].style.display = 'none';
+            on_filters_loaded: function(tf) {
+                tf.dom().rows[tf.getFiltersRowIndex()].style.display = 'none';
             },
 
             // sorting feature
