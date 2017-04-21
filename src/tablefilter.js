@@ -1,6 +1,7 @@
 import {addEvt, cancelEvt, stopEvt, targetEvt, keyCode} from './event';
 import {
-    addClass, createElm, createOpt, elm, getText, getFirstTextNode, hasClass,
+    addClass, createElm, createOpt, elm, getText, getFirstTextNode,
+    /*hasClass,*/
     removeClass, removeElm, tag
 } from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
@@ -27,6 +28,7 @@ import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
 import {State} from './modules/state';
 import {DateType} from './modules/dateType';
+import {MarkActiveColumns} from './modules/markActiveColumns';
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
@@ -47,7 +49,7 @@ export class TableFilter {
     /**
      * Creates an instance of TableFilter
      * requires `table` or `id` arguments, `row` and `configuration` optional
-     * @param {DOMElement} table Table DOM element
+     * @param {HTMLTableElement} table Table DOM element
      * @param {String} id Table id
      * @param {Number} row index indicating the 1st row
      * @param {Object} configuration object
@@ -93,6 +95,13 @@ export class TableFilter {
          * @private
          */
         this.headersRow = null;
+
+        /**
+         * Headers row DOM element
+         * @type {HTMLTableElement}
+         * @private
+         */
+        // this.headersRowElement = null;
 
         /**
          * Configuration object
@@ -509,28 +518,32 @@ export class TableFilter {
          * Indicate whether filtered (active) columns indicator is enabled
          * @type {Boolean}
          */
-        this.markActiveColumns = Boolean(f.mark_active_columns);
+        this.markActiveColumns = isObj(f.mark_active_columns) ||
+            Boolean(f.mark_active_columns);
 
-        /**
-         * Css class for filtered (active) columns
-         * @type {String}
-         */
-        this.activeColumnsCssClass = f.active_columns_css_class ||
-            'activeHeader';
+        // this.noResults = isObj(f.no_results_message) ||
+        //     Boolean(f.no_results_message);
 
-        /**
-         * Callback fired before a column is marked as filtered
-         * @type {Function}
-         */
-        this.onBeforeActiveColumn = isFn(f.on_before_active_column) ?
-            f.on_before_active_column : EMPTY_FN;
+        // /**
+        //  * Css class for filtered (active) columns
+        //  * @type {String}
+        //  */
+        // this.activeColumnsCssClass = f.active_columns_css_class ||
+        //     'activeHeader';
 
-        /**
-         * Callback fired after a column is marked as filtered
-         * @type {Function}
-         */
-        this.onAfterActiveColumn = isFn(f.on_after_active_column) ?
-            f.on_after_active_column : EMPTY_FN;
+        // /**
+        //  * Callback fired before a column is marked as filtered
+        //  * @type {Function}
+        //  */
+        // this.onBeforeActiveColumn = isFn(f.on_before_active_column) ?
+        //     f.on_before_active_column : EMPTY_FN;
+
+        // /**
+        //  * Callback fired after a column is marked as filtered
+        //  * @type {Function}
+        //  */
+        // this.onAfterActiveColumn = isFn(f.on_after_active_column) ?
+        //     f.on_after_active_column : EMPTY_FN;
 
         /*** select filter's customisation and behaviours ***/
         /**
@@ -1034,6 +1047,12 @@ export class TableFilter {
             Mod.state.init();
         }
 
+        if (this.markActiveColumns) {
+            Mod.markActiveColumns =
+                Mod.markActiveColumns || new MarkActiveColumns(this);
+            Mod.markActiveColumns.init();
+        }
+
         if (this.gridLayout) {
             Mod.gridLayout = Mod.gridLayout || new GridLayout(this);
             Mod.gridLayout.init();
@@ -1112,6 +1131,8 @@ export class TableFilter {
             this.emitter.on(['filter-focus'],
                 (tf, filter) => this.setActiveFilterId(filter.id));
 
+            // this.headersRowElement =
+                // this.dom().rows[this.getHeadersRowIndex()];
         }//if this.fltGrid
 
         /* Features */
@@ -1165,12 +1186,15 @@ export class TableFilter {
         this.initExtensions();
 
         // Subscribe to events
-        if (this.markActiveColumns) {
-            this.emitter.on(['before-filtering'],
-                () => this.clearActiveColumns());
-            this.emitter.on(['cell-processed'],
-                (tf, colIndex) => this.markActiveColumn(colIndex));
-        }
+        // if (this.markActiveColumns) {
+        //     Mod.markActiveColumns =
+        //         Mod.markActiveColumns || new MarkActiveColumns(this);
+        //     Mod.markActiveColumns.init();
+        //     // this.emitter.on(['before-filtering'],
+        //     //     () => this.clearActiveColumns());
+        //     // this.emitter.on(['cell-processed'],
+        //     //     (tf, colIndex) => this.markActiveColumn(colIndex));
+        // }
         if (this.linkedFilters) {
             this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
@@ -1526,24 +1550,28 @@ export class TableFilter {
         if (this.infDiv) {
             this.removeToolbar();
         }
-        if (this.markActiveColumns) {
-            this.clearActiveColumns();
-            emitter.off(['before-filtering'], () => this.clearActiveColumns());
-            emitter.off(['cell-processed'],
-                (tf, colIndex) => this.markActiveColumn(colIndex));
-        }
+        // if (this.markActiveColumns) {
+        //     this.clearActiveColumns();
+        //     emitter.off(['before-filtering'],
+        //          () => this.clearActiveColumns());
+        //     emitter.off(['cell-processed'],
+        //         (tf, colIndex) => this.markActiveColumn(colIndex));
+        // }
         if (this.hasExtensions) {
             this.destroyExtensions();
         }
 
         this.validateAllRows();
 
+        // broadcast destroy event modules and extensions are subscribed to
+        emitter.emit('destroy', this);
+
         if (this.fltGrid && !this.gridLayout) {
             this.dom().deleteRow(this.filtersRowIndex);
         }
 
         // broadcast destroy event modules and extensions are subscribed to
-        emitter.emit('destroy', this);
+        // emitter.emit('destroy', this);
 
         // unsubscribe to events
         if (this.hasVisibleRows) {
@@ -2752,30 +2780,32 @@ export class TableFilter {
         this.emitter.emit('after-clearing-filters', this);
     }
 
-    /**
-     * Clear filtered columns visual indicator (background color)
-     */
-    clearActiveColumns() {
-        for (let i = 0, len = this.getCellsNb(this.headersRow); i < len; i++) {
-            removeClass(this.getHeaderElement(i), this.activeColumnsCssClass);
-        }
-    }
+    // /**
+    //  * Clear filtered columns visual indicator (background color)
+    //  */
+    // clearActiveColumns() {
+    //     for (let i = 0,
+    //    len = this.getCellsNb(this.headersRow); i < len; i++) {
+    //         removeClass(this.getHeaderElement(i),
+    //          this.activeColumnsCssClass);
+    //     }
+    // }
 
-    /**
-     * Mark currently filtered column
-     * @param  {Number} colIndex Column index
-     */
-    markActiveColumn(colIndex) {
-        let header = this.getHeaderElement(colIndex);
-        if (hasClass(header, this.activeColumnsCssClass)) {
-            return;
-        }
-        this.onBeforeActiveColumn(this, colIndex);
+    // /**
+    //  * Mark currently filtered column
+    //  * @param  {Number} colIndex Column index
+    //  */
+    // markActiveColumn(colIndex) {
+    //     let header = this.getHeaderElement(colIndex);
+    //     if (hasClass(header, this.activeColumnsCssClass)) {
+    //         return;
+    //     }
+    //     this.onBeforeActiveColumn(this, colIndex);
 
-        addClass(header, this.activeColumnsCssClass);
+    //     addClass(header, this.activeColumnsCssClass);
 
-        this.onAfterActiveColumn(this, colIndex);
-    }
+    //     this.onAfterActiveColumn(this, colIndex);
+    // }
 
     /**
      * Return the ID of the current active filter
@@ -3102,20 +3132,27 @@ export class TableFilter {
     getHeaderElement(colIndex) {
         let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.dom();
         let tHead = tag(table, 'thead');
-        let headersRow = this.headersRow;
+        // let rowIdx = this.headersRowElement.rowIndex;
+        let rowIdx = this.getHeadersRowIndex();
         let header;
-        for (let i = 0; i < this.nbCells; i++) {
-            if (i !== colIndex) {
-                continue;
-            }
-            if (tHead.length === 0) {
-                header = table.rows[headersRow].cells[i];
-            }
-            if (tHead.length === 1) {
-                header = tHead[0].rows[headersRow].cells[i];
-            }
-            break;
+        if (tHead.length === 0) {
+            header = table.rows[rowIdx].cells[colIndex];
         }
+        if (tHead.length === 1) {
+            header = tHead[0].rows[rowIdx].cells[colIndex];
+        }
+        // for (let i = 0; i < this.nbCells; i++) {
+        //     if (i !== colIndex) {
+        //         continue;
+        //     }
+        //     if (tHead.length === 0) {
+        //         header = table.rows[rowIdx].cells[i];
+        //     }
+        //     if (tHead.length === 1) {
+        //         header = tHead[0].rows[rowIdx].cells[i];
+        //     }
+        //     break;
+        // }
         return header;
     }
 
