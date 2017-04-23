@@ -11369,7 +11369,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {addClass, removeClass, hasClass} from '../dom';\nimport {isFn, EMPTY_FN} from '../types';\n\nexport class MarkActiveColumns extends Feature {\n\n    /**\n     * Create an instance of MarkActiveColumns\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'markActiveColumns');\n\n        let config = this.config.mark_active_columns\n\n        /**\n         * Css class for filtered (active) columns\n         * @type {String}\n         */\n        this.headerCssClass = config.header_css_class || 'activeHeader';\n\n        /**\n         * Callback fired before a column is marked as filtered\n         * @type {Function}\n         */\n        this.onBeforeActiveColumn = isFn(config.on_before_active_column) ?\n            config.on_before_active_column : EMPTY_FN;\n\n        /**\n         * Callback fired after a column is marked as filtered\n         * @type {Function}\n         */\n        this.onAfterActiveColumn = isFn(config.on_after_active_column) ?\n            config.on_after_active_column : EMPTY_FN;\n    }\n\n    /**\n     * Initialise MarkActiveColumns instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        this.emitter.on(['before-filtering'], () => this.clearActiveColumns());\n        this.emitter.on(\n            ['cell-processed'],\n            (tf, colIndex) => this.markActiveColumn(colIndex)\n        );\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Clear filtered columns visual indicator (background color)\n     */\n    clearActiveColumns() {\n        let tf = this.tf;\n        let len = tf.getCellsNb();\n        for (let i = 0; i < len; i++) {\n            removeClass(tf.getHeaderElement(i), this.headerCssClass);\n        }\n    }\n\n    /**\n     * Mark currently filtered column\n     * @param  {Number} colIndex Column index\n     */\n    markActiveColumn(colIndex) {\n        let header = this.tf.getHeaderElement(colIndex);\n        if (hasClass(header, this.headerCssClass)) {\n            return;\n        }\n        this.onBeforeActiveColumn(this, colIndex);\n\n        addClass(header, this.headerCssClass);\n\n        this.onAfterActiveColumn(this, colIndex);\n    }\n\n    /**\n     * Remove feature\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        this.clearActiveColumns();\n        this.emitter.off(['before-filtering'], () => this.clearActiveColumns());\n        this.emitter.off(\n            ['cell-processed'],\n            (tf, colIndex) => this.markActiveColumn(colIndex)\n        );\n\n        /** @inherited */\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {addClass, removeClass, hasClass} from '../dom';\nimport {isFn, EMPTY_FN} from '../types';\n\n/**\n * Visual indicator for filtered columns\n * @export\n * @class MarkActiveColumns\n * @extends {Feature}\n */\nexport class MarkActiveColumns extends Feature {\n\n    /**\n     * Create an instance of MarkActiveColumns\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'markActiveColumns');\n\n        let config = this.config.mark_active_columns\n\n        /**\n         * Css class for filtered (active) columns\n         * @type {String}\n         */\n        this.headerCssClass = config.header_css_class || 'activeHeader';\n\n        /**\n         * Callback fired before a column is marked as filtered\n         * @type {Function}\n         */\n        this.onBeforeActiveColumn = isFn(config.on_before_active_column) ?\n            config.on_before_active_column : EMPTY_FN;\n\n        /**\n         * Callback fired after a column is marked as filtered\n         * @type {Function}\n         */\n        this.onAfterActiveColumn = isFn(config.on_after_active_column) ?\n            config.on_after_active_column : EMPTY_FN;\n    }\n\n    /**\n     * Initialise MarkActiveColumns instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        this.emitter.on(['before-filtering'], () => this.clearActiveColumns());\n        this.emitter.on(\n            ['cell-processed'],\n            (tf, colIndex) => this.markActiveColumn(colIndex)\n        );\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Clear filtered columns visual indicator (background color)\n     */\n    clearActiveColumns() {\n        let tf = this.tf;\n        let len = tf.getCellsNb();\n        for (let i = 0; i < len; i++) {\n            removeClass(tf.getHeaderElement(i), this.headerCssClass);\n        }\n    }\n\n    /**\n     * Mark currently filtered column\n     * @param  {Number} colIndex Column index\n     */\n    markActiveColumn(colIndex) {\n        let header = this.tf.getHeaderElement(colIndex);\n        if (hasClass(header, this.headerCssClass)) {\n            return;\n        }\n        this.onBeforeActiveColumn(this, colIndex);\n\n        addClass(header, this.headerCssClass);\n\n        this.onAfterActiveColumn(this, colIndex);\n    }\n\n    /**\n     * Remove feature\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        this.clearActiveColumns();\n        this.emitter.off(['before-filtering'], () => this.clearActiveColumns());\n        this.emitter.off(\n            ['cell-processed'],\n            (tf, colIndex) => this.markActiveColumn(colIndex)\n        );\n\n        /** @inherited */\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 513,
@@ -11383,12 +11383,21 @@
     "export": true,
     "importPath": "tablefilter/src/modules/markActiveColumns.js",
     "importStyle": "{MarkActiveColumns}",
-    "description": null,
-    "lineNumber": 5,
-    "undocument": true,
+    "description": "Visual indicator for filtered columns",
+    "lineNumber": 11,
+    "unknown": [
+      {
+        "tagName": "@export",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@class",
+        "tagValue": "MarkActiveColumns"
+      }
+    ],
     "interface": false,
     "extends": [
-      "src/feature.js~Feature"
+      "Feature"
     ]
   },
   {
@@ -11401,7 +11410,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#constructor",
     "access": null,
     "description": "Create an instance of MarkActiveColumns",
-    "lineNumber": 11,
+    "lineNumber": 17,
     "params": [
       {
         "nullable": null,
@@ -11426,7 +11435,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#headerCssClass",
     "access": null,
     "description": "Css class for filtered (active) columns",
-    "lineNumber": 20,
+    "lineNumber": 26,
     "type": {
       "nullable": null,
       "types": [
@@ -11446,7 +11455,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#onBeforeActiveColumn",
     "access": null,
     "description": "Callback fired before a column is marked as filtered",
-    "lineNumber": 26,
+    "lineNumber": 32,
     "type": {
       "nullable": null,
       "types": [
@@ -11466,7 +11475,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#onAfterActiveColumn",
     "access": null,
     "description": "Callback fired after a column is marked as filtered",
-    "lineNumber": 33,
+    "lineNumber": 39,
     "type": {
       "nullable": null,
       "types": [
@@ -11486,7 +11495,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#init",
     "access": null,
     "description": "Initialise MarkActiveColumns instance",
-    "lineNumber": 40,
+    "lineNumber": 46,
     "params": [],
     "generator": false
   },
@@ -11500,7 +11509,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 52,
+    "lineNumber": 58,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -11523,7 +11532,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#clearActiveColumns",
     "access": null,
     "description": "Clear filtered columns visual indicator (background color)",
-    "lineNumber": 58,
+    "lineNumber": 64,
     "params": [],
     "generator": false
   },
@@ -11537,7 +11546,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#markActiveColumn",
     "access": null,
     "description": "Mark currently filtered column",
-    "lineNumber": 70,
+    "lineNumber": 76,
     "params": [
       {
         "nullable": null,
@@ -11562,7 +11571,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#destroy",
     "access": null,
     "description": "Remove feature",
-    "lineNumber": 85,
+    "lineNumber": 91,
     "params": [],
     "generator": false
   },
@@ -11576,7 +11585,7 @@
     "longname": "src/modules/markActiveColumns.js~MarkActiveColumns#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 98,
+    "lineNumber": 104,
     "unknown": [
       {
         "tagName": "@inherited",
