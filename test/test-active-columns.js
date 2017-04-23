@@ -132,8 +132,6 @@
             header3.className.indexOf('activeHeader') !== -1,
             true,
             'Active filter indicator');
-
-        tf.destroy();
     });
 
     test('Cannot destroy if not initialised', function() {
@@ -153,7 +151,7 @@
     });
 
     module('Callbacks');
-    test('Can trigger onBeforeActiveColumn callback ', function() {
+    test('Can trigger onBeforeActiveColumn callback', function() {
         // setup
         var colIndex;
         markActiveColumns.onBeforeActiveColumn = function(feature, colIdx) {
@@ -168,7 +166,7 @@
             'expected column index passed to onBeforeActiveColumn');
     });
 
-    test('Can trigger onAfterActiveColumn callback ', function() {
+    test('Can trigger onAfterActiveColumn callback', function() {
         // setup
         var colIndex;
         markActiveColumns.onAfterActiveColumn = function(feature, colIdx) {
@@ -181,6 +179,83 @@
         // assert
         deepEqual(colIndex, 3,
             'expected column index passed to onAfterActiveColumn');
+    });
+
+    module('mark_active_columns as configuration object');
+    test('Sanity checks', function() {
+        tf.destroy();
+        var hit = 0;
+        tf = new TableFilter('demo', {
+            base_path: '../dist/tablefilter/',
+            mark_active_columns: {
+                header_css_class: 'myCssClass',
+                on_before_active_column: function(feature, colIndex) {
+                    hit = colIndex;
+                },
+                on_after_active_column: function(feature, colIndex) {
+                    hit = colIndex;
+                }
+            }
+        });
+        tf.init();
+        var markActiveColumns = tf.feature('markActiveColumns');
+
+        deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
+        notEqual(markActiveColumns, null, 'markActiveColumns instanciated');
+        deepEqual(tf.markActiveColumns, true, 'markActiveColumns property');
+
+        test('Custom header CSS class', function() {
+            // setup
+            tf.setFilterValue(1, 'Bri');
+            tf.setFilterValue(3, '>2');
+            var header1 = tf.getHeaderElement(1);
+            var header3 = tf.getHeaderElement(3);
+
+            // act
+            tf.filter();
+
+            // assert
+            deepEqual(
+                header1.className.indexOf('myCssClass') !== -1,
+                true,
+                'Active filter indicator');
+            deepEqual(
+                header3.className.indexOf('myCssClass') !== -1,
+                true,
+                'Active filter indicator');
+        });
+
+        test('on_before_active_column callback', function() {
+            // setup
+            tf.clearFilters();
+            tf.setFilterValue(1, 'Bri');
+
+            // act
+            tf.filter();
+
+             // assert
+            deepEqual(hit, 1,
+                'expected column index passed to on_before_active_column');
+        });
+
+        test('on_after_active_column callback', function() {
+            // setup
+            tf.clearFilters();
+            tf.setFilterValue(3, '>2');
+
+            // act
+            tf.filter();
+
+             // assert
+            deepEqual(hit, 3,
+                'expected column index passed to on_after_active_column');
+        });
+
+        module('Tear-down');
+        test('can destroy', function() {
+            tf.destroy();
+            deepEqual(tf.isInitialized(), false, 'Filters removed');
+        });
     });
 
 })(window, TableFilter);

@@ -92,7 +92,6 @@
             );
         });
 
-
         test('after changing pagination page', function() {
             paging.setPage(2);
             var alwaysVisibleRow1 = tf.dom().rows[4];
