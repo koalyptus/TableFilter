@@ -2,6 +2,12 @@ import {Feature} from '../feature';
 import {addClass, removeClass, hasClass} from '../dom';
 import {isFn, EMPTY_FN} from '../types';
 
+/**
+ * Visual indicator for filtered columns
+ * @export
+ * @class MarkActiveColumns
+ * @extends {Feature}
+ */
 export class MarkActiveColumns extends Feature {
 
     /**
