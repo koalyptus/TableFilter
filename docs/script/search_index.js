@@ -180,6 +180,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/modules/markactivecolumns.js~markactivecolumns",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html",
+    "<span>MarkActiveColumns</span> <span class=\"search-result-import-path\">tablefilter/src/modules/markActiveColumns.js</span>",
+    "class"
+  ],
+  [
     "tablefilter/src/const.js~none",
     "variable/index.html#static-variable-NONE",
     "<span>NONE</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
@@ -2568,6 +2574,66 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/markactivecolumns.js",
+    "file/src/modules/markActiveColumns.js.html",
+    "src/modules/markActiveColumns.js",
+    "file"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#clearactivecolumns",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-method-clearActiveColumns",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#clearActiveColumns",
+    "method"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#constructor",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-constructor-constructor",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#constructor",
+    "method"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#destroy",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-method-destroy",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#destroy",
+    "method"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#headercssclass",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-member-headerCssClass",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#headerCssClass",
+    "member"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#init",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-method-init",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#init",
+    "method"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#initialized",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-member-initialized",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#initialized",
+    "member"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#markactivecolumn",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-method-markActiveColumn",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#markActiveColumn",
+    "method"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#onafteractivecolumn",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-member-onAfterActiveColumn",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#onAfterActiveColumn",
+    "member"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#onbeforeactivecolumn",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-member-onBeforeActiveColumn",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#onBeforeActiveColumn",
+    "member"
+  ],
+  [
     "src/modules/noresults.js",
     "file/src/modules/noResults.js.html",
     "src/modules/noResults.js",
@@ -3540,12 +3606,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#activecolumnscssclass",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-activeColumnsCssClass",
-    "src/tablefilter.js~TableFilter#activeColumnsCssClass",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#alternaterows",
     "class/src/tablefilter.js~TableFilter.html#instance-member-alternateRows",
     "src/tablefilter.js~TableFilter#alternateRows",
@@ -3604,12 +3664,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-member-cellParser",
     "src/tablefilter.js~TableFilter#cellParser",
     "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#clearactivecolumns",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-clearActiveColumns",
-    "src/tablefilter.js~TableFilter#clearActiveColumns",
-    "method"
   ],
   [
     "src/tablefilter.js~tablefilter#clearfiltertext",
@@ -4272,12 +4326,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#markactivecolumn",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-markActiveColumn",
-    "src/tablefilter.js~TableFilter#markActiveColumn",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#markactivecolumns",
     "class/src/tablefilter.js~TableFilter.html#instance-member-markActiveColumns",
     "src/tablefilter.js~TableFilter#markActiveColumns",
@@ -4302,12 +4350,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#onafteractivecolumn",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-onAfterActiveColumn",
-    "src/tablefilter.js~TableFilter#onAfterActiveColumn",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#onafterfilter",
     "class/src/tablefilter.js~TableFilter.html#instance-member-onAfterFilter",
     "src/tablefilter.js~TableFilter#onAfterFilter",
@@ -4317,12 +4359,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#onafterreset",
     "class/src/tablefilter.js~TableFilter.html#instance-member-onAfterReset",
     "src/tablefilter.js~TableFilter#onAfterReset",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#onbeforeactivecolumn",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-onBeforeActiveColumn",
-    "src/tablefilter.js~TableFilter#onBeforeActiveColumn",
     "member"
   ],
   [
