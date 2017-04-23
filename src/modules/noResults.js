@@ -115,9 +115,7 @@ export class NoResults extends Feature {
         // subscribe to after-filtering event
         this.emitter.on(['after-filtering'], () => this.toggle());
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
 
         this.hide();

@@ -1,6 +1,6 @@
 import {addEvt, cancelEvt, stopEvt, targetEvt, keyCode} from './event';
 import {
-    addClass, createElm, createOpt, elm, getText, getFirstTextNode, hasClass,
+    addClass, createElm, createOpt, elm, getText, getFirstTextNode,
     removeClass, removeElm, tag
 } from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
@@ -27,6 +27,7 @@ import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
 import {State} from './modules/state';
 import {DateType} from './modules/dateType';
+import {MarkActiveColumns} from './modules/markActiveColumns';
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
@@ -47,7 +48,7 @@ export class TableFilter {
     /**
      * Creates an instance of TableFilter
      * requires `table` or `id` arguments, `row` and `configuration` optional
-     * @param {DOMElement} table Table DOM element
+     * @param {HTMLTableElement} table Table DOM element
      * @param {String} id Table id
      * @param {Number} row index indicating the 1st row
      * @param {Object} configuration object
@@ -509,28 +510,8 @@ export class TableFilter {
          * Indicate whether filtered (active) columns indicator is enabled
          * @type {Boolean}
          */
-        this.markActiveColumns = Boolean(f.mark_active_columns);
-
-        /**
-         * Css class for filtered (active) columns
-         * @type {String}
-         */
-        this.activeColumnsCssClass = f.active_columns_css_class ||
-            'activeHeader';
-
-        /**
-         * Callback fired before a column is marked as filtered
-         * @type {Function}
-         */
-        this.onBeforeActiveColumn = isFn(f.on_before_active_column) ?
-            f.on_before_active_column : EMPTY_FN;
-
-        /**
-         * Callback fired after a column is marked as filtered
-         * @type {Function}
-         */
-        this.onAfterActiveColumn = isFn(f.on_after_active_column) ?
-            f.on_after_active_column : EMPTY_FN;
+        this.markActiveColumns = isObj(f.mark_active_columns) ||
+            Boolean(f.mark_active_columns);
 
         /*** select filter's customisation and behaviours ***/
         /**
@@ -1034,6 +1015,12 @@ export class TableFilter {
             Mod.state.init();
         }
 
+        if (this.markActiveColumns) {
+            Mod.markActiveColumns =
+                Mod.markActiveColumns || new MarkActiveColumns(this);
+            Mod.markActiveColumns.init();
+        }
+
         if (this.gridLayout) {
             Mod.gridLayout = Mod.gridLayout || new GridLayout(this);
             Mod.gridLayout.init();
@@ -1165,12 +1152,6 @@ export class TableFilter {
         this.initExtensions();
 
         // Subscribe to events
-        if (this.markActiveColumns) {
-            this.emitter.on(['before-filtering'],
-                () => this.clearActiveColumns());
-            this.emitter.on(['cell-processed'],
-                (tf, colIndex) => this.markActiveColumn(colIndex));
-        }
         if (this.linkedFilters) {
             this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
@@ -1526,24 +1507,18 @@ export class TableFilter {
         if (this.infDiv) {
             this.removeToolbar();
         }
-        if (this.markActiveColumns) {
-            this.clearActiveColumns();
-            emitter.off(['before-filtering'], () => this.clearActiveColumns());
-            emitter.off(['cell-processed'],
-                (tf, colIndex) => this.markActiveColumn(colIndex));
-        }
         if (this.hasExtensions) {
             this.destroyExtensions();
         }
 
         this.validateAllRows();
 
+        // broadcast destroy event modules and extensions are subscribed to
+        emitter.emit('destroy', this);
+
         if (this.fltGrid && !this.gridLayout) {
             this.dom().deleteRow(this.filtersRowIndex);
         }
-
-        // broadcast destroy event modules and extensions are subscribed to
-        emitter.emit('destroy', this);
 
         // unsubscribe to events
         if (this.hasVisibleRows) {
@@ -1835,7 +1810,7 @@ export class TableFilter {
      * @param {String} term      Search term
      * @param {String} cellValue  Cell data
      * @param {Number} colIdx    Column index
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     _testTerm(term, cellValue, colIdx) {
         let numData;
@@ -2075,7 +2050,7 @@ export class TableFilter {
      * @param {Number} colIndex Column index
      * @param {Boolean} [includeHeaders=false] Include headers row
      * @param {Arrat} [exclude=[]] List of row indexes to be excluded
-     * @returns Flat list of data for a column
+     * @return Flat list of data for a column
      */
     getColumnData(colIndex, includeHeaders = false, exclude = []) {
         return this.getColValues(colIndex, includeHeaders, true, exclude);
@@ -2086,7 +2061,7 @@ export class TableFilter {
      * @param {Number} colIndex Column index
      * @param {Boolean} [includeHeaders=false] Include headers row
      * @param {Arrat} [exclude=[]] List of row indexes to be excluded
-     * @returns Flat list of values for a column
+     * @return Flat list of values for a column
      */
     getColumnValues(colIndex, includeHeaders = false, exclude = []) {
         return this.getColValues(colIndex, includeHeaders, false, exclude);
@@ -2273,7 +2248,7 @@ export class TableFilter {
     /**
      * Return the text content of a given cell
      * @param {DOMElement} Cell's DOM element
-     * @returns {String}
+     * @return {String}
      */
     getCellValue(cell) {
         let idx = cell.cellIndex;
@@ -2324,7 +2299,7 @@ export class TableFilter {
      * ]
      * @param {Boolean} [includeHeaders=false] Include headers row
      * @param {Boolean} [excludeHiddenCols=false] Exclude hidden columns
-     * @returns {Array}
+     * @return {Array}
      */
     getData(includeHeaders = false, excludeHiddenCols = false) {
         return this.getTableData(includeHeaders, excludeHiddenCols, true);
@@ -2338,7 +2313,7 @@ export class TableFilter {
      * ]
      * @param {Boolean} [includeHeaders=false] Include headers row
      * @param {Boolean} [excludeHiddenCols=false] Exclude hidden columns
-     * @returns {Array}
+     * @return {Array}
      */
     getValues(includeHeaders = false, excludeHiddenCols = false) {
         return this.getTableData(includeHeaders, excludeHiddenCols, false);
@@ -2478,7 +2453,7 @@ export class TableFilter {
      * @param {any} colIndex Colmun's index
      * @param {boolean} [includeHeaders=false] Optional Include headers row
      * @param {any} [exclude=[]] Optional List of row indexes to be excluded
-     * @returns {Array} Flat list of typed values [data0, data1, data2...]
+     * @return {Array} Flat list of typed values [data0, data1, data2...]
      *
      * TODO: provide an API returning data in JSON format
      */
@@ -2492,7 +2467,7 @@ export class TableFilter {
      * @param {any} colIndex Colmun's index
      * @param {boolean} [includeHeaders=false] Optional Include headers row
      * @param {any} [exclude=[]] Optional List of row indexes to be excluded
-     * @returns {Array} Flat list of typed values [data0, data1, data2...]
+     * @return {Array} Flat list of typed values [data0, data1, data2...]
      *
      * TODO: provide an API returning data in JSON format
      */
@@ -2506,7 +2481,7 @@ export class TableFilter {
      * @param {any} colIndex Colmun's index
      * @param {boolean} [includeHeaders=false] Optional Include headers row
      * @param {any} [exclude=[]] Optional List of row indexes to be excluded
-     * @returns {Array} Flat list of values ['value0', 'value1', 'value2'...]
+     * @return {Array} Flat list of values ['value0', 'value1', 'value2'...]
      *
      * TODO: provide an API returning data in JSON format
      */
@@ -2520,7 +2495,7 @@ export class TableFilter {
      * @param {any} colIndex Colmun's index
      * @param {boolean} [includeHeaders=false] Optional Include headers row
      * @param {any} [exclude=[]] Optional List of row indexes to be excluded
-     * @returns {Array} Flat list of values ['value0', 'value1', 'value2'...]
+     * @return {Array} Flat list of values ['value0', 'value1', 'value2'...]
      *
      * TODO: provide an API returning data in JSON format
      */
@@ -2753,33 +2728,8 @@ export class TableFilter {
     }
 
     /**
-     * Clear filtered columns visual indicator (background color)
-     */
-    clearActiveColumns() {
-        for (let i = 0, len = this.getCellsNb(this.headersRow); i < len; i++) {
-            removeClass(this.getHeaderElement(i), this.activeColumnsCssClass);
-        }
-    }
-
-    /**
-     * Mark currently filtered column
-     * @param  {Number} colIndex Column index
-     */
-    markActiveColumn(colIndex) {
-        let header = this.getHeaderElement(colIndex);
-        if (hasClass(header, this.activeColumnsCssClass)) {
-            return;
-        }
-        this.onBeforeActiveColumn(this, colIndex);
-
-        addClass(header, this.activeColumnsCssClass);
-
-        this.onAfterActiveColumn(this, colIndex);
-    }
-
-    /**
      * Return the ID of the current active filter
-     * @returns {String}
+     * @return {String}
      */
     getActiveFilterId() {
         return this.activeFilterId;
@@ -2796,7 +2746,7 @@ export class TableFilter {
     /**
      * Return the column index for a given filter ID
      * @param {string} [filterId=''] Filter ID
-     * @returns {Number} Column index
+     * @return {Number} Column index
      */
     getColumnIndexFromFilterId(filterId = '') {
         let idx = filterId.split('_')[0];
@@ -2807,7 +2757,7 @@ export class TableFilter {
     /**
      * Build filter element ID for a given column index
      * @param {any} colIndex
-     * @returns {String} Filter element ID string
+     * @return {String} Filter element ID string
      * @private
      */
     buildFilterId(colIndex) {
@@ -2889,7 +2839,7 @@ export class TableFilter {
     /**
      * Check if passed row is valid
      * @param {Number} rowIndex Row index
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     isRowValid(rowIndex) {
         return this.getValidRows().indexOf(rowIndex) !== -1;
@@ -2898,7 +2848,7 @@ export class TableFilter {
     /**
      * Check if passed row is visible
      * @param {Number} rowIndex Row index
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     isRowDisplayed(rowIndex) {
         let row = this.dom().rows[rowIndex];
@@ -2909,7 +2859,7 @@ export class TableFilter {
      * Check if specified column filter ignores diacritics.
      * Note this is only applicable to input filter types.
      * @param {Number} colIndex    Column index
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     ignoresDiacritics(colIndex) {
         let ignoreDiac = this.ignoreDiacritics;
@@ -2922,7 +2872,7 @@ export class TableFilter {
     /**
      * Return clear all text for specified filter column
      * @param {Number} colIndex    Column index
-     * @returns {String}
+     * @return {String}
      */
     getClearFilterText(colIndex) {
         let clearText = this.clearFilterText;
@@ -3081,7 +3031,7 @@ export class TableFilter {
      * Determine whether the specified column has one of the passed types
      * @param {Number} colIndex Column index
      * @param {Array} [types=[]] List of column types
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     hasType(colIndex, types = []) {
         if (this.colTypes.length === 0) {
@@ -3102,19 +3052,13 @@ export class TableFilter {
     getHeaderElement(colIndex) {
         let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.dom();
         let tHead = tag(table, 'thead');
-        let headersRow = this.headersRow;
+        let rowIdx = this.getHeadersRowIndex();
         let header;
-        for (let i = 0; i < this.nbCells; i++) {
-            if (i !== colIndex) {
-                continue;
-            }
-            if (tHead.length === 0) {
-                header = table.rows[headersRow].cells[i];
-            }
-            if (tHead.length === 1) {
-                header = tHead[0].rows[headersRow].cells[i];
-            }
-            break;
+        if (tHead.length === 0) {
+            header = table.rows[rowIdx].cells[colIndex];
+        }
+        if (tHead.length === 1) {
+            header = tHead[0].rows[rowIdx].cells[colIndex];
         }
         return header;
     }
@@ -3160,7 +3104,7 @@ export class TableFilter {
     /**
      * Return the total number of valid rows
      * @param {Boolean} [reCalc=false] Forces calculation of filtered rows
-     * @returns {Number}
+     * @return {Number}
      */
     getValidRowsNb(reCalc = false) {
         return this.getValidRows(reCalc).length;
