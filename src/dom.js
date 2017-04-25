@@ -55,7 +55,6 @@ export const createElm = (...args) => {
             el.setAttribute(arg[0], arg[1]);
         }
     }
-
     return el;
 }
 
