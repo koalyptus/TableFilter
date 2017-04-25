@@ -3144,6 +3144,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/popupfilter.js~popupfilter#placeholdercssclass",
+    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-placeholderCssClass",
+    "src/modules/popupFilter.js~PopupFilter#placeholderCssClass",
+    "member"
+  ],
+  [
     "src/modules/popupfilter.js~popupfilter#reset",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-reset",
     "src/modules/popupFilter.js~PopupFilter#reset",

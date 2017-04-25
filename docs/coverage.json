@@ -1,7 +1,7 @@
 {
   "coverage": "100%",
-  "expectCount": 678,
-  "actualCount": 678,
+  "expectCount": 679,
+  "actualCount": 679,
   "files": {
     "src/const.js": {
       "expectCount": 18,
@@ -114,8 +114,8 @@
       "undocumentLines": []
     },
     "src/modules/popupFilter.js": {
-      "expectCount": 26,
-      "actualCount": 26,
+      "expectCount": 27,
+      "actualCount": 27,
       "undocumentLines": []
     },
     "src/modules/rowsCounter.js": {
