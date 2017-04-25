@@ -56,6 +56,13 @@ export class PopupFilter extends Feature {
             '<img src="' + this.iconPath + '" alt="Column filter" />';
 
         /**
+         * Css class assigned to the popup container element
+         * @type {String}
+         */
+        this.placeholderCssClass =
+            f.popup_placeholder_css_class || 'popUpPlaceholder';
+
+        /**
          * Css class assigned to filter container element
          * @type {String}
          */
@@ -277,12 +284,14 @@ export class PopupFilter extends Feature {
     build(colIndex, div) {
         let tf = this.tf;
         let contId = `${this.prfxDiv}${tf.id}_${colIndex}`;
-        let cont = div || createElm('div', ['id', contId]);
-        cont.className = this.containerCssClass;
+        let placeholder = createElm('div', ['class', this.placeholderCssClass]);
+        let cont = div ||
+            createElm('div', ['id', contId], ['class', this.containerCssClass]);
         tf.externalFltTgtIds.push(cont.id);
+        placeholder.appendChild(cont);
 
         let header = tf.getHeaderElement(colIndex);
-        header.insertBefore(cont, header.firstChild);
+        header.insertBefore(placeholder, header.firstChild);
         addEvt(cont, 'click', (evt) => stopEvt(evt));
         this.fltElms[colIndex] = cont;
     }
@@ -408,6 +417,7 @@ export class PopupFilter extends Feature {
         this.filtersCache = [];
         for (let i = 0; i < this.fltElms.length; i++) {
             let container = this.fltElms[i],
+                placeholder = container.parentNode,
                 icon = this.fltSpans[i],
                 iconImg = this.fltIcons[i];
             if (container) {
@@ -415,6 +425,10 @@ export class PopupFilter extends Feature {
                 this.filtersCache[i] = container;
             }
             container = null;
+            if (placeholder) {
+                removeElm(placeholder);
+            }
+            placeholder = null;
             if (icon) {
                 removeElm(icon);
             }
