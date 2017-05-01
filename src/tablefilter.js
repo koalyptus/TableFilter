@@ -1000,8 +1000,9 @@ export class TableFilter {
             Mod.help.init();
         }
 
-        const {state, markActiveColumns, gridLayout,
-            loader, highlightKeyword, popupFilter} = FEATURES;
+        const { state, markActiveColumns, gridLayout, loader, highlightKeyword,
+            popupFilter, rowsCounter, statusBar, clearButton, alternateRows,
+            noResults } = FEATURES;
 
         this.initFeatures([
             state,
@@ -1078,9 +1079,6 @@ export class TableFilter {
                 () => this.enforceVisibility());
             this.enforceVisibility();
         }
-
-        const {rowsCounter, statusBar, clearButton,
-            alternateRows, noResults} = FEATURES;
 
         this.initFeatures([
             rowsCounter,
