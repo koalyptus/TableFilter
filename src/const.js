@@ -1,3 +1,15 @@
+import {State} from './modules/state';
+import {GridLayout} from './modules/gridLayout';
+import {Loader} from './modules/loader';
+import {HighlightKeyword} from './modules/highlightKeywords';
+import {PopupFilter} from './modules/popupFilter';
+import {MarkActiveColumns} from './modules/markActiveColumns';
+import {RowsCounter} from './modules/rowsCounter';
+import {StatusBar} from './modules/statusBar';
+import {ClearButton} from './modules/clearButton';
+import {AlternateRows} from './modules/alternateRows';
+import {NoResults} from './modules/noResults';
+
 /**
  * Filter types
  */
@@ -116,3 +128,53 @@ export const IP_ADDRESS = 'ipaddress';
  * @type {Number}
  */
 export const AUTO_FILTER_DELAY = 750;
+
+export const FEATURES = {
+    state: {
+        class: State,
+        name: 'state'
+    },
+    markActiveColumns: {
+        class: MarkActiveColumns,
+        name: 'markActiveColumns'
+    },
+    gridLayout: {
+        class: GridLayout,
+        name: 'gridLayout'
+    },
+    loader: {
+        class: Loader,
+        name: 'loader'
+    },
+    highlightKeyword: {
+        class: HighlightKeyword,
+        name: 'highlightKeyword',
+        property: 'highlightKeywords'
+    },
+    popupFilter: {
+        class: PopupFilter,
+        name: 'popupFilter',
+        property: 'popupFilters'
+    },
+    rowsCounter: {
+        class: RowsCounter,
+        name: 'rowsCounter'
+    },
+    statusBar: {
+        class: StatusBar,
+        name: 'statusBar'
+    },
+    clearButton: {
+        class: ClearButton,
+        name: 'clearButton',
+        property: 'btnReset'
+    },
+    alternateRows: {
+        class: AlternateRows,
+        name: 'alternateRows'
+    },
+    noResults: {
+        class: NoResults,
+        name: 'noResults'
+    }
+};

@@ -12,27 +12,17 @@ import {parse as parseNb} from './number'
 
 import {root} from './root';
 import {Emitter} from './emitter';
-import {GridLayout} from './modules/gridLayout';
-import {Loader} from './modules/loader';
-import {HighlightKeyword} from './modules/highlightKeywords';
-import {PopupFilter} from './modules/popupFilter';
 import {Dropdown} from './modules/dropdown';
 import {CheckList} from './modules/checkList';
-import {RowsCounter} from './modules/rowsCounter';
-import {StatusBar} from './modules/statusBar';
 import {Paging} from './modules/paging';
-import {ClearButton} from './modules/clearButton';
 import {Help} from './modules/help';
-import {AlternateRows} from './modules/alternateRows';
-import {NoResults} from './modules/noResults';
-import {State} from './modules/state';
 import {DateType} from './modules/dateType';
-import {MarkActiveColumns} from './modules/markActiveColumns';
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
     ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
-    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER
+    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER,
+    FEATURES
 } from './const';
 
 let doc = root.document;
@@ -1000,7 +990,7 @@ export class TableFilter {
         //loads theme
         this.loadThemes();
 
-        // Instanciate sugar date wrapper
+        // Instantiate sugar date wrapper
         Mod.dateType = Mod.dateType || new DateType(this);
         Mod.dateType.init();
 
@@ -1010,36 +1000,18 @@ export class TableFilter {
             Mod.help.init();
         }
 
-        if (this.state) {
-            Mod.state = Mod.state || new State(this);
-            Mod.state.init();
-        }
+        const { state, markActiveColumns, gridLayout, loader, highlightKeyword,
+            popupFilter, rowsCounter, statusBar, clearButton, alternateRows,
+            noResults } = FEATURES;
 
-        if (this.markActiveColumns) {
-            Mod.markActiveColumns =
-                Mod.markActiveColumns || new MarkActiveColumns(this);
-            Mod.markActiveColumns.init();
-        }
-
-        if (this.gridLayout) {
-            Mod.gridLayout = Mod.gridLayout || new GridLayout(this);
-            Mod.gridLayout.init();
-        }
-
-        if (this.loader) {
-            Mod.loader = Mod.loader || new Loader(this);
-            Mod.loader.init();
-        }
-
-        if (this.highlightKeywords) {
-            Mod.highlightKeyword = new HighlightKeyword(this);
-            Mod.highlightKeyword.init();
-        }
-
-        if (this.popupFilters) {
-            Mod.popupFilter = Mod.popupFilter || new PopupFilter(this);
-            Mod.popupFilter.init();
-        }
+        this.initFeatures([
+            state,
+            markActiveColumns,
+            gridLayout,
+            loader,
+            highlightKeyword,
+            popupFilter
+        ]);
 
         //filters grid is not generated
         if (!this.fltGrid) {
@@ -1107,14 +1079,15 @@ export class TableFilter {
                 () => this.enforceVisibility());
             this.enforceVisibility();
         }
-        if (this.rowsCounter) {
-            Mod.rowsCounter = new RowsCounter(this);
-            Mod.rowsCounter.init();
-        }
-        if (this.statusBar) {
-            Mod.statusBar = new StatusBar(this);
-            Mod.statusBar.init();
-        }
+
+        this.initFeatures([
+            rowsCounter,
+            statusBar,
+            clearButton,
+            alternateRows,
+            noResults
+        ]);
+
         if (this.paging) {
             if (!Mod.paging) {
                 Mod.paging = new Paging(this);
@@ -1123,21 +1096,9 @@ export class TableFilter {
                 Mod.paging.reset();
             }
         }
-        if (this.btnReset) {
-            Mod.clearButton = new ClearButton(this);
-            Mod.clearButton.init();
-        }
 
         if (this.hasColWidths && !this.gridLayout) {
             this.setColWidths();
-        }
-        if (this.alternateRows) {
-            Mod.alternateRows = new AlternateRows(this);
-            Mod.alternateRows.init();
-        }
-        if (this.noResults) {
-            Mod.noResults = Mod.noResults || new NoResults(this);
-            Mod.noResults.init();
         }
 
         //TF css class is added to table
@@ -1358,6 +1319,34 @@ export class TableFilter {
      */
     feature(name) {
         return this.Mod[name];
+    }
+
+    /**
+     * Instanciate and initialise the collection of features required by the
+     * configuration and add them to the features registry. A feature is
+     * described by a `class` and `name` fields and and optional `property`
+     * field:
+     * {
+     *   class: AClass,
+     *   name: 'aClass'
+     * }
+     * @param {Array} [features=[]]
+     * @private
+     */
+    initFeatures(features = []) {
+        features.forEach((feature) => {
+            // TODO: remove the property field.
+            // Due to naming convention inconsistencies, a `property`
+            // field is added in order allow a conditional instanciation based
+            // on that property on TableFilter, if supplied.
+            feature.property = feature.property || feature.name;
+            if (this[feature.property] === true) {
+                let {class: Cls, name} = feature;
+
+                this.Mod[name] = this.Mod[name] || new Cls(this);
+                this.Mod[name].init();
+            }
+        });
     }
 
     /**
