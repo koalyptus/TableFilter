@@ -108,6 +108,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/const.js~features",
+    "variable/index.html#static-variable-FEATURES",
+    "<span>FEATURES</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/const.js~formatted_number",
     "variable/index.html#static-variable-FORMATTED_NUMBER",
     "<span>FORMATTED_NUMBER</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
