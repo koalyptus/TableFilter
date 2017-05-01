@@ -12,22 +12,11 @@ import {parse as parseNb} from './number'
 
 import {root} from './root';
 import {Emitter} from './emitter';
-// import {GridLayout} from './modules/gridLayout';
-// import {Loader} from './modules/loader';
-// import {HighlightKeyword} from './modules/highlightKeywords';
-// import {PopupFilter} from './modules/popupFilter';
 import {Dropdown} from './modules/dropdown';
 import {CheckList} from './modules/checkList';
-// import {RowsCounter} from './modules/rowsCounter';
-// import {StatusBar} from './modules/statusBar';
 import {Paging} from './modules/paging';
-// import {ClearButton} from './modules/clearButton';
 import {Help} from './modules/help';
-// import {AlternateRows} from './modules/alternateRows';
-// import {NoResults} from './modules/noResults';
-// import {State} from './modules/state';
 import {DateType} from './modules/dateType';
-// import {MarkActiveColumns} from './modules/markActiveColumns';
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
