@@ -129,6 +129,10 @@ export const IP_ADDRESS = 'ipaddress';
  */
 export const AUTO_FILTER_DELAY = 750;
 
+/**
+ * TableFilter features definitions
+ * @type {Object}
+ */
 export const FEATURES = {
     state: {
         class: State,
