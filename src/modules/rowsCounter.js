@@ -18,13 +18,13 @@ export class RowsCounter extends Feature {
         super(tf, 'rowsCounter');
 
         // TableFilter configuration
-        let f = this.config;
+        let f = this.config.rows_counter || {};
 
         /**
          * ID of custom container element
          * @type {String}
          */
-        this.targetId = f.rows_counter_target_id || null;
+        this.targetId = f.target_id || null;
 
         /**
          * Container DOM element
@@ -44,14 +44,14 @@ export class RowsCounter extends Feature {
          * Text preceding the total number of rows
          * @type {String}
          */
-        this.text = f.rows_counter_text || 'Rows: ';
+        this.text = f.text || 'Rows: ';
 
         /**
          * Separator symbol appearing between the first and last visible rows of
          * current page when paging is enabled. ie: Rows: 31-40 / 70
          * @type {String}
          */
-        this.fromToTextSeparator = f.from_to_text_separator || '-';
+        this.fromToTextSeparator = f.separator || '-';
 
         /**
          * Separator symbol appearing between the first and last visible rows of
@@ -65,7 +65,7 @@ export class RowsCounter extends Feature {
          * Css class for container element
          * @type {String}
          */
-        this.cssClass = f.tot_rows_css_class || 'tot';
+        this.cssClass = f.css_class || 'tot';
 
         /**
          * Callback fired before the counter is refreshed
@@ -154,16 +154,17 @@ export class RowsCounter extends Feature {
         } else {
             let paging = tf.feature('paging');
             if (paging) {
+                let nbValidRows = tf.getValidRowsNb();
                 //paging start row
                 let pagingStartRow = parseInt(paging.startPagingRow, 10) +
-                    ((tf.getValidRowsNb() > 0) ? 1 : 0);
+                    ((nbValidRows > 0) ? 1 : 0);
                 let pagingEndRow =
                     (pagingStartRow + paging.pagingLength) - 1 <=
-                    tf.getValidRowsNb() ?
+                    nbValidRows ?
                         pagingStartRow + paging.pagingLength - 1 :
-                        tf.getValidRowsNb();
+                        nbValidRows;
                 totTxt = pagingStartRow + this.fromToTextSeparator +
-                    pagingEndRow + this.overText + tf.getValidRowsNb();
+                    pagingEndRow + this.overText + nbValidRows;
             }
         }
 

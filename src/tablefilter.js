@@ -708,7 +708,7 @@ export class TableFilter {
          * Enable rows counter UI component
          * @type {Boolean}
          */
-        this.rowsCounter = Boolean(f.rows_counter);
+        this.rowsCounter = isObj(f.rows_counter) || Boolean(f.rows_counter);
 
         /**
          * Enable status bar UI component
@@ -1045,16 +1045,12 @@ export class TableFilter {
 
                 //drop-down filters
                 if (col === SELECT || col === MULTIPLE) {
-                    if (!Mod.dropdown) {
-                        Mod.dropdown = new Dropdown(this);
-                    }
+                    Mod.dropdown = Mod.dropdown || new Dropdown(this);
                     Mod.dropdown.init(i, this.isExternalFlt, fltcell);
                 }
                 // checklist
                 else if (col === CHECKLIST) {
-                    if (!Mod.checkList) {
-                        Mod.checkList = new CheckList(this);
-                    }
+                    Mod.checkList = Mod.checkList || new CheckList(this);
                     Mod.checkList.init(i, this.isExternalFlt, fltcell);
                 } else {
                     this._buildInputFilter(i, inpclass, fltcell);
