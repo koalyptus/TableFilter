@@ -1113,7 +1113,6 @@ export class TableFilter {
             this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
 
-        /** @inherited */
         this.initialized = true;
 
         this.onFiltersLoaded(this);
@@ -1360,9 +1359,7 @@ export class TableFilter {
         this.emitter.emit('before-loading-extensions', this);
         for (let i = 0, len = exts.length; i < len; i++) {
             let ext = exts[i];
-            if (!this.ExtRegistry[ext.name]) {
-                this.loadExtension(ext);
-            }
+            this.loadExtension(ext);
         }
         this.emitter.emit('after-loading-extensions', this);
     }
@@ -1372,7 +1369,7 @@ export class TableFilter {
      * @param  {Object} ext Extension config object
      */
     loadExtension(ext) {
-        if (!ext || !ext.name) {
+        if (!ext || !ext.name || this.hasExtension(ext.name)) {
             return;
         }
 
@@ -1413,6 +1410,15 @@ export class TableFilter {
      */
     hasExtension(name) {
         return !isEmpty(this.ExtRegistry[name]);
+    }
+
+    /**
+     * Register the passed extension instance with associated name
+     * @param {Object} inst Extension instance
+     * @param {String} name Name of the extension
+     */
+    registerExtension(inst, name) {
+        this.ExtRegistry[name] = inst;
     }
 
     /**

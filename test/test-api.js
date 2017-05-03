@@ -14,6 +14,14 @@ var tf1 = new TableFilter('demo1', {
         on_loaded: colsVisibilityTests
     }]
 });
+
+tf1.registerExtension(
+    {
+        init: function() {},
+        destroy: function() {}
+    },
+    'myExtension'
+);
 tf1.init();
 
 module('Sanity checks');
@@ -717,6 +725,20 @@ function colsVisibilityTests() { // issue 94
             'Headers text with excluded columns'
         );
 
+    });
+
+    test('Extension Sanity checks', function() {
+        deepEqual(
+            tf1.hasExtension('colsVisibility'),
+            true,
+            'ColsVisibility in extensions registry'
+        );
+
+        deepEqual(
+            tf1.hasExtension('myExtension'),
+            true,
+            'myExtension in extensions registry'
+        );
     });
 
     test('Destroy', function() {
