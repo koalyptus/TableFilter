@@ -1984,8 +1984,9 @@
         {
             base_path: 'tablefilter/',
             paging: true,
-            rows_counter: true,
-            rows_counter_text: 'Countries: ',
+            rows_counter: {
+                text: 'Countries: '
+            },
             btn_reset: true,
             loader: true,
             alternate_rows: true,
@@ -2012,7 +2013,7 @@
     // manually add a custom extension instance to the extensions registry
     function addMyExtension(tf) {
         var myExtension = new MyExtension(tf);
-        tf.ExtRegistry['myExtension'] = myExtension;
+        tf.registerExtension(myExtension, 'myExtension');
 
         myExtension.init();
     }

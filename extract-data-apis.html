@@ -843,8 +843,9 @@
     var tfConfig = {
         base_path: 'tablefilter/',
         alternate_rows: true,
-        rows_counter: true,
-        rows_counter_text: 'Records: ',
+        rows_counter: {
+            text: 'Records: '
+        },
         btn_reset: true,
         loader: true,
         col_types: [
