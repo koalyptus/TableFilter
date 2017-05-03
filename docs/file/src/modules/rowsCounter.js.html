@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/rowsCounter.js | tablefilter v0.5.10 API Document</title>
+  <title data-ice="title">src/modules/rowsCounter.js | tablefilter v0.5.11 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -142,13 +142,13 @@ export class RowsCounter extends Feature {
         super(tf, &apos;rowsCounter&apos;);
 
         // TableFilter configuration
-        let f = this.config;
+        let f = this.config.rows_counter || {};
 
         /**
          * ID of custom container element
          * @type {String}
          */
-        this.targetId = f.rows_counter_target_id || null;
+        this.targetId = f.target_id || null;
 
         /**
          * Container DOM element
@@ -168,14 +168,14 @@ export class RowsCounter extends Feature {
          * Text preceding the total number of rows
          * @type {String}
          */
-        this.text = f.rows_counter_text || &apos;Rows: &apos;;
+        this.text = f.text || &apos;Rows: &apos;;
 
         /**
          * Separator symbol appearing between the first and last visible rows of
          * current page when paging is enabled. ie: Rows: 31-40 / 70
          * @type {String}
          */
-        this.fromToTextSeparator = f.from_to_text_separator || &apos;-&apos;;
+        this.fromToTextSeparator = f.separator || &apos;-&apos;;
 
         /**
          * Separator symbol appearing between the first and last visible rows of
@@ -189,7 +189,7 @@ export class RowsCounter extends Feature {
          * Css class for container element
          * @type {String}
          */
-        this.cssClass = f.tot_rows_css_class || &apos;tot&apos;;
+        this.cssClass = f.css_class || &apos;tot&apos;;
 
         /**
          * Callback fired before the counter is refreshed
@@ -278,16 +278,17 @@ export class RowsCounter extends Feature {
         } else {
             let paging = tf.feature(&apos;paging&apos;);
             if (paging) {
+                let nbValidRows = tf.getValidRowsNb();
                 //paging start row
                 let pagingStartRow = parseInt(paging.startPagingRow, 10) +
-                    ((tf.getValidRowsNb() &gt; 0) ? 1 : 0);
+                    ((nbValidRows &gt; 0) ? 1 : 0);
                 let pagingEndRow =
                     (pagingStartRow + paging.pagingLength) - 1 &lt;=
-                    tf.getValidRowsNb() ?
+                    nbValidRows ?
                         pagingStartRow + paging.pagingLength - 1 :
-                        tf.getValidRowsNb();
+                        nbValidRows;
                 totTxt = pagingStartRow + this.fromToTextSeparator +
-                    pagingEndRow + this.overText + tf.getValidRowsNb();
+                    pagingEndRow + this.overText + nbValidRows;
             }
         }
 

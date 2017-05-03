@@ -4458,6 +4458,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#registerextension",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-registerExtension",
+    "src/tablefilter.js~TableFilter#registerExtension",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#removeexternalflts",
     "class/src/tablefilter.js~TableFilter.html#instance-method-removeExternalFlts",
     "src/tablefilter.js~TableFilter#removeExternalFlts",
