@@ -708,7 +708,7 @@ export class TableFilter {
          * Enable rows counter UI component
          * @type {Boolean}
          */
-        this.rowsCounter = Boolean(f.rows_counter);
+        this.rowsCounter = isObj(f.rows_counter) || Boolean(f.rows_counter);
 
         /**
          * Enable status bar UI component
@@ -1045,16 +1045,12 @@ export class TableFilter {
 
                 //drop-down filters
                 if (col === SELECT || col === MULTIPLE) {
-                    if (!Mod.dropdown) {
-                        Mod.dropdown = new Dropdown(this);
-                    }
+                    Mod.dropdown = Mod.dropdown || new Dropdown(this);
                     Mod.dropdown.init(i, this.isExternalFlt, fltcell);
                 }
                 // checklist
                 else if (col === CHECKLIST) {
-                    if (!Mod.checkList) {
-                        Mod.checkList = new CheckList(this);
-                    }
+                    Mod.checkList = Mod.checkList || new CheckList(this);
                     Mod.checkList.init(i, this.isExternalFlt, fltcell);
                 } else {
                     this._buildInputFilter(i, inpclass, fltcell);
@@ -1117,7 +1113,6 @@ export class TableFilter {
             this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
 
-        /** @inherited */
         this.initialized = true;
 
         this.onFiltersLoaded(this);
@@ -1364,9 +1359,7 @@ export class TableFilter {
         this.emitter.emit('before-loading-extensions', this);
         for (let i = 0, len = exts.length; i < len; i++) {
             let ext = exts[i];
-            if (!this.ExtRegistry[ext.name]) {
-                this.loadExtension(ext);
-            }
+            this.loadExtension(ext);
         }
         this.emitter.emit('after-loading-extensions', this);
     }
@@ -1376,7 +1369,7 @@ export class TableFilter {
      * @param  {Object} ext Extension config object
      */
     loadExtension(ext) {
-        if (!ext || !ext.name) {
+        if (!ext || !ext.name || this.hasExtension(ext.name)) {
             return;
         }
 
@@ -1417,6 +1410,15 @@ export class TableFilter {
      */
     hasExtension(name) {
         return !isEmpty(this.ExtRegistry[name]);
+    }
+
+    /**
+     * Register the passed extension instance with associated name
+     * @param {Object} inst Extension instance
+     * @param {String} name Name of the extension
+     */
+    registerExtension(inst, name) {
+        this.ExtRegistry[name] = inst;
     }
 
     /**
