@@ -106,6 +106,9 @@ export class TableFilter {
          */
         this.nbCells = null;
 
+        /** @private */
+        this.initialized = false;
+
         let startRow;
 
         // TODO: use for-of
@@ -543,11 +546,13 @@ export class TableFilter {
         this.onSlcChange = f.on_change === false ? false : true;
 
         /**
-         * Indicate whether options in drop-down filter types are sorted in a
-         * alpha-numeric manner by default
-         * @type {Boolean}
+         * Make drop-down filter types options sorted in alpha-numeric manner
+         * by default globally or on a column basis
+         * @type {Boolean|Array}
          */
-        this.sortSlc = f.sort_select === false ? false : true;
+        // this.sortSlc = f.sort_select === false ? false : true;
+        this.sortSlc = isUndef(f.sort_select) ? true :
+            isArray(f.sort_select) ? f.sort_select : Boolean(f.sort_select);
 
         /**
          * Indicate whether options in drop-down filter types are sorted in a
@@ -1805,7 +1810,7 @@ export class TableFilter {
      */
     _testTerm(term, cellValue, colIdx) {
         let numData;
-        let decimal = this.decimalSeparator;
+        let decimal = this.getDecimal(colIdx);
         let reLe = new RegExp(this.leOperator),
             reGe = new RegExp(this.geOperator),
             reL = new RegExp(this.lwOperator),
@@ -1847,7 +1852,8 @@ export class TableFilter {
             let dateType = this.Mod.dateType;
             let isValidDate = dateType.isValid.bind(dateType);
             let parseDate = dateType.parse.bind(dateType);
-            let locale = dateType.getOptions(colIdx).locale || this.locale;
+            // let locale = dateType.getOptions(colIdx).locale || this.locale;
+            let locale = dateType.getLocale(colIdx);
 
             // Search arg dates tests
             let isLDate = hasLO &&
@@ -1918,12 +1924,12 @@ export class TableFilter {
         }
 
         else {
-            if (this.hasType(colIdx, [FORMATTED_NUMBER])) {
-                let colType = this.colTypes[colIdx];
-                if (colType.hasOwnProperty('decimal')) {
-                    decimal = colType.decimal;
-                }
-            }
+            // if (this.hasType(colIdx, [FORMATTED_NUMBER])) {
+            //     let colType = this.colTypes[colIdx];
+            //     if (colType.hasOwnProperty('decimal')) {
+            //         decimal = colType.decimal;
+            //     }
+            // }
             // Convert to number anyways to auto-resolve type in case not
             // defined by configuration
             numData = Number(cellValue) || parseNb(cellValue, decimal);
@@ -2262,11 +2268,11 @@ export class TableFilter {
         let value = this.getCellValue(cell);
 
         if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
-            let decimal = this.decimalSeparator;
-            let colType = this.colTypes[colIndex];
-            if (colType.hasOwnProperty('decimal')) {
-                decimal = colType.decimal;
-            }
+            let decimal = this.getDecimal(colIndex);
+            // let colType = this.colTypes[colIndex];
+            // if (colType.hasOwnProperty('decimal')) {
+            //     decimal = colType.decimal;
+            // }
             return parseNb(value, decimal);
         }
         else if (this.hasType(colIndex, [NUMBER])) {
@@ -2274,8 +2280,8 @@ export class TableFilter {
         }
         else if (this.hasType(colIndex, [DATE])){
             let dateType = this.Mod.dateType;
-            let locale = dateType.getOptions(colIndex).locale || this.locale;
-            return dateType.parse(value, locale);
+            // let locale = dateType.getOptions(colIndex).locale || this.locale;
+            return dateType.parse(value, dateType.getLocale(colIndex));
         }
 
         return value;
@@ -3107,6 +3113,21 @@ export class TableFilter {
      */
     dom() {
         return this.tbl;
+    }
+
+    /**
+     * Return the decimal separator for supplied column as per column type
+     * configuration or global setting
+     * @param {Number} colIndex Column index
+     * @returns {String} '.' or ','
+     */
+    getDecimal(colIndex) {
+        let decimal = this.decimalSeparator;
+        let colType = this.colTypes[colIndex];
+        if (colType.hasOwnProperty('decimal')) {
+            decimal = colType.decimal;
+        }
+        return decimal;
     }
 
     /**
