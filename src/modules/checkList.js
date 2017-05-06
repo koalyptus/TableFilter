@@ -5,13 +5,20 @@ import {
 } from '../dom';
 import {has} from '../array';
 import {matchCase, trim, rgxEsc} from '../string';
-import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
+import {
+    ignoreCase, numSortAsc, numSortDesc,
+    dateSortAsc, sortNumberStr, sortDateStr
+} from '../sort';
 import {addEvt, removeEvt, targetEvt} from '../event';
 import {isEmpty} from '../types';
-import {CHECKLIST, NONE} from '../const';
+import {
+    CHECKLIST, NONE, NUMBER,
+    FORMATTED_NUMBER, DATE, FORMATTED_DATE
+} from '../const';
+import {isArray} from '../types';
 
-const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
-    '{1} manner.';
+// const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
+//     '{1} manner.';
 
 /**
  * Checklist filter UI component
@@ -232,6 +239,13 @@ export class CheckList extends Feature {
         let caseSensitive = tf.caseSensitive;
         this.isCustom = tf.isCustomOptions(colIndex);
 
+        //Retrieves custom values
+        if (this.isCustom) {
+            let customValues = tf.getCustomOptions(colIndex);
+            this.opts = customValues[0];
+            this.optsTxt = customValues[1];
+        }
+
         let activeIdx;
         let activeFilterId = tf.getActiveFilterId();
         if (isLinked && activeFilterId) {
@@ -292,56 +306,60 @@ export class CheckList extends Feature {
             }
         }
 
-        //Retrieves custom values
-        if (this.isCustom) {
-            let customValues = tf.getCustomOptions(colIndex);
-            this.opts = customValues[0];
-            this.optsTxt = customValues[1];
-        }
+        // //Retrieves custom values
+        // if (this.isCustom) {
+        //     let customValues = tf.getCustomOptions(colIndex);
+        //     this.opts = customValues[0];
+        //     this.optsTxt = customValues[1];
+        // }
 
-        if (tf.sortSlc && !this.isCustom) {
-            if (!caseSensitive) {
-                this.opts.sort(ignoreCase);
-                if (this.excludedOpts) {
-                    this.excludedOpts.sort(ignoreCase);
-                }
-            } else {
-                this.opts.sort();
-                if (this.excludedOpts) {
-                    this.excludedOpts.sort();
-                }
-            }
+        this.opts = this.sortOptions(colIndex, this.opts);
+        if (this.excludedOpts) {
+            this.excludedOpts = this.sortOptions(colIndex, this.excludedOpts);
         }
-        //asc sort
-        if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
-            try {
-                this.opts.sort(numSortAsc);
-                if (this.excludedOpts) {
-                    this.excludedOpts.sort(numSortAsc);
-                }
-                if (this.isCustom) {
-                    this.optsTxt.sort(numSortAsc);
-                }
-            } catch (e) {
-                throw new Error(SORT_ERROR.replace('{0}', colIndex)
-                    .replace('{1}', 'ascending'));
-            }//in case there are alphanumeric values
-        }
-        //desc sort
-        if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
-            try {
-                this.opts.sort(numSortDesc);
-                if (this.excludedOpts) {
-                    this.excludedOpts.sort(numSortDesc);
-                }
-                if (this.isCustom) {
-                    this.optsTxt.sort(numSortDesc);
-                }
-            } catch (e) {
-                throw new Error(SORT_ERROR.replace('{0}', colIndex)
-                    .replace('{1}', 'descending'));
-            }//in case there are alphanumeric values
-        }
+        // if (tf.sortSlc && !this.isCustom) {
+        //     if (!caseSensitive) {
+        //         this.opts.sort(ignoreCase);
+        //         if (this.excludedOpts) {
+        //             this.excludedOpts.sort(ignoreCase);
+        //         }
+        //     } else {
+        //         this.opts.sort();
+        //         if (this.excludedOpts) {
+        //             this.excludedOpts.sort();
+        //         }
+        //     }
+        // }
+        // //asc sort
+        // if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
+        //     try {
+        //         this.opts.sort(numSortAsc);
+        //         if (this.excludedOpts) {
+        //             this.excludedOpts.sort(numSortAsc);
+        //         }
+        //         if (this.isCustom) {
+        //             this.optsTxt.sort(numSortAsc);
+        //         }
+        //     } catch (e) {
+        //         throw new Error(SORT_ERROR.replace('{0}', colIndex)
+        //             .replace('{1}', 'ascending'));
+        //     }//in case there are alphanumeric values
+        // }
+        // //desc sort
+        // if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
+        //     try {
+        //         this.opts.sort(numSortDesc);
+        //         if (this.excludedOpts) {
+        //             this.excludedOpts.sort(numSortDesc);
+        //         }
+        //         if (this.isCustom) {
+        //             this.optsTxt.sort(numSortDesc);
+        //         }
+        //     } catch (e) {
+        //         throw new Error(SORT_ERROR.replace('{0}', colIndex)
+        //             .replace('{1}', 'descending'));
+        //     }//in case there are alphanumeric values
+        // }
 
         this.addChecks(colIndex, ul);
 
@@ -387,6 +405,43 @@ export class CheckList extends Feature {
                 li.style.display = NONE;
             }
         }
+    }
+
+    /**
+     * Sort passed options based on the type of the specified column
+     * @param {Number} colIndex Column index
+     * @param {Array} [options=[]] Collection of values
+     * @return {Array} Sorted values
+     * @private
+     */
+    sortOptions(colIndex, options = []) {
+        let tf = this.tf;
+
+        if (tf.isCustomOptions(colIndex) || !tf.sortSlc ||
+            (isArray(tf.sortSlc) && tf.sortSlc.indexOf(colIndex) === -1)) {
+            return options;
+        }
+
+        let { caseSensitive, sortNumDesc } = tf;
+
+        if (tf.hasType(colIndex, [NUMBER, FORMATTED_NUMBER])) {
+            let decimal = tf.getDecimal(colIndex);
+            let compareFn = numSortAsc;
+            if (sortNumDesc === true || sortNumDesc.indexOf(colIndex) !== -1) {
+                compareFn = numSortDesc;
+            }
+            options.sort(sortNumberStr(compareFn, decimal));
+        }
+        else if (tf.hasType(colIndex, [DATE, FORMATTED_DATE])) {
+            let locale = this.tf.feature('dateType').getLocale(colIndex);
+            let compareFn = dateSortAsc;
+            options.sort(sortDateStr(compareFn, locale));
+        } else {
+            let compareFn = caseSensitive ? undefined : ignoreCase;
+            options.sort(compareFn);
+        }
+
+        return options;
     }
 
     /**
@@ -562,7 +617,6 @@ export class CheckList extends Feature {
         let flt = tf.getFilterElement(colIndex);
         let fltAttr = flt.getAttribute('value');
         let values = isEmpty(fltAttr) ? '' : fltAttr;
-
         //removes last operator ||
         values = values.substr(0, values.length - 3);
         //turn || separated values into array

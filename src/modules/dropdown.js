@@ -9,9 +9,10 @@ import {
 import {addEvt, targetEvt} from '../event';
 import {
     SELECT, MULTIPLE, NONE,
-    STRING, NUMBER, FORMATTED_NUMBER,
+    NUMBER, FORMATTED_NUMBER,
     DATE, FORMATTED_DATE
 } from '../const';
+import {isArray} from '../types';
 
 // import {parse as parseNb} from '../number';
 
@@ -335,19 +336,15 @@ export class Dropdown extends Feature {
      */
     sortOptions(colIndex, options = []) {
         let tf = this.tf;
-        if (tf.isCustomOptions(colIndex)) {
+
+        if (tf.isCustomOptions(colIndex) || !tf.sortSlc ||
+            (isArray(tf.sortSlc) && tf.sortSlc.indexOf(colIndex) === -1)) {
             return options;
         }
 
         let { caseSensitive, sortNumDesc } = tf;
 
-        if (tf.hasType(colIndex, [STRING])) {
-            console.log('sorting', colIndex, STRING);
-            let compareFn = caseSensitive ? undefined : ignoreCase;
-            options.sort(compareFn);
-        }
-        else if (tf.hasType(colIndex, [NUMBER, FORMATTED_NUMBER])) {
-            console.log('sorting', colIndex, FORMATTED_NUMBER);
+        if (tf.hasType(colIndex, [NUMBER, FORMATTED_NUMBER])) {
             let decimal = tf.getDecimal(colIndex);
             let compareFn = numSortAsc;
             if (sortNumDesc === true || sortNumDesc.indexOf(colIndex) !== -1) {
@@ -356,10 +353,12 @@ export class Dropdown extends Feature {
             options.sort(sortNumberStr(compareFn, decimal));
         }
         else if (tf.hasType(colIndex, [DATE, FORMATTED_DATE])) {
-            console.log('sorting', colIndex, DATE);
             let locale = this.tf.feature('dateType').getLocale(colIndex);
             let compareFn = dateSortAsc;
             options.sort(sortDateStr(compareFn, locale));
+        } else {
+            let compareFn = caseSensitive ? undefined : ignoreCase;
+            options.sort(compareFn);
         }
 
         return options;

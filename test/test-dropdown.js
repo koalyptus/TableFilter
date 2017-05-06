@@ -95,6 +95,7 @@ test('Can sort options', function() {
         col_2: 'multiple',
         col_3: 'select',
         col_4: 'multiple',
+        col_types: ['string', 'string', 'number', 'number', 'number'],
         sort_num_asc: [2, 3],
         sort_num_desc: [4]
     });

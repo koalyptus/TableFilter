@@ -3123,9 +3123,11 @@ export class TableFilter {
      */
     getDecimal(colIndex) {
         let decimal = this.decimalSeparator;
-        let colType = this.colTypes[colIndex];
-        if (colType.hasOwnProperty('decimal')) {
-            decimal = colType.decimal;
+        if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
+            let colType = this.colTypes[colIndex];
+            if (colType.hasOwnProperty('decimal')) {
+                decimal = colType.decimal;
+            }
         }
         return decimal;
     }
