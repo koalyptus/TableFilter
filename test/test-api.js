@@ -388,7 +388,7 @@ test('Can select checklist options with array', function() {
     tf.setFilterValue(2, '');
     tf.setFilterValue(2, ['1412', '982']);
 
-    deepEqual(tf.getFilterValue(2), ['1412', '982'],
+    deepEqual(tf.getFilterValue(2), ['982', '1412'],
         'Column 2 filter values');
 });
 

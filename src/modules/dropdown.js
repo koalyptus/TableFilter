@@ -1,18 +1,17 @@
-import {Feature} from '../feature';
+import {BaseDropdown} from './baseDropdown';
 import {createElm, createOpt, elm} from '../dom';
 import {has} from '../array';
 import {matchCase} from '../string';
-import {ignoreCase, numSortAsc, numSortDesc} from '../sort';
 import {addEvt, targetEvt} from '../event';
 import {SELECT, MULTIPLE, NONE} from '../const';
 
-const SORT_ERROR = 'Filter options for column {0} cannot be sorted in ' +
-    '{1} manner.';
-
 /**
  * Dropdown filter UI component
+ * @export
+ * @class Dropdown
+ * @extends {BaseDropdown}
  */
-export class Dropdown extends Feature {
+export class Dropdown extends BaseDropdown {
 
     /**
      * Creates an instance of Dropdown
@@ -43,26 +42,6 @@ export class Dropdown extends Feature {
          */
         this.multipleSlcTooltip = f.multiple_slc_tooltip ||
             'Use Ctrl/Cmd key for multiple selections';
-
-        /**
-         * Indicates drop-down has custom options
-         * @private
-         */
-        this.isCustom = null;
-
-        /**
-         * List of options values
-         * @type {Array}
-         * @private
-         */
-        this.opts = null;
-
-        /**
-         * List of options texts for custom values
-         * @type {Array}
-         * @private
-         */
-        this.optsTxt = null;
     }
 
 
@@ -96,15 +75,10 @@ export class Dropdown extends Feature {
      * Refresh all drop-down filters
      */
     refreshAll() {
-        let tf = this.tf;
-        let selectFlts = tf.getFiltersByType(SELECT, true);
-        let multipleFlts = tf.getFiltersByType(MULTIPLE, true);
-        let flts = selectFlts.concat(multipleFlts);
-        flts.forEach((colIdx) => {
-            let values = this.getValues(colIdx);
-            this.build(colIdx, tf.linkedFilters);
-            this.selectOptions(colIdx, values);
-        });
+        let selectFlts = this.tf.getFiltersByType(SELECT, true);
+        let multipleFlts = this.tf.getFiltersByType(MULTIPLE, true);
+        let colIdxs = selectFlts.concat(multipleFlts);
+        this.refreshFilters(colIdxs);
     }
 
     /**
@@ -188,6 +162,13 @@ export class Dropdown extends Feature {
         //custom select test
         this.isCustom = tf.isCustomOptions(colIndex);
 
+        //Retrieves custom values
+        if (this.isCustom) {
+            let customValues = tf.getCustomOptions(colIndex);
+            this.opts = customValues[0];
+            this.optsTxt = customValues[1];
+        }
+
         //custom selects text
         let activeIdx;
         let activeFilterId = tf.getActiveFilterId();
@@ -250,54 +231,10 @@ export class Dropdown extends Feature {
             }//for j
         }//for k
 
-        //Retrieves custom values
-        if (this.isCustom) {
-            let customValues = tf.getCustomOptions(colIndex);
-            this.opts = customValues[0];
-            this.optsTxt = customValues[1];
-        }
-
-        if (tf.sortSlc && !this.isCustom) {
-            if (!tf.caseSensitive) {
-                this.opts.sort(ignoreCase);
-                if (excludedOpts) {
-                    excludedOpts.sort(ignoreCase);
-                }
-            } else {
-                this.opts.sort();
-                if (excludedOpts) { excludedOpts.sort(); }
-            }
-        }
-
-        //asc sort
-        if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
-            try {
-                this.opts.sort(numSortAsc);
-                if (excludedOpts) {
-                    excludedOpts.sort(numSortAsc);
-                }
-                if (this.isCustom) {
-                    this.optsTxt.sort(numSortAsc);
-                }
-            } catch (e) {
-                throw new Error(SORT_ERROR.replace('{0}', colIndex)
-                    .replace('{1}', 'ascending'));
-            }//in case there are alphanumeric values
-        }
-        //desc sort
-        if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
-            try {
-                this.opts.sort(numSortDesc);
-                if (excludedOpts) {
-                    excludedOpts.sort(numSortDesc);
-                }
-                if (this.isCustom) {
-                    this.optsTxt.sort(numSortDesc);
-                }
-            } catch (e) {
-                throw new Error(SORT_ERROR.replace('{0}', colIndex)
-                    .replace('{1}', 'ascending'));
-            }//in case there are alphanumeric values
+        //sort options
+        this.opts = this.sortOptions(colIndex, this.opts);
+        if (excludedOpts) {
+            excludedOpts = this.sortOptions(colIndex, excludedOpts);
         }
 
         //populates drop-down

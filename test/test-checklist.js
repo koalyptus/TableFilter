@@ -103,6 +103,7 @@ test('Can sort options', function() {
         col_2: 'checklist',
         col_3: 'checklist',
         col_4: 'checklist',
+        col_types: ['string', 'string', 'number', 'number', 'number'],
         sort_num_asc: [2, 3],
         sort_num_desc: [4]
     });
