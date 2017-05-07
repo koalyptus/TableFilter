@@ -1852,7 +1852,6 @@ export class TableFilter {
             let dateType = this.Mod.dateType;
             let isValidDate = dateType.isValid.bind(dateType);
             let parseDate = dateType.parse.bind(dateType);
-            // let locale = dateType.getOptions(colIdx).locale || this.locale;
             let locale = dateType.getLocale(colIdx);
 
             // Search arg dates tests
@@ -1924,12 +1923,6 @@ export class TableFilter {
         }
 
         else {
-            // if (this.hasType(colIdx, [FORMATTED_NUMBER])) {
-            //     let colType = this.colTypes[colIdx];
-            //     if (colType.hasOwnProperty('decimal')) {
-            //         decimal = colType.decimal;
-            //     }
-            // }
             // Convert to number anyways to auto-resolve type in case not
             // defined by configuration
             numData = Number(cellValue) || parseNb(cellValue, decimal);
@@ -2268,19 +2261,13 @@ export class TableFilter {
         let value = this.getCellValue(cell);
 
         if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
-            let decimal = this.getDecimal(colIndex);
-            // let colType = this.colTypes[colIndex];
-            // if (colType.hasOwnProperty('decimal')) {
-            //     decimal = colType.decimal;
-            // }
-            return parseNb(value, decimal);
+            return parseNb(value, this.getDecimal(colIndex));
         }
         else if (this.hasType(colIndex, [NUMBER])) {
             return Number(value) || parseNb(value);
         }
         else if (this.hasType(colIndex, [DATE])){
             let dateType = this.Mod.dateType;
-            // let locale = dateType.getOptions(colIndex).locale || this.locale;
             return dateType.parse(value, dateType.getLocale(colIndex));
         }
 
