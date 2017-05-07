@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/sort.js | tablefilter v0.5.11 API Document</title>
+  <title data-ice="title">src/sort.js | tablefilter v0.5.12 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -76,9 +76,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-parse">parse</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortAsc">dateSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortDesc">dateSortDesc</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortAsc">numSortAsc</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortDesc">numSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDateStr">sortDateStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortNumberStr">sortNumberStr</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-contains">contains</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-matchCase">matchCase</a></span></span></li>
@@ -98,6 +102,7 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/filtersVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/sort</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">modules</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dateType.js~DateType.html">DateType</a></span></span></li>
@@ -122,9 +127,10 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/sort.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * Sorting utilities
- */
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {parse as parseNb} from &apos;./number&apos;;
+import {Date as SugarDate} from &apos;sugar-date&apos;;
+
+/** Sorting utilities */
 
 /**
  * Case insensitive compare function for passed strings
@@ -137,24 +143,72 @@
 export const ignoreCase = (a, b) =&gt; {
     let x = a.toLowerCase();
     let y = b.toLowerCase();
-    return ((x &lt; y) ? -1 : ((x &gt; y) ? 1 : 0));
+    return x &lt; y ? -1 : (x &gt; y ? 1 : 0);
 }
 
 /**
- * Sorts passed numbers in a ascending manner
+ * Compare function for sorting passed numbers in ascending manner
  * @param {Number} First number
  * @param {Number} Second number
- * @param {Number} Negative, zero or positive number
+ * @return {Number} Negative, zero or positive number
  */
 export const numSortAsc = (a, b) =&gt; (a - b);
 
 /**
- * Sorts passed numbers in a descending manner
+ * Compare function for sorting passed numbers in descending manner
  * @param {Number} First number
  * @param {Number} Second number
- * @param {Number} Negative, zero or positive number
+ * @return {Number} Negative, zero or positive number
  */
 export const numSortDesc = (a, b) =&gt; (b - a);
+
+/**
+ * Compare function for sorting passed dates in ascending manner according to
+ * the corresponding UTC numeric value (returned by getTime)
+ * @param {Date} First date object
+ * @param {Date} Second date object
+ * @return {Number} Negative, zero or positive number
+ */
+export const dateSortAsc = (date1, date2) =&gt; date1.getTime() - date2.getTime();
+
+/**
+ * Compare function for sorting passed dates in descending manner according to
+ * the corresponding UTC numeric value (returned by getTime)
+ * @param {Date} First date object
+ * @param {Date} Second date object
+ * @return {Number} Negative, zero or positive number
+ */
+export const dateSortDesc = (date1, date2) =&gt; date2.getTime() - date1.getTime();
+
+/**
+ * Curried compare function for sorting passed formatted numbers in desired
+ * fashion according to supplied compare function and decimal separator
+ * @param {Function} Compare function
+ * @param {String} [decimal=&apos;,&apos;] Decimal separator
+ * @return {Function} Compare function receiving parsed numeric arguments
+ */
+export const sortNumberStr = (compareFn, decimal = &apos;,&apos;) =&gt; {
+    return (numStr1, numStr2) =&gt; {
+        let num1 = parseNb(numStr1, decimal);
+        let num2 = parseNb(numStr2, decimal);
+        return compareFn(num1, num2);
+    }
+}
+
+/**
+ * Curried compare function for sorting passed formatted dates in desired
+ * fashion according to supplied compare function and locale
+ * @param {Function} Compare function
+ * @param {String} [locale=&apos;en-us&apos;] Locale code
+ * @return {Function} Compare function receiving parsed date arguments
+ */
+export const sortDateStr = (compareFn, locale = &apos;en-us&apos;) =&gt; {
+    return (dateStr1, dateStr2) =&gt; {
+        let date1 = SugarDate.create(dateStr1, locale);
+        let date2 = SugarDate.create(dateStr2, locale);
+        return compareFn(date1, date2);
+    }
+}
 </code></pre>
 
 </div>

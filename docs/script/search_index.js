@@ -24,6 +24,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/modules/basedropdown.js~basedropdown",
+    "class/src/modules/baseDropdown.js~BaseDropdown.html",
+    "<span>BaseDropdown</span> <span class=\"search-result-import-path\">tablefilter/src/modules/baseDropdown.js</span>",
+    "class"
+  ],
+  [
     "tablefilter/src/const.js~cell_tag",
     "variable/index.html#static-variable-CELL_TAG",
     "<span>CELL_TAG</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
@@ -324,6 +330,18 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/sort.js~datesortasc",
+    "variable/index.html#static-variable-dateSortAsc",
+    "<span>dateSortAsc</span> <span class=\"search-result-import-path\">tablefilter/src/sort.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/sort.js~datesortdesc",
+    "variable/index.html#static-variable-dateSortDesc",
+    "<span>dateSortDesc</span> <span class=\"search-result-import-path\">tablefilter/src/sort.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/dom.js~elm",
     "variable/index.html#static-variable-elm",
     "<span>elm</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
@@ -483,6 +501,18 @@ window.esdocSearchIndex = [
     "tablefilter/src/root.js~root",
     "variable/index.html#static-variable-root",
     "<span>root</span> <span class=\"search-result-import-path\">tablefilter/src/root.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/sort.js~sortdatestr",
+    "variable/index.html#static-variable-sortDateStr",
+    "<span>sortDateStr</span> <span class=\"search-result-import-path\">tablefilter/src/sort.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/sort.js~sortnumberstr",
+    "variable/index.html#static-variable-sortNumberStr",
+    "<span>sortNumberStr</span> <span class=\"search-result-import-path\">tablefilter/src/sort.js</span>",
     "variable"
   ],
   [
@@ -1872,6 +1902,24 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/basedropdown.js",
+    "file/src/modules/baseDropdown.js.html",
+    "src/modules/baseDropdown.js",
+    "file"
+  ],
+  [
+    "src/modules/basedropdown.js~basedropdown#constructor",
+    "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-constructor-constructor",
+    "src/modules/baseDropdown.js~BaseDropdown#constructor",
+    "method"
+  ],
+  [
+    "src/modules/basedropdown.js~basedropdown#customsorter",
+    "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-member-customSorter",
+    "src/modules/baseDropdown.js~BaseDropdown#customSorter",
+    "member"
+  ],
+  [
     "src/modules/checklist.js",
     "file/src/modules/checkList.js.html",
     "src/modules/checkList.js",
@@ -1926,6 +1974,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/checklist.js~checklist#excludedopts",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-excludedOpts",
+    "src/modules/checkList.js~CheckList#excludedOpts",
+    "member"
+  ],
+  [
     "src/modules/checklist.js~checklist#filtercssclass",
     "class/src/modules/checkList.js~CheckList.html#instance-member-filterCssClass",
     "src/modules/checkList.js~CheckList#filterCssClass",
@@ -1950,9 +2004,27 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/checklist.js~checklist#iscustom",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-isCustom",
+    "src/modules/checkList.js~CheckList#isCustom",
+    "member"
+  ],
+  [
     "src/modules/checklist.js~checklist#itemcssclass",
     "class/src/modules/checkList.js~CheckList.html#instance-member-itemCssClass",
     "src/modules/checkList.js~CheckList#itemCssClass",
+    "member"
+  ],
+  [
+    "src/modules/checklist.js~checklist#opts",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-opts",
+    "src/modules/checkList.js~CheckList#opts",
+    "member"
+  ],
+  [
+    "src/modules/checklist.js~checklist#optstxt",
+    "class/src/modules/checkList.js~CheckList.html#instance-member-optsTxt",
+    "src/modules/checkList.js~CheckList#optsTxt",
     "member"
   ],
   [
@@ -2064,6 +2136,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/datetype.js~datetype#getlocale",
+    "class/src/modules/dateType.js~DateType.html#instance-method-getLocale",
+    "src/modules/dateType.js~DateType#getLocale",
+    "method"
+  ],
+  [
     "src/modules/datetype.js~datetype#getoptions",
     "class/src/modules/dateType.js~DateType.html#instance-method-getOptions",
     "src/modules/dateType.js~DateType#getOptions",
@@ -2160,6 +2238,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/dropdown.js~dropdown#iscustom",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-member-isCustom",
+    "src/modules/dropdown.js~Dropdown#isCustom",
+    "member"
+  ],
+  [
     "src/modules/dropdown.js~dropdown#multipleslctooltip",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-multipleSlcTooltip",
     "src/modules/dropdown.js~Dropdown#multipleSlcTooltip",
@@ -2169,6 +2253,18 @@ window.esdocSearchIndex = [
     "src/modules/dropdown.js~dropdown#nonemptytext",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-nonEmptyText",
     "src/modules/dropdown.js~Dropdown#nonEmptyText",
+    "member"
+  ],
+  [
+    "src/modules/dropdown.js~dropdown#opts",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-member-opts",
+    "src/modules/dropdown.js~Dropdown#opts",
+    "member"
+  ],
+  [
+    "src/modules/dropdown.js~dropdown#optstxt",
+    "class/src/modules/dropdown.js~Dropdown.html#instance-member-optsTxt",
+    "src/modules/dropdown.js~Dropdown#optsTxt",
     "member"
   ],
   [
@@ -3978,6 +4074,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#getdecimal",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getDecimal",
+    "src/tablefilter.js~TableFilter#getDecimal",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#getfilterelement",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getFilterElement",
     "src/tablefilter.js~TableFilter#getFilterElement",
@@ -4216,12 +4318,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-initExtensions",
     "src/tablefilter.js~TableFilter#initExtensions",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#initialized",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-initialized",
-    "src/tablefilter.js~TableFilter#initialized",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#iscustomoptions",

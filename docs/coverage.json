@@ -1,7 +1,7 @@
 {
-  "coverage": "99.85%",
-  "expectCount": 681,
-  "actualCount": 680,
+  "coverage": "98.99%",
+  "expectCount": 696,
+  "actualCount": 689,
   "files": {
     "src/const.js": {
       "expectCount": 19,
@@ -23,10 +23,20 @@
       "actualCount": 9,
       "undocumentLines": []
     },
-    "src/modules/checkList.js": {
-      "expectCount": 17,
-      "actualCount": 17,
+    "src/modules/baseDropdown.js": {
+      "expectCount": 3,
+      "actualCount": 3,
       "undocumentLines": []
+    },
+    "src/modules/checkList.js": {
+      "expectCount": 21,
+      "actualCount": 17,
+      "undocumentLines": [
+        216,
+        199,
+        187,
+        188
+      ]
     },
     "src/modules/clearButton.js": {
       "expectCount": 10,
@@ -44,14 +54,18 @@
       "undocumentLines": []
     },
     "src/modules/dateType.js": {
-      "expectCount": 11,
-      "actualCount": 11,
+      "expectCount": 12,
+      "actualCount": 12,
       "undocumentLines": []
     },
     "src/modules/dropdown.js": {
-      "expectCount": 14,
+      "expectCount": 17,
       "actualCount": 14,
-      "undocumentLines": []
+      "undocumentLines": [
+        163,
+        154,
+        155
+      ]
     },
     "src/types.js": {
       "expectCount": 9,
@@ -140,10 +154,8 @@
     },
     "src/tablefilter.js": {
       "expectCount": 172,
-      "actualCount": 171,
-      "undocumentLines": [
-        1116
-      ]
+      "actualCount": 172,
+      "undocumentLines": []
     },
     "src/dom.js": {
       "expectCount": 12,
@@ -160,14 +172,14 @@
       "actualCount": 5,
       "undocumentLines": []
     },
+    "src/sort.js": {
+      "expectCount": 7,
+      "actualCount": 7,
+      "undocumentLines": []
+    },
     "src/array.js": {
       "expectCount": 1,
       "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/sort.js": {
-      "expectCount": 3,
-      "actualCount": 3,
       "undocumentLines": []
     },
     "src/number.js": {

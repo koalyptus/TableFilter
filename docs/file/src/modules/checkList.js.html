@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/checkList.js | tablefilter v0.5.11 API Document</title>
+  <title data-ice="title">src/modules/checkList.js | tablefilter v0.5.12 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -76,9 +76,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-parse">parse</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortAsc">dateSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortDesc">dateSortDesc</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortAsc">numSortAsc</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortDesc">numSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDateStr">sortDateStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortNumberStr">sortNumberStr</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-contains">contains</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-matchCase">matchCase</a></span></span></li>
@@ -98,6 +102,7 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/filtersVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/sort</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">modules</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dateType.js~DateType.html">DateType</a></span></span></li>
@@ -122,25 +127,24 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/checkList.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {BaseDropdown} from &apos;./baseDropdown&apos;;
 import {
     addClass, createCheckItem, createText, createElm, elm, getText,
     removeClass, tag
 } from &apos;../dom&apos;;
 import {has} from &apos;../array&apos;;
 import {matchCase, trim, rgxEsc} from &apos;../string&apos;;
-import {ignoreCase, numSortAsc, numSortDesc} from &apos;../sort&apos;;
 import {addEvt, removeEvt, targetEvt} from &apos;../event&apos;;
 import {isEmpty} from &apos;../types&apos;;
 import {CHECKLIST, NONE} from &apos;../const&apos;;
 
-const SORT_ERROR = &apos;Filter options for column {0} cannot be sorted in &apos; +
-    &apos;{1} manner.&apos;;
-
 /**
  * Checklist filter UI component
+ * @export
+ * @class CheckList
+ * @extends {BaseDropdown}
  */
-export class CheckList extends Feature {
+export class CheckList extends BaseDropdown {
 
     /**
      * Creates an instance of CheckList
@@ -210,34 +214,6 @@ export class CheckList extends Feature {
          * @private
          */
         this.prfx = &apos;chkdiv_&apos;;
-
-        /**
-         * Has custom options
-         * @type {Boolean}
-         * @private
-         */
-        this.isCustom = false;
-
-        /**
-         * List of options values
-         * @type {Array}
-         * @private
-         */
-        this.opts = [];
-
-        /**
-         * List of options texts for custom values
-         * @type {Array}
-         * @private
-         */
-        this.optsTxt = [];
-
-        /**
-         * List of options to be excluded from the checklist filter
-         * @type {Array}
-         * @private
-         */
-        this.excludedOpts = [];
     }
 
     /**
@@ -273,13 +249,8 @@ export class CheckList extends Feature {
      * Refresh all checklist filters
      */
     refreshAll() {
-        let tf = this.tf;
-        let fltsIdxs = tf.getFiltersByType(CHECKLIST, true);
-        fltsIdxs.forEach((colIdx) =&gt; {
-            let values = this.getValues(colIdx);
-            this.build(colIdx, tf.linkedFilters);
-            this.selectOptions(colIdx, values);
-        });
+        let colIdxs = this.tf.getFiltersByType(CHECKLIST, true);
+        this.refreshFilters(colIdxs);
     }
 
     /**
@@ -356,6 +327,13 @@ export class CheckList extends Feature {
         let caseSensitive = tf.caseSensitive;
         this.isCustom = tf.isCustomOptions(colIndex);
 
+        //Retrieves custom values
+        if (this.isCustom) {
+            let customValues = tf.getCustomOptions(colIndex);
+            this.opts = customValues[0];
+            this.optsTxt = customValues[1];
+        }
+
         let activeIdx;
         let activeFilterId = tf.getActiveFilterId();
         if (isLinked &amp;&amp; activeFilterId) {
@@ -416,55 +394,10 @@ export class CheckList extends Feature {
             }
         }
 
-        //Retrieves custom values
-        if (this.isCustom) {
-            let customValues = tf.getCustomOptions(colIndex);
-            this.opts = customValues[0];
-            this.optsTxt = customValues[1];
-        }
-
-        if (tf.sortSlc &amp;&amp; !this.isCustom) {
-            if (!caseSensitive) {
-                this.opts.sort(ignoreCase);
-                if (this.excludedOpts) {
-                    this.excludedOpts.sort(ignoreCase);
-                }
-            } else {
-                this.opts.sort();
-                if (this.excludedOpts) {
-                    this.excludedOpts.sort();
-                }
-            }
-        }
-        //asc sort
-        if (tf.sortNumAsc.indexOf(colIndex) !== -1) {
-            try {
-                this.opts.sort(numSortAsc);
-                if (this.excludedOpts) {
-                    this.excludedOpts.sort(numSortAsc);
-                }
-                if (this.isCustom) {
-                    this.optsTxt.sort(numSortAsc);
-                }
-            } catch (e) {
-                throw new Error(SORT_ERROR.replace(&apos;{0}&apos;, colIndex)
-                    .replace(&apos;{1}&apos;, &apos;ascending&apos;));
-            }//in case there are alphanumeric values
-        }
-        //desc sort
-        if (tf.sortNumDesc.indexOf(colIndex) !== -1) {
-            try {
-                this.opts.sort(numSortDesc);
-                if (this.excludedOpts) {
-                    this.excludedOpts.sort(numSortDesc);
-                }
-                if (this.isCustom) {
-                    this.optsTxt.sort(numSortDesc);
-                }
-            } catch (e) {
-                throw new Error(SORT_ERROR.replace(&apos;{0}&apos;, colIndex)
-                    .replace(&apos;{1}&apos;, &apos;descending&apos;));
-            }//in case there are alphanumeric values
+        //sort options
+        this.opts = this.sortOptions(colIndex, this.opts);
+        if (this.excludedOpts) {
+            this.excludedOpts = this.sortOptions(colIndex, this.excludedOpts);
         }
 
         this.addChecks(colIndex, ul);
@@ -686,7 +619,6 @@ export class CheckList extends Feature {
         let flt = tf.getFilterElement(colIndex);
         let fltAttr = flt.getAttribute(&apos;value&apos;);
         let values = isEmpty(fltAttr) ? &apos;&apos; : fltAttr;
-
         //removes last operator ||
         values = values.substr(0, values.length - 3);
         //turn || separated values into array

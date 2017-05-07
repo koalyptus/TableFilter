@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">CheckList | tablefilter v0.5.11 API Document</title>
+  <title data-ice="title">CheckList | tablefilter v0.5.12 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -76,9 +76,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-parse">parse</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortAsc">dateSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortDesc">dateSortDesc</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortAsc">numSortAsc</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortDesc">numSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDateStr">sortDateStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortNumberStr">sortNumberStr</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-contains">contains</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-matchCase">matchCase</a></span></span></li>
@@ -98,6 +102,7 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/filtersVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/sort</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">modules</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dateType.js~DateType.html">DateType</a></span></span></li>
@@ -122,13 +127,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CheckList} from &apos;<span><a href="file/src/modules/checkList.js.html#lineNumber19">tablefilter/src/modules/checkList.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CheckList} from &apos;<span><a href="file/src/modules/checkList.js.html#lineNumber18">tablefilter/src/modules/checkList.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/modules/checkList.js.html#lineNumber19">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/modules/checkList.js.html#lineNumber18">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -138,7 +143,7 @@
 
   
   
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/feature.js~Feature.html">Feature</a></span> &#x2192; CheckList</div></div>
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/feature.js~Feature.html">Feature</a></span> &#x2192; <span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span> &#x2192; CheckList</div></div>
   
   
   
@@ -341,6 +346,31 @@ feature is enabled</p>
     <td>
       <div>
         <p>
+           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-member-excludedOpts">excludedOpts</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
            <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-member-filterCssClass">filterCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
@@ -392,6 +422,31 @@ feature is enabled</p>
     <td>
       <div>
         <p>
+           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-member-isCustom">isCustom</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
            <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-member-itemCssClass">itemCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
@@ -400,6 +455,56 @@ feature is enabled</p>
         
         <div data-ice="description"><p>Css class for the item of a checklist (li)</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-member-opts">opts</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html#instance-member-optsTxt">optsTxt</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -918,6 +1023,39 @@ feature is enabled</p>
   </tr>
 </tbody>
 </table>
+
+<table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span></td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html#instance-member-customSorter">customSorter</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Filter options custom sorter on a column basis</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
 </div>
 
 
@@ -935,7 +1073,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber25">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber24">source</a></span></span>
     </span>
   </h3>
 
@@ -945,7 +1083,7 @@ feature is enabled</p>
   <div data-ice="description"><p>Creates an instance of CheckList</p>
 </div>
 
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/feature.js~Feature.html#instance-constructor-constructor">Feature#constructor</a></span></div>
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html#instance-constructor-constructor">BaseDropdown#constructor</a></span></div>
 
   <div data-ice="properties"><div data-ice="properties">
   <h4 data-ice="title">Params:</h4>
@@ -996,7 +1134,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber65">source</a></span></span>
     </span>
   </h3>
 
@@ -1038,7 +1176,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber40">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber39">source</a></span></span>
     </span>
   </h3>
 
@@ -1079,7 +1217,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber34">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber33">source</a></span></span>
     </span>
   </h3>
 
@@ -1120,7 +1258,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber73">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber72">source</a></span></span>
     </span>
   </h3>
 
@@ -1161,7 +1299,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber79">source</a></span></span>
     </span>
   </h3>
 
@@ -1170,6 +1308,46 @@ feature is enabled</p>
   
   <div data-ice="description"><p>Enable the reset filter option as first item</p>
 </div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-excludedOpts">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">excludedOpts</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber216">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
 
   
 
@@ -1202,7 +1380,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber46">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
@@ -1243,7 +1421,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber173">source</a></span></span>
     </span>
   </h3>
 
@@ -1253,6 +1431,46 @@ feature is enabled</p>
   
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/feature.js~Feature.html#instance-member-initialized">Feature#initialized</a></span></div>
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-isCustom">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">isCustom</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber199">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
 
   <div data-ice="properties">
 </div>
@@ -1283,7 +1501,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber51">source</a></span></span>
     </span>
   </h3>
 
@@ -1292,6 +1510,86 @@ feature is enabled</p>
   
   <div data-ice="description"><p>Css class for the item of a checklist (li)</p>
 </div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-opts">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">opts</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber187">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-optsTxt">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">optsTxt</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber188">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
 
   
 
@@ -1324,7 +1622,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber58">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber57">source</a></span></span>
     </span>
   </h3>
 
@@ -1368,7 +1666,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber215">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber181">source</a></span></span>
     </span>
   </h3>
 
@@ -1433,7 +1731,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber577">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber504">source</a></span></span>
     </span>
   </h3>
 
@@ -1474,7 +1772,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber560">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber488">source</a></span></span>
     </span>
   </h3>
 
@@ -1543,7 +1841,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber133">source</a></span></span>
     </span>
   </h3>
 
@@ -1615,7 +1913,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber151">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber122">source</a></span></span>
     </span>
   </h3>
 
@@ -1656,7 +1954,7 @@ feature is enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber517">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/modules/checkList.js.html#lineNumber445">source</a></span></span>
     </span>
   </h3>
 
