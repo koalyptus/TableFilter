@@ -151,7 +151,9 @@ export class Dropdown extends BaseDropdown {
 
         this.emitter.emit('before-populating-filter', tf, colIndex);
 
+        /** @inherited */
         this.opts = [];
+        /** @inherited */
         this.optsTxt = [];
 
         let slcId = tf.fltIds[colIndex];
@@ -160,6 +162,7 @@ export class Dropdown extends BaseDropdown {
         let nbRows = tf.getRowsNb(true);
 
         //custom select test
+        /** @inherited */
         this.isCustom = tf.isCustomOptions(colIndex);
 
         //Retrieves custom values
