@@ -30,7 +30,8 @@ module.exports = {
                 options: {
                     compact: false,
                     presets: ['es2015'],
-                    plugins: [['transform-es2015-classes', {loose: true}]]
+                    // plugins: [['transform-es2015-classes', {loose: true}]]
+                    plugins: 'transform-es2015-classes'
                 },
                 loader: 'babel-loader'
             }, {
