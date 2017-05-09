@@ -111,8 +111,7 @@ export class RowsCounter extends Feature {
             countDiv.appendChild(countText);
             countDiv.appendChild(countSpan);
             targetEl.appendChild(countDiv);
-        }
-        else {
+        } else {
             //custom container, no need to append statusDiv
             targetEl.appendChild(countText);
             targetEl.appendChild(countSpan);
@@ -133,7 +132,6 @@ export class RowsCounter extends Feature {
     /**
      * Refreshes the rows counter
      * @param {Number} p Optional parameter the total number of rows to display
-     * @returns
      */
     refresh(p) {
         if (!this.initialized || !this.isEnabled()) {
