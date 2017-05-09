@@ -184,7 +184,9 @@ export class CheckList extends BaseDropdown {
 
         this.emitter.emit('before-populating-filter', tf, colIndex);
 
+        /** @inherited */
         this.opts = [];
+        /** @inherited */
         this.optsTxt = [];
 
         let flt = this.containers[colIndex];
@@ -196,6 +198,7 @@ export class CheckList extends BaseDropdown {
         let rows = tf.dom().rows;
         let nbRows = tf.getRowsNb(true);
         let caseSensitive = tf.caseSensitive;
+        /** @inherited */
         this.isCustom = tf.isCustomOptions(colIndex);
 
         //Retrieves custom values
@@ -213,6 +216,7 @@ export class CheckList extends BaseDropdown {
 
         let filteredDataCol = [];
         if (isLinked && tf.disableExcludedOptions) {
+            /** @inherited */
             this.excludedOpts = [];
         }
 

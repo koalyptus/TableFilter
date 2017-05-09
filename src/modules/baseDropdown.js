@@ -4,7 +4,7 @@ import {
     dateSortAsc, sortNumberStr, sortDateStr
 } from '../sort';
 import {isArray, isObj} from '../types';
-import {NUMBER, FORMATTED_NUMBER, DATE, FORMATTED_DATE} from '../const';
+import {NUMBER, FORMATTED_NUMBER, DATE} from '../const';
 
 /**
  * Base class for Dropdown and CheckList UI components
@@ -95,7 +95,7 @@ export class BaseDropdown extends Feature {
             }
             compareFn = sortNumberStr(comparer, decimal);
         }
-        else if (tf.hasType(colIndex, [DATE, FORMATTED_DATE])) {
+        else if (tf.hasType(colIndex, [DATE])) {
             let locale = tf.feature('dateType').getLocale(colIndex);
             let comparer = dateSortAsc;
             compareFn = sortDateStr(comparer, locale);
