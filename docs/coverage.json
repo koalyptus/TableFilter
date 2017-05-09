@@ -1,7 +1,7 @@
 {
-  "coverage": "98.99%",
+  "coverage": "100%",
   "expectCount": 696,
-  "actualCount": 689,
+  "actualCount": 696,
   "files": {
     "src/const.js": {
       "expectCount": 19,
@@ -30,13 +30,8 @@
     },
     "src/modules/checkList.js": {
       "expectCount": 21,
-      "actualCount": 17,
-      "undocumentLines": [
-        216,
-        199,
-        187,
-        188
-      ]
+      "actualCount": 21,
+      "undocumentLines": []
     },
     "src/modules/clearButton.js": {
       "expectCount": 10,
@@ -60,12 +55,8 @@
     },
     "src/modules/dropdown.js": {
       "expectCount": 17,
-      "actualCount": 14,
-      "undocumentLines": [
-        163,
-        154,
-        155
-      ]
+      "actualCount": 17,
+      "undocumentLines": []
     },
     "src/types.js": {
       "expectCount": 9,
