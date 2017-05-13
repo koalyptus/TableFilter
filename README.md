@@ -32,7 +32,7 @@ git clone https://github.com/koalyptus/TableFilter.git
 
 * You can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
 
-* Alternatively, install TableFilter files in your npm enabled project using:
+* TableFilter is available on [npm repository](https://www.npmjs.com/package/tablefilter), you can install it from the command line using the following command:
 ```shell
 npm install tablefilter --save-dev
 ``` 
@@ -40,15 +40,32 @@ npm install tablefilter --save-dev
 ```shell
 npm install tablefilter@next --save-dev
 ```
-* If you don't use `npm`, you can also 
-[access these files on unpkg](https://unpkg.com/tablefilter/), download them 
-or point your package manager to them.
+* Alternatively  you can also [access these files from unpkg CDN](https://unpkg.com/tablefilter/), download them or point your package manager to them.
 
 ## Setup
+### Using modules
+Require `TableFilter`:
+```javascript
+// ES2015 modules
+import TableFilter from 'tablefilter';
+
+// CommonJS or AMD modules
+var TableFilter = require('tablefilter');
+```
+
+### Using distribution scripts
+If you are not using a module system, you can reference the distribution scripts directly in your html pages:
+```html
+<script src="path_to/node_modules/tablefilter/dist/tablefilter/tablefilter.js"></script>
+```
+
+### Placing manually the distribution scripts in your project
 Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the main js file in your page:
 ```shell
 <script src="path/to/my/scripts/tablefilter/tablefilter.js"></script>
 ```
+
+### Usage
 Place the following snippet just under the HTML table and always define a ``base_path`` property in the configuration object to reflect the path to the script
 ```shell
 <script>
