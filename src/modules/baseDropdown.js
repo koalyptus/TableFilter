@@ -1,0 +1,121 @@
+import {Feature} from '../feature';
+import {
+    ignoreCase, numSortAsc, numSortDesc,
+    dateSortAsc, sortNumberStr, sortDateStr
+} from '../sort';
+import {isArray, isObj} from '../types';
+import {NUMBER, FORMATTED_NUMBER, DATE} from '../const';
+
+/**
+ * Base class for Dropdown and CheckList UI components
+ * @export
+ * @class BaseDropdown
+ * @extends {Feature}
+ */
+export class BaseDropdown extends Feature {
+
+    /**
+     * Creates an instance of BaseDropdown
+     * @param {TableFilter} tf
+     */
+    constructor(tf) {
+        super(tf, 'baseDropdown');
+
+        let f = this.config;
+
+        /**
+         * Filter options custom sorter on a column basis
+         * @type {Object}
+         */
+        this.customSorter = isObj(f.filter_options_sorter) &&
+            isArray(f.filter_options_sorter.col) &&
+            isArray(f.filter_options_sorter.comparer) ?
+                f.filter_options_sorter :
+                null;
+
+        // TODO: move here all properties shared by Dropdown CheckList
+
+        /**
+         * Has custom options
+         * @type {Boolean}
+         * @private
+         */
+        this.isCustom = false;
+
+        /**
+         * List of options values
+         * @type {Array}
+         * @private
+         */
+        this.opts = [];
+
+        /**
+         * List of options texts for custom values
+         * @type {Array}
+         * @private
+         */
+        this.optsTxt = [];
+
+        /**
+         * List of options to be excluded from the checklist filter
+         * @type {Array}
+         * @private
+         */
+        this.excludedOpts = [];
+    }
+
+    /**
+     * Sort passed options based on the type of the specified column
+     * @param {Number} colIndex Column index
+     * @param {Array} [options=[]] Collection of values
+     * @return {Array} Sorted values
+     * @private
+     */
+    sortOptions(colIndex, options = []) {
+        let tf = this.tf;
+
+        if (tf.isCustomOptions(colIndex) || !tf.sortSlc ||
+            (isArray(tf.sortSlc) && tf.sortSlc.indexOf(colIndex) === -1)) {
+            return options;
+        }
+
+        let { caseSensitive, sortNumDesc } = tf;
+        let compareFn;
+
+        if (this.customSorter &&
+            this.customSorter.col.indexOf(colIndex) !== -1) {
+            var idx = this.customSorter.col.indexOf(colIndex);
+            compareFn = this.customSorter.comparer[idx];
+        }
+        else if (tf.hasType(colIndex, [NUMBER, FORMATTED_NUMBER])) {
+            let decimal = tf.getDecimal(colIndex);
+            let comparer = numSortAsc;
+            if (sortNumDesc === true || sortNumDesc.indexOf(colIndex) !== -1) {
+                comparer = numSortDesc;
+            }
+            compareFn = sortNumberStr(comparer, decimal);
+        }
+        else if (tf.hasType(colIndex, [DATE])) {
+            let locale = tf.feature('dateType').getLocale(colIndex);
+            let comparer = dateSortAsc;
+            compareFn = sortDateStr(comparer, locale);
+        } else { // string
+            compareFn = caseSensitive ? undefined : ignoreCase;
+        }
+
+        return options.sort(compareFn);
+    }
+
+    /**
+     * Regenerate filters of specified columns and maintain selection if any
+     * @param {Array} colIndexes Collection of column indexes
+     * @private
+     */
+    refreshFilters(colIndexes) {
+        colIndexes.forEach((colIdx) => {
+            let values = this.getValues(colIdx);
+            this.build(colIdx, this.tf.linkedFilters);
+            this.selectOptions(colIdx, values);
+        });
+    }
+}

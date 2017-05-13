@@ -82,8 +82,9 @@
 var tfConfig = {
     base_path: '../dist/tablefilter/',
     alternate_rows: true,
-    rows_counter: true,
-    rows_counter_text: "Displayed rows: ",
+    rows_counter: {
+        text: 'Displayed rows: '
+    },
     loader: true,
     status: true,
     status_bar: true,

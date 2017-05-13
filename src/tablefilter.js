@@ -106,6 +106,9 @@ export class TableFilter {
          */
         this.nbCells = null;
 
+        /** @private */
+        this.initialized = false;
+
         let startRow;
 
         // TODO: use for-of
@@ -543,11 +546,13 @@ export class TableFilter {
         this.onSlcChange = f.on_change === false ? false : true;
 
         /**
-         * Indicate whether options in drop-down filter types are sorted in a
-         * alpha-numeric manner by default
-         * @type {Boolean}
+         * Make drop-down filter types options sorted in alpha-numeric manner
+         * by default globally or on a column basis
+         * @type {Boolean|Array}
          */
-        this.sortSlc = f.sort_select === false ? false : true;
+        // this.sortSlc = f.sort_select === false ? false : true;
+        this.sortSlc = isUndef(f.sort_select) ? true :
+            isArray(f.sort_select) ? f.sort_select : Boolean(f.sort_select);
 
         /**
          * Indicate whether options in drop-down filter types are sorted in a
@@ -708,7 +713,7 @@ export class TableFilter {
          * Enable rows counter UI component
          * @type {Boolean}
          */
-        this.rowsCounter = Boolean(f.rows_counter);
+        this.rowsCounter = isObj(f.rows_counter) || Boolean(f.rows_counter);
 
         /**
          * Enable status bar UI component
@@ -1045,16 +1050,12 @@ export class TableFilter {
 
                 //drop-down filters
                 if (col === SELECT || col === MULTIPLE) {
-                    if (!Mod.dropdown) {
-                        Mod.dropdown = new Dropdown(this);
-                    }
+                    Mod.dropdown = Mod.dropdown || new Dropdown(this);
                     Mod.dropdown.init(i, this.isExternalFlt, fltcell);
                 }
                 // checklist
                 else if (col === CHECKLIST) {
-                    if (!Mod.checkList) {
-                        Mod.checkList = new CheckList(this);
-                    }
+                    Mod.checkList = Mod.checkList || new CheckList(this);
                     Mod.checkList.init(i, this.isExternalFlt, fltcell);
                 } else {
                     this._buildInputFilter(i, inpclass, fltcell);
@@ -1117,7 +1118,6 @@ export class TableFilter {
             this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
 
-        /** @inherited */
         this.initialized = true;
 
         this.onFiltersLoaded(this);
@@ -1364,9 +1364,7 @@ export class TableFilter {
         this.emitter.emit('before-loading-extensions', this);
         for (let i = 0, len = exts.length; i < len; i++) {
             let ext = exts[i];
-            if (!this.ExtRegistry[ext.name]) {
-                this.loadExtension(ext);
-            }
+            this.loadExtension(ext);
         }
         this.emitter.emit('after-loading-extensions', this);
     }
@@ -1376,7 +1374,7 @@ export class TableFilter {
      * @param  {Object} ext Extension config object
      */
     loadExtension(ext) {
-        if (!ext || !ext.name) {
+        if (!ext || !ext.name || this.hasExtension(ext.name)) {
             return;
         }
 
@@ -1417,6 +1415,15 @@ export class TableFilter {
      */
     hasExtension(name) {
         return !isEmpty(this.ExtRegistry[name]);
+    }
+
+    /**
+     * Register the passed extension instance with associated name
+     * @param {Object} inst Extension instance
+     * @param {String} name Name of the extension
+     */
+    registerExtension(inst, name) {
+        this.ExtRegistry[name] = inst;
     }
 
     /**
@@ -1803,7 +1810,7 @@ export class TableFilter {
      */
     _testTerm(term, cellValue, colIdx) {
         let numData;
-        let decimal = this.decimalSeparator;
+        let decimal = this.getDecimal(colIdx);
         let reLe = new RegExp(this.leOperator),
             reGe = new RegExp(this.geOperator),
             reL = new RegExp(this.lwOperator),
@@ -1845,7 +1852,7 @@ export class TableFilter {
             let dateType = this.Mod.dateType;
             let isValidDate = dateType.isValid.bind(dateType);
             let parseDate = dateType.parse.bind(dateType);
-            let locale = dateType.getOptions(colIdx).locale || this.locale;
+            let locale = dateType.getLocale(colIdx);
 
             // Search arg dates tests
             let isLDate = hasLO &&
@@ -1916,12 +1923,6 @@ export class TableFilter {
         }
 
         else {
-            if (this.hasType(colIdx, [FORMATTED_NUMBER])) {
-                let colType = this.colTypes[colIdx];
-                if (colType.hasOwnProperty('decimal')) {
-                    decimal = colType.decimal;
-                }
-            }
             // Convert to number anyways to auto-resolve type in case not
             // defined by configuration
             numData = Number(cellValue) || parseNb(cellValue, decimal);
@@ -2260,20 +2261,14 @@ export class TableFilter {
         let value = this.getCellValue(cell);
 
         if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
-            let decimal = this.decimalSeparator;
-            let colType = this.colTypes[colIndex];
-            if (colType.hasOwnProperty('decimal')) {
-                decimal = colType.decimal;
-            }
-            return parseNb(value, decimal);
+            return parseNb(value, this.getDecimal(colIndex));
         }
         else if (this.hasType(colIndex, [NUMBER])) {
             return Number(value) || parseNb(value);
         }
         else if (this.hasType(colIndex, [DATE])){
             let dateType = this.Mod.dateType;
-            let locale = dateType.getOptions(colIndex).locale || this.locale;
-            return dateType.parse(value, locale);
+            return dateType.parse(value, dateType.getLocale(colIndex));
         }
 
         return value;
@@ -3105,6 +3100,23 @@ export class TableFilter {
      */
     dom() {
         return this.tbl;
+    }
+
+    /**
+     * Return the decimal separator for supplied column as per column type
+     * configuration or global setting
+     * @param {Number} colIndex Column index
+     * @returns {String} '.' or ','
+     */
+    getDecimal(colIndex) {
+        let decimal = this.decimalSeparator;
+        if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
+            let colType = this.colTypes[colIndex];
+            if (colType.hasOwnProperty('decimal')) {
+                decimal = colType.decimal;
+            }
+        }
+        return decimal;
     }
 
     /**

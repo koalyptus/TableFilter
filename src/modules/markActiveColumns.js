@@ -17,7 +17,7 @@ export class MarkActiveColumns extends Feature {
     constructor(tf) {
         super(tf, 'markActiveColumns');
 
-        let config = this.config.mark_active_columns
+        let config = this.config.mark_active_columns || {};
 
         /**
          * Css class for filtered (active) columns

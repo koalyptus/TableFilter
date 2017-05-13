@@ -19,7 +19,7 @@ export class NoResults extends Feature {
         super(tf, 'noResults');
 
         //configuration object
-        let f = this.config.no_results_message;
+        let f = this.config.no_results_message || {};
 
         /**
          * Text (accepts HTML)
