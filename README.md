@@ -35,7 +35,7 @@ git clone https://github.com/koalyptus/TableFilter.git
 * TableFilter is available on [npm repository](https://www.npmjs.com/package/tablefilter), you can install it from the command line using the following command:
 ```shell
 npm install tablefilter --save-dev
-``` 
+```
 * or get the future features from the ``next`` release channel:
 ```shell
 npm install tablefilter@next --save-dev
@@ -79,7 +79,7 @@ If the ``base_path`` property is not specified, it will default to ``/tablefilte
 ```shell
 your-page.html
  |— tablefilter
-``` 
+```
 
 ## Development
 This project requires node.js and Grunt to be installed:
@@ -94,24 +94,24 @@ Start by installing any dependencies.
 ```shell
 npm install
 ```
-Use 
+Use
 ```shell
 npm run dev
-``` 
+```
 command to launch a build / watch cycle and start the local
 sever on port ``8080``.
 
-Use 
+Use
 ```shell
 npm run build
-``` 
+```
 command to generate a production build.
 
-The 
+The
 ```shell
 npm run dist
-``` 
-command will create a production build, run the tests and finally generate 
+```
+command will create a production build, run the tests and finally generate
 the demos:
 
 To run all the tests and generate the coverage report:
@@ -132,7 +132,7 @@ to view the coverage report(s), open the `index.html` under the
 [online](https://codecov.io/gh/koalyptus/TableFilter).
 
 ## Demos
-Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) 
+Check out the online [examples](http://koalyptus.github.io/TableFilter/examples)
 or generate the demos locally:
 ```shell
 npm run build:demos

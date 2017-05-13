@@ -92,6 +92,6 @@ export class Feature {
      * @returns {Boolean}
      */
     isEnabled() {
-        return this.enabled;
+        return this.enabled === true;
     }
 }

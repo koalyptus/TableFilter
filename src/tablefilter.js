@@ -14,9 +14,6 @@ import {root} from './root';
 import {Emitter} from './emitter';
 import {Dropdown} from './modules/dropdown';
 import {CheckList} from './modules/checkList';
-import {Paging} from './modules/paging';
-import {Help} from './modules/help';
-import {DateType} from './modules/dateType';
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
@@ -830,6 +827,13 @@ export class TableFilter {
         /*** data types ***/
 
         /**
+         * Enable date type module
+         * @type {Boolean}
+         * @private
+         */
+        this.dateType = true;
+
+        /**
          * Define default locale, default to 'en' as per Sugar Date module:
          * https://sugarjs.com/docs/#/DateLocales
          * @type {String}
@@ -975,6 +979,11 @@ export class TableFilter {
          */
         this.ExtRegistry = {};
 
+        //conditionally instantiate required features
+        this.instantiateFeatures(
+            Object.keys(FEATURES).map((item) => FEATURES[item])
+        );
+
         //load styles if necessary
         this.import(this.stylesheetId, this.stylesheet, null, 'link');
     }
@@ -995,21 +1004,13 @@ export class TableFilter {
         //loads theme
         this.loadThemes();
 
-        // Instantiate sugar date wrapper
-        Mod.dateType = Mod.dateType || new DateType(this);
-        Mod.dateType.init();
-
-        // Instantiate help feature and initialise only if set true
-        Mod.help = Mod.help || new Help(this);
-        if (this.help) {
-            Mod.help.init();
-        }
-
-        const { state, markActiveColumns, gridLayout, loader, highlightKeyword,
-            popupFilter, rowsCounter, statusBar, clearButton, alternateRows,
-            noResults } = FEATURES;
+        const { dateType, help, state, markActiveColumns, gridLayout, loader,
+            highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
+            alternateRows, noResults, paging } = FEATURES;
 
         this.initFeatures([
+            dateType,
+            help,
             state,
             markActiveColumns,
             gridLayout,
@@ -1086,17 +1087,9 @@ export class TableFilter {
             statusBar,
             clearButton,
             alternateRows,
-            noResults
+            noResults,
+            paging
         ]);
-
-        if (this.paging) {
-            if (!Mod.paging) {
-                Mod.paging = new Paging(this);
-                Mod.paging.init();
-            } else {
-                Mod.paging.reset();
-            }
-        }
 
         if (this.hasColWidths && !this.gridLayout) {
             this.setColWidths();
@@ -1313,16 +1306,7 @@ export class TableFilter {
     }
 
     /**
-     * Return a feature instance for a given name
-     * @param  {String} name Name of the feature
-     * @return {Object}
-     */
-    feature(name) {
-        return this.Mod[name];
-    }
-
-    /**
-     * Instanciate and initialise the collection of features required by the
+     * Istantiate the collection of features required by the
      * configuration and add them to the features registry. A feature is
      * described by a `class` and `name` fields and and optional `property`
      * field:
@@ -1333,20 +1317,47 @@ export class TableFilter {
      * @param {Array} [features=[]]
      * @private
      */
-    initFeatures(features = []) {
+    instantiateFeatures(features = []) {
         features.forEach((feature) => {
             // TODO: remove the property field.
             // Due to naming convention inconsistencies, a `property`
-            // field is added in order allow a conditional instanciation based
+            // field is added to allow a conditional instanciation based
             // on that property on TableFilter, if supplied.
             feature.property = feature.property || feature.name;
-            if (this[feature.property] === true) {
+            if (this[feature.property] === true || feature.enforce === true) {
                 let {class: Cls, name} = feature;
 
                 this.Mod[name] = this.Mod[name] || new Cls(this);
+            }
+        });
+    }
+
+    /**
+     * Initialise the passed features collection. A feature is described by a
+     * `class` and `name` fields and and optional `property` field:
+     * {
+     *   class: AClass,
+     *   name: 'aClass'
+     * }
+     * @param {Array} [features=[]]
+     * @private
+     */
+    initFeatures(features = []) {
+        features.forEach((feature) => {
+            let {property, name} = feature;
+            if (this[property] === true && this.Mod[name]) {
                 this.Mod[name].init();
             }
         });
+    }
+
+    /**
+     * Return a feature instance for a given name
+     * @param  {String} name Name of the feature
+     * @return {Object}
+     */
+    feature(name) {
+        return this.Mod[name];
     }
 
     /**
@@ -1500,9 +1511,9 @@ export class TableFilter {
         if (this.isExternalFlt && !this.popupFilters) {
             this.removeExternalFlts();
         }
-        if (this.infDiv) {
-            this.removeToolbar();
-        }
+
+        this.removeToolbar();
+
         if (this.hasExtensions) {
             this.destroyExtensions();
         }
@@ -1586,9 +1597,9 @@ export class TableFilter {
 
         // emit help initialisation only if undefined
         if (isUndef(this.help)) {
-            // explicitily set enabled field to true to initialise help by
+            // explicitily enable help to initialise feature by
             // default, only if setting is undefined
-            this.Mod.help.enabled = true;
+            this.Mod.help.enable();
             this.emitter.emit('init-help', this);
         }
     }
@@ -1605,9 +1616,7 @@ export class TableFilter {
 
         let tbl = this.dom();
         let captions = tag(tbl, 'caption');
-        if (captions.length > 0) {
-            [].forEach.call(captions, (elm) => tbl.removeChild(elm));
-        }
+        [].forEach.call(captions, (elm) => removeElm(elm));
     }
 
     /**
