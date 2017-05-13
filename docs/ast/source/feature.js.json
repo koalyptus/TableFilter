@@ -2708,13 +2708,49 @@
                     {
                       "type": "ReturnStatement",
                       "argument": {
-                        "type": "MemberExpression",
-                        "computed": false,
-                        "object": {
-                          "type": "ThisExpression",
+                        "type": "BinaryExpression",
+                        "operator": "===",
+                        "left": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "ThisExpression",
+                            "range": [
+                              1842,
+                              1846
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 95,
+                                "column": 15
+                              },
+                              "end": {
+                                "line": 95,
+                                "column": 19
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "enabled",
+                            "range": [
+                              1847,
+                              1854
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 95,
+                                "column": 20
+                              },
+                              "end": {
+                                "line": 95,
+                                "column": 27
+                              }
+                            }
+                          },
                           "range": [
                             1842,
-                            1846
+                            1854
                           ],
                           "loc": {
                             "start": {
@@ -2723,31 +2759,32 @@
                             },
                             "end": {
                               "line": 95,
-                              "column": 19
+                              "column": 27
                             }
                           }
                         },
-                        "property": {
-                          "type": "Identifier",
-                          "name": "enabled",
+                        "right": {
+                          "type": "Literal",
+                          "value": true,
+                          "raw": "true",
                           "range": [
-                            1847,
-                            1854
+                            1859,
+                            1863
                           ],
                           "loc": {
                             "start": {
                               "line": 95,
-                              "column": 20
+                              "column": 32
                             },
                             "end": {
                               "line": 95,
-                              "column": 27
+                              "column": 36
                             }
                           }
                         },
                         "range": [
                           1842,
-                          1854
+                          1863
                         ],
                         "loc": {
                           "start": {
@@ -2756,13 +2793,13 @@
                           },
                           "end": {
                             "line": 95,
-                            "column": 27
+                            "column": 36
                           }
                         }
                       },
                       "range": [
                         1835,
-                        1855
+                        1864
                       ],
                       "loc": {
                         "start": {
@@ -2771,14 +2808,14 @@
                         },
                         "end": {
                           "line": 95,
-                          "column": 28
+                          "column": 37
                         }
                       }
                     }
                   ],
                   "range": [
                     1825,
-                    1861
+                    1870
                   ],
                   "loc": {
                     "start": {
@@ -2795,7 +2832,7 @@
                 "expression": false,
                 "range": [
                   1822,
-                  1861
+                  1870
                 ],
                 "loc": {
                   "start": {
@@ -2812,7 +2849,7 @@
               "computed": false,
               "range": [
                 1813,
-                1861
+                1870
               ],
               "loc": {
                 "start": {
@@ -2849,7 +2886,7 @@
           ],
           "range": [
             136,
-            1863
+            1872
           ],
           "loc": {
             "start": {
@@ -2864,7 +2901,7 @@
         },
         "range": [
           122,
-          1863
+          1872
         ],
         "loc": {
           "start": {
@@ -2902,7 +2939,7 @@
       "source": null,
       "range": [
         115,
-        1863
+        1872
       ],
       "loc": {
         "start": {
@@ -2939,7 +2976,7 @@
   "sourceType": "module",
   "range": [
     1,
-    1863
+    1872
   ],
   "loc": {
     "start": {
