@@ -193,9 +193,9 @@ export class Help extends Feature {
      * Toggle help pop-up
      */
     toggle() {
-        // check only if explicitily set to false as in this case undefined
+        // check only if explicitily disabled as in this case undefined
         // signifies the help feature is enabled by default
-        if (this.enabled === false) {
+        if (!this.isEnabled()) {
             return;
         }
 
@@ -225,7 +225,6 @@ export class Help extends Feature {
         this.cont = null;
 
         this.boundMouseup = null;
-
         this.initialized = false;
     }
 

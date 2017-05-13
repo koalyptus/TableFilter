@@ -1,3 +1,5 @@
+import {DateType} from './modules/dateType';
+import {Help} from './modules/help';
 import {State} from './modules/state';
 import {GridLayout} from './modules/gridLayout';
 import {Loader} from './modules/loader';
@@ -9,6 +11,7 @@ import {StatusBar} from './modules/statusBar';
 import {ClearButton} from './modules/clearButton';
 import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
+import {Paging} from './modules/paging';
 
 /**
  * Filter types
@@ -134,6 +137,15 @@ export const AUTO_FILTER_DELAY = 750;
  * @type {Object}
  */
 export const FEATURES = {
+    dateType: {
+        class: DateType,
+        name: 'dateType'
+    },
+    help: {
+        class: Help,
+        name: 'help',
+        enforce: true
+    },
     state: {
         class: State,
         name: 'state'
@@ -180,5 +192,9 @@ export const FEATURES = {
     noResults: {
         class: NoResults,
         name: 'noResults'
+    },
+    paging: {
+        class: Paging,
+        name: 'paging'
     }
 };

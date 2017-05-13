@@ -33,7 +33,7 @@ test('Properties', function() {
 });
 test('Can destroy', function() {
     paging.destroy();
-    deepEqual(paging.enabled, false, 'disabled');
+    deepEqual(paging.initialized, false, 'not initialized');
 });
 test('Can reset', function() {
     paging.reset();

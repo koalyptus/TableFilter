@@ -489,15 +489,11 @@ export class Paging extends Feature {
      * @param {Boolean} filterTable Execute filtering once paging instanciated
      */
     reset(filterTable = false) {
-        var tf = this.tf;
-        if (this.isEnabled()) {
-            return;
-        }
         this.enable();
         this.init();
 
         if (filterTable) {
-            tf.filter();
+            this.tf.filter();
         }
     }
 
@@ -894,7 +890,7 @@ export class Paging extends Feature {
 
         this.pagingSlc = null;
         this.nbPages = 0;
-        this.disable();
+
         this.initialized = false;
     }
 }

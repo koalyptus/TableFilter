@@ -32,23 +32,40 @@ git clone https://github.com/koalyptus/TableFilter.git
 
 * You can [download](https://github.com/koalyptus/TableFilter/archive/master.zip) this repository.
 
-* Alternatively, install TableFilter files in your npm enabled project using:
+* TableFilter is available on [npm repository](https://www.npmjs.com/package/tablefilter), you can install it from the command line using the following command:
 ```shell
 npm install tablefilter --save-dev
-``` 
+```
 * or get the future features from the ``next`` release channel:
 ```shell
 npm install tablefilter@next --save-dev
 ```
-* If you don't use `npm`, you can also 
-[access these files on unpkg](https://unpkg.com/tablefilter/), download them 
-or point your package manager to them.
+* Alternatively  you can also [access these files from unpkg CDN](https://unpkg.com/tablefilter/), download them or point your package manager to them.
 
 ## Setup
+### Using modules
+Require `TableFilter`:
+```javascript
+// ES2015 modules
+import TableFilter from 'tablefilter';
+
+// CommonJS or AMD modules
+var TableFilter = require('tablefilter');
+```
+
+### Using distribution scripts
+If you are not using a module system, you can reference the distribution scripts directly in your html pages:
+```html
+<script src="path_to/node_modules/tablefilter/dist/tablefilter/tablefilter.js"></script>
+```
+
+### Placing manually the distribution scripts in your project
 Copy the ``tablefilter`` directory under ``dist`` and place it at desired location in your project. Then include the main js file in your page:
 ```shell
 <script src="path/to/my/scripts/tablefilter/tablefilter.js"></script>
 ```
+
+### Usage
 Place the following snippet just under the HTML table and always define a ``base_path`` property in the configuration object to reflect the path to the script
 ```shell
 <script>
@@ -62,7 +79,7 @@ If the ``base_path`` property is not specified, it will default to ``/tablefilte
 ```shell
 your-page.html
  |— tablefilter
-``` 
+```
 
 ## Development
 This project requires node.js and Grunt to be installed:
@@ -77,24 +94,24 @@ Start by installing any dependencies.
 ```shell
 npm install
 ```
-Use 
+Use
 ```shell
 npm run dev
-``` 
+```
 command to launch a build / watch cycle and start the local
 sever on port ``8080``.
 
-Use 
+Use
 ```shell
 npm run build
-``` 
+```
 command to generate a production build.
 
-The 
+The
 ```shell
 npm run dist
-``` 
-command will create a production build, run the tests and finally generate 
+```
+command will create a production build, run the tests and finally generate
 the demos:
 
 To run all the tests and generate the coverage report:
@@ -115,7 +132,7 @@ to view the coverage report(s), open the `index.html` under the
 [online](https://codecov.io/gh/koalyptus/TableFilter).
 
 ## Demos
-Check out the online [examples](http://koalyptus.github.io/TableFilter/examples) 
+Check out the online [examples](http://koalyptus.github.io/TableFilter/examples)
 or generate the demos locally:
 ```shell
 npm run build:demos

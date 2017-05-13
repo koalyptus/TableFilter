@@ -139,13 +139,34 @@ module('Destroy and re-init with help property undefined');
 test('Can init help when property is undefined and toolbar is set',
     function() {
         tf.destroy();
-        tf.help = undefined;
-        tf.rowsCounter = true;
-        var help = tf.feature('help');
-        help.btnText = '?';
+        tf = new TableFilter('demo', {
+            base_path: '../dist/tablefilter/',
+            help_instructions: undefined,
+            help_instructions_btn_text: '??',
+            // creates toolbar
+            rows_counter: true
+        });
         tf.init();
+        var help = tf.feature('help');
 
         notEqual(help.btn, null, 'btn property');
+        deepEqual(help.btn.childNodes[1].innerHTML, '??', 'Button text');
+    }
+);
+
+test('Does not init help when property is undefined and toolbar is not set '+
+    'by other feature(s)',
+    function() {
+        tf.destroy();
+        tf = new TableFilter('demo', {
+            base_path: '../dist/tablefilter/'
+        });
+        tf.init();
+        var help = tf.feature('help');
+
+        deepEqual(help.initialized, false, 'feature not initialized');
+        deepEqual(help.btn, null, 'btn property not set');
+        deepEqual(help.cont, null, 'cont property not set');
     }
 );
 
