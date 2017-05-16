@@ -547,7 +547,6 @@ export class TableFilter {
          * by default globally or on a column basis
          * @type {Boolean|Array}
          */
-        // this.sortSlc = f.sort_select === false ? false : true;
         this.sortSlc = isUndef(f.sort_select) ? true :
             isArray(f.sort_select) ? f.sort_select : Boolean(f.sort_select);
 
@@ -708,15 +707,15 @@ export class TableFilter {
 
         /**
          * Enable rows counter UI component
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
         this.rowsCounter = isObj(f.rows_counter) || Boolean(f.rows_counter);
 
         /**
          * Enable status bar UI component
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
-        this.statusBar = Boolean(f.status_bar);
+        this.statusBar = isObj(f.status_bar) || Boolean(f.status_bar);
 
         /**
          * Enable activity/spinner indicator UI component
@@ -1008,6 +1007,7 @@ export class TableFilter {
             highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
             alternateRows, noResults, paging } = FEATURES;
 
+        //explicitly initialise features in given order
         this.initFeatures([
             dateType,
             help,
