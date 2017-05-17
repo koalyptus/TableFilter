@@ -13176,9 +13176,10 @@
         loader: true,
         loader_html: '<div id="lblMsg"></div>',
         loader_css_class: 'myLoader',
-        status_bar: true,
-        status_bar_target_id: 'lblMsg',
-        status_bar_css_class: 'myStatus',
+        status_bar: {
+          target_id: 'lblMsg',
+          css_class: 'myStatus'
+        },
         col_0: 'select',
         col_1: 'select',
         col_2: 'select',

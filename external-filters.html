@@ -722,8 +722,9 @@
             text: 'Displayed rows: '
         },
         loader: true,
-        status_bar: true,
-        status_bar_target_id: 'statusDiv',
+        status_bar: {
+          target_id: 'statusDiv',
+        },
         col_types: [
             'string', 'string', 'number',
             'number', 'number', 'number',
