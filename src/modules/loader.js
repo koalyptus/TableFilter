@@ -33,13 +33,13 @@ export class Loader extends Feature {
     constructor(tf) {
         super(tf, 'loader');
 
-        let f = this.config;
+        let f = this.config.loader || {};
 
         /**
          * ID of custom container element
          * @type {String}
          */
-        this.targetId = f.loader_target_id || null;
+        this.targetId = f.target_id || null;
 
         /**
          * Loader container DOM element
@@ -51,19 +51,19 @@ export class Loader extends Feature {
          * Text displayed when indicator is visible
          * @type {String}
          */
-        this.text = f.loader_text || 'Loading...';
+        this.text = f.text || 'Loading...';
 
         /**
          * Custom HTML injected in Loader's container element
          * @type {String}
          */
-        this.html = f.loader_html || null;
+        this.html = f.html || null;
 
         /**
          * Css class for Loader's container element
          * @type {String}
          */
-        this.cssClass = f.loader_css_class || 'loader';
+        this.cssClass = f.css_class || 'loader';
 
         /**
          * Close delay in milliseconds
