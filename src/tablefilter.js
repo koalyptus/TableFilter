@@ -719,9 +719,9 @@ export class TableFilter {
 
         /**
          * Enable activity/spinner indicator UI component
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
-        this.loader = Boolean(f.loader);
+        this.loader = isObj(f.loader) || Boolean(f.loader);
 
         /*** validation - reset buttons/links ***/
         /**

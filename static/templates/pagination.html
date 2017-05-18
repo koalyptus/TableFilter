@@ -42,9 +42,10 @@
         alternate_rows: true,
         btn_reset: true,
         rows_counter: true,
-        loader: true,
-        loader_html: '<div id="lblMsg"></div>',
-        loader_css_class: 'myLoader',
+        loader: {
+            html: '<div id="lblMsg"></div>',
+            css_class: 'myLoader'
+        },
         status_bar: {
             target_id: 'lblMsg',
             css_class: 'myStatus'
