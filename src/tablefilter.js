@@ -487,8 +487,8 @@ export class TableFilter {
          * Indicate whether help UI component is disabled
          * @type {Boolean}
          */
-        this.help = isUndef(f.help_instructions) ?
-            undefined : Boolean(f.help_instructions);
+        this.help = isUndef(f.help_instructions) ? undefined :
+            (isObj(f.help_instructions) || Boolean(f.help_instructions));
 
         /**
          * Indicate whether pop-up filters UI is enabled
