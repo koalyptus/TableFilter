@@ -8,7 +8,7 @@ import {isEmpty as isEmptyString} from './string';
 import {
     isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN
 } from './types';
-import {parse as parseNb} from './number'
+import {parse as parseNb} from './number';
 
 import {root} from './root';
 import {Emitter} from './emitter';

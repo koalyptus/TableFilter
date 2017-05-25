@@ -6,6 +6,7 @@
   "rules": {
     "max-len": [2, 80, 2, {"ignoreUrls": true}],
     "indent": [2, 4, {"SwitchCase": 1}],
+    "semi": ["error", "always"],
     "no-trailing-spaces": 2,
     "no-multi-spaces": 2,
     "array-bracket-spacing": 2,

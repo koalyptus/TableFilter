@@ -138,7 +138,7 @@
         // setup
         var clearActiveColumns = markActiveColumns.clearActiveColumns;
         var hit = 0;
-        markActiveColumns.clearActiveColumns = function() { hit++ };
+        markActiveColumns.clearActiveColumns = function() { hit++; };
         markActiveColumns.initialized = false;
 
         // act
