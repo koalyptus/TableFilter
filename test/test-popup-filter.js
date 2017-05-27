@@ -164,6 +164,19 @@ test('Pop-up filter auto-closes when user clicks away', function() {
     );
 });
 
+test('Can close all popup filters', function() {
+    // setup
+    popupFilter.open(0);
+
+    // act
+    popupFilter.closeAll();
+
+    // assert
+    deepEqual(popupFilter.isOpen(0), false,
+        'Pop-up filter closed after closeAll'
+    );
+});
+
 test('Can destroy and reset', function(){
     // setup
     popupFilter.destroy();

@@ -373,7 +373,7 @@ export class PopupFilter extends Feature {
             if (i === exceptIdx) {
                 continue;
             }
-            let fltType = tf.getFilterType(i);
+            let fltType = this.tf.getFilterType(i);
             let isMultipleFilter =
                 (fltType === CHECKLIST || fltType === MULTIPLE);
 
@@ -443,7 +443,7 @@ export class PopupFilter extends Feature {
         this.fltIcons = [];
 
         // TODO: expose an API to handle external filter IDs
-        tf.externalFltTgtIds = [];
+        this.tf.externalFltTgtIds = [];
 
         // unsubscribe to events
         this.emitter.off(['before-filtering'], () => this.setIconsState());
