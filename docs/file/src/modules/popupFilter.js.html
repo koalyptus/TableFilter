@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.5.17 API Document</title>
+  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.5.18 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -502,7 +502,7 @@ export class PopupFilter extends Feature {
             if (i === exceptIdx) {
                 continue;
             }
-            let fltType = tf.getFilterType(i);
+            let fltType = this.tf.getFilterType(i);
             let isMultipleFilter =
                 (fltType === CHECKLIST || fltType === MULTIPLE);
 
@@ -572,7 +572,7 @@ export class PopupFilter extends Feature {
         this.fltIcons = [];
 
         // TODO: expose an API to handle external filter IDs
-        tf.externalFltTgtIds = [];
+        this.tf.externalFltTgtIds = [];
 
         // unsubscribe to events
         this.emitter.off([&apos;before-filtering&apos;], () =&gt; this.setIconsState());
