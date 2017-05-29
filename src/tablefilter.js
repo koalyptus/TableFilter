@@ -494,7 +494,7 @@ export class TableFilter {
          * Indicate whether pop-up filters UI is enabled
          * @type {Boolean}
          */
-        this.popupFilters = Boolean(f.popup_filters);
+        this.popupFilters = isObj(f.popup_filters) || Boolean(f.popup_filters);
 
         /**
          * Indicate whether filtered (active) columns indicator is enabled
