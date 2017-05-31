@@ -26,4 +26,4 @@ export const parse = (value, decimal = '.') => {
 
     // This will fail silently
     return !isNaN(unformatted) ? unformatted : 0;
-}
+};

@@ -15,7 +15,7 @@ export const ignoreCase = (a, b) => {
     let x = a.toLowerCase();
     let y = b.toLowerCase();
     return x < y ? -1 : (x > y ? 1 : 0);
-}
+};
 
 /**
  * Compare function for sorting passed numbers in ascending manner
@@ -63,8 +63,8 @@ export const sortNumberStr = (compareFn, decimal = ',') => {
         let num1 = parseNb(numStr1, decimal);
         let num2 = parseNb(numStr2, decimal);
         return compareFn(num1, num2);
-    }
-}
+    };
+};
 
 /**
  * Curried compare function for sorting passed formatted dates in desired
@@ -78,5 +78,5 @@ export const sortDateStr = (compareFn, locale = 'en-us') => {
         let date1 = SugarDate.create(dateStr1, locale);
         let date2 = SugarDate.create(dateStr2, locale);
         return compareFn(date1, date2);
-    }
-}
+    };
+};

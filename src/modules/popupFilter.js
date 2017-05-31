@@ -21,7 +21,7 @@ export class PopupFilter extends Feature {
         super(tf, 'popupFilters');
 
         // Configuration object
-        let f = this.config;
+        let f = this.config.popup_filters || {};
 
         // Enable external filters
         tf.isExternalFlt = true;
@@ -31,50 +31,47 @@ export class PopupFilter extends Feature {
          * Close active popup filter upon filtering, enabled by default
          * @type {Boolean}
          */
-        this.closeOnFiltering = f.popup_filters_close_on_filtering === false ?
-            false : true;
+        this.closeOnFiltering = f.close_on_filtering === false ? false : true;
 
         /**
          * Filter icon path
          * @type {String}
          */
-        this.iconPath = f.popup_filters_image ||
-            tf.themesPath + 'icn_filter.gif';
+        this.iconPath = f.image || tf.themesPath + 'icn_filter.gif';
 
         /**
          * Active filter icon path
          * @type {string}
          */
-        this.activeIconPath = f.popup_filters_image_active ||
+        this.activeIconPath = f.image_active ||
             tf.themesPath + 'icn_filterActive.gif';
 
         /**
          * HTML for the filter icon
          * @type {string}
          */
-        this.iconHtml = f.popup_filters_image_html ||
+        this.iconHtml = f.image_html ||
             '<img src="' + this.iconPath + '" alt="Column filter" />';
 
         /**
          * Css class assigned to the popup container element
          * @type {String}
          */
-        this.placeholderCssClass =
-            f.popup_placeholder_css_class || 'popUpPlaceholder';
+        this.placeholderCssClass = f.placeholder_css_class ||
+            'popUpPlaceholder';
 
         /**
          * Css class assigned to filter container element
          * @type {String}
          */
-        this.containerCssClass = f.popup_div_css_class || 'popUpFilter';
+        this.containerCssClass = f.div_css_class || 'popUpFilter';
 
         /**
          * Ensure filter's container element width matches column width, enabled
          * by default
          * @type {Boolean}
          */
-        this.adjustToContainer =
-            f.popup_filters_adjust_to_container === false ? false : true;
+        this.adjustToContainer = f.adjust_to_container === false ? false : true;
 
         /**
          * Callback fired before a popup filter is opened

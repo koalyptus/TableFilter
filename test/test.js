@@ -78,7 +78,7 @@
         // setup
         var importFile = tf1.import;
         var hit = 0;
-        tf1.import = function() { hit++ };
+        tf1.import = function() { hit++; };
         tf1.initialized = true;
 
         // act

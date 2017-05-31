@@ -21,7 +21,7 @@
     test('Sanity checks', function() {
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(tf.cellParser.cols.length, 1,
-            'Columns implementing cell parser')
+            'Columns implementing cell parser');
         deepEqual(typeof tf.cellParser.parse, 'function', 'Parse function');
         deepEqual(
             tf.getFilterElement(0).nodeName, 'SELECT', 'Expected filter type');
@@ -60,7 +60,7 @@
             tf.cellParser.cols = [];
             tf.cellParser.parse = function() {
                 hit++;
-            }
+            };
 
             // act
             tf.getCellValue(cell);

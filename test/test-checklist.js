@@ -41,7 +41,7 @@ test('Can refresh all drop-down filters', function() {
     tf.clearFilters();
     var build = checkList.build;
     var hit = 0;
-    checkList.build = function() { hit++ };
+    checkList.build = function() { hit++; };
 
     //act
     checkList.refreshAll();
