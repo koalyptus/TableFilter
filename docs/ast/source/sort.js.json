@@ -825,33 +825,13 @@
                 "line": 18,
                 "column": 1
               }
-            },
-            "trailingComments": [
-              {
-                "type": "Block",
-                "value": "*\n * Compare function for sorting passed numbers in ascending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
-                "range": [
-                  573,
-                  766
-                ],
-                "loc": {
-                  "start": {
-                    "line": 20,
-                    "column": 0
-                  },
-                  "end": {
-                    "line": 25,
-                    "column": 3
-                  }
-                }
-              }
-            ]
+            }
           }
         ],
         "kind": "const",
         "range": [
           440,
-          767
+          572
         ],
         "loc": {
           "start": {
@@ -859,8 +839,8 @@
             "column": 7
           },
           "end": {
-            "line": 26,
-            "column": 0
+            "line": 18,
+            "column": 2
           }
         },
         "leadingComments": [
@@ -901,13 +881,32 @@
             }
           }
         ],
-        "trailingComments": []
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Compare function for sorting passed numbers in ascending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
+            "range": [
+              574,
+              767
+            ],
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 0
+              },
+              "end": {
+                "line": 25,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
         433,
-        767
+        572
       ],
       "loc": {
         "start": {
@@ -915,8 +914,8 @@
           "column": 0
         },
         "end": {
-          "line": 26,
-          "column": 0
+          "line": 18,
+          "column": 2
         }
       },
       "leadingComments": [
@@ -956,6 +955,26 @@
             }
           }
         }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Compare function for sorting passed numbers in ascending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
+          "range": [
+            574,
+            767
+          ],
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 0
+            },
+            "end": {
+              "line": 25,
+              "column": 3
+            }
+          }
+        }
       ]
     },
     {
@@ -969,8 +988,8 @@
               "type": "Identifier",
               "name": "numSortAsc",
               "range": [
-                780,
-                790
+                781,
+                791
               ],
               "loc": {
                 "start": {
@@ -991,8 +1010,8 @@
                   "type": "Identifier",
                   "name": "a",
                   "range": [
-                    794,
-                    795
+                    795,
+                    796
                   ],
                   "loc": {
                     "start": {
@@ -1009,8 +1028,8 @@
                   "type": "Identifier",
                   "name": "b",
                   "range": [
-                    797,
-                    798
+                    798,
+                    799
                   ],
                   "loc": {
                     "start": {
@@ -1031,8 +1050,8 @@
                   "type": "Identifier",
                   "name": "a",
                   "range": [
-                    804,
-                    805
+                    805,
+                    806
                   ],
                   "loc": {
                     "start": {
@@ -1049,8 +1068,8 @@
                   "type": "Identifier",
                   "name": "b",
                   "range": [
-                    808,
-                    809
+                    809,
+                    810
                   ],
                   "loc": {
                     "start": {
@@ -1064,8 +1083,8 @@
                   }
                 },
                 "range": [
-                  804,
-                  809
+                  805,
+                  810
                 ],
                 "loc": {
                   "start": {
@@ -1081,8 +1100,8 @@
               "generator": false,
               "expression": true,
               "range": [
-                793,
-                810
+                794,
+                811
               ],
               "loc": {
                 "start": {
@@ -1096,8 +1115,8 @@
               }
             },
             "range": [
-              780,
-              810
+              781,
+              811
             ],
             "loc": {
               "start": {
@@ -1113,8 +1132,8 @@
         ],
         "kind": "const",
         "range": [
-          774,
-          811
+          775,
+          812
         ],
         "loc": {
           "start": {
@@ -1131,8 +1150,8 @@
             "type": "Block",
             "value": "*\n * Compare function for sorting passed numbers in ascending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
             "range": [
-              573,
-              766
+              574,
+              767
             ],
             "loc": {
               "start": {
@@ -1151,8 +1170,8 @@
             "type": "Block",
             "value": "*\n * Compare function for sorting passed numbers in descending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
             "range": [
-              813,
-              1007
+              814,
+              1008
             ],
             "loc": {
               "start": {
@@ -1170,8 +1189,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        767,
-        811
+        768,
+        812
       ],
       "loc": {
         "start": {
@@ -1188,8 +1207,8 @@
           "type": "Block",
           "value": "*\n * Compare function for sorting passed numbers in ascending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
           "range": [
-            573,
-            766
+            574,
+            767
           ],
           "loc": {
             "start": {
@@ -1208,8 +1227,8 @@
           "type": "Block",
           "value": "*\n * Compare function for sorting passed numbers in descending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
           "range": [
-            813,
-            1007
+            814,
+            1008
           ],
           "loc": {
             "start": {
@@ -1235,8 +1254,8 @@
               "type": "Identifier",
               "name": "numSortDesc",
               "range": [
-                1021,
-                1032
+                1022,
+                1033
               ],
               "loc": {
                 "start": {
@@ -1257,8 +1276,8 @@
                   "type": "Identifier",
                   "name": "a",
                   "range": [
-                    1036,
-                    1037
+                    1037,
+                    1038
                   ],
                   "loc": {
                     "start": {
@@ -1275,8 +1294,8 @@
                   "type": "Identifier",
                   "name": "b",
                   "range": [
-                    1039,
-                    1040
+                    1040,
+                    1041
                   ],
                   "loc": {
                     "start": {
@@ -1297,8 +1316,8 @@
                   "type": "Identifier",
                   "name": "b",
                   "range": [
-                    1046,
-                    1047
+                    1047,
+                    1048
                   ],
                   "loc": {
                     "start": {
@@ -1315,8 +1334,8 @@
                   "type": "Identifier",
                   "name": "a",
                   "range": [
-                    1050,
-                    1051
+                    1051,
+                    1052
                   ],
                   "loc": {
                     "start": {
@@ -1330,8 +1349,8 @@
                   }
                 },
                 "range": [
-                  1046,
-                  1051
+                  1047,
+                  1052
                 ],
                 "loc": {
                   "start": {
@@ -1347,8 +1366,8 @@
               "generator": false,
               "expression": true,
               "range": [
-                1035,
-                1052
+                1036,
+                1053
               ],
               "loc": {
                 "start": {
@@ -1362,8 +1381,8 @@
               }
             },
             "range": [
-              1021,
-              1052
+              1022,
+              1053
             ],
             "loc": {
               "start": {
@@ -1379,8 +1398,8 @@
         ],
         "kind": "const",
         "range": [
-          1015,
-          1053
+          1016,
+          1054
         ],
         "loc": {
           "start": {
@@ -1397,8 +1416,8 @@
             "type": "Block",
             "value": "*\n * Compare function for sorting passed numbers in descending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
             "range": [
-              813,
-              1007
+              814,
+              1008
             ],
             "loc": {
               "start": {
@@ -1417,8 +1436,8 @@
             "type": "Block",
             "value": "*\n * Compare function for sorting passed dates in ascending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
             "range": [
-              1055,
-              1326
+              1056,
+              1327
             ],
             "loc": {
               "start": {
@@ -1436,8 +1455,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        1008,
-        1053
+        1009,
+        1054
       ],
       "loc": {
         "start": {
@@ -1454,8 +1473,8 @@
           "type": "Block",
           "value": "*\n * Compare function for sorting passed numbers in descending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
           "range": [
-            813,
-            1007
+            814,
+            1008
           ],
           "loc": {
             "start": {
@@ -1474,8 +1493,8 @@
           "type": "Block",
           "value": "*\n * Compare function for sorting passed dates in ascending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
           "range": [
-            1055,
-            1326
+            1056,
+            1327
           ],
           "loc": {
             "start": {
@@ -1501,8 +1520,8 @@
               "type": "Identifier",
               "name": "dateSortAsc",
               "range": [
-                1340,
-                1351
+                1341,
+                1352
               ],
               "loc": {
                 "start": {
@@ -1523,8 +1542,8 @@
                   "type": "Identifier",
                   "name": "date1",
                   "range": [
-                    1355,
-                    1360
+                    1356,
+                    1361
                   ],
                   "loc": {
                     "start": {
@@ -1541,8 +1560,8 @@
                   "type": "Identifier",
                   "name": "date2",
                   "range": [
-                    1362,
-                    1367
+                    1363,
+                    1368
                   ],
                   "loc": {
                     "start": {
@@ -1568,8 +1587,8 @@
                       "type": "Identifier",
                       "name": "date1",
                       "range": [
-                        1372,
-                        1377
+                        1373,
+                        1378
                       ],
                       "loc": {
                         "start": {
@@ -1586,8 +1605,8 @@
                       "type": "Identifier",
                       "name": "getTime",
                       "range": [
-                        1378,
-                        1385
+                        1379,
+                        1386
                       ],
                       "loc": {
                         "start": {
@@ -1601,8 +1620,8 @@
                       }
                     },
                     "range": [
-                      1372,
-                      1385
+                      1373,
+                      1386
                     ],
                     "loc": {
                       "start": {
@@ -1617,8 +1636,8 @@
                   },
                   "arguments": [],
                   "range": [
-                    1372,
-                    1387
+                    1373,
+                    1388
                   ],
                   "loc": {
                     "start": {
@@ -1640,8 +1659,8 @@
                       "type": "Identifier",
                       "name": "date2",
                       "range": [
-                        1390,
-                        1395
+                        1391,
+                        1396
                       ],
                       "loc": {
                         "start": {
@@ -1658,8 +1677,8 @@
                       "type": "Identifier",
                       "name": "getTime",
                       "range": [
-                        1396,
-                        1403
+                        1397,
+                        1404
                       ],
                       "loc": {
                         "start": {
@@ -1673,8 +1692,8 @@
                       }
                     },
                     "range": [
-                      1390,
-                      1403
+                      1391,
+                      1404
                     ],
                     "loc": {
                       "start": {
@@ -1689,8 +1708,8 @@
                   },
                   "arguments": [],
                   "range": [
-                    1390,
-                    1405
+                    1391,
+                    1406
                   ],
                   "loc": {
                     "start": {
@@ -1704,8 +1723,8 @@
                   }
                 },
                 "range": [
-                  1372,
-                  1405
+                  1373,
+                  1406
                 ],
                 "loc": {
                   "start": {
@@ -1721,8 +1740,8 @@
               "generator": false,
               "expression": true,
               "range": [
-                1354,
-                1405
+                1355,
+                1406
               ],
               "loc": {
                 "start": {
@@ -1736,8 +1755,8 @@
               }
             },
             "range": [
-              1340,
-              1405
+              1341,
+              1406
             ],
             "loc": {
               "start": {
@@ -1753,8 +1772,8 @@
         ],
         "kind": "const",
         "range": [
-          1334,
-          1406
+          1335,
+          1407
         ],
         "loc": {
           "start": {
@@ -1771,8 +1790,8 @@
             "type": "Block",
             "value": "*\n * Compare function for sorting passed dates in ascending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
             "range": [
-              1055,
-              1326
+              1056,
+              1327
             ],
             "loc": {
               "start": {
@@ -1791,8 +1810,8 @@
             "type": "Block",
             "value": "*\n * Compare function for sorting passed dates in descending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
             "range": [
-              1408,
-              1680
+              1409,
+              1681
             ],
             "loc": {
               "start": {
@@ -1810,8 +1829,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        1327,
-        1406
+        1328,
+        1407
       ],
       "loc": {
         "start": {
@@ -1828,8 +1847,8 @@
           "type": "Block",
           "value": "*\n * Compare function for sorting passed dates in ascending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
           "range": [
-            1055,
-            1326
+            1056,
+            1327
           ],
           "loc": {
             "start": {
@@ -1848,8 +1867,8 @@
           "type": "Block",
           "value": "*\n * Compare function for sorting passed dates in descending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
           "range": [
-            1408,
-            1680
+            1409,
+            1681
           ],
           "loc": {
             "start": {
@@ -1875,8 +1894,8 @@
               "type": "Identifier",
               "name": "dateSortDesc",
               "range": [
-                1694,
-                1706
+                1695,
+                1707
               ],
               "loc": {
                 "start": {
@@ -1897,8 +1916,8 @@
                   "type": "Identifier",
                   "name": "date1",
                   "range": [
-                    1710,
-                    1715
+                    1711,
+                    1716
                   ],
                   "loc": {
                     "start": {
@@ -1915,8 +1934,8 @@
                   "type": "Identifier",
                   "name": "date2",
                   "range": [
-                    1717,
-                    1722
+                    1718,
+                    1723
                   ],
                   "loc": {
                     "start": {
@@ -1942,8 +1961,8 @@
                       "type": "Identifier",
                       "name": "date2",
                       "range": [
-                        1727,
-                        1732
+                        1728,
+                        1733
                       ],
                       "loc": {
                         "start": {
@@ -1960,8 +1979,8 @@
                       "type": "Identifier",
                       "name": "getTime",
                       "range": [
-                        1733,
-                        1740
+                        1734,
+                        1741
                       ],
                       "loc": {
                         "start": {
@@ -1975,8 +1994,8 @@
                       }
                     },
                     "range": [
-                      1727,
-                      1740
+                      1728,
+                      1741
                     ],
                     "loc": {
                       "start": {
@@ -1991,8 +2010,8 @@
                   },
                   "arguments": [],
                   "range": [
-                    1727,
-                    1742
+                    1728,
+                    1743
                   ],
                   "loc": {
                     "start": {
@@ -2014,8 +2033,8 @@
                       "type": "Identifier",
                       "name": "date1",
                       "range": [
-                        1745,
-                        1750
+                        1746,
+                        1751
                       ],
                       "loc": {
                         "start": {
@@ -2032,8 +2051,8 @@
                       "type": "Identifier",
                       "name": "getTime",
                       "range": [
-                        1751,
-                        1758
+                        1752,
+                        1759
                       ],
                       "loc": {
                         "start": {
@@ -2047,8 +2066,8 @@
                       }
                     },
                     "range": [
-                      1745,
-                      1758
+                      1746,
+                      1759
                     ],
                     "loc": {
                       "start": {
@@ -2063,8 +2082,8 @@
                   },
                   "arguments": [],
                   "range": [
-                    1745,
-                    1760
+                    1746,
+                    1761
                   ],
                   "loc": {
                     "start": {
@@ -2078,8 +2097,8 @@
                   }
                 },
                 "range": [
-                  1727,
-                  1760
+                  1728,
+                  1761
                 ],
                 "loc": {
                   "start": {
@@ -2095,8 +2114,8 @@
               "generator": false,
               "expression": true,
               "range": [
-                1709,
-                1760
+                1710,
+                1761
               ],
               "loc": {
                 "start": {
@@ -2110,8 +2129,8 @@
               }
             },
             "range": [
-              1694,
-              1760
+              1695,
+              1761
             ],
             "loc": {
               "start": {
@@ -2127,8 +2146,8 @@
         ],
         "kind": "const",
         "range": [
-          1688,
-          1761
+          1689,
+          1762
         ],
         "loc": {
           "start": {
@@ -2145,8 +2164,8 @@
             "type": "Block",
             "value": "*\n * Compare function for sorting passed dates in descending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
             "range": [
-              1408,
-              1680
+              1409,
+              1681
             ],
             "loc": {
               "start": {
@@ -2165,8 +2184,8 @@
             "type": "Block",
             "value": "*\n * Curried compare function for sorting passed formatted numbers in desired\n * fashion according to supplied compare function and decimal separator\n * @param {Function} Compare function\n * @param {String} [decimal=','] Decimal separator\n * @return {Function} Compare function receiving parsed numeric arguments\n ",
             "range": [
-              1763,
-              2081
+              1764,
+              2082
             ],
             "loc": {
               "start": {
@@ -2184,8 +2203,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        1681,
-        1761
+        1682,
+        1762
       ],
       "loc": {
         "start": {
@@ -2202,8 +2221,8 @@
           "type": "Block",
           "value": "*\n * Compare function for sorting passed dates in descending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
           "range": [
-            1408,
-            1680
+            1409,
+            1681
           ],
           "loc": {
             "start": {
@@ -2222,8 +2241,8 @@
           "type": "Block",
           "value": "*\n * Curried compare function for sorting passed formatted numbers in desired\n * fashion according to supplied compare function and decimal separator\n * @param {Function} Compare function\n * @param {String} [decimal=','] Decimal separator\n * @return {Function} Compare function receiving parsed numeric arguments\n ",
           "range": [
-            1763,
-            2081
+            1764,
+            2082
           ],
           "loc": {
             "start": {
@@ -2249,8 +2268,8 @@
               "type": "Identifier",
               "name": "sortNumberStr",
               "range": [
-                2095,
-                2108
+                2096,
+                2109
               ],
               "loc": {
                 "start": {
@@ -2271,8 +2290,8 @@
                   "type": "Identifier",
                   "name": "compareFn",
                   "range": [
-                    2112,
-                    2121
+                    2113,
+                    2122
                   ],
                   "loc": {
                     "start": {
@@ -2291,8 +2310,8 @@
                     "type": "Identifier",
                     "name": "decimal",
                     "range": [
-                      2123,
-                      2130
+                      2124,
+                      2131
                     ],
                     "loc": {
                       "start": {
@@ -2310,8 +2329,8 @@
                     "value": ",",
                     "raw": "','",
                     "range": [
-                      2133,
-                      2136
+                      2134,
+                      2137
                     ],
                     "loc": {
                       "start": {
@@ -2325,8 +2344,8 @@
                     }
                   },
                   "range": [
-                    2123,
-                    2136
+                    2124,
+                    2137
                   ],
                   "loc": {
                     "start": {
@@ -2353,8 +2372,8 @@
                           "type": "Identifier",
                           "name": "numStr1",
                           "range": [
-                            2155,
-                            2162
+                            2156,
+                            2163
                           ],
                           "loc": {
                             "start": {
@@ -2371,8 +2390,8 @@
                           "type": "Identifier",
                           "name": "numStr2",
                           "range": [
-                            2164,
-                            2171
+                            2165,
+                            2172
                           ],
                           "loc": {
                             "start": {
@@ -2398,8 +2417,8 @@
                                   "type": "Identifier",
                                   "name": "num1",
                                   "range": [
-                                    2190,
-                                    2194
+                                    2191,
+                                    2195
                                   ],
                                   "loc": {
                                     "start": {
@@ -2418,8 +2437,8 @@
                                     "type": "Identifier",
                                     "name": "parseNb",
                                     "range": [
-                                      2197,
-                                      2204
+                                      2198,
+                                      2205
                                     ],
                                     "loc": {
                                       "start": {
@@ -2437,8 +2456,8 @@
                                       "type": "Identifier",
                                       "name": "numStr1",
                                       "range": [
-                                        2205,
-                                        2212
+                                        2206,
+                                        2213
                                       ],
                                       "loc": {
                                         "start": {
@@ -2455,8 +2474,8 @@
                                       "type": "Identifier",
                                       "name": "decimal",
                                       "range": [
-                                        2214,
-                                        2221
+                                        2215,
+                                        2222
                                       ],
                                       "loc": {
                                         "start": {
@@ -2471,8 +2490,8 @@
                                     }
                                   ],
                                   "range": [
-                                    2197,
-                                    2222
+                                    2198,
+                                    2223
                                   ],
                                   "loc": {
                                     "start": {
@@ -2486,8 +2505,8 @@
                                   }
                                 },
                                 "range": [
-                                  2190,
-                                  2222
+                                  2191,
+                                  2223
                                 ],
                                 "loc": {
                                   "start": {
@@ -2503,8 +2522,8 @@
                             ],
                             "kind": "let",
                             "range": [
-                              2186,
-                              2223
+                              2187,
+                              2224
                             ],
                             "loc": {
                               "start": {
@@ -2526,8 +2545,8 @@
                                   "type": "Identifier",
                                   "name": "num2",
                                   "range": [
-                                    2236,
-                                    2240
+                                    2237,
+                                    2241
                                   ],
                                   "loc": {
                                     "start": {
@@ -2546,8 +2565,8 @@
                                     "type": "Identifier",
                                     "name": "parseNb",
                                     "range": [
-                                      2243,
-                                      2250
+                                      2244,
+                                      2251
                                     ],
                                     "loc": {
                                       "start": {
@@ -2565,8 +2584,8 @@
                                       "type": "Identifier",
                                       "name": "numStr2",
                                       "range": [
-                                        2251,
-                                        2258
+                                        2252,
+                                        2259
                                       ],
                                       "loc": {
                                         "start": {
@@ -2583,8 +2602,8 @@
                                       "type": "Identifier",
                                       "name": "decimal",
                                       "range": [
-                                        2260,
-                                        2267
+                                        2261,
+                                        2268
                                       ],
                                       "loc": {
                                         "start": {
@@ -2599,8 +2618,8 @@
                                     }
                                   ],
                                   "range": [
-                                    2243,
-                                    2268
+                                    2244,
+                                    2269
                                   ],
                                   "loc": {
                                     "start": {
@@ -2614,8 +2633,8 @@
                                   }
                                 },
                                 "range": [
-                                  2236,
-                                  2268
+                                  2237,
+                                  2269
                                 ],
                                 "loc": {
                                   "start": {
@@ -2631,8 +2650,8 @@
                             ],
                             "kind": "let",
                             "range": [
-                              2232,
-                              2269
+                              2233,
+                              2270
                             ],
                             "loc": {
                               "start": {
@@ -2653,8 +2672,8 @@
                                 "type": "Identifier",
                                 "name": "compareFn",
                                 "range": [
-                                  2285,
-                                  2294
+                                  2286,
+                                  2295
                                 ],
                                 "loc": {
                                   "start": {
@@ -2672,8 +2691,8 @@
                                   "type": "Identifier",
                                   "name": "num1",
                                   "range": [
-                                    2295,
-                                    2299
+                                    2296,
+                                    2300
                                   ],
                                   "loc": {
                                     "start": {
@@ -2690,8 +2709,8 @@
                                   "type": "Identifier",
                                   "name": "num2",
                                   "range": [
-                                    2301,
-                                    2305
+                                    2302,
+                                    2306
                                   ],
                                   "loc": {
                                     "start": {
@@ -2706,8 +2725,8 @@
                                 }
                               ],
                               "range": [
-                                2285,
-                                2306
+                                2286,
+                                2307
                               ],
                               "loc": {
                                 "start": {
@@ -2721,8 +2740,8 @@
                               }
                             },
                             "range": [
-                              2278,
-                              2307
+                              2279,
+                              2308
                             ],
                             "loc": {
                               "start": {
@@ -2737,8 +2756,8 @@
                           }
                         ],
                         "range": [
-                          2176,
-                          2313
+                          2177,
+                          2314
                         ],
                         "loc": {
                           "start": {
@@ -2754,8 +2773,8 @@
                       "generator": false,
                       "expression": false,
                       "range": [
-                        2154,
-                        2313
+                        2155,
+                        2314
                       ],
                       "loc": {
                         "start": {
@@ -2769,8 +2788,8 @@
                       }
                     },
                     "range": [
-                      2147,
-                      2314
+                      2148,
+                      2315
                     ],
                     "loc": {
                       "start": {
@@ -2778,15 +2797,15 @@
                         "column": 4
                       },
                       "end": {
-                        "line": 67,
-                        "column": 0
+                        "line": 66,
+                        "column": 6
                       }
                     }
                   }
                 ],
                 "range": [
-                  2141,
-                  2315
+                  2142,
+                  2317
                 ],
                 "loc": {
                   "start": {
@@ -2802,8 +2821,8 @@
               "generator": false,
               "expression": false,
               "range": [
-                2111,
-                2315
+                2112,
+                2317
               ],
               "loc": {
                 "start": {
@@ -2817,8 +2836,8 @@
               }
             },
             "range": [
-              2095,
-              2315
+              2096,
+              2317
             ],
             "loc": {
               "start": {
@@ -2829,33 +2848,13 @@
                 "line": 67,
                 "column": 1
               }
-            },
-            "trailingComments": [
-              {
-                "type": "Block",
-                "value": "*\n * Curried compare function for sorting passed formatted dates in desired\n * fashion according to supplied compare function and locale\n * @param {Function} Compare function\n * @param {String} [locale='en-us'] Locale code\n * @return {Function} Compare function receiving parsed date arguments\n ",
-                "range": [
-                  2317,
-                  2616
-                ],
-                "loc": {
-                  "start": {
-                    "line": 69,
-                    "column": 0
-                  },
-                  "end": {
-                    "line": 75,
-                    "column": 3
-                  }
-                }
-              }
-            ]
+            }
           }
         ],
         "kind": "const",
         "range": [
-          2089,
-          2617
+          2090,
+          2318
         ],
         "loc": {
           "start": {
@@ -2863,8 +2862,8 @@
             "column": 7
           },
           "end": {
-            "line": 76,
-            "column": 0
+            "line": 67,
+            "column": 2
           }
         },
         "leadingComments": [
@@ -2872,8 +2871,8 @@
             "type": "Block",
             "value": "*\n * Curried compare function for sorting passed formatted numbers in desired\n * fashion according to supplied compare function and decimal separator\n * @param {Function} Compare function\n * @param {String} [decimal=','] Decimal separator\n * @return {Function} Compare function receiving parsed numeric arguments\n ",
             "range": [
-              1763,
-              2081
+              1764,
+              2082
             ],
             "loc": {
               "start": {
@@ -2887,13 +2886,32 @@
             }
           }
         ],
-        "trailingComments": []
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Curried compare function for sorting passed formatted dates in desired\n * fashion according to supplied compare function and locale\n * @param {Function} Compare function\n * @param {String} [locale='en-us'] Locale code\n * @return {Function} Compare function receiving parsed date arguments\n ",
+            "range": [
+              2320,
+              2619
+            ],
+            "loc": {
+              "start": {
+                "line": 69,
+                "column": 0
+              },
+              "end": {
+                "line": 75,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        2082,
-        2617
+        2083,
+        2318
       ],
       "loc": {
         "start": {
@@ -2901,8 +2919,8 @@
           "column": 0
         },
         "end": {
-          "line": 76,
-          "column": 0
+          "line": 67,
+          "column": 2
         }
       },
       "leadingComments": [
@@ -2910,8 +2928,8 @@
           "type": "Block",
           "value": "*\n * Curried compare function for sorting passed formatted numbers in desired\n * fashion according to supplied compare function and decimal separator\n * @param {Function} Compare function\n * @param {String} [decimal=','] Decimal separator\n * @return {Function} Compare function receiving parsed numeric arguments\n ",
           "range": [
-            1763,
-            2081
+            1764,
+            2082
           ],
           "loc": {
             "start": {
@@ -2920,6 +2938,26 @@
             },
             "end": {
               "line": 60,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Curried compare function for sorting passed formatted dates in desired\n * fashion according to supplied compare function and locale\n * @param {Function} Compare function\n * @param {String} [locale='en-us'] Locale code\n * @return {Function} Compare function receiving parsed date arguments\n ",
+          "range": [
+            2320,
+            2619
+          ],
+          "loc": {
+            "start": {
+              "line": 69,
+              "column": 0
+            },
+            "end": {
+              "line": 75,
               "column": 3
             }
           }
@@ -2937,8 +2975,8 @@
               "type": "Identifier",
               "name": "sortDateStr",
               "range": [
-                2630,
-                2641
+                2633,
+                2644
               ],
               "loc": {
                 "start": {
@@ -2959,8 +2997,8 @@
                   "type": "Identifier",
                   "name": "compareFn",
                   "range": [
-                    2645,
-                    2654
+                    2648,
+                    2657
                   ],
                   "loc": {
                     "start": {
@@ -2979,8 +3017,8 @@
                     "type": "Identifier",
                     "name": "locale",
                     "range": [
-                      2656,
-                      2662
+                      2659,
+                      2665
                     ],
                     "loc": {
                       "start": {
@@ -2998,8 +3036,8 @@
                     "value": "en-us",
                     "raw": "'en-us'",
                     "range": [
-                      2665,
-                      2672
+                      2668,
+                      2675
                     ],
                     "loc": {
                       "start": {
@@ -3013,8 +3051,8 @@
                     }
                   },
                   "range": [
-                    2656,
-                    2672
+                    2659,
+                    2675
                   ],
                   "loc": {
                     "start": {
@@ -3041,8 +3079,8 @@
                           "type": "Identifier",
                           "name": "dateStr1",
                           "range": [
-                            2691,
-                            2699
+                            2694,
+                            2702
                           ],
                           "loc": {
                             "start": {
@@ -3059,8 +3097,8 @@
                           "type": "Identifier",
                           "name": "dateStr2",
                           "range": [
-                            2701,
-                            2709
+                            2704,
+                            2712
                           ],
                           "loc": {
                             "start": {
@@ -3086,8 +3124,8 @@
                                   "type": "Identifier",
                                   "name": "date1",
                                   "range": [
-                                    2728,
-                                    2733
+                                    2731,
+                                    2736
                                   ],
                                   "loc": {
                                     "start": {
@@ -3109,8 +3147,8 @@
                                       "type": "Identifier",
                                       "name": "SugarDate",
                                       "range": [
-                                        2736,
-                                        2745
+                                        2739,
+                                        2748
                                       ],
                                       "loc": {
                                         "start": {
@@ -3127,8 +3165,8 @@
                                       "type": "Identifier",
                                       "name": "create",
                                       "range": [
-                                        2746,
-                                        2752
+                                        2749,
+                                        2755
                                       ],
                                       "loc": {
                                         "start": {
@@ -3142,8 +3180,8 @@
                                       }
                                     },
                                     "range": [
-                                      2736,
-                                      2752
+                                      2739,
+                                      2755
                                     ],
                                     "loc": {
                                       "start": {
@@ -3161,8 +3199,8 @@
                                       "type": "Identifier",
                                       "name": "dateStr1",
                                       "range": [
-                                        2753,
-                                        2761
+                                        2756,
+                                        2764
                                       ],
                                       "loc": {
                                         "start": {
@@ -3179,8 +3217,8 @@
                                       "type": "Identifier",
                                       "name": "locale",
                                       "range": [
-                                        2763,
-                                        2769
+                                        2766,
+                                        2772
                                       ],
                                       "loc": {
                                         "start": {
@@ -3195,8 +3233,8 @@
                                     }
                                   ],
                                   "range": [
-                                    2736,
-                                    2770
+                                    2739,
+                                    2773
                                   ],
                                   "loc": {
                                     "start": {
@@ -3210,8 +3248,8 @@
                                   }
                                 },
                                 "range": [
-                                  2728,
-                                  2770
+                                  2731,
+                                  2773
                                 ],
                                 "loc": {
                                   "start": {
@@ -3227,8 +3265,8 @@
                             ],
                             "kind": "let",
                             "range": [
-                              2724,
-                              2771
+                              2727,
+                              2774
                             ],
                             "loc": {
                               "start": {
@@ -3250,8 +3288,8 @@
                                   "type": "Identifier",
                                   "name": "date2",
                                   "range": [
-                                    2784,
-                                    2789
+                                    2787,
+                                    2792
                                   ],
                                   "loc": {
                                     "start": {
@@ -3273,8 +3311,8 @@
                                       "type": "Identifier",
                                       "name": "SugarDate",
                                       "range": [
-                                        2792,
-                                        2801
+                                        2795,
+                                        2804
                                       ],
                                       "loc": {
                                         "start": {
@@ -3291,8 +3329,8 @@
                                       "type": "Identifier",
                                       "name": "create",
                                       "range": [
-                                        2802,
-                                        2808
+                                        2805,
+                                        2811
                                       ],
                                       "loc": {
                                         "start": {
@@ -3306,8 +3344,8 @@
                                       }
                                     },
                                     "range": [
-                                      2792,
-                                      2808
+                                      2795,
+                                      2811
                                     ],
                                     "loc": {
                                       "start": {
@@ -3325,8 +3363,8 @@
                                       "type": "Identifier",
                                       "name": "dateStr2",
                                       "range": [
-                                        2809,
-                                        2817
+                                        2812,
+                                        2820
                                       ],
                                       "loc": {
                                         "start": {
@@ -3343,8 +3381,8 @@
                                       "type": "Identifier",
                                       "name": "locale",
                                       "range": [
-                                        2819,
-                                        2825
+                                        2822,
+                                        2828
                                       ],
                                       "loc": {
                                         "start": {
@@ -3359,8 +3397,8 @@
                                     }
                                   ],
                                   "range": [
-                                    2792,
-                                    2826
+                                    2795,
+                                    2829
                                   ],
                                   "loc": {
                                     "start": {
@@ -3374,8 +3412,8 @@
                                   }
                                 },
                                 "range": [
-                                  2784,
-                                  2826
+                                  2787,
+                                  2829
                                 ],
                                 "loc": {
                                   "start": {
@@ -3391,8 +3429,8 @@
                             ],
                             "kind": "let",
                             "range": [
-                              2780,
-                              2827
+                              2783,
+                              2830
                             ],
                             "loc": {
                               "start": {
@@ -3413,8 +3451,8 @@
                                 "type": "Identifier",
                                 "name": "compareFn",
                                 "range": [
-                                  2843,
-                                  2852
+                                  2846,
+                                  2855
                                 ],
                                 "loc": {
                                   "start": {
@@ -3432,8 +3470,8 @@
                                   "type": "Identifier",
                                   "name": "date1",
                                   "range": [
-                                    2853,
-                                    2858
+                                    2856,
+                                    2861
                                   ],
                                   "loc": {
                                     "start": {
@@ -3450,8 +3488,8 @@
                                   "type": "Identifier",
                                   "name": "date2",
                                   "range": [
-                                    2860,
-                                    2865
+                                    2863,
+                                    2868
                                   ],
                                   "loc": {
                                     "start": {
@@ -3466,8 +3504,8 @@
                                 }
                               ],
                               "range": [
-                                2843,
-                                2866
+                                2846,
+                                2869
                               ],
                               "loc": {
                                 "start": {
@@ -3481,8 +3519,8 @@
                               }
                             },
                             "range": [
-                              2836,
-                              2867
+                              2839,
+                              2870
                             ],
                             "loc": {
                               "start": {
@@ -3497,8 +3535,8 @@
                           }
                         ],
                         "range": [
-                          2714,
-                          2873
+                          2717,
+                          2876
                         ],
                         "loc": {
                           "start": {
@@ -3514,8 +3552,8 @@
                       "generator": false,
                       "expression": false,
                       "range": [
-                        2690,
-                        2873
+                        2693,
+                        2876
                       ],
                       "loc": {
                         "start": {
@@ -3529,8 +3567,8 @@
                       }
                     },
                     "range": [
-                      2683,
-                      2874
+                      2686,
+                      2877
                     ],
                     "loc": {
                       "start": {
@@ -3538,15 +3576,15 @@
                         "column": 4
                       },
                       "end": {
-                        "line": 82,
-                        "column": 0
+                        "line": 81,
+                        "column": 6
                       }
                     }
                   }
                 ],
                 "range": [
-                  2677,
-                  2875
+                  2680,
+                  2879
                 ],
                 "loc": {
                   "start": {
@@ -3562,8 +3600,8 @@
               "generator": false,
               "expression": false,
               "range": [
-                2644,
-                2875
+                2647,
+                2879
               ],
               "loc": {
                 "start": {
@@ -3577,8 +3615,8 @@
               }
             },
             "range": [
-              2630,
-              2875
+              2633,
+              2879
             ],
             "loc": {
               "start": {
@@ -3594,8 +3632,8 @@
         ],
         "kind": "const",
         "range": [
-          2624,
-          2876
+          2627,
+          2880
         ],
         "loc": {
           "start": {
@@ -3603,8 +3641,8 @@
             "column": 7
           },
           "end": {
-            "line": 83,
-            "column": 0
+            "line": 82,
+            "column": 2
           }
         },
         "leadingComments": [
@@ -3612,8 +3650,8 @@
             "type": "Block",
             "value": "*\n * Curried compare function for sorting passed formatted dates in desired\n * fashion according to supplied compare function and locale\n * @param {Function} Compare function\n * @param {String} [locale='en-us'] Locale code\n * @return {Function} Compare function receiving parsed date arguments\n ",
             "range": [
-              2317,
-              2616
+              2320,
+              2619
             ],
             "loc": {
               "start": {
@@ -3632,8 +3670,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        2617,
-        2876
+        2620,
+        2880
       ],
       "loc": {
         "start": {
@@ -3641,8 +3679,8 @@
           "column": 0
         },
         "end": {
-          "line": 83,
-          "column": 0
+          "line": 82,
+          "column": 2
         }
       },
       "leadingComments": [
@@ -3650,8 +3688,8 @@
           "type": "Block",
           "value": "*\n * Curried compare function for sorting passed formatted dates in desired\n * fashion according to supplied compare function and locale\n * @param {Function} Compare function\n * @param {String} [locale='en-us'] Locale code\n * @return {Function} Compare function receiving parsed date arguments\n ",
           "range": [
-            2317,
-            2616
+            2320,
+            2619
           ],
           "loc": {
             "start": {
@@ -3670,7 +3708,7 @@
   "sourceType": "module",
   "range": [
     0,
-    2876
+    2880
   ],
   "loc": {
     "start": {
@@ -3678,8 +3716,8 @@
       "column": 0
     },
     "end": {
-      "line": 83,
-      "column": 0
+      "line": 82,
+      "column": 2
     }
   },
   "comments": [
@@ -3723,8 +3761,8 @@
       "type": "Block",
       "value": "*\n * Compare function for sorting passed numbers in ascending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
       "range": [
-        573,
-        766
+        574,
+        767
       ],
       "loc": {
         "start": {
@@ -3741,8 +3779,8 @@
       "type": "Block",
       "value": "*\n * Compare function for sorting passed numbers in descending manner\n * @param {Number} First number\n * @param {Number} Second number\n * @return {Number} Negative, zero or positive number\n ",
       "range": [
-        813,
-        1007
+        814,
+        1008
       ],
       "loc": {
         "start": {
@@ -3759,8 +3797,8 @@
       "type": "Block",
       "value": "*\n * Compare function for sorting passed dates in ascending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
       "range": [
-        1055,
-        1326
+        1056,
+        1327
       ],
       "loc": {
         "start": {
@@ -3777,8 +3815,8 @@
       "type": "Block",
       "value": "*\n * Compare function for sorting passed dates in descending manner according to\n * the corresponding UTC numeric value (returned by getTime)\n * @param {Date} First date object\n * @param {Date} Second date object\n * @return {Number} Negative, zero or positive number\n ",
       "range": [
-        1408,
-        1680
+        1409,
+        1681
       ],
       "loc": {
         "start": {
@@ -3795,8 +3833,8 @@
       "type": "Block",
       "value": "*\n * Curried compare function for sorting passed formatted numbers in desired\n * fashion according to supplied compare function and decimal separator\n * @param {Function} Compare function\n * @param {String} [decimal=','] Decimal separator\n * @return {Function} Compare function receiving parsed numeric arguments\n ",
       "range": [
-        1763,
-        2081
+        1764,
+        2082
       ],
       "loc": {
         "start": {
@@ -3813,8 +3851,8 @@
       "type": "Block",
       "value": "*\n * Curried compare function for sorting passed formatted dates in desired\n * fashion according to supplied compare function and locale\n * @param {Function} Compare function\n * @param {String} [locale='en-us'] Locale code\n * @return {Function} Compare function receiving parsed date arguments\n ",
       "range": [
-        2317,
-        2616
+        2320,
+        2619
       ],
       "loc": {
         "start": {

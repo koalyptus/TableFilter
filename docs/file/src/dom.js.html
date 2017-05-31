@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/dom.js | tablefilter v0.5.18 API Document</title>
+  <title data-ice="title">src/dom.js | tablefilter v0.5.19 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -147,7 +147,7 @@ export const getText = (node) =&gt; {
         return trim(node.innerText);
     }
     return trim(node.textContent);
-}
+};
 
 /**
  * Returns the first text node contained in the supplied node
@@ -161,7 +161,7 @@ export const getFirstTextNode = (node) =&gt; {
             return n.data;
         }
     }
-}
+};
 
 /**
  * Creates an html element with given collection of attributes
@@ -185,7 +185,7 @@ export const createElm = (...args) =&gt; {
         }
     }
     return el;
-}
+};
 
 /**
  * Removes passed node from DOM
@@ -216,7 +216,7 @@ export const hasClass = (ele, cls) =&gt; {
         return ele.classList.contains(cls);
     }
     return ele.className.match(new RegExp(&apos;(\\s|^)&apos; + cls + &apos;(\\s|$)&apos;));
-}
+};
 
 /**
  * Adds the specified class to the passed element
@@ -239,7 +239,7 @@ export const addClass = (ele, cls) =&gt; {
     else if (!hasClass(ele, cls)) {
         ele.className += &apos; &apos; + cls;
     }
-}
+};
 
 /**
  * Removes the specified class to the passed element
@@ -257,7 +257,7 @@ export const removeClass = (ele, cls) =&gt; {
     }
     let reg = new RegExp(&apos;(\\s|^)&apos; + cls + &apos;(\\s|$)&apos;, &apos;g&apos;);
     ele.className = ele.className.replace(reg, &apos;&apos;);
-}
+};
 
 /**
  * Creates and returns an option element
@@ -273,7 +273,7 @@ export const createOpt = (text, value, isSel) =&gt; {
             createElm(&apos;option&apos;, [&apos;value&apos;, value]);
     opt.appendChild(createText(text));
     return opt;
-}
+};
 
 /**
  * Creates and returns a checklist item
@@ -297,7 +297,7 @@ export const createCheckItem = (id, chkValue, labelText) =&gt; {
     li.label = label;
     li.check = check;
     return li;
-}
+};
 
 /**
  * Returns the element matching the supplied Id

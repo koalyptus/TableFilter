@@ -539,33 +539,13 @@
                 "line": 17,
                 "column": 1
               }
-            },
-            "trailingComments": [
-              {
-                "type": "Block",
-                "value": "*\n * Checks if passed string is empty\n * @param {String} text\n * @return {Boolean}\n ",
-                "range": [
-                  326,
-                  414
-                ],
-                "loc": {
-                  "start": {
-                    "line": 19,
-                    "column": 0
-                  },
-                  "end": {
-                    "line": 23,
-                    "column": 3
-                  }
-                }
-              }
-            ]
+            }
           }
         ],
         "kind": "const",
         "range": [
           200,
-          415
+          325
         ],
         "loc": {
           "start": {
@@ -573,8 +553,8 @@
             "column": 7
           },
           "end": {
-            "line": 24,
-            "column": 0
+            "line": 17,
+            "column": 2
           }
         },
         "leadingComments": [
@@ -615,13 +595,32 @@
             }
           }
         ],
-        "trailingComments": []
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Checks if passed string is empty\n * @param {String} text\n * @return {Boolean}\n ",
+            "range": [
+              327,
+              415
+            ],
+            "loc": {
+              "start": {
+                "line": 19,
+                "column": 0
+              },
+              "end": {
+                "line": 23,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
         193,
-        415
+        325
       ],
       "loc": {
         "start": {
@@ -629,8 +628,8 @@
           "column": 0
         },
         "end": {
-          "line": 24,
-          "column": 0
+          "line": 17,
+          "column": 2
         }
       },
       "leadingComments": [
@@ -670,6 +669,26 @@
             }
           }
         }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Checks if passed string is empty\n * @param {String} text\n * @return {Boolean}\n ",
+          "range": [
+            327,
+            415
+          ],
+          "loc": {
+            "start": {
+              "line": 19,
+              "column": 0
+            },
+            "end": {
+              "line": 23,
+              "column": 3
+            }
+          }
+        }
       ]
     },
     {
@@ -683,8 +702,8 @@
               "type": "Identifier",
               "name": "isEmpty",
               "range": [
-                428,
-                435
+                429,
+                436
               ],
               "loc": {
                 "start": {
@@ -705,8 +724,8 @@
                   "type": "Identifier",
                   "name": "text",
                   "range": [
-                    439,
-                    443
+                    440,
+                    444
                   ],
                   "loc": {
                     "start": {
@@ -729,8 +748,8 @@
                     "type": "Identifier",
                     "name": "trim",
                     "range": [
-                      448,
-                      452
+                      449,
+                      453
                     ],
                     "loc": {
                       "start": {
@@ -748,8 +767,8 @@
                       "type": "Identifier",
                       "name": "text",
                       "range": [
-                        453,
-                        457
+                        454,
+                        458
                       ],
                       "loc": {
                         "start": {
@@ -764,8 +783,8 @@
                     }
                   ],
                   "range": [
-                    448,
-                    458
+                    449,
+                    459
                   ],
                   "loc": {
                     "start": {
@@ -783,8 +802,8 @@
                   "value": "",
                   "raw": "''",
                   "range": [
-                    463,
-                    465
+                    464,
+                    466
                   ],
                   "loc": {
                     "start": {
@@ -798,8 +817,8 @@
                   }
                 },
                 "range": [
-                  448,
-                  465
+                  449,
+                  466
                 ],
                 "loc": {
                   "start": {
@@ -815,8 +834,8 @@
               "generator": false,
               "expression": true,
               "range": [
-                438,
-                465
+                439,
+                466
               ],
               "loc": {
                 "start": {
@@ -830,8 +849,8 @@
               }
             },
             "range": [
-              428,
-              465
+              429,
+              466
             ],
             "loc": {
               "start": {
@@ -847,8 +866,8 @@
         ],
         "kind": "const",
         "range": [
-          422,
-          466
+          423,
+          467
         ],
         "loc": {
           "start": {
@@ -865,8 +884,8 @@
             "type": "Block",
             "value": "*\n * Checks if passed string is empty\n * @param {String} text\n * @return {Boolean}\n ",
             "range": [
-              326,
-              414
+              327,
+              415
             ],
             "loc": {
               "start": {
@@ -885,8 +904,8 @@
             "type": "Block",
             "value": "*\n * Makes regex safe string by escaping special characters from passed string\n * @param {String} text\n * @return {String} escaped string\n ",
             "range": [
-              468,
-              611
+              469,
+              612
             ],
             "loc": {
               "start": {
@@ -904,8 +923,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        415,
-        466
+        416,
+        467
       ],
       "loc": {
         "start": {
@@ -922,8 +941,8 @@
           "type": "Block",
           "value": "*\n * Checks if passed string is empty\n * @param {String} text\n * @return {Boolean}\n ",
           "range": [
-            326,
-            414
+            327,
+            415
           ],
           "loc": {
             "start": {
@@ -942,8 +961,8 @@
           "type": "Block",
           "value": "*\n * Makes regex safe string by escaping special characters from passed string\n * @param {String} text\n * @return {String} escaped string\n ",
           "range": [
-            468,
-            611
+            469,
+            612
           ],
           "loc": {
             "start": {
@@ -969,8 +988,8 @@
               "type": "Identifier",
               "name": "rgxEsc",
               "range": [
-                625,
-                631
+                626,
+                632
               ],
               "loc": {
                 "start": {
@@ -991,8 +1010,8 @@
                   "type": "Identifier",
                   "name": "text",
                   "range": [
-                    635,
-                    639
+                    636,
+                    640
                   ],
                   "loc": {
                     "start": {
@@ -1018,8 +1037,8 @@
                           "type": "Identifier",
                           "name": "chars",
                           "range": [
-                            654,
-                            659
+                            655,
+                            660
                           ],
                           "loc": {
                             "start": {
@@ -1041,8 +1060,8 @@
                             "flags": "g"
                           },
                           "range": [
-                            662,
-                            686
+                            663,
+                            687
                           ],
                           "loc": {
                             "start": {
@@ -1056,8 +1075,8 @@
                           }
                         },
                         "range": [
-                          654,
-                          686
+                          655,
+                          687
                         ],
                         "loc": {
                           "start": {
@@ -1073,8 +1092,8 @@
                     ],
                     "kind": "let",
                     "range": [
-                      650,
-                      687
+                      651,
+                      688
                     ],
                     "loc": {
                       "start": {
@@ -1096,8 +1115,8 @@
                           "type": "Identifier",
                           "name": "escMatch",
                           "range": [
-                            696,
-                            704
+                            697,
+                            705
                           ],
                           "loc": {
                             "start": {
@@ -1115,8 +1134,8 @@
                           "value": "\\$&",
                           "raw": "'\\\\$&'",
                           "range": [
-                            707,
-                            713
+                            708,
+                            714
                           ],
                           "loc": {
                             "start": {
@@ -1130,8 +1149,8 @@
                           }
                         },
                         "range": [
-                          696,
-                          713
+                          697,
+                          714
                         ],
                         "loc": {
                           "start": {
@@ -1147,8 +1166,8 @@
                     ],
                     "kind": "let",
                     "range": [
-                      692,
-                      714
+                      693,
+                      715
                     ],
                     "loc": {
                       "start": {
@@ -1174,8 +1193,8 @@
                             "type": "Identifier",
                             "name": "String",
                             "range": [
-                              726,
-                              732
+                              727,
+                              733
                             ],
                             "loc": {
                               "start": {
@@ -1193,8 +1212,8 @@
                               "type": "Identifier",
                               "name": "text",
                               "range": [
-                                733,
-                                737
+                                734,
+                                738
                               ],
                               "loc": {
                                 "start": {
@@ -1209,8 +1228,8 @@
                             }
                           ],
                           "range": [
-                            726,
-                            738
+                            727,
+                            739
                           ],
                           "loc": {
                             "start": {
@@ -1227,8 +1246,8 @@
                           "type": "Identifier",
                           "name": "replace",
                           "range": [
-                            739,
-                            746
+                            740,
+                            747
                           ],
                           "loc": {
                             "start": {
@@ -1242,8 +1261,8 @@
                           }
                         },
                         "range": [
-                          726,
-                          746
+                          727,
+                          747
                         ],
                         "loc": {
                           "start": {
@@ -1261,8 +1280,8 @@
                           "type": "Identifier",
                           "name": "chars",
                           "range": [
-                            747,
-                            752
+                            748,
+                            753
                           ],
                           "loc": {
                             "start": {
@@ -1279,8 +1298,8 @@
                           "type": "Identifier",
                           "name": "escMatch",
                           "range": [
-                            754,
-                            762
+                            755,
+                            763
                           ],
                           "loc": {
                             "start": {
@@ -1295,8 +1314,8 @@
                         }
                       ],
                       "range": [
-                        726,
-                        763
+                        727,
+                        764
                       ],
                       "loc": {
                         "start": {
@@ -1310,8 +1329,8 @@
                       }
                     },
                     "range": [
-                      719,
-                      764
+                      720,
+                      765
                     ],
                     "loc": {
                       "start": {
@@ -1326,8 +1345,8 @@
                   }
                 ],
                 "range": [
-                  644,
-                  766
+                  645,
+                  767
                 ],
                 "loc": {
                   "start": {
@@ -1343,8 +1362,8 @@
               "generator": false,
               "expression": false,
               "range": [
-                634,
-                766
+                635,
+                767
               ],
               "loc": {
                 "start": {
@@ -1358,8 +1377,8 @@
               }
             },
             "range": [
-              625,
-              766
+              626,
+              767
             ],
             "loc": {
               "start": {
@@ -1370,33 +1389,13 @@
                 "line": 35,
                 "column": 1
               }
-            },
-            "trailingComments": [
-              {
-                "type": "Block",
-                "value": "*\n * Returns passed string as lowercase if caseSensitive flag set false. By\n * default it returns the string with no casing changes.\n * @param {String} text\n * @return {String} string\n ",
-                "range": [
-                  768,
-                  957
-                ],
-                "loc": {
-                  "start": {
-                    "line": 37,
-                    "column": 0
-                  },
-                  "end": {
-                    "line": 42,
-                    "column": 3
-                  }
-                }
-              }
-            ]
+            }
           }
         ],
         "kind": "const",
         "range": [
-          619,
-          958
+          620,
+          768
         ],
         "loc": {
           "start": {
@@ -1404,8 +1403,8 @@
             "column": 7
           },
           "end": {
-            "line": 43,
-            "column": 0
+            "line": 35,
+            "column": 2
           }
         },
         "leadingComments": [
@@ -1413,8 +1412,8 @@
             "type": "Block",
             "value": "*\n * Makes regex safe string by escaping special characters from passed string\n * @param {String} text\n * @return {String} escaped string\n ",
             "range": [
-              468,
-              611
+              469,
+              612
             ],
             "loc": {
               "start": {
@@ -1428,13 +1427,32 @@
             }
           }
         ],
-        "trailingComments": []
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Returns passed string as lowercase if caseSensitive flag set false. By\n * default it returns the string with no casing changes.\n * @param {String} text\n * @return {String} string\n ",
+            "range": [
+              770,
+              959
+            ],
+            "loc": {
+              "start": {
+                "line": 37,
+                "column": 0
+              },
+              "end": {
+                "line": 42,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        612,
-        958
+        613,
+        768
       ],
       "loc": {
         "start": {
@@ -1442,8 +1460,8 @@
           "column": 0
         },
         "end": {
-          "line": 43,
-          "column": 0
+          "line": 35,
+          "column": 2
         }
       },
       "leadingComments": [
@@ -1451,8 +1469,8 @@
           "type": "Block",
           "value": "*\n * Makes regex safe string by escaping special characters from passed string\n * @param {String} text\n * @return {String} escaped string\n ",
           "range": [
-            468,
-            611
+            469,
+            612
           ],
           "loc": {
             "start": {
@@ -1461,6 +1479,26 @@
             },
             "end": {
               "line": 30,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Returns passed string as lowercase if caseSensitive flag set false. By\n * default it returns the string with no casing changes.\n * @param {String} text\n * @return {String} string\n ",
+          "range": [
+            770,
+            959
+          ],
+          "loc": {
+            "start": {
+              "line": 37,
+              "column": 0
+            },
+            "end": {
+              "line": 42,
               "column": 3
             }
           }
@@ -1478,8 +1516,8 @@
               "type": "Identifier",
               "name": "matchCase",
               "range": [
-                971,
-                980
+                973,
+                982
               ],
               "loc": {
                 "start": {
@@ -1500,8 +1538,8 @@
                   "type": "Identifier",
                   "name": "text",
                   "range": [
-                    984,
-                    988
+                    986,
+                    990
                   ],
                   "loc": {
                     "start": {
@@ -1520,8 +1558,8 @@
                     "type": "Identifier",
                     "name": "caseSensitive",
                     "range": [
-                      990,
-                      1003
+                      992,
+                      1005
                     ],
                     "loc": {
                       "start": {
@@ -1539,8 +1577,8 @@
                     "value": false,
                     "raw": "false",
                     "range": [
-                      1006,
-                      1011
+                      1008,
+                      1013
                     ],
                     "loc": {
                       "start": {
@@ -1554,8 +1592,8 @@
                     }
                   },
                   "range": [
-                    990,
-                    1011
+                    992,
+                    1013
                   ],
                   "loc": {
                     "start": {
@@ -1581,8 +1619,8 @@
                         "type": "Identifier",
                         "name": "caseSensitive",
                         "range": [
-                          1027,
-                          1040
+                          1029,
+                          1042
                         ],
                         "loc": {
                           "start": {
@@ -1597,8 +1635,8 @@
                       },
                       "prefix": true,
                       "range": [
-                        1026,
-                        1040
+                        1028,
+                        1042
                       ],
                       "loc": {
                         "start": {
@@ -1625,8 +1663,8 @@
                                 "type": "Identifier",
                                 "name": "text",
                                 "range": [
-                                  1059,
-                                  1063
+                                  1061,
+                                  1065
                                 ],
                                 "loc": {
                                   "start": {
@@ -1643,8 +1681,8 @@
                                 "type": "Identifier",
                                 "name": "toLowerCase",
                                 "range": [
-                                  1064,
-                                  1075
+                                  1066,
+                                  1077
                                 ],
                                 "loc": {
                                   "start": {
@@ -1658,8 +1696,8 @@
                                 }
                               },
                               "range": [
-                                1059,
-                                1075
+                                1061,
+                                1077
                               ],
                               "loc": {
                                 "start": {
@@ -1674,8 +1712,8 @@
                             },
                             "arguments": [],
                             "range": [
-                              1059,
-                              1077
+                              1061,
+                              1079
                             ],
                             "loc": {
                               "start": {
@@ -1689,8 +1727,8 @@
                             }
                           },
                           "range": [
-                            1052,
-                            1078
+                            1054,
+                            1080
                           ],
                           "loc": {
                             "start": {
@@ -1705,8 +1743,8 @@
                         }
                       ],
                       "range": [
-                        1042,
-                        1084
+                        1044,
+                        1086
                       ],
                       "loc": {
                         "start": {
@@ -1721,8 +1759,8 @@
                     },
                     "alternate": null,
                     "range": [
-                      1022,
-                      1084
+                      1024,
+                      1086
                     ],
                     "loc": {
                       "start": {
@@ -1741,8 +1779,8 @@
                       "type": "Identifier",
                       "name": "text",
                       "range": [
-                        1096,
-                        1100
+                        1098,
+                        1102
                       ],
                       "loc": {
                         "start": {
@@ -1756,8 +1794,8 @@
                       }
                     },
                     "range": [
-                      1089,
-                      1101
+                      1091,
+                      1103
                     ],
                     "loc": {
                       "start": {
@@ -1772,8 +1810,8 @@
                   }
                 ],
                 "range": [
-                  1016,
-                  1103
+                  1018,
+                  1105
                 ],
                 "loc": {
                   "start": {
@@ -1789,8 +1827,8 @@
               "generator": false,
               "expression": false,
               "range": [
-                983,
-                1103
+                985,
+                1105
               ],
               "loc": {
                 "start": {
@@ -1804,8 +1842,8 @@
               }
             },
             "range": [
-              971,
-              1103
+              973,
+              1105
             ],
             "loc": {
               "start": {
@@ -1816,33 +1854,13 @@
                 "line": 48,
                 "column": 1
               }
-            },
-            "trailingComments": [
-              {
-                "type": "Block",
-                "value": "*\n * Checks if passed data contains the searched term\n * @param  {String} term                Searched term\n * @param  {String} data                Data string\n * @param  {Boolean} exactMatch         Exact match\n * @param  {Boolean} caseSensitive      Case sensitive\n * @param  {Boolean} ignoreDiacritics   Ignore diacritics\n * @return {Boolean}\n ",
-                "range": [
-                  1105,
-                  1456
-                ],
-                "loc": {
-                  "start": {
-                    "line": 50,
-                    "column": 0
-                  },
-                  "end": {
-                    "line": 58,
-                    "column": 3
-                  }
-                }
-              }
-            ]
+            }
           }
         ],
         "kind": "const",
         "range": [
-          965,
-          1457
+          967,
+          1106
         ],
         "loc": {
           "start": {
@@ -1850,8 +1868,8 @@
             "column": 7
           },
           "end": {
-            "line": 59,
-            "column": 0
+            "line": 48,
+            "column": 2
           }
         },
         "leadingComments": [
@@ -1859,8 +1877,8 @@
             "type": "Block",
             "value": "*\n * Returns passed string as lowercase if caseSensitive flag set false. By\n * default it returns the string with no casing changes.\n * @param {String} text\n * @return {String} string\n ",
             "range": [
-              768,
-              957
+              770,
+              959
             ],
             "loc": {
               "start": {
@@ -1874,13 +1892,32 @@
             }
           }
         ],
-        "trailingComments": []
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Checks if passed data contains the searched term\n * @param  {String} term                Searched term\n * @param  {String} data                Data string\n * @param  {Boolean} exactMatch         Exact match\n * @param  {Boolean} caseSensitive      Case sensitive\n * @param  {Boolean} ignoreDiacritics   Ignore diacritics\n * @return {Boolean}\n ",
+            "range": [
+              1108,
+              1459
+            ],
+            "loc": {
+              "start": {
+                "line": 50,
+                "column": 0
+              },
+              "end": {
+                "line": 58,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        958,
-        1457
+        960,
+        1106
       ],
       "loc": {
         "start": {
@@ -1888,8 +1925,8 @@
           "column": 0
         },
         "end": {
-          "line": 59,
-          "column": 0
+          "line": 48,
+          "column": 2
         }
       },
       "leadingComments": [
@@ -1897,8 +1934,8 @@
           "type": "Block",
           "value": "*\n * Returns passed string as lowercase if caseSensitive flag set false. By\n * default it returns the string with no casing changes.\n * @param {String} text\n * @return {String} string\n ",
           "range": [
-            768,
-            957
+            770,
+            959
           ],
           "loc": {
             "start": {
@@ -1907,6 +1944,26 @@
             },
             "end": {
               "line": 42,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Checks if passed data contains the searched term\n * @param  {String} term                Searched term\n * @param  {String} data                Data string\n * @param  {Boolean} exactMatch         Exact match\n * @param  {Boolean} caseSensitive      Case sensitive\n * @param  {Boolean} ignoreDiacritics   Ignore diacritics\n * @return {Boolean}\n ",
+          "range": [
+            1108,
+            1459
+          ],
+          "loc": {
+            "start": {
+              "line": 50,
+              "column": 0
+            },
+            "end": {
+              "line": 58,
               "column": 3
             }
           }
@@ -1924,8 +1981,8 @@
               "type": "Identifier",
               "name": "contains",
               "range": [
-                1470,
-                1478
+                1473,
+                1481
               ],
               "loc": {
                 "start": {
@@ -1946,8 +2003,8 @@
                   "type": "Identifier",
                   "name": "term",
                   "range": [
-                    1482,
-                    1486
+                    1485,
+                    1489
                   ],
                   "loc": {
                     "start": {
@@ -1964,8 +2021,8 @@
                   "type": "Identifier",
                   "name": "data",
                   "range": [
-                    1488,
-                    1492
+                    1491,
+                    1495
                   ],
                   "loc": {
                     "start": {
@@ -1984,8 +2041,8 @@
                     "type": "Identifier",
                     "name": "exactMatch",
                     "range": [
-                      1494,
-                      1504
+                      1497,
+                      1507
                     ],
                     "loc": {
                       "start": {
@@ -2003,8 +2060,8 @@
                     "value": false,
                     "raw": "false",
                     "range": [
-                      1507,
-                      1512
+                      1510,
+                      1515
                     ],
                     "loc": {
                       "start": {
@@ -2018,8 +2075,8 @@
                     }
                   },
                   "range": [
-                    1494,
-                    1512
+                    1497,
+                    1515
                   ],
                   "loc": {
                     "start": {
@@ -2038,8 +2095,8 @@
                     "type": "Identifier",
                     "name": "caseSensitive",
                     "range": [
-                      1514,
-                      1527
+                      1517,
+                      1530
                     ],
                     "loc": {
                       "start": {
@@ -2057,8 +2114,8 @@
                     "value": false,
                     "raw": "false",
                     "range": [
-                      1530,
-                      1535
+                      1533,
+                      1538
                     ],
                     "loc": {
                       "start": {
@@ -2072,8 +2129,8 @@
                     }
                   },
                   "range": [
-                    1514,
-                    1535
+                    1517,
+                    1538
                   ],
                   "loc": {
                     "start": {
@@ -2092,8 +2149,8 @@
                     "type": "Identifier",
                     "name": "ignoreDiacritics",
                     "range": [
-                      1541,
-                      1557
+                      1544,
+                      1560
                     ],
                     "loc": {
                       "start": {
@@ -2111,8 +2168,8 @@
                     "value": false,
                     "raw": "false",
                     "range": [
-                      1560,
-                      1565
+                      1563,
+                      1568
                     ],
                     "loc": {
                       "start": {
@@ -2126,8 +2183,8 @@
                     }
                   },
                   "range": [
-                    1541,
-                    1565
+                    1544,
+                    1568
                   ],
                   "loc": {
                     "start": {
@@ -2153,8 +2210,8 @@
                           "type": "Identifier",
                           "name": "regexp",
                           "range": [
-                            1700,
-                            1706
+                            1703,
+                            1709
                           ],
                           "loc": {
                             "start": {
@@ -2169,8 +2226,8 @@
                         },
                         "init": null,
                         "range": [
-                          1700,
-                          1706
+                          1703,
+                          1709
                         ],
                         "loc": {
                           "start": {
@@ -2186,8 +2243,8 @@
                     ],
                     "kind": "let",
                     "range": [
-                      1696,
-                      1707
+                      1699,
+                      1710
                     ],
                     "loc": {
                       "start": {
@@ -2204,8 +2261,8 @@
                         "type": "Line",
                         "value": " Improved by Cedric Wartel (cwl) automatic exact match for selects and",
                         "range": [
-                          1576,
-                          1648
+                          1579,
+                          1651
                         ],
                         "loc": {
                           "start": {
@@ -2222,8 +2279,8 @@
                         "type": "Line",
                         "value": " special characters are now filtered",
                         "range": [
-                          1653,
-                          1691
+                          1656,
+                          1694
                         ],
                         "loc": {
                           "start": {
@@ -2247,8 +2304,8 @@
                           "type": "Identifier",
                           "name": "modifier",
                           "range": [
-                            1716,
-                            1724
+                            1719,
+                            1727
                           ],
                           "loc": {
                             "start": {
@@ -2267,8 +2324,8 @@
                             "type": "Identifier",
                             "name": "caseSensitive",
                             "range": [
-                              1727,
-                              1740
+                              1730,
+                              1743
                             ],
                             "loc": {
                               "start": {
@@ -2286,8 +2343,8 @@
                             "value": "g",
                             "raw": "'g'",
                             "range": [
-                              1743,
-                              1746
+                              1746,
+                              1749
                             ],
                             "loc": {
                               "start": {
@@ -2305,8 +2362,8 @@
                             "value": "gi",
                             "raw": "'gi'",
                             "range": [
-                              1749,
-                              1753
+                              1752,
+                              1756
                             ],
                             "loc": {
                               "start": {
@@ -2320,8 +2377,8 @@
                             }
                           },
                           "range": [
-                            1727,
-                            1753
+                            1730,
+                            1756
                           ],
                           "loc": {
                             "start": {
@@ -2335,8 +2392,8 @@
                           }
                         },
                         "range": [
-                          1716,
-                          1753
+                          1719,
+                          1756
                         ],
                         "loc": {
                           "start": {
@@ -2352,8 +2409,8 @@
                     ],
                     "kind": "let",
                     "range": [
-                      1712,
-                      1754
+                      1715,
+                      1757
                     ],
                     "loc": {
                       "start": {
@@ -2372,8 +2429,8 @@
                       "type": "Identifier",
                       "name": "ignoreDiacritics",
                       "range": [
-                        1763,
-                        1779
+                        1766,
+                        1782
                       ],
                       "loc": {
                         "start": {
@@ -2398,8 +2455,8 @@
                               "type": "Identifier",
                               "name": "term",
                               "range": [
-                                1791,
-                                1795
+                                1794,
+                                1798
                               ],
                               "loc": {
                                 "start": {
@@ -2418,8 +2475,8 @@
                                 "type": "Identifier",
                                 "name": "removeDiacritics",
                                 "range": [
-                                  1798,
-                                  1814
+                                  1801,
+                                  1817
                                 ],
                                 "loc": {
                                   "start": {
@@ -2437,8 +2494,8 @@
                                   "type": "Identifier",
                                   "name": "term",
                                   "range": [
-                                    1815,
-                                    1819
+                                    1818,
+                                    1822
                                   ],
                                   "loc": {
                                     "start": {
@@ -2453,8 +2510,8 @@
                                 }
                               ],
                               "range": [
-                                1798,
-                                1820
+                                1801,
+                                1823
                               ],
                               "loc": {
                                 "start": {
@@ -2468,8 +2525,8 @@
                               }
                             },
                             "range": [
-                              1791,
-                              1820
+                              1794,
+                              1823
                             ],
                             "loc": {
                               "start": {
@@ -2483,8 +2540,8 @@
                             }
                           },
                           "range": [
-                            1791,
-                            1821
+                            1794,
+                            1824
                           ],
                           "loc": {
                             "start": {
@@ -2506,8 +2563,8 @@
                               "type": "Identifier",
                               "name": "data",
                               "range": [
-                                1830,
-                                1834
+                                1833,
+                                1837
                               ],
                               "loc": {
                                 "start": {
@@ -2526,8 +2583,8 @@
                                 "type": "Identifier",
                                 "name": "removeDiacritics",
                                 "range": [
-                                  1837,
-                                  1853
+                                  1840,
+                                  1856
                                 ],
                                 "loc": {
                                   "start": {
@@ -2545,8 +2602,8 @@
                                   "type": "Identifier",
                                   "name": "data",
                                   "range": [
-                                    1854,
-                                    1858
+                                    1857,
+                                    1861
                                   ],
                                   "loc": {
                                     "start": {
@@ -2561,8 +2618,8 @@
                                 }
                               ],
                               "range": [
-                                1837,
-                                1859
+                                1840,
+                                1862
                               ],
                               "loc": {
                                 "start": {
@@ -2576,8 +2633,8 @@
                               }
                             },
                             "range": [
-                              1830,
-                              1859
+                              1833,
+                              1862
                             ],
                             "loc": {
                               "start": {
@@ -2591,8 +2648,8 @@
                             }
                           },
                           "range": [
-                            1830,
-                            1860
+                            1833,
+                            1863
                           ],
                           "loc": {
                             "start": {
@@ -2607,8 +2664,8 @@
                         }
                       ],
                       "range": [
-                        1781,
-                        1866
+                        1784,
+                        1869
                       ],
                       "loc": {
                         "start": {
@@ -2623,8 +2680,8 @@
                     },
                     "alternate": null,
                     "range": [
-                      1759,
-                      1866
+                      1762,
+                      1869
                     ],
                     "loc": {
                       "start": {
@@ -2643,8 +2700,8 @@
                       "type": "Identifier",
                       "name": "exactMatch",
                       "range": [
-                        1875,
-                        1885
+                        1878,
+                        1888
                       ],
                       "loc": {
                         "start": {
@@ -2669,8 +2726,8 @@
                               "type": "Identifier",
                               "name": "regexp",
                               "range": [
-                                1897,
-                                1903
+                                1900,
+                                1906
                               ],
                               "loc": {
                                 "start": {
@@ -2689,8 +2746,8 @@
                                 "type": "Identifier",
                                 "name": "RegExp",
                                 "range": [
-                                  1910,
-                                  1916
+                                  1913,
+                                  1919
                                 ],
                                 "loc": {
                                   "start": {
@@ -2715,8 +2772,8 @@
                                       "value": "(^\\s*)",
                                       "raw": "'(^\\\\s*)'",
                                       "range": [
-                                        1917,
-                                        1926
+                                        1920,
+                                        1929
                                       ],
                                       "loc": {
                                         "start": {
@@ -2735,8 +2792,8 @@
                                         "type": "Identifier",
                                         "name": "rgxEsc",
                                         "range": [
-                                          1929,
-                                          1935
+                                          1932,
+                                          1938
                                         ],
                                         "loc": {
                                           "start": {
@@ -2754,8 +2811,8 @@
                                           "type": "Identifier",
                                           "name": "term",
                                           "range": [
-                                            1936,
-                                            1940
+                                            1939,
+                                            1943
                                           ],
                                           "loc": {
                                             "start": {
@@ -2770,8 +2827,8 @@
                                         }
                                       ],
                                       "range": [
-                                        1929,
-                                        1941
+                                        1932,
+                                        1944
                                       ],
                                       "loc": {
                                         "start": {
@@ -2785,8 +2842,8 @@
                                       }
                                     },
                                     "range": [
-                                      1917,
-                                      1941
+                                      1920,
+                                      1944
                                     ],
                                     "loc": {
                                       "start": {
@@ -2804,8 +2861,8 @@
                                     "value": "(\\s*$)",
                                     "raw": "'(\\\\s*$)'",
                                     "range": [
-                                      1944,
-                                      1953
+                                      1947,
+                                      1956
                                     ],
                                     "loc": {
                                       "start": {
@@ -2819,8 +2876,8 @@
                                     }
                                   },
                                   "range": [
-                                    1917,
-                                    1953
+                                    1920,
+                                    1956
                                   ],
                                   "loc": {
                                     "start": {
@@ -2837,8 +2894,8 @@
                                   "type": "Identifier",
                                   "name": "modifier",
                                   "range": [
-                                    1967,
-                                    1975
+                                    1970,
+                                    1978
                                   ],
                                   "loc": {
                                     "start": {
@@ -2853,8 +2910,8 @@
                                 }
                               ],
                               "range": [
-                                1906,
-                                1976
+                                1909,
+                                1979
                               ],
                               "loc": {
                                 "start": {
@@ -2868,8 +2925,8 @@
                               }
                             },
                             "range": [
-                              1897,
-                              1976
+                              1900,
+                              1979
                             ],
                             "loc": {
                               "start": {
@@ -2883,8 +2940,8 @@
                             }
                           },
                           "range": [
-                            1897,
-                            1977
+                            1900,
+                            1980
                           ],
                           "loc": {
                             "start": {
@@ -2899,8 +2956,8 @@
                         }
                       ],
                       "range": [
-                        1887,
-                        1983
+                        1890,
+                        1986
                       ],
                       "loc": {
                         "start": {
@@ -2925,8 +2982,8 @@
                               "type": "Identifier",
                               "name": "regexp",
                               "range": [
-                                1999,
-                                2005
+                                2002,
+                                2008
                               ],
                               "loc": {
                                 "start": {
@@ -2945,8 +3002,8 @@
                                 "type": "Identifier",
                                 "name": "RegExp",
                                 "range": [
-                                  2012,
-                                  2018
+                                  2015,
+                                  2021
                                 ],
                                 "loc": {
                                   "start": {
@@ -2966,8 +3023,8 @@
                                     "type": "Identifier",
                                     "name": "rgxEsc",
                                     "range": [
-                                      2019,
-                                      2025
+                                      2022,
+                                      2028
                                     ],
                                     "loc": {
                                       "start": {
@@ -2985,8 +3042,8 @@
                                       "type": "Identifier",
                                       "name": "term",
                                       "range": [
-                                        2026,
-                                        2030
+                                        2029,
+                                        2033
                                       ],
                                       "loc": {
                                         "start": {
@@ -3001,8 +3058,8 @@
                                     }
                                   ],
                                   "range": [
-                                    2019,
-                                    2031
+                                    2022,
+                                    2034
                                   ],
                                   "loc": {
                                     "start": {
@@ -3019,8 +3076,8 @@
                                   "type": "Identifier",
                                   "name": "modifier",
                                   "range": [
-                                    2033,
-                                    2041
+                                    2036,
+                                    2044
                                   ],
                                   "loc": {
                                     "start": {
@@ -3035,8 +3092,8 @@
                                 }
                               ],
                               "range": [
-                                2008,
-                                2042
+                                2011,
+                                2045
                               ],
                               "loc": {
                                 "start": {
@@ -3050,8 +3107,8 @@
                               }
                             },
                             "range": [
-                              1999,
-                              2042
+                              2002,
+                              2045
                             ],
                             "loc": {
                               "start": {
@@ -3065,8 +3122,8 @@
                             }
                           },
                           "range": [
-                            1999,
-                            2043
+                            2002,
+                            2046
                           ],
                           "loc": {
                             "start": {
@@ -3081,8 +3138,8 @@
                         }
                       ],
                       "range": [
-                        1989,
-                        2049
+                        1992,
+                        2052
                       ],
                       "loc": {
                         "start": {
@@ -3096,8 +3153,8 @@
                       }
                     },
                     "range": [
-                      1871,
-                      2049
+                      1874,
+                      2052
                     ],
                     "loc": {
                       "start": {
@@ -3121,8 +3178,8 @@
                           "type": "Identifier",
                           "name": "regexp",
                           "range": [
-                            2061,
-                            2067
+                            2064,
+                            2070
                           ],
                           "loc": {
                             "start": {
@@ -3139,8 +3196,8 @@
                           "type": "Identifier",
                           "name": "test",
                           "range": [
-                            2068,
-                            2072
+                            2071,
+                            2075
                           ],
                           "loc": {
                             "start": {
@@ -3154,8 +3211,8 @@
                           }
                         },
                         "range": [
-                          2061,
-                          2072
+                          2064,
+                          2075
                         ],
                         "loc": {
                           "start": {
@@ -3173,8 +3230,8 @@
                           "type": "Identifier",
                           "name": "data",
                           "range": [
-                            2073,
-                            2077
+                            2076,
+                            2080
                           ],
                           "loc": {
                             "start": {
@@ -3189,8 +3246,8 @@
                         }
                       ],
                       "range": [
-                        2061,
-                        2078
+                        2064,
+                        2081
                       ],
                       "loc": {
                         "start": {
@@ -3204,8 +3261,8 @@
                       }
                     },
                     "range": [
-                      2054,
-                      2079
+                      2057,
+                      2082
                     ],
                     "loc": {
                       "start": {
@@ -3220,8 +3277,8 @@
                   }
                 ],
                 "range": [
-                  1570,
-                  2081
+                  1573,
+                  2084
                 ],
                 "loc": {
                   "start": {
@@ -3237,8 +3294,8 @@
               "generator": false,
               "expression": false,
               "range": [
-                1481,
-                2081
+                1484,
+                2084
               ],
               "loc": {
                 "start": {
@@ -3252,8 +3309,8 @@
               }
             },
             "range": [
-              1470,
-              2081
+              1473,
+              2084
             ],
             "loc": {
               "start": {
@@ -3269,8 +3326,8 @@
         ],
         "kind": "const",
         "range": [
-          1464,
-          2082
+          1467,
+          2085
         ],
         "loc": {
           "start": {
@@ -3278,8 +3335,8 @@
             "column": 7
           },
           "end": {
-            "line": 77,
-            "column": 0
+            "line": 76,
+            "column": 2
           }
         },
         "leadingComments": [
@@ -3287,8 +3344,8 @@
             "type": "Block",
             "value": "*\n * Checks if passed data contains the searched term\n * @param  {String} term                Searched term\n * @param  {String} data                Data string\n * @param  {Boolean} exactMatch         Exact match\n * @param  {Boolean} caseSensitive      Case sensitive\n * @param  {Boolean} ignoreDiacritics   Ignore diacritics\n * @return {Boolean}\n ",
             "range": [
-              1105,
-              1456
+              1108,
+              1459
             ],
             "loc": {
               "start": {
@@ -3307,8 +3364,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        1457,
-        2082
+        1460,
+        2085
       ],
       "loc": {
         "start": {
@@ -3316,8 +3373,8 @@
           "column": 0
         },
         "end": {
-          "line": 77,
-          "column": 0
+          "line": 76,
+          "column": 2
         }
       },
       "leadingComments": [
@@ -3325,8 +3382,8 @@
           "type": "Block",
           "value": "*\n * Checks if passed data contains the searched term\n * @param  {String} term                Searched term\n * @param  {String} data                Data string\n * @param  {Boolean} exactMatch         Exact match\n * @param  {Boolean} caseSensitive      Case sensitive\n * @param  {Boolean} ignoreDiacritics   Ignore diacritics\n * @return {Boolean}\n ",
           "range": [
-            1105,
-            1456
+            1108,
+            1459
           ],
           "loc": {
             "start": {
@@ -3345,7 +3402,7 @@
   "sourceType": "module",
   "range": [
     0,
-    2082
+    2085
   ],
   "loc": {
     "start": {
@@ -3353,8 +3410,8 @@
       "column": 0
     },
     "end": {
-      "line": 77,
-      "column": 0
+      "line": 76,
+      "column": 2
     }
   },
   "comments": [
@@ -3398,8 +3455,8 @@
       "type": "Block",
       "value": "*\n * Checks if passed string is empty\n * @param {String} text\n * @return {Boolean}\n ",
       "range": [
-        326,
-        414
+        327,
+        415
       ],
       "loc": {
         "start": {
@@ -3416,8 +3473,8 @@
       "type": "Block",
       "value": "*\n * Makes regex safe string by escaping special characters from passed string\n * @param {String} text\n * @return {String} escaped string\n ",
       "range": [
-        468,
-        611
+        469,
+        612
       ],
       "loc": {
         "start": {
@@ -3434,8 +3491,8 @@
       "type": "Block",
       "value": "*\n * Returns passed string as lowercase if caseSensitive flag set false. By\n * default it returns the string with no casing changes.\n * @param {String} text\n * @return {String} string\n ",
       "range": [
-        768,
-        957
+        770,
+        959
       ],
       "loc": {
         "start": {
@@ -3452,8 +3509,8 @@
       "type": "Block",
       "value": "*\n * Checks if passed data contains the searched term\n * @param  {String} term                Searched term\n * @param  {String} data                Data string\n * @param  {Boolean} exactMatch         Exact match\n * @param  {Boolean} caseSensitive      Case sensitive\n * @param  {Boolean} ignoreDiacritics   Ignore diacritics\n * @return {Boolean}\n ",
       "range": [
-        1105,
-        1456
+        1108,
+        1459
       ],
       "loc": {
         "start": {
@@ -3470,8 +3527,8 @@
       "type": "Line",
       "value": " Improved by Cedric Wartel (cwl) automatic exact match for selects and",
       "range": [
-        1576,
-        1648
+        1579,
+        1651
       ],
       "loc": {
         "start": {
@@ -3488,8 +3545,8 @@
       "type": "Line",
       "value": " special characters are now filtered",
       "range": [
-        1653,
-        1691
+        1656,
+        1694
       ],
       "loc": {
         "start": {
