@@ -204,6 +204,36 @@ test('TableFilter re-initialised', function() {
     deepEqual(id(tf.fltIds[3]).nodeName, 'SELECT', 'Filter exists');
 });
 
+module('Properties');
+test('Can set icon HTML', function() {
+    // setup
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        col_2: 'multiple',
+        col_3: 'select',
+        col_4: 'none',
+        popup_filters: {
+            image_html: '<span>hello world</span>'
+        }
+    });
+    var feature = tf.feature('popupFilter');
+    feature.filtersCache = [];
+    feature.fltElms = [];
+
+    // act
+    tf.init();
+    var headersRow = tf.dom().rows[tf.getHeadersRowIndex()];
+
+    // assert
+    deepEqual(
+        headersRow.cells[1].innerHTML
+            .indexOf('<span>hello world</span>') !== -1,
+        true,
+        'Custom HTML element present'
+    );
+});
+
 module('Grid-layout');
 test('Re-instantiated with grid-layout', function() {
     tf.destroy();
