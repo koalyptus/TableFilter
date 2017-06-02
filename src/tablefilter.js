@@ -161,9 +161,9 @@ export class TableFilter {
 
         /**
          * Enable/disable grid layout (fixed headers)
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
-        this.gridLayout = Boolean(f.grid_layout);
+        this.gridLayout = isObj(f.grid_layout) || Boolean(f.grid_layout);
 
         /**
          * Filters row index
@@ -812,14 +812,14 @@ export class TableFilter {
 
         /**
          * Enable no results message UI component
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
         this.noResults = isObj(f.no_results_message) ||
             Boolean(f.no_results_message);
 
         /**
          * Enable state persistence
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
         this.state = isObj(f.state) || Boolean(f.state);
 
