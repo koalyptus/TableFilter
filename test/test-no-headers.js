@@ -49,8 +49,9 @@ test('Grid layout with no header', function() {
     tf.destroy();
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
-        grid_layout: true,
-        grid_no_headers: true
+        grid_layout: {
+            no_headers: true
+        }
     });
     tf.init();
 
