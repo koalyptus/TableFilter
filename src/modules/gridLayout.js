@@ -46,7 +46,7 @@ export class GridLayout extends Feature {
          * Css class for headers table container element
          * @type {String}
          */
-        this.headContCssClass = f.tblHead_cont_css_class || 'grd_headTblCont';
+        this.headContCssClass = f.tbl_head_css_class || 'grd_headTblCont';
 
         /**
          * Css class for toolbar container element (rows counter, paging etc.)
