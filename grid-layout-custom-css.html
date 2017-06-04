@@ -784,13 +784,14 @@
         loader: true,
 
         // grid layout customisation
-        grid_layout: true,
-        grid_width: '890px',
-        grid_height: '400px',
-        grid_enable_default_filters: false,
-        grid_cont_css_class: 'grd-main-cont',
-        grid_tblHead_cont_css_class: 'grd-head-cont',
-        grid_tbl_cont_css_class: 'grd-cont',
+        grid_layout: {
+            width: '890px',
+            height: '400px',
+            filters: false,
+            cont_css_class: 'grd-main-cont',
+            tbl_head_css_class: 'grd-head-cont',
+            tbl_cont_css_class: 'grd-cont'
+        },
 
         extensions:[{
             name: 'sort'

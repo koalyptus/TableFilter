@@ -660,8 +660,9 @@
 <script data-config>
     var tf = new TableFilter('demo', {
       base_path: 'tablefilter/',
-      grid_layout: true,
-      grid_width: '100%'
+      grid_layout: {
+          width: '100%'
+      }
     });
     tf.init();
 </script>
