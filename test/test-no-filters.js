@@ -139,7 +139,7 @@
             base_path: '../dist/tablefilter/',
             col_width: ['100px','100px','100px','100px','100px'],
             grid_layout: {
-                enable_default_filters: false
+                filters: false
             }
         });
 

@@ -70,7 +70,7 @@ export class GridLayout extends Feature {
          * Enable or disable column filters generation, default: true
          * @type {Boolean}
          */
-        this.enableFilters = f.enable_default_filters === false ? false : true;
+        this.filters = f.filters === false ? false : true;
 
         /**
          * Enable or disable column headers, default: false
@@ -144,7 +144,7 @@ export class GridLayout extends Feature {
         this.headTbl = null;
 
         // filters flag at TF level
-        tf.fltGrid = this.enableFilters;
+        tf.fltGrid = this.filters;
     }
 
     /**
@@ -372,7 +372,7 @@ export class GridLayout extends Feature {
     createFiltersRow() {
         let tf = this.tf;
         let filtersRow = createElm('tr');
-        if (this.enableFilters && tf.fltGrid) {
+        if (this.filters && tf.fltGrid) {
             tf.externalFltTgtIds = [];
             for (let j = 0; j < tf.getCellsNb(); j++) {
                 let fltTdId = `${tf.prfxFlt + j + this.prfxGridFltTd + tf.id}`;
