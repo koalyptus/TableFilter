@@ -2310,9 +2310,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#enablefilters",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-enableFilters",
-    "src/modules/gridLayout.js~GridLayout#enableFilters",
+    "src/modules/gridlayout.js~gridlayout#filters",
+    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-filters",
+    "src/modules/gridLayout.js~GridLayout#filters",
     "member"
   ],
   [

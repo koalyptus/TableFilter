@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.5.19 API Document</title>
+  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.5.20 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -145,75 +145,73 @@ export class GridLayout extends Feature {
     constructor(tf) {
         super(tf, &apos;gridLayout&apos;);
 
-        let f = this.config;
+        let f = this.config.grid_layout || {};
 
         /**
          * Grid-layout container width as CSS string
          * @type {String}
          */
-        this.width = f.grid_width || null;
+        this.width = f.width || null;
 
         /**
          * Grid-layout container height as CSS string
          * @type {String}
          */
-        this.height = f.grid_height || null;
+        this.height = f.height || null;
 
         /**
          * Css class for main container element
          * @type {String}
          */
-        this.mainContCssClass = f.grid_cont_css_class || &apos;grd_Cont&apos;;
+        this.mainContCssClass = f.cont_css_class || &apos;grd_Cont&apos;;
 
         /**
          * Css class for body table container element
          * @type {String}
          */
-        this.contCssClass = f.grid_tbl_cont_css_class || &apos;grd_tblCont&apos;;
+        this.contCssClass = f.tbl_cont_css_class || &apos;grd_tblCont&apos;;
 
         /**
          * Css class for headers table container element
          * @type {String}
          */
-        this.headContCssClass = f.grid_tblHead_cont_css_class ||
-            &apos;grd_headTblCont&apos;;
+        this.headContCssClass = f.tbl_head_css_class || &apos;grd_headTblCont&apos;;
 
         /**
          * Css class for toolbar container element (rows counter, paging etc.)
          * @type {String}
          */
-        this.infDivCssClass = f.grid_inf_grid_css_class || &apos;grd_inf&apos;;
+        this.infDivCssClass = f.inf_grid_css_class || &apos;grd_inf&apos;;
 
         /**
          * Index of the headers row, default: 0
          * @type {Number}
          */
-        this.headRowIndex = f.grid_headers_row_index || 0;
+        this.headRowIndex = f.headers_row_index || 0;
 
         /**
          * Collection of the header row indexes to be moved into headers table
          * @type {Array}
          */
-        this.headRows = f.grid_headers_rows || [0];
+        this.headRows = f.headers_rows || [0];
 
         /**
          * Enable or disable column filters generation, default: true
          * @type {Boolean}
          */
-        this.enableFilters = f.grid_enable_default_filters === false ?
-            false : true;
+        this.filters = f.filters === false ? false : true;
 
         /**
          * Enable or disable column headers, default: false
          * @type {Boolean}
          */
-        this.noHeaders = Boolean(f.grid_no_headers);
+        this.noHeaders = Boolean(f.no_headers);
 
         /**
          * Grid-layout default column widht as CSS string
          * @type {String}
          */
-        this.defaultColWidth = f.grid_default_col_width || &apos;100px&apos;;
+        this.defaultColWidth = f.default_col_width || &apos;100px&apos;;
 
         /**
          * List of column elements
@@ -275,7 +273,7 @@ export class GridLayout extends Feature {
         this.headTbl = null;
 
         // filters flag at TF level
-        tf.fltGrid = this.enableFilters;
+        tf.fltGrid = this.filters;
     }
 
     /**
@@ -503,7 +501,7 @@ export class GridLayout extends Feature {
     createFiltersRow() {
         let tf = this.tf;
         let filtersRow = createElm(&apos;tr&apos;);
-        if (this.enableFilters &amp;&amp; tf.fltGrid) {
+        if (this.filters &amp;&amp; tf.fltGrid) {
             tf.externalFltTgtIds = [];
             for (let j = 0; j &lt; tf.getCellsNb(); j++) {
                 let fltTdId = `${tf.prfxFlt + j + this.prfxGridFltTd + tf.id}`;
