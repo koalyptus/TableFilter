@@ -16,75 +16,73 @@ export class GridLayout extends Feature {
     constructor(tf) {
         super(tf, 'gridLayout');
 
-        let f = this.config;
+        let f = this.config.grid_layout || {};
 
         /**
          * Grid-layout container width as CSS string
          * @type {String}
          */
-        this.width = f.grid_width || null;
+        this.width = f.width || null;
 
         /**
          * Grid-layout container height as CSS string
          * @type {String}
          */
-        this.height = f.grid_height || null;
+        this.height = f.height || null;
 
         /**
          * Css class for main container element
          * @type {String}
          */
-        this.mainContCssClass = f.grid_cont_css_class || 'grd_Cont';
+        this.mainContCssClass = f.cont_css_class || 'grd_Cont';
 
         /**
          * Css class for body table container element
          * @type {String}
          */
-        this.contCssClass = f.grid_tbl_cont_css_class || 'grd_tblCont';
+        this.contCssClass = f.tbl_cont_css_class || 'grd_tblCont';
 
         /**
          * Css class for headers table container element
          * @type {String}
          */
-        this.headContCssClass = f.grid_tblHead_cont_css_class ||
-            'grd_headTblCont';
+        this.headContCssClass = f.tbl_head_css_class || 'grd_headTblCont';
 
         /**
          * Css class for toolbar container element (rows counter, paging etc.)
          * @type {String}
          */
-        this.infDivCssClass = f.grid_inf_grid_css_class || 'grd_inf';
+        this.infDivCssClass = f.inf_grid_css_class || 'grd_inf';
 
         /**
          * Index of the headers row, default: 0
          * @type {Number}
          */
-        this.headRowIndex = f.grid_headers_row_index || 0;
+        this.headRowIndex = f.headers_row_index || 0;
 
         /**
          * Collection of the header row indexes to be moved into headers table
          * @type {Array}
          */
-        this.headRows = f.grid_headers_rows || [0];
+        this.headRows = f.headers_rows || [0];
 
         /**
          * Enable or disable column filters generation, default: true
          * @type {Boolean}
          */
-        this.enableFilters = f.grid_enable_default_filters === false ?
-            false : true;
+        this.filters = f.filters === false ? false : true;
 
         /**
          * Enable or disable column headers, default: false
          * @type {Boolean}
          */
-        this.noHeaders = Boolean(f.grid_no_headers);
+        this.noHeaders = Boolean(f.no_headers);
 
         /**
          * Grid-layout default column widht as CSS string
          * @type {String}
          */
-        this.defaultColWidth = f.grid_default_col_width || '100px';
+        this.defaultColWidth = f.default_col_width || '100px';
 
         /**
          * List of column elements
@@ -146,7 +144,7 @@ export class GridLayout extends Feature {
         this.headTbl = null;
 
         // filters flag at TF level
-        tf.fltGrid = this.enableFilters;
+        tf.fltGrid = this.filters;
     }
 
     /**
@@ -374,7 +372,7 @@ export class GridLayout extends Feature {
     createFiltersRow() {
         let tf = this.tf;
         let filtersRow = createElm('tr');
-        if (this.enableFilters && tf.fltGrid) {
+        if (this.filters && tf.fltGrid) {
             tf.externalFltTgtIds = [];
             for (let j = 0; j < tf.getCellsNb(); j++) {
                 let fltTdId = `${tf.prfxFlt + j + this.prfxGridFltTd + tf.id}`;

@@ -137,9 +137,10 @@
         tf = null;
         tf = new TableFilter('demo', {
             base_path: '../dist/tablefilter/',
-            grid_enable_default_filters: false,
             col_width: ['100px','100px','100px','100px','100px'],
-            grid_layout: true
+            grid_layout: {
+                filters: false
+            }
         });
 
         // act
