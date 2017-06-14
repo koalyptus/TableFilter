@@ -765,9 +765,9 @@ export class TableFilter {
 
         /**
          * Enable paging component
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
-        this.paging = Boolean(f.paging);
+        this.paging = isObj(f.paging) || Boolean(f.paging);
 
         /**
          * Number of hidden rows
