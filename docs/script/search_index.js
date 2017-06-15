@@ -2844,6 +2844,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/modules/paging.js~paging#btncssclass",
+    "class/src/modules/paging.js~Paging.html#instance-member-btnCssClass",
+    "src/modules/paging.js~Paging#btnCssClass",
+    "member"
+  ],
+  [
     "src/modules/paging.js~paging#btnfirstpagehtml",
     "class/src/modules/paging.js~Paging.html#instance-member-btnFirstPageHtml",
     "src/modules/paging.js~Paging#btnFirstPageHtml",
@@ -2877,12 +2883,6 @@ window.esdocSearchIndex = [
     "src/modules/paging.js~paging#btnnextpagetext",
     "class/src/modules/paging.js~Paging.html#instance-member-btnNextPageText",
     "src/modules/paging.js~Paging#btnNextPageText",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#btnpagecssclass",
-    "class/src/modules/paging.js~Paging.html#instance-member-btnPageCssClass",
-    "src/modules/paging.js~Paging#btnPageCssClass",
     "member"
   ],
   [
@@ -2934,9 +2934,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/paging.js~paging#haspagingbtns",
-    "class/src/modules/paging.js~Paging.html#instance-member-hasPagingBtns",
-    "src/modules/paging.js~Paging#hasPagingBtns",
+    "src/modules/paging.js~paging#hasbtns",
+    "class/src/modules/paging.js~Paging.html#instance-member-hasBtns",
+    "src/modules/paging.js~Paging#hasBtns",
     "member"
   ],
   [
@@ -2988,33 +2988,39 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/modules/paging.js~paging#pagelength",
+    "class/src/modules/paging.js~Paging.html#instance-member-pageLength",
+    "src/modules/paging.js~Paging#pageLength",
+    "member"
+  ],
+  [
+    "src/modules/paging.js~paging#pagelengthslc",
+    "class/src/modules/paging.js~Paging.html#instance-member-pageLengthSlc",
+    "src/modules/paging.js~Paging#pageLengthSlc",
+    "member"
+  ],
+  [
+    "src/modules/paging.js~paging#pagelengthtgtid",
+    "class/src/modules/paging.js~Paging.html#instance-member-pageLengthTgtId",
+    "src/modules/paging.js~Paging#pageLengthTgtId",
+    "member"
+  ],
+  [
     "src/modules/paging.js~paging#pageselectortype",
     "class/src/modules/paging.js~Paging.html#instance-member-pageSelectorType",
     "src/modules/paging.js~Paging#pageSelectorType",
     "member"
   ],
   [
+    "src/modules/paging.js~paging#pageslc",
+    "class/src/modules/paging.js~Paging.html#instance-member-pageSlc",
+    "src/modules/paging.js~Paging#pageSlc",
+    "member"
+  ],
+  [
     "src/modules/paging.js~paging#pagetext",
     "class/src/modules/paging.js~Paging.html#instance-member-pageText",
     "src/modules/paging.js~Paging#pageText",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#paginglength",
-    "class/src/modules/paging.js~Paging.html#instance-member-pagingLength",
-    "src/modules/paging.js~Paging#pagingLength",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#pagingslc",
-    "class/src/modules/paging.js~Paging.html#instance-member-pagingSlc",
-    "src/modules/paging.js~Paging#pagingSlc",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#pagingtgtid",
-    "class/src/modules/paging.js~Paging.html#instance-member-pagingTgtId",
-    "src/modules/paging.js~Paging#pagingTgtId",
     "member"
   ],
   [
@@ -3066,18 +3072,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/paging.js~paging#resultsperpageslc",
-    "class/src/modules/paging.js~Paging.html#instance-member-resultsPerPageSlc",
-    "src/modules/paging.js~Paging#resultsPerPageSlc",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#resultsperpagetgtid",
-    "class/src/modules/paging.js~Paging.html#instance-member-resultsPerPageTgtId",
-    "src/modules/paging.js~Paging#resultsPerPageTgtId",
-    "member"
-  ],
-  [
     "src/modules/paging.js~paging#resultsslccssclass",
     "class/src/modules/paging.js~Paging.html#instance-member-resultsSlcCssClass",
     "src/modules/paging.js~Paging#resultsSlcCssClass",
@@ -3106,6 +3100,12 @@ window.esdocSearchIndex = [
     "class/src/modules/paging.js~Paging.html#instance-method-setResultsPerPage",
     "src/modules/paging.js~Paging#setResultsPerPage",
     "method"
+  ],
+  [
+    "src/modules/paging.js~paging#tgtid",
+    "class/src/modules/paging.js~Paging.html#instance-member-tgtId",
+    "src/modules/paging.js~Paging#tgtId",
+    "member"
   ],
   [
     "src/modules/popupfilter.js",
