@@ -13176,8 +13176,9 @@
     var tfConfig = {
         base_path: 'tablefilter/',
         toolbar_target_id: 'externalToolbar',
-        paging: true,
-        results_per_page: ['Records: ', [10, 25, 50, 100]],
+        paging: {
+          results_per_page: ['Records: ', [10, 25, 50, 100]]
+        },
         state: {
           types: ['local_storage'],
           filters: true,

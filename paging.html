@@ -13161,7 +13161,9 @@
 <script data-config>
     var filtersConfig = {
         base_path: 'tablefilter/',
-        paging: true,
+        paging: {
+          results_per_page: ['Records: ', [10, 25, 50, 100]]
+        },
         state: {
           types: ['local_storage'],
           filters: true,
@@ -13169,7 +13171,6 @@
           page_length: true,
           sort: true
         },
-        results_per_page: ['Records: ', [10, 25, 50, 100]],
         alternate_rows: true,
         btn_reset: true,
         rows_counter: true,
