@@ -13,7 +13,7 @@
     "keyword-spacing": ["error", { "after": true, "before": true }],
     "max-depth": [2, 7],
     "max-statements": [2, 143],
-    "complexity": [2, 82],
+    "complexity": [2, 83],
     "no-unused-vars": 2,
     "no-eval": 2,
     "no-underscore-dangle": 0,

@@ -7,8 +7,9 @@ var tf = new TableFilter('demo', {
         page_number: true,
         page_length: true
     },
-    paging: true,
-    results_per_page: ['Records: ', [2, 4, 6]],
+    paging: {
+        results_per_page: ['Records: ', [2, 4, 6]]
+    }
 });
 tf.init();
 var state = tf.feature('state');

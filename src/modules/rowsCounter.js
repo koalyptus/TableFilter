@@ -157,9 +157,9 @@ export class RowsCounter extends Feature {
                 let pagingStartRow = parseInt(paging.startPagingRow, 10) +
                     ((nbValidRows > 0) ? 1 : 0);
                 let pagingEndRow =
-                    (pagingStartRow + paging.pagingLength) - 1 <=
+                    (pagingStartRow + paging.pageLength) - 1 <=
                     nbValidRows ?
-                        pagingStartRow + paging.pagingLength - 1 :
+                        pagingStartRow + paging.pageLength - 1 :
                         nbValidRows;
                 totTxt = pagingStartRow + this.fromToTextSeparator +
                     pagingEndRow + this.overText + nbValidRows;

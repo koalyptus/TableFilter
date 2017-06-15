@@ -208,7 +208,7 @@ export default class AdapterEzEditTable extends Feature {
                     paging = tf.feature('paging'),
                     //pgup/pgdown keys
                     d = keyCode === 34 || keyCode === 33 ?
-                        (paging && paging.pagingLength || et.nbRowsPerPage) :
+                        (paging && paging.pageLength || et.nbRowsPerPage) :
                         1;
 
                 //If next row is not valid, next valid filtered row needs to be
@@ -278,11 +278,11 @@ export default class AdapterEzEditTable extends Feature {
                     if (tf.feature('paging').nbPages > 1) {
                         let paging = tf.feature('paging');
                         //page length is re-assigned in case it has changed
-                        et.nbRowsPerPage = paging.pagingLength;
+                        et.nbRowsPerPage = paging.pageLength;
                         let validIndexes = tf.validRowsIndex,
                             validIdxLen = validIndexes.length,
                             pagingEndRow = parseInt(paging.startPagingRow, 10) +
-                                parseInt(paging.pagingLength, 10);
+                                parseInt(paging.pageLength, 10);
                         let rowIndex = row.rowIndex;
 
                         if ((rowIndex === validIndexes[validIdxLen - 1]) &&
