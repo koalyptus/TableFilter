@@ -198,7 +198,6 @@ export class GridLayout extends Feature {
         //Headers table container: div wrapping headers table
         this.headTblCont = this.createContainer(
             'div', this.headContCssClass);
-        this.setConfigWidth(this.headTblCont);
 
         //Headers table
         this.headTbl = createElm('table');
@@ -236,7 +235,6 @@ export class GridLayout extends Feature {
         tbl.style.tableLayout = 'fixed';
         this.headTbl.cellPadding = tbl.cellPadding;
         this.headTbl.cellSpacing = tbl.cellSpacing;
-        // this.headTbl.style.width = tbl.style.width;
 
         //content table without headers needs col widths to be reset
         tf.setColWidths(this.headTbl);
