@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.5.22 API Document</title>
+  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.5.23 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -327,7 +327,6 @@ export class GridLayout extends Feature {
         //Headers table container: div wrapping headers table
         this.headTblCont = this.createContainer(
             &apos;div&apos;, this.headContCssClass);
-        this.setConfigWidth(this.headTblCont);
 
         //Headers table
         this.headTbl = createElm(&apos;table&apos;);
@@ -365,7 +364,6 @@ export class GridLayout extends Feature {
         tbl.style.tableLayout = &apos;fixed&apos;;
         this.headTbl.cellPadding = tbl.cellPadding;
         this.headTbl.cellSpacing = tbl.cellSpacing;
-        // this.headTbl.style.width = tbl.style.width;
 
         //content table without headers needs col widths to be reset
         tf.setColWidths(this.headTbl);

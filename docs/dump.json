@@ -9002,7 +9002,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {createElm, removeElm, elm, tag} from '../dom';\nimport {addEvt, targetEvt} from '../event';\nimport {contains} from '../string';\nimport {NONE} from '../const';\n\n/**\n * Grid layout, table with fixed headers\n */\nexport class GridLayout extends Feature {\n\n    /**\n     * Creates an instance of GridLayout\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'gridLayout');\n\n        let f = this.config.grid_layout || {};\n\n        /**\n         * Grid-layout container width as CSS string\n         * @type {String}\n         */\n        this.width = f.width || null;\n\n        /**\n         * Grid-layout container height as CSS string\n         * @type {String}\n         */\n        this.height = f.height || null;\n\n        /**\n         * Css class for main container element\n         * @type {String}\n         */\n        this.mainContCssClass = f.cont_css_class || 'grd_Cont';\n\n        /**\n         * Css class for body table container element\n         * @type {String}\n         */\n        this.contCssClass = f.tbl_cont_css_class || 'grd_tblCont';\n\n        /**\n         * Css class for headers table container element\n         * @type {String}\n         */\n        this.headContCssClass = f.tbl_head_css_class || 'grd_headTblCont';\n\n        /**\n         * Css class for toolbar container element (rows counter, paging etc.)\n         * @type {String}\n         */\n        this.infDivCssClass = f.inf_grid_css_class || 'grd_inf';\n\n        /**\n         * Index of the headers row, default: 0\n         * @type {Number}\n         */\n        this.headRowIndex = f.headers_row_index || 0;\n\n        /**\n         * Collection of the header row indexes to be moved into headers table\n         * @type {Array}\n         */\n        this.headRows = f.headers_rows || [0];\n\n        /**\n         * Enable or disable column filters generation, default: true\n         * @type {Boolean}\n         */\n        this.filters = f.filters === false ? false : true;\n\n        /**\n         * Enable or disable column headers, default: false\n         * @type {Boolean}\n         */\n        this.noHeaders = Boolean(f.no_headers);\n\n        /**\n         * Grid-layout default column widht as CSS string\n         * @type {String}\n         */\n        this.defaultColWidth = f.default_col_width || '100px';\n\n        /**\n         * List of column elements\n         * @type {Array}\n         * @private\n         */\n        this.colElms = [];\n\n        /**\n         * Prefix for grid-layout filter's cell ID\n         * @type {String}\n         * @private\n         */\n        this.prfxGridFltTd = '_td_';\n\n        /**\n         * Prefix for grid-layout header's cell ID\n         * @type {String}\n         * @private\n         */\n        this.prfxGridTh = 'tblHeadTh_';\n\n        /**\n         * Mark-up of original HTML table\n         * @type {String}\n         * @private\n         */\n        this.sourceTblHtml = tf.dom().outerHTML;\n\n        /**\n         * Indicates if working table has column elements\n         * @type {Boolean}\n         * @private\n         */\n        this.tblHasColTag = tag(tf.dom(), 'col').length > 0 ? true : false;\n\n        /**\n         * Main container element\n         * @private\n         */\n        this.tblMainCont = null;\n\n        /**\n         * Table container element\n         * @private\n         */\n        this.tblCont = null;\n\n        /**\n         * Headers' table container element\n         * @private\n         */\n        this.headTblCont = null;\n\n        /**\n         * Headers' table element\n         * @private\n         */\n        this.headTbl = null;\n\n        // filters flag at TF level\n        tf.fltGrid = this.filters;\n    }\n\n    /**\n     * Generates a grid with fixed headers\n     * TODO: reduce size of init by extracting single purposed methods\n     */\n    init() {\n        let tf = this.tf;\n        let tbl = tf.dom();\n\n        if (this.initialized) {\n            return;\n        }\n\n        // Override relevant TableFilter properties\n        this.setOverrides();\n\n        // Assign default column widths\n        this.setDefaultColWidths();\n\n        // Initial table width\n        let tblW = this.initialTableWidth();\n\n        //Main container: it will contain all the elements\n        this.tblMainCont = this.createContainer(\n            'div', this.mainContCssClass);\n        if (this.width) {\n            this.tblMainCont.style.width = this.width;\n        }\n        tbl.parentNode.insertBefore(this.tblMainCont, tbl);\n\n        //Table container: div wrapping content table\n        this.tblCont = this.createContainer('div', this.contCssClass);\n        this.setConfigWidth(this.tblCont);\n        if (this.height) {\n            this.tblCont.style.height = this.height;\n        }\n        tbl.parentNode.insertBefore(this.tblCont, tbl);\n        let t = removeElm(tbl);\n        this.tblCont.appendChild(t);\n\n        //In case table width is expressed in %\n        if (tbl.style.width === '') {\n            tbl.style.width = (contains('%', tblW) ?\n                tbl.clientWidth : tblW) + 'px';\n        }\n\n        let d = removeElm(this.tblCont);\n        this.tblMainCont.appendChild(d);\n\n        //Headers table container: div wrapping headers table\n        this.headTblCont = this.createContainer(\n            'div', this.headContCssClass);\n        this.setConfigWidth(this.headTblCont);\n\n        //Headers table\n        this.headTbl = createElm('table');\n        let tH = createElm('tHead');\n\n        //1st row should be headers row, ids are added if not set\n        //Those ids are used by the sort feature\n        let hRow = tbl.rows[this.headRowIndex];\n        let sortTriggers = this.getSortTriggerIds(hRow);\n\n        //Filters row is created\n        let filtersRow = this.createFiltersRow();\n\n        //Headers row are moved from content table to headers table\n        this.setHeadersRow(tH);\n\n        this.headTbl.appendChild(tH);\n        if (tf.filtersRowIndex === 0) {\n            tH.insertBefore(filtersRow, hRow);\n        } else {\n            tH.appendChild(filtersRow);\n        }\n\n        this.headTblCont.appendChild(this.headTbl);\n        this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);\n\n        //THead needs to be removed in content table for sort feature\n        let thead = tag(tbl, 'thead');\n        if (thead.length > 0) {\n            tbl.removeChild(thead[0]);\n        }\n\n        //Headers table style\n        this.headTbl.style.tableLayout = 'fixed';\n        tbl.style.tableLayout = 'fixed';\n        this.headTbl.cellPadding = tbl.cellPadding;\n        this.headTbl.cellSpacing = tbl.cellSpacing;\n        // this.headTbl.style.width = tbl.style.width;\n\n        //content table without headers needs col widths to be reset\n        tf.setColWidths(this.headTbl);\n\n        //Headers container width\n        // this.headTblCont.style.width = this.tblCont.clientWidth+'px';\n\n        tbl.style.width = '';\n        //\n        this.headTbl.style.width = tbl.clientWidth + 'px';\n        //\n\n        //scroll synchronisation\n        addEvt(this.tblCont, 'scroll', (evt) => {\n            let elm = targetEvt(evt);\n            let scrollLeft = elm.scrollLeft;\n            this.headTblCont.scrollLeft = scrollLeft;\n            //New pointerX calc taking into account scrollLeft\n            // if(!o.isPointerXOverwritten){\n            //     try{\n            //         o.Evt.pointerX = function(evt){\n            //             let e = evt || global.event;\n            //             let bdScrollLeft = tf_StandardBody().scrollLeft +\n            //                 scrollLeft;\n            //             return (e.pageX + scrollLeft) ||\n            //                 (e.clientX + bdScrollLeft);\n            //         };\n            //         o.isPointerXOverwritten = true;\n            //     } catch(err) {\n            //         o.isPointerXOverwritten = false;\n            //     }\n            // }\n        });\n\n        // TODO: Trigger a custom event handled by sort extension\n        let sort = tf.extension('sort');\n        if (sort) {\n            sort.asyncSort = true;\n            sort.triggerIds = sortTriggers;\n        }\n\n        //Col elements are enough to keep column widths after sorting and\n        //filtering\n        this.setColumnElements();\n\n        if (tf.popupFilters) {\n            filtersRow.style.display = NONE;\n        }\n\n        if (tbl.clientWidth !== this.headTbl.clientWidth) {\n            tbl.style.width = this.headTbl.clientWidth + 'px';\n        }\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Overrides TableFilter instance properties to adjust to grid layout mode\n     * @private\n     */\n    setOverrides() {\n        let tf = this.tf;\n        tf.refRow = 0;\n        tf.headersRow = 0;\n        tf.filtersRowIndex = 1;\n        tf.isExternalFlt = true;\n    }\n\n    /**\n     * Set grid-layout default column widths if column widths are not defined\n     * @private\n     */\n    setDefaultColWidths() {\n        let tf = this.tf;\n        if (tf.hasColWidths) {\n            return;\n        }\n        for (let k = 0, len = tf.getCellsNb(); k < len; k++) {\n            let colW;\n            let cell = tf.dom().rows[tf.getHeadersRowIndex()].cells[k];\n            if (cell.width !== '') {\n                colW = cell.width;\n            } else if (cell.style.width !== '') {\n                colW = parseInt(cell.style.width, 10);\n            } else {\n                colW = this.defaultColWidth;\n            }\n            tf.colWidths[k] = colW;\n        }\n        tf.hasColWidths = true;\n        tf.setColWidths();\n    }\n\n    /**\n     * Initial table width\n     * @returns {Number}\n     * @private\n     */\n    initialTableWidth() {\n        let tbl = this.tf.dom();\n        let width; //initial table width\n\n        if (tbl.width !== '') {\n            width = tbl.width;\n        }\n        else if (tbl.style.width !== '') {\n            width = tbl.style.width;\n        } else {\n            width = tbl.clientWidth;\n        }\n        return parseInt(width, 10);\n    }\n\n    /**\n     * Creates container element\n     * @param {String} tag Tag name\n     * @param {String} className Css class to assign to element\n     * @returns {DOMElement}\n     * @private\n     */\n    createContainer(tag, className) {\n        let element = createElm(tag);\n        element.className = className;\n        return element;\n    }\n\n    /**\n     * Creates filters row with cells\n     * @returns {HTMLTableRowElement}\n     * @private\n     */\n    createFiltersRow() {\n        let tf = this.tf;\n        let filtersRow = createElm('tr');\n        if (this.filters && tf.fltGrid) {\n            tf.externalFltTgtIds = [];\n            for (let j = 0; j < tf.getCellsNb(); j++) {\n                let fltTdId = `${tf.prfxFlt + j + this.prfxGridFltTd + tf.id}`;\n                let cl = createElm(tf.fltCellTag, ['id', fltTdId]);\n                filtersRow.appendChild(cl);\n                tf.externalFltTgtIds[j] = fltTdId;\n            }\n        }\n        return filtersRow;\n    }\n\n    /**\n     * Generates column elements if necessary and assigns their widths\n     * @private\n     */\n    setColumnElements() {\n        let tf = this.tf;\n        let cols = tag(tf.dom(), 'col');\n        this.tblHasColTag = cols.length > 0;\n\n        for (let k = (tf.nbCells - 1); k >= 0; k--) {\n            let col;\n\n            if (!this.tblHasColTag) {\n                col = createElm('col');\n                tf.dom().insertBefore(col, tf.dom().firstChild);\n            } else {\n                col = cols[k];\n            }\n            col.style.width = tf.colWidths[k];\n            this.colElms[k] = col;\n        }\n        this.tblHasColTag = true;\n    }\n\n    /**\n     * Sets headers row in headers table\n     * @param {HTMLHeadElement} tableHead Table head element\n     * @private\n     */\n    setHeadersRow(tableHead) {\n        if (this.noHeaders) {\n            // Handle table with no headers, assuming here headers do not\n            // exist\n            tableHead.appendChild(createElm('tr'));\n        } else {\n            // Headers row are moved from content table to headers table\n            for (let i = 0; i < this.headRows.length; i++) {\n                let row = this.tf.dom().rows[this.headRows[i]];\n                tableHead.appendChild(row);\n            }\n        }\n    }\n\n    /**\n     * Sets width defined in configuration to passed element\n     * @param {DOMElement} element DOM element\n     * @private\n     */\n    setConfigWidth(element) {\n        if (!this.width) {\n            return;\n        }\n        if (this.width.indexOf('%') !== -1) {\n            element.style.width = '100%';\n        } else {\n            element.style.width = this.width;\n        }\n    }\n\n    /**\n     * Returns a list of header IDs used for specifing external sort triggers\n     * @param {HTMLTableRowElement} row DOM row element\n     * @returns {Array} List of IDs\n     * @private\n     */\n    getSortTriggerIds(row) {\n        let tf = this.tf;\n        let sortTriggers = [];\n        for (let n = 0; n < tf.getCellsNb(); n++) {\n            let c = row.cells[n];\n            let thId = c.getAttribute('id');\n            if (!thId || thId === '') {\n                thId = `${this.prfxGridTh + n}_${tf.id}`;\n                c.setAttribute('id', thId);\n            }\n            sortTriggers.push(thId);\n        }\n        return sortTriggers;\n    }\n\n    /**\n     * Removes the grid layout\n     */\n    destroy() {\n        let tf = this.tf;\n        let tbl = tf.dom();\n\n        if (!this.initialized) {\n            return;\n        }\n        let t = removeElm(tbl);\n        this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);\n        removeElm(this.tblMainCont);\n\n        this.tblMainCont = null;\n        this.headTblCont = null;\n        this.headTbl = null;\n        this.tblCont = null;\n\n        tbl.outerHTML = this.sourceTblHtml;\n        //needed to keep reference of table element for future usage\n        this.tf.tbl = elm(tf.id);\n\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {createElm, removeElm, elm, tag} from '../dom';\nimport {addEvt, targetEvt} from '../event';\nimport {contains} from '../string';\nimport {NONE} from '../const';\n\n/**\n * Grid layout, table with fixed headers\n */\nexport class GridLayout extends Feature {\n\n    /**\n     * Creates an instance of GridLayout\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'gridLayout');\n\n        let f = this.config.grid_layout || {};\n\n        /**\n         * Grid-layout container width as CSS string\n         * @type {String}\n         */\n        this.width = f.width || null;\n\n        /**\n         * Grid-layout container height as CSS string\n         * @type {String}\n         */\n        this.height = f.height || null;\n\n        /**\n         * Css class for main container element\n         * @type {String}\n         */\n        this.mainContCssClass = f.cont_css_class || 'grd_Cont';\n\n        /**\n         * Css class for body table container element\n         * @type {String}\n         */\n        this.contCssClass = f.tbl_cont_css_class || 'grd_tblCont';\n\n        /**\n         * Css class for headers table container element\n         * @type {String}\n         */\n        this.headContCssClass = f.tbl_head_css_class || 'grd_headTblCont';\n\n        /**\n         * Css class for toolbar container element (rows counter, paging etc.)\n         * @type {String}\n         */\n        this.infDivCssClass = f.inf_grid_css_class || 'grd_inf';\n\n        /**\n         * Index of the headers row, default: 0\n         * @type {Number}\n         */\n        this.headRowIndex = f.headers_row_index || 0;\n\n        /**\n         * Collection of the header row indexes to be moved into headers table\n         * @type {Array}\n         */\n        this.headRows = f.headers_rows || [0];\n\n        /**\n         * Enable or disable column filters generation, default: true\n         * @type {Boolean}\n         */\n        this.filters = f.filters === false ? false : true;\n\n        /**\n         * Enable or disable column headers, default: false\n         * @type {Boolean}\n         */\n        this.noHeaders = Boolean(f.no_headers);\n\n        /**\n         * Grid-layout default column widht as CSS string\n         * @type {String}\n         */\n        this.defaultColWidth = f.default_col_width || '100px';\n\n        /**\n         * List of column elements\n         * @type {Array}\n         * @private\n         */\n        this.colElms = [];\n\n        /**\n         * Prefix for grid-layout filter's cell ID\n         * @type {String}\n         * @private\n         */\n        this.prfxGridFltTd = '_td_';\n\n        /**\n         * Prefix for grid-layout header's cell ID\n         * @type {String}\n         * @private\n         */\n        this.prfxGridTh = 'tblHeadTh_';\n\n        /**\n         * Mark-up of original HTML table\n         * @type {String}\n         * @private\n         */\n        this.sourceTblHtml = tf.dom().outerHTML;\n\n        /**\n         * Indicates if working table has column elements\n         * @type {Boolean}\n         * @private\n         */\n        this.tblHasColTag = tag(tf.dom(), 'col').length > 0 ? true : false;\n\n        /**\n         * Main container element\n         * @private\n         */\n        this.tblMainCont = null;\n\n        /**\n         * Table container element\n         * @private\n         */\n        this.tblCont = null;\n\n        /**\n         * Headers' table container element\n         * @private\n         */\n        this.headTblCont = null;\n\n        /**\n         * Headers' table element\n         * @private\n         */\n        this.headTbl = null;\n\n        // filters flag at TF level\n        tf.fltGrid = this.filters;\n    }\n\n    /**\n     * Generates a grid with fixed headers\n     * TODO: reduce size of init by extracting single purposed methods\n     */\n    init() {\n        let tf = this.tf;\n        let tbl = tf.dom();\n\n        if (this.initialized) {\n            return;\n        }\n\n        // Override relevant TableFilter properties\n        this.setOverrides();\n\n        // Assign default column widths\n        this.setDefaultColWidths();\n\n        // Initial table width\n        let tblW = this.initialTableWidth();\n\n        //Main container: it will contain all the elements\n        this.tblMainCont = this.createContainer(\n            'div', this.mainContCssClass);\n        if (this.width) {\n            this.tblMainCont.style.width = this.width;\n        }\n        tbl.parentNode.insertBefore(this.tblMainCont, tbl);\n\n        //Table container: div wrapping content table\n        this.tblCont = this.createContainer('div', this.contCssClass);\n        this.setConfigWidth(this.tblCont);\n        if (this.height) {\n            this.tblCont.style.height = this.height;\n        }\n        tbl.parentNode.insertBefore(this.tblCont, tbl);\n        let t = removeElm(tbl);\n        this.tblCont.appendChild(t);\n\n        //In case table width is expressed in %\n        if (tbl.style.width === '') {\n            tbl.style.width = (contains('%', tblW) ?\n                tbl.clientWidth : tblW) + 'px';\n        }\n\n        let d = removeElm(this.tblCont);\n        this.tblMainCont.appendChild(d);\n\n        //Headers table container: div wrapping headers table\n        this.headTblCont = this.createContainer(\n            'div', this.headContCssClass);\n\n        //Headers table\n        this.headTbl = createElm('table');\n        let tH = createElm('tHead');\n\n        //1st row should be headers row, ids are added if not set\n        //Those ids are used by the sort feature\n        let hRow = tbl.rows[this.headRowIndex];\n        let sortTriggers = this.getSortTriggerIds(hRow);\n\n        //Filters row is created\n        let filtersRow = this.createFiltersRow();\n\n        //Headers row are moved from content table to headers table\n        this.setHeadersRow(tH);\n\n        this.headTbl.appendChild(tH);\n        if (tf.filtersRowIndex === 0) {\n            tH.insertBefore(filtersRow, hRow);\n        } else {\n            tH.appendChild(filtersRow);\n        }\n\n        this.headTblCont.appendChild(this.headTbl);\n        this.tblCont.parentNode.insertBefore(this.headTblCont, this.tblCont);\n\n        //THead needs to be removed in content table for sort feature\n        let thead = tag(tbl, 'thead');\n        if (thead.length > 0) {\n            tbl.removeChild(thead[0]);\n        }\n\n        //Headers table style\n        this.headTbl.style.tableLayout = 'fixed';\n        tbl.style.tableLayout = 'fixed';\n        this.headTbl.cellPadding = tbl.cellPadding;\n        this.headTbl.cellSpacing = tbl.cellSpacing;\n\n        //content table without headers needs col widths to be reset\n        tf.setColWidths(this.headTbl);\n\n        //Headers container width\n        // this.headTblCont.style.width = this.tblCont.clientWidth+'px';\n\n        tbl.style.width = '';\n        //\n        this.headTbl.style.width = tbl.clientWidth + 'px';\n        //\n\n        //scroll synchronisation\n        addEvt(this.tblCont, 'scroll', (evt) => {\n            let elm = targetEvt(evt);\n            let scrollLeft = elm.scrollLeft;\n            this.headTblCont.scrollLeft = scrollLeft;\n            //New pointerX calc taking into account scrollLeft\n            // if(!o.isPointerXOverwritten){\n            //     try{\n            //         o.Evt.pointerX = function(evt){\n            //             let e = evt || global.event;\n            //             let bdScrollLeft = tf_StandardBody().scrollLeft +\n            //                 scrollLeft;\n            //             return (e.pageX + scrollLeft) ||\n            //                 (e.clientX + bdScrollLeft);\n            //         };\n            //         o.isPointerXOverwritten = true;\n            //     } catch(err) {\n            //         o.isPointerXOverwritten = false;\n            //     }\n            // }\n        });\n\n        // TODO: Trigger a custom event handled by sort extension\n        let sort = tf.extension('sort');\n        if (sort) {\n            sort.asyncSort = true;\n            sort.triggerIds = sortTriggers;\n        }\n\n        //Col elements are enough to keep column widths after sorting and\n        //filtering\n        this.setColumnElements();\n\n        if (tf.popupFilters) {\n            filtersRow.style.display = NONE;\n        }\n\n        if (tbl.clientWidth !== this.headTbl.clientWidth) {\n            tbl.style.width = this.headTbl.clientWidth + 'px';\n        }\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Overrides TableFilter instance properties to adjust to grid layout mode\n     * @private\n     */\n    setOverrides() {\n        let tf = this.tf;\n        tf.refRow = 0;\n        tf.headersRow = 0;\n        tf.filtersRowIndex = 1;\n        tf.isExternalFlt = true;\n    }\n\n    /**\n     * Set grid-layout default column widths if column widths are not defined\n     * @private\n     */\n    setDefaultColWidths() {\n        let tf = this.tf;\n        if (tf.hasColWidths) {\n            return;\n        }\n        for (let k = 0, len = tf.getCellsNb(); k < len; k++) {\n            let colW;\n            let cell = tf.dom().rows[tf.getHeadersRowIndex()].cells[k];\n            if (cell.width !== '') {\n                colW = cell.width;\n            } else if (cell.style.width !== '') {\n                colW = parseInt(cell.style.width, 10);\n            } else {\n                colW = this.defaultColWidth;\n            }\n            tf.colWidths[k] = colW;\n        }\n        tf.hasColWidths = true;\n        tf.setColWidths();\n    }\n\n    /**\n     * Initial table width\n     * @returns {Number}\n     * @private\n     */\n    initialTableWidth() {\n        let tbl = this.tf.dom();\n        let width; //initial table width\n\n        if (tbl.width !== '') {\n            width = tbl.width;\n        }\n        else if (tbl.style.width !== '') {\n            width = tbl.style.width;\n        } else {\n            width = tbl.clientWidth;\n        }\n        return parseInt(width, 10);\n    }\n\n    /**\n     * Creates container element\n     * @param {String} tag Tag name\n     * @param {String} className Css class to assign to element\n     * @returns {DOMElement}\n     * @private\n     */\n    createContainer(tag, className) {\n        let element = createElm(tag);\n        element.className = className;\n        return element;\n    }\n\n    /**\n     * Creates filters row with cells\n     * @returns {HTMLTableRowElement}\n     * @private\n     */\n    createFiltersRow() {\n        let tf = this.tf;\n        let filtersRow = createElm('tr');\n        if (this.filters && tf.fltGrid) {\n            tf.externalFltTgtIds = [];\n            for (let j = 0; j < tf.getCellsNb(); j++) {\n                let fltTdId = `${tf.prfxFlt + j + this.prfxGridFltTd + tf.id}`;\n                let cl = createElm(tf.fltCellTag, ['id', fltTdId]);\n                filtersRow.appendChild(cl);\n                tf.externalFltTgtIds[j] = fltTdId;\n            }\n        }\n        return filtersRow;\n    }\n\n    /**\n     * Generates column elements if necessary and assigns their widths\n     * @private\n     */\n    setColumnElements() {\n        let tf = this.tf;\n        let cols = tag(tf.dom(), 'col');\n        this.tblHasColTag = cols.length > 0;\n\n        for (let k = (tf.nbCells - 1); k >= 0; k--) {\n            let col;\n\n            if (!this.tblHasColTag) {\n                col = createElm('col');\n                tf.dom().insertBefore(col, tf.dom().firstChild);\n            } else {\n                col = cols[k];\n            }\n            col.style.width = tf.colWidths[k];\n            this.colElms[k] = col;\n        }\n        this.tblHasColTag = true;\n    }\n\n    /**\n     * Sets headers row in headers table\n     * @param {HTMLHeadElement} tableHead Table head element\n     * @private\n     */\n    setHeadersRow(tableHead) {\n        if (this.noHeaders) {\n            // Handle table with no headers, assuming here headers do not\n            // exist\n            tableHead.appendChild(createElm('tr'));\n        } else {\n            // Headers row are moved from content table to headers table\n            for (let i = 0; i < this.headRows.length; i++) {\n                let row = this.tf.dom().rows[this.headRows[i]];\n                tableHead.appendChild(row);\n            }\n        }\n    }\n\n    /**\n     * Sets width defined in configuration to passed element\n     * @param {DOMElement} element DOM element\n     * @private\n     */\n    setConfigWidth(element) {\n        if (!this.width) {\n            return;\n        }\n        if (this.width.indexOf('%') !== -1) {\n            element.style.width = '100%';\n        } else {\n            element.style.width = this.width;\n        }\n    }\n\n    /**\n     * Returns a list of header IDs used for specifing external sort triggers\n     * @param {HTMLTableRowElement} row DOM row element\n     * @returns {Array} List of IDs\n     * @private\n     */\n    getSortTriggerIds(row) {\n        let tf = this.tf;\n        let sortTriggers = [];\n        for (let n = 0; n < tf.getCellsNb(); n++) {\n            let c = row.cells[n];\n            let thId = c.getAttribute('id');\n            if (!thId || thId === '') {\n                thId = `${this.prfxGridTh + n}_${tf.id}`;\n                c.setAttribute('id', thId);\n            }\n            sortTriggers.push(thId);\n        }\n        return sortTriggers;\n    }\n\n    /**\n     * Removes the grid layout\n     */\n    destroy() {\n        let tf = this.tf;\n        let tbl = tf.dom();\n\n        if (!this.initialized) {\n            return;\n        }\n        let t = removeElm(tbl);\n        this.tblMainCont.parentNode.insertBefore(t, this.tblMainCont);\n        removeElm(this.tblMainCont);\n\n        this.tblMainCont = null;\n        this.headTblCont = null;\n        this.headTbl = null;\n        this.tblCont = null;\n\n        tbl.outerHTML = this.sourceTblHtml;\n        //needed to keep reference of table element for future usage\n        this.tf.tbl = elm(tf.id);\n\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 390,
@@ -9514,7 +9514,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#headTbl",
     "access": null,
     "description": null,
-    "lineNumber": 204,
+    "lineNumber": 203,
     "undocument": true,
     "type": {
       "types": [
@@ -9532,7 +9532,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 294,
+    "lineNumber": 292,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -9555,7 +9555,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#setOverrides",
     "access": "private",
     "description": "Overrides TableFilter instance properties to adjust to grid layout mode",
-    "lineNumber": 301,
+    "lineNumber": 299,
     "params": [],
     "generator": false
   },
@@ -9569,7 +9569,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#setDefaultColWidths",
     "access": "private",
     "description": "Set grid-layout default column widths if column widths are not defined",
-    "lineNumber": 313,
+    "lineNumber": 311,
     "params": [],
     "generator": false
   },
@@ -9583,7 +9583,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#initialTableWidth",
     "access": "private",
     "description": "Initial table width",
-    "lineNumber": 339,
+    "lineNumber": 337,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9611,7 +9611,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#createContainer",
     "access": "private",
     "description": "Creates container element",
-    "lineNumber": 361,
+    "lineNumber": 359,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9660,7 +9660,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#createFiltersRow",
     "access": "private",
     "description": "Creates filters row with cells",
-    "lineNumber": 372,
+    "lineNumber": 370,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9688,7 +9688,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#setColumnElements",
     "access": "private",
     "description": "Generates column elements if necessary and assigns their widths",
-    "lineNumber": 391,
+    "lineNumber": 389,
     "params": [],
     "generator": false
   },
@@ -9702,7 +9702,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#tblHasColTag",
     "access": null,
     "description": null,
-    "lineNumber": 394,
+    "lineNumber": 392,
     "undocument": true,
     "type": {
       "types": [
@@ -9720,7 +9720,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#tblHasColTag",
     "access": null,
     "description": null,
-    "lineNumber": 408,
+    "lineNumber": 406,
     "undocument": true,
     "type": {
       "types": [
@@ -9738,7 +9738,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#setHeadersRow",
     "access": "private",
     "description": "Sets headers row in headers table",
-    "lineNumber": 416,
+    "lineNumber": 414,
     "params": [
       {
         "nullable": null,
@@ -9763,7 +9763,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#setConfigWidth",
     "access": "private",
     "description": "Sets width defined in configuration to passed element",
-    "lineNumber": 435,
+    "lineNumber": 433,
     "params": [
       {
         "nullable": null,
@@ -9788,7 +9788,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#getSortTriggerIds",
     "access": "private",
     "description": "Returns a list of header IDs used for specifing external sort triggers",
-    "lineNumber": 452,
+    "lineNumber": 450,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9827,7 +9827,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#destroy",
     "access": null,
     "description": "Removes the grid layout",
-    "lineNumber": 470,
+    "lineNumber": 468,
     "params": [],
     "generator": false
   },
@@ -9841,7 +9841,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#tblMainCont",
     "access": null,
     "description": null,
-    "lineNumber": 481,
+    "lineNumber": 479,
     "undocument": true,
     "type": {
       "types": [
@@ -9859,7 +9859,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#headTblCont",
     "access": null,
     "description": null,
-    "lineNumber": 482,
+    "lineNumber": 480,
     "undocument": true,
     "type": {
       "types": [
@@ -9877,7 +9877,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#headTbl",
     "access": null,
     "description": null,
-    "lineNumber": 483,
+    "lineNumber": 481,
     "undocument": true,
     "type": {
       "types": [
@@ -9895,7 +9895,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#tblCont",
     "access": null,
     "description": null,
-    "lineNumber": 484,
+    "lineNumber": 482,
     "undocument": true,
     "type": {
       "types": [
@@ -9913,7 +9913,7 @@
     "longname": "src/modules/gridLayout.js~GridLayout#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 490,
+    "lineNumber": 488,
     "undocument": true,
     "type": {
       "types": [
