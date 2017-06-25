@@ -288,6 +288,32 @@ export class GridLayout extends Feature {
             tbl.style.width = this.headTbl.clientWidth + 'px';
         }
 
+        this.emitter.on(['column-hidden'],
+            (tf, extension, colIndex/*, hiddenCols*/) => {
+                // let hiddenWidth = parseInt(
+                //     this.colElms[colIndex].style.width, 10);
+                // let headCols = tag(this.headTbl, 'col');
+                // headCols[colIndex].style.width = '0';
+                // this.colElms[colIndex].style.width = '0';
+                let headTblW = parseInt(this.headTbl.style.width, 10);
+                let hiddenWidth = parseInt(
+                    this.colElms[colIndex].style.width, 10);
+                this.headTbl.style.width = (headTblW - hiddenWidth) + 'px';
+                tbl.style.width = this.headTbl.style.width;
+            });
+
+        this.emitter.on(['column-shown'],
+            (tf, extension, colIndex/*, hiddenCols*/) => {
+                let width = parseInt(this.colElms[colIndex].style.width, 10);
+                // let headCols = tag(this.headTbl, 'col');
+                // headCols[colIndex].style.width = tf.colWidths[colIndex];
+                // this.colElms[colIndex].style.width = tf.colWidths[colIndex];
+                let headTblW = parseInt(this.headTbl.style.width, 10);
+                // console.log('show',headTblW);
+                this.headTbl.style.width = (headTblW + width) + 'px';
+                tbl.style.width = this.headTbl.style.width;
+            });
+
         /** @inherited */
         this.initialized = true;
     }

@@ -3,9 +3,10 @@ import {
     addClass, removeClass, createCheckItem, createElm, elm, removeElm,
     getText
 } from '../../dom';
-import {isFn, EMPTY_FN} from '../../types';
+import {isFn, isUndef, EMPTY_FN} from '../../types';
 import {addEvt, targetEvt, removeEvt} from '../../event';
 import {root} from '../../root';
+import {NONE} from '../../const';
 
 /**
  * Columns Visibility extension
@@ -277,8 +278,8 @@ export default class ColsVisibility extends Feature {
         if (tf.gridLayout) {
             this.headersTbl = tf.feature('gridLayout').headTbl; //headers table
             this.headersIndex = 0; //headers index
-            this.onAfterColDisplayed = function () { };
-            this.onAfterColHidden = function () { };
+            // this.onAfterColDisplayed = function () { };
+            // this.onAfterColHidden = function () { };
         }
 
         //Loads extension stylesheet
@@ -324,7 +325,7 @@ export default class ColsVisibility extends Feature {
         }
 
         this.contEl.style.display = contDisplay === 'inline' ?
-            'none' : 'inline';
+            NONE : 'inline';
 
         if (contDisplay !== 'inline') {
             this.onAfterOpen(this);
@@ -459,7 +460,7 @@ export default class ColsVisibility extends Feature {
         let ul = createElm('ul');
         ul.className = this.listCssClass;
 
-        let tbl = this.headersTbl ? this.headersTbl : tf.dom();
+        let tbl = this.headersTbl || tf.dom();
         let headerIndex = this.headersTbl ?
             this.headersIndex : tf.getHeadersRowIndex();
         let headerRow = tbl.rows[headerIndex];
@@ -561,25 +562,26 @@ export default class ColsVisibility extends Feature {
             }
         }
 
-        let gridLayout;
-        let headTbl;
-        let gridColElms;
+        // let gridLayout;
+        // let headTbl;
+        // let gridColElms;
         if (hide) {
             //This event is fired just after a column is displayed for
             //grid_layout support
             //TODO: grid layout module should be responsible for those
             //calculations
-            if (tf.gridLayout) {
-                gridLayout = tf.feature('gridLayout');
-                headTbl = gridLayout.headTbl;
-                gridColElms = gridLayout.colElms;
-                let hiddenWidth = parseInt(
-                    gridColElms[colIndex].style.width, 10);
+            // if (tf.gridLayout) {
+            //     gridLayout = tf.feature('gridLayout');
+            //     headTbl = gridLayout.headTbl;
+            //     gridColElms = gridLayout.colElms;
+            //     let hiddenWidth = parseInt(
+            //         gridColElms[colIndex].style.width, 10);
 
-                let headTblW = parseInt(headTbl.style.width, 10);
-                headTbl.style.width = headTblW - hiddenWidth + 'px';
-                tbl.style.width = headTbl.style.width;
-            }
+            //     let headTblW = parseInt(headTbl.style.width, 10);
+            //     headTbl.style.width = headTblW - hiddenWidth + 'px';
+            //     tbl.style.width = headTbl.style.width;
+            //     gridColElms[colIndex].style.width = '0';
+            // }
 
             this.onAfterColHidden(this, colIndex);
             this.emitter.emit('column-hidden', tf, this, colIndex,
@@ -591,15 +593,17 @@ export default class ColsVisibility extends Feature {
             //grid_layout support
             //TODO: grid layout module should be responsible for those
             //calculations
-            if (tf.gridLayout) {
-                gridLayout = tf.feature('gridLayout');
-                headTbl = gridLayout.headTbl;
-                gridColElms = gridLayout.colElms;
-                let width = parseInt(gridColElms[colIndex].style.width, 10);
-                headTbl.style.width =
-                    (parseInt(headTbl.style.width, 10) + width) + 'px';
-                tf.dom().style.width = headTbl.style.width;
-            }
+            // if (tf.gridLayout) {
+            //     gridLayout = tf.feature('gridLayout');
+            //     headTbl = gridLayout.headTbl;
+            //     gridColElms = gridLayout.colElms;
+            //     let width = parseInt(gridColElms[colIndex].style.width, 10);
+            //     headTbl.style.width =
+            //         (parseInt(headTbl.style.width, 10) + width) + 'px';
+            //     tf.dom().style.width = headTbl.style.width;
+            //     // gridColElms[colIndex].style.width = '0';
+            //     // gridLayout.setDefaultColWidths();
+            // }
 
             this.onAfterColDisplayed(this, colIndex);
             this.emitter.emit('column-shown', tf, this, colIndex,
@@ -612,7 +616,7 @@ export default class ColsVisibility extends Feature {
      * @param  {Number} colIndex Column index
      */
     showCol(colIndex) {
-        if (colIndex === undefined || !this.isColHidden(colIndex)) {
+        if (isUndef(colIndex) || !this.isColHidden(colIndex)) {
             return;
         }
         if (this.manager && this.contEl) {
@@ -630,7 +634,7 @@ export default class ColsVisibility extends Feature {
      * @param  {Number} colIndex Column index
      */
     hideCol(colIndex) {
-        if (colIndex === undefined || this.isColHidden(colIndex)) {
+        if (isUndef(colIndex) || this.isColHidden(colIndex)) {
             return;
         }
         if (this.manager && this.contEl) {
@@ -659,7 +663,7 @@ export default class ColsVisibility extends Feature {
      * @param  {Number} colIndex Column index
      */
     toggleCol(colIndex) {
-        if (colIndex === undefined || this.isColHidden(colIndex)) {
+        if (isUndef(colIndex) || this.isColHidden(colIndex)) {
             this.showCol(colIndex);
         } else {
             this.hideCol(colIndex);
@@ -726,7 +730,7 @@ export default class ColsVisibility extends Feature {
             let row = tbl.rows[i];
             let cell = row.cells[colIndex];
             if (cell) {
-                cell.style.display = hide ? 'none' : '';
+                cell.style.display = hide ? NONE : '';
             }
         }
     }
