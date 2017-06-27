@@ -230,6 +230,11 @@ export class GridLayout extends Feature {
             tbl.removeChild(thead[0]);
         }
 
+        // ensure table layout is always set even if already set in css
+        // definitions, potentially with custom css class this could be lost
+        this.headTbl.style.tableLayout = 'fixed';
+        tbl.style.tableLayout = 'fixed';
+
         //content table without headers needs col widths to be reset
         tf.setColWidths(this.headTbl);
 
