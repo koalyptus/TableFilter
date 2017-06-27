@@ -230,21 +230,11 @@ export class GridLayout extends Feature {
             tbl.removeChild(thead[0]);
         }
 
-        //Headers table style
-        this.headTbl.style.tableLayout = 'fixed';
-        tbl.style.tableLayout = 'fixed';
-        this.headTbl.cellPadding = tbl.cellPadding;
-        this.headTbl.cellSpacing = tbl.cellSpacing;
-
         //content table without headers needs col widths to be reset
         tf.setColWidths(this.headTbl);
 
         //Headers container width
-        // this.headTblCont.style.width = this.tblCont.clientWidth+'px';
-
-        tbl.style.width = '';
-        //
-        this.headTbl.style.width = tbl.clientWidth + 'px';
+        this.headTbl.style.width = tbl.style.width;
         //
 
         //scroll synchronisation
@@ -282,10 +272,6 @@ export class GridLayout extends Feature {
 
         if (tf.popupFilters) {
             filtersRow.style.display = NONE;
-        }
-
-        if (tbl.clientWidth !== this.headTbl.clientWidth) {
-            tbl.style.width = this.headTbl.clientWidth + 'px';
         }
 
         /** @inherited */
