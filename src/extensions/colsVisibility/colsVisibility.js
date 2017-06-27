@@ -278,8 +278,6 @@ export default class ColsVisibility extends Feature {
         if (tf.gridLayout) {
             this.headersTbl = tf.feature('gridLayout').headTbl; //headers table
             this.headersIndex = 0; //headers index
-            // this.onAfterColDisplayed = function () { };
-            // this.onAfterColHidden = function () { };
         }
 
         //Loads extension stylesheet
