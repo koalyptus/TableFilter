@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.5.24 API Document</title>
+  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.5.25 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -358,6 +358,11 @@ export class GridLayout extends Feature {
         if (thead.length &gt; 0) {
             tbl.removeChild(thead[0]);
         }
+
+        // ensure table layout is always set even if already set in css
+        // definitions, potentially with custom css class this could be lost
+        this.headTbl.style.tableLayout = &apos;fixed&apos;;
+        tbl.style.tableLayout = &apos;fixed&apos;;
 
         //content table without headers needs col widths to be reset
         tf.setColWidths(this.headTbl);
