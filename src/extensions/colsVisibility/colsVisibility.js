@@ -562,49 +562,13 @@ export default class ColsVisibility extends Feature {
             }
         }
 
-        // let gridLayout;
-        // let headTbl;
-        // let gridColElms;
         if (hide) {
-            //This event is fired just after a column is displayed for
-            //grid_layout support
-            //TODO: grid layout module should be responsible for those
-            //calculations
-            // if (tf.gridLayout) {
-            //     gridLayout = tf.feature('gridLayout');
-            //     headTbl = gridLayout.headTbl;
-            //     gridColElms = gridLayout.colElms;
-            //     let hiddenWidth = parseInt(
-            //         gridColElms[colIndex].style.width, 10);
-
-            //     let headTblW = parseInt(headTbl.style.width, 10);
-            //     headTbl.style.width = headTblW - hiddenWidth + 'px';
-            //     tbl.style.width = headTbl.style.width;
-            //     gridColElms[colIndex].style.width = '0';
-            // }
-
             this.onAfterColHidden(this, colIndex);
             this.emitter.emit('column-hidden', tf, this, colIndex,
                 this.hiddenCols);
         }
 
         if (!hide) {
-            //This event is fired just after a column is displayed for
-            //grid_layout support
-            //TODO: grid layout module should be responsible for those
-            //calculations
-            // if (tf.gridLayout) {
-            //     gridLayout = tf.feature('gridLayout');
-            //     headTbl = gridLayout.headTbl;
-            //     gridColElms = gridLayout.colElms;
-            //     let width = parseInt(gridColElms[colIndex].style.width, 10);
-            //     headTbl.style.width =
-            //         (parseInt(headTbl.style.width, 10) + width) + 'px';
-            //     tf.dom().style.width = headTbl.style.width;
-            //     // gridColElms[colIndex].style.width = '0';
-            //     // gridLayout.setDefaultColWidths();
-            // }
-
             this.onAfterColDisplayed(this, colIndex);
             this.emitter.emit('column-shown', tf, this, colIndex,
                 this.hiddenCols);

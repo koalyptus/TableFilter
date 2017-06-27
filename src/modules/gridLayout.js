@@ -230,21 +230,11 @@ export class GridLayout extends Feature {
             tbl.removeChild(thead[0]);
         }
 
-        //Headers table style
-        this.headTbl.style.tableLayout = 'fixed';
-        tbl.style.tableLayout = 'fixed';
-        this.headTbl.cellPadding = tbl.cellPadding;
-        this.headTbl.cellSpacing = tbl.cellSpacing;
-
         //content table without headers needs col widths to be reset
         tf.setColWidths(this.headTbl);
 
         //Headers container width
-        // this.headTblCont.style.width = this.tblCont.clientWidth+'px';
-
-        tbl.style.width = '';
-        //
-        this.headTbl.style.width = tbl.clientWidth + 'px';
+        this.headTbl.style.width = tbl.style.width;
         //
 
         //scroll synchronisation
@@ -283,36 +273,6 @@ export class GridLayout extends Feature {
         if (tf.popupFilters) {
             filtersRow.style.display = NONE;
         }
-
-        if (tbl.clientWidth !== this.headTbl.clientWidth) {
-            tbl.style.width = this.headTbl.clientWidth + 'px';
-        }
-
-        this.emitter.on(['column-hidden'],
-            (tf, extension, colIndex/*, hiddenCols*/) => {
-                // let hiddenWidth = parseInt(
-                //     this.colElms[colIndex].style.width, 10);
-                // let headCols = tag(this.headTbl, 'col');
-                // headCols[colIndex].style.width = '0';
-                // this.colElms[colIndex].style.width = '0';
-                let headTblW = parseInt(this.headTbl.style.width, 10);
-                let hiddenWidth = parseInt(
-                    this.colElms[colIndex].style.width, 10);
-                this.headTbl.style.width = (headTblW - hiddenWidth) + 'px';
-                tbl.style.width = this.headTbl.style.width;
-            });
-
-        this.emitter.on(['column-shown'],
-            (tf, extension, colIndex/*, hiddenCols*/) => {
-                let width = parseInt(this.colElms[colIndex].style.width, 10);
-                // let headCols = tag(this.headTbl, 'col');
-                // headCols[colIndex].style.width = tf.colWidths[colIndex];
-                // this.colElms[colIndex].style.width = tf.colWidths[colIndex];
-                let headTblW = parseInt(this.headTbl.style.width, 10);
-                // console.log('show',headTblW);
-                this.headTbl.style.width = (headTblW + width) + 'px';
-                tbl.style.width = this.headTbl.style.width;
-            });
 
         /** @inherited */
         this.initialized = true;
