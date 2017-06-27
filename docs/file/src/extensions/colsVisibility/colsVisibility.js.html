@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/extensions/colsVisibility/colsVisibility.js | tablefilter v0.5.23 API Document</title>
+  <title data-ice="title">src/extensions/colsVisibility/colsVisibility.js | tablefilter v0.5.24 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -132,9 +132,10 @@ import {
     addClass, removeClass, createCheckItem, createElm, elm, removeElm,
     getText
 } from &apos;../../dom&apos;;
-import {isFn, EMPTY_FN} from &apos;../../types&apos;;
+import {isFn, isUndef, EMPTY_FN} from &apos;../../types&apos;;
 import {addEvt, targetEvt, removeEvt} from &apos;../../event&apos;;
 import {root} from &apos;../../root&apos;;
+import {NONE} from &apos;../../const&apos;;
 
 /**
  * Columns Visibility extension
@@ -406,8 +407,6 @@ export default class ColsVisibility extends Feature {
         if (tf.gridLayout) {
             this.headersTbl = tf.feature(&apos;gridLayout&apos;).headTbl; //headers table
             this.headersIndex = 0; //headers index
-            this.onAfterColDisplayed = function () { };
-            this.onAfterColHidden = function () { };
         }
 
         //Loads extension stylesheet
@@ -453,7 +452,7 @@ export default class ColsVisibility extends Feature {
         }
 
         this.contEl.style.display = contDisplay === &apos;inline&apos; ?
-            &apos;none&apos; : &apos;inline&apos;;
+            NONE : &apos;inline&apos;;
 
         if (contDisplay !== &apos;inline&apos;) {
             this.onAfterOpen(this);
@@ -588,7 +587,7 @@ export default class ColsVisibility extends Feature {
         let ul = createElm(&apos;ul&apos;);
         ul.className = this.listCssClass;
 
-        let tbl = this.headersTbl ? this.headersTbl : tf.dom();
+        let tbl = this.headersTbl || tf.dom();
         let headerIndex = this.headersTbl ?
             this.headersIndex : tf.getHeadersRowIndex();
         let headerRow = tbl.rows[headerIndex];
@@ -690,46 +689,13 @@ export default class ColsVisibility extends Feature {
             }
         }
 
-        let gridLayout;
-        let headTbl;
-        let gridColElms;
         if (hide) {
-            //This event is fired just after a column is displayed for
-            //grid_layout support
-            //TODO: grid layout module should be responsible for those
-            //calculations
-            if (tf.gridLayout) {
-                gridLayout = tf.feature(&apos;gridLayout&apos;);
-                headTbl = gridLayout.headTbl;
-                gridColElms = gridLayout.colElms;
-                let hiddenWidth = parseInt(
-                    gridColElms[colIndex].style.width, 10);
-
-                let headTblW = parseInt(headTbl.style.width, 10);
-                headTbl.style.width = headTblW - hiddenWidth + &apos;px&apos;;
-                tbl.style.width = headTbl.style.width;
-            }
-
             this.onAfterColHidden(this, colIndex);
             this.emitter.emit(&apos;column-hidden&apos;, tf, this, colIndex,
                 this.hiddenCols);
         }
 
         if (!hide) {
-            //This event is fired just after a column is displayed for
-            //grid_layout support
-            //TODO: grid layout module should be responsible for those
-            //calculations
-            if (tf.gridLayout) {
-                gridLayout = tf.feature(&apos;gridLayout&apos;);
-                headTbl = gridLayout.headTbl;
-                gridColElms = gridLayout.colElms;
-                let width = parseInt(gridColElms[colIndex].style.width, 10);
-                headTbl.style.width =
-                    (parseInt(headTbl.style.width, 10) + width) + &apos;px&apos;;
-                tf.dom().style.width = headTbl.style.width;
-            }
-
             this.onAfterColDisplayed(this, colIndex);
             this.emitter.emit(&apos;column-shown&apos;, tf, this, colIndex,
                 this.hiddenCols);
@@ -741,7 +707,7 @@ export default class ColsVisibility extends Feature {
      * @param  {Number} colIndex Column index
      */
     showCol(colIndex) {
-        if (colIndex === undefined || !this.isColHidden(colIndex)) {
+        if (isUndef(colIndex) || !this.isColHidden(colIndex)) {
             return;
         }
         if (this.manager &amp;&amp; this.contEl) {
@@ -759,7 +725,7 @@ export default class ColsVisibility extends Feature {
      * @param  {Number} colIndex Column index
      */
     hideCol(colIndex) {
-        if (colIndex === undefined || this.isColHidden(colIndex)) {
+        if (isUndef(colIndex) || this.isColHidden(colIndex)) {
             return;
         }
         if (this.manager &amp;&amp; this.contEl) {
@@ -788,7 +754,7 @@ export default class ColsVisibility extends Feature {
      * @param  {Number} colIndex Column index
      */
     toggleCol(colIndex) {
-        if (colIndex === undefined || this.isColHidden(colIndex)) {
+        if (isUndef(colIndex) || this.isColHidden(colIndex)) {
             this.showCol(colIndex);
         } else {
             this.hideCol(colIndex);
@@ -855,7 +821,7 @@ export default class ColsVisibility extends Feature {
             let row = tbl.rows[i];
             let cell = row.cells[colIndex];
             if (cell) {
-                cell.style.display = hide ? &apos;none&apos; : &apos;&apos;;
+                cell.style.display = hide ? NONE : &apos;&apos;;
             }
         }
     }
