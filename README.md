@@ -4,6 +4,8 @@
 
 # TableFilter
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/koalyptus/TableFilter.svg)](https://greenkeeper.io/)
+
 > A Javascript library making HTML tables filterable
 
 TableFilter is a modernised version of the [HTML Table Filter generator](http://tablefilter.free.fr) javascript plugin.
