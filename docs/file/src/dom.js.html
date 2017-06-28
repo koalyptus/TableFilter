@@ -269,8 +269,8 @@ export const removeClass = (ele, cls) =&gt; {
 export const createOpt = (text, value, isSel) =&gt; {
     let isSelected = isSel ? true : false;
     let opt = isSelected ?
-            createElm(&apos;option&apos;, [&apos;value&apos;, value], [&apos;selected&apos;, &apos;true&apos;]) :
-            createElm(&apos;option&apos;, [&apos;value&apos;, value]);
+        createElm(&apos;option&apos;, [&apos;value&apos;, value], [&apos;selected&apos;, &apos;true&apos;]) :
+        createElm(&apos;option&apos;, [&apos;value&apos;, value]);
     opt.appendChild(createText(text));
     return opt;
 };

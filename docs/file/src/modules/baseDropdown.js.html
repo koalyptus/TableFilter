@@ -159,8 +159,8 @@ export class BaseDropdown extends Feature {
         this.customSorter = isObj(f.filter_options_sorter) &amp;&amp;
             isArray(f.filter_options_sorter.col) &amp;&amp;
             isArray(f.filter_options_sorter.comparer) ?
-                f.filter_options_sorter :
-                null;
+            f.filter_options_sorter :
+            null;
 
         // TODO: move here all properties shared by Dropdown CheckList
 

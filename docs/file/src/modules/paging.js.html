@@ -157,7 +157,7 @@ export class Paging extends Feature {
          */
         this.btnCssClass = f.btn_css_class || &apos;pgInp&apos;;
 
-         /**
+        /**
          * Main select DOM element
          * @type {DOMElement}
          */
@@ -904,9 +904,9 @@ export class Paging extends Feature {
             this.setPagingInfo();
 
             if (pageSelectorType === SELECT) {
-                let slcIdx =
-                    (pageSlc.options.length - 1 &lt;= slcPagesSelIndex) ?
-                    (pageSlc.options.length - 1) : slcPagesSelIndex;
+                let slcIdx = (pageSlc.options.length - 1 &lt;= slcPagesSelIndex) ?
+                    (pageSlc.options.length - 1) :
+                    slcPagesSelIndex;
                 pageSlc.options[slcIdx].selected = true;
             }
         }

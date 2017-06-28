@@ -148,9 +148,12 @@ export const parse = (value, decimal = &apos;.&apos;) =&gt; {
     let regex = new RegExp(&apos;[^0-9-&apos; + decimal + &apos;]&apos;, [&apos;g&apos;]);
     let unformatted = parseFloat(
         (&apos;&apos; + value)
-        .replace(/\((.*)\)/, &apos;-$1&apos;) // replace bracketed values with negatives
-        .replace(regex, &apos;&apos;)         // strip out any cruft
-        .replace(decimal, &apos;.&apos;)      // make sure decimal point is standard
+            // replace bracketed values with negatives
+            .replace(/\((.*)\)/, &apos;-$1&apos;)
+            // strip out any cruft
+            .replace(regex, &apos;&apos;)
+            // make sure decimal point is standard
+            .replace(decimal, &apos;.&apos;)
     );
 
     // This will fail silently
