@@ -292,9 +292,9 @@ test('Grid layout: initialising alternating rows', function() {
     altRows = tf.feature('alternateRows');
 
     deepEqual(
-      tbl.querySelectorAll('tr.odd').length, 4, 'Expected bg for odd rows');
+        tbl.querySelectorAll('tr.odd').length, 4, 'Expected bg for odd rows');
     deepEqual(
-     tbl.querySelectorAll('tr.even').length, 3, 'Expected bg for even rows');
+        tbl.querySelectorAll('tr.even').length, 3, 'Expected bg for even rows');
 });
 
 test('Grid layout: filter column', function() {

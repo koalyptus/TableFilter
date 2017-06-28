@@ -104,7 +104,7 @@ export default class ColOps extends Feature {
          * @type {Array}
          */
         this.decimalPrecisions = isUndef(opts.decimal_precision) ?
-                2 : opts.decimal_precision;
+            2 : opts.decimal_precision;
 
         this.enable();
     }
@@ -153,7 +153,7 @@ export default class ColOps extends Feature {
         let { colIndexes, operations: colOperations, outputTypes,
             totRowIndexes, excludeRows, formatResults } = this;
         let decimalPrecisions = isUndef(this.decimalPrecisions) ?
-                2 : this.decimalPrecisions;
+            2 : this.decimalPrecisions;
 
         //nuovella: determine unique list of columns to operate on
         let uIndexes = [];

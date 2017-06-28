@@ -1,10 +1,9 @@
 [![Build Status](https://api.travis-ci.org/koalyptus/TableFilter.svg?branch=master)](https://travis-ci.org/koalyptus/TableFilter)
 [![Document](http://koalyptus.github.io/TableFilter/docs/badge.svg)](https://koalyptus.github.io/TableFilter/docs/source)
 [![codecov](https://codecov.io/gh/koalyptus/TableFilter/branch/master/graph/badge.svg)](https://codecov.io/gh/koalyptus/TableFilter)
+[![Greenkeeper badge](https://badges.greenkeeper.io/koalyptus/TableFilter.svg)](https://greenkeeper.io/)
 
 # TableFilter
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/koalyptus/TableFilter.svg)](https://greenkeeper.io/)
 
 > A Javascript library making HTML tables filterable
 

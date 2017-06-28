@@ -233,7 +233,7 @@
             // act
             tf.filter();
 
-             // assert
+            // assert
             deepEqual(hit, 1,
                 'expected column index passed to on_before_active_column');
         });
@@ -246,7 +246,7 @@
             // act
             tf.filter();
 
-             // assert
+            // assert
             deepEqual(hit, 3,
                 'expected column index passed to on_after_active_column');
         });
