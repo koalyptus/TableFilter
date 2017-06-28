@@ -19,9 +19,12 @@ export const parse = (value, decimal = '.') => {
     let regex = new RegExp('[^0-9-' + decimal + ']', ['g']);
     let unformatted = parseFloat(
         ('' + value)
-        .replace(/\((.*)\)/, '-$1') // replace bracketed values with negatives
-        .replace(regex, '')         // strip out any cruft
-        .replace(decimal, '.')      // make sure decimal point is standard
+            // replace bracketed values with negatives
+            .replace(/\((.*)\)/, '-$1')
+            // strip out any cruft
+            .replace(regex, '')
+            // make sure decimal point is standard
+            .replace(decimal, '.')
     );
 
     // This will fail silently
