@@ -186,7 +186,8 @@ test('Does not close popup filter if closeOnFiltering false', function() {
 //     // assert
 //     deepEqual(popupFilter.fltElms.length, 7, 'Filters are generated');
 //     deepEqual(popupFilter.fltIcons.length, 4, 'Icons are generated');
-//     deepEqual(popupFilter.fltSpans.length, 4, 'Icon containers are generated');
+//     deepEqual(popupFilter.fltSpans.length, 4,
+//            'Icon containers are generated');
 // });
 
 test('TableFilter removed', function() {
