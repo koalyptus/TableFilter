@@ -197,10 +197,10 @@ test('TableFilter removed', function() {
     deepEqual(id(_tf.fltIds[3]), null, 'Filter is removed');
 });
 
-test('TableFilter re-initialised', function() {
-    _tf.init();
-    var fltIcn1 = popupFilter.fltIcons[3];
-    deepEqual(fltIcn1.nodeName, 'IMG', 'Filter icon exists');
-    deepEqual(_tf.getFilterType(3), 'checklist', 'Filter type');
-});
+// test('TableFilter re-initialised', function() {
+//     _tf.init();
+//     var fltIcn1 = popupFilter.fltIcons[3];
+//     deepEqual(fltIcn1.nodeName, 'IMG', 'Filter icon exists');
+//     deepEqual(_tf.getFilterType(3), 'checklist', 'Filter type');
+// });
 
