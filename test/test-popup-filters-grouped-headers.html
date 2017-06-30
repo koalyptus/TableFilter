@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>TableFilter pop-up filters with grouped headers</title>
+        <link rel="stylesheet" href="libs/qunit/qunit.css">
+        <script src="libs/qunit/qunit.js"></script>
+        <script src="libs/polyfill.js"></script>
+    </head>
+    <body>
+        <p>
+            Tests for <a href="https://jsfiddle.net/wLexc6pt/6/">
+                https://jsfiddle.net/wLexc6pt/6/</a> fiddle
+        </p>
+        <table id="demo">
+            <thead>
+                <tr>
+                    <th colspan="3">Colspan Header</th>
+                    <th colspan="4">Colspan Header</th>
+                </tr>
+                <tr>
+                    <th>SubHeader</th>
+                    <th>SubHeader</th>
+                    <th>SubHeader</th>
+                    <th>SubHeader</th>
+                    <th>SubHeader</th>
+                    <th>SubHeader</th>
+                    <th>SubHeader</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Filter Value 1</td>
+                    <td>Filter Value 1</td>
+                    <td>Filter Value 1</td>
+                    <td>Filter Value 1</td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Filter Value 1</td>
+                    <td>Filter Value 1</td>
+                    <td>Filter Value 1</td>
+                    <td>Filter Value 1</td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Filter Value 2</td>
+                    <td>Filter Value 2</td>
+                    <td>Filter Value 2</td>
+                    <td>Filter Value 2</td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Filter Value 3</td>
+                    <td>Filter Value 3</td>
+                    <td>Filter Value 3</td>
+                    <td>Filter Value 3</td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Filter Value 3</td>
+                    <td>Filter Value 3</td>
+                    <td>Filter Value 3</td>
+                    <td>Filter Value 3</td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Filter Value 4</td>
+                    <td>Filter Value 4</td>
+                    <td>Filter Value 4</td>
+                    <td>Filter Value 4</td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Value</td>
+                    <td>Filter Value 5</td>
+                    <td>Filter Value 5</td>
+                    <td>Filter Value 5</td>
+                    <td>Filter Value 5</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <script src="../dist/tablefilter/tablefilter.js"></script>
+        <script src="test-popup-filters-grouped-headers.js"></script>
+
+        <div id="qunit"></div>
+        <div id="qunit-fixture"></div>
+    </body>
+</html>
