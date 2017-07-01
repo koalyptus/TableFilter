@@ -10,8 +10,9 @@ var rowToAdd = tf.dom().rows[8];
 var tf1 = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
     rows_counter: true,
-    paging: true,
-    paging_length: 3
+    paging: {
+        length: 3
+    }
 });
 
 module('Sanity checks');

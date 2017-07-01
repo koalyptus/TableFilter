@@ -31,13 +31,13 @@ export class StatusBar extends Feature {
         super(tf, 'statusBar');
 
         // Configuration object
-        let f = this.config;
+        let f = this.config.status_bar || {};
 
         /**
          * ID of custom container element
          * @type {String}
          */
-        this.targetId = f.status_bar_target_id || null;
+        this.targetId = f.target_id || null;
 
         /**
          * Container DOM element
@@ -64,13 +64,13 @@ export class StatusBar extends Feature {
          * Text preceding status message
          * @type {String}
          */
-        this.text = f.status_bar_text || '';
+        this.text = f.text || '';
 
         /**
          * Css class for container element
          * @type {String}
          */
-        this.cssClass = f.status_bar_css_class || 'status';
+        this.cssClass = f.css_class || 'status';
 
         /**
          * Message visibility duration in milliseconds

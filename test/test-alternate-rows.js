@@ -110,7 +110,7 @@ test('Cannot init if initialised', function() {
     // setup
     var processAll = altRows.processAll;
     var hit = 0;
-    altRows.processAll = function() { hit++ };
+    altRows.processAll = function() { hit++; };
     altRows.initialized = true;
 
     // act
@@ -126,7 +126,7 @@ test('Cannot processAll if not enabled', function() {
     // setup
     var setRowBg = altRows.setRowBg;
     var hit = 0;
-    altRows.setRowBg = function() { hit++ };
+    altRows.setRowBg = function() { hit++; };
     altRows.enabled = false;
 
     // act
@@ -142,7 +142,7 @@ test('Cannot setRowBg if not enabled', function() {
     // setup
     var removeRowBg = altRows.removeRowBg;
     var hit = 0;
-    altRows.removeRowBg = function() { hit++ };
+    altRows.removeRowBg = function() { hit++; };
     altRows.enabled = false;
 
     // act
@@ -171,7 +171,7 @@ test('Cannot destroy if not initialised', function() {
     // setup
     var getRowsNb = altRows.tf.getRowsNb;
     var hit = 0;
-    altRows.tf.getRowsNb = function() { hit++ };
+    altRows.tf.getRowsNb = function() { hit++; };
     altRows.initialized = false;
 
     // act
@@ -292,9 +292,9 @@ test('Grid layout: initialising alternating rows', function() {
     altRows = tf.feature('alternateRows');
 
     deepEqual(
-      tbl.querySelectorAll('tr.odd').length, 4, 'Expected bg for odd rows');
+        tbl.querySelectorAll('tr.odd').length, 4, 'Expected bg for odd rows');
     deepEqual(
-     tbl.querySelectorAll('tr.even').length, 3, 'Expected bg for even rows');
+        tbl.querySelectorAll('tr.even').length, 3, 'Expected bg for even rows');
 });
 
 test('Grid layout: filter column', function() {

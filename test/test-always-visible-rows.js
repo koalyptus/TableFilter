@@ -52,8 +52,9 @@
         tf = new TableFilter('demo', {
             base_path: '../dist/tablefilter/',
             rows_always_visible: [4, 9],
-            paging: true,
-            paging_length: 2
+            paging: {
+                length: 2
+            }
         });
         tf.init();
         var paging = tf.feature('paging');

@@ -164,6 +164,19 @@ test('Pop-up filter auto-closes when user clicks away', function() {
     );
 });
 
+test('Can close all popup filters', function() {
+    // setup
+    popupFilter.open(0);
+
+    // act
+    popupFilter.closeAll();
+
+    // assert
+    deepEqual(popupFilter.isOpen(0), false,
+        'Pop-up filter closed after closeAll'
+    );
+});
+
 test('Can destroy and reset', function(){
     // setup
     popupFilter.destroy();
@@ -189,6 +202,36 @@ test('TableFilter re-initialised', function() {
     var fltIcn1 = popupFilter.fltIcons[3];
     deepEqual(fltIcn1.nodeName, 'IMG', 'Filter icon exists');
     deepEqual(id(tf.fltIds[3]).nodeName, 'SELECT', 'Filter exists');
+});
+
+module('Properties');
+test('Can set icon HTML', function() {
+    // setup
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        col_2: 'multiple',
+        col_3: 'select',
+        col_4: 'none',
+        popup_filters: {
+            image_html: '<span>hello world</span>'
+        }
+    });
+    var feature = tf.feature('popupFilter');
+    feature.filtersCache = [];
+    feature.fltElms = [];
+
+    // act
+    tf.init();
+    var headersRow = tf.dom().rows[tf.getHeadersRowIndex()];
+
+    // assert
+    deepEqual(
+        headersRow.cells[1].innerHTML
+            .indexOf('<span>hello world</span>') !== -1,
+        true,
+        'Custom HTML element present'
+    );
 });
 
 module('Grid-layout');

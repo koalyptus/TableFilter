@@ -85,8 +85,9 @@ test('RowsCounter component with paging', function() {
             separator: '~',
             over_text: ' \\ '
         },
-        paging: true,
-        paging_length: 3
+        paging: {
+            length: 3
+        }
     });
     tf.init();
     equal(tf.feature('rowsCounter').label.innerHTML,

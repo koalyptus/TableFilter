@@ -14,7 +14,7 @@ export const trim = (text) => {
         return text.trim();
     }
     return text.replace(/^\s*|\s*$/g, '');
-}
+};
 
 /**
  * Checks if passed string is empty
@@ -32,7 +32,7 @@ export const rgxEsc = (text) => {
     let chars = /[-\/\\^$*+?.()|[\]{}]/g;
     let escMatch = '\\$&';
     return String(text).replace(chars, escMatch);
-}
+};
 
 /**
  * Returns passed string as lowercase if caseSensitive flag set false. By
@@ -45,7 +45,7 @@ export const matchCase = (text, caseSensitive = false) => {
         return text.toLowerCase();
     }
     return text;
-}
+};
 
 /**
  * Checks if passed data contains the searched term
@@ -73,4 +73,4 @@ export const contains = (term, data, exactMatch = false, caseSensitive = false,
         regexp = new RegExp(rgxEsc(term), modifier);
     }
     return regexp.test(data);
-}
+};

@@ -8,7 +8,7 @@ import {isEmpty as isEmptyString} from './string';
 import {
     isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN
 } from './types';
-import {parse as parseNb} from './number'
+import {parse as parseNb} from './number';
 
 import {root} from './root';
 import {Emitter} from './emitter';
@@ -161,9 +161,9 @@ export class TableFilter {
 
         /**
          * Enable/disable grid layout (fixed headers)
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
-        this.gridLayout = Boolean(f.grid_layout);
+        this.gridLayout = isObj(f.grid_layout) || Boolean(f.grid_layout);
 
         /**
          * Filters row index
@@ -487,14 +487,14 @@ export class TableFilter {
          * Indicate whether help UI component is disabled
          * @type {Boolean}
          */
-        this.help = isUndef(f.help_instructions) ?
-            undefined : Boolean(f.help_instructions);
+        this.help = isUndef(f.help_instructions) ? undefined :
+            (isObj(f.help_instructions) || Boolean(f.help_instructions));
 
         /**
          * Indicate whether pop-up filters UI is enabled
          * @type {Boolean}
          */
-        this.popupFilters = Boolean(f.popup_filters);
+        this.popupFilters = isObj(f.popup_filters) || Boolean(f.popup_filters);
 
         /**
          * Indicate whether filtered (active) columns indicator is enabled
@@ -547,7 +547,6 @@ export class TableFilter {
          * by default globally or on a column basis
          * @type {Boolean|Array}
          */
-        // this.sortSlc = f.sort_select === false ? false : true;
         this.sortSlc = isUndef(f.sort_select) ? true :
             isArray(f.sort_select) ? f.sort_select : Boolean(f.sort_select);
 
@@ -708,21 +707,21 @@ export class TableFilter {
 
         /**
          * Enable rows counter UI component
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
         this.rowsCounter = isObj(f.rows_counter) || Boolean(f.rows_counter);
 
         /**
          * Enable status bar UI component
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
-        this.statusBar = Boolean(f.status_bar);
+        this.statusBar = isObj(f.status_bar) || Boolean(f.status_bar);
 
         /**
          * Enable activity/spinner indicator UI component
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
-        this.loader = Boolean(f.loader);
+        this.loader = isObj(f.loader) || Boolean(f.loader);
 
         /*** validation - reset buttons/links ***/
         /**
@@ -766,9 +765,9 @@ export class TableFilter {
 
         /**
          * Enable paging component
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
-        this.paging = Boolean(f.paging);
+        this.paging = isObj(f.paging) || Boolean(f.paging);
 
         /**
          * Number of hidden rows
@@ -813,14 +812,14 @@ export class TableFilter {
 
         /**
          * Enable no results message UI component
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
         this.noResults = isObj(f.no_results_message) ||
             Boolean(f.no_results_message);
 
         /**
          * Enable state persistence
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
         this.state = isObj(f.state) || Boolean(f.state);
 
@@ -1008,6 +1007,7 @@ export class TableFilter {
             highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
             alternateRows, noResults, paging } = FEATURES;
 
+        //explicitly initialise features in given order
         this.initFeatures([
             dateType,
             help,

@@ -18,7 +18,7 @@ test('Does not init if initialised', function() {
     var hit = 0;
     loader.show = function() {
         hit++;
-    }
+    };
 
     // act
     loader.init();

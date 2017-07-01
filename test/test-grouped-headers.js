@@ -28,8 +28,9 @@ test('Sanity checks', function() {
         base_path: '../dist/tablefilter/',
         filters_row_index: 3,
         headers_row_index: 2,
-        paging: true,
-        paging_length: 3
+        paging: {
+            length: 3
+        }
     });
     tf.init();
 

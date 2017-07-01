@@ -30,8 +30,9 @@
 <script data-config>
     var filtersConfig = {
         base_path: '../dist/tablefilter/',
-        paging: true,
-        results_per_page: ['Records: ', [10,25,50,100]],
+        paging: {
+            results_per_page: ['Records: ', [10, 25, 50, 100]]
+        },
         state: {
             types: ['local_storage'],
             filters: true,
@@ -42,12 +43,14 @@
         alternate_rows: true,
         btn_reset: true,
         rows_counter: true,
-        loader: true,
-        loader_html: '<div id="lblMsg"></div>',
-        loader_css_class: 'myLoader',
-        status_bar: true,
-        status_bar_target_id: 'lblMsg',
-        status_bar_css_class: 'myStatus',
+        loader: {
+            html: '<div id="lblMsg"></div>',
+            css_class: 'myLoader'
+        },
+        status_bar: {
+            target_id: 'lblMsg',
+            css_class: 'myStatus'
+        },
         no_results_message: true,
         col_0: 'select',
         col_1: 'select',

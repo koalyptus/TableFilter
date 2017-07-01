@@ -6,8 +6,9 @@ var totRowIndex = table.getElementsByTagName('tr').length;
 tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
     col_types: ['string', 'string', 'number', 'number', 'number'],
-    paging: true,
-    paging_length: 4,
+    paging: {
+        length: 4
+    },
     rows_always_visible: [
         totRowIndex-6,
         totRowIndex-5,

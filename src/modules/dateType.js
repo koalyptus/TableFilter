@@ -101,7 +101,7 @@ export class DateType extends Feature {
      * @returns {String} Locale code (ie: 'en-us')
      */
     getLocale(colIndex) {
-        return this.getOptions(colIndex).locale || this.locale
+        return this.getOptions(colIndex).locale || this.locale;
     }
 
     /**

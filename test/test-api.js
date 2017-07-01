@@ -283,7 +283,7 @@ test('Get table data', function() {
     );
     deepEqual(
         tf.getFilteredColumnValues(2, true),
-       ['Road Distance (km)','2781','1533','2045'],
+        ['Road Distance (km)','2781','1533','2045'],
         'Get filtered column data with headers'
     );
     deepEqual(
@@ -630,7 +630,7 @@ test('Get table data', function() {
     );
     deepEqual(
         tf.getFilteredColumnValues(2, true),
-       ['Road Distance (km)','2781','1533','2045'],
+        ['Road Distance (km)','2781','1533','2045'],
         'Get filtered column data with headers'
     );
     deepEqual(

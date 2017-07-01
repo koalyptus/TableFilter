@@ -135,14 +135,13 @@ test('Re-set UI', function() {
 });
 
 
-module('Destroy and re-init with help property undefined');
+module('Destroy and re-init');
 test('Can init help when property is undefined and toolbar is set',
     function() {
         tf.destroy();
         tf = new TableFilter('demo', {
             base_path: '../dist/tablefilter/',
             help_instructions: undefined,
-            help_instructions_btn_text: '??',
             // creates toolbar
             rows_counter: true
         });
@@ -150,25 +149,47 @@ test('Can init help when property is undefined and toolbar is set',
         var help = tf.feature('help');
 
         notEqual(help.btn, null, 'btn property');
-        deepEqual(help.btn.childNodes[1].innerHTML, '??', 'Button text');
+        deepEqual(help.btn.childNodes[1].innerHTML, '?', 'Button text');
     }
 );
 
-test('Does not init help when property is undefined and toolbar is not set '+
+test('Does not init help when property is undefined and toolbar is not set ' +
     'by other feature(s)',
-    function() {
-        tf.destroy();
-        tf = new TableFilter('demo', {
-            base_path: '../dist/tablefilter/'
-        });
-        tf.init();
-        var help = tf.feature('help');
+function() {
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/'
+    });
+    tf.init();
+    var help = tf.feature('help');
 
-        deepEqual(help.initialized, false, 'feature not initialized');
-        deepEqual(help.btn, null, 'btn property not set');
-        deepEqual(help.cont, null, 'cont property not set');
-    }
-);
+    deepEqual(help.initialized, false, 'feature not initialized');
+    deepEqual(help.btn, null, 'btn property not set');
+    deepEqual(help.cont, null, 'cont property not set');
+});
+
+test('Can init help when property is defined with a literal object ' +
+    'and toolbar is set',
+function() {
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        help_instructions: {
+            btn_text: '??',
+            text: 'hello world'
+        },
+        // creates toolbar
+        rows_counter: true
+    });
+    tf.init();
+    var help = tf.feature('help');
+
+    notEqual(help.btn, null, 'btn property');
+    deepEqual(help.btn.childNodes[1].innerHTML, '??', 'Button text');
+    deepEqual(help.instrText, 'hello world', 'Text property');
+    deepEqual(help.cont.innerHTML.indexOf('hello world') !== -1, true,
+        'Text in DOM element');
+});
 
 test('Can toggle help when property is undefined and toolbar is set',
     function() {
@@ -187,8 +208,7 @@ test('Can toggle help when property is undefined and toolbar is set',
         notEqual(help, null, 'help instantiated');
         deepEqual(help.enabled, true, 'help enabled');
         deepEqual(help.cont.style.display, 'inline', 'Container is open');
-    }
-);
+    });
 
 module('Tear-down');
 test('can destroy TableFilter DOM elements', function() {
