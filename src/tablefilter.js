@@ -978,11 +978,6 @@ export class TableFilter {
          */
         this.ExtRegistry = {};
 
-        //conditionally instantiate required features
-        this.instantiateFeatures(
-            Object.keys(FEATURES).map((item) => FEATURES[item])
-        );
-
         //load styles if necessary
         this.import(this.stylesheetId, this.stylesheet, null, 'link');
     }
@@ -994,6 +989,11 @@ export class TableFilter {
         if (this.initialized) {
             return;
         }
+
+        //conditionally instantiate required features
+        this.instantiateFeatures(
+            Object.keys(FEATURES).map((item) => FEATURES[item])
+        );
 
         this.nbCells = this.getCellsNb(this.refRow);
         let Mod = this.Mod;
