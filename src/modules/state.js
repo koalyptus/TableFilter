@@ -20,7 +20,7 @@ export class State extends Feature {
     constructor(tf) {
         super(tf, 'state');
 
-        let cfg = this.config.state;
+        let cfg = this.config.state || {};
 
         /**
          * Determines whether state is persisted with URL hash
