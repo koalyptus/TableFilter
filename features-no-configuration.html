@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add an extension at runtime | TableFilter</title>
+    <title>Enable features without configuration | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -193,16 +193,12 @@
 
       
 
-<h1>Add an extension at runtime</h1>
+<h1>Enable features without configuration</h1>
 
 <p>
-    This example shows how to add an extension at runtime.
+    This example shows how to enable features without using any configuration
+    options.
 </p>
-
-<div class="alert alert-warning" role="alert">
-    Instructions: filter a column, change a page or sort a column to see actions
-    logged in the logging box.
-</div>
 
 
 <table id="countries-codes">
@@ -1897,129 +1893,81 @@
 <script src="tablefilter/tablefilter.js"></script>
 
 
-<br>
-
-<div data-config>
-    <button onclick="tf.destroy()">Remove TableFilter</button>
-    <button onclick="tf.init()">Reset TableFilter</button>
-</div>
-
-<br>
-<pre class="console"></pre>
-
 <script data-config>
 
-    /**
-     * MyExtension class
-     * Implements an interface exposing a `init` and `destroy` methods, called
-     * when TableFilter instance is initialiazed or destroyed.
-     *
-     * @param {TableFilter} tf TableFilter instance
-     */
-    function MyExtension(tf) {
-        this.tf = tf;
-        this.container = document.querySelector('.console');
-    }
+    var tf = new TableFilter(document.querySelector('#countries-codes'));
 
-    MyExtension.prototype.init = function() {
-        var tf = this.tf;
+    // filter types
+    tf.filterTypes = ['multiple', 'checklist', 'input', 'input', 'input'];
 
-        // subscribe to events
-        tf.emitter.on(['after-filtering'], this.afterFiltering.bind(this));
-        tf.emitter.on(['after-page-change'], this.pageChanged.bind(this));
-        tf.emitter.on(['after-clearing-filters'], this.filtersCleared.bind(this));
-        tf.emitter.on(['column-sorted'], this.columnSorted.bind(this));
+    // columns widths
+    tf.hasColWidths = true;
+    tf.colWidths = ['70px', '250px', '250px', '100px', '100px'];
 
-        this.log('MyExtension initialized');
-    };
+    // loading indicator
+    tf.loader = true;
+    var loader = tf.feature('loader');
+    loader.html = '<div id="lblStatus"></div>';
+    loader.enable();
 
-    MyExtension.prototype.log = function(msg) {
-        if(msg.length === 0) {
-            return;
-        }
-        this.container.innerHTML += msg + '\n';
-    };
+    // status messages
+    tf.statusBar = true;
+    var statusBar = tf.feature('statusBar');
+    statusBar.targetId = 'lblStatus';
+    statusBar.enable();
 
-    MyExtension.prototype.afterFiltering = function(tf, terms) {
-        var msg = [];
-        terms.forEach(function(term, idx){
-            if(term.trim() !== '') {
-                msg.push(
-                    'Searched for `' + term + '` in `' +
-                    tf.getHeadersText()[idx] + '` column'
-                );
-            }
-        });
-        this.log(msg);
-    };
+    // pagination
+    tf.paging = true;
+    var paging = tf.feature('paging');
+    paging.pageLength = 15;
+    paging.enable();
 
-    MyExtension.prototype.pageChanged = function(tf, pageNb) {
-        this.log('Selected page: ' + pageNb);
-    };
+    // rows counter
+    tf.rowsCounter = true;
+    var rowsCounter = tf.feature('rowsCounter');
+    rowsCounter.enable();
 
-    MyExtension.prototype.filtersCleared = function(tf) {
-        this.log('Filters cleared');
-    };
+    // alternating backgrounds
+    tf.alternateRows = true;
+    var alternateRows = tf.feature('alternateRows');
+    alternateRows.enable();
 
-    MyExtension.prototype.columnSorted = function(tf, columnIndex, descending) {
-        this.log(
-            'Sorted column `' + tf.getHeadersText()[columnIndex] + '` in ' +
-            ( descending ? 'descending ' : 'ascending') + ' manner'
-        );
-    };
+    // filtered column indicator
+    tf.markActiveColumns = true;
+    var markActiveColumns = tf.feature('markActiveColumns');
+    markActiveColumns.enable();
 
-    MyExtension.prototype.destroy = function() {
-        var tf = this.tf;
-        tf.emitter.off(['after-filtering'], this.afterFiltering.bind(this));
-        tf.emitter.off(['after-page-change'], this.pageChanged.bind(this));
-        tf.emitter.off(['after-clearing-filters'], this.filtersCleared.bind(this));
-        tf.emitter.off(['column-sorted'], this.columnSorted.bind(this));
+    // matched words highlighting
+    tf.highlightKeywords = true;
+    var highlightKeyword = tf.feature('highlightKeyword');
 
-        this.log('MyExtension destroyed');
-    }
-    /**  MyExtension END */
+    // no results message
+    tf.noResults = true;
+    var noResults = tf.feature('noResults');
+    noResults.enable();
 
+    // clear filters button
+    tf.btnReset = true;
+    var clearButton = tf.feature('clearButton');
+    clearButton.enable();
 
-    /** TableFilter configuration and instantiation */
-    var tf = new TableFilter(
-        document.querySelector('#countries-codes'),
-        {
-            base_path: 'tablefilter/',
-            paging: true,
-            rows_counter: {
-              text: 'Countries: '
-            },
-            btn_reset: true,
-            loader: true,
-            alternate_rows: true,
-            mark_active_columns: true,
-            col_types: [
-              'string', 'string', 'string',
-              'string', 'number'
-            ],
-            col_widths: [
-                '75px','350px','350px',
-                '75px','75px'
-            ],
+    // persist filters state with url hash
+    tf.state = true;
+    var state = tf.feature('state');
+    state.enableHash = true;
+    state.enable();
 
-            // sorting feature
-            extensions: [{ name: 'sort' }]
-        }
-    );
-
-    // subcribe to an event emitted just before the required extensions are loaded
-    tf.emitter.on(['before-loading-extensions'], addMyExtension);
+    // extensions: column sorting, filters toggle, columns toggle
+    tf.hasExtensions = true;
+    tf.extensions = [{
+        name: 'sort'
+      }, {
+        name: 'filtersVisibility'
+      }, {
+      name: 'colsVisibility'
+    }];
 
     tf.init();
-
-    // manually add a custom extension instance to the extensions registry
-    function addMyExtension(tf) {
-        var myExtension = new MyExtension(tf);
-        tf.registerExtension(myExtension, 'myExtension');
-
-        myExtension.init();
-    }
-
 
 </script>
 
@@ -2149,7 +2097,6 @@
 
     </div>
 </div>
-
 
 
 
