@@ -103,6 +103,13 @@ export class TableFilter {
          */
         this.nbCells = null;
 
+        /**
+         * Has a configuration object
+         * @type {Object}
+         * @private
+         */
+        this.hasConfig = false;
+
         /** @private */
         this.initialized = false;
 
@@ -120,6 +127,7 @@ export class TableFilter {
                 startRow = arg;
             } else if (isObj(arg)) {
                 this.cfg = arg;
+                this.hasConfig = true;
             }
         });
 
@@ -142,8 +150,16 @@ export class TableFilter {
          */
         this.emitter = new Emitter();
 
-        //Start row et cols nb
+        //Start row
         this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
+
+        // get the collection of filter type by column
+        this.filterTypes = [].map.call(
+            (this.dom().rows[this.refRow] || this.dom().rows[0]).cells,
+            (cell, idx) => {
+                let colType = this.cfg[`col_${idx}`];
+                return !colType ? INPUT : colType.toLowerCase();
+            });
 
         /**
          * Base path for static assets
@@ -1324,7 +1340,8 @@ export class TableFilter {
             // field is added to allow a conditional instanciation based
             // on that property on TableFilter, if supplied.
             feature.property = feature.property || feature.name;
-            if (this[feature.property] === true || feature.enforce === true) {
+            if (!this.hasConfig || this[feature.property] === true ||
+                feature.enforce === true) {
                 let {class: Cls, name} = feature;
 
                 this.Mod[name] = this.Mod[name] || new Cls(this);
@@ -3082,8 +3099,7 @@ export class TableFilter {
      * @return {String}
      */
     getFilterType(colIndex) {
-        let colType = this.cfg['col_' + colIndex];
-        return !colType ? INPUT : colType.toLowerCase();
+        return this.filterTypes[colIndex];
     }
 
     /**

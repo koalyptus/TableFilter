@@ -217,6 +217,8 @@ test('Can set icon HTML', function() {
             image_html: '<span>hello world</span>'
         }
     });
+    tf.init();
+
     var feature = tf.feature('popupFilter');
     feature.filtersCache = [];
     feature.fltElms = [];

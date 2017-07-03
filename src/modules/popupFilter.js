@@ -23,10 +23,6 @@ export class PopupFilter extends Feature {
         // Configuration object
         let f = this.config.popup_filters || {};
 
-        // Enable external filters
-        tf.isExternalFlt = true;
-        tf.externalFltTgtIds = [];
-
         /**
          * Close active popup filter upon filtering, enabled by default
          * @type {Boolean}
@@ -201,6 +197,10 @@ export class PopupFilter extends Feature {
         }
 
         let tf = this.tf;
+
+        // Enable external filters
+        tf.isExternalFlt = true;
+        tf.externalFltTgtIds = [];
 
         // Override headers row index if no grouped headers
         // TODO: Because of the filters row generation, headers row index needs
