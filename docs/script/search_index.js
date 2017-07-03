@@ -3966,6 +3966,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#filtertypes",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-filterTypes",
+    "src/tablefilter.js~TableFilter#filterTypes",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#filtersrowindex",
     "class/src/tablefilter.js~TableFilter.html#instance-member-filtersRowIndex",
     "src/tablefilter.js~TableFilter#filtersRowIndex",
