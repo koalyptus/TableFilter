@@ -153,7 +153,11 @@ export class TableFilter {
         //Start row
         this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
 
-        // get the collection of filter type by column
+        /**
+         * Collection of filter type by column
+         * @type {Array}
+         * @private
+         */
         this.filterTypes = [].map.call(
             (this.dom().rows[this.refRow] || this.dom().rows[0]).cells,
             (cell, idx) => {
@@ -308,17 +312,10 @@ export class TableFilter {
         this.alternateRows = Boolean(f.alternate_rows);
 
         /**
-         * Indicate whether columns widths are set
-         * @type {Boolean}
-         * @private
-         */
-        this.hasColWidths = isArray(f.col_widths);
-
-        /**
          * Columns widths array
          * @type {Array}
          */
-        this.colWidths = this.hasColWidths ? f.col_widths : [];
+        this.colWidths = f.col_widths || [];
 
         /**
          * Css class for a filter element
@@ -938,14 +935,7 @@ export class TableFilter {
          * @type {Array}
          * @private
          */
-        this.extensions = f.extensions;
-
-        /**
-         * Determine whether extensions are loaded
-         * @type {Boolean}
-         * @private
-         */
-        this.hasExtensions = isArray(this.extensions);
+        this.extensions = f.extensions || [];
 
         /*** themes ***/
         /**
@@ -1107,9 +1097,7 @@ export class TableFilter {
             paging
         ]);
 
-        if (this.hasColWidths && !this.gridLayout) {
-            this.setColWidths();
-        }
+        this.setColWidths();
 
         //TF css class is added to table
         if (!this.gridLayout) {
@@ -1381,11 +1369,11 @@ export class TableFilter {
      * Initialise all the extensions defined in the configuration object
      */
     initExtensions() {
-        if (!this.hasExtensions) {
+        let exts = this.extensions;
+        if (exts.length === 0) {
             return;
         }
 
-        let exts = this.extensions;
         // Set config's publicPath dynamically for Webpack...
         __webpack_public_path__ = this.basePath;
 
@@ -1531,9 +1519,7 @@ export class TableFilter {
 
         this.removeToolbar();
 
-        if (this.hasExtensions) {
-            this.destroyExtensions();
-        }
+        this.destroyExtensions();
 
         this.validateAllRows();
 
@@ -2674,13 +2660,14 @@ export class TableFilter {
      * @param {Element} tbl DOM element
      */
     setColWidths(tbl) {
-        if (!this.hasColWidths) {
+        let colWidths = this.colWidths;
+        if (colWidths.length === 0 || this.gridLayout) {
             return;
         }
+
         tbl = tbl || this.dom();
 
         let nbCols = this.nbCells;
-        let colWidths = this.colWidths;
         let colTags = tag(tbl, 'col');
         let tblHasColTag = colTags.length > 0;
         let frag = !tblHasColTag ? doc.createDocumentFragment() : null;

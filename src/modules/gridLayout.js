@@ -301,7 +301,7 @@ export class GridLayout extends Feature {
      */
     setDefaultColWidths() {
         let tf = this.tf;
-        if (tf.hasColWidths) {
+        if (tf.colWidths.length > 0) {
             return;
         }
         for (let k = 0, len = tf.getCellsNb(); k < len; k++) {
@@ -316,7 +316,6 @@ export class GridLayout extends Feature {
             }
             tf.colWidths[k] = colW;
         }
-        tf.hasColWidths = true;
         tf.setColWidths();
     }
 
