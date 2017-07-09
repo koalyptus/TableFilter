@@ -4,6 +4,7 @@ import {has} from '../array';
 import {matchCase} from '../string';
 import {addEvt, targetEvt} from '../event';
 import {SELECT, MULTIPLE, NONE} from '../const';
+import {defaultsStr, defaultsBool} from '../settings';
 
 /**
  * Dropdown filter UI component
@@ -27,21 +28,21 @@ export class Dropdown extends BaseDropdown {
          * Enable the reset filter option as first item
          * @type {Boolean}
          */
-        this.enableSlcResetFilter = f.enable_slc_reset_filter === false ?
-            false : true;
+        this.enableSlcResetFilter =
+            defaultsBool(f.enable_slc_reset_filter, true);
 
         /**
          * Non empty option text
          * @type {String}
          */
-        this.nonEmptyText = f.non_empty_text || '(Non empty)';
+        this.nonEmptyText = defaultsStr(f.non_empty_text, '(Non empty)');
 
         /**
          * Tooltip text appearing on multiple select
          * @type {String}
          */
-        this.multipleSlcTooltip = f.multiple_slc_tooltip ||
-            'Use Ctrl/Cmd key for multiple selections';
+        this.multipleSlcTooltip = defaultsStr(f.multiple_slc_tooltip,
+            'Use Ctrl/Cmd key for multiple selections');
     }
 
 

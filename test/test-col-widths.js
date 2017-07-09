@@ -21,8 +21,7 @@
         tf = new TableFilter('demo', {
             base_path: '../dist/tablefilter/',
             col_widths: ['150px', '100px', '175px', '120px', '200px'],
-            grid_layout: true,
-            sort: false
+            grid_layout: true
         });
         tf.init();
         var cols = tf.feature('gridLayout').headTbl.getElementsByTagName('col');

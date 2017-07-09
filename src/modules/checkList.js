@@ -8,6 +8,7 @@ import {matchCase, trim, rgxEsc} from '../string';
 import {addEvt, removeEvt, targetEvt} from '../event';
 import {isEmpty} from '../types';
 import {CHECKLIST, NONE} from '../const';
+import {defaultsStr, defaultsBool} from '../settings';
 
 /**
  * Checklist filter UI component
@@ -36,48 +37,57 @@ export class CheckList extends BaseDropdown {
          * Css class for the container of the checklist filter (div)
          * @type {String}
          */
-        this.containerCssClass = f.div_checklist_css_class || 'div_checklist';
+        this.containerCssClass = defaultsStr(f.div_checklist_css_class,
+            'div_checklist');
 
         /**
          * Css class for the checklist filter element (ul)
          * @type {String}
          */
-        this.filterCssClass = f.checklist_css_class || 'flt_checklist';
+        this.filterCssClass = defaultsStr(f.checklist_css_class,
+            'flt_checklist');
 
         /**
          * Css class for the item of a checklist (li)
          * @type {String}
          */
-        this.itemCssClass = f.checklist_item_css_class || 'flt_checklist_item';
+        this.itemCssClass = defaultsStr(f.checklist_item_css_class,
+            'flt_checklist_item');
 
         /**
          * Css class for a selected item of a checklist (li)
          * @type {String}
          */
-        this.selectedItemCssClass =
-            f.checklist_selected_item_css_class || 'flt_checklist_slc_item';
+        this.selectedItemCssClass = defaultsStr(
+            f.checklist_selected_item_css_class,
+            'flt_checklist_slc_item'
+        );
 
         /**
          * Text placed in the filter's container when load filter on demand
          * feature is enabled
          * @type {String}
          */
-        this.activateText =
-            f.activate_checklist_text || 'Click to load filter data';
+        this.activateText = defaultsStr(
+            f.activate_checklist_text,
+            'Click to load filter data'
+        );
 
         /**
          * Css class for a disabled item of a checklist (li)
          * @type {String}
          */
-        this.disabledItemCssClass = f.checklist_item_disabled_css_class ||
-            'flt_checklist_item_disabled';
+        this.disabledItemCssClass = defaultsStr(
+            f.checklist_item_disabled_css_class,
+            'flt_checklist_item_disabled'
+        );
 
         /**
          * Enable the reset filter option as first item
          * @type {Boolean}
          */
-        this.enableResetOption = f.enable_checklist_reset_filter === false ?
-            false : true;
+        this.enableResetOption = defaultsBool(f.enable_checklist_reset_filter,
+            true);
 
         /**
          * Prefix for container element ID

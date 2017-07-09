@@ -37,7 +37,7 @@ export const isArray =
 
 /**
  * Check passed argument is a string
- * @param {String} obj objue
+ * @param {String} obj obj
  * @returns {Boolean}
  */
 export const isString =
@@ -50,6 +50,14 @@ export const isString =
  */
 export const isNumber =
     (obj) => Object.prototype.toString.call(obj) === '[object Number]';
+
+/**
+ * Check passed argument is a boolean
+ * @param {Boolean} obj
+ * @returns {Boolean}
+ */
+export const isBoolean =
+    (obj) => Object.prototype.toString.call(obj) === '[object Boolean]';
 
 /**
  * Check passed argument is undefined

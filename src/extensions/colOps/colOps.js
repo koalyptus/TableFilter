@@ -1,9 +1,10 @@
 import {Feature} from '../../feature';
 import {createText, elm} from '../../dom';
-import {isArray, isFn, isUndef, isEmpty, EMPTY_FN} from '../../types';
+import {isArray, isEmpty, EMPTY_FN} from '../../types';
 import {numSortAsc} from '../../sort';
 import {FORMATTED_NUMBER} from '../../const';
 import formatNumber from 'format-number';
+import {defaultsFn, defaultsArr} from '../../settings';
 
 const EVENTS = [
     'after-filtering',
@@ -37,15 +38,13 @@ export default class ColOps extends Feature {
          * Callback fired before columns operations start
          * @type {Function}
          */
-        this.onBeforeOperation = isFn(opts.on_before_operation) ?
-            opts.on_before_operation : EMPTY_FN;
+        this.onBeforeOperation = defaultsFn(opts.on_before_operation, EMPTY_FN);
 
         /**
          * Callback fired after columns operations are completed
          * @type {Function}
          */
-        this.onAfterOperation = isFn(opts.on_after_operation) ?
-            opts.on_after_operation : EMPTY_FN;
+        this.onAfterOperation = defaultsFn(opts.on_after_operation, EMPTY_FN);
 
         /**
          * Configuration options
@@ -57,27 +56,27 @@ export default class ColOps extends Feature {
          * List of DOM element IDs containing column's calculation result
          * @type {Array}
          */
-        this.labelIds = opts.id || [];
+        this.labelIds = defaultsArr(opts.id, []);
 
         /**
          * List of columns' indexes for calculations
          * @type {Array}
          */
-        this.colIndexes = opts.col || [];
+        this.colIndexes = defaultsArr(opts.col, []);
 
         /**
          * List of operations - possible values: 'sum', 'mean', 'min', 'max',
          * 'median', 'q1', 'q3'
          * @type {Array}
          */
-        this.operations = opts.operation || [];
+        this.operations = defaultsArr(opts.operation, []);
 
         /**
          * List of write methods used to write the result - possible values:
          * 'innerHTML', 'setValue', 'createTextNode'
          * @type {Array}
          */
-        this.outputTypes = opts.write_method || [];
+        this.outputTypes = defaultsArr(opts.write_method, []);
 
         /**
          * List of format objects used for formatting the result -
@@ -85,26 +84,25 @@ export default class ColOps extends Feature {
          * configuration options
          * @type {Array}
          */
-        this.formatResults = opts.format_result || [];
+        this.formatResults = defaultsArr(opts.format_result, []);
 
         /**
          * List of row indexes displaying the results
          * @type {Array}
          */
-        this.totRowIndexes = opts.tot_row_index || [];
+        this.totRowIndexes = defaultsArr(opts.tot_row_index, []);
 
         /**
          * List of row indexes excluded from calculations
          * @type {Array}
          */
-        this.excludeRows = opts.exclude_row || [];
+        this.excludeRows = defaultsArr(opts.exclude_row, []);
 
         /**
          * List of decimal precision for calculation results
          * @type {Array}
          */
-        this.decimalPrecisions = isUndef(opts.decimal_precision) ?
-            2 : opts.decimal_precision;
+        this.decimalPrecisions = defaultsArr(opts.decimal_precision, 2);
 
         this.enable();
     }
@@ -151,9 +149,8 @@ export default class ColOps extends Feature {
         this.emitter.emit('before-column-operation', tf, this);
 
         let { colIndexes, operations: colOperations, outputTypes,
-            totRowIndexes, excludeRows, formatResults } = this;
-        let decimalPrecisions = isUndef(this.decimalPrecisions) ?
-            2 : this.decimalPrecisions;
+            totRowIndexes, excludeRows, formatResults,
+            decimalPrecisions } = this;
 
         //nuovella: determine unique list of columns to operate on
         let uIndexes = [];

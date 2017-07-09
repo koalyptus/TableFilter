@@ -1,6 +1,7 @@
 import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
-import {isFn, EMPTY_FN} from '../types';
+import {EMPTY_FN} from '../types';
+import {defaultsStr, defaultsFn} from '../settings';
 
 /**
  * Rows counter UI component
@@ -24,7 +25,7 @@ export class RowsCounter extends Feature {
          * ID of custom container element
          * @type {String}
          */
-        this.targetId = f.target_id || null;
+        this.targetId = defaultsStr(f.target_id, null);
 
         /**
          * Container DOM element
@@ -44,14 +45,14 @@ export class RowsCounter extends Feature {
          * Text preceding the total number of rows
          * @type {String}
          */
-        this.text = f.text || 'Rows: ';
+        this.text = defaultsStr(f.text, 'Rows: ');
 
         /**
          * Separator symbol appearing between the first and last visible rows of
          * current page when paging is enabled. ie: Rows: 31-40 / 70
          * @type {String}
          */
-        this.fromToTextSeparator = f.separator || '-';
+        this.fromToTextSeparator = defaultsStr(f.separator, '-');
 
         /**
          * Separator symbol appearing between the first and last visible rows of
@@ -59,27 +60,27 @@ export class RowsCounter extends Feature {
          * enabled. ie: Rows: 31-40 / 70
          * @type {String}
          */
-        this.overText = f.over_text || ' / ';
+        this.overText = defaultsStr(f.over_text, ' / ');
 
         /**
          * Css class for container element
          * @type {String}
          */
-        this.cssClass = f.css_class || 'tot';
+        this.cssClass = defaultsStr(f.css_class, 'tot');
 
         /**
          * Callback fired before the counter is refreshed
          * @type {Function}
          */
-        this.onBeforeRefreshCounter = isFn(f.on_before_refresh_counter) ?
-            f.on_before_refresh_counter : EMPTY_FN;
+        this.onBeforeRefreshCounter = defaultsFn(f.on_before_refresh_counter,
+            EMPTY_FN);
 
         /**
          * Callback fired after the counter is refreshed
          * @type {Function}
          */
-        this.onAfterRefreshCounter = isFn(f.on_after_refresh_counter) ?
-            f.on_after_refresh_counter : EMPTY_FN;
+        this.onAfterRefreshCounter = defaultsFn(f.on_after_refresh_counter,
+            EMPTY_FN);
     }
 
     /**

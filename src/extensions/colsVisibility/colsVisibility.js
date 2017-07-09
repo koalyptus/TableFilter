@@ -3,10 +3,14 @@ import {
     addClass, removeClass, createCheckItem, createElm, elm, removeElm,
     getText
 } from '../../dom';
-import {isFn, isUndef, EMPTY_FN} from '../../types';
+import {isUndef, EMPTY_FN} from '../../types';
 import {addEvt, targetEvt, removeEvt} from '../../event';
 import {root} from '../../root';
 import {NONE} from '../../const';
+import {
+    defaultsBool, defaultsStr, defaultsFn,
+    defaultsNb, defaultsArr
+} from '../../settings';
 
 /**
  * Columns Visibility extension
@@ -34,7 +38,7 @@ export default class ColsVisibility extends Feature {
          * Module description
          * @type {String}
          */
-        this.desc = f.description || 'Columns visibility manager';
+        this.desc = defaultsStr(f.description, 'Columns visibility manager');
 
         /**
          * show/hide columns container element
@@ -58,13 +62,13 @@ export default class ColsVisibility extends Feature {
          * Enable tick to hide a column, defaults to true
          * @type {Boolean}
          */
-        this.tickToHide = f.tick_to_hide === false ? false : true;
+        this.tickToHide = defaultsBool(f.tick_to_hide, true);
 
         /**
          * Enable columns manager UI, defaults to true
          * @type {Boolean}
          */
-        this.manager = f.manager === false ? false : true;
+        this.manager = defaultsBool(f.manager, true);
 
         /**
          * Headers HTML table reference only if headers are external
@@ -76,112 +80,115 @@ export default class ColsVisibility extends Feature {
          * Headers row index only if headers are external
          * @type {Number}
          */
-        this.headersIndex = f.headers_index || 1;
+        this.headersIndex = defaultsNb(f.headers_index, 1);
 
         /**
          * ID of main container element
          * @type {String}
          */
-        this.contElTgtId = f.container_target_id || null;
+        this.contElTgtId = defaultsStr(f.container_target_id, null);
 
         /**
          * Alternative text for column headers in column manager UI
          * @type {Array}
          */
-        this.headersText = f.headers_text || null;
+        this.headersText = defaultsArr(f.headers_text, []);
 
         /**
          * ID of button's container element
          * @type {String}
          */
-        this.btnTgtId = f.btn_target_id || null;
+        this.btnTgtId = defaultsStr(f.btn_target_id, null);
 
         /**
          * Button's text, defaults to Columns&#9660;
          * @type {String}
          */
-        this.btnText = f.btn_text || 'Columns&#9660;';
+        this.btnText = defaultsStr(f.btn_text, 'Columns&#9660;');
 
         /**
          * Button's inner HTML
          * @type {String}
          */
-        this.btnHtml = f.btn_html || null;
+        this.btnHtml = defaultsStr(f.btn_html, null);
 
         /**
          * Css class for button
          * @type {String}
          */
-        this.btnCssClass = f.btn_css_class || 'colVis';
+        this.btnCssClass = defaultsStr(f.btn_css_class, 'colVis');
 
         /**
          * Columns manager UI close link text, defaults to 'Close'
          * @type {String}
          */
-        this.btnCloseText = f.btn_close_text || 'Close';
+        this.btnCloseText = defaultsStr(f.btn_close_text, 'Close');
 
         /**
          * Columns manager UI close link HTML
          * @type {String}
          */
-        this.btnCloseHtml = f.btn_close_html || null;
+        this.btnCloseHtml = defaultsStr(f.btn_close_html, null);
 
         /**
          * Css for columns manager UI close link
          * @type {String}
          */
-        this.btnCloseCssClass = f.btn_close_css_class || this.btnCssClass;
+        this.btnCloseCssClass = defaultsStr(f.btn_close_css_class,
+            this.btnCssClass);
 
         /**
          * Extension's stylesheet filename
          * @type {String}
          */
-        this.stylesheet = f.stylesheet || 'colsVisibility.css';
+        this.stylesheet = defaultsStr(f.stylesheet, 'colsVisibility.css');
 
         /**
          * Css for columns manager UI span
          * @type {String}
          */
-        this.spanCssClass = f.span_css_class || 'colVisSpan';
+        this.spanCssClass = defaultsStr(f.span_css_class, 'colVisSpan');
 
         /**
          * Css for columns manager UI main container
          * @type {String}
          */
-        this.contCssClass = f.cont_css_class || 'colVisCont';
+        this.contCssClass = defaultsStr(f.cont_css_class, 'colVisCont');
 
         /**
          * Css for columns manager UI checklist (ul)
          * @type {String}
          */
-        this.listCssClass = cfg.list_css_class || 'cols_checklist';
+        this.listCssClass = defaultsStr(cfg.list_css_class, 'cols_checklist');
 
         /**
          * Css for columns manager UI checklist item (li)
          * @type {String}
          */
-        this.listItemCssClass = cfg.checklist_item_css_class ||
-            'cols_checklist_item';
+        this.listItemCssClass = defaultsStr(cfg.checklist_item_css_class,
+            'cols_checklist_item');
 
         /**
          * Css for columns manager UI checklist item selected state (li)
          * @type {String}
          */
-        this.listSlcItemCssClass = cfg.checklist_selected_item_css_class ||
-            'cols_checklist_slc_item';
+        this.listSlcItemCssClass = defaultsStr(
+            cfg.checklist_selected_item_css_class,
+            'cols_checklist_slc_item'
+        );
 
         /**
          * Text preceding the columns list, defaults to 'Hide' or 'Show'
          * depending on tick mode (tick_to_hide option)
          * @type {String}
          */
-        this.text = f.text || (this.tickToHide ? 'Hide: ' : 'Show: ');
+        this.text = defaultsStr(f.text, this.tickToHide ? 'Hide: ' : 'Show: ');
 
         /**
          * List of columns indexes to be hidden at initialization
          * @type {Array}
          */
-        this.atStart = f.at_start || [];
+        this.atStart = defaultsArr(f.at_start, []);
 
         /**
          * Enable hover behaviour on columns manager button/link
@@ -199,7 +206,7 @@ export default class ColsVisibility extends Feature {
          * Text for select all option, defaults to 'Select all:'
          * @type {String}
          */
-        this.tickAllText = f.tick_all_text || 'Select all:';
+        this.tickAllText = defaultsStr(f.tick_all_text, 'Select all:');
 
         /**
          * List of indexes of hidden columns
@@ -217,62 +224,57 @@ export default class ColsVisibility extends Feature {
          * Callback fired when the extension is initialized
          * @type {Function}
          */
-        this.onLoaded = isFn(f.on_loaded) ? f.on_loaded : EMPTY_FN;
+        this.onLoaded = defaultsFn(f.on_loaded, EMPTY_FN);
 
         /**
          * Callback fired before the columns manager is opened
          * @type {Function}
          */
-        this.onBeforeOpen = isFn(f.on_before_open) ?
-            f.on_before_open : EMPTY_FN;
+        this.onBeforeOpen = defaultsFn(f.on_before_open, EMPTY_FN);
 
         /**
          * Callback fired after the columns manager is opened
          * @type {Function}
          */
-        this.onAfterOpen = isFn(f.on_after_open) ? f.on_after_open : EMPTY_FN;
+        this.onAfterOpen = defaultsFn(f.on_after_open, EMPTY_FN);
 
         /**
          * Callback fired before the columns manager is closed
          * @type {Function}
          */
-        this.onBeforeClose = isFn(f.on_before_close) ?
-            f.on_before_close : EMPTY_FN;
+        this.onBeforeClose = defaultsFn(f.on_before_close, EMPTY_FN);
 
         /**
          * Callback fired after the columns manager is closed
          * @type {Function}
          */
-        this.onAfterClose = isFn(f.on_after_close) ?
-            f.on_after_close : EMPTY_FN;
+        this.onAfterClose = defaultsFn(f.on_after_close, EMPTY_FN);
 
         /**
          * Callback fired before a column is hidden
          * @type {Function}
          */
-        this.onBeforeColHidden = isFn(f.on_before_col_hidden) ?
-            f.on_before_col_hidden : EMPTY_FN;
+        this.onBeforeColHidden = defaultsFn(f.on_before_col_hidden, EMPTY_FN);
 
         /**
          * Callback fired after a column is hidden
          * @type {Function}
          */
-        this.onAfterColHidden = isFn(f.on_after_col_hidden) ?
-            f.on_after_col_hidden : EMPTY_FN;
+        this.onAfterColHidden = defaultsFn(f.on_after_col_hidden, EMPTY_FN);
 
         /**
          * Callback fired before a column is displayed
          * @type {Function}
          */
-        this.onBeforeColDisplayed = isFn(f.on_before_col_displayed) ?
-            f.on_before_col_displayed : EMPTY_FN;
+        this.onBeforeColDisplayed = defaultsFn(f.on_before_col_displayed,
+            EMPTY_FN);
 
         /**
          * Callback fired after a column is displayed
          * @type {Function}
          */
-        this.onAfterColDisplayed = isFn(f.on_after_col_displayed) ?
-            f.on_after_col_displayed : EMPTY_FN;
+        this.onAfterColDisplayed = defaultsFn(f.on_after_col_displayed,
+            EMPTY_FN);
 
         //Grid layout support
         if (tf.gridLayout) {
@@ -484,8 +486,7 @@ export default class ColsVisibility extends Feature {
 
         for (let i = 0; i < headerRow.cells.length; i++) {
             let cell = headerRow.cells[i];
-            let cellText = this.headersText && this.headersText[i] ?
-                this.headersText[i] : this._getHeaderText(cell);
+            let cellText = this.headersText[i] || this._getHeaderText(cell);
             let liElm = createCheckItem('col_' + i + '_' + tf.id, cellText,
                 cellText);
             addClass(liElm, this.listItemCssClass);

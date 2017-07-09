@@ -1,6 +1,7 @@
 import {Feature} from '../../feature';
 import {tag} from '../../dom';
 import {INPUT} from '../../const';
+import {defaultsStr} from '../../settings';
 import {root} from '../../root';
 
 const INSTANTIATION_ERROR = `Failed to instantiate EditTable object.
@@ -26,13 +27,13 @@ export default class AdapterEzEditTable extends Feature {
          * Module description
          * @type {String}
          */
-        this.desc = cfg.description || 'ezEditTable adapter';
+        this.desc = defaultsStr(cfg.description, 'ezEditTable adapter');
 
         /**
          * Filename of ezEditTable library
          * @type {String}
          */
-        this.filename = cfg.filename || 'ezEditTable.js';
+        this.filename = defaultsStr(cfg.filename, 'ezEditTable.js');
 
         /**
          * Path to ezEditTable library
@@ -50,13 +51,15 @@ export default class AdapterEzEditTable extends Feature {
          * Path to ezEditTable stylesheet
          * @type {String}
          */
-        this.stylesheet = cfg.stylesheet || this.vendorPath + 'ezEditTable.css';
+        this.stylesheet = defaultsStr(cfg.stylesheet,
+            this.vendorPath + 'ezEditTable.css');
 
         /**
          * Name of ezEditTable stylesheet
          * @type {String}
          */
-        this.stylesheetName = cfg.stylesheet_name || 'ezEditTableCss';
+        this.stylesheetName = defaultsStr(cfg.stylesheet_name,
+            'ezEditTableCss');
 
         // Enable the ezEditTable's scroll into view behaviour if grid layout on
         cfg.scroll_into_view = cfg.scroll_into_view === false ?

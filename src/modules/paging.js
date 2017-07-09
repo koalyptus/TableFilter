@@ -1,8 +1,11 @@
 import {Feature} from '../feature';
 import {createElm, createOpt, createText, elm, removeElm} from '../dom';
-import {isArray, isFn, isNull, EMPTY_FN} from '../types';
+import {isArray, isNull, EMPTY_FN} from '../types';
 import {addEvt, keyCode, removeEvt} from '../event';
 import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
+import {
+    defaultsStr, defaultsNb, defaultsBool, defaultsArr, defaultsFn
+} from '../settings';
 
 /**
  * Paging UI component
@@ -26,7 +29,7 @@ export class Paging extends Feature {
          * Css class for the paging buttons (previous, next, etc.)
          * @type {String}
          */
-        this.btnCssClass = f.btn_css_class || 'pgInp';
+        this.btnCssClass = defaultsStr(f.btn_css_class, 'pgInp');
 
         /**
          * Main select DOM element
@@ -44,38 +47,38 @@ export class Paging extends Feature {
          * ID of custom container element
          * @type {String}
          */
-        this.tgtId = f.target_id || null;
+        this.tgtId = defaultsStr(f.target_id, null);
 
         /**
          * Number of rows contained in a page
          * @type {Number}
          */
-        this.pageLength = !isNaN(f.length) ? f.length : 10;
+        this.pageLength = defaultsNb(f.length, 10);
 
         /**
          * ID of custom container element for the results per page selector
          * @type {String}
          */
-        this.pageLengthTgtId = f.results_per_page_target_id || null;
+        this.pageLengthTgtId = defaultsStr(f.results_per_page_target_id, null);
 
         /**
          * Css class for the paging select element
          * @type {String}
          */
-        this.pgSlcCssClass = f.slc_css_class || 'pgSlc';
+        this.pgSlcCssClass = defaultsStr(f.slc_css_class, 'pgSlc');
 
         /**
          * Css class for the paging input element
          * @type {String}
          */
-        this.pgInpCssClass = f.inp_css_class || 'pgNbInp';
+        this.pgInpCssClass = defaultsStr(f.inp_css_class, 'pgNbInp');
 
         /**
          * Label and values for the results per page select, example of usage:
          * ['Records: ', [10,25,50,100]]
          * @type {Array}
          */
-        this.resultsPerPage = f.results_per_page || null;
+        this.resultsPerPage = defaultsArr(f.results_per_page, null);
 
         /**
          * Determines if results per page is configured
@@ -87,13 +90,14 @@ export class Paging extends Feature {
          * Css class for the results per page select
          * @type {String}
          */
-        this.resultsSlcCssClass = f.results_slc_css_class || 'rspg';
+        this.resultsSlcCssClass = defaultsStr(f.results_slc_css_class, 'rspg');
 
         /**
          * Css class for the label preceding results per page select
          * @type {String}
          */
-        this.resultsSpanCssClass = f.results_span_css_class || 'rspgSpan';
+        this.resultsSpanCssClass = defaultsStr(f.results_span_css_class,
+            'rspgSpan');
 
         /**
          * Index of the first row of current page
@@ -120,105 +124,103 @@ export class Paging extends Feature {
          * Next page button text
          * @type {String}
          */
-        this.btnNextPageText = f.btn_next_page_text || '>';
+        this.btnNextPageText = defaultsStr(f.btn_next_page_text, '>');
 
         /**
          * Previous page button text
          * @type {String}
          */
-        this.btnPrevPageText = f.btn_prev_page_text || '<';
+        this.btnPrevPageText = defaultsStr(f.btn_prev_page_text, '<');
 
         /**
          * Last page button text
          * @type {String}
          */
-        this.btnLastPageText = f.btn_last_page_text || '>|';
+        this.btnLastPageText = defaultsStr(f.btn_last_page_text, '>|');
 
         /**
          * First page button text
          * @type {String}
          */
-        this.btnFirstPageText = f.btn_first_page_text || '|<';
+        this.btnFirstPageText = defaultsStr(f.btn_first_page_text, '|<');
 
         /**
          * Next page button HTML
          * @type {String}
          */
-        this.btnNextPageHtml = f.btn_next_page_html ||
+        this.btnNextPageHtml = defaultsStr(f.btn_next_page_html,
             (!tf.enableIcons ? null :
                 '<input type="button" value="" class="' + this.btnCssClass +
-                ' nextPage" title="Next page" />');
+                ' nextPage" title="Next page" />'));
 
         /**
          * Previous page button HTML
          * @type {String}
          */
-        this.btnPrevPageHtml = f.btn_prev_page_html ||
+        this.btnPrevPageHtml = defaultsStr(f.btn_prev_page_html,
             (!tf.enableIcons ? null :
                 '<input type="button" value="" class="' + this.btnCssClass +
-                ' previousPage" title="Previous page" />');
+                ' previousPage" title="Previous page" />'));
 
         /**
          * First page button HTML
          * @type {String}
          */
-        this.btnFirstPageHtml = f.btn_first_page_html ||
+        this.btnFirstPageHtml = defaultsStr(f.btn_first_page_html,
             (!tf.enableIcons ? null :
                 '<input type="button" value="" class="' + this.btnCssClass +
-                ' firstPage" title="First page" />');
+                ' firstPage" title="First page" />'));
 
         /**
          * Last page button HTML
          * @type {String}
          */
-        this.btnLastPageHtml = f.btn_last_page_html ||
+        this.btnLastPageHtml = defaultsStr(f.btn_last_page_html,
             (!tf.enableIcons ? null :
                 '<input type="button" value="" class="' + this.btnCssClass +
-                ' lastPage" title="Last page" />');
+                ' lastPage" title="Last page" />'));
 
         /**
          * Text preceeding page selector drop-down
          * @type {String}
          */
-        this.pageText = f.page_text || ' Page ';
+        this.pageText = defaultsStr(f.page_text, ' Page ');
 
         /**
          * Text after page selector drop-down
          * @type {String}
          */
-        this.ofText = f.of_text || ' of ';
+        this.ofText = defaultsStr(f.of_text, ' of ');
 
         /**
          * Css class for the span containing total number of pages
          * @type {String}
          */
-        this.nbPgSpanCssClass = f.nb_pages_css_class || 'nbpg';
+        this.nbPgSpanCssClass = defaultsStr(f.nb_pages_css_class, 'nbpg');
 
         /**
          * Determines if paging buttons are enabled (default: true)
          * @type {Boolean}
          */
-        this.hasBtns = f.btns === false ? false : true;
+        this.hasBtns = defaultsBool(f.btns, true);
 
         /**
          * Defines page selector type, two possible values: 'select', 'input'
          * @type {String}
          */
-        this.pageSelectorType = f.page_selector_type || SELECT;
+        this.pageSelectorType = defaultsStr(f.page_selector_type, SELECT);
 
         /**
          * Callback fired before the page is changed
          * @type {Function}
          */
-        this.onBeforeChangePage = isFn(f.on_before_change_page) ?
-            f.on_before_change_page : EMPTY_FN;
+        this.onBeforeChangePage = defaultsFn(f.on_before_change_page, EMPTY_FN);
 
         /**
          * Callback fired after the page is changed
          * @type {Function}
          */
-        this.onAfterChangePage = isFn(f.on_after_change_page) ?
-            f.on_after_change_page : EMPTY_FN;
+        this.onAfterChangePage = defaultsFn(f.on_after_change_page, EMPTY_FN);
 
         /**
          * Label preciding results per page select

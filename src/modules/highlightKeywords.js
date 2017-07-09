@@ -1,6 +1,7 @@
 import {createText, createElm, getText} from '../dom';
 import {isArray} from '../types';
 import {rgxEsc} from '../string';
+import {defaultsStr} from '../settings';
 
 /**
  * Highlight matched keywords upon filtering
@@ -21,7 +22,7 @@ export class HighlightKeyword {
          * Css class for highlighted term
          * @type {String}
          */
-        this.highlightCssClass = f.highlight_css_class || 'keyword';
+        this.highlightCssClass = defaultsStr(f.highlight_css_class, 'keyword');
 
         /**
          * TableFilter instance
