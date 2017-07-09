@@ -1451,10 +1451,10 @@
         "trailingComments": [
           {
             "type": "Block",
-            "value": "*\n * Check passed argument is a string\n * @param {String} obj objue\n * @returns {Boolean}\n ",
+            "value": "*\n * Check passed argument is a string\n * @param {String} obj obj\n * @returns {Boolean}\n ",
             "range": [
               714,
-              809
+              807
             ],
             "loc": {
               "start": {
@@ -1508,10 +1508,10 @@
       "trailingComments": [
         {
           "type": "Block",
-          "value": "*\n * Check passed argument is a string\n * @param {String} obj objue\n * @returns {Boolean}\n ",
+          "value": "*\n * Check passed argument is a string\n * @param {String} obj obj\n * @returns {Boolean}\n ",
           "range": [
             714,
-            809
+            807
           ],
           "loc": {
             "start": {
@@ -1537,8 +1537,8 @@
               "type": "Identifier",
               "name": "isString",
               "range": [
-                823,
-                831
+                821,
+                829
               ],
               "loc": {
                 "start": {
@@ -1559,8 +1559,8 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    839,
-                    842
+                    837,
+                    840
                   ],
                   "loc": {
                     "start": {
@@ -1592,8 +1592,8 @@
                           "type": "Identifier",
                           "name": "Object",
                           "range": [
-                            847,
-                            853
+                            845,
+                            851
                           ],
                           "loc": {
                             "start": {
@@ -1610,8 +1610,8 @@
                           "type": "Identifier",
                           "name": "prototype",
                           "range": [
-                            854,
-                            863
+                            852,
+                            861
                           ],
                           "loc": {
                             "start": {
@@ -1625,8 +1625,8 @@
                           }
                         },
                         "range": [
-                          847,
-                          863
+                          845,
+                          861
                         ],
                         "loc": {
                           "start": {
@@ -1643,8 +1643,8 @@
                         "type": "Identifier",
                         "name": "toString",
                         "range": [
-                          864,
-                          872
+                          862,
+                          870
                         ],
                         "loc": {
                           "start": {
@@ -1658,8 +1658,8 @@
                         }
                       },
                       "range": [
-                        847,
-                        872
+                        845,
+                        870
                       ],
                       "loc": {
                         "start": {
@@ -1676,8 +1676,8 @@
                       "type": "Identifier",
                       "name": "call",
                       "range": [
-                        873,
-                        877
+                        871,
+                        875
                       ],
                       "loc": {
                         "start": {
@@ -1691,8 +1691,8 @@
                       }
                     },
                     "range": [
-                      847,
-                      877
+                      845,
+                      875
                     ],
                     "loc": {
                       "start": {
@@ -1710,8 +1710,8 @@
                       "type": "Identifier",
                       "name": "obj",
                       "range": [
-                        878,
-                        881
+                        876,
+                        879
                       ],
                       "loc": {
                         "start": {
@@ -1726,8 +1726,8 @@
                     }
                   ],
                   "range": [
-                    847,
-                    882
+                    845,
+                    880
                   ],
                   "loc": {
                     "start": {
@@ -1745,8 +1745,8 @@
                   "value": "[object String]",
                   "raw": "'[object String]'",
                   "range": [
-                    887,
-                    904
+                    885,
+                    902
                   ],
                   "loc": {
                     "start": {
@@ -1760,8 +1760,8 @@
                   }
                 },
                 "range": [
-                  847,
-                  904
+                  845,
+                  902
                 ],
                 "loc": {
                   "start": {
@@ -1777,8 +1777,8 @@
               "generator": false,
               "expression": true,
               "range": [
-                838,
-                904
+                836,
+                902
               ],
               "loc": {
                 "start": {
@@ -1792,8 +1792,8 @@
               }
             },
             "range": [
-              823,
-              904
+              821,
+              902
             ],
             "loc": {
               "start": {
@@ -1809,8 +1809,8 @@
         ],
         "kind": "const",
         "range": [
-          817,
-          905
+          815,
+          903
         ],
         "loc": {
           "start": {
@@ -1825,10 +1825,10 @@
         "leadingComments": [
           {
             "type": "Block",
-            "value": "*\n * Check passed argument is a string\n * @param {String} obj objue\n * @returns {Boolean}\n ",
+            "value": "*\n * Check passed argument is a string\n * @param {String} obj obj\n * @returns {Boolean}\n ",
             "range": [
               714,
-              809
+              807
             ],
             "loc": {
               "start": {
@@ -1847,8 +1847,8 @@
             "type": "Block",
             "value": "*\n * Check passed argument is a number\n * @param {Number} obj\n * @returns {Boolean}\n ",
             "range": [
-              907,
-              996
+              905,
+              994
             ],
             "loc": {
               "start": {
@@ -1866,8 +1866,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        810,
-        905
+        808,
+        903
       ],
       "loc": {
         "start": {
@@ -1882,10 +1882,10 @@
       "leadingComments": [
         {
           "type": "Block",
-          "value": "*\n * Check passed argument is a string\n * @param {String} obj objue\n * @returns {Boolean}\n ",
+          "value": "*\n * Check passed argument is a string\n * @param {String} obj obj\n * @returns {Boolean}\n ",
           "range": [
             714,
-            809
+            807
           ],
           "loc": {
             "start": {
@@ -1904,8 +1904,8 @@
           "type": "Block",
           "value": "*\n * Check passed argument is a number\n * @param {Number} obj\n * @returns {Boolean}\n ",
           "range": [
-            907,
-            996
+            905,
+            994
           ],
           "loc": {
             "start": {
@@ -1931,8 +1931,8 @@
               "type": "Identifier",
               "name": "isNumber",
               "range": [
-                1010,
-                1018
+                1008,
+                1016
               ],
               "loc": {
                 "start": {
@@ -1953,8 +1953,8 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    1026,
-                    1029
+                    1024,
+                    1027
                   ],
                   "loc": {
                     "start": {
@@ -1986,8 +1986,8 @@
                           "type": "Identifier",
                           "name": "Object",
                           "range": [
-                            1034,
-                            1040
+                            1032,
+                            1038
                           ],
                           "loc": {
                             "start": {
@@ -2004,8 +2004,8 @@
                           "type": "Identifier",
                           "name": "prototype",
                           "range": [
-                            1041,
-                            1050
+                            1039,
+                            1048
                           ],
                           "loc": {
                             "start": {
@@ -2019,8 +2019,8 @@
                           }
                         },
                         "range": [
-                          1034,
-                          1050
+                          1032,
+                          1048
                         ],
                         "loc": {
                           "start": {
@@ -2037,8 +2037,8 @@
                         "type": "Identifier",
                         "name": "toString",
                         "range": [
-                          1051,
-                          1059
+                          1049,
+                          1057
                         ],
                         "loc": {
                           "start": {
@@ -2052,8 +2052,8 @@
                         }
                       },
                       "range": [
-                        1034,
-                        1059
+                        1032,
+                        1057
                       ],
                       "loc": {
                         "start": {
@@ -2070,8 +2070,8 @@
                       "type": "Identifier",
                       "name": "call",
                       "range": [
-                        1060,
-                        1064
+                        1058,
+                        1062
                       ],
                       "loc": {
                         "start": {
@@ -2085,8 +2085,8 @@
                       }
                     },
                     "range": [
-                      1034,
-                      1064
+                      1032,
+                      1062
                     ],
                     "loc": {
                       "start": {
@@ -2104,8 +2104,8 @@
                       "type": "Identifier",
                       "name": "obj",
                       "range": [
-                        1065,
-                        1068
+                        1063,
+                        1066
                       ],
                       "loc": {
                         "start": {
@@ -2120,8 +2120,8 @@
                     }
                   ],
                   "range": [
-                    1034,
-                    1069
+                    1032,
+                    1067
                   ],
                   "loc": {
                     "start": {
@@ -2139,8 +2139,8 @@
                   "value": "[object Number]",
                   "raw": "'[object Number]'",
                   "range": [
-                    1074,
-                    1091
+                    1072,
+                    1089
                   ],
                   "loc": {
                     "start": {
@@ -2154,8 +2154,8 @@
                   }
                 },
                 "range": [
-                  1034,
-                  1091
+                  1032,
+                  1089
                 ],
                 "loc": {
                   "start": {
@@ -2171,8 +2171,8 @@
               "generator": false,
               "expression": true,
               "range": [
-                1025,
-                1091
+                1023,
+                1089
               ],
               "loc": {
                 "start": {
@@ -2186,8 +2186,8 @@
               }
             },
             "range": [
-              1010,
-              1091
+              1008,
+              1089
             ],
             "loc": {
               "start": {
@@ -2203,8 +2203,8 @@
         ],
         "kind": "const",
         "range": [
-          1004,
-          1092
+          1002,
+          1090
         ],
         "loc": {
           "start": {
@@ -2221,8 +2221,8 @@
             "type": "Block",
             "value": "*\n * Check passed argument is a number\n * @param {Number} obj\n * @returns {Boolean}\n ",
             "range": [
-              907,
-              996
+              905,
+              994
             ],
             "loc": {
               "start": {
@@ -2239,10 +2239,10 @@
         "trailingComments": [
           {
             "type": "Block",
-            "value": "*\n * Check passed argument is undefined\n * @param  {Any}  obj\n * @return {Boolean}\n ",
+            "value": "*\n * Check passed argument is a boolean\n * @param {Boolean} obj\n * @returns {Boolean}\n ",
             "range": [
-              1094,
-              1182
+              1092,
+              1183
             ],
             "loc": {
               "start": {
@@ -2260,8 +2260,8 @@
       "specifiers": [],
       "source": null,
       "range": [
-        997,
-        1092
+        995,
+        1090
       ],
       "loc": {
         "start": {
@@ -2278,8 +2278,8 @@
           "type": "Block",
           "value": "*\n * Check passed argument is a number\n * @param {Number} obj\n * @returns {Boolean}\n ",
           "range": [
-            907,
-            996
+            905,
+            994
           ],
           "loc": {
             "start": {
@@ -2296,10 +2296,10 @@
       "trailingComments": [
         {
           "type": "Block",
-          "value": "*\n * Check passed argument is undefined\n * @param  {Any}  obj\n * @return {Boolean}\n ",
+          "value": "*\n * Check passed argument is a boolean\n * @param {Boolean} obj\n * @returns {Boolean}\n ",
           "range": [
-            1094,
-            1182
+            1092,
+            1183
           ],
           "loc": {
             "start": {
@@ -2308,6 +2308,400 @@
             },
             "end": {
               "line": 58,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "isBoolean",
+              "range": [
+                1197,
+                1206
+              ],
+              "loc": {
+                "start": {
+                  "line": 59,
+                  "column": 13
+                },
+                "end": {
+                  "line": 59,
+                  "column": 22
+                }
+              }
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "id": null,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "obj",
+                  "range": [
+                    1214,
+                    1217
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 60,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 60,
+                      "column": 8
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BinaryExpression",
+                "operator": "===",
+                "left": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "MemberExpression",
+                    "computed": false,
+                    "object": {
+                      "type": "MemberExpression",
+                      "computed": false,
+                      "object": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                          "type": "Identifier",
+                          "name": "Object",
+                          "range": [
+                            1222,
+                            1228
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 60,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 60,
+                              "column": 19
+                            }
+                          }
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "prototype",
+                          "range": [
+                            1229,
+                            1238
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 60,
+                              "column": 20
+                            },
+                            "end": {
+                              "line": 60,
+                              "column": 29
+                            }
+                          }
+                        },
+                        "range": [
+                          1222,
+                          1238
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 60,
+                            "column": 13
+                          },
+                          "end": {
+                            "line": 60,
+                            "column": 29
+                          }
+                        }
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "name": "toString",
+                        "range": [
+                          1239,
+                          1247
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 60,
+                            "column": 30
+                          },
+                          "end": {
+                            "line": 60,
+                            "column": 38
+                          }
+                        }
+                      },
+                      "range": [
+                        1222,
+                        1247
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 60,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 60,
+                          "column": 38
+                        }
+                      }
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "name": "call",
+                      "range": [
+                        1248,
+                        1252
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 60,
+                          "column": 39
+                        },
+                        "end": {
+                          "line": 60,
+                          "column": 43
+                        }
+                      }
+                    },
+                    "range": [
+                      1222,
+                      1252
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 60,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 60,
+                        "column": 43
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "obj",
+                      "range": [
+                        1253,
+                        1256
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 60,
+                          "column": 44
+                        },
+                        "end": {
+                          "line": 60,
+                          "column": 47
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    1222,
+                    1257
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 60,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 60,
+                      "column": 48
+                    }
+                  }
+                },
+                "right": {
+                  "type": "Literal",
+                  "value": "[object Boolean]",
+                  "raw": "'[object Boolean]'",
+                  "range": [
+                    1262,
+                    1280
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 60,
+                      "column": 53
+                    },
+                    "end": {
+                      "line": 60,
+                      "column": 71
+                    }
+                  }
+                },
+                "range": [
+                  1222,
+                  1280
+                ],
+                "loc": {
+                  "start": {
+                    "line": 60,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 60,
+                    "column": 71
+                  }
+                }
+              },
+              "generator": false,
+              "expression": true,
+              "range": [
+                1213,
+                1280
+              ],
+              "loc": {
+                "start": {
+                  "line": 60,
+                  "column": 4
+                },
+                "end": {
+                  "line": 60,
+                  "column": 71
+                }
+              }
+            },
+            "range": [
+              1197,
+              1280
+            ],
+            "loc": {
+              "start": {
+                "line": 59,
+                "column": 13
+              },
+              "end": {
+                "line": 60,
+                "column": 71
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          1191,
+          1281
+        ],
+        "loc": {
+          "start": {
+            "line": 59,
+            "column": 7
+          },
+          "end": {
+            "line": 60,
+            "column": 72
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Check passed argument is a boolean\n * @param {Boolean} obj\n * @returns {Boolean}\n ",
+            "range": [
+              1092,
+              1183
+            ],
+            "loc": {
+              "start": {
+                "line": 54,
+                "column": 0
+              },
+              "end": {
+                "line": 58,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Check passed argument is undefined\n * @param  {Any}  obj\n * @return {Boolean}\n ",
+            "range": [
+              1283,
+              1371
+            ],
+            "loc": {
+              "start": {
+                "line": 62,
+                "column": 0
+              },
+              "end": {
+                "line": 66,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        1184,
+        1281
+      ],
+      "loc": {
+        "start": {
+          "line": 59,
+          "column": 0
+        },
+        "end": {
+          "line": 60,
+          "column": 72
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Check passed argument is a boolean\n * @param {Boolean} obj\n * @returns {Boolean}\n ",
+          "range": [
+            1092,
+            1183
+          ],
+          "loc": {
+            "start": {
+              "line": 54,
+              "column": 0
+            },
+            "end": {
+              "line": 58,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Check passed argument is undefined\n * @param  {Any}  obj\n * @return {Boolean}\n ",
+          "range": [
+            1283,
+            1371
+          ],
+          "loc": {
+            "start": {
+              "line": 62,
+              "column": 0
+            },
+            "end": {
+              "line": 66,
               "column": 3
             }
           }
@@ -2325,16 +2719,16 @@
               "type": "Identifier",
               "name": "isUndef",
               "range": [
-                1196,
-                1203
+                1385,
+                1392
               ],
               "loc": {
                 "start": {
-                  "line": 59,
+                  "line": 67,
                   "column": 13
                 },
                 "end": {
-                  "line": 59,
+                  "line": 67,
                   "column": 20
                 }
               }
@@ -2347,16 +2741,16 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    1207,
-                    1210
+                    1396,
+                    1399
                   ],
                   "loc": {
                     "start": {
-                      "line": 59,
+                      "line": 67,
                       "column": 24
                     },
                     "end": {
-                      "line": 59,
+                      "line": 67,
                       "column": 27
                     }
                   }
@@ -2369,16 +2763,16 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    1215,
-                    1218
+                    1404,
+                    1407
                   ],
                   "loc": {
                     "start": {
-                      "line": 59,
+                      "line": 67,
                       "column": 32
                     },
                     "end": {
-                      "line": 59,
+                      "line": 67,
                       "column": 35
                     }
                   }
@@ -2387,31 +2781,31 @@
                   "type": "Identifier",
                   "name": "UNDEFINED",
                   "range": [
-                    1223,
-                    1232
+                    1412,
+                    1421
                   ],
                   "loc": {
                     "start": {
-                      "line": 59,
+                      "line": 67,
                       "column": 40
                     },
                     "end": {
-                      "line": 59,
+                      "line": 67,
                       "column": 49
                     }
                   }
                 },
                 "range": [
-                  1215,
-                  1232
+                  1404,
+                  1421
                 ],
                 "loc": {
                   "start": {
-                    "line": 59,
+                    "line": 67,
                     "column": 32
                   },
                   "end": {
-                    "line": 59,
+                    "line": 67,
                     "column": 49
                   }
                 }
@@ -2419,31 +2813,31 @@
               "generator": false,
               "expression": true,
               "range": [
-                1206,
-                1232
+                1395,
+                1421
               ],
               "loc": {
                 "start": {
-                  "line": 59,
+                  "line": 67,
                   "column": 23
                 },
                 "end": {
-                  "line": 59,
+                  "line": 67,
                   "column": 49
                 }
               }
             },
             "range": [
-              1196,
-              1232
+              1385,
+              1421
             ],
             "loc": {
               "start": {
-                "line": 59,
+                "line": 67,
                 "column": 13
               },
               "end": {
-                "line": 59,
+                "line": 67,
                 "column": 49
               }
             }
@@ -2451,16 +2845,16 @@
         ],
         "kind": "const",
         "range": [
-          1190,
-          1233
+          1379,
+          1422
         ],
         "loc": {
           "start": {
-            "line": 59,
+            "line": 67,
             "column": 7
           },
           "end": {
-            "line": 59,
+            "line": 67,
             "column": 50
           }
         },
@@ -2469,16 +2863,16 @@
             "type": "Block",
             "value": "*\n * Check passed argument is undefined\n * @param  {Any}  obj\n * @return {Boolean}\n ",
             "range": [
-              1094,
-              1182
+              1283,
+              1371
             ],
             "loc": {
               "start": {
-                "line": 54,
+                "line": 62,
                 "column": 0
               },
               "end": {
-                "line": 58,
+                "line": 66,
                 "column": 3
               }
             }
@@ -2489,16 +2883,16 @@
             "type": "Block",
             "value": "*\n * Check passed argument is null\n * @param  {Any}  obj\n * @return {Boolean}\n ",
             "range": [
-              1235,
-              1318
+              1424,
+              1507
             ],
             "loc": {
               "start": {
-                "line": 61,
+                "line": 69,
                 "column": 0
               },
               "end": {
-                "line": 65,
+                "line": 73,
                 "column": 3
               }
             }
@@ -2508,16 +2902,16 @@
       "specifiers": [],
       "source": null,
       "range": [
-        1183,
-        1233
+        1372,
+        1422
       ],
       "loc": {
         "start": {
-          "line": 59,
+          "line": 67,
           "column": 0
         },
         "end": {
-          "line": 59,
+          "line": 67,
           "column": 50
         }
       },
@@ -2526,16 +2920,16 @@
           "type": "Block",
           "value": "*\n * Check passed argument is undefined\n * @param  {Any}  obj\n * @return {Boolean}\n ",
           "range": [
-            1094,
-            1182
+            1283,
+            1371
           ],
           "loc": {
             "start": {
-              "line": 54,
+              "line": 62,
               "column": 0
             },
             "end": {
-              "line": 58,
+              "line": 66,
               "column": 3
             }
           }
@@ -2546,16 +2940,16 @@
           "type": "Block",
           "value": "*\n * Check passed argument is null\n * @param  {Any}  obj\n * @return {Boolean}\n ",
           "range": [
-            1235,
-            1318
+            1424,
+            1507
           ],
           "loc": {
             "start": {
-              "line": 61,
+              "line": 69,
               "column": 0
             },
             "end": {
-              "line": 65,
+              "line": 73,
               "column": 3
             }
           }
@@ -2573,16 +2967,16 @@
               "type": "Identifier",
               "name": "isNull",
               "range": [
-                1332,
-                1338
+                1521,
+                1527
               ],
               "loc": {
                 "start": {
-                  "line": 66,
+                  "line": 74,
                   "column": 13
                 },
                 "end": {
-                  "line": 66,
+                  "line": 74,
                   "column": 19
                 }
               }
@@ -2595,16 +2989,16 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    1342,
-                    1345
+                    1531,
+                    1534
                   ],
                   "loc": {
                     "start": {
-                      "line": 66,
+                      "line": 74,
                       "column": 23
                     },
                     "end": {
-                      "line": 66,
+                      "line": 74,
                       "column": 26
                     }
                   }
@@ -2617,16 +3011,16 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    1350,
-                    1353
+                    1539,
+                    1542
                   ],
                   "loc": {
                     "start": {
-                      "line": 66,
+                      "line": 74,
                       "column": 31
                     },
                     "end": {
-                      "line": 66,
+                      "line": 74,
                       "column": 34
                     }
                   }
@@ -2636,31 +3030,31 @@
                   "value": null,
                   "raw": "null",
                   "range": [
-                    1358,
-                    1362
+                    1547,
+                    1551
                   ],
                   "loc": {
                     "start": {
-                      "line": 66,
+                      "line": 74,
                       "column": 39
                     },
                     "end": {
-                      "line": 66,
+                      "line": 74,
                       "column": 43
                     }
                   }
                 },
                 "range": [
-                  1350,
-                  1362
+                  1539,
+                  1551
                 ],
                 "loc": {
                   "start": {
-                    "line": 66,
+                    "line": 74,
                     "column": 31
                   },
                   "end": {
-                    "line": 66,
+                    "line": 74,
                     "column": 43
                   }
                 }
@@ -2668,31 +3062,31 @@
               "generator": false,
               "expression": true,
               "range": [
-                1341,
-                1362
+                1530,
+                1551
               ],
               "loc": {
                 "start": {
-                  "line": 66,
+                  "line": 74,
                   "column": 22
                 },
                 "end": {
-                  "line": 66,
+                  "line": 74,
                   "column": 43
                 }
               }
             },
             "range": [
-              1332,
-              1362
+              1521,
+              1551
             ],
             "loc": {
               "start": {
-                "line": 66,
+                "line": 74,
                 "column": 13
               },
               "end": {
-                "line": 66,
+                "line": 74,
                 "column": 43
               }
             }
@@ -2700,16 +3094,16 @@
         ],
         "kind": "const",
         "range": [
-          1326,
-          1363
+          1515,
+          1552
         ],
         "loc": {
           "start": {
-            "line": 66,
+            "line": 74,
             "column": 7
           },
           "end": {
-            "line": 66,
+            "line": 74,
             "column": 44
           }
         },
@@ -2718,16 +3112,16 @@
             "type": "Block",
             "value": "*\n * Check passed argument is null\n * @param  {Any}  obj\n * @return {Boolean}\n ",
             "range": [
-              1235,
-              1318
+              1424,
+              1507
             ],
             "loc": {
               "start": {
-                "line": 61,
+                "line": 69,
                 "column": 0
               },
               "end": {
-                "line": 65,
+                "line": 73,
                 "column": 3
               }
             }
@@ -2738,16 +3132,16 @@
             "type": "Block",
             "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
             "range": [
-              1365,
-              1483
+              1554,
+              1672
             ],
             "loc": {
               "start": {
-                "line": 68,
+                "line": 76,
                 "column": 0
               },
               "end": {
-                "line": 72,
+                "line": 80,
                 "column": 3
               }
             }
@@ -2757,16 +3151,16 @@
       "specifiers": [],
       "source": null,
       "range": [
-        1319,
-        1363
+        1508,
+        1552
       ],
       "loc": {
         "start": {
-          "line": 66,
+          "line": 74,
           "column": 0
         },
         "end": {
-          "line": 66,
+          "line": 74,
           "column": 44
         }
       },
@@ -2775,16 +3169,16 @@
           "type": "Block",
           "value": "*\n * Check passed argument is null\n * @param  {Any}  obj\n * @return {Boolean}\n ",
           "range": [
-            1235,
-            1318
+            1424,
+            1507
           ],
           "loc": {
             "start": {
-              "line": 61,
+              "line": 69,
               "column": 0
             },
             "end": {
-              "line": 65,
+              "line": 73,
               "column": 3
             }
           }
@@ -2795,16 +3189,16 @@
           "type": "Block",
           "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
           "range": [
-            1365,
-            1483
+            1554,
+            1672
           ],
           "loc": {
             "start": {
-              "line": 68,
+              "line": 76,
               "column": 0
             },
             "end": {
-              "line": 72,
+              "line": 80,
               "column": 3
             }
           }
@@ -2822,16 +3216,16 @@
               "type": "Identifier",
               "name": "isEmpty",
               "range": [
-                1497,
-                1504
+                1686,
+                1693
               ],
               "loc": {
                 "start": {
-                  "line": 73,
+                  "line": 81,
                   "column": 13
                 },
                 "end": {
-                  "line": 73,
+                  "line": 81,
                   "column": 20
                 }
               }
@@ -2844,16 +3238,16 @@
                   "type": "Identifier",
                   "name": "obj",
                   "range": [
-                    1508,
-                    1511
+                    1697,
+                    1700
                   ],
                   "loc": {
                     "start": {
-                      "line": 73,
+                      "line": 81,
                       "column": 24
                     },
                     "end": {
-                      "line": 73,
+                      "line": 81,
                       "column": 27
                     }
                   }
@@ -2871,16 +3265,16 @@
                       "type": "Identifier",
                       "name": "isUndef",
                       "range": [
-                        1516,
-                        1523
+                        1705,
+                        1712
                       ],
                       "loc": {
                         "start": {
-                          "line": 73,
+                          "line": 81,
                           "column": 32
                         },
                         "end": {
-                          "line": 73,
+                          "line": 81,
                           "column": 39
                         }
                       }
@@ -2890,32 +3284,32 @@
                         "type": "Identifier",
                         "name": "obj",
                         "range": [
-                          1524,
-                          1527
+                          1713,
+                          1716
                         ],
                         "loc": {
                           "start": {
-                            "line": 73,
+                            "line": 81,
                             "column": 40
                           },
                           "end": {
-                            "line": 73,
+                            "line": 81,
                             "column": 43
                           }
                         }
                       }
                     ],
                     "range": [
-                      1516,
-                      1528
+                      1705,
+                      1717
                     ],
                     "loc": {
                       "start": {
-                        "line": 73,
+                        "line": 81,
                         "column": 32
                       },
                       "end": {
-                        "line": 73,
+                        "line": 81,
                         "column": 44
                       }
                     }
@@ -2926,16 +3320,16 @@
                       "type": "Identifier",
                       "name": "isNull",
                       "range": [
-                        1532,
-                        1538
+                        1721,
+                        1727
                       ],
                       "loc": {
                         "start": {
-                          "line": 73,
+                          "line": 81,
                           "column": 48
                         },
                         "end": {
-                          "line": 73,
+                          "line": 81,
                           "column": 54
                         }
                       }
@@ -2945,47 +3339,47 @@
                         "type": "Identifier",
                         "name": "obj",
                         "range": [
-                          1539,
-                          1542
+                          1728,
+                          1731
                         ],
                         "loc": {
                           "start": {
-                            "line": 73,
+                            "line": 81,
                             "column": 55
                           },
                           "end": {
-                            "line": 73,
+                            "line": 81,
                             "column": 58
                           }
                         }
                       }
                     ],
                     "range": [
-                      1532,
-                      1543
+                      1721,
+                      1732
                     ],
                     "loc": {
                       "start": {
-                        "line": 73,
+                        "line": 81,
                         "column": 48
                       },
                       "end": {
-                        "line": 73,
+                        "line": 81,
                         "column": 59
                       }
                     }
                   },
                   "range": [
-                    1516,
-                    1543
+                    1705,
+                    1732
                   ],
                   "loc": {
                     "start": {
-                      "line": 73,
+                      "line": 81,
                       "column": 32
                     },
                     "end": {
-                      "line": 73,
+                      "line": 81,
                       "column": 59
                     }
                   }
@@ -3000,16 +3394,16 @@
                       "type": "Identifier",
                       "name": "obj",
                       "range": [
-                        1547,
-                        1550
+                        1736,
+                        1739
                       ],
                       "loc": {
                         "start": {
-                          "line": 73,
+                          "line": 81,
                           "column": 63
                         },
                         "end": {
-                          "line": 73,
+                          "line": 81,
                           "column": 66
                         }
                       }
@@ -3018,31 +3412,31 @@
                       "type": "Identifier",
                       "name": "length",
                       "range": [
-                        1551,
-                        1557
+                        1740,
+                        1746
                       ],
                       "loc": {
                         "start": {
-                          "line": 73,
+                          "line": 81,
                           "column": 67
                         },
                         "end": {
-                          "line": 73,
+                          "line": 81,
                           "column": 73
                         }
                       }
                     },
                     "range": [
-                      1547,
-                      1557
+                      1736,
+                      1746
                     ],
                     "loc": {
                       "start": {
-                        "line": 73,
+                        "line": 81,
                         "column": 63
                       },
                       "end": {
-                        "line": 73,
+                        "line": 81,
                         "column": 73
                       }
                     }
@@ -3052,46 +3446,46 @@
                     "value": 0,
                     "raw": "0",
                     "range": [
-                      1562,
-                      1563
+                      1751,
+                      1752
                     ],
                     "loc": {
                       "start": {
-                        "line": 73,
+                        "line": 81,
                         "column": 78
                       },
                       "end": {
-                        "line": 73,
+                        "line": 81,
                         "column": 79
                       }
                     }
                   },
                   "range": [
-                    1547,
-                    1563
+                    1736,
+                    1752
                   ],
                   "loc": {
                     "start": {
-                      "line": 73,
+                      "line": 81,
                       "column": 63
                     },
                     "end": {
-                      "line": 73,
+                      "line": 81,
                       "column": 79
                     }
                   }
                 },
                 "range": [
-                  1516,
-                  1563
+                  1705,
+                  1752
                 ],
                 "loc": {
                   "start": {
-                    "line": 73,
+                    "line": 81,
                     "column": 32
                   },
                   "end": {
-                    "line": 73,
+                    "line": 81,
                     "column": 79
                   }
                 }
@@ -3099,31 +3493,31 @@
               "generator": false,
               "expression": true,
               "range": [
-                1507,
-                1563
+                1696,
+                1752
               ],
               "loc": {
                 "start": {
-                  "line": 73,
+                  "line": 81,
                   "column": 23
                 },
                 "end": {
-                  "line": 73,
+                  "line": 81,
                   "column": 79
                 }
               }
             },
             "range": [
-              1497,
-              1563
+              1686,
+              1752
             ],
             "loc": {
               "start": {
-                "line": 73,
+                "line": 81,
                 "column": 13
               },
               "end": {
-                "line": 73,
+                "line": 81,
                 "column": 79
               }
             }
@@ -3131,16 +3525,16 @@
         ],
         "kind": "const",
         "range": [
-          1491,
-          1564
+          1680,
+          1753
         ],
         "loc": {
           "start": {
-            "line": 73,
+            "line": 81,
             "column": 7
           },
           "end": {
-            "line": 73,
+            "line": 81,
             "column": 80
           }
         },
@@ -3149,16 +3543,16 @@
             "type": "Block",
             "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
             "range": [
-              1365,
-              1483
+              1554,
+              1672
             ],
             "loc": {
               "start": {
-                "line": 68,
+                "line": 76,
                 "column": 0
               },
               "end": {
-                "line": 72,
+                "line": 80,
                 "column": 3
               }
             }
@@ -3169,16 +3563,16 @@
       "specifiers": [],
       "source": null,
       "range": [
-        1484,
-        1564
+        1673,
+        1753
       ],
       "loc": {
         "start": {
-          "line": 73,
+          "line": 81,
           "column": 0
         },
         "end": {
-          "line": 73,
+          "line": 81,
           "column": 80
         }
       },
@@ -3187,16 +3581,16 @@
           "type": "Block",
           "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
           "range": [
-            1365,
-            1483
+            1554,
+            1672
           ],
           "loc": {
             "start": {
-              "line": 68,
+              "line": 76,
               "column": 0
             },
             "end": {
-              "line": 72,
+              "line": 80,
               "column": 3
             }
           }
@@ -3207,7 +3601,7 @@
   "sourceType": "module",
   "range": [
     29,
-    1564
+    1753
   ],
   "loc": {
     "start": {
@@ -3215,7 +3609,7 @@
       "column": 0
     },
     "end": {
-      "line": 73,
+      "line": 81,
       "column": 80
     }
   },
@@ -3312,10 +3706,10 @@
     },
     {
       "type": "Block",
-      "value": "*\n * Check passed argument is a string\n * @param {String} obj objue\n * @returns {Boolean}\n ",
+      "value": "*\n * Check passed argument is a string\n * @param {String} obj obj\n * @returns {Boolean}\n ",
       "range": [
         714,
-        809
+        807
       ],
       "loc": {
         "start": {
@@ -3332,8 +3726,8 @@
       "type": "Block",
       "value": "*\n * Check passed argument is a number\n * @param {Number} obj\n * @returns {Boolean}\n ",
       "range": [
-        907,
-        996
+        905,
+        994
       ],
       "loc": {
         "start": {
@@ -3348,10 +3742,10 @@
     },
     {
       "type": "Block",
-      "value": "*\n * Check passed argument is undefined\n * @param  {Any}  obj\n * @return {Boolean}\n ",
+      "value": "*\n * Check passed argument is a boolean\n * @param {Boolean} obj\n * @returns {Boolean}\n ",
       "range": [
-        1094,
-        1182
+        1092,
+        1183
       ],
       "loc": {
         "start": {
@@ -3366,18 +3760,36 @@
     },
     {
       "type": "Block",
-      "value": "*\n * Check passed argument is null\n * @param  {Any}  obj\n * @return {Boolean}\n ",
+      "value": "*\n * Check passed argument is undefined\n * @param  {Any}  obj\n * @return {Boolean}\n ",
       "range": [
-        1235,
-        1318
+        1283,
+        1371
       ],
       "loc": {
         "start": {
-          "line": 61,
+          "line": 62,
           "column": 0
         },
         "end": {
-          "line": 65,
+          "line": 66,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * Check passed argument is null\n * @param  {Any}  obj\n * @return {Boolean}\n ",
+      "range": [
+        1424,
+        1507
+      ],
+      "loc": {
+        "start": {
+          "line": 69,
+          "column": 0
+        },
+        "end": {
+          "line": 73,
           "column": 3
         }
       }
@@ -3386,16 +3798,16 @@
       "type": "Block",
       "value": "*\n * Check passed argument is empty (undefined, null or empty string)\n * @param  {Any}  obj\n * @return {Boolean}\n ",
       "range": [
-        1365,
-        1483
+        1554,
+        1672
       ],
       "loc": {
         "start": {
-          "line": 68,
+          "line": 76,
           "column": 0
         },
         "end": {
-          "line": 72,
+          "line": 80,
           "column": 3
         }
       }

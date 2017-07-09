@@ -1,7 +1,7 @@
 {
-  "coverage": "99.85%",
-  "expectCount": 697,
-  "actualCount": 696,
+  "coverage": "100%",
+  "expectCount": 678,
+  "actualCount": 678,
   "files": {
     "src/const.js": {
       "expectCount": 19,
@@ -59,8 +59,8 @@
       "undocumentLines": []
     },
     "src/types.js": {
-      "expectCount": 9,
-      "actualCount": 9,
+      "expectCount": 10,
+      "actualCount": 10,
       "undocumentLines": []
     },
     "src/emitter.js": {
@@ -71,11 +71,6 @@
     "src/feature.js": {
       "expectCount": 14,
       "actualCount": 14,
-      "undocumentLines": []
-    },
-    "src/extensions/filtersVisibility/filtersVisibility.js": {
-      "expectCount": 25,
-      "actualCount": 25,
       "undocumentLines": []
     },
     "src/modules/gridLayout.js": {
@@ -145,10 +140,8 @@
     },
     "src/tablefilter.js": {
       "expectCount": 173,
-      "actualCount": 172,
-      "undocumentLines": [
-        157
-      ]
+      "actualCount": 173,
+      "undocumentLines": []
     },
     "src/dom.js": {
       "expectCount": 12,
@@ -168,6 +161,11 @@
     "src/sort.js": {
       "expectCount": 7,
       "actualCount": 7,
+      "undocumentLines": []
+    },
+    "src/settings.js": {
+      "expectCount": 5,
+      "actualCount": 5,
       "undocumentLines": []
     },
     "src/array.js": {

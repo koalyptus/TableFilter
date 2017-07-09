@@ -132,12 +132,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "tablefilter/src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html",
-    "<span>FiltersVisibility</span> <span class=\"search-result-import-path\">tablefilter/src/extensions/filtersVisibility/filtersVisibility.js</span>",
-    "class"
-  ],
-  [
     "tablefilter/src/modules/gridlayout.js~gridlayout",
     "class/src/modules/gridLayout.js~GridLayout.html",
     "<span>GridLayout</span> <span class=\"search-result-import-path\">tablefilter/src/modules/gridLayout.js</span>",
@@ -342,6 +336,36 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/settings.js~defaultsarr",
+    "variable/index.html#static-variable-defaultsArr",
+    "<span>defaultsArr</span> <span class=\"search-result-import-path\">tablefilter/src/settings.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/settings.js~defaultsbool",
+    "variable/index.html#static-variable-defaultsBool",
+    "<span>defaultsBool</span> <span class=\"search-result-import-path\">tablefilter/src/settings.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/settings.js~defaultsfn",
+    "variable/index.html#static-variable-defaultsFn",
+    "<span>defaultsFn</span> <span class=\"search-result-import-path\">tablefilter/src/settings.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/settings.js~defaultsnb",
+    "variable/index.html#static-variable-defaultsNb",
+    "<span>defaultsNb</span> <span class=\"search-result-import-path\">tablefilter/src/settings.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/settings.js~defaultsstr",
+    "variable/index.html#static-variable-defaultsStr",
+    "<span>defaultsStr</span> <span class=\"search-result-import-path\">tablefilter/src/settings.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/dom.js~elm",
     "variable/index.html#static-variable-elm",
     "<span>elm</span> <span class=\"search-result-import-path\">tablefilter/src/dom.js</span>",
@@ -393,6 +417,12 @@ window.esdocSearchIndex = [
     "tablefilter/src/types.js~isarray",
     "variable/index.html#static-variable-isArray",
     "<span>isArray</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
+    "variable"
+  ],
+  [
+    "tablefilter/src/types.js~isboolean",
+    "variable/index.html#static-variable-isBoolean",
+    "<span>isBoolean</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
     "variable"
   ],
   [
@@ -1468,156 +1498,6 @@ window.esdocSearchIndex = [
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-toggleCol",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#toggleCol",
     "method"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js",
-    "file/src/extensions/filtersVisibility/filtersVisibility.js.html",
-    "src/extensions/filtersVisibility/filtersVisibility.js",
-    "file"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#btncssclass",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-btnCssClass",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnCssClass",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#btnhtml",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-btnHtml",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnHtml",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#btntext",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-btnText",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnText",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#buildui",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-method-buildUI",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#buildUI",
-    "method"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#constructor",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-constructor-constructor",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#constructor",
-    "method"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#contcssclass",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-contCssClass",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#contCssClass",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#desc",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-desc",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#desc",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#destroy",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-method-destroy",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#destroy",
-    "method"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#enableicon",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-enableIcon",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#enableIcon",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#filtersrowindex",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-filtersRowIndex",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#filtersRowIndex",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#icncollapse",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-icnCollapse",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnCollapse",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#icnexpand",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-icnExpand",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnExpand",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#init",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-method-init",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#init",
-    "method"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#initialized",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-initialized",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#initialized",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#name",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-name",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#name",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#onafterhide",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-onAfterHide",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#onAfterHide",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#onaftershow",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-onAfterShow",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#onAfterShow",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#onbeforehide",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-onBeforeHide",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#onBeforeHide",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#onbeforeshow",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-onBeforeShow",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#onBeforeShow",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#show",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-method-show",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#show",
-    "method"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#stylesheet",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-stylesheet",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#stylesheet",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#targetid",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-targetId",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#targetId",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#toggle",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-method-toggle",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#toggle",
-    "method"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#visibleatstart",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-visibleAtStart",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#visibleAtStart",
-    "member"
   ],
   [
     "src/extensions/sort/adaptersortabletable.js",
@@ -3690,6 +3570,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/settings.js",
+    "file/src/settings.js.html",
+    "src/settings.js",
+    "file"
+  ],
+  [
     "src/sort.js",
     "file/src/sort.js.html",
     "src/sort.js",
@@ -3948,6 +3834,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#extensions",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-extensions",
+    "src/tablefilter.js~TableFilter#extensions",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#externalflttgtids",
     "class/src/tablefilter.js~TableFilter.html#instance-member-externalFltTgtIds",
     "src/tablefilter.js~TableFilter#externalFltTgtIds",
@@ -3964,12 +3856,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-filter",
     "src/tablefilter.js~TableFilter#filter",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#filtertypes",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-filterTypes",
-    "src/tablefilter.js~TableFilter#filterTypes",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#filtersrowindex",

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/clearButton.js | tablefilter v0.5.27 API Document</title>
+  <title data-ice="title">src/modules/clearButton.js | tablefilter v0.5.28 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -76,6 +76,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-parse">parse</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsArr">defaultsArr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsBool">defaultsBool</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsFn">defaultsFn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsNb">defaultsNb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsStr">defaultsStr</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortAsc">dateSortAsc</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortDesc">dateSortDesc</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
@@ -89,6 +94,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-rgxEsc">rgxEsc</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-trim">trim</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isArray">isArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isBoolean">isBoolean</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isFn">isFn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isNull">isNull</a></span></span></li>
@@ -99,7 +105,6 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/advancedGrid</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colOps</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colsVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/filtersVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/sort</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">modules</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span></span></li>
@@ -130,6 +135,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {createElm, createText, elm, removeElm} from &apos;../dom&apos;;
 import {addEvt} from &apos;../event&apos;;
+import {defaultsStr} from &apos;../settings&apos;;
 
 /**
  * Clear button UI component
@@ -149,7 +155,7 @@ export class ClearButton extends Feature {
          * Container element ID
          * @type {String}
          */
-        this.targetId = f.btn_reset_target_id || null;
+        this.targetId = defaultsStr(f.btn_reset_target_id, null);
 
         /**
          * Clear button container element
@@ -169,13 +175,13 @@ export class ClearButton extends Feature {
          * Text for the clear button
          * @type {String}
          */
-        this.text = f.btn_reset_text || &apos;Reset&apos;;
+        this.text = defaultsStr(f.btn_reset_text, &apos;Reset&apos;);
 
         /**
          * Css class for reset button
          * @type {String}
          */
-        this.cssClass = f.btn_reset_css_class || &apos;reset&apos;;
+        this.cssClass = defaultsStr(f.btn_reset_css_class, &apos;reset&apos;);
 
         /**
          * Tooltip text for the clear button
@@ -187,10 +193,10 @@ export class ClearButton extends Feature {
          * Custom Html string for the clear button
          * @type {String}
          */
-        this.html = f.btn_reset_html ||
+        this.html = defaultsStr(f.btn_reset_html,
             (!tf.enableIcons ? null :
                 &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.cssClass +
-                &apos;&quot; &apos; + &apos;title=&quot;&apos; + this.tooltip + &apos;&quot; /&gt;&apos;);
+                &apos;&quot; &apos; + &apos;title=&quot;&apos; + this.tooltip + &apos;&quot; /&gt;&apos;));
     }
 
     /**
