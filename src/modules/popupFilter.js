@@ -1,9 +1,10 @@
 import {Feature} from '../feature';
-import {isFn, isUndef, EMPTY_FN} from '../types';
+import {isUndef, EMPTY_FN} from '../types';
 import {createElm, removeElm} from '../dom';
 import {addEvt, cancelEvt, stopEvt, targetEvt, removeEvt} from '../event';
 import {INPUT, NONE, CHECKLIST, MULTIPLE} from '../const';
 import {root} from '../root';
+import {defaultsStr, defaultsBool, defaultsArr, defaultsFn} from '../settings';
 
 /**
  * Pop-up filter component
@@ -27,75 +28,72 @@ export class PopupFilter extends Feature {
          * Close active popup filter upon filtering, enabled by default
          * @type {Boolean}
          */
-        this.closeOnFiltering = f.close_on_filtering === false ? false : true;
+        this.closeOnFiltering = defaultsBool(f.close_on_filtering, true);
 
         /**
          * Filter icon path
          * @type {String}
          */
-        this.iconPath = f.image || tf.themesPath + 'icn_filter.gif';
+        this.iconPath = defaultsStr(f.image, tf.themesPath + 'icn_filter.gif');
 
         /**
          * Active filter icon path
          * @type {string}
          */
-        this.activeIconPath = f.image_active ||
-            tf.themesPath + 'icn_filterActive.gif';
+        this.activeIconPath = defaultsStr(f.image_active,
+            tf.themesPath + 'icn_filterActive.gif');
 
         /**
          * HTML for the filter icon
          * @type {string}
          */
-        this.iconHtml = f.image_html ||
-            '<img src="' + this.iconPath + '" alt="Column filter" />';
+        this.iconHtml = defaultsStr(f.image_html,
+            '<img src="' + this.iconPath + '" alt="Column filter" />');
 
         /**
          * Css class assigned to the popup container element
          * @type {String}
          */
-        this.placeholderCssClass = f.placeholder_css_class ||
-            'popUpPlaceholder';
+        this.placeholderCssClass = defaultsStr(f.placeholder_css_class,
+            'popUpPlaceholder');
 
         /**
          * Css class assigned to filter container element
          * @type {String}
          */
-        this.containerCssClass = f.div_css_class || 'popUpFilter';
+        this.containerCssClass = defaultsStr(f.div_css_class, 'popUpFilter');
 
         /**
          * Ensure filter's container element width matches column width, enabled
          * by default
          * @type {Boolean}
          */
-        this.adjustToContainer = f.adjust_to_container === false ? false : true;
+        this.adjustToContainer = defaultsBool(f.adjust_to_container, true);
 
         /**
          * Callback fired before a popup filter is opened
          * @type {Function}
          */
-        this.onBeforeOpen = isFn(f.on_before_popup_filter_open) ?
-            f.on_before_popup_filter_open : EMPTY_FN;
+        this.onBeforeOpen = defaultsFn(f.on_before_popup_filter_open, EMPTY_FN);
 
         /**
          * Callback fired after a popup filter is opened
          * @type {Function}
          */
-        this.onAfterOpen = isFn(f.on_after_popup_filter_open) ?
-            f.on_after_popup_filter_open : EMPTY_FN;
+        this.onAfterOpen = defaultsFn(f.on_after_popup_filter_open, EMPTY_FN);
 
         /**
          * Callback fired before a popup filter is closed
          * @type {Function}
          */
-        this.onBeforeClose = isFn(f.on_before_popup_filter_close) ?
-            f.on_before_popup_filter_close : EMPTY_FN;
+        this.onBeforeClose = defaultsFn(f.on_before_popup_filter_close,
+            EMPTY_FN);
 
         /**
          * Callback fired after a popup filter is closed
          * @type {Function}
          */
-        this.onAfterClose = isFn(f.on_after_popup_filter_close) ?
-            f.on_after_popup_filter_close : EMPTY_FN;
+        this.onAfterClose = defaultsFn(f.on_after_popup_filter_close, EMPTY_FN);
 
         /**
          * Collection of filters spans
@@ -123,7 +121,7 @@ export class PopupFilter extends Feature {
          * @type {Array}
          * @private
          */
-        this.fltElms = this.filtersCache || [];
+        this.fltElms = defaultsArr(this.filtersCache, []);
 
         /**
          * Prefix for pop-up filter container ID

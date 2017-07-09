@@ -4,6 +4,7 @@ import {addEvt, targetEvt, removeEvt} from '../event';
 import {NONE} from '../const';
 import {root} from '../root';
 import {isEmpty} from '../types';
+import {defaultsStr} from '../settings';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
     '4.-Filter-operators';
@@ -27,13 +28,13 @@ export class Help extends Feature {
          * ID of main custom container element
          * @type {String}
          */
-        this.tgtId = f.target_id || null;
+        this.tgtId = defaultsStr(f.target_id, null);
 
         /**
          * ID of custom container element for instructions
          * @type {String}
          */
-        this.contTgtId = f.container_target_id || null;
+        this.contTgtId = defaultsStr(f.container_target_id, null);
 
         /**
          * Instructions text (accepts HTML)
@@ -52,31 +53,31 @@ export class Help extends Feature {
          * Instructions HTML
          * @type {String}
          */
-        this.instrHtml = f.html || null;
+        this.instrHtml = defaultsStr(f.html, null);
 
         /**
          * Help button text ('?')
          * @type {String}
          */
-        this.btnText = f.btn_text || '?';
+        this.btnText = defaultsStr(f.btn_text, '?');
 
         /**
          * Custom help button HTML
          * @type {String}
          */
-        this.btnHtml = f.btn_html || null;
+        this.btnHtml = defaultsStr(f.btn_html, null);
 
         /**
          * Css class for help button
          * @type {String}
          */
-        this.btnCssClass = f.btn_css_class || 'helpBtn';
+        this.btnCssClass = defaultsStr(f.btn_css_class, 'helpBtn');
 
         /**
          * Css class for help container element
          * @type {String}
          */
-        this.contCssClass = f.container_css_class || 'helpCont';
+        this.contCssClass = defaultsStr(f.container_css_class, 'helpCont');
 
         /**
          * Button DOM element

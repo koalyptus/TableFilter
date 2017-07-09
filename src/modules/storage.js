@@ -1,4 +1,3 @@
-
 import Cookie from '../cookie';
 import {root} from '../root';
 

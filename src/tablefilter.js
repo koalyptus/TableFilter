@@ -9,6 +9,10 @@ import {
     isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN
 } from './types';
 import {parse as parseNb} from './number';
+import {
+    defaultsBool, defaultsStr, defaultsFn,
+    defaultsNb, defaultsArr
+} from './settings';
 
 import {root} from './root';
 import {Emitter} from './emitter';
@@ -169,7 +173,7 @@ export class TableFilter {
          * Base path for static assets
          * @type {String}
          */
-        this.basePath = f.base_path || 'tablefilter/';
+        this.basePath = defaultsStr(f.base_path, 'tablefilter/');
 
         /*** filters' grid properties ***/
 
@@ -177,7 +181,7 @@ export class TableFilter {
          * Enable/disable filters
          * @type {Boolean}
          */
-        this.fltGrid = f.grid === false ? false : true;
+        this.fltGrid = defaultsBool(f.grid, true);
 
         /**
          * Enable/disable grid layout (fixed headers)
@@ -189,22 +193,20 @@ export class TableFilter {
          * Filters row index
          * @type {Number}
          */
-        this.filtersRowIndex = isNaN(f.filters_row_index) ?
-            0 : f.filters_row_index;
+        this.filtersRowIndex = defaultsNb(f.filters_row_index, 0);
 
         /**
          * Headers row index
          * @type {Number}
          */
-        this.headersRow = isNaN(f.headers_row_index) ?
-            (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
+        this.headersRow = defaultsNb(f.headers_row_index,
+            (this.filtersRowIndex === 0 ? 1 : 0));
 
         /**
          * Define the type of cell containing a filter (td/th)
          * @type {String}
          */
-        this.fltCellTag = isString(f.filters_cell_tag) ?
-            f.filters_cell_tag : CELL_TAG;
+        this.fltCellTag = defaultsStr(f.filters_cell_tag, CELL_TAG);
 
         /**
          * List of filters IDs
@@ -253,38 +255,39 @@ export class TableFilter {
          * Css class for toolbar's container DOM element
          * @type {String}
          */
-        this.infDivCssClass = f.inf_div_css_class || 'inf';
+        this.infDivCssClass = defaultsStr(f.inf_div_css_class, 'inf');
 
         /**
          * Css class for left-side inner container DOM element
          * @type {String}
          */
-        this.lDivCssClass = f.left_div_css_class || 'ldiv';
+        this.lDivCssClass = defaultsStr(f.left_div_css_class, 'ldiv');
 
         /**
          * Css class for right-side inner container DOM element
          * @type {String}
          */
-        this.rDivCssClass = f.right_div_css_class || 'rdiv';
+        this.rDivCssClass = defaultsStr(f.right_div_css_class, 'rdiv');
 
         /**
          * Css class for middle inner container DOM element
          * @type {String}
          */
-        this.mDivCssClass = f.middle_div_css_class || 'mdiv';
+        this.mDivCssClass = defaultsStr(f.middle_div_css_class, 'mdiv');
 
         /*** filters' grid appearance ***/
         /**
          * Path for stylesheets
          * @type {String}
          */
-        this.stylePath = f.style_path || this.basePath + 'style/';
+        this.stylePath = defaultsStr(f.style_path, this.basePath + 'style/');
 
         /**
          * Main stylesheet path
          * @type {String}
          */
-        this.stylesheet = f.stylesheet || this.stylePath + 'tablefilter.css';
+        this.stylesheet = defaultsStr(f.stylesheet,
+            this.stylePath + 'tablefilter.css');
 
         /**
          * Main stylesheet ID
@@ -297,13 +300,13 @@ export class TableFilter {
          * Css class for the filters row
          * @type {String}
          */
-        this.fltsRowCssClass = f.flts_row_css_class || 'fltrow';
+        this.fltsRowCssClass = defaultsStr(f.flts_row_css_class, 'fltrow');
 
         /**
          * Enable/disable icons (paging, reset button)
          * @type {Boolean}
          */
-        this.enableIcons = f.enable_icons === false ? false : true;
+        this.enableIcons = defaultsBool(f.enable_icons, true);
 
         /**
          * Enable/disable alternating rows
@@ -315,31 +318,32 @@ export class TableFilter {
          * Columns widths array
          * @type {Array}
          */
-        this.colWidths = f.col_widths || [];
+        this.colWidths = defaultsArr(f.col_widths, []);
 
         /**
          * Css class for a filter element
          * @type {String}
          */
-        this.fltCssClass = f.flt_css_class || 'flt';
+        this.fltCssClass = defaultsStr(f.flt_css_class, 'flt');
 
         /**
          * Css class for multiple select filters
          * @type {String}
          */
-        this.fltMultiCssClass = f.flt_multi_css_class || 'flt_multi';
+        this.fltMultiCssClass = defaultsStr(f.flt_multi_css_class, 'flt_multi');
 
         /**
          * Css class for small filter (when submit button is active)
          * @type {String}
          */
-        this.fltSmallCssClass = f.flt_small_css_class || 'flt_s';
+        this.fltSmallCssClass = defaultsStr(f.flt_small_css_class, 'flt_s');
 
         /**
          * Css class for single filter type
          * @type {String}
          */
-        this.singleFltCssClass = f.single_flt_css_class || 'single_flt';
+        this.singleFltCssClass = defaultsStr(f.single_flt_css_class,
+            'single_flt');
 
         /*** filters' grid behaviours ***/
 
@@ -347,21 +351,19 @@ export class TableFilter {
          * Enable/disable enter key for input type filters
          * @type {Boolean}
          */
-        this.enterKey = f.enter_key === false ? false : true;
+        this.enterKey = defaultsBool(f.enter_key, true);
 
         /**
          * Callback fired before filtering process starts
          * @type {Function}
          */
-        this.onBeforeFilter = isFn(f.on_before_filter) ?
-            f.on_before_filter : EMPTY_FN;
+        this.onBeforeFilter = defaultsFn(f.on_before_filter, EMPTY_FN);
 
         /**
          * Callback fired after filtering process is completed
          * @type {Function}
          */
-        this.onAfterFilter = isFn(f.on_after_filter) ?
-            f.on_after_filter : EMPTY_FN;
+        this.onAfterFilter = defaultsFn(f.on_after_filter, EMPTY_FN);
 
         /**
          * Enable/disable case sensitivity filtering
@@ -438,14 +440,13 @@ export class TableFilter {
          * List of containers IDs where external filters will be generated
          * @type {Array}
          */
-        this.externalFltTgtIds = f.external_flt_grid_ids || [];
+        this.externalFltTgtIds = defaultsArr(f.external_flt_grid_ids, []);
 
         /**
          * Callback fired after filters are generated
          * @type {Function}
          */
-        this.onFiltersLoaded = isFn(f.on_filters_loaded) ?
-            f.on_filters_loaded : EMPTY_FN;
+        this.onFiltersLoaded = defaultsFn(f.on_filters_loaded, EMPTY_FN);
 
         /**
          * Enable/disable single filter filtering all columns
@@ -457,8 +458,7 @@ export class TableFilter {
          * Callback fired after a row is validated during filtering
          * @type {Function}
          */
-        this.onRowValidated = isFn(f.on_row_validated) ?
-            f.on_row_validated : EMPTY_FN;
+        this.onRowValidated = defaultsFn(f.on_row_validated, EMPTY_FN);
 
         /**
          * Specify which column implements a custom cell parser to retrieve the
@@ -494,7 +494,7 @@ export class TableFilter {
          * Toolbar's custom container ID
          * @type {String}
          */
-        this.toolBarTgtId = f.toolbar_target_id || null;
+        this.toolBarTgtId = defaultsStr(f.toolbar_target_id, null);
 
         /**
          * Indicate whether help UI component is disabled
@@ -521,7 +521,7 @@ export class TableFilter {
          * Text for clear option in drop-down filter types (1st option)
          * @type {String|Array}
          */
-        this.clearFilterText = f.clear_filter_text || 'Clear';
+        this.clearFilterText = defaultsStr(f.clear_filter_text, 'Clear');
 
         /**
          * Indicate whether empty option is enabled in drop-down filter types
@@ -533,7 +533,7 @@ export class TableFilter {
          * Text for empty option in drop-down filter types
          * @type {String}
          */
-        this.emptyText = f.empty_text || '(Empty)';
+        this.emptyText = defaultsStr(f.empty_text, '(Empty)');
 
         /**
          * Indicate whether non-empty option is enabled in drop-down filter
@@ -546,14 +546,14 @@ export class TableFilter {
          * Text for non-empty option in drop-down filter types
          * @type {String}
          */
-        this.nonEmptyText = f.non_empty_text || '(Non empty)';
+        this.nonEmptyText = defaultsStr(f.non_empty_text, '(Non empty)');
 
         /**
          * Indicate whether drop-down filter types filter the table by default
          * on change event
          * @type {Boolean}
          */
-        this.onSlcChange = f.on_change === false ? false : true;
+        this.onSlcChange = defaultsBool(f.on_change, true);
 
         /**
          * Make drop-down filter types options sorted in alpha-numeric manner
@@ -630,85 +630,85 @@ export class TableFilter {
          * Regular expression operator for input filter. Defaults to 'rgx:'
          * @type {String}
          */
-        this.rgxOperator = f.regexp_operator || 'rgx:';
+        this.rgxOperator = defaultsStr(f.regexp_operator, 'rgx:');
 
         /**
          * Empty cells operator for input filter. Defaults to '[empty]'
          * @type {String}
          */
-        this.emOperator = f.empty_operator || '[empty]';
+        this.emOperator = defaultsStr(f.empty_operator, '[empty]');
 
         /**
          * Non-empty cells operator for input filter. Defaults to '[nonempty]'
          * @type {String}
          */
-        this.nmOperator = f.nonempty_operator || '[nonempty]';
+        this.nmOperator = defaultsStr(f.nonempty_operator, '[nonempty]');
 
         /**
          * Logical OR operator for input filter. Defaults to '||'
          * @type {String}
          */
-        this.orOperator = f.or_operator || '||';
+        this.orOperator = defaultsStr(f.or_operator, '||');
 
         /**
          * Logical AND operator for input filter. Defaults to '&&'
          * @type {String}
          */
-        this.anOperator = f.and_operator || '&&';
+        this.anOperator = defaultsStr(f.and_operator, '&&');
 
         /**
          * Greater than operator for input filter. Defaults to '>'
          * @type {String}
          */
-        this.grOperator = f.greater_operator || '>';
+        this.grOperator = defaultsStr(f.greater_operator, '>');
 
         /**
          * Lower than operator for input filter. Defaults to '<'
          * @type {String}
          */
-        this.lwOperator = f.lower_operator || '<';
+        this.lwOperator = defaultsStr(f.lower_operator, '<');
 
         /**
          * Lower than or equal operator for input filter. Defaults to '<='
          * @type {String}
          */
-        this.leOperator = f.lower_equal_operator || '<=';
+        this.leOperator = defaultsStr(f.lower_equal_operator, '<=');
 
         /**
          * Greater than or equal operator for input filter. Defaults to '>='
          * @type {String}
          */
-        this.geOperator = f.greater_equal_operator || '>=';
+        this.geOperator = defaultsStr(f.greater_equal_operator, '>=');
 
         /**
          * Inequality operator for input filter. Defaults to '!'
          * @type {String}
          */
-        this.dfOperator = f.different_operator || '!';
+        this.dfOperator = defaultsStr(f.different_operator, '!');
 
         /**
-         * Like operator for input filter. Defaults to '!'
+         * Like operator for input filter. Defaults to '*'
          * @type {String}
          */
-        this.lkOperator = f.like_operator || '*';
+        this.lkOperator = defaultsStr(f.like_operator, '*');
 
         /**
          * Strict equality operator for input filter. Defaults to '='
          * @type {String}
          */
-        this.eqOperator = f.equal_operator || '=';
+        this.eqOperator = defaultsStr(f.equal_operator, '=');
 
         /**
          * Starts with operator for input filter. Defaults to '='
          * @type {String}
          */
-        this.stOperator = f.start_with_operator || '{';
+        this.stOperator = defaultsStr(f.start_with_operator, '{');
 
         /**
          * Ends with operator for input filter. Defaults to '='
          * @type {String}
          */
-        this.enOperator = f.end_with_operator || '}';
+        this.enOperator = defaultsStr(f.end_with_operator, '}');
 
         // this.curExp = f.cur_exp || '^[¥£€$]';
 
@@ -716,7 +716,7 @@ export class TableFilter {
          * Stored values separator
          * @type {String}
          */
-        this.separator = f.separator || ',';
+        this.separator = defaultsStr(f.separator, ',');
 
         /**
          * Enable rows counter UI component
@@ -747,14 +747,14 @@ export class TableFilter {
          * Define filters submission button text
          * @type {String}
          */
-        this.btnText = f.btn_text || (!this.enableIcons ? 'Go' : '');
+        this.btnText = defaultsStr(f.btn_text, (!this.enableIcons ? 'Go' : ''));
 
         /**
          * Css class for filters submission button
          * @type {String}
          */
-        this.btnCssClass = f.btn_css_class ||
-            (!this.enableIcons ? 'btnflt' : 'btnflt_icon');
+        this.btnCssClass = defaultsStr(f.btn_css_class,
+            (!this.enableIcons ? 'btnflt' : 'btnflt_icon'));
 
         /**
          * Enable clear button
@@ -766,15 +766,13 @@ export class TableFilter {
          * Callback fired before filters are cleared
          * @type {Function}
          */
-        this.onBeforeReset = isFn(f.on_before_reset) ?
-            f.on_before_reset : EMPTY_FN;
+        this.onBeforeReset = defaultsFn(f.on_before_reset, EMPTY_FN);
 
         /**
          * Callback fired after filters are cleared
          * @type {Function}
          */
-        this.onAfterReset = isFn(f.on_after_reset) ?
-            f.on_after_reset : EMPTY_FN;
+        this.onAfterReset = defaultsFn(f.on_after_reset, EMPTY_FN);
 
         /**
          * Enable paging component
@@ -800,8 +798,8 @@ export class TableFilter {
          * Auto-filter delay in msecs
          * @type {Number}
          */
-        this.autoFilterDelay = !isNaN(f.auto_filter_delay) ?
-            f.auto_filter_delay : AUTO_FILTER_DELAY;
+        this.autoFilterDelay =
+            defaultsNb(f.auto_filter_delay, AUTO_FILTER_DELAY);
 
         /**
          * Indicate whether user is typing
@@ -850,19 +848,19 @@ export class TableFilter {
          * https://sugarjs.com/docs/#/DateLocales
          * @type {String}
          */
-        this.locale = f.locale || 'en';
+        this.locale = defaultsStr(f.locale, 'en');
 
         /**
          * Define thousands separator ',' or '.', defaults to ','
          * @type {String}
          */
-        this.thousandsSeparator = f.thousands_separator || ',';
+        this.thousandsSeparator = defaultsStr(f.thousands_separator, ',');
 
         /**
          * Define decimal separator ',' or '.', defaults to '.'
          * @type {String}
          */
-        this.decimalSeparator = f.decimal_separator || '.';
+        this.decimalSeparator = defaultsStr(f.decimal_separator, '.');
 
         /**
          * Define data types on a column basis, possible values 'string',
@@ -933,9 +931,8 @@ export class TableFilter {
         /**
          * List of loaded extensions
          * @type {Array}
-         * @private
          */
-        this.extensions = f.extensions || [];
+        this.extensions = defaultsArr(f.extensions, []);
 
         /*** themes ***/
         /**
@@ -956,7 +953,7 @@ export class TableFilter {
          * themes: [{ name: 'skyblue' }]
          * @type {Array}
          */
-        this.themes = f.themes || [];
+        this.themes = defaultsArr(f.themes, []);
 
         /**
          * Define path to themes assets, defaults to
@@ -2661,7 +2658,7 @@ export class TableFilter {
      */
     setColWidths(tbl) {
         let colWidths = this.colWidths;
-        if (colWidths.length === 0 || this.gridLayout) {
+        if (colWidths.length === 0) {
             return;
         }
 

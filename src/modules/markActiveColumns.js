@@ -1,6 +1,7 @@
 import {Feature} from '../feature';
 import {addClass, removeClass, hasClass} from '../dom';
-import {isFn, EMPTY_FN} from '../types';
+import {EMPTY_FN} from '../types';
+import {defaultsStr, defaultsFn} from '../settings';
 
 /**
  * Visual indicator for filtered columns
@@ -23,21 +24,22 @@ export class MarkActiveColumns extends Feature {
          * Css class for filtered (active) columns
          * @type {String}
          */
-        this.headerCssClass = config.header_css_class || 'activeHeader';
+        this.headerCssClass = defaultsStr(config.header_css_class,
+            'activeHeader');
 
         /**
          * Callback fired before a column is marked as filtered
          * @type {Function}
          */
-        this.onBeforeActiveColumn = isFn(config.on_before_active_column) ?
-            config.on_before_active_column : EMPTY_FN;
+        this.onBeforeActiveColumn = defaultsFn(config.on_before_active_column,
+            EMPTY_FN);
 
         /**
          * Callback fired after a column is marked as filtered
          * @type {Function}
          */
-        this.onAfterActiveColumn = isFn(config.on_after_active_column) ?
-            config.on_after_active_column : EMPTY_FN;
+        this.onAfterActiveColumn = defaultsFn(config.on_after_active_column,
+            EMPTY_FN);
     }
 
     /**

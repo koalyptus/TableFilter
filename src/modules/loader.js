@@ -1,8 +1,9 @@
 import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
-import {isFn, EMPTY_FN} from '../types';
+import {EMPTY_FN} from '../types';
 import {root} from '../root';
 import {NONE} from '../const';
+import {defaultsStr, defaultsFn} from '../settings';
 
 const EVENTS = [
     'before-filtering',
@@ -39,7 +40,7 @@ export class Loader extends Feature {
          * ID of custom container element
          * @type {String}
          */
-        this.targetId = f.target_id || null;
+        this.targetId = defaultsStr(f.target_id, null);
 
         /**
          * Loader container DOM element
@@ -51,19 +52,19 @@ export class Loader extends Feature {
          * Text displayed when indicator is visible
          * @type {String}
          */
-        this.text = f.text || 'Loading...';
+        this.text = defaultsStr(f.text, 'Loading...');
 
         /**
          * Custom HTML injected in Loader's container element
          * @type {String}
          */
-        this.html = f.html || null;
+        this.html = defaultsStr(f.html, null);
 
         /**
          * Css class for Loader's container element
          * @type {String}
          */
-        this.cssClass = f.css_class || 'loader';
+        this.cssClass = defaultsStr(f.css_class, 'loader');
 
         /**
          * Close delay in milliseconds
@@ -75,14 +76,13 @@ export class Loader extends Feature {
          * Callback fired when loader is displayed
          * @type {Function}
          */
-        this.onShow = isFn(f.on_show_loader) ?
-            f.on_show_loader : EMPTY_FN;
+        this.onShow = defaultsFn(f.on_show_loader, EMPTY_FN);
 
         /**
          * Callback fired when loader is closed
          * @type {Function}
          */
-        this.onHide = isFn(f.on_hide_loader) ? f.on_hide_loader : EMPTY_FN;
+        this.onHide = defaultsFn(f.on_hide_loader, EMPTY_FN);
     }
 
     /**

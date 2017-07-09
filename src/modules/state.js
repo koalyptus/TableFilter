@@ -3,6 +3,7 @@ import {Hash} from './hash';
 import {Storage} from './storage';
 import {isEmpty} from '../string';
 import {isArray, isNull, isString, isUndef} from '../types';
+import {defaultsBool, defaultsNb} from '../settings';
 
 /**
  * Features state object persistable with localStorage, cookie or URL hash
@@ -47,7 +48,7 @@ export class State extends Feature {
          * Persist filters values, enabled by default
          * @type {Boolean}
          */
-        this.persistFilters = cfg.filters === false ? false : true;
+        this.persistFilters = defaultsBool(cfg.filters, true);
 
         /**
          * Persist current page number when paging is enabled
@@ -83,8 +84,8 @@ export class State extends Feature {
          * Cookie duration in hours
          * @type {Boolean}
          */
-        this.cookieDuration = !isNaN(cfg.cookie_duration) ?
-            parseInt(cfg.cookie_duration, 10) : 87600;
+        this.cookieDuration = defaultsNb(parseInt(cfg.cookie_duration, 10),
+            87600);
 
         /**
          * Enable Storage if localStorage or cookie is required
