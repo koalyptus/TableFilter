@@ -197,7 +197,7 @@ export class PopupFilter extends Feature {
         let tf = this.tf;
 
         // Enable external filters
-        tf.externalFltTgtIds = [0];
+        tf.externalFltTgtIds = [''];
 
         // Override headers row index if no grouped headers
         // TODO: Because of the filters row generation, headers row index needs
@@ -281,7 +281,7 @@ export class PopupFilter extends Feature {
         let placeholder = createElm('div', ['class', this.placeholderCssClass]);
         let cont = div ||
             createElm('div', ['id', contId], ['class', this.containerCssClass]);
-        tf.externalFltTgtIds.push(cont.id);
+        tf.externalFltTgtIds[colIndex] = cont.id;
         placeholder.appendChild(cont);
 
         let header = tf.getHeaderElement(colIndex);

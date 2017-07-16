@@ -33,6 +33,8 @@ test('Pop-up filter component', function() {
         'By Air (hrs)',
         'Expected header text for multiple filter type'
     );
+    deepEqual(tf.dom().rows[tf.headersRow-1].style.display, 'none',
+        'Extra row hidden');
 });
 
 module('UI elements');
