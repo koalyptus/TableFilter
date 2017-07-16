@@ -283,7 +283,7 @@ export default class ColsVisibility extends Feature {
         }
 
         //Loads extension stylesheet
-        tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,
+        tf.import(f.name + 'Style', tf.getStylePath() + this.stylesheet, null,
             'link');
 
         this.enable();

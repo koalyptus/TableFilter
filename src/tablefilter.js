@@ -280,14 +280,13 @@ export class TableFilter {
          * Path for stylesheets
          * @type {String}
          */
-        this.stylePath = defaultsStr(f.style_path, this.basePath + 'style/');
+        this.stylePath = this.getStylePath();
 
         /**
          * Main stylesheet path
          * @type {String}
          */
-        this.stylesheet = defaultsStr(f.stylesheet,
-            this.stylePath + 'tablefilter.css');
+        this.stylesheet = this.getStylesheetPath();
 
         /**
          * Main stylesheet ID
@@ -429,12 +428,6 @@ export class TableFilter {
          * @type {Array}
          */
         this.visibleRows = this.hasVisibleRows ? f.rows_always_visible : [];
-
-        /**
-         * Enable/disable external filters generation
-         * @type {Boolean}
-         */
-        this.isExternalFlt = Boolean(f.external_flt_grid);
 
         /**
          * List of containers IDs where external filters will be generated
@@ -961,7 +954,7 @@ export class TableFilter {
          * themes: [{ name: 'skyblue' }]
          * @type {Array}
          */
-        this.themesPath = f.themes_path || this.stylePath + 'themes/';
+        this.themesPath = this.getThemesPath();
 
         /**
          * Enable responsive layout
@@ -985,9 +978,6 @@ export class TableFilter {
         this.instantiateFeatures(
             Object.keys(FEATURES).map((item) => FEATURES[item])
         );
-
-        //load styles if necessary
-        this.import(this.stylesheetId, this.stylesheet, null, 'link');
     }
 
     /**
@@ -997,6 +987,9 @@ export class TableFilter {
         if (this.initialized) {
             return;
         }
+
+        // import main stylesheet
+        this.import(this.stylesheetId, this.getStylesheetPath(), null, 'link');
 
         this.nbCells = this.getCellsNb(this.refRow);
         let Mod = this.Mod;
@@ -1055,12 +1048,12 @@ export class TableFilter {
                 //drop-down filters
                 if (col === SELECT || col === MULTIPLE) {
                     Mod.dropdown = Mod.dropdown || new Dropdown(this);
-                    Mod.dropdown.init(i, this.isExternalFlt, fltcell);
+                    Mod.dropdown.init(i, this.isExternalFlt(), fltcell);
                 }
                 // checklist
                 else if (col === CHECKLIST) {
                     Mod.checkList = Mod.checkList || new CheckList(this);
-                    Mod.checkList.init(i, this.isExternalFlt, fltcell);
+                    Mod.checkList.init(i, this.isExternalFlt(), fltcell);
                 } else {
                     this._buildInputFilter(i, inpclass, fltcell);
                 }
@@ -1224,7 +1217,7 @@ export class TableFilter {
 
         fltrow.className = this.fltsRowCssClass;
 
-        if (this.isExternalFlt) {
+        if (this.isExternalFlt()) {
             fltrow.style.display = NONE;
         }
 
@@ -1251,7 +1244,7 @@ export class TableFilter {
      */
     _buildInputFilter(colIndex, cssClass, container) {
         let col = this.getFilterType(colIndex);
-        let externalFltTgtId = this.isExternalFlt ?
+        let externalFltTgtId = this.isExternalFlt() ?
             this.externalFltTgtIds[colIndex] : null;
         let inpType = col === INPUT ? 'text' : 'hidden';
         let inp = createElm(INPUT,
@@ -1288,7 +1281,7 @@ export class TableFilter {
      * @param  {DOMElement} container Container DOM element
      */
     _buildSubmitButton(colIndex, container) {
-        let externalFltTgtId = this.isExternalFlt ?
+        let externalFltTgtId = this.isExternalFlt() ?
             this.externalFltTgtIds[colIndex] : null;
         let btn = createElm(INPUT,
             ['type', 'button'],
@@ -1510,7 +1503,7 @@ export class TableFilter {
 
         let emitter = this.emitter;
 
-        if (this.isExternalFlt && !this.popupFilters) {
+        if (this.isExternalFlt() && !this.popupFilters) {
             this.removeExternalFlts();
         }
 
@@ -1623,7 +1616,7 @@ export class TableFilter {
      * Remove all the external column filters
      */
     removeExternalFlts() {
-        if (!this.isExternalFlt) {
+        if (!this.isExternalFlt()) {
             return;
         }
         let ids = this.externalFltTgtIds,
@@ -2618,7 +2611,7 @@ export class TableFilter {
         if (fltColType !== MULTIPLE && fltColType !== CHECKLIST) {
             if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-select-filter', this, index,
-                    this.linkedFilters, this.isExternalFlt);
+                    this.linkedFilters, this.isExternalFlt());
             }
             slc.value = query;
         }
@@ -2629,7 +2622,7 @@ export class TableFilter {
 
             if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-select-filter', this, index,
-                    this.linkedFilters, this.isExternalFlt);
+                    this.linkedFilters, this.isExternalFlt());
             }
 
             this.emitter.emit('select-options', this, index, values);
@@ -2756,6 +2749,44 @@ export class TableFilter {
      */
     buildFilterId(colIndex) {
         return `${this.prfxFlt}${colIndex}_${this.id}`;
+    }
+
+    /**
+     * Check if has external filters
+     * @returns {Boolean}
+     * @private
+     */
+    isExternalFlt() {
+        return this.externalFltTgtIds.length > 0;
+    }
+
+    /**
+     * Returns styles path
+     * @returns {String}
+     * @private
+     */
+    getStylePath() {
+        return defaultsStr(this.config.style_path, this.basePath + 'style/');
+    }
+
+    /**
+     * Returns main stylesheet path
+     * @returns {String}
+     * @private
+     */
+    getStylesheetPath() {
+        return defaultsStr(this.config.stylesheet,
+            this.getStylePath() + 'tablefilter.css');
+    }
+
+    /**
+     * Returns themes path
+     * @returns {String}
+     * @private
+     */
+    getThemesPath() {
+        return defaultsStr(this.config.themes_path,
+            this.getStylePath() + 'themes/');
     }
 
     /**
