@@ -197,7 +197,7 @@ export class PopupFilter extends Feature {
         let tf = this.tf;
 
         // Enable external filters
-        tf.externalFltTgtIds = [];
+        tf.externalFltTgtIds = [0];
 
         // Override headers row index if no grouped headers
         // TODO: Because of the filters row generation, headers row index needs
