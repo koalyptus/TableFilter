@@ -172,7 +172,7 @@ export default class FiltersVisibility extends Feature {
         this.onAfterHide = defaultsFn(f.on_after_hide, EMPTY_FN);
 
         //Import extension's stylesheet
-        tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,
+        tf.import(f.name + 'Style', tf.getStylePath() + this.stylesheet, null,
             'link');
 
         this.enable();

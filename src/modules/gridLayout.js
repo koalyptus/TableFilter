@@ -296,7 +296,6 @@ export class GridLayout extends Feature {
         tf.refRow = 0;
         tf.headersRow = 0;
         tf.filtersRowIndex = 1;
-        tf.isExternalFlt = true;
     }
 
     /**
