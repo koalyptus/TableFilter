@@ -4224,12 +4224,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#isexternalflt",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isExternalFlt",
-    "src/tablefilter.js~TableFilter#isExternalFlt",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#isimported",
     "class/src/tablefilter.js~TableFilter.html#instance-method-isImported",
     "src/tablefilter.js~TableFilter#isImported",
