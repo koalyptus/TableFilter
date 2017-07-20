@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.5.31 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/feature.js~Feature.html">Feature</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-EMPTY_FN">EMPTY_FN</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-has">has</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHECKLIST">CHECKLIST</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DATE">DATE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DOWN_ARROW_KEY">DOWN_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ENTER_KEY">ENTER_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ESC_KEY">ESC_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FEATURES">FEATURES</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FORMATTED_NUMBER">FORMATTED_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HEADER_TAG">HEADER_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INPUT">INPUT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IP_ADDRESS">IP_ADDRESS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MULTIPLE">MULTIPLE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NONE">NONE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NUMBER">NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT">SELECT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRING">STRING</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addEvt">addEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-keyCode">keyCode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeEvt">removeEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stopEvt">stopEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-parse">parse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsArr">defaultsArr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsBool">defaultsBool</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsFn">defaultsFn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsNb">defaultsNb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsStr">defaultsStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortAsc">dateSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortDesc">dateSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortAsc">numSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortDesc">numSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDateStr">sortDateStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortNumberStr">sortNumberStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-contains">contains</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-matchCase">matchCase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-rgxEsc">rgxEsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-trim">trim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isArray">isArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isBoolean">isBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isFn">isFn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isNull">isNull</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isNumber">isNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isObj">isObj</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isString">isString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isUndef">isUndef</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/advancedGrid</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colOps</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colsVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/sort</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">modules</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dateType.js~DateType.html">DateType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/hash.js~Hash.html">Hash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/markActiveColumns.js~MarkActiveColumns.html">MarkActiveColumns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/noResults.js~NoResults.html">NoResults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasHashChange">hasHashChange</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasStorage">hasStorage</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/modules/paging.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
+import {createElm, createOpt, createText, elm, removeElm} from &apos;../dom&apos;;
+import {isArray, isNull, EMPTY_FN} from &apos;../types&apos;;
+import {addEvt, keyCode, removeEvt} from &apos;../event&apos;;
+import {INPUT, SELECT, NONE, ENTER_KEY} from &apos;../const&apos;;
+import {
+    defaultsStr, defaultsNb, defaultsBool, defaultsArr, defaultsFn
+} from &apos;../settings&apos;;
+
+/**
+ * Paging UI component
+ * @export
+ * @class Paging
+ * @extends {Feature}
+ */
+export class Paging extends Feature {
+
+    /**
+     * Creates an instance of Paging
+     * @param {TableFilter} tf TableFilter instance
+     */
+    constructor(tf) {
+        super(tf, &apos;paging&apos;);
+
+        // Configuration object
+        let f = this.config.paging || {};
+
+        /**
+         * Css class for the paging buttons (previous, next, etc.)
+         * @type {String}
+         */
+        this.btnCssClass = defaultsStr(f.btn_css_class, &apos;pgInp&apos;);
+
+        /**
+         * Main select DOM element
+         * @type {DOMElement}
+         */
+        this.pageSlc = null;
+
+        /**
+         * Results per page select DOM element
+         * @type {DOMElement}
+         */
+        this.pageLengthSlc = null;
+
+        /**
+         * ID of custom container element
+         * @type {String}
+         */
+        this.tgtId = defaultsStr(f.target_id, null);
+
+        /**
+         * Number of rows contained in a page
+         * @type {Number}
+         */
+        this.pageLength = defaultsNb(f.length, 10);
+
+        /**
+         * ID of custom container element for the results per page selector
+         * @type {String}
+         */
+        this.pageLengthTgtId = defaultsStr(f.results_per_page_target_id, null);
+
+        /**
+         * Css class for the paging select element
+         * @type {String}
+         */
+        this.pgSlcCssClass = defaultsStr(f.slc_css_class, &apos;pgSlc&apos;);
+
+        /**
+         * Css class for the paging input element
+         * @type {String}
+         */
+        this.pgInpCssClass = defaultsStr(f.inp_css_class, &apos;pgNbInp&apos;);
+
+        /**
+         * Label and values for the results per page select, example of usage:
+         * [&apos;Records: &apos;, [10,25,50,100]]
+         * @type {Array}
+         */
+        this.resultsPerPage = defaultsArr(f.results_per_page, null);
+
+        /**
+         * Determines if results per page is configured
+         * @type {Boolean}
+         */
+        this.hasResultsPerPage = isArray(this.resultsPerPage);
+
+        /**
+         * Css class for the results per page select
+         * @type {String}
+         */
+        this.resultsSlcCssClass = defaultsStr(f.results_slc_css_class, &apos;rspg&apos;);
+
+        /**
+         * Css class for the label preceding results per page select
+         * @type {String}
+         */
+        this.resultsSpanCssClass = defaultsStr(f.results_span_css_class,
+            &apos;rspgSpan&apos;);
+
+        /**
+         * Index of the first row of current page
+         * @type {Number}
+         * @private
+         */
+        this.startPagingRow = 0;
+
+        /**
+         * Total number of pages
+         * @type {Number}
+         * @private
+         */
+        this.nbPages = 0;
+
+        /**
+         * Current page number
+         * @type {Number}
+         * @private
+         */
+        this.currentPageNb = 1;
+
+        /**
+         * Next page button text
+         * @type {String}
+         */
+        this.btnNextPageText = defaultsStr(f.btn_next_page_text, &apos;&gt;&apos;);
+
+        /**
+         * Previous page button text
+         * @type {String}
+         */
+        this.btnPrevPageText = defaultsStr(f.btn_prev_page_text, &apos;&lt;&apos;);
+
+        /**
+         * Last page button text
+         * @type {String}
+         */
+        this.btnLastPageText = defaultsStr(f.btn_last_page_text, &apos;&gt;|&apos;);
+
+        /**
+         * First page button text
+         * @type {String}
+         */
+        this.btnFirstPageText = defaultsStr(f.btn_first_page_text, &apos;|&lt;&apos;);
+
+        /**
+         * Next page button HTML
+         * @type {String}
+         */
+        this.btnNextPageHtml = defaultsStr(f.btn_next_page_html,
+            (!tf.enableIcons ? null :
+                &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.btnCssClass +
+                &apos; nextPage&quot; title=&quot;Next page&quot; /&gt;&apos;));
+
+        /**
+         * Previous page button HTML
+         * @type {String}
+         */
+        this.btnPrevPageHtml = defaultsStr(f.btn_prev_page_html,
+            (!tf.enableIcons ? null :
+                &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.btnCssClass +
+                &apos; previousPage&quot; title=&quot;Previous page&quot; /&gt;&apos;));
+
+        /**
+         * First page button HTML
+         * @type {String}
+         */
+        this.btnFirstPageHtml = defaultsStr(f.btn_first_page_html,
+            (!tf.enableIcons ? null :
+                &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.btnCssClass +
+                &apos; firstPage&quot; title=&quot;First page&quot; /&gt;&apos;));
+
+        /**
+         * Last page button HTML
+         * @type {String}
+         */
+        this.btnLastPageHtml = defaultsStr(f.btn_last_page_html,
+            (!tf.enableIcons ? null :
+                &apos;&lt;input type=&quot;button&quot; value=&quot;&quot; class=&quot;&apos; + this.btnCssClass +
+                &apos; lastPage&quot; title=&quot;Last page&quot; /&gt;&apos;));
+
+        /**
+         * Text preceeding page selector drop-down
+         * @type {String}
+         */
+        this.pageText = defaultsStr(f.page_text, &apos; Page &apos;);
+
+        /**
+         * Text after page selector drop-down
+         * @type {String}
+         */
+        this.ofText = defaultsStr(f.of_text, &apos; of &apos;);
+
+        /**
+         * Css class for the span containing total number of pages
+         * @type {String}
+         */
+        this.nbPgSpanCssClass = defaultsStr(f.nb_pages_css_class, &apos;nbpg&apos;);
+
+        /**
+         * Determines if paging buttons are enabled (default: true)
+         * @type {Boolean}
+         */
+        this.hasBtns = defaultsBool(f.btns, true);
+
+        /**
+         * Defines page selector type, two possible values: &apos;select&apos;, &apos;input&apos;
+         * @type {String}
+         */
+        this.pageSelectorType = defaultsStr(f.page_selector_type, SELECT);
+
+        /**
+         * Callback fired before the page is changed
+         * @type {Function}
+         */
+        this.onBeforeChangePage = defaultsFn(f.on_before_change_page, EMPTY_FN);
+
+        /**
+         * Callback fired after the page is changed
+         * @type {Function}
+         */
+        this.onAfterChangePage = defaultsFn(f.on_after_change_page, EMPTY_FN);
+
+        /**
+         * Label preciding results per page select
+         * @type {DOMElement}
+         * @private
+         */
+        this.slcResultsTxt = null;
+        /**
+         * Span containing next page button
+         * @type {DOMElement}
+         * @private
+         */
+        this.btnNextCont = null;
+        /**
+         * Span containing previous page button
+         * @type {DOMElement}
+         * @private
+         */
+        this.btnPrevCont = null;
+        /**
+         * Span containing last page button
+         * @type {DOMElement}
+         * @private
+         */
+        this.btnLastCont = null;
+        /**
+         * Span containing first page button
+         * @type {DOMElement}
+         * @private
+         */
+        this.btnFirstCont = null;
+        /**
+         * Span for tot nb pages
+         * @type {DOMElement}
+         * @private
+         */
+        this.pgCont = null;
+        /**
+         * Span preceding pages select (contains &apos;Page&apos;)
+         * @type {DOMElement}
+         * @private
+         */
+        this.pgBefore = null;
+        /**
+         * Span following pages select (contains &apos; of &apos;)
+         * @type {DOMElement}
+         * @private
+         */
+        this.pgAfter = null;
+
+        let startRow = tf.refRow;
+        let nrows = tf.getRowsNb(true);
+        //calculates page nb
+        this.nbPages = Math.ceil((nrows - startRow) / this.pageLength);
+
+        let o = this;
+        /**
+         * Paging DOM events handlers
+         * @type {String}
+         * @private
+         */
+        this.evt = {
+            slcIndex() {
+                return (o.pageSelectorType === SELECT) ?
+                    o.pageSlc.options.selectedIndex :
+                    parseInt(o.pageSlc.value, 10) - 1;
+            },
+            nbOpts() {
+                return (o.pageSelectorType === SELECT) ?
+                    parseInt(o.pageSlc.options.length, 10) - 1 :
+                    (o.nbPages - 1);
+            },
+            next() {
+                let nextIndex = o.evt.slcIndex() &lt; o.evt.nbOpts() ?
+                    o.evt.slcIndex() + 1 : 0;
+                o.changePage(nextIndex);
+            },
+            prev() {
+                let prevIndex = o.evt.slcIndex() &gt; 0 ?
+                    o.evt.slcIndex() - 1 : o.evt.nbOpts();
+                o.changePage(prevIndex);
+            },
+            last() {
+                o.changePage(o.evt.nbOpts());
+            },
+            first() {
+                o.changePage(0);
+            },
+            _detectKey(e) {
+                let key = keyCode(e);
+                if (key === ENTER_KEY) {
+                    if (tf.sorted) {
+                        tf.filter();
+                        o.changePage(o.evt.slcIndex());
+                    } else {
+                        o.changePage();
+                    }
+                    this.blur();
+                }
+            },
+            slcPagesChange: null,
+            nextEvt: null,
+            prevEvt: null,
+            lastEvt: null,
+            firstEvt: null
+        };
+    }
+
+    /**
+     * Initialize DOM elements
+     */
+    init() {
+        let slcPages;
+        let tf = this.tf;
+        let evt = this.evt;
+
+        if (this.initialized) {
+            return;
+        }
+
+        // Check resultsPerPage is in expected format and initialise the
+        // results per page component
+        if (this.hasResultsPerPage) {
+            if (this.resultsPerPage.length &lt; 2) {
+                this.hasResultsPerPage = false;
+            } else {
+                this.pageLength = this.resultsPerPage[1][0];
+                this.setResultsPerPage();
+            }
+        }
+
+        evt.slcPagesChange = (event) =&gt; {
+            let slc = event.target;
+            this.changePage(slc.selectedIndex);
+        };
+
+        // Paging drop-down list selector
+        if (this.pageSelectorType === SELECT) {
+            slcPages = createElm(SELECT);
+            slcPages.className = this.pgSlcCssClass;
+            addEvt(slcPages, &apos;change&apos;, evt.slcPagesChange);
+        }
+
+        // Paging input selector
+        if (this.pageSelectorType === INPUT) {
+            slcPages = createElm(INPUT, [&apos;value&apos;, this.currentPageNb]);
+            slcPages.className = this.pgInpCssClass;
+            addEvt(slcPages, &apos;keypress&apos;, evt._detectKey);
+        }
+
+        // btns containers
+        let btnNextSpan = createElm(&apos;span&apos;);
+        let btnPrevSpan = createElm(&apos;span&apos;);
+        let btnLastSpan = createElm(&apos;span&apos;);
+        let btnFirstSpan = createElm(&apos;span&apos;);
+
+        if (this.hasBtns) {
+            // Next button
+            if (!this.btnNextPageHtml) {
+                let btnNext = createElm(INPUT,
+                    [&apos;type&apos;, &apos;button&apos;],
+                    [&apos;value&apos;, this.btnNextPageText],
+                    [&apos;title&apos;, &apos;Next&apos;]
+                );
+                btnNext.className = this.btnCssClass;
+                addEvt(btnNext, &apos;click&apos;, evt.next);
+                btnNextSpan.appendChild(btnNext);
+            } else {
+                btnNextSpan.innerHTML = this.btnNextPageHtml;
+                addEvt(btnNextSpan, &apos;click&apos;, evt.next);
+            }
+            // Previous button
+            if (!this.btnPrevPageHtml) {
+                let btnPrev = createElm(INPUT,
+                    [&apos;type&apos;, &apos;button&apos;],
+                    [&apos;value&apos;, this.btnPrevPageText],
+                    [&apos;title&apos;, &apos;Previous&apos;]
+                );
+                btnPrev.className = this.btnCssClass;
+                addEvt(btnPrev, &apos;click&apos;, evt.prev);
+                btnPrevSpan.appendChild(btnPrev);
+            } else {
+                btnPrevSpan.innerHTML = this.btnPrevPageHtml;
+                addEvt(btnPrevSpan, &apos;click&apos;, evt.prev);
+            }
+            // Last button
+            if (!this.btnLastPageHtml) {
+                let btnLast = createElm(INPUT,
+                    [&apos;type&apos;, &apos;button&apos;],
+                    [&apos;value&apos;, this.btnLastPageText],
+                    [&apos;title&apos;, &apos;Last&apos;]
+                );
+                btnLast.className = this.btnCssClass;
+                addEvt(btnLast, &apos;click&apos;, evt.last);
+                btnLastSpan.appendChild(btnLast);
+            } else {
+                btnLastSpan.innerHTML = this.btnLastPageHtml;
+                addEvt(btnLastSpan, &apos;click&apos;, evt.last);
+            }
+            // First button
+            if (!this.btnFirstPageHtml) {
+                let btnFirst = createElm(INPUT,
+                    [&apos;type&apos;, &apos;button&apos;],
+                    [&apos;value&apos;, this.btnFirstPageText],
+                    [&apos;title&apos;, &apos;First&apos;]
+                );
+                btnFirst.className = this.btnCssClass;
+                addEvt(btnFirst, &apos;click&apos;, evt.first);
+                btnFirstSpan.appendChild(btnFirst);
+            } else {
+                btnFirstSpan.innerHTML = this.btnFirstPageHtml;
+                addEvt(btnFirstSpan, &apos;click&apos;, evt.first);
+            }
+        }
+
+        // paging elements (buttons+drop-down list) are added to defined element
+        if (!this.tgtId) {
+            tf.setToolbar();
+        }
+        let targetEl = !this.tgtId ? tf.mDiv : elm(this.tgtId);
+        targetEl.appendChild(btnFirstSpan);
+        targetEl.appendChild(btnPrevSpan);
+
+        let pgBeforeSpan = createElm(&apos;span&apos;);
+        pgBeforeSpan.appendChild(createText(this.pageText));
+        pgBeforeSpan.className = this.nbPgSpanCssClass;
+        targetEl.appendChild(pgBeforeSpan);
+        targetEl.appendChild(slcPages);
+        let pgAfterSpan = createElm(&apos;span&apos;);
+        pgAfterSpan.appendChild(createText(this.ofText));
+        pgAfterSpan.className = this.nbPgSpanCssClass;
+        targetEl.appendChild(pgAfterSpan);
+        let pgSpan = createElm(&apos;span&apos;);
+        pgSpan.className = this.nbPgSpanCssClass;
+        pgSpan.appendChild(createText(&apos; &apos; + this.nbPages + &apos; &apos;));
+        targetEl.appendChild(pgSpan);
+        targetEl.appendChild(btnNextSpan);
+        targetEl.appendChild(btnLastSpan);
+
+        this.btnNextCont = btnNextSpan;
+        this.btnPrevCont = btnPrevSpan;
+        this.btnLastCont = btnLastSpan;
+        this.btnFirstCont = btnFirstSpan;
+        this.pgCont = pgSpan;
+        this.pgBefore = pgBeforeSpan;
+        this.pgAfter = pgAfterSpan;
+        this.pageSlc = slcPages;
+
+        this.setPagingInfo();
+
+        if (!tf.fltGrid) {
+            tf.validateAllRows();
+            this.setPagingInfo(tf.validRowsIndex);
+        }
+
+        this.emitter.on([&apos;after-filtering&apos;], () =&gt; this.resetPagingInfo());
+        this.emitter.on([&apos;change-page&apos;],
+            (tf, pageNumber) =&gt; this.setPage(pageNumber));
+        this.emitter.on([&apos;change-page-results&apos;],
+            (tf, pageLength) =&gt; this.changeResultsPerPage(pageLength));
+
+        /** @inherited */
+        this.initialized = true;
+    }
+
+    /**
+     * Reset paging when filters are already instantiated
+     * @param {Boolean} filterTable Execute filtering once paging instanciated
+     */
+    reset(filterTable = false) {
+        this.enable();
+        this.init();
+
+        if (filterTable) {
+            this.tf.filter();
+        }
+    }
+
+    /**
+     * Reset paging info from scratch after a filtering process
+     */
+    resetPagingInfo() {
+        this.startPagingRow = 0;
+        this.currentPageNb = 1;
+        this.setPagingInfo(this.tf.validRowsIndex);
+    }
+
+    /**
+     * Calculate number of pages based on valid rows
+     * Refresh paging select according to number of pages
+     * @param {Array} validRows Collection of valid rows
+     */
+    setPagingInfo(validRows) {
+        let tf = this.tf;
+        let mdiv = !this.tgtId ? tf.mDiv : elm(this.tgtId);
+
+        //store valid rows indexes
+        tf.validRowsIndex = validRows || tf.getValidRows(true);
+
+        //calculate nb of pages
+        this.nbPages = Math.ceil(tf.validRowsIndex.length / this.pageLength);
+        //refresh page nb span
+        this.pgCont.innerHTML = this.nbPages;
+        //select clearing shortcut
+        if (this.pageSelectorType === SELECT) {
+            this.pageSlc.innerHTML = &apos;&apos;;
+        }
+
+        if (this.nbPages &gt; 0) {
+            mdiv.style.visibility = &apos;visible&apos;;
+            if (this.pageSelectorType === SELECT) {
+                for (let z = 0; z &lt; this.nbPages; z++) {
+                    let opt = createOpt(z + 1, z * this.pageLength, false);
+                    this.pageSlc.options[z] = opt;
+                }
+            } else {
+                //input type
+                this.pageSlc.value = this.currentPageNb;
+            }
+
+        } else {
+            /*** if no results paging select and buttons are hidden ***/
+            mdiv.style.visibility = &apos;hidden&apos;;
+        }
+        this.groupByPage(tf.validRowsIndex);
+    }
+
+    /**
+     * Group table rows by page and display valid rows
+     * @param  {Array} validRows Collection of valid rows
+     */
+    groupByPage(validRows) {
+        let tf = this.tf;
+        let rows = tf.dom().rows;
+        let startPagingRow = parseInt(this.startPagingRow, 10);
+        let endPagingRow = startPagingRow + parseInt(this.pageLength, 10);
+
+        //store valid rows indexes
+        if (validRows) {
+            tf.validRowsIndex = validRows;
+        }
+
+        //this loop shows valid rows of current page
+        for (let h = 0, len = tf.getValidRowsNb(true); h &lt; len; h++) {
+            let validRowIdx = tf.validRowsIndex[h];
+            let r = rows[validRowIdx];
+            let isRowValid = r.getAttribute(&apos;validRow&apos;);
+            let rowDisplayed = false;
+
+            if (h &gt;= startPagingRow &amp;&amp; h &lt; endPagingRow) {
+                if (isNull(isRowValid) || Boolean(isRowValid === &apos;true&apos;)) {
+                    r.style.display = &apos;&apos;;
+                    rowDisplayed = true;
+                }
+            } else {
+                r.style.display = NONE;
+            }
+            this.emitter.emit(&apos;row-paged&apos;, tf, validRowIdx, h, rowDisplayed);
+        }
+
+        // broadcast grouping by page
+        this.emitter.emit(&apos;grouped-by-page&apos;, tf, this);
+    }
+
+    /**
+     * Return the current page number
+     * @return {Number} Page number
+     */
+    getPage() {
+        return this.currentPageNb;
+    }
+
+    /**
+     * Show page defined by passed argument (string or number):
+     * @param {String}/{Number} cmd possible string values: &apos;next&apos;,
+     *   &apos;previous&apos;, &apos;last&apos;, &apos;first&apos; or page number as per param
+     */
+    setPage(cmd) {
+        let tf = this.tf;
+        if (!tf.isInitialized() || !this.isEnabled()) {
+            return;
+        }
+        let btnEvt = this.evt,
+            cmdtype = typeof cmd;
+        if (cmdtype === &apos;string&apos;) {
+            switch (cmd.toLowerCase()) {
+                case &apos;next&apos;:
+                    btnEvt.next();
+                    break;
+                case &apos;previous&apos;:
+                    btnEvt.prev();
+                    break;
+                case &apos;last&apos;:
+                    btnEvt.last();
+                    break;
+                case &apos;first&apos;:
+                    btnEvt.first();
+                    break;
+                default:
+                    btnEvt.next();
+                    break;
+            }
+        }
+        else if (cmdtype === &apos;number&apos;) {
+            this.changePage(cmd - 1);
+        }
+    }
+
+    /**
+     * Generates UI elements for the number of results per page drop-down
+     */
+    setResultsPerPage() {
+        let tf = this.tf;
+        let evt = this.evt;
+
+        if (this.pageLengthSlc || !this.resultsPerPage) {
+            return;
+        }
+
+        evt.slcResultsChange = (ev) =&gt; {
+            this.onChangeResultsPerPage();
+            ev.target.blur();
+        };
+
+        let slcR = createElm(SELECT);
+        slcR.className = this.resultsSlcCssClass;
+        let slcRText = this.resultsPerPage[0],
+            slcROpts = this.resultsPerPage[1];
+        let slcRSpan = createElm(&apos;span&apos;);
+        slcRSpan.className = this.resultsSpanCssClass;
+
+        // results per page select is added to external element
+        if (!this.pageLengthTgtId) {
+            tf.setToolbar();
+        }
+        let targetEl = !this.pageLengthTgtId ?
+            tf.rDiv : elm(this.pageLengthTgtId);
+        slcRSpan.appendChild(createText(slcRText));
+
+        let help = tf.feature(&apos;help&apos;);
+        if (help &amp;&amp; help.btn) {
+            help.btn.parentNode.insertBefore(slcRSpan, help.btn);
+            help.btn.parentNode.insertBefore(slcR, help.btn);
+        } else {
+            targetEl.appendChild(slcRSpan);
+            targetEl.appendChild(slcR);
+        }
+
+        for (let r = 0; r &lt; slcROpts.length; r++) {
+            let currOpt = new Option(slcROpts[r], slcROpts[r], false, false);
+            slcR.options[r] = currOpt;
+        }
+        addEvt(slcR, &apos;change&apos;, evt.slcResultsChange);
+        this.slcResultsTxt = slcRSpan;
+        this.pageLengthSlc = slcR;
+    }
+
+    /**
+     * Remove number of results per page UI elements
+     */
+    removeResultsPerPage() {
+        let tf = this.tf;
+        if (!tf.isInitialized() || !this.pageLengthSlc ||
+            !this.resultsPerPage) {
+            return;
+        }
+        if (this.pageLengthSlc) {
+            removeElm(this.pageLengthSlc);
+        }
+        if (this.slcResultsTxt) {
+            removeElm(this.slcResultsTxt);
+        }
+        this.pageLengthSlc = null;
+        this.slcResultsTxt = null;
+    }
+
+    /**
+     * Change the page based on passed index
+     * @param {Number} index Index of the page (0-n)
+     */
+    changePage(index) {
+        let tf = this.tf;
+
+        if (!this.isEnabled()) {
+            return;
+        }
+
+        this.emitter.emit(&apos;before-page-change&apos;, tf, (index + 1));
+
+        if (index === null) {
+            index = this.pageSelectorType === SELECT ?
+                this.pageSlc.options.selectedIndex : this.pageSlc.value - 1;
+        }
+        if (index &gt;= 0 &amp;&amp; index &lt;= (this.nbPages - 1)) {
+            this.onBeforeChangePage(this, (index + 1));
+
+            this.currentPageNb = parseInt(index, 10) + 1;
+            if (this.pageSelectorType === SELECT) {
+                this.pageSlc.options[index].selected = true;
+            } else {
+                this.pageSlc.value = this.currentPageNb;
+            }
+
+            this.startPagingRow = (this.pageSelectorType === SELECT) ?
+                this.pageSlc.value : (index * this.pageLength);
+
+            this.groupByPage();
+
+            this.onAfterChangePage(this, (index + 1));
+        }
+
+        this.emitter.emit(&apos;after-page-change&apos;, tf, (index + 1));
+    }
+
+    /**
+     * Change the number of results per page based on passed value
+     * @param {String} val The number of results per page
+     */
+    changeResultsPerPage(val) {
+        if (!this.isEnabled() || isNaN(val)) {
+            return;
+        }
+
+        this.pageLengthSlc.value = val;
+        this.onChangeResultsPerPage();
+    }
+
+    /**
+     * Change rows according to page results drop-down
+     */
+    onChangeResultsPerPage() {
+        let tf = this.tf;
+
+        if (!this.isEnabled() || tf.getValidRowsNb() === 0) {
+            return;
+        }
+
+        let {
+            pageLengthSlc: slcR, pageSelectorType, pageSlc, emitter
+        } = this;
+
+        emitter.emit(&apos;before-page-length-change&apos;, tf);
+
+        let slcIndex = slcR.selectedIndex;
+        let slcPagesSelIndex = (pageSelectorType === SELECT) ?
+            pageSlc.selectedIndex : parseInt(pageSlc.value - 1, 10);
+        this.pageLength = parseInt(slcR.options[slcIndex].value, 10);
+        this.startPagingRow = this.pageLength * slcPagesSelIndex;
+
+        if (!isNaN(this.pageLength)) {
+            if (this.startPagingRow &gt;= tf.nbFilterableRows) {
+                this.startPagingRow = (tf.nbFilterableRows - this.pageLength);
+            }
+            this.setPagingInfo();
+
+            if (pageSelectorType === SELECT) {
+                let slcIdx = (pageSlc.options.length - 1 &lt;= slcPagesSelIndex) ?
+                    (pageSlc.options.length - 1) :
+                    slcPagesSelIndex;
+                pageSlc.options[slcIdx].selected = true;
+            }
+        }
+
+        emitter.emit(&apos;after-page-length-change&apos;, tf, this.pageLength);
+    }
+
+    /**
+     * Re-set page nb at page re-load
+     */
+    resetPage() {
+        let tf = this.tf;
+        if (!this.isEnabled()) {
+            return;
+        }
+        this.emitter.emit(&apos;before-reset-page&apos;, tf);
+        let pgNb = tf.feature(&apos;store&apos;).getPageNb();
+        if (pgNb !== &apos;&apos;) {
+            this.changePage((pgNb - 1));
+        }
+        this.emitter.emit(&apos;after-reset-page&apos;, tf, pgNb);
+    }
+
+    /**
+     * Re-set page length value at page re-load
+     */
+    resetPageLength() {
+        let tf = this.tf;
+        if (!this.isEnabled()) {
+            return;
+        }
+        this.emitter.emit(&apos;before-reset-page-length&apos;, tf);
+        let pglenIndex = tf.feature(&apos;store&apos;).getPageLength();
+
+        if (pglenIndex !== &apos;&apos;) {
+            this.pageLengthSlc.options[pglenIndex].selected = true;
+            this.changeResultsPerPage();
+        }
+        this.emitter.emit(&apos;after-reset-page-length&apos;, tf, pglenIndex);
+    }
+
+    /**
+     * Remove paging feature
+     */
+    destroy() {
+        if (!this.initialized) {
+            return;
+        }
+
+        let evt = this.evt;
+
+        if (this.pageSlc) {
+            if (this.pageSelectorType === SELECT) {
+                removeEvt(this.pageSlc, &apos;change&apos;, evt.slcPagesChange);
+            }
+            else if (this.pageSelectorType === INPUT) {
+                removeEvt(this.pageSlc, &apos;keypress&apos;, evt._detectKey);
+            }
+            removeElm(this.pageSlc);
+        }
+
+        if (this.btnNextCont) {
+            removeEvt(this.btnNextCont, &apos;click&apos;, evt.next);
+            removeElm(this.btnNextCont);
+            this.btnNextCont = null;
+        }
+
+        if (this.btnPrevCont) {
+            removeEvt(this.btnPrevCont, &apos;click&apos;, evt.prev);
+            removeElm(this.btnPrevCont);
+            this.btnPrevCont = null;
+        }
+
+        if (this.btnLastCont) {
+            removeEvt(this.btnLastCont, &apos;click&apos;, evt.last);
+            removeElm(this.btnLastCont);
+            this.btnLastCont = null;
+        }
+
+        if (this.btnFirstCont) {
+            removeEvt(this.btnFirstCont, &apos;click&apos;, evt.first);
+            removeElm(this.btnFirstCont);
+            this.btnFirstCont = null;
+        }
+
+        if (this.pgBefore) {
+            removeElm(this.pgBefore);
+            this.pgBefore = null;
+        }
+
+        if (this.pgAfter) {
+            removeElm(this.pgAfter);
+            this.pgAfter = null;
+        }
+
+        if (this.pgCont) {
+            removeElm(this.pgCont);
+            this.pgCont = null;
+        }
+
+        if (this.hasResultsPerPage) {
+            this.removeResultsPerPage();
+        }
+
+        this.emitter.off([&apos;after-filtering&apos;], () =&gt; this.resetPagingInfo());
+        this.emitter.off([&apos;change-page&apos;],
+            (tf, pageNumber) =&gt; this.setPage(pageNumber));
+        this.emitter.off([&apos;change-page-results&apos;],
+            (tf, pageLength) =&gt; this.changeResultsPerPage(pageLength));
+
+        this.pageSlc = null;
+        this.nbPages = 0;
+
+        this.initialized = false;
+    }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
