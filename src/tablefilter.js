@@ -2095,14 +2095,8 @@ export class TableFilter {
 
             // checks if row has exact cell # and is not excluded
             if (nchilds === this.nbCells && !isExludedRow) {
-                // this loop retrieves cell data
-                for (let j = 0; j < nchilds; j++) {
-                    if (j !== colIndex) {
-                        continue;
-                    }
-                    let data = getContent(cell[j]);
-                    colValues.push(data);
-                }
+                let data = getContent(cell[colIndex]);
+                colValues.push(data);
             }
         }
         return colValues;
