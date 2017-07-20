@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/extensions/colOps/colOps.js | tablefilter v0.5.31 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/koalyptus/TableFilter.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/feature.js~Feature.html">Feature</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-EMPTY_FN">EMPTY_FN</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-has">has</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHECKLIST">CHECKLIST</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DATE">DATE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DOWN_ARROW_KEY">DOWN_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ENTER_KEY">ENTER_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ESC_KEY">ESC_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FEATURES">FEATURES</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FORMATTED_NUMBER">FORMATTED_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HEADER_TAG">HEADER_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INPUT">INPUT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IP_ADDRESS">IP_ADDRESS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MULTIPLE">MULTIPLE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NONE">NONE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NUMBER">NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT">SELECT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRING">STRING</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tag">tag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-addEvt">addEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-keyCode">keyCode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-removeEvt">removeEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stopEvt">stopEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-targetEvt">targetEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-parse">parse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsArr">defaultsArr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsBool">defaultsBool</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsFn">defaultsFn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsNb">defaultsNb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultsStr">defaultsStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortAsc">dateSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dateSortDesc">dateSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ignoreCase">ignoreCase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortAsc">numSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-numSortDesc">numSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDateStr">sortDateStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortNumberStr">sortNumberStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-contains">contains</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-matchCase">matchCase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-rgxEsc">rgxEsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-trim">trim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isArray">isArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isBoolean">isBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEmpty">isEmpty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isFn">isFn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isNull">isNull</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isNumber">isNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isObj">isObj</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isString">isString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isUndef">isUndef</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/advancedGrid</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colOps</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/colsVisibility</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">extensions/sort</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">modules</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dateType.js~DateType.html">DateType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/hash.js~Hash.html">Hash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/markActiveColumns.js~MarkActiveColumns.html">MarkActiveColumns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/noResults.js~NoResults.html">NoResults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasHashChange">hasHashChange</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasStorage">hasStorage</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/extensions/colOps/colOps.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../../feature&apos;;
+import {createText, elm} from &apos;../../dom&apos;;
+import {isArray, isEmpty, EMPTY_FN} from &apos;../../types&apos;;
+import {numSortAsc} from &apos;../../sort&apos;;
+import {FORMATTED_NUMBER} from &apos;../../const&apos;;
+import formatNumber from &apos;format-number&apos;;
+import {defaultsFn, defaultsArr} from &apos;../../settings&apos;;
+
+const EVENTS = [
+    &apos;after-filtering&apos;,
+    &apos;after-page-change&apos;,
+    &apos;after-page-length-change&apos;
+];
+
+const SUM = &apos;sum&apos;;
+const MEAN = &apos;mean&apos;;
+const MIN = &apos;min&apos;;
+const MAX = &apos;max&apos;;
+const MEDIAN = &apos;median&apos;;
+const Q1 = &apos;q1&apos;;
+const Q3 = &apos;q3&apos;;
+
+/**
+ * Column calculations extension
+ */
+export default class ColOps extends Feature {
+
+    /**
+     * Creates an instance of ColOps
+     *
+     * @param {TableFilter} tf TableFilter instance
+     * @param {Object} opts Configuration object
+     */
+    constructor(tf, opts) {
+        super(tf, opts.name);
+
+        /**
+         * Callback fired before columns operations start
+         * @type {Function}
+         */
+        this.onBeforeOperation = defaultsFn(opts.on_before_operation, EMPTY_FN);
+
+        /**
+         * Callback fired after columns operations are completed
+         * @type {Function}
+         */
+        this.onAfterOperation = defaultsFn(opts.on_after_operation, EMPTY_FN);
+
+        /**
+         * Configuration options
+         * @type {Object}
+         */
+        this.opts = opts;
+
+        /**
+         * List of DOM element IDs containing column&apos;s calculation result
+         * @type {Array}
+         */
+        this.labelIds = defaultsArr(opts.id, []);
+
+        /**
+         * List of columns&apos; indexes for calculations
+         * @type {Array}
+         */
+        this.colIndexes = defaultsArr(opts.col, []);
+
+        /**
+         * List of operations - possible values: &apos;sum&apos;, &apos;mean&apos;, &apos;min&apos;, &apos;max&apos;,
+         * &apos;median&apos;, &apos;q1&apos;, &apos;q3&apos;
+         * @type {Array}
+         */
+        this.operations = defaultsArr(opts.operation, []);
+
+        /**
+         * List of write methods used to write the result - possible values:
+         * &apos;innerHTML&apos;, &apos;setValue&apos;, &apos;createTextNode&apos;
+         * @type {Array}
+         */
+        this.outputTypes = defaultsArr(opts.write_method, []);
+
+        /**
+         * List of format objects used for formatting the result -
+         * refer to https://github.com/componitable/format-number to check
+         * configuration options
+         * @type {Array}
+         */
+        this.formatResults = defaultsArr(opts.format_result, []);
+
+        /**
+         * List of row indexes displaying the results
+         * @type {Array}
+         */
+        this.totRowIndexes = defaultsArr(opts.tot_row_index, []);
+
+        /**
+         * List of row indexes excluded from calculations
+         * @type {Array}
+         */
+        this.excludeRows = defaultsArr(opts.exclude_row, []);
+
+        /**
+         * List of decimal precision for calculation results
+         * @type {Array}
+         */
+        this.decimalPrecisions = defaultsArr(opts.decimal_precision, 2);
+
+        this.enable();
+    }
+
+    /**
+     * Initializes ColOps instance
+     */
+    init() {
+        if (this.initialized) {
+            return;
+        }
+        // subscribe to events
+        this.emitter.on(EVENTS, () =&gt; this.calcAll());
+
+        this.calcAll();
+
+        /** @inherited */
+        this.initialized = true;
+    }
+
+    /**
+     * Calculates columns&apos; values
+     * Configuration options are stored in &apos;opts&apos; property
+     * - &apos;id&apos; contains ids of elements showing result (array)
+     * - &apos;col&apos; contains the columns&apos; indexes (array)
+     * - &apos;operation&apos; contains operation type (array, values: &apos;sum&apos;, &apos;mean&apos;,
+     *   &apos;min&apos;, &apos;max&apos;, &apos;median&apos;, &apos;q1&apos;, &apos;q3&apos;)
+     * - &apos;write_method&apos; array defines which method to use for displaying the
+     *    result (innerHTML, setValue, createTextNode) - default: &apos;innerHTML&apos;
+     * - &apos;tot_row_index&apos; defines in which row results are displayed
+     *   (integers array)
+     *
+     * - changes made by Nuovella:
+     * (1) optimized the routine (now it will only process each column once),
+     * (2) added calculations for the median, lower and upper quartile.
+     */
+    calcAll() {
+        let tf = this.tf;
+        if (!tf.isInitialized()) {
+            return;
+        }
+
+        this.onBeforeOperation(tf, this);
+        this.emitter.emit(&apos;before-column-operation&apos;, tf, this);
+
+        let { colIndexes, operations: colOperations, outputTypes,
+            totRowIndexes, excludeRows, formatResults,
+            decimalPrecisions } = this;
+
+        //nuovella: determine unique list of columns to operate on
+        let uIndexes = [];
+        colIndexes.forEach((val) =&gt; {
+            if (uIndexes.indexOf(val) === -1) {
+                uIndexes.push(val);
+            }
+        });
+
+        let nbCols = uIndexes.length,
+            rows = tf.dom().rows,
+            colValues = [];
+
+        for (let u = 0; u &lt; nbCols; u++) {
+            //this retrieves col values
+            //use uIndexes because we only want to pass through this loop
+            //once for each column get the values in this unique column
+            colValues.push(
+                tf.getVisibleColumnData(uIndexes[u], false, excludeRows)
+            );
+
+            let curValues = colValues[u];
+
+            //next: calculate all operations for this column
+            let result = 0,
+                operations = [],
+                precisions = [],
+                labels = [],
+                writeType,
+                formatResult = [],
+                idx = 0;
+
+            for (let k = 0; k &lt; colIndexes.length; k++) {
+                if (colIndexes[k] !== uIndexes[u]) {
+                    continue;
+                }
+                operations[idx] = (colOperations[k] || &apos;sum&apos;).toLowerCase();
+                precisions[idx] = decimalPrecisions[k];
+                labels[idx] = this.labelIds[k];
+                writeType = isArray(outputTypes) ? outputTypes[k] : null;
+                formatResult[idx] =
+                    this.configureFormat(uIndexes[u], formatResults[k]);
+                idx++;
+            }
+
+            for (let i = 0; i &lt; idx; i++) {
+                // emit values before column calculation
+                this.emitter.emit(
+                    &apos;before-column-calc&apos;,
+                    tf,
+                    this,
+                    uIndexes[u],
+                    curValues,
+                    operations[i],
+                    precisions[i]
+                );
+
+                result = Number(this.calc(curValues, operations[i], null));
+
+                // emit column calculation result
+                this.emitter.emit(
+                    &apos;column-calc&apos;,
+                    tf,
+                    this,
+                    uIndexes[u],
+                    result,
+                    operations[i],
+                    precisions[i]
+                );
+
+                // write result in expected DOM element
+                this.writeResult(
+                    result,
+                    labels[i],
+                    writeType,
+                    precisions[i],
+                    formatResult[i]
+                );
+
+            }//for i
+
+            // row(s) with result are always visible
+            let totRow = totRowIndexes &amp;&amp; totRowIndexes[u] ?
+                rows[totRowIndexes[u]] : null;
+            if (totRow) {
+                totRow.style.display = &apos;&apos;;
+            }
+        }//for u
+
+        this.onAfterOperation(tf, this);
+        this.emitter.emit(&apos;after-column-operation&apos;, tf, this);
+    }
+
+    /**
+     * Make desired calculation on specified column.
+     * @param {Number} colIndex Column index
+     * @param {String} [operation=SUM] Operation type
+     * @param {Number} precision Decimal precision
+     * @returns {Number}
+     */
+    columnCalc(colIndex, operation = SUM, precision) {
+        let excludeRows = this.excludeRows || [];
+        let colValues = tf.getVisibleColumnData(colIndex, false, excludeRows);
+
+        return Number(this.calc(colValues, operation, precision));
+    }
+
+    /**
+     * Make calculation on passed values.
+     * @param {Array} values List of values
+     * @param {String} [operation=SUM] Optional operation type
+     * @param {Number} precision Optional result precision
+     * @returns {Number}
+     * @private
+     */
+    calc(colValues, operation = SUM, precision) {
+        let result = 0;
+
+        if (operation === Q1 || operation === Q3 || operation === MEDIAN) {
+            colValues = this.sortColumnValues(colValues, numSortAsc);
+        }
+
+        switch (operation) {
+            case MEAN:
+                result = this.calcMean(colValues);
+                break;
+            case SUM:
+                result = this.calcSum(colValues);
+                break;
+            case MIN:
+                result = this.calcMin(colValues);
+                break;
+            case MAX:
+                result = this.calcMax(colValues);
+                break;
+            case MEDIAN:
+                result = this.calcMedian(colValues);
+                break;
+            case Q1:
+                result = this.calcQ1(colValues);
+                break;
+            case Q3:
+                result = this.calcQ3(colValues);
+                break;
+        }
+
+        return isEmpty(precision) ? result : result.toFixed(precision);
+    }
+
+    /**
+     * Calculate the sum of passed values.
+     * @param {Array} [values=[]] List of values
+     * @returns {Number}
+     */
+    calcSum(values = []) {
+        if (isEmpty(values)) {
+            return 0;
+        }
+        let result = values.reduce((x, y) =&gt; Number(x) + Number(y));
+        return result;
+    }
+
+    /**
+     * Calculate the mean of passed values.
+     * @param {Array} [values=[]] List of values
+     * @returns {Number}
+     */
+    calcMean(values = []) {
+        let result = this.calcSum(values) / values.length;
+        return Number(result);
+    }
+
+    /**
+     * Calculate the max value of passed values.
+     * @param {Array} [values=[]] List of values
+     * @returns {Number}
+     */
+    calcMax(values = []) {
+        return Math.max.apply(null, values);
+    }
+
+    /**
+     * Calculate the min value of passed values.
+     * @param {Array} [values=[]] List of values
+     * @returns {Number}
+     */
+    calcMin(values = []) {
+        return Math.min.apply(null, values);
+    }
+
+    /**
+     * Calculate the median of passed values.
+     * @param {Array} [values=[]] List of values
+     * @returns {Number}
+     */
+    calcMedian(values = []) {
+        let nbValues = values.length;
+        let aux = 0;
+        if (nbValues % 2 === 1) {
+            aux = Math.floor(nbValues / 2);
+            return Number(values[aux]);
+        }
+        return (Number(values[nbValues / 2]) +
+            Number(values[((nbValues / 2) - 1)])) / 2;
+    }
+
+    /**
+     * Calculate the lower quartile of passed values.
+     * @param {Array} [values=[]] List of values
+     * @returns {Number}
+     */
+    calcQ1(values = []) {
+        let nbValues = values.length;
+        let posa = 0.0;
+        posa = Math.floor(nbValues / 4);
+        if (4 * posa === nbValues) {
+            return (Number(values[posa - 1]) +
+                Number(values[posa])) / 2;
+        }
+        return Number(values[posa]);
+    }
+
+    /**
+     * Calculate the upper quartile of passed values.
+     * @param {Array} [values=[]] List of values
+     * @returns {Number}
+     */
+    calcQ3(values = []) {
+        let nbValues = values.length;
+        let posa = 0.0;
+        let posb = 0.0;
+        posa = Math.floor(nbValues / 4);
+        if (4 * posa === nbValues) {
+            posb = 3 * posa;
+            return (Number(values[posb]) +
+                Number(values[posb - 1])) / 2;
+        }
+        return Number(values[nbValues - posa - 1]);
+    }
+
+    /**
+     * Sort passed values with supplied sorter function.
+     * @param {Array} [values=[]] List of values to be sorted
+     * @param {Function} sorter Sorter function
+     * @returns {Array}
+     */
+    sortColumnValues(values = [], sorter) {
+        return values.sort(sorter);
+    }
+
+    /**
+     * Write calculation result in passed DOM element with supplied write method
+     * and decimal precision.
+     * @param {Number} [result=0] Calculation result
+     * @param {DOMElement} label DOM element
+     * @param {String} [writeType=&apos;innerhtml&apos;] Write method
+     * @param {Number} [precision=2] Applied decimal precision
+     * @private
+     */
+    writeResult(result = 0, label, writeType = &apos;innerhtml&apos;,
+        precision = 2, format = {}) {
+        let labelElm = elm(label);
+
+        if (!labelElm) {
+            return;
+        }
+
+        result = result.toFixed(precision);
+        if (isNaN(result) || !isFinite(result)) {
+            result = &apos;&apos;;
+        } else {
+            result = formatNumber(format)(result);
+        }
+
+        switch (writeType.toLowerCase()) {
+            case &apos;innerhtml&apos;:
+                labelElm.innerHTML = result;
+                break;
+            case &apos;setvalue&apos;:
+                labelElm.value = result;
+                break;
+            case &apos;createtextnode&apos;:
+                let oldNode = labelElm.firstChild;
+                let txtNode = createText(result);
+                labelElm.replaceChild(txtNode, oldNode);
+                break;
+        }
+    }
+
+    /**
+     * Configure the format options used to format the operation result based
+     * on column type.
+     * @param {Number} colIndex Column index
+     * @param {Object} [format={}] Format object
+     * @returns {Object}
+     * @private
+     */
+    configureFormat(colIndex, format = {}) {
+        let tf = this.tf;
+        if (tf.hasType(colIndex, [FORMATTED_NUMBER])) {
+            let colType = tf.colTypes[colIndex];
+            if (colType.decimal &amp;&amp; !format.decimal) {
+                format.decimal = colType.decimal;
+            }
+            if (colType.thousands &amp;&amp; !format.integerSeparator) {
+                format.integerSeparator = colType.thousands;
+            }
+        } else {
+            format.decimal = format.decimal || &apos;&apos;;
+            format.integerSeparator = format.integerSeparator || &apos;&apos;;
+        }
+        return format;
+    }
+
+    /** Remove extension */
+    destroy() {
+        if (!this.initialized) {
+            return;
+        }
+        // unsubscribe to events
+        this.emitter.off(EVENTS, () =&gt; this.calcAll());
+
+        this.initialized = false;
+    }
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,2015 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "isBoolean",
+            "range": [
+              8,
+              17
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 8
+              },
+              "end": {
+                "line": 1,
+                "column": 17
+              }
+            }
+          },
+          "imported": {
+            "type": "Identifier",
+            "name": "isBoolean",
+            "range": [
+              8,
+              17
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 8
+              },
+              "end": {
+                "line": 1,
+                "column": 17
+              }
+            }
+          },
+          "range": [
+            8,
+            17
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            }
+          }
+        },
+        {
+          "type": "ImportSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "isString",
+            "range": [
+              19,
+              27
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 19
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            }
+          },
+          "imported": {
+            "type": "Identifier",
+            "name": "isString",
+            "range": [
+              19,
+              27
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 19
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            }
+          },
+          "range": [
+            19,
+            27
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 19
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          }
+        },
+        {
+          "type": "ImportSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "isFn",
+            "range": [
+              29,
+              33
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 29
+              },
+              "end": {
+                "line": 1,
+                "column": 33
+              }
+            }
+          },
+          "imported": {
+            "type": "Identifier",
+            "name": "isFn",
+            "range": [
+              29,
+              33
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 29
+              },
+              "end": {
+                "line": 1,
+                "column": 33
+              }
+            }
+          },
+          "range": [
+            29,
+            33
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 29
+            },
+            "end": {
+              "line": 1,
+              "column": 33
+            }
+          }
+        },
+        {
+          "type": "ImportSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "isArray",
+            "range": [
+              35,
+              42
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 35
+              },
+              "end": {
+                "line": 1,
+                "column": 42
+              }
+            }
+          },
+          "imported": {
+            "type": "Identifier",
+            "name": "isArray",
+            "range": [
+              35,
+              42
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 35
+              },
+              "end": {
+                "line": 1,
+                "column": 42
+              }
+            }
+          },
+          "range": [
+            35,
+            42
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 35
+            },
+            "end": {
+              "line": 1,
+              "column": 42
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./types",
+        "raw": "'./types'",
+        "range": [
+          49,
+          58
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 49
+          },
+          "end": {
+            "line": 1,
+            "column": 58
+          }
+        }
+      },
+      "range": [
+        0,
+        59
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 59
+        }
+      },
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "* Configuration settings helpers  ",
+          "range": [
+            61,
+            99
+          ],
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 38
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of boolean type return the default value\n * otherwise return the value itself\n * @param  {Boolean|Any}  value\n * @param  {Boolean} default value\n * @return {Boolean|Any}\n ",
+          "range": [
+            101,
+            304
+          ],
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 0
+            },
+            "end": {
+              "line": 11,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "defaultsBool",
+              "range": [
+                318,
+                330
+              ],
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 13
+                },
+                "end": {
+                  "line": 12,
+                  "column": 25
+                }
+              }
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "id": null,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    338,
+                    341
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 13,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 8
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    343,
+                    353
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 13,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 20
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "ConditionalExpression",
+                "test": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "isBoolean",
+                    "range": [
+                      358,
+                      367
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 13,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 13,
+                        "column": 34
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "val",
+                      "range": [
+                        368,
+                        371
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 13,
+                          "column": 35
+                        },
+                        "end": {
+                          "line": 13,
+                          "column": 38
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    358,
+                    372
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 13,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 39
+                    }
+                  }
+                },
+                "consequent": {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    375,
+                    378
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 13,
+                      "column": 42
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 45
+                    }
+                  }
+                },
+                "alternate": {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    381,
+                    391
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 13,
+                      "column": 48
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 58
+                    }
+                  }
+                },
+                "range": [
+                  358,
+                  391
+                ],
+                "loc": {
+                  "start": {
+                    "line": 13,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 13,
+                    "column": 58
+                  }
+                }
+              },
+              "generator": false,
+              "expression": true,
+              "range": [
+                337,
+                391
+              ],
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 4
+                },
+                "end": {
+                  "line": 13,
+                  "column": 58
+                }
+              }
+            },
+            "range": [
+              318,
+              391
+            ],
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 13
+              },
+              "end": {
+                "line": 13,
+                "column": 58
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          312,
+          392
+        ],
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 7
+          },
+          "end": {
+            "line": 13,
+            "column": 59
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "* Configuration settings helpers  ",
+            "range": [
+              61,
+              99
+            ],
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 0
+              },
+              "end": {
+                "line": 3,
+                "column": 38
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * If passed value is not of boolean type return the default value\n * otherwise return the value itself\n * @param  {Boolean|Any}  value\n * @param  {Boolean} default value\n * @return {Boolean|Any}\n ",
+            "range": [
+              101,
+              304
+            ],
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 0
+              },
+              "end": {
+                "line": 11,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * If passed value is not of string type return the default value\n * otherwise return the value itself\n * @param  {String|Any}  value\n * @param  {String} default value\n * @return {String|Any}\n ",
+            "range": [
+              394,
+              593
+            ],
+            "loc": {
+              "start": {
+                "line": 15,
+                "column": 0
+              },
+              "end": {
+                "line": 21,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        305,
+        392
+      ],
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 0
+        },
+        "end": {
+          "line": 13,
+          "column": 59
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "* Configuration settings helpers  ",
+          "range": [
+            61,
+            99
+          ],
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 38
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of boolean type return the default value\n * otherwise return the value itself\n * @param  {Boolean|Any}  value\n * @param  {Boolean} default value\n * @return {Boolean|Any}\n ",
+          "range": [
+            101,
+            304
+          ],
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 0
+            },
+            "end": {
+              "line": 11,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of string type return the default value\n * otherwise return the value itself\n * @param  {String|Any}  value\n * @param  {String} default value\n * @return {String|Any}\n ",
+          "range": [
+            394,
+            593
+          ],
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 0
+            },
+            "end": {
+              "line": 21,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "defaultsStr",
+              "range": [
+                607,
+                618
+              ],
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 13
+                },
+                "end": {
+                  "line": 22,
+                  "column": 24
+                }
+              }
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "id": null,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    626,
+                    629
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 23,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 8
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    631,
+                    641
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 23,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 20
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "ConditionalExpression",
+                "test": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "isString",
+                    "range": [
+                      646,
+                      654
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 23,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 23,
+                        "column": 33
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "val",
+                      "range": [
+                        655,
+                        658
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 23,
+                          "column": 34
+                        },
+                        "end": {
+                          "line": 23,
+                          "column": 37
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    646,
+                    659
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 23,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 38
+                    }
+                  }
+                },
+                "consequent": {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    662,
+                    665
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 23,
+                      "column": 41
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 44
+                    }
+                  }
+                },
+                "alternate": {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    668,
+                    678
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 23,
+                      "column": 47
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 57
+                    }
+                  }
+                },
+                "range": [
+                  646,
+                  678
+                ],
+                "loc": {
+                  "start": {
+                    "line": 23,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 23,
+                    "column": 57
+                  }
+                }
+              },
+              "generator": false,
+              "expression": true,
+              "range": [
+                625,
+                678
+              ],
+              "loc": {
+                "start": {
+                  "line": 23,
+                  "column": 4
+                },
+                "end": {
+                  "line": 23,
+                  "column": 57
+                }
+              }
+            },
+            "range": [
+              607,
+              678
+            ],
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 13
+              },
+              "end": {
+                "line": 23,
+                "column": 57
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          601,
+          679
+        ],
+        "loc": {
+          "start": {
+            "line": 22,
+            "column": 7
+          },
+          "end": {
+            "line": 23,
+            "column": 58
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * If passed value is not of string type return the default value\n * otherwise return the value itself\n * @param  {String|Any}  value\n * @param  {String} default value\n * @return {String|Any}\n ",
+            "range": [
+              394,
+              593
+            ],
+            "loc": {
+              "start": {
+                "line": 15,
+                "column": 0
+              },
+              "end": {
+                "line": 21,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * If passed value is not of number type return the default value\n * otherwise return the value itself\n * @param  {Number|Any}  value\n * @param  {Number} default value\n * @return {Number|Any}\n ",
+            "range": [
+              681,
+              880
+            ],
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 0
+              },
+              "end": {
+                "line": 31,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        594,
+        679
+      ],
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 0
+        },
+        "end": {
+          "line": 23,
+          "column": 58
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of string type return the default value\n * otherwise return the value itself\n * @param  {String|Any}  value\n * @param  {String} default value\n * @return {String|Any}\n ",
+          "range": [
+            394,
+            593
+          ],
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 0
+            },
+            "end": {
+              "line": 21,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of number type return the default value\n * otherwise return the value itself\n * @param  {Number|Any}  value\n * @param  {Number} default value\n * @return {Number|Any}\n ",
+          "range": [
+            681,
+            880
+          ],
+          "loc": {
+            "start": {
+              "line": 25,
+              "column": 0
+            },
+            "end": {
+              "line": 31,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "defaultsNb",
+              "range": [
+                894,
+                904
+              ],
+              "loc": {
+                "start": {
+                  "line": 32,
+                  "column": 13
+                },
+                "end": {
+                  "line": 32,
+                  "column": 23
+                }
+              }
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "id": null,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    912,
+                    915
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 33,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 33,
+                      "column": 8
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    917,
+                    927
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 33,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 33,
+                      "column": 20
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "ConditionalExpression",
+                "test": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "isNaN",
+                    "range": [
+                      932,
+                      937
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 33,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 33,
+                        "column": 30
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "val",
+                      "range": [
+                        938,
+                        941
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 33,
+                          "column": 31
+                        },
+                        "end": {
+                          "line": 33,
+                          "column": 34
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    932,
+                    942
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 33,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 33,
+                      "column": 35
+                    }
+                  }
+                },
+                "consequent": {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    945,
+                    955
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 33,
+                      "column": 38
+                    },
+                    "end": {
+                      "line": 33,
+                      "column": 48
+                    }
+                  }
+                },
+                "alternate": {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    958,
+                    961
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 33,
+                      "column": 51
+                    },
+                    "end": {
+                      "line": 33,
+                      "column": 54
+                    }
+                  }
+                },
+                "range": [
+                  932,
+                  961
+                ],
+                "loc": {
+                  "start": {
+                    "line": 33,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 33,
+                    "column": 54
+                  }
+                }
+              },
+              "generator": false,
+              "expression": true,
+              "range": [
+                911,
+                961
+              ],
+              "loc": {
+                "start": {
+                  "line": 33,
+                  "column": 4
+                },
+                "end": {
+                  "line": 33,
+                  "column": 54
+                }
+              }
+            },
+            "range": [
+              894,
+              961
+            ],
+            "loc": {
+              "start": {
+                "line": 32,
+                "column": 13
+              },
+              "end": {
+                "line": 33,
+                "column": 54
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          888,
+          962
+        ],
+        "loc": {
+          "start": {
+            "line": 32,
+            "column": 7
+          },
+          "end": {
+            "line": 33,
+            "column": 55
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * If passed value is not of number type return the default value\n * otherwise return the value itself\n * @param  {Number|Any}  value\n * @param  {Number} default value\n * @return {Number|Any}\n ",
+            "range": [
+              681,
+              880
+            ],
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 0
+              },
+              "end": {
+                "line": 31,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * If passed value is not of array type return the default value\n * otherwise return the value itself\n * @param  {Array|Any}  value\n * @param  {Array} default value\n * @return {Array|Any}\n ",
+            "range": [
+              964,
+              1159
+            ],
+            "loc": {
+              "start": {
+                "line": 35,
+                "column": 0
+              },
+              "end": {
+                "line": 41,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        881,
+        962
+      ],
+      "loc": {
+        "start": {
+          "line": 32,
+          "column": 0
+        },
+        "end": {
+          "line": 33,
+          "column": 55
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of number type return the default value\n * otherwise return the value itself\n * @param  {Number|Any}  value\n * @param  {Number} default value\n * @return {Number|Any}\n ",
+          "range": [
+            681,
+            880
+          ],
+          "loc": {
+            "start": {
+              "line": 25,
+              "column": 0
+            },
+            "end": {
+              "line": 31,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of array type return the default value\n * otherwise return the value itself\n * @param  {Array|Any}  value\n * @param  {Array} default value\n * @return {Array|Any}\n ",
+          "range": [
+            964,
+            1159
+          ],
+          "loc": {
+            "start": {
+              "line": 35,
+              "column": 0
+            },
+            "end": {
+              "line": 41,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "defaultsArr",
+              "range": [
+                1173,
+                1184
+              ],
+              "loc": {
+                "start": {
+                  "line": 42,
+                  "column": 13
+                },
+                "end": {
+                  "line": 42,
+                  "column": 24
+                }
+              }
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "id": null,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    1192,
+                    1195
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 43,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 43,
+                      "column": 8
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    1197,
+                    1207
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 43,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 43,
+                      "column": 20
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "ConditionalExpression",
+                "test": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "isArray",
+                    "range": [
+                      1212,
+                      1219
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 43,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 43,
+                        "column": 32
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "val",
+                      "range": [
+                        1220,
+                        1223
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 43,
+                          "column": 33
+                        },
+                        "end": {
+                          "line": 43,
+                          "column": 36
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    1212,
+                    1224
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 43,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 43,
+                      "column": 37
+                    }
+                  }
+                },
+                "consequent": {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    1227,
+                    1230
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 43,
+                      "column": 40
+                    },
+                    "end": {
+                      "line": 43,
+                      "column": 43
+                    }
+                  }
+                },
+                "alternate": {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    1233,
+                    1243
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 43,
+                      "column": 46
+                    },
+                    "end": {
+                      "line": 43,
+                      "column": 56
+                    }
+                  }
+                },
+                "range": [
+                  1212,
+                  1243
+                ],
+                "loc": {
+                  "start": {
+                    "line": 43,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 43,
+                    "column": 56
+                  }
+                }
+              },
+              "generator": false,
+              "expression": true,
+              "range": [
+                1191,
+                1243
+              ],
+              "loc": {
+                "start": {
+                  "line": 43,
+                  "column": 4
+                },
+                "end": {
+                  "line": 43,
+                  "column": 56
+                }
+              }
+            },
+            "range": [
+              1173,
+              1243
+            ],
+            "loc": {
+              "start": {
+                "line": 42,
+                "column": 13
+              },
+              "end": {
+                "line": 43,
+                "column": 56
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          1167,
+          1244
+        ],
+        "loc": {
+          "start": {
+            "line": 42,
+            "column": 7
+          },
+          "end": {
+            "line": 43,
+            "column": 57
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * If passed value is not of array type return the default value\n * otherwise return the value itself\n * @param  {Array|Any}  value\n * @param  {Array} default value\n * @return {Array|Any}\n ",
+            "range": [
+              964,
+              1159
+            ],
+            "loc": {
+              "start": {
+                "line": 35,
+                "column": 0
+              },
+              "end": {
+                "line": 41,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * If passed value is not of function type return the default value\n * otherwise return the value itself\n * @param  {Function|Any}  value\n * @param  {Function} default value\n * @return {Function|Any}\n ",
+            "range": [
+              1246,
+              1453
+            ],
+            "loc": {
+              "start": {
+                "line": 45,
+                "column": 0
+              },
+              "end": {
+                "line": 51,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        1160,
+        1244
+      ],
+      "loc": {
+        "start": {
+          "line": 42,
+          "column": 0
+        },
+        "end": {
+          "line": 43,
+          "column": 57
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of array type return the default value\n * otherwise return the value itself\n * @param  {Array|Any}  value\n * @param  {Array} default value\n * @return {Array|Any}\n ",
+          "range": [
+            964,
+            1159
+          ],
+          "loc": {
+            "start": {
+              "line": 35,
+              "column": 0
+            },
+            "end": {
+              "line": 41,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of function type return the default value\n * otherwise return the value itself\n * @param  {Function|Any}  value\n * @param  {Function} default value\n * @return {Function|Any}\n ",
+          "range": [
+            1246,
+            1453
+          ],
+          "loc": {
+            "start": {
+              "line": 45,
+              "column": 0
+            },
+            "end": {
+              "line": 51,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "defaultsFn",
+              "range": [
+                1467,
+                1477
+              ],
+              "loc": {
+                "start": {
+                  "line": 52,
+                  "column": 13
+                },
+                "end": {
+                  "line": 52,
+                  "column": 23
+                }
+              }
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "id": null,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    1485,
+                    1488
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 53,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 53,
+                      "column": 8
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    1490,
+                    1500
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 53,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 53,
+                      "column": 20
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "ConditionalExpression",
+                "test": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "isFn",
+                    "range": [
+                      1505,
+                      1509
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 53,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 53,
+                        "column": 29
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "val",
+                      "range": [
+                        1510,
+                        1513
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 53,
+                          "column": 30
+                        },
+                        "end": {
+                          "line": 53,
+                          "column": 33
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    1505,
+                    1514
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 53,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 53,
+                      "column": 34
+                    }
+                  }
+                },
+                "consequent": {
+                  "type": "Identifier",
+                  "name": "val",
+                  "range": [
+                    1517,
+                    1520
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 53,
+                      "column": 37
+                    },
+                    "end": {
+                      "line": 53,
+                      "column": 40
+                    }
+                  }
+                },
+                "alternate": {
+                  "type": "Identifier",
+                  "name": "defaultVal",
+                  "range": [
+                    1523,
+                    1533
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 53,
+                      "column": 43
+                    },
+                    "end": {
+                      "line": 53,
+                      "column": 53
+                    }
+                  }
+                },
+                "range": [
+                  1505,
+                  1533
+                ],
+                "loc": {
+                  "start": {
+                    "line": 53,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 53,
+                    "column": 53
+                  }
+                }
+              },
+              "generator": false,
+              "expression": true,
+              "range": [
+                1484,
+                1533
+              ],
+              "loc": {
+                "start": {
+                  "line": 53,
+                  "column": 4
+                },
+                "end": {
+                  "line": 53,
+                  "column": 53
+                }
+              }
+            },
+            "range": [
+              1467,
+              1533
+            ],
+            "loc": {
+              "start": {
+                "line": 52,
+                "column": 13
+              },
+              "end": {
+                "line": 53,
+                "column": 53
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          1461,
+          1534
+        ],
+        "loc": {
+          "start": {
+            "line": 52,
+            "column": 7
+          },
+          "end": {
+            "line": 53,
+            "column": 54
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * If passed value is not of function type return the default value\n * otherwise return the value itself\n * @param  {Function|Any}  value\n * @param  {Function} default value\n * @return {Function|Any}\n ",
+            "range": [
+              1246,
+              1453
+            ],
+            "loc": {
+              "start": {
+                "line": 45,
+                "column": 0
+              },
+              "end": {
+                "line": 51,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": []
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        1454,
+        1534
+      ],
+      "loc": {
+        "start": {
+          "line": 52,
+          "column": 0
+        },
+        "end": {
+          "line": 53,
+          "column": 54
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * If passed value is not of function type return the default value\n * otherwise return the value itself\n * @param  {Function|Any}  value\n * @param  {Function} default value\n * @return {Function|Any}\n ",
+          "range": [
+            1246,
+            1453
+          ],
+          "loc": {
+            "start": {
+              "line": 45,
+              "column": 0
+            },
+            "end": {
+              "line": 51,
+              "column": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    0,
+    1534
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 53,
+      "column": 54
+    }
+  },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "* Configuration settings helpers  ",
+      "range": [
+        61,
+        99
+      ],
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 38
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * If passed value is not of boolean type return the default value\n * otherwise return the value itself\n * @param  {Boolean|Any}  value\n * @param  {Boolean} default value\n * @return {Boolean|Any}\n ",
+      "range": [
+        101,
+        304
+      ],
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * If passed value is not of string type return the default value\n * otherwise return the value itself\n * @param  {String|Any}  value\n * @param  {String} default value\n * @return {String|Any}\n ",
+      "range": [
+        394,
+        593
+      ],
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 0
+        },
+        "end": {
+          "line": 21,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * If passed value is not of number type return the default value\n * otherwise return the value itself\n * @param  {Number|Any}  value\n * @param  {Number} default value\n * @return {Number|Any}\n ",
+      "range": [
+        681,
+        880
+      ],
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 0
+        },
+        "end": {
+          "line": 31,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * If passed value is not of array type return the default value\n * otherwise return the value itself\n * @param  {Array|Any}  value\n * @param  {Array} default value\n * @return {Array|Any}\n ",
+      "range": [
+        964,
+        1159
+      ],
+      "loc": {
+        "start": {
+          "line": 35,
+          "column": 0
+        },
+        "end": {
+          "line": 41,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * If passed value is not of function type return the default value\n * otherwise return the value itself\n * @param  {Function|Any}  value\n * @param  {Function} default value\n * @return {Function|Any}\n ",
+      "range": [
+        1246,
+        1453
+      ],
+      "loc": {
+        "start": {
+          "line": 45,
+          "column": 0
+        },
+        "end": {
+          "line": 51,
+          "column": 3
+        }
+      }
+    }
+  ]
+}
