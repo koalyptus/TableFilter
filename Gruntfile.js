@@ -233,7 +233,6 @@ module.exports = function (grunt) {
             },
             'publish-lib': {
                 options: {
-                    add: false,
                     base: 'dist',
                     repo: 'https://' + repo,
                     message: 'publish TableFilter lib to gh-pages (cli)'
@@ -261,7 +260,6 @@ module.exports = function (grunt) {
                     user: {
                         name: 'koalyptus'
                     },
-                    add: false,
                     base: 'dist',
                     repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
                     message: 'publish TableFilter to gh-pages (auto)' +
