@@ -6,8 +6,7 @@ var tf = new TableFilter('demo', {
     col_2: 'multiple',
     col_3: 'select',
     col_4: 'none',
-    popup_filters: true,
-    filters_row_index: 1
+    popup_filters: true
 });
 tf.init();
 
