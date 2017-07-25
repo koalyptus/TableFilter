@@ -6,7 +6,8 @@ var tf = new TableFilter('demo', {
     col_2: 'multiple',
     col_3: 'select',
     col_4: 'none',
-    popup_filters: true
+    popup_filters: true,
+    filters_row_index: 1
 });
 tf.init();
 
@@ -332,6 +333,46 @@ test('Properties', function() {
     deepEqual(typeof popupFilter.disable, 'function', 'Feature enable method');
     deepEqual(typeof popupFilter.isEnabled,
         'function', 'Feature enable method');
+});
+
+module('Overrides');
+test('Configuration settings overrides', function() {
+    // setup
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        popup_filters: true,
+        filters_row_index: 1
+    });
+
+    // assert
+    deepEqual(tf.filtersRowIndex, 1, 'Filters row index config setting value');
+    deepEqual(
+        tf.externalFltTgtIds,
+        [],
+        'External filters container ids config setting value'
+    );
+    deepEqual(tf.headersRow, 0, 'Headers row index config setting value');
+
+    test('Overrides after init', function() {
+        // act
+        tf.init();
+
+        // assert
+        deepEqual(tf.filtersRowIndex, 0, 'Filters row index override');
+        deepEqual(
+            tf.externalFltTgtIds,
+            [
+                'popup_demo_0',
+                'popup_demo_1',
+                'popup_demo_2',
+                'popup_demo_3',
+                'popup_demo_4'
+            ],
+            'External filters container ids config setting value'
+        );
+        deepEqual(tf.headersRow, 1, 'Headers row index override');
+    });
 });
 
 module('Tear-down');
