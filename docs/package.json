@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.5.32",
+  "version": "0.5.33",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -65,7 +65,7 @@
     "script-loader": "^0.7.0",
     "string-replace-webpack-plugin": "^0.1.3",
     "sugar-date": "2.0.4",
-    "webpack": "^3.4.0",
+    "webpack": "^3.0.0",
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {},
