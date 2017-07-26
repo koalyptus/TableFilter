@@ -392,6 +392,16 @@ test('Can select checklist options with array', function() {
         'Column 2 filter values');
 });
 
+test('get and set filter value can handle out of range column index',
+    function() {
+        // act
+        tf.setFilterValue(11, '');
+
+        // assert
+        deepEqual(tf.getFilterValue(11), '',
+            'return empty string for inexistent filter');
+    });
+
 module('TableFilter with pop-up filters');
 test('Sanity checks', function() {
     tf.destroy();

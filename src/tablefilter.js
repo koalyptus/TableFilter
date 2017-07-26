@@ -2602,6 +2602,10 @@ export class TableFilter {
         let slc = this.getFilterElement(index),
             fltColType = this.getFilterType(index);
 
+        if (!slc) {
+            return;
+        }
+
         if (fltColType !== MULTIPLE && fltColType !== CHECKLIST) {
             if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-select-filter', this, index,
