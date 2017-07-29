@@ -154,7 +154,7 @@ test('Sanity checks', function() {
             'No results message displayed');
         deepEqual(
             parseInt(noResultsGl.cont.style.width, 10),
-            gridLayout.tblCont.clientWidth,
+            gridLayout.headTbl.clientWidth,
             'Container element width'
         );
     });
