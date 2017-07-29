@@ -8800,7 +8800,7 @@
                                     },
                                     "property": {
                                       "type": "Identifier",
-                                      "name": "tblCont",
+                                      "name": "headTbl",
                                       "range": [
                                         4242,
                                         4249
