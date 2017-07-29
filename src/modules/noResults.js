@@ -169,7 +169,7 @@ export class NoResults extends Feature {
         let tf = this.tf;
         if (tf.gridLayout) {
             let gridLayout = tf.feature('gridLayout');
-            this.cont.style.width = gridLayout.tblCont.clientWidth + 'px';
+            this.cont.style.width = gridLayout.headTbl.clientWidth + 'px';
         } else {
             this.cont.style.width = (tf.dom().tHead ?
                 tf.dom().tHead.clientWidth :
