@@ -90,6 +90,52 @@
         tf1.import = importFile;
     });
 
+    test('Disable icons', function() {
+        // setup
+        tf1.destroy();
+        tf1 = new TableFilter(
+            document.querySelector('.test'),
+            {
+                base_path: '../dist/tablefilter/',
+                btn: true,
+                enable_icons: false
+            }
+        );
+
+        // act
+        tf1.init();
+
+        // assert
+        deepEqual(
+            document.querySelector('.' + tf1.btnCssClass).value,
+            'Go',
+            'Filter button text'
+        );
+    });
+
+    test('Defaults to flt_css_class if no filter class defined', function() {
+        // setup
+        tf1.destroy();
+        tf1 = new TableFilter(
+            document.querySelector('.test'),
+            {
+                base_path: '../dist/tablefilter/',
+                btn: true
+            }
+        );
+
+        // act
+        tf1.fltSmallCssClass = null;
+        tf1.init();
+
+        // assert
+        deepEqual(
+            tf1.getFilterElement(4).className,
+            'flt',
+            'Default css class for filter'
+        );
+    });
+
     module('Tear-down');
     test('can destroy TableFilter DOM elements', function() {
         tf.destroy();

@@ -67,15 +67,37 @@
         );
     });
 
+    test('Watermarks per column with null or undefined values', function() {
+        tf.destroy();
+        tf = new TableFilter('demo', {
+            base_path: '../dist/tablefilter/',
+            watermark: ['City', undefined, 'Distance', null, 'Time']
+        });
+        tf.init();
+
+        deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
+        deepEqual(tf.isWatermarkArray, true, 'Type: watermark array');
+        deepEqual(
+            tf.watermark,
+            ['City', undefined, 'Distance', null, 'Time'],
+            'Property value'
+        );
+        deepEqual(
+            tf.getFilterElement(1).placeholder,
+            '',
+            'Defaults to empty string with undefined'
+        );
+        deepEqual(
+            tf.getFilterElement(3).placeholder,
+            '',
+            'Defaults to empty string with null'
+        );
+    });
+
     module('Tear-down');
     test('TableFilter removed', function() {
         tf.destroy();
         deepEqual(tf.isInitialized(), false, 'Filters removed');
-        deepEqual(
-            tf.watermark,
-            ['City', 'City', 'Distance', 'Time', 'Time'],
-            'Property value'
-        );
     });
 
 })(window, TableFilter);
