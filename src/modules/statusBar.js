@@ -1,7 +1,8 @@
 import {Feature} from '../feature';
 import {root} from '../root';
 import {createElm, createText, elm, removeElm} from '../dom';
-import {isFn, EMPTY_FN} from '../types';
+import {EMPTY_FN} from '../types';
+import {defaultsStr, defaultsFn} from '../settings';
 
 const EVENTS = [
     'after-filtering',
@@ -31,13 +32,13 @@ export class StatusBar extends Feature {
         super(tf, 'statusBar');
 
         // Configuration object
-        let f = this.config;
+        let f = this.config.status_bar || {};
 
         /**
          * ID of custom container element
          * @type {String}
          */
-        this.targetId = f.status_bar_target_id || null;
+        this.targetId = defaultsStr(f.target_id, null);
 
         /**
          * Container DOM element
@@ -64,13 +65,13 @@ export class StatusBar extends Feature {
          * Text preceding status message
          * @type {String}
          */
-        this.text = f.status_bar_text || '';
+        this.text = defaultsStr(f.text, '');
 
         /**
          * Css class for container element
          * @type {String}
          */
-        this.cssClass = f.status_bar_css_class || 'status';
+        this.cssClass = defaultsStr(f.css_class, 'status');
 
         /**
          * Message visibility duration in milliseconds
@@ -83,85 +84,85 @@ export class StatusBar extends Feature {
          * Callback fired before the message is displayed
          * @type {Function}
          */
-        this.onBeforeShowMsg = isFn(f.on_before_show_msg) ?
-            f.on_before_show_msg : EMPTY_FN;
+        this.onBeforeShowMsg = defaultsFn(f.on_before_show_msg, EMPTY_FN);
 
         /**
          * Callback fired after the message is displayed
          * @type {Function}
          */
-        this.onAfterShowMsg = isFn(f.on_after_show_msg) ?
-            f.on_after_show_msg : EMPTY_FN;
+        this.onAfterShowMsg = defaultsFn(f.on_after_show_msg, EMPTY_FN);
 
         /**
          * Message appearing upon filtering
          * @type {String}
          */
-        this.msgFilter = f.msg_filter || 'Filtering data...';
+        this.msgFilter = defaultsStr(f.msg_filter, 'Filtering data...');
 
         /**
          * Message appearing when a drop-down filter is populated
          * @type {String}
          */
-        this.msgPopulate = f.msg_populate || 'Populating filter...';
+        this.msgPopulate = defaultsStr(f.msg_populate, 'Populating filter...');
 
         /**
          * Message appearing when a checklist filter is populated
          * @type {String}
          */
-        this.msgPopulateCheckList = f.msg_populate_checklist ||
-            'Populating list...';
+        this.msgPopulateCheckList = defaultsStr(f.msg_populate_checklist,
+            'Populating list...');
 
         /**
          * Message appearing when a pagination page is changed
          * @type {String}
          */
-        this.msgChangePage = f.msg_change_page || 'Collecting paging data...';
+        this.msgChangePage = defaultsStr(f.msg_change_page,
+            'Collecting paging data...');
 
         /**
          * Message appearing when filters are cleared
          * @type {String}
          */
-        this.msgClear = f.msg_clear || 'Clearing filters...';
+        this.msgClear = defaultsStr(f.msg_clear, 'Clearing filters...');
 
         /**
          * Message appearing when the page length is changed
          * @type {String}
          */
-        this.msgChangeResults = f.msg_change_results ||
-            'Changing results per page...';
+        this.msgChangeResults = defaultsStr(f.msg_change_results,
+            'Changing results per page...');
 
         /**
          * Message appearing when the page is re-set
          * @type {String}
          */
-        this.msgResetPage = f.msg_reset_page || 'Re-setting page...';
+        this.msgResetPage = defaultsStr(f.msg_reset_page, 'Re-setting page...');
 
         /**
          * Message appearing when the page length is re-set
          * @type {String}
          */
-        this.msgResetPageLength = f.msg_reset_page_length ||
-            'Re-setting page length...';
+        this.msgResetPageLength = defaultsStr(f.msg_reset_page_length,
+            'Re-setting page length...');
 
         /**
          * Message appearing upon column sorting
          * @type {String}
          */
-        this.msgSort = f.msg_sort || 'Sorting data...';
+        this.msgSort = defaultsStr(f.msg_sort, 'Sorting data...');
 
         /**
          * Message appearing when extensions are loading
          * @type {String}
          */
-        this.msgLoadExtensions = f.msg_load_extensions ||
-            'Loading extensions...';
+        this.msgLoadExtensions = defaultsStr(f.msg_load_extensions,
+            'Loading extensions...');
 
         /**
          * Message appearing when themes are loading
          * @type {String}
          */
-        this.msgLoadThemes = f.msg_load_themes || 'Loading theme(s)...';
+        this.msgLoadThemes = defaultsStr(f.msg_load_themes,
+            'Loading theme(s)...');
     }
 
     /**

@@ -1,5 +1,5 @@
 import {Feature} from '../../feature';
-import {isArray, isFn, isUndef, isObj, EMPTY_FN} from '../../types';
+import {isUndef, isObj, EMPTY_FN} from '../../types';
 import {createElm, elm, getText, tag} from '../../dom';
 import {addEvt} from '../../event';
 import {parse as parseNb} from '../../number';
@@ -7,6 +7,7 @@ import {
     NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, DATE, FORMATTED_NUMBER,
     IP_ADDRESS
 } from '../../const';
+import {defaultsStr, defaultsFn, defaultsArr} from '../../settings';
 
 /**
  * SortableTable Adapter module
@@ -31,7 +32,7 @@ export default class AdapterSortableTable extends Feature {
          * Module description
          * @type {String}
          */
-        this.desc = opts.description || 'Sortable table';
+        this.desc = defaultsStr(opts.description, 'Sortable table');
 
         /**
          * Indicate whether table previously sorted
@@ -44,15 +45,14 @@ export default class AdapterSortableTable extends Feature {
          * List of sort type per column basis
          * @type {Array}
          */
-        this.sortTypes = isArray(opts.types) ? opts.types : tf.colTypes;
+        this.sortTypes = defaultsArr(opts.types, tf.colTypes);
 
         /**
          * Column to be sorted at initialization, ie:
          * sort_col_at_start: [1, true]
          * @type {Array}
          */
-        this.sortColAtStart = isArray(opts.sort_col_at_start) ?
-            opts.sort_col_at_start : null;
+        this.sortColAtStart = defaultsArr(opts.sort_col_at_start, null);
 
         /**
          * Enable asynchronous sort, if triggers are external
@@ -64,7 +64,7 @@ export default class AdapterSortableTable extends Feature {
          * List of element IDs triggering sort on a per column basis
          * @type {Array}
          */
-        this.triggerIds = isArray(opts.trigger_ids) ? opts.trigger_ids : [];
+        this.triggerIds = defaultsArr(opts.trigger_ids, []);
 
         // edit .sort-arrow.descending / .sort-arrow.ascending in
         // tablefilter.css to reflect any path change
@@ -72,58 +72,57 @@ export default class AdapterSortableTable extends Feature {
          * Path to images
          * @type {String}
          */
-        this.imgPath = opts.images_path || tf.themesPath;
+        this.imgPath = defaultsStr(opts.images_path, tf.themesPath);
 
         /**
          * Blank image file name
          * @type {String}
          */
-        this.imgBlank = opts.image_blank || 'blank.png';
+        this.imgBlank = defaultsStr(opts.image_blank, 'blank.png');
 
         /**
          * Css class for sort indicator image
          * @type {String}
          */
-        this.imgClassName = opts.image_class_name || 'sort-arrow';
+        this.imgClassName = defaultsStr(opts.image_class_name, 'sort-arrow');
 
         /**
          * Css class for ascending sort indicator image
          * @type {String}
          */
-        this.imgAscClassName = opts.image_asc_class_name || 'ascending';
+        this.imgAscClassName = defaultsStr(opts.image_asc_class_name,
+            'ascending');
 
         /**
          * Css class for descending sort indicator image
          * @type {String}
          */
-        this.imgDescClassName = opts.image_desc_class_name || 'descending';
+        this.imgDescClassName = defaultsStr(opts.image_desc_class_name,
+            'descending');
 
         /**
          * Cell attribute key storing custom value used for sorting
          * @type {String}
          */
-        this.customKey = opts.custom_key || 'data-tf-sortKey';
+        this.customKey = defaultsStr(opts.custom_key, 'data-tf-sortKey');
 
         /**
          * Callback fired when sort extension is instanciated
          * @type {Function}
          */
-        this.onSortLoaded = isFn(opts.on_sort_loaded) ?
-            opts.on_sort_loaded : EMPTY_FN;
+        this.onSortLoaded = defaultsFn(opts.on_sort_loaded, EMPTY_FN);
 
         /**
          * Callback fired before a table column is sorted
          * @type {Function}
          */
-        this.onBeforeSort = isFn(opts.on_before_sort) ?
-            opts.on_before_sort : EMPTY_FN;
+        this.onBeforeSort = defaultsFn(opts.on_before_sort, EMPTY_FN);
 
         /**
          * Callback fired after a table column is sorted
          * @type {Function}
          */
-        this.onAfterSort = isFn(opts.on_after_sort) ?
-            opts.on_after_sort : EMPTY_FN;
+        this.onAfterSort = defaultsFn(opts.on_after_sort, EMPTY_FN);
 
         /**
          * SortableTable instance
@@ -430,7 +429,7 @@ export default class AdapterSortableTable extends Feature {
         this.addSortType(STRING);
         this.addSortType(IP_ADDRESS, ipAddress, sortIP);
 
-        this.stt = new SortableTable(tf.tbl, _sortTypes);
+        this.stt = new SortableTable(tf.dom(), _sortTypes);
 
         /*** external table headers adapter ***/
         if (this.asyncSort && this.triggerIds.length > 0) {

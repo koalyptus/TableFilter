@@ -282,6 +282,24 @@
         deepEqual(tf.getValidRows().length, 8, 'Expected rows');
     });
 
+    module('Locale helpers');
+    test('Can get decimal separator for given column from config', function() {
+        // act
+        var result = tf.getDecimal(3);
+
+        // assert
+        deepEqual(result, ',', 'Decimal separator for given column');
+    });
+
+    test('Can get decimal separator for given column from global setting',
+        function() {
+            // act
+            var result = tf.getDecimal(1);
+
+            // assert
+            deepEqual(result, '.', 'Decimal separator for given column');
+        });
+
     module('Tear-down');
     test('can destroy TableFilter DOM elements', function() {
         tf.destroy();

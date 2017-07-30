@@ -7,8 +7,9 @@ var tf = new TableFilter('demo', {
         page_number: true,
         page_length: true
     },
-    paging: true,
-    results_per_page: ['Records: ', [2, 4, 6]],
+    paging: {
+        results_per_page: ['Records: ', [2, 4, 6]]
+    }
 });
 tf.init();
 var state = tf.feature('state');
@@ -46,7 +47,7 @@ test('Can parse a URL hash', function() {
     // URL-encoded version of:
     //    #{"page":2,"page_length":4,"col_2":{"flt":">500"}}
     var hashStr = '#%7B%22page%22%3A2%2C%22page_length%22%3A4'+
-            '%2C%22col_2%22%3A%7B%22flt%22%3A%22%3E500%22%7D%7D'
+            '%2C%22col_2%22%3A%7B%22flt%22%3A%22%3E500%22%7D%7D';
     // act
     var result = hash.parse(hashStr);
 

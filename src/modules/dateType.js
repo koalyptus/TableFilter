@@ -95,6 +95,16 @@ export class DateType extends Feature {
     }
 
     /**
+     * Return the locale code for supplied column index as per configuration
+     * or global setting
+     * @param {Number} colIndex Column index
+     * @returns {String} Locale code (ie: 'en-us')
+     */
+    getLocale(colIndex) {
+        return this.getOptions(colIndex).locale || this.locale;
+    }
+
+    /**
      * Add date time format(s) to a locale as specified by the passed
      * collection of column types, ie:
      *  [

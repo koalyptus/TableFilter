@@ -136,6 +136,22 @@ test('Can add date formats from config', function() {
     );
 });
 
+test('Can get locale for a column index retrieved from config', function() {
+    // act
+    var result = dateType.getLocale(6);
+
+    // assert
+    deepEqual(result, 'fr', 'Locale for given column');
+});
+
+test('Can get locale for a column index from global setting', function() {
+    // act
+    var result = dateType.getLocale(1);
+
+    // assert
+    deepEqual(result, 'en', 'Locale for given column');
+});
+
 module('Tear-down');
 test('can destroy TableFilter DOM elements', function() {
     tf.destroy();

@@ -1,6 +1,7 @@
 import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
 import {addEvt} from '../event';
+import {defaultsStr} from '../settings';
 
 /**
  * Clear button UI component
@@ -20,7 +21,7 @@ export class ClearButton extends Feature {
          * Container element ID
          * @type {String}
          */
-        this.targetId = f.btn_reset_target_id || null;
+        this.targetId = defaultsStr(f.btn_reset_target_id, null);
 
         /**
          * Clear button container element
@@ -40,13 +41,13 @@ export class ClearButton extends Feature {
          * Text for the clear button
          * @type {String}
          */
-        this.text = f.btn_reset_text || 'Reset';
+        this.text = defaultsStr(f.btn_reset_text, 'Reset');
 
         /**
          * Css class for reset button
          * @type {String}
          */
-        this.cssClass = f.btn_reset_css_class || 'reset';
+        this.cssClass = defaultsStr(f.btn_reset_css_class, 'reset');
 
         /**
          * Tooltip text for the clear button
@@ -58,10 +59,10 @@ export class ClearButton extends Feature {
          * Custom Html string for the clear button
          * @type {String}
          */
-        this.html = f.btn_reset_html ||
+        this.html = defaultsStr(f.btn_reset_html,
             (!tf.enableIcons ? null :
                 '<input type="button" value="" class="' + this.cssClass +
-                '" ' + 'title="' + this.tooltip + '" />');
+                '" ' + 'title="' + this.tooltip + '" />'));
     }
 
     /**

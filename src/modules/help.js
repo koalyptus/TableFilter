@@ -3,6 +3,8 @@ import {createElm, createText, elm, removeElm} from '../dom';
 import {addEvt, targetEvt, removeEvt} from '../event';
 import {NONE} from '../const';
 import {root} from '../root';
+import {isEmpty} from '../types';
+import {defaultsStr} from '../settings';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
     '4.-Filter-operators';
@@ -20,27 +22,25 @@ export class Help extends Feature {
     constructor(tf) {
         super(tf, 'help');
 
-        let f = this.config;
+        let f = this.config.help_instructions || {};
 
         /**
          * ID of main custom container element
          * @type {String}
          */
-        this.tgtId = f.help_instructions_target_id || null;
+        this.tgtId = defaultsStr(f.target_id, null);
 
         /**
          * ID of custom container element for instructions
          * @type {String}
          */
-        this.contTgtId = f.help_instructions_container_target_id ||
-            null;
+        this.contTgtId = defaultsStr(f.container_target_id, null);
 
         /**
          * Instructions text (accepts HTML)
          * @type {String}
          */
-        this.instrText = f.help_instructions_text ?
-            f.help_instructions_text :
+        this.instrText = !isEmpty(f.text) ? f.text :
             'Use the filters above each column to filter and limit table ' +
             'data. Advanced searches can be performed by using the following ' +
             'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
@@ -53,32 +53,31 @@ export class Help extends Feature {
          * Instructions HTML
          * @type {String}
          */
-        this.instrHtml = f.help_instructions_html || null;
+        this.instrHtml = defaultsStr(f.html, null);
 
         /**
          * Help button text ('?')
          * @type {String}
          */
-        this.btnText = f.help_instructions_btn_text || '?';
+        this.btnText = defaultsStr(f.btn_text, '?');
 
         /**
          * Custom help button HTML
          * @type {String}
          */
-        this.btnHtml = f.help_instructions_btn_html || null;
+        this.btnHtml = defaultsStr(f.btn_html, null);
 
         /**
          * Css class for help button
          * @type {String}
          */
-        this.btnCssClass = f.help_instructions_btn_css_class || 'helpBtn';
+        this.btnCssClass = defaultsStr(f.btn_css_class, 'helpBtn');
 
         /**
          * Css class for help container element
          * @type {String}
          */
-        this.contCssClass = f.help_instructions_container_css_class ||
-            'helpCont';
+        this.contCssClass = defaultsStr(f.container_css_class, 'helpCont');
 
         /**
          * Button DOM element
@@ -193,9 +192,9 @@ export class Help extends Feature {
      * Toggle help pop-up
      */
     toggle() {
-        // check only if explicitily set to false as in this case undefined
+        // check only if explicitily disabled as in this case undefined
         // signifies the help feature is enabled by default
-        if (this.enabled === false) {
+        if (!this.isEnabled()) {
             return;
         }
 
@@ -225,7 +224,6 @@ export class Help extends Feature {
         this.cont = null;
 
         this.boundMouseup = null;
-
         this.initialized = false;
     }
 

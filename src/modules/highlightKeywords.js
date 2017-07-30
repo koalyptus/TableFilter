@@ -1,6 +1,7 @@
 import {createText, createElm, getText} from '../dom';
 import {isArray} from '../types';
 import {rgxEsc} from '../string';
+import {defaultsStr} from '../settings';
 
 /**
  * Highlight matched keywords upon filtering
@@ -21,7 +22,7 @@ export class HighlightKeyword {
          * Css class for highlighted term
          * @type {String}
          */
-        this.highlightCssClass = f.highlight_css_class || 'keyword';
+        this.highlightCssClass = defaultsStr(f.highlight_css_class, 'keyword');
 
         /**
          * TableFilter instance
@@ -99,7 +100,7 @@ export class HighlightKeyword {
      * @param  {String} cssClass Css class to remove
      */
     unhighlight(term, cssClass) {
-        let highlightedNodes = this.tf.tbl.querySelectorAll(`.${cssClass}`);
+        let highlightedNodes = this.tf.dom().querySelectorAll(`.${cssClass}`);
         for (let i = 0; i < highlightedNodes.length; i++) {
             let n = highlightedNodes[i];
             let nodeVal = getText(n);

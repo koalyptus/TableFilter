@@ -1,6 +1,7 @@
 import {Feature} from '../../feature';
 import {tag} from '../../dom';
 import {INPUT} from '../../const';
+import {defaultsStr} from '../../settings';
 import {root} from '../../root';
 
 const INSTANTIATION_ERROR = `Failed to instantiate EditTable object.
@@ -26,13 +27,13 @@ export default class AdapterEzEditTable extends Feature {
          * Module description
          * @type {String}
          */
-        this.desc = cfg.description || 'ezEditTable adapter';
+        this.desc = defaultsStr(cfg.description, 'ezEditTable adapter');
 
         /**
          * Filename of ezEditTable library
          * @type {String}
          */
-        this.filename = cfg.filename || 'ezEditTable.js';
+        this.filename = defaultsStr(cfg.filename, 'ezEditTable.js');
 
         /**
          * Path to ezEditTable library
@@ -50,13 +51,15 @@ export default class AdapterEzEditTable extends Feature {
          * Path to ezEditTable stylesheet
          * @type {String}
          */
-        this.stylesheet = cfg.stylesheet || this.vendorPath + 'ezEditTable.css';
+        this.stylesheet = defaultsStr(cfg.stylesheet,
+            this.vendorPath + 'ezEditTable.css');
 
         /**
          * Name of ezEditTable stylesheet
          * @type {String}
          */
-        this.stylesheetName = cfg.stylesheet_name || 'ezEditTableCss';
+        this.stylesheetName = defaultsStr(cfg.stylesheet_name,
+            'ezEditTableCss');
 
         // Enable the ezEditTable's scroll into view behaviour if grid layout on
         cfg.scroll_into_view = cfg.scroll_into_view === false ?
@@ -117,7 +120,7 @@ export default class AdapterEzEditTable extends Feature {
         //start row for EditTable constructor needs to be calculated
         let startRow,
             cfg = this.cfg,
-            thead = tag(tf.tbl, 'thead');
+            thead = tag(tf.dom(), 'thead');
 
         //if thead exists and startRow not specified, startRow is calculated
         //automatically by EditTable
@@ -158,7 +161,7 @@ export default class AdapterEzEditTable extends Feature {
                         et.ClearSelections();
                         /* eslint-enable */
                         let cellIndex = selectedElm.cellIndex,
-                            row = tf.tbl.rows[nextRowIndex];
+                            row = tf.dom().rows[nextRowIndex];
                         if (et.defaultSelection === 'both') {
                             /* eslint-disable */
                             slc.SelectRowByIndex(nextRowIndex);
@@ -172,7 +175,7 @@ export default class AdapterEzEditTable extends Feature {
                     }
                     //Table is filtered
                     if (tf.validRowsIndex.length !== tf.getRowsNb()) {
-                        let r = tf.tbl.rows[nextRowIndex];
+                        let r = tf.dom().rows[nextRowIndex];
                         if (r) {
                             r.scrollIntoView(false);
                         }
@@ -208,7 +211,7 @@ export default class AdapterEzEditTable extends Feature {
                     paging = tf.feature('paging'),
                     //pgup/pgdown keys
                     d = keyCode === 34 || keyCode === 33 ?
-                        (paging && paging.pagingLength || et.nbRowsPerPage) :
+                        (paging && paging.pageLength || et.nbRowsPerPage) :
                         1;
 
                 //If next row is not valid, next valid filtered row needs to be
@@ -278,11 +281,11 @@ export default class AdapterEzEditTable extends Feature {
                     if (tf.feature('paging').nbPages > 1) {
                         let paging = tf.feature('paging');
                         //page length is re-assigned in case it has changed
-                        et.nbRowsPerPage = paging.pagingLength;
+                        et.nbRowsPerPage = paging.pageLength;
                         let validIndexes = tf.validRowsIndex,
                             validIdxLen = validIndexes.length,
                             pagingEndRow = parseInt(paging.startPagingRow, 10) +
-                                parseInt(paging.pagingLength, 10);
+                                parseInt(paging.pageLength, 10);
                         let rowIndex = row.rowIndex;
 
                         if ((rowIndex === validIndexes[validIdxLen - 1]) &&

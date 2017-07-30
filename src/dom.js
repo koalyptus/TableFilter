@@ -18,7 +18,7 @@ export const getText = (node) => {
         return trim(node.innerText);
     }
     return trim(node.textContent);
-}
+};
 
 /**
  * Returns the first text node contained in the supplied node
@@ -32,7 +32,7 @@ export const getFirstTextNode = (node) => {
             return n.data;
         }
     }
-}
+};
 
 /**
  * Creates an html element with given collection of attributes
@@ -55,9 +55,8 @@ export const createElm = (...args) => {
             el.setAttribute(arg[0], arg[1]);
         }
     }
-
     return el;
-}
+};
 
 /**
  * Removes passed node from DOM
@@ -88,7 +87,7 @@ export const hasClass = (ele, cls) => {
         return ele.classList.contains(cls);
     }
     return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-}
+};
 
 /**
  * Adds the specified class to the passed element
@@ -111,7 +110,7 @@ export const addClass = (ele, cls) => {
     else if (!hasClass(ele, cls)) {
         ele.className += ' ' + cls;
     }
-}
+};
 
 /**
  * Removes the specified class to the passed element
@@ -129,7 +128,7 @@ export const removeClass = (ele, cls) => {
     }
     let reg = new RegExp('(\\s|^)' + cls + '(\\s|$)', 'g');
     ele.className = ele.className.replace(reg, '');
-}
+};
 
 /**
  * Creates and returns an option element
@@ -141,11 +140,11 @@ export const removeClass = (ele, cls) => {
 export const createOpt = (text, value, isSel) => {
     let isSelected = isSel ? true : false;
     let opt = isSelected ?
-            createElm('option', ['value', value], ['selected', 'true']) :
-            createElm('option', ['value', value]);
+        createElm('option', ['value', value], ['selected', 'true']) :
+        createElm('option', ['value', value]);
     opt.appendChild(createText(text));
     return opt;
-}
+};
 
 /**
  * Creates and returns a checklist item
@@ -169,7 +168,7 @@ export const createCheckItem = (id, chkValue, labelText) => {
     li.label = label;
     li.check = check;
     return li;
-}
+};
 
 /**
  * Returns the element matching the supplied Id

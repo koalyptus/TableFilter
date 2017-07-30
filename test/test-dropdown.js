@@ -41,7 +41,7 @@ test('Can refresh all drop-down filters', function() {
     tf.clearFilters();
     var build = dropdown.build;
     var hit = 0;
-    dropdown.build = function() { hit++ };
+    dropdown.build = function() { hit++; };
 
     //act
     dropdown.refreshAll();
@@ -95,6 +95,7 @@ test('Can sort options', function() {
         col_2: 'multiple',
         col_3: 'select',
         col_4: 'multiple',
+        col_types: ['string', 'string', 'number', 'number', 'number'],
         sort_num_asc: [2, 3],
         sort_num_desc: [4]
     });

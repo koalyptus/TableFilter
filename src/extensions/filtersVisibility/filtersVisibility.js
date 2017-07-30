@@ -1,7 +1,10 @@
 import {Feature} from '../../feature';
 import {createElm, removeElm, elm} from '../../dom';
-import {isFn, isUndef, EMPTY_FN} from '../../types';
+import {EMPTY_FN} from '../../types';
 import {addEvt} from '../../event';
+import {
+    defaultsBool, defaultsStr, defaultsFn, defaultsNb,
+} from '../../settings';
 
 /**
  * Filters Visibility extension
@@ -26,25 +29,26 @@ export default class FiltersVisibility extends Feature {
          * Module description
          * @type {String}
          */
-        this.desc = f.description || 'Filters row visibility manager';
+        this.desc = defaultsStr(f.description,
+            'Filters row visibility manager');
 
         /**
          * Extension's stylesheet filename
          * @type {String}
          */
-        this.stylesheet = f.stylesheet || 'filtersVisibility.css';
+        this.stylesheet = defaultsStr(f.stylesheet , 'filtersVisibility.css');
 
         /**
          * Expand icon filename
          * @type {String}
          */
-        this.icnExpand = f.expand_icon_name || 'icn_exp.png';
+        this.icnExpand = defaultsStr(f.expand_icon_name, 'icn_exp.png');
 
         /**
          * Collapse icon filename
          * @type {String}
          */
-        this.icnCollapse = f.collapse_icon_name || 'icn_clp.png';
+        this.icnCollapse = defaultsStr(f.collapse_icon_name, 'icn_clp.png');
 
         /**
          * Main container element
@@ -88,13 +92,13 @@ export default class FiltersVisibility extends Feature {
          * Enable expand/collapse icon, defaults to true
          * @type {Boolean}
          */
-        this.enableIcon = f.enable_icon === false ? false : true;
+        this.enableIcon = defaultsBool(f.enable_icon, true);
 
         /**
          * Custom text for button
          * @type {String}
          */
-        this.btnText = f.btn_text || '';
+        this.btnText = defaultsStr(f.btn_text, '');
 
         /**
          * Collapse button HTML
@@ -116,62 +120,59 @@ export default class FiltersVisibility extends Feature {
          * Button's custom HTML
          * @type {String}
          */
-        this.btnHtml = f.btn_html || null;
+        this.btnHtml = defaultsStr(f.btn_html, null);
 
         /**
          * Css class for expand/collapse filters button
          * @type {String}
          */
-        this.btnCssClass = f.btn_css_class || 'btnExpClpFlt';
+        this.btnCssClass = defaultsStr(f.btn_css_class, 'btnExpClpFlt');
 
         /**
          * Css class for main container
          * @type {String}
          */
-        this.contCssClass = f.cont_css_class || 'expClpFlt';
+        this.contCssClass = defaultsStr(f.cont_css_class, 'expClpFlt');
 
         /**
          * Filters row index
          * @type {Number}
          */
-        this.filtersRowIndex = !isUndef(f.filters_row_index) ?
-            f.filters_row_index : tf.getFiltersRowIndex();
+        this.filtersRowIndex = defaultsNb(f.filters_row_index,
+            tf.getFiltersRowIndex());
 
         /**
          * Make filters visible at initialization, defaults to true
          * @type {Boolean}
          */
-        this.visibleAtStart = !isUndef(f.visible_at_start) ?
-            Boolean(f.visible_at_start) : true;
+        this.visibleAtStart = defaultsNb(f.visible_at_start, true);
 
         /**
          * Callback fired before filters row is shown
          * @type {Function}
          */
-        this.onBeforeShow = isFn(f.on_before_show) ?
-            f.on_before_show : EMPTY_FN;
+        this.onBeforeShow = defaultsFn(f.on_before_show, EMPTY_FN);
 
         /**
          * Callback fired after filters row is shown
          * @type {Function}
          */
-        this.onAfterShow = isFn(f.on_after_show) ? f.on_after_show : EMPTY_FN;
+        this.onAfterShow = defaultsFn(f.on_after_show, EMPTY_FN);
 
         /**
          * Callback fired before filters row is hidden
          * @type {Function}
          */
-        this.onBeforeHide = isFn(f.on_before_hide) ?
-            f.on_before_hide : EMPTY_FN;
+        this.onBeforeHide = defaultsFn(f.on_before_hide, EMPTY_FN);
 
         /**
          * Callback fired after filters row is hidden
          * @type {Function}
          */
-        this.onAfterHide = isFn(f.on_after_hide) ? f.on_after_hide : EMPTY_FN;
+        this.onAfterHide = defaultsFn(f.on_after_hide, EMPTY_FN);
 
         //Import extension's stylesheet
-        tf.import(f.name + 'Style', tf.stylePath + this.stylesheet, null,
+        tf.import(f.name + 'Style', tf.getStylePath() + this.stylesheet, null,
             'link');
 
         this.enable();
@@ -244,7 +245,7 @@ export default class FiltersVisibility extends Feature {
      */
     toggle() {
         let tf = this.tf;
-        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
+        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.dom();
         let fltRow = tbl.rows[this.filtersRowIndex];
         let isDisplayed = fltRow.style.display === '';
 
@@ -258,7 +259,7 @@ export default class FiltersVisibility extends Feature {
      */
     show(visible = true) {
         let tf = this.tf;
-        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.tbl;
+        let tbl = tf.gridLayout ? tf.feature('gridLayout').headTbl : tf.dom();
         let fltRow = tbl.rows[this.filtersRowIndex];
 
         if (visible) {

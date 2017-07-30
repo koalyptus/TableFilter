@@ -236,9 +236,9 @@ test('can filter date with different date format', function(){
 
 test('can filter empty value with [empty] operator', function(){
     // setup
-    var cellValue = tf.getCellValue(tf.tbl.rows[2].cells[2]);
+    var cellValue = tf.getCellValue(tf.dom().rows[2].cells[2]);
     tf.clearFilters();
-    tf.tbl.rows[2].cells[2].innerHTML = '';
+    tf.dom().rows[2].cells[2].innerHTML = '';
 
     // act
     tf.setFilterValue(2, '[empty]');
@@ -251,7 +251,7 @@ test('can filter empty value with [empty] operator', function(){
         'Expected match'
     );
 
-    tf.tbl.rows[2].cells[2].innerHTML = cellValue;
+    tf.dom().rows[2].cells[2].innerHTML = cellValue;
 });
 
 test('can filter empty value with [nonempty] operator', function(){

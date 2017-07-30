@@ -12,6 +12,22 @@ test('Loader component', function() {
     notEqual(loader, null, 'Loader instanciated');
     equal(loader.cont.nodeName, 'DIV', 'Loader DOM container');
 });
+test('Does not init if initialised', function() {
+    // setup
+    var show = loader.show;
+    var hit = 0;
+    loader.show = function() {
+        hit++;
+    };
+
+    // act
+    loader.init();
+
+    // assert
+    deepEqual(hit, 0, 'does not initialise');
+
+    loader.show = show;
+});
 
 module('Feature interface');
 test('Properties', function() {

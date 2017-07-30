@@ -1,9 +1,10 @@
 
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
-    paging: true,
-    paging_length: 2,
-    results_per_page: ['Results per page ', [2, 4, 6]]
+    paging: {
+        length: 2,
+        results_per_page: ['Results per page ', [2, 4, 6]]
+    }
 });
 tf.init();
 
@@ -11,7 +12,7 @@ var paging = tf.feature('paging');
 module('Sanity checks');
 test('Paging component', function() {
     notEqual(paging, null, 'Paging instanciated');
-    deepEqual(paging.pagingLength, 2, 'Paging length');
+    deepEqual(paging.pageLength, 2, 'Paging length');
     deepEqual(paging.nbPages, 4, 'Number of pages');
 });
 module('Feature interface');
@@ -33,7 +34,7 @@ test('Properties', function() {
 });
 test('Can destroy', function() {
     paging.destroy();
-    deepEqual(paging.enabled, false, 'disabled');
+    deepEqual(paging.initialized, false, 'not initialized');
 });
 test('Can reset', function() {
     paging.reset();
@@ -60,8 +61,8 @@ test('Can check is enabled', function() {
 
 module('UI elements');
 test('Paging UI elements', function() {
-    notEqual(paging.pagingSlc, null, 'Paging drop-down element');
-    notEqual(paging.resultsPerPageSlc, null,
+    notEqual(paging.pageSlc, null, 'Paging drop-down element');
+    notEqual(paging.pageLengthSlc, null,
         'Number of results per page drop-down element');
     notEqual(paging.btnNextCont, null, 'Next button container element');
     notEqual(paging.btnPrevCont, null, 'Previous button container element');
@@ -71,8 +72,8 @@ test('Paging UI elements', function() {
 
 test('Destroy Paging component', function() {
     paging.destroy();
-    deepEqual(paging.pagingSlc, null, 'Paging drop-down element');
-    deepEqual(paging.resultsPerPageSlc, null, 'Paging drop-down element');
+    deepEqual(paging.pageSlc, null, 'Paging drop-down element');
+    deepEqual(paging.pageLengthSlc, null, 'Paging drop-down element');
     deepEqual(paging.btnNextCont, null, 'Next button container element');
     deepEqual(paging.btnPrevCont, null, 'Previous button container element');
     deepEqual(paging.btnLastCont, null, 'Last button container element');
@@ -83,7 +84,7 @@ test('Destroy Paging component', function() {
 test('Reset Paging component', function() {
     paging.reset();
     paging.setPage(2);
-    notEqual(paging.pagingSlc, null, 'Paging drop-down element');
+    notEqual(paging.pageSlc, null, 'Paging drop-down element');
 });
 
 module('Behaviour');
@@ -92,7 +93,7 @@ test('Set page', function() {
     deepEqual(paging.getPage(), 1, 'Expected page number');
     paging.setPage(3);
     deepEqual(paging.getPage(), 3, 'Expected page number');
-    deepEqual(paging.pagingSlc.selectedIndex, 2,
+    deepEqual(paging.pageSlc.selectedIndex, 2,
         'Expected page number in paging drop-down selector');
 });
 
@@ -121,8 +122,8 @@ test('Can set page with command', function() {
 });
 
 test('Set page via drop-down page selector', function() {
-    paging.pagingSlc.selectedIndex = 3;
-    paging.changePage(paging.pagingSlc.selectedIndex);
+    paging.pageSlc.selectedIndex = 3;
+    paging.changePage(paging.pageSlc.selectedIndex);
     deepEqual(paging.getPage(), 4, 'Expected page number');
 });
 
@@ -145,10 +146,10 @@ test('Filter with dummy value', function() {
 test('Set results per page', function() {
     tf.clearFilters();
     paging.changeResultsPerPage('4');
-    deepEqual(paging.pagingLength, 4, 'Expected page length');
+    deepEqual(paging.pageLength, 4, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
     paging.changeResultsPerPage('6');
-    deepEqual(paging.pagingLength, 6, 'Expected page length');
+    deepEqual(paging.pageLength, 6, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
 });
 
@@ -159,16 +160,17 @@ test('Grid layout with paging', function() {
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
         grid_layout: true,
-        paging: true,
-        paging_length: 2,
-        results_per_page: ['Results per page ', [2,4,6]]
+        paging: {
+            length: 2,
+            results_per_page: ['Results per page ', [2, 4, 6]]
+        }
     });
     tf.init();
 
     paging = tf.feature('paging');
 
-    notEqual(paging.pagingSlc, null, 'Paging drop-down element');
-    notEqual(paging.resultsPerPageSlc, null,
+    notEqual(paging.pageSlc, null, 'Paging drop-down element');
+    notEqual(paging.pageLengthSlc, null,
         'Number of results per page drop-down element');
     notEqual(paging.btnNextCont, null, 'Next button container element');
     notEqual(paging.btnPrevCont, null, 'Previous button container element');
@@ -209,8 +211,8 @@ test('Can set page with command', function() {
 });
 
 test('Set page via drop-down page selector', function() {
-    paging.pagingSlc.selectedIndex = 3;
-    paging.changePage(paging.pagingSlc.selectedIndex);
+    paging.pageSlc.selectedIndex = 3;
+    paging.changePage(paging.pageSlc.selectedIndex);
     deepEqual(paging.getPage(), 4, 'Expected page number');
 });
 
@@ -233,10 +235,10 @@ test('Filter with dummy value', function() {
 test('Set results per page', function() {
     tf.clearFilters();
     paging.changeResultsPerPage('4');
-    deepEqual(paging.pagingLength, 4, 'Expected page length');
+    deepEqual(paging.pageLength, 4, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
     paging.changeResultsPerPage('6');
-    deepEqual(paging.pagingLength, 6, 'Expected page length');
+    deepEqual(paging.pageLength, 6, 'Expected page length');
     deepEqual(paging.nbPages, 2, 'Expected number of pages');
 });
 
@@ -251,7 +253,7 @@ test('Set results per page when no valid rows', function() {
     paging.changeResultsPerPage('4');
 
     // assert
-    deepEqual(paging.resultsPerPageSlc.value, '4', 'Select page length option');
+    deepEqual(paging.pageLengthSlc.value, '4', 'Select page length option');
     deepEqual(paging.getPage(), 1, 'Expected page number');
 });
 
@@ -260,7 +262,7 @@ test('can destroy and init TableFilter', function() {
     tf.destroy();
     tf.init();
     notEqual(paging, null, 'Paging instanciated');
-    deepEqual(paging.pagingLength, 2, 'Paging length');
+    deepEqual(paging.pageLength, 2, 'Paging length');
     deepEqual(paging.nbPages, 4, 'Number of pages');
 });
 

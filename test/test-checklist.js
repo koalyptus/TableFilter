@@ -41,7 +41,7 @@ test('Can refresh all drop-down filters', function() {
     tf.clearFilters();
     var build = checkList.build;
     var hit = 0;
-    checkList.build = function() { hit++ };
+    checkList.build = function() { hit++; };
 
     //act
     checkList.refreshAll();
@@ -103,6 +103,7 @@ test('Can sort options', function() {
         col_2: 'checklist',
         col_3: 'checklist',
         col_4: 'checklist',
+        col_types: ['string', 'string', 'number', 'number', 'number'],
         sort_num_asc: [2, 3],
         sort_num_desc: [4]
     });

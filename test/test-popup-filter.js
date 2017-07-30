@@ -33,6 +33,8 @@ test('Pop-up filter component', function() {
         'By Air (hrs)',
         'Expected header text for multiple filter type'
     );
+    deepEqual(tf.dom().rows[tf.headersRow-1].style.display, 'none',
+        'Extra row hidden');
 });
 
 module('UI elements');
@@ -156,11 +158,24 @@ test('Pop-up filter auto-closes when user clicks away', function() {
     // act
     var evObj = document.createEvent('HTMLEvents');
     evObj.initEvent('mouseup', true, true);
-    tf.tbl.rows[4].cells[2].dispatchEvent(evObj);
+    tf.dom().rows[4].cells[2].dispatchEvent(evObj);
 
     // assert
     deepEqual(popupFilter.isOpen(0), false,
         'Pop-up filter closed after user clicks away'
+    );
+});
+
+test('Can close all popup filters', function() {
+    // setup
+    popupFilter.open(0);
+
+    // act
+    popupFilter.closeAll();
+
+    // assert
+    deepEqual(popupFilter.isOpen(0), false,
+        'Pop-up filter closed after closeAll'
     );
 });
 
@@ -189,6 +204,38 @@ test('TableFilter re-initialised', function() {
     var fltIcn1 = popupFilter.fltIcons[3];
     deepEqual(fltIcn1.nodeName, 'IMG', 'Filter icon exists');
     deepEqual(id(tf.fltIds[3]).nodeName, 'SELECT', 'Filter exists');
+});
+
+module('Properties');
+test('Can set icon HTML', function() {
+    // setup
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        col_2: 'multiple',
+        col_3: 'select',
+        col_4: 'none',
+        popup_filters: {
+            image_html: '<span>hello world</span>'
+        }
+    });
+    tf.init();
+
+    var feature = tf.feature('popupFilter');
+    feature.filtersCache = [];
+    feature.fltElms = [];
+
+    // act
+    tf.init();
+    var headersRow = tf.dom().rows[tf.getHeadersRowIndex()];
+
+    // assert
+    deepEqual(
+        headersRow.cells[1].innerHTML
+            .indexOf('<span>hello world</span>') !== -1,
+        true,
+        'Custom HTML element present'
+    );
 });
 
 module('Grid-layout');
@@ -285,6 +332,46 @@ test('Properties', function() {
     deepEqual(typeof popupFilter.disable, 'function', 'Feature enable method');
     deepEqual(typeof popupFilter.isEnabled,
         'function', 'Feature enable method');
+});
+
+module('Overrides');
+test('Configuration settings overrides', function() {
+    // setup
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        popup_filters: true,
+        filters_row_index: 1
+    });
+
+    // assert
+    deepEqual(tf.filtersRowIndex, 1, 'Filters row index config setting value');
+    deepEqual(
+        tf.externalFltTgtIds,
+        [],
+        'External filters container ids config setting value'
+    );
+    deepEqual(tf.headersRow, 0, 'Headers row index config setting value');
+
+    test('Overrides after init', function() {
+        // act
+        tf.init();
+
+        // assert
+        deepEqual(tf.filtersRowIndex, 0, 'Filters row index override');
+        deepEqual(
+            tf.externalFltTgtIds,
+            [
+                'popup_demo_0',
+                'popup_demo_1',
+                'popup_demo_2',
+                'popup_demo_3',
+                'popup_demo_4'
+            ],
+            'External filters container ids config setting value'
+        );
+        deepEqual(tf.headersRow, 1, 'Headers row index override');
+    });
 });
 
 module('Tear-down');

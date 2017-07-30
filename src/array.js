@@ -19,4 +19,4 @@ export const has = (arr, val, caseSensitive) => {
         }
     }
     return false;
-}
+};

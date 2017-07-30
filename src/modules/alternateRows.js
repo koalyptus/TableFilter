@@ -1,5 +1,6 @@
 import {Feature} from '../feature';
 import {addClass, removeClass} from '../dom';
+import {defaultsStr} from '../settings';
 
 /**
  * Rows with alternating background color for improved readability
@@ -19,13 +20,13 @@ export class AlternateRows extends Feature {
          * Css class for even rows (default: 'even')
          * @type {String}
          */
-        this.evenCss = config.even_row_css_class || 'even';
+        this.evenCss = defaultsStr(config.even_row_css_class, 'even');
 
         /**
          * Css class for odd rows (default: 'odd')
          * @type {String}
          */
-        this.oddCss = config.odd_row_css_class || 'odd';
+        this.oddCss = defaultsStr(config.odd_row_css_class, 'odd');
     }
 
     /**
@@ -42,8 +43,8 @@ export class AlternateRows extends Feature {
         this.emitter.on(['row-processed', 'row-paged'],
             (tf, rowIndex, arrIndex, isValid) =>
                 this.processRow(rowIndex, arrIndex, isValid));
-        this.emitter.on(['column-sorted'], () => this.processAll());
-        this.emitter.on(['rows-changed'], () => this.processAll());
+        this.emitter.on(['column-sorted', 'rows-changed'],
+            () => this.processAll());
 
         /** @inherited */
         this.initialized = true;
@@ -94,7 +95,7 @@ export class AlternateRows extends Feature {
         if (!this.isEnabled() || isNaN(rowIdx)) {
             return;
         }
-        let rows = this.tf.tbl.rows;
+        let rows = this.tf.dom().rows;
         let i = isNaN(idx) ? rowIdx : idx;
         this.removeRowBg(rowIdx);
 
@@ -110,7 +111,7 @@ export class AlternateRows extends Feature {
         if (isNaN(idx)) {
             return;
         }
-        let rows = this.tf.tbl.rows;
+        let rows = this.tf.dom().rows;
         removeClass(rows[idx], this.oddCss);
         removeClass(rows[idx], this.evenCss);
     }
@@ -131,8 +132,8 @@ export class AlternateRows extends Feature {
         this.emitter.off(['row-processed', 'row-paged'],
             (tf, rowIndex, arrIndex, isValid) =>
                 this.processRow(rowIndex, arrIndex, isValid));
-        this.emitter.off(['column-sorted'], () => this.processAll());
-        this.emitter.off(['rows-changed'], () => this.processAll());
+        this.emitter.off(['column-sorted', 'rows-changed'],
+            () => this.processAll());
 
         this.initialized = false;
     }

@@ -1,5 +1,5 @@
 
-const NOTIMPLEMENTED = 'Not implemented.';
+const NOT_IMPLEMENTED = 'Not implemented.';
 
 /**
  * Base class defining the interface of a TableFilter feature
@@ -55,7 +55,7 @@ export class Feature {
      * Initialize the feature
      */
     init() {
-        throw new Error(NOTIMPLEMENTED);
+        throw new Error(NOT_IMPLEMENTED);
     }
 
     /**
@@ -70,7 +70,7 @@ export class Feature {
      * Destroy the feature
      */
     destroy() {
-        throw new Error(NOTIMPLEMENTED);
+        throw new Error(NOT_IMPLEMENTED);
     }
 
     /**
@@ -92,6 +92,6 @@ export class Feature {
      * @returns {Boolean}
      */
     isEnabled() {
-        return this.enabled;
+        return this.enabled === true;
     }
 }

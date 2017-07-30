@@ -15,8 +15,8 @@
     test('for filtered table', function() {
         tf.setFilterValue(0, 'Hello');
         tf.filter();
-        var alwaysVisibleRow1 = tf.tbl.rows[4];
-        var alwaysVisibleRow2 = tf.tbl.rows[9];
+        var alwaysVisibleRow1 = tf.dom().rows[4];
+        var alwaysVisibleRow2 = tf.dom().rows[9];
         deepEqual(
             tf.getRowDisplay(alwaysVisibleRow1),
             '',
@@ -31,8 +31,8 @@
 
     test('after filters are cleared', function() {
         tf.clearFilters();
-        var alwaysVisibleRow1 = tf.tbl.rows[4];
-        var alwaysVisibleRow2 = tf.tbl.rows[9];
+        var alwaysVisibleRow1 = tf.dom().rows[4];
+        var alwaysVisibleRow2 = tf.dom().rows[9];
         deepEqual(
             tf.getRowDisplay(alwaysVisibleRow1),
             '',
@@ -52,8 +52,9 @@
         tf = new TableFilter('demo', {
             base_path: '../dist/tablefilter/',
             rows_always_visible: [4, 9],
-            paging: true,
-            paging_length: 2
+            paging: {
+                length: 2
+            }
         });
         tf.init();
         var paging = tf.feature('paging');
@@ -62,8 +63,8 @@
         test('for filtered table', function() {
             tf.setFilterValue(0, 'Hello');
             tf.filter();
-            var alwaysVisibleRow1 = tf.tbl.rows[4];
-            var alwaysVisibleRow2 = tf.tbl.rows[9];
+            var alwaysVisibleRow1 = tf.dom().rows[4];
+            var alwaysVisibleRow2 = tf.dom().rows[9];
             deepEqual(
                 tf.getRowDisplay(alwaysVisibleRow1),
                 '',
@@ -78,8 +79,8 @@
 
         test('after filters are cleared', function() {
             tf.clearFilters();
-            var alwaysVisibleRow1 = tf.tbl.rows[4];
-            var alwaysVisibleRow2 = tf.tbl.rows[9];
+            var alwaysVisibleRow1 = tf.dom().rows[4];
+            var alwaysVisibleRow2 = tf.dom().rows[9];
             deepEqual(
                 tf.getRowDisplay(alwaysVisibleRow1),
                 'none',
@@ -92,11 +93,10 @@
             );
         });
 
-
         test('after changing pagination page', function() {
             paging.setPage(2);
-            var alwaysVisibleRow1 = tf.tbl.rows[4];
-            var alwaysVisibleRow2 = tf.tbl.rows[9];
+            var alwaysVisibleRow1 = tf.dom().rows[4];
+            var alwaysVisibleRow2 = tf.dom().rows[9];
             deepEqual(
                 tf.getRowDisplay(alwaysVisibleRow1),
                 '',

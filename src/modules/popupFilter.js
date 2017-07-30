@@ -1,9 +1,10 @@
 import {Feature} from '../feature';
-import {isFn, isUndef, EMPTY_FN} from '../types';
+import {isUndef, EMPTY_FN} from '../types';
 import {createElm, removeElm} from '../dom';
 import {addEvt, cancelEvt, stopEvt, targetEvt, removeEvt} from '../event';
 import {INPUT, NONE, CHECKLIST, MULTIPLE} from '../const';
 import {root} from '../root';
+import {defaultsStr, defaultsBool, defaultsArr, defaultsFn} from '../settings';
 
 /**
  * Pop-up filter component
@@ -21,81 +22,78 @@ export class PopupFilter extends Feature {
         super(tf, 'popupFilters');
 
         // Configuration object
-        let f = this.config;
-
-        // Enable external filters
-        tf.isExternalFlt = true;
-        tf.externalFltTgtIds = [];
+        let f = this.config.popup_filters || {};
 
         /**
          * Close active popup filter upon filtering, enabled by default
          * @type {Boolean}
          */
-        this.closeOnFiltering = f.popup_filters_close_on_filtering === false ?
-            false : true;
+        this.closeOnFiltering = defaultsBool(f.close_on_filtering, true);
 
         /**
          * Filter icon path
          * @type {String}
          */
-        this.iconPath = f.popup_filters_image ||
-            tf.themesPath + 'icn_filter.gif';
+        this.iconPath = defaultsStr(f.image, tf.themesPath + 'icn_filter.gif');
 
         /**
          * Active filter icon path
          * @type {string}
          */
-        this.activeIconPath = f.popup_filters_image_active ||
-            tf.themesPath + 'icn_filterActive.gif';
+        this.activeIconPath = defaultsStr(f.image_active,
+            tf.themesPath + 'icn_filterActive.gif');
 
         /**
          * HTML for the filter icon
          * @type {string}
          */
-        this.iconHtml = f.popup_filters_image_html ||
-            '<img src="' + this.iconPath + '" alt="Column filter" />';
+        this.iconHtml = defaultsStr(f.image_html,
+            '<img src="' + this.iconPath + '" alt="Column filter" />');
+
+        /**
+         * Css class assigned to the popup container element
+         * @type {String}
+         */
+        this.placeholderCssClass = defaultsStr(f.placeholder_css_class,
+            'popUpPlaceholder');
 
         /**
          * Css class assigned to filter container element
          * @type {String}
          */
-        this.containerCssClass = f.popup_div_css_class || 'popUpFilter';
+        this.containerCssClass = defaultsStr(f.div_css_class, 'popUpFilter');
 
         /**
          * Ensure filter's container element width matches column width, enabled
          * by default
          * @type {Boolean}
          */
-        this.adjustToContainer =
-            f.popup_filters_adjust_to_container === false ? false : true;
+        this.adjustToContainer = defaultsBool(f.adjust_to_container, true);
 
         /**
          * Callback fired before a popup filter is opened
          * @type {Function}
          */
-        this.onBeforeOpen = isFn(f.on_before_popup_filter_open) ?
-            f.on_before_popup_filter_open : EMPTY_FN;
+        this.onBeforeOpen = defaultsFn(f.on_before_popup_filter_open, EMPTY_FN);
 
         /**
          * Callback fired after a popup filter is opened
          * @type {Function}
          */
-        this.onAfterOpen = isFn(f.on_after_popup_filter_open) ?
-            f.on_after_popup_filter_open : EMPTY_FN;
+        this.onAfterOpen = defaultsFn(f.on_after_popup_filter_open, EMPTY_FN);
 
         /**
          * Callback fired before a popup filter is closed
          * @type {Function}
          */
-        this.onBeforeClose = isFn(f.on_before_popup_filter_close) ?
-            f.on_before_popup_filter_close : EMPTY_FN;
+        this.onBeforeClose = defaultsFn(f.on_before_popup_filter_close,
+            EMPTY_FN);
 
         /**
          * Callback fired after a popup filter is closed
          * @type {Function}
          */
-        this.onAfterClose = isFn(f.on_after_popup_filter_close) ?
-            f.on_after_popup_filter_close : EMPTY_FN;
+        this.onAfterClose = defaultsFn(f.on_after_popup_filter_close, EMPTY_FN);
 
         /**
          * Collection of filters spans
@@ -123,7 +121,7 @@ export class PopupFilter extends Feature {
          * @type {Array}
          * @private
          */
-        this.fltElms = this.filtersCache || [];
+        this.fltElms = defaultsArr(this.filtersCache, []);
 
         /**
          * Prefix for pop-up filter container ID
@@ -197,6 +195,12 @@ export class PopupFilter extends Feature {
         }
 
         let tf = this.tf;
+
+        // Enable external filters
+        tf.externalFltTgtIds = [''];
+
+        // Override filters row index supplied by configuration
+        tf.filtersRowIndex = 0;
 
         // Override headers row index if no grouped headers
         // TODO: Because of the filters row generation, headers row index needs
@@ -277,12 +281,14 @@ export class PopupFilter extends Feature {
     build(colIndex, div) {
         let tf = this.tf;
         let contId = `${this.prfxDiv}${tf.id}_${colIndex}`;
-        let cont = div || createElm('div', ['id', contId]);
-        cont.className = this.containerCssClass;
-        tf.externalFltTgtIds.push(cont.id);
+        let placeholder = createElm('div', ['class', this.placeholderCssClass]);
+        let cont = div ||
+            createElm('div', ['id', contId], ['class', this.containerCssClass]);
+        tf.externalFltTgtIds[colIndex] = cont.id;
+        placeholder.appendChild(cont);
 
         let header = tf.getHeaderElement(colIndex);
-        header.insertBefore(cont, header.firstChild);
+        header.insertBefore(placeholder, header.firstChild);
         addEvt(cont, 'click', (evt) => stopEvt(evt));
         this.fltElms[colIndex] = cont;
     }
@@ -364,7 +370,7 @@ export class PopupFilter extends Feature {
             if (i === exceptIdx) {
                 continue;
             }
-            let fltType = tf.getFilterType(i);
+            let fltType = this.tf.getFilterType(i);
             let isMultipleFilter =
                 (fltType === CHECKLIST || fltType === MULTIPLE);
 
@@ -408,6 +414,7 @@ export class PopupFilter extends Feature {
         this.filtersCache = [];
         for (let i = 0; i < this.fltElms.length; i++) {
             let container = this.fltElms[i],
+                placeholder = container.parentNode,
                 icon = this.fltSpans[i],
                 iconImg = this.fltIcons[i];
             if (container) {
@@ -415,6 +422,10 @@ export class PopupFilter extends Feature {
                 this.filtersCache[i] = container;
             }
             container = null;
+            if (placeholder) {
+                removeElm(placeholder);
+            }
+            placeholder = null;
             if (icon) {
                 removeElm(icon);
             }
@@ -429,7 +440,7 @@ export class PopupFilter extends Feature {
         this.fltIcons = [];
 
         // TODO: expose an API to handle external filter IDs
-        tf.externalFltTgtIds = [];
+        this.tf.externalFltTgtIds = [];
 
         // unsubscribe to events
         this.emitter.off(['before-filtering'], () => this.setIconsState());

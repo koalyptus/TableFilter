@@ -143,7 +143,7 @@ test('Sanity checks', function() {
     deepEqual(tfGl.noResults, true, 'noResults property');
     deepEqual(noResultsGl.cont.nodeName, 'DIV', 'Container element');
     deepEqual(noResultsGl.cont.className, 'no-results',
-       'Container element default CSS class');
+        'Container element default CSS class');
 
     test('Can display no results message in grid layout', function() {
         tfGl.setFilterValue(0, 'sadasd');
@@ -154,7 +154,7 @@ test('Sanity checks', function() {
             'No results message displayed');
         deepEqual(
             parseInt(noResultsGl.cont.style.width, 10),
-            gridLayout.tblCont.clientWidth,
+            gridLayout.headTbl.clientWidth,
             'Container element width'
         );
     });

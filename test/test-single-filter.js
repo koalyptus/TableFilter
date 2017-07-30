@@ -27,7 +27,6 @@ test('Sanity checks', function() {
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
         single_filter: true,
-        external_flt_grid: true,
         external_flt_grid_ids: ['single-search']
     });
     tf.init();

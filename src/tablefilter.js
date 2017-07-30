@@ -1,6 +1,6 @@
 import {addEvt, cancelEvt, stopEvt, targetEvt, keyCode} from './event';
 import {
-    addClass, createElm, createOpt, elm, getText, getFirstTextNode, hasClass,
+    addClass, createElm, createOpt, elm, getText, getFirstTextNode,
     removeClass, removeElm, tag
 } from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
@@ -8,30 +8,22 @@ import {isEmpty as isEmptyString} from './string';
 import {
     isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN
 } from './types';
-import {parse as parseNb} from './number'
+import {parse as parseNb} from './number';
+import {
+    defaultsBool, defaultsStr, defaultsFn,
+    defaultsNb, defaultsArr
+} from './settings';
 
 import {root} from './root';
 import {Emitter} from './emitter';
-import {GridLayout} from './modules/gridLayout';
-import {Loader} from './modules/loader';
-import {HighlightKeyword} from './modules/highlightKeywords';
-import {PopupFilter} from './modules/popupFilter';
 import {Dropdown} from './modules/dropdown';
 import {CheckList} from './modules/checkList';
-import {RowsCounter} from './modules/rowsCounter';
-import {StatusBar} from './modules/statusBar';
-import {Paging} from './modules/paging';
-import {ClearButton} from './modules/clearButton';
-import {Help} from './modules/help';
-import {AlternateRows} from './modules/alternateRows';
-import {NoResults} from './modules/noResults';
-import {State} from './modules/state';
-import {DateType} from './modules/dateType';
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
     ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
-    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER
+    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER,
+    FEATURES
 } from './const';
 
 let doc = root.document;
@@ -47,7 +39,7 @@ export class TableFilter {
     /**
      * Creates an instance of TableFilter
      * requires `table` or `id` arguments, `row` and `configuration` optional
-     * @param {DOMElement} table Table DOM element
+     * @param {HTMLTableElement} table Table DOM element
      * @param {String} id Table id
      * @param {Number} row index indicating the 1st row
      * @param {Object} configuration object
@@ -76,6 +68,7 @@ export class TableFilter {
         /**
          * HTML Table DOM element
          * @type {DOMElement}
+         * @private
          */
         this.tbl = null;
 
@@ -114,6 +107,16 @@ export class TableFilter {
          */
         this.nbCells = null;
 
+        /**
+         * Has a configuration object
+         * @type {Object}
+         * @private
+         */
+        this.hasConfig = false;
+
+        /** @private */
+        this.initialized = false;
+
         let startRow;
 
         // TODO: use for-of
@@ -128,6 +131,7 @@ export class TableFilter {
                 startRow = arg;
             } else if (isObj(arg)) {
                 this.cfg = arg;
+                this.hasConfig = true;
             }
         });
 
@@ -150,14 +154,26 @@ export class TableFilter {
          */
         this.emitter = new Emitter();
 
-        //Start row et cols nb
+        //Start row
         this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
+
+        /**
+         * Collection of filter type by column
+         * @type {Array}
+         * @private
+         */
+        this.filterTypes = [].map.call(
+            (this.dom().rows[this.refRow] || this.dom().rows[0]).cells,
+            (cell, idx) => {
+                let colType = this.cfg[`col_${idx}`];
+                return !colType ? INPUT : colType.toLowerCase();
+            });
 
         /**
          * Base path for static assets
          * @type {String}
          */
-        this.basePath = f.base_path || 'tablefilter/';
+        this.basePath = defaultsStr(f.base_path, 'tablefilter/');
 
         /*** filters' grid properties ***/
 
@@ -165,34 +181,32 @@ export class TableFilter {
          * Enable/disable filters
          * @type {Boolean}
          */
-        this.fltGrid = f.grid === false ? false : true;
+        this.fltGrid = defaultsBool(f.grid, true);
 
         /**
          * Enable/disable grid layout (fixed headers)
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
-        this.gridLayout = Boolean(f.grid_layout);
+        this.gridLayout = isObj(f.grid_layout) || Boolean(f.grid_layout);
 
         /**
          * Filters row index
          * @type {Number}
          */
-        this.filtersRowIndex = isNaN(f.filters_row_index) ?
-            0 : f.filters_row_index;
+        this.filtersRowIndex = defaultsNb(f.filters_row_index, 0);
 
         /**
          * Headers row index
          * @type {Number}
          */
-        this.headersRow = isNaN(f.headers_row_index) ?
-            (this.filtersRowIndex === 0 ? 1 : 0) : f.headers_row_index;
+        this.headersRow = defaultsNb(f.headers_row_index,
+            (this.filtersRowIndex === 0 ? 1 : 0));
 
         /**
          * Define the type of cell containing a filter (td/th)
          * @type {String}
          */
-        this.fltCellTag = isString(f.filters_cell_tag) ?
-            f.filters_cell_tag : CELL_TAG;
+        this.fltCellTag = defaultsStr(f.filters_cell_tag, CELL_TAG);
 
         /**
          * List of filters IDs
@@ -241,38 +255,38 @@ export class TableFilter {
          * Css class for toolbar's container DOM element
          * @type {String}
          */
-        this.infDivCssClass = f.inf_div_css_class || 'inf';
+        this.infDivCssClass = defaultsStr(f.inf_div_css_class, 'inf');
 
         /**
          * Css class for left-side inner container DOM element
          * @type {String}
          */
-        this.lDivCssClass = f.left_div_css_class || 'ldiv';
+        this.lDivCssClass = defaultsStr(f.left_div_css_class, 'ldiv');
 
         /**
          * Css class for right-side inner container DOM element
          * @type {String}
          */
-        this.rDivCssClass = f.right_div_css_class || 'rdiv';
+        this.rDivCssClass = defaultsStr(f.right_div_css_class, 'rdiv');
 
         /**
          * Css class for middle inner container DOM element
          * @type {String}
          */
-        this.mDivCssClass = f.middle_div_css_class || 'mdiv';
+        this.mDivCssClass = defaultsStr(f.middle_div_css_class, 'mdiv');
 
         /*** filters' grid appearance ***/
         /**
          * Path for stylesheets
          * @type {String}
          */
-        this.stylePath = f.style_path || this.basePath + 'style/';
+        this.stylePath = this.getStylePath();
 
         /**
          * Main stylesheet path
          * @type {String}
          */
-        this.stylesheet = f.stylesheet || this.stylePath + 'tablefilter.css';
+        this.stylesheet = this.getStylesheetPath();
 
         /**
          * Main stylesheet ID
@@ -285,13 +299,13 @@ export class TableFilter {
          * Css class for the filters row
          * @type {String}
          */
-        this.fltsRowCssClass = f.flts_row_css_class || 'fltrow';
+        this.fltsRowCssClass = defaultsStr(f.flts_row_css_class, 'fltrow');
 
         /**
          * Enable/disable icons (paging, reset button)
          * @type {Boolean}
          */
-        this.enableIcons = f.enable_icons === false ? false : true;
+        this.enableIcons = defaultsBool(f.enable_icons, true);
 
         /**
          * Enable/disable alternating rows
@@ -300,41 +314,35 @@ export class TableFilter {
         this.alternateRows = Boolean(f.alternate_rows);
 
         /**
-         * Indicate whether columns widths are set
-         * @type {Boolean}
-         * @private
-         */
-        this.hasColWidths = isArray(f.col_widths);
-
-        /**
          * Columns widths array
          * @type {Array}
          */
-        this.colWidths = this.hasColWidths ? f.col_widths : [];
+        this.colWidths = defaultsArr(f.col_widths, []);
 
         /**
          * Css class for a filter element
          * @type {String}
          */
-        this.fltCssClass = f.flt_css_class || 'flt';
+        this.fltCssClass = defaultsStr(f.flt_css_class, 'flt');
 
         /**
          * Css class for multiple select filters
          * @type {String}
          */
-        this.fltMultiCssClass = f.flt_multi_css_class || 'flt_multi';
+        this.fltMultiCssClass = defaultsStr(f.flt_multi_css_class, 'flt_multi');
 
         /**
          * Css class for small filter (when submit button is active)
          * @type {String}
          */
-        this.fltSmallCssClass = f.flt_small_css_class || 'flt_s';
+        this.fltSmallCssClass = defaultsStr(f.flt_small_css_class, 'flt_s');
 
         /**
          * Css class for single filter type
          * @type {String}
          */
-        this.singleFltCssClass = f.single_flt_css_class || 'single_flt';
+        this.singleFltCssClass = defaultsStr(f.single_flt_css_class,
+            'single_flt');
 
         /*** filters' grid behaviours ***/
 
@@ -342,21 +350,19 @@ export class TableFilter {
          * Enable/disable enter key for input type filters
          * @type {Boolean}
          */
-        this.enterKey = f.enter_key === false ? false : true;
+        this.enterKey = defaultsBool(f.enter_key, true);
 
         /**
          * Callback fired before filtering process starts
          * @type {Function}
          */
-        this.onBeforeFilter = isFn(f.on_before_filter) ?
-            f.on_before_filter : EMPTY_FN;
+        this.onBeforeFilter = defaultsFn(f.on_before_filter, EMPTY_FN);
 
         /**
          * Callback fired after filtering process is completed
          * @type {Function}
          */
-        this.onAfterFilter = isFn(f.on_after_filter) ?
-            f.on_after_filter : EMPTY_FN;
+        this.onAfterFilter = defaultsFn(f.on_after_filter, EMPTY_FN);
 
         /**
          * Enable/disable case sensitivity filtering
@@ -424,23 +430,16 @@ export class TableFilter {
         this.visibleRows = this.hasVisibleRows ? f.rows_always_visible : [];
 
         /**
-         * Enable/disable external filters generation
-         * @type {Boolean}
-         */
-        this.isExternalFlt = Boolean(f.external_flt_grid);
-
-        /**
          * List of containers IDs where external filters will be generated
          * @type {Array}
          */
-        this.externalFltTgtIds = f.external_flt_grid_ids || [];
+        this.externalFltTgtIds = defaultsArr(f.external_flt_grid_ids, []);
 
         /**
          * Callback fired after filters are generated
          * @type {Function}
          */
-        this.onFiltersLoaded = isFn(f.on_filters_loaded) ?
-            f.on_filters_loaded : EMPTY_FN;
+        this.onFiltersLoaded = defaultsFn(f.on_filters_loaded, EMPTY_FN);
 
         /**
          * Enable/disable single filter filtering all columns
@@ -452,8 +451,7 @@ export class TableFilter {
          * Callback fired after a row is validated during filtering
          * @type {Function}
          */
-        this.onRowValidated = isFn(f.on_row_validated) ?
-            f.on_row_validated : EMPTY_FN;
+        this.onRowValidated = defaultsFn(f.on_row_validated, EMPTY_FN);
 
         /**
          * Specify which column implements a custom cell parser to retrieve the
@@ -489,54 +487,34 @@ export class TableFilter {
          * Toolbar's custom container ID
          * @type {String}
          */
-        this.toolBarTgtId = f.toolbar_target_id || null;
+        this.toolBarTgtId = defaultsStr(f.toolbar_target_id, null);
 
         /**
          * Indicate whether help UI component is disabled
          * @type {Boolean}
          */
-        this.help = isUndef(f.help_instructions) ?
-            undefined : Boolean(f.help_instructions);
+        this.help = isUndef(f.help_instructions) ? undefined :
+            (isObj(f.help_instructions) || Boolean(f.help_instructions));
 
         /**
          * Indicate whether pop-up filters UI is enabled
          * @type {Boolean}
          */
-        this.popupFilters = Boolean(f.popup_filters);
+        this.popupFilters = isObj(f.popup_filters) || Boolean(f.popup_filters);
 
         /**
          * Indicate whether filtered (active) columns indicator is enabled
          * @type {Boolean}
          */
-        this.markActiveColumns = Boolean(f.mark_active_columns);
-
-        /**
-         * Css class for filtered (active) columns
-         * @type {String}
-         */
-        this.activeColumnsCssClass = f.active_columns_css_class ||
-            'activeHeader';
-
-        /**
-         * Callback fired before a column is marked as filtered
-         * @type {Function}
-         */
-        this.onBeforeActiveColumn = isFn(f.on_before_active_column) ?
-            f.on_before_active_column : EMPTY_FN;
-
-        /**
-         * Callback fired after a column is marked as filtered
-         * @type {Function}
-         */
-        this.onAfterActiveColumn = isFn(f.on_after_active_column) ?
-            f.on_after_active_column : EMPTY_FN;
+        this.markActiveColumns = isObj(f.mark_active_columns) ||
+            Boolean(f.mark_active_columns);
 
         /*** select filter's customisation and behaviours ***/
         /**
          * Text for clear option in drop-down filter types (1st option)
          * @type {String|Array}
          */
-        this.clearFilterText = f.clear_filter_text || 'Clear';
+        this.clearFilterText = defaultsStr(f.clear_filter_text, 'Clear');
 
         /**
          * Indicate whether empty option is enabled in drop-down filter types
@@ -548,7 +526,7 @@ export class TableFilter {
          * Text for empty option in drop-down filter types
          * @type {String}
          */
-        this.emptyText = f.empty_text || '(Empty)';
+        this.emptyText = defaultsStr(f.empty_text, '(Empty)');
 
         /**
          * Indicate whether non-empty option is enabled in drop-down filter
@@ -561,21 +539,22 @@ export class TableFilter {
          * Text for non-empty option in drop-down filter types
          * @type {String}
          */
-        this.nonEmptyText = f.non_empty_text || '(Non empty)';
+        this.nonEmptyText = defaultsStr(f.non_empty_text, '(Non empty)');
 
         /**
          * Indicate whether drop-down filter types filter the table by default
          * on change event
          * @type {Boolean}
          */
-        this.onSlcChange = f.on_change === false ? false : true;
+        this.onSlcChange = defaultsBool(f.on_change, true);
 
         /**
-         * Indicate whether options in drop-down filter types are sorted in a
-         * alpha-numeric manner by default
-         * @type {Boolean}
+         * Make drop-down filter types options sorted in alpha-numeric manner
+         * by default globally or on a column basis
+         * @type {Boolean|Array}
          */
-        this.sortSlc = f.sort_select === false ? false : true;
+        this.sortSlc = isUndef(f.sort_select) ? true :
+            isArray(f.sort_select) ? f.sort_select : Boolean(f.sort_select);
 
         /**
          * Indicate whether options in drop-down filter types are sorted in a
@@ -644,85 +623,85 @@ export class TableFilter {
          * Regular expression operator for input filter. Defaults to 'rgx:'
          * @type {String}
          */
-        this.rgxOperator = f.regexp_operator || 'rgx:';
+        this.rgxOperator = defaultsStr(f.regexp_operator, 'rgx:');
 
         /**
          * Empty cells operator for input filter. Defaults to '[empty]'
          * @type {String}
          */
-        this.emOperator = f.empty_operator || '[empty]';
+        this.emOperator = defaultsStr(f.empty_operator, '[empty]');
 
         /**
          * Non-empty cells operator for input filter. Defaults to '[nonempty]'
          * @type {String}
          */
-        this.nmOperator = f.nonempty_operator || '[nonempty]';
+        this.nmOperator = defaultsStr(f.nonempty_operator, '[nonempty]');
 
         /**
          * Logical OR operator for input filter. Defaults to '||'
          * @type {String}
          */
-        this.orOperator = f.or_operator || '||';
+        this.orOperator = defaultsStr(f.or_operator, '||');
 
         /**
          * Logical AND operator for input filter. Defaults to '&&'
          * @type {String}
          */
-        this.anOperator = f.and_operator || '&&';
+        this.anOperator = defaultsStr(f.and_operator, '&&');
 
         /**
          * Greater than operator for input filter. Defaults to '>'
          * @type {String}
          */
-        this.grOperator = f.greater_operator || '>';
+        this.grOperator = defaultsStr(f.greater_operator, '>');
 
         /**
          * Lower than operator for input filter. Defaults to '<'
          * @type {String}
          */
-        this.lwOperator = f.lower_operator || '<';
+        this.lwOperator = defaultsStr(f.lower_operator, '<');
 
         /**
          * Lower than or equal operator for input filter. Defaults to '<='
          * @type {String}
          */
-        this.leOperator = f.lower_equal_operator || '<=';
+        this.leOperator = defaultsStr(f.lower_equal_operator, '<=');
 
         /**
          * Greater than or equal operator for input filter. Defaults to '>='
          * @type {String}
          */
-        this.geOperator = f.greater_equal_operator || '>=';
+        this.geOperator = defaultsStr(f.greater_equal_operator, '>=');
 
         /**
          * Inequality operator for input filter. Defaults to '!'
          * @type {String}
          */
-        this.dfOperator = f.different_operator || '!';
+        this.dfOperator = defaultsStr(f.different_operator, '!');
 
         /**
-         * Like operator for input filter. Defaults to '!'
+         * Like operator for input filter. Defaults to '*'
          * @type {String}
          */
-        this.lkOperator = f.like_operator || '*';
+        this.lkOperator = defaultsStr(f.like_operator, '*');
 
         /**
          * Strict equality operator for input filter. Defaults to '='
          * @type {String}
          */
-        this.eqOperator = f.equal_operator || '=';
+        this.eqOperator = defaultsStr(f.equal_operator, '=');
 
         /**
          * Starts with operator for input filter. Defaults to '='
          * @type {String}
          */
-        this.stOperator = f.start_with_operator || '{';
+        this.stOperator = defaultsStr(f.start_with_operator, '{');
 
         /**
          * Ends with operator for input filter. Defaults to '='
          * @type {String}
          */
-        this.enOperator = f.end_with_operator || '}';
+        this.enOperator = defaultsStr(f.end_with_operator, '}');
 
         // this.curExp = f.cur_exp || '^[¥£€$]';
 
@@ -730,25 +709,25 @@ export class TableFilter {
          * Stored values separator
          * @type {String}
          */
-        this.separator = f.separator || ',';
+        this.separator = defaultsStr(f.separator, ',');
 
         /**
          * Enable rows counter UI component
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
-        this.rowsCounter = Boolean(f.rows_counter);
+        this.rowsCounter = isObj(f.rows_counter) || Boolean(f.rows_counter);
 
         /**
          * Enable status bar UI component
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
-        this.statusBar = Boolean(f.status_bar);
+        this.statusBar = isObj(f.status_bar) || Boolean(f.status_bar);
 
         /**
          * Enable activity/spinner indicator UI component
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
-        this.loader = Boolean(f.loader);
+        this.loader = isObj(f.loader) || Boolean(f.loader);
 
         /*** validation - reset buttons/links ***/
         /**
@@ -761,14 +740,14 @@ export class TableFilter {
          * Define filters submission button text
          * @type {String}
          */
-        this.btnText = f.btn_text || (!this.enableIcons ? 'Go' : '');
+        this.btnText = defaultsStr(f.btn_text, (!this.enableIcons ? 'Go' : ''));
 
         /**
          * Css class for filters submission button
          * @type {String}
          */
-        this.btnCssClass = f.btn_css_class ||
-            (!this.enableIcons ? 'btnflt' : 'btnflt_icon');
+        this.btnCssClass = defaultsStr(f.btn_css_class,
+            (!this.enableIcons ? 'btnflt' : 'btnflt_icon'));
 
         /**
          * Enable clear button
@@ -780,21 +759,19 @@ export class TableFilter {
          * Callback fired before filters are cleared
          * @type {Function}
          */
-        this.onBeforeReset = isFn(f.on_before_reset) ?
-            f.on_before_reset : EMPTY_FN;
+        this.onBeforeReset = defaultsFn(f.on_before_reset, EMPTY_FN);
 
         /**
          * Callback fired after filters are cleared
          * @type {Function}
          */
-        this.onAfterReset = isFn(f.on_after_reset) ?
-            f.on_after_reset : EMPTY_FN;
+        this.onAfterReset = defaultsFn(f.on_after_reset, EMPTY_FN);
 
         /**
          * Enable paging component
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
-        this.paging = Boolean(f.paging);
+        this.paging = isObj(f.paging) || Boolean(f.paging);
 
         /**
          * Number of hidden rows
@@ -814,8 +791,8 @@ export class TableFilter {
          * Auto-filter delay in msecs
          * @type {Number}
          */
-        this.autoFilterDelay = !isNaN(f.auto_filter_delay) ?
-            f.auto_filter_delay : AUTO_FILTER_DELAY;
+        this.autoFilterDelay =
+            defaultsNb(f.auto_filter_delay, AUTO_FILTER_DELAY);
 
         /**
          * Indicate whether user is typing
@@ -839,37 +816,44 @@ export class TableFilter {
 
         /**
          * Enable no results message UI component
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
         this.noResults = isObj(f.no_results_message) ||
             Boolean(f.no_results_message);
 
         /**
          * Enable state persistence
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
         this.state = isObj(f.state) || Boolean(f.state);
 
         /*** data types ***/
 
         /**
+         * Enable date type module
+         * @type {Boolean}
+         * @private
+         */
+        this.dateType = true;
+
+        /**
          * Define default locale, default to 'en' as per Sugar Date module:
          * https://sugarjs.com/docs/#/DateLocales
          * @type {String}
          */
-        this.locale = f.locale || 'en';
+        this.locale = defaultsStr(f.locale, 'en');
 
         /**
          * Define thousands separator ',' or '.', defaults to ','
          * @type {String}
          */
-        this.thousandsSeparator = f.thousands_separator || ',';
+        this.thousandsSeparator = defaultsStr(f.thousands_separator, ',');
 
         /**
          * Define decimal separator ',' or '.', defaults to '.'
          * @type {String}
          */
-        this.decimalSeparator = f.decimal_separator || '.';
+        this.decimalSeparator = defaultsStr(f.decimal_separator, '.');
 
         /**
          * Define data types on a column basis, possible values 'string',
@@ -940,16 +924,8 @@ export class TableFilter {
         /**
          * List of loaded extensions
          * @type {Array}
-         * @private
          */
-        this.extensions = f.extensions;
-
-        /**
-         * Determine whether extensions are loaded
-         * @type {Boolean}
-         * @private
-         */
-        this.hasExtensions = isArray(this.extensions);
+        this.extensions = defaultsArr(f.extensions, []);
 
         /*** themes ***/
         /**
@@ -970,7 +946,7 @@ export class TableFilter {
          * themes: [{ name: 'skyblue' }]
          * @type {Array}
          */
-        this.themes = f.themes || [];
+        this.themes = defaultsArr(f.themes, []);
 
         /**
          * Define path to themes assets, defaults to
@@ -978,7 +954,7 @@ export class TableFilter {
          * themes: [{ name: 'skyblue' }]
          * @type {Array}
          */
-        this.themesPath = f.themes_path || this.stylePath + 'themes/';
+        this.themesPath = this.getThemesPath();
 
         /**
          * Enable responsive layout
@@ -997,6 +973,11 @@ export class TableFilter {
          * @private
          */
         this.ExtRegistry = {};
+
+        //conditionally instantiate required features
+        this.instantiateFeatures(
+            Object.keys(FEATURES).map((item) => FEATURES[item])
+        );
     }
 
     /**
@@ -1007,53 +988,32 @@ export class TableFilter {
             return;
         }
 
+        // import main stylesheet
+        this.import(this.stylesheetId, this.getStylesheetPath(), null, 'link');
+
         this.nbCells = this.getCellsNb(this.refRow);
         let Mod = this.Mod;
         let n = this.singleSearchFlt ? 1 : this.nbCells;
         let inpclass;
 
-        //loads stylesheet if not imported
-        this.import(this.stylesheetId, this.stylesheet, null, 'link');
-
         //loads theme
-        if (this.hasThemes) {
-            this.loadThemes();
-        }
+        this.loadThemes();
 
-        // Instanciate sugar date wrapper
-        Mod.dateType = Mod.dateType || new DateType(this);
-        Mod.dateType.init();
+        const { dateType, help, state, markActiveColumns, gridLayout, loader,
+            highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
+            alternateRows, noResults, paging } = FEATURES;
 
-        // Instantiate help feature and initialise only if set true
-        Mod.help = Mod.help || new Help(this);
-        if (this.help) {
-            Mod.help.init();
-        }
-
-        if (this.state) {
-            Mod.state = Mod.state || new State(this);
-            Mod.state.init();
-        }
-
-        if (this.gridLayout) {
-            Mod.gridLayout = Mod.gridLayout || new GridLayout(this);
-            Mod.gridLayout.init();
-        }
-
-        if (this.loader) {
-            Mod.loader = Mod.loader || new Loader(this);
-            Mod.loader.init();
-        }
-
-        if (this.highlightKeywords) {
-            Mod.highlightKeyword = new HighlightKeyword(this);
-            Mod.highlightKeyword.init();
-        }
-
-        if (this.popupFilters) {
-            Mod.popupFilter = Mod.popupFilter || new PopupFilter(this);
-            Mod.popupFilter.init();
-        }
+        //explicitly initialise features in given order
+        this.initFeatures([
+            dateType,
+            help,
+            state,
+            markActiveColumns,
+            gridLayout,
+            loader,
+            highlightKeyword,
+            popupFilter
+        ]);
 
         //filters grid is not generated
         if (!this.fltGrid) {
@@ -1087,17 +1047,13 @@ export class TableFilter {
 
                 //drop-down filters
                 if (col === SELECT || col === MULTIPLE) {
-                    if (!Mod.dropdown) {
-                        Mod.dropdown = new Dropdown(this);
-                    }
-                    Mod.dropdown.init(i, this.isExternalFlt, fltcell);
+                    Mod.dropdown = Mod.dropdown || new Dropdown(this);
+                    Mod.dropdown.init(i, this.isExternalFlt(), fltcell);
                 }
                 // checklist
                 else if (col === CHECKLIST) {
-                    if (!Mod.checkList) {
-                        Mod.checkList = new CheckList(this);
-                    }
-                    Mod.checkList.init(i, this.isExternalFlt, fltcell);
+                    Mod.checkList = Mod.checkList || new CheckList(this);
+                    Mod.checkList.init(i, this.isExternalFlt(), fltcell);
                 } else {
                     this._buildInputFilter(i, inpclass, fltcell);
                 }
@@ -1121,64 +1077,34 @@ export class TableFilter {
                 () => this.enforceVisibility());
             this.enforceVisibility();
         }
-        if (this.rowsCounter) {
-            Mod.rowsCounter = new RowsCounter(this);
-            Mod.rowsCounter.init();
-        }
-        if (this.statusBar) {
-            Mod.statusBar = new StatusBar(this);
-            Mod.statusBar.init();
-        }
-        if (this.paging) {
-            if (!Mod.paging) {
-                Mod.paging = new Paging(this);
-                Mod.paging.init();
-            } else {
-                Mod.paging.reset();
-            }
-        }
-        if (this.btnReset) {
-            Mod.clearButton = new ClearButton(this);
-            Mod.clearButton.init();
-        }
 
-        if (this.hasColWidths && !this.gridLayout) {
-            this.setColWidths();
-        }
-        if (this.alternateRows) {
-            Mod.alternateRows = new AlternateRows(this);
-            Mod.alternateRows.init();
-        }
-        if (this.noResults) {
-            Mod.noResults = Mod.noResults || new NoResults(this);
-            Mod.noResults.init();
-        }
+        this.initFeatures([
+            rowsCounter,
+            statusBar,
+            clearButton,
+            alternateRows,
+            noResults,
+            paging
+        ]);
+
+        this.setColWidths();
 
         //TF css class is added to table
         if (!this.gridLayout) {
-            addClass(this.tbl, this.prfxTf);
+            addClass(this.dom(), this.prfxTf);
             if (this.responsive) {
-                addClass(this.tbl, this.prfxResponsive);
+                addClass(this.dom(), this.prfxResponsive);
             }
         }
 
-        /* Loads extensions */
-        if (this.hasExtensions) {
-            this.initExtensions();
-        }
+        /* Load extensions */
+        this.initExtensions();
 
         // Subscribe to events
-        if (this.markActiveColumns) {
-            this.emitter.on(['before-filtering'],
-                () => this.clearActiveColumns());
-            this.emitter.on(['cell-processed'],
-                (tf, colIndex) => this.markActiveColumn(colIndex));
-        }
         if (this.linkedFilters) {
             this.emitter.on(['after-filtering'], () => this.linkFilters());
         }
 
-        /** @inherited */
         this.initialized = true;
 
         this.onFiltersLoaded(this);
@@ -1282,16 +1208,16 @@ export class TableFilter {
         }
         let fltrow;
 
-        let thead = tag(this.tbl, 'thead');
+        let thead = tag(this.dom(), 'thead');
         if (thead.length > 0) {
             fltrow = thead[0].insertRow(this.filtersRowIndex);
         } else {
-            fltrow = this.tbl.insertRow(this.filtersRowIndex);
+            fltrow = this.dom().insertRow(this.filtersRowIndex);
         }
 
         fltrow.className = this.fltsRowCssClass;
 
-        if (this.isExternalFlt) {
+        if (this.isExternalFlt()) {
             fltrow.style.display = NONE;
         }
 
@@ -1318,7 +1244,7 @@ export class TableFilter {
      */
     _buildInputFilter(colIndex, cssClass, container) {
         let col = this.getFilterType(colIndex);
-        let externalFltTgtId = this.isExternalFlt ?
+        let externalFltTgtId = this.isExternalFlt() ?
             this.externalFltTgtIds[colIndex] : null;
         let inpType = col === INPUT ? 'text' : 'hidden';
         let inp = createElm(INPUT,
@@ -1355,7 +1281,7 @@ export class TableFilter {
      * @param  {DOMElement} container Container DOM element
      */
     _buildSubmitButton(colIndex, container) {
-        let externalFltTgtId = this.isExternalFlt ?
+        let externalFltTgtId = this.isExternalFlt() ?
             this.externalFltTgtIds[colIndex] : null;
         let btn = createElm(INPUT,
             ['type', 'button'],
@@ -1374,6 +1300,53 @@ export class TableFilter {
     }
 
     /**
+     * Istantiate the collection of features required by the
+     * configuration and add them to the features registry. A feature is
+     * described by a `class` and `name` fields and and optional `property`
+     * field:
+     * {
+     *   class: AClass,
+     *   name: 'aClass'
+     * }
+     * @param {Array} [features=[]]
+     * @private
+     */
+    instantiateFeatures(features = []) {
+        features.forEach((feature) => {
+            // TODO: remove the property field.
+            // Due to naming convention inconsistencies, a `property`
+            // field is added to allow a conditional instanciation based
+            // on that property on TableFilter, if supplied.
+            feature.property = feature.property || feature.name;
+            if (!this.hasConfig || this[feature.property] === true ||
+                feature.enforce === true) {
+                let {class: Cls, name} = feature;
+
+                this.Mod[name] = this.Mod[name] || new Cls(this);
+            }
+        });
+    }
+
+    /**
+     * Initialise the passed features collection. A feature is described by a
+     * `class` and `name` fields and and optional `property` field:
+     * {
+     *   class: AClass,
+     *   name: 'aClass'
+     * }
+     * @param {Array} [features=[]]
+     * @private
+     */
+    initFeatures(features = []) {
+        features.forEach((feature) => {
+            let {property, name} = feature;
+            if (this[property] === true && this.Mod[name]) {
+                this.Mod[name].init();
+            }
+        });
+    }
+
+    /**
      * Return a feature instance for a given name
      * @param  {String} name Name of the feature
      * @return {Object}
@@ -1387,15 +1360,17 @@ export class TableFilter {
      */
     initExtensions() {
         let exts = this.extensions;
+        if (exts.length === 0) {
+            return;
+        }
+
         // Set config's publicPath dynamically for Webpack...
         __webpack_public_path__ = this.basePath;
 
         this.emitter.emit('before-loading-extensions', this);
         for (let i = 0, len = exts.length; i < len; i++) {
             let ext = exts[i];
-            if (!this.ExtRegistry[ext.name]) {
-                this.loadExtension(ext);
-            }
+            this.loadExtension(ext);
         }
         this.emitter.emit('after-loading-extensions', this);
     }
@@ -1405,7 +1380,7 @@ export class TableFilter {
      * @param  {Object} ext Extension config object
      */
     loadExtension(ext) {
-        if (!ext || !ext.name) {
+        if (!ext || !ext.name || this.hasExtension(ext.name)) {
             return;
         }
 
@@ -1449,6 +1424,15 @@ export class TableFilter {
     }
 
     /**
+     * Register the passed extension instance with associated name
+     * @param {Object} inst Extension instance
+     * @param {String} name Name of the extension
+     */
+    registerExtension(inst, name) {
+        this.ExtRegistry[name] = inst;
+    }
+
+    /**
      * Destroy all the extensions store in extensions registry
      */
     destroyExtensions() {
@@ -1464,6 +1448,10 @@ export class TableFilter {
      * Load themes defined in the configuration object
      */
     loadThemes() {
+        if (!this.hasThemes) {
+            return;
+        }
+
         let themes = this.themes;
         this.emitter.emit('before-loading-themes', this);
 
@@ -1515,30 +1503,22 @@ export class TableFilter {
 
         let emitter = this.emitter;
 
-        if (this.isExternalFlt && !this.popupFilters) {
+        if (this.isExternalFlt() && !this.popupFilters) {
             this.removeExternalFlts();
         }
-        if (this.infDiv) {
-            this.removeToolbar();
-        }
-        if (this.markActiveColumns) {
-            this.clearActiveColumns();
-            emitter.off(['before-filtering'], () => this.clearActiveColumns());
-            emitter.off(['cell-processed'],
-                (tf, colIndex) => this.markActiveColumn(colIndex));
-        }
-        if (this.hasExtensions) {
-            this.destroyExtensions();
-        }
+
+        this.removeToolbar();
+
+        this.destroyExtensions();
 
         this.validateAllRows();
 
-        if (this.fltGrid && !this.gridLayout) {
-            this.tbl.deleteRow(this.filtersRowIndex);
-        }
-
         // broadcast destroy event modules and extensions are subscribed to
         emitter.emit('destroy', this);
+
+        if (this.fltGrid && !this.gridLayout) {
+            this.dom().deleteRow(this.filtersRowIndex);
+        }
 
         // unsubscribe to events
         if (this.hasVisibleRows) {
@@ -1550,8 +1530,8 @@ export class TableFilter {
         this.emitter.off(['filter-focus'],
             (tf, filter) => this.setActiveFilterId(filter.id));
 
-        removeClass(this.tbl, this.prfxTf);
-        removeClass(this.tbl, this.prfxResponsive);
+        removeClass(this.dom(), this.prfxTf);
+        removeClass(this.dom(), this.prfxResponsive);
 
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
@@ -1585,7 +1565,7 @@ export class TableFilter {
         else {
             let cont = createElm('caption');
             cont.appendChild(infDiv);
-            this.tbl.insertBefore(cont, this.tbl.firstChild);
+            this.dom().insertBefore(cont, this.dom().firstChild);
         }
         this.infDiv = infDiv;
 
@@ -1610,9 +1590,9 @@ export class TableFilter {
 
         // emit help initialisation only if undefined
         if (isUndef(this.help)) {
-            // explicitily set enabled field to true to initialise help by
+            // explicitily enable help to initialise feature by
             // default, only if setting is undefined
-            this.Mod.help.enabled = true;
+            this.Mod.help.enable();
             this.emitter.emit('init-help', this);
         }
     }
@@ -1627,18 +1607,16 @@ export class TableFilter {
         removeElm(this.infDiv);
         this.infDiv = null;
 
-        let tbl = this.tbl;
+        let tbl = this.dom();
         let captions = tag(tbl, 'caption');
-        if (captions.length > 0) {
-            [].forEach.call(captions, (elm) => tbl.removeChild(elm));
-        }
+        [].forEach.call(captions, (elm) => removeElm(elm));
     }
 
     /**
      * Remove all the external column filters
      */
     removeExternalFlts() {
-        if (!this.isExternalFlt) {
+        if (!this.isExternalFlt()) {
             return;
         }
         let ids = this.externalFltTgtIds,
@@ -1709,7 +1687,7 @@ export class TableFilter {
         this.onBeforeFilter(this);
         this.emitter.emit('before-filtering', this);
 
-        let row = this.tbl.rows,
+        let row = this.dom().rows,
             nbRows = this.getRowsNb(true),
             hiddenRows = 0;
 
@@ -1830,11 +1808,11 @@ export class TableFilter {
      * @param {String} term      Search term
      * @param {String} cellValue  Cell data
      * @param {Number} colIdx    Column index
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     _testTerm(term, cellValue, colIdx) {
         let numData;
-        let decimal = this.decimalSeparator;
+        let decimal = this.getDecimal(colIdx);
         let reLe = new RegExp(this.leOperator),
             reGe = new RegExp(this.geOperator),
             reL = new RegExp(this.lwOperator),
@@ -1876,7 +1854,7 @@ export class TableFilter {
             let dateType = this.Mod.dateType;
             let isValidDate = dateType.isValid.bind(dateType);
             let parseDate = dateType.parse.bind(dateType);
-            let locale = dateType.getOptions(colIdx).locale || this.locale;
+            let locale = dateType.getLocale(colIdx);
 
             // Search arg dates tests
             let isLDate = hasLO &&
@@ -1947,12 +1925,6 @@ export class TableFilter {
         }
 
         else {
-            if (this.hasType(colIdx, [FORMATTED_NUMBER])) {
-                let colType = this.colTypes[colIdx];
-                if (colType.hasOwnProperty('decimal')) {
-                    decimal = colType.decimal;
-                }
-            }
             // Convert to number anyways to auto-resolve type in case not
             // defined by configuration
             numData = Number(cellValue) || parseNb(cellValue, decimal);
@@ -2070,7 +2042,7 @@ export class TableFilter {
      * @param {Number} colIndex Column index
      * @param {Boolean} [includeHeaders=false] Include headers row
      * @param {Arrat} [exclude=[]] List of row indexes to be excluded
-     * @returns Flat list of data for a column
+     * @return Flat list of data for a column
      */
     getColumnData(colIndex, includeHeaders = false, exclude = []) {
         return this.getColValues(colIndex, includeHeaders, true, exclude);
@@ -2081,7 +2053,7 @@ export class TableFilter {
      * @param {Number} colIndex Column index
      * @param {Boolean} [includeHeaders=false] Include headers row
      * @param {Arrat} [exclude=[]] List of row indexes to be excluded
-     * @returns Flat list of values for a column
+     * @return Flat list of values for a column
      */
     getColumnValues(colIndex, includeHeaders = false, exclude = []) {
         return this.getColValues(colIndex, includeHeaders, false, exclude);
@@ -2102,7 +2074,7 @@ export class TableFilter {
         typed = false,
         exclude = []
     ) {
-        let row = this.tbl.rows;
+        let row = this.dom().rows;
         let nbRows = this.getRowsNb(true);
         let colValues = [];
         let getContent = typed ? this.getCellData.bind(this) :
@@ -2123,14 +2095,8 @@ export class TableFilter {
 
             // checks if row has exact cell # and is not excluded
             if (nchilds === this.nbCells && !isExludedRow) {
-                // this loop retrieves cell data
-                for (let j = 0; j < nchilds; j++) {
-                    if (j !== colIndex) {
-                        continue;
-                    }
-                    let data = getContent(cell[j]);
-                    colValues.push(data);
-                }
+                let data = getContent(cell[colIndex]);
+                colValues.push(data);
             }
         }
         return colValues;
@@ -2245,7 +2211,7 @@ export class TableFilter {
      * @return {Number}          Number of cells
      */
     getCellsNb(rowIndex = 0) {
-        let tr = this.tbl.rows[rowIndex >= 0 ? rowIndex : 0];
+        let tr = this.dom().rows[rowIndex >= 0 ? rowIndex : 0];
         return tr ? tr.cells.length : 0;
     }
 
@@ -2257,7 +2223,7 @@ export class TableFilter {
      */
     getRowsNb(includeHeaders) {
         let s = isUndef(this.refRow) ? 0 : this.refRow;
-        let ntrs = this.tbl.rows.length;
+        let ntrs = this.dom().rows.length;
         if (includeHeaders) {
             s = 0;
         }
@@ -2268,7 +2234,7 @@ export class TableFilter {
     /**
      * Return the text content of a given cell
      * @param {DOMElement} Cell's DOM element
-     * @returns {String}
+     * @return {String}
      */
     getCellValue(cell) {
         let idx = cell.cellIndex;
@@ -2291,20 +2257,14 @@ export class TableFilter {
         let value = this.getCellValue(cell);
 
         if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
-            let decimal = this.decimalSeparator;
-            let colType = this.colTypes[colIndex];
-            if (colType.hasOwnProperty('decimal')) {
-                decimal = colType.decimal;
-            }
-            return parseNb(value, decimal);
+            return parseNb(value, this.getDecimal(colIndex));
         }
         else if (this.hasType(colIndex, [NUMBER])) {
             return Number(value) || parseNb(value);
         }
         else if (this.hasType(colIndex, [DATE])){
             let dateType = this.Mod.dateType;
-            let locale = dateType.getOptions(colIndex).locale || this.locale;
-            return dateType.parse(value, locale);
+            return dateType.parse(value, dateType.getLocale(colIndex));
         }
 
         return value;
@@ -2319,7 +2279,7 @@ export class TableFilter {
      * ]
      * @param {Boolean} [includeHeaders=false] Include headers row
      * @param {Boolean} [excludeHiddenCols=false] Exclude hidden columns
-     * @returns {Array}
+     * @return {Array}
      */
     getData(includeHeaders = false, excludeHiddenCols = false) {
         return this.getTableData(includeHeaders, excludeHiddenCols, true);
@@ -2333,7 +2293,7 @@ export class TableFilter {
      * ]
      * @param {Boolean} [includeHeaders=false] Include headers row
      * @param {Boolean} [excludeHiddenCols=false] Exclude hidden columns
-     * @returns {Array}
+     * @return {Array}
      */
     getValues(includeHeaders = false, excludeHiddenCols = false) {
         return this.getTableData(includeHeaders, excludeHiddenCols, false);
@@ -2358,7 +2318,7 @@ export class TableFilter {
         excludeHiddenCols = false,
         typed = false
     ) {
-        let rows = this.tbl.rows;
+        let rows = this.dom().rows;
         let nbRows = this.getRowsNb(true);
         let tblData = [];
         let getContent = typed ? this.getCellData.bind(this) :
@@ -2440,7 +2400,7 @@ export class TableFilter {
         if (this.validRowsIndex.length === 0) {
             return [];
         }
-        let rows = this.tbl.rows,
+        let rows = this.dom().rows,
             filteredData = [];
         let getContent = typed ? this.getCellData.bind(this) :
             this.getCellValue.bind(this);
@@ -2473,7 +2433,7 @@ export class TableFilter {
      * @param {any} colIndex Colmun's index
      * @param {boolean} [includeHeaders=false] Optional Include headers row
      * @param {any} [exclude=[]] Optional List of row indexes to be excluded
-     * @returns {Array} Flat list of typed values [data0, data1, data2...]
+     * @return {Array} Flat list of typed values [data0, data1, data2...]
      *
      * TODO: provide an API returning data in JSON format
      */
@@ -2487,7 +2447,7 @@ export class TableFilter {
      * @param {any} colIndex Colmun's index
      * @param {boolean} [includeHeaders=false] Optional Include headers row
      * @param {any} [exclude=[]] Optional List of row indexes to be excluded
-     * @returns {Array} Flat list of typed values [data0, data1, data2...]
+     * @return {Array} Flat list of typed values [data0, data1, data2...]
      *
      * TODO: provide an API returning data in JSON format
      */
@@ -2501,7 +2461,7 @@ export class TableFilter {
      * @param {any} colIndex Colmun's index
      * @param {boolean} [includeHeaders=false] Optional Include headers row
      * @param {any} [exclude=[]] Optional List of row indexes to be excluded
-     * @returns {Array} Flat list of values ['value0', 'value1', 'value2'...]
+     * @return {Array} Flat list of values ['value0', 'value1', 'value2'...]
      *
      * TODO: provide an API returning data in JSON format
      */
@@ -2515,7 +2475,7 @@ export class TableFilter {
      * @param {any} colIndex Colmun's index
      * @param {boolean} [includeHeaders=false] Optional Include headers row
      * @param {any} [exclude=[]] Optional List of row indexes to be excluded
-     * @returns {Array} Flat list of values ['value0', 'value1', 'value2'...]
+     * @return {Array} Flat list of values ['value0', 'value1', 'value2'...]
      *
      * TODO: provide an API returning data in JSON format
      */
@@ -2548,7 +2508,7 @@ export class TableFilter {
             return [];
         }
 
-        let rows = this.tbl.rows;
+        let rows = this.dom().rows;
         let getContent = typed ? this.getCellData.bind(this) :
             this.getCellValue.bind(this);
 
@@ -2588,7 +2548,7 @@ export class TableFilter {
      * @param  {Boolean} isValid
      */
     validateRow(rowIndex, isValid) {
-        let row = this.tbl.rows[rowIndex];
+        let row = this.dom().rows[rowIndex];
         if (!row || typeof isValid !== 'boolean') {
             return;
         }
@@ -2642,10 +2602,14 @@ export class TableFilter {
         let slc = this.getFilterElement(index),
             fltColType = this.getFilterType(index);
 
+        if (!slc) {
+            return;
+        }
+
         if (fltColType !== MULTIPLE && fltColType !== CHECKLIST) {
             if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-select-filter', this, index,
-                    this.linkedFilters, this.isExternalFlt);
+                    this.linkedFilters, this.isExternalFlt());
             }
             slc.value = query;
         }
@@ -2656,7 +2620,7 @@ export class TableFilter {
 
             if (this.loadFltOnDemand && !this.initialized) {
                 this.emitter.emit('build-select-filter', this, index,
-                    this.linkedFilters, this.isExternalFlt);
+                    this.linkedFilters, this.isExternalFlt());
             }
 
             this.emitter.emit('select-options', this, index, values);
@@ -2684,13 +2648,14 @@ export class TableFilter {
      * @param {Element} tbl DOM element
      */
     setColWidths(tbl) {
-        if (!this.hasColWidths) {
+        let colWidths = this.colWidths;
+        if (colWidths.length === 0) {
             return;
         }
-        tbl = tbl || this.tbl;
+
+        tbl = tbl || this.dom();
 
         let nbCols = this.nbCells;
-        let colWidths = this.colWidths;
         let colTags = tag(tbl, 'col');
         let tblHasColTag = colTags.length > 0;
         let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
@@ -2748,33 +2713,8 @@ export class TableFilter {
     }
 
     /**
-     * Clear filtered columns visual indicator (background color)
-     */
-    clearActiveColumns() {
-        for (let i = 0, len = this.getCellsNb(this.headersRow); i < len; i++) {
-            removeClass(this.getHeaderElement(i), this.activeColumnsCssClass);
-        }
-    }
-
-    /**
-     * Mark currently filtered column
-     * @param  {Number} colIndex Column index
-     */
-    markActiveColumn(colIndex) {
-        let header = this.getHeaderElement(colIndex);
-        if (hasClass(header, this.activeColumnsCssClass)) {
-            return;
-        }
-        this.onBeforeActiveColumn(this, colIndex);
-
-        addClass(header, this.activeColumnsCssClass);
-
-        this.onAfterActiveColumn(this, colIndex);
-    }
-
-    /**
      * Return the ID of the current active filter
-     * @returns {String}
+     * @return {String}
      */
     getActiveFilterId() {
         return this.activeFilterId;
@@ -2791,7 +2731,7 @@ export class TableFilter {
     /**
      * Return the column index for a given filter ID
      * @param {string} [filterId=''] Filter ID
-     * @returns {Number} Column index
+     * @return {Number} Column index
      */
     getColumnIndexFromFilterId(filterId = '') {
         let idx = filterId.split('_')[0];
@@ -2802,11 +2742,49 @@ export class TableFilter {
     /**
      * Build filter element ID for a given column index
      * @param {any} colIndex
-     * @returns {String} Filter element ID string
+     * @return {String} Filter element ID string
      * @private
      */
     buildFilterId(colIndex) {
         return `${this.prfxFlt}${colIndex}_${this.id}`;
+    }
+
+    /**
+     * Check if has external filters
+     * @returns {Boolean}
+     * @private
+     */
+    isExternalFlt() {
+        return this.externalFltTgtIds.length > 0;
+    }
+
+    /**
+     * Returns styles path
+     * @returns {String}
+     * @private
+     */
+    getStylePath() {
+        return defaultsStr(this.config.style_path, this.basePath + 'style/');
+    }
+
+    /**
+     * Returns main stylesheet path
+     * @returns {String}
+     * @private
+     */
+    getStylesheetPath() {
+        return defaultsStr(this.config.stylesheet,
+            this.getStylePath() + 'tablefilter.css');
+    }
+
+    /**
+     * Returns themes path
+     * @returns {String}
+     * @private
+     */
+    getThemesPath() {
+        return defaultsStr(this.config.themes_path,
+            this.getStylePath() + 'themes/');
     }
 
     /**
@@ -2884,7 +2862,7 @@ export class TableFilter {
     /**
      * Check if passed row is valid
      * @param {Number} rowIndex Row index
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     isRowValid(rowIndex) {
         return this.getValidRows().indexOf(rowIndex) !== -1;
@@ -2893,10 +2871,10 @@ export class TableFilter {
     /**
      * Check if passed row is visible
      * @param {Number} rowIndex Row index
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     isRowDisplayed(rowIndex) {
-        let row = this.tbl.rows[rowIndex];
+        let row = this.dom().rows[rowIndex];
         return this.getRowDisplay(row) === '';
     }
 
@@ -2904,7 +2882,7 @@ export class TableFilter {
      * Check if specified column filter ignores diacritics.
      * Note this is only applicable to input filter types.
      * @param {Number} colIndex    Column index
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     ignoresDiacritics(colIndex) {
         let ignoreDiac = this.ignoreDiacritics;
@@ -2917,7 +2895,7 @@ export class TableFilter {
     /**
      * Return clear all text for specified filter column
      * @param {Number} colIndex    Column index
-     * @returns {String}
+     * @return {String}
      */
     getClearFilterText(colIndex) {
         let clearText = this.clearFilterText;
@@ -3023,7 +3001,7 @@ export class TableFilter {
         let nbRows = this.getRowsNb(true);
         this.validRowsIndex = [];
         for (let k = this.refRow; k < nbRows; k++) {
-            let r = this.tbl.rows[k];
+            let r = this.dom().rows[k];
             if (!this.paging) {
                 if (this.getRowDisplay(r) !== NONE) {
                     this.validRowsIndex.push(r.rowIndex);
@@ -3076,7 +3054,7 @@ export class TableFilter {
      * Determine whether the specified column has one of the passed types
      * @param {Number} colIndex Column index
      * @param {Array} [types=[]] List of column types
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     hasType(colIndex, types = []) {
         if (this.colTypes.length === 0) {
@@ -3095,21 +3073,15 @@ export class TableFilter {
      * @return {Element}
      */
     getHeaderElement(colIndex) {
-        let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.tbl;
+        let table = this.gridLayout ? this.Mod.gridLayout.headTbl : this.dom();
         let tHead = tag(table, 'thead');
-        let headersRow = this.headersRow;
+        let rowIdx = this.getHeadersRowIndex();
         let header;
-        for (let i = 0; i < this.nbCells; i++) {
-            if (i !== colIndex) {
-                continue;
-            }
-            if (tHead.length === 0) {
-                header = table.rows[headersRow].cells[i];
-            }
-            if (tHead.length === 1) {
-                header = tHead[0].rows[headersRow].cells[i];
-            }
-            break;
+        if (tHead.length === 0) {
+            header = table.rows[rowIdx].cells[colIndex];
+        }
+        if (tHead.length === 1) {
+            header = tHead[0].rows[rowIdx].cells[colIndex];
         }
         return header;
     }
@@ -3140,8 +3112,7 @@ export class TableFilter {
      * @return {String}
      */
     getFilterType(colIndex) {
-        let colType = this.cfg['col_' + colIndex];
-        return !colType ? INPUT : colType.toLowerCase();
+        return this.filterTypes[colIndex];
     }
 
     /**
@@ -3155,10 +3126,35 @@ export class TableFilter {
     /**
      * Return the total number of valid rows
      * @param {Boolean} [reCalc=false] Forces calculation of filtered rows
-     * @returns {Number}
+     * @return {Number}
      */
     getValidRowsNb(reCalc = false) {
         return this.getValidRows(reCalc).length;
+    }
+
+    /**
+     * Return the working DOM element
+     * @return {HTMLTableElement}
+     */
+    dom() {
+        return this.tbl;
+    }
+
+    /**
+     * Return the decimal separator for supplied column as per column type
+     * configuration or global setting
+     * @param {Number} colIndex Column index
+     * @returns {String} '.' or ','
+     */
+    getDecimal(colIndex) {
+        let decimal = this.decimalSeparator;
+        if (this.hasType(colIndex, [FORMATTED_NUMBER])) {
+            let colType = this.colTypes[colIndex];
+            if (colType.hasOwnProperty('decimal')) {
+                decimal = colType.decimal;
+            }
+        }
+        return decimal;
     }
 
     /**

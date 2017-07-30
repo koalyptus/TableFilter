@@ -15,10 +15,14 @@
 
     module('Table 1: DOM tests');
     test('Filters row', function() {
-        equal(tf.tbl.rows[0].className, 'fltrow', 'Filters row CSS class name');
+        equal(
+            tf.dom().rows[0].className,
+            'fltrow',
+            'Filters row CSS class name'
+        );
         equal(tf.getFilterElement(0).nodeName, 'INPUT', 'Filter DOM element');
         deepEqual(
-            tf.tbl.scrollWidth === tf.tbl.clientWidth,
+            tf.dom().scrollWidth === tf.dom().clientWidth,
             true,
             'Horizontal scrollbar is not displayed'
         );
@@ -40,7 +44,7 @@
     module('Table 2: sanity checks');
     test('TableFilter instance', function() {
         notEqual(tf1.id, null, 'id check');
-        deepEqual(tf1.tbl.classList.contains(tf1.prfxResponsive), true,
+        deepEqual(tf1.dom().classList.contains(tf1.prfxResponsive), true,
             'Responsive CSS class');
         equal(tf1.filtersRowIndex, 1, 'Filters row index');
         deepEqual(tf1.getCellsNb(), 5, 'filters type collection length');
@@ -49,13 +53,13 @@
     module('Table 2: DOM tests');
     test('Filters row', function() {
         equal(
-            tf1.tbl.rows[1].className,
+            tf1.dom().rows[1].className,
             'fltrow',
             'Filters row CSS class name'
         );
         equal(tf1.getFilterElement(0).nodeName, 'INPUT', 'Filter DOM element');
         deepEqual(
-            tf1.tbl.scrollWidth > tf1.tbl.clientWidth,
+            tf1.dom().scrollWidth > tf1.dom().clientWidth,
             true,
             'Horizontal scrollbar is displayed'
         );
@@ -74,7 +78,7 @@
         // setup
         var importFile = tf1.import;
         var hit = 0;
-        tf1.import = function() { hit++ };
+        tf1.import = function() { hit++; };
         tf1.initialized = true;
 
         // act

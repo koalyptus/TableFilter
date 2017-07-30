@@ -9,7 +9,7 @@
 
     module('Sanity checks');
     test('Column widths', function() {
-        var cols = tf.tbl.getElementsByTagName('col');
+        var cols = tf.dom().getElementsByTagName('col');
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(cols[1].style.width, '100px', 'Expected column width');
         deepEqual(cols[4].style.width, '', 'Expected column width');
@@ -21,8 +21,7 @@
         tf = new TableFilter('demo', {
             base_path: '../dist/tablefilter/',
             col_widths: ['150px', '100px', '175px', '120px', '200px'],
-            grid_layout: true,
-            sort: false
+            grid_layout: true
         });
         tf.init();
         var cols = tf.feature('gridLayout').headTbl.getElementsByTagName('col');

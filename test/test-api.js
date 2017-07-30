@@ -14,6 +14,14 @@ var tf1 = new TableFilter('demo1', {
         on_loaded: colsVisibilityTests
     }]
 });
+
+tf1.registerExtension(
+    {
+        init: function() {},
+        destroy: function() {}
+    },
+    'myExtension'
+);
 tf1.init();
 
 module('Sanity checks');
@@ -28,6 +36,7 @@ test('TableFilter object', function() {
     deepEqual(tf.getFilterId(0), 'flt0_demo', 'Filter DOM element id');
     deepEqual(tf.getStartRowIndex(), 2, 'Start of filterable rows');
     deepEqual(tf.getLastRowIndex(), 8, 'Last row index');
+    deepEqual(tf.dom().nodeName, 'TABLE', 'Working DOM element type');
     deepEqual(
         tf.getHeadersText(),
         [
@@ -42,7 +51,7 @@ test('TableFilter object', function() {
     );
     deepEqual(tf.getValidRowsNb(), 0, 'Number of valid rows before filtering');
     deepEqual(
-        tf.getCellData(tf.tbl.rows[3].cells[2]),
+        tf.getCellData(tf.dom().rows[3].cells[2]),
         982,
         'getCellData returns typed value'
     );
@@ -274,7 +283,7 @@ test('Get table data', function() {
     );
     deepEqual(
         tf.getFilteredColumnValues(2, true),
-       ['Road Distance (km)','2781','1533','2045'],
+        ['Road Distance (km)','2781','1533','2045'],
         'Get filtered column data with headers'
     );
     deepEqual(
@@ -379,9 +388,19 @@ test('Can select checklist options with array', function() {
     tf.setFilterValue(2, '');
     tf.setFilterValue(2, ['1412', '982']);
 
-    deepEqual(tf.getFilterValue(2), ['1412', '982'],
+    deepEqual(tf.getFilterValue(2), ['982', '1412'],
         'Column 2 filter values');
 });
+
+test('get and set filter value can handle out of range column index',
+    function() {
+        // act
+        tf.setFilterValue(11, '');
+
+        // assert
+        deepEqual(tf.getFilterValue(11), '',
+            'return empty string for inexistent filter');
+    });
 
 module('TableFilter with pop-up filters');
 test('Sanity checks', function() {
@@ -621,7 +640,7 @@ test('Get table data', function() {
     );
     deepEqual(
         tf.getFilteredColumnValues(2, true),
-       ['Road Distance (km)','2781','1533','2045'],
+        ['Road Distance (km)','2781','1533','2045'],
         'Get filtered column data with headers'
     );
     deepEqual(
@@ -716,6 +735,20 @@ function colsVisibilityTests() { // issue 94
             'Headers text with excluded columns'
         );
 
+    });
+
+    test('Extension Sanity checks', function() {
+        deepEqual(
+            tf1.hasExtension('colsVisibility'),
+            true,
+            'ColsVisibility in extensions registry'
+        );
+
+        deepEqual(
+            tf1.hasExtension('myExtension'),
+            true,
+            'myExtension in extensions registry'
+        );
     });
 
     test('Destroy', function() {
