@@ -2222,11 +2222,8 @@ export class TableFilter {
      * @return {Number}                 Number of filterable rows
      */
     getRowsNb(includeHeaders) {
-        let s = isUndef(this.refRow) ? 0 : this.refRow;
+        let s = includeHeaders === true ? 0 : this.refRow;
         let ntrs = this.dom().rows.length;
-        if (includeHeaders) {
-            s = 0;
-        }
         return parseInt(ntrs - s, 10);
     }
 

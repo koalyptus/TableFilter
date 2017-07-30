@@ -14,6 +14,18 @@
         deepEqual(tf.autoFilter, true, 'Auto filtering enabled');
         deepEqual(tf.autoFilterDelay, 1000, 'Expected filtering delay');
     });
+    test('Blur input filter', function() {
+        // setup
+        var filter = tf.getFilterElement(0);
+        filter.focus();
+
+        // act
+        filter.blur();
+
+        // assert
+        deepEqual(tf.isUserTyping, false, 'User not typing');
+        deepEqual(tf.autoFilterTimer, null, 'Auto filter timer cleared');
+    });
 
     module('Remove feature');
     test('Auto filter feature disabled', function() {
