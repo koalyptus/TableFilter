@@ -1922,12 +1922,12 @@ export class TableFilter {
                 occurence = contains(term, cellValue,
                     this.isExactMatch(colIdx), this.caseSensitive);
             }
-        }
-
-        else {
+        } else {
             // Convert to number anyways to auto-resolve type in case not
-            // defined by configuration
-            numData = Number(cellValue) || parseNb(cellValue, decimal);
+            // defined by configuration. Order is important first try to
+            // parse formatted number then fallback to Number coercion
+            // to avoid false positives with Number
+            numData = parseNb(cellValue, decimal) || Number(cellValue);
 
             // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
             // rgx:)
