@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/tablefilter.js | tablefilter v0.5.36 API Document</title>
+  <title data-ice="title">src/tablefilter.js | tablefilter v0.5.37 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -1161,14 +1161,14 @@ export class TableFilter {
             for (let i = 0; i &lt; n; i++) {
                 this.emitter.emit(&apos;before-filter-init&apos;, this, i);
 
-                let fltcell = createElm(this.fltCellTag),
+                let fltCell = createElm(this.fltCellTag),
                     col = this.getFilterType(i);
 
                 if (this.singleSearchFlt) {
-                    fltcell.colSpan = this.nbCells;
+                    fltCell.colSpan = this.nbCells;
                 }
                 if (!this.gridLayout) {
-                    fltrow.appendChild(fltcell);
+                    fltrow.appendChild(fltCell);
                 }
                 inpclass = (i === n - 1 &amp;&amp; this.displayBtn) ?
                     this.fltSmallCssClass : this.fltCssClass;
@@ -1182,19 +1182,23 @@ export class TableFilter {
                 //drop-down filters
                 if (col === SELECT || col === MULTIPLE) {
                     Mod.dropdown = Mod.dropdown || new Dropdown(this);
-                    Mod.dropdown.init(i, this.isExternalFlt(), fltcell);
+                    Mod.dropdown.init(i, this.isExternalFlt(), fltCell);
                 }
                 // checklist
                 else if (col === CHECKLIST) {
                     Mod.checkList = Mod.checkList || new CheckList(this);
-                    Mod.checkList.init(i, this.isExternalFlt(), fltcell);
+                    Mod.checkList.init(i, this.isExternalFlt(), fltCell);
                 } else {
-                    this._buildInputFilter(i, inpclass, fltcell);
+                    this._buildInputFilter(i, inpclass, fltCell);
                 }
 
                 // this adds submit button
                 if (i === n - 1 &amp;&amp; this.displayBtn) {
-                    this._buildSubmitButton(i, fltcell);
+                    this._buildSubmitButton(
+                        this.isExternalFlt() ?
+                            elm(this.externalFltTgtIds[i]) :
+                            fltCell
+                    );
                 }
 
                 this.emitter.emit(&apos;after-filter-init&apos;, this, i);
@@ -1411,24 +1415,17 @@ export class TableFilter {
 
     /**
      * Build submit button
-     * @param  {Number} colIndex      Column index
      * @param  {DOMElement} container Container DOM element
      */
-    _buildSubmitButton(colIndex, container) {
-        let externalFltTgtId = this.isExternalFlt() ?
-            this.externalFltTgtIds[colIndex] : null;
+    _buildSubmitButton(container) {
         let btn = createElm(INPUT,
             [&apos;type&apos;, &apos;button&apos;],
             [&apos;value&apos;, this.btnText]
         );
         btn.className = this.btnCssClass;
 
-        //filter is appended in custom element
-        if (externalFltTgtId) {
-            elm(externalFltTgtId).appendChild(btn);
-        } else {
-            container.appendChild(btn);
-        }
+        //filter is appended in container element
+        container.appendChild(btn);
 
         addEvt(btn, &apos;click&apos;, () =&gt; this.filter());
     }
@@ -2391,7 +2388,7 @@ export class TableFilter {
             return parseNb(value, this.getDecimal(colIndex));
         }
         else if (this.hasType(colIndex, [NUMBER])) {
-            return Number(value) || parseNb(value);
+            return Number(value);
         }
         else if (this.hasType(colIndex, [DATE])){
             let dateType = this.Mod.dateType;
