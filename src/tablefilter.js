@@ -1027,14 +1027,14 @@ export class TableFilter {
             for (let i = 0; i < n; i++) {
                 this.emitter.emit('before-filter-init', this, i);
 
-                let fltcell = createElm(this.fltCellTag),
+                let fltCell = createElm(this.fltCellTag),
                     col = this.getFilterType(i);
 
                 if (this.singleSearchFlt) {
-                    fltcell.colSpan = this.nbCells;
+                    fltCell.colSpan = this.nbCells;
                 }
                 if (!this.gridLayout) {
-                    fltrow.appendChild(fltcell);
+                    fltrow.appendChild(fltCell);
                 }
                 inpclass = (i === n - 1 && this.displayBtn) ?
                     this.fltSmallCssClass : this.fltCssClass;
@@ -1048,19 +1048,23 @@ export class TableFilter {
                 //drop-down filters
                 if (col === SELECT || col === MULTIPLE) {
                     Mod.dropdown = Mod.dropdown || new Dropdown(this);
-                    Mod.dropdown.init(i, this.isExternalFlt(), fltcell);
+                    Mod.dropdown.init(i, this.isExternalFlt(), fltCell);
                 }
                 // checklist
                 else if (col === CHECKLIST) {
                     Mod.checkList = Mod.checkList || new CheckList(this);
-                    Mod.checkList.init(i, this.isExternalFlt(), fltcell);
+                    Mod.checkList.init(i, this.isExternalFlt(), fltCell);
                 } else {
-                    this._buildInputFilter(i, inpclass, fltcell);
+                    this._buildInputFilter(i, inpclass, fltCell);
                 }
 
                 // this adds submit button
                 if (i === n - 1 && this.displayBtn) {
-                    this._buildSubmitButton(i, fltcell);
+                    this._buildSubmitButton(
+                        this.isExternalFlt() ?
+                            elm(this.externalFltTgtIds[i]) :
+                            fltCell
+                    );
                 }
 
                 this.emitter.emit('after-filter-init', this, i);
@@ -1277,24 +1281,17 @@ export class TableFilter {
 
     /**
      * Build submit button
-     * @param  {Number} colIndex      Column index
      * @param  {DOMElement} container Container DOM element
      */
-    _buildSubmitButton(colIndex, container) {
-        let externalFltTgtId = this.isExternalFlt() ?
-            this.externalFltTgtIds[colIndex] : null;
+    _buildSubmitButton(container) {
         let btn = createElm(INPUT,
             ['type', 'button'],
             ['value', this.btnText]
         );
         btn.className = this.btnCssClass;
 
-        //filter is appended in custom element
-        if (externalFltTgtId) {
-            elm(externalFltTgtId).appendChild(btn);
-        } else {
-            container.appendChild(btn);
-        }
+        //filter is appended in container element
+        container.appendChild(btn);
 
         addEvt(btn, 'click', () => this.filter());
     }
@@ -2257,7 +2254,7 @@ export class TableFilter {
             return parseNb(value, this.getDecimal(colIndex));
         }
         else if (this.hasType(colIndex, [NUMBER])) {
-            return Number(value) || parseNb(value);
+            return Number(value);
         }
         else if (this.hasType(colIndex, [DATE])){
             let dateType = this.Mod.dateType;
