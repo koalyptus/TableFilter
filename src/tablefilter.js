@@ -2806,39 +2806,27 @@ export class TableFilter {
             slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
 
-        let activeIdx = this.getColumnIndexFromFilterId(this.activeFilterId);
-
         for (let i = 0, len = slcIndex.length; i < len; i++) {
             let colIdx = slcIndex[i];
             let curSlc = elm(this.fltIds[colIdx]);
             let slcSelectedValue = this.getFilterValue(colIdx);
 
-            // Welcome to cyclomatic complexity hell :)
-            // TODO: simplify/refactor if statement
-            if (activeIdx !== colIdx ||
-                (this.paging && slcA1.indexOf(colIdx) !== -1 &&
-                    activeIdx === colIdx) ||
-                (!this.paging && (slcA3.indexOf(colIdx) !== -1 ||
-                    slcA2.indexOf(colIdx) !== -1)) ||
-                slcSelectedValue === this.getClearFilterText(colIdx)) {
-
-                //1st option needs to be inserted
-                if (this.loadFltOnDemand) {
-                    let opt0 = createOpt(this.getClearFilterText(colIdx), '');
-                    curSlc.innerHTML = '';
-                    curSlc.appendChild(opt0);
-                }
-
-                if (slcA3.indexOf(colIdx) !== -1) {
-                    this.emitter.emit('build-checklist-filter', this, colIdx,
-                        true);
-                } else {
-                    this.emitter.emit('build-select-filter', this, colIdx,
-                        true);
-                }
-
-                this.setFilterValue(colIdx, slcSelectedValue);
+            //1st option needs to be inserted
+            if (this.loadFltOnDemand) {
+                let opt0 = createOpt(this.getClearFilterText(colIdx), '');
+                curSlc.innerHTML = '';
+                curSlc.appendChild(opt0);
             }
+
+            if (slcA3.indexOf(colIdx) !== -1) {
+                this.emitter.emit('build-checklist-filter', this, colIdx,
+                    true);
+            } else {
+                this.emitter.emit('build-select-filter', this, colIdx,
+                    true);
+            }
+
+            this.setFilterValue(colIdx, slcSelectedValue);
         }
     }
 
