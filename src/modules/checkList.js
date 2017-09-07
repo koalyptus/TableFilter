@@ -220,6 +220,7 @@ export class CheckList extends BaseDropdown {
 
         let activeIdx;
         let activeFilterId = tf.getActiveFilterId();
+        console.log('activeFilterId',activeFilterId);
         if (isLinked && activeFilterId) {
             activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
         }
@@ -252,9 +253,12 @@ export class CheckList extends BaseDropdown {
                 if (colIndex !== j) {
                     continue;
                 }
-                if (isLinked && !tf.disableExcludedOptions &&
-                    (!tf.paging && !tf.isRowDisplayed(k)) ||
-                    (tf.paging && activeIdx && !tf.isRowValid(k))) {
+
+                // if (isLinked && !tf.disableExcludedOptions &&
+                //     (!tf.paging && !tf.isRowDisplayed(k)) ||
+                //     (tf.paging && activeIdx !== undefined &&
+                //         !tf.isRowValid(k))) {
+                if (isLinked && !this.isValidLinkedValue(k, activeIdx)) {
                     continue;
                 }
 

@@ -3,7 +3,7 @@ import {
     ignoreCase, numSortAsc, numSortDesc,
     dateSortAsc, sortNumberStr, sortDateStr
 } from '../sort';
-import {isArray, isObj} from '../types';
+import {isArray, isObj, isEmpty} from '../types';
 import {NUMBER, FORMATTED_NUMBER, DATE} from '../const';
 
 /**
@@ -117,5 +117,28 @@ export class BaseDropdown extends Feature {
             this.build(colIdx, this.tf.linkedFilters);
             this.selectOptions(colIdx, values);
         });
+    }
+
+    isValidLinkedValue(rowIdx, activeFilterIdx) {
+        let tf = this.tf;
+        // if (isLinked && !tf.disableExcludedOptions &&
+        //     (!tf.paging && !tf.isRowDisplayed(k)) ||
+        //     (tf.paging && activeIdx !== undefined &&
+        //         !tf.isRowValid(k)))
+        if (tf.disableExcludedOptions) {
+            return true;
+        }
+
+        if (tf.paging) {
+            if (!isEmpty(activeFilterIdx) && tf.isRowValid(rowIdx)) {
+                return true;
+            }
+        } else {
+            if (tf.isRowDisplayed(rowIdx)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -207,9 +207,8 @@ export class Dropdown extends BaseDropdown {
                 if (colIndex !== j) {
                     continue;
                 }
-                if (isLinked && !tf.disableExcludedOptions &&
-                    (!tf.paging && !tf.isRowDisplayed(k)) ||
-                    (tf.paging && activeIdx && !tf.isRowValid(k))) {
+
+                if (isLinked && !this.isValidLinkedValue(k, activeIdx)) {
                     continue;
                 }
 
