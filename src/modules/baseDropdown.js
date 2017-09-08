@@ -119,12 +119,15 @@ export class BaseDropdown extends Feature {
         });
     }
 
+    /**
+     * Check passed row contains a valid linked value
+     * @param {Number} rowIdx Row index
+     * @param {Number} activeFilterIdx Current active filter index
+     * @returns {Boolean}
+     */
     isValidLinkedValue(rowIdx, activeFilterIdx) {
         let tf = this.tf;
-        // if (isLinked && !tf.disableExcludedOptions &&
-        //     (!tf.paging && !tf.isRowDisplayed(k)) ||
-        //     (tf.paging && activeIdx !== undefined &&
-        //         !tf.isRowValid(k)))
+
         if (tf.disableExcludedOptions) {
             return true;
         }
