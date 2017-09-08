@@ -3,7 +3,7 @@ import {
     ignoreCase, numSortAsc, numSortDesc,
     dateSortAsc, sortNumberStr, sortDateStr
 } from '../sort';
-import {isArray, isObj} from '../types';
+import {isArray, isObj, isEmpty} from '../types';
 import {NUMBER, FORMATTED_NUMBER, DATE} from '../const';
 
 /**
@@ -117,5 +117,31 @@ export class BaseDropdown extends Feature {
             this.build(colIdx, this.tf.linkedFilters);
             this.selectOptions(colIdx, values);
         });
+    }
+
+    /**
+     * Check passed row contains a valid linked value
+     * @param {Number} rowIdx Row index
+     * @param {Number} activeFilterIdx Current active filter index
+     * @returns {Boolean}
+     */
+    isValidLinkedValue(rowIdx, activeFilterIdx) {
+        let tf = this.tf;
+
+        if (tf.disableExcludedOptions) {
+            return true;
+        }
+
+        if (tf.paging) {
+            if (!isEmpty(activeFilterIdx) && tf.isRowValid(rowIdx)) {
+                return true;
+            }
+        } else {
+            if (tf.isRowDisplayed(rowIdx)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

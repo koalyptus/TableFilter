@@ -202,14 +202,13 @@ export class Dropdown extends BaseDropdown {
                 continue;
             }
 
+            if (isLinked && !this.isValidLinkedValue(k, activeIdx)) {
+                continue;
+            }
+
             // this loop retrieves cell data
             for (let j = 0; j < nchilds; j++) {
                 if (colIndex !== j) {
-                    continue;
-                }
-                if (isLinked && !tf.disableExcludedOptions &&
-                    (!tf.paging && !tf.isRowDisplayed(k)) ||
-                    (tf.paging && activeIdx && !tf.isRowValid(k))) {
                     continue;
                 }
 
