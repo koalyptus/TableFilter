@@ -1800,6 +1800,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/basedropdown.js~basedropdown#isvalidlinkedvalue",
+    "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-method-isValidLinkedValue",
+    "src/modules/baseDropdown.js~BaseDropdown#isValidLinkedValue",
+    "method"
+  ],
+  [
     "src/modules/checklist.js",
     "file/src/modules/checkList.js.html",
     "src/modules/checkList.js",

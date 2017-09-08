@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/checkList.js | tablefilter v0.5.40 API Document</title>
+  <title data-ice="title">src/modules/checkList.js | tablefilter v0.5.41 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -354,6 +354,7 @@ export class CheckList extends BaseDropdown {
 
         let activeIdx;
         let activeFilterId = tf.getActiveFilterId();
+
         if (isLinked &amp;&amp; activeFilterId) {
             activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);
         }
@@ -381,14 +382,13 @@ export class CheckList extends BaseDropdown {
                 continue;
             }
 
+            if (isLinked &amp;&amp; !this.isValidLinkedValue(k, activeIdx)) {
+                continue;
+            }
+
             // this loop retrieves cell data
             for (let j = 0; j &lt; ncells; j++) {
                 if (colIndex !== j) {
-                    continue;
-                }
-                if (isLinked &amp;&amp; !tf.disableExcludedOptions &amp;&amp;
-                    (!tf.paging &amp;&amp; !tf.isRowDisplayed(k)) ||
-                    (tf.paging &amp;&amp; activeIdx &amp;&amp; !tf.isRowValid(k))) {
                     continue;
                 }
 

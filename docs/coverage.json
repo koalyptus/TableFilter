@@ -1,7 +1,7 @@
 {
   "coverage": "100%",
-  "expectCount": 677,
-  "actualCount": 677,
+  "expectCount": 678,
+  "actualCount": 678,
   "files": {
     "src/const.js": {
       "expectCount": 19,
@@ -24,8 +24,8 @@
       "undocumentLines": []
     },
     "src/modules/baseDropdown.js": {
-      "expectCount": 3,
-      "actualCount": 3,
+      "expectCount": 4,
+      "actualCount": 4,
       "undocumentLines": []
     },
     "src/modules/checkList.js": {
