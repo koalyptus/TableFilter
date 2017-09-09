@@ -244,6 +244,12 @@
           <input id="chxCounter" type="checkbox" checked class="form-control"
               onclick="toggleRowsCounter(event);">
       </div>
+
+      <div class="navbar-form navbar-left">
+          <label for="chxGridLayout">Grid layout:</label>
+          <input id="chxGridLayout" type="checkbox" checked class="form-control"
+              onclick="toggleGridLayout(event);">
+      </div>
   </div>
 </div>
 
@@ -758,24 +764,45 @@
         }
     }
 
-    var tf = new TableFilter(
-        document.querySelector('.countries-tiny'),
-        {
-            base_path: 'tablefilter/',
-            alternate_rows: true,
-            rows_counter: true,
-            paging: true,
-            col_widths: [
-                '120px','120px','120px',
-                '120px','120px','120px',
-                '120px','120px','120px'
-            ],
-            on_filters_loaded: function(tf){
-                // hide the filters row
-                tf.dom().rows[tf.getFiltersRowIndex()].style.display = 'none';
+    // Toggle grid-layout mode
+    function toggleGridLayout(evt){
+        var chx = evt.target;
+
+        tf.destroy();
+        tf = createTableFilter(chx.checked);
+        tf.init();
+    }
+
+
+    function createTableFilter(gridLayout) {
+        return new TableFilter(
+            document.querySelector('.countries-tiny'),
+            {
+                base_path: 'tablefilter/',
+                alternate_rows: true,
+                rows_counter: true,
+                paging: true,
+                grid_layout: gridLayout ? {
+                    width: '100%',
+                    height: '350px'
+                } : false,
+                col_widths: [
+                    '120px','120px','120px',
+                    '120px','120px','120px',
+                    '120px','120px','120px'
+                ],
+                on_filters_loaded: function(tf){
+                    var dom = tf.gridLayout ?
+                        tf.feature('gridLayout').headTbl : tf.dom();
+
+                    // hide the filters row
+                    dom.rows[tf.getFiltersRowIndex()].style.display = 'none';
+                }
             }
-        }
-    );
+        );
+    }
+
+    var tf = createTableFilter(true);
     tf.init();
 </script>
 
