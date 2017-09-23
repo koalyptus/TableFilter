@@ -1,15 +1,14 @@
 import {Feature} from '../../feature';
 import {
     addClass, removeClass, createCheckItem, createElm, elm, removeElm,
-    getText
+    getText, tag
 } from '../../dom';
 import {isUndef, EMPTY_FN} from '../../types';
 import {addEvt, targetEvt, removeEvt} from '../../event';
 import {root} from '../../root';
 import {NONE} from '../../const';
 import {
-    defaultsBool, defaultsStr, defaultsFn,
-    defaultsNb, defaultsArr
+    defaultsBool, defaultsStr, defaultsFn, defaultsNb, defaultsArr
 } from '../../settings';
 
 /**
@@ -539,14 +538,13 @@ export default class ColsVisibility extends Feature {
 
         if (hide) {
             this.onBeforeColHidden(this, colIndex);
-        }
-        if (!hide) {
+        } else {
             this.onBeforeColDisplayed(this, colIndex);
         }
 
-        this._hideCells(tbl, colIndex, hide);
+        this._hideElements(tbl, colIndex, hide);
         if (this.headersTbl) {
-            this._hideCells(this.headersTbl, colIndex, hide);
+            this._hideElements(this.headersTbl, colIndex, hide);
         }
 
         let hiddenCols = this.hiddenCols;
@@ -565,9 +563,7 @@ export default class ColsVisibility extends Feature {
             this.onAfterColHidden(this, colIndex);
             this.emitter.emit('column-hidden', tf, this, colIndex,
                 this.hiddenCols);
-        }
-
-        if (!hide) {
+        } else {
             this.onAfterColDisplayed(this, colIndex);
             this.emitter.emit('column-shown', tf, this, colIndex,
                 this.hiddenCols);
@@ -688,14 +684,27 @@ export default class ColsVisibility extends Feature {
         return '';
     }
 
-    _hideCells(tbl, colIndex, hide) {
+    _hideElements(tbl, colIdx, hide) {
+        this._hideCells(tbl, colIdx, hide);
+        this._hideCol(tbl, colIdx, hide);
+    }
+
+    _hideCells(tbl, colIdx, hide) {
         for (let i = 0; i < tbl.rows.length; i++) {
             let row = tbl.rows[i];
-            let cell = row.cells[colIndex];
+            let cell = row.cells[colIdx];
             if (cell) {
                 cell.style.display = hide ? NONE : '';
             }
         }
+    }
+
+    _hideCol(tbl, colIdx, hide) {
+        let colElms = tag(this.tf.dom(), 'col');
+        if (colElms.length === 0) {
+            return;
+        }
+        colElms[colIdx].style.display = hide ? NONE : '';
     }
 
     _hideAtStart() {

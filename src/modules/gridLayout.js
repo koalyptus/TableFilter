@@ -169,9 +169,6 @@ export class GridLayout extends Feature {
         // Assign default column widths
         this.setDefaultColWidths();
 
-        // Initial table width
-        let tblW = this.initialTableWidth();
-
         //Main container: it will contain all the elements
         this.tblMainCont = this.createContainer(
             'div', this.mainContCssClass);
@@ -192,6 +189,7 @@ export class GridLayout extends Feature {
 
         //In case table width is expressed in %
         if (tbl.style.width === '') {
+            let tblW = this.initialTableWidth();
             tbl.style.width = (contains('%', tblW) ?
                 tbl.clientWidth : tblW) + 'px';
         }
