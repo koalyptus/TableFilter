@@ -40,18 +40,34 @@ test('Toggle columns list container', function() {
     deepEqual(ext.contEl.style.display, 'none', 'columns list visible');
 });
 test('Hide columns', function() {
+    // setup
     ext = tf.extension('colsVisibility');
+    var cols = tf.dom().getElementsByTagName('COL');
+
+    // act
     ext.hideCol(2);
     ext.hideCol(3);
+
+    // assert
     deepEqual(ext.isColHidden(2), true, 'Expected column is hidden');
     deepEqual(ext.isColHidden(3), true, 'Expected column is hidden');
+    deepEqual(cols[2].style.display, 'none', 'Column`s element display value');
+    deepEqual(cols[3].style.display, 'none', 'Column`s element display value');
 });
 test('Show columns', function() {
+    // setup
     ext = tf.extension('colsVisibility');
+    var cols = tf.dom().getElementsByTagName('COL');
+
+    // act
     ext.showCol(2);
     ext.showCol(3);
+
+    // assert
     deepEqual(ext.isColHidden(2), false, 'Expected column is displayed');
     deepEqual(ext.isColHidden(3), false, 'Expected column is displayed');
+    deepEqual(cols[2].style.display, '', 'Column`s element display value');
+    deepEqual(cols[3].style.display, '', 'Column`s element display value');
 });
 test('Toggle column', function() {
     ext = tf.extension('colsVisibility');
