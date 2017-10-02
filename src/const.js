@@ -12,6 +12,7 @@ import {ClearButton} from './modules/clearButton';
 import {AlternateRows} from './modules/alternateRows';
 import {NoResults} from './modules/noResults';
 import {Paging} from './modules/paging';
+import {Toolbar} from './modules/toolbar';
 
 /**
  * Filter types
@@ -196,5 +197,10 @@ export const FEATURES = {
     paging: {
         class: Paging,
         name: 'paging'
+    },
+    toolbar: {
+        class: Toolbar,
+        name: 'toolbar',
+        enforce: true
     }
 };

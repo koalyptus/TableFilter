@@ -92,7 +92,8 @@ export class ClearButton extends Feature {
         if (!this.targetId) {
             tf.setToolbar();
         }
-        let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);
+        let targetEl = !this.targetId ? /*tf.rDiv*/
+            tf.feature('toolbar').right() : elm(this.targetId);
         targetEl.appendChild(cont);
 
         if (!this.html) {

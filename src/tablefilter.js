@@ -222,58 +222,58 @@ export class TableFilter {
          */
         this.validRowsIndex = [];
 
-        /**
-         * Toolbar's container DOM element
-         * @type {DOMElement}
-         * @private
-         */
-        this.infDiv = null;
+        // /**
+        //  * Toolbar's container DOM element
+        //  * @type {DOMElement}
+        //  * @private
+        //  */
+        // this.infDiv = null;
 
-        /**
-         * Left-side inner container DOM element (rows counter in toolbar)
-         * @type {DOMElement}
-         * @private
-         */
-        this.lDiv = null;
+        // /**
+        //  * Left-side inner container DOM element (rows counter in toolbar)
+        //  * @type {DOMElement}
+        //  * @private
+        //  */
+        // this.lDiv = null;
 
-        /**
-         * Right-side inner container DOM element (reset button,
-         * page length selector in toolbar)
-         * @type {DOMElement}
-         * @private
-         */
-        this.rDiv = null;
+        // /**
+        //  * Right-side inner container DOM element (reset button,
+        //  * page length selector in toolbar)
+        //  * @type {DOMElement}
+        //  * @private
+        //  */
+        // this.rDiv = null;
 
-        /**
-         * Middle inner container DOM element (paging elements in toolbar)
-         * @type {DOMElement}
-         * @private
-         */
-        this.mDiv = null;
+        // /**
+        //  * Middle inner container DOM element (paging elements in toolbar)
+        //  * @type {DOMElement}
+        //  * @private
+        //  */
+        // this.mDiv = null;
 
-        /**
-         * Css class for toolbar's container DOM element
-         * @type {String}
-         */
-        this.infDivCssClass = defaultsStr(f.inf_div_css_class, 'inf');
+        // /**
+        //  * Css class for toolbar's container DOM element
+        //  * @type {String}
+        //  */
+        // this.infDivCssClass = defaultsStr(f.inf_div_css_class, 'inf');
 
-        /**
-         * Css class for left-side inner container DOM element
-         * @type {String}
-         */
-        this.lDivCssClass = defaultsStr(f.left_div_css_class, 'ldiv');
+        // /**
+        //  * Css class for left-side inner container DOM element
+        //  * @type {String}
+        //  */
+        // this.lDivCssClass = defaultsStr(f.left_div_css_class, 'ldiv');
 
-        /**
-         * Css class for right-side inner container DOM element
-         * @type {String}
-         */
-        this.rDivCssClass = defaultsStr(f.right_div_css_class, 'rdiv');
+        // /**
+        //  * Css class for right-side inner container DOM element
+        //  * @type {String}
+        //  */
+        // this.rDivCssClass = defaultsStr(f.right_div_css_class, 'rdiv');
 
-        /**
-         * Css class for middle inner container DOM element
-         * @type {String}
-         */
-        this.mDivCssClass = defaultsStr(f.middle_div_css_class, 'mdiv');
+        // /**
+        //  * Css class for middle inner container DOM element
+        //  * @type {String}
+        //  */
+        // this.mDivCssClass = defaultsStr(f.middle_div_css_class, 'mdiv');
 
         /*** filters' grid appearance ***/
         /**
@@ -483,11 +483,11 @@ export class TableFilter {
          */
         this.isWatermarkArray = isArray(this.watermark);
 
-        /**
-         * Toolbar's custom container ID
-         * @type {String}
-         */
-        this.toolBarTgtId = defaultsStr(f.toolbar_target_id, null);
+        // /**
+        //  * Toolbar's custom container ID
+        //  * @type {String}
+        //  */
+        // this.toolBarTgtId = defaultsStr(f.toolbar_target_id, null);
 
         /**
          * Indicate whether help UI component is disabled
@@ -890,29 +890,29 @@ export class TableFilter {
          */
         this.prfxValButton = 'btn';
 
-        /**
-         * Toolbar container ID prefix
-         * @private
-         */
-        this.prfxInfDiv = 'inf_';
+        // /**
+        //  * Toolbar container ID prefix
+        //  * @private
+        //  */
+        // this.prfxInfDiv = 'inf_';
 
-        /**
-         * Toolbar left element ID prefix
-         * @private
-         */
-        this.prfxLDiv = 'ldiv_';
+        // /**
+        //  * Toolbar left element ID prefix
+        //  * @private
+        //  */
+        // this.prfxLDiv = 'ldiv_';
 
-        /**
-         * Toolbar right element ID prefix
-         * @private
-         */
-        this.prfxRDiv = 'rdiv_';
+        // /**
+        //  * Toolbar right element ID prefix
+        //  * @private
+        //  */
+        // this.prfxRDiv = 'rdiv_';
 
-        /**
-         * Toolbar middle element ID prefix
-         * @private
-         */
-        this.prfxMDiv = 'mdiv_';
+        // /**
+        //  * Toolbar middle element ID prefix
+        //  * @private
+        //  */
+        // this.prfxMDiv = 'mdiv_';
 
         /**
          * Responsive Css class
@@ -1504,7 +1504,7 @@ export class TableFilter {
             this.removeExternalFlts();
         }
 
-        this.removeToolbar();
+        // this.removeToolbar();
 
         this.destroyExtensions();
 
@@ -1536,78 +1536,78 @@ export class TableFilter {
         this.initialized = false;
     }
 
-    /**
-     * Generate container element for paging, reset button, rows counter etc.
-     */
-    setToolbar() {
-        if (this.infDiv) {
-            return;
-        }
+    // /**
+    //  * Generate container element for paging, reset button, rows counter etc.
+    //  */
+    // setToolbar() {
+    //     if (this.infDiv) {
+    //         return;
+    //     }
 
-        /*** container div ***/
-        let infDiv = createElm('div');
-        infDiv.className = this.infDivCssClass;
+    //     /*** container div ***/
+    //     let infDiv = createElm('div');
+    //     infDiv.className = this.infDivCssClass;
 
-        //custom container
-        if (this.toolBarTgtId) {
-            elm(this.toolBarTgtId).appendChild(infDiv);
-        }
-        //grid-layout
-        else if (this.gridLayout) {
-            let gridLayout = this.Mod.gridLayout;
-            gridLayout.tblMainCont.appendChild(infDiv);
-            infDiv.className = gridLayout.infDivCssClass;
-        }
-        //default location: just above the table
-        else {
-            let cont = createElm('caption');
-            cont.appendChild(infDiv);
-            this.dom().insertBefore(cont, this.dom().firstChild);
-        }
-        this.infDiv = infDiv;
+    //     //custom container
+    //     if (this.toolBarTgtId) {
+    //         elm(this.toolBarTgtId).appendChild(infDiv);
+    //     }
+    //     //grid-layout
+    //     else if (this.gridLayout) {
+    //         let gridLayout = this.Mod.gridLayout;
+    //         gridLayout.tblMainCont.appendChild(infDiv);
+    //         infDiv.className = gridLayout.infDivCssClass;
+    //     }
+    //     //default location: just above the table
+    //     else {
+    //         let cont = createElm('caption');
+    //         cont.appendChild(infDiv);
+    //         this.dom().insertBefore(cont, this.dom().firstChild);
+    //     }
+    //     this.infDiv = infDiv;
 
-        /*** left div containing rows # displayer ***/
-        let lDiv = createElm('div');
-        lDiv.className = this.lDivCssClass;
-        infDiv.appendChild(lDiv);
-        this.lDiv = lDiv;
+    //     /*** left div containing rows # displayer ***/
+    //     let lDiv = createElm('div');
+    //     lDiv.className = this.lDivCssClass;
+    //     infDiv.appendChild(lDiv);
+    //     this.lDiv = lDiv;
 
-        /***    right div containing reset button
-                + nb results per page select    ***/
-        let rDiv = createElm('div');
-        rDiv.className = this.rDivCssClass;
-        infDiv.appendChild(rDiv);
-        this.rDiv = rDiv;
+    //     /***    right div containing reset button
+    //             + nb results per page select    ***/
+    //     let rDiv = createElm('div');
+    //     rDiv.className = this.rDivCssClass;
+    //     infDiv.appendChild(rDiv);
+    //     this.rDiv = rDiv;
 
-        /*** mid div containing paging elements ***/
-        let mDiv = createElm('div');
-        mDiv.className = this.mDivCssClass;
-        infDiv.appendChild(mDiv);
-        this.mDiv = mDiv;
+    //     /*** mid div containing paging elements ***/
+    //     let mDiv = createElm('div');
+    //     mDiv.className = this.mDivCssClass;
+    //     infDiv.appendChild(mDiv);
+    //     this.mDiv = mDiv;
 
-        // emit help initialisation only if undefined
-        if (isUndef(this.help)) {
-            // explicitily enable help to initialise feature by
-            // default, only if setting is undefined
-            this.Mod.help.enable();
-            this.emitter.emit('init-help', this);
-        }
-    }
+    //     // emit help initialisation only if undefined
+    //     if (isUndef(this.help)) {
+    //         // explicitily enable help to initialise feature by
+    //         // default, only if setting is undefined
+    //         this.Mod.help.enable();
+    //         this.emitter.emit('init-help', this);
+    //     }
+    // }
 
-    /**
-     * Remove toolbar container element
-     */
-    removeToolbar() {
-        if (!this.infDiv) {
-            return;
-        }
-        removeElm(this.infDiv);
-        this.infDiv = null;
+    // /**
+    //  * Remove toolbar container element
+    //  */
+    // removeToolbar() {
+    //     if (!this.infDiv) {
+    //         return;
+    //     }
+    //     removeElm(this.infDiv);
+    //     this.infDiv = null;
 
-        let tbl = this.dom();
-        let captions = tag(tbl, 'caption');
-        [].forEach.call(captions, (elm) => removeElm(elm));
-    }
+    //     let tbl = this.dom();
+    //     let captions = tag(tbl, 'caption');
+    //     [].forEach.call(captions, (elm) => removeElm(elm));
+    // }
 
     /**
      * Remove all the external column filters
