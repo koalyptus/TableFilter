@@ -2,6 +2,7 @@ import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
 import {addEvt} from '../event';
 import {defaultsStr} from '../settings';
+import {isNull} from '../types';
 
 /**
  * Clear button UI component
@@ -89,9 +90,12 @@ export class ClearButton extends Feature {
         let cont = createElm('span');
 
         // reset button is added to defined element
-        if (!this.targetId) {
-            tf.setToolbar();
-        }
+        // if (!this.targetId) {
+        //     tf.setToolbar();
+        // }
+        this.emitter.emit('initializing-feature', this,
+            !isNull(this.targetId));
+
         let targetEl = !this.targetId ? /*tf.rDiv*/
             tf.feature('toolbar').right() : elm(this.targetId);
         targetEl.appendChild(cont);
@@ -112,6 +116,8 @@ export class ClearButton extends Feature {
 
         /** @inherited */
         this.initialized = true;
+
+        this.emitter.emit('feature-initialized', this);
     }
 
     /**

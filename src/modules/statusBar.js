@@ -228,9 +228,7 @@ export class StatusBar extends Feature {
 
         emitter.on(EVENTS, () => this.message(''));
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
     }
 
