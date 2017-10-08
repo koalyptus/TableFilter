@@ -1,7 +1,8 @@
 import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
-import {EMPTY_FN} from '../types';
+import {EMPTY_FN, isNull} from '../types';
 import {defaultsStr, defaultsFn} from '../settings';
+import {LEFT} from './toolbar';
 
 /**
  * Rows counter UI component
@@ -69,6 +70,12 @@ export class RowsCounter extends Feature {
         this.cssClass = defaultsStr(f.css_class, 'tot');
 
         /**
+         * Default position in toolbar ('left'|'center'|'right')
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, LEFT);
+
+        /**
          * Callback fired before the counter is refreshed
          * @type {Function}
          */
@@ -91,6 +98,8 @@ export class RowsCounter extends Feature {
             return;
         }
 
+        this.emitter.emit('initializing-feature', this, !isNull(this.targetId));
+
         let tf = this.tf;
 
         //rows counter container
@@ -102,10 +111,12 @@ export class RowsCounter extends Feature {
         countText.appendChild(createText(this.text));
 
         // counter is added to defined element
-        if (!this.targetId) {
-            tf.setToolbar();
-        }
-        let targetEl = !this.targetId ? tf.lDiv : elm(this.targetId);
+        // if (!this.targetId) {
+        //     tf.setToolbar();
+        // }
+        let targetEl = !this.targetId ? /*tf.lDiv*/
+        tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.targetId);
 
         //default container: 'lDiv'
         if (!this.targetId) {
@@ -128,6 +139,8 @@ export class RowsCounter extends Feature {
         /** @inherited */
         this.initialized = true;
         this.refresh();
+
+        this.emitter.emit('feature-initialized', this);
     }
 
     /**

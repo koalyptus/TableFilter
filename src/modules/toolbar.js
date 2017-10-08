@@ -1,12 +1,16 @@
 import {Feature} from '../feature';
-import {createElm, removeElm, elm} from '../dom';
+import {createElm, removeElm, elm, tag} from '../dom';
 import {defaultsStr} from '../settings';
 import {isUndef} from '../types';
 
 const EVENTS = [
-    'initializing-feature'
+    'initializing-feature',
+    'initializing-extension'
 ];
 
+export const LEFT = 'left';
+export const RIGHT = 'right';
+export const CENTER = 'center';
 
 /**
  * Toolbar UI component
@@ -86,7 +90,7 @@ export class Toolbar extends Feature {
          */
         this.mDiv = null;
 
-                /**
+        /**
          * Toolbar container ID prefix
          * @private
          */
@@ -110,19 +114,22 @@ export class Toolbar extends Feature {
          */
         this.prfxMDiv = 'mdiv_';
 
+        /**
+         * Container elements inside toolbar
+         * @private
+         */
+        this.cont = {
+            left: null,
+            center: null,
+            right: null
+        };
+
         this.emitter.on(EVENTS,
-            (feature, isExternal) => this.tryInit(isExternal));
+            (feature, isExternal) => this.init(isExternal));
     }
 
-    tryInit(isExternal) {
-        if (isExternal) {
-            return;
-        }
-        this.init();
-    }
-
-    init() {
-        if (this.initialized) {
+    init(isExternal) {
+        if (this.initialized || isExternal) {
             return;
         }
 
@@ -136,13 +143,13 @@ export class Toolbar extends Feature {
         if (this.toolBarTgtId) {
             elm(this.toolBarTgtId).appendChild(infDiv);
         }
-        //grid-layout
+        // grid-layout
         else if (tf.gridLayout) {
             let gridLayout = tf.Mod.gridLayout;
             gridLayout.tblMainCont.appendChild(infDiv);
             infDiv.className = gridLayout.infDivCssClass;
         }
-        //default location: just above the table
+        // default location: just above the table
         else {
             let cont = createElm('caption');
             cont.appendChild(infDiv);
@@ -154,20 +161,29 @@ export class Toolbar extends Feature {
         // let lDiv = createElm('div');
         // lDiv.className = this.lDivCssClass;
         // infDiv.appendChild(lDiv);
-        this.lDiv = createContainer(infDiv, this.lDivCssClass);
+        this.lDiv = this.createContainer(infDiv, this.lDivCssClass);
 
         /***    right div containing reset button
                 + nb results per page select    ***/
         // let rDiv = createElm('div');
         // rDiv.className = this.rDivCssClass;
         // infDiv.appendChild(rDiv);
-        this.rDiv = createContainer(infDiv, this.rDivCssClass);
+        this.rDiv = this.createContainer(infDiv, this.rDivCssClass);
 
         /*** mid div containing paging elements ***/
         // let mDiv = createElm('div');
         // mDiv.className = this.mDivCssClass;
         // infDiv.appendChild(mDiv);
-        this.mDiv = createContainer(infDiv, this.mDivCssClass);
+        this.mDiv = this.createContainer(infDiv, this.mDivCssClass);
+
+        this.cont = {
+            left: this.lDiv,
+            center: this.mDiv,
+            right: this.rDiv
+        };
+
+        /** @inherited */
+        this.initialized = true;
 
         // emit help initialisation only if undefined
         if (isUndef(tf.help)) {
@@ -176,35 +192,45 @@ export class Toolbar extends Feature {
             tf.Mod.help.enable();
             this.emitter.emit('init-help', tf);
         }
-
-        /** @inherited */
-        this.initialized = true;
     }
 
-    left(elm) {
+    // left(elm) {
+    //     if (elm) {
+    //         this.lDiv.appendChild(elm);
+    //     }
+    //     return this.lDiv;
+    // }
+
+    // middle(elm) {
+    //     if (elm) {
+    //         this.mDiv.appendChild(elm);
+    //     }
+    //     return this.mDiv;
+    // }
+
+    // right(elm) {
+    //     if (elm) {
+    //         this.rDiv.appendChild(elm);
+    //     }
+    //     return this.rDiv;
+    // }
+
+    container(position = RIGHT, elm) {
+        let cont = this.cont[position];
         if (elm) {
-            this.lDiv.appendChild(elm);
+            cont.appendChild(elm);
         }
-        return this.lDiv;
+        return cont;
     }
 
-    middle(elm) {
-        if (elm) {
-            this.mDiv.appendChild(elm);
-        }
-        return this.mDiv;
-    }
-
-    right(elm) {
-        if (elm) {
-            this.rDiv.appendChild(elm);
-        }
-        return this.rDiv;
-    }
+    // insertIn(elm, position = RIGHT) {
+    //     let cont = this.container[position];
+    //     cont.appendChild(elm);
+    //     return cont;
+    // }
 
     createContainer(container, css) {
         let div = createElm('div', ['class', css]);
-        // div.className = css;
         container.appendChild(div);
         return div;
     }

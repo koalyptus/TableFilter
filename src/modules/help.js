@@ -3,8 +3,9 @@ import {createElm, createText, elm, removeElm} from '../dom';
 import {addEvt, targetEvt, removeEvt} from '../event';
 import {NONE} from '../const';
 import {root} from '../root';
-import {isEmpty} from '../types';
+import {isEmpty, isNull} from '../types';
 import {defaultsStr} from '../settings';
+import {RIGHT} from './toolbar';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
     '4.-Filter-operators';
@@ -108,6 +109,12 @@ export class Help extends Feature {
             '<div align="center" style="margin-top:8px;">' +
             '<a href="javascript:void(0);" class="close">Close</a></div></div>';
 
+        /**
+         * Default position in toolbar ('left'|'center'|'right')
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, RIGHT);
+
         this.emitter.on(['init-help'], () => this.init());
     }
 
@@ -137,6 +144,8 @@ export class Help extends Feature {
             return;
         }
 
+        this.emitter.emit('initializing-feature', this, !isNull(this.tgtId));
+
         let tf = this.tf;
 
         let btn = createElm('span');
@@ -145,10 +154,13 @@ export class Help extends Feature {
         this.boundMouseup = this.onMouseup.bind(this);
 
         //help button is added to defined element
-        if (!this.tgtId) {
-            tf.setToolbar();
-        }
-        let targetEl = !this.tgtId ? tf.rDiv : elm(this.tgtId);
+        // if (!this.tgtId) {
+        //     tf.setToolbar();
+        // }
+
+        let targetEl = !this.tgtId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.tgtId);
         targetEl.appendChild(btn);
 
         let divContainer = !this.contTgtId ? btn : elm(this.contTgtId);
@@ -186,6 +198,8 @@ export class Help extends Feature {
         this.btn = btn;
         /** @inherited */
         this.initialized = true;
+
+        this.emitter.emit('feature-initialized', this);
     }
 
     /**

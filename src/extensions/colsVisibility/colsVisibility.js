@@ -3,13 +3,14 @@ import {
     addClass, removeClass, createCheckItem, createElm, elm, removeElm,
     getText, tag
 } from '../../dom';
-import {isUndef, EMPTY_FN} from '../../types';
+import {isUndef, EMPTY_FN, isNull} from '../../types';
 import {addEvt, targetEvt, removeEvt} from '../../event';
 import {root} from '../../root';
 import {NONE} from '../../const';
 import {
     defaultsBool, defaultsStr, defaultsFn, defaultsNb, defaultsArr
 } from '../../settings';
+import {RIGHT} from '../../modules/toolbar';
 
 /**
  * Columns Visibility extension
@@ -208,6 +209,12 @@ export default class ColsVisibility extends Feature {
         this.tickAllText = defaultsStr(f.tick_all_text, 'Select all:');
 
         /**
+         * Default position in toolbar ('left'|'center'|'right')
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, RIGHT);
+
+        /**
          * List of indexes of hidden columns
          * @private
          */
@@ -369,6 +376,9 @@ export default class ColsVisibility extends Feature {
             return;
         }
 
+        this.emitter.emit('initializing-extension', this,
+            !isNull(this.btnTgtId));
+
         this.emitter.on(['hide-column'],
             (tf, colIndex) => this.hideCol(colIndex));
 
@@ -381,6 +391,7 @@ export default class ColsVisibility extends Feature {
         this.boundMouseup = this.onMouseup.bind(this);
 
         this.emitter.emit('columns-visibility-initialized', this.tf, this);
+        this.emitter.emit('extension-initialized', this);
 
         // Hide columns at start at very end of initialization, do not move
         // as order is important
@@ -399,10 +410,12 @@ export default class ColsVisibility extends Feature {
         span.className = this.spanCssClass;
 
         //Container element (rdiv or custom element)
-        if (!this.btnTgtId) {
-            tf.setToolbar();
-        }
-        let targetEl = !this.btnTgtId ? tf.rDiv : elm(this.btnTgtId);
+        // if (!this.btnTgtId) {
+        //     tf.setToolbar();
+        // }
+        let targetEl = !this.btnTgtId ? /*tf.rDiv*/
+        tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.btnTgtId);
 
         if (!this.btnTgtId) {
             let firstChild = targetEl.firstChild;

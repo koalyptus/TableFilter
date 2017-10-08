@@ -1,7 +1,7 @@
 import {addEvt, cancelEvt, stopEvt, targetEvt, keyCode} from './event';
 import {
     addClass, createElm, createOpt, elm, getText, getFirstTextNode,
-    removeClass, removeElm, tag
+    removeClass, /*removeElm,*/ tag
 } from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
 import {isEmpty as isEmptyString} from './string';
@@ -974,7 +974,7 @@ export class TableFilter {
          */
         this.ExtRegistry = {};
 
-        //conditionally instantiate required features
+        // conditionally instantiate required features
         this.instantiateFeatures(
             Object.keys(FEATURES).map((item) => FEATURES[item])
         );
@@ -1743,7 +1743,7 @@ export class TableFilter {
                     // isolate search term and check occurence in cell data
                     for (let w = 0, len = s.length; w < len; w++) {
                         cS = trim(s[w]);
-                        occur = this._testTerm(cS, cellValue, j);
+                        occur = this._matcth(cS, cellValue, j);
 
                         if (occur) {
                             this.emitter.emit('highlight-keyword', this,
@@ -1762,7 +1762,7 @@ export class TableFilter {
                 }
                 //single search parameter
                 else {
-                    occurence[j] = this._testTerm(trim(sA), cellValue, j);
+                    occurence[j] = this._matcth(trim(sA), cellValue, j);
                     if (occurence[j]) {
                         this.emitter.emit('highlight-keyword', this, cells[j],
                             sA);
@@ -1801,13 +1801,14 @@ export class TableFilter {
     }
 
     /**
-     * Test for a match of search term in cell data
+     * Match search term in cell data
      * @param {String} term      Search term
      * @param {String} cellValue  Cell data
      * @param {Number} colIdx    Column index
      * @return {Boolean}
+     * @private
      */
-    _testTerm(term, cellValue, colIdx) {
+    _matcth(term, cellValue, colIdx) {
         let numData;
         let decimal = this.getDecimal(colIdx);
         let reLe = new RegExp(this.leOperator),

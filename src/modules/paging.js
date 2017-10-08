@@ -6,6 +6,7 @@ import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
 import {
     defaultsStr, defaultsNb, defaultsBool, defaultsArr, defaultsFn
 } from '../settings';
+import {CENTER, RIGHT} from './toolbar';
 
 /**
  * Paging UI component
@@ -211,6 +212,12 @@ export class Paging extends Feature {
         this.pageSelectorType = defaultsStr(f.page_selector_type, SELECT);
 
         /**
+         * Default position in toolbar ('left'|'center'|'right')
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, CENTER);
+
+        /**
          * Callback fired before the page is changed
          * @type {Function}
          */
@@ -341,6 +348,8 @@ export class Paging extends Feature {
             return;
         }
 
+        this.emitter.emit('initializing-feature', this, !isNull(this.tgtId));
+
         // Check resultsPerPage is in expected format and initialise the
         // results per page component
         if (this.hasResultsPerPage) {
@@ -437,10 +446,12 @@ export class Paging extends Feature {
         }
 
         // paging elements (buttons+drop-down list) are added to defined element
-        if (!this.tgtId) {
-            tf.setToolbar();
-        }
-        let targetEl = !this.tgtId ? tf.mDiv : elm(this.tgtId);
+        // if (!this.tgtId) {
+        //     tf.setToolbar();
+        // }
+        let targetEl = !this.tgtId ? /*tf.mDiv*/
+        tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.tgtId);
         targetEl.appendChild(btnFirstSpan);
         targetEl.appendChild(btnPrevSpan);
 
@@ -484,6 +495,8 @@ export class Paging extends Feature {
 
         /** @inherited */
         this.initialized = true;
+
+        this.emitter.emit('feature-initialized', this);
     }
 
     /**
@@ -515,7 +528,9 @@ export class Paging extends Feature {
      */
     setPagingInfo(validRows) {
         let tf = this.tf;
-        let mdiv = !this.tgtId ? tf.mDiv : elm(this.tgtId);
+        let cont = !this.tgtId ? /*tf.mDiv*/
+        tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.tgtId);
 
         //store valid rows indexes
         tf.validRowsIndex = validRows || tf.getValidRows(true);
@@ -530,7 +545,7 @@ export class Paging extends Feature {
         }
 
         if (this.nbPages > 0) {
-            mdiv.style.visibility = 'visible';
+            cont.style.visibility = 'visible';
             if (this.pageSelectorType === SELECT) {
                 for (let z = 0; z < this.nbPages; z++) {
                     let opt = createOpt(z + 1, z * this.pageLength, false);
@@ -543,7 +558,7 @@ export class Paging extends Feature {
 
         } else {
             /*** if no results paging select and buttons are hidden ***/
-            mdiv.style.visibility = 'hidden';
+            cont.style.visibility = 'hidden';
         }
         this.groupByPage(tf.validRowsIndex);
     }
@@ -653,11 +668,12 @@ export class Paging extends Feature {
         slcRSpan.className = this.resultsSpanCssClass;
 
         // results per page select is added to external element
-        if (!this.pageLengthTgtId) {
-            tf.setToolbar();
-        }
+        // if (!this.pageLengthTgtId) {
+        //     tf.setToolbar();
+        // }
         let targetEl = !this.pageLengthTgtId ?
-            tf.rDiv : elm(this.pageLengthTgtId);
+            tf.feature('toolbar').container(RIGHT) :
+            elm(this.pageLengthTgtId);
         slcRSpan.appendChild(createText(slcRText));
 
         let help = tf.feature('help');
