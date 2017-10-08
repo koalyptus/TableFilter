@@ -98,13 +98,8 @@ export class ClearButton extends Feature {
 
         let cont = createElm('span');
 
-        // reset button is added to defined element
-        // if (!this.targetId) {
-        //     tf.setToolbar();
-        // }
-
-        let targetEl = !this.targetId ? /*tf.rDiv*/
-        tf.feature('toolbar').container(this.toolbarPosition) :
+        let targetEl = !this.targetId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.targetId);
         targetEl.appendChild(cont);
 

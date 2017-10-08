@@ -14,8 +14,8 @@ test('Should not initialize if already initialized', function() {
     // setup
     var hit = 0;
     statusBar.initialized = true;
-    var initialSetToolbar = statusBar.tf.setToolbar;
-    statusBar.tf.setToolbar = function() {
+    var initialEmit = statusBar.emitter.emit;
+    statusBar.emitter.emit = function() {
         hit++;
     };
 
@@ -23,9 +23,9 @@ test('Should not initialize if already initialized', function() {
     statusBar.init();
 
     // assert
-    deepEqual(hit, 0, 'setToolbar not called');
+    deepEqual(hit, 0, 'emitter.emit not called');
 
-    statusBar.tf.setToolbar = initialSetToolbar;
+    statusBar.emitter.emit = initialEmit;
 });
 asyncTest('Can display message', function() {
     // act

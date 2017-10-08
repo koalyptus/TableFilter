@@ -59,14 +59,14 @@ export class Toolbar extends Feature {
          * Toolbar's custom container ID
          * @type {String}
          */
-        this.toolBarTgtId = defaultsStr(f.toolbar_target_id, null);
+        this.tgtId = defaultsStr(f.target_id, null);
 
         /**
          * Toolbar's container DOM element
          * @type {DOMElement}
          * @private
          */
-        this.infDiv = null;
+        this.cont = null;
 
         /**
          * Left-side inner container DOM element (rows counter in toolbar)
@@ -118,7 +118,7 @@ export class Toolbar extends Feature {
          * Container elements inside toolbar
          * @private
          */
-        this.cont = {
+        this.innerCont = {
             left: null,
             center: null,
             right: null
@@ -128,6 +128,11 @@ export class Toolbar extends Feature {
             (feature, isExternal) => this.init(isExternal));
     }
 
+    /**
+     * Initialize toolbar components
+     * @param {Boolean} isExternal initialize only if component belongs
+     * to toolbar
+     */
     init(isExternal) {
         if (this.initialized || isExternal) {
             return;
@@ -136,47 +141,37 @@ export class Toolbar extends Feature {
         let tf = this.tf;
 
         // default container
-        let infDiv = createElm('div');
-        infDiv.className = this.infDivCssClass;
+        let container = createElm('div');
+        container.className = this.infDivCssClass;
 
         // custom container
-        if (this.toolBarTgtId) {
-            elm(this.toolBarTgtId).appendChild(infDiv);
+        if (this.tgtId) {
+            elm(this.tgtId).appendChild(container);
         }
         // grid-layout
         else if (tf.gridLayout) {
             let gridLayout = tf.Mod.gridLayout;
-            gridLayout.tblMainCont.appendChild(infDiv);
-            infDiv.className = gridLayout.infDivCssClass;
+            gridLayout.tblMainCont.appendChild(container);
+            container.className = gridLayout.infDivCssClass;
         }
         // default location: just above the table
         else {
             let cont = createElm('caption');
-            cont.appendChild(infDiv);
+            cont.appendChild(container);
             tf.dom().insertBefore(cont, tf.dom().firstChild);
         }
-        this.infDiv = infDiv;
+        this.cont = container;
 
-        /*** left div containing rows # displayer ***/
-        // let lDiv = createElm('div');
-        // lDiv.className = this.lDivCssClass;
-        // infDiv.appendChild(lDiv);
-        this.lDiv = this.createContainer(infDiv, this.lDivCssClass);
+        // left container
+        this.lDiv = this.createContainer(container, this.lDivCssClass);
 
-        /***    right div containing reset button
-                + nb results per page select    ***/
-        // let rDiv = createElm('div');
-        // rDiv.className = this.rDivCssClass;
-        // infDiv.appendChild(rDiv);
-        this.rDiv = this.createContainer(infDiv, this.rDivCssClass);
+        // right container
+        this.rDiv = this.createContainer(container, this.rDivCssClass);
 
-        /*** mid div containing paging elements ***/
-        // let mDiv = createElm('div');
-        // mDiv.className = this.mDivCssClass;
-        // infDiv.appendChild(mDiv);
-        this.mDiv = this.createContainer(infDiv, this.mDivCssClass);
+        // middle container
+        this.mDiv = this.createContainer(container, this.mDivCssClass);
 
-        this.cont = {
+        this.innerCont = {
             left: this.lDiv,
             center: this.mDiv,
             right: this.rDiv
@@ -194,47 +189,36 @@ export class Toolbar extends Feature {
         }
     }
 
-    // left(elm) {
-    //     if (elm) {
-    //         this.lDiv.appendChild(elm);
-    //     }
-    //     return this.lDiv;
-    // }
-
-    // middle(elm) {
-    //     if (elm) {
-    //         this.mDiv.appendChild(elm);
-    //     }
-    //     return this.mDiv;
-    // }
-
-    // right(elm) {
-    //     if (elm) {
-    //         this.rDiv.appendChild(elm);
-    //     }
-    //     return this.rDiv;
-    // }
-
+    /**
+     * Return the container based on requested position inside the toolbar
+     * @param {String} [position=RIGHT] 3 possible positions: 'left', 'center',
+     * 'right'
+     * @param {DOMElement} elm optional DOM element to be inserter in container
+     * @returns {DOMElement}
+     */
     container(position = RIGHT, elm) {
-        let cont = this.cont[position];
+        let cont = this.innerCont[position];
         if (elm) {
             cont.appendChild(elm);
         }
         return cont;
     }
 
-    // insertIn(elm, position = RIGHT) {
-    //     let cont = this.container[position];
-    //     cont.appendChild(elm);
-    //     return cont;
-    // }
-
+    /**
+     * Create DOM element inside passed container
+     * @param {DOMElement} container
+     * @param {String} css
+     * @private
+     */
     createContainer(container, css) {
         let div = createElm('div', ['class', css]);
         container.appendChild(div);
         return div;
     }
 
+    /**
+     * Destroy Toolbar instance
+     */
     destroy() {
         if (!this.initialized) {
             return;
@@ -242,8 +226,8 @@ export class Toolbar extends Feature {
 
         let tf = this.tf;
 
-        removeElm(this.infDiv);
-        this.infDiv = null;
+        removeElm(this.cont);
+        this.cont = null;
 
         let tbl = tf.dom();
         let captions = tag(tbl, 'caption');
