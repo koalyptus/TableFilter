@@ -111,11 +111,8 @@ export class RowsCounter extends Feature {
         countText.appendChild(createText(this.text));
 
         // counter is added to defined element
-        // if (!this.targetId) {
-        //     tf.setToolbar();
-        // }
-        let targetEl = !this.targetId ? /*tf.lDiv*/
-        tf.feature('toolbar').container(this.toolbarPosition) :
+        let targetEl = !this.targetId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.targetId);
 
         //default container: 'lDiv'

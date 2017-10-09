@@ -880,6 +880,12 @@ export class TableFilter {
         this.responsive = Boolean(f.responsive);
 
         /**
+         * Enable toolbar component
+         * @type {Object|Boolean}
+         */
+        this.toolbar = isObj(f.toolbar) || Boolean(f.toolbar);
+
+        /**
          * Features registry
          * @private
          */
@@ -918,7 +924,7 @@ export class TableFilter {
 
         const { dateType, help, state, markActiveColumns, gridLayout, loader,
             highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
-            alternateRows, noResults, paging } = FEATURES;
+            alternateRows, noResults, paging, toolbar } = FEATURES;
 
         //explicitly initialise features in given order
         this.initFeatures([
@@ -1005,7 +1011,8 @@ export class TableFilter {
             clearButton,
             alternateRows,
             noResults,
-            paging
+            paging,
+            toolbar
         ]);
 
         this.setColWidths();

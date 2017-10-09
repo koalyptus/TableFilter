@@ -409,12 +409,9 @@ export default class ColsVisibility extends Feature {
         let span = createElm('span');
         span.className = this.spanCssClass;
 
-        //Container element (rdiv or custom element)
-        // if (!this.btnTgtId) {
-        //     tf.setToolbar();
-        // }
-        let targetEl = !this.btnTgtId ? /*tf.rDiv*/
-        tf.feature('toolbar').container(this.toolbarPosition) :
+        // Container element (rdiv or custom element)
+        let targetEl = !this.btnTgtId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.btnTgtId);
 
         if (!this.btnTgtId) {
@@ -436,7 +433,7 @@ export default class ColsVisibility extends Feature {
             } else {
                 addEvt(btn, 'mouseover', (evt) => this.toggle(evt));
             }
-        } else { //Custom html
+        } else { // Custom html
             span.innerHTML = this.btnHtml;
             let colVisEl = span.firstChild;
             if (!this.enableHover) {

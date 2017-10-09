@@ -446,11 +446,8 @@ export class Paging extends Feature {
         }
 
         // paging elements (buttons+drop-down list) are added to defined element
-        // if (!this.tgtId) {
-        //     tf.setToolbar();
-        // }
-        let targetEl = !this.tgtId ? /*tf.mDiv*/
-        tf.feature('toolbar').container(this.toolbarPosition) :
+        let targetEl = !this.tgtId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.tgtId);
         targetEl.appendChild(btnFirstSpan);
         targetEl.appendChild(btnPrevSpan);
@@ -528,8 +525,8 @@ export class Paging extends Feature {
      */
     setPagingInfo(validRows) {
         let tf = this.tf;
-        let cont = !this.tgtId ? /*tf.mDiv*/
-        tf.feature('toolbar').container(this.toolbarPosition) :
+        let cont = !this.tgtId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.tgtId);
 
         //store valid rows indexes
@@ -668,9 +665,6 @@ export class Paging extends Feature {
         slcRSpan.className = this.resultsSpanCssClass;
 
         // results per page select is added to external element
-        // if (!this.pageLengthTgtId) {
-        //     tf.setToolbar();
-        // }
         let targetEl = !this.pageLengthTgtId ?
             tf.feature('toolbar').container(RIGHT) :
             elm(this.pageLengthTgtId);

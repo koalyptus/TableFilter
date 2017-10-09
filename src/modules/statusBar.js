@@ -185,25 +185,22 @@ export class StatusBar extends Feature {
 
         emitter.emit('initializing-feature', this, !isNull(this.targetId));
 
-        //status bar container
+        // status bar container
         let statusDiv = createElm('div');
         statusDiv.className = this.cssClass;
 
-        //status bar label
+        // status bar label
         let statusSpan = createElm('span');
-        //preceding text
+        // preceding text
         let statusSpanText = createElm('span');
         statusSpanText.appendChild(createText(this.text));
 
         // target element container
-        // if (!this.targetId) {
-        //     tf.setToolbar();
-        // }
-        let targetEl = (!this.targetId) ? /*tf.lDiv*/
-        tf.feature('toolbar').container(this.toolbarPosition) :
+        let targetEl = (!this.targetId) ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.targetId);
 
-        //default container: 'lDiv'
+        // default container
         if (!this.targetId) {
             statusDiv.appendChild(statusSpanText);
             statusDiv.appendChild(statusSpan);
@@ -218,7 +215,7 @@ export class StatusBar extends Feature {
         this.msgContainer = statusSpan;
         this.labelContainer = statusSpanText;
 
-        // Subscribe to events
+        // subscribe to events
         emitter.on(['before-filtering'], () => this.message(this.msgFilter));
         emitter.on(['before-populating-filter'],
             () => this.message(this.msgPopulate));

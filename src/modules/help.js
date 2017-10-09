@@ -154,10 +154,6 @@ export class Help extends Feature {
         this.boundMouseup = this.onMouseup.bind(this);
 
         //help button is added to defined element
-        // if (!this.tgtId) {
-        //     tf.setToolbar();
-        // }
-
         let targetEl = !this.tgtId ?
             tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.tgtId);

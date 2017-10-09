@@ -35,25 +35,25 @@ export class Toolbar extends Feature {
          * Css class for toolbar's container DOM element
          * @type {String}
          */
-        this.infDivCssClass = defaultsStr(f.inf_div_css_class, 'inf');
+        this.contCssClass = defaultsStr(f.container_css_class, 'inf');
 
         /**
          * Css class for left-side inner container DOM element
          * @type {String}
          */
-        this.lDivCssClass = defaultsStr(f.left_div_css_class, 'ldiv');
+        this.lContCssClass = defaultsStr(f.left_cont_css_class, 'ldiv');
 
         /**
          * Css class for right-side inner container DOM element
          * @type {String}
          */
-        this.rDivCssClass = defaultsStr(f.right_div_css_class, 'rdiv');
+        this.rContCssClass = defaultsStr(f.right_cont_css_class, 'rdiv');
 
         /**
          * Css class for middle inner container DOM element
          * @type {String}
          */
-        this.mDivCssClass = defaultsStr(f.middle_div_css_class, 'mdiv');
+        this.cContCssClass = defaultsStr(f.center_cont_css_class, 'mdiv');
 
         /**
          * Toolbar's custom container ID
@@ -73,7 +73,7 @@ export class Toolbar extends Feature {
          * @type {DOMElement}
          * @private
          */
-        this.lDiv = null;
+        this.lCont = null;
 
         /**
          * Right-side inner container DOM element (reset button,
@@ -81,38 +81,14 @@ export class Toolbar extends Feature {
          * @type {DOMElement}
          * @private
          */
-        this.rDiv = null;
+        this.rCont = null;
 
         /**
          * Middle inner container DOM element (paging elements in toolbar)
          * @type {DOMElement}
          * @private
          */
-        this.mDiv = null;
-
-        /**
-         * Toolbar container ID prefix
-         * @private
-         */
-        this.prfxInfDiv = 'inf_';
-
-        /**
-         * Toolbar left element ID prefix
-         * @private
-         */
-        this.prfxLDiv = 'ldiv_';
-
-        /**
-         * Toolbar right element ID prefix
-         * @private
-         */
-        this.prfxRDiv = 'rdiv_';
-
-        /**
-         * Toolbar middle element ID prefix
-         * @private
-         */
-        this.prfxMDiv = 'mdiv_';
+        this.cCont = null;
 
         /**
          * Container elements inside toolbar
@@ -126,6 +102,9 @@ export class Toolbar extends Feature {
 
         this.emitter.on(EVENTS,
             (feature, isExternal) => this.init(isExternal));
+
+        /** @inherited */
+        this.enabled = true;
     }
 
     /**
@@ -142,7 +121,7 @@ export class Toolbar extends Feature {
 
         // default container
         let container = createElm('div');
-        container.className = this.infDivCssClass;
+        container.className = this.contCssClass;
 
         // custom container
         if (this.tgtId) {
@@ -163,18 +142,18 @@ export class Toolbar extends Feature {
         this.cont = container;
 
         // left container
-        this.lDiv = this.createContainer(container, this.lDivCssClass);
+        this.lCont = this.createContainer(container, this.lContCssClass);
 
         // right container
-        this.rDiv = this.createContainer(container, this.rDivCssClass);
+        this.rCont = this.createContainer(container, this.rContCssClass);
 
         // middle container
-        this.mDiv = this.createContainer(container, this.mDivCssClass);
+        this.cCont = this.createContainer(container, this.cContCssClass);
 
         this.innerCont = {
-            left: this.lDiv,
-            center: this.mDiv,
-            right: this.rDiv
+            left: this.lCont,
+            center: this.cCont,
+            right: this.rCont
         };
 
         /** @inherited */
@@ -193,13 +172,13 @@ export class Toolbar extends Feature {
      * Return the container based on requested position inside the toolbar
      * @param {String} [position=RIGHT] 3 possible positions: 'left', 'center',
      * 'right'
-     * @param {DOMElement} elm optional DOM element to be inserter in container
+     * @param {DOMElement} el optional DOM element to be inserter in container
      * @returns {DOMElement}
      */
-    container(position = RIGHT, elm) {
+    container(position = RIGHT, el) {
         let cont = this.innerCont[position];
-        if (elm) {
-            cont.appendChild(elm);
+        if (el) {
+            cont.appendChild(el);
         }
         return cont;
     }
@@ -231,7 +210,7 @@ export class Toolbar extends Feature {
 
         let tbl = tf.dom();
         let captions = tag(tbl, 'caption');
-        [].forEach.call(captions, (elm) => removeElm(elm));
+        [].forEach.call(captions, (el) => removeElm(el));
 
         /** @inherited */
         this.initialized = false;

@@ -214,12 +214,9 @@ export default class FiltersVisibility extends Feature {
         let span = createElm('span');
         span.className = this.contCssClass;
 
-        //Container element (rdiv or custom element)
-        // if (!this.targetId) {
-        //     tf.setToolbar();
-        // }
-        let targetEl = !this.targetId ? /*tf.rDiv*/
-        tf.feature('toolbar').container(this.toolbarPosition) :
+        // Container element (rdiv or custom element)
+        let targetEl = !this.targetId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.targetId);
 
         if (!this.targetId) {
@@ -236,7 +233,7 @@ export default class FiltersVisibility extends Feature {
             btn.title = this.btnText || this.defaultText;
             btn.innerHTML = this.collapseBtnHtml;
             span.appendChild(btn);
-        } else { //Custom html
+        } else { // Custom html
             span.innerHTML = this.btnHtml;
             btn = span.firstChild;
         }
