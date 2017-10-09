@@ -8,8 +8,11 @@ const EVENTS = [
     'initializing-extension'
 ];
 
+/** Left position in toolbar */
 export const LEFT = 'left';
+/** Right position in toolbar */
 export const RIGHT = 'right';
+/** Center position in toolbar */
 export const CENTER = 'center';
 
 /**
