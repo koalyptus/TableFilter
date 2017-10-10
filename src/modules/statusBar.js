@@ -1,8 +1,9 @@
 import {Feature} from '../feature';
 import {root} from '../root';
 import {createElm, createText, elm, removeElm} from '../dom';
-import {EMPTY_FN} from '../types';
+import {EMPTY_FN, isNull} from '../types';
 import {defaultsStr, defaultsFn} from '../settings';
+import {LEFT} from './toolbar';
 
 const EVENTS = [
     'after-filtering',
@@ -163,6 +164,12 @@ export class StatusBar extends Feature {
          */
         this.msgLoadThemes = defaultsStr(f.msg_load_themes,
             'Loading theme(s)...');
+
+        /**
+         * Default position in toolbar ('left'|'center'|'right')
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, LEFT);
     }
 
     /**
@@ -176,23 +183,24 @@ export class StatusBar extends Feature {
         let tf = this.tf;
         let emitter = this.emitter;
 
-        //status bar container
+        emitter.emit('initializing-feature', this, !isNull(this.targetId));
+
+        // status bar container
         let statusDiv = createElm('div');
         statusDiv.className = this.cssClass;
 
-        //status bar label
+        // status bar label
         let statusSpan = createElm('span');
-        //preceding text
+        // preceding text
         let statusSpanText = createElm('span');
         statusSpanText.appendChild(createText(this.text));
 
         // target element container
-        if (!this.targetId) {
-            tf.setToolbar();
-        }
-        let targetEl = (!this.targetId) ? tf.lDiv : elm(this.targetId);
+        let targetEl = (!this.targetId) ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.targetId);
 
-        //default container: 'lDiv'
+        // default container
         if (!this.targetId) {
             statusDiv.appendChild(statusSpanText);
             statusDiv.appendChild(statusSpan);
@@ -207,7 +215,7 @@ export class StatusBar extends Feature {
         this.msgContainer = statusSpan;
         this.labelContainer = statusSpanText;
 
-        // Subscribe to events
+        // subscribe to events
         emitter.on(['before-filtering'], () => this.message(this.msgFilter));
         emitter.on(['before-populating-filter'],
             () => this.message(this.msgPopulate));
@@ -228,10 +236,10 @@ export class StatusBar extends Feature {
 
         emitter.on(EVENTS, () => this.message(''));
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
+
+        emitter.emit('feature-initialized', this);
     }
 
     /**

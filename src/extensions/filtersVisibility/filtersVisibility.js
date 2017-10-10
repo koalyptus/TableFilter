@@ -1,10 +1,11 @@
 import {Feature} from '../../feature';
 import {createElm, removeElm, elm} from '../../dom';
-import {EMPTY_FN} from '../../types';
+import {EMPTY_FN, isNull} from '../../types';
 import {addEvt} from '../../event';
 import {
     defaultsBool, defaultsStr, defaultsFn, defaultsNb,
 } from '../../settings';
+import {RIGHT} from '../../modules/toolbar';
 
 /**
  * Filters Visibility extension
@@ -148,6 +149,12 @@ export default class FiltersVisibility extends Feature {
         this.visibleAtStart = defaultsNb(f.visible_at_start, true);
 
         /**
+         * Default position in toolbar ('left'|'center'|'right')
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, RIGHT);
+
+        /**
          * Callback fired before filters row is shown
          * @type {Function}
          */
@@ -186,15 +193,17 @@ export default class FiltersVisibility extends Feature {
             return;
         }
 
+        this.emitter.emit('initializing-extension', this,
+            !isNull(this.targetId));
+
         this.buildUI();
 
-        /**
-         * @inherited
-         */
+        /** @inherited */
         this.initialized = true;
 
         this.emitter.on(['show-filters'], (tf, visible) => this.show(visible));
         this.emitter.emit('filters-visibility-initialized', this.tf, this);
+        this.emitter.emit('extension-initialized', this);
     }
 
     /**
@@ -205,11 +214,10 @@ export default class FiltersVisibility extends Feature {
         let span = createElm('span');
         span.className = this.contCssClass;
 
-        //Container element (rdiv or custom element)
-        if (!this.targetId) {
-            tf.setToolbar();
-        }
-        let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);
+        // Container element (rdiv or custom element)
+        let targetEl = !this.targetId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.targetId);
 
         if (!this.targetId) {
             let firstChild = targetEl.firstChild;
@@ -225,7 +233,7 @@ export default class FiltersVisibility extends Feature {
             btn.title = this.btnText || this.defaultText;
             btn.innerHTML = this.collapseBtnHtml;
             span.appendChild(btn);
-        } else { //Custom html
+        } else { // Custom html
             span.innerHTML = this.btnHtml;
             btn = span.firstChild;
         }

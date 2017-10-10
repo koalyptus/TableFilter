@@ -2,6 +2,8 @@ import {Feature} from '../feature';
 import {createElm, createText, elm, removeElm} from '../dom';
 import {addEvt} from '../event';
 import {defaultsStr} from '../settings';
+import {isNull} from '../types';
+import {RIGHT} from './toolbar';
 
 /**
  * Clear button UI component
@@ -63,6 +65,12 @@ export class ClearButton extends Feature {
             (!tf.enableIcons ? null :
                 '<input type="button" value="" class="' + this.cssClass +
                 '" ' + 'title="' + this.tooltip + '" />'));
+
+        /**
+         * Default position in toolbar ('left'|'center'|'right')
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, RIGHT);
     }
 
     /**
@@ -86,13 +94,13 @@ export class ClearButton extends Feature {
             return;
         }
 
+        this.emitter.emit('initializing-feature', this, !isNull(this.targetId));
+
         let cont = createElm('span');
 
-        // reset button is added to defined element
-        if (!this.targetId) {
-            tf.setToolbar();
-        }
-        let targetEl = !this.targetId ? tf.rDiv : elm(this.targetId);
+        let targetEl = !this.targetId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.targetId);
         targetEl.appendChild(cont);
 
         if (!this.html) {
@@ -111,6 +119,8 @@ export class ClearButton extends Feature {
 
         /** @inherited */
         this.initialized = true;
+
+        this.emitter.emit('feature-initialized', this);
     }
 
     /**

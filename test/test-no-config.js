@@ -11,7 +11,7 @@
         notEqual(tf.getFilterElement(0), null,
             'Filter element for column 0');
         deepEqual(tf.refRow, 2, 'Reference row index');
-        deepEqual(Object.keys(tf.Mod).length, 14, 'Features instantiated');
+        deepEqual(Object.keys(tf.Mod).length, 15, 'Features instantiated');
         notEqual(tf.feature('rowsCounter'), null, 'RowsCounter instantiated');
         deepEqual(tf.rowsCounter, false, 'RowsCounter not enabled');
     });
