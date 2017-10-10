@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/paging.js | tablefilter v0.5.42 API Document</title>
+  <title data-ice="title">src/modules/paging.js | tablefilter v0.5.43 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -125,8 +125,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/toolbar.js~Toolbar.html">Toolbar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasHashChange">hasHashChange</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasStorage">hasStorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CENTER">CENTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LEFT">LEFT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RIGHT">RIGHT</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -140,6 +144,7 @@ import {INPUT, SELECT, NONE, ENTER_KEY} from &apos;../const&apos;;
 import {
     defaultsStr, defaultsNb, defaultsBool, defaultsArr, defaultsFn
 } from &apos;../settings&apos;;
+import {CENTER, RIGHT} from &apos;./toolbar&apos;;
 
 /**
  * Paging UI component
@@ -345,6 +350,12 @@ export class Paging extends Feature {
         this.pageSelectorType = defaultsStr(f.page_selector_type, SELECT);
 
         /**
+         * Default position in toolbar (&apos;left&apos;|&apos;center&apos;|&apos;right&apos;)
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, CENTER);
+
+        /**
          * Callback fired before the page is changed
          * @type {Function}
          */
@@ -475,6 +486,8 @@ export class Paging extends Feature {
             return;
         }
 
+        this.emitter.emit(&apos;initializing-feature&apos;, this, !isNull(this.tgtId));
+
         // Check resultsPerPage is in expected format and initialise the
         // results per page component
         if (this.hasResultsPerPage) {
@@ -571,10 +584,9 @@ export class Paging extends Feature {
         }
 
         // paging elements (buttons+drop-down list) are added to defined element
-        if (!this.tgtId) {
-            tf.setToolbar();
-        }
-        let targetEl = !this.tgtId ? tf.mDiv : elm(this.tgtId);
+        let targetEl = !this.tgtId ?
+            tf.feature(&apos;toolbar&apos;).container(this.toolbarPosition) :
+            elm(this.tgtId);
         targetEl.appendChild(btnFirstSpan);
         targetEl.appendChild(btnPrevSpan);
 
@@ -618,6 +630,8 @@ export class Paging extends Feature {
 
         /** @inherited */
         this.initialized = true;
+
+        this.emitter.emit(&apos;feature-initialized&apos;, this);
     }
 
     /**
@@ -649,7 +663,9 @@ export class Paging extends Feature {
      */
     setPagingInfo(validRows) {
         let tf = this.tf;
-        let mdiv = !this.tgtId ? tf.mDiv : elm(this.tgtId);
+        let cont = !this.tgtId ?
+            tf.feature(&apos;toolbar&apos;).container(this.toolbarPosition) :
+            elm(this.tgtId);
 
         //store valid rows indexes
         tf.validRowsIndex = validRows || tf.getValidRows(true);
@@ -664,7 +680,7 @@ export class Paging extends Feature {
         }
 
         if (this.nbPages &gt; 0) {
-            mdiv.style.visibility = &apos;visible&apos;;
+            cont.style.visibility = &apos;visible&apos;;
             if (this.pageSelectorType === SELECT) {
                 for (let z = 0; z &lt; this.nbPages; z++) {
                     let opt = createOpt(z + 1, z * this.pageLength, false);
@@ -677,7 +693,7 @@ export class Paging extends Feature {
 
         } else {
             /*** if no results paging select and buttons are hidden ***/
-            mdiv.style.visibility = &apos;hidden&apos;;
+            cont.style.visibility = &apos;hidden&apos;;
         }
         this.groupByPage(tf.validRowsIndex);
     }
@@ -787,11 +803,9 @@ export class Paging extends Feature {
         slcRSpan.className = this.resultsSpanCssClass;
 
         // results per page select is added to external element
-        if (!this.pageLengthTgtId) {
-            tf.setToolbar();
-        }
         let targetEl = !this.pageLengthTgtId ?
-            tf.rDiv : elm(this.pageLengthTgtId);
+            tf.feature(&apos;toolbar&apos;).container(RIGHT) :
+            elm(this.pageLengthTgtId);
         slcRSpan.appendChild(createText(slcRText));
 
         let help = tf.feature(&apos;help&apos;);

@@ -1,7 +1,7 @@
 {
   "coverage": "100%",
-  "expectCount": 678,
-  "actualCount": 678,
+  "expectCount": 693,
+  "actualCount": 693,
   "files": {
     "src/const.js": {
       "expectCount": 19,
@@ -28,14 +28,19 @@
       "actualCount": 4,
       "undocumentLines": []
     },
+    "src/modules/toolbar.js": {
+      "expectCount": 15,
+      "actualCount": 15,
+      "undocumentLines": []
+    },
     "src/modules/checkList.js": {
       "expectCount": 21,
       "actualCount": 21,
       "undocumentLines": []
     },
     "src/modules/clearButton.js": {
-      "expectCount": 10,
-      "actualCount": 10,
+      "expectCount": 11,
+      "actualCount": 11,
       "undocumentLines": []
     },
     "src/extensions/colOps/colOps.js": {
@@ -44,8 +49,8 @@
       "undocumentLines": []
     },
     "src/extensions/colsVisibility/colsVisibility.js": {
-      "expectCount": 49,
-      "actualCount": 49,
+      "expectCount": 50,
+      "actualCount": 50,
       "undocumentLines": []
     },
     "src/modules/dateType.js": {
@@ -84,8 +89,8 @@
       "undocumentLines": []
     },
     "src/modules/help.js": {
-      "expectCount": 17,
-      "actualCount": 17,
+      "expectCount": 18,
+      "actualCount": 18,
       "undocumentLines": []
     },
     "src/modules/highlightKeywords.js": {
@@ -109,8 +114,8 @@
       "undocumentLines": []
     },
     "src/modules/paging.js": {
-      "expectCount": 45,
-      "actualCount": 45,
+      "expectCount": 46,
+      "actualCount": 46,
       "undocumentLines": []
     },
     "src/modules/popupFilter.js": {
@@ -119,8 +124,8 @@
       "undocumentLines": []
     },
     "src/modules/rowsCounter.js": {
-      "expectCount": 13,
-      "actualCount": 13,
+      "expectCount": 14,
+      "actualCount": 14,
       "undocumentLines": []
     },
     "src/modules/state.js": {
@@ -129,8 +134,8 @@
       "undocumentLines": []
     },
     "src/modules/statusBar.js": {
-      "expectCount": 22,
-      "actualCount": 22,
+      "expectCount": 23,
+      "actualCount": 23,
       "undocumentLines": []
     },
     "src/modules/storage.js": {
@@ -139,8 +144,8 @@
       "undocumentLines": []
     },
     "src/tablefilter.js": {
-      "expectCount": 172,
-      "actualCount": 172,
+      "expectCount": 166,
+      "actualCount": 166,
       "undocumentLines": []
     },
     "src/dom.js": {

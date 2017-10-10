@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">Feature | tablefilter v0.5.42 API Document</title>
+  <title data-ice="title">Feature | tablefilter v0.5.43 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -125,8 +125,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/toolbar.js~Toolbar.html">Toolbar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasHashChange">hasHashChange</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasStorage">hasStorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CENTER">CENTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LEFT">LEFT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RIGHT">RIGHT</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -149,7 +153,7 @@
   
   
   
-  <div class="flat-list" data-ice="directSubclass"><h4>Direct Subclass:</h4><div><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span>, <span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span>, <span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span>, <span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span>, <span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span>, <span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span>, <span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span>, <span><a href="class/src/modules/dateType.js~DateType.html">DateType</a></span>, <span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span>, <span><a href="class/src/modules/help.js~Help.html">Help</a></span>, <span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span>, <span><a href="class/src/modules/markActiveColumns.js~MarkActiveColumns.html">MarkActiveColumns</a></span>, <span><a href="class/src/modules/noResults.js~NoResults.html">NoResults</a></span>, <span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span>, <span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span>, <span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span>, <span><a href="class/src/modules/state.js~State.html">State</a></span>, <span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></div></div>
+  <div class="flat-list" data-ice="directSubclass"><h4>Direct Subclass:</h4><div><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span>, <span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span>, <span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span>, <span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span>, <span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span>, <span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span>, <span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span>, <span><a href="class/src/modules/dateType.js~DateType.html">DateType</a></span>, <span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span>, <span><a href="class/src/modules/help.js~Help.html">Help</a></span>, <span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span>, <span><a href="class/src/modules/markActiveColumns.js~MarkActiveColumns.html">MarkActiveColumns</a></span>, <span><a href="class/src/modules/noResults.js~NoResults.html">NoResults</a></span>, <span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span>, <span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span>, <span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span>, <span><a href="class/src/modules/state.js~State.html">State</a></span>, <span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span>, <span><a href="class/src/modules/toolbar.js~Toolbar.html">Toolbar</a></span></div></div>
   <div class="flat-list" data-ice="indirectSubclass"><h4>Indirect Subclass:</h4><div><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span>, <span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></div></div>
   
   

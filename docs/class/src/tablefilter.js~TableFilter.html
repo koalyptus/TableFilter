@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">TableFilter | tablefilter v0.5.42 API Document</title>
+  <title data-ice="title">TableFilter | tablefilter v0.5.43 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -125,8 +125,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/toolbar.js~Toolbar.html">Toolbar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasHashChange">hasHashChange</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasStorage">hasStorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CENTER">CENTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LEFT">LEFT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RIGHT">RIGHT</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -1473,58 +1477,6 @@ types</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-member-infDivCssClass">infDivCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Css class for toolbar&apos;s container DOM element</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-member-lDivCssClass">lDivCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Css class for left-side inner container DOM element</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
            <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-member-leOperator">leOperator</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
@@ -1690,32 +1642,6 @@ first usage</p>
         
         
         <div data-ice="description"><p>Lower than operator for input filter.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-member-mDivCssClass">mDivCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Css class for middle inner container DOM element</p>
 </div>
       </div>
     </td>
@@ -2081,32 +2007,6 @@ on change event</p>
         
         
         <div data-ice="description"><p>Indicate whether pop-up filters UI is enabled</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-member-rDivCssClass">rDivCssClass</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Css class for right-side inner container DOM element</p>
 </div>
       </div>
     </td>
@@ -2600,13 +2500,13 @@ themes: [{ name: &apos;skyblue&apos; }]</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-member-toolBarTgtId">toolBarTgtId</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-member-toolbar">toolbar</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Toolbar&apos;s custom container ID</p>
+        <div data-ice="description"><p>Enable toolbar component</p>
 </div>
       </div>
     </td>
@@ -4531,32 +4431,6 @@ columns</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-removeToolbar">removeToolbar</a></span></span><span data-ice="signature">()</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Remove toolbar container element</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
            <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-setActiveFilterId">setActiveFilterId</a></span></span><span data-ice="signature">(filterId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
         </p>
       </div>
@@ -4616,32 +4490,6 @@ columns</p>
         
         
         <div data-ice="description"><p>Set search value to a given filter</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html#instance-method-setToolbar">setToolbar</a></span></span><span data-ice="signature">()</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Generate container element for paging, reset button, rows counter etc.</p>
 </div>
       </div>
     </td>
@@ -4806,7 +4654,7 @@ requires <code>table</code> or <code>id</code> arguments, <code>row</code> and <
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber314">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber261">source</a></span></span>
     </span>
   </h3>
 
@@ -4847,7 +4695,7 @@ requires <code>table</code> or <code>id</code> arguments, <code>row</code> and <
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber650">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber591">source</a></span></span>
     </span>
   </h3>
 
@@ -4888,7 +4736,7 @@ requires <code>table</code> or <code>id</code> arguments, <code>row</code> and <
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber788">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber729">source</a></span></span>
     </span>
   </h3>
 
@@ -4930,7 +4778,7 @@ stops typing</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber794">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber735">source</a></span></span>
     </span>
   </h3>
 
@@ -5012,7 +4860,7 @@ stops typing</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber749">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber690">source</a></span></span>
     </span>
   </h3>
 
@@ -5053,7 +4901,7 @@ stops typing</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber756">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber697">source</a></span></span>
     </span>
   </h3>
 
@@ -5094,7 +4942,7 @@ stops typing</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber743">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber684">source</a></span></span>
     </span>
   </h3>
 
@@ -5135,7 +4983,7 @@ stops typing</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber371">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber318">source</a></span></span>
     </span>
   </h3>
 
@@ -5176,7 +5024,7 @@ stops typing</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber468">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber415">source</a></span></span>
     </span>
   </h3>
 
@@ -5225,7 +5073,7 @@ cell_parser: {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber517">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber458">source</a></span></span>
     </span>
   </h3>
 
@@ -5266,7 +5114,7 @@ cell_parser: {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber872">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber813">source</a></span></span>
     </span>
   </h3>
 
@@ -5316,7 +5164,7 @@ information on date parsing formats supported by Sugar Date</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber320">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber267">source</a></span></span>
     </span>
   </h3>
 
@@ -5357,7 +5205,7 @@ information on date parsing formats supported by Sugar Date</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber619">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber560">source</a></span></span>
     </span>
   </h3>
 
@@ -5410,7 +5258,7 @@ custom_options: {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber856">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber797">source</a></span></span>
     </span>
   </h3>
 
@@ -5451,7 +5299,7 @@ custom_options: {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber680">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber621">source</a></span></span>
     </span>
   </h3>
 
@@ -5492,7 +5340,7 @@ custom_options: {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber411">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber358">source</a></span></span>
     </span>
   </h3>
 
@@ -5534,7 +5382,7 @@ linked filters filtering mode is on</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber737">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber678">source</a></span></span>
     </span>
   </h3>
 
@@ -5575,7 +5423,7 @@ linked filters filtering mode is on</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber632">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber573">source</a></span></span>
     </span>
   </h3>
 
@@ -5657,7 +5505,7 @@ linked filters filtering mode is on</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber529">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber470">source</a></span></span>
     </span>
   </h3>
 
@@ -5698,7 +5546,7 @@ linked filters filtering mode is on</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber704">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber645">source</a></span></span>
     </span>
   </h3>
 
@@ -5739,7 +5587,7 @@ linked filters filtering mode is on</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber935">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber852">source</a></span></span>
     </span>
   </h3>
 
@@ -5780,7 +5628,7 @@ linked filters filtering mode is on</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber523">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber464">source</a></span></span>
     </span>
   </h3>
 
@@ -5821,7 +5669,7 @@ linked filters filtering mode is on</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber308">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber255">source</a></span></span>
     </span>
   </h3>
 
@@ -5862,7 +5710,7 @@ linked filters filtering mode is on</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber536">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber477">source</a></span></span>
     </span>
   </h3>
 
@@ -5904,7 +5752,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber353">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber300">source</a></span></span>
     </span>
   </h3>
 
@@ -5945,7 +5793,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber692">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber633">source</a></span></span>
     </span>
   </h3>
 
@@ -5986,7 +5834,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber392">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber339">source</a></span></span>
     </span>
   </h3>
 
@@ -6027,7 +5875,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber385">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber332">source</a></span></span>
     </span>
   </h3>
 
@@ -6068,7 +5916,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber928">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber845">source</a></span></span>
     </span>
   </h3>
 
@@ -6109,7 +5957,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber436">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber383">source</a></span></span>
     </span>
   </h3>
 
@@ -6232,7 +6080,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber326">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber273">source</a></span></span>
     </span>
   </h3>
 
@@ -6314,7 +6162,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber332">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber279">source</a></span></span>
     </span>
   </h3>
 
@@ -6355,7 +6203,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber338">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber285">source</a></span></span>
     </span>
   </h3>
 
@@ -6396,7 +6244,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber302">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber249">source</a></span></span>
     </span>
   </h3>
 
@@ -6437,7 +6285,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber674">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber615">source</a></span></span>
     </span>
   </h3>
 
@@ -6478,7 +6326,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber656">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber597">source</a></span></span>
     </span>
   </h3>
 
@@ -6560,7 +6408,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber600">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber541">source</a></span></span>
     </span>
   </h3>
 
@@ -6601,7 +6449,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber424">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber371">source</a></span></span>
     </span>
   </h3>
 
@@ -6642,7 +6490,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber496">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber437">source</a></span></span>
     </span>
   </h3>
 
@@ -6683,7 +6531,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber815">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber756">source</a></span></span>
     </span>
   </h3>
 
@@ -6724,7 +6572,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber398">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber345">source</a></span></span>
     </span>
   </h3>
 
@@ -6732,88 +6580,6 @@ types</p>
   
   
   <div data-ice="description"><p>Ignore diacritics globally or on a column basis</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-infDivCssClass">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">infDivCssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber258">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Css class for toolbar&apos;s container DOM element</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-lDivCssClass">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">lDivCssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber264">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Css class for left-side inner container DOM element</p>
 </div>
 
   
@@ -6847,7 +6613,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber668">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber609">source</a></span></span>
     </span>
   </h3>
 
@@ -6888,7 +6654,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber404">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber351">source</a></span></span>
     </span>
   </h3>
 
@@ -6929,7 +6695,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber686">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber627">source</a></span></span>
     </span>
   </h3>
 
@@ -6970,7 +6736,7 @@ types</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber594">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber535">source</a></span></span>
     </span>
   </h3>
 
@@ -7012,7 +6778,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber730">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber671">source</a></span></span>
     </span>
   </h3>
 
@@ -7053,7 +6819,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber844">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber785">source</a></span></span>
     </span>
   </h3>
 
@@ -7095,7 +6861,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber662">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber603">source</a></span></span>
     </span>
   </h3>
 
@@ -7103,47 +6869,6 @@ first usage</p>
   
   
   <div data-ice="description"><p>Lower than operator for input filter. Defaults to &apos;&lt;&apos;</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-mDivCssClass">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">mDivCssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber276">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Css class for middle inner container DOM element</p>
 </div>
 
   
@@ -7177,7 +6902,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber509">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber450">source</a></span></span>
     </span>
   </h3>
 
@@ -7218,7 +6943,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber638">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber579">source</a></span></span>
     </span>
   </h3>
 
@@ -7259,7 +6984,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber821">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber762">source</a></span></span>
     </span>
   </h3>
 
@@ -7300,7 +7025,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber542">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber483">source</a></span></span>
     </span>
   </h3>
 
@@ -7341,7 +7066,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber365">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber312">source</a></span></span>
     </span>
   </h3>
 
@@ -7382,7 +7107,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber768">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber709">source</a></span></span>
     </span>
   </h3>
 
@@ -7423,7 +7148,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber359">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber306">source</a></span></span>
     </span>
   </h3>
 
@@ -7464,7 +7189,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber762">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber703">source</a></span></span>
     </span>
   </h3>
 
@@ -7505,7 +7230,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber442">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber389">source</a></span></span>
     </span>
   </h3>
 
@@ -7546,7 +7271,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber454">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber401">source</a></span></span>
     </span>
   </h3>
 
@@ -7587,7 +7312,7 @@ first usage</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber549">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber490">source</a></span></span>
     </span>
   </h3>
 
@@ -7629,7 +7354,7 @@ on change event</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber644">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber585">source</a></span></span>
     </span>
   </h3>
 
@@ -7670,7 +7395,7 @@ on change event</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber774">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber715">source</a></span></span>
     </span>
   </h3>
 
@@ -7711,7 +7436,7 @@ on change event</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber503">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber444">source</a></span></span>
     </span>
   </h3>
 
@@ -7719,47 +7444,6 @@ on change event</p>
   
   
   <div data-ice="description"><p>Indicate whether pop-up filters UI is enabled</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-rDivCssClass">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">rDivCssClass</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber270">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Css class for right-side inner container DOM element</p>
 </div>
 
   
@@ -7835,7 +7519,7 @@ are generated</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber963">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber880">source</a></span></span>
     </span>
   </h3>
 
@@ -7876,7 +7560,7 @@ are generated</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber626">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber567">source</a></span></span>
     </span>
   </h3>
 
@@ -7917,7 +7601,7 @@ are generated</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber718">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber659">source</a></span></span>
     </span>
   </h3>
 
@@ -7958,7 +7642,7 @@ are generated</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber712">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber653">source</a></span></span>
     </span>
   </h3>
 
@@ -7999,7 +7683,7 @@ are generated</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber344">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber291">source</a></span></span>
     </span>
   </h3>
 
@@ -8040,7 +7724,7 @@ are generated</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber448">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber395">source</a></span></span>
     </span>
   </h3>
 
@@ -8081,7 +7765,7 @@ are generated</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber572">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber513">source</a></span></span>
     </span>
   </h3>
 
@@ -8123,7 +7807,7 @@ manner</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber587">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber528">source</a></span></span>
     </span>
   </h3>
 
@@ -8165,7 +7849,7 @@ manner</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber556">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber497">source</a></span></span>
     </span>
   </h3>
 
@@ -8207,7 +7891,7 @@ by default globally or on a column basis</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber698">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber639">source</a></span></span>
     </span>
   </h3>
 
@@ -8248,7 +7932,7 @@ by default globally or on a column basis</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber828">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber769">source</a></span></span>
     </span>
   </h3>
 
@@ -8289,7 +7973,7 @@ by default globally or on a column basis</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber724">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber665">source</a></span></span>
     </span>
   </h3>
 
@@ -8330,7 +8014,7 @@ by default globally or on a column basis</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber283">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber230">source</a></span></span>
     </span>
   </h3>
 
@@ -8371,7 +8055,7 @@ by default globally or on a column basis</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber289">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber236">source</a></span></span>
     </span>
   </h3>
 
@@ -8412,7 +8096,7 @@ by default globally or on a column basis</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber949">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber866">source</a></span></span>
     </span>
   </h3>
 
@@ -8454,7 +8138,7 @@ themes: [{ name: &apos;skyblue&apos; }]</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber957">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber874">source</a></span></span>
     </span>
   </h3>
 
@@ -8497,7 +8181,7 @@ themes: [{ name: &apos;skyblue&apos; }]</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber850">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber791">source</a></span></span>
     </span>
   </h3>
 
@@ -8528,24 +8212,24 @@ themes: [{ name: &apos;skyblue&apos; }]</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-toolBarTgtId">
+  <h3 data-ice="anchor" id="instance-member-toolbar">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">toolBarTgtId</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span data-ice="name">toolbar</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber490">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber886">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Toolbar&apos;s custom container ID</p>
+  <div data-ice="description"><p>Enable toolbar component</p>
 </div>
 
   
@@ -8620,7 +8304,7 @@ themes: [{ name: &apos;skyblue&apos; }]</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber430">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber377">source</a></span></span>
     </span>
   </h3>
 
@@ -8661,7 +8345,7 @@ themes: [{ name: &apos;skyblue&apos; }]</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber477">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber424">source</a></span></span>
     </span>
   </h3>
 
@@ -8706,7 +8390,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2788">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2638">source</a></span></span>
     </span>
   </h3>
 
@@ -8764,7 +8448,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2691">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2541">source</a></span></span>
     </span>
   </h3>
 
@@ -8805,7 +8489,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3146">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2996">source</a></span></span>
     </span>
   </h3>
 
@@ -8856,7 +8540,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1496">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1420">source</a></span></span>
     </span>
   </h3>
 
@@ -8897,7 +8581,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1435">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1359">source</a></span></span>
     </span>
   </h3>
 
@@ -8938,7 +8622,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1047">source</a></span></span>
     </span>
   </h3>
 
@@ -8995,7 +8679,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3121">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2971">source</a></span></span>
     </span>
   </h3>
 
@@ -9046,7 +8730,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2674">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2524">source</a></span></span>
     </span>
   </h3>
 
@@ -9087,7 +8771,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1410">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1334">source</a></span></span>
     </span>
   </h3>
 
@@ -9156,7 +8840,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1351">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1275">source</a></span></span>
     </span>
   </h3>
 
@@ -9224,7 +8908,7 @@ filter if an array is supplied</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1679">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1528">source</a></span></span>
     </span>
   </h3>
 
@@ -9267,7 +8951,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2713">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2563">source</a></span></span>
     </span>
   </h3>
 
@@ -9318,7 +9002,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2249">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2099">source</a></span></span>
     </span>
   </h3>
 
@@ -9386,7 +9070,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2233">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2083">source</a></span></span>
     </span>
   </h3>
 
@@ -9454,7 +9138,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2210">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2060">source</a></span></span>
     </span>
   </h3>
 
@@ -9523,7 +9207,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2882">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2732">source</a></span></span>
     </span>
   </h3>
 
@@ -9591,7 +9275,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2044">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1894">source</a></span></span>
     </span>
   </h3>
 
@@ -9676,7 +9360,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2730">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2580">source</a></span></span>
     </span>
   </h3>
 
@@ -9746,7 +9430,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2055">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1905">source</a></span></span>
     </span>
   </h3>
 
@@ -9831,7 +9515,7 @@ hidden when all the search terms are not found in inspected row.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1646">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1495">source</a></span></span>
     </span>
   </h3>
 
@@ -9900,7 +9584,7 @@ custom options values and texts</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2278">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2128">source</a></span></span>
     </span>
   </h3>
 
@@ -9982,7 +9666,7 @@ with following structure:
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3131">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2981">source</a></span></span>
     </span>
   </h3>
 
@@ -10052,7 +9736,7 @@ configuration or global setting</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2200">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2050">source</a></span></span>
     </span>
   </h3>
 
@@ -10120,7 +9804,7 @@ configuration or global setting</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2164">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2014">source</a></span></span>
     </span>
   </h3>
 
@@ -10189,7 +9873,7 @@ configuration or global setting</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3096">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2946">source</a></span></span>
     </span>
   </h3>
 
@@ -10257,7 +9941,7 @@ configuration or global setting</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2107">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1957">source</a></span></span>
     </span>
   </h3>
 
@@ -10326,7 +10010,7 @@ configuration or global setting</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3104">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2954">source</a></span></span>
     </span>
   </h3>
 
@@ -10377,7 +10061,7 @@ configuration or global setting</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2434">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2284">source</a></span></span>
     </span>
   </h3>
 
@@ -10463,7 +10147,7 @@ configuration or global setting</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2462">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2312">source</a></span></span>
     </span>
   </h3>
 
@@ -10549,7 +10233,7 @@ configuration or global setting</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2355">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2205">source</a></span></span>
     </span>
   </h3>
 
@@ -10632,7 +10316,7 @@ with following structure:
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2371">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2221">source</a></span></span>
     </span>
   </h3>
 
@@ -10714,7 +10398,7 @@ with following structure:
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2180">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2030">source</a></span></span>
     </span>
   </h3>
 
@@ -10792,7 +10476,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2969">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2819">source</a></span></span>
     </span>
   </h3>
 
@@ -10844,7 +10528,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3005">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2855">source</a></span></span>
     </span>
   </h3>
 
@@ -10895,7 +10579,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2143">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1993">source</a></span></span>
     </span>
   </h3>
 
@@ -10947,7 +10631,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3057">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2907">source</a></span></span>
     </span>
   </h3>
 
@@ -11015,7 +10699,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3013">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2863">source</a></span></span>
     </span>
   </h3>
 
@@ -11066,7 +10750,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3076">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2926">source</a></span></span>
     </span>
   </h3>
 
@@ -11135,7 +10819,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3030">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2880">source</a></span></span>
     </span>
   </h3>
 
@@ -11186,7 +10870,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2535">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2385">source</a></span></span>
     </span>
   </h3>
 
@@ -11255,7 +10939,7 @@ Note: hidden filters are also returned</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2221">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2071">source</a></span></span>
     </span>
   </h3>
 
@@ -11325,7 +11009,7 @@ defined</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3022">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2872">source</a></span></span>
     </span>
   </h3>
 
@@ -11377,7 +11061,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1489">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1413">source</a></span></span>
     </span>
   </h3>
 
@@ -11446,7 +11130,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2978">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2828">source</a></span></span>
     </span>
   </h3>
 
@@ -11515,7 +11199,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3113">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2963">source</a></span></span>
     </span>
   </h3>
 
@@ -11584,7 +11268,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2292">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2142">source</a></span></span>
     </span>
   </h3>
 
@@ -11665,7 +11349,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2448">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2298">source</a></span></span>
     </span>
   </h3>
 
@@ -11751,7 +11435,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2476">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2326">source</a></span></span>
     </span>
   </h3>
 
@@ -11837,7 +11521,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1419">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1343">source</a></span></span>
     </span>
   </h3>
 
@@ -11905,7 +11589,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber3041">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2891">source</a></span></span>
     </span>
   </h3>
 
@@ -11981,7 +11665,7 @@ row)</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2869">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2719">source</a></span></span>
     </span>
   </h3>
 
@@ -12050,7 +11734,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2919">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2769">source</a></span></span>
     </span>
   </h3>
 
@@ -12129,7 +11813,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber986">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber909">source</a></span></span>
     </span>
   </h3>
 
@@ -12170,7 +11854,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1358">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1282">source</a></span></span>
     </span>
   </h3>
 
@@ -12211,7 +11895,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1635">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1484">source</a></span></span>
     </span>
   </h3>
 
@@ -12279,7 +11963,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2838">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2688">source</a></span></span>
     </span>
   </h3>
 
@@ -12347,7 +12031,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2896">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2746">source</a></span></span>
     </span>
   </h3>
 
@@ -12422,7 +12106,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2961">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2811">source</a></span></span>
     </span>
   </h3>
 
@@ -12473,7 +12157,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2858">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2708">source</a></span></span>
     </span>
   </h3>
 
@@ -12541,7 +12225,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2849">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2699">source</a></span></span>
     </span>
   </h3>
 
@@ -12609,7 +12293,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2799">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2649">source</a></span></span>
     </span>
   </h3>
 
@@ -12651,7 +12335,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1379">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1303">source</a></span></span>
     </span>
   </h3>
 
@@ -12709,7 +12393,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1447">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1371">source</a></span></span>
     </span>
   </h3>
 
@@ -12750,7 +12434,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1195">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1119">source</a></span></span>
     </span>
   </h3>
 
@@ -12791,7 +12475,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1187">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1111">source</a></span></span>
     </span>
   </h3>
 
@@ -12848,7 +12532,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1177">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1101">source</a></span></span>
     </span>
   </h3>
 
@@ -12889,7 +12573,7 @@ Note this is only applicable to input filter types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1146">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1070">source</a></span></span>
     </span>
   </h3>
 
@@ -12947,7 +12631,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1428">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1352">source</a></span></span>
     </span>
   </h3>
 
@@ -13012,7 +12696,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1615">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1464">source</a></span></span>
     </span>
   </h3>
 
@@ -13020,47 +12704,6 @@ columns</p>
   
   
   <div data-ice="description"><p>Remove all the external column filters</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-removeToolbar">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">removeToolbar</span><span data-ice="signature">()</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1600">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Remove toolbar container element</p>
 </div>
 
   
@@ -13094,7 +12737,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2721">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2571">source</a></span></span>
     </span>
   </h3>
 
@@ -13152,7 +12795,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2644">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2494">source</a></span></span>
     </span>
   </h3>
 
@@ -13210,7 +12853,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2592">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2442">source</a></span></span>
     </span>
   </h3>
 
@@ -13265,47 +12908,6 @@ columns</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-setToolbar">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">setToolbar</span><span data-ice="signature">()</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber1542">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Generate container element for paging, reset button, rows counter etc.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-validateAllRows">
     <span class="access" data-ice="access">public</span>
     
@@ -13316,7 +12918,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2577">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2427">source</a></span></span>
     </span>
   </h3>
 
@@ -13357,7 +12959,7 @@ columns</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2544">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/tablefilter.js.html#lineNumber2394">source</a></span></span>
     </span>
   </h3>
 

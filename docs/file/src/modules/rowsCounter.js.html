@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/rowsCounter.js | tablefilter v0.5.42 API Document</title>
+  <title data-ice="title">src/modules/rowsCounter.js | tablefilter v0.5.43 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -125,8 +125,12 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/toolbar.js~Toolbar.html">Toolbar</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasHashChange">hasHashChange</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-hasStorage">hasStorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CENTER">CENTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LEFT">LEFT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RIGHT">RIGHT</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -134,8 +138,9 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/modules/rowsCounter.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {createElm, createText, elm, removeElm} from &apos;../dom&apos;;
-import {EMPTY_FN} from &apos;../types&apos;;
+import {EMPTY_FN, isNull} from &apos;../types&apos;;
 import {defaultsStr, defaultsFn} from &apos;../settings&apos;;
+import {LEFT} from &apos;./toolbar&apos;;
 
 /**
  * Rows counter UI component
@@ -203,6 +208,12 @@ export class RowsCounter extends Feature {
         this.cssClass = defaultsStr(f.css_class, &apos;tot&apos;);
 
         /**
+         * Default position in toolbar (&apos;left&apos;|&apos;center&apos;|&apos;right&apos;)
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, LEFT);
+
+        /**
          * Callback fired before the counter is refreshed
          * @type {Function}
          */
@@ -225,6 +236,8 @@ export class RowsCounter extends Feature {
             return;
         }
 
+        this.emitter.emit(&apos;initializing-feature&apos;, this, !isNull(this.targetId));
+
         let tf = this.tf;
 
         //rows counter container
@@ -236,10 +249,9 @@ export class RowsCounter extends Feature {
         countText.appendChild(createText(this.text));
 
         // counter is added to defined element
-        if (!this.targetId) {
-            tf.setToolbar();
-        }
-        let targetEl = !this.targetId ? tf.lDiv : elm(this.targetId);
+        let targetEl = !this.targetId ?
+            tf.feature(&apos;toolbar&apos;).container(this.toolbarPosition) :
+            elm(this.targetId);
 
         //default container: &apos;lDiv&apos;
         if (!this.targetId) {
@@ -262,6 +274,8 @@ export class RowsCounter extends Feature {
         /** @inherited */
         this.initialized = true;
         this.refresh();
+
+        this.emitter.emit(&apos;feature-initialized&apos;, this);
     }
 
     /**

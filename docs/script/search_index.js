@@ -36,6 +36,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/modules/toolbar.js~center",
+    "variable/index.html#static-variable-CENTER",
+    "<span>CENTER</span> <span class=\"search-result-import-path\">tablefilter/src/modules/toolbar.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/const.js~checklist",
     "variable/index.html#static-variable-CHECKLIST",
     "<span>CHECKLIST</span> <span class=\"search-result-import-path\">tablefilter/src/const.js</span>",
@@ -174,6 +180,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "tablefilter/src/modules/toolbar.js~left",
+    "variable/index.html#static-variable-LEFT",
+    "<span>LEFT</span> <span class=\"search-result-import-path\">tablefilter/src/modules/toolbar.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/modules/loader.js~loader",
     "class/src/modules/loader.js~Loader.html",
     "<span>Loader</span> <span class=\"search-result-import-path\">tablefilter/src/modules/loader.js</span>",
@@ -222,6 +234,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "tablefilter/src/modules/toolbar.js~right",
+    "variable/index.html#static-variable-RIGHT",
+    "<span>RIGHT</span> <span class=\"search-result-import-path\">tablefilter/src/modules/toolbar.js</span>",
+    "variable"
+  ],
+  [
     "tablefilter/src/modules/rowscounter.js~rowscounter",
     "class/src/modules/rowsCounter.js~RowsCounter.html",
     "<span>RowsCounter</span> <span class=\"search-result-import-path\">tablefilter/src/modules/rowsCounter.js</span>",
@@ -267,6 +285,12 @@ window.esdocSearchIndex = [
     "tablefilter/src/tablefilter.js~tablefilter",
     "class/src/tablefilter.js~TableFilter.html",
     "<span>TableFilter</span> <span class=\"search-result-import-path\">tablefilter/src/tablefilter.js</span>",
+    "class"
+  ],
+  [
+    "tablefilter/src/modules/toolbar.js~toolbar",
+    "class/src/modules/toolbar.js~Toolbar.html",
+    "<span>Toolbar</span> <span class=\"search-result-import-path\">tablefilter/src/modules/toolbar.js</span>",
     "class"
   ],
   [
@@ -1500,6 +1524,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#toolbarposition",
+    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-toolbarPosition",
+    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#toolbarPosition",
+    "member"
+  ],
+  [
     "src/extensions/sort/adaptersortabletable.js",
     "file/src/extensions/sort/adapterSortabletable.js.html",
     "src/extensions/sort/adapterSortabletable.js",
@@ -1986,6 +2016,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/clearbutton.js~clearbutton#toolbarposition",
+    "class/src/modules/clearButton.js~ClearButton.html#instance-member-toolbarPosition",
+    "src/modules/clearButton.js~ClearButton#toolbarPosition",
+    "member"
+  ],
+  [
     "src/modules/clearbutton.js~clearbutton#tooltip",
     "class/src/modules/clearButton.js~ClearButton.html#instance-member-tooltip",
     "src/modules/clearButton.js~ClearButton#tooltip",
@@ -2416,6 +2452,12 @@ window.esdocSearchIndex = [
     "class/src/modules/help.js~Help.html#instance-method-toggle",
     "src/modules/help.js~Help#toggle",
     "method"
+  ],
+  [
+    "src/modules/help.js~help#toolbarposition",
+    "class/src/modules/help.js~Help.html#instance-member-toolbarPosition",
+    "src/modules/help.js~Help#toolbarPosition",
+    "member"
   ],
   [
     "src/modules/highlightkeywords.js",
@@ -2994,6 +3036,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/paging.js~paging#toolbarposition",
+    "class/src/modules/paging.js~Paging.html#instance-member-toolbarPosition",
+    "src/modules/paging.js~Paging#toolbarPosition",
+    "member"
+  ],
+  [
     "src/modules/popupfilter.js",
     "file/src/modules/popupFilter.js.html",
     "src/modules/popupFilter.js",
@@ -3231,6 +3279,12 @@ window.esdocSearchIndex = [
     "src/modules/rowscounter.js~rowscounter#text",
     "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-text",
     "src/modules/rowsCounter.js~RowsCounter#text",
+    "member"
+  ],
+  [
+    "src/modules/rowscounter.js~rowscounter#toolbarposition",
+    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-toolbarPosition",
+    "src/modules/rowsCounter.js~RowsCounter#toolbarPosition",
     "member"
   ],
   [
@@ -3510,6 +3564,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/modules/statusbar.js~statusbar#toolbarposition",
+    "class/src/modules/statusBar.js~StatusBar.html#instance-member-toolbarPosition",
+    "src/modules/statusBar.js~StatusBar#toolbarPosition",
+    "member"
+  ],
+  [
     "src/modules/storage.js",
     "file/src/modules/storage.js.html",
     "src/modules/storage.js",
@@ -3562,6 +3622,78 @@ window.esdocSearchIndex = [
     "class/src/modules/storage.js~Storage.html#instance-method-sync",
     "src/modules/storage.js~Storage#sync",
     "method"
+  ],
+  [
+    "src/modules/toolbar.js",
+    "file/src/modules/toolbar.js.html",
+    "src/modules/toolbar.js",
+    "file"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#ccontcssclass",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-member-cContCssClass",
+    "src/modules/toolbar.js~Toolbar#cContCssClass",
+    "member"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#constructor",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-constructor-constructor",
+    "src/modules/toolbar.js~Toolbar#constructor",
+    "method"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#contcssclass",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-member-contCssClass",
+    "src/modules/toolbar.js~Toolbar#contCssClass",
+    "member"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#container",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-method-container",
+    "src/modules/toolbar.js~Toolbar#container",
+    "method"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#destroy",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-method-destroy",
+    "src/modules/toolbar.js~Toolbar#destroy",
+    "method"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#enabled",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-member-enabled",
+    "src/modules/toolbar.js~Toolbar#enabled",
+    "member"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#init",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-method-init",
+    "src/modules/toolbar.js~Toolbar#init",
+    "method"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#initialized",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-member-initialized",
+    "src/modules/toolbar.js~Toolbar#initialized",
+    "member"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#lcontcssclass",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-member-lContCssClass",
+    "src/modules/toolbar.js~Toolbar#lContCssClass",
+    "member"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#rcontcssclass",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-member-rContCssClass",
+    "src/modules/toolbar.js~Toolbar#rContCssClass",
+    "member"
+  ],
+  [
+    "src/modules/toolbar.js~toolbar#tgtid",
+    "class/src/modules/toolbar.js~Toolbar.html#instance-member-tgtId",
+    "src/modules/toolbar.js~Toolbar#tgtId",
+    "member"
   ],
   [
     "src/number.js",
@@ -4200,12 +4332,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#infdivcssclass",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-infDivCssClass",
-    "src/tablefilter.js~TableFilter#infDivCssClass",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#init",
     "class/src/tablefilter.js~TableFilter.html#instance-method-init",
     "src/tablefilter.js~TableFilter#init",
@@ -4252,12 +4378,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-isRowValid",
     "src/tablefilter.js~TableFilter#isRowValid",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#ldivcssclass",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-lDivCssClass",
-    "src/tablefilter.js~TableFilter#lDivCssClass",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#leoperator",
@@ -4317,12 +4437,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#lwoperator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-lwOperator",
     "src/tablefilter.js~TableFilter#lwOperator",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#mdivcssclass",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-mDivCssClass",
-    "src/tablefilter.js~TableFilter#mDivCssClass",
     "member"
   ],
   [
@@ -4434,12 +4548,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#rdivcssclass",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-rDivCssClass",
-    "src/tablefilter.js~TableFilter#rDivCssClass",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#refrow",
     "class/src/tablefilter.js~TableFilter.html#instance-member-refRow",
     "src/tablefilter.js~TableFilter#refRow",
@@ -4455,12 +4563,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#removeexternalflts",
     "class/src/tablefilter.js~TableFilter.html#instance-method-removeExternalFlts",
     "src/tablefilter.js~TableFilter#removeExternalFlts",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#removetoolbar",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-removeToolbar",
-    "src/tablefilter.js~TableFilter#removeToolbar",
     "method"
   ],
   [
@@ -4503,12 +4605,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#setfiltervalue",
     "class/src/tablefilter.js~TableFilter.html#instance-method-setFilterValue",
     "src/tablefilter.js~TableFilter#setFilterValue",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#settoolbar",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-setToolbar",
-    "src/tablefilter.js~TableFilter#setToolbar",
     "method"
   ],
   [
@@ -4590,9 +4686,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#toolbartgtid",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-toolBarTgtId",
-    "src/tablefilter.js~TableFilter#toolBarTgtId",
+    "src/tablefilter.js~tablefilter#toolbar",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-toolbar",
+    "src/tablefilter.js~TableFilter#toolbar",
     "member"
   ],
   [
