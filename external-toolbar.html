@@ -13177,7 +13177,9 @@
 <script data-config>
     var tfConfig = {
         base_path: 'tablefilter/',
-        toolbar_target_id: 'externalToolbar',
+        toolbar: {
+          target_id: 'externalToolbar'
+        },
         paging: {
           results_per_page: ['Records: ', [10, 25, 50, 100]]
         },
