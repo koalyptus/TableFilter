@@ -6,7 +6,8 @@ import {
 import {contains, matchCase, rgxEsc, trim} from './string';
 import {isEmpty as isEmptyString} from './string';
 import {
-    isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN
+    isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN,
+    isBoolean
 } from './types';
 import {parse as parseNb} from './number';
 import {
@@ -365,16 +366,18 @@ export class TableFilter {
         this.activeFilterId = null;
 
         /**
-         * Enable/disable always visible rows, excluded from filtering
+         * Determine if there are excluded rows from filtering
          * @type {Boolean}
+         * @private
          */
-        this.hasVisibleRows = Boolean(f.rows_always_visible);
+        this.hasExcludedRows = Boolean(isArray(f.exclude_rows) &&
+            f.exclude_rows.length > 0);
 
         /**
          * List of row indexes to be excluded from filtering
          * @type {Array}
          */
-        this.visibleRows = this.hasVisibleRows ? f.rows_always_visible : [];
+        this.excludeRows = defaultsArr(f.exclude_rows, []);
 
         /**
          * List of containers IDs where external filters will be generated
@@ -999,7 +1002,7 @@ export class TableFilter {
         }//if this.fltGrid
 
         /* Features */
-        if (this.hasVisibleRows) {
+        if (this.hasExcludedRows) {
             this.emitter.on(['after-filtering'],
                 () => this.enforceVisibility());
             this.enforceVisibility();
@@ -1440,7 +1443,7 @@ export class TableFilter {
         }
 
         // unsubscribe to events
-        if (this.hasVisibleRows) {
+        if (this.hasExcludedRows) {
             emitter.off(['after-filtering'], () => this.enforceVisibility());
         }
         if (this.linkedFilters) {
@@ -2393,12 +2396,12 @@ export class TableFilter {
      */
     validateRow(rowIndex, isValid) {
         let row = this.dom().rows[rowIndex];
-        if (!row || typeof isValid !== 'boolean') {
+        if (!row || !isBoolean(isValid)) {
             return;
         }
 
         // always visible rows are valid
-        if (this.hasVisibleRows && this.visibleRows.indexOf(rowIndex) !== -1) {
+        if (this.excludeRows.indexOf(rowIndex) !== -1) {
             isValid = true;
         }
 
@@ -2522,12 +2525,12 @@ export class TableFilter {
      * Make defined rows always visible
      */
     enforceVisibility() {
-        if (!this.hasVisibleRows) {
+        if (!this.hasExcludedRows) {
             return;
         }
         let nbRows = this.getRowsNb(true);
-        for (let i = 0, len = this.visibleRows.length; i < len; i++) {
-            let row = this.visibleRows[i];
+        for (let i = 0, len = this.excludeRows.length; i < len; i++) {
+            let row = this.excludeRows[i];
             //row index cannot be > nrows
             if (row <= nbRows) {
                 this.validateRow(row, true);
