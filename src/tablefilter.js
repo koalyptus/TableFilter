@@ -2419,7 +2419,6 @@ export class TableFilter {
             }
 
             this.onRowValidated(this, rowIndex);
-
             this.emitter.emit('row-validated', this, rowIndex);
         }
     }

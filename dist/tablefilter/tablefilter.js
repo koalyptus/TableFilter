@@ -8144,7 +8144,6 @@ var TableFilter = exports.TableFilter = function () {
                 }
 
                 this.onRowValidated(this, rowIndex);
-
                 this.emitter.emit('row-validated', this, rowIndex);
             }
         }
