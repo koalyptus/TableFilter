@@ -7523,7 +7523,7 @@ var TableFilter = exports.TableFilter = function () {
          * Return the data of a specified column
          * @param {Number} colIndex Column index
          * @param {Boolean} [includeHeaders=false] Include headers row
-         * @param {Arrat} [exclude=[]] List of row indexes to be excluded
+         * @param {Array} [exclude=[]] List of row indexes to be excluded
          * @return Flat list of data for a column
          */
 
@@ -7540,7 +7540,7 @@ var TableFilter = exports.TableFilter = function () {
          * Return the values of a specified column
          * @param {Number} colIndex Column index
          * @param {Boolean} [includeHeaders=false] Include headers row
-         * @param {Arrat} [exclude=[]] List of row indexes to be excluded
+         * @param {Array} [exclude=[]] List of row indexes to be excluded
          * @return Flat list of values for a column
          */
 
@@ -7730,18 +7730,36 @@ var TableFilter = exports.TableFilter = function () {
         }
 
         /**
-         * Return the number of filterable rows starting from reference row if
+         * Return the number of working rows starting from reference row if
          * defined
-         * @param  {Boolean} includeHeaders Include the headers row
-         * @return {Number}                 Number of filterable rows
+         * @param  {Boolean} includeHeaders Include the headers row(s)
+         * @return {Number}                 Number of working rows
          */
 
     }, {
         key: 'getRowsNb',
         value: function getRowsNb(includeHeaders) {
-            var s = includeHeaders === true ? 0 : this.refRow;
-            var ntrs = this.dom().rows.length;
-            return parseInt(ntrs - s, 10);
+            var dom = this.dom();
+            var nbRows = this.getRows().length;
+            if (dom.tHead) {
+                return includeHeaders ? nbRows + dom.querySelectorAll('thead > tr').length : nbRows;
+            }
+            return includeHeaders ? nbRows : nbRows - this.refRow;
+        }
+
+        /**
+         * Collection of table or tbody rows, if latter present
+         * @returns {Array}
+         */
+
+    }, {
+        key: 'getRows',
+        value: function getRows() {
+            var dom = this.dom();
+            if (dom.tBodies.length > 0) {
+                return [].slice.call(dom.querySelectorAll('tbody > tr'));
+            }
+            return [].slice.call(dom.rows);
         }
 
         /**
@@ -9165,7 +9183,7 @@ var Dropdown = exports.Dropdown = function (_BaseDropdown) {
             for (var k = tf.refRow; k < nbRows; k++) {
                 // always visible rows don't need to appear on selects as always
                 // valid
-                if (tf.excludedRows.indexOf(k) !== -1) {
+                if (tf.excludeRows.indexOf(k) !== -1) {
                     continue;
                 }
 
@@ -15163,7 +15181,7 @@ var CheckList = exports.CheckList = function (_BaseDropdown) {
             for (var k = tf.refRow; k < nbRows; k++) {
                 // always visible rows don't need to appear on selects as always
                 // valid
-                if (tf.excludedRows.indexOf(k) !== -1) {
+                if (tf.excludeRows.indexOf(k) !== -1) {
                     continue;
                 }
 

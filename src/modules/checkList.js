@@ -236,7 +236,7 @@ export class CheckList extends BaseDropdown {
         for (let k = tf.refRow; k < nbRows; k++) {
             // always visible rows don't need to appear on selects as always
             // valid
-            if (tf.excludedRows.indexOf(k) !== -1) {
+            if (tf.excludeRows.indexOf(k) !== -1) {
                 continue;
             }
 

@@ -1891,7 +1891,7 @@ export class TableFilter {
      * Return the data of a specified column
      * @param {Number} colIndex Column index
      * @param {Boolean} [includeHeaders=false] Include headers row
-     * @param {Arrat} [exclude=[]] List of row indexes to be excluded
+     * @param {Array} [exclude=[]] List of row indexes to be excluded
      * @return Flat list of data for a column
      */
     getColumnData(colIndex, includeHeaders = false, exclude = []) {
@@ -1902,7 +1902,7 @@ export class TableFilter {
      * Return the values of a specified column
      * @param {Number} colIndex Column index
      * @param {Boolean} [includeHeaders=false] Include headers row
-     * @param {Arrat} [exclude=[]] List of row indexes to be excluded
+     * @param {Array} [exclude=[]] List of row indexes to be excluded
      * @return Flat list of values for a column
      */
     getColumnValues(colIndex, includeHeaders = false, exclude = []) {
@@ -2066,17 +2066,33 @@ export class TableFilter {
     }
 
     /**
-     * Return the number of filterable rows starting from reference row if
+     * Return the number of working rows starting from reference row if
      * defined
-     * @param  {Boolean} includeHeaders Include the headers row
-     * @return {Number}                 Number of filterable rows
+     * @param  {Boolean} includeHeaders Include the headers row(s)
+     * @return {Number}                 Number of working rows
      */
     getRowsNb(includeHeaders) {
-        let s = includeHeaders === true ? 0 : this.refRow;
-        let ntrs = this.dom().rows.length;
-        return parseInt(ntrs - s, 10);
+        let dom = this.dom();
+        let nbRows = this.getRows().length;
+        if (dom.tHead) {
+            return includeHeaders ?
+                nbRows + dom.querySelectorAll('thead > tr').length :
+                nbRows;
+        }
+        return includeHeaders ? nbRows : nbRows - this.refRow;
     }
 
+    /**
+     * Collection of table or tbody rows, if latter present
+     * @returns {Array}
+     */
+    getRows() {
+        let dom = this.dom();
+        if (dom.tBodies.length > 0) {
+            return [].slice.call(dom.querySelectorAll('tbody > tr'));
+        }
+        return [].slice.call(dom.rows);
+    }
 
     /**
      * Return the text content of a given cell
