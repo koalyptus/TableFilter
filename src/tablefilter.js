@@ -2072,26 +2072,22 @@ export class TableFilter {
      * @return {Number}                 Number of working rows
      */
     getRowsNb(includeHeaders) {
-        let dom = this.dom();
-        let nbRows = this.getRows().length;
-        if (dom.tHead) {
+        let nbRows = this.getWorkingRows().length;
+        if (this.dom().tHead) {
             return includeHeaders ?
-                nbRows + dom.querySelectorAll('thead > tr').length :
+                nbRows + this.dom().querySelectorAll('thead > tr').length :
                 nbRows;
         }
         return includeHeaders ? nbRows : nbRows - this.refRow;
     }
 
     /**
-     * Collection of table or tbody rows, if latter present
+     * Return the collection of the working rows, that is, the rows belonging
+     * to the tbody section(s)
      * @returns {Array}
      */
-    getRows() {
-        let dom = this.dom();
-        if (dom.tBodies.length > 0) {
-            return [].slice.call(dom.querySelectorAll('tbody > tr'));
-        }
-        return [].slice.call(dom.rows);
+    getWorkingRows() {
+        return [].slice.call(this.dom().querySelectorAll('tbody > tr'));
     }
 
     /**

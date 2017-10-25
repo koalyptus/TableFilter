@@ -5634,7 +5634,7 @@ var TableFilter = exports.TableFilter = function () {
          * Current version
          * @type {String}
          */
-        this.version = '0.5.44';
+        this.version = '0.6.0';
 
         /**
          * Current year
@@ -7739,27 +7739,23 @@ var TableFilter = exports.TableFilter = function () {
     }, {
         key: 'getRowsNb',
         value: function getRowsNb(includeHeaders) {
-            var dom = this.dom();
-            var nbRows = this.getRows().length;
-            if (dom.tHead) {
-                return includeHeaders ? nbRows + dom.querySelectorAll('thead > tr').length : nbRows;
+            var nbRows = this.getWorkingRows().length;
+            if (this.dom().tHead) {
+                return includeHeaders ? nbRows + this.dom().querySelectorAll('thead > tr').length : nbRows;
             }
             return includeHeaders ? nbRows : nbRows - this.refRow;
         }
 
         /**
-         * Collection of table or tbody rows, if latter present
+         * Return the collection of the working rows, that is, the rows belonging
+         * to the tbody section(s)
          * @returns {Array}
          */
 
     }, {
-        key: 'getRows',
-        value: function getRows() {
-            var dom = this.dom();
-            if (dom.tBodies.length > 0) {
-                return [].slice.call(dom.querySelectorAll('tbody > tr'));
-            }
-            return [].slice.call(dom.rows);
+        key: 'getWorkingRows',
+        value: function getWorkingRows() {
+            return [].slice.call(this.dom().querySelectorAll('tbody > tr'));
         }
 
         /**
