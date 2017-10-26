@@ -3966,6 +3966,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#excluderows",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-excludeRows",
+    "src/tablefilter.js~TableFilter#excludeRows",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#extension",
     "class/src/tablefilter.js~TableFilter.html#instance-method-extension",
     "src/tablefilter.js~TableFilter#extension",
@@ -4266,6 +4272,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#getworkingrows",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-getWorkingRows",
+    "src/tablefilter.js~TableFilter#getWorkingRows",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#groperator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-grOperator",
     "src/tablefilter.js~TableFilter#grOperator",
@@ -4294,12 +4306,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-hasType",
     "src/tablefilter.js~TableFilter#hasType",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#hasvisiblerows",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasVisibleRows",
-    "src/tablefilter.js~TableFilter#hasVisibleRows",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#help",
@@ -4707,12 +4713,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#version",
     "class/src/tablefilter.js~TableFilter.html#instance-member-version",
     "src/tablefilter.js~TableFilter#version",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#visiblerows",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-visibleRows",
-    "src/tablefilter.js~TableFilter#visibleRows",
     "member"
   ],
   [
