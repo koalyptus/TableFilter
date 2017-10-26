@@ -638,7 +638,7 @@
             { type: 'date', locale: 'en', format: ['{dd}-{months}-{yyyy|yy}'] },
             'ipaddress'
         ],
-        rows_always_visible: [totRowIndex],
+        exclude_rows: [totRowIndex],
         on_filters_loaded: function(tf){
             tf.setFilterValue(3, '>1.000');
             tf.setFilterValue(4, '<2,500');

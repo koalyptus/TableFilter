@@ -196,7 +196,7 @@
 <h1>Exclude rows</h1>
 <p>
     To exclude rows from the filtering process, use the
-    <code>rows_always_visible</code> option. Those rows will remain always
+    <code>exclude_rows</code> option. Those rows will remain always
     visible.
 </p>
 
@@ -272,7 +272,7 @@
 <script data-config>
     var tf = new TableFilter('demo', {
         base_path: 'tablefilter/',
-        rows_always_visible: [2, 8]
+        exclude_rows: [2, 8]
     });
     tf.init();
 </script>
