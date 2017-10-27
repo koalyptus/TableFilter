@@ -3,6 +3,7 @@
  */
 
 @import 'config'
+@import 'mixins/empty-content'
 
 // left, middle and right divs container (toolbar)
 .inf
@@ -32,25 +33,27 @@
 
 // left div
 .ldiv
+    empty-content()
     float                       left
     width                       30%
-    // height                      100%
     position                    inherit
     text-align                  left
 
 // middle div
 .mdiv
+    empty-content()
     float                       left
     width                       38%
-    // height                      100%
+    min-width                   38%
     position                    inherit
     text-align                  center
     padding                     0
 
 // right div
 .rdiv
+    empty-content()
     float                       right
     width                       30%
-    // height                      100%
+    min-width                   30%
     position                    inherit
     text-align                  right
