@@ -2538,14 +2538,6 @@ export class TableFilter {
         if (!this.hasExcludedRows) {
             return;
         }
-        // let nbRows = this.getRowsNb(true);
-        // for (let i = 0, len = this.excludeRows.length; i < len; i++) {
-        //     let row = this.excludeRows[i];
-        //     //row index cannot be > nrows
-        //     if (row <= nbRows) {
-        //         this.validateRow(row, true);
-        //     }
-        // }
         this.excludeRows.forEach((rowIdx) => this.validateRow(rowIdx, true));
     }
 

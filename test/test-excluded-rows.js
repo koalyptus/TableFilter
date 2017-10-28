@@ -44,6 +44,19 @@
             '',
             'Row display for excludedRow2'
         );
+    });
+
+    test('setExcludeRows not called if no exclude rows', function() {
+        tf.hasExcludedRows = false;
+        var originalValidateRow = tf.validateRow;
+        var hit = 0;
+        tf.validateRow = function() { hit++; };
+
+        tf.setExcludeRows();
+
+        deepEqual(hit, 0, 'validateRow not called');
+
+        tf.validateRow = originalValidateRow;
 
         testPaging();
     });
