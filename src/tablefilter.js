@@ -2050,8 +2050,23 @@ export class TableFilter {
      * @return {DOMElement}
      */
     getFilterElement(index) {
-        let fltId = this.fltIds[index];
-        return elm(fltId);
+        return elm(this.fltIds[index]);
+    }
+
+    /**
+     * Column iterator invoking break condition callback if any and then
+     * invoking the callback for each item
+     * @param {Function} [fn=EMPTY_FN] callback
+     * @param {Function} [breakFn=EMPTY_FN] break condition callback
+     */
+    eachCol(fn = EMPTY_FN, breakFn = EMPTY_FN) {
+        let len = this.getCellsNb(this.refRow);
+        for (let i = 0; i < len; i++) {
+            if (breakFn(i) === true) {
+                continue;
+            }
+            fn(i);
+        }
     }
 
     /**
@@ -2512,11 +2527,11 @@ export class TableFilter {
 
         tbl = tbl || this.dom();
 
-        let nbCols = this.nbCells;
         let colTags = tag(tbl, 'col');
         let tblHasColTag = colTags.length > 0;
         let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
-        for (let k = 0; k < nbCols; k++) {
+
+        this.eachCol((k) => {
             let col;
             if (tblHasColTag) {
                 col = colTags[k];
@@ -2525,7 +2540,8 @@ export class TableFilter {
                 frag.appendChild(col);
             }
             col.style.width = colWidths[k];
-        }
+        });
+
         if (!tblHasColTag) {
             tbl.insertBefore(frag, tbl.firstChild);
         }
@@ -2931,16 +2947,20 @@ export class TableFilter {
      */
     getHeadersText(excludeHiddenCols = false) {
         let headers = [];
-        for (let j = 0; j < this.nbCells; j++) {
-            if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
-                if (this.extension('colsVisibility').isColHidden(j)) {
-                    continue;
+        this.eachCol(
+            (j) => {
+                let header = this.getHeaderElement(j);
+                let headerText = getFirstTextNode(header);
+                headers.push(headerText);
+            },
+            // break condition function
+            (j) => {
+                if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
+                    return this.extension('colsVisibility').isColHidden(j);
                 }
+                return false;
             }
-            let header = this.getHeaderElement(j);
-            let headerText = getFirstTextNode(header);
-            headers.push(headerText);
-        }
+        );
         return headers;
     }
 

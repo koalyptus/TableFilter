@@ -65,10 +65,9 @@ export class MarkActiveColumns extends Feature {
      */
     clearActiveColumns() {
         let tf = this.tf;
-        let len = tf.getCellsNb();
-        for (let i = 0; i < len; i++) {
-            removeClass(tf.getHeaderElement(i), this.headerCssClass);
-        }
+        tf.eachCol((idx) => {
+            removeClass(tf.getHeaderElement(idx), this.headerCssClass);
+        });
     }
 
     /**

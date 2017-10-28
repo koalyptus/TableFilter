@@ -390,7 +390,7 @@ export default class AdapterSortableTable extends Feature {
             sortTypes = this.sortTypes,
             _sortTypes = [];
 
-        for (let i = 0; i < tf.nbCells; i++) {
+        tf.eachCol((i) => {
             let colType;
             if (sortTypes[i]) {
                 colType = sortTypes[i];
@@ -420,7 +420,7 @@ export default class AdapterSortableTable extends Feature {
                 colType = STRING;
             }
             _sortTypes.push(colType);
-        }
+        });
 
         //Public TF method to add sort type
 
