@@ -3936,12 +3936,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#enforcevisibility",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-enforceVisibility",
-    "src/tablefilter.js~TableFilter#enforceVisibility",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#enterkey",
     "class/src/tablefilter.js~TableFilter.html#instance-member-enterKey",
     "src/tablefilter.js~TableFilter#enterKey",
@@ -4605,6 +4599,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#setcolwidths",
     "class/src/tablefilter.js~TableFilter.html#instance-method-setColWidths",
     "src/tablefilter.js~TableFilter#setColWidths",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#setexcluderows",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-setExcludeRows",
+    "src/tablefilter.js~TableFilter#setExcludeRows",
     "method"
   ],
   [
