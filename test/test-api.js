@@ -137,6 +137,21 @@ test('Activate filter for a specified column', function() {
     deepEqual(tf.getActiveFilterId(), filterId, 'Filter active');
 });
 
+test('Activate filter not called if colIndex not a number', function() {
+    //set
+    var originalSetActiveFilterId = tf.setActiveFilterId;
+    var hit = 0;
+    tf.setActiveFilterId = function() { hit++; };
+
+    //act
+    tf.activateFilter(undefined);
+
+    //assert
+    deepEqual(hit, 0, 'setActiveFilterId never called');
+
+    tf.setActiveFilterId = originalSetActiveFilterId;
+});
+
 test('Clear filters', function() {
     tf.clearFilters();
     deepEqual(tf.getValidRowsNb(), 7, 'Filtered rows number');

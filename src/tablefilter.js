@@ -1003,9 +1003,8 @@ export class TableFilter {
 
         /* Features */
         if (this.hasExcludedRows) {
-            this.emitter.on(['after-filtering'],
-                () => this.enforceVisibility());
-            this.enforceVisibility();
+            this.emitter.on(['after-filtering'], () => this.setExcludeRows());
+            this.setExcludeRows();
         }
 
         this.initFeatures([
@@ -1444,7 +1443,7 @@ export class TableFilter {
 
         // unsubscribe to events
         if (this.hasExcludedRows) {
-            emitter.off(['after-filtering'], () => this.enforceVisibility());
+            emitter.off(['after-filtering'], () => this.setExcludeRows());
         }
         if (this.linkedFilters) {
             emitter.off(['after-filtering'], () => this.linkFilters());
@@ -2533,20 +2532,13 @@ export class TableFilter {
     }
 
     /**
-     * Make defined rows always visible
+     * Exclude rows from actions
      */
-    enforceVisibility() {
+    setExcludeRows() {
         if (!this.hasExcludedRows) {
             return;
         }
-        let nbRows = this.getRowsNb(true);
-        for (let i = 0, len = this.excludeRows.length; i < len; i++) {
-            let row = this.excludeRows[i];
-            //row index cannot be > nrows
-            if (row <= nbRows) {
-                this.validateRow(row, true);
-            }
-        }
+        this.excludeRows.forEach((rowIdx) => this.validateRow(rowIdx, true));
     }
 
     /**
