@@ -28,6 +28,19 @@ export class MarkActiveColumns extends Feature {
             'activeHeader');
 
         /**
+         * Css class for filtered (active) column cells
+         * @type {String}
+         */
+        this.cellCssClass = defaultsStr(config.cell_css_class,
+            'activeCell');
+
+        /**
+         * Enable/disable column highlighting
+         * @type {Boolean}
+         */
+        this.highlightColumn = Boolean(config.highlight_column);
+
+        /**
          * Callback fired before a column is marked as filtered
          * @type {Function}
          */
@@ -67,6 +80,14 @@ export class MarkActiveColumns extends Feature {
         let tf = this.tf;
         tf.eachCol((idx) => {
             removeClass(tf.getHeaderElement(idx), this.headerCssClass);
+
+            if (this.highlightColumn) {
+                tf.dom()
+                    .querySelectorAll(`tbody td:nth-child(${idx + 1})`)
+                    .forEach((cell) => {
+                        removeClass(cell, this.cellCssClass);
+                    });
+            }
         });
     }
 
@@ -75,13 +96,23 @@ export class MarkActiveColumns extends Feature {
      * @param  {Number} colIndex Column index
      */
     markActiveColumn(colIndex) {
-        let header = this.tf.getHeaderElement(colIndex);
+        let tf = this.tf;
+        let header = tf.getHeaderElement(colIndex);
         if (hasClass(header, this.headerCssClass)) {
             return;
         }
+
         this.onBeforeActiveColumn(this, colIndex);
 
         addClass(header, this.headerCssClass);
+
+        if (this.highlightColumn) {
+            tf.dom()
+                .querySelectorAll(`tbody td:nth-child(${colIndex + 1})`)
+                .forEach((cell) => {
+                    addClass(cell, this.cellCssClass);
+                });
+        }
 
         this.onAfterActiveColumn(this, colIndex);
     }

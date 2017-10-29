@@ -2054,16 +2054,20 @@ export class TableFilter {
     }
 
     /**
-     * Column iterator invoking break condition callback if any and then
-     * invoking the callback for each item
+     * Column iterator invoking continue and break condition callbacks if any
+     * then calling supplied callback for each item
      * @param {Function} [fn=EMPTY_FN] callback
+     * @param {Function} [continueFn=EMPTY_FN] continue condition callback
      * @param {Function} [breakFn=EMPTY_FN] break condition callback
      */
-    eachCol(fn = EMPTY_FN, breakFn = EMPTY_FN) {
+    eachCol(fn = EMPTY_FN, continueFn = EMPTY_FN, breakFn = EMPTY_FN) {
         let len = this.getCellsNb(this.refRow);
         for (let i = 0; i < len; i++) {
-            if (breakFn(i) === true) {
+            if (continueFn(i) === true) {
                 continue;
+            }
+            if (breakFn(i) === true) {
+                break;
             }
             fn(i);
         }
@@ -2953,7 +2957,7 @@ export class TableFilter {
                 let headerText = getFirstTextNode(header);
                 headers.push(headerText);
             },
-            // break condition function
+            // continue condition function
             (j) => {
                 if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
                     return this.extension('colsVisibility').isColHidden(j);

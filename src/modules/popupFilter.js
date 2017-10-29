@@ -260,7 +260,7 @@ export class PopupFilter extends Feature {
                 this.fltSpans[i] = icon;
                 this.fltIcons[i] = icon.firstChild;
             },
-            // break condition function
+            // continue condition function
             (i) => tf.getFilterType(i) === NONE
         );
     }
