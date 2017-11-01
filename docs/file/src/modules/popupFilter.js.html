@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.6.1 API Document</title>
+  <title data-ice="title">src/modules/popupFilter.js | tablefilter v0.6.2 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -388,18 +388,19 @@ export class PopupFilter extends Feature {
         // adjusting: prevent useless row generation
         tf.headersRow++;
 
-        for (let i = 0; i &lt; tf.nbCells; i++) {
-            if (tf.getFilterType(i) === NONE) {
-                continue;
-            }
-            let icon = createElm(&apos;span&apos;, [&apos;ci&apos;, i]);
-            icon.innerHTML = this.iconHtml;
-            let header = tf.getHeaderElement(i);
-            header.appendChild(icon);
-            addEvt(icon, &apos;click&apos;, (evt) =&gt; this.onClick(evt));
-            this.fltSpans[i] = icon;
-            this.fltIcons[i] = icon.firstChild;
-        }
+        tf.eachCol(
+            (i) =&gt; {
+                let icon = createElm(&apos;span&apos;, [&apos;ci&apos;, i]);
+                icon.innerHTML = this.iconHtml;
+                let header = tf.getHeaderElement(i);
+                header.appendChild(icon);
+                addEvt(icon, &apos;click&apos;, (evt) =&gt; this.onClick(evt));
+                this.fltSpans[i] = icon;
+                this.fltIcons[i] = icon.firstChild;
+            },
+            // continue condition function
+            (i) =&gt; tf.getFilterType(i) === NONE
+        );
     }
 
     /**

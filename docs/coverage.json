@@ -1,7 +1,7 @@
 {
   "coverage": "100%",
-  "expectCount": 693,
-  "actualCount": 693,
+  "expectCount": 696,
+  "actualCount": 696,
   "files": {
     "src/const.js": {
       "expectCount": 19,
@@ -104,8 +104,8 @@
       "undocumentLines": []
     },
     "src/modules/markActiveColumns.js": {
-      "expectCount": 10,
-      "actualCount": 10,
+      "expectCount": 12,
+      "actualCount": 12,
       "undocumentLines": []
     },
     "src/modules/noResults.js": {
@@ -144,8 +144,8 @@
       "undocumentLines": []
     },
     "src/tablefilter.js": {
-      "expectCount": 166,
-      "actualCount": 166,
+      "expectCount": 167,
+      "actualCount": 167,
       "undocumentLines": []
     },
     "src/dom.js": {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.6.1 API Document</title>
+  <title data-ice="title">src/modules/gridLayout.js | tablefilter v0.6.2 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -443,7 +443,8 @@ export class GridLayout extends Feature {
         if (tf.colWidths.length &gt; 0) {
             return;
         }
-        for (let k = 0, len = tf.getCellsNb(); k &lt; len; k++) {
+
+        tf.eachCol((k) =&gt; {
             let colW;
             let cell = tf.dom().rows[tf.getHeadersRowIndex()].cells[k];
             if (cell.width !== &apos;&apos;) {
@@ -454,7 +455,8 @@ export class GridLayout extends Feature {
                 colW = this.defaultColWidth;
             }
             tf.colWidths[k] = colW;
-        }
+        });
+
         tf.setColWidths();
     }
 
@@ -501,12 +503,12 @@ export class GridLayout extends Feature {
         let filtersRow = createElm(&apos;tr&apos;);
         if (this.filters &amp;&amp; tf.fltGrid) {
             tf.externalFltTgtIds = [];
-            for (let j = 0; j &lt; tf.getCellsNb(); j++) {
+            tf.eachCol((j) =&gt; {
                 let fltTdId = `${tf.prfxFlt + j + this.prfxGridFltTd + tf.id}`;
                 let cl = createElm(tf.fltCellTag, [&apos;id&apos;, fltTdId]);
                 filtersRow.appendChild(cl);
                 tf.externalFltTgtIds[j] = fltTdId;
-            }
+            });
         }
         return filtersRow;
     }
@@ -520,7 +522,7 @@ export class GridLayout extends Feature {
         let cols = tag(tf.dom(), &apos;col&apos;);
         this.tblHasColTag = cols.length &gt; 0;
 
-        for (let k = (tf.nbCells - 1); k &gt;= 0; k--) {
+        for (let k = (tf.getCellsNb() - 1); k &gt;= 0; k--) {
             let col;
 
             if (!this.tblHasColTag) {
@@ -579,7 +581,7 @@ export class GridLayout extends Feature {
     getSortTriggerIds(row) {
         let tf = this.tf;
         let sortTriggers = [];
-        for (let n = 0; n &lt; tf.getCellsNb(); n++) {
+        tf.eachCol((n) =&gt; {
             let c = row.cells[n];
             let thId = c.getAttribute(&apos;id&apos;);
             if (!thId || thId === &apos;&apos;) {
@@ -587,7 +589,7 @@ export class GridLayout extends Feature {
                 c.setAttribute(&apos;id&apos;, thId);
             }
             sortTriggers.push(thId);
-        }
+        });
         return sortTriggers;
     }
 

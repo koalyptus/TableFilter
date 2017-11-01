@@ -2610,6 +2610,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/modules/markactivecolumns.js~markactivecolumns#cellcssclass",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-member-cellCssClass",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#cellCssClass",
+    "member"
+  ],
+  [
     "src/modules/markactivecolumns.js~markactivecolumns#clearactivecolumns",
     "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-method-clearActiveColumns",
     "src/modules/markActiveColumns.js~MarkActiveColumns#clearActiveColumns",
@@ -2631,6 +2637,12 @@ window.esdocSearchIndex = [
     "src/modules/markactivecolumns.js~markactivecolumns#headercssclass",
     "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-member-headerCssClass",
     "src/modules/markActiveColumns.js~MarkActiveColumns#headerCssClass",
+    "member"
+  ],
+  [
+    "src/modules/markactivecolumns.js~markactivecolumns#highlightcolumn",
+    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-member-highlightColumn",
+    "src/modules/markActiveColumns.js~MarkActiveColumns#highlightColumn",
     "member"
   ],
   [
@@ -3885,6 +3897,12 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#dom",
     "class/src/tablefilter.js~TableFilter.html#instance-method-dom",
     "src/tablefilter.js~TableFilter#dom",
+    "method"
+  ],
+  [
+    "src/tablefilter.js~tablefilter#eachcol",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-eachCol",
+    "src/tablefilter.js~TableFilter#eachCol",
     "method"
   ],
   [
