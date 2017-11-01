@@ -1,9 +1,9 @@
 /** 
- *	 tablefilter v0.6.1 by Max Guglielmi 
- *	 build date: 2017-10-28T04:59:43.949Z 
+ *	 tablefilter v0.6.2 by Max Guglielmi 
+ *	 build date: 2017-11-01T11:06:37.113Z 
  *	 MIT License  
  */ 
-.activeHeader{background-color:#66afe9 !important;color:#fff !important}
+.activeHeader{background-color:#66afe9 !important;color:#fff !important}.activeCell{background-color:rgba(0,0,0,0.075)}
 .even{background-color:#fff}.odd{background-color:#f9f9f9}
 
 .ezActiveRow{background-color:#2852a8 !important;color:#fff}.ezSelectedRow{background-color:#316ac5 !important;color:#fff}.ezActiveCell{background-color:#d9e8fb !important;color:#000 !important;font-weight:bold}.ezETSelectedCell{background-color:#ffdc61 !important;font-weight:bold;color:#000 !important}.ezUnselectable{-moz-user-select:-moz-none;-khtml-user-select:none;-webkit-user-select:none;-o-user-select:none;user-select:none}.ezInputEditor{width:95%;height:auto;font-size:inherit;border:1px solid #aaccf6}.ezTextareaEditor{width:95%;height:35px;font-size:inherit;border:1px solid #aaccf6}.ezSelectEditor{width:100%;font-size:inherit;border:1px solid #aaccf6}.ezModifiedCell{background:transparent url("themes/bg_mod_cell.png") 0 0 no-repeat}select[multiple="multiple"].ezSelectEditor{height:35px}.ezCommandEditor{margin:2px;}.ezCommandEditor button,.ezCommandEditor input[type="button"]{min-height:22px;margin:1px;padding:3px;border:1px solid #ccc;background:#fff;border-radius:4px 4px 4px 4px;-moz-border-radius:4px 4px 4px 4px;}.ezCommandEditor button:hover,.ezCommandEditor input[type="button"]:hover{border:1px solid #999}.ezCommandEditor img{border:0;vertical-align:middle;margin:2px}.ezOpacity{opacity:.6}.alignLeft{text-align:left}.alignCenter{text-align:center}.alignRight{text-align:right}

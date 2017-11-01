@@ -2050,8 +2050,7 @@ export class TableFilter {
      * @return {DOMElement}
      */
     getFilterElement(index) {
-        let fltId = this.fltIds[index];
-        return elm(fltId);
+        return elm(this.fltIds[index]);
     }
 
     /**
@@ -2086,7 +2085,7 @@ export class TableFilter {
      * @returns {Array}
      */
     getWorkingRows() {
-        return [].slice.call(this.dom().querySelectorAll('tbody > tr'));
+        return this.dom().querySelectorAll('tbody > tr');
     }
 
     /**
@@ -2512,11 +2511,11 @@ export class TableFilter {
 
         tbl = tbl || this.dom();
 
-        let nbCols = this.nbCells;
         let colTags = tag(tbl, 'col');
         let tblHasColTag = colTags.length > 0;
         let frag = !tblHasColTag ? doc.createDocumentFragment() : null;
-        for (let k = 0; k < nbCols; k++) {
+
+        this.eachCol((k) => {
             let col;
             if (tblHasColTag) {
                 col = colTags[k];
@@ -2525,7 +2524,8 @@ export class TableFilter {
                 frag.appendChild(col);
             }
             col.style.width = colWidths[k];
-        }
+        });
+
         if (!tblHasColTag) {
             tbl.insertBefore(frag, tbl.firstChild);
         }
@@ -2744,6 +2744,26 @@ export class TableFilter {
     }
 
     /**
+     * Column iterator invoking continue and break condition callbacks if any
+     * then calling supplied callback for each item
+     * @param {Function} [fn=EMPTY_FN] callback
+     * @param {Function} [continueFn=EMPTY_FN] continue condition callback
+     * @param {Function} [breakFn=EMPTY_FN] break condition callback
+     */
+    eachCol(fn = EMPTY_FN, continueFn = EMPTY_FN, breakFn = EMPTY_FN) {
+        let len = this.getCellsNb(this.refRow);
+        for (let i = 0; i < len; i++) {
+            if (continueFn(i) === true) {
+                continue;
+            }
+            if (breakFn(i) === true) {
+                break;
+            }
+            fn(i);
+        }
+    }
+
+    /**
      * Check if passed script or stylesheet is already imported
      * @param  {String}  filePath Ressource path
      * @param  {String}  type     Possible values: 'script' or 'link'
@@ -2931,16 +2951,20 @@ export class TableFilter {
      */
     getHeadersText(excludeHiddenCols = false) {
         let headers = [];
-        for (let j = 0; j < this.nbCells; j++) {
-            if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
-                if (this.extension('colsVisibility').isColHidden(j)) {
-                    continue;
+        this.eachCol(
+            (j) => {
+                let header = this.getHeaderElement(j);
+                let headerText = getFirstTextNode(header);
+                headers.push(headerText);
+            },
+            // continue condition function
+            (j) => {
+                if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
+                    return this.extension('colsVisibility').isColHidden(j);
                 }
+                return false;
             }
-            let header = this.getHeaderElement(j);
-            let headerText = getFirstTextNode(header);
-            headers.push(headerText);
-        }
+        );
         return headers;
     }
 

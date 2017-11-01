@@ -28,6 +28,19 @@ export class MarkActiveColumns extends Feature {
             'activeHeader');
 
         /**
+         * Css class for filtered (active) column cells
+         * @type {String}
+         */
+        this.cellCssClass = defaultsStr(config.cell_css_class,
+            'activeCell');
+
+        /**
+         * Enable/disable column highlighting
+         * @type {Boolean}
+         */
+        this.highlightColumn = Boolean(config.highlight_column);
+
+        /**
          * Callback fired before a column is marked as filtered
          * @type {Function}
          */
@@ -65,10 +78,14 @@ export class MarkActiveColumns extends Feature {
      */
     clearActiveColumns() {
         let tf = this.tf;
-        let len = tf.getCellsNb();
-        for (let i = 0; i < len; i++) {
-            removeClass(tf.getHeaderElement(i), this.headerCssClass);
-        }
+        tf.eachCol((idx) => {
+            removeClass(tf.getHeaderElement(idx), this.headerCssClass);
+
+            if (this.highlightColumn) {
+                this.eachColumnCell(idx,
+                    (cell) => removeClass(cell, this.cellCssClass));
+            }
+        });
     }
 
     /**
@@ -76,15 +93,36 @@ export class MarkActiveColumns extends Feature {
      * @param  {Number} colIndex Column index
      */
     markActiveColumn(colIndex) {
-        let header = this.tf.getHeaderElement(colIndex);
+        let tf = this.tf;
+        let header = tf.getHeaderElement(colIndex);
         if (hasClass(header, this.headerCssClass)) {
             return;
         }
+
         this.onBeforeActiveColumn(this, colIndex);
 
         addClass(header, this.headerCssClass);
 
+        if (this.highlightColumn) {
+            this.eachColumnCell(colIndex,
+                (cell) => addClass(cell, this.cellCssClass));
+        }
+
         this.onAfterActiveColumn(this, colIndex);
+    }
+
+    /**
+     * Column cells iterator
+     * TODO: make public and move into TableFilter if used elsewhere
+     * @param {Number} colIndex
+     * @param {Function} fn
+     * @param {DOMElement} tbl
+     * @private
+     */
+    eachColumnCell(colIndex, fn = EMPTY_FN, tbl = this.tf.dom()) {
+        // TODO: remove [].forEach when polyfill for PhanthomJs is available
+        [].forEach.call(
+            tbl.querySelectorAll(`tbody td:nth-child(${colIndex + 1})`), fn);
     }
 
     /**

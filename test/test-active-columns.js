@@ -13,6 +13,10 @@
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         notEqual(markActiveColumns, null, 'markActiveColumns instanciated');
         deepEqual(tf.markActiveColumns, true, 'markActiveColumns property');
+        equal(markActiveColumns.emitter.events['before-filtering'].length, 1,
+            'subscribed to `before-filtering` event');
+        equal(markActiveColumns.emitter.events['cell-processed'].length, 1,
+            'subscribed to `cell-processed` event');
     });
 
     module('Feature interface');
@@ -82,6 +86,59 @@
             header3.className.indexOf('activeHeader') !== -1,
             true,
             'Active filter indicator');
+    });
+
+    test('can highlight column cells', function() {
+        // setup
+        tf.clearFilters();
+        var markActiveColumns = tf.feature('markActiveColumns');
+        markActiveColumns.highlightColumn = true;
+
+        // act
+        tf.setFilterValue(3, '>2');
+        tf.filter();
+
+        // assert
+        deepEqual(tf.dom().rows[6].cells[3].className,
+            markActiveColumns.cellCssClass, 'cell has expected css class');
+        deepEqual(
+            tf.dom()
+                .querySelectorAll('.' + markActiveColumns.cellCssClass).length,
+            7,
+            'number of highlighted column cells'
+        );
+    });
+
+    test('can unhighlight column cells', function() {
+        // act
+        tf.clearFilters();
+
+        // assert
+        deepEqual(
+            tf.dom()
+                .querySelectorAll('.' + markActiveColumns.cellCssClass).length,
+            0,
+            'number of highlighted column cells'
+        );
+
+        markActiveColumns.highlightColumn = false;
+    });
+
+    test('cannot initialiase if already initialised', function() {
+        // setup
+        var hit = 0;
+        var emitterOn = markActiveColumns.emitter.on;
+        markActiveColumns.emitter.on = function() {
+            hit++;
+        };
+
+        // act
+        markActiveColumns.init();
+
+        // assert
+        deepEqual(hit, 0, 'init exited');
+
+        markActiveColumns.emitter.on = emitterOn;
     });
 
     test('Active columns with paging', function() {

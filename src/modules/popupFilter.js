@@ -250,18 +250,19 @@ export class PopupFilter extends Feature {
         // adjusting: prevent useless row generation
         tf.headersRow++;
 
-        for (let i = 0; i < tf.nbCells; i++) {
-            if (tf.getFilterType(i) === NONE) {
-                continue;
-            }
-            let icon = createElm('span', ['ci', i]);
-            icon.innerHTML = this.iconHtml;
-            let header = tf.getHeaderElement(i);
-            header.appendChild(icon);
-            addEvt(icon, 'click', (evt) => this.onClick(evt));
-            this.fltSpans[i] = icon;
-            this.fltIcons[i] = icon.firstChild;
-        }
+        tf.eachCol(
+            (i) => {
+                let icon = createElm('span', ['ci', i]);
+                icon.innerHTML = this.iconHtml;
+                let header = tf.getHeaderElement(i);
+                header.appendChild(icon);
+                addEvt(icon, 'click', (evt) => this.onClick(evt));
+                this.fltSpans[i] = icon;
+                this.fltIcons[i] = icon.firstChild;
+            },
+            // continue condition function
+            (i) => tf.getFilterType(i) === NONE
+        );
     }
 
     /**

@@ -305,7 +305,8 @@ export class GridLayout extends Feature {
         if (tf.colWidths.length > 0) {
             return;
         }
-        for (let k = 0, len = tf.getCellsNb(); k < len; k++) {
+
+        tf.eachCol((k) => {
             let colW;
             let cell = tf.dom().rows[tf.getHeadersRowIndex()].cells[k];
             if (cell.width !== '') {
@@ -316,7 +317,8 @@ export class GridLayout extends Feature {
                 colW = this.defaultColWidth;
             }
             tf.colWidths[k] = colW;
-        }
+        });
+
         tf.setColWidths();
     }
 
@@ -363,12 +365,12 @@ export class GridLayout extends Feature {
         let filtersRow = createElm('tr');
         if (this.filters && tf.fltGrid) {
             tf.externalFltTgtIds = [];
-            for (let j = 0; j < tf.getCellsNb(); j++) {
+            tf.eachCol((j) => {
                 let fltTdId = `${tf.prfxFlt + j + this.prfxGridFltTd + tf.id}`;
                 let cl = createElm(tf.fltCellTag, ['id', fltTdId]);
                 filtersRow.appendChild(cl);
                 tf.externalFltTgtIds[j] = fltTdId;
-            }
+            });
         }
         return filtersRow;
     }
@@ -382,7 +384,7 @@ export class GridLayout extends Feature {
         let cols = tag(tf.dom(), 'col');
         this.tblHasColTag = cols.length > 0;
 
-        for (let k = (tf.nbCells - 1); k >= 0; k--) {
+        for (let k = (tf.getCellsNb() - 1); k >= 0; k--) {
             let col;
 
             if (!this.tblHasColTag) {
@@ -441,7 +443,7 @@ export class GridLayout extends Feature {
     getSortTriggerIds(row) {
         let tf = this.tf;
         let sortTriggers = [];
-        for (let n = 0; n < tf.getCellsNb(); n++) {
+        tf.eachCol((n) => {
             let c = row.cells[n];
             let thId = c.getAttribute('id');
             if (!thId || thId === '') {
@@ -449,7 +451,7 @@ export class GridLayout extends Feature {
                 c.setAttribute('id', thId);
             }
             sortTriggers.push(thId);
-        }
+        });
         return sortTriggers;
     }
 
