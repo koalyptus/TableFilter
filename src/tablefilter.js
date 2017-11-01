@@ -2054,26 +2054,6 @@ export class TableFilter {
     }
 
     /**
-     * Column iterator invoking continue and break condition callbacks if any
-     * then calling supplied callback for each item
-     * @param {Function} [fn=EMPTY_FN] callback
-     * @param {Function} [continueFn=EMPTY_FN] continue condition callback
-     * @param {Function} [breakFn=EMPTY_FN] break condition callback
-     */
-    eachCol(fn = EMPTY_FN, continueFn = EMPTY_FN, breakFn = EMPTY_FN) {
-        let len = this.getCellsNb(this.refRow);
-        for (let i = 0; i < len; i++) {
-            if (continueFn(i) === true) {
-                continue;
-            }
-            if (breakFn(i) === true) {
-                break;
-            }
-            fn(i);
-        }
-    }
-
-    /**
      * Return the number of cells for a given row index
      * @param  {Number} rowIndex Index of the row
      * @return {Number}          Number of cells
@@ -2105,7 +2085,7 @@ export class TableFilter {
      * @returns {Array}
      */
     getWorkingRows() {
-        return [].slice.call(this.dom().querySelectorAll('tbody > tr'));
+        return this.dom().querySelectorAll('tbody > tr');
     }
 
     /**
@@ -2761,6 +2741,26 @@ export class TableFilter {
             return clearText[colIndex];
         }
         return clearText;
+    }
+
+    /**
+     * Column iterator invoking continue and break condition callbacks if any
+     * then calling supplied callback for each item
+     * @param {Function} [fn=EMPTY_FN] callback
+     * @param {Function} [continueFn=EMPTY_FN] continue condition callback
+     * @param {Function} [breakFn=EMPTY_FN] break condition callback
+     */
+    eachCol(fn = EMPTY_FN, continueFn = EMPTY_FN, breakFn = EMPTY_FN) {
+        let len = this.getCellsNb(this.refRow);
+        for (let i = 0; i < len; i++) {
+            if (continueFn(i) === true) {
+                continue;
+            }
+            if (breakFn(i) === true) {
+                break;
+            }
+            fn(i);
+        }
     }
 
     /**

@@ -164,6 +164,27 @@ test('Can get feature', function() {
     deepEqual(feature.feature, 'help', 'Feature name');
 });
 
+test('can iterate columns', function() {
+    // setup
+    var counter = [];
+
+    // act
+    tf.eachCol(
+        function(idx) {
+            counter.push(idx);
+        },
+        function(idx) {
+            return idx === 2;
+        },
+        function(idx) {
+            return idx === 4;
+        }
+    );
+
+    // assert
+    deepEqual(counter, [0, 1, 3], 'column iterator conditions met');
+});
+
 test('Get table data', function() {
     deepEqual(tf.getColValues(0),
         [

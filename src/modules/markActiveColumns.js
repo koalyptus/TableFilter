@@ -82,11 +82,8 @@ export class MarkActiveColumns extends Feature {
             removeClass(tf.getHeaderElement(idx), this.headerCssClass);
 
             if (this.highlightColumn) {
-                tf.dom()
-                    .querySelectorAll(`tbody td:nth-child(${idx + 1})`)
-                    .forEach((cell) => {
-                        removeClass(cell, this.cellCssClass);
-                    });
+                this.eachColumnCell(idx,
+                    (cell) => removeClass(cell, this.cellCssClass));
             }
         });
     }
@@ -107,14 +104,25 @@ export class MarkActiveColumns extends Feature {
         addClass(header, this.headerCssClass);
 
         if (this.highlightColumn) {
-            tf.dom()
-                .querySelectorAll(`tbody td:nth-child(${colIndex + 1})`)
-                .forEach((cell) => {
-                    addClass(cell, this.cellCssClass);
-                });
+            this.eachColumnCell(colIndex,
+                (cell) => addClass(cell, this.cellCssClass));
         }
 
         this.onAfterActiveColumn(this, colIndex);
+    }
+
+    /**
+     * Column cells iterator
+     * TODO: make public and move into TableFilter if used elsewhere
+     * @param {Number} colIndex
+     * @param {Function} fn
+     * @param {DOMElement} tbl
+     * @private
+     */
+    eachColumnCell(colIndex, fn = EMPTY_FN, tbl = this.tf.dom()) {
+        // TODO: remove [].forEach when polyfill for PhanthomJs is available
+        [].forEach.call(
+            tbl.querySelectorAll(`tbody td:nth-child(${colIndex + 1})`), fn);
     }
 
     /**
