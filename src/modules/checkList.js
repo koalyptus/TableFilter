@@ -190,7 +190,7 @@ export class CheckList extends BaseDropdown {
      */
     build(colIndex, isLinked = false) {
         let tf = this.tf;
-        colIndex = parseInt(colIndex, 10);
+        colIndex = Number(colIndex);
 
         this.emitter.emit('before-populating-filter', tf, colIndex);
 
@@ -205,8 +205,8 @@ export class CheckList extends BaseDropdown {
             ['colIndex', colIndex]);
         ul.className = this.filterCssClass;
 
-        let rows = tf.dom().rows;
-        let nbRows = tf.getRowsNb(true);
+        // let rows = tf.dom().rows;
+        // let nbRows = tf.getRowsNb(true);
         let caseSensitive = tf.caseSensitive;
         /** @inherited */
         this.isCustom = tf.isCustomOptions(colIndex);
@@ -233,51 +233,83 @@ export class CheckList extends BaseDropdown {
 
         flt.innerHTML = '';
 
-        for (let k = tf.refRow; k < nbRows; k++) {
-            // always visible rows don't need to appear on selects as always
-            // valid
-            if (tf.excludeRows.indexOf(k) !== -1) {
-                continue;
-            }
+        // for (let k = tf.refRow; k < nbRows; k++) {
+        //     // always visible rows don't need to appear on selects as always
+        //     // valid
+        //     if (tf.excludeRows.indexOf(k) !== -1) {
+        //         continue;
+        //     }
 
-            let cells = rows[k].cells;
-            let ncells = cells.length;
+        //     let cells = rows[k].cells;
+        //     let ncells = cells.length;
 
-            // checks if row has exact cell #
-            if (ncells !== tf.nbCells || this.isCustom) {
-                continue;
-            }
+        //     // checks if row has exact cell #
+        //     if (ncells !== tf.nbCells || this.isCustom) {
+        //         continue;
+        //     }
 
-            if (isLinked && !this.isValidLinkedValue(k, activeIdx)) {
-                continue;
-            }
+        //     if (isLinked && !this.isValidLinkedValue(k, activeIdx)) {
+        //         continue;
+        //     }
 
-            // this loop retrieves cell data
-            for (let j = 0; j < ncells; j++) {
-                if (colIndex !== j) {
-                    continue;
-                }
+        //     let cellValue = tf.getCellValue(cells[colIndex]);
+        //     //Vary Peter's patch
+        //     let cellString = matchCase(cellValue, caseSensitive);
+        //     // checks if celldata is already in array
+        //     if (!has(this.opts, cellString, caseSensitive)) {
+        //         this.opts.push(cellValue);
+        //     }
+        //     let filteredCol = filteredDataCol[colIndex];
+        //     if (isLinked && tf.disableExcludedOptions) {
+        //         if (!filteredCol) {
+        //             filteredCol = tf.getVisibleColumnValues(colIndex);
+        //         }
+        //         if (!has(filteredCol, cellString, caseSensitive) &&
+        //             !has(this.excludedOpts, cellString,
+        //                 caseSensitive)) {
+        //             this.excludedOpts.push(cellValue);
+        //         }
+        //     }
+        // }
 
-                let cellValue = tf.getCellValue(cells[j]);
+        let eachRow = tf.eachRow();
+        eachRow(
+            (row) => {
+                let cellValue = tf.getCellValue(row.cells[colIndex]);
                 //Vary Peter's patch
                 let cellString = matchCase(cellValue, caseSensitive);
                 // checks if celldata is already in array
                 if (!has(this.opts, cellString, caseSensitive)) {
                     this.opts.push(cellValue);
                 }
-                let filteredCol = filteredDataCol[j];
+                let filteredCol = filteredDataCol[colIndex];
                 if (isLinked && tf.disableExcludedOptions) {
                     if (!filteredCol) {
-                        filteredCol = tf.getVisibleColumnValues(j);
+                        filteredCol = tf.getVisibleColumnValues(colIndex);
                     }
                     if (!has(filteredCol, cellString, caseSensitive) &&
-                        !has(this.excludedOpts, cellString,
-                            caseSensitive)) {
+                        !has(this.excludedOpts, cellString, caseSensitive)) {
                         this.excludedOpts.push(cellValue);
                     }
                 }
+            },
+            // continue conditions function
+            (row, k) => {
+                // excluded rows don't need to appear on selects as always valid
+                if (tf.excludeRows.indexOf(k) !== -1) {
+                    return true;
+                }
+
+                // checks if row has expected number of cells
+                if (row.cells.length !== tf.nbCells || this.isCustom) {
+                    return true;
+                }
+
+                if (isLinked && !this.isValidLinkedValue(k, activeIdx)) {
+                    return true;
+                }
             }
-        }
+        );
 
         //sort options
         this.opts = this.sortOptions(colIndex, this.opts);
