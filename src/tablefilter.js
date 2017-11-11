@@ -2704,9 +2704,10 @@ export class TableFilter {
             slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
 
-        for (let i = 0, len = slcIndex.length; i < len; i++) {
-            let colIdx = slcIndex[i];
-            let curSlc = elm(this.fltIds[colIdx]);
+        slcIndex.forEach((colIdx) => {
+        // for (let i = 0, len = slcIndex.length; i < len; i++) {
+            // let colIdx = slcIndex[i];
+            let curSlc = this.getFilterElement(colIdx);
             let slcSelectedValue = this.getFilterValue(colIdx);
 
             //1st option needs to be inserted
@@ -2725,7 +2726,7 @@ export class TableFilter {
             }
 
             this.setFilterValue(colIdx, slcSelectedValue);
-        }
+        });
     }
 
     /**
