@@ -155,7 +155,7 @@ export class TableFilter {
          */
         this.emitter = new Emitter();
 
-        //Start row
+        // start row
         this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
 
         /**
@@ -344,6 +344,12 @@ export class TableFilter {
          * @type {Boolean|Array}
          */
         this.ignoreDiacritics = f.ignore_diacritics;
+
+        /**
+         * Filter rows with uneven number of cells (rowspan, cellspan)
+         * @type {Boolean}
+         */
+        this.allowUnevenRows = Boolean(f.allow_uneven_rows);
 
         /**
          * Enable/disable linked filters filtering mode
@@ -1652,7 +1658,7 @@ export class TableFilter {
                     this.validRowsIndex.length, isRowValid);
             },
             // continue condition
-            (row) => row.cells.length !== this.nbCells
+            (row) => !this.allowUnevenRows && row.cells.length !== this.nbCells
         );
 
         this.nbHiddenRows = hiddenRows;
@@ -1962,11 +1968,11 @@ export class TableFilter {
         // }
         let eachRow = this.eachRow();
         eachRow((row, i) => {
-            let isExludedRow = false;
+            let isExludedRow = exclude.indexOf(i) !== -1;
             // checks if current row index appears in exclude array
-            if (exclude.length > 0) {
-                isExludedRow = exclude.indexOf(i) !== -1;
-            }
+            // if (exclude.length > 0) {
+            //     isExludedRow = exclude.indexOf(i) !== -1;
+            // }
             let cells = row.cells;
 
             // checks if row has exact cell # and is not excluded
@@ -2024,14 +2030,15 @@ export class TableFilter {
             return;
         }
         let searchArgs = [];
-        for (let i = 0, len = this.fltIds.length; i < len; i++) {
+        // for (let i = 0, len = this.fltIds.length; i < len; i++) {
+        this.fltIds.forEach((id, i) => {
             let fltValue = this.getFilterValue(i);
             if (isArray(fltValue)) {
                 searchArgs.push(fltValue);
             } else {
                 searchArgs.push(trim(fltValue));
             }
-        }
+        });
         return searchArgs;
     }
 
@@ -2883,7 +2890,7 @@ export class TableFilter {
                 }
             }
         };
-        file.onerror = function () {
+        file.onerror = () => {
             throw new Error(`TableFilter could not load: ${filePath}`);
         };
         head.appendChild(file);
