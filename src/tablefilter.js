@@ -155,8 +155,9 @@ export class TableFilter {
          */
         this.emitter = new Emitter();
 
-        //Start row
-        this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
+        // start row
+        // this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
+        this.refRow = this.startRow(startRow);
 
         /**
          * Collection of filter type by column
@@ -917,9 +918,9 @@ export class TableFilter {
         // import main stylesheet
         this.import(this.stylesheetId, this.getStylesheetPath(), null, 'link');
 
-        this.nbCells = this.getCellsNb(this.refRow);
+        // this.nbCells = this.getCellsNb(this.refRow);
         let Mod = this.Mod;
-        let n = this.singleSearchFlt ? 1 : this.nbCells;
+        // let n = this.singleSearchFlt ? 1 : this.nbCells;
         let inpclass;
 
         //loads theme
@@ -947,7 +948,10 @@ export class TableFilter {
         } else {
             let fltrow = this._insertFiltersRow();
 
+            this.nbCells = this.getCellsNb(this.refRow);
             this.nbFilterableRows = this.getRowsNb();
+
+            let n = this.singleSearchFlt ? 1 : this.nbCells;
 
             // Generate filters
             for (let i = 0; i < n; i++) {
@@ -1594,7 +1598,7 @@ export class TableFilter {
                     // isolate search term and check occurence in cell data
                     for (let w = 0, len = s.length; w < len; w++) {
                         cS = trim(s[w]);
-                        occur = this._matcth(cS, cellValue, j);
+                        occur = this._match(cS, cellValue, j);
 
                         if (occur) {
                             this.emitter.emit('highlight-keyword', this,
@@ -1613,7 +1617,7 @@ export class TableFilter {
                 }
                 //single search parameter
                 else {
-                    occurence[j] = this._matcth(trim(sA), cellValue, j);
+                    occurence[j] = this._match(trim(sA), cellValue, j);
                     if (occurence[j]) {
                         this.emitter.emit('highlight-keyword', this, cells[j],
                             sA);
@@ -1659,7 +1663,7 @@ export class TableFilter {
      * @return {Boolean}
      * @private
      */
-    _matcth(term, cellValue, colIdx) {
+    _match(term, cellValue, colIdx) {
         let numData;
         let decimal = this.getDecimal(colIdx);
         let reLe = new RegExp(this.leOperator),
@@ -2051,6 +2055,14 @@ export class TableFilter {
      */
     getFilterElement(index) {
         return elm(this.fltIds[index]);
+    }
+
+    startRow(startRow) {
+        if (isUndef(startRow)) {
+            let lastRowIdx = this.getLastRowIndex();
+            return lastRowIdx >= 2 ? 2 : lastRowIdx;
+        }
+        return (startRow + 1);
     }
 
     /**
