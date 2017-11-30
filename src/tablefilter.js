@@ -156,8 +156,7 @@ export class TableFilter {
         this.emitter = new Emitter();
 
         // start row
-        // this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
-        this.refRow = this.startRow(startRow);
+        this.refRow = isUndef(startRow) ? 2 : (startRow + 1);
 
         /**
          * Collection of filter type by column
@@ -2055,14 +2054,6 @@ export class TableFilter {
      */
     getFilterElement(index) {
         return elm(this.fltIds[index]);
-    }
-
-    startRow(startRow) {
-        if (isUndef(startRow)) {
-            let lastRowIdx = this.getLastRowIndex();
-            return lastRowIdx >= 2 ? 2 : lastRowIdx;
-        }
-        return (startRow + 1);
     }
 
     /**
