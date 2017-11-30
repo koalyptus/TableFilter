@@ -917,9 +917,7 @@ export class TableFilter {
         // import main stylesheet
         this.import(this.stylesheetId, this.getStylesheetPath(), null, 'link');
 
-        // this.nbCells = this.getCellsNb(this.refRow);
         let Mod = this.Mod;
-        // let n = this.singleSearchFlt ? 1 : this.nbCells;
         let inpclass;
 
         //loads theme
