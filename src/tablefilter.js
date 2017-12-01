@@ -923,9 +923,7 @@ export class TableFilter {
         // import main stylesheet
         this.import(this.stylesheetId, this.getStylesheetPath(), null, 'link');
 
-        this.nbCells = this.getCellsNb(this.refRow);
         let Mod = this.Mod;
-        let n = this.singleSearchFlt ? 1 : this.nbCells;
         let inpclass;
 
         //loads theme
@@ -953,7 +951,10 @@ export class TableFilter {
         } else {
             let fltrow = this._insertFiltersRow();
 
+            this.nbCells = this.getCellsNb(this.refRow);
             this.nbFilterableRows = this.getRowsNb();
+
+            let n = this.singleSearchFlt ? 1 : this.nbCells;
 
             // Generate filters
             for (let i = 0; i < n; i++) {
@@ -1677,7 +1678,7 @@ export class TableFilter {
      * @return {Boolean}
      * @private
      */
-    _matcth(term, cellValue, colIdx) {
+    _match(term, cellValue, colIdx) {
         let numData;
         let decimal = this.getDecimal(colIdx);
         let reLe = new RegExp(this.leOperator),

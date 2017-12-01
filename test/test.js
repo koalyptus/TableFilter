@@ -156,7 +156,7 @@
     test('Can instantiate with wrong refRow', function() {
         var tf2 = new TableFilter('demo', -9);
         tf2.init();
-        deepEqual(tf2.nbCells, 5, 'Expected number of columns');
+        deepEqual(tf2.nbCells, 0, 'Expected number of columns');
     });
 
 })(window, TableFilter);
