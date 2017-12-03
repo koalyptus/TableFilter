@@ -1292,10 +1292,10 @@ export class TableFilter {
         __webpack_public_path__ = this.basePath;
 
         this.emitter.emit('before-loading-extensions', this);
-        for (let i = 0, len = exts.length; i < len; i++) {
-            let ext = exts[i];
+
+        exts.forEach((ext) => {
             this.loadExtension(ext);
-        }
+        });
         this.emitter.emit('after-loading-extensions', this);
     }
 
@@ -1308,8 +1308,7 @@ export class TableFilter {
             return;
         }
 
-        let name = ext.name;
-        let path = ext.path;
+        let {name, path} = ext;
         let modulePath;
 
         if (name && path) {
@@ -1384,24 +1383,21 @@ export class TableFilter {
             let defaultTheme = { name: 'default' };
             this.themes.push(defaultTheme);
         }
-        if (isArray(themes)) {
-            for (let i = 0, len = themes.length; i < len; i++) {
-                let theme = themes[i];
-                let name = theme.name;
-                let path = theme.path;
-                let styleId = this.prfxTf + name;
-                if (name && !path) {
-                    path = this.themesPath + name + '/' + name + '.css';
-                }
-                else if (!name && theme.path) {
-                    name = 'theme{0}'.replace('{0}', i);
-                }
 
-                if (!this.isImported(path, 'link')) {
-                    this.import(styleId, path, null, 'link');
-                }
+        themes.forEach((theme, i) => {
+            let {name, path} = theme;
+            let styleId = this.prfxTf + name;
+            if (name && !path) {
+                path = this.themesPath + name + '/' + name + '.css';
             }
-        }
+            else if (!name && theme.path) {
+                name = 'theme{0}'.replace('{0}', i);
+            }
+
+            if (!this.isImported(path, 'link')) {
+                this.import(styleId, path, null, 'link');
+            }
+        });
 
         // Enable loader indicator
         this.loader = true;
@@ -1468,15 +1464,13 @@ export class TableFilter {
         if (!this.isExternalFlt()) {
             return;
         }
-        let ids = this.externalFltTgtIds,
-            len = ids.length;
-        for (let ct = 0; ct < len; ct++) {
-            let externalFltTgtId = ids[ct],
-                externalFlt = elm(externalFltTgtId);
+        let ids = this.externalFltTgtIds;
+        ids.forEach((id) => {
+            let externalFlt = elm(id);
             if (externalFlt) {
                 externalFlt.innerHTML = '';
             }
-        }
+        });
     }
 
     /**
@@ -1536,113 +1530,111 @@ export class TableFilter {
         this.onBeforeFilter(this);
         this.emitter.emit('before-filtering', this);
 
-        let row = this.dom().rows,
-            nbRows = this.getRowsNb(true),
-            hiddenRows = 0;
+        let hiddenRows = 0;
 
         this.validRowsIndex = [];
-        // search args re-init
+        // search args
         let searchArgs = this.getFiltersValue();
 
-        for (let k = this.refRow; k < nbRows; k++) {
-            // already filtered rows display re-init
-            row[k].style.display = '';
+        let eachRow = this.eachRow();
+        eachRow(
+            (row, k) => {
+                // already filtered rows display re-init
+                row.style.display = '';
 
-            let cells = row[k].cells;
-            let nchilds = cells.length;
+                let cells = row.cells;
+                let nbCells = cells.length;
 
-            // checks if row has exact cell #
-            if (nchilds !== this.nbCells) {
-                continue;
-            }
+                let occurence = [],
+                    isRowValid = true,
+                    //only for single filter search
+                    singleFltRowValid = false;
 
-            let occurence = [],
-                isRowValid = true,
-                //only for single filter search
-                singleFltRowValid = false;
+                // this loop retrieves cell data
+                for (let j = 0; j < nbCells; j++) {
+                    //searched keyword
+                    let sA = searchArgs[this.singleSearchFlt ? 0 : j];
 
-            // this loop retrieves cell data
-            for (let j = 0; j < nchilds; j++) {
-                //searched keyword
-                let sA = searchArgs[this.singleSearchFlt ? 0 : j];
-
-                if (sA === '') {
-                    continue;
-                }
-
-                let cellValue = matchCase(this.getCellValue(cells[j]),
-                    this.caseSensitive);
-
-                //multiple search parameter operator ||
-                let sAOrSplit = sA.toString().split(this.orOperator),
-                    //multiple search || parameter boolean
-                    hasMultiOrSA = sAOrSplit.length > 1,
-                    //multiple search parameter operator &&
-                    sAAndSplit = sA.toString().split(this.anOperator),
-                    //multiple search && parameter boolean
-                    hasMultiAndSA = sAAndSplit.length > 1;
-
-                //detect operators or array query
-                if (isArray(sA) || hasMultiOrSA || hasMultiAndSA) {
-                    let cS,
-                        s,
-                        occur = false;
-                    if (isArray(sA)) {
-                        s = sA;
-                    } else {
-                        s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
+                    if (sA === '') {
+                        continue;
                     }
-                    // isolate search term and check occurence in cell data
-                    for (let w = 0, len = s.length; w < len; w++) {
-                        cS = trim(s[w]);
-                        occur = this._match(cS, cellValue, j);
 
-                        if (occur) {
+                    let cellValue = matchCase(this.getCellValue(cells[j]),
+                        this.caseSensitive);
+
+                    //multiple search parameter operator ||
+                    let sAOrSplit = sA.toString().split(this.orOperator),
+                        //multiple search || parameter boolean
+                        hasMultiOrSA = sAOrSplit.length > 1,
+                        //multiple search parameter operator &&
+                        sAAndSplit = sA.toString().split(this.anOperator),
+                        //multiple search && parameter boolean
+                        hasMultiAndSA = sAAndSplit.length > 1;
+
+                    //detect operators or array query
+                    if (isArray(sA) || hasMultiOrSA || hasMultiAndSA) {
+                        let cS,
+                            s,
+                            occur = false;
+                        if (isArray(sA)) {
+                            s = sA;
+                        } else {
+                            s = hasMultiOrSA ? sAOrSplit : sAAndSplit;
+                        }
+                        // isolate search term and check occurence in cell data
+                        for (let w = 0, len = s.length; w < len; w++) {
+                            cS = trim(s[w]);
+                            occur = this._match(cS, cellValue, j);
+
+                            if (occur) {
+                                this.emitter.emit('highlight-keyword', this,
+                                    cells[j], cS);
+                            }
+                            if ((hasMultiOrSA && occur) ||
+                                (hasMultiAndSA && !occur)) {
+                                break;
+                            }
+                            if (isArray(sA) && occur) {
+                                break;
+                            }
+                        }
+                        occurence[j] = occur;
+
+                    }
+                    //single search parameter
+                    else {
+                        occurence[j] = this._match(trim(sA), cellValue, j);
+                        if (occurence[j]) {
                             this.emitter.emit('highlight-keyword', this,
-                                cells[j], cS);
-                        }
-                        if ((hasMultiOrSA && occur) ||
-                            (hasMultiAndSA && !occur)) {
-                            break;
-                        }
-                        if (isArray(sA) && occur) {
-                            break;
+                                cells[j], sA);
                         }
                     }
-                    occurence[j] = occur;
 
-                }
-                //single search parameter
-                else {
-                    occurence[j] = this._match(trim(sA), cellValue, j);
-                    if (occurence[j]) {
-                        this.emitter.emit('highlight-keyword', this, cells[j],
-                            sA);
+                    if (!occurence[j]) {
+                        isRowValid = false;
                     }
-                }//else single param
+                    if (this.singleSearchFlt && occurence[j]) {
+                        singleFltRowValid = true;
+                    }
 
-                if (!occurence[j]) {
-                    isRowValid = false;
+                    this.emitter.emit('cell-processed', this, j, cells[j]);
+                }//for j
+
+                if (this.singleSearchFlt && singleFltRowValid) {
+                    isRowValid = true;
                 }
-                if (this.singleSearchFlt && occurence[j]) {
-                    singleFltRowValid = true;
+
+                this.validateRow(k, isRowValid);
+                if (!isRowValid) {
+                    hiddenRows++;
                 }
 
-                this.emitter.emit('cell-processed', this, j, cells[j]);
-            }//for j
-
-            if (this.singleSearchFlt && singleFltRowValid) {
-                isRowValid = true;
-            }
-
-            this.validateRow(k, isRowValid);
-            if (!isRowValid) {
-                hiddenRows++;
-            }
-
-            this.emitter.emit('row-processed', this, k,
-                this.validRowsIndex.length, isRowValid);
-        }// for k
+                this.emitter.emit('row-processed', this, k,
+                    this.validRowsIndex.length, isRowValid);
+            },
+            // continue condition
+            (row) => row.cells.length !== this.nbCells
+        );
 
         this.nbHiddenRows = hiddenRows;
 
@@ -1924,8 +1916,6 @@ export class TableFilter {
         typed = false,
         exclude = []
     ) {
-        let row = this.dom().rows;
-        let nbRows = this.getRowsNb(true);
         let colValues = [];
         let getContent = typed ? this.getCellData.bind(this) :
             this.getCellValue.bind(this);
@@ -1934,21 +1924,18 @@ export class TableFilter {
             colValues.push(this.getHeadersText()[colIndex]);
         }
 
-        for (let i = this.refRow; i < nbRows; i++) {
-            let isExludedRow = false;
+        let eachRow = this.eachRow();
+        eachRow((row, i) => {
             // checks if current row index appears in exclude array
-            if (exclude.length > 0) {
-                isExludedRow = exclude.indexOf(i) !== -1;
-            }
-            let cell = row[i].cells,
-                nchilds = cell.length;
+            let isExludedRow = exclude.indexOf(i) !== -1;
+            let cells = row.cells;
 
             // checks if row has exact cell # and is not excluded
-            if (nchilds === this.nbCells && !isExludedRow) {
-                let data = getContent(cell[colIndex]);
+            if (cells.length === this.nbCells && !isExludedRow) {
+                let data = getContent(cells[colIndex]);
                 colValues.push(data);
             }
-        }
+        });
         return colValues;
     }
 
@@ -1998,14 +1985,15 @@ export class TableFilter {
             return;
         }
         let searchArgs = [];
-        for (let i = 0, len = this.fltIds.length; i < len; i++) {
+
+        this.fltIds.forEach((id, i) => {
             let fltValue = this.getFilterValue(i);
             if (isArray(fltValue)) {
                 searchArgs.push(fltValue);
             } else {
                 searchArgs.push(trim(fltValue));
             }
-        }
+        });
         return searchArgs;
     }
 
@@ -2176,8 +2164,6 @@ export class TableFilter {
         excludeHiddenCols = false,
         typed = false
     ) {
-        let rows = this.dom().rows;
-        let nbRows = this.getRowsNb(true);
         let tblData = [];
         let getContent = typed ? this.getCellData.bind(this) :
             this.getCellValue.bind(this);
@@ -2186,20 +2172,22 @@ export class TableFilter {
             let headers = this.getHeadersText(excludeHiddenCols);
             tblData.push([this.getHeadersRowIndex(), headers]);
         }
-        for (let k = this.refRow; k < nbRows; k++) {
+
+        let eachRow = this.eachRow();
+        eachRow((row, k) => {
             let rowData = [k, []];
-            let cells = rows[k].cells;
+            let cells = row.cells;
             for (let j = 0, len = cells.length; j < len; j++) {
                 if (excludeHiddenCols && this.hasExtension('colsVisibility')) {
                     if (this.extension('colsVisibility').isColHidden(j)) {
                         continue;
                     }
                 }
-                let cellValue = getContent(cells[j]);
-                rowData[1].push(cellValue);
+                let cellContent = getContent(cells[j]);
+                rowData[1].push(cellContent);
             }
             tblData.push(rowData);
-        }
+        });
         return tblData;
     }
 
@@ -2663,9 +2651,8 @@ export class TableFilter {
             slcIndex = slcA1.concat(slcA2);
         slcIndex = slcIndex.concat(slcA3);
 
-        for (let i = 0, len = slcIndex.length; i < len; i++) {
-            let colIdx = slcIndex[i];
-            let curSlc = elm(this.fltIds[colIdx]);
+        slcIndex.forEach((colIdx) => {
+            let curSlc = this.getFilterElement(colIdx);
             let slcSelectedValue = this.getFilterValue(colIdx);
 
             //1st option needs to be inserted
@@ -2684,7 +2671,7 @@ export class TableFilter {
             }
 
             this.setFilterValue(colIdx, slcSelectedValue);
-        }
+        });
     }
 
     /**
@@ -2765,6 +2752,28 @@ export class TableFilter {
     }
 
     /**
+     * Rows iterator starting from supplied row index or defaulting to reference
+     * row index. Closure function accepts a callback function and optional
+     * continue and break callbacks.
+     * @param {Number} startIdx Row index from which filtering starts
+     */
+    eachRow(startIdx = this.refRow) {
+        return (fn = EMPTY_FN, continueFn = EMPTY_FN, breakFn = EMPTY_FN) => {
+            let rows = this.dom().rows;
+            let len = this.getRowsNb(true);
+            for (let i = startIdx; i < len; i++) {
+                if (continueFn(rows[i], i) === true) {
+                    continue;
+                }
+                if (breakFn(rows[i], i) === true) {
+                    break;
+                }
+                fn(rows[i], i);
+            }
+        };
+    }
+
+    /**
      * Check if passed script or stylesheet is already imported
      * @param  {String}  filePath Ressource path
      * @param  {String}  type     Possible values: 'script' or 'link'
@@ -2825,7 +2834,7 @@ export class TableFilter {
                 }
             }
         };
-        file.onerror = function () {
+        file.onerror = () => {
             throw new Error(`TableFilter could not load: ${filePath}`);
         };
         head.appendChild(file);
@@ -2857,21 +2866,21 @@ export class TableFilter {
             return this.validRowsIndex;
         }
 
-        let nbRows = this.getRowsNb(true);
         this.validRowsIndex = [];
-        for (let k = this.refRow; k < nbRows; k++) {
-            let r = this.dom().rows[k];
+
+        let eachRow = this.eachRow();
+        eachRow((row) => {
             if (!this.paging) {
-                if (this.getRowDisplay(r) !== NONE) {
-                    this.validRowsIndex.push(r.rowIndex);
+                if (this.getRowDisplay(row) !== NONE) {
+                    this.validRowsIndex.push(row.rowIndex);
                 }
             } else {
-                if (r.getAttribute('validRow') === 'true' ||
-                    r.getAttribute('validRow') === null) {
-                    this.validRowsIndex.push(r.rowIndex);
+                if (row.getAttribute('validRow') === 'true' ||
+                    row.getAttribute('validRow') === null) {
+                    this.validRowsIndex.push(row.rowIndex);
                 }
             }
-        }
+        });
         return this.validRowsIndex;
     }
 

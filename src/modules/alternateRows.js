@@ -123,10 +123,9 @@ export class AlternateRows extends Feature {
         if (!this.initialized) {
             return;
         }
-        let nbRows = this.tf.getRowsNb(true);
-        for (let i = 0; i < nbRows; i++) {
-            this.removeRowBg(i);
-        }
+
+        let eachRow = this.tf.eachRow(0);
+        eachRow((row, i) => this.removeRowBg(i));
 
         // Unsubscribe to events
         this.emitter.off(['row-processed', 'row-paged'],
