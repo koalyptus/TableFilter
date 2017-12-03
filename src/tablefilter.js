@@ -1293,9 +1293,7 @@ export class TableFilter {
 
         this.emitter.emit('before-loading-extensions', this);
 
-        // for (let i = 0, len = exts.length; i < len; i++) {
         exts.forEach((ext) => {
-            // let ext = exts[i];
             this.loadExtension(ext);
         });
         this.emitter.emit('after-loading-extensions', this);
