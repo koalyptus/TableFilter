@@ -3906,6 +3906,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#eachrow",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-eachRow",
+    "src/tablefilter.js~TableFilter#eachRow",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#emoperator",
     "class/src/tablefilter.js~TableFilter.html#instance-member-emOperator",
     "src/tablefilter.js~TableFilter#emOperator",
