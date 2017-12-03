@@ -157,11 +157,6 @@ export class Dropdown extends BaseDropdown {
         /** @inherited */
         this.optsTxt = [];
 
-        // let slcId = tf.fltIds[colIndex];
-        // let slc = elm(slcId);
-        // let rows = tf.dom().rows;
-        // let nbRows = tf.getRowsNb(true);
-
         let slc = tf.getFilterElement(colIndex);
 
         //custom select test
@@ -188,46 +183,6 @@ export class Dropdown extends BaseDropdown {
             excludedOpts = [];
             filteredDataCol = [];
         }
-
-        // for (let k = tf.refRow; k < nbRows; k++) {
-        //     // always visible rows don't need to appear on selects as always
-        //     // valid
-        //     if (tf.excludeRows.indexOf(k) !== -1) {
-        //         continue;
-        //     }
-
-        //     let cell = rows[k].cells,
-        //         nchilds = cell.length;
-
-        //     // checks if row has exact cell #
-        //     if (nchilds !== tf.nbCells || this.isCustom) {
-        //         continue;
-        //     }
-
-        //     if (isLinked && !this.isValidLinkedValue(k, activeIdx)) {
-        //         continue;
-        //     }
-
-        //     let cellValue = tf.getCellValue(cell[colIndex]),
-        //         //Vary Peter's patch
-        //         cellString = matchCase(cellValue, tf.caseSensitive);
-
-        //     // checks if celldata is already in array
-        //     if (!has(this.opts, cellString, tf.caseSensitive)) {
-        //         this.opts.push(cellValue);
-        //     }
-
-        //     if (isLinked && tf.disableExcludedOptions) {
-        //         let filteredCol = filteredDataCol[colIndex];
-        //         if (!filteredCol) {
-        //             filteredCol = tf.getVisibleColumnValues(colIndex);
-        //         }
-        //         if (!has(filteredCol, cellString, tf.caseSensitive) &&
-        //             !has(excludedOpts, cellString, tf.caseSensitive)) {
-        //             excludedOpts.push(cellValue);
-        //         }
-        //     }
-        // }
 
         let eachRow = tf.eachRow();
         eachRow(
