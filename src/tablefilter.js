@@ -1780,8 +1780,21 @@ export class TableFilter {
 
             // first checks if there is any operator (<,>,<=,>=,!,*,=,{,},
             // rgx:)
+
+            //regexp
+            if (hasRE) {
+                //in case regexp throws
+                try {
+                    //operator is removed
+                    let srchArg = term.replace(reRe, '');
+                    let rgx = new RegExp(srchArg);
+                    occurence = rgx.test(cellValue);
+                } catch (ex) {
+                    occurence = false;
+                }
+            }
             // lower equal
-            if (hasLE) {
+            else if (hasLE) {
                 occurence = numData <= parseNb(
                     term.replace(reLe, ''),
                     decimal
@@ -1844,18 +1857,6 @@ export class TableFilter {
             //non-empty
             else if (hasNM) {
                 occurence = !isEmptyString(cellValue);
-            }
-            //regexp
-            else if (hasRE) {
-                //in case regexp throws
-                try {
-                    //operator is removed
-                    let srchArg = term.replace(reRe, '');
-                    let rgx = new RegExp(srchArg);
-                    occurence = rgx.test(cellValue);
-                } catch (ex) {
-                    occurence = false;
-                }
             } else {
                 // If numeric type data, perform a strict equality test and
                 // fallback to unformatted number string comparison
