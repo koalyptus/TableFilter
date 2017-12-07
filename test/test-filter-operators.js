@@ -24,6 +24,32 @@
         );
     });
 
+    test('Regex operator - rgx:b.*e', function() {
+        tf.clearFilters();
+        tf.setFilterValue(1, 'rgx:b.*e');
+        tf.filter();
+        var filteredData = tf.getFilteredData();
+        deepEqual(tf.getValidRows().length, 4, 'Expected number of matches');
+        deepEqual(
+            filteredData[3],
+            [8, ['Adelaide', 'Brisbane', '2045', '2.15', '40']],
+            'Expected row data'
+        );
+    });
+
+    test('Regex operator - rgx:b.+e', function() {
+        tf.clearFilters();
+        tf.setFilterValue(1, 'rgx:b.+e');
+        tf.filter();
+        var filteredData = tf.getFilteredData();
+        deepEqual(tf.getValidRows().length, 3, 'Expected number of matches');
+        deepEqual(
+            filteredData[2],
+            [8, ['Adelaide', 'Brisbane', '2045', '2.15', '40']],
+            'Expected row data'
+        );
+    });
+
     test('Empty operator - [empty]', function() {
         tf.clearFilters();
         tf.setFilterValue(4, '[empty]');
