@@ -225,6 +225,7 @@
 
     module('Tear-down');
     test('can destroy TableFilter DOM elements', function() {
+        tf.clearFilters();
         tf.destroy();
         deepEqual(tf.isInitialized(), false, 'Filters removed');
     });
