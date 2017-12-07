@@ -197,10 +197,10 @@
         );
     });
 
-    module('Tear-down');
-    test('can destroy TableFilter DOM elements', function() {
-        tf.destroy();
-        deepEqual(tf.isInitialized(), false, 'Filters removed');
-    });
+    // module('Tear-down');
+    // test('can destroy TableFilter DOM elements', function() {
+    //     tf.destroy();
+    //     deepEqual(tf.isInitialized(), false, 'Filters removed');
+    // });
 
 })(window, TableFilter);

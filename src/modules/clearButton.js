@@ -17,13 +17,46 @@ export class ClearButton extends Feature {
     constructor(tf) {
         super(tf, 'btnReset');
 
-        let f = this.config;
+        let f = this.config.btn_reset || {};
 
         /**
          * Container element ID
          * @type {String}
          */
-        this.targetId = defaultsStr(f.btn_reset_target_id, null);
+        this.targetId = defaultsStr(f.target_id, null);
+
+        /**
+         * Text for the clear button
+         * @type {String}
+         */
+        this.text = defaultsStr(f.text, null);
+
+        /**
+         * Css class for reset button
+         * @type {String}
+         */
+        this.cssClass = defaultsStr(f.css_class, 'reset');
+
+        /**
+         * Tooltip text for the clear button
+         * @type {String}
+         */
+        this.tooltip = f.tooltip || 'Clear filters';
+
+        /**
+         * Custom Html string for the clear button
+         * @type {String}
+         */
+        this.html = defaultsStr(f.html,
+            (!tf.enableIcons || this.text ? null :
+                '<input type="button" value="" class="' + this.cssClass +
+                '" ' + 'title="' + this.tooltip + '" />'));
+
+        /**
+         * Default position in toolbar ('left'|'center'|'right')
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, RIGHT);
 
         /**
          * Clear button container element
@@ -38,39 +71,6 @@ export class ClearButton extends Feature {
          * @private
          */
         this.element = null;
-
-        /**
-         * Text for the clear button
-         * @type {String}
-         */
-        this.text = defaultsStr(f.btn_reset_text, 'Reset');
-
-        /**
-         * Css class for reset button
-         * @type {String}
-         */
-        this.cssClass = defaultsStr(f.btn_reset_css_class, 'reset');
-
-        /**
-         * Tooltip text for the clear button
-         * @type {String}
-         */
-        this.tooltip = f.btn_reset_tooltip || 'Clear filters';
-
-        /**
-         * Custom Html string for the clear button
-         * @type {String}
-         */
-        this.html = defaultsStr(f.btn_reset_html,
-            (!tf.enableIcons ? null :
-                '<input type="button" value="" class="' + this.cssClass +
-                '" ' + 'title="' + this.tooltip + '" />'));
-
-        /**
-         * Default position in toolbar ('left'|'center'|'right')
-         * @type {String}
-         */
-        this.toolbarPosition = defaultsStr(f.toolbar_position, RIGHT);
     }
 
     /**
