@@ -695,9 +695,9 @@ export class TableFilter {
 
         /**
          * Enable clear button
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
-        this.btnReset = Boolean(f.btn_reset);
+        this.btnReset = isObj(f.btn_reset) || Boolean(f.btn_reset);
 
         /**
          * Callback fired before filters are cleared
