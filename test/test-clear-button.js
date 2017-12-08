@@ -58,6 +58,61 @@ test('Can check is enabled', function() {
     deepEqual(clearButton.enabled, true, 'enabled');
 });
 
+module('Behaviour');
+test('Cannot init if already initialised', function() {
+    // setup
+    clearButton.initialized = true;
+    var emit = clearButton.emitter.emit;
+    var hit = 0;
+    clearButton.emitter.emit = function() {
+        hit++;
+    };
+
+    // act
+    clearButton.init();
+
+    // assert
+    deepEqual(hit, 0, 'does not initialise');
+
+    clearButton.emitter.emit = emit;
+});
+
+test('onClick does nothing if not enabled', function() {
+    // setup
+    clearButton.disable();
+    var clearFilters = clearButton.tf.clearFilters;
+    var hit = 0;
+    clearButton.tf.clearFilters = function() {
+        hit++;
+    };
+
+    // act
+    clearButton.onClick();
+
+    // assert
+    deepEqual(hit, 0, 'onClick does nothing');
+
+    clearButton.tf.clearFilters = clearFilters;
+});
+
+test('onClick calls clearFilters if enabled', function() {
+    // setup
+    clearButton.enable();
+    var clearFilters = clearButton.tf.clearFilters;
+    var hit = 0;
+    clearButton.tf.clearFilters = function() {
+        hit++;
+    };
+
+    // act
+    clearButton.onClick();
+
+    // assert
+    deepEqual(hit, 1, 'onClick calls clearFilters');
+
+    clearButton.tf.clearFilters = clearFilters;
+});
+
 module('UI elements');
 test('ClearButton UI elements', function() {
     var container = clearButton.container;
@@ -73,7 +128,7 @@ test('Remove UI', function() {
     deepEqual(btnResetEl, null, 'Clear button is removed');
 });
 
-test('Re-set UI', function() {
+test('Re-set UI with no icons and text button', function() {
     clearButton.destroy();
     tf.enableIcons = false;
     clearButton.html = null;
@@ -83,6 +138,40 @@ test('Re-set UI', function() {
     var btnResetEl = clearButton.element;
     deepEqual(btnResetEl.nodeName, 'A', 'Clear button tag changed');
     deepEqual(btnResetEl.innerText, 'Clear', 'Clear button text');
+});
+
+test('Destroy and init with text button and icons enabled', function() {
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        btn_reset: {
+            text: 'Clear all'
+        }
+    });
+    tf.init();
+
+    clearButton = tf.feature('clearButton');
+
+    var btnResetEl = clearButton.element;
+    deepEqual(btnResetEl.nodeName, 'A', 'Clear button tag changed');
+    deepEqual(btnResetEl.innerText, 'Clear all', 'Clear button text');
+});
+
+test('Destroy and init in external container', function() {
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        btn_reset: {
+            target_id: 'external-container'
+        }
+    });
+    tf.init();
+
+    clearButton = tf.feature('clearButton');
+
+    deepEqual(clearButton.element.nodeName, 'INPUT', 'Clear button tag');
+    deepEqual(clearButton.container.parentNode.id, 'external-container',
+        'container id');
 });
 
 module('Tear-down');
