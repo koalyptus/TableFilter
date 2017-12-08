@@ -1,6 +1,6 @@
 /** 
- *	 tablefilter v0.6.7 by Max Guglielmi 
- *	 build date: 2017-12-07T11:33:15.458Z 
+ *	 tablefilter v0.6.8 by Max Guglielmi 
+ *	 build date: 2017-12-08T11:13:51.709Z 
  *	 MIT License  
  */ 
 .activeHeader{background-color:#66afe9 !important;color:#fff !important}.activeCell{background-color:rgba(0,0,0,0.075)}
@@ -15,7 +15,7 @@ span.keyword{font-weight:700;font-style:italic;border-bottom:1px dotted #ccc}
 .loader{position:absolute;padding:.5em .7em;margin:10em 0 0 3em;width:auto;z-index:1000;font-weight:600;background-color:#a7a7a8;vertical-align:middle;border-radius:10px;color:#fff;text-shadow:1px 1px #333}
 .no-results{display:none;color:#333;margin:0;padding:1em 0;text-align:center;max-height:5em;background-color:#f4f4f4}
 select.pgSlc{height:35px;margin:0;border:1px solid #f4f4f4;background-color:#fff;vertical-align:middle}select.pgSlc:focus{border-color:#66afe9;outline:0 none;box-shadow:0 1px 1px rgba(0,0,0,0.075) inset,0 0 8px rgba(102,175,233,0.6)}input.pgNbInp{height:35px;margin:0;border:1px solid #f4f4f4;background-color:#fff;width:35px}input.pgNbInp:focus{border-color:#66afe9;outline:0 none;box-shadow:0 1px 1px rgba(0,0,0,0.075) inset,0 0 8px rgba(102,175,233,0.6)}input.pgInp,.nextPage,.previousPage,.firstPage,.lastPage{height:35px;margin:0;border:1px solid #f4f4f4;background-color:#fff;vertical-align:middle;width:35px;border:0;font-weight:bold}input.pgInp:focus,.nextPage:focus,.previousPage:focus,.firstPage:focus,.lastPage:focus{border-color:#66afe9;outline:0 none;box-shadow:0 1px 1px rgba(0,0,0,0.075) inset,0 0 8px rgba(102,175,233,0.6)}.nextPage{background:transparent url("themes/btn_next_page.gif") center center no-repeat !important;}.nextPage:hover{background-color:#f4f4f4 !important}.previousPage{background:transparent url("themes/btn_previous_page.gif") center center no-repeat !important;}.previousPage:hover{background-color:#f4f4f4 !important}.firstPage{background:transparent url("themes/btn_first_page.gif") center center no-repeat !important;}.firstPage:hover{background-color:#f4f4f4 !important}.lastPage{background:transparent url("themes/btn_last_page.gif") center center no-repeat !important;}.lastPage:hover{background-color:#f4f4f4 !important}span.nbpg{padding:0 5px}select.rspg{height:35px;margin:0;border:1px solid #f4f4f4;background-color:#fff;margin:0 0 0 5px;vertical-align:middle}select.rspg:focus{border-color:#66afe9;outline:0 none;box-shadow:0 1px 1px rgba(0,0,0,0.075) inset,0 0 8px rgba(102,175,233,0.6)}span.rspgSpan{font-size:inherit}
-input.reset{display:inline-block;width:35px;height:35px;border:0;background:transparent url("themes/btn_clear_filters.png") center center no-repeat;vertical-align:top;}input.reset:hover{background-color:#f4f4f4}
+input.reset{display:inline-block;width:35px;height:35px;border:0;background:transparent url("themes/btn_clear_filters.png") center center no-repeat;vertical-align:top;}input.reset:hover{background-color:#f4f4f4}a.reset{font-weight:normal !important;line-height:35px;padding:5px 5px}
 div.tot{float:left;overflow:hidden;min-width:150px;height:100%;margin:0;padding:.5em;vertical-align:middle;}div.tot span{font-weight:500}
 .sort-arrow{position:absolute;display:none;width:11px;height:11px;margin:0;background-position:center center;background-repeat:no-repeat}.descending{display:inline;background-image:url("themes/downsimple.png")}.ascending{display:inline;background-image:url("themes/upsimple.png")}
 div.status{float:left;overflow:hidden;min-width:120px;height:100%;margin:0;padding:.5em;}div.status span{font-size:inherit}
