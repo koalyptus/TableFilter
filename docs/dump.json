@@ -6295,7 +6295,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {BaseDropdown} from './baseDropdown';\nimport {\n    addClass, createCheckItem, createText, createElm, elm, getText,\n    removeClass, tag\n} from '../dom';\nimport {has} from '../array';\nimport {matchCase, trim, rgxEsc} from '../string';\nimport {addEvt, removeEvt, targetEvt} from '../event';\nimport {isEmpty} from '../types';\nimport {CHECKLIST, NONE} from '../const';\nimport {defaultsStr, defaultsBool} from '../settings';\n\n/**\n * Checklist filter UI component\n * @export\n * @class CheckList\n * @extends {BaseDropdown}\n */\nexport class CheckList extends BaseDropdown {\n\n    /**\n     * Creates an instance of CheckList\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'checkList');\n\n        let f = this.config;\n\n        /**\n         * List of container DOM elements\n         * @type {Array}\n         */\n        this.containers = [];\n\n        /**\n         * Css class for the container of the checklist filter (div)\n         * @type {String}\n         */\n        this.containerCssClass = defaultsStr(f.div_checklist_css_class,\n            'div_checklist');\n\n        /**\n         * Css class for the checklist filter element (ul)\n         * @type {String}\n         */\n        this.filterCssClass = defaultsStr(f.checklist_css_class,\n            'flt_checklist');\n\n        /**\n         * Css class for the item of a checklist (li)\n         * @type {String}\n         */\n        this.itemCssClass = defaultsStr(f.checklist_item_css_class,\n            'flt_checklist_item');\n\n        /**\n         * Css class for a selected item of a checklist (li)\n         * @type {String}\n         */\n        this.selectedItemCssClass = defaultsStr(\n            f.checklist_selected_item_css_class,\n            'flt_checklist_slc_item'\n        );\n\n        /**\n         * Text placed in the filter's container when load filter on demand\n         * feature is enabled\n         * @type {String}\n         */\n        this.activateText = defaultsStr(\n            f.activate_checklist_text,\n            'Click to load filter data'\n        );\n\n        /**\n         * Css class for a disabled item of a checklist (li)\n         * @type {String}\n         */\n        this.disabledItemCssClass = defaultsStr(\n            f.checklist_item_disabled_css_class,\n            'flt_checklist_item_disabled'\n        );\n\n        /**\n         * Enable the reset filter option as first item\n         * @type {Boolean}\n         */\n        this.enableResetOption = defaultsBool(f.enable_checklist_reset_filter,\n            true);\n\n        /**\n         * Prefix for container element ID\n         * @type {String}\n         * @private\n         */\n        this.prfx = 'chkdiv_';\n    }\n\n    /**\n     * Checklist option click event handler\n     * @param {Event} evt\n     * @private\n     */\n    optionClick(evt) {\n        let elm = targetEvt(evt);\n        let tf = this.tf;\n\n        this.emitter.emit('filter-focus', tf, elm);\n        this.setCheckListValues(elm);\n        tf.filter();\n    }\n\n    /**\n     * Checklist container click event handler for load-on-demand feature\n     * @param {Event} evt\n     * @private\n     */\n    onCheckListClick(evt) {\n        let elm = targetEvt(evt);\n        if (this.tf.loadFltOnDemand && elm.getAttribute('filled') === '0') {\n            let ct = elm.getAttribute('ct');\n            let div = this.containers[ct];\n            this.build(ct);\n            removeEvt(div, 'click', (evt) => this.onCheckListClick(evt));\n        }\n    }\n\n    /**\n     * Refresh all checklist filters\n     */\n    refreshAll() {\n        let colIdxs = this.tf.getFiltersByType(CHECKLIST, true);\n        this.refreshFilters(colIdxs);\n    }\n\n    /**\n     * Initialize checklist filter\n     * @param  {Number}     colIndex   Column index\n     * @param  {Boolean}    isExternal External filter flag\n     * @param  {DOMElement} container  Dom element containing the filter\n     */\n    init(colIndex, isExternal, container) {\n        let tf = this.tf;\n        let externalFltTgtId = isExternal ?\n            tf.externalFltTgtIds[colIndex] : null;\n\n        let divCont = createElm('div',\n            ['id', `${this.prfx}${colIndex}_${tf.id}`],\n            ['ct', colIndex], ['filled', '0']);\n        divCont.className = this.containerCssClass;\n\n        //filter is appended in desired element\n        if (externalFltTgtId) {\n            elm(externalFltTgtId).appendChild(divCont);\n        } else {\n            container.appendChild(divCont);\n        }\n\n        this.containers[colIndex] = divCont;\n        tf.fltIds.push(tf.buildFilterId(colIndex));\n\n        if (!tf.loadFltOnDemand) {\n            this.build(colIndex);\n        } else {\n            addEvt(divCont, 'click', (evt) => this.onCheckListClick(evt));\n            divCont.appendChild(createText(this.activateText));\n        }\n\n        this.emitter.on(\n            ['build-checklist-filter'],\n            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)\n        );\n\n        this.emitter.on(\n            ['select-checklist-options'],\n            (tf, colIndex, values) => this.selectOptions(colIndex, values)\n        );\n\n        this.emitter.on(['rows-changed'], () => this.refreshAll());\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Build checklist UI\n     * @param  {Number}  colIndex   Column index\n     * @param  {Boolean} isLinked    Enable linked filters behaviour\n     */\n    build(colIndex, isLinked = false) {\n        let tf = this.tf;\n        colIndex = Number(colIndex);\n\n        this.emitter.emit('before-populating-filter', tf, colIndex);\n\n        /** @inherited */\n        this.opts = [];\n        /** @inherited */\n        this.optsTxt = [];\n\n        let flt = this.containers[colIndex];\n        let ul = createElm('ul',\n            ['id', tf.fltIds[colIndex]],\n            ['colIndex', colIndex]);\n        ul.className = this.filterCssClass;\n\n        let caseSensitive = tf.caseSensitive;\n        /** @inherited */\n        this.isCustom = tf.isCustomOptions(colIndex);\n\n        //Retrieves custom values\n        if (this.isCustom) {\n            let customValues = tf.getCustomOptions(colIndex);\n            this.opts = customValues[0];\n            this.optsTxt = customValues[1];\n        }\n\n        let activeIdx;\n        let activeFilterId = tf.getActiveFilterId();\n\n        if (isLinked && activeFilterId) {\n            activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);\n        }\n\n        let filteredDataCol = [];\n        if (isLinked && tf.disableExcludedOptions) {\n            /** @inherited */\n            this.excludedOpts = [];\n        }\n\n        flt.innerHTML = '';\n\n        let eachRow = tf.eachRow();\n        eachRow(\n            (row) => {\n                let cellValue = tf.getCellValue(row.cells[colIndex]);\n                //Vary Peter's patch\n                let cellString = matchCase(cellValue, caseSensitive);\n                // checks if celldata is already in array\n                if (!has(this.opts, cellString, caseSensitive)) {\n                    this.opts.push(cellValue);\n                }\n                let filteredCol = filteredDataCol[colIndex];\n                if (isLinked && tf.disableExcludedOptions) {\n                    if (!filteredCol) {\n                        filteredCol = tf.getVisibleColumnValues(colIndex);\n                    }\n                    if (!has(filteredCol, cellString, caseSensitive) &&\n                        !has(this.excludedOpts, cellString, caseSensitive)) {\n                        this.excludedOpts.push(cellValue);\n                    }\n                }\n            },\n            // continue conditions function\n            (row, k) => {\n                // excluded rows don't need to appear on selects as always valid\n                if (tf.excludeRows.indexOf(k) !== -1) {\n                    return true;\n                }\n\n                // checks if row has expected number of cells\n                if (row.cells.length !== tf.nbCells || this.isCustom) {\n                    return true;\n                }\n\n                if (isLinked && !this.isValidLinkedValue(k, activeIdx)) {\n                    return true;\n                }\n            }\n        );\n\n        //sort options\n        this.opts = this.sortOptions(colIndex, this.opts);\n        if (this.excludedOpts) {\n            this.excludedOpts = this.sortOptions(colIndex, this.excludedOpts);\n        }\n\n        this.addChecks(colIndex, ul);\n\n        if (tf.loadFltOnDemand) {\n            flt.innerHTML = '';\n        }\n        flt.appendChild(ul);\n        flt.setAttribute('filled', '1');\n\n        this.emitter.emit('after-populating-filter', tf, colIndex, flt);\n    }\n\n    /**\n     * Add checklist options\n     * @param {Number} colIndex  Column index\n     * @param {Object} ul        Ul element\n     * @private\n     */\n    addChecks(colIndex, ul) {\n        let tf = this.tf;\n        let chkCt = this.addTChecks(colIndex, ul);\n\n        for (let y = 0; y < this.opts.length; y++) {\n            let val = this.opts[y]; //item value\n            let lbl = this.isCustom ? this.optsTxt[y] : val; //item text\n            let fltId = tf.fltIds[colIndex];\n            let li = createCheckItem(`${fltId}_${(y + chkCt)}`, val, lbl);\n            li.className = this.itemCssClass;\n\n            if (tf.linkedFilters && tf.disableExcludedOptions &&\n                has(this.excludedOpts, matchCase(val, tf.caseSensitive),\n                    tf.caseSensitive)) {\n                addClass(li, this.disabledItemCssClass);\n                li.check.disabled = true;\n                li.disabled = true;\n            } else {\n                addEvt(li.check, 'click', evt => this.optionClick(evt));\n            }\n            ul.appendChild(li);\n\n            if (val === '') {\n                //item is hidden\n                li.style.display = NONE;\n            }\n        }\n    }\n\n    /**\n     * Add checklist header option\n     * @param {Number} colIndex Column index\n     * @param {Object} ul       Ul element\n     * @private\n     */\n    addTChecks(colIndex, ul) {\n        let tf = this.tf;\n        let chkCt = 1;\n        let fltId = tf.fltIds[colIndex];\n        let li0 = createCheckItem(`${fltId}_0`, '',\n            tf.getClearFilterText(colIndex));\n        li0.className = this.itemCssClass;\n        ul.appendChild(li0);\n\n        addEvt(li0.check, 'click', evt => this.optionClick(evt));\n\n        if (!this.enableResetOption) {\n            li0.style.display = NONE;\n        }\n\n        if (tf.enableEmptyOption) {\n            let li1 = createCheckItem(`${fltId}_1`, tf.emOperator,\n                tf.emptyText);\n            li1.className = this.itemCssClass;\n            ul.appendChild(li1);\n            addEvt(li1.check, 'click', evt => this.optionClick(evt));\n            chkCt++;\n        }\n\n        if (tf.enableNonEmptyOption) {\n            let li2 = createCheckItem(`${fltId}_2`, tf.nmOperator,\n                tf.nonEmptyText);\n            li2.className = this.itemCssClass;\n            ul.appendChild(li2);\n            addEvt(li2.check, 'click', evt => this.optionClick(evt));\n            chkCt++;\n        }\n        return chkCt;\n    }\n\n    /**\n     * Store checked options in DOM element attribute\n     * @param {Object} o checklist option DOM element\n     * @private\n     */\n    setCheckListValues(o) {\n        if (!o) {\n            return;\n        }\n\n        let tf = this.tf;\n        let chkValue = o.value; //checked item value\n        // TODO: provide helper to extract column index, ugly!\n        let chkIndex = parseInt(o.id.split('_')[2], 10);\n        let colIdx = tf.getColumnIndexFromFilterId(o.id);\n        let itemTag = 'LI';\n\n        let n = tf.getFilterElement(parseInt(colIdx, 10));\n        let li = n.childNodes[chkIndex];\n        let colIndex = n.getAttribute('colIndex');\n        let fltValue = n.getAttribute('value'); //filter value (ul tag)\n        let fltIndexes = n.getAttribute('indexes'); //selected items (ul tag)\n\n        if (o.checked) {\n            //show all item\n            if (chkValue === '') {\n                if ((fltIndexes && fltIndexes !== '')) {\n                    //items indexes\n                    let indSplit = fltIndexes.split(tf.separator);\n                    //checked items loop\n                    for (let u = 0; u < indSplit.length; u++) {\n                        //checked item\n                        let cChk = elm(tf.fltIds[colIndex] + '_' +\n                            indSplit[u]);\n                        if (cChk) {\n                            cChk.checked = false;\n                            removeClass(n.childNodes[indSplit[u]],\n                                this.selectedItemCssClass);\n                        }\n                    }\n                }\n                n.setAttribute('value', '');\n                n.setAttribute('indexes', '');\n\n            } else {\n                fltValue = (fltValue) ? fltValue : '';\n                chkValue = trim(fltValue + ' ' + chkValue + ' ' +\n                    tf.orOperator);\n                chkIndex = fltIndexes + chkIndex + tf.separator;\n                n.setAttribute('value', chkValue);\n                n.setAttribute('indexes', chkIndex);\n                //1st option unchecked\n                if (elm(tf.fltIds[colIndex] + '_0')) {\n                    elm(tf.fltIds[colIndex] + '_0').checked = false;\n                }\n            }\n\n            if (li.nodeName === itemTag) {\n                removeClass(n.childNodes[0], this.selectedItemCssClass);\n                addClass(li, this.selectedItemCssClass);\n            }\n        } else { //removes values and indexes\n            if (chkValue !== '') {\n                let replaceValue = new RegExp(\n                    rgxEsc(chkValue + ' ' + tf.orOperator));\n                fltValue = fltValue.replace(replaceValue, '');\n                n.setAttribute('value', trim(fltValue));\n\n                let replaceIndex = new RegExp(\n                    rgxEsc(chkIndex + tf.separator));\n                fltIndexes = fltIndexes.replace(replaceIndex, '');\n                n.setAttribute('indexes', fltIndexes);\n            }\n            if (li.nodeName === itemTag) {\n                removeClass(li, this.selectedItemCssClass);\n            }\n        }\n    }\n\n    /**\n     * Select filter options programmatically\n     * @param  {Number} colIndex Column index\n     * @param  {Array}  values   Array of option values to select\n     */\n    selectOptions(colIndex, values = []) {\n        let tf = this.tf;\n        let flt = tf.getFilterElement(colIndex);\n        if (tf.getFilterType(colIndex) !== CHECKLIST || !flt ||\n            values.length === 0) {\n            return;\n        }\n\n        let lisNb = tag(flt, 'li').length;\n\n        flt.setAttribute('value', '');\n        flt.setAttribute('indexes', '');\n\n        for (let k = 0; k < lisNb; k++) {\n            let li = tag(flt, 'li')[k];\n            let lbl = tag(li, 'label')[0];\n            let chk = tag(li, 'input')[0];\n            let lblTxt = matchCase(getText(lbl), tf.caseSensitive);\n\n            if (lblTxt !== '' && has(values, lblTxt, tf.caseSensitive)) {\n                chk.checked = true;\n            } else {\n                // Check non-empty-text or empty-text option\n                if (values.indexOf(tf.nmOperator) !== -1 &&\n                    lblTxt === matchCase(tf.nonEmptyText, tf.caseSensitive)) {\n                    chk.checked = true;\n                }\n                else if (values.indexOf(tf.emOperator) !== -1 &&\n                    lblTxt === matchCase(tf.emptyText, tf.caseSensitive)) {\n                    chk.checked = true;\n                } else {\n                    chk.checked = false;\n                }\n            }\n            this.setCheckListValues(chk);\n        }\n    }\n\n    /**\n     * Get filter values for a given column index\n     * @param {Number} colIndex Column index\n     * @returns {Array} values Collection of selected values\n     */\n    getValues(colIndex) {\n        let tf = this.tf;\n        let flt = tf.getFilterElement(colIndex);\n        let fltAttr = flt.getAttribute('value');\n        let values = isEmpty(fltAttr) ? '' : fltAttr;\n        //removes last operator ||\n        values = values.substr(0, values.length - 3);\n        //turn || separated values into array\n        values = values.split(' ' + tf.orOperator + ' ');\n\n        return values;\n    }\n\n    /**\n     * Destroy CheckList instance\n     */\n    destroy() {\n        this.emitter.off(\n            ['build-checklist-filter'],\n            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)\n        );\n        this.emitter.off(\n            ['select-checklist-options'],\n            (tf, colIndex, values) => this.selectOptions(colIndex, values)\n        );\n        this.emitter.off(['rows-changed'], () => this.refreshAll());\n\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {BaseDropdown} from './baseDropdown';\nimport {\n    addClass, createCheckItem, createText, createElm, elm, removeClass, tag\n} from '../dom';\nimport {has} from '../array';\nimport {matchCase, trim, rgxEsc} from '../string';\nimport {addEvt, removeEvt, targetEvt} from '../event';\nimport {isEmpty} from '../types';\nimport {CHECKLIST, NONE} from '../const';\nimport {defaultsStr, defaultsBool} from '../settings';\n\n/**\n * Checklist filter UI component\n * @export\n * @class CheckList\n * @extends {BaseDropdown}\n */\nexport class CheckList extends BaseDropdown {\n\n    /**\n     * Creates an instance of CheckList\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'checkList');\n\n        let f = this.config;\n\n        /**\n         * List of container DOM elements\n         * @type {Array}\n         */\n        this.containers = [];\n\n        /**\n         * Css class for the container of the checklist filter (div)\n         * @type {String}\n         */\n        this.containerCssClass = defaultsStr(f.div_checklist_css_class,\n            'div_checklist');\n\n        /**\n         * Css class for the checklist filter element (ul)\n         * @type {String}\n         */\n        this.filterCssClass = defaultsStr(f.checklist_css_class,\n            'flt_checklist');\n\n        /**\n         * Css class for the item of a checklist (li)\n         * @type {String}\n         */\n        this.itemCssClass = defaultsStr(f.checklist_item_css_class,\n            'flt_checklist_item');\n\n        /**\n         * Css class for a selected item of a checklist (li)\n         * @type {String}\n         */\n        this.selectedItemCssClass = defaultsStr(\n            f.checklist_selected_item_css_class,\n            'flt_checklist_slc_item'\n        );\n\n        /**\n         * Text placed in the filter's container when load filter on demand\n         * feature is enabled\n         * @type {String}\n         */\n        this.activateText = defaultsStr(\n            f.activate_checklist_text,\n            'Click to load filter data'\n        );\n\n        /**\n         * Css class for a disabled item of a checklist (li)\n         * @type {String}\n         */\n        this.disabledItemCssClass = defaultsStr(\n            f.checklist_item_disabled_css_class,\n            'flt_checklist_item_disabled'\n        );\n\n        /**\n         * Enable the reset filter option as first item\n         * @type {Boolean}\n         */\n        this.enableResetOption = defaultsBool(f.enable_checklist_reset_filter,\n            true);\n\n        /**\n         * Prefix for container element ID\n         * @type {String}\n         * @private\n         */\n        this.prfx = 'chkdiv_';\n    }\n\n    /**\n     * Checklist option click event handler\n     * @param {Event} evt\n     * @private\n     */\n    optionClick(evt) {\n        let elm = targetEvt(evt);\n        let tf = this.tf;\n\n        this.emitter.emit('filter-focus', tf, elm);\n        this.setCheckListValues(elm);\n        tf.filter();\n    }\n\n    /**\n     * Checklist container click event handler for load-on-demand feature\n     * @param {Event} evt\n     * @private\n     */\n    onCheckListClick(evt) {\n        let elm = targetEvt(evt);\n        if (this.tf.loadFltOnDemand && elm.getAttribute('filled') === '0') {\n            let ct = elm.getAttribute('ct');\n            let div = this.containers[ct];\n            this.build(ct);\n            removeEvt(div, 'click', (evt) => this.onCheckListClick(evt));\n        }\n    }\n\n    /**\n     * Refresh all checklist filters\n     */\n    refreshAll() {\n        let colIdxs = this.tf.getFiltersByType(CHECKLIST, true);\n        this.refreshFilters(colIdxs);\n    }\n\n    /**\n     * Initialize checklist filter\n     * @param  {Number}     colIndex   Column index\n     * @param  {Boolean}    isExternal External filter flag\n     * @param  {DOMElement} container  Dom element containing the filter\n     */\n    init(colIndex, isExternal, container) {\n        let tf = this.tf;\n        let externalFltTgtId = isExternal ?\n            tf.externalFltTgtIds[colIndex] : null;\n\n        let divCont = createElm('div',\n            ['id', `${this.prfx}${colIndex}_${tf.id}`],\n            ['ct', colIndex], ['filled', '0']);\n        divCont.className = this.containerCssClass;\n\n        //filter is appended in desired element\n        if (externalFltTgtId) {\n            elm(externalFltTgtId).appendChild(divCont);\n        } else {\n            container.appendChild(divCont);\n        }\n\n        this.containers[colIndex] = divCont;\n        tf.fltIds.push(tf.buildFilterId(colIndex));\n\n        if (!tf.loadFltOnDemand) {\n            this.build(colIndex);\n        } else {\n            addEvt(divCont, 'click', (evt) => this.onCheckListClick(evt));\n            divCont.appendChild(createText(this.activateText));\n        }\n\n        this.emitter.on(\n            ['build-checklist-filter'],\n            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)\n        );\n\n        this.emitter.on(\n            ['select-checklist-options'],\n            (tf, colIndex, values) => this.selectOptions(colIndex, values)\n        );\n\n        this.emitter.on(['rows-changed'], () => this.refreshAll());\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n    /**\n     * Build checklist UI\n     * @param  {Number}  colIndex   Column index\n     * @param  {Boolean} isLinked    Enable linked filters behaviour\n     */\n    build(colIndex, isLinked = false) {\n        let tf = this.tf;\n        colIndex = Number(colIndex);\n\n        this.emitter.emit('before-populating-filter', tf, colIndex);\n\n        /** @inherited */\n        this.opts = [];\n        /** @inherited */\n        this.optsTxt = [];\n\n        let flt = this.containers[colIndex];\n        let ul = createElm('ul',\n            ['id', tf.fltIds[colIndex]],\n            ['colIndex', colIndex]);\n        ul.className = this.filterCssClass;\n\n        let caseSensitive = tf.caseSensitive;\n        /** @inherited */\n        this.isCustom = tf.isCustomOptions(colIndex);\n\n        //Retrieves custom values\n        if (this.isCustom) {\n            let customValues = tf.getCustomOptions(colIndex);\n            this.opts = customValues[0];\n            this.optsTxt = customValues[1];\n        }\n\n        let activeIdx;\n        let activeFilterId = tf.getActiveFilterId();\n\n        if (isLinked && activeFilterId) {\n            activeIdx = tf.getColumnIndexFromFilterId(activeFilterId);\n        }\n\n        let filteredDataCol = [];\n        if (isLinked && tf.disableExcludedOptions) {\n            /** @inherited */\n            this.excludedOpts = [];\n        }\n\n        flt.innerHTML = '';\n\n        let eachRow = tf.eachRow();\n        eachRow(\n            (row) => {\n                let cellValue = tf.getCellValue(row.cells[colIndex]);\n                //Vary Peter's patch\n                let cellString = matchCase(cellValue, caseSensitive);\n                // checks if celldata is already in array\n                if (!has(this.opts, cellString, caseSensitive)) {\n                    this.opts.push(cellValue);\n                }\n                let filteredCol = filteredDataCol[colIndex];\n                if (isLinked && tf.disableExcludedOptions) {\n                    if (!filteredCol) {\n                        filteredCol = tf.getVisibleColumnValues(colIndex);\n                    }\n                    if (!has(filteredCol, cellString, caseSensitive) &&\n                        !has(this.excludedOpts, cellString, caseSensitive)) {\n                        this.excludedOpts.push(cellValue);\n                    }\n                }\n            },\n            // continue conditions function\n            (row, k) => {\n                // excluded rows don't need to appear on selects as always valid\n                if (tf.excludeRows.indexOf(k) !== -1) {\n                    return true;\n                }\n\n                // checks if row has expected number of cells\n                if (row.cells.length !== tf.nbCells || this.isCustom) {\n                    return true;\n                }\n\n                if (isLinked && !this.isValidLinkedValue(k, activeIdx)) {\n                    return true;\n                }\n            }\n        );\n\n        //sort options\n        this.opts = this.sortOptions(colIndex, this.opts);\n        if (this.excludedOpts) {\n            this.excludedOpts = this.sortOptions(colIndex, this.excludedOpts);\n        }\n\n        this.addChecks(colIndex, ul);\n\n        if (tf.loadFltOnDemand) {\n            flt.innerHTML = '';\n        }\n        flt.appendChild(ul);\n        flt.setAttribute('filled', '1');\n\n        this.emitter.emit('after-populating-filter', tf, colIndex, flt);\n    }\n\n    /**\n     * Add checklist options\n     * @param {Number} colIndex  Column index\n     * @param {Object} ul        Ul element\n     * @private\n     */\n    addChecks(colIndex, ul) {\n        let tf = this.tf;\n        let chkCt = this.addTChecks(colIndex, ul);\n\n        for (let y = 0; y < this.opts.length; y++) {\n            let val = this.opts[y]; //item value\n            let lbl = this.isCustom ? this.optsTxt[y] : val; //item text\n            let fltId = tf.fltIds[colIndex];\n            let li = createCheckItem(`${fltId}_${(y + chkCt)}`, val, lbl);\n            li.className = this.itemCssClass;\n\n            if (tf.linkedFilters && tf.disableExcludedOptions &&\n                has(this.excludedOpts, matchCase(val, tf.caseSensitive),\n                    tf.caseSensitive)) {\n                addClass(li, this.disabledItemCssClass);\n                li.check.disabled = true;\n                li.disabled = true;\n            } else {\n                addEvt(li.check, 'click', evt => this.optionClick(evt));\n            }\n            ul.appendChild(li);\n\n            if (val === '') {\n                //item is hidden\n                li.style.display = NONE;\n            }\n        }\n    }\n\n    /**\n     * Add checklist header option\n     * @param {Number} colIndex Column index\n     * @param {Object} ul       Ul element\n     * @private\n     */\n    addTChecks(colIndex, ul) {\n        let tf = this.tf;\n        let chkCt = 1;\n        let fltId = tf.fltIds[colIndex];\n        let li0 = createCheckItem(`${fltId}_0`, '',\n            tf.getClearFilterText(colIndex));\n        li0.className = this.itemCssClass;\n        ul.appendChild(li0);\n\n        addEvt(li0.check, 'click', evt => this.optionClick(evt));\n\n        if (!this.enableResetOption) {\n            li0.style.display = NONE;\n        }\n\n        if (tf.enableEmptyOption) {\n            let li1 = createCheckItem(`${fltId}_1`, tf.emOperator,\n                tf.emptyText);\n            li1.className = this.itemCssClass;\n            ul.appendChild(li1);\n            addEvt(li1.check, 'click', evt => this.optionClick(evt));\n            chkCt++;\n        }\n\n        if (tf.enableNonEmptyOption) {\n            let li2 = createCheckItem(`${fltId}_2`, tf.nmOperator,\n                tf.nonEmptyText);\n            li2.className = this.itemCssClass;\n            ul.appendChild(li2);\n            addEvt(li2.check, 'click', evt => this.optionClick(evt));\n            chkCt++;\n        }\n        return chkCt;\n    }\n\n    /**\n     * Store checked options in DOM element attribute\n     * @param {Object} o checklist option DOM element\n     * @private\n     */\n    setCheckListValues(o) {\n        if (!o) {\n            return;\n        }\n\n        let tf = this.tf;\n        let chkValue = o.value; //checked item value\n        // TODO: provide helper to extract column index, ugly!\n        let chkIndex = parseInt(o.id.split('_')[2], 10);\n        let colIdx = tf.getColumnIndexFromFilterId(o.id);\n        let itemTag = 'LI';\n\n        let n = tf.getFilterElement(parseInt(colIdx, 10));\n        let li = n.childNodes[chkIndex];\n        let colIndex = n.getAttribute('colIndex');\n        let fltValue = n.getAttribute('value'); //filter value (ul tag)\n        let fltIndexes = n.getAttribute('indexes'); //selected items (ul tag)\n\n        if (o.checked) {\n            //show all item\n            if (chkValue === '') {\n                if ((fltIndexes && fltIndexes !== '')) {\n                    //items indexes\n                    let indSplit = fltIndexes.split(tf.separator);\n                    //checked items loop\n                    for (let u = 0; u < indSplit.length; u++) {\n                        //checked item\n                        let cChk = elm(tf.fltIds[colIndex] + '_' +\n                            indSplit[u]);\n                        if (cChk) {\n                            cChk.checked = false;\n                            removeClass(n.childNodes[indSplit[u]],\n                                this.selectedItemCssClass);\n                        }\n                    }\n                }\n                n.setAttribute('value', '');\n                n.setAttribute('indexes', '');\n\n            } else {\n                fltValue = (fltValue) ? fltValue : '';\n                chkValue = trim(fltValue + ' ' + chkValue + ' ' +\n                    tf.orOperator);\n                chkIndex = fltIndexes + chkIndex + tf.separator;\n                n.setAttribute('value', chkValue);\n                n.setAttribute('indexes', chkIndex);\n                //1st option unchecked\n                if (elm(tf.fltIds[colIndex] + '_0')) {\n                    elm(tf.fltIds[colIndex] + '_0').checked = false;\n                }\n            }\n\n            if (li.nodeName === itemTag) {\n                removeClass(n.childNodes[0], this.selectedItemCssClass);\n                addClass(li, this.selectedItemCssClass);\n            }\n        } else { //removes values and indexes\n            if (chkValue !== '') {\n                let replaceValue = new RegExp(\n                    rgxEsc(chkValue + ' ' + tf.orOperator));\n                fltValue = fltValue.replace(replaceValue, '');\n                n.setAttribute('value', trim(fltValue));\n\n                let replaceIndex = new RegExp(\n                    rgxEsc(chkIndex + tf.separator));\n                fltIndexes = fltIndexes.replace(replaceIndex, '');\n                n.setAttribute('indexes', fltIndexes);\n            }\n            if (li.nodeName === itemTag) {\n                removeClass(li, this.selectedItemCssClass);\n            }\n        }\n    }\n\n    /**\n     * Select filter options programmatically\n     * @param  {Number} colIndex Column index\n     * @param  {Array}  values   Array of option values to select\n     */\n    selectOptions(colIndex, values = []) {\n        let tf = this.tf;\n        let flt = tf.getFilterElement(colIndex);\n        if (tf.getFilterType(colIndex) !== CHECKLIST || !flt ||\n            values.length === 0) {\n            return;\n        }\n\n        let lis = tag(flt, 'li');\n\n        flt.setAttribute('value', '');\n        flt.setAttribute('indexes', '');\n\n        [].forEach.call(lis, (li) => {\n            let chk = tag(li, 'input')[0];\n            let chkVal = matchCase(chk.value, tf.caseSensitive);\n\n            if (chkVal !== '' && has(values, chkVal, tf.caseSensitive)) {\n                chk.checked = true;\n            } else {\n                // Check non-empty-text or empty-text option\n                if (values.indexOf(tf.nmOperator) !== -1 &&\n                    chkVal === matchCase(tf.nonEmptyText, tf.caseSensitive)) {\n                    chk.checked = true;\n                }\n                else if (values.indexOf(tf.emOperator) !== -1 &&\n                    chkVal === matchCase(tf.emptyText, tf.caseSensitive)) {\n                    chk.checked = true;\n                } else {\n                    chk.checked = false;\n                }\n            }\n            this.setCheckListValues(chk);\n        });\n    }\n\n    /**\n     * Get filter values for a given column index\n     * @param {Number} colIndex Column index\n     * @returns {Array} values Collection of selected values\n     */\n    getValues(colIndex) {\n        let tf = this.tf;\n        let flt = tf.getFilterElement(colIndex);\n        let fltAttr = flt.getAttribute('value');\n        let values = isEmpty(fltAttr) ? '' : fltAttr;\n        //removes last operator ||\n        values = values.substr(0, values.length - 3);\n        //turn || separated values into array\n        values = values.split(' ' + tf.orOperator + ' ');\n\n        return values;\n    }\n\n    /**\n     * Destroy CheckList instance\n     */\n    destroy() {\n        this.emitter.off(\n            ['build-checklist-filter'],\n            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)\n        );\n        this.emitter.off(\n            ['select-checklist-options'],\n            (tf, colIndex, values) => this.selectOptions(colIndex, values)\n        );\n        this.emitter.off(['rows-changed'], () => this.refreshAll());\n\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 266,
@@ -6310,7 +6310,7 @@
     "importPath": "tablefilter/src/modules/checkList.js",
     "importStyle": "{CheckList}",
     "description": "Checklist filter UI component",
-    "lineNumber": 19,
+    "lineNumber": 18,
     "unknown": [
       {
         "tagName": "@export",
@@ -6336,7 +6336,7 @@
     "longname": "src/modules/checkList.js~CheckList#constructor",
     "access": null,
     "description": "Creates an instance of CheckList",
-    "lineNumber": 25,
+    "lineNumber": 24,
     "params": [
       {
         "nullable": null,
@@ -6361,7 +6361,7 @@
     "longname": "src/modules/checkList.js~CheckList#containers",
     "access": null,
     "description": "List of container DOM elements",
-    "lineNumber": 34,
+    "lineNumber": 33,
     "type": {
       "nullable": null,
       "types": [
@@ -6381,7 +6381,7 @@
     "longname": "src/modules/checkList.js~CheckList#containerCssClass",
     "access": null,
     "description": "Css class for the container of the checklist filter (div)",
-    "lineNumber": 40,
+    "lineNumber": 39,
     "type": {
       "nullable": null,
       "types": [
@@ -6401,7 +6401,7 @@
     "longname": "src/modules/checkList.js~CheckList#filterCssClass",
     "access": null,
     "description": "Css class for the checklist filter element (ul)",
-    "lineNumber": 47,
+    "lineNumber": 46,
     "type": {
       "nullable": null,
       "types": [
@@ -6421,7 +6421,7 @@
     "longname": "src/modules/checkList.js~CheckList#itemCssClass",
     "access": null,
     "description": "Css class for the item of a checklist (li)",
-    "lineNumber": 54,
+    "lineNumber": 53,
     "type": {
       "nullable": null,
       "types": [
@@ -6441,7 +6441,7 @@
     "longname": "src/modules/checkList.js~CheckList#selectedItemCssClass",
     "access": null,
     "description": "Css class for a selected item of a checklist (li)",
-    "lineNumber": 61,
+    "lineNumber": 60,
     "type": {
       "nullable": null,
       "types": [
@@ -6461,7 +6461,7 @@
     "longname": "src/modules/checkList.js~CheckList#activateText",
     "access": null,
     "description": "Text placed in the filter's container when load filter on demand\nfeature is enabled",
-    "lineNumber": 71,
+    "lineNumber": 70,
     "type": {
       "nullable": null,
       "types": [
@@ -6481,7 +6481,7 @@
     "longname": "src/modules/checkList.js~CheckList#disabledItemCssClass",
     "access": null,
     "description": "Css class for a disabled item of a checklist (li)",
-    "lineNumber": 80,
+    "lineNumber": 79,
     "type": {
       "nullable": null,
       "types": [
@@ -6501,7 +6501,7 @@
     "longname": "src/modules/checkList.js~CheckList#enableResetOption",
     "access": null,
     "description": "Enable the reset filter option as first item",
-    "lineNumber": 89,
+    "lineNumber": 88,
     "type": {
       "nullable": null,
       "types": [
@@ -6521,7 +6521,7 @@
     "longname": "src/modules/checkList.js~CheckList#prfx",
     "access": "private",
     "description": "Prefix for container element ID",
-    "lineNumber": 97,
+    "lineNumber": 96,
     "type": {
       "nullable": null,
       "types": [
@@ -6541,7 +6541,7 @@
     "longname": "src/modules/checkList.js~CheckList#optionClick",
     "access": "private",
     "description": "Checklist option click event handler",
-    "lineNumber": 105,
+    "lineNumber": 104,
     "params": [
       {
         "nullable": null,
@@ -6566,7 +6566,7 @@
     "longname": "src/modules/checkList.js~CheckList#onCheckListClick",
     "access": "private",
     "description": "Checklist container click event handler for load-on-demand feature",
-    "lineNumber": 119,
+    "lineNumber": 118,
     "params": [
       {
         "nullable": null,
@@ -6591,7 +6591,7 @@
     "longname": "src/modules/checkList.js~CheckList#refreshAll",
     "access": null,
     "description": "Refresh all checklist filters",
-    "lineNumber": 132,
+    "lineNumber": 131,
     "params": [],
     "generator": false
   },
@@ -6605,7 +6605,7 @@
     "longname": "src/modules/checkList.js~CheckList#init",
     "access": null,
     "description": "Initialize checklist filter",
-    "lineNumber": 143,
+    "lineNumber": 142,
     "params": [
       {
         "nullable": null,
@@ -6650,7 +6650,7 @@
     "longname": "src/modules/checkList.js~CheckList#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 183,
+    "lineNumber": 182,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -6673,7 +6673,7 @@
     "longname": "src/modules/checkList.js~CheckList#build",
     "access": null,
     "description": "Build checklist UI",
-    "lineNumber": 191,
+    "lineNumber": 190,
     "params": [
       {
         "nullable": null,
@@ -6708,7 +6708,7 @@
     "longname": "src/modules/checkList.js~CheckList#opts",
     "access": null,
     "description": null,
-    "lineNumber": 198,
+    "lineNumber": 197,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -6731,7 +6731,7 @@
     "longname": "src/modules/checkList.js~CheckList#optsTxt",
     "access": null,
     "description": null,
-    "lineNumber": 200,
+    "lineNumber": 199,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -6754,7 +6754,7 @@
     "longname": "src/modules/checkList.js~CheckList#isCustom",
     "access": null,
     "description": null,
-    "lineNumber": 210,
+    "lineNumber": 209,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -6777,7 +6777,7 @@
     "longname": "src/modules/checkList.js~CheckList#opts",
     "access": null,
     "description": null,
-    "lineNumber": 215,
+    "lineNumber": 214,
     "undocument": true,
     "type": {
       "types": [
@@ -6795,7 +6795,7 @@
     "longname": "src/modules/checkList.js~CheckList#optsTxt",
     "access": null,
     "description": null,
-    "lineNumber": 216,
+    "lineNumber": 215,
     "undocument": true,
     "type": {
       "types": [
@@ -6813,7 +6813,7 @@
     "longname": "src/modules/checkList.js~CheckList#excludedOpts",
     "access": null,
     "description": null,
-    "lineNumber": 229,
+    "lineNumber": 228,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -6836,7 +6836,7 @@
     "longname": "src/modules/checkList.js~CheckList#opts",
     "access": null,
     "description": null,
-    "lineNumber": 274,
+    "lineNumber": 273,
     "undocument": true,
     "type": {
       "types": [
@@ -6854,7 +6854,7 @@
     "longname": "src/modules/checkList.js~CheckList#excludedOpts",
     "access": null,
     "description": null,
-    "lineNumber": 276,
+    "lineNumber": 275,
     "undocument": true,
     "type": {
       "types": [
@@ -6872,7 +6872,7 @@
     "longname": "src/modules/checkList.js~CheckList#addChecks",
     "access": "private",
     "description": "Add checklist options",
-    "lineNumber": 296,
+    "lineNumber": 295,
     "params": [
       {
         "nullable": null,
@@ -6907,7 +6907,7 @@
     "longname": "src/modules/checkList.js~CheckList#addTChecks",
     "access": "private",
     "description": "Add checklist header option",
-    "lineNumber": 331,
+    "lineNumber": 330,
     "params": [
       {
         "nullable": null,
@@ -6947,7 +6947,7 @@
     "longname": "src/modules/checkList.js~CheckList#setCheckListValues",
     "access": "private",
     "description": "Store checked options in DOM element attribute",
-    "lineNumber": 371,
+    "lineNumber": 370,
     "params": [
       {
         "nullable": null,
@@ -6972,7 +6972,7 @@
     "longname": "src/modules/checkList.js~CheckList#selectOptions",
     "access": null,
     "description": "Select filter options programmatically",
-    "lineNumber": 450,
+    "lineNumber": 449,
     "params": [
       {
         "nullable": null,
@@ -7007,7 +7007,7 @@
     "longname": "src/modules/checkList.js~CheckList#getValues",
     "access": null,
     "description": "Get filter values for a given column index",
-    "lineNumber": 493,
+    "lineNumber": 490,
     "unknown": [
       {
         "tagName": "@returns",
@@ -7046,7 +7046,7 @@
     "longname": "src/modules/checkList.js~CheckList#destroy",
     "access": null,
     "description": "Destroy CheckList instance",
-    "lineNumber": 509,
+    "lineNumber": 506,
     "params": [],
     "generator": false
   },
@@ -7060,7 +7060,7 @@
     "longname": "src/modules/checkList.js~CheckList#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 520,
+    "lineNumber": 517,
     "undocument": true,
     "type": {
       "types": [
