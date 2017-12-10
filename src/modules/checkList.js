@@ -1,7 +1,6 @@
 import {BaseDropdown} from './baseDropdown';
 import {
-    addClass, createCheckItem, createText, createElm, elm, getText,
-    removeClass, tag
+    addClass, createCheckItem, createText, createElm, elm, removeClass, tag
 } from '../dom';
 import {has} from '../array';
 import {matchCase, trim, rgxEsc} from '../string';
@@ -455,34 +454,32 @@ export class CheckList extends BaseDropdown {
             return;
         }
 
-        let lisNb = tag(flt, 'li').length;
+        let lis = tag(flt, 'li');
 
         flt.setAttribute('value', '');
         flt.setAttribute('indexes', '');
 
-        for (let k = 0; k < lisNb; k++) {
-            let li = tag(flt, 'li')[k];
-            let lbl = tag(li, 'label')[0];
+        [].forEach.call(lis, (li) => {
             let chk = tag(li, 'input')[0];
-            let lblTxt = matchCase(getText(lbl), tf.caseSensitive);
+            let chkVal = matchCase(chk.value, tf.caseSensitive);
 
-            if (lblTxt !== '' && has(values, lblTxt, tf.caseSensitive)) {
+            if (chkVal !== '' && has(values, chkVal, tf.caseSensitive)) {
                 chk.checked = true;
             } else {
                 // Check non-empty-text or empty-text option
                 if (values.indexOf(tf.nmOperator) !== -1 &&
-                    lblTxt === matchCase(tf.nonEmptyText, tf.caseSensitive)) {
+                    chkVal === matchCase(tf.nonEmptyText, tf.caseSensitive)) {
                     chk.checked = true;
                 }
                 else if (values.indexOf(tf.emOperator) !== -1 &&
-                    lblTxt === matchCase(tf.emptyText, tf.caseSensitive)) {
+                    chkVal === matchCase(tf.emptyText, tf.caseSensitive)) {
                     chk.checked = true;
                 } else {
                     chk.checked = false;
                 }
             }
             this.setCheckListValues(chk);
-        }
+        });
     }
 
     /**

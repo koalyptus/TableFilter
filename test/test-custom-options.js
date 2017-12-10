@@ -3,12 +3,19 @@
 
     var tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
+        col_1: 'checklist',
         col_3: 'select',
         custom_options: {
-            cols: [3],
-            texts: [['0-0.5', '0.5-1', '1-2', '>2']],
-            values: [['>0 && <=0.5', '>0.5 && <=1', '>1 && <=2', '>2']],
-            sorts: [false]
+            cols: [1, 3],
+            texts: [
+                ['Perth', 'Canberra'],
+                ['0-0.5', '0.5-1', '1-2', '>2']
+            ],
+            values: [
+                ['rgx:^Perth$', 'rgx:^Canberra$'],
+                ['>0 && <=0.5', '>0.5 && <=1', '>1 && <=2', '>2']
+            ],
+            sorts: [false, false]
         }
     });
     tf.init();
@@ -33,6 +40,38 @@
 
         deepEqual(
             tf.getFilteredData().length, 7, 'Expected nb of filtered rows');
+    });
+
+    test('set filter value with regex', function() {
+        // act
+        tf.setFilterValue(1, ['rgx:^Canberra$', 'rgx:^Perth$']);
+        tf.filter();
+
+        // assert
+        deepEqual(
+            tf.getFilteredData(),
+            [
+                [
+                    4,
+                    [
+                        'Sydney',
+                        'Canberra',
+                        '286',
+                        '.6',
+                        '4.3'
+                    ]
+                ], [
+                    6,
+                    [
+                        'Adelaide',
+                        'Perth',
+                        '2781',
+                        '3.1',
+                        '38'
+                    ]
+                ]
+            ],
+            'expected filtered data');
     });
 
     test('Paging: filter column with custom filter', function() {
