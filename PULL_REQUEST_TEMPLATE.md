@@ -1,17 +1,23 @@
-TableFilter welcomes contributions from anyone and everyone. If you want to get
-your hands dirty:
+# Description
 
-### Pull requests
-In general, we follow the "fork-and-pull" Git workflow.
+Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context.
+Fixes # (issue)
 
- 1. **Fork** the repo on GitHub
- 2. **Clone** the project to your own machine
- 3. **Commit** changes to your own branch
-    - 3.1 **Bump** package version in `package.json` file
-    - 3.2. **Add** unit tests covering your change in the `test` folder
-    - 3.3. **Run** the tests with the `npm run eslint test` command
-    - 3.4. **Ensure** build is working with `npm run dist` command
- 4. **Push** your work back up to your fork
- 5. Submit a **Pull request** so that we can review your changes
+## Type of change
 
-NOTE: Be sure to merge the latest from "upstream" before making a pull request!
+Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+# Checklist:
+
+- [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes do not lower current test coverage
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
