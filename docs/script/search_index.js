@@ -4002,9 +4002,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#externalflttgtids",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-externalFltTgtIds",
-    "src/tablefilter.js~TableFilter#externalFltTgtIds",
+    "src/tablefilter.js~tablefilter#externalfltids",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-externalFltIds",
+    "src/tablefilter.js~TableFilter#externalFltIds",
     "member"
   ],
   [
@@ -4638,15 +4638,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#singleflt",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-singleFlt",
+    "src/tablefilter.js~TableFilter#singleFlt",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#singlefltcssclass",
     "class/src/tablefilter.js~TableFilter.html#instance-member-singleFltCssClass",
     "src/tablefilter.js~TableFilter#singleFltCssClass",
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#singlesearchflt",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-singleSearchFlt",
-    "src/tablefilter.js~TableFilter#singleSearchFlt",
+    "src/tablefilter.js~tablefilter#singlefltexcludecols",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-singleFltExcludeCols",
+    "src/tablefilter.js~TableFilter#singleFltExcludeCols",
     "member"
   ],
   [
