@@ -347,7 +347,7 @@ test('Configuration settings overrides', function() {
     // assert
     deepEqual(tf.filtersRowIndex, 1, 'Filters row index config setting value');
     deepEqual(
-        tf.externalFltTgtIds,
+        tf.externalFltIds,
         [],
         'External filters container ids config setting value'
     );
@@ -360,7 +360,7 @@ test('Configuration settings overrides', function() {
         // assert
         deepEqual(tf.filtersRowIndex, 0, 'Filters row index override');
         deepEqual(
-            tf.externalFltTgtIds,
+            tf.externalFltIds,
             [
                 'popup_demo_0',
                 'popup_demo_1',
