@@ -92,7 +92,7 @@ export class Dropdown extends BaseDropdown {
         let tf = this.tf;
         let col = tf.getFilterType(colIndex);
         let externalFltTgtId = isExternal ?
-            tf.externalFltTgtIds[colIndex] : null;
+            tf.externalFltIds[colIndex] : null;
 
         let slc = createElm(SELECT,
             ['id', tf.buildFilterId(colIndex)],

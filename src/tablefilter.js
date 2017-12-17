@@ -383,7 +383,7 @@ export class TableFilter {
          * List of containers IDs where external filters will be generated
          * @type {Array}
          */
-        this.externalFltTgtIds = defaultsArr(f.external_flt_grid_ids, []);
+        this.externalFltIds = defaultsArr(f.external_flt_ids, []);
 
         /**
          * Callback fired after filters are generated
@@ -392,10 +392,22 @@ export class TableFilter {
         this.onFiltersLoaded = defaultsFn(f.on_filters_loaded, EMPTY_FN);
 
         /**
-         * Enable/disable single filter filtering all columns
-         * @type {Boolean}
+         * Enable/disable single filter mode
+         * @type {Boolean|Object}
          */
-        this.singleSearchFlt = Boolean(f.single_filter);
+        this.singleFlt = isObj(f.single_filter) ||
+            Boolean(f.single_filter);
+
+        /**
+         * Specify columns to be excluded from single filter search, by default
+         * searching in all columns:
+         * single_filter: {
+         *      exclude_cols: [2, 7]
+         * }
+         */
+        this.singleFltExcludeCols = isObj(f.single_filter) &&
+            isArray(f.single_filter.exclude_cols) ?
+            f.single_filter.exclude_cols : [];
 
         /**
          * Callback fired after a row is validated during filtering
@@ -442,7 +454,7 @@ export class TableFilter {
 
         /**
          * Indicate whether pop-up filters UI is enabled
-         * @type {Boolean}
+         * @type {Boolean|Object}
          */
         this.popupFilters = isObj(f.popup_filters) || Boolean(f.popup_filters);
 
@@ -948,16 +960,16 @@ export class TableFilter {
             this.nbCells = this.getCellsNb(this.refRow);
             this.nbFilterableRows = this.getRowsNb();
 
-            let n = this.singleSearchFlt ? 1 : this.nbCells;
+            let n = this.singleFlt ? 1 : this.nbCells;
 
-            // Generate filters
+            //build filters
             for (let i = 0; i < n; i++) {
                 this.emitter.emit('before-filter-init', this, i);
 
                 let fltCell = createElm(this.fltCellTag),
                     col = this.getFilterType(i);
 
-                if (this.singleSearchFlt) {
+                if (this.singleFlt) {
                     fltCell.colSpan = this.nbCells;
                 }
                 if (!this.gridLayout) {
@@ -967,7 +979,7 @@ export class TableFilter {
                     this.fltSmallCssClass : this.fltCssClass;
 
                 //only 1 input for single search
-                if (this.singleSearchFlt) {
+                if (this.singleFlt) {
                     col = INPUT;
                     inpclass = this.singleFltCssClass;
                 }
@@ -989,7 +1001,7 @@ export class TableFilter {
                 if (i === n - 1 && this.displayBtn) {
                     this._buildSubmitButton(
                         this.isExternalFlt() ?
-                            elm(this.externalFltTgtIds[i]) :
+                            elm(this.externalFltIds[i]) :
                             fltCell
                     );
                 }
@@ -1176,7 +1188,7 @@ export class TableFilter {
     _buildInputFilter(colIndex, cssClass, container) {
         let col = this.getFilterType(colIndex);
         let externalFltTgtId = this.isExternalFlt() ?
-            this.externalFltTgtIds[colIndex] : null;
+            this.externalFltIds[colIndex] : null;
         let inpType = col === INPUT ? 'text' : 'hidden';
         let inp = createElm(INPUT,
             ['id', this.buildFilterId(colIndex)],
@@ -1464,7 +1476,7 @@ export class TableFilter {
         if (!this.isExternalFlt()) {
             return;
         }
-        let ids = this.externalFltTgtIds;
+        let ids = this.externalFltIds;
         ids.forEach((id) => {
             let externalFlt = elm(id);
             if (externalFlt) {
@@ -1526,9 +1538,12 @@ export class TableFilter {
         if (!this.fltGrid || !this.initialized) {
             return;
         }
+
+        let emitter = this.emitter;
+
         //fire onbefore callback
         this.onBeforeFilter(this);
-        this.emitter.emit('before-filtering', this);
+        emitter.emit('before-filtering', this);
 
         let hiddenRows = 0;
 
@@ -1546,14 +1561,14 @@ export class TableFilter {
                 let nbCells = cells.length;
 
                 let occurence = [],
-                    isRowValid = true,
+                    isMatch = true,
                     //only for single filter search
-                    singleFltRowValid = false;
+                    isSingleFltMatch = false;
 
                 // this loop retrieves cell data
                 for (let j = 0; j < nbCells; j++) {
                     //searched keyword
-                    let sA = searchArgs[this.singleSearchFlt ? 0 : j];
+                    let sA = searchArgs[this.singleFlt ? 0 : j];
 
                     if (sA === '') {
                         continue;
@@ -1573,9 +1588,9 @@ export class TableFilter {
 
                     //detect operators or array query
                     if (isArray(sA) || hasMultiOrSA || hasMultiAndSA) {
-                        let cS,
-                            s,
-                            occur = false;
+                        let cS, s;
+                        let found = false;
+
                         if (isArray(sA)) {
                             s = sA;
                         } else {
@@ -1584,53 +1599,56 @@ export class TableFilter {
                         // isolate search term and check occurence in cell data
                         for (let w = 0, len = s.length; w < len; w++) {
                             cS = trim(s[w]);
-                            occur = this._match(cS, cellValue, j);
+                            found = this._match(cS, cellValue, j);
 
-                            if (occur) {
-                                this.emitter.emit('highlight-keyword', this,
+                            if (found) {
+                                emitter.emit('highlight-keyword', this,
                                     cells[j], cS);
                             }
-                            if ((hasMultiOrSA && occur) ||
-                                (hasMultiAndSA && !occur)) {
+                            if ((hasMultiOrSA && found) ||
+                                (hasMultiAndSA && !found)) {
                                 break;
                             }
-                            if (isArray(sA) && occur) {
+                            if (isArray(sA) && found) {
                                 break;
                             }
                         }
-                        occurence[j] = occur;
+                        occurence[j] = found;
 
                     }
                     //single search parameter
                     else {
                         occurence[j] = this._match(trim(sA), cellValue, j);
                         if (occurence[j]) {
-                            this.emitter.emit('highlight-keyword', this,
-                                cells[j], sA);
+                            emitter.emit('highlight-keyword', this, cells[j],
+                                sA);
                         }
                     }
 
                     if (!occurence[j]) {
-                        isRowValid = false;
-                    }
-                    if (this.singleSearchFlt && occurence[j]) {
-                        singleFltRowValid = true;
+                        isMatch = false;
                     }
 
-                    this.emitter.emit('cell-processed', this, j, cells[j]);
+                    if (this.singleFlt &&
+                        this.singleFltExcludeCols.indexOf(j) === -1 &&
+                        occurence[j]) {
+                        isSingleFltMatch = true;
+                    }
+
+                    emitter.emit('cell-processed', this, j, cells[j]);
                 }//for j
 
-                if (this.singleSearchFlt && singleFltRowValid) {
-                    isRowValid = true;
+                if (isSingleFltMatch) {
+                    isMatch = true;
                 }
 
-                this.validateRow(k, isRowValid);
-                if (!isRowValid) {
+                this.validateRow(k, isMatch);
+                if (!isMatch) {
                     hiddenRows++;
                 }
 
-                this.emitter.emit('row-processed', this, k,
-                    this.validRowsIndex.length, isRowValid);
+                emitter.emit('row-processed', this, k,
+                    this.validRowsIndex.length, isMatch);
             },
             // continue condition
             (row) => row.cells.length !== this.nbCells
@@ -1641,7 +1659,7 @@ export class TableFilter {
         //fire onafterfilter callback
         this.onAfterFilter(this);
 
-        this.emitter.emit('after-filtering', this, searchArgs);
+        emitter.emit('after-filtering', this, searchArgs);
     }
 
     /**
@@ -1855,7 +1873,7 @@ export class TableFilter {
                 // fallback to unformatted number string comparison
                 if (numData &&
                     this.hasType(colIdx, [NUMBER, FORMATTED_NUMBER]) &&
-                    !this.singleSearchFlt) {
+                    !this.singleFlt) {
                     // parseNb can return 0 for strings which are not
                     // formatted numbers, in that case return the original
                     // string. TODO: handle this in parseNb
@@ -2595,7 +2613,7 @@ export class TableFilter {
      * @private
      */
     isExternalFlt() {
-        return this.externalFltTgtIds.length > 0;
+        return this.externalFltIds.length > 0;
     }
 
     /**

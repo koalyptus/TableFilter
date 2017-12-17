@@ -142,7 +142,7 @@ export class CheckList extends BaseDropdown {
     init(colIndex, isExternal, container) {
         let tf = this.tf;
         let externalFltTgtId = isExternal ?
-            tf.externalFltTgtIds[colIndex] : null;
+            tf.externalFltIds[colIndex] : null;
 
         let divCont = createElm('div',
             ['id', `${this.prfx}${colIndex}_${tf.id}`],

@@ -7,7 +7,7 @@ var tf = new TableFilter('demo', {
     col_3: 'multiple',
     col_4: 'checklist',
     /* external filters */
-    external_flt_grid_ids: [
+    external_flt_ids: [
         'extFrom',
         'extDestination',
         'extRoadDistance',
@@ -21,7 +21,7 @@ module('Sanity checks');
 test('External filters', function() {
     deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
     deepEqual(tf.isExternalFlt(), true, 'Has external filters');
-    deepEqual(tf.externalFltTgtIds.length, 5,
+    deepEqual(tf.externalFltIds.length, 5,
         'External filters ids length');
     deepEqual(tf.getFiltersRowIndex(), 0, 'Filters row index');
     deepEqual(tf.getHeadersRowIndex(), 1, 'Headers row index');
@@ -81,7 +81,7 @@ test('Sanity checks', function() {
         col_3: 'multiple',
         col_4: 'checklist',
         /* external filters */
-        external_flt_grid_ids: [
+        external_flt_ids: [
             'extFrom',
             'extDestination',
             'extRoadDistance',
@@ -94,7 +94,7 @@ test('Sanity checks', function() {
 
     deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
     deepEqual(tf.isExternalFlt(), true, 'Has external filters');
-    deepEqual(tf.externalFltTgtIds.length, 5,
+    deepEqual(tf.externalFltIds.length, 5,
         'External filters ids length');
     deepEqual(tf.getFiltersRowIndex(), 1, 'Filters row index');
     deepEqual(tf.getHeadersRowIndex(), 0, 'Headers row index');
@@ -152,7 +152,7 @@ test('Sanity checks', function() {
         col_3: 'multiple',
         col_4: 'checklist',
         /* external filters */
-        external_flt_grid_ids: [
+        external_flt_ids: [
             'extFrom',
             'extDestination',
             'extRoadDistance',
@@ -165,7 +165,7 @@ test('Sanity checks', function() {
 
     deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
     deepEqual(tf.isExternalFlt(), true, 'Has external filters');
-    deepEqual(tf.externalFltTgtIds.length, 5,
+    deepEqual(tf.externalFltIds.length, 5,
         'External filters ids length');
     deepEqual(tf.getFiltersRowIndex(), 0, 'Filters row index');
     deepEqual(tf.getHeadersRowIndex(), 1, 'Headers row index');

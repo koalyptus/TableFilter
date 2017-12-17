@@ -197,7 +197,7 @@ export class PopupFilter extends Feature {
         let tf = this.tf;
 
         // Enable external filters
-        tf.externalFltTgtIds = [''];
+        tf.externalFltIds = [''];
 
         // Override filters row index supplied by configuration
         tf.filtersRowIndex = 0;
@@ -285,7 +285,7 @@ export class PopupFilter extends Feature {
         let placeholder = createElm('div', ['class', this.placeholderCssClass]);
         let cont = div ||
             createElm('div', ['id', contId], ['class', this.containerCssClass]);
-        tf.externalFltTgtIds[colIndex] = cont.id;
+        tf.externalFltIds[colIndex] = cont.id;
         placeholder.appendChild(cont);
 
         let header = tf.getHeaderElement(colIndex);
@@ -441,7 +441,7 @@ export class PopupFilter extends Feature {
         this.fltIcons = [];
 
         // TODO: expose an API to handle external filter IDs
-        this.tf.externalFltTgtIds = [];
+        this.tf.externalFltIds = [];
 
         // unsubscribe to events
         this.emitter.off(['before-filtering'], () => this.setIconsState());
