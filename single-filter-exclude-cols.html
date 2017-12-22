@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sort columns with external command | TableFilter</title>
+    <title>Single filter, exclude columns | TableFilter</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -195,63 +195,16 @@
 
       
 
-<h1>Sort columns with external command</h1>
+<h1>Single filter, exclude columns</h1>
 
 <p>
-    Sort a column with an external command.
+    This demo shows how to configure a single filter searching on desired
+    columns.
 </p>
 
-<div class="alert alert-info" role="alert">
-    Instructions: use the drop-down or the buttons to sort the table columns.
-</div>
-
-<div data-config>
-  <div class="row">
-      <div class="btn-group col-md-4">
-          <button type="button" class="btn btn-default dropdown-toggle"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Sort <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-              <li>
-                  <a id="extSort0" href="#" onclick="sortColumn(0);">Country</a>
-                  <a id="extSort1" href="#" onclick="sortColumn(1);">ISO</a>
-                  <a id="extSort2" href="#" onclick="sortColumn(2);">Year</a>
-                  <a id="extSort3" href="#" onclick="sortColumn(3);">POP</a>
-                  <a id="extSort4" href="#" onclick="sortColumn(4);">XRAT</a>
-                  <a id="extSort5" href="#" onclick="sortColumn(5);">PPP</a>
-                  <a id="extSort6" href="#" onclick="sortColumn(6);">cgdp</a>
-                  <a id="extSort7" href="#" onclick="sortColumn(7);">cc</a>
-                  <a id="extSort8" href="#" onclick="sortColumn(8);">ci</a>
-              </li>
-          </ul>
-
-      </div>
-
-      <div class="btn-group col-md-5" role="group" aria-label="...">
-          <button type="button" class="btn btn-default"
-              onclick="sortColumn(0, false);">Country &uarr;</button>
-          <button type="button" class="btn btn-default"
-              onclick="sortColumn(0, true);">Country &darr;</button>
-          <button type="button" class="btn btn-default"
-              onclick="sortColumn(2, false);">Year &uarr;</button>
-          <button type="button" class="btn btn-default"
-              onclick="sortColumn(2, true);">Year &darr;</button>
-      </div>
-
-      <div class="col-md-3">
-          <div class="pull-right">
-              Sorted column: <span class="badge">None</span>
-          </div>
-      </div>
-  </div>
-</div>
-
-<p></p>
 
 
-
-<table id="demo" class="countries-tiny">
+<table id="demo" class="table">
     <thead>
         <tr>
             <th>Country</th>
@@ -688,52 +641,56 @@
 </table>
 
 
+<div class="alert alert-info" role="alert">
+  NOTE: this demo uses Bootstrap.
+</div>
+
 
 <script src="tablefilter/tablefilter.js"></script>
 
 
 <script data-config>
-    function sortColumn(colIndex, desc) {
-        var sortExt = tf.extension('sort');
-
-        // Sort column programmatically
-        sortExt.sortByColumnIndex(colIndex, desc);
-    }
-
     var tfConfig = {
         base_path: 'tablefilter/',
-        col_widths: [
-            "180px", "120px", "120px",
-            null, null, null,
-            null, null, null
-        ],
         alternate_rows: true,
-        rows_counter: true,
         btn_reset: true,
+        rows_counter: true,
+        loader: true,
         status_bar: true,
-        col_0: 'multiple',
-        col_1: 'select',
-        col_2: 'checklist',
+        highlight_keywords: true,
+        no_results_message: true,
+        single_filter: {
+            exclude_cols: [3, 4, 5, 6, 7, 8]
+        },
+        single_flt_css_class: 'form-control',
+        watermark: 'Search Country, ISO or Year',
+        auto_filter: true,
         col_types: [
             'string', 'string', 'number',
             'number', 'number', 'number',
             'number', 'number', 'number'
         ],
-
-        // sorting extension
+        col_widths: [
+            '180px', '120px', '120px',
+            '100px', '100px', '100px',
+            '100px', '100px', '100px'
+        ],
         extensions: [{
-            name: 'sort',
-            async_sort: true,
-            on_after_sort: function(o, colIndex){
-                document.querySelector('.badge').innerHTML =
-                    o.getHeaderElement(colIndex).innerHTML;
-            }
+            name: 'sort'
+        }],
+
+        /** Bootstrap integration */
+
+        // aligns filter at cell bottom when Bootstrap is enabled
+        filters_cell_tag: 'th',
+
+        // allows Bootstrap table styling
+        themes: [{
+            name: 'transparent'
         }]
     };
-    var tf = new TableFilter(
-        document.querySelector('.countries-tiny'),
-        tfConfig
-    );
+
+    var tf = new TableFilter(document.querySelector('.table'), tfConfig);
     tf.init();
 </script>
 
@@ -864,10 +821,6 @@
     </div>
 </div>
 
-
-<div class="alert alert-warning" role="alert">
-    NOTE: the sorting commands above the table use Bootstrap styles.
-</div>
 
 
     </div>
