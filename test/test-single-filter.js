@@ -10,6 +10,8 @@ test('Single filter', function() {
     deepEqual(tf.getFiltersId().length, 1, 'Number of filter');
     deepEqual(tf.getFiltersId(), ['flt0_demo'], 'Filter ID');
     deepEqual(typeof tf.getFilterElement(0), 'object', 'Filter element');
+    deepEqual(tf.getFilterElement(0).className, 'single_flt',
+        'Default CSS class');
 });
 
 module('Behaviour');
@@ -56,6 +58,25 @@ test('Exclude from filtering expected columns', function() {
 
     // assert
     deepEqual(tf.getValidRows().length, 1, 'Filtered rows number');
+});
+
+module('Styling');
+test('Can customise CSS class', function() {
+    // setup
+    tf.destroy();
+    tf = null;
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        single_filter: {
+            css_class: 'test'
+        }
+    });
+
+    // act
+    tf.init();
+
+    // assert
+    deepEqual(tf.getFilterElement(0).className, 'test', 'Custom CSS class');
 });
 
 module('External single filter');
