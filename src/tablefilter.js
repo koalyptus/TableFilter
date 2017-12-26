@@ -289,7 +289,7 @@ export class TableFilter {
          * Css class for single filter type
          * @type {String}
          */
-        this.singleFltCssClass = defaultsStr(f.single_flt_css_class,
+        this.singleFltCssClass = defaultsStr((f.single_filter || {}).css_class,
             'single_flt');
 
         /*** filters' grid behaviours ***/
