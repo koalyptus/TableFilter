@@ -49,6 +49,21 @@ test('Can update', function() {
         'State object updated');
 });
 
+test('Can update state when previously field value is set empty', function() {
+    // setup
+    state.state = {};
+    tf.setFilterValue(0, 'Sydney');
+    tf.filter();
+
+    // act
+    tf.setFilterValue(0, '');
+    tf.filter();
+
+    // assert
+    deepEqual(state.state.col_0, { 'flt': undefined },
+        'State object updated');
+});
+
 test('Can update on clear filters', function() {
     // setup
     state.state = {};
@@ -58,6 +73,153 @@ test('Can update on clear filters', function() {
 
     // assert
     deepEqual(state.state.col_1, undefined, 'State object updated');
+});
+
+test('Can update page number', function() {
+    // setup
+    state.state = {};
+    state.pageNb = 2;
+    state.persistPageNumber = true;
+
+    // act
+    tf.filter();
+    state.persistPageNumber = false;
+
+    // assert
+    deepEqual(state.state.page, 2, 'Page number updated');
+});
+
+test('Can update page number when null', function() {
+    // setup
+    state.state = {};
+    state.pageNb = null;
+    state.persistPageNumber = true;
+
+    // act
+    tf.filter();
+    state.persistPageNumber = false;
+
+    // assert
+    deepEqual(state.state.page, undefined, 'Page number updated');
+});
+
+test('Can update page length', function() {
+    // setup
+    state.persistPageLength = true;
+    state.state = {};
+    state.pageLength = 10;
+
+    // act
+    tf.filter();
+    state.persistPageLength = false;
+
+    // assert
+    deepEqual(state.state.page_length, 10, 'Page length updated');
+});
+
+test('Can update page length when null', function() {
+    // setup
+    state.persistPageLength = true;
+    state.state = {};
+    state.pageLength = null;
+
+    // act
+    tf.filter();
+    state.persistPageLength = false;
+
+    // assert
+    deepEqual(state.state.page_length, undefined, 'Page length updated');
+});
+
+test('Can update sort', function() {
+    // setup
+    state.persistSort = true;
+    state.state = {};
+
+    // act
+    tf.emitter.emit('column-sorted', tf, 1, true);
+    state.persistSort = false;
+
+    // assert
+    deepEqual(state.state.col_1,
+        { 'sort': { 'descending': true } }, 'Sort updated');
+});
+
+test('Can update sort when previously set', function() {
+    // setup
+    state.persistSort = true;
+    state.state = { col_1: { 'sort': { 'descending': true } } };
+
+    // act
+    tf.emitter.emit('column-sorted', tf, 0, false);
+    state.persistSort = false;
+
+    // assert
+    deepEqual(state.state.col_0,
+        { 'sort': { 'descending': false } }, 'Sort updated');
+    deepEqual(state.state.col_1.sort, undefined, 'Sort updated');
+});
+
+test('Can update columns visibility', function() {
+    // setup
+    state.persistColsVisibility = true;
+    state.state = {};
+
+    // act
+    tf.emitter.emit('column-shown', tf, {}, 1, [0, 2]);
+    state.persistColsVisibility = false;
+
+    // assert
+    deepEqual(state.state.col_0.hidden, true, 'Column 0 visibility updated');
+    deepEqual(state.state.col_2.hidden, true, 'Column 2 visibility updated');
+});
+
+test('Can update columns visibility when already set', function() {
+    // setup
+    state.persistColsVisibility = true;
+    state.state = {
+        col_0: { hidden: true },
+        col_2: { hidden: true }
+    };
+
+    // act
+    tf.emitter.emit('column-shown', tf, {}, 1, []);
+    state.persistColsVisibility = false;
+
+    // assert
+    deepEqual(state.state.col_0.hidden, undefined,
+        'Column 0 visibility updated');
+    deepEqual(state.state.col_2.hidden, undefined,
+        'Column 2 visibility updated');
+});
+
+test('Can update filters visibility', function() {
+    // setup
+    state.persistFiltersVisibility = true;
+    state.state = {};
+
+    // act
+    tf.emitter.emit('filters-toggled', tf, {}, false);
+    state.persistFiltersVisibility = false;
+
+    // assert
+    deepEqual(state.state.filters_visibility, false,
+        'Filters visibility updated');
+});
+
+test('Can update filters visibility when null', function() {
+    // setup
+    state.persistFiltersVisibility = true;
+    state.state = {};
+    state.filtersVisibility = null;
+
+    // act
+    state.update();
+    state.persistFiltersVisibility = false;
+
+    // assert
+    deepEqual(state.state.filters_visibility, undefined,
+        'Filters visibility updated');
 });
 
 test('Can sync state', function() {
