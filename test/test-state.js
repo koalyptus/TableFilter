@@ -1,4 +1,5 @@
 
+var location = window.location;
 var tf = new TableFilter('demo', {
     base_path: '../dist/tablefilter/',
     state: true
@@ -327,14 +328,66 @@ test('Can update filters visibility', function() {
         'Filters visibility updated');
 });
 
-module('Tear-down');
-test('Can destroy TF', function() {
-    // setup
-    location.hash = null;
+// #545: Url hash takes precedence over storage
+test('url hash takes precedence at init',
+    function() {
+        // // setup
+        // state.enableHash = true;
+        // state.enableStorage = false;
+        // state.enableLocalStorage = false;
+        // state.state = {};
 
-    // act
-    tf.destroy();
+        // // act
+        // tf.setFilterValue(0, 'sydney');
+        // tf.filter();
 
-    // assert
-    deepEqual(state.initialized, false, 'State not initialized');
-});
+        // // assert
+        // deepEqual(state.state.col_0, { 'flt': 'sydney' },
+        //     'State object updated with url hash');
+
+        // setup
+        tf.clearFilters();
+        state.destroy();
+        state.enableHash = true;
+        state.enableStorage = true;
+        state.enableLocalStorage = true;
+        state.state = {};
+
+        // act
+        state.init();
+        tf.setFilterValue(0, 'adelaide');
+        tf.filter();
+
+        // assert
+        deepEqual(state.state.col_0, { 'flt': 'adelaide' },
+            'State object updated with localStorage');
+        deepEqual(state.storage.retrieve().col_0,
+            { 'flt': 'adelaide' }, 'State object in localStorage');
+
+        // act
+        var hashFrag = encodeURIComponent(JSON.stringify(
+            { 'col_0': {'flt': 'sydney'} }
+        ));
+
+        location = '#' + hashFrag;
+        state.emitter.emit('initialized');
+
+        // assert
+        deepEqual(state.state.col_0, { 'flt': 'sydney' },
+            'State object updated with localStorage');
+        deepEqual(state.storage.retrieve().col_0,
+            { 'flt': 'sydney' }, 'State object in localStorage');
+
+    });
+
+// module('Tear-down');
+// test('Can destroy TF', function() {
+//     // setup
+//     location.hash = null;
+
+//     // act
+//     tf.destroy();
+
+//     // assert
+//     deepEqual(state.initialized, false, 'State not initialized');
+// });

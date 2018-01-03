@@ -204,13 +204,13 @@ export class State extends Feature {
         this.emitter.on(['filters-toggled'],
             (tf, extension, visible) => this.updateFiltersVisibility(visible));
 
-        if (this.enableStorage) {
-            this.storage = new Storage(this);
-            this.storage.init();
-        }
         if (this.enableHash) {
             this.hash = new Hash(this);
             this.hash.init();
+        }
+        if (this.enableStorage) {
+            this.storage = new Storage(this);
+            this.storage.init();
         }
 
         /** @inherited */
