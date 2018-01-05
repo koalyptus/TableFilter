@@ -1,13 +1,3 @@
-language: node_js
-node_js:
-- '6.3.0'
-before_script:
-- npm install grunt-cli -g
-- npm install codecov -g
-script:
-- npm test
-- npm run codecov
-- npm run deploy
 branches:
   only:
   - master
