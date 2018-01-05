@@ -1,0 +1,33 @@
+{
+  "name": "tablefilter",
+  "version": "0.0.1",
+  "description": "A Javascript library making HTML tables filterable and a bit more",
+  "license": "MIT",
+  "author": {
+    "name": "Max Guglielmi",
+    "url": "https://github.com/koalyptus"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koalyptus/TableFilter.git"
+  },
+  "keywords": [
+    "filter",
+    "table",
+    "javascript",
+    "filterable",
+    "grid",
+    "datagrid",
+    "sort",
+    "pagination"
+  ],
+  "scripts": {
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "devDependencies": {},
+  "dependencies": {},
+  "bugs": {
+    "url": "https://github.com/koalyptus/TableFilter/issues"
+  },
+  "homepage": "http://koalyptus.github.io/TableFilter"
+}
