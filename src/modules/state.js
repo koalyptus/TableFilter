@@ -365,6 +365,7 @@ export class State extends Feature {
      */
     override(state) {
         this.state = state;
+        this.emitter.emit('state-changed', this.tf, state);
     }
 
     /**
@@ -419,6 +420,10 @@ export class State extends Feature {
         }
         let state = this.state;
         let tf = this.tf;
+
+        // clear all filters
+        // TODO: use tf.clearFilters() once it allows to not filter the table
+        tf.eachCol((colIdx) => tf.setFilterValue(colIdx, ''));
 
         Object.keys(state).forEach((key) => {
             if (key.indexOf(this.prfxCol) !== -1) {
