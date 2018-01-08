@@ -14898,7 +14898,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {Feature} from '../feature';\nimport {Hash} from './hash';\nimport {Storage} from './storage';\nimport {isEmpty} from '../string';\nimport {isArray, isNull, isString, isUndef} from '../types';\nimport {defaultsBool, defaultsNb} from '../settings';\n\n/**\n * Features state object persistable with localStorage, cookie or URL hash\n *\n * @export\n * @class State\n * @extends {Feature}\n */\nexport class State extends Feature {\n\n    /**\n     * Creates an instance of State\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'state');\n\n        let cfg = this.config.state || {};\n\n        /**\n         * Determines whether state is persisted with URL hash\n         * @type {Boolean}\n         */\n        this.enableHash = cfg === true ||\n            (isArray(cfg.types) && cfg.types.indexOf('hash') !== -1);\n\n        /**\n         * Determines whether state is persisted with localStorage\n         * @type {Boolean}\n         */\n        this.enableLocalStorage = isArray(cfg.types) &&\n            cfg.types.indexOf('local_storage') !== -1;\n\n        /**\n         * Determines whether state is persisted with localStorage\n         * @type {Boolean}\n         */\n        this.enableCookie = isArray(cfg.types) &&\n            cfg.types.indexOf('cookie') !== -1;\n\n        /**\n         * Persist filters values, enabled by default\n         * @type {Boolean}\n         */\n        this.persistFilters = defaultsBool(cfg.filters, true);\n\n        /**\n         * Persist current page number when paging is enabled\n         * @type {Boolean}\n         */\n        this.persistPageNumber = Boolean(cfg.page_number);\n\n        /**\n         * Persist page length when paging is enabled\n         * @type {Boolean}\n         */\n        this.persistPageLength = Boolean(cfg.page_length);\n\n        /**\n         * Persist column sorting\n         * @type {Boolean}\n         */\n        this.persistSort = Boolean(cfg.sort);\n\n        /**\n         * Persist columns visibility\n         * @type {Boolean}\n         */\n        this.persistColsVisibility = Boolean(cfg.columns_visibility);\n\n        /**\n         * Persist filters row visibility\n         * @type {Boolean}\n         */\n        this.persistFiltersVisibility = Boolean(cfg.filters_visibility);\n\n        /**\n         * Cookie duration in hours\n         * @type {Boolean}\n         */\n        this.cookieDuration = defaultsNb(parseInt(cfg.cookie_duration, 10),\n            87600);\n\n        /**\n         * Enable Storage if localStorage or cookie is required\n         * @type {Boolean}\n         * @private\n         */\n        this.enableStorage = this.enableLocalStorage || this.enableCookie;\n\n        /**\n         * Storage instance if storage is required\n         * @type {Storage}\n         * @private\n         */\n        this.storage = null;\n\n        /**\n         * Hash instance if URL hash is required\n         * @type {Boolean}\n         * @private\n         */\n        this.hash = null;\n\n        /**\n         * Current page number\n         * @type {Number}\n         * @private\n         */\n        this.pageNb = null;\n\n        /**\n         * Current page length\n         * @type {Number}\n         * @private\n         */\n        this.pageLength = null;\n\n        /**\n         * Current column sorting\n         * @type {Object}\n         * @private\n         */\n        this.sort = null;\n\n        /**\n         * Current hidden columns\n         * @type {Object}\n         * @private\n         */\n        this.hiddenCols = null;\n\n        /**\n         * Filters row visibility\n         * @type {Boolean}\n         * @private\n         */\n        this.filtersVisibility = null;\n\n        /**\n         * State object\n         * @type {Object}\n         * @private\n         */\n        this.state = {};\n\n        /**\n         * Prefix for column ID\n         * @type {String}\n         * @private\n         */\n        this.prfxCol = 'col_';\n\n        /**\n         * Prefix for page number ID\n         * @type {String}\n         * @private\n         */\n        this.pageNbKey = 'page';\n\n        /**\n         * Prefix for page length ID\n         * @type {String}\n         * @private\n         */\n        this.pageLengthKey = 'page_length';\n\n        /**\n         * Prefix for filters visibility ID\n         * @type {String}\n         * @private\n         */\n        this.filtersVisKey = 'filters_visibility';\n    }\n\n    /**\n     * Initializes State instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        this.emitter.on(['after-filtering'], () => this.update());\n        this.emitter.on(['after-page-change', 'after-clearing-filters'],\n            (tf, pageNb) => this.updatePage(pageNb));\n        this.emitter.on(['after-page-length-change'],\n            (tf, pageLength) => this.updatePageLength(pageLength));\n        this.emitter.on(['column-sorted'],\n            (tf, index, descending) => this.updateSort(index, descending));\n        this.emitter.on(['sort-initialized'], () => this._syncSort());\n        this.emitter.on(['columns-visibility-initialized'],\n            () => this._syncColsVisibility());\n        this.emitter.on(['column-shown', 'column-hidden'], (tf, feature,\n            colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));\n        this.emitter.on(['filters-visibility-initialized'],\n            () => this._syncFiltersVisibility());\n        this.emitter.on(['filters-toggled'],\n            (tf, extension, visible) => this.updateFiltersVisibility(visible));\n\n        if (this.enableHash) {\n            this.hash = new Hash(this);\n            this.hash.init();\n        }\n        if (this.enableStorage) {\n            this.storage = new Storage(this);\n            this.storage.init();\n        }\n\n        /**\n         * @inherited\n         */\n        this.initialized = true;\n    }\n\n\n    /**\n     * Update state object based on current features state\n     */\n    update() {\n        if (!this.isEnabled()) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n\n        if (this.persistFilters) {\n            let filterValues = tf.getFiltersValue();\n\n            filterValues.forEach((val, idx) => {\n                let key = `${this.prfxCol}${idx}`;\n\n                if (isString(val) && isEmpty(val)) {\n                    if (state.hasOwnProperty(key)) {\n                        state[key].flt = undefined;\n                    }\n                } else {\n                    state[key] = state[key] || {};\n                    state[key].flt = val;\n                }\n            });\n        }\n\n        if (this.persistPageNumber) {\n            if (isNull(this.pageNb)) {\n                state[this.pageNbKey] = undefined;\n            } else {\n                state[this.pageNbKey] = this.pageNb;\n            }\n        }\n\n        if (this.persistPageLength) {\n            if (isNull(this.pageLength)) {\n                state[this.pageLengthKey] = undefined;\n            } else {\n                state[this.pageLengthKey] = this.pageLength;\n            }\n        }\n\n        if (this.persistSort) {\n            if (!isNull(this.sort)) {\n                // Remove previuosly sorted column\n                Object.keys(state).forEach((key) => {\n                    if (key.indexOf(this.prfxCol) !== -1 && state[key]) {\n                        state[key].sort = undefined;\n                    }\n                });\n\n                let key = `${this.prfxCol}${this.sort.column}`;\n                state[key] = state[key] || {};\n                state[key].sort = { descending: this.sort.descending };\n            }\n        }\n\n        if (this.persistColsVisibility) {\n            if (!isNull(this.hiddenCols)) {\n                // Clear previuosly hidden columns\n                Object.keys(state).forEach((key) => {\n                    if (key.indexOf(this.prfxCol) !== -1 && state[key]) {\n                        state[key].hidden = undefined;\n                    }\n                });\n\n                this.hiddenCols.forEach((colIdx) => {\n                    let key = `${this.prfxCol}${colIdx}`;\n                    state[key] = state[key] || {};\n                    state[key].hidden = true;\n                });\n            }\n        }\n\n        if (this.persistFiltersVisibility) {\n            if (isNull(this.filtersVisibility)) {\n                state[this.filtersVisKey] = undefined;\n            } else {\n                state[this.filtersVisKey] = this.filtersVisibility;\n            }\n        }\n\n        this.emitter.emit('state-changed', tf, state);\n    }\n\n    /**\n     * Refresh page number field on page number changes\n     *\n     * @param {Number} pageNb Current page number\n     */\n    updatePage(pageNb) {\n        this.pageNb = pageNb;\n        this.update();\n    }\n\n    /**\n     * Refresh page length field on page length changes\n     *\n     * @param {Number} pageLength Current page length value\n     */\n    updatePageLength(pageLength) {\n        this.pageLength = pageLength;\n        this.update();\n    }\n\n    /**\n     * Refresh column sorting information on sort changes\n     *\n     * @param index {Number} Column index\n     * @param {Boolean} descending Descending manner\n     */\n    updateSort(index, descending) {\n        this.sort = {\n            column: index,\n            descending: descending\n        };\n        this.update();\n    }\n\n    /**\n     * Refresh hidden columns information on columns visibility changes\n     *\n     * @param {Array} hiddenCols Columns indexes\n     */\n    updateColsVisibility(hiddenCols) {\n        this.hiddenCols = hiddenCols;\n        this.update();\n    }\n\n    /**\n     * Refresh filters visibility on filters visibility change\n     *\n     * @param {Boolean} visible Visibility flad\n     */\n    updateFiltersVisibility(visible) {\n        this.filtersVisibility = visible;\n        this.update();\n    }\n\n    /**\n     * Override state field\n     *\n     * @param state State object\n     */\n    override(state) {\n        this.state = state;\n    }\n\n    /**\n     * Sync stored features state\n     */\n    sync() {\n        let state = this.state;\n        let tf = this.tf;\n\n        this._syncFilters();\n\n        if (this.persistPageNumber) {\n            let pageNumber = state[this.pageNbKey];\n            this.emitter.emit('change-page', tf, pageNumber);\n        }\n\n        if (this.persistPageLength) {\n            let pageLength = state[this.pageLengthKey];\n            this.emitter.emit('change-page-results', tf, pageLength);\n        }\n\n        this._syncSort();\n        this._syncColsVisibility();\n        this._syncFiltersVisibility();\n    }\n\n    /**\n     * Override current state with passed one and sync features\n     *\n     * @param {Object} state State object\n     */\n    overrideAndSync(state) {\n        // To prevent state to react to features changes, state is temporarily\n        // disabled\n        this.disable();\n        // State is overriden with passed state object\n        this.override(state);\n        // New hash state is applied to features\n        this.sync();\n        // State is re-enabled\n        this.enable();\n    }\n\n    /**\n     * Sync filters with stored values and filter table\n     *\n     * @private\n     */\n    _syncFilters() {\n        if (!this.persistFilters) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n\n        Object.keys(state).forEach((key) => {\n            if (key.indexOf(this.prfxCol) !== -1) {\n                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);\n                let val = state[key].flt;\n                tf.setFilterValue(colIdx, val);\n            }\n        });\n\n        tf.filter();\n    }\n\n    /**\n     * Sync sorted column with stored sorting information and sort table\n     *\n     * @private\n     */\n    _syncSort() {\n        if (!this.persistSort) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n\n        Object.keys(state).forEach((key) => {\n            if (key.indexOf(this.prfxCol) !== -1) {\n                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);\n                if (!isUndef(state[key].sort)) {\n                    let sort = state[key].sort;\n                    this.emitter.emit('sort', tf, colIdx, sort.descending);\n                }\n            }\n        });\n    }\n\n    /**\n     * Sync hidden columns with stored information\n     *\n     * @private\n     */\n    _syncColsVisibility() {\n        if (!this.persistColsVisibility) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n        let hiddenCols = [];\n\n        Object.keys(state).forEach((key) => {\n            if (key.indexOf(this.prfxCol) !== -1) {\n                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);\n                if (!isUndef(state[key].hidden)) {\n                    hiddenCols.push(colIdx);\n                }\n            }\n        });\n\n        hiddenCols.forEach((colIdx) => {\n            this.emitter.emit('hide-column', tf, colIdx);\n        });\n    }\n\n    /**\n     * Sync filters visibility with stored information\n     *\n     * @private\n     */\n    _syncFiltersVisibility() {\n        if (!this.persistFiltersVisibility) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n        let filtersVisibility = state[this.filtersVisKey];\n\n        this.filtersVisibility = filtersVisibility;\n        this.emitter.emit('show-filters', tf, filtersVisibility);\n    }\n\n    /**\n     * Destroy State instance\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        this.state = {};\n\n        this.emitter.off(['after-filtering'], () => this.update());\n        this.emitter.off(['after-page-change', 'after-clearing-filters'],\n            (tf, pageNb) => this.updatePage(pageNb));\n        this.emitter.off(['after-page-length-change'],\n            (tf, index) => this.updatePageLength(index));\n        this.emitter.off(['column-sorted'],\n            (tf, index, descending) => this.updateSort(index, descending));\n        this.emitter.off(['sort-initialized'], () => this._syncSort());\n        this.emitter.off(['columns-visibility-initialized'],\n            () => this._syncColsVisibility());\n        this.emitter.off(['column-shown', 'column-hidden'], (tf, feature,\n            colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));\n        this.emitter.off(['filters-visibility-initialized'],\n            () => this._syncFiltersVisibility());\n        this.emitter.off(['filters-toggled'],\n            (tf, extension, visible) => this.updateFiltersVisibility(visible));\n\n        if (this.enableHash) {\n            this.hash.destroy();\n            this.hash = null;\n        }\n\n        if (this.enableStorage) {\n            this.storage.destroy();\n            this.storage = null;\n        }\n\n        this.initialized = false;\n    }\n}\n"
+    "content": "import {Feature} from '../feature';\nimport {Hash} from './hash';\nimport {Storage} from './storage';\nimport {isEmpty} from '../string';\nimport {isArray, isNull, isString, isUndef} from '../types';\nimport {defaultsBool, defaultsNb} from '../settings';\n\n/**\n * Features state object persistable with localStorage, cookie or URL hash\n *\n * @export\n * @class State\n * @extends {Feature}\n */\nexport class State extends Feature {\n\n    /**\n     * Creates an instance of State\n     * @param {TableFilter} tf TableFilter instance\n     */\n    constructor(tf) {\n        super(tf, 'state');\n\n        let cfg = this.config.state || {};\n\n        /**\n         * Determines whether state is persisted with URL hash\n         * @type {Boolean}\n         */\n        this.enableHash = cfg === true ||\n            (isArray(cfg.types) && cfg.types.indexOf('hash') !== -1);\n\n        /**\n         * Determines whether state is persisted with localStorage\n         * @type {Boolean}\n         */\n        this.enableLocalStorage = isArray(cfg.types) &&\n            cfg.types.indexOf('local_storage') !== -1;\n\n        /**\n         * Determines whether state is persisted with localStorage\n         * @type {Boolean}\n         */\n        this.enableCookie = isArray(cfg.types) &&\n            cfg.types.indexOf('cookie') !== -1;\n\n        /**\n         * Persist filters values, enabled by default\n         * @type {Boolean}\n         */\n        this.persistFilters = defaultsBool(cfg.filters, true);\n\n        /**\n         * Persist current page number when paging is enabled\n         * @type {Boolean}\n         */\n        this.persistPageNumber = Boolean(cfg.page_number);\n\n        /**\n         * Persist page length when paging is enabled\n         * @type {Boolean}\n         */\n        this.persistPageLength = Boolean(cfg.page_length);\n\n        /**\n         * Persist column sorting\n         * @type {Boolean}\n         */\n        this.persistSort = Boolean(cfg.sort);\n\n        /**\n         * Persist columns visibility\n         * @type {Boolean}\n         */\n        this.persistColsVisibility = Boolean(cfg.columns_visibility);\n\n        /**\n         * Persist filters row visibility\n         * @type {Boolean}\n         */\n        this.persistFiltersVisibility = Boolean(cfg.filters_visibility);\n\n        /**\n         * Cookie duration in hours\n         * @type {Boolean}\n         */\n        this.cookieDuration = defaultsNb(parseInt(cfg.cookie_duration, 10),\n            87600);\n\n        /**\n         * Enable Storage if localStorage or cookie is required\n         * @type {Boolean}\n         * @private\n         */\n        this.enableStorage = this.enableLocalStorage || this.enableCookie;\n\n        /**\n         * Storage instance if storage is required\n         * @type {Storage}\n         * @private\n         */\n        this.storage = null;\n\n        /**\n         * Hash instance if URL hash is required\n         * @type {Boolean}\n         * @private\n         */\n        this.hash = null;\n\n        /**\n         * Current page number\n         * @type {Number}\n         * @private\n         */\n        this.pageNb = null;\n\n        /**\n         * Current page length\n         * @type {Number}\n         * @private\n         */\n        this.pageLength = null;\n\n        /**\n         * Current column sorting\n         * @type {Object}\n         * @private\n         */\n        this.sort = null;\n\n        /**\n         * Current hidden columns\n         * @type {Object}\n         * @private\n         */\n        this.hiddenCols = null;\n\n        /**\n         * Filters row visibility\n         * @type {Boolean}\n         * @private\n         */\n        this.filtersVisibility = null;\n\n        /**\n         * State object\n         * @type {Object}\n         * @private\n         */\n        this.state = {};\n\n        /**\n         * Prefix for column ID\n         * @type {String}\n         * @private\n         */\n        this.prfxCol = 'col_';\n\n        /**\n         * Prefix for page number ID\n         * @type {String}\n         * @private\n         */\n        this.pageNbKey = 'page';\n\n        /**\n         * Prefix for page length ID\n         * @type {String}\n         * @private\n         */\n        this.pageLengthKey = 'page_length';\n\n        /**\n         * Prefix for filters visibility ID\n         * @type {String}\n         * @private\n         */\n        this.filtersVisKey = 'filters_visibility';\n    }\n\n    /**\n     * Initializes State instance\n     */\n    init() {\n        if (this.initialized) {\n            return;\n        }\n\n        this.emitter.on(['after-filtering'], () => this.update());\n        this.emitter.on(['after-page-change', 'after-clearing-filters'],\n            (tf, pageNb) => this.updatePage(pageNb));\n        this.emitter.on(['after-page-length-change'],\n            (tf, pageLength) => this.updatePageLength(pageLength));\n        this.emitter.on(['column-sorted'],\n            (tf, index, descending) => this.updateSort(index, descending));\n        this.emitter.on(['sort-initialized'], () => this._syncSort());\n        this.emitter.on(['columns-visibility-initialized'],\n            () => this._syncColsVisibility());\n        this.emitter.on(['column-shown', 'column-hidden'], (tf, feature,\n            colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));\n        this.emitter.on(['filters-visibility-initialized'],\n            () => this._syncFiltersVisibility());\n        this.emitter.on(['filters-toggled'],\n            (tf, extension, visible) => this.updateFiltersVisibility(visible));\n\n        if (this.enableHash) {\n            this.hash = new Hash(this);\n            this.hash.init();\n        }\n        if (this.enableStorage) {\n            this.storage = new Storage(this);\n            this.storage.init();\n        }\n\n        /** @inherited */\n        this.initialized = true;\n    }\n\n\n    /**\n     * Update state object based on current features state\n     */\n    update() {\n        if (!this.isEnabled()) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n\n        if (this.persistFilters) {\n            let filterValues = tf.getFiltersValue();\n\n            filterValues.forEach((val, idx) => {\n                let key = `${this.prfxCol}${idx}`;\n\n                if (isString(val) && isEmpty(val)) {\n                    if (state.hasOwnProperty(key)) {\n                        state[key].flt = undefined;\n                    }\n                } else {\n                    state[key] = state[key] || {};\n                    state[key].flt = val;\n                }\n            });\n        }\n\n        if (this.persistPageNumber) {\n            if (isNull(this.pageNb)) {\n                state[this.pageNbKey] = undefined;\n            } else {\n                state[this.pageNbKey] = this.pageNb;\n            }\n        }\n\n        if (this.persistPageLength) {\n            if (isNull(this.pageLength)) {\n                state[this.pageLengthKey] = undefined;\n            } else {\n                state[this.pageLengthKey] = this.pageLength;\n            }\n        }\n\n        if (this.persistSort) {\n            if (!isNull(this.sort)) {\n                // Remove previuosly sorted column\n                Object.keys(state).forEach((key) => {\n                    if (key.indexOf(this.prfxCol) !== -1 && state[key]) {\n                        state[key].sort = undefined;\n                    }\n                });\n\n                let key = `${this.prfxCol}${this.sort.column}`;\n                state[key] = state[key] || {};\n                state[key].sort = { descending: this.sort.descending };\n            }\n        }\n\n        if (this.persistColsVisibility) {\n            if (!isNull(this.hiddenCols)) {\n                // Clear previuosly hidden columns\n                Object.keys(state).forEach((key) => {\n                    if (key.indexOf(this.prfxCol) !== -1 && state[key]) {\n                        state[key].hidden = undefined;\n                    }\n                });\n\n                this.hiddenCols.forEach((colIdx) => {\n                    let key = `${this.prfxCol}${colIdx}`;\n                    state[key] = state[key] || {};\n                    state[key].hidden = true;\n                });\n            }\n        }\n\n        if (this.persistFiltersVisibility) {\n            if (isNull(this.filtersVisibility)) {\n                state[this.filtersVisKey] = undefined;\n            } else {\n                state[this.filtersVisKey] = this.filtersVisibility;\n            }\n        }\n\n        this.emitter.emit('state-changed', tf, state);\n    }\n\n    /**\n     * Refresh page number field on page number changes\n     *\n     * @param {Number} pageNb Current page number\n     */\n    updatePage(pageNb) {\n        this.pageNb = pageNb;\n        this.update();\n    }\n\n    /**\n     * Refresh page length field on page length changes\n     *\n     * @param {Number} pageLength Current page length value\n     */\n    updatePageLength(pageLength) {\n        this.pageLength = pageLength;\n        this.update();\n    }\n\n    /**\n     * Refresh column sorting information on sort changes\n     *\n     * @param index {Number} Column index\n     * @param {Boolean} descending Descending manner\n     */\n    updateSort(index, descending) {\n        this.sort = {\n            column: index,\n            descending: descending\n        };\n        this.update();\n    }\n\n    /**\n     * Refresh hidden columns information on columns visibility changes\n     *\n     * @param {Array} hiddenCols Columns indexes\n     */\n    updateColsVisibility(hiddenCols) {\n        this.hiddenCols = hiddenCols;\n        this.update();\n    }\n\n    /**\n     * Refresh filters visibility on filters visibility change\n     *\n     * @param {Boolean} visible Visibility flad\n     */\n    updateFiltersVisibility(visible) {\n        this.filtersVisibility = visible;\n        this.update();\n    }\n\n    /**\n     * Override state field\n     *\n     * @param state State object\n     */\n    override(state) {\n        this.state = state;\n        this.emitter.emit('state-changed', this.tf, state);\n    }\n\n    /**\n     * Sync stored features state\n     */\n    sync() {\n        let state = this.state;\n        let tf = this.tf;\n\n        this._syncFilters();\n\n        if (this.persistPageNumber) {\n            let pageNumber = state[this.pageNbKey];\n            this.emitter.emit('change-page', tf, pageNumber);\n        }\n\n        if (this.persistPageLength) {\n            let pageLength = state[this.pageLengthKey];\n            this.emitter.emit('change-page-results', tf, pageLength);\n        }\n\n        this._syncSort();\n        this._syncColsVisibility();\n        this._syncFiltersVisibility();\n    }\n\n    /**\n     * Override current state with passed one and sync features\n     *\n     * @param {Object} state State object\n     */\n    overrideAndSync(state) {\n        // To prevent state to react to features changes, state is temporarily\n        // disabled\n        this.disable();\n        // State is overriden with passed state object\n        this.override(state);\n        // New hash state is applied to features\n        this.sync();\n        // State is re-enabled\n        this.enable();\n    }\n\n    /**\n     * Sync filters with stored values and filter table\n     *\n     * @private\n     */\n    _syncFilters() {\n        if (!this.persistFilters) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n\n        // clear all filters\n        // TODO: use tf.clearFilters() once it allows to not filter the table\n        tf.eachCol((colIdx) => tf.setFilterValue(colIdx, ''));\n\n        Object.keys(state).forEach((key) => {\n            if (key.indexOf(this.prfxCol) !== -1) {\n                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);\n                let val = state[key].flt;\n                tf.setFilterValue(colIdx, val);\n            }\n        });\n\n        tf.filter();\n    }\n\n    /**\n     * Sync sorted column with stored sorting information and sort table\n     *\n     * @private\n     */\n    _syncSort() {\n        if (!this.persistSort) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n\n        Object.keys(state).forEach((key) => {\n            if (key.indexOf(this.prfxCol) !== -1) {\n                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);\n                if (!isUndef(state[key].sort)) {\n                    let sort = state[key].sort;\n                    this.emitter.emit('sort', tf, colIdx, sort.descending);\n                }\n            }\n        });\n    }\n\n    /**\n     * Sync hidden columns with stored information\n     *\n     * @private\n     */\n    _syncColsVisibility() {\n        if (!this.persistColsVisibility) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n        let hiddenCols = [];\n\n        Object.keys(state).forEach((key) => {\n            if (key.indexOf(this.prfxCol) !== -1) {\n                let colIdx = parseInt(key.replace(this.prfxCol, ''), 10);\n                if (!isUndef(state[key].hidden)) {\n                    hiddenCols.push(colIdx);\n                }\n            }\n        });\n\n        hiddenCols.forEach((colIdx) => {\n            this.emitter.emit('hide-column', tf, colIdx);\n        });\n    }\n\n    /**\n     * Sync filters visibility with stored information\n     *\n     * @private\n     */\n    _syncFiltersVisibility() {\n        if (!this.persistFiltersVisibility) {\n            return;\n        }\n        let state = this.state;\n        let tf = this.tf;\n        let filtersVisibility = state[this.filtersVisKey];\n\n        this.filtersVisibility = filtersVisibility;\n        this.emitter.emit('show-filters', tf, filtersVisibility);\n    }\n\n    /**\n     * Destroy State instance\n     */\n    destroy() {\n        if (!this.initialized) {\n            return;\n        }\n\n        this.state = {};\n\n        this.emitter.off(['after-filtering'], () => this.update());\n        this.emitter.off(['after-page-change', 'after-clearing-filters'],\n            (tf, pageNb) => this.updatePage(pageNb));\n        this.emitter.off(['after-page-length-change'],\n            (tf, index) => this.updatePageLength(index));\n        this.emitter.off(['column-sorted'],\n            (tf, index, descending) => this.updateSort(index, descending));\n        this.emitter.off(['sort-initialized'], () => this._syncSort());\n        this.emitter.off(['columns-visibility-initialized'],\n            () => this._syncColsVisibility());\n        this.emitter.off(['column-shown', 'column-hidden'], (tf, feature,\n            colIndex, hiddenCols) => this.updateColsVisibility(hiddenCols));\n        this.emitter.off(['filters-visibility-initialized'],\n            () => this._syncFiltersVisibility());\n        this.emitter.off(['filters-toggled'],\n            (tf, extension, visible) => this.updateFiltersVisibility(visible));\n\n        if (this.enableHash) {\n            this.hash.destroy();\n            this.hash = null;\n        }\n\n        if (this.enableStorage) {\n            this.storage.destroy();\n            this.storage = null;\n        }\n\n        this.initialized = false;\n    }\n}\n"
   },
   {
     "__docId__": 682,
@@ -15473,8 +15473,8 @@
     "memberof": "src/modules/state.js~State",
     "longname": "src/modules/state.js~State#initialized",
     "access": null,
-    "description": "",
-    "lineNumber": 219,
+    "description": null,
+    "lineNumber": 217,
     "unknown": [
       {
         "tagName": "@inherited",
@@ -15497,7 +15497,7 @@
     "longname": "src/modules/state.js~State#update",
     "access": null,
     "description": "Update state object based on current features state",
-    "lineNumber": 226,
+    "lineNumber": 224,
     "params": [],
     "generator": false
   },
@@ -15511,7 +15511,7 @@
     "longname": "src/modules/state.js~State#updatePage",
     "access": null,
     "description": "Refresh page number field on page number changes",
-    "lineNumber": 314,
+    "lineNumber": 312,
     "params": [
       {
         "nullable": null,
@@ -15536,7 +15536,7 @@
     "longname": "src/modules/state.js~State#pageNb",
     "access": null,
     "description": null,
-    "lineNumber": 315,
+    "lineNumber": 313,
     "undocument": true,
     "type": {
       "types": [
@@ -15554,7 +15554,7 @@
     "longname": "src/modules/state.js~State#updatePageLength",
     "access": null,
     "description": "Refresh page length field on page length changes",
-    "lineNumber": 324,
+    "lineNumber": 322,
     "params": [
       {
         "nullable": null,
@@ -15579,7 +15579,7 @@
     "longname": "src/modules/state.js~State#pageLength",
     "access": null,
     "description": null,
-    "lineNumber": 325,
+    "lineNumber": 323,
     "undocument": true,
     "type": {
       "types": [
@@ -15597,7 +15597,7 @@
     "longname": "src/modules/state.js~State#updateSort",
     "access": null,
     "description": "Refresh column sorting information on sort changes",
-    "lineNumber": 335,
+    "lineNumber": 333,
     "params": [
       {
         "nullable": null,
@@ -15632,7 +15632,7 @@
     "longname": "src/modules/state.js~State#sort",
     "access": null,
     "description": null,
-    "lineNumber": 336,
+    "lineNumber": 334,
     "undocument": true,
     "type": {
       "types": [
@@ -15650,7 +15650,7 @@
     "longname": "src/modules/state.js~State#updateColsVisibility",
     "access": null,
     "description": "Refresh hidden columns information on columns visibility changes",
-    "lineNumber": 348,
+    "lineNumber": 346,
     "params": [
       {
         "nullable": null,
@@ -15675,7 +15675,7 @@
     "longname": "src/modules/state.js~State#hiddenCols",
     "access": null,
     "description": null,
-    "lineNumber": 349,
+    "lineNumber": 347,
     "undocument": true,
     "type": {
       "types": [
@@ -15693,7 +15693,7 @@
     "longname": "src/modules/state.js~State#updateFiltersVisibility",
     "access": null,
     "description": "Refresh filters visibility on filters visibility change",
-    "lineNumber": 358,
+    "lineNumber": 356,
     "params": [
       {
         "nullable": null,
@@ -15718,7 +15718,7 @@
     "longname": "src/modules/state.js~State#filtersVisibility",
     "access": null,
     "description": null,
-    "lineNumber": 359,
+    "lineNumber": 357,
     "undocument": true,
     "type": {
       "types": [
@@ -15736,7 +15736,7 @@
     "longname": "src/modules/state.js~State#override",
     "access": null,
     "description": "Override state field",
-    "lineNumber": 368,
+    "lineNumber": 366,
     "params": [
       {
         "nullable": null,
@@ -15761,7 +15761,7 @@
     "longname": "src/modules/state.js~State#state",
     "access": null,
     "description": null,
-    "lineNumber": 369,
+    "lineNumber": 367,
     "undocument": true,
     "type": {
       "types": [
@@ -15779,7 +15779,7 @@
     "longname": "src/modules/state.js~State#sync",
     "access": null,
     "description": "Sync stored features state",
-    "lineNumber": 375,
+    "lineNumber": 374,
     "params": [],
     "generator": false
   },
@@ -15793,7 +15793,7 @@
     "longname": "src/modules/state.js~State#overrideAndSync",
     "access": null,
     "description": "Override current state with passed one and sync features",
-    "lineNumber": 401,
+    "lineNumber": 400,
     "params": [
       {
         "nullable": null,
@@ -15818,7 +15818,7 @@
     "longname": "src/modules/state.js~State#_syncFilters",
     "access": "private",
     "description": "Sync filters with stored values and filter table",
-    "lineNumber": 418,
+    "lineNumber": 417,
     "params": [],
     "generator": false
   },
@@ -15832,7 +15832,7 @@
     "longname": "src/modules/state.js~State#_syncSort",
     "access": "private",
     "description": "Sync sorted column with stored sorting information and sort table",
-    "lineNumber": 441,
+    "lineNumber": 444,
     "params": [],
     "generator": false
   },
@@ -15846,7 +15846,7 @@
     "longname": "src/modules/state.js~State#_syncColsVisibility",
     "access": "private",
     "description": "Sync hidden columns with stored information",
-    "lineNumber": 464,
+    "lineNumber": 467,
     "params": [],
     "generator": false
   },
@@ -15860,7 +15860,7 @@
     "longname": "src/modules/state.js~State#_syncFiltersVisibility",
     "access": "private",
     "description": "Sync filters visibility with stored information",
-    "lineNumber": 491,
+    "lineNumber": 494,
     "params": [],
     "generator": false
   },
@@ -15874,7 +15874,7 @@
     "longname": "src/modules/state.js~State#filtersVisibility",
     "access": null,
     "description": null,
-    "lineNumber": 499,
+    "lineNumber": 502,
     "undocument": true,
     "type": {
       "types": [
@@ -15892,7 +15892,7 @@
     "longname": "src/modules/state.js~State#destroy",
     "access": null,
     "description": "Destroy State instance",
-    "lineNumber": 506,
+    "lineNumber": 509,
     "params": [],
     "generator": false
   },
@@ -15906,7 +15906,7 @@
     "longname": "src/modules/state.js~State#state",
     "access": null,
     "description": null,
-    "lineNumber": 511,
+    "lineNumber": 514,
     "undocument": true,
     "type": {
       "types": [
@@ -15924,7 +15924,7 @@
     "longname": "src/modules/state.js~State#hash",
     "access": null,
     "description": null,
-    "lineNumber": 532,
+    "lineNumber": 535,
     "undocument": true,
     "type": {
       "types": [
@@ -15942,7 +15942,7 @@
     "longname": "src/modules/state.js~State#storage",
     "access": null,
     "description": null,
-    "lineNumber": 537,
+    "lineNumber": 540,
     "undocument": true,
     "type": {
       "types": [
@@ -15960,7 +15960,7 @@
     "longname": "src/modules/state.js~State#initialized",
     "access": null,
     "description": null,
-    "lineNumber": 540,
+    "lineNumber": 543,
     "undocument": true,
     "type": {
       "types": [
