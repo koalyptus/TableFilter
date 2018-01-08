@@ -36,7 +36,7 @@ test('Should not initialize if already initialized', function() {
 });
 
 module('Behaviour');
-test('Can update', function() {
+test('Can update filters state', function() {
     // setup
     state.state = {};
 
@@ -236,6 +236,13 @@ test('Can sync state', function() {
 
 test('Can override state', function() {
     // setup
+    var hit = 0;
+    var initialEmit = state.emitter.emit;
+    var args = null;
+    state.emitter.emit = function() {
+        args = arguments;
+        hit++;
+    };
     state.state = {};
 
     // act
@@ -244,6 +251,12 @@ test('Can override state', function() {
     // assert
     deepEqual(state.state, { 'col_1': { 'flt': 'Ade' } },
         'State field overriden');
+    deepEqual(hit, 1, 'event emitted');
+    deepEqual(args[0], 'state-changed', 'event name');
+    deepEqual(args[1], tf, 'tf parameter');
+    deepEqual(args[2], state.state, 'state parameter');
+
+    state.emitter.emit = initialEmit;
 });
 
 test('Can override and sync state', function() {
@@ -325,6 +338,22 @@ test('Can update filters visibility', function() {
     // assert
     deepEqual(state.state.filters_visibility, false,
         'Filters visibility updated');
+});
+
+test('sync filters can clear filters before applying state', function() {
+    // setup
+    state.state = {'col_0': { 'flt': 'Ade' }};
+    tf.setFilterValue(1, 'Can');
+    tf.setFilterValue(2, '1412');
+
+    // act
+    state._syncFilters();
+
+    // assert
+    deepEqual(tf.getFilterValue(1), '', 'filter 1 cleared');
+    deepEqual(tf.getFilterValue(2), '', 'filter 2 cleared');
+    deepEqual(tf.getFilterValue(0), 'Ade', 'filter 0 state value applied');
+    deepEqual(tf.getValidRows(), [6, 7, 8], 'Filtered rows');
 });
 
 module('Tear-down');
