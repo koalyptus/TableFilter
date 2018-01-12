@@ -12,20 +12,6 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
 
-        eslint: {
-            options: {
-                configFile: '.eslintrc'
-            },
-            target: [
-                'Gruntfile.js',
-                'webpack.config.js',
-                'webpack.dev.config.js',
-                'webpack.test.config.js',
-                'src/**/*.js',
-                'test/*.js'
-            ]
-        },
-
         qunit: {
             options: {
                 '--web-security': 'no',
@@ -298,7 +284,6 @@ module.exports = function (grunt) {
 
     });
 
-    grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -318,11 +303,11 @@ module.exports = function (grunt) {
 
     // Dev dev/build/watch cycle
     grunt.registerTask('dev',
-        ['eslint', 'webpack:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
+        ['webpack:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
 
     // Production build
     grunt.registerTask('build',
-        ['eslint', 'webpack:build', 'copy:dist', 'stylus:compile']);
+        ['webpack:build', 'copy:dist', 'stylus:compile']);
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
@@ -331,7 +316,7 @@ module.exports = function (grunt) {
 
     // Build tests
     grunt.registerTask('build-test',
-        ['eslint', 'webpack:test', 'copy:dist', 'stylus:compile']);
+        ['webpack:test', 'copy:dist', 'stylus:compile']);
 
     // Transpile with Babel
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
