@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.6.13",
+  "version": "0.6.14",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -22,15 +22,16 @@
     "pagination"
   ],
   "scripts": {
-    "dev": "grunt dev",
-    "build": "grunt build",
+    "lint": "eslint src/**/*.js test/*.js *.js",
+    "dev": "npm run lint && grunt dev",
+    "build": "npm run lint && grunt build",
     "build:demos": "grunt build-demos",
+    "build:test": "grunt build-test",
     "server": "grunt server",
-    "eslint": "grunt eslint",
-    "test": "grunt test",
+    "test": "npm run lint && grunt test",
     "codecov": "./node_modules/.bin/codecov",
     "esdoc": "grunt esdoc",
-    "dist": "grunt",
+    "dist": "npm run lint && grunt",
     "deploy": "grunt deploy",
     "start": "npm run server"
   },
@@ -39,13 +40,14 @@
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
-    "babel-eslint": "8.2.0",
+    "babel-eslint": "8.2.1",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-es2015-classes": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "clean-webpack-plugin": "^0.1.16",
     "codecov": "3.0.0",
     "diacritics": "1.3.0",
+    "eslint": "4.15.0",
     "format-number": "3.0.0",
     "grunt": "^1.0.1",
     "grunt-babel": "^7.0.0",
@@ -56,7 +58,6 @@
     "grunt-contrib-stylus": "^1.2.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-esdoc": "^0.0.4",
-    "grunt-eslint": "20.1.0",
     "grunt-gh-pages": "^2.0.0",
     "grunt-qunit-istanbul": "1.0.0",
     "grunt-string-replace": "^1.3.1",
