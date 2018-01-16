@@ -1,0 +1,10 @@
+{
+    "source": "src",
+    "destination": "docs/docs",
+    "plugins": [{
+        "name": "esdoc-standard-plugin",
+        "option": {
+            "lint": {"enable": false}
+        }
+    }]
+}
