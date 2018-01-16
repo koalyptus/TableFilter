@@ -1,6 +1,6 @@
 /** 
- *	 tablefilter v0.6.14 by Max Guglielmi
- *	 build date: 2018-01-14T11:33:27.183Z 
+ *	 tablefilter v0.6.15 by Max Guglielmi
+ *	 build date: 2018-01-16T11:26:16.561Z 
  *	 MIT License  
  */ 
 
