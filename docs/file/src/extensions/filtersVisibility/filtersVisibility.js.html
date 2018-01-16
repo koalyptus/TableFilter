@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/extensions/filtersVisibility/filtersVisibility.js | tablefilter</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A Javascript library making HTML tables filterable and a bit more"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="tablefilter"><meta property="twitter:description" content="A Javascript library making HTML tables filterable and a bit more"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/koalyptus/TableFilter.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emitter.js~Emitter.html">Emitter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/feature.js~Feature.html">Feature</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/tablefilter.js~TableFilter.html">TableFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-has">has</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addClass">addClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createCheckItem">createCheckItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createElm">createElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createOpt">createOpt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createText">createText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-elm">elm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFirstTextNode">getFirstTextNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getText">getText</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasClass">hasClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-removeClass">removeClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-removeElm">removeElm</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-tag">tag</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addEvt">addEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-keyCode">keyCode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-removeEvt">removeEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-stopEvt">stopEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-targetEvt">targetEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parse">parse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-defaultsArr">defaultsArr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-defaultsBool">defaultsBool</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-defaultsFn">defaultsFn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-defaultsNb">defaultsNb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-defaultsStr">defaultsStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dateSortAsc">dateSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dateSortDesc">dateSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ignoreCase">ignoreCase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-numSortAsc">numSortAsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-numSortDesc">numSortDesc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sortDateStr">sortDateStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sortNumberStr">sortNumberStr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-contains">contains</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isEmpty">isEmpty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-matchCase">matchCase</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rgxEsc">rgxEsc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-trim">trim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-EMPTY_FN">EMPTY_FN</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isBoolean">isBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isEmpty">isEmpty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFn">isFn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNumber">isNumber</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObj">isObj</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndef">isUndef</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AUTO_FILTER_DELAY">AUTO_FILTER_DELAY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CELL_TAG">CELL_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CHECKLIST">CHECKLIST</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DATE">DATE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DOWN_ARROW_KEY">DOWN_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ENTER_KEY">ENTER_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ESC_KEY">ESC_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FEATURES">FEATURES</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FORMATTED_NUMBER">FORMATTED_NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HEADER_TAG">HEADER_TAG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INPUT">INPUT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IP_ADDRESS">IP_ADDRESS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MULTIPLE">MULTIPLE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NONE">NONE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NUMBER">NUMBER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SELECT">SELECT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STRING">STRING</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TAB_KEY">TAB_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UP_ARROW_KEY">UP_ARROW_KEY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-root">root</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extensions-advancedgrid">extensions/advancedGrid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html">AdapterEzEditTable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extensions-colops">extensions/colOps</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colOps/colOps.js~ColOps.html">ColOps</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extensions-colsvisibility">extensions/colsVisibility</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html">ColsVisibility</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extensions-filtersvisibility">extensions/filtersVisibility</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html">FiltersVisibility</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extensions-sort">extensions/sort</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html">AdapterSortableTable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#modules">modules</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/alternateRows.js~AlternateRows.html">AlternateRows</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/baseDropdown.js~BaseDropdown.html">BaseDropdown</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/checkList.js~CheckList.html">CheckList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/clearButton.js~ClearButton.html">ClearButton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dateType.js~DateType.html">DateType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/dropdown.js~Dropdown.html">Dropdown</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/gridLayout.js~GridLayout.html">GridLayout</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/hash.js~Hash.html">Hash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/help.js~Help.html">Help</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/highlightKeywords.js~HighlightKeyword.html">HighlightKeyword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/loader.js~Loader.html">Loader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/markActiveColumns.js~MarkActiveColumns.html">MarkActiveColumns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/noResults.js~NoResults.html">NoResults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/paging.js~Paging.html">Paging</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/popupFilter.js~PopupFilter.html">PopupFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/rowsCounter.js~RowsCounter.html">RowsCounter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/state.js~State.html">State</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/statusBar.js~StatusBar.html">StatusBar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/modules/toolbar.js~Toolbar.html">Toolbar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasHashChange">hasHashChange</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasStorage">hasStorage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CENTER">CENTER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LEFT">LEFT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RIGHT">RIGHT</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/extensions/filtersVisibility/filtersVisibility.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../../feature&apos;;
+import {createElm, removeElm, elm} from &apos;../../dom&apos;;
+import {EMPTY_FN, isNull} from &apos;../../types&apos;;
+import {addEvt} from &apos;../../event&apos;;
+import {
+    defaultsBool, defaultsStr, defaultsFn, defaultsNb,
+} from &apos;../../settings&apos;;
+import {RIGHT} from &apos;../../modules/toolbar&apos;;
+
+/**
+ * Filters Visibility extension
+ */
+export default class FiltersVisibility extends Feature {
+
+    /**
+     * Creates an instance of FiltersVisibility
+     * @param {TableFilter} tf TableFilter instance
+     * @param {Object} Configuration object
+     */
+    constructor(tf, f) {
+        super(tf, f.name);
+
+        /**
+         * Module name
+         * @type {String}
+         */
+        this.name = f.name;
+
+        /**
+         * Module description
+         * @type {String}
+         */
+        this.desc = defaultsStr(f.description,
+            &apos;Filters row visibility manager&apos;);
+
+        /**
+         * Extension&apos;s stylesheet filename
+         * @type {String}
+         */
+        this.stylesheet = defaultsStr(f.stylesheet , &apos;filtersVisibility.css&apos;);
+
+        /**
+         * Expand icon filename
+         * @type {String}
+         */
+        this.icnExpand = defaultsStr(f.expand_icon_name, &apos;icn_exp.png&apos;);
+
+        /**
+         * Collapse icon filename
+         * @type {String}
+         */
+        this.icnCollapse = defaultsStr(f.collapse_icon_name, &apos;icn_clp.png&apos;);
+
+        /**
+         * Main container element
+         * @private
+         */
+        this.contEl = null;
+
+        /**
+         * Button element
+         * @private
+         */
+        this.btnEl = null;
+
+        /**
+         * Expand icon HTML
+         * @private
+         */
+        this.icnExpandHtml = &apos;&lt;img src=&quot;&apos; + tf.themesPath + this.icnExpand +
+            &apos;&quot; alt=&quot;Expand filters&quot; &gt;&apos;;
+
+        /**
+         * Collapse icon HTML
+         * @private
+         */
+        this.icnCollapseHtml = &apos;&lt;img src=&quot;&apos; + tf.themesPath + this.icnCollapse +
+            &apos;&quot; alt=&quot;Collapse filters&quot; &gt;&apos;;
+
+        /**
+         * Default text
+         * @private
+         */
+        this.defaultText = &apos;Toggle filters&apos;;
+
+        /**
+         * ID of main container element
+         * @type {String}
+         */
+        this.targetId = f.target_id || null;
+
+        /**
+         * Enable expand/collapse icon, defaults to true
+         * @type {Boolean}
+         */
+        this.enableIcon = defaultsBool(f.enable_icon, true);
+
+        /**
+         * Custom text for button
+         * @type {String}
+         */
+        this.btnText = defaultsStr(f.btn_text, &apos;&apos;);
+
+        /**
+         * Collapse button HTML
+         * @private
+         */
+        this.collapseBtnHtml = this.enableIcon ?
+            this.icnCollapseHtml + this.btnText :
+            this.btnText || this.defaultText;
+
+        /**
+         * Expand button HTML
+         * @private
+         */
+        this.expandBtnHtml = this.enableIcon ?
+            this.icnExpandHtml + this.btnText :
+            this.btnText || this.defaultText;
+
+        /**
+         * Button&apos;s custom HTML
+         * @type {String}
+         */
+        this.btnHtml = defaultsStr(f.btn_html, null);
+
+        /**
+         * Css class for expand/collapse filters button
+         * @type {String}
+         */
+        this.btnCssClass = defaultsStr(f.btn_css_class, &apos;btnExpClpFlt&apos;);
+
+        /**
+         * Css class for main container
+         * @type {String}
+         */
+        this.contCssClass = defaultsStr(f.cont_css_class, &apos;expClpFlt&apos;);
+
+        /**
+         * Filters row index
+         * @type {Number}
+         */
+        this.filtersRowIndex = defaultsNb(f.filters_row_index,
+            tf.getFiltersRowIndex());
+
+        /**
+         * Make filters visible at initialization, defaults to true
+         * @type {Boolean}
+         */
+        this.visibleAtStart = defaultsNb(f.visible_at_start, true);
+
+        /**
+         * Default position in toolbar (&apos;left&apos;|&apos;center&apos;|&apos;right&apos;)
+         * @type {String}
+         */
+        this.toolbarPosition = defaultsStr(f.toolbar_position, RIGHT);
+
+        /**
+         * Callback fired before filters row is shown
+         * @type {Function}
+         */
+        this.onBeforeShow = defaultsFn(f.on_before_show, EMPTY_FN);
+
+        /**
+         * Callback fired after filters row is shown
+         * @type {Function}
+         */
+        this.onAfterShow = defaultsFn(f.on_after_show, EMPTY_FN);
+
+        /**
+         * Callback fired before filters row is hidden
+         * @type {Function}
+         */
+        this.onBeforeHide = defaultsFn(f.on_before_hide, EMPTY_FN);
+
+        /**
+         * Callback fired after filters row is hidden
+         * @type {Function}
+         */
+        this.onAfterHide = defaultsFn(f.on_after_hide, EMPTY_FN);
+
+        //Import extension&apos;s stylesheet
+        tf.import(f.name + &apos;Style&apos;, tf.getStylePath() + this.stylesheet, null,
+            &apos;link&apos;);
+
+        this.enable();
+    }
+
+    /**
+     * Initialise extension
+     */
+    init() {
+        if (this.initialized) {
+            return;
+        }
+
+        this.emitter.emit(&apos;initializing-extension&apos;, this,
+            !isNull(this.targetId));
+
+        this.buildUI();
+
+        /** @inherited */
+        this.initialized = true;
+
+        this.emitter.on([&apos;show-filters&apos;], (tf, visible) =&gt; this.show(visible));
+        this.emitter.emit(&apos;filters-visibility-initialized&apos;, this.tf, this);
+        this.emitter.emit(&apos;extension-initialized&apos;, this);
+    }
+
+    /**
+     * Build UI elements
+     */
+    buildUI() {
+        let tf = this.tf;
+        let span = createElm(&apos;span&apos;);
+        span.className = this.contCssClass;
+
+        // Container element (rdiv or custom element)
+        let targetEl = !this.targetId ?
+            tf.feature(&apos;toolbar&apos;).container(this.toolbarPosition) :
+            elm(this.targetId);
+
+        if (!this.targetId) {
+            let firstChild = targetEl.firstChild;
+            firstChild.parentNode.insertBefore(span, firstChild);
+        } else {
+            targetEl.appendChild(span);
+        }
+
+        let btn;
+        if (!this.btnHtml) {
+            btn = createElm(&apos;a&apos;, [&apos;href&apos;, &apos;javascript:void(0);&apos;]);
+            btn.className = this.btnCssClass;
+            btn.title = this.btnText || this.defaultText;
+            btn.innerHTML = this.collapseBtnHtml;
+            span.appendChild(btn);
+        } else { // Custom html
+            span.innerHTML = this.btnHtml;
+            btn = span.firstChild;
+        }
+
+        addEvt(btn, &apos;click&apos;, () =&gt; this.toggle());
+
+        this.contEl = span;
+        this.btnEl = btn;
+
+        if (!this.visibleAtStart) {
+            this.toggle();
+        }
+    }
+
+    /**
+     * Toggle filters visibility
+     */
+    toggle() {
+        let tf = this.tf;
+        let tbl = tf.gridLayout ? tf.feature(&apos;gridLayout&apos;).headTbl : tf.dom();
+        let fltRow = tbl.rows[this.filtersRowIndex];
+        let isDisplayed = fltRow.style.display === &apos;&apos;;
+
+        this.show(!isDisplayed);
+    }
+
+    /**
+     * Show or hide filters
+     *
+     * @param {boolean} [visible=true] Visibility flag
+     */
+    show(visible = true) {
+        let tf = this.tf;
+        let tbl = tf.gridLayout ? tf.feature(&apos;gridLayout&apos;).headTbl : tf.dom();
+        let fltRow = tbl.rows[this.filtersRowIndex];
+
+        if (visible) {
+            this.onBeforeShow(this);
+        }
+        if (!visible) {
+            this.onBeforeHide(this);
+        }
+
+        fltRow.style.display = visible ? &apos;&apos; : &apos;none&apos;;
+        if (this.enableIcon &amp;&amp; !this.btnHtml) {
+            this.btnEl.innerHTML = visible ?
+                this.collapseBtnHtml : this.expandBtnHtml;
+        }
+
+        if (visible) {
+            this.onAfterShow(this);
+        }
+        if (!visible) {
+            this.onAfterHide(this);
+        }
+
+        this.emitter.emit(&apos;filters-toggled&apos;, tf, this, visible);
+    }
+
+    /**
+     * Destroy the UI
+     */
+    destroy() {
+        if (!this.initialized) {
+            return;
+        }
+
+        this.emitter.off([&apos;show-filters&apos;], (tf, visible) =&gt; this.show(visible));
+
+        this.btnEl.innerHTML = &apos;&apos;;
+        removeElm(this.btnEl);
+        this.btnEl = null;
+
+        this.contEl.innerHTML = &apos;&apos;;
+        removeElm(this.contEl);
+        this.contEl = null;
+        this.initialized = false;
+    }
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
