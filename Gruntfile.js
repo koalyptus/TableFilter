@@ -164,13 +164,12 @@ module.exports = function (grunt) {
             }
         },
 
-        esdoc: {
-            dist: {
-                options: {
-                    source: 'src',
-                    destination: 'docs/docs',
-                    title: pkg.name + ' v' + pkg.version
-                }
+        shell: {
+            eslint: {
+                command: 'npm run lint'
+            },
+            esdoc: {
+                command: 'npm run esdoc'
             }
         },
 
@@ -291,10 +290,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
-    grunt.loadNpmTasks('grunt-esdoc');
+    grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-qunit-istanbul');
     grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-gh-pages');
+
+    grunt.registerTask('eslint', ['shell:eslint']);
+    grunt.registerTask('esdoc', ['shell:esdoc']);
 
     grunt.registerTask('default', ['test', 'build', 'build-demos']);
 
@@ -303,11 +305,11 @@ module.exports = function (grunt) {
 
     // Dev dev/build/watch cycle
     grunt.registerTask('dev',
-        ['webpack:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
+        ['eslint', 'webpack:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
 
     // Production build
     grunt.registerTask('build',
-        ['webpack:build', 'copy:dist', 'stylus:compile']);
+        ['eslint', 'webpack:build', 'copy:dist', 'stylus:compile']);
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
@@ -316,7 +318,7 @@ module.exports = function (grunt) {
 
     // Build tests
     grunt.registerTask('build-test',
-        ['webpack:test', 'copy:dist', 'stylus:compile']);
+        ['eslint', 'webpack:test', 'copy:dist', 'stylus:compile']);
 
     // Transpile with Babel
     grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
