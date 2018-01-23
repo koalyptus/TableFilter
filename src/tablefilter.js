@@ -2094,7 +2094,6 @@ export class TableFilter {
      * @returns {Array}
      */
     getWorkingRows() {
-        // return this.dom().querySelectorAll('tbody > tr');
         return doc.querySelectorAll(`table#${this.id} > tbody > tr`);
     }
 
