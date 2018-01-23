@@ -125,6 +125,7 @@ export class TableFilter {
             if (typeof arg === 'object' && arg.nodeName === 'TABLE') {
                 this.tbl = arg;
                 this.id = arg.id || `tf_${new Date().getTime()}_`;
+                this.tbl.id = this.id;
             } else if (isString(arg)) {
                 this.id = arg;
                 this.tbl = elm(arg);
@@ -2093,7 +2094,7 @@ export class TableFilter {
      * @returns {Array}
      */
     getWorkingRows() {
-        return this.dom().querySelectorAll('tbody > tr');
+        return doc.querySelectorAll(`table#${this.id} > tbody > tr`);
     }
 
     /**
