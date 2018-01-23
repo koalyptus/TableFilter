@@ -261,6 +261,7 @@ export class TableFilter {
             if (typeof arg === &apos;object&apos; &amp;&amp; arg.nodeName === &apos;TABLE&apos;) {
                 this.tbl = arg;
                 this.id = arg.id || `tf_${new Date().getTime()}_`;
+                this.tbl.id = this.id;
             } else if (isString(arg)) {
                 this.id = arg;
                 this.tbl = elm(arg);
@@ -2229,7 +2230,7 @@ export class TableFilter {
      * @returns {Array}
      */
     getWorkingRows() {
-        return this.dom().querySelectorAll(&apos;tbody &gt; tr&apos;);
+        return doc.querySelectorAll(`table#${this.id} &gt; tbody &gt; tr`);
     }
 
     /**
