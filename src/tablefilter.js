@@ -740,16 +740,19 @@ export class TableFilter {
         /**
          * Enable auto-filter behaviour, table is filtered when a user
          * stops typing
-         * @type {Boolean}
+         * @type {Object|Boolean}
          */
-        this.autoFilter = Boolean(f.auto_filter);
+        this.autoFilter = isObj(f.auto_filter) || Boolean(f.auto_filter);
 
         /**
          * Auto-filter delay in msecs
          * @type {Number}
          */
-        this.autoFilterDelay =
-            defaultsNb(f.auto_filter_delay, AUTO_FILTER_DELAY);
+        // this.autoFilterDelay =
+        //     defaultsNb(f.auto_filter_delay, AUTO_FILTER_DELAY);
+        this.autoFilterDelay = isObj(f.auto_filter) &&
+            isNumber(f.auto_filter.delay) ?
+            f.auto_filter.delay : AUTO_FILTER_DELAY;
 
         /**
          * Indicate whether user is typing
@@ -1061,21 +1064,21 @@ export class TableFilter {
      * @param {Event} evt
      */
     detectKey(evt) {
-        if (!this.enterKey) {
+        if (!this.enterKey || !evt) {
             return;
         }
-        if (evt) {
-            let key = keyCode(evt);
-            if (key === ENTER_KEY) {
-                this.filter();
-                cancelEvt(evt);
-                stopEvt(evt);
-            } else {
-                this.isUserTyping = true;
-                root.clearInterval(this.autoFilterTimer);
-                this.autoFilterTimer = null;
-            }
+        // if (evt) {
+        let key = keyCode(evt);
+        if (key === ENTER_KEY) {
+            this.filter();
+            cancelEvt(evt);
+            stopEvt(evt);
+        } else {
+            this.isUserTyping = true;
+            root.clearInterval(this.autoFilterTimer);
+            this.autoFilterTimer = null;
         }
+        // }
     }
 
     /**
@@ -1084,7 +1087,7 @@ export class TableFilter {
      * @param {Event} evt
      */
     onKeyUp(evt) {
-        if (!this.autoFilter) {
+        if (!this.autoFilter || !evt) {
             return;
         }
         let key = keyCode(evt);
