@@ -4,7 +4,11 @@
     "plugins": [{
         "name": "esdoc-standard-plugin",
         "option": {
-            "lint": {"enable": false}
+            "lint": {"enable": false},
+            "accessor": {
+                "access": ["public", "protected"],
+                "autoPrivate": true
+            }
         }
     }]
 }
