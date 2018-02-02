@@ -1,4 +1,4 @@
-import {addEvt, cancelEvt, stopEvt, targetEvt, keyCode} from './event';
+import {addEvt, cancelEvt, stopEvt, targetEvt, isKeyPressed} from './event';
 import {
     addClass, createElm, createOpt, elm, getText, getFirstTextNode,
     removeClass, tag
@@ -745,11 +745,9 @@ export class TableFilter {
         this.autoFilter = isObj(f.auto_filter) || Boolean(f.auto_filter);
 
         /**
-         * Auto-filter delay in msecs
+         * Auto-filter delay in milliseconds
          * @type {Number}
          */
-        // this.autoFilterDelay =
-        //     defaultsNb(f.auto_filter_delay, AUTO_FILTER_DELAY);
         this.autoFilterDelay = isObj(f.auto_filter) &&
             isNumber(f.auto_filter.delay) ?
             f.auto_filter.delay : AUTO_FILTER_DELAY;
@@ -1067,9 +1065,8 @@ export class TableFilter {
         if (!this.enterKey || !evt) {
             return;
         }
-        // if (evt) {
-        let key = keyCode(evt);
-        if (key === ENTER_KEY) {
+
+        if (isKeyPressed(evt, [ENTER_KEY])) {
             this.filter();
             cancelEvt(evt);
             stopEvt(evt);
@@ -1078,7 +1075,6 @@ export class TableFilter {
             root.clearInterval(this.autoFilterTimer);
             this.autoFilterTimer = null;
         }
-        // }
     }
 
     /**
@@ -1090,7 +1086,6 @@ export class TableFilter {
         if (!this.autoFilter || !evt) {
             return;
         }
-        let key = keyCode(evt);
         this.isUserTyping = false;
 
         function filter() {
@@ -1102,15 +1097,17 @@ export class TableFilter {
             }
         }
 
-        if (key !== ENTER_KEY && key !== TAB_KEY && key !== ESC_KEY &&
-            key !== UP_ARROW_KEY && key !== DOWN_ARROW_KEY) {
-            if (this.autoFilterTimer === null) {
-                this.autoFilterTimer = root.setInterval(filter.bind(this),
-                    this.autoFilterDelay);
-            }
-        } else {
+        if (isKeyPressed(evt,
+            [ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY])) {
             root.clearInterval(this.autoFilterTimer);
             this.autoFilterTimer = null;
+        } else {
+            if (this.autoFilterTimer !== null) {
+                return;
+            }
+            this.autoFilterTimer = root.setInterval(
+                filter.bind(this),
+                this.autoFilterDelay);
         }
     }
 

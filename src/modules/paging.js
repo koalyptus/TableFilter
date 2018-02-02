@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import {createElm, createOpt, createText, elm, removeElm} from '../dom';
 import {isArray, isNull, EMPTY_FN} from '../types';
-import {addEvt, keyCode, removeEvt} from '../event';
+import {addEvt, removeEvt, isKeyPressed} from '../event';
 import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
 import {
     defaultsStr, defaultsNb, defaultsBool, defaultsArr, defaultsFn
@@ -317,8 +317,7 @@ export class Paging extends Feature {
                 o.changePage(0);
             },
             _detectKey(e) {
-                let key = keyCode(e);
-                if (key === ENTER_KEY) {
+                if (isKeyPressed(e, [ENTER_KEY])) {
                     if (tf.sorted) {
                         tf.filter();
                         o.changePage(o.evt.slcIndex());

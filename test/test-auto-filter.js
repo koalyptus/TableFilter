@@ -2,8 +2,9 @@
 
     var tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
-        auto_filter: true,
-        auto_filter_delay: 1000
+        auto_filter: {
+            delay: 1000
+        }
     });
     tf.init();
     window.tf = tf;

@@ -100,4 +100,12 @@ export const keyCode = (evt) => {
         (evt.keyCode ? evt.keyCode : (evt.which ? evt.which : 0));
 };
 
-
+/**
+ * Check pressed key code is one of the expected key codes
+ *
+ * @param {Event} evt key event
+ * @param {Array} keyCodes list of keycodes to check
+ */
+export const isKeyPressed = (evt, keyCodes = []) => {
+    return keyCodes.indexOf(keyCode(evt)) !== -1;
+};
