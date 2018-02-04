@@ -1062,7 +1062,7 @@ export class TableFilter {
      * @param {Event} evt
      */
     detectKey(evt) {
-        if (!this.enterKey || !evt) {
+        if (!this.enterKey) {
             return;
         }
 
@@ -1083,7 +1083,7 @@ export class TableFilter {
      * @param {Event} evt
      */
     onKeyUp(evt) {
-        if (!this.autoFilter || !evt) {
+        if (!this.autoFilter) {
             return;
         }
         this.isUserTyping = false;

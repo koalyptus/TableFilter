@@ -101,7 +101,7 @@ export const keyCode = (evt) => {
 };
 
 /**
- * Check pressed key code is one of the expected key codes
+ * Check code of pressed key is one of the expected key codes
  *
  * @param {Event} evt key event
  * @param {Array} keyCodes list of keycodes to check
