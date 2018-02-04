@@ -185,7 +185,7 @@
           </ul>
         </li>
         <li>
-          <a href="http://koalyptus.github.io/TableFilter/docs" target="_blank">Docs</a>
+          <a href="./docs" target="_blank">Docs</a>
         </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -650,8 +650,9 @@
 <script data-config>
     var filtersConfig = {
         base_path: 'tablefilter/',
-        auto_filter: true,
-        auto_filter_delay: 1100, //milliseconds
+        auto_filter: {
+            delay: 1100 //milliseconds
+        },
         filters_row_index: 1,
         state: true,
         alternate_rows: true,

@@ -185,7 +185,7 @@
           </ul>
         </li>
         <li>
-          <a href="http://koalyptus.github.io/TableFilter/docs" target="_blank">Docs</a>
+          <a href="./docs" target="_blank">Docs</a>
         </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -662,8 +662,9 @@
         col_2: 'checklist',
         col_8: 'none',
         popup_filters: true,
-        auto_filter: true,
-        auto_filter_delay: 1100, //milliseconds
+        auto_filter: {
+            delay: 1100 //milliseconds
+        },
         alternate_rows: true,
         rows_counter: true,
         btn_reset: true,
