@@ -47,6 +47,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addEvt">addEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isKeyPressed">isKeyPressed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-keyCode">keyCode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-removeEvt">removeEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-stopEvt">stopEvt</a></span></span></li>
@@ -234,6 +235,16 @@ export const targetEvt = (evt) =&gt; {
 export const keyCode = (evt) =&gt; {
     return evt.charCode ? evt.charCode :
         (evt.keyCode ? evt.keyCode : (evt.which ? evt.which : 0));
+};
+
+/**
+ * Check code of pressed key is one of the expected key codes
+ *
+ * @param {Event} evt key event
+ * @param {Array} keyCodes list of keycodes to check
+ */
+export const isKeyPressed = (evt, keyCodes = []) =&gt; {
+    return keyCodes.indexOf(keyCode(evt)) !== -1;
 };
 </code></pre>
 

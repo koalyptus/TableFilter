@@ -474,6 +474,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "tablefilter/src/event.js~iskeypressed",
+    "function/index.html#static-function-isKeyPressed",
+    "<span>isKeyPressed</span> <span class=\"search-result-import-path\">tablefilter/src/event.js</span>",
+    "function"
+  ],
+  [
     "tablefilter/src/types.js~isnull",
     "function/index.html#static-function-isNull",
     "<span>isNull</span> <span class=\"search-result-import-path\">tablefilter/src/types.js</span>",
@@ -954,30 +960,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#_ezedittable",
-    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-_ezEditTable",
-    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#_ezEditTable",
-    "member"
-  ],
-  [
-    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#_setadvancedgrid",
-    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-method-_setAdvancedGrid",
-    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#_setAdvancedGrid",
-    "method"
-  ],
-  [
-    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#_toggleforinputfilter",
-    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-method-_toggleForInputFilter",
-    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#_toggleForInputFilter",
-    "method"
-  ],
-  [
-    "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#cfg",
-    "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-member-cfg",
-    "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#cfg",
-    "member"
-  ],
-  [
     "src/extensions/advancedgrid/adapterezedittable.js~adapterezedittable#constructor",
     "class/src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable.html#instance-constructor-constructor",
     "src/extensions/advancedGrid/adapterEzEditTable.js~AdapterEzEditTable#constructor",
@@ -1062,12 +1044,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/extensions/colops/colops.js~colops#calc",
-    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calc",
-    "src/extensions/colOps/colOps.js~ColOps#calc",
-    "method"
-  ],
-  [
     "src/extensions/colops/colops.js~colops#calcall",
     "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-calcAll",
     "src/extensions/colOps/colOps.js~ColOps#calcAll",
@@ -1125,12 +1101,6 @@ window.esdocSearchIndex = [
     "src/extensions/colops/colops.js~colops#columncalc",
     "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-columnCalc",
     "src/extensions/colOps/colOps.js~ColOps#columnCalc",
-    "method"
-  ],
-  [
-    "src/extensions/colops/colops.js~colops#configureformat",
-    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-configureFormat",
-    "src/extensions/colOps/colOps.js~ColOps#configureFormat",
     "method"
   ],
   [
@@ -1224,57 +1194,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/colops/colops.js~colops#writeresult",
-    "class/src/extensions/colOps/colOps.js~ColOps.html#instance-method-writeResult",
-    "src/extensions/colOps/colOps.js~ColOps#writeResult",
-    "method"
-  ],
-  [
     "src/extensions/colsvisibility/colsvisibility.js",
     "file/src/extensions/colsVisibility/colsVisibility.js.html",
     "src/extensions/colsVisibility/colsVisibility.js",
     "file"
   ],
   [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#_getheadertext",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-_getHeaderText",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#_getHeaderText",
-    "method"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#_hideatstart",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-_hideAtStart",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#_hideAtStart",
-    "method"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#_hidecells",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-_hideCells",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#_hideCells",
-    "method"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#_hidecol",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-_hideCol",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#_hideCol",
-    "method"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#_hideelements",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-_hideElements",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#_hideElements",
-    "method"
-  ],
-  [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#atstart",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-atStart",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#atStart",
-    "member"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#boundmouseup",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-boundMouseup",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#boundMouseup",
     "member"
   ],
   [
@@ -1299,12 +1227,6 @@ window.esdocSearchIndex = [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#btncssclass",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-btnCssClass",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnCssClass",
-    "member"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#btnel",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-btnEl",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#btnEl",
     "member"
   ],
   [
@@ -1338,12 +1260,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#checkitem",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-checkItem",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#checkItem",
-    "method"
-  ],
-  [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#constructor",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-constructor-constructor",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#constructor",
@@ -1353,12 +1269,6 @@ window.esdocSearchIndex = [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#contcssclass",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-contCssClass",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#contCssClass",
-    "member"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#contel",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-contEl",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#contEl",
     "member"
   ],
   [
@@ -1413,12 +1323,6 @@ window.esdocSearchIndex = [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#headerstext",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-headersText",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#headersText",
-    "member"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#hiddencols",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-hiddenCols",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#hiddenCols",
     "member"
   ],
   [
@@ -1530,12 +1434,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#onmouseup",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-onMouseup",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#onMouseup",
-    "method"
-  ],
-  [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#sethidden",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-method-setHidden",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#setHidden",
@@ -1551,12 +1449,6 @@ window.esdocSearchIndex = [
     "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#spancssclass",
     "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-spanCssClass",
     "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#spanCssClass",
-    "member"
-  ],
-  [
-    "src/extensions/colsvisibility/colsvisibility.js~colsvisibility#spanel",
-    "class/src/extensions/colsVisibility/colsVisibility.js~ColsVisibility.html#instance-member-spanEl",
-    "src/extensions/colsVisibility/colsVisibility.js~ColsVisibility#spanEl",
     "member"
   ],
   [
@@ -1614,12 +1506,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#btnel",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-btnEl",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnEl",
-    "member"
-  ],
-  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#btnhtml",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-btnHtml",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#btnHtml",
@@ -1638,12 +1524,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#collapsebtnhtml",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-collapseBtnHtml",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#collapseBtnHtml",
-    "member"
-  ],
-  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#constructor",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-constructor-constructor",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#constructor",
@@ -1653,18 +1533,6 @@ window.esdocSearchIndex = [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#contcssclass",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-contCssClass",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#contCssClass",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#contel",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-contEl",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#contEl",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#defaulttext",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-defaultText",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#defaultText",
     "member"
   ],
   [
@@ -1686,12 +1554,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#expandbtnhtml",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-expandBtnHtml",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#expandBtnHtml",
-    "member"
-  ],
-  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#filtersrowindex",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-filtersRowIndex",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#filtersRowIndex",
@@ -1704,21 +1566,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#icncollapsehtml",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-icnCollapseHtml",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnCollapseHtml",
-    "member"
-  ],
-  [
     "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#icnexpand",
     "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-icnExpand",
     "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnExpand",
-    "member"
-  ],
-  [
-    "src/extensions/filtersvisibility/filtersvisibility.js~filtersvisibility#icnexpandhtml",
-    "class/src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility.html#instance-member-icnExpandHtml",
-    "src/extensions/filtersVisibility/filtersVisibility.js~FiltersVisibility#icnExpandHtml",
     "member"
   ],
   [
@@ -1804,18 +1654,6 @@ window.esdocSearchIndex = [
     "file/src/extensions/sort/adapterSortabletable.js.html",
     "src/extensions/sort/adapterSortabletable.js",
     "file"
-  ],
-  [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#_adddatetype",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-method-_addDateType",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#_addDateType",
-    "method"
-  ],
-  [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#_addnumbertype",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-method-_addNumberType",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#_addNumberType",
-    "method"
   ],
   [
     "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#addsorttype",
@@ -1926,12 +1764,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#setsorttypes",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-method-setSortTypes",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#setSortTypes",
-    "method"
-  ],
-  [
     "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#sortbycolumnindex",
     "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-method-sortByColumnIndex",
     "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sortByColumnIndex",
@@ -1947,18 +1779,6 @@ window.esdocSearchIndex = [
     "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#sorttypes",
     "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-sortTypes",
     "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sortTypes",
-    "member"
-  ],
-  [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#sorted",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-sorted",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#sorted",
-    "member"
-  ],
-  [
-    "src/extensions/sort/adaptersortabletable.js~adaptersortabletable#stt",
-    "class/src/extensions/sort/adapterSortabletable.js~AdapterSortableTable.html#instance-member-stt",
-    "src/extensions/sort/adapterSortabletable.js~AdapterSortableTable#stt",
     "member"
   ],
   [
@@ -2112,18 +1932,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/alternaterows.js~alternaterows#removerowbg",
-    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-removeRowBg",
-    "src/modules/alternateRows.js~AlternateRows#removeRowBg",
-    "method"
-  ],
-  [
-    "src/modules/alternaterows.js~alternaterows#setrowbg",
-    "class/src/modules/alternateRows.js~AlternateRows.html#instance-method-setRowBg",
-    "src/modules/alternateRows.js~AlternateRows#setRowBg",
-    "method"
-  ],
-  [
     "src/modules/basedropdown.js",
     "file/src/modules/baseDropdown.js.html",
     "src/modules/baseDropdown.js",
@@ -2142,45 +1950,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/basedropdown.js~basedropdown#excludedopts",
-    "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-member-excludedOpts",
-    "src/modules/baseDropdown.js~BaseDropdown#excludedOpts",
-    "member"
-  ],
-  [
-    "src/modules/basedropdown.js~basedropdown#iscustom",
-    "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-member-isCustom",
-    "src/modules/baseDropdown.js~BaseDropdown#isCustom",
-    "member"
-  ],
-  [
     "src/modules/basedropdown.js~basedropdown#isvalidlinkedvalue",
     "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-method-isValidLinkedValue",
     "src/modules/baseDropdown.js~BaseDropdown#isValidLinkedValue",
-    "method"
-  ],
-  [
-    "src/modules/basedropdown.js~basedropdown#opts",
-    "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-member-opts",
-    "src/modules/baseDropdown.js~BaseDropdown#opts",
-    "member"
-  ],
-  [
-    "src/modules/basedropdown.js~basedropdown#optstxt",
-    "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-member-optsTxt",
-    "src/modules/baseDropdown.js~BaseDropdown#optsTxt",
-    "member"
-  ],
-  [
-    "src/modules/basedropdown.js~basedropdown#refreshfilters",
-    "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-method-refreshFilters",
-    "src/modules/baseDropdown.js~BaseDropdown#refreshFilters",
-    "method"
-  ],
-  [
-    "src/modules/basedropdown.js~basedropdown#sortoptions",
-    "class/src/modules/baseDropdown.js~BaseDropdown.html#instance-method-sortOptions",
-    "src/modules/baseDropdown.js~BaseDropdown#sortOptions",
     "method"
   ],
   [
@@ -2194,18 +1966,6 @@ window.esdocSearchIndex = [
     "class/src/modules/checkList.js~CheckList.html#instance-member-activateText",
     "src/modules/checkList.js~CheckList#activateText",
     "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#addchecks",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-addChecks",
-    "src/modules/checkList.js~CheckList#addChecks",
-    "method"
-  ],
-  [
-    "src/modules/checklist.js~checklist#addtchecks",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-addTChecks",
-    "src/modules/checkList.js~CheckList#addTChecks",
-    "method"
   ],
   [
     "src/modules/checklist.js~checklist#build",
@@ -2292,18 +2052,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/checklist.js~checklist#onchecklistclick",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-onCheckListClick",
-    "src/modules/checkList.js~CheckList#onCheckListClick",
-    "method"
-  ],
-  [
-    "src/modules/checklist.js~checklist#optionclick",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-optionClick",
-    "src/modules/checkList.js~CheckList#optionClick",
-    "method"
-  ],
-  [
     "src/modules/checklist.js~checklist#opts",
     "class/src/modules/checkList.js~CheckList.html#instance-member-opts",
     "src/modules/checkList.js~CheckList#opts",
@@ -2313,12 +2061,6 @@ window.esdocSearchIndex = [
     "src/modules/checklist.js~checklist#optstxt",
     "class/src/modules/checkList.js~CheckList.html#instance-member-optsTxt",
     "src/modules/checkList.js~CheckList#optsTxt",
-    "member"
-  ],
-  [
-    "src/modules/checklist.js~checklist#prfx",
-    "class/src/modules/checkList.js~CheckList.html#instance-member-prfx",
-    "src/modules/checkList.js~CheckList#prfx",
     "member"
   ],
   [
@@ -2340,12 +2082,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/checklist.js~checklist#setchecklistvalues",
-    "class/src/modules/checkList.js~CheckList.html#instance-method-setCheckListValues",
-    "src/modules/checkList.js~CheckList#setCheckListValues",
-    "method"
-  ],
-  [
     "src/modules/clearbutton.js",
     "file/src/modules/clearButton.js.html",
     "src/modules/clearButton.js",
@@ -2358,12 +2094,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/clearbutton.js~clearbutton#container",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-member-container",
-    "src/modules/clearButton.js~ClearButton#container",
-    "member"
-  ],
-  [
     "src/modules/clearbutton.js~clearbutton#cssclass",
     "class/src/modules/clearButton.js~ClearButton.html#instance-member-cssClass",
     "src/modules/clearButton.js~ClearButton#cssClass",
@@ -2374,12 +2104,6 @@ window.esdocSearchIndex = [
     "class/src/modules/clearButton.js~ClearButton.html#instance-method-destroy",
     "src/modules/clearButton.js~ClearButton#destroy",
     "method"
-  ],
-  [
-    "src/modules/clearbutton.js~clearbutton#element",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-member-element",
-    "src/modules/clearButton.js~ClearButton#element",
-    "member"
   ],
   [
     "src/modules/clearbutton.js~clearbutton#html",
@@ -2398,12 +2122,6 @@ window.esdocSearchIndex = [
     "class/src/modules/clearButton.js~ClearButton.html#instance-member-initialized",
     "src/modules/clearButton.js~ClearButton#initialized",
     "member"
-  ],
-  [
-    "src/modules/clearbutton.js~clearbutton#onclick",
-    "class/src/modules/clearButton.js~ClearButton.html#instance-method-onClick",
-    "src/modules/clearButton.js~ClearButton#onClick",
-    "method"
   ],
   [
     "src/modules/clearbutton.js~clearbutton#targetid",
@@ -2580,18 +2298,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/dropdown.js~dropdown#onslcchange",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-method-onSlcChange",
-    "src/modules/dropdown.js~Dropdown#onSlcChange",
-    "method"
-  ],
-  [
-    "src/modules/dropdown.js~dropdown#onslcfocus",
-    "class/src/modules/dropdown.js~Dropdown.html#instance-method-onSlcFocus",
-    "src/modules/dropdown.js~Dropdown#onSlcFocus",
-    "method"
-  ],
-  [
     "src/modules/dropdown.js~dropdown#opts",
     "class/src/modules/dropdown.js~Dropdown.html#instance-member-opts",
     "src/modules/dropdown.js~Dropdown#opts",
@@ -2622,12 +2328,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#colelms",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-colElms",
-    "src/modules/gridLayout.js~GridLayout#colElms",
-    "member"
-  ],
-  [
     "src/modules/gridlayout.js~gridlayout#constructor",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-constructor-constructor",
     "src/modules/gridLayout.js~GridLayout#constructor",
@@ -2638,18 +2338,6 @@ window.esdocSearchIndex = [
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-contCssClass",
     "src/modules/gridLayout.js~GridLayout#contCssClass",
     "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#createcontainer",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-method-createContainer",
-    "src/modules/gridLayout.js~GridLayout#createContainer",
-    "method"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#createfiltersrow",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-method-createFiltersRow",
-    "src/modules/gridLayout.js~GridLayout#createFiltersRow",
-    "method"
   ],
   [
     "src/modules/gridlayout.js~gridlayout#defaultcolwidth",
@@ -2670,12 +2358,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#getsorttriggerids",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-method-getSortTriggerIds",
-    "src/modules/gridLayout.js~GridLayout#getSortTriggerIds",
-    "method"
-  ],
-  [
     "src/modules/gridlayout.js~gridlayout#headcontcssclass",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-headContCssClass",
     "src/modules/gridLayout.js~GridLayout#headContCssClass",
@@ -2691,18 +2373,6 @@ window.esdocSearchIndex = [
     "src/modules/gridlayout.js~gridlayout#headrows",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-headRows",
     "src/modules/gridLayout.js~GridLayout#headRows",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#headtbl",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-headTbl",
-    "src/modules/gridLayout.js~GridLayout#headTbl",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#headtblcont",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-headTblCont",
-    "src/modules/gridLayout.js~GridLayout#headTblCont",
     "member"
   ],
   [
@@ -2724,12 +2394,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#initialtablewidth",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-method-initialTableWidth",
-    "src/modules/gridLayout.js~GridLayout#initialTableWidth",
-    "method"
-  ],
-  [
     "src/modules/gridlayout.js~gridlayout#initialized",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-initialized",
     "src/modules/gridLayout.js~GridLayout#initialized",
@@ -2748,72 +2412,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/gridlayout.js~gridlayout#prfxgridflttd",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxGridFltTd",
-    "src/modules/gridLayout.js~GridLayout#prfxGridFltTd",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#prfxgridth",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-prfxGridTh",
-    "src/modules/gridLayout.js~GridLayout#prfxGridTh",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#setcolumnelements",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-method-setColumnElements",
-    "src/modules/gridLayout.js~GridLayout#setColumnElements",
-    "method"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#setconfigwidth",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-method-setConfigWidth",
-    "src/modules/gridLayout.js~GridLayout#setConfigWidth",
-    "method"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#setdefaultcolwidths",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-method-setDefaultColWidths",
-    "src/modules/gridLayout.js~GridLayout#setDefaultColWidths",
-    "method"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#setheadersrow",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-method-setHeadersRow",
-    "src/modules/gridLayout.js~GridLayout#setHeadersRow",
-    "method"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#setoverrides",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-method-setOverrides",
-    "src/modules/gridLayout.js~GridLayout#setOverrides",
-    "method"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#sourcetblhtml",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-sourceTblHtml",
-    "src/modules/gridLayout.js~GridLayout#sourceTblHtml",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#tblcont",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblCont",
-    "src/modules/gridLayout.js~GridLayout#tblCont",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#tblhascoltag",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblHasColTag",
-    "src/modules/gridLayout.js~GridLayout#tblHasColTag",
-    "member"
-  ],
-  [
-    "src/modules/gridlayout.js~gridlayout#tblmaincont",
-    "class/src/modules/gridLayout.js~GridLayout.html#instance-member-tblMainCont",
-    "src/modules/gridLayout.js~GridLayout#tblMainCont",
-    "member"
-  ],
-  [
     "src/modules/gridlayout.js~gridlayout#width",
     "class/src/modules/gridLayout.js~GridLayout.html#instance-member-width",
     "src/modules/gridLayout.js~GridLayout#width",
@@ -2824,12 +2422,6 @@ window.esdocSearchIndex = [
     "file/src/modules/hash.js.html",
     "src/modules/hash.js",
     "file"
-  ],
-  [
-    "src/modules/hash.js~hash#boundsync",
-    "class/src/modules/hash.js~Hash.html#instance-member-boundSync",
-    "src/modules/hash.js~Hash#boundSync",
-    "member"
   ],
   [
     "src/modules/hash.js~hash#constructor",
@@ -2854,12 +2446,6 @@ window.esdocSearchIndex = [
     "class/src/modules/hash.js~Hash.html#instance-method-init",
     "src/modules/hash.js~Hash#init",
     "method"
-  ],
-  [
-    "src/modules/hash.js~hash#lasthash",
-    "class/src/modules/hash.js~Hash.html#instance-member-lastHash",
-    "src/modules/hash.js~Hash#lastHash",
-    "member"
   ],
   [
     "src/modules/hash.js~hash#parse",
@@ -2890,12 +2476,6 @@ window.esdocSearchIndex = [
     "file/src/modules/help.js.html",
     "src/modules/help.js",
     "file"
-  ],
-  [
-    "src/modules/help.js~help#boundmouseup",
-    "class/src/modules/help.js~Help.html#instance-member-boundMouseup",
-    "src/modules/help.js~Help#boundMouseup",
-    "member"
   ],
   [
     "src/modules/help.js~help#btn",
@@ -2982,12 +2562,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/help.js~help#onmouseup",
-    "class/src/modules/help.js~Help.html#instance-method-onMouseup",
-    "src/modules/help.js~Help#onMouseup",
-    "method"
-  ],
-  [
     "src/modules/help.js~help#tgtid",
     "class/src/modules/help.js~Help.html#instance-member-tgtId",
     "src/modules/help.js~Help#tgtId",
@@ -3010,12 +2584,6 @@ window.esdocSearchIndex = [
     "file/src/modules/highlightKeywords.js.html",
     "src/modules/highlightKeywords.js",
     "file"
-  ],
-  [
-    "src/modules/highlightkeywords.js~highlightkeyword#_processterm",
-    "class/src/modules/highlightKeywords.js~HighlightKeyword.html#instance-method-_processTerm",
-    "src/modules/highlightKeywords.js~HighlightKeyword#_processTerm",
-    "method"
   ],
   [
     "src/modules/highlightkeywords.js~highlightkeyword#constructor",
@@ -3186,12 +2754,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/markactivecolumns.js~markactivecolumns#eachcolumncell",
-    "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-method-eachColumnCell",
-    "src/modules/markActiveColumns.js~MarkActiveColumns#eachColumnCell",
-    "method"
-  ],
-  [
     "src/modules/markactivecolumns.js~markactivecolumns#headercssclass",
     "class/src/modules/markActiveColumns.js~MarkActiveColumns.html#instance-member-headerCssClass",
     "src/modules/markActiveColumns.js~MarkActiveColumns#headerCssClass",
@@ -3300,12 +2862,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/noresults.js~noresults#isexternal",
-    "class/src/modules/noResults.js~NoResults.html#instance-member-isExternal",
-    "src/modules/noResults.js~NoResults#isExternal",
-    "member"
-  ],
-  [
     "src/modules/noresults.js~noresults#onafterhide",
     "class/src/modules/noResults.js~NoResults.html#instance-member-onAfterHide",
     "src/modules/noResults.js~NoResults#onAfterHide",
@@ -3328,12 +2884,6 @@ window.esdocSearchIndex = [
     "class/src/modules/noResults.js~NoResults.html#instance-member-onBeforeShow",
     "src/modules/noResults.js~NoResults#onBeforeShow",
     "member"
-  ],
-  [
-    "src/modules/noresults.js~noresults#setwidth",
-    "class/src/modules/noResults.js~NoResults.html#instance-method-setWidth",
-    "src/modules/noResults.js~NoResults#setWidth",
-    "method"
   ],
   [
     "src/modules/noresults.js~noresults#show",
@@ -3360,12 +2910,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/paging.js~paging#btnfirstcont",
-    "class/src/modules/paging.js~Paging.html#instance-member-btnFirstCont",
-    "src/modules/paging.js~Paging#btnFirstCont",
-    "member"
-  ],
-  [
     "src/modules/paging.js~paging#btnfirstpagehtml",
     "class/src/modules/paging.js~Paging.html#instance-member-btnFirstPageHtml",
     "src/modules/paging.js~Paging#btnFirstPageHtml",
@@ -3375,12 +2919,6 @@ window.esdocSearchIndex = [
     "src/modules/paging.js~paging#btnfirstpagetext",
     "class/src/modules/paging.js~Paging.html#instance-member-btnFirstPageText",
     "src/modules/paging.js~Paging#btnFirstPageText",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#btnlastcont",
-    "class/src/modules/paging.js~Paging.html#instance-member-btnLastCont",
-    "src/modules/paging.js~Paging#btnLastCont",
     "member"
   ],
   [
@@ -3396,12 +2934,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/paging.js~paging#btnnextcont",
-    "class/src/modules/paging.js~Paging.html#instance-member-btnNextCont",
-    "src/modules/paging.js~Paging#btnNextCont",
-    "member"
-  ],
-  [
     "src/modules/paging.js~paging#btnnextpagehtml",
     "class/src/modules/paging.js~Paging.html#instance-member-btnNextPageHtml",
     "src/modules/paging.js~Paging#btnNextPageHtml",
@@ -3411,12 +2943,6 @@ window.esdocSearchIndex = [
     "src/modules/paging.js~paging#btnnextpagetext",
     "class/src/modules/paging.js~Paging.html#instance-member-btnNextPageText",
     "src/modules/paging.js~Paging#btnNextPageText",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#btnprevcont",
-    "class/src/modules/paging.js~Paging.html#instance-member-btnPrevCont",
-    "src/modules/paging.js~Paging#btnPrevCont",
     "member"
   ],
   [
@@ -3450,22 +2976,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/paging.js~paging#currentpagenb",
-    "class/src/modules/paging.js~Paging.html#instance-member-currentPageNb",
-    "src/modules/paging.js~Paging#currentPageNb",
-    "member"
-  ],
-  [
     "src/modules/paging.js~paging#destroy",
     "class/src/modules/paging.js~Paging.html#instance-method-destroy",
     "src/modules/paging.js~Paging#destroy",
     "method"
-  ],
-  [
-    "src/modules/paging.js~paging#evt",
-    "class/src/modules/paging.js~Paging.html#instance-member-evt",
-    "src/modules/paging.js~Paging#evt",
-    "member"
   ],
   [
     "src/modules/paging.js~paging#getpage",
@@ -3501,12 +3015,6 @@ window.esdocSearchIndex = [
     "src/modules/paging.js~paging#initialized",
     "class/src/modules/paging.js~Paging.html#instance-member-initialized",
     "src/modules/paging.js~Paging#initialized",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#nbpages",
-    "class/src/modules/paging.js~Paging.html#instance-member-nbPages",
-    "src/modules/paging.js~Paging#nbPages",
     "member"
   ],
   [
@@ -3573,24 +3081,6 @@ window.esdocSearchIndex = [
     "src/modules/paging.js~paging#pagetext",
     "class/src/modules/paging.js~Paging.html#instance-member-pageText",
     "src/modules/paging.js~Paging#pageText",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#pgafter",
-    "class/src/modules/paging.js~Paging.html#instance-member-pgAfter",
-    "src/modules/paging.js~Paging#pgAfter",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#pgbefore",
-    "class/src/modules/paging.js~Paging.html#instance-member-pgBefore",
-    "src/modules/paging.js~Paging#pgBefore",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#pgcont",
-    "class/src/modules/paging.js~Paging.html#instance-member-pgCont",
-    "src/modules/paging.js~Paging#pgCont",
     "member"
   ],
   [
@@ -3672,18 +3162,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/paging.js~paging#slcresultstxt",
-    "class/src/modules/paging.js~Paging.html#instance-member-slcResultsTxt",
-    "src/modules/paging.js~Paging#slcResultsTxt",
-    "member"
-  ],
-  [
-    "src/modules/paging.js~paging#startpagingrow",
-    "class/src/modules/paging.js~Paging.html#instance-member-startPagingRow",
-    "src/modules/paging.js~Paging#startPagingRow",
-    "member"
-  ],
-  [
     "src/modules/paging.js~paging#tgtid",
     "class/src/modules/paging.js~Paging.html#instance-member-tgtId",
     "src/modules/paging.js~Paging#tgtId",
@@ -3700,12 +3178,6 @@ window.esdocSearchIndex = [
     "file/src/modules/popupFilter.js.html",
     "src/modules/popupFilter.js",
     "file"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#activefilteridx",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-activeFilterIdx",
-    "src/modules/popupFilter.js~PopupFilter#activeFilterIdx",
-    "member"
   ],
   [
     "src/modules/popupfilter.js~popupfilter#activeiconpath",
@@ -3780,30 +3252,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/popupfilter.js~popupfilter#filterscache",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-filtersCache",
-    "src/modules/popupFilter.js~PopupFilter#filtersCache",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#fltelms",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-fltElms",
-    "src/modules/popupFilter.js~PopupFilter#fltElms",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#flticons",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-fltIcons",
-    "src/modules/popupFilter.js~PopupFilter#fltIcons",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#fltspans",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-fltSpans",
-    "src/modules/popupFilter.js~PopupFilter#fltSpans",
-    "member"
-  ],
-  [
     "src/modules/popupfilter.js~popupfilter#iconhtml",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-iconHtml",
     "src/modules/popupFilter.js~PopupFilter#iconHtml",
@@ -3858,18 +3306,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/popupfilter.js~popupfilter#onclick",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-onClick",
-    "src/modules/popupFilter.js~PopupFilter#onClick",
-    "method"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#onmouseup",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-onMouseup",
-    "src/modules/popupFilter.js~PopupFilter#onMouseup",
-    "method"
-  ],
-  [
     "src/modules/popupfilter.js~popupfilter#open",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-method-open",
     "src/modules/popupFilter.js~PopupFilter#open",
@@ -3879,12 +3315,6 @@ window.esdocSearchIndex = [
     "src/modules/popupfilter.js~popupfilter#placeholdercssclass",
     "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-placeholderCssClass",
     "src/modules/popupFilter.js~PopupFilter#placeholderCssClass",
-    "member"
-  ],
-  [
-    "src/modules/popupfilter.js~popupfilter#prfxdiv",
-    "class/src/modules/popupFilter.js~PopupFilter.html#instance-member-prfxDiv",
-    "src/modules/popupFilter.js~PopupFilter#prfxDiv",
     "member"
   ],
   [
@@ -3918,12 +3348,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/rowscounter.js~rowscounter#container",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-container",
-    "src/modules/rowsCounter.js~RowsCounter#container",
-    "member"
-  ],
-  [
     "src/modules/rowscounter.js~rowscounter#cssclass",
     "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-cssClass",
     "src/modules/rowsCounter.js~RowsCounter#cssClass",
@@ -3951,12 +3375,6 @@ window.esdocSearchIndex = [
     "src/modules/rowscounter.js~rowscounter#initialized",
     "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-initialized",
     "src/modules/rowsCounter.js~RowsCounter#initialized",
-    "member"
-  ],
-  [
-    "src/modules/rowscounter.js~rowscounter#label",
-    "class/src/modules/rowsCounter.js~RowsCounter.html#instance-member-label",
-    "src/modules/rowsCounter.js~RowsCounter#label",
     "member"
   ],
   [
@@ -4008,30 +3426,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/modules/state.js~state#_synccolsvisibility",
-    "class/src/modules/state.js~State.html#instance-method-_syncColsVisibility",
-    "src/modules/state.js~State#_syncColsVisibility",
-    "method"
-  ],
-  [
-    "src/modules/state.js~state#_syncfilters",
-    "class/src/modules/state.js~State.html#instance-method-_syncFilters",
-    "src/modules/state.js~State#_syncFilters",
-    "method"
-  ],
-  [
-    "src/modules/state.js~state#_syncfiltersvisibility",
-    "class/src/modules/state.js~State.html#instance-method-_syncFiltersVisibility",
-    "src/modules/state.js~State#_syncFiltersVisibility",
-    "method"
-  ],
-  [
-    "src/modules/state.js~state#_syncsort",
-    "class/src/modules/state.js~State.html#instance-method-_syncSort",
-    "src/modules/state.js~State#_syncSort",
-    "method"
-  ],
-  [
     "src/modules/state.js~state#constructor",
     "class/src/modules/state.js~State.html#instance-constructor-constructor",
     "src/modules/state.js~State#constructor",
@@ -4068,36 +3462,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/state.js~state#enablestorage",
-    "class/src/modules/state.js~State.html#instance-member-enableStorage",
-    "src/modules/state.js~State#enableStorage",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#filtersviskey",
-    "class/src/modules/state.js~State.html#instance-member-filtersVisKey",
-    "src/modules/state.js~State#filtersVisKey",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#filtersvisibility",
-    "class/src/modules/state.js~State.html#instance-member-filtersVisibility",
-    "src/modules/state.js~State#filtersVisibility",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#hash",
-    "class/src/modules/state.js~State.html#instance-member-hash",
-    "src/modules/state.js~State#hash",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#hiddencols",
-    "class/src/modules/state.js~State.html#instance-member-hiddenCols",
-    "src/modules/state.js~State#hiddenCols",
-    "member"
-  ],
-  [
     "src/modules/state.js~state#init",
     "class/src/modules/state.js~State.html#instance-method-init",
     "src/modules/state.js~State#init",
@@ -4120,30 +3484,6 @@ window.esdocSearchIndex = [
     "class/src/modules/state.js~State.html#instance-method-overrideAndSync",
     "src/modules/state.js~State#overrideAndSync",
     "method"
-  ],
-  [
-    "src/modules/state.js~state#pagelength",
-    "class/src/modules/state.js~State.html#instance-member-pageLength",
-    "src/modules/state.js~State#pageLength",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#pagelengthkey",
-    "class/src/modules/state.js~State.html#instance-member-pageLengthKey",
-    "src/modules/state.js~State#pageLengthKey",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#pagenb",
-    "class/src/modules/state.js~State.html#instance-member-pageNb",
-    "src/modules/state.js~State#pageNb",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#pagenbkey",
-    "class/src/modules/state.js~State.html#instance-member-pageNbKey",
-    "src/modules/state.js~State#pageNbKey",
-    "member"
   ],
   [
     "src/modules/state.js~state#persistcolsvisibility",
@@ -4179,30 +3519,6 @@ window.esdocSearchIndex = [
     "src/modules/state.js~state#persistsort",
     "class/src/modules/state.js~State.html#instance-member-persistSort",
     "src/modules/state.js~State#persistSort",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#prfxcol",
-    "class/src/modules/state.js~State.html#instance-member-prfxCol",
-    "src/modules/state.js~State#prfxCol",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#sort",
-    "class/src/modules/state.js~State.html#instance-member-sort",
-    "src/modules/state.js~State#sort",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#state",
-    "class/src/modules/state.js~State.html#instance-member-state",
-    "src/modules/state.js~State#state",
-    "member"
-  ],
-  [
-    "src/modules/state.js~state#storage",
-    "class/src/modules/state.js~State.html#instance-member-storage",
-    "src/modules/state.js~State#storage",
     "member"
   ],
   [
@@ -4260,21 +3576,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/statusbar.js~statusbar#container",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-container",
-    "src/modules/statusBar.js~StatusBar#container",
-    "member"
-  ],
-  [
     "src/modules/statusbar.js~statusbar#cssclass",
     "class/src/modules/statusBar.js~StatusBar.html#instance-member-cssClass",
     "src/modules/statusBar.js~StatusBar#cssClass",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#delay",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-delay",
-    "src/modules/statusBar.js~StatusBar#delay",
     "member"
   ],
   [
@@ -4293,12 +3597,6 @@ window.esdocSearchIndex = [
     "src/modules/statusbar.js~statusbar#initialized",
     "class/src/modules/statusBar.js~StatusBar.html#instance-member-initialized",
     "src/modules/statusBar.js~StatusBar#initialized",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#labelcontainer",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-labelContainer",
-    "src/modules/statusBar.js~StatusBar#labelContainer",
     "member"
   ],
   [
@@ -4323,12 +3621,6 @@ window.esdocSearchIndex = [
     "src/modules/statusbar.js~statusbar#msgclear",
     "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgClear",
     "src/modules/statusBar.js~StatusBar#msgClear",
-    "member"
-  ],
-  [
-    "src/modules/statusbar.js~statusbar#msgcontainer",
-    "class/src/modules/statusBar.js~StatusBar.html#instance-member-msgContainer",
-    "src/modules/statusBar.js~StatusBar#msgContainer",
     "member"
   ],
   [
@@ -4428,30 +3720,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/storage.js~storage#duration",
-    "class/src/modules/storage.js~Storage.html#instance-member-duration",
-    "src/modules/storage.js~Storage#duration",
-    "member"
-  ],
-  [
-    "src/modules/storage.js~storage#emitter",
-    "class/src/modules/storage.js~Storage.html#instance-member-emitter",
-    "src/modules/storage.js~Storage#emitter",
-    "member"
-  ],
-  [
-    "src/modules/storage.js~storage#enablecookie",
-    "class/src/modules/storage.js~Storage.html#instance-member-enableCookie",
-    "src/modules/storage.js~Storage#enableCookie",
-    "member"
-  ],
-  [
-    "src/modules/storage.js~storage#enablelocalstorage",
-    "class/src/modules/storage.js~Storage.html#instance-member-enableLocalStorage",
-    "src/modules/storage.js~Storage#enableLocalStorage",
-    "member"
-  ],
-  [
     "src/modules/storage.js~storage#getkey",
     "class/src/modules/storage.js~Storage.html#instance-method-getKey",
     "src/modules/storage.js~Storage#getKey",
@@ -4482,34 +3750,16 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/storage.js~storage#state",
-    "class/src/modules/storage.js~Storage.html#instance-member-state",
-    "src/modules/storage.js~Storage#state",
-    "member"
-  ],
-  [
     "src/modules/storage.js~storage#sync",
     "class/src/modules/storage.js~Storage.html#instance-method-sync",
     "src/modules/storage.js~Storage#sync",
     "method"
   ],
   [
-    "src/modules/storage.js~storage#tf",
-    "class/src/modules/storage.js~Storage.html#instance-member-tf",
-    "src/modules/storage.js~Storage#tf",
-    "member"
-  ],
-  [
     "src/modules/toolbar.js",
     "file/src/modules/toolbar.js.html",
     "src/modules/toolbar.js",
     "file"
-  ],
-  [
-    "src/modules/toolbar.js~toolbar#ccont",
-    "class/src/modules/toolbar.js~Toolbar.html#instance-member-cCont",
-    "src/modules/toolbar.js~Toolbar#cCont",
-    "member"
   ],
   [
     "src/modules/toolbar.js~toolbar#ccontcssclass",
@@ -4524,12 +3774,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/modules/toolbar.js~toolbar#cont",
-    "class/src/modules/toolbar.js~Toolbar.html#instance-member-cont",
-    "src/modules/toolbar.js~Toolbar#cont",
-    "member"
-  ],
-  [
     "src/modules/toolbar.js~toolbar#contcssclass",
     "class/src/modules/toolbar.js~Toolbar.html#instance-member-contCssClass",
     "src/modules/toolbar.js~Toolbar#contCssClass",
@@ -4539,12 +3783,6 @@ window.esdocSearchIndex = [
     "src/modules/toolbar.js~toolbar#container",
     "class/src/modules/toolbar.js~Toolbar.html#instance-method-container",
     "src/modules/toolbar.js~Toolbar#container",
-    "method"
-  ],
-  [
-    "src/modules/toolbar.js~toolbar#createcontainer",
-    "class/src/modules/toolbar.js~Toolbar.html#instance-method-createContainer",
-    "src/modules/toolbar.js~Toolbar#createContainer",
     "method"
   ],
   [
@@ -4572,27 +3810,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/modules/toolbar.js~toolbar#innercont",
-    "class/src/modules/toolbar.js~Toolbar.html#instance-member-innerCont",
-    "src/modules/toolbar.js~Toolbar#innerCont",
-    "member"
-  ],
-  [
-    "src/modules/toolbar.js~toolbar#lcont",
-    "class/src/modules/toolbar.js~Toolbar.html#instance-member-lCont",
-    "src/modules/toolbar.js~Toolbar#lCont",
-    "member"
-  ],
-  [
     "src/modules/toolbar.js~toolbar#lcontcssclass",
     "class/src/modules/toolbar.js~Toolbar.html#instance-member-lContCssClass",
     "src/modules/toolbar.js~Toolbar#lContCssClass",
-    "member"
-  ],
-  [
-    "src/modules/toolbar.js~toolbar#rcont",
-    "class/src/modules/toolbar.js~Toolbar.html#instance-member-rCont",
-    "src/modules/toolbar.js~Toolbar#rCont",
     "member"
   ],
   [
@@ -4644,58 +3864,10 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/tablefilter.js~tablefilter#extregistry",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-ExtRegistry",
-    "src/tablefilter.js~TableFilter#ExtRegistry",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#mod",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-Mod",
-    "src/tablefilter.js~TableFilter#Mod",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#_buildinputfilter",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-_buildInputFilter",
-    "src/tablefilter.js~TableFilter#_buildInputFilter",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#_buildsubmitbutton",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-_buildSubmitButton",
-    "src/tablefilter.js~TableFilter#_buildSubmitButton",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#_initnofilters",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-_initNoFilters",
-    "src/tablefilter.js~TableFilter#_initNoFilters",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#_insertfiltersrow",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-_insertFiltersRow",
-    "src/tablefilter.js~TableFilter#_insertFiltersRow",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#_match",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-_match",
-    "src/tablefilter.js~TableFilter#_match",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#activatefilter",
     "class/src/tablefilter.js~TableFilter.html#instance-method-activateFilter",
     "src/tablefilter.js~TableFilter#activateFilter",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#activefilterid",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-activeFilterId",
-    "src/tablefilter.js~TableFilter#activeFilterId",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#alternaterows",
@@ -4719,12 +3891,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#autofilterdelay",
     "class/src/tablefilter.js~TableFilter.html#instance-member-autoFilterDelay",
     "src/tablefilter.js~TableFilter#autoFilterDelay",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#autofiltertimer",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-autoFilterTimer",
-    "src/tablefilter.js~TableFilter#autoFilterTimer",
     "member"
   ],
   [
@@ -4752,12 +3918,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#buildfilterid",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-buildFilterId",
-    "src/tablefilter.js~TableFilter#buildFilterId",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#casesensitive",
     "class/src/tablefilter.js~TableFilter.html#instance-member-caseSensitive",
     "src/tablefilter.js~TableFilter#caseSensitive",
@@ -4767,12 +3927,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#cellparser",
     "class/src/tablefilter.js~TableFilter.html#instance-member-cellParser",
     "src/tablefilter.js~TableFilter#cellParser",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#cfg",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-cfg",
-    "src/tablefilter.js~TableFilter#cfg",
     "member"
   ],
   [
@@ -4815,12 +3969,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#customoptions",
     "class/src/tablefilter.js~TableFilter.html#instance-member-customOptions",
     "src/tablefilter.js~TableFilter#customOptions",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#datetype",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-dateType",
-    "src/tablefilter.js~TableFilter#dateType",
     "member"
   ],
   [
@@ -4992,18 +4140,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#filtertypes",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-filterTypes",
-    "src/tablefilter.js~TableFilter#filterTypes",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#filtereddata",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-filteredData",
-    "src/tablefilter.js~TableFilter#filteredData",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#filtersrowindex",
     "class/src/tablefilter.js~TableFilter.html#instance-member-filtersRowIndex",
     "src/tablefilter.js~TableFilter#filtersRowIndex",
@@ -5025,12 +4161,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#fltgrid",
     "class/src/tablefilter.js~TableFilter.html#instance-member-fltGrid",
     "src/tablefilter.js~TableFilter#fltGrid",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#fltids",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-fltIds",
-    "src/tablefilter.js~TableFilter#fltIds",
     "member"
   ],
   [
@@ -5085,12 +4215,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#getclearfiltertext",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getClearFilterText",
     "src/tablefilter.js~TableFilter#getClearFilterText",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#getcolvalues",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-getColValues",
-    "src/tablefilter.js~TableFilter#getColValues",
     "method"
   ],
   [
@@ -5178,12 +4302,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#getfiltereddatacol",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredDataCol",
-    "src/tablefilter.js~TableFilter#getFilteredDataCol",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#getfilteredvalues",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getFilteredValues",
     "src/tablefilter.js~TableFilter#getFilteredValues",
@@ -5256,33 +4374,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#getstylepath",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-getStylePath",
-    "src/tablefilter.js~TableFilter#getStylePath",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#getstylesheet",
     "class/src/tablefilter.js~TableFilter.html#instance-method-getStylesheet",
     "src/tablefilter.js~TableFilter#getStylesheet",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#getstylesheetpath",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-getStylesheetPath",
-    "src/tablefilter.js~TableFilter#getStylesheetPath",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#gettabledata",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-getTableData",
-    "src/tablefilter.js~TableFilter#getTableData",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#getthemespath",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-getThemesPath",
-    "src/tablefilter.js~TableFilter#getThemesPath",
     "method"
   ],
   [
@@ -5334,27 +4428,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#hasconfig",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasConfig",
-    "src/tablefilter.js~TableFilter#hasConfig",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#hascustomoptions",
     "class/src/tablefilter.js~TableFilter.html#instance-member-hasCustomOptions",
     "src/tablefilter.js~TableFilter#hasCustomOptions",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#hasexactmatchbycol",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasExactMatchByCol",
-    "src/tablefilter.js~TableFilter#hasExactMatchByCol",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#hasexcludedrows",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasExcludedRows",
-    "src/tablefilter.js~TableFilter#hasExcludedRows",
     "member"
   ],
   [
@@ -5364,22 +4440,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#hasthemes",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-hasThemes",
-    "src/tablefilter.js~TableFilter#hasThemes",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#hastype",
     "class/src/tablefilter.js~TableFilter.html#instance-method-hasType",
     "src/tablefilter.js~TableFilter#hasType",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#headersrow",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-headersRow",
-    "src/tablefilter.js~TableFilter#headersRow",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#help",
@@ -5391,12 +4455,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#highlightkeywords",
     "class/src/tablefilter.js~TableFilter.html#instance-member-highlightKeywords",
     "src/tablefilter.js~TableFilter#highlightKeywords",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#id",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-id",
-    "src/tablefilter.js~TableFilter#id",
     "member"
   ],
   [
@@ -5430,24 +4488,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/tablefilter.js~tablefilter#initfeatures",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-initFeatures",
-    "src/tablefilter.js~TableFilter#initFeatures",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#initialized",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-initialized",
-    "src/tablefilter.js~TableFilter#initialized",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#instantiatefeatures",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-instantiateFeatures",
-    "src/tablefilter.js~TableFilter#instantiateFeatures",
-    "method"
-  ],
-  [
     "src/tablefilter.js~tablefilter#iscustomoptions",
     "class/src/tablefilter.js~TableFilter.html#instance-method-isCustomOptions",
     "src/tablefilter.js~TableFilter#isCustomOptions",
@@ -5457,12 +4497,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#isexactmatch",
     "class/src/tablefilter.js~TableFilter.html#instance-method-isExactMatch",
     "src/tablefilter.js~TableFilter#isExactMatch",
-    "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#isexternalflt",
-    "class/src/tablefilter.js~TableFilter.html#instance-method-isExternalFlt",
-    "src/tablefilter.js~TableFilter#isExternalFlt",
     "method"
   ],
   [
@@ -5488,30 +4522,6 @@ window.esdocSearchIndex = [
     "class/src/tablefilter.js~TableFilter.html#instance-method-isRowValid",
     "src/tablefilter.js~TableFilter#isRowValid",
     "method"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#issortnumasc",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isSortNumAsc",
-    "src/tablefilter.js~TableFilter#isSortNumAsc",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#issortnumdesc",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isSortNumDesc",
-    "src/tablefilter.js~TableFilter#isSortNumDesc",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#isusertyping",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isUserTyping",
-    "src/tablefilter.js~TableFilter#isUserTyping",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#iswatermarkarray",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-isWatermarkArray",
-    "src/tablefilter.js~TableFilter#isWatermarkArray",
-    "member"
   ],
   [
     "src/tablefilter.js~tablefilter#leoperator",
@@ -5577,24 +4587,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#markactivecolumns",
     "class/src/tablefilter.js~TableFilter.html#instance-member-markActiveColumns",
     "src/tablefilter.js~TableFilter#markActiveColumns",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#nbcells",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-nbCells",
-    "src/tablefilter.js~TableFilter#nbCells",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#nbfilterablerows",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-nbFilterableRows",
-    "src/tablefilter.js~TableFilter#nbFilterableRows",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#nbhiddenrows",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-nbHiddenRows",
-    "src/tablefilter.js~TableFilter#nbHiddenRows",
     "member"
   ],
   [
@@ -5697,30 +4689,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#popupfilters",
     "class/src/tablefilter.js~TableFilter.html#instance-member-popupFilters",
     "src/tablefilter.js~TableFilter#popupFilters",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxflt",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxFlt",
-    "src/tablefilter.js~TableFilter#prfxFlt",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxresponsive",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxResponsive",
-    "src/tablefilter.js~TableFilter#prfxResponsive",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxtf",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxTf",
-    "src/tablefilter.js~TableFilter#prfxTf",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#prfxvalbutton",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-prfxValButton",
-    "src/tablefilter.js~TableFilter#prfxValButton",
     "member"
   ],
   [
@@ -5856,18 +4824,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#stylesheetid",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-stylesheetId",
-    "src/tablefilter.js~TableFilter#stylesheetId",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#tbl",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-tbl",
-    "src/tablefilter.js~TableFilter#tbl",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#themes",
     "class/src/tablefilter.js~TableFilter.html#instance-member-themes",
     "src/tablefilter.js~TableFilter#themes",
@@ -5892,12 +4848,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/tablefilter.js~tablefilter#validrowsindex",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-validRowsIndex",
-    "src/tablefilter.js~TableFilter#validRowsIndex",
-    "member"
-  ],
-  [
     "src/tablefilter.js~tablefilter#validateallrows",
     "class/src/tablefilter.js~TableFilter.html#instance-method-validateAllRows",
     "src/tablefilter.js~TableFilter#validateAllRows",
@@ -5919,12 +4869,6 @@ window.esdocSearchIndex = [
     "src/tablefilter.js~tablefilter#watermark",
     "class/src/tablefilter.js~TableFilter.html#instance-member-watermark",
     "src/tablefilter.js~TableFilter#watermark",
-    "member"
-  ],
-  [
-    "src/tablefilter.js~tablefilter#year",
-    "class/src/tablefilter.js~TableFilter.html#instance-member-year",
-    "src/tablefilter.js~TableFilter#year",
     "member"
   ],
   [

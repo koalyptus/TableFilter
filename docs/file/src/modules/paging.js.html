@@ -47,6 +47,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-tag">tag</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addEvt">addEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-cancelEvt">cancelEvt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isKeyPressed">isKeyPressed</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-keyCode">keyCode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-removeEvt">removeEvt</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-stopEvt">stopEvt</a></span></span></li>
@@ -137,7 +138,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Feature} from &apos;../feature&apos;;
 import {createElm, createOpt, createText, elm, removeElm} from &apos;../dom&apos;;
 import {isArray, isNull, EMPTY_FN} from &apos;../types&apos;;
-import {addEvt, keyCode, removeEvt} from &apos;../event&apos;;
+import {addEvt, removeEvt, isKeyPressed} from &apos;../event&apos;;
 import {INPUT, SELECT, NONE, ENTER_KEY} from &apos;../const&apos;;
 import {
     defaultsStr, defaultsNb, defaultsBool, defaultsArr, defaultsFn
@@ -453,8 +454,7 @@ export class Paging extends Feature {
                 o.changePage(0);
             },
             _detectKey(e) {
-                let key = keyCode(e);
-                if (key === ENTER_KEY) {
+                if (isKeyPressed(e, [ENTER_KEY])) {
                     if (tf.sorted) {
                         tf.filter();
                         o.changePage(o.evt.slcIndex());
