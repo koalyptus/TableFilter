@@ -19,8 +19,9 @@
 <script data-config>
     var filtersConfig = {
         base_path: '../dist/tablefilter/',
-        auto_filter: true,
-        auto_filter_delay: 750, //milliseconds
+        auto_filter: {
+            delay: 750 // milliseconds
+        },
         filters_row_index: 1,
         state: true,
         alternate_rows: true,
