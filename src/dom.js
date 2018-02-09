@@ -153,14 +153,15 @@ export const createOpt = (text, value, isSel) => {
  * @param  {String} labelText check item label text
  * @return {Object}           li DOM element
  */
-export const createCheckItem = (id, chkValue, labelText) => {
+export const createCheckItem = (id, chkValue, labelText, extraAttr = []) => {
     let li = createElm('li');
     let label = createElm('label', ['for', id]);
     let check = createElm('input',
         ['id', id],
         ['name', id],
         ['type', 'checkbox'],
-        ['value', chkValue]
+        ['value', chkValue],
+        extraAttr
     );
     label.appendChild(check);
     label.appendChild(createText(labelText));
