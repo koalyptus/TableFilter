@@ -151,6 +151,7 @@ export const createOpt = (text, value, isSel) => {
  * @param  {String} id  index of check item
  * @param  {String} chkValue  check item value
  * @param  {String} labelText check item label text
+ * @param  {Array} extraAttr  array containing attribute name and its value
  * @return {Object}           li DOM element
  */
 export const createCheckItem = (id, chkValue, labelText, extraAttr = []) => {

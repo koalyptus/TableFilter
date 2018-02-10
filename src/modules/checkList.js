@@ -106,7 +106,7 @@ export class CheckList extends BaseDropdown {
         let tf = this.tf;
 
         this.emitter.emit('filter-focus', tf, elm);
-        this.setCheckListValues(elm);
+        this.setItemOption(elm);
         tf.filter();
     }
 
@@ -365,11 +365,11 @@ export class CheckList extends BaseDropdown {
     }
 
     /**
-     * Store checked options in DOM element attribute
+     * Set/unset value of passed item option in filter's DOM element attribute
      * @param {Object} o checklist option DOM element
      * @private
      */
-    setCheckListValues(o) {
+    setItemOption(o) {
         if (!o) {
             return;
         }
@@ -378,69 +378,60 @@ export class CheckList extends BaseDropdown {
         let chkValue = o.value; //checked item value
         let chkIndex = o.dataset.idx;
         let colIdx = tf.getColumnIndexFromFilterId(o.id);
-        let itemTag = 'LI';
-
         let n = tf.getFilterElement(parseInt(colIdx, 10));
-        let li = n.childNodes[chkIndex];
-        let colIndex = n.getAttribute('colIndex');
+        let items = n.childNodes;
+        let li = items[chkIndex];
         //selected values (ul tag)
-        let fltValue = n.getAttribute('value');
+        let slcValues = n.getAttribute('value') || '';
         //selected items indexes (ul tag)
-        let fltIndexes = n.getAttribute('indexes') || '';
+        let slcIndexes = n.getAttribute('indexes') || '';
 
         if (o.checked) {
             //show all item
             if (chkValue === '') {
-                if (fltIndexes !== '') {
-                    //items indexes
-                    let indSplit = fltIndexes.split(tf.separator);
-                    //checked items loop
-                    for (let u = 0; u < indSplit.length; u++) {
-                        //checked item
-                        let cChk = elm(tf.fltIds[colIndex] + '_' +
-                            indSplit[u]);
-                        if (cChk) {
-                            cChk.checked = false;
-                            removeClass(n.childNodes[indSplit[u]],
-                                this.selectedItemCssClass);
-                        }
+                //items indexes
+                let indexes = slcIndexes.split(tf.separator);
+                indexes.forEach(idx => {
+                    idx = Number(idx);
+                    let li = items[idx];
+                    let chx = tag(li, 'input')[0];
+                    if (chx && idx > 0) {
+                        chx.checked = false;
+                        removeClass(li, this.selectedItemCssClass);
                     }
-                }
+                });
+
                 n.setAttribute('value', '');
                 n.setAttribute('indexes', '');
 
             } else {
-                fltValue = (fltValue) ? fltValue : '';
-                chkValue = trim(fltValue + ' ' + chkValue + ' ' +
-                    tf.orOperator);
-                chkIndex = fltIndexes + chkIndex + tf.separator;
-                n.setAttribute('value', chkValue);
-                n.setAttribute('indexes', chkIndex);
-                //1st option unchecked
-                if (elm(tf.fltIds[colIndex] + '_0')) {
-                    elm(tf.fltIds[colIndex] + '_0').checked = false;
+                let index = slcIndexes + chkIndex + tf.separator;
+                let values =
+                    trim(slcValues + ' ' + chkValue + ' ' + tf.orOperator);
+
+                n.setAttribute('value', values);
+                n.setAttribute('indexes', index);
+
+                //uncheck first option
+                let chx0 = tag(items[0], 'input')[0];
+                if (chx0) {
+                    chx0.checked = false;
                 }
             }
 
-            if (li.nodeName === itemTag) {
-                removeClass(n.childNodes[0], this.selectedItemCssClass);
-                addClass(li, this.selectedItemCssClass);
-            }
+            removeClass(items[0], this.selectedItemCssClass);
+            addClass(li, this.selectedItemCssClass);
         } else { //removes values and indexes
-            if (chkValue !== '') {
-                let replaceValue = new RegExp(
-                    rgxEsc(chkValue + ' ' + tf.orOperator));
-                fltValue = fltValue.replace(replaceValue, '');
-                n.setAttribute('value', trim(fltValue));
+            let replaceValue =
+                new RegExp(rgxEsc(chkValue + ' ' + tf.orOperator));
+            let values = slcValues.replace(replaceValue, '');
+            let replaceIndex = new RegExp(rgxEsc(chkIndex + tf.separator));
+            let indexes = slcIndexes.replace(replaceIndex, '');
 
-                let replaceIndex = new RegExp(
-                    rgxEsc(chkIndex + tf.separator));
-                fltIndexes = fltIndexes.replace(replaceIndex, '');
-                n.setAttribute('indexes', fltIndexes);
-            }
-            if (li.nodeName === itemTag) {
-                removeClass(li, this.selectedItemCssClass);
-            }
+            n.setAttribute('value', trim(values));
+            n.setAttribute('indexes', indexes);
+
+            removeClass(li, this.selectedItemCssClass);
         }
     }
 
@@ -480,7 +471,7 @@ export class CheckList extends BaseDropdown {
                     chk.checked = false;
                 }
             }
-            this.setCheckListValues(chk);
+            this.setItemOption(chk);
         });
     }
 
