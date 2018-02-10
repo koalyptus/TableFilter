@@ -109,12 +109,15 @@
         });
         tf.init();
 
+        var flt0 = tf.getFilterElement(0);
         var flt1 = tf.getFilterElement(1);
 
         var evObj = document.createEvent('HTMLEvents');
         evObj.initEvent('click', true, true);
 
+        tf.setFilterValue(0, 'Sydney');
         tf.setFilterValue(1, 'Adelaide');
+        flt0.querySelectorAll('input')[1].dispatchEvent(evObj);
         flt1.querySelectorAll('input')[1].dispatchEvent(evObj);
 
         setTimeout(testWithChecklistFilters.call(null, tf), 50);
