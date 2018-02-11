@@ -116,9 +116,9 @@
         evObj.initEvent('click', true, true);
 
         tf.setFilterValue(0, 'Sydney');
-        flt0.querySelectorAll('input')[1].dispatchEvent(evObj);
         tf.setFilterValue(1, 'Adelaide');
-        flt1.querySelectorAll('input')[0].dispatchEvent(evObj);
+        flt0.querySelectorAll('input')[1].dispatchEvent(evObj);
+        flt1.querySelectorAll('input')[1].dispatchEvent(evObj);
 
         setTimeout(testWithChecklistFilters.call(null, tf), 50);
     }
