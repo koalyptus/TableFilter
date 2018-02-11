@@ -405,12 +405,12 @@ export class CheckList extends BaseDropdown {
                 n.setAttribute('indexes', '');
 
             } else {
-                let index = slcIndexes + chkIndex + tf.separator;
+                let indexes = slcIndexes + chkIndex + tf.separator;
                 let values =
                     trim(slcValues + ' ' + chkValue + ' ' + tf.orOperator);
 
                 n.setAttribute('value', values);
-                n.setAttribute('indexes', index);
+                n.setAttribute('indexes', indexes);
 
                 //uncheck first option
                 let chx0 = tag(items[0], 'input')[0];
