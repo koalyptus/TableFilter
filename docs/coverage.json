@@ -22,7 +22,7 @@
       "expectCount": 14,
       "actualCount": 13,
       "undocumentLines": [
-        188
+        190
       ]
     },
     "src/emitter.js": {

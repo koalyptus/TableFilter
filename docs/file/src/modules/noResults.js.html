@@ -247,12 +247,13 @@ export class NoResults extends Feature {
         this.cont = cont;
 
         // subscribe to after-filtering event
-        this.emitter.on([&apos;after-filtering&apos;], () =&gt; this.toggle());
+        this.emitter.on(
+            [&apos;initialized&apos;, &apos;after-filtering&apos;],
+            () =&gt; this.toggle()
+        );
 
         /** @inherited */
         this.initialized = true;
-
-        this.hide();
     }
 
     /**
@@ -314,9 +315,7 @@ export class NoResults extends Feature {
         }
     }
 
-    /**
-     * Remove feature
-     */
+    /** Remove feature */
     destroy() {
         if (!this.initialized) {
             return;

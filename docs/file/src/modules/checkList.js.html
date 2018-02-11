@@ -243,7 +243,7 @@ export class CheckList extends BaseDropdown {
         let tf = this.tf;
 
         this.emitter.emit(&apos;filter-focus&apos;, tf, elm);
-        this.setCheckListValues(elm);
+        this.setItemOption(elm);
         tf.filter();
     }
 
@@ -437,7 +437,9 @@ export class CheckList extends BaseDropdown {
             let val = this.opts[y]; //item value
             let lbl = this.isCustom ? this.optsTxt[y] : val; //item text
             let fltId = tf.fltIds[colIndex];
-            let li = createCheckItem(`${fltId}_${(y + chkCt)}`, val, lbl);
+            let lblIdx = y + chkCt;
+            let li = createCheckItem(`${fltId}_${lblIdx}`, val, lbl,
+                [&apos;data-idx&apos;, lblIdx]);
             li.className = this.itemCssClass;
 
             if (tf.linkedFilters &amp;&amp; tf.disableExcludedOptions &amp;&amp;
@@ -469,7 +471,7 @@ export class CheckList extends BaseDropdown {
         let chkCt = 1;
         let fltId = tf.fltIds[colIndex];
         let li0 = createCheckItem(`${fltId}_0`, &apos;&apos;,
-            tf.getClearFilterText(colIndex));
+            tf.getClearFilterText(colIndex), [&apos;data-idx&apos;, 0]);
         li0.className = this.itemCssClass;
         ul.appendChild(li0);
 
@@ -481,7 +483,7 @@ export class CheckList extends BaseDropdown {
 
         if (tf.enableEmptyOption) {
             let li1 = createCheckItem(`${fltId}_1`, tf.emOperator,
-                tf.emptyText);
+                tf.emptyText, [&apos;data-idx&apos;, 1]);
             li1.className = this.itemCssClass;
             ul.appendChild(li1);
             addEvt(li1.check, &apos;click&apos;, evt =&gt; this.optionClick(evt));
@@ -490,7 +492,7 @@ export class CheckList extends BaseDropdown {
 
         if (tf.enableNonEmptyOption) {
             let li2 = createCheckItem(`${fltId}_2`, tf.nmOperator,
-                tf.nonEmptyText);
+                tf.nonEmptyText, [&apos;data-idx&apos;, 2]);
             li2.className = this.itemCssClass;
             ul.appendChild(li2);
             addEvt(li2.check, &apos;click&apos;, evt =&gt; this.optionClick(evt));
@@ -500,81 +502,73 @@ export class CheckList extends BaseDropdown {
     }
 
     /**
-     * Store checked options in DOM element attribute
+     * Set/unset value of passed item option in filter&apos;s DOM element attribute
      * @param {Object} o checklist option DOM element
      * @private
      */
-    setCheckListValues(o) {
+    setItemOption(o) {
         if (!o) {
             return;
         }
 
         let tf = this.tf;
         let chkValue = o.value; //checked item value
-        // TODO: provide helper to extract column index, ugly!
-        let chkIndex = parseInt(o.id.split(&apos;_&apos;)[2], 10);
+        let chkIndex = o.dataset.idx;
         let colIdx = tf.getColumnIndexFromFilterId(o.id);
-        let itemTag = &apos;LI&apos;;
-
         let n = tf.getFilterElement(parseInt(colIdx, 10));
-        let li = n.childNodes[chkIndex];
-        let colIndex = n.getAttribute(&apos;colIndex&apos;);
-        let fltValue = n.getAttribute(&apos;value&apos;); //filter value (ul tag)
-        let fltIndexes = n.getAttribute(&apos;indexes&apos;); //selected items (ul tag)
+        let items = n.childNodes;
+        let li = items[chkIndex];
+        //selected values (ul tag)
+        let slcValues = n.getAttribute(&apos;value&apos;) || &apos;&apos;;
+        //selected items indexes (ul tag)
+        let slcIndexes = n.getAttribute(&apos;indexes&apos;) || &apos;&apos;;
 
         if (o.checked) {
             //show all item
             if (chkValue === &apos;&apos;) {
-                if ((fltIndexes &amp;&amp; fltIndexes !== &apos;&apos;)) {
-                    //items indexes
-                    let indSplit = fltIndexes.split(tf.separator);
-                    //checked items loop
-                    for (let u = 0; u &lt; indSplit.length; u++) {
-                        //checked item
-                        let cChk = elm(tf.fltIds[colIndex] + &apos;_&apos; +
-                            indSplit[u]);
-                        if (cChk) {
-                            cChk.checked = false;
-                            removeClass(n.childNodes[indSplit[u]],
-                                this.selectedItemCssClass);
-                        }
+                //items indexes
+                let indexes = slcIndexes.split(tf.separator);
+                indexes.forEach(idx =&gt; {
+                    idx = Number(idx);
+                    let li = items[idx];
+                    let chx = tag(li, &apos;input&apos;)[0];
+                    if (chx &amp;&amp; idx &gt; 0) {
+                        chx.checked = false;
+                        removeClass(li, this.selectedItemCssClass);
                     }
-                }
+                });
+
                 n.setAttribute(&apos;value&apos;, &apos;&apos;);
                 n.setAttribute(&apos;indexes&apos;, &apos;&apos;);
 
             } else {
-                fltValue = (fltValue) ? fltValue : &apos;&apos;;
-                chkValue = trim(fltValue + &apos; &apos; + chkValue + &apos; &apos; +
-                    tf.orOperator);
-                chkIndex = fltIndexes + chkIndex + tf.separator;
-                n.setAttribute(&apos;value&apos;, chkValue);
-                n.setAttribute(&apos;indexes&apos;, chkIndex);
-                //1st option unchecked
-                if (elm(tf.fltIds[colIndex] + &apos;_0&apos;)) {
-                    elm(tf.fltIds[colIndex] + &apos;_0&apos;).checked = false;
+                let indexes = slcIndexes + chkIndex + tf.separator;
+                let values =
+                    trim(slcValues + &apos; &apos; + chkValue + &apos; &apos; + tf.orOperator);
+
+                n.setAttribute(&apos;value&apos;, values);
+                n.setAttribute(&apos;indexes&apos;, indexes);
+
+                //uncheck first option
+                let chx0 = tag(items[0], &apos;input&apos;)[0];
+                if (chx0) {
+                    chx0.checked = false;
                 }
             }
 
-            if (li.nodeName === itemTag) {
-                removeClass(n.childNodes[0], this.selectedItemCssClass);
-                addClass(li, this.selectedItemCssClass);
-            }
+            removeClass(items[0], this.selectedItemCssClass);
+            addClass(li, this.selectedItemCssClass);
         } else { //removes values and indexes
-            if (chkValue !== &apos;&apos;) {
-                let replaceValue = new RegExp(
-                    rgxEsc(chkValue + &apos; &apos; + tf.orOperator));
-                fltValue = fltValue.replace(replaceValue, &apos;&apos;);
-                n.setAttribute(&apos;value&apos;, trim(fltValue));
+            let replaceValue =
+                new RegExp(rgxEsc(chkValue + &apos; &apos; + tf.orOperator));
+            let values = slcValues.replace(replaceValue, &apos;&apos;);
+            let replaceIndex = new RegExp(rgxEsc(chkIndex + tf.separator));
+            let indexes = slcIndexes.replace(replaceIndex, &apos;&apos;);
 
-                let replaceIndex = new RegExp(
-                    rgxEsc(chkIndex + tf.separator));
-                fltIndexes = fltIndexes.replace(replaceIndex, &apos;&apos;);
-                n.setAttribute(&apos;indexes&apos;, fltIndexes);
-            }
-            if (li.nodeName === itemTag) {
-                removeClass(li, this.selectedItemCssClass);
-            }
+            n.setAttribute(&apos;value&apos;, trim(values));
+            n.setAttribute(&apos;indexes&apos;, indexes);
+
+            removeClass(li, this.selectedItemCssClass);
         }
     }
 
@@ -586,8 +580,7 @@ export class CheckList extends BaseDropdown {
     selectOptions(colIndex, values = []) {
         let tf = this.tf;
         let flt = tf.getFilterElement(colIndex);
-        if (tf.getFilterType(colIndex) !== CHECKLIST || !flt ||
-            values.length === 0) {
+        if (!flt || values.length === 0) {
             return;
         }
 
@@ -615,7 +608,7 @@ export class CheckList extends BaseDropdown {
                     chk.checked = false;
                 }
             }
-            this.setCheckListValues(chk);
+            this.setItemOption(chk);
         });
     }
 
