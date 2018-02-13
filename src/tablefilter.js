@@ -142,7 +142,7 @@ export class TableFilter {
                 DOM element not found.`);
         }
 
-        if (this.getRowsNb() === 0) {
+        if (this.getRowsNb(true) === 0) {
             throw new Error(`Could not instantiate TableFilter: HTML table
                 requires at least 1 row.`);
         }
