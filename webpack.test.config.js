@@ -4,6 +4,7 @@ var path = require('path');
 var Clean = require('clean-webpack-plugin');
 
 module.exports = {
+    mode: 'development',
     cache: true,
     entry: webpackConfig.entry,
     output: webpackConfig.output,

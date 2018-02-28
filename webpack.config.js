@@ -6,6 +6,7 @@ var fs = require('fs');
 var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 module.exports = {
+    mode: 'production',
     cache: true,
     entry: {
         'main': path.join(__dirname, '/src/tablefilter.js')
@@ -53,16 +54,15 @@ module.exports = {
         ]
     },
     devtool: 'source-map',
+    optimization: {
+        minimize: true
+    },
     plugins: [
         new Clean(['dist']),
         new webpack.optimize.AggressiveMergingPlugin(),
         new StringReplacePlugin(),
-        new webpack.optimize.MinChunkSizePlugin({ minChunkSize: 10000 }),
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true,
-            compress: {
-                warnings: false
-            }
+        new webpack.optimize.MinChunkSizePlugin({
+            minChunkSize: 10000
         }),
         new webpack.BannerPlugin({
             banner: '/** \n' +
