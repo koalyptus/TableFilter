@@ -3,6 +3,7 @@ var webpack = require('webpack');
 var StringReplacePlugin = require('string-replace-webpack-plugin');
 
 module.exports = {
+    mode: 'development',
     cache: true,
     entry: webpackConfig.entry,
     output: webpackConfig.output,
