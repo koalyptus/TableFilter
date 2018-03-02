@@ -1,7 +1,4 @@
 module.exports = function (grunt) {
-    var webpackConfig = require('./webpack.config.js');
-    var webpackDevConfig = require('./webpack.dev.config.js');
-    var webpackTestConfig = require('./webpack.test.config.js');
     var fs = require('fs');
     var path = require('path');
     var testDir = 'test';
@@ -112,24 +109,6 @@ module.exports = function (grunt) {
 
         clean: ['demos/starter.html'],
 
-        'webpack-dev-server': {
-            options: {
-                webpack: webpackDevConfig,
-                publicPath: '/dist/'
-            },
-            start: {
-                webpack: {
-                    devtool: 'eval'
-                }
-            }
-        },
-
-        webpack: {
-            build: webpackConfig,
-            dev: webpackDevConfig,
-            test: webpackTestConfig
-        },
-
         watch: {
             app: {
                 files: ['src/**/*', 'static/style/**/*'],
@@ -147,29 +126,22 @@ module.exports = function (grunt) {
             }
         },
 
-        babel: {
-            options: {
-                sourceMap: true,
-                modules: 'amd',
-                compact: false,
-                presets: ['es2015']
-            },
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: 'src',
-                    src: ['**/*.js'],
-                    dest: 'dist/tablefilter'
-                }]
-            }
-        },
-
+        // temporary shell commands while decommissioning grunt
         shell: {
             eslint: {
                 command: 'npm run lint'
             },
             esdoc: {
                 command: 'npm run esdoc'
+            },
+            build: {
+                command: 'npm run build'
+            },
+            dev: {
+                command: 'npm run dev'
+            },
+            test: {
+                command: 'npm run build:test'
             }
         },
 
@@ -288,8 +260,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-webpack');
-    grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-qunit-istanbul');
     grunt.loadNpmTasks('grunt-contrib-stylus');
@@ -300,16 +270,13 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', ['test', 'build', 'build-demos']);
 
-    // Development server
-    grunt.registerTask('server', ['webpack-dev-server:start']);
-
     // Dev dev/build/watch cycle
     grunt.registerTask('dev',
-        ['eslint', 'webpack:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
+        ['eslint', 'shell:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
 
     // Production build
     grunt.registerTask('build',
-        ['eslint', 'webpack:build', 'copy:dist', 'stylus:compile']);
+        ['eslint', 'shell:build', 'copy:dist', 'stylus:compile']);
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
@@ -318,10 +285,7 @@ module.exports = function (grunt) {
 
     // Build tests
     grunt.registerTask('build-test',
-        ['eslint', 'webpack:test', 'copy:dist', 'stylus:compile']);
-
-    // Transpile with Babel
-    grunt.registerTask('dev-modules', ['babel', 'copy:dist']);
+        ['eslint', 'shell:test', 'copy:dist', 'stylus:compile']);
 
     // Tests with coverage
     grunt.registerTask('test', ['build-test', 'connect', 'qunit:all']);

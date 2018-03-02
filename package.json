@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.6.20",
+  "version": "0.6.21",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -23,11 +23,11 @@
   ],
   "scripts": {
     "lint": "eslint src/**/*.js test/*.js *.js",
-    "dev": "grunt dev",
-    "build": "grunt build",
+    "dev": "webpack --colors --config webpack.dev.config.js",
+    "build": "webpack --colors --config webpack.config.js",
     "build:demos": "grunt build-demos",
-    "build:test": "grunt build-test",
-    "server": "grunt server",
+    "build:test": "webpack --colors --config webpack.test.config.js",
+    "server": "webpack-dev-server --colors --hot --config ./webpack.dev.config.js",
     "test": "grunt test",
     "codecov": "./node_modules/.bin/codecov",
     "esdoc": "esdoc",
@@ -52,7 +52,6 @@
     "eslint": "4.18.2",
     "format-number": "3.0.0",
     "grunt": "^1.0.1",
-    "grunt-babel": "^7.0.0",
     "grunt-cli": "1.2.0",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-connect": "^1.0.2",
@@ -63,15 +62,14 @@
     "grunt-qunit-istanbul": "1.0.0",
     "grunt-shell": "2.1.0",
     "grunt-string-replace": "^1.3.1",
-    "grunt-webpack": "^3.0.0",
     "isparta-loader": "2.0.0",
     "script-loader": "^0.7.0",
     "string-replace-webpack-plugin": "^0.1.3",
     "sugar-date": "2.0.4",
     "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10",
     "webpack-dev-server": "^3.0.0"
   },
-  "dependencies": {},
   "bugs": {
     "url": "https://github.com/koalyptus/TableFilter/issues"
   },
