@@ -1,5 +1,5 @@
 module.exports = function (grunt) {
-    var webpackConfig = require('./webpack.config.js');
+    // var webpackConfig = require('./webpack.config.js');
     var webpackDevConfig = require('./webpack.dev.config.js');
     var webpackTestConfig = require('./webpack.test.config.js');
     var fs = require('fs');
@@ -125,7 +125,7 @@ module.exports = function (grunt) {
         },
 
         webpack: {
-            build: webpackConfig,
+        //     build: webpackConfig,
             dev: webpackDevConfig,
             test: webpackTestConfig
         },
@@ -170,6 +170,9 @@ module.exports = function (grunt) {
             },
             esdoc: {
                 command: 'npm run esdoc'
+            },
+            build: {
+                command: 'npm run build'
             }
         },
 
@@ -309,7 +312,7 @@ module.exports = function (grunt) {
 
     // Production build
     grunt.registerTask('build',
-        ['eslint', 'webpack:build', 'copy:dist', 'stylus:compile']);
+        ['eslint', 'shell:build', 'copy:dist', 'stylus:compile']);
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
