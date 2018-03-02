@@ -15,5 +15,11 @@ module.exports = {
             debug: true
         }),
         new StringReplacePlugin()
-    ]
+    ],
+    devServer: {
+        port: 8080,
+        host: '0.0.0.0',
+        publicPath: '/dist',
+        hot: true
+    }
 };
