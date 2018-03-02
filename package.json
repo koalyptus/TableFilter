@@ -70,9 +70,6 @@
     "webpack-cli": "^2.0.10",
     "webpack-dev-server": "^3.0.0"
   },
-  "dependencies": {
-    "npm": "^5.7.1"
-  },
   "bugs": {
     "url": "https://github.com/koalyptus/TableFilter/issues"
   },
