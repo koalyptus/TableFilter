@@ -262,7 +262,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-qunit-istanbul');
-    grunt.loadNpmTasks('grunt-contrib-stylus');
+    // grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-gh-pages');
 
     grunt.registerTask('eslint', ['shell:eslint']);
@@ -272,11 +272,11 @@ module.exports = function (grunt) {
 
     // Dev dev/build/watch cycle
     grunt.registerTask('dev',
-        ['eslint', 'shell:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
+        ['eslint', 'shell:dev', 'copy:dist', /*'stylus:compile',*/'watch:app']);
 
     // Production build
     grunt.registerTask('build',
-        ['eslint', 'shell:build', 'copy:dist', 'stylus:compile']);
+        ['eslint', 'shell:build', 'copy:dist'/*, 'stylus:compile'*/]);
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
@@ -285,7 +285,7 @@ module.exports = function (grunt) {
 
     // Build tests
     grunt.registerTask('build-test',
-        ['eslint', 'shell:test', 'copy:dist', 'stylus:compile']);
+        ['eslint', 'shell:test', 'copy:dist'/*, 'stylus:compile'*/]);
 
     // Tests with coverage
     grunt.registerTask('test', ['build-test', 'connect', 'qunit:all']);

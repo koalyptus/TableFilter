@@ -1,9 +1,10 @@
-var webpack = require('webpack');
-var path = require('path');
-var Clean = require('clean-webpack-plugin');
-var StringReplacePlugin = require('string-replace-webpack-plugin');
-var fs = require('fs');
-var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+const webpack = require('webpack');
+const path = require('path');
+const Clean = require('clean-webpack-plugin');
+const StringReplacePlugin = require('string-replace-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const fs = require('fs');
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 module.exports = {
     mode: 'production',
@@ -18,7 +19,7 @@ module.exports = {
         libraryTarget: 'umd'
     },
     resolve: {
-        extensions: ['.js'],
+        extensions: ['.js', '.styl'],
         alias: {
             sortabletable: '../../../libs/sortabletable.js'
         }
@@ -48,6 +49,21 @@ module.exports = {
                         replacement: function () {
                             return pkg.author.name;
                         }
+                    }]
+                })
+            }, {
+                // compile and extract all css definitions from stylus files
+                test: /\.(styl)$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [{
+                        loader: 'css-loader',
+                        options: {
+                            url: false,
+                            minimize: true
+                        },
+                    }, {
+                        loader: 'stylus-loader'
                     }]
                 })
             }
