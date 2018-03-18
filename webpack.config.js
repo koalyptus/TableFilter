@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const Clean = require('clean-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const fs = require('fs');
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
@@ -19,7 +19,7 @@ module.exports = {
         libraryTarget: 'umd'
     },
     resolve: {
-        extensions: ['.js', '.styl'],
+        extensions: ['.js'],
         alias: {
             sortabletable: '../../../libs/sortabletable.js'
         }
@@ -51,7 +51,7 @@ module.exports = {
                         }
                     }]
                 })
-            }, {
+            }/*, {
                 // compile and extract all css definitions from stylus files
                 test: /\.(styl)$/,
                 use: ExtractTextPlugin.extract({
@@ -66,7 +66,7 @@ module.exports = {
                         loader: 'stylus-loader'
                     }]
                 })
-            }
+            }*/
         ]
     },
     devtool: 'source-map',
@@ -80,6 +80,13 @@ module.exports = {
         new webpack.optimize.MinChunkSizePlugin({
             minChunkSize: 10000
         }),
+        // extract all styling definitions in a CSS bundle
+        // with a unique filename
+        // new ExtractTextPlugin({
+        //     // relative to `output.path`
+        //     filename: './tablefilter.css'/*,
+        //     allChunks: true*/
+        // }),
         new webpack.BannerPlugin({
             banner: '/** \n' +
             ' *\t '+pkg.name+' v'+pkg.version+' by '+pkg.author.name+'\n' +
