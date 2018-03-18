@@ -1,7 +1,7 @@
-var webpack = require('webpack');
-var webpackConfig = require('./webpack.config.js');
-var path = require('path');
-var Clean = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config.js');
+const path = require('path');
+const Clean = require('clean-webpack-plugin');
 
 module.exports = {
     mode: 'development',

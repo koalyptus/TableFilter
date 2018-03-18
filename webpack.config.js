@@ -1,9 +1,9 @@
-var webpack = require('webpack');
-var path = require('path');
-var Clean = require('clean-webpack-plugin');
-var StringReplacePlugin = require('string-replace-webpack-plugin');
-var fs = require('fs');
-var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+const webpack = require('webpack');
+const path = require('path');
+const Clean = require('clean-webpack-plugin');
+const StringReplacePlugin = require('string-replace-webpack-plugin');
+const fs = require('fs');
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 module.exports = {
     mode: 'production',

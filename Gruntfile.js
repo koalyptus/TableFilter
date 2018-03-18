@@ -5,7 +5,6 @@ module.exports = function (grunt) {
     var testHost = 'http://localhost:8000/';
     var pkg = grunt.file.readJSON('package.json');
     var repo = 'github.com/koalyptus/TableFilter';
-    var styleDirDist = 'dist/tablefilter/style/';
 
     grunt.initConfig({
 
@@ -142,44 +141,9 @@ module.exports = function (grunt) {
             },
             test: {
                 command: 'npm run build:test'
-            }
-        },
-
-        stylus: {
-            compile: {
-                options: {
-                    banner: '/** \n' +
-                    ' *\t ' + pkg.name + ' v' + pkg.version +
-                    ' by ' + pkg.author.name + ' \n' +
-                    ' *\t build date: ' + new Date().toISOString() + ' \n' +
-                    ' *\t MIT License  \n' +
-                    ' */ \n'
-                },
-                files: [
-                    {
-                        src: ['static/style/*.styl'],
-                        dest: styleDirDist + 'tablefilter.css'
-                    }, {
-                        src: ['static/style/extensions/colsVisibility.styl'],
-                        dest: styleDirDist + 'colsVisibility.css'
-                    }, {
-                        src: ['static/style/extensions/filtersVisibility.styl'],
-                        dest: styleDirDist + 'filtersVisibility.css'
-                    }, {
-                        src: ['static/style/themes/default/*.styl'],
-                        dest: styleDirDist + 'themes/default/default.css'
-                    }, {
-                        src: ['static/style/themes/mytheme/*.styl'],
-                        dest: styleDirDist + 'themes/mytheme/mytheme.css'
-                    }, {
-                        src: ['static/style/themes/skyblue/*.styl'],
-                        dest: styleDirDist + 'themes/skyblue/skyblue.css'
-                    }, {
-                        src: ['static/style/themes/transparent/*.styl'],
-                        dest:
-                            styleDirDist + 'themes/transparent/transparent.css'
-                    }
-                ]
+            },
+            'build-css': {
+                command: 'npm run build:css'
             }
         },
 
@@ -262,7 +226,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-qunit-istanbul');
-    grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-gh-pages');
 
     grunt.registerTask('eslint', ['shell:eslint']);
@@ -272,11 +235,11 @@ module.exports = function (grunt) {
 
     // Dev dev/build/watch cycle
     grunt.registerTask('dev',
-        ['eslint', 'shell:dev', 'copy:dist', 'stylus:compile', 'watch:app']);
+        ['eslint', 'shell:dev', 'copy:dist', 'shell:build-css', 'watch:app']);
 
     // Production build
     grunt.registerTask('build',
-        ['eslint', 'shell:build', 'copy:dist', 'stylus:compile']);
+        ['eslint', 'shell:build', 'copy:dist', 'shell:build-css']);
 
     // Build demos
     grunt.registerTask('dev-demos', ['build-demos', 'watch:templates']);
@@ -285,7 +248,7 @@ module.exports = function (grunt) {
 
     // Build tests
     grunt.registerTask('build-test',
-        ['eslint', 'shell:test', 'copy:dist', 'stylus:compile']);
+        ['eslint', 'shell:test', 'copy:dist', 'shell:build-css']);
 
     // Tests with coverage
     grunt.registerTask('test', ['build-test', 'connect', 'qunit:all']);
