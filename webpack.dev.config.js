@@ -1,6 +1,6 @@
-var webpackConfig = require('./webpack.config.js');
-var webpack = require('webpack');
-var StringReplacePlugin = require('string-replace-webpack-plugin');
+const webpackConfig = require('./webpack.config.js');
+const webpack = require('webpack');
+const StringReplacePlugin = require('string-replace-webpack-plugin');
 
 module.exports = {
     mode: 'development',
