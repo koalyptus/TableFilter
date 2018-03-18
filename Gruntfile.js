@@ -5,7 +5,6 @@ module.exports = function (grunt) {
     var testHost = 'http://localhost:8000/';
     var pkg = grunt.file.readJSON('package.json');
     var repo = 'github.com/koalyptus/TableFilter';
-    // var styleDirDist = 'dist/tablefilter/style/';
 
     grunt.initConfig({
 
@@ -148,44 +147,6 @@ module.exports = function (grunt) {
             }
         },
 
-        // stylus: {
-        //     compile: {
-        //         options: {
-        //             banner: '/** \n' +
-        //             ' *\t ' + pkg.name + ' v' + pkg.version +
-        //             ' by ' + pkg.author.name + ' \n' +
-        //             ' *\t build date: ' + new Date().toISOString() + ' \n' +
-        //             ' *\t MIT License  \n' +
-        //             ' */ \n'
-        //         },
-        //         files: [
-        //             {
-        //                 src: ['static/style/*.styl'],
-        //                 dest: styleDirDist + 'tablefilter.css'
-        //             }, {
-        //                 src: ['static/style/extensions/colsVisibility.styl'],
-        //                 dest: styleDirDist + 'colsVisibility.css'
-        //             }, {
-        //                 src: ['static/style/extensions/filtersVisibility.styl'],
-        //                 dest: styleDirDist + 'filtersVisibility.css'
-        //             }, {
-        //                 src: ['static/style/themes/default/*.styl'],
-        //                 dest: styleDirDist + 'themes/default/default.css'
-        //             }, {
-        //                 src: ['static/style/themes/mytheme/*.styl'],
-        //                 dest: styleDirDist + 'themes/mytheme/mytheme.css'
-        //             }, {
-        //                 src: ['static/style/themes/skyblue/*.styl'],
-        //                 dest: styleDirDist + 'themes/skyblue/skyblue.css'
-        //             }, {
-        //                 src: ['static/style/themes/transparent/*.styl'],
-        //                 dest:
-        //                     styleDirDist + 'themes/transparent/transparent.css'
-        //             }
-        //         ]
-        //     }
-        // },
-
         'gh-pages': {
             options: {
                 branch: 'gh-pages',
@@ -265,7 +226,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-qunit-istanbul');
-    // grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-gh-pages');
 
     grunt.registerTask('eslint', ['shell:eslint']);
