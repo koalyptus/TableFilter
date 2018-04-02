@@ -13,7 +13,8 @@
         deepEqual(tf instanceof TableFilter, true, 'TableFilter instanciated');
         deepEqual(cols[1].style.width, '100px', 'Expected column width');
         deepEqual(cols[4].style.width, '', 'Expected column width');
-        deepEqual(tf.dom().style.width, '', 'Table width not set');
+        deepEqual(tf.dom().style.width, '545px', 'Table width set');
+        deepEqual(tf.dom().style.tableLayout, 'fixed', 'Table layout fixed');
     });
 
     test('Grid layout column widths', function() {

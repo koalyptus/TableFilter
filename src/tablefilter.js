@@ -1040,6 +1040,9 @@ export class TableFilter {
             if (this.responsive) {
                 addClass(this.dom(), this.prfxResponsive);
             }
+            if (this.colWidths.length > 0) {
+                this.setFixedLayout();
+            }
         }
 
         /* Load extensions */
@@ -2509,16 +2512,34 @@ export class TableFilter {
     }
 
     /**
-     * Set them columns' widths as per configuration
-     * @param {Element} tbl DOM element
+     * Make passed or default working table element width fixed
+     * @param {TableElement} tbl optional table DOM element
      */
-    setColWidths(tbl) {
+    setFixedLayout(tbl = this.dom()) {
+        let colWidths = this.colWidths;
+        let tableWidth = tbl.clientWidth;
+
+        if (colWidths.length > 0) {
+            tableWidth = colWidths
+                .reduce((x, y) =>
+                    parseInt((x || 0), 10) + parseInt((y || 0), 10)
+                );
+        }
+
+        tbl.style.width = `${tableWidth}px`;
+        tbl.style.tableLayout = 'fixed';
+    }
+
+    /**
+     * Set passed or default working table columns' widths with configuration
+     * values
+     * @param {TableElement} tbl optional table DOM element
+     */
+    setColWidths(tbl = this.dom()) {
         let colWidths = this.colWidths;
         if (colWidths.length === 0) {
             return;
         }
-
-        tbl = tbl || this.dom();
 
         let colTags = tag(tbl, 'col');
         let tblHasColTag = colTags.length > 0;
