@@ -4758,6 +4758,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/tablefilter.js~tablefilter#setfixedlayout",
+    "class/src/tablefilter.js~TableFilter.html#instance-method-setFixedLayout",
+    "src/tablefilter.js~TableFilter#setFixedLayout",
+    "method"
+  ],
+  [
     "src/tablefilter.js~tablefilter#singleflt",
     "class/src/tablefilter.js~TableFilter.html#instance-member-singleFlt",
     "src/tablefilter.js~TableFilter#singleFlt",
