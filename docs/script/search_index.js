@@ -3978,6 +3978,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/tablefilter.js~tablefilter#defaultcolwidth",
+    "class/src/tablefilter.js~TableFilter.html#instance-member-defaultColWidth",
+    "src/tablefilter.js~TableFilter#defaultColWidth",
+    "member"
+  ],
+  [
     "src/tablefilter.js~tablefilter#destroy",
     "class/src/tablefilter.js~TableFilter.html#instance-method-destroy",
     "src/tablefilter.js~TableFilter#destroy",
