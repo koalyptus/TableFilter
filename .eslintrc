@@ -13,7 +13,7 @@
     "array-bracket-spacing": 2,
     "keyword-spacing": ["error", { "after": true, "before": true }],
     "max-depth": [2, 7],
-    "max-statements": [2, 130],
+    "max-statements": [2, 131],
     "complexity": [2, 41],
     "no-unused-vars": 2,
     "no-eval": 2,

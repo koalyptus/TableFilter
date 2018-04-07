@@ -269,6 +269,11 @@ export class TableFilter {
         this.colWidths = defaultsArr(f.col_widths, []);
 
         /**
+         * Default column width when column widths are defined
+         */
+        this.defaultColWidth = defaultsNb(f.default_col_width, 100);
+
+        /**
          * Css class for a filter element
          * @type {String}
          */
@@ -2520,9 +2525,11 @@ export class TableFilter {
         let tableWidth = tbl.clientWidth;
 
         if (colWidths.length > 0) {
+            let defaultWidth = this.defaultColWidth;
             tableWidth = colWidths
                 .reduce((x, y) =>
-                    parseInt((x || 0), 10) + parseInt((y || 0), 10)
+                    parseInt((x || defaultWidth), 10) +
+                    parseInt((y || defaultWidth), 10)
                 );
         }
 
