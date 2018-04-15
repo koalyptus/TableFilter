@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.6.24",
+  "version": "0.6.25",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -34,6 +34,7 @@
     "esdoc": "esdoc",
     "dist": "grunt",
     "deploy": "grunt deploy",
+    "release": "npm run deploy && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
     "start": "npm run server"
   },
   "publishConfig": {
