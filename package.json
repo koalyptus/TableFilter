@@ -34,7 +34,7 @@
     "esdoc": "esdoc",
     "dist": "grunt",
     "deploy": "grunt deploy",
-    "release": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish && npm run deploy",
+    "release": "npm run deploy && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
     "start": "npm run server"
   },
   "publishConfig": {
