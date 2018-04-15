@@ -4,6 +4,8 @@ node_js:
 before_script:
 - npm install grunt-cli -g
 - npm install codecov -g
+- git config --global user.email "builds@travis-ci.com"
+- git config --global user.name "Travis CI"
 script:
 - npm test
 - npm run codecov
