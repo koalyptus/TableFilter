@@ -21,7 +21,7 @@ before_deploy:
   - git tag $GIT_TAG -am "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
 deploy:
   provider: releases
-  api_key: 6929c0030fedd2961a4d4fe28c4a0e02014237b8
+  api_key: $GITHUB_OAUTH_ACCESS_TOKEN
   skip_cleanup: true
 env:
   global:
