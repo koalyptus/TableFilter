@@ -14,7 +14,11 @@ branches:
   - /^greenkeeper/.*$/
   - gh-pages
 before_deploy:
-  - git tag $(node -p -e "require('./package.json').version")
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - export GIT_TAG=$(node -p -e "require('./package.json').version")
+  - echo -n $GIT_TAG
+  - git tag $GIT_TAG -am "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
 deploy:
   provider: releases
   api_key:
