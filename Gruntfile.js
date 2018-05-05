@@ -152,14 +152,14 @@ module.exports = function (grunt) {
                 branch: 'gh-pages',
                 add: true
             },
-            // 'publish-lib': {
-            //     options: {
-            //         base: 'dist',
-            //         repo: 'https://' + repo,
-            //         message: 'publish TableFilter lib to gh-pages (cli)'
-            //     },
-            //     src: ['**/*']
-            // },
+            'publish-lib': {
+                options: {
+                    base: 'dist',
+                    repo: 'https://' + repo,
+                    message: 'publish TableFilter lib to gh-pages (cli)'
+                },
+                src: ['**/*']
+            },
             'publish-readme': {
                 options: {
                     base: './',
@@ -176,19 +176,19 @@ module.exports = function (grunt) {
                 },
                 src: ['**/*']
             },
-            // 'deploy-lib': {
-            //     options: {
-            //         user: {
-            //             name: 'koalyptus'
-            //         },
-            //         base: 'dist',
-            //         repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
-            //         message: 'publish TableFilter to gh-pages (auto)' +
-            //         getDeployMessage(),
-            //         silent: true
-            //     },
-            //     src: ['**/*']
-            // },
+            'deploy-lib': {
+                options: {
+                    user: {
+                        name: 'koalyptus'
+                    },
+                    base: 'dist',
+                    repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
+                    message: 'publish TableFilter to gh-pages (auto)' +
+                    getDeployMessage(),
+                    silent: true
+                },
+                src: ['**/*']
+            },
             'deploy-readme': {
                 options: {
                     user: {
@@ -255,7 +255,7 @@ module.exports = function (grunt) {
 
     // Publish to gh-pages
     grunt.registerTask('publish', 'Publish from CLI', [
-        'build', 'build-demos', 'esdoc', /*'gh-pages:publish-lib',*/
+        'build', 'build-demos', 'esdoc', 'gh-pages:publish-lib',
         'gh-pages:publish-readme', 'gh-pages:publish-docs'
     ]);
 
@@ -341,7 +341,7 @@ module.exports = function (grunt) {
             grunt.log.writeln('executing deployment');
             // queue deploy
             grunt.task.run([
-                // 'gh-pages:deploy-lib',
+                'gh-pages:deploy-lib',
                 'gh-pages:deploy-readme',
                 'gh-pages:deploy-docs'
             ]);
