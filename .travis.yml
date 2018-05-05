@@ -16,9 +16,14 @@ branches:
 before_deploy:
   - git config --global user.email "maxgug@hotmail.com"
   - git config --global user.name "koalyptus"
-  - export GIT_TAG=$(node -p -e "require('./package.json').version")
+  - export $GIT_TAG=$(git describe --tags)
   - echo -n $GIT_TAG
-  - git tag $GIT_TAG -am "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
+  - export NEW_GIT_TAG=$(node -p -e "require('./package.json').version")
+  - echo -n $NEW_GIT_TAG
+  - |
+    if [ $GIT_TAG != $NEW_GIT_TAG ]; then
+        git tag $NEW_GIT_TAG -am "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
+    fi
 deploy:
   - provider: releases
     on:
