@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Alphabetical pager | TableFilter</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- Bootstrap theme -->
+    <link href="assets/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/theme.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    
+<!-- Fixed navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="./">TableFilter</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <!-- you can exclude pages using {{#isnt}} helper: {{#isnt data.title 'Blog'}} -->
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <li>
+              <a href="examples.html">Examples</a>
+            </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter">Repo</a>
+            </li>
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter/wiki">Wiki</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="./docs" target="_blank">Docs</a>
+        </li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+
+    <div class="container theme-showcase" role="main">
+
+      
+
+<h1>Alphabetical pager</h1>
+
+<p>
+    This example shows how to easily implement an alphabetical paging component
+    by simply using the <code>start with</code> operator
+</p>
+
+<div class="row pagination" data-config>
+    <button class="btn" value="" onclick="filter(event);">All</button>
+    <button class="btn" value="A" onclick="filter(event);">A</button>
+    <button class="btn" value="B" onclick="filter(event);">B</button>
+    <button class="btn" value="C" onclick="filter(event);">C</button>
+    <button class="btn" value="D" onclick="filter(event);">D</button>
+    <button class="btn" value="E" onclick="filter(event);">E</button>
+    <button class="btn" value="F" onclick="filter(event);">F</button>
+    <button class="btn" value="G" onclick="filter(event);">G</button>
+    <button class="btn" value="H" onclick="filter(event);">H</button>
+    <button class="btn" value="I" onclick="filter(event);">I</button>
+    <button class="btn" value="J" onclick="filter(event);">J</button>
+    <button class="btn" value="K" onclick="filter(event);">K</button>
+    <button class="btn" value="L" onclick="filter(event);">L</button>
+    <button class="btn" value="M" onclick="filter(event);">M</button>
+    <button class="btn" value="N" onclick="filter(event);">N</button>
+    <button class="btn" value="O" onclick="filter(event);">O</button>
+    <button class="btn" value="P" onclick="filter(event);">P</button>
+    <button class="btn" value="Q" onclick="filter(event);">Q</button>
+    <button class="btn" value="R" onclick="filter(event);">R</button>
+    <button class="btn" value="S" onclick="filter(event);">S</button>
+    <button class="btn" value="T" onclick="filter(event);">T</button>
+    <button class="btn" value="U" onclick="filter(event);">U</button>
+    <button class="btn" value="V" onclick="filter(event);">V</button>
+    <button class="btn" value="W" onclick="filter(event);">W</button>
+    <button class="btn" value="X" onclick="filter(event);">X</button>
+    <button class="btn" value="Y" onclick="filter(event);">Y</button>
+    <button class="btn" value="Z" onclick="filter(event);">Z</button>
+</div>
+
+
+<table id="countries-codes">
+  <thead>
+    <tr>
+      <th align="center">ISO</th>
+      <th>Name</th>
+      <th>Printable Name</th>
+      <th>ISO3</th>
+      <th align="right">Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="rowAD">
+      <td align="center">AD</td>
+      <td>Andorra</td>
+      <td>Andorra</td>
+      <td>AND</td>
+      <td align="right">20</td>
+    </tr>
+    <tr id="rowAE">
+      <td align="center">AE</td>
+      <td>United Arab Emirates</td>
+      <td>United Arab Emirates</td>
+      <td>ARE</td>
+      <td align="right">784</td>
+    </tr>
+    <tr id="rowAF">
+      <td align="center">AF</td>
+      <td>Afghanistan</td>
+      <td>Afghanistan</td>
+      <td>AFG</td>
+      <td align="right">4</td>
+    </tr>
+    <tr id="rowAG">
+      <td align="center">AG</td>
+      <td>Antigua and Barbuda</td>
+      <td>Antigua and Barbuda</td>
+      <td>ATG</td>
+      <td align="right">28</td>
+    </tr>
+    <tr id="rowAI">
+      <td align="center">AI</td>
+      <td>Anguilla</td>
+      <td>Anguilla</td>
+      <td>AIA</td>
+      <td align="right">660</td>
+    </tr>
+    <tr id="rowAL">
+      <td align="center">AL</td>
+      <td>Albania</td>
+      <td>Albania</td>
+      <td>ALB</td>
+      <td align="right">8</td>
+    </tr>
+    <tr id="rowAM">
+      <td align="center">AM</td>
+      <td>Armenia</td>
+      <td>Armenia</td>
+      <td>ARM</td>
+      <td align="right">51</td>
+    </tr>
+    <tr id="rowAN">
+      <td align="center">AN</td>
+      <td>Netherlands Antilles</td>
+      <td>Netherlands Antilles</td>
+      <td>ANT</td>
+      <td align="right">530</td>
+    </tr>
+    <tr id="rowAO">
+      <td align="center">AO</td>
+      <td>Angola</td>
+      <td>Angola</td>
+      <td>AGO</td>
+      <td align="right">24</td>
+    </tr>
+    <tr id="rowAQ">
+      <td align="center">AQ</td>
+      <td>Antarctica</td>
+      <td>Antarctica</td>
+      <td>ART</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowAR">
+      <td align="center">AR</td>
+      <td>Argentina</td>
+      <td>Argentina</td>
+      <td>ARG</td>
+      <td align="right">32</td>
+    </tr>
+    <tr id="rowAS">
+      <td align="center">AS</td>
+      <td>American Samoa</td>
+      <td>American Samoa</td>
+      <td>ASM</td>
+      <td align="right">16</td>
+    </tr>
+    <tr id="rowAT">
+      <td align="center">AT</td>
+      <td>Austria</td>
+      <td>Austria</td>
+      <td>AUT</td>
+      <td align="right">40</td>
+    </tr>
+    <tr id="rowAU">
+      <td align="center">AU</td>
+      <td>Australia</td>
+      <td>Australia</td>
+      <td>AUS</td>
+      <td align="right">36</td>
+    </tr>
+    <tr id="rowAW">
+      <td align="center">AW</td>
+      <td>Aruba</td>
+      <td>Aruba</td>
+      <td>ABW</td>
+      <td align="right">533</td>
+    </tr>
+    <tr id="rowAZ">
+      <td align="center">AZ</td>
+      <td>Azerbaijan</td>
+      <td>Azerbaijan</td>
+      <td>AZE</td>
+      <td align="right">31</td>
+    </tr>
+    <tr id="rowBA">
+      <td align="center">BA</td>
+      <td>Bosnia and Herzegovina</td>
+      <td>Bosnia and Herzegovina</td>
+      <td>BIH</td>
+      <td align="right">70</td>
+    </tr>
+    <tr id="rowBB">
+      <td align="center">BB</td>
+      <td>Barbados</td>
+      <td>Barbados</td>
+      <td>BRB</td>
+      <td align="right">52</td>
+    </tr>
+    <tr id="rowBD">
+      <td align="center">BD</td>
+      <td>Bangladesh</td>
+      <td>Bangladesh</td>
+      <td>BGD</td>
+      <td align="right">50</td>
+    </tr>
+    <tr id="rowBE">
+      <td align="center">BE</td>
+      <td>Belgium</td>
+      <td>Belgium</td>
+      <td>BEL</td>
+      <td align="right">56</td>
+    </tr>
+    <tr id="rowBF">
+      <td align="center">BF</td>
+      <td>Burkina Faso</td>
+      <td>Burkina Faso</td>
+      <td>BFA</td>
+      <td align="right">854</td>
+    </tr>
+    <tr id="rowBG">
+      <td align="center">BG</td>
+      <td>Bulgaria</td>
+      <td>Bulgaria</td>
+      <td>BGR</td>
+      <td align="right">100</td>
+    </tr>
+    <tr id="rowBH">
+      <td align="center">BH</td>
+      <td>Bahrain</td>
+      <td>Bahrain</td>
+      <td>BHR</td>
+      <td align="right">48</td>
+    </tr>
+    <tr id="rowBI">
+      <td align="center">BI</td>
+      <td>Burundi</td>
+      <td>Burundi</td>
+      <td>BDI</td>
+      <td align="right">108</td>
+    </tr>
+    <tr id="rowBJ">
+      <td align="center">BJ</td>
+      <td>Benin</td>
+      <td>Benin</td>
+      <td>BEN</td>
+      <td align="right">204</td>
+    </tr>
+    <tr id="rowBM">
+      <td align="center">BM</td>
+      <td>Bermuda</td>
+      <td>Bermuda</td>
+      <td>BMU</td>
+      <td align="right">60</td>
+    </tr>
+    <tr id="rowBN">
+      <td align="center">BN</td>
+      <td>Brunei Darussalam</td>
+      <td>Brunei Darussalam</td>
+      <td>BRN</td>
+      <td align="right">96</td>
+    </tr>
+    <tr id="rowBO">
+      <td align="center">BO</td>
+      <td>Bolivia</td>
+      <td>Bolivia</td>
+      <td>BOL</td>
+      <td align="right">68</td>
+    </tr>
+    <tr id="rowBR">
+      <td align="center">BR</td>
+      <td>Brazil</td>
+      <td>Brazil</td>
+      <td>BRA</td>
+      <td align="right">76</td>
+    </tr>
+    <tr id="rowBS">
+      <td align="center">BS</td>
+      <td>Bahamas</td>
+      <td>Bahamas</td>
+      <td>BHS</td>
+      <td align="right">44</td>
+    </tr>
+    <tr id="rowBT">
+      <td align="center">BT</td>
+      <td>Bhutan</td>
+      <td>Bhutan</td>
+      <td>BTN</td>
+      <td align="right">64</td>
+    </tr>
+    <tr id="rowBV">
+      <td align="center">BV</td>
+      <td>Bouvet Island</td>
+      <td>Bouvet Island</td>
+      <td>BVT</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowBW">
+      <td align="center">BW</td>
+      <td>Botswana</td>
+      <td>Botswana</td>
+      <td>BWA</td>
+      <td align="right">72</td>
+    </tr>
+    <tr id="rowBY">
+      <td align="center">BY</td>
+      <td>Belarus</td>
+      <td>Belarus</td>
+      <td>BLR</td>
+      <td align="right">112</td>
+    </tr>
+    <tr id="rowBZ">
+      <td align="center">BZ</td>
+      <td>Belize</td>
+      <td>Belize</td>
+      <td>BLZ</td>
+      <td align="right">84</td>
+    </tr>
+    <tr id="rowCA">
+      <td align="center">CA</td>
+      <td>Canada</td>
+      <td>Canada</td>
+      <td>CAN</td>
+      <td align="right">124</td>
+    </tr>
+    <tr id="rowCC">
+      <td align="center">CC</td>
+      <td>Cocos (Keeling) Islands</td>
+      <td>Cocos (Keeling) Islands</td>
+      <td>CKI</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowCD">
+      <td align="center">CD</td>
+      <td>Congo, the Democratic Republic of the</td>
+      <td>Congo, the Democratic Republic of the</td>
+      <td>COD</td>
+      <td align="right">180</td>
+    </tr>
+    <tr id="rowCF">
+      <td align="center">CF</td>
+      <td>Central African Republic</td>
+      <td>Central African Republic</td>
+      <td>CAF</td>
+      <td align="right">140</td>
+    </tr>
+    <tr id="rowCG">
+      <td align="center">CG</td>
+      <td>Congo</td>
+      <td>Congo</td>
+      <td>COG</td>
+      <td align="right">178</td>
+    </tr>
+    <tr id="rowCH">
+      <td align="center">CH</td>
+      <td>Switzerland</td>
+      <td>Switzerland</td>
+      <td>CHE</td>
+      <td align="right">756</td>
+    </tr>
+    <tr id="rowCI">
+      <td align="center">CI</td>
+      <td>Cote D'Ivoire</td>
+      <td>Cote D'Ivoire</td>
+      <td>CIV</td>
+      <td align="right">384</td>
+    </tr>
+    <tr id="rowCK">
+      <td align="center">CK</td>
+      <td>Cook Islands</td>
+      <td>Cook Islands</td>
+      <td>COK</td>
+      <td align="right">184</td>
+    </tr>
+    <tr id="rowCL">
+      <td align="center">CL</td>
+      <td>Chile</td>
+      <td>Chile</td>
+      <td>CHL</td>
+      <td align="right">152</td>
+    </tr>
+    <tr id="rowCM">
+      <td align="center">CM</td>
+      <td>Cameroon</td>
+      <td>Cameroon</td>
+      <td>CMR</td>
+      <td align="right">120</td>
+    </tr>
+    <tr id="rowCN">
+      <td align="center">CN</td>
+      <td>China</td>
+      <td>China</td>
+      <td>CHN</td>
+      <td align="right">156</td>
+    </tr>
+    <tr id="rowCO">
+      <td align="center">CO</td>
+      <td>Colombia</td>
+      <td>Colombia</td>
+      <td>COL</td>
+      <td align="right">170</td>
+    </tr>
+    <tr id="rowCR">
+      <td align="center">CR</td>
+      <td>Costa Rica</td>
+      <td>Costa Rica</td>
+      <td>CRI</td>
+      <td align="right">188</td>
+    </tr>
+    <tr id="rowCS">
+      <td align="center">CS</td>
+      <td>Serbia and Montenegro</td>
+      <td>Serbia and Montenegro</td>
+      <td>SNM</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowCU">
+      <td align="center">CU</td>
+      <td>Cuba</td>
+      <td>Cuba</td>
+      <td>CUB</td>
+      <td align="right">192</td>
+    </tr>
+    <tr id="rowCV">
+      <td align="center">CV</td>
+      <td>Cape Verde</td>
+      <td>Cape Verde</td>
+      <td>CPV</td>
+      <td align="right">132</td>
+    </tr>
+    <tr id="rowCX">
+      <td align="center">CX</td>
+      <td>Christmas Island</td>
+      <td>Christmas Island</td>
+      <td>CMI</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowCY">
+      <td align="center">CY</td>
+      <td>Cyprus</td>
+      <td>Cyprus</td>
+      <td>CYP</td>
+      <td align="right">196</td>
+    </tr>
+    <tr id="rowCZ">
+      <td align="center">CZ</td>
+      <td>Czech Republic</td>
+      <td>Czech Republic</td>
+      <td>CZE</td>
+      <td align="right">203</td>
+    </tr>
+    <tr id="rowDE">
+      <td align="center">DE</td>
+      <td>Germany</td>
+      <td>Germany</td>
+      <td>DEU</td>
+      <td align="right">276</td>
+    </tr>
+    <tr id="rowDJ">
+      <td align="center">DJ</td>
+      <td>Djibouti</td>
+      <td>Djibouti</td>
+      <td>DJI</td>
+      <td align="right">262</td>
+    </tr>
+    <tr id="rowDK">
+      <td align="center">DK</td>
+      <td>Denmark</td>
+      <td>Denmark</td>
+      <td>DNK</td>
+      <td align="right">208</td>
+    </tr>
+    <tr id="rowDM">
+      <td align="center">DM</td>
+      <td>Dominica</td>
+      <td>Dominica</td>
+      <td>DMA</td>
+      <td align="right">212</td>
+    </tr>
+    <tr id="rowDO">
+      <td align="center">DO</td>
+      <td>Dominican Republic</td>
+      <td>Dominican Republic</td>
+      <td>DOM</td>
+      <td align="right">214</td>
+    </tr>
+    <tr id="rowDZ">
+      <td align="center">DZ</td>
+      <td>Algeria</td>
+      <td>Algeria</td>
+      <td>DZA</td>
+      <td align="right">12</td>
+    </tr>
+    <tr id="rowEC">
+      <td align="center">EC</td>
+      <td>Ecuador</td>
+      <td>Ecuador</td>
+      <td>ECU</td>
+      <td align="right">218</td>
+    </tr>
+    <tr id="rowEE">
+      <td align="center">EE</td>
+      <td>Estonia</td>
+      <td>Estonia</td>
+      <td>EST</td>
+      <td align="right">233</td>
+    </tr>
+    <tr id="rowEG">
+      <td align="center">EG</td>
+      <td>Egypt</td>
+      <td>Egypt</td>
+      <td>EGY</td>
+      <td align="right">818</td>
+    </tr>
+    <tr id="rowEH">
+      <td align="center">EH</td>
+      <td>Western Sahara</td>
+      <td>Western Sahara</td>
+      <td>ESH</td>
+      <td align="right">732</td>
+    </tr>
+    <tr id="rowER">
+      <td align="center">ER</td>
+      <td>Eritrea</td>
+      <td>Eritrea</td>
+      <td>ERI</td>
+      <td align="right">232</td>
+    </tr>
+    <tr id="rowES">
+      <td align="center">ES</td>
+      <td>Spain</td>
+      <td>Spain</td>
+      <td>ESP</td>
+      <td align="right">724</td>
+    </tr>
+    <tr id="rowET">
+      <td align="center">ET</td>
+      <td>Ethiopia</td>
+      <td>Ethiopia</td>
+      <td>ETH</td>
+      <td align="right">231</td>
+    </tr>
+    <tr id="rowFI">
+      <td align="center">FI</td>
+      <td>Finland</td>
+      <td>Finland</td>
+      <td>FIN</td>
+      <td align="right">246</td>
+    </tr>
+    <tr id="rowFJ">
+      <td align="center">FJ</td>
+      <td>Fiji</td>
+      <td>Fiji</td>
+      <td>FJI</td>
+      <td align="right">242</td>
+    </tr>
+    <tr id="rowFK">
+      <td align="center">FK</td>
+      <td>Falkland Islands (Malvinas)</td>
+      <td>Falkland Islands (Malvinas)</td>
+      <td>FLK</td>
+      <td align="right">238</td>
+    </tr>
+    <tr id="rowFM">
+      <td align="center">FM</td>
+      <td>Micronesia, Federated States of</td>
+      <td>Micronesia, Federated States of</td>
+      <td>FSM</td>
+      <td align="right">583</td>
+    </tr>
+    <tr id="rowFO">
+      <td align="center">FO</td>
+      <td>Faroe Islands</td>
+      <td>Faroe Islands</td>
+      <td>FRO</td>
+      <td align="right">234</td>
+    </tr>
+    <tr id="rowFR">
+      <td align="center">FR</td>
+      <td>France</td>
+      <td>France</td>
+      <td>FRA</td>
+      <td align="right">250</td>
+    </tr>
+    <tr id="rowGA">
+      <td align="center">GA</td>
+      <td>Gabon</td>
+      <td>Gabon</td>
+      <td>GAB</td>
+      <td align="right">266</td>
+    </tr>
+    <tr id="rowGB">
+      <td align="center">GB</td>
+      <td>United Kingdom</td>
+      <td>United Kingdom</td>
+      <td>GBR</td>
+      <td align="right">826</td>
+    </tr>
+    <tr id="rowGD">
+      <td align="center">GD</td>
+      <td>Grenada</td>
+      <td>Grenada</td>
+      <td>GRD</td>
+      <td align="right">308</td>
+    </tr>
+    <tr id="rowGE">
+      <td align="center">GE</td>
+      <td>Georgia</td>
+      <td>Georgia</td>
+      <td>GEO</td>
+      <td align="right">268</td>
+    </tr>
+    <tr id="rowGF">
+      <td align="center">GF</td>
+      <td>French Guiana</td>
+      <td>French Guiana</td>
+      <td>GUF</td>
+      <td align="right">254</td>
+    </tr>
+    <tr id="rowGH">
+      <td align="center">GH</td>
+      <td>Ghana</td>
+      <td>Ghana</td>
+      <td>GHA</td>
+      <td align="right">288</td>
+    </tr>
+    <tr id="rowGI">
+      <td align="center">GI</td>
+      <td>Gibraltar</td>
+      <td>Gibraltar</td>
+      <td>GIB</td>
+      <td align="right">292</td>
+    </tr>
+    <tr id="rowGL">
+      <td align="center">GL</td>
+      <td>Greenland</td>
+      <td>Greenland</td>
+      <td>GRL</td>
+      <td align="right">304</td>
+    </tr>
+    <tr id="rowGM">
+      <td align="center">GM</td>
+      <td>Gambia</td>
+      <td>Gambia</td>
+      <td>GMB</td>
+      <td align="right">270</td>
+    </tr>
+    <tr id="rowGN">
+      <td align="center">GN</td>
+      <td>Guinea</td>
+      <td>Guinea</td>
+      <td>GIN</td>
+      <td align="right">324</td>
+    </tr>
+    <tr id="rowGP">
+      <td align="center">GP</td>
+      <td>Guadeloupe</td>
+      <td>Guadeloupe</td>
+      <td>GLP</td>
+      <td align="right">312</td>
+    </tr>
+    <tr id="rowGQ">
+      <td align="center">GQ</td>
+      <td>Equatorial Guinea</td>
+      <td>Equatorial Guinea</td>
+      <td>GNQ</td>
+      <td align="right">226</td>
+    </tr>
+    <tr id="rowGR">
+      <td align="center">GR</td>
+      <td>Greece</td>
+      <td>Greece</td>
+      <td>GRC</td>
+      <td align="right">300</td>
+    </tr>
+    <tr id="rowGS">
+      <td align="center">GS</td>
+      <td>South Georgia and the South Sandwich Islands</td>
+      <td>South Georgia and the South Sandwich Islands</td>
+      <td>SGS</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowGT">
+      <td align="center">GT</td>
+      <td>Guatemala</td>
+      <td>Guatemala</td>
+      <td>GTM</td>
+      <td align="right">320</td>
+    </tr>
+    <tr id="rowGU">
+      <td align="center">GU</td>
+      <td>Guam</td>
+      <td>Guam</td>
+      <td>GUM</td>
+      <td align="right">316</td>
+    </tr>
+    <tr id="rowGW">
+      <td align="center">GW</td>
+      <td>Guinea-Bissau</td>
+      <td>Guinea-Bissau</td>
+      <td>GNB</td>
+      <td align="right">624</td>
+    </tr>
+    <tr id="rowGY">
+      <td align="center">GY</td>
+      <td>Guyana</td>
+      <td>Guyana</td>
+      <td>GUY</td>
+      <td align="right">328</td>
+    </tr>
+    <tr id="rowHK">
+      <td align="center">HK</td>
+      <td>Hong Kong</td>
+      <td>Hong Kong</td>
+      <td>HKG</td>
+      <td align="right">344</td>
+    </tr>
+    <tr id="rowHM">
+      <td align="center">HM</td>
+      <td>Heard Island and Mcdonald Islands</td>
+      <td>Heard Island and Mcdonald Islands</td>
+      <td>HMI</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowHN">
+      <td align="center">HN</td>
+      <td>Honduras</td>
+      <td>Honduras</td>
+      <td>HND</td>
+      <td align="right">340</td>
+    </tr>
+    <tr id="rowHR">
+      <td align="center">HR</td>
+      <td>Croatia</td>
+      <td>Croatia</td>
+      <td>HRV</td>
+      <td align="right">191</td>
+    </tr>
+    <tr id="rowHT">
+      <td align="center">HT</td>
+      <td>Haiti</td>
+      <td>Haiti</td>
+      <td>HTI</td>
+      <td align="right">332</td>
+    </tr>
+    <tr id="rowHU">
+      <td align="center">HU</td>
+      <td>Hungary</td>
+      <td>Hungary</td>
+      <td>HUN</td>
+      <td align="right">348</td>
+    </tr>
+    <tr id="rowID">
+      <td align="center">ID</td>
+      <td>Indonesia</td>
+      <td>Indonesia</td>
+      <td>IDN</td>
+      <td align="right">360</td>
+    </tr>
+    <tr id="rowIE">
+      <td align="center">IE</td>
+      <td>Ireland</td>
+      <td>Ireland</td>
+      <td>IRL</td>
+      <td align="right">372</td>
+    </tr>
+    <tr id="rowIL">
+      <td align="center">IL</td>
+      <td>Israel</td>
+      <td>Israel</td>
+      <td>ISR</td>
+      <td align="right">376</td>
+    </tr>
+    <tr id="rowIN">
+      <td align="center">IN</td>
+      <td>India</td>
+      <td>India</td>
+      <td>IND</td>
+      <td align="right">356</td>
+    </tr>
+    <tr id="rowIO">
+      <td align="center">IO</td>
+      <td>British Indian Ocean Territory</td>
+      <td>British Indian Ocean Territory</td>
+      <td>BIO</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowIQ">
+      <td align="center">IQ</td>
+      <td>Iraq</td>
+      <td>Iraq</td>
+      <td>IRQ</td>
+      <td align="right">368</td>
+    </tr>
+    <tr id="rowIR">
+      <td align="center">IR</td>
+      <td>Iran, Islamic Republic of</td>
+      <td>Iran, Islamic Republic of</td>
+      <td>IRN</td>
+      <td align="right">364</td>
+    </tr>
+    <tr id="rowIS">
+      <td align="center">IS</td>
+      <td>Iceland</td>
+      <td>Iceland</td>
+      <td>ISL</td>
+      <td align="right">352</td>
+    </tr>
+    <tr id="rowIT">
+      <td align="center">IT</td>
+      <td>Italy</td>
+      <td>Italy</td>
+      <td>ITA</td>
+      <td align="right">380</td>
+    </tr>
+    <tr id="rowJM">
+      <td align="center">JM</td>
+      <td>Jamaica</td>
+      <td>Jamaica</td>
+      <td>JAM</td>
+      <td align="right">388</td>
+    </tr>
+    <tr id="rowJO">
+      <td align="center">JO</td>
+      <td>Jordan</td>
+      <td>Jordan</td>
+      <td>JOR</td>
+      <td align="right">400</td>
+    </tr>
+    <tr id="rowJP">
+      <td align="center">JP</td>
+      <td>Japan</td>
+      <td>Japan</td>
+      <td>JPN</td>
+      <td align="right">392</td>
+    </tr>
+    <tr id="rowKE">
+      <td align="center">KE</td>
+      <td>Kenya</td>
+      <td>Kenya</td>
+      <td>KEN</td>
+      <td align="right">404</td>
+    </tr>
+    <tr id="rowKG">
+      <td align="center">KG</td>
+      <td>Kyrgyzstan</td>
+      <td>Kyrgyzstan</td>
+      <td>KGZ</td>
+      <td align="right">417</td>
+    </tr>
+    <tr id="rowKH">
+      <td align="center">KH</td>
+      <td>Cambodia</td>
+      <td>Cambodia</td>
+      <td>KHM</td>
+      <td align="right">116</td>
+    </tr>
+    <tr id="rowKI">
+      <td align="center">KI</td>
+      <td>Kiribati</td>
+      <td>Kiribati</td>
+      <td>KIR</td>
+      <td align="right">296</td>
+    </tr>
+    <tr id="rowKM">
+      <td align="center">KM</td>
+      <td>Comoros</td>
+      <td>Comoros</td>
+      <td>COM</td>
+      <td align="right">174</td>
+    </tr>
+    <tr id="rowKN">
+      <td align="center">KN</td>
+      <td>Saint Kitts and Nevis</td>
+      <td>Saint Kitts and Nevis</td>
+      <td>KNA</td>
+      <td align="right">659</td>
+    </tr>
+    <tr id="rowKP">
+      <td align="center">KP</td>
+      <td>Korea, Democratic People's Republic of</td>
+      <td>Korea, Democratic People's Republic of</td>
+      <td>PRK</td>
+      <td align="right">408</td>
+    </tr>
+    <tr id="rowKR">
+      <td align="center">KR</td>
+      <td>Korea, Republic of</td>
+      <td>Korea, Republic of</td>
+      <td>KOR</td>
+      <td align="right">410</td>
+    </tr>
+    <tr id="rowKW">
+      <td align="center">KW</td>
+      <td>Kuwait</td>
+      <td>Kuwait</td>
+      <td>KWT</td>
+      <td align="right">414</td>
+    </tr>
+    <tr id="rowKY">
+      <td align="center">KY</td>
+      <td>Cayman Islands</td>
+      <td>Cayman Islands</td>
+      <td>CYM</td>
+      <td align="right">136</td>
+    </tr>
+    <tr id="rowKZ">
+      <td align="center">KZ</td>
+      <td>Kazakhstan</td>
+      <td>Kazakhstan</td>
+      <td>KAZ</td>
+      <td align="right">398</td>
+    </tr>
+    <tr id="rowLA">
+      <td align="center">LA</td>
+      <td>Lao People's Democratic Republic</td>
+      <td>Lao People's Democratic Republic</td>
+      <td>LAO</td>
+      <td align="right">418</td>
+    </tr>
+    <tr id="rowLB">
+      <td align="center">LB</td>
+      <td>Lebanon</td>
+      <td>Lebanon</td>
+      <td>LBN</td>
+      <td align="right">422</td>
+    </tr>
+    <tr id="rowLC">
+      <td align="center">LC</td>
+      <td>Saint Lucia</td>
+      <td>Saint Lucia</td>
+      <td>LCA</td>
+      <td align="right">662</td>
+    </tr>
+    <tr id="rowLI">
+      <td align="center">LI</td>
+      <td>Liechtenstein</td>
+      <td>Liechtenstein</td>
+      <td>LIE</td>
+      <td align="right">438</td>
+    </tr>
+    <tr id="rowLK">
+      <td align="center">LK</td>
+      <td>Sri Lanka</td>
+      <td>Sri Lanka</td>
+      <td>LKA</td>
+      <td align="right">144</td>
+    </tr>
+    <tr id="rowLR">
+      <td align="center">LR</td>
+      <td>Liberia</td>
+      <td>Liberia</td>
+      <td>LBR</td>
+      <td align="right">430</td>
+    </tr>
+    <tr id="rowLS">
+      <td align="center">LS</td>
+      <td>Lesotho</td>
+      <td>Lesotho</td>
+      <td>LSO</td>
+      <td align="right">426</td>
+    </tr>
+    <tr id="rowLT">
+      <td align="center">LT</td>
+      <td>Lithuania</td>
+      <td>Lithuania</td>
+      <td>LTU</td>
+      <td align="right">440</td>
+    </tr>
+    <tr id="rowLU">
+      <td align="center">LU</td>
+      <td>Luxembourg</td>
+      <td>Luxembourg</td>
+      <td>LUX</td>
+      <td align="right">442</td>
+    </tr>
+    <tr id="rowLV">
+      <td align="center">LV</td>
+      <td>Latvia</td>
+      <td>Latvia</td>
+      <td>LVA</td>
+      <td align="right">428</td>
+    </tr>
+    <tr id="rowLY">
+      <td align="center">LY</td>
+      <td>Libyan Arab Jamahiriya</td>
+      <td>Libyan Arab Jamahiriya</td>
+      <td>LBY</td>
+      <td align="right">434</td>
+    </tr>
+    <tr id="rowMA">
+      <td align="center">MA</td>
+      <td>Morocco</td>
+      <td>Morocco</td>
+      <td>MAR</td>
+      <td align="right">504</td>
+    </tr>
+    <tr id="rowMC">
+      <td align="center">MC</td>
+      <td>Monaco</td>
+      <td>Monaco</td>
+      <td>MCO</td>
+      <td align="right">492</td>
+    </tr>
+    <tr id="rowMD">
+      <td align="center">MD</td>
+      <td>Moldova, Republic of</td>
+      <td>Moldova, Republic of</td>
+      <td>MDA</td>
+      <td align="right">498</td>
+    </tr>
+    <tr id="rowMG">
+      <td align="center">MG</td>
+      <td>Madagascar</td>
+      <td>Madagascar</td>
+      <td>MDG</td>
+      <td align="right">450</td>
+    </tr>
+    <tr id="rowMH">
+      <td align="center">MH</td>
+      <td>Marshall Islands</td>
+      <td>Marshall Islands</td>
+      <td>MHL</td>
+      <td align="right">584</td>
+    </tr>
+    <tr id="rowMK">
+      <td align="center">MK</td>
+      <td>Macedonia, the Former Yugoslav Republic of</td>
+      <td>Macedonia, the Former Yugoslav Republic of</td>
+      <td>MKD</td>
+      <td align="right">807</td>
+    </tr>
+    <tr id="rowML">
+      <td align="center">ML</td>
+      <td>Mali</td>
+      <td>Mali</td>
+      <td>MLI</td>
+      <td align="right">466</td>
+    </tr>
+    <tr id="rowMM">
+      <td align="center">MM</td>
+      <td>Myanmar</td>
+      <td>Myanmar</td>
+      <td>MMR</td>
+      <td align="right">104</td>
+    </tr>
+    <tr id="rowMN">
+      <td align="center">MN</td>
+      <td>Mongolia</td>
+      <td>Mongolia</td>
+      <td>MNG</td>
+      <td align="right">496</td>
+    </tr>
+    <tr id="rowMO">
+      <td align="center">MO</td>
+      <td>Macao</td>
+      <td>Macao</td>
+      <td>MAC</td>
+      <td align="right">446</td>
+    </tr>
+    <tr id="rowMP">
+      <td align="center">MP</td>
+      <td>Northern Mariana Islands</td>
+      <td>Northern Mariana Islands</td>
+      <td>MNP</td>
+      <td align="right">580</td>
+    </tr>
+    <tr id="rowMQ">
+      <td align="center">MQ</td>
+      <td>Martinique</td>
+      <td>Martinique</td>
+      <td>MTQ</td>
+      <td align="right">474</td>
+    </tr>
+    <tr id="rowMR">
+      <td align="center">MR</td>
+      <td>Mauritania</td>
+      <td>Mauritania</td>
+      <td>MRT</td>
+      <td align="right">478</td>
+    </tr>
+    <tr id="rowMS">
+      <td align="center">MS</td>
+      <td>Montserrat</td>
+      <td>Montserrat</td>
+      <td>MSR</td>
+      <td align="right">500</td>
+    </tr>
+    <tr id="rowMT">
+      <td align="center">MT</td>
+      <td>Malta</td>
+      <td>Malta</td>
+      <td>MLT</td>
+      <td align="right">470</td>
+    </tr>
+    <tr id="rowMU">
+      <td align="center">MU</td>
+      <td>Mauritius</td>
+      <td>Mauritius</td>
+      <td>MUS</td>
+      <td align="right">480</td>
+    </tr>
+    <tr id="rowMV">
+      <td align="center">MV</td>
+      <td>Maldives</td>
+      <td>Maldives</td>
+      <td>MDV</td>
+      <td align="right">462</td>
+    </tr>
+    <tr id="rowMW">
+      <td align="center">MW</td>
+      <td>Malawi</td>
+      <td>Malawi</td>
+      <td>MWI</td>
+      <td align="right">454</td>
+    </tr>
+    <tr id="rowMX">
+      <td align="center">MX</td>
+      <td>Mexico</td>
+      <td>Mexico</td>
+      <td>MEX</td>
+      <td align="right">484</td>
+    </tr>
+    <tr id="rowMY">
+      <td align="center">MY</td>
+      <td>Malaysia</td>
+      <td>Malaysia</td>
+      <td>MYS</td>
+      <td align="right">458</td>
+    </tr>
+    <tr id="rowMZ">
+      <td align="center">MZ</td>
+      <td>Mozambique</td>
+      <td>Mozambique</td>
+      <td>MOZ</td>
+      <td align="right">508</td>
+    </tr>
+    <tr id="rowNA">
+      <td align="center">NA</td>
+      <td>Namibia</td>
+      <td>Namibia</td>
+      <td>NAM</td>
+      <td align="right">516</td>
+    </tr>
+    <tr id="rowNC">
+      <td align="center">NC</td>
+      <td>New Caledonia</td>
+      <td>New Caledonia</td>
+      <td>NCL</td>
+      <td align="right">540</td>
+    </tr>
+    <tr id="rowNE">
+      <td align="center">NE</td>
+      <td>Niger</td>
+      <td>Niger</td>
+      <td>NER</td>
+      <td align="right">562</td>
+    </tr>
+    <tr id="rowNF">
+      <td align="center">NF</td>
+      <td>Norfolk Island</td>
+      <td>Norfolk Island</td>
+      <td>NFK</td>
+      <td align="right">574</td>
+    </tr>
+    <tr id="rowNG">
+      <td align="center">NG</td>
+      <td>Nigeria</td>
+      <td>Nigeria</td>
+      <td>NGA</td>
+      <td align="right">566</td>
+    </tr>
+    <tr id="rowNI">
+      <td align="center">NI</td>
+      <td>Nicaragua</td>
+      <td>Nicaragua</td>
+      <td>NIC</td>
+      <td align="right">558</td>
+    </tr>
+    <tr id="rowNL">
+      <td align="center">NL</td>
+      <td>Netherlands</td>
+      <td>Netherlands</td>
+      <td>NLD</td>
+      <td align="right">528</td>
+    </tr>
+    <tr id="rowNO">
+      <td align="center">NO</td>
+      <td>Norway</td>
+      <td>Norway</td>
+      <td>NOR</td>
+      <td align="right">578</td>
+    </tr>
+    <tr id="rowNP">
+      <td align="center">NP</td>
+      <td>Nepal</td>
+      <td>Nepal</td>
+      <td>NPL</td>
+      <td align="right">524</td>
+    </tr>
+    <tr id="rowNR">
+      <td align="center">NR</td>
+      <td>Nauru</td>
+      <td>Nauru</td>
+      <td>NRU</td>
+      <td align="right">520</td>
+    </tr>
+    <tr id="rowNU">
+      <td align="center">NU</td>
+      <td>Niue</td>
+      <td>Niue</td>
+      <td>NIU</td>
+      <td align="right">570</td>
+    </tr>
+    <tr id="rowNZ">
+      <td align="center">NZ</td>
+      <td>New Zealand</td>
+      <td>New Zealand</td>
+      <td>NZL</td>
+      <td align="right">554</td>
+    </tr>
+    <tr id="rowOM">
+      <td align="center">OM</td>
+      <td>Oman</td>
+      <td>Oman</td>
+      <td>OMN</td>
+      <td align="right">512</td>
+    </tr>
+    <tr id="rowPA">
+      <td align="center">PA</td>
+      <td>Panama</td>
+      <td>Panama</td>
+      <td>PAN</td>
+      <td align="right">591</td>
+    </tr>
+    <tr id="rowPE">
+      <td align="center">PE</td>
+      <td>Peru</td>
+      <td>Peru</td>
+      <td>PER</td>
+      <td align="right">604</td>
+    </tr>
+    <tr id="rowPF">
+      <td align="center">PF</td>
+      <td>French Polynesia</td>
+      <td>French Polynesia</td>
+      <td>PYF</td>
+      <td align="right">258</td>
+    </tr>
+    <tr id="rowPG">
+      <td align="center">PG</td>
+      <td>Papua New Guinea</td>
+      <td>Papua New Guinea</td>
+      <td>PNG</td>
+      <td align="right">598</td>
+    </tr>
+    <tr id="rowPH">
+      <td align="center">PH</td>
+      <td>Philippines</td>
+      <td>Philippines</td>
+      <td>PHL</td>
+      <td align="right">608</td>
+    </tr>
+    <tr id="rowPK">
+      <td align="center">PK</td>
+      <td>Pakistan</td>
+      <td>Pakistan</td>
+      <td>PAK</td>
+      <td align="right">586</td>
+    </tr>
+    <tr id="rowPL">
+      <td align="center">PL</td>
+      <td>Poland</td>
+      <td>Poland</td>
+      <td>POL</td>
+      <td align="right">616</td>
+    </tr>
+    <tr id="rowPM">
+      <td align="center">PM</td>
+      <td>Saint Pierre and Miquelon</td>
+      <td>Saint Pierre and Miquelon</td>
+      <td>SPM</td>
+      <td align="right">666</td>
+    </tr>
+    <tr id="rowPN">
+      <td align="center">PN</td>
+      <td>Pitcairn</td>
+      <td>Pitcairn</td>
+      <td>PCN</td>
+      <td align="right">612</td>
+    </tr>
+    <tr id="rowPR">
+      <td align="center">PR</td>
+      <td>Puerto Rico</td>
+      <td>Puerto Rico</td>
+      <td>PRI</td>
+      <td align="right">630</td>
+    </tr>
+    <tr id="rowPS">
+      <td align="center">PS</td>
+      <td>Palestinian Territory, Occupied</td>
+      <td>Palestinian Territory, Occupied</td>
+      <td>PTO</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowPT">
+      <td align="center">PT</td>
+      <td>Portugal</td>
+      <td>Portugal</td>
+      <td>PRT</td>
+      <td align="right">620</td>
+    </tr>
+    <tr id="rowPW">
+      <td align="center">PW</td>
+      <td>Palau</td>
+      <td>Palau</td>
+      <td>PLW</td>
+      <td align="right">585</td>
+    </tr>
+    <tr id="rowPY">
+      <td align="center">PY</td>
+      <td>Paraguay</td>
+      <td>Paraguay</td>
+      <td>PRY</td>
+      <td align="right">600</td>
+    </tr>
+    <tr id="rowQA">
+      <td align="center">QA</td>
+      <td>Qatar</td>
+      <td>Qatar</td>
+      <td>QAT</td>
+      <td align="right">634</td>
+    </tr>
+    <tr id="rowRE">
+      <td align="center">RE</td>
+      <td>Reunion</td>
+      <td>Reunion</td>
+      <td>REU</td>
+      <td align="right">638</td>
+    </tr>
+    <tr id="rowRO">
+      <td align="center">RO</td>
+      <td>Romania</td>
+      <td>Romania</td>
+      <td>ROM</td>
+      <td align="right">642</td>
+    </tr>
+    <tr id="rowRU">
+      <td align="center">RU</td>
+      <td>Russian Federation</td>
+      <td>Russian Federation</td>
+      <td>RUS</td>
+      <td align="right">643</td>
+    </tr>
+    <tr id="rowRW">
+      <td align="center">RW</td>
+      <td>Rwanda</td>
+      <td>Rwanda</td>
+      <td>RWA</td>
+      <td align="right">646</td>
+    </tr>
+    <tr id="rowSA">
+      <td align="center">SA</td>
+      <td>Saudi Arabia</td>
+      <td>Saudi Arabia</td>
+      <td>SAU</td>
+      <td align="right">682</td>
+    </tr>
+    <tr id="rowSB">
+      <td align="center">SB</td>
+      <td>Solomon Islands</td>
+      <td>Solomon Islands</td>
+      <td>SLB</td>
+      <td align="right">90</td>
+    </tr>
+    <tr id="rowSC">
+      <td align="center">SC</td>
+      <td>Seychelles</td>
+      <td>Seychelles</td>
+      <td>SYC</td>
+      <td align="right">690</td>
+    </tr>
+    <tr id="rowSD">
+      <td align="center">SD</td>
+      <td>Sudan</td>
+      <td>Sudan</td>
+      <td>SDN</td>
+      <td align="right">736</td>
+    </tr>
+    <tr id="rowSE">
+      <td align="center">SE</td>
+      <td>Sweden</td>
+      <td>Sweden</td>
+      <td>SWE</td>
+      <td align="right">752</td>
+    </tr>
+    <tr id="rowSG">
+      <td align="center">SG</td>
+      <td>Singapore</td>
+      <td>Singapore</td>
+      <td>SGP</td>
+      <td align="right">702</td>
+    </tr>
+    <tr id="rowSH">
+      <td align="center">SH</td>
+      <td>Saint Helena</td>
+      <td>Saint Helena</td>
+      <td>SHN</td>
+      <td align="right">654</td>
+    </tr>
+    <tr id="rowSI">
+      <td align="center">SI</td>
+      <td>Slovenia</td>
+      <td>Slovenia</td>
+      <td>SVN</td>
+      <td align="right">705</td>
+    </tr>
+    <tr id="rowSJ">
+      <td align="center">SJ</td>
+      <td>Svalbard and Jan Mayen</td>
+      <td>Svalbard and Jan Mayen</td>
+      <td>SJM</td>
+      <td align="right">744</td>
+    </tr>
+    <tr id="rowSK">
+      <td align="center">SK</td>
+      <td>Slovakia</td>
+      <td>Slovakia</td>
+      <td>SVK</td>
+      <td align="right">703</td>
+    </tr>
+    <tr id="rowSL">
+      <td align="center">SL</td>
+      <td>Sierra Leone</td>
+      <td>Sierra Leone</td>
+      <td>SLE</td>
+      <td align="right">694</td>
+    </tr>
+    <tr id="rowSM">
+      <td align="center">SM</td>
+      <td>San Marino</td>
+      <td>San Marino</td>
+      <td>SMR</td>
+      <td align="right">674</td>
+    </tr>
+    <tr id="rowSN">
+      <td align="center">SN</td>
+      <td>Senegal</td>
+      <td>Senegal</td>
+      <td>SEN</td>
+      <td align="right">686</td>
+    </tr>
+    <tr id="rowSO">
+      <td align="center">SO</td>
+      <td>Somalia</td>
+      <td>Somalia</td>
+      <td>SOM</td>
+      <td align="right">706</td>
+    </tr>
+    <tr id="rowSR">
+      <td align="center">SR</td>
+      <td>Suriname</td>
+      <td>Suriname</td>
+      <td>SUR</td>
+      <td align="right">740</td>
+    </tr>
+    <tr id="rowST">
+      <td align="center">ST</td>
+      <td>Sao Tome and Principe</td>
+      <td>Sao Tome and Principe</td>
+      <td>STP</td>
+      <td align="right">678</td>
+    </tr>
+    <tr id="rowSV">
+      <td align="center">SV</td>
+      <td>El Salvador</td>
+      <td>El Salvador</td>
+      <td>SLV</td>
+      <td align="right">222</td>
+    </tr>
+    <tr id="rowSY">
+      <td align="center">SY</td>
+      <td>Syrian Arab Republic</td>
+      <td>Syrian Arab Republic</td>
+      <td>SYR</td>
+      <td align="right">760</td>
+    </tr>
+    <tr id="rowSZ">
+      <td align="center">SZ</td>
+      <td>Swaziland</td>
+      <td>Swaziland</td>
+      <td>SWZ</td>
+      <td align="right">748</td>
+    </tr>
+    <tr id="rowTC">
+      <td align="center">TC</td>
+      <td>Turks and Caicos Islands</td>
+      <td>Turks and Caicos Islands</td>
+      <td>TCA</td>
+      <td align="right">796</td>
+    </tr>
+    <tr id="rowTD">
+      <td align="center">TD</td>
+      <td>Chad</td>
+      <td>Chad</td>
+      <td>TCD</td>
+      <td align="right">148</td>
+    </tr>
+    <tr id="rowTF">
+      <td align="center">TF</td>
+      <td>French Southern Territories</td>
+      <td>French Southern Territories</td>
+      <td>FST</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowTG">
+      <td align="center">TG</td>
+      <td>Togo</td>
+      <td>Togo</td>
+      <td>TGO</td>
+      <td align="right">768</td>
+    </tr>
+    <tr id="rowTH">
+      <td align="center">TH</td>
+      <td>Thailand</td>
+      <td>Thailand</td>
+      <td>THA</td>
+      <td align="right">764</td>
+    </tr>
+    <tr id="rowTJ">
+      <td align="center">TJ</td>
+      <td>Tajikistan</td>
+      <td>Tajikistan</td>
+      <td>TJK</td>
+      <td align="right">762</td>
+    </tr>
+    <tr id="rowTK">
+      <td align="center">TK</td>
+      <td>Tokelau</td>
+      <td>Tokelau</td>
+      <td>TKL</td>
+      <td align="right">772</td>
+    </tr>
+    <tr id="rowTL">
+      <td align="center">TL</td>
+      <td>Timor-Leste</td>
+      <td>Timor-Leste</td>
+      <td>TIM</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowTM">
+      <td align="center">TM</td>
+      <td>Turkmenistan</td>
+      <td>Turkmenistan</td>
+      <td>TKM</td>
+      <td align="right">795</td>
+    </tr>
+    <tr id="rowTN">
+      <td align="center">TN</td>
+      <td>Tunisia</td>
+      <td>Tunisia</td>
+      <td>TUN</td>
+      <td align="right">788</td>
+    </tr>
+    <tr id="rowTO">
+      <td align="center">TO</td>
+      <td>Tonga</td>
+      <td>Tonga</td>
+      <td>TON</td>
+      <td align="right">776</td>
+    </tr>
+    <tr id="rowTR">
+      <td align="center">TR</td>
+      <td>Turkey</td>
+      <td>Turkey</td>
+      <td>TUR</td>
+      <td align="right">792</td>
+    </tr>
+    <tr id="rowTT">
+      <td align="center">TT</td>
+      <td>Trinidad and Tobago</td>
+      <td>Trinidad and Tobago</td>
+      <td>TTO</td>
+      <td align="right">780</td>
+    </tr>
+    <tr id="rowTV">
+      <td align="center">TV</td>
+      <td>Tuvalu</td>
+      <td>Tuvalu</td>
+      <td>TUV</td>
+      <td align="right">798</td>
+    </tr>
+    <tr id="rowTW">
+      <td align="center">TW</td>
+      <td>Taiwan, Province of China</td>
+      <td>Taiwan, Province of China</td>
+      <td>TWN</td>
+      <td align="right">158</td>
+    </tr>
+    <tr id="rowTZ">
+      <td align="center">TZ</td>
+      <td>Tanzania, United Republic of</td>
+      <td>Tanzania, United Republic of</td>
+      <td>TZA</td>
+      <td align="right">834</td>
+    </tr>
+    <tr id="rowUA">
+      <td align="center">UA</td>
+      <td>Ukraine</td>
+      <td>Ukraine</td>
+      <td>UKR</td>
+      <td align="right">804</td>
+    </tr>
+    <tr id="rowUG">
+      <td align="center">UG</td>
+      <td>Uganda</td>
+      <td>Uganda</td>
+      <td>UGA</td>
+      <td align="right">800</td>
+    </tr>
+    <tr id="rowUM">
+      <td align="center">UM</td>
+      <td>United States Minor Outlying Islands</td>
+      <td>United States Minor Outlying Islands</td>
+      <td>USI</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowUS">
+      <td align="center">US</td>
+      <td>United States</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td align="right">840</td>
+    </tr>
+    <tr id="rowUY">
+      <td align="center">UY</td>
+      <td>Uruguay</td>
+      <td>Uruguay</td>
+      <td>URY</td>
+      <td align="right">858</td>
+    </tr>
+    <tr id="rowUZ">
+      <td align="center">UZ</td>
+      <td>Uzbekistan</td>
+      <td>Uzbekistan</td>
+      <td>UZB</td>
+      <td align="right">860</td>
+    </tr>
+    <tr id="rowVA">
+      <td align="center">VA</td>
+      <td>Holy See (Vatican City State)</td>
+      <td>Holy See (Vatican City State)</td>
+      <td>VAT</td>
+      <td align="right">336</td>
+    </tr>
+    <tr id="rowVC">
+      <td align="center">VC</td>
+      <td>Saint Vincent and the Grenadines</td>
+      <td>Saint Vincent and the Grenadines</td>
+      <td>VCT</td>
+      <td align="right">670</td>
+    </tr>
+    <tr id="rowVE">
+      <td align="center">VE</td>
+      <td>Venezuela</td>
+      <td>Venezuela</td>
+      <td>VEN</td>
+      <td align="right">862</td>
+    </tr>
+    <tr id="rowVG">
+      <td align="center">VG</td>
+      <td>Virgin Islands, British</td>
+      <td>Virgin Islands, British</td>
+      <td>VGB</td>
+      <td align="right">92</td>
+    </tr>
+    <tr id="rowVI">
+      <td align="center">VI</td>
+      <td>Virgin Islands, U.s.</td>
+      <td>Virgin Islands, U.s.</td>
+      <td>VIR</td>
+      <td align="right">850</td>
+    </tr>
+    <tr id="rowVN">
+      <td align="center">VN</td>
+      <td>Viet Nam</td>
+      <td>Viet Nam</td>
+      <td>VNM</td>
+      <td align="right">704</td>
+    </tr>
+    <tr id="rowVU">
+      <td align="center">VU</td>
+      <td>Vanuatu</td>
+      <td>Vanuatu</td>
+      <td>VUT</td>
+      <td align="right">548</td>
+    </tr>
+    <tr id="rowWF">
+      <td align="center">WF</td>
+      <td>Wallis and Futuna</td>
+      <td>Wallis and Futuna</td>
+      <td>WLF</td>
+      <td align="right">876</td>
+    </tr>
+    <tr id="rowWS">
+      <td align="center">WS</td>
+      <td>Samoa</td>
+      <td>Samoa</td>
+      <td>WSM</td>
+      <td align="right">882</td>
+    </tr>
+    <tr id="rowYE">
+      <td align="center">YE</td>
+      <td>Yemen</td>
+      <td>Yemen</td>
+      <td>YEM</td>
+      <td align="right">887</td>
+    </tr>
+    <tr id="rowYT">
+      <td align="center">YT</td>
+      <td>Mayotte</td>
+      <td>Mayotte</td>
+      <td>MAY</td>
+      <td align="right">0</td>
+    </tr>
+    <tr id="rowZA">
+      <td align="center">ZA</td>
+      <td>South Africa</td>
+      <td>South Africa</td>
+      <td>ZAF</td>
+      <td align="right">710</td>
+    </tr>
+    <tr id="rowZM">
+      <td align="center">ZM</td>
+      <td>Zambia</td>
+      <td>Zambia</td>
+      <td>ZMB</td>
+      <td align="right">894</td>
+    </tr>
+    <tr id="rowZW">
+      <td align="center">ZW</td>
+      <td>Zimbabwe</td>
+      <td>Zimbabwe</td>
+      <td>ZWE</td>
+      <td align="right">716</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<script src="tablefilter/tablefilter.js"></script>
+
+
+<script data-config>
+    // filter by first letter logic
+    function filter(evt){
+        var elm = evt.target;
+        var query = elm.value.length > 0 ? tf.stOperator + elm.value : '';
+
+        // set the column's filter value
+        tf.setFilterValue(1, query);
+
+        // filter the table
+        tf.filter();
+
+        // clear previously marked element
+        if(tf.selectedLetter) {
+            tf.selectedLetter.classList.remove('btn-primary');
+        }
+
+        // mark selected letter
+        elm.classList.add('btn-primary');
+
+        // keep reference of selected element
+        tf.selectedLetter = elm;
+    }
+
+    var tf = new TableFilter(
+        document.querySelector('#countries-codes'),
+        {
+            base_path: 'tablefilter/',
+            start_with_operator: '←',
+            paging: {
+              length: 10
+            },
+            rows_counter: {
+                text: 'Countries: '
+            },
+            col_types: [
+              'string', 'string', 'string',
+              'string', 'number'
+            ],
+            col_widths: [
+                '75px','350px','350px',
+                '75px','75px'
+            ],
+
+            // hide filters
+            on_filters_loaded: function(tf) {
+                tf.dom().rows[tf.getFiltersRowIndex()].style.display = 'none';
+            },
+
+            // sorting feature
+            extensions: [{
+                name: 'sort'
+            }]
+        }
+    );
+    tf.init();
+    // keep reference of selected letter element
+    tf.selectedLetter = null;
+</script>
+
+<hr>
+<ul class="nav nav-pills">
+    <li class="active">
+        <a data-toggle="tab" href="#js">JS</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#html">HTML</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#css">CSS</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="js" class="tab-pane fade in active">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="js">
+  <code class="javascript"></code>
+</pre>
+<script src="assets/js/js-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="html" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="html">
+  <code class="xml"></code>
+</pre>
+<script src="assets/js/html-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+    <div id="css" class="tab-pane fade">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<pre class="css">
+  <code class="css"></code>
+</pre>
+<script src="assets/js/css-code-in-pre.js"></script>
+<!-- -->
+
+
+
+
+
+    </div>
+</div>
+
+
+<div class="alert alert-info" role="alert">
+    NOTE: Toolbar above the HTML table is styled with Bootstrap.
+</div>
+
+
+    </div>
+
+    
+    <nav class="navbar navbar-default navbar-bottom">
+      <div class="container">
+        <ul class="nav navbar-nav">
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter">Repo</a>
+            </li>
+            <li>
+              <a href="https://github.com/koalyptus/TableFilter/wiki">Wiki</a>
+            </li>
+            <li>
+              <a href="./docs" target="_blank">Docs</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <p>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+    <input type="hidden" name="cmd" value="_donations">
+    <input type="hidden" name="business" value="maxgug@hotmail.com">
+    <input type="hidden" name="lc" value="BM">
+    <input type="hidden" name="item_name" value="TableFilter">
+    <input type="hidden" name="no_note" value="0">
+    <input type="hidden" name="currency_code" value="USD">
+    <input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHosted">
+    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">
+</form>
+</p>
+          </li>
+          <li>
+            
+<a href="https://flattr.com/submit/auto?user_id=koalyptus&
+    url=https%3A%2F%2Fgithub.com%2Fkoalyptus%2FTablefilter">
+    <img src="https://api.flattr.com/button/flattr-badge-large.png"
+        alt="TableFilter - A Javascript library making HTML tables filterable
+        and a bit more" />
+</a>
+
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <script src="assets/js/github-fork-me.js"></script>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    DO NOT COPY: NOT PART OF TABLEFILTER
+-->
+<link rel="stylesheet" href="assets/js/highlight/styles/monokai-sublime.css">
+<script src="assets/js/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- -->
+
+    
+<script type="text/javascript"
+    src="//s7.addthis.com/js/300/addthis_widget.js#pubid=maxgug"
+    async="async"></script>
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-68429903-1', 'auto');
+  ga('send', 'pageview');
+</script>
+  </body>
+</html>
