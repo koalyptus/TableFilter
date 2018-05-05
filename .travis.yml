@@ -18,7 +18,7 @@ before_deploy:
   - git config --global user.name "koalyptus"
   - export GIT_TAG=$(node -p -e "require('./package.json').version")
   - echo -n $GIT_TAG
-  - git tag $GIT_TAG -am -f "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
+  - git tag $GIT_TAG -amf "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
 deploy:
   - provider: releases
     on:
