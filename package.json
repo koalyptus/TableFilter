@@ -33,7 +33,7 @@
     "codecov": "./node_modules/.bin/codecov",
     "esdoc": "esdoc",
     "dist": "grunt",
-    "deploy": "grunt deploy",
+    "build:all": "grunt build-all",
     "start": "npm run server"
   },
   "publishConfig": {
@@ -58,7 +58,6 @@
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-gh-pages": "^2.0.0",
     "grunt-qunit-istanbul": "1.0.0",
     "grunt-shell": "2.1.0",
     "grunt-string-replace": "^1.3.1",

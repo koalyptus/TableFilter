@@ -9,7 +9,7 @@ import {RIGHT} from './toolbar';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
     '4.-Filter-operators';
-const WEBSITE_URL = 'http://koalyptus.github.io/TableFilter/';
+const WEBSITE_URL = 'https://www.tablefilter.com/';
 
 /**
  * Help UI component

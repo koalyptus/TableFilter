@@ -4,7 +4,6 @@ module.exports = function (grunt) {
     var testDir = 'test';
     var testHost = 'http://localhost:8000/';
     var pkg = grunt.file.readJSON('package.json');
-    var repo = 'github.com/koalyptus/TableFilter';
 
     grunt.initConfig({
 
@@ -145,78 +144,7 @@ module.exports = function (grunt) {
             'build-css': {
                 command: 'npm run build:css'
             }
-        },
-
-        'gh-pages': {
-            options: {
-                branch: 'gh-pages',
-                add: true
-            },
-            'publish-lib': {
-                options: {
-                    base: 'dist',
-                    repo: 'https://' + repo,
-                    message: 'publish TableFilter lib to gh-pages (cli)'
-                },
-                src: ['**/*']
-            },
-            'publish-readme': {
-                options: {
-                    base: './',
-                    repo: 'https://' + repo,
-                    message: 'publish README and LICENSE to gh-pages (cli)'
-                },
-                src: ['README.md', 'LICENSE']
-            },
-            'publish-docs': {
-                options: {
-                    base: 'docs',
-                    repo: 'https://' + repo,
-                    message: 'publish Docs to gh-pages (cli)'
-                },
-                src: ['**/*']
-            },
-            'deploy-lib': {
-                options: {
-                    user: {
-                        name: 'koalyptus'
-                    },
-                    base: 'dist',
-                    repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
-                    message: 'publish TableFilter to gh-pages (auto)' +
-                    getDeployMessage(),
-                    silent: true
-                },
-                src: ['**/*']
-            },
-            'deploy-readme': {
-                options: {
-                    user: {
-                        name: 'koalyptus'
-                    },
-                    base: './',
-                    repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
-                    message: 'publish README to gh-pages (auto)' +
-                    getDeployMessage(),
-                    silent: true
-                },
-                src: ['README.md', 'LICENSE']
-            },
-            'deploy-docs': {
-                options: {
-                    user: {
-                        name: 'koalyptus'
-                    },
-                    base: 'docs',
-                    repo: 'https://' + process.env.GH_TOKEN + '@' + repo,
-                    message: 'publish Docs to gh-pages (auto)' +
-                    getDeployMessage(),
-                    silent: true
-                },
-                src: ['**/*']
-            }
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -226,7 +154,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-qunit-istanbul');
-    grunt.loadNpmTasks('grunt-gh-pages');
 
     grunt.registerTask('eslint', ['shell:eslint']);
     grunt.registerTask('esdoc', ['shell:esdoc']);
@@ -253,15 +180,9 @@ module.exports = function (grunt) {
     // Tests with coverage
     grunt.registerTask('test', ['build-test', 'connect', 'qunit:all']);
 
-    // Publish to gh-pages
-    grunt.registerTask('publish', 'Publish from CLI', [
-        'build', 'build-demos', 'esdoc', 'gh-pages:publish-lib',
-        'gh-pages:publish-readme', 'gh-pages:publish-docs'
-    ]);
-
-    // Deploy to gh-pages
-    grunt.registerTask('deploy', 'Publish from Travis', [
-        'build', 'esdoc', 'check-deploy'
+    // Build all for deployment from travis
+    grunt.registerTask('build-all', 'Prepare for deployment', [
+        'build', 'build-demos', 'esdoc'
     ]);
 
     // Custom task running QUnit tests for specified files.
@@ -328,43 +249,4 @@ module.exports = function (grunt) {
 
         return getFiles(testDir, host);
     }
-
-    grunt.registerTask('check-deploy', function () {
-        var env = process.env;
-        // need this
-        this.requires(['build', 'esdoc']);
-
-        // only deploy under these conditions
-        if (env.TRAVIS === 'true' &&
-            env.TRAVIS_SECURE_ENV_VARS === 'true' &&
-            env.TRAVIS_PULL_REQUEST === 'false') {
-            grunt.log.writeln('executing deployment');
-            // queue deploy
-            grunt.task.run([
-                'gh-pages:deploy-lib',
-                'gh-pages:deploy-readme',
-                'gh-pages:deploy-docs'
-            ]);
-        } else {
-            grunt.log.writeln('skipped deployment');
-        }
-    });
-
-    // Get a formatted commit message to review changes from the commit log
-    // github will turn some of these into clickable links
-    function getDeployMessage() {
-        var ret = '\n\n';
-        var env = process.env;
-        if (env.TRAVIS !== 'true') {
-            ret += 'missing env vars for travis-ci';
-            return ret;
-        }
-        ret += 'branch:       ' + env.TRAVIS_BRANCH + '\n';
-        ret += 'SHA:          ' + env.TRAVIS_COMMIT + '\n';
-        ret += 'range SHA:    ' + env.TRAVIS_COMMIT_RANGE + '\n';
-        ret += 'build id:     ' + env.TRAVIS_BUILD_ID + '\n';
-        ret += 'build number: ' + env.TRAVIS_BUILD_NUMBER + '\n';
-        return ret;
-    }
-
 };

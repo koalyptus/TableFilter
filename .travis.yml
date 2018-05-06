@@ -7,12 +7,11 @@ before_script:
 script:
   - npm test
   - npm run codecov
-  - npm run deploy
+  - npm run build:all
 branches:
   only:
   - master
   - /^greenkeeper/.*$/
-  - gh-pages
 before_deploy:
   - git config --global user.email "maxgug@hotmail.com"
   - git config --global user.name "koalyptus"
