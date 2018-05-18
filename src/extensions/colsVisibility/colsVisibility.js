@@ -710,7 +710,7 @@ export default class ColsVisibility extends Feature {
     }
 
     _hideCol(tbl, colIdx, hide) {
-        let colElms = tag(this.tf.dom(), 'col');
+        let colElms = tag(tbl, 'col');
         if (colElms.length === 0) {
             return;
         }
