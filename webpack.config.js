@@ -30,9 +30,7 @@ module.exports = {
                 exclude: /tablefilter\/node_modules/,
                 options: {
                     compact: false,
-                    presets: ['es2015'],
-                    // plugins: [['transform-es2015-classes', {loose: true}]]
-                    plugins: 'transform-es2015-classes'
+                    presets: ['env']
                 },
                 loader: 'babel-loader'
             }, {

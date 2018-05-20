@@ -5,6 +5,7 @@ import {numSortAsc} from '../../sort';
 import {FORMATTED_NUMBER} from '../../const';
 import formatNumber from 'format-number';
 import {defaultsFn, defaultsArr} from '../../settings';
+import {bound} from '../../event';
 
 const EVENTS = [
     'after-filtering',
@@ -115,7 +116,7 @@ export default class ColOps extends Feature {
             return;
         }
         // subscribe to events
-        this.emitter.on(EVENTS, () => this.calcAll());
+        this.emitter.on(EVENTS, bound(this.calcAll, this));
 
         this.calcAll();
 
@@ -471,7 +472,7 @@ export default class ColOps extends Feature {
             return;
         }
         // unsubscribe to events
-        this.emitter.off(EVENTS, () => this.calcAll());
+        this.emitter.off(EVENTS, bound(this.calcAll, this));
 
         this.initialized = false;
     }

@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import {createElm, createOpt, createText, elm, removeElm} from '../dom';
 import {isArray, isNull, EMPTY_FN} from '../types';
-import {addEvt, removeEvt, isKeyPressed} from '../event';
+import {addEvt, removeEvt, isKeyPressed, bound} from '../event';
 import {INPUT, SELECT, NONE, ENTER_KEY} from '../const';
 import {
     defaultsStr, defaultsNb, defaultsBool, defaultsArr, defaultsFn
@@ -483,11 +483,10 @@ export class Paging extends Feature {
             this.setPagingInfo(tf.validRowsIndex);
         }
 
-        this.emitter.on(['after-filtering'], () => this.resetPagingInfo());
-        this.emitter.on(['change-page'],
-            (tf, pageNumber) => this.setPage(pageNumber));
+        this.emitter.on(['after-filtering'], bound(this.resetPagingInfo, this));
+        this.emitter.on(['change-page'], bound(this.changePageHandler, this));
         this.emitter.on(['change-page-results'],
-            (tf, pageLength) => this.changeResultsPerPage(pageLength));
+            bound(this.changePageResultsHandler, this));
 
         /** @inherited */
         this.initialized = true;
@@ -830,6 +829,16 @@ export class Paging extends Feature {
         this.emitter.emit('after-reset-page-length', tf, pglenIndex);
     }
 
+    /** @private */
+    changePageHandler(tf, pageNumber) {
+        this.setPage(pageNumber);
+    }
+
+    /** @private */
+    changePageResultsHandler(tf, pageLength) {
+        this.changeResultsPerPage(pageLength);
+    }
+
     /**
      * Remove paging feature
      */
@@ -893,11 +902,11 @@ export class Paging extends Feature {
             this.removeResultsPerPage();
         }
 
-        this.emitter.off(['after-filtering'], () => this.resetPagingInfo());
-        this.emitter.off(['change-page'],
-            (tf, pageNumber) => this.setPage(pageNumber));
+        this.emitter.off(['after-filtering'],
+            bound(this.resetPagingInfo, this));
+        this.emitter.off(['change-page'], bound(this.changePageHandler, this));
         this.emitter.off(['change-page-results'],
-            (tf, pageLength) => this.changeResultsPerPage(pageLength));
+            bound(this.changePageResultsHandler, this));
 
         this.pageSlc = null;
         this.nbPages = 0;
