@@ -109,3 +109,16 @@ export const keyCode = (evt) => {
 export const isKeyPressed = (evt, keyCodes = []) => {
     return keyCodes.indexOf(keyCode(evt)) !== -1;
 };
+
+/**
+ * Bind passed function to passed scope
+ * @param {Function} fn function
+ * @param {Object} scope object instance
+ */
+export function bound(fn, scope) {
+    let boundFnName = `${fn.name}_bound`;
+    if (!scope[boundFnName]) {
+        scope[boundFnName] = fn.bind(scope);
+    }
+    return scope[boundFnName];
+}
