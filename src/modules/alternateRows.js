@@ -1,6 +1,7 @@
 import {Feature} from '../feature';
 import {addClass, removeClass} from '../dom';
 import {defaultsStr} from '../settings';
+import {bound} from '../event';
 
 /**
  * Rows with alternating background color for improved readability
@@ -41,10 +42,9 @@ export class AlternateRows extends Feature {
 
         // Subscribe to events
         this.emitter.on(['row-processed', 'row-paged'],
-            (tf, rowIndex, arrIndex, isValid) =>
-                this.processRow(rowIndex, arrIndex, isValid));
+            bound(this.processRowHandler, this));
         this.emitter.on(['column-sorted', 'rows-changed'],
-            () => this.processAll());
+            bound(this.processAll, this));
 
         /** @inherited */
         this.initialized = true;
@@ -116,6 +116,11 @@ export class AlternateRows extends Feature {
         removeClass(rows[idx], this.evenCss);
     }
 
+    /** @private */
+    processRowHandler(tf, rowIndex, arrIndex, isValid) {
+        this.processRow(rowIndex, arrIndex, isValid);
+    }
+
     /**
      * Removes all alternating backgrounds
      */
@@ -129,10 +134,9 @@ export class AlternateRows extends Feature {
 
         // Unsubscribe to events
         this.emitter.off(['row-processed', 'row-paged'],
-            (tf, rowIndex, arrIndex, isValid) =>
-                this.processRow(rowIndex, arrIndex, isValid));
+            bound(this.processRowHandler, this));
         this.emitter.off(['column-sorted', 'rows-changed'],
-            () => this.processAll());
+            bound(this.processAll, this));
 
         this.initialized = false;
     }

@@ -91,8 +91,8 @@ test('Clear filters', function() {
     tf.clearFilters();
     tf.filter();
 
-    deepEqual(tbl.querySelectorAll('tr.odd').length, 3, 'Odd bgs removed');
-    deepEqual(tbl.querySelectorAll('tr.even').length, 4, 'Even bg removed');
+    deepEqual(tbl.querySelectorAll('tr.odd').length, 4, 'Odd bgs removed');
+    deepEqual(tbl.querySelectorAll('tr.even').length, 3, 'Even bg removed');
 });
 
 test('Set background on a row', function() {
@@ -242,42 +242,6 @@ test('Can handle `row-paged` event', function() {
     altRows.processRow = processRow;
 });
 
-test('Can handle `column-sorted` event', function() {
-    // setup
-    var processAll = altRows.processAll;
-    var hit = 0;
-    altRows.processAll = function() {
-        hit++;
-    };
-
-    // act
-    altRows.init();
-    tf.emitter.emit('column-sorted');
-
-    // assert
-    deepEqual(hit, 1, 'processAll called');
-
-    altRows.processAll = processAll;
-});
-
-test('Can handle `rows-changed` event', function() {
-    // setup
-    var processAll = altRows.processAll;
-    var hit = 0;
-    altRows.processAll = function() {
-        hit++;
-    };
-
-    // act
-    altRows.init();
-    tf.emitter.emit('rows-changed');
-
-    // assert
-    deepEqual(hit, 1, 'processAll called');
-
-    altRows.processAll = processAll;
-});
-
 module('Grid layout');
 test('Grid layout: initialising alternating rows', function() {
     tf.destroy();
@@ -309,8 +273,8 @@ test('Grid layout: clear filters', function() {
     tf.clearFilters();
     tf.filter();
 
-    deepEqual(tbl.querySelectorAll('tr.odd').length, 3, 'Odd bgs removed');
-    deepEqual(tbl.querySelectorAll('tr.even').length, 4, 'Even bg removed');
+    deepEqual(tbl.querySelectorAll('tr.odd').length, 4, 'Odd bgs removed');
+    deepEqual(tbl.querySelectorAll('tr.even').length, 3, 'Even bg removed');
 });
 
 test('Grid layout: set background on a row', function() {
