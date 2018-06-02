@@ -1657,7 +1657,7 @@ export class TableFilter {
                 }
 
                 emitter.emit('row-processed', this, k,
-                    this.validRowsIndex.length, isMatch);
+                    this.validRowsIndex.length - 1, isMatch);
             },
             // continue condition
             (row) => row.cells.length !== this.nbCells
