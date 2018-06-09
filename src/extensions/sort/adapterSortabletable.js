@@ -1,7 +1,7 @@
 import {Feature} from '../../feature';
 import {isUndef, isObj, EMPTY_FN} from '../../types';
-import {createElm, elm, getText, tag} from '../../dom';
-import {addEvt} from '../../event';
+import {createElm, elm, tag} from '../../dom';
+import {addEvt, bound} from '../../event';
 import {parse as parseNb} from '../../number';
 import {
     NONE, CELL_TAG, HEADER_TAG, STRING, NUMBER, DATE, FORMATTED_NUMBER,
@@ -189,8 +189,7 @@ export default class AdapterSortableTable extends Feature {
             this.stt.sort(sortColAtStart[0], sortColAtStart[1]);
         }
 
-        this.emitter.on(['sort'],
-            (tf, colIdx, desc) => this.sortByColumnIndex(colIdx, desc));
+        this.emitter.on(['sort'], bound(this.sortByColumnIndexHandler, this));
 
         /** @inherited */
         this.initialized = true;
@@ -205,6 +204,11 @@ export default class AdapterSortableTable extends Feature {
      */
     sortByColumnIndex(colIdx, desc) {
         this.stt.sort(colIdx, desc);
+    }
+
+    /** @private */
+    sortByColumnIndexHandler(tf, colIdx, desc) {
+        this.sortByColumnIndex(colIdx, desc);
     }
 
     /**
@@ -357,17 +361,17 @@ export default class AdapterSortableTable extends Feature {
         /**
          * Overrides getInnerText in order to avoid Firefox unexpected sorting
          * behaviour with untrimmed text elements
-         * @param  {Object} oNode DOM element
+         * @param  {Object} cell DOM element
          * @return {String}       DOM element inner text
          */
-        SortableTable.getInnerText = function (oNode) {
-            if (!oNode) {
+        SortableTable.getInnerText = function (cell) {
+            if (!cell) {
                 return;
             }
-            if (oNode.getAttribute(adpt.customKey)) {
-                return oNode.getAttribute(adpt.customKey);
+            if (cell.getAttribute(adpt.customKey)) {
+                return cell.getAttribute(adpt.customKey);
             } else {
-                return getText(oNode);
+                return tf.getCellValue(cell);
             }
         };
     }
@@ -377,8 +381,8 @@ export default class AdapterSortableTable extends Feature {
      */
     addSortType(...args) {
         // Extract the arguments
-        let [id, caster, sorter] = args;
-        SortableTable.prototype.addSortType(id, caster, sorter);
+        let [id, caster, sorter, getRowValue] = args;
+        SortableTable.prototype.addSortType(id, caster, sorter, getRowValue);
     }
 
     /**
@@ -486,8 +490,7 @@ export default class AdapterSortableTable extends Feature {
             return;
         }
         let tf = this.tf;
-        this.emitter.off(['sort'],
-            (tf, colIdx, desc) => this.sortByColumnIndex(colIdx, desc));
+        this.emitter.off(['sort'], bound(this.sortByColumnIndexHandler, this));
         this.sorted = false;
         this.stt.destroy();
 

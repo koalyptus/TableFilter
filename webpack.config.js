@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const Clean = require('clean-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const fs = require('fs');
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
@@ -53,7 +54,16 @@ module.exports = {
     },
     devtool: 'source-map',
     optimization: {
-        minimize: true
+        minimizer: [
+            new UglifyJsPlugin({
+                uglifyOptions: {
+                    beautify: false,
+                    compress: {warnings: false},
+                    comments: false,
+                    keep_fnames: true
+                }
+            })
+        ]
     },
     plugins: [
         new Clean(['dist']),
