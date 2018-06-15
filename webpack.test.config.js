@@ -32,7 +32,7 @@ module.exports = {
                     noAutoWrap: true,
                     babel: {
                         compact: false,
-                        presets: ['es2015'],
+                        presets: ['env'],
                         plugins: [['transform-es2015-classes', {loose: true}]]
                     }
                 }
