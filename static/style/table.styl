@@ -28,10 +28,16 @@ table.TF
         border-bottom       1px solid $td-border-color
         text-overflow       ellipsis
 
-    // responsiveness
+    // responsive
     &.resp
         display             block
         overflow-x          auto
 
         .sort-arrow
             position        initial
+
+    // stick headers
+    thead.sticky
+        th
+            position            sticky
+            top                 -1px

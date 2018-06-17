@@ -124,7 +124,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Donations
 To support this project simply locate the `Donate` button in the [project's 
-website](http://koalyptus.github.io/TableFilter/)
+website](https://www.tablefilter.com/)
 which points to PayPal.
 Thanks to all those who supported this project in the past and to those who will
 in the future!

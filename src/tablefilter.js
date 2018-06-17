@@ -859,6 +859,9 @@ export class TableFilter {
          */
         this.prfxResponsive = 'resp';
 
+        /** @private */
+        this.stickyCssClass = 'sticky';
+
         /*** extensions ***/
         /**
          * List of loaded extensions
@@ -906,6 +909,12 @@ export class TableFilter {
          * @type {Object|Boolean}
          */
         this.toolbar = isObj(f.toolbar) || Boolean(f.toolbar);
+
+        /**
+         * Enable sticky headers
+         * @type {Boolean}
+         */
+        this.stickyHeaders = Boolean(f.sticky_headers);
 
         /**
          * Features registry
@@ -1047,6 +1056,9 @@ export class TableFilter {
             }
             if (this.colWidths.length > 0) {
                 this.setFixedLayout();
+            }
+            if (this.stickyHeaders && this.dom().tHead) {
+                addClass(this.dom().tHead, this.stickyCssClass);
             }
         }
 
@@ -1471,6 +1483,9 @@ export class TableFilter {
 
         removeClass(this.dom(), this.prfxTf);
         removeClass(this.dom(), this.prfxResponsive);
+        if (this.dom().tHead) {
+            removeClass(this.dom().tHead, this.stickyCssClass);
+        }
 
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];

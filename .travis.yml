@@ -29,6 +29,7 @@ deploy:
       branch: master
     api_key: $GITHUB_OAUTH_ACCESS_TOKEN
     skip_cleanup: true
+    name: $NEW_GIT_TAG
   - provider: s3
     on:
       branch: master
