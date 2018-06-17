@@ -1483,6 +1483,9 @@ export class TableFilter {
 
         removeClass(this.dom(), this.prfxTf);
         removeClass(this.dom(), this.prfxResponsive);
+        if (this.dom().tHead) {
+            removeClass(this.dom().tHead, this.stickyCssClass);
+        }
 
         this.nbHiddenRows = 0;
         this.validRowsIndex = [];
