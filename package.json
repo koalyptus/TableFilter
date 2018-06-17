@@ -67,7 +67,7 @@
     "sugar-date": "2.0.4",
     "uglifyjs-webpack-plugin": "1.2.5",
     "webpack": "^4.0.1",
-    "webpack-cli": "^3.0.7",
+    "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.0.0"
   },
   "bugs": {
