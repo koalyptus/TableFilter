@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.6.48",
+  "version": "0.6.49",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
-    "babel-eslint": "8.2.5",
+    "babel-eslint": "8.2.6",
     "babel-loader": "^7.0.0",
     "babel-preset-env": "1.7.0",
     "clean-webpack-plugin": "^0.1.16",
