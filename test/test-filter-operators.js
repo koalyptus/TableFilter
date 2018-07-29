@@ -51,10 +51,13 @@
     });
 
     test('Empty operator - [empty]', function() {
+        var cell = tf.getWorkingRows()[4].cells[4];
+        cell.innerHTML = '';
         tf.clearFilters();
         tf.setFilterValue(4, '[empty]');
         tf.filter();
         var filteredData = tf.getFilteredData();
+
         deepEqual(tf.getValidRows().length, 1, 'Expected number of matches');
         deepEqual(
             filteredData[0],
@@ -63,7 +66,18 @@
         );
     });
 
+    test('Empty operator - with cell containing dom element', function() {
+        var cell = tf.getWorkingRows()[4].cells[4];
+        cell.innerHTML = '<img>';
+        tf.clearFilters();
+        tf.setFilterValue(4, '[empty]');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 0, 'No matches expected');
+    });
+
     test('Non-empty operator - [nonempty]', function() {
+        var cell = tf.getWorkingRows()[4].cells[4];
+        cell.innerHTML = '';
         tf.clearFilters();
         tf.setFilterValue(4, '[nonempty]');
         tf.filter();
@@ -73,6 +87,18 @@
             filteredData[5],
             [8, ['Adelaide', 'Brisbane', '2045', '2.15', '40']],
             'Expected row data');
+    });
+
+    test('Non-empty operator - with cell containing dom element', function() {
+        var cell = tf.getWorkingRows()[4].cells[4];
+        cell.innerHTML = '<img>';
+        tf.clearFilters();
+        tf.setFilterValue(4, '[nonempty]');
+        tf.filter();
+        var filteredData = tf.getFilteredData();
+        console.log(filteredData);
+
+        deepEqual(tf.getValidRows().length, 7, 'Expected number of matches');
     });
 
     test('Or operator - ||', function() {

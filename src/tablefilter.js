@@ -4,7 +4,6 @@ import {
     removeClass, tag
 } from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
-import {isEmpty as isEmptyString} from './string';
 import {
     isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN,
     isBoolean
@@ -1623,7 +1622,7 @@ export class TableFilter {
                         // isolate search term and check occurence in cell data
                         for (let w = 0, len = s.length; w < len; w++) {
                             cS = trim(s[w]);
-                            found = this._match(cS, cellValue, j);
+                            found = this._match(cS, cellValue, cells[j]);
 
                             if (found) {
                                 emitter.emit('highlight-keyword', this,
@@ -1642,7 +1641,8 @@ export class TableFilter {
                     }
                     //single search parameter
                     else {
-                        occurence[j] = this._match(trim(sA), cellValue, j);
+                        occurence[j] =
+                            this._match(trim(sA), cellValue, cells[j]);
                         if (occurence[j]) {
                             emitter.emit('highlight-keyword', this, cells[j],
                                 sA);
@@ -1688,14 +1688,15 @@ export class TableFilter {
 
     /**
      * Match search term in cell data
-     * @param {String} term      Search term
+     * @param {String} term       Search term
      * @param {String} cellValue  Cell data
-     * @param {Number} colIdx    Column index
+     * @param {DOMElement} cell   Current cell
      * @return {Boolean}
      * @private
      */
-    _match(term, cellValue, colIdx) {
+    _match(term, cellValue, cell) {
         let numData;
+        let colIdx = cell.cellIndex;
         let decimal = this.getDecimal(colIdx);
         let reLe = new RegExp(this.leOperator),
             reGe = new RegExp(this.geOperator),
@@ -1797,11 +1798,11 @@ export class TableFilter {
             }
             //empty
             else if (hasEM) {
-                occurence = isEmptyString(cellValue);
+                occurence = !cell.hasChildNodes();
             }
             //non-empty
             else if (hasNM) {
-                occurence = !isEmptyString(cellValue);
+                occurence = cell.hasChildNodes();
             } else {
                 occurence = contains(term, cellValue,
                     this.isExactMatch(colIdx), this.caseSensitive);
@@ -1887,11 +1888,11 @@ export class TableFilter {
             }
             //empty
             else if (hasEM) {
-                occurence = isEmptyString(cellValue);
+                occurence = !cell.hasChildNodes();
             }
             //non-empty
             else if (hasNM) {
-                occurence = !isEmptyString(cellValue);
+                occurence = cell.hasChildNodes();
             } else {
                 // If numeric type data, perform a strict equality test and
                 // fallback to unformatted number string comparison
