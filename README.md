@@ -2,6 +2,7 @@
 [![Document](https://www.tablefilter.com/docs/badge.svg)](https://www.tablefilter.com/docs/source.html)
 [![codecov](https://codecov.io/gh/koalyptus/TableFilter/branch/master/graph/badge.svg)](https://codecov.io/gh/koalyptus/TableFilter)
 [![Greenkeeper badge](https://badges.greenkeeper.io/koalyptus/TableFilter.svg)](https://greenkeeper.io/)
+[![Donate](https://img.shields.io/badge/donate-%24-green.svg)](https://www.tablefilter.com/donate.html)
 
 # TableFilter
 
