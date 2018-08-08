@@ -123,8 +123,6 @@ In general, we follow the "fork-and-pull" Git workflow.
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Donations
-To support this project simply locate the `Donate` button in the [project's 
-website](https://www.tablefilter.com/)
-which points to PayPal.
-Thanks to all those who supported this project in the past and to those who will
+Support this project by donating [here](http://www.tablefilter.com/donate.html).
+Thanks to all those who supported this project in the past and those who will
 in the future!
