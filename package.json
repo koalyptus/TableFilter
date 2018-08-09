@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.6.51",
+  "version": "0.6.52",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -70,6 +70,7 @@
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.0.0"
   },
+  "dependencies": {},
   "bugs": {
     "url": "https://github.com/koalyptus/TableFilter/issues"
   },
