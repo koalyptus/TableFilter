@@ -1057,7 +1057,7 @@ export class TableFilter {
                 this.setFixedLayout();
             }
             if (this.stickyHeaders && this.dom().tHead) {
-                addClass(this.dom().tHead, this.stickyCssClass);
+                addClass(this.dom(), this.stickyCssClass);
             }
         }
 
