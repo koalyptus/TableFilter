@@ -1,7 +1,6 @@
 
 var tf = new TableFilter('demo', {
-    base_path: '../dist/tablefilter/',
-    sticky_headers: true
+    base_path: '../dist/tablefilter/'
 });
 tf.init();
 
@@ -13,8 +12,6 @@ test('thead', function() {
     deepEqual(tf.getRowsNb(), 7, 'nb working rows');
     deepEqual(tf.getRowsNb(true), 9, 'nb working rows with headers');
     notEqual(tf.getFilterElement(0), null, 'Filter element for column 0');
-    deepEqual(tf.dom().tHead.classList.contains(tf.stickyCssClass), true,
-        'Sticky headers CSS class');
 
     tf.setFilterValue(1, 'Ade');
     tf.filter();
