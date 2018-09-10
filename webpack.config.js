@@ -31,7 +31,7 @@ module.exports = {
                 exclude: /tablefilter\/node_modules/,
                 options: {
                     compact: false,
-                    presets: ['env']
+                    presets: ['@babel/env']
                 },
                 loader: 'babel-loader'
             }, {
