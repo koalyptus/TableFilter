@@ -44,6 +44,35 @@ test('Match same term with increasing number of chars', function() {
         'Search term matched');
 });
 
+// issue 628
+test('unhighlight with term', function() {
+    // setup
+    tf.clearFilters();
+    tf.setFilterValue(0, 'Sydney');
+    tf.filter();
+
+    // act
+    highlightKeyword.unhighlight('Sydney', highlightKeyword.highlightCssClass);
+
+    // assert
+    deepEqual(tf.dom().querySelectorAll('.keyword').length, 0,
+        'term unhighlighted');
+});
+test('unhighlight with null term', function() {
+    // setup
+    tf.clearFilters();
+    tf.setFilterValue(0, 'Sydney');
+    tf.setFilterValue(1, 'Canbe');
+    tf.filter();
+
+    // act
+    highlightKeyword.unhighlight(null, highlightKeyword.highlightCssClass);
+
+    // assert
+    deepEqual(tf.dom().querySelectorAll('.keyword').length, 0,
+        'all terms unhighlighted');
+});
+
 module('Reset feature');
 test('can destroy and init TableFilter', function() {
     tf.destroy();

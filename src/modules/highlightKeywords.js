@@ -1,5 +1,5 @@
 import {createText, createElm, getText} from '../dom';
-import {isArray} from '../types';
+import {isNull} from '../types';
 import {rgxEsc} from '../string';
 import {defaultsStr} from '../settings';
 
@@ -105,7 +105,8 @@ export class HighlightKeyword {
             let n = highlightedNodes[i];
             let nodeVal = getText(n);
 
-            if (nodeVal.toLowerCase().indexOf(term.toLowerCase()) !== -1) {
+            if (isNull(term) ||
+                nodeVal.toLowerCase().indexOf(term.toLowerCase()) !== -1) {
                 let parentNode = n.parentNode;
                 parentNode.replaceChild(createText(nodeVal), n);
                 parentNode.normalize();
@@ -120,15 +121,8 @@ export class HighlightKeyword {
         if (!this.tf.highlightKeywords) {
             return;
         }
-        // iterate filters values to unhighlight all values
-        this.tf.getFiltersValue().forEach((val) => {
-            if (isArray(val)) {
-                val.forEach((item) =>
-                    this.unhighlight(item, this.highlightCssClass));
-            } else {
-                this.unhighlight(val, this.highlightCssClass);
-            }
-        });
+
+        this.unhighlight(null, this.highlightCssClass);
     }
 
     /**  Remove feature */
