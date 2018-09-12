@@ -47,6 +47,7 @@ test('Match same term with increasing number of chars', function() {
 // issue 628
 test('unhighlight with term', function() {
     // setup
+    tf.clearFilters();
     tf.setFilterValue(0, 'Sydney');
     tf.filter();
 
@@ -56,11 +57,10 @@ test('unhighlight with term', function() {
     // assert
     deepEqual(tf.dom().querySelectorAll('.keyword').length, 0,
         'term unhighlighted');
-
-    tf.clearFilters();
 });
 test('unhighlight with null term', function() {
     // setup
+    tf.clearFilters();
     tf.setFilterValue(0, 'Sydney');
     tf.setFilterValue(1, 'Canbe');
     tf.filter();
@@ -70,9 +70,7 @@ test('unhighlight with null term', function() {
 
     // assert
     deepEqual(tf.dom().querySelectorAll('.keyword').length, 0,
-        'term unhighlighted');
-
-    tf.clearFilters();
+        'all terms unhighlighted');
 });
 
 module('Reset feature');
