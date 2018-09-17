@@ -1,7 +1,6 @@
 import {addEvt, cancelEvt, stopEvt, targetEvt, isKeyPressed} from './event';
 import {
-    addClass, createElm/*, createOpt*/, elm, getText, getFirstTextNode,
-    removeClass, tag
+    addClass, createElm, elm, getText, getFirstTextNode, removeClass, tag
 } from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
 import {

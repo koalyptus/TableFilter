@@ -4,7 +4,6 @@ import {
     dateSortAsc, sortNumberStr, sortDateStr
 } from '../sort';
 import {isArray, isObj, isEmpty} from '../types';
-// import {createOpt} from '../dom';
 import {NUMBER, FORMATTED_NUMBER, DATE} from '../const';
 
 /**
