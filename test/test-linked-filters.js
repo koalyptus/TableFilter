@@ -11,7 +11,7 @@
     });
 
     var ct = 0;
-    tf.emitter.on(['build-checklist-filter'], function() {
+    tf.emitter.on(['after-filtering'], function() {
         ct++;
     });
 
@@ -31,7 +31,7 @@
         tf.clearFilters();
 
         deepEqual(ct, 2,
-            'build-checklist-filter event emitted after filtering');
+            'after-filtering event emitted after filtering');
         tf.onAfterFilter = null;
         tf.destroy();
         tf = null;

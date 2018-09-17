@@ -144,4 +144,16 @@ export class BaseDropdown extends Feature {
 
         return false;
     }
+
+    /**
+     * Refresh linked filters to offer only selected options
+     */
+    linkFilters() {
+        let tf = this.tf;
+        if (!tf.linkedFilters || !tf.activeFilterId) {
+            return;
+        }
+
+        this.refreshAll();
+    }
 }

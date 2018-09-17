@@ -137,6 +137,8 @@ export class Dropdown extends BaseDropdown {
         );
         this.emitter.on(['rows-changed'], () => this.refreshAll());
 
+        this.emitter.on(['after-filtering'], () => this.linkFilters());
+
         /** @inherited */
         this.initialized = true;
     }
@@ -368,6 +370,7 @@ export class Dropdown extends BaseDropdown {
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
         this.emitter.off(['rows-changed'], () => this.refreshAll());
+        this.emitter.off(['after-filtering'], () => this.linkFilters());
         this.initialized = false;
     }
 }
