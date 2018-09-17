@@ -4,6 +4,7 @@ import {
     dateSortAsc, sortNumberStr, sortDateStr
 } from '../sort';
 import {isArray, isObj, isEmpty} from '../types';
+// import {createOpt} from '../dom';
 import {NUMBER, FORMATTED_NUMBER, DATE} from '../const';
 
 /**
@@ -143,5 +144,17 @@ export class BaseDropdown extends Feature {
         }
 
         return false;
+    }
+
+    /**
+     * Refresh linked filters to offer only selected options
+     */
+    linkFilters() {
+        let tf = this.tf;
+        if (!tf.linkedFilters || !tf.activeFilterId) {
+            return;
+        }
+
+        this.refreshAll();
     }
 }

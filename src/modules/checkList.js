@@ -178,6 +178,8 @@ export class CheckList extends BaseDropdown {
 
         this.emitter.on(['rows-changed'], () => this.refreshAll());
 
+        this.emitter.on(['after-filtering'], () => this.linkFilters());
+
         /** @inherited */
         this.initialized = true;
     }
@@ -483,6 +485,10 @@ export class CheckList extends BaseDropdown {
     getValues(colIndex) {
         let tf = this.tf;
         let flt = tf.getFilterElement(colIndex);
+        if (!flt) {
+            return [];
+        }
+
         let fltAttr = flt.getAttribute('value');
         let values = isEmpty(fltAttr) ? '' : fltAttr;
         //removes last operator ||
@@ -506,6 +512,7 @@ export class CheckList extends BaseDropdown {
             (tf, colIndex, values) => this.selectOptions(colIndex, values)
         );
         this.emitter.off(['rows-changed'], () => this.refreshAll());
+        this.emitter.off(['after-filtering'], () => this.linkFilters());
 
         this.initialized = false;
     }

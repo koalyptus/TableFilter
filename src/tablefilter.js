@@ -1,6 +1,6 @@
 import {addEvt, cancelEvt, stopEvt, targetEvt, isKeyPressed} from './event';
 import {
-    addClass, createElm, createOpt, elm, getText, getFirstTextNode,
+    addClass, createElm/*, createOpt*/, elm, getText, getFirstTextNode,
     removeClass, tag
 } from './dom';
 import {contains, matchCase, rgxEsc, trim} from './string';
@@ -1064,11 +1064,6 @@ export class TableFilter {
         /* Load extensions */
         this.initExtensions();
 
-        // Subscribe to events
-        if (this.linkedFilters) {
-            this.emitter.on(['after-filtering'], () => this.linkFilters());
-        }
-
         this.initialized = true;
 
         this.onFiltersLoaded(this);
@@ -1474,9 +1469,7 @@ export class TableFilter {
         if (this.hasExcludedRows) {
             emitter.off(['after-filtering'], () => this.setExcludeRows());
         }
-        if (this.linkedFilters) {
-            emitter.off(['after-filtering'], () => this.linkFilters());
-        }
+
         this.emitter.off(['filter-focus'],
             (tf, filter) => this.setActiveFilterId(filter.id));
 
@@ -2495,15 +2488,8 @@ export class TableFilter {
             return;
         }
 
-        if (fltColType !== MULTIPLE && fltColType !== CHECKLIST) {
-            if (this.loadFltOnDemand && !this.initialized) {
-                this.emitter.emit('build-select-filter', this, index,
-                    this.linkedFilters, this.isExternalFlt());
-            }
-            slc.value = query;
-        }
         //multiple selects
-        else if (fltColType === MULTIPLE) {
+        if (fltColType === MULTIPLE) {
             let values = isArray(query) ? query :
                 query.split(' ' + this.orOperator + ' ');
 
@@ -2529,6 +2515,13 @@ export class TableFilter {
             }
 
             this.emitter.emit('select-checklist-options', this, index, values);
+        }
+        else {
+            if (this.loadFltOnDemand && !this.initialized) {
+                this.emitter.emit('build-select-filter', this, index,
+                    this.linkedFilters, this.isExternalFlt());
+            }
+            slc.value = query;
         }
     }
 
@@ -2699,43 +2692,6 @@ export class TableFilter {
             return;
         }
         this.setActiveFilterId(this.getFilterId(colIndex));
-    }
-
-    /**
-     * Refresh the filters subject to linking ('select', 'multiple',
-     * 'checklist' type)
-     */
-    linkFilters() {
-        if (!this.linkedFilters || !this.activeFilterId) {
-            return;
-        }
-        let slcA1 = this.getFiltersByType(SELECT, true),
-            slcA2 = this.getFiltersByType(MULTIPLE, true),
-            slcA3 = this.getFiltersByType(CHECKLIST, true),
-            slcIndex = slcA1.concat(slcA2);
-        slcIndex = slcIndex.concat(slcA3);
-
-        slcIndex.forEach((colIdx) => {
-            let curSlc = this.getFilterElement(colIdx);
-            let slcSelectedValue = this.getFilterValue(colIdx);
-
-            //1st option needs to be inserted
-            if (this.loadFltOnDemand) {
-                let opt0 = createOpt(this.getClearFilterText(colIdx), '');
-                curSlc.innerHTML = '';
-                curSlc.appendChild(opt0);
-            }
-
-            if (slcA3.indexOf(colIdx) !== -1) {
-                this.emitter.emit('build-checklist-filter', this, colIdx,
-                    true);
-            } else {
-                this.emitter.emit('build-select-filter', this, colIdx,
-                    true);
-            }
-
-            this.setFilterValue(colIdx, slcSelectedValue);
-        });
     }
 
     /**
