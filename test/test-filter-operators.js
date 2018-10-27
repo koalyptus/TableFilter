@@ -95,8 +95,6 @@
         tf.clearFilters();
         tf.setFilterValue(4, '[nonempty]');
         tf.filter();
-        var filteredData = tf.getFilteredData();
-        console.log(filteredData);
 
         deepEqual(tf.getValidRows().length, 7, 'Expected number of matches');
     });
