@@ -5,7 +5,7 @@ import {root} from '../root';
 import {NONE} from '../const';
 import {defaultsStr, defaultsFn} from '../settings';
 
-const EVENTS = [
+const BEFORE_ACTION_EVENTS = [
     'before-filtering',
     'before-populating-filter',
     'before-page-change',
@@ -15,6 +15,18 @@ const EVENTS = [
     'before-reset-page-length',
     'before-loading-extensions',
     'before-loading-themes'
+];
+
+const AFTER_ACTION_EVENTS = [
+    'after-filtering',
+    'after-populating-filter',
+    'after-page-change',
+    'after-clearing-filters',
+    'after-page-length-change',
+    'after-reset-page',
+    'after-reset-page-length',
+    'after-loading-extensions',
+    'after-loading-themes'
 ];
 
 /**
@@ -116,8 +128,8 @@ export class Loader extends Feature {
         this.show(NONE);
 
         // Subscribe to events
-        emitter.on(EVENTS, () => this.show(''));
-        emitter.on(EVENTS, () => this.show(NONE));
+        emitter.on(BEFORE_ACTION_EVENTS, () => this.show(''));
+        emitter.on(AFTER_ACTION_EVENTS, () => this.show(NONE));
 
         /** @inherited */
         this.initialized = true;
@@ -132,7 +144,7 @@ export class Loader extends Feature {
             return;
         }
 
-        let displayLoader = () => {
+        function displayLoader() {
             if (!this.cont) {
                 return;
             }
@@ -146,7 +158,7 @@ export class Loader extends Feature {
         };
 
         let t = p === NONE ? this.closeDelay : 1;
-        root.setTimeout(displayLoader, t);
+        root.setTimeout(displayLoader.bind(this), t);
     }
 
     /**
@@ -163,8 +175,8 @@ export class Loader extends Feature {
         this.cont = null;
 
         // Unsubscribe to events
-        emitter.off(EVENTS, () => this.show(''));
-        emitter.off(EVENTS, () => this.show(NONE));
+        emitter.off(BEFORE_ACTION_EVENTS, () => this.show(''));
+        emitter.off(AFTER_ACTION_EVENTS, () => this.show(NONE));
 
         this.initialized = false;
     }
