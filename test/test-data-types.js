@@ -279,7 +279,7 @@
         tf.filter();
 
         // assert
-        deepEqual(tf.getValidRows().length, 8, 'Expected rows');
+        deepEqual(tf.getValidRows().length, 7, 'Expected rows');
     });
 
     module('Locale helpers');
