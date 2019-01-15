@@ -456,3 +456,6 @@ export class PopupFilter extends Feature {
     }
 
 }
+
+// TODO: remove as soon as feature name is fixed
+PopupFilter.altName = 'popupFilters';

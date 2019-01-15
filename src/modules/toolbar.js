@@ -219,3 +219,6 @@ export class Toolbar extends Feature {
         this.initialized = false;
     }
 }
+
+// TODO: remove as soon as feature name is fixed
+Toolbar.alwaysInstantiate = true;

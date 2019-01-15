@@ -1,16 +1,19 @@
+import {TfBase} from './tfBase';
 
 const NOT_IMPLEMENTED = 'Not implemented.';
 
 /**
  * Base class defining the interface of a TableFilter feature
  */
-export class Feature {
+export class Feature extends TfBase {
     /**
      * Creates an instance of Feature
      * @param {Object} tf TableFilter instance
      * @param {String} feature Feature name known by TableFilter
      */
-    constructor(tf, feature) {
+    constructor(tf, feature, cls) {
+        super(tf, cls);
+
         /**
          * TableFilter instance
          * @type {TableFilter}

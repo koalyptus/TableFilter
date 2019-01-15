@@ -137,3 +137,6 @@ export class ClearButton extends Feature {
         this.initialized = false;
     }
 }
+
+// TODO: remove as soon as feature name is fixed
+ClearButton.altName = 'btnReset';

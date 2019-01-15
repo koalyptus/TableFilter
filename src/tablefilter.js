@@ -919,6 +919,7 @@ export class TableFilter {
          * @private
          */
         this.Mod = {};
+        this._mod_ = [];
 
         /**
          * Extensions registry

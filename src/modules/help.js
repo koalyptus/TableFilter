@@ -238,3 +238,6 @@ export class Help extends Feature {
     }
 
 }
+
+// TODO: remove as soon as feature name is fixed
+Help.alwaysInstantiate = true;
