@@ -173,10 +173,10 @@ export const FEATURES = {
         name: 'popupFilter',
         property: 'popupFilters'
     },
-    rowsCounter: {
-        class: RowsCounter,
-        name: 'rowsCounter'
-    },
+    // rowsCounter: {
+    //     class: RowsCounter,
+    //     name: 'rowsCounter'
+    // },
     statusBar: {
         class: StatusBar,
         name: 'statusBar'

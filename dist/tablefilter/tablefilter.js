@@ -102,7 +102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
-/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"8ba4e8f28dcb16cfc50b"}[chunkId] + ".js";
+/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"973b3f20052aa524e437"}[chunkId] + ".js";
 /******/ 				var timeout = setTimeout(function(){
 /******/ 					onScriptComplete({ type: 'timeout', target: script });
 /******/ 				}, 120000);
@@ -15846,10 +15846,10 @@ var FEATURES = {
     name: 'popupFilter',
     property: 'popupFilters'
   },
-  rowsCounter: {
-    class: _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_8__["RowsCounter"],
-    name: 'rowsCounter'
-  },
+  // rowsCounter: {
+  //     class: RowsCounter,
+  //     name: 'rowsCounter'
+  // },
   statusBar: {
     class: _modules_statusBar__WEBPACK_IMPORTED_MODULE_9__["StatusBar"],
     name: 'statusBar'
@@ -16429,7 +16429,7 @@ function bound(fn, scope) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Feature", function() { return Feature; });
-/* harmony import */ var _tfBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tfBase */ "./src/tfBase.js");
+/* harmony import */ var _register__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./register */ "./src/register.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -16456,8 +16456,8 @@ var NOT_IMPLEMENTED = 'Not implemented.';
 
 var Feature =
 /*#__PURE__*/
-function (_TfBase) {
-  _inherits(Feature, _TfBase);
+function (_Register) {
+  _inherits(Feature, _Register);
 
   /**
    * Creates an instance of Feature
@@ -16574,7 +16574,7 @@ function (_TfBase) {
   }]);
 
   return Feature;
-}(_tfBase__WEBPACK_IMPORTED_MODULE_0__["TfBase"]);
+}(_register__WEBPACK_IMPORTED_MODULE_0__["Register"]);
 
 /***/ }),
 
@@ -23726,6 +23726,55 @@ var parse = function parse(value) {
 
 /***/ }),
 
+/***/ "./src/register.js":
+/*!*************************!*\
+  !*** ./src/register.js ***!
+  \*************************/
+/*! exports provided: Register */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Register", function() { return Register; });
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings */ "./src/settings.js");
+/* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./string */ "./src/string.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Register = function Register(tf) {
+  var cls = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  _classCallCheck(this, Register);
+
+  console.log(tf, cls);
+  /**
+   * TableFilter instance
+   * @type {TableFilter}
+   */
+
+  this.tf = tf;
+  /**
+   * Feature name, retrieved from alternate class name if found or from
+   * camelised class name
+   * @type {String}
+   */
+
+  this.feature = Object(_settings__WEBPACK_IMPORTED_MODULE_0__["defaultsStr"])(cls.altName, Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name));
+  this.tf._mod_[this.feature] = cls; // this.instantiate(cls, this.feature);
+} // instantiate(cls, name) {
+//     let Cls = cls;
+//     console.log(Boolean(this.tf[name]),
+//         Boolean(Cls.alwaysInstantiate));
+//     if (!this.tf.hasConfig || Boolean(this.tf[name])
+//         || Boolean(cls.alwaysInstantiate)) {
+//         this.tf.Mod[name] = this.tf.Mod[name] || new Cls(tf);
+//     }
+// }
+;
+
+/***/ }),
+
 /***/ "./src/root.js":
 /*!*********************!*\
   !*** ./src/root.js ***!
@@ -24048,14 +24097,11 @@ var contains = function contains(term, data) {
 
 var toCamelCase = function toCamelCase() {
   var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  console.log('in', text);
   return text.replace(/^([A-Z])|[\s-_]+(\w)/g, function (match, p1, p2) {
     if (p2) {
-      console.log('out', p2.toUpperCase());
       return p2.toUpperCase();
     }
 
-    console.log('out', p1.toLowerCase());
     return p1.toLowerCase();
   });
 };
@@ -24083,6 +24129,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_dropdown__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/dropdown */ "./src/modules/dropdown.js");
 /* harmony import */ var _modules_checkList__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/checkList */ "./src/modules/checkList.js");
 /* harmony import */ var _const__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./const */ "./src/const.js");
+/* harmony import */ var _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/rowsCounter */ "./src/modules/rowsCounter.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24090,6 +24137,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -25106,7 +25154,8 @@ function () {
         this.setExcludeRows();
       }
 
-      this.initFeatures([rowsCounter, statusBar, clearButton, alternateRows, noResults, paging, toolbar]);
+      this.initFeatures([// rowsCounter,
+      statusBar, clearButton, alternateRows, noResults, paging, toolbar]);
       this.setColWidths(); //TF css class is added to table
 
       if (!this.gridLayout) {
@@ -27328,48 +27377,6 @@ function () {
 
   return TableFilter;
 }();
-
-/***/ }),
-
-/***/ "./src/tfBase.js":
-/*!***********************!*\
-  !*** ./src/tfBase.js ***!
-  \***********************/
-/*! exports provided: TfBase */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TfBase", function() { return TfBase; });
-/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings */ "./src/settings.js");
-/* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./string */ "./src/string.js");
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var TfBase = function TfBase(tf) {
-  var cls = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-  _classCallCheck(this, TfBase);
-
-  console.log(cls.name);
-  /**
-   * TableFilter instance
-   * @type {TableFilter}
-   */
-
-  this.tf = tf;
-  /**
-   * Feature name, retrieved from alternate class name if found or from
-   * camelised class name
-   * @type {String}
-   */
-
-  this.feature = Object(_settings__WEBPACK_IMPORTED_MODULE_0__["defaultsStr"])(cls.altName, Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name));
-  console.log(this.feature, Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name));
-
-  this.tf._mod_.push(this.feature);
-};
 
 /***/ }),
 

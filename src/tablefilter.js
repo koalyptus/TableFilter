@@ -24,6 +24,7 @@ import {
     CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER,
     FEATURES
 } from './const';
+import { RowsCounter } from './modules/rowsCounter';
 
 let doc = root.document;
 
@@ -919,7 +920,7 @@ export class TableFilter {
          * @private
          */
         this.Mod = {};
-        this._mod_ = [];
+        this._mod_ = {};
 
         /**
          * Extensions registry
@@ -1036,7 +1037,7 @@ export class TableFilter {
         }
 
         this.initFeatures([
-            rowsCounter,
+            // rowsCounter,
             statusBar,
             clearButton,
             alternateRows,

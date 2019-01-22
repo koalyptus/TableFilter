@@ -1,11 +1,11 @@
-import {TfBase} from './tfBase';
+import {Register} from './register';
 
 const NOT_IMPLEMENTED = 'Not implemented.';
 
 /**
  * Base class defining the interface of a TableFilter feature
  */
-export class Feature extends TfBase {
+export class Feature extends Register {
     /**
      * Creates an instance of Feature
      * @param {Object} tf TableFilter instance
