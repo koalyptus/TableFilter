@@ -15846,10 +15846,10 @@ var FEATURES = {
     name: 'popupFilter',
     property: 'popupFilters'
   },
-  // rowsCounter: {
-  //     class: RowsCounter,
-  //     name: 'rowsCounter'
-  // },
+  rowsCounter: {
+    class: _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_8__["RowsCounter"],
+    name: 'rowsCounter'
+  },
   statusBar: {
     class: _modules_statusBar__WEBPACK_IMPORTED_MODULE_9__["StatusBar"],
     name: 'statusBar'
@@ -23730,18 +23730,22 @@ var parse = function parse(value) {
 /*!*************************!*\
   !*** ./src/register.js ***!
   \*************************/
-/*! exports provided: Register */
+/*! exports provided: FeaturesRegistry, Register */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FeaturesRegistry", function() { return FeaturesRegistry; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Register", function() { return Register; });
 /* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings */ "./src/settings.js");
 /* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./string */ "./src/string.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
+var FeaturesRegistry = {};
 var Register = function Register(tf) {
   var cls = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -23755,13 +23759,18 @@ var Register = function Register(tf) {
 
   this.tf = tf;
   /**
-   * Feature name, retrieved from alternate class name if found or from
-   * camelised class name
+   * Feature name, retrieved from alternate class name
+   * if found defined or from camelised class name
    * @type {String}
    */
 
   this.feature = Object(_settings__WEBPACK_IMPORTED_MODULE_0__["defaultsStr"])(cls.altName, Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name));
-  this.tf._mod_[this.feature] = cls; // this.instantiate(cls, this.feature);
+  console.log(cls !== {}, _typeof({}), _typeof(cls));
+
+  if (cls !== {}) {
+    this.tf._mod_[this.feature] = cls;
+  } // this.instantiate(cls, this.feature);
+
 } // instantiate(cls, name) {
 //     let Cls = cls;
 //     console.log(Boolean(this.tf[name]),
@@ -25040,7 +25049,7 @@ function () {
      */
 
     this.Mod = {};
-    this._mod_ = [];
+    this._mod_ = {};
     /**
      * Extensions registry
      * @private
@@ -25050,7 +25059,7 @@ function () {
 
     this.instantiateFeatures(Object.keys(_const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"]).map(function (item) {
       return _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"][item];
-    }));
+    })); // console.log(this.Mod, this._mod_);
   }
   /**
    * Initialise features and layout
@@ -25086,7 +25095,8 @@ function () {
           alternateRows = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].alternateRows,
           noResults = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].noResults,
           paging = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].paging,
-          toolbar = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].toolbar; //explicitly initialise features in given order
+          toolbar = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].toolbar;
+      console.log(this.Mod, this._mod_); //explicitly initialise features in given order
 
       this.initFeatures([dateType, help, state, markActiveColumns, gridLayout, loader, highlightKeyword, popupFilter]); //filters grid is not generated
 
@@ -25154,8 +25164,7 @@ function () {
         this.setExcludeRows();
       }
 
-      this.initFeatures([// rowsCounter,
-      statusBar, clearButton, alternateRows, noResults, paging, toolbar]);
+      this.initFeatures([rowsCounter, statusBar, clearButton, alternateRows, noResults, paging, toolbar]);
       this.setColWidths(); //TF css class is added to table
 
       if (!this.gridLayout) {

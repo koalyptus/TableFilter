@@ -1,6 +1,8 @@
 import {defaultsStr} from './settings';
 import {toCamelCase} from './string';
 
+export const FeaturesRegistry = {};
+
 export class Register {
     constructor(tf, cls = {}) {
         console.log(tf, cls);
@@ -11,8 +13,8 @@ export class Register {
         this.tf = tf;
 
         /**
-         * Feature name, retrieved from alternate class name if found or from
-         * camelised class name
+         * Feature name, retrieved from alternate class name
+         * if found defined or from camelised class name
          * @type {String}
          */
         this.feature = defaultsStr(cls.altName, toCamelCase(cls.name));

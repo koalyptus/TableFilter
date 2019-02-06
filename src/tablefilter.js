@@ -932,6 +932,7 @@ export class TableFilter {
         this.instantiateFeatures(
             Object.keys(FEATURES).map((item) => FEATURES[item])
         );
+        // console.log(this.Mod, this._mod_);
     }
 
     /**
@@ -954,7 +955,7 @@ export class TableFilter {
         const { dateType, help, state, markActiveColumns, gridLayout, loader,
             highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
             alternateRows, noResults, paging, toolbar } = FEATURES;
-
+        console.log(this.Mod, this._mod_);
         //explicitly initialise features in given order
         this.initFeatures([
             dateType,
@@ -1037,7 +1038,7 @@ export class TableFilter {
         }
 
         this.initFeatures([
-            // rowsCounter,
+            rowsCounter,
             statusBar,
             clearButton,
             alternateRows,
