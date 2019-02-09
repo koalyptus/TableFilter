@@ -102,7 +102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
-/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"0c56575d9b568fc4dedd"}[chunkId] + ".js";
+/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"090f7cf765d85d916b67"}[chunkId] + ".js";
 /******/ 				var timeout = setTimeout(function(){
 /******/ 					onScriptComplete({ type: 'timeout', target: script });
 /******/ 				}, 120000);
@@ -16414,24 +16414,14 @@ function bound(fn, scope) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Feature", function() { return Feature; });
-/* harmony import */ var _register__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./register */ "./src/register.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings */ "./src/settings.js");
+/* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./string */ "./src/string.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 
 var NOT_IMPLEMENTED = 'Not implemented.';
@@ -16441,63 +16431,61 @@ var NOT_IMPLEMENTED = 'Not implemented.';
 
 var Feature =
 /*#__PURE__*/
-function (_Register) {
-  _inherits(Feature, _Register);
-
+function () {
   /**
    * Creates an instance of Feature
    * @param {Object} tf TableFilter instance
    * @param {Class} feature Feature class for TableFilter registration
    */
   function Feature(tf, cls) {
-    var _this;
+    var _this = this;
 
     _classCallCheck(this, Feature);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Feature).call(this, tf, cls));
+    cls.meta = cls.meta || {};
     /**
      * TableFilter instance
      * @type {TableFilter}
      */
-    //this.tf = tf;
 
+    this.tf = tf;
     /**
-     * Feature name
+     * Feature name, retrieved from alternate class name if found or from
+     * camelised class name as per TableFilter convention
      * @type {String}
      */
-    // this.feature = feature;
 
+    this.feature = Object(_settings__WEBPACK_IMPORTED_MODULE_0__["defaultsStr"])(cls.meta.altName, Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name));
+    cls.meta.name = this.feature;
     /**
      * TableFilter feature setting
      * @type {Boolean}
      */
 
-    _this.enabled = tf[_this.feature];
+    this.enabled = tf[this.feature];
     /**
      * TableFilter configuration
      * @type {Object}
      */
 
-    _this.config = tf.config();
+    this.config = tf.config();
     /**
      * TableFilter emitter instance
      * @type {Emitter}
      */
 
-    _this.emitter = tf.emitter;
+    this.emitter = tf.emitter;
     /**
      * Field indicating whether Feature is initialized
      * @type {Boolean}
      */
 
-    _this.initialized = false;
+    this.initialized = false;
     /** Subscribe to destroy event */
 
-    _this.emitter.on(['destroy'], function () {
+    this.emitter.on(['destroy'], function () {
       return _this.destroy();
     });
-
-    return _this;
   }
   /**
    * Initialize the feature
@@ -16559,7 +16547,7 @@ function (_Register) {
   }]);
 
   return Feature;
-}(_register__WEBPACK_IMPORTED_MODULE_0__["Register"]);
+}();
 
 /***/ }),
 
@@ -23717,51 +23705,6 @@ var parse = function parse(value) {
   .replace(decimal, '.')); // This will fail silently
 
   return !isNaN(unformatted) ? unformatted : 0;
-};
-
-/***/ }),
-
-/***/ "./src/register.js":
-/*!*************************!*\
-  !*** ./src/register.js ***!
-  \*************************/
-/*! exports provided: Register */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Register", function() { return Register; });
-/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings */ "./src/settings.js");
-/* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./string */ "./src/string.js");
-/* harmony import */ var _const__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./const */ "./src/const.js");
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-
-var Register = function Register(tf) {
-  var cls = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-  _classCallCheck(this, Register);
-
-  cls.meta = cls.meta || {};
-  console.log(tf, cls);
-  /**
-   * TableFilter instance
-   * @type {TableFilter}
-   */
-
-  this.tf = tf;
-  /**
-   * Feature name, retrieved from alternate class name if found or from
-   * camelised class name as per TableFilter convention
-   * @type {String}
-   */
-
-  this.feature = Object(_settings__WEBPACK_IMPORTED_MODULE_0__["defaultsStr"])(cls.meta.altName, Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name));
-  cls.meta.name = this.feature; // this.tf._mod_[this.feature] = cls;
-
-  _const__WEBPACK_IMPORTED_MODULE_2__["FEATURES"][this.feature] = cls;
 };
 
 /***/ }),

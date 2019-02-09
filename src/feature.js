@@ -1,30 +1,34 @@
-import {Register} from './register';
+import {defaultsStr} from './settings';
+import {toCamelCase} from './string';
 
 const NOT_IMPLEMENTED = 'Not implemented.';
 
 /**
  * Base class defining the interface of a TableFilter feature
  */
-export class Feature extends Register {
+export class Feature {
     /**
      * Creates an instance of Feature
      * @param {Object} tf TableFilter instance
      * @param {Class} feature Feature class for TableFilter registration
      */
     constructor(tf, cls) {
-        super(tf, cls);
+        cls.meta = cls.meta || {};
 
         /**
          * TableFilter instance
          * @type {TableFilter}
          */
-        //this.tf = tf;
+        this.tf = tf;
 
         /**
-         * Feature name
+         * Feature name, retrieved from alternate class name if found or from
+         * camelised class name as per TableFilter convention
          * @type {String}
          */
-        // this.feature = feature;
+        this.feature = defaultsStr(cls.meta.altName, toCamelCase(cls.name));
+
+        cls.meta.name = this.feature;
 
         /**
          * TableFilter feature setting
