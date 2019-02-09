@@ -15,7 +15,7 @@ export class ClearButton extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'btnReset');
+        super(tf, ClearButton);
 
         let f = this.config.btn_reset || {};
 
@@ -139,4 +139,4 @@ export class ClearButton extends Feature {
 }
 
 // TODO: remove as soon as feature name is fixed
-ClearButton.altName = 'btnReset';
+ClearButton.meta = {altName: 'btnReset'};

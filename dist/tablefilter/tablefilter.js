@@ -102,7 +102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
-/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"973b3f20052aa524e437"}[chunkId] + ".js";
+/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"0c56575d9b568fc4dedd"}[chunkId] + ".js";
 /******/ 				var timeout = setTimeout(function(){
 /******/ 					onScriptComplete({ type: 'timeout', target: script });
 /******/ 				}, 120000);
@@ -15647,35 +15647,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IP_ADDRESS", function() { return IP_ADDRESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTO_FILTER_DELAY", function() { return AUTO_FILTER_DELAY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FEATURES", function() { return FEATURES; });
-/* harmony import */ var _modules_dateType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/dateType */ "./src/modules/dateType.js");
-/* harmony import */ var _modules_help__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/help */ "./src/modules/help.js");
-/* harmony import */ var _modules_state__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/state */ "./src/modules/state.js");
-/* harmony import */ var _modules_gridLayout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/gridLayout */ "./src/modules/gridLayout.js");
-/* harmony import */ var _modules_loader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/loader */ "./src/modules/loader.js");
-/* harmony import */ var _modules_highlightKeywords__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/highlightKeywords */ "./src/modules/highlightKeywords.js");
-/* harmony import */ var _modules_popupFilter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/popupFilter */ "./src/modules/popupFilter.js");
-/* harmony import */ var _modules_markActiveColumns__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/markActiveColumns */ "./src/modules/markActiveColumns.js");
-/* harmony import */ var _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/rowsCounter */ "./src/modules/rowsCounter.js");
-/* harmony import */ var _modules_statusBar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/statusBar */ "./src/modules/statusBar.js");
-/* harmony import */ var _modules_clearButton__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/clearButton */ "./src/modules/clearButton.js");
-/* harmony import */ var _modules_alternateRows__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/alternateRows */ "./src/modules/alternateRows.js");
-/* harmony import */ var _modules_noResults__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/noResults */ "./src/modules/noResults.js");
-/* harmony import */ var _modules_paging__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./modules/paging */ "./src/modules/paging.js");
-/* harmony import */ var _modules_toolbar__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./modules/toolbar */ "./src/modules/toolbar.js");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// import {DateType} from './modules/dateType';
+// import {Help} from './modules/help';
+// import {State} from './modules/state';
+// import {GridLayout} from './modules/gridLayout';
+// import {Loader} from './modules/loader';
+// import {HighlightKeyword} from './modules/highlightKeywords';
+// import {PopupFilter} from './modules/popupFilter';
+// import {MarkActiveColumns} from './modules/markActiveColumns';
+// import {RowsCounter} from './modules/rowsCounter';
+// import {StatusBar} from './modules/statusBar';
+// import {ClearButton} from './modules/clearButton';
+// import {AlternateRows} from './modules/alternateRows';
+// import {NoResults} from './modules/noResults';
+// import {Paging} from './modules/paging';
+// import {Toolbar} from './modules/toolbar';
 
 /**
  * Filter types
@@ -15685,7 +15671,6 @@ __webpack_require__.r(__webpack_exports__);
  * Input filter type
  * @type {String}
  */
-
 var INPUT = 'input';
 /**
  * Select filter type
@@ -15807,76 +15792,76 @@ var IP_ADDRESS = 'ipaddress';
 var AUTO_FILTER_DELAY = 750;
 /**
  * TableFilter features definitions
- * @type {Object}
+ * @type {Array}
  */
 
-var FEATURES = {
-  dateType: {
-    class: _modules_dateType__WEBPACK_IMPORTED_MODULE_0__["DateType"],
-    name: 'dateType'
-  },
-  help: {
-    class: _modules_help__WEBPACK_IMPORTED_MODULE_1__["Help"],
-    name: 'help',
-    enforce: true
-  },
-  state: {
-    class: _modules_state__WEBPACK_IMPORTED_MODULE_2__["State"],
-    name: 'state'
-  },
-  markActiveColumns: {
-    class: _modules_markActiveColumns__WEBPACK_IMPORTED_MODULE_7__["MarkActiveColumns"],
-    name: 'markActiveColumns'
-  },
-  gridLayout: {
-    class: _modules_gridLayout__WEBPACK_IMPORTED_MODULE_3__["GridLayout"],
-    name: 'gridLayout'
-  },
-  loader: {
-    class: _modules_loader__WEBPACK_IMPORTED_MODULE_4__["Loader"],
-    name: 'loader'
-  },
-  highlightKeyword: {
-    class: _modules_highlightKeywords__WEBPACK_IMPORTED_MODULE_5__["HighlightKeyword"],
-    name: 'highlightKeyword',
-    property: 'highlightKeywords'
-  },
-  popupFilter: {
-    class: _modules_popupFilter__WEBPACK_IMPORTED_MODULE_6__["PopupFilter"],
-    name: 'popupFilter',
-    property: 'popupFilters'
-  },
-  rowsCounter: {
-    class: _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_8__["RowsCounter"],
-    name: 'rowsCounter'
-  },
-  statusBar: {
-    class: _modules_statusBar__WEBPACK_IMPORTED_MODULE_9__["StatusBar"],
-    name: 'statusBar'
-  },
-  clearButton: {
-    class: _modules_clearButton__WEBPACK_IMPORTED_MODULE_10__["ClearButton"],
-    name: 'clearButton',
-    property: 'btnReset'
-  },
-  alternateRows: {
-    class: _modules_alternateRows__WEBPACK_IMPORTED_MODULE_11__["AlternateRows"],
-    name: 'alternateRows'
-  },
-  noResults: {
-    class: _modules_noResults__WEBPACK_IMPORTED_MODULE_12__["NoResults"],
-    name: 'noResults'
-  },
-  paging: {
-    class: _modules_paging__WEBPACK_IMPORTED_MODULE_13__["Paging"],
-    name: 'paging'
-  },
-  toolbar: {
-    class: _modules_toolbar__WEBPACK_IMPORTED_MODULE_14__["Toolbar"],
-    name: 'toolbar',
-    enforce: true
-  }
-};
+var FEATURES = []; // export const FEATURES = {
+//     dateType: {
+//         class: DateType,
+//         name: 'dateType'
+//     },
+//     help: {
+//         class: Help,
+//         name: 'help',
+//         enforce: true
+//     },
+//     state: {
+//         class: State,
+//         name: 'state'
+//     },
+//     markActiveColumns: {
+//         class: MarkActiveColumns,
+//         name: 'markActiveColumns'
+//     },
+//     gridLayout: {
+//         class: GridLayout,
+//         name: 'gridLayout'
+//     },
+//     loader: {
+//         class: Loader,
+//         name: 'loader'
+//     },
+//     highlightKeyword: {
+//         class: HighlightKeyword,
+//         name: 'highlightKeyword',
+//         property: 'highlightKeywords'
+//     },
+//     popupFilter: {
+//         class: PopupFilter,
+//         name: 'popupFilter',
+//         property: 'popupFilters'
+//     },
+//     rowsCounter: {
+//         class: RowsCounter,
+//         name: 'rowsCounter'
+//     },
+//     statusBar: {
+//         class: StatusBar,
+//         name: 'statusBar'
+//     },
+//     clearButton: {
+//         class: ClearButton,
+//         name: 'clearButton',
+//         property: 'btnReset'
+//     },
+//     alternateRows: {
+//         class: AlternateRows,
+//         name: 'alternateRows'
+//     },
+//     noResults: {
+//         class: NoResults,
+//         name: 'noResults'
+//     },
+//     paging: {
+//         class: Paging,
+//         name: 'paging'
+//     },
+//     toolbar: {
+//         class: Toolbar,
+//         name: 'toolbar',
+//         enforce: true
+//     }
+// };
 
 /***/ }),
 
@@ -16462,9 +16447,9 @@ function (_Register) {
   /**
    * Creates an instance of Feature
    * @param {Object} tf TableFilter instance
-   * @param {String} feature Feature name known by TableFilter
+   * @param {Class} feature Feature class for TableFilter registration
    */
-  function Feature(tf, feature, cls) {
+  function Feature(tf, cls) {
     var _this;
 
     _classCallCheck(this, Feature);
@@ -16474,20 +16459,20 @@ function (_Register) {
      * TableFilter instance
      * @type {TableFilter}
      */
+    //this.tf = tf;
 
-    _this.tf = tf;
     /**
      * Feature name
      * @type {String}
      */
+    // this.feature = feature;
 
-    _this.feature = feature;
     /**
      * TableFilter feature setting
      * @type {Boolean}
      */
 
-    _this.enabled = tf[feature];
+    _this.enabled = tf[_this.feature];
     /**
      * TableFilter configuration
      * @type {Object}
@@ -16633,7 +16618,7 @@ function (_Feature) {
 
     _classCallCheck(this, AlternateRows);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(AlternateRows).call(this, tf, 'alternateRows'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(AlternateRows).call(this, tf, AlternateRows));
     var config = _this.config;
     /**
      * Css class for even rows (default: 'even')
@@ -16837,14 +16822,14 @@ function (_Feature) {
 
     _classCallCheck(this, BaseDropdown);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(BaseDropdown).call(this, tf, 'baseDropdown'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(BaseDropdown).call(this, tf, BaseDropdown));
     var f = _this.config;
     /**
      * Filter options custom sorter on a column basis
      * @type {Object}
      */
 
-    _this.customSorter = Object(_types__WEBPACK_IMPORTED_MODULE_2__["isObj"])(f.filter_options_sorter) && Object(_types__WEBPACK_IMPORTED_MODULE_2__["isArray"])(f.filter_options_sorter.col) && Object(_types__WEBPACK_IMPORTED_MODULE_2__["isArray"])(f.filter_options_sorter.comparer) ? f.filter_options_sorter : null; // TODO: move here all properties shared by Dropdown CheckList
+    _this.customSorter = Object(_types__WEBPACK_IMPORTED_MODULE_2__["isObj"])(f.filter_options_sorter) && Object(_types__WEBPACK_IMPORTED_MODULE_2__["isArray"])(f.filter_options_sorter.col) && Object(_types__WEBPACK_IMPORTED_MODULE_2__["isArray"])(f.filter_options_sorter.comparer) ? f.filter_options_sorter : null; // TODO: move here all properties shared by Dropdown and CheckList
 
     /**
      * Has custom options
@@ -17056,7 +17041,7 @@ function (_BaseDropdown) {
 
     _classCallCheck(this, CheckList);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CheckList).call(this, tf, 'checkList'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(CheckList).call(this, tf, CheckList));
     var f = _this.config;
     /**
      * List of container DOM elements
@@ -17640,7 +17625,7 @@ function (_Feature) {
 
     _classCallCheck(this, ClearButton);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ClearButton).call(this, tf, 'btnReset'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ClearButton).call(this, tf, ClearButton));
     var f = _this.config.btn_reset || {};
     /**
      * Container element ID
@@ -17774,7 +17759,9 @@ function (_Feature) {
   return ClearButton;
 }(_feature__WEBPACK_IMPORTED_MODULE_0__["Feature"]); // TODO: remove as soon as feature name is fixed
 
-ClearButton.altName = 'btnReset';
+ClearButton.meta = {
+  altName: 'btnReset'
+};
 
 /***/ }),
 
@@ -17840,7 +17827,7 @@ function (_Feature) {
 
     _classCallCheck(this, DateType);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(DateType).call(this, tf, 'dateType'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(DateType).call(this, tf, DateType));
     /**
      * Global locale
      * @type {String}
@@ -18062,7 +18049,7 @@ function (_BaseDropdown) {
 
     _classCallCheck(this, Dropdown);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Dropdown).call(this, tf, 'dropdown')); // Configuration object
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Dropdown).call(this, tf, Dropdown)); // Configuration object
 
     var f = _this.config;
     /**
@@ -18512,7 +18499,7 @@ function (_Feature) {
 
     _classCallCheck(this, GridLayout);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(GridLayout).call(this, tf, 'gridLayout'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(GridLayout).call(this, tf, GridLayout));
     var f = _this.config.grid_layout || {};
     /**
      * Grid-layout container width as CSS string
@@ -19125,7 +19112,7 @@ function () {
       this.lastHash = hash;
     }
     /**
-     * Converts a URL hash into a state JSON object
+     * Converts a URL hash into a JSON object
      *
      * @param {String} hash URL hash fragment
      * @returns {Object} JSON object
@@ -19246,7 +19233,7 @@ function (_Feature) {
 
     _classCallCheck(this, Help);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Help).call(this, tf, 'help'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Help).call(this, tf, Help));
     var f = _this.config.help_instructions || {};
     /**
      * ID of main custom container element
@@ -19468,7 +19455,9 @@ function (_Feature) {
   return Help;
 }(_feature__WEBPACK_IMPORTED_MODULE_0__["Feature"]); // TODO: remove as soon as feature name is fixed
 
-Help.alwaysInstantiate = true;
+Help.meta = {
+  alwaysInstantiate: true
+};
 
 /***/ }),
 
@@ -19682,7 +19671,9 @@ function () {
   return HighlightKeyword;
 }(); // TODO: remove as soon as feature name is fixed
 
-HighlightKeyword.altName = 'highlightKeywords';
+HighlightKeyword.meta = {
+  altName: 'highlightKeywords'
+};
 
 /***/ }),
 
@@ -19751,7 +19742,7 @@ function (_Feature) {
 
     _classCallCheck(this, Loader);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Loader).call(this, tf, 'loader'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Loader).call(this, tf, Loader));
     var f = _this.config.loader || {};
     /**
      * ID of custom container element
@@ -19970,7 +19961,7 @@ function (_Feature) {
 
     _classCallCheck(this, MarkActiveColumns);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(MarkActiveColumns).call(this, tf, 'markActiveColumns'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(MarkActiveColumns).call(this, tf, MarkActiveColumns));
     var config = _this.config.mark_active_columns || {};
     /**
      * Css class for filtered (active) columns
@@ -20183,7 +20174,7 @@ function (_Feature) {
 
     _classCallCheck(this, NoResults);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(NoResults).call(this, tf, 'noResults')); //configuration object
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(NoResults).call(this, tf, NoResults)); //configuration object
 
     var f = _this.config.no_results_message || {};
     /**
@@ -20439,7 +20430,7 @@ function (_Feature) {
 
     _classCallCheck(this, Paging);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Paging).call(this, tf, 'paging')); // Configuration object
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Paging).call(this, tf, Paging)); // Configuration object
 
     var f = _this.config.paging || {};
     /**
@@ -21413,7 +21404,7 @@ function (_Feature) {
 
     _classCallCheck(this, PopupFilter);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PopupFilter).call(this, tf, 'popupFilters')); // Configuration object
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(PopupFilter).call(this, tf, PopupFilter)); // Configuration object
 
     var f = _this.config.popup_filters || {};
     /**
@@ -21913,7 +21904,9 @@ function (_Feature) {
   return PopupFilter;
 }(_feature__WEBPACK_IMPORTED_MODULE_0__["Feature"]); // TODO: remove as soon as feature name is fixed
 
-PopupFilter.altName = 'popupFilters';
+PopupFilter.meta = {
+  altName: 'popupFilters'
+};
 
 /***/ }),
 
@@ -21976,7 +21969,7 @@ function (_Feature) {
 
     _classCallCheck(this, RowsCounter);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(RowsCounter).call(this, tf, 'rowsCounter', RowsCounter)); // TableFilter configuration
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(RowsCounter).call(this, tf, RowsCounter)); // TableFilter configuration
 
     var f = _this.config.rows_counter || {};
     /**
@@ -22233,7 +22226,7 @@ function (_Feature) {
 
     _classCallCheck(this, State);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(State).call(this, tf, 'state'));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(State).call(this, tf, State));
     var cfg = _this.config.state || {};
     /**
      * Determines whether state is persisted with URL hash
@@ -22890,7 +22883,7 @@ function (_Feature) {
 
     _classCallCheck(this, StatusBar);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(StatusBar).call(this, tf, 'statusBar')); // Configuration object
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(StatusBar).call(this, tf, StatusBar)); // Configuration object
 
     var f = _this.config.status_bar || {};
     /**
@@ -23479,7 +23472,7 @@ function (_Feature) {
 
     _classCallCheck(this, Toolbar);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Toolbar).call(this, tf, 'toolbar')); // Configuration object
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Toolbar).call(this, tf, Toolbar)); // Configuration object
 
     var f = _this.config.toolbar || {};
     /**
@@ -23680,7 +23673,9 @@ function (_Feature) {
   return Toolbar;
 }(_feature__WEBPACK_IMPORTED_MODULE_0__["Feature"]); // TODO: remove as soon as feature name is fixed
 
-Toolbar.alwaysInstantiate = true;
+Toolbar.meta = {
+  alwaysInstantiate: true
+};
 
 /***/ }),
 
@@ -23730,27 +23725,26 @@ var parse = function parse(value) {
 /*!*************************!*\
   !*** ./src/register.js ***!
   \*************************/
-/*! exports provided: FeaturesRegistry, Register */
+/*! exports provided: Register */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FeaturesRegistry", function() { return FeaturesRegistry; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Register", function() { return Register; });
 /* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings */ "./src/settings.js");
 /* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./string */ "./src/string.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
+/* harmony import */ var _const__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./const */ "./src/const.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var FeaturesRegistry = {};
+
 var Register = function Register(tf) {
   var cls = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   _classCallCheck(this, Register);
 
+  cls.meta = cls.meta || {};
   console.log(tf, cls);
   /**
    * TableFilter instance
@@ -23759,28 +23753,16 @@ var Register = function Register(tf) {
 
   this.tf = tf;
   /**
-   * Feature name, retrieved from alternate class name
-   * if found defined or from camelised class name
+   * Feature name, retrieved from alternate class name if found or from
+   * camelised class name as per TableFilter convention
    * @type {String}
    */
 
-  this.feature = Object(_settings__WEBPACK_IMPORTED_MODULE_0__["defaultsStr"])(cls.altName, Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name));
-  console.log(cls !== {}, _typeof({}), _typeof(cls));
+  this.feature = Object(_settings__WEBPACK_IMPORTED_MODULE_0__["defaultsStr"])(cls.meta.altName, Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name));
+  cls.meta.name = this.feature; // this.tf._mod_[this.feature] = cls;
 
-  if (cls !== {}) {
-    this.tf._mod_[this.feature] = cls;
-  } // this.instantiate(cls, this.feature);
-
-} // instantiate(cls, name) {
-//     let Cls = cls;
-//     console.log(Boolean(this.tf[name]),
-//         Boolean(Cls.alwaysInstantiate));
-//     if (!this.tf.hasConfig || Boolean(this.tf[name])
-//         || Boolean(cls.alwaysInstantiate)) {
-//         this.tf.Mod[name] = this.tf.Mod[name] || new Cls(tf);
-//     }
-// }
-;
+  _const__WEBPACK_IMPORTED_MODULE_2__["FEATURES"][this.feature] = cls;
+};
 
 /***/ }),
 
@@ -24137,8 +24119,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _emitter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./emitter */ "./src/emitter.js");
 /* harmony import */ var _modules_dropdown__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/dropdown */ "./src/modules/dropdown.js");
 /* harmony import */ var _modules_checkList__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/checkList */ "./src/modules/checkList.js");
-/* harmony import */ var _const__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./const */ "./src/const.js");
-/* harmony import */ var _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/rowsCounter */ "./src/modules/rowsCounter.js");
+/* harmony import */ var _modules_dateType__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/dateType */ "./src/modules/dateType.js");
+/* harmony import */ var _modules_help__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/help */ "./src/modules/help.js");
+/* harmony import */ var _modules_state__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/state */ "./src/modules/state.js");
+/* harmony import */ var _modules_gridLayout__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./modules/gridLayout */ "./src/modules/gridLayout.js");
+/* harmony import */ var _modules_loader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./modules/loader */ "./src/modules/loader.js");
+/* harmony import */ var _modules_highlightKeywords__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./modules/highlightKeywords */ "./src/modules/highlightKeywords.js");
+/* harmony import */ var _modules_popupFilter__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./modules/popupFilter */ "./src/modules/popupFilter.js");
+/* harmony import */ var _modules_markActiveColumns__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./modules/markActiveColumns */ "./src/modules/markActiveColumns.js");
+/* harmony import */ var _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./modules/rowsCounter */ "./src/modules/rowsCounter.js");
+/* harmony import */ var _modules_statusBar__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./modules/statusBar */ "./src/modules/statusBar.js");
+/* harmony import */ var _modules_clearButton__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./modules/clearButton */ "./src/modules/clearButton.js");
+/* harmony import */ var _modules_alternateRows__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./modules/alternateRows */ "./src/modules/alternateRows.js");
+/* harmony import */ var _modules_noResults__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./modules/noResults */ "./src/modules/noResults.js");
+/* harmony import */ var _modules_paging__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./modules/paging */ "./src/modules/paging.js");
+/* harmony import */ var _modules_toolbar__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./modules/toolbar */ "./src/modules/toolbar.js");
+/* harmony import */ var _const__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./const */ "./src/const.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24146,6 +24142,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -24303,7 +24313,7 @@ function () {
     this.filterTypes = [].map.call((this.dom().rows[this.refRow] || this.dom().rows[0]).cells, function (cell, idx) {
       var colType = _this.cfg["col_".concat(idx)];
 
-      return !colType ? _const__WEBPACK_IMPORTED_MODULE_10__["INPUT"] : colType.toLowerCase();
+      return !colType ? _const__WEBPACK_IMPORTED_MODULE_25__["INPUT"] : colType.toLowerCase();
     });
     /**
      * Base path for static assets
@@ -24342,7 +24352,7 @@ function () {
      * @type {String}
      */
 
-    this.fltCellTag = Object(_settings__WEBPACK_IMPORTED_MODULE_5__["defaultsStr"])(f.filters_cell_tag, _const__WEBPACK_IMPORTED_MODULE_10__["CELL_TAG"]);
+    this.fltCellTag = Object(_settings__WEBPACK_IMPORTED_MODULE_5__["defaultsStr"])(f.filters_cell_tag, _const__WEBPACK_IMPORTED_MODULE_25__["CELL_TAG"]);
     /**
      * List of filters IDs
      * @type {Array}
@@ -24881,7 +24891,7 @@ function () {
      * @type {Number}
      */
 
-    this.autoFilterDelay = Object(_types__WEBPACK_IMPORTED_MODULE_3__["isObj"])(f.auto_filter) && Object(_types__WEBPACK_IMPORTED_MODULE_3__["isNumber"])(f.auto_filter.delay) ? f.auto_filter.delay : _const__WEBPACK_IMPORTED_MODULE_10__["AUTO_FILTER_DELAY"];
+    this.autoFilterDelay = Object(_types__WEBPACK_IMPORTED_MODULE_3__["isObj"])(f.auto_filter) && Object(_types__WEBPACK_IMPORTED_MODULE_3__["isNumber"])(f.auto_filter.delay) ? f.auto_filter.delay : _const__WEBPACK_IMPORTED_MODULE_25__["AUTO_FILTER_DELAY"];
     /**
      * Indicate whether user is typing
      * @type {Boolean}
@@ -25049,7 +25059,6 @@ function () {
      */
 
     this.Mod = {};
-    this._mod_ = {};
     /**
      * Extensions registry
      * @private
@@ -25057,9 +25066,9 @@ function () {
 
     this.ExtRegistry = {}; // conditionally instantiate required features
 
-    this.instantiateFeatures(Object.keys(_const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"]).map(function (item) {
-      return _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"][item];
-    })); // console.log(this.Mod, this._mod_);
+    this.instantiateFeatures( //     //Object.keys(FEATURES).map((item) => FEATURES[item])
+    //     //FEATURES
+    [_modules_toolbar__WEBPACK_IMPORTED_MODULE_24__["Toolbar"]]);
   }
   /**
    * Initialise features and layout
@@ -25080,25 +25089,20 @@ function () {
       var Mod = this.Mod;
       var inpclass; //loads theme
 
-      this.loadThemes();
-      var dateType = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].dateType,
-          help = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].help,
-          state = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].state,
-          markActiveColumns = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].markActiveColumns,
-          gridLayout = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].gridLayout,
-          loader = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].loader,
-          highlightKeyword = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].highlightKeyword,
-          popupFilter = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].popupFilter,
-          rowsCounter = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].rowsCounter,
-          statusBar = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].statusBar,
-          clearButton = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].clearButton,
-          alternateRows = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].alternateRows,
-          noResults = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].noResults,
-          paging = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].paging,
-          toolbar = _const__WEBPACK_IMPORTED_MODULE_10__["FEATURES"].toolbar;
-      console.log(this.Mod, this._mod_); //explicitly initialise features in given order
+      this.loadThemes(); // const { dateType, help, state, markActiveColumns, gridLayout, loader,
+      //   highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
+      //     alternateRows, noResults, paging, toolbar } = FEATURES;
+      //explicitly initialise features in given order
 
-      this.initFeatures([dateType, help, state, markActiveColumns, gridLayout, loader, highlightKeyword, popupFilter]); //filters grid is not generated
+      this.initFeatures([// dateType,
+      // help,
+      // state,
+      // markActiveColumns,
+      // gridLayout,
+      // loader,
+      // highlightKeyword,
+      // popupFilter
+      _modules_dateType__WEBPACK_IMPORTED_MODULE_10__["DateType"], _modules_help__WEBPACK_IMPORTED_MODULE_11__["Help"], _modules_state__WEBPACK_IMPORTED_MODULE_12__["State"], _modules_markActiveColumns__WEBPACK_IMPORTED_MODULE_17__["MarkActiveColumns"], _modules_gridLayout__WEBPACK_IMPORTED_MODULE_13__["GridLayout"], _modules_loader__WEBPACK_IMPORTED_MODULE_14__["Loader"], _modules_highlightKeywords__WEBPACK_IMPORTED_MODULE_15__["HighlightKeyword"], _modules_popupFilter__WEBPACK_IMPORTED_MODULE_16__["PopupFilter"]]); //filters grid is not generated
 
       if (!this.fltGrid) {
         this._initNoFilters();
@@ -25125,16 +25129,16 @@ function () {
           inpclass = i === n - 1 && this.displayBtn ? this.fltSmallCssClass : this.fltCssClass; //only 1 input for single search
 
           if (this.singleFlt) {
-            col = _const__WEBPACK_IMPORTED_MODULE_10__["INPUT"];
+            col = _const__WEBPACK_IMPORTED_MODULE_25__["INPUT"];
             inpclass = this.singleFltCssClass;
           } //drop-down filters
 
 
-          if (col === _const__WEBPACK_IMPORTED_MODULE_10__["SELECT"] || col === _const__WEBPACK_IMPORTED_MODULE_10__["MULTIPLE"]) {
+          if (col === _const__WEBPACK_IMPORTED_MODULE_25__["SELECT"] || col === _const__WEBPACK_IMPORTED_MODULE_25__["MULTIPLE"]) {
             Mod.dropdown = Mod.dropdown || new _modules_dropdown__WEBPACK_IMPORTED_MODULE_8__["Dropdown"](this);
             Mod.dropdown.init(i, this.isExternalFlt(), fltCell);
           } // checklist
-          else if (col === _const__WEBPACK_IMPORTED_MODULE_10__["CHECKLIST"]) {
+          else if (col === _const__WEBPACK_IMPORTED_MODULE_25__["CHECKLIST"]) {
               Mod.checkList = Mod.checkList || new _modules_checkList__WEBPACK_IMPORTED_MODULE_9__["CheckList"](this);
               Mod.checkList.init(i, this.isExternalFlt(), fltCell);
             } else {
@@ -25164,7 +25168,14 @@ function () {
         this.setExcludeRows();
       }
 
-      this.initFeatures([rowsCounter, statusBar, clearButton, alternateRows, noResults, paging, toolbar]);
+      this.initFeatures([// rowsCounter,
+      // statusBar,
+      // clearButton,
+      // alternateRows,
+      // noResults,
+      // paging,
+      // toolbar
+      _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_18__["RowsCounter"], _modules_statusBar__WEBPACK_IMPORTED_MODULE_19__["StatusBar"], _modules_clearButton__WEBPACK_IMPORTED_MODULE_20__["ClearButton"], _modules_alternateRows__WEBPACK_IMPORTED_MODULE_21__["AlternateRows"], _modules_noResults__WEBPACK_IMPORTED_MODULE_22__["NoResults"], _modules_paging__WEBPACK_IMPORTED_MODULE_23__["Paging"], _modules_toolbar__WEBPACK_IMPORTED_MODULE_24__["Toolbar"]]);
       this.setColWidths(); //TF css class is added to table
 
       if (!this.gridLayout) {
@@ -25202,7 +25213,7 @@ function () {
         return;
       }
 
-      if (Object(_event__WEBPACK_IMPORTED_MODULE_0__["isKeyPressed"])(evt, [_const__WEBPACK_IMPORTED_MODULE_10__["ENTER_KEY"]])) {
+      if (Object(_event__WEBPACK_IMPORTED_MODULE_0__["isKeyPressed"])(evt, [_const__WEBPACK_IMPORTED_MODULE_25__["ENTER_KEY"]])) {
         this.filter();
         Object(_event__WEBPACK_IMPORTED_MODULE_0__["cancelEvt"])(evt);
         Object(_event__WEBPACK_IMPORTED_MODULE_0__["stopEvt"])(evt);
@@ -25237,7 +25248,7 @@ function () {
         }
       }
 
-      if (Object(_event__WEBPACK_IMPORTED_MODULE_0__["isKeyPressed"])(evt, [_const__WEBPACK_IMPORTED_MODULE_10__["ENTER_KEY"], _const__WEBPACK_IMPORTED_MODULE_10__["TAB_KEY"], _const__WEBPACK_IMPORTED_MODULE_10__["ESC_KEY"], _const__WEBPACK_IMPORTED_MODULE_10__["UP_ARROW_KEY"], _const__WEBPACK_IMPORTED_MODULE_10__["DOWN_ARROW_KEY"]])) {
+      if (Object(_event__WEBPACK_IMPORTED_MODULE_0__["isKeyPressed"])(evt, [_const__WEBPACK_IMPORTED_MODULE_25__["ENTER_KEY"], _const__WEBPACK_IMPORTED_MODULE_25__["TAB_KEY"], _const__WEBPACK_IMPORTED_MODULE_25__["ESC_KEY"], _const__WEBPACK_IMPORTED_MODULE_25__["UP_ARROW_KEY"], _const__WEBPACK_IMPORTED_MODULE_25__["DOWN_ARROW_KEY"]])) {
         _root__WEBPACK_IMPORTED_MODULE_6__["root"].clearInterval(this.autoFilterTimer);
         this.autoFilterTimer = null;
       } else {
@@ -25310,7 +25321,7 @@ function () {
       fltrow.className = this.fltsRowCssClass;
 
       if (this.isExternalFlt()) {
-        fltrow.style.display = _const__WEBPACK_IMPORTED_MODULE_10__["NONE"];
+        fltrow.style.display = _const__WEBPACK_IMPORTED_MODULE_25__["NONE"];
       }
 
       this.emitter.emit('filters-row-inserted', this, fltrow);
@@ -25344,8 +25355,8 @@ function () {
 
       var col = this.getFilterType(colIndex);
       var externalFltTgtId = this.isExternalFlt() ? this.externalFltIds[colIndex] : null;
-      var inpType = col === _const__WEBPACK_IMPORTED_MODULE_10__["INPUT"] ? 'text' : 'hidden';
-      var inp = Object(_dom__WEBPACK_IMPORTED_MODULE_1__["createElm"])(_const__WEBPACK_IMPORTED_MODULE_10__["INPUT"], ['id', this.buildFilterId(colIndex)], ['type', inpType], ['ct', colIndex]);
+      var inpType = col === _const__WEBPACK_IMPORTED_MODULE_25__["INPUT"] ? 'text' : 'hidden';
+      var inp = Object(_dom__WEBPACK_IMPORTED_MODULE_1__["createElm"])(_const__WEBPACK_IMPORTED_MODULE_25__["INPUT"], ['id', this.buildFilterId(colIndex)], ['type', inpType], ['ct', colIndex]);
 
       if (inpType !== 'hidden' && this.watermark) {
         inp.setAttribute('placeholder', this.isWatermarkArray ? this.watermark[colIndex] || '' : this.watermark);
@@ -25386,7 +25397,7 @@ function () {
     value: function _buildSubmitButton(container) {
       var _this4 = this;
 
-      var btn = Object(_dom__WEBPACK_IMPORTED_MODULE_1__["createElm"])(_const__WEBPACK_IMPORTED_MODULE_10__["INPUT"], ['type', 'button'], ['value', this.btnText]);
+      var btn = Object(_dom__WEBPACK_IMPORTED_MODULE_1__["createElm"])(_const__WEBPACK_IMPORTED_MODULE_25__["INPUT"], ['type', 'button'], ['value', this.btnText]);
       btn.className = this.btnCssClass; //filter is appended in container element
 
       container.appendChild(btn);
@@ -25395,14 +25406,10 @@ function () {
       });
     }
     /**
-     * Istantiate the collection of features required by the
-     * configuration and add them to the features registry. A feature is
-     * described by a `class` and `name` fields and and optional `property`
-     * field:
-     * {
-     *   class: AClass,
-     *   name: 'aClass'
-     * }
+     * Conditionally istantiate each feature class in passed collection if
+     * required by configuration and add it to the features registry. A feature
+     * class meta information contains a `name` field and optional `altName` and
+     * `alwaysInstantiate` fields
      * @param {Array} [features=[]]
      * @private
      */
@@ -25413,27 +25420,31 @@ function () {
       var _this5 = this;
 
       var features = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      features.forEach(function (feature) {
-        // TODO: remove the property field.
-        // Due to naming convention inconsistencies, a `property`
-        // field is added to allow a conditional instanciation based
-        // on that property on TableFilter, if supplied.
-        feature.property = feature.property || feature.name;
+      // features.forEach((feature) => {
+      //     // TODO: remove the property field.
+      //     // Due to naming convention inconsistencies, a `property`
+      //     // field is added to allow a conditional instanciation based
+      //     // on that property on TableFilter, if supplied.
+      //     feature.property = feature.property || feature.name;
+      //     if (!this.hasConfig || this[feature.property] === true ||
+      //         feature.enforce === true) {
+      //         let {class: Cls, name} = feature;
+      //         this.Mod[name] = this.Mod[name] || new Cls(this);
+      //     }
+      // });
+      features.forEach(function (featureCls) {
+        var Cls = featureCls;
+        var inst = new Cls(_this5);
+        var meta = Cls.meta;
+        var name = meta.name;
 
-        if (!_this5.hasConfig || _this5[feature.property] === true || feature.enforce === true) {
-          var Cls = feature.class,
-              name = feature.name;
-          _this5.Mod[name] = _this5.Mod[name] || new Cls(_this5);
+        if (!_this5.hasConfig || _this5[name] === true || Boolean(meta.alwaysInstantiate)) {
+          _this5.Mod[name] = _this5.Mod[name] || inst;
         }
       });
     }
     /**
-     * Initialise the passed features collection. A feature is described by a
-     * `class` and `name` fields and and optional `property` field:
-     * {
-     *   class: AClass,
-     *   name: 'aClass'
-     * }
+     * Initialise each feature class in passed collection.
      * @param {Array} [features=[]]
      * @private
      */
@@ -25444,11 +25455,19 @@ function () {
       var _this6 = this;
 
       var features = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      features.forEach(function (feature) {
-        var property = feature.property,
-            name = feature.name;
+      // features.forEach((feature) => {
+      //     let {property, name} = feature;
+      //     if (this[property] === true && this.Mod[name]) {
+      //         this.Mod[name].init();
+      //     }
+      // });
+      // this.instantiateFeatures(features);
+      features.forEach(function (featureCls) {
+        _this6.instantiateFeatures([featureCls]);
 
-        if (_this6[property] === true && _this6.Mod[name]) {
+        var name = featureCls.meta.name;
+
+        if (_this6[name] === true && _this6.Mod[name]) {
           _this6.Mod[name].init();
         }
       });
@@ -25911,7 +25930,7 @@ function () {
           hasNM = reNm === term,
           hasRE = reRe.test(term); // Check for dates or resolve date type
 
-      if (this.hasType(colIdx, [_const__WEBPACK_IMPORTED_MODULE_10__["DATE"]])) {
+      if (this.hasType(colIdx, [_const__WEBPACK_IMPORTED_MODULE_25__["DATE"]])) {
         var dte1, dte2;
         var dateType = this.Mod.dateType;
         var isValidDate = dateType.isValid.bind(dateType);
@@ -26021,7 +26040,7 @@ function () {
                               } else {
                                 // If numeric type data, perform a strict equality test and
                                 // fallback to unformatted number string comparison
-                                if (numData && this.hasType(colIdx, [_const__WEBPACK_IMPORTED_MODULE_10__["NUMBER"], _const__WEBPACK_IMPORTED_MODULE_10__["FORMATTED_NUMBER"]]) && !this.singleFlt) {
+                                if (numData && this.hasType(colIdx, [_const__WEBPACK_IMPORTED_MODULE_25__["NUMBER"], _const__WEBPACK_IMPORTED_MODULE_25__["FORMATTED_NUMBER"]]) && !this.singleFlt) {
                                   // parseNb can return 0 for strings which are not
                                   // formatted numbers, in that case return the original
                                   // string. TODO: handle this in parseNb
@@ -26127,13 +26146,13 @@ function () {
 
       var fltColType = this.getFilterType(index);
 
-      if (fltColType !== _const__WEBPACK_IMPORTED_MODULE_10__["MULTIPLE"] && fltColType !== _const__WEBPACK_IMPORTED_MODULE_10__["CHECKLIST"]) {
+      if (fltColType !== _const__WEBPACK_IMPORTED_MODULE_25__["MULTIPLE"] && fltColType !== _const__WEBPACK_IMPORTED_MODULE_25__["CHECKLIST"]) {
         fltValue = flt.value;
       } //mutiple select
-      else if (fltColType === _const__WEBPACK_IMPORTED_MODULE_10__["MULTIPLE"]) {
+      else if (fltColType === _const__WEBPACK_IMPORTED_MODULE_25__["MULTIPLE"]) {
           fltValue = this.feature('dropdown').getValues(index);
         } //checklist
-        else if (fltColType === _const__WEBPACK_IMPORTED_MODULE_10__["CHECKLIST"]) {
+        else if (fltColType === _const__WEBPACK_IMPORTED_MODULE_25__["CHECKLIST"]) {
             fltValue = this.feature('checkList').getValues(index);
           } //return an empty string if collection is empty or contains a single
       //empty string
@@ -26299,11 +26318,11 @@ function () {
       var colIndex = cell.cellIndex;
       var value = this.getCellValue(cell);
 
-      if (this.hasType(colIndex, [_const__WEBPACK_IMPORTED_MODULE_10__["FORMATTED_NUMBER"]])) {
+      if (this.hasType(colIndex, [_const__WEBPACK_IMPORTED_MODULE_25__["FORMATTED_NUMBER"]])) {
         return Object(_number__WEBPACK_IMPORTED_MODULE_4__["parse"])(value, this.getDecimal(colIndex));
-      } else if (this.hasType(colIndex, [_const__WEBPACK_IMPORTED_MODULE_10__["NUMBER"]])) {
+      } else if (this.hasType(colIndex, [_const__WEBPACK_IMPORTED_MODULE_25__["NUMBER"]])) {
         return Number(value);
-      } else if (this.hasType(colIndex, [_const__WEBPACK_IMPORTED_MODULE_10__["DATE"]])) {
+      } else if (this.hasType(colIndex, [_const__WEBPACK_IMPORTED_MODULE_25__["DATE"]])) {
         var dateType = this.Mod.dateType;
         return dateType.parse(value, dateType.getLocale(colIndex));
       }
@@ -26641,7 +26660,7 @@ function () {
         isValid = true;
       }
 
-      var displayFlag = isValid ? '' : _const__WEBPACK_IMPORTED_MODULE_10__["NONE"],
+      var displayFlag = isValid ? '' : _const__WEBPACK_IMPORTED_MODULE_25__["NONE"],
           validFlag = isValid ? 'true' : 'false';
       row.style.display = displayFlag;
 
@@ -26698,7 +26717,7 @@ function () {
       } //multiple selects
 
 
-      if (fltColType === _const__WEBPACK_IMPORTED_MODULE_10__["MULTIPLE"]) {
+      if (fltColType === _const__WEBPACK_IMPORTED_MODULE_25__["MULTIPLE"]) {
         var values = Object(_types__WEBPACK_IMPORTED_MODULE_3__["isArray"])(query) ? query : query.split(' ' + this.orOperator + ' ');
 
         if (this.loadFltOnDemand && !this.initialized) {
@@ -26707,7 +26726,7 @@ function () {
 
         this.emitter.emit('select-options', this, index, values);
       } //checklist
-      else if (fltColType === _const__WEBPACK_IMPORTED_MODULE_10__["CHECKLIST"]) {
+      else if (fltColType === _const__WEBPACK_IMPORTED_MODULE_25__["CHECKLIST"]) {
           var _values = [];
 
           if (this.loadFltOnDemand && !this.initialized) {
@@ -26941,7 +26960,7 @@ function () {
     key: "isExactMatch",
     value: function isExactMatch(colIndex) {
       var fltType = this.getFilterType(colIndex);
-      return this.exactMatchByCol[colIndex] || this.exactMatch || fltType !== _const__WEBPACK_IMPORTED_MODULE_10__["INPUT"];
+      return this.exactMatchByCol[colIndex] || this.exactMatch || fltType !== _const__WEBPACK_IMPORTED_MODULE_25__["INPUT"];
     }
     /**
      * Check if passed row is valid
@@ -27178,7 +27197,7 @@ function () {
       var eachRow = this.eachRow();
       eachRow(function (row) {
         if (!_this19.paging) {
-          if (_this19.getRowDisplay(row) !== _const__WEBPACK_IMPORTED_MODULE_10__["NONE"]) {
+          if (_this19.getRowDisplay(row) !== _const__WEBPACK_IMPORTED_MODULE_25__["NONE"]) {
             _this19.validRowsIndex.push(row.rowIndex);
           }
         } else {
@@ -27362,7 +27381,7 @@ function () {
     value: function getDecimal(colIndex) {
       var decimal = this.decimalSeparator;
 
-      if (this.hasType(colIndex, [_const__WEBPACK_IMPORTED_MODULE_10__["FORMATTED_NUMBER"]])) {
+      if (this.hasType(colIndex, [_const__WEBPACK_IMPORTED_MODULE_25__["FORMATTED_NUMBER"]])) {
         var colType = this.colTypes[colIndex];
 
         if (colType.hasOwnProperty('decimal')) {

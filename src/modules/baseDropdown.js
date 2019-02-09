@@ -19,7 +19,7 @@ export class BaseDropdown extends Feature {
      * @param {TableFilter} tf
      */
     constructor(tf) {
-        super(tf, 'baseDropdown');
+        super(tf, BaseDropdown);
 
         let f = this.config;
 
@@ -33,7 +33,7 @@ export class BaseDropdown extends Feature {
             f.filter_options_sorter :
             null;
 
-        // TODO: move here all properties shared by Dropdown CheckList
+        // TODO: move here all properties shared by Dropdown and CheckList
 
         /**
          * Has custom options

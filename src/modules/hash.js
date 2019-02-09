@@ -86,7 +86,7 @@ export class Hash {
     }
 
     /**
-     * Converts a URL hash into a state JSON object
+     * Converts a URL hash into a JSON object
      *
      * @param {String} hash URL hash fragment
      * @returns {Object} JSON object

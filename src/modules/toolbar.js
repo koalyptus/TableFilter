@@ -29,7 +29,7 @@ export class Toolbar extends Feature {
      * @memberof Toolbar
      */
     constructor(tf) {
-        super(tf, 'toolbar');
+        super(tf, Toolbar);
 
         // Configuration object
         let f = this.config.toolbar || {};
@@ -221,4 +221,4 @@ export class Toolbar extends Feature {
 }
 
 // TODO: remove as soon as feature name is fixed
-Toolbar.alwaysInstantiate = true;
+Toolbar.meta = {alwaysInstantiate: true};

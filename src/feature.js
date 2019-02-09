@@ -9,28 +9,28 @@ export class Feature extends Register {
     /**
      * Creates an instance of Feature
      * @param {Object} tf TableFilter instance
-     * @param {String} feature Feature name known by TableFilter
+     * @param {Class} feature Feature class for TableFilter registration
      */
-    constructor(tf, feature, cls) {
+    constructor(tf, cls) {
         super(tf, cls);
 
         /**
          * TableFilter instance
          * @type {TableFilter}
          */
-        this.tf = tf;
+        //this.tf = tf;
 
         /**
          * Feature name
          * @type {String}
          */
-        this.feature = feature;
+        // this.feature = feature;
 
         /**
          * TableFilter feature setting
          * @type {Boolean}
          */
-        this.enabled = tf[feature];
+        this.enabled = tf[this.feature];
 
         /**
          * TableFilter configuration

@@ -1,11 +1,11 @@
 import {defaultsStr} from './settings';
 import {toCamelCase} from './string';
-
-export const FeaturesRegistry = {};
+import {FEATURES} from './const';
 
 export class Register {
     constructor(tf, cls = {}) {
-        console.log(tf, cls);
+        cls.meta = cls.meta || {};
+
         /**
          * TableFilter instance
          * @type {TableFilter}
@@ -13,24 +13,15 @@ export class Register {
         this.tf = tf;
 
         /**
-         * Feature name, retrieved from alternate class name
-         * if found defined or from camelised class name
+         * Feature name, retrieved from alternate class name if found or from
+         * camelised class name as per TableFilter convention
          * @type {String}
          */
-        this.feature = defaultsStr(cls.altName, toCamelCase(cls.name));
+        this.feature = defaultsStr(cls.meta.altName, toCamelCase(cls.name));
 
-        this.tf._mod_[this.feature] = cls;
+        cls.meta.name = this.feature;
 
-        // this.instantiate(cls, this.feature);
+        FEATURES[this.feature] = cls;
+
     }
-
-    // instantiate(cls, name) {
-    //     let Cls = cls;
-    //     console.log(Boolean(this.tf[name]),
-    //         Boolean(Cls.alwaysInstantiate));
-    //     if (!this.tf.hasConfig || Boolean(this.tf[name])
-    //         || Boolean(cls.alwaysInstantiate)) {
-    //         this.tf.Mod[name] = this.tf.Mod[name] || new Cls(tf);
-    //     }
-    // }
 }

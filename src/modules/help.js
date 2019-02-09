@@ -21,7 +21,7 @@ export class Help extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'help');
+        super(tf, Help);
 
         let f = this.config.help_instructions || {};
 
@@ -240,4 +240,4 @@ export class Help extends Feature {
 }
 
 // TODO: remove as soon as feature name is fixed
-Help.alwaysInstantiate = true;
+Help.meta = {alwaysInstantiate: true};

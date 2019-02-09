@@ -19,7 +19,7 @@ export class Dropdown extends BaseDropdown {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'dropdown');
+        super(tf, Dropdown);
 
         // Configuration object
         let f = this.config;

@@ -21,7 +21,7 @@ export class Paging extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'paging');
+        super(tf, Paging);
 
         // Configuration object
         let f = this.config.paging || {};

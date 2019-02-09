@@ -17,7 +17,7 @@ export class DateType extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'dateType');
+        super(tf, DateType);
 
         /**
          * Global locale

@@ -17,7 +17,7 @@ export class GridLayout extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'gridLayout');
+        super(tf, GridLayout);
 
         let f = this.config.grid_layout || {};
 

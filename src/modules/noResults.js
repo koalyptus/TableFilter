@@ -17,7 +17,7 @@ export class NoResults extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'noResults');
+        super(tf, NoResults);
 
         //configuration object
         let f = this.config.no_results_message || {};

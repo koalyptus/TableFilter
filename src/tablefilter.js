@@ -17,6 +17,21 @@ import {root} from './root';
 import {Emitter} from './emitter';
 import {Dropdown} from './modules/dropdown';
 import {CheckList} from './modules/checkList';
+import {DateType} from './modules/dateType';
+import {Help} from './modules/help';
+import {State} from './modules/state';
+import {GridLayout} from './modules/gridLayout';
+import {Loader} from './modules/loader';
+import {HighlightKeyword} from './modules/highlightKeywords';
+import {PopupFilter} from './modules/popupFilter';
+import {MarkActiveColumns} from './modules/markActiveColumns';
+import {RowsCounter} from './modules/rowsCounter';
+import {StatusBar} from './modules/statusBar';
+import {ClearButton} from './modules/clearButton';
+import {AlternateRows} from './modules/alternateRows';
+import {NoResults} from './modules/noResults';
+import {Paging} from './modules/paging';
+import {Toolbar} from './modules/toolbar';
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
@@ -24,7 +39,6 @@ import {
     CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER,
     FEATURES
 } from './const';
-import { RowsCounter } from './modules/rowsCounter';
 
 let doc = root.document;
 
@@ -920,7 +934,6 @@ export class TableFilter {
          * @private
          */
         this.Mod = {};
-        this._mod_ = {};
 
         /**
          * Extensions registry
@@ -930,9 +943,10 @@ export class TableFilter {
 
         // conditionally instantiate required features
         this.instantiateFeatures(
-            Object.keys(FEATURES).map((item) => FEATURES[item])
+        //     //Object.keys(FEATURES).map((item) => FEATURES[item])
+        //     //FEATURES
+            [Toolbar]
         );
-        // console.log(this.Mod, this._mod_);
     }
 
     /**
@@ -952,20 +966,28 @@ export class TableFilter {
         //loads theme
         this.loadThemes();
 
-        const { dateType, help, state, markActiveColumns, gridLayout, loader,
-            highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
-            alternateRows, noResults, paging, toolbar } = FEATURES;
-        console.log(this.Mod, this._mod_);
+        // const { dateType, help, state, markActiveColumns, gridLayout, loader,
+        //   highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
+        //     alternateRows, noResults, paging, toolbar } = FEATURES;
+
         //explicitly initialise features in given order
         this.initFeatures([
-            dateType,
-            help,
-            state,
-            markActiveColumns,
-            gridLayout,
-            loader,
-            highlightKeyword,
-            popupFilter
+            // dateType,
+            // help,
+            // state,
+            // markActiveColumns,
+            // gridLayout,
+            // loader,
+            // highlightKeyword,
+            // popupFilter
+            DateType,
+            Help,
+            State,
+            MarkActiveColumns,
+            GridLayout,
+            Loader,
+            HighlightKeyword,
+            PopupFilter
         ]);
 
         //filters grid is not generated
@@ -1038,13 +1060,20 @@ export class TableFilter {
         }
 
         this.initFeatures([
-            rowsCounter,
-            statusBar,
-            clearButton,
-            alternateRows,
-            noResults,
-            paging,
-            toolbar
+            // rowsCounter,
+            // statusBar,
+            // clearButton,
+            // alternateRows,
+            // noResults,
+            // paging,
+            // toolbar
+            RowsCounter,
+            StatusBar,
+            ClearButton,
+            AlternateRows,
+            NoResults,
+            Paging,
+            Toolbar
         ]);
 
         this.setColWidths();
@@ -1253,47 +1282,61 @@ export class TableFilter {
     }
 
     /**
-     * Istantiate the collection of features required by the
-     * configuration and add them to the features registry. A feature is
-     * described by a `class` and `name` fields and and optional `property`
-     * field:
-     * {
-     *   class: AClass,
-     *   name: 'aClass'
-     * }
+     * Conditionally istantiate each feature class in passed collection if
+     * required by configuration and add it to the features registry. A feature
+     * class meta information contains a `name` field and optional `altName` and
+     * `alwaysInstantiate` fields
      * @param {Array} [features=[]]
      * @private
      */
     instantiateFeatures(features = []) {
-        features.forEach((feature) => {
-            // TODO: remove the property field.
-            // Due to naming convention inconsistencies, a `property`
-            // field is added to allow a conditional instanciation based
-            // on that property on TableFilter, if supplied.
-            feature.property = feature.property || feature.name;
-            if (!this.hasConfig || this[feature.property] === true ||
-                feature.enforce === true) {
-                let {class: Cls, name} = feature;
+        // features.forEach((feature) => {
+        //     // TODO: remove the property field.
+        //     // Due to naming convention inconsistencies, a `property`
+        //     // field is added to allow a conditional instanciation based
+        //     // on that property on TableFilter, if supplied.
+        //     feature.property = feature.property || feature.name;
+        //     if (!this.hasConfig || this[feature.property] === true ||
+        //         feature.enforce === true) {
+        //         let {class: Cls, name} = feature;
 
-                this.Mod[name] = this.Mod[name] || new Cls(this);
+        //         this.Mod[name] = this.Mod[name] || new Cls(this);
+        //     }
+        // });
+        features.forEach(featureCls => {
+            let Cls = featureCls;
+            let inst = new Cls(this);
+
+            let {meta} = Cls;
+            let {name} = meta;
+
+            if (!this.hasConfig || this[name] === true
+                || Boolean(meta.alwaysInstantiate)) {
+                this.Mod[name] = this.Mod[name] || inst;
             }
         });
     }
 
     /**
-     * Initialise the passed features collection. A feature is described by a
-     * `class` and `name` fields and and optional `property` field:
-     * {
-     *   class: AClass,
-     *   name: 'aClass'
-     * }
+     * Initialise each feature class in passed collection.
      * @param {Array} [features=[]]
      * @private
      */
     initFeatures(features = []) {
-        features.forEach((feature) => {
-            let {property, name} = feature;
-            if (this[property] === true && this.Mod[name]) {
+        // features.forEach((feature) => {
+        //     let {property, name} = feature;
+        //     if (this[property] === true && this.Mod[name]) {
+        //         this.Mod[name].init();
+        //     }
+        // });
+        // this.instantiateFeatures(features);
+
+        features.forEach(featureCls => {
+            this.instantiateFeatures([featureCls]);
+
+            let {name} = featureCls.meta;
+
+            if (this[name] === true && this.Mod[name]) {
                 this.Mod[name].init();
             }
         });

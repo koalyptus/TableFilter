@@ -19,7 +19,7 @@ export class State extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'state');
+        super(tf, State);
 
         let cfg = this.config.state || {};
 

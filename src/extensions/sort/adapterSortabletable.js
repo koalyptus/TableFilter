@@ -20,7 +20,7 @@ export default class AdapterSortableTable extends Feature {
      * @param {Object} opts Configuration object
      */
     constructor(tf, opts) {
-        super(tf, opts.name);
+        super(tf, AdapterSortableTable);
 
         /**
          * Module name
@@ -507,6 +507,8 @@ export default class AdapterSortableTable extends Feature {
     }
 
 }
+
+AdapterSortableTable.meta = {altName: 'sort'};
 
 //Converters
 function ipAddress(value) {
