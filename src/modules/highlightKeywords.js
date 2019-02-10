@@ -174,4 +174,7 @@ export class HighlightKeyword {
 }
 
 // TODO: remove as soon as feature name is fixed
-HighlightKeyword.meta = {altName: 'highlightKeywords'};
+HighlightKeyword.meta = {
+    name: 'highlightKeyword',
+    altName: 'highlightKeywords'
+};

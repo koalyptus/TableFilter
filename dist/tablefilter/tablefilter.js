@@ -102,7 +102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
-/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"090f7cf765d85d916b67"}[chunkId] + ".js";
+/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"d95430c357ebd060de71"}[chunkId] + ".js";
 /******/ 				var timeout = setTimeout(function(){
 /******/ 					onScriptComplete({ type: 'timeout', target: script });
 /******/ 				}, 120000);
@@ -15623,7 +15623,7 @@ var has = function has(arr, val, caseSensitive) {
 /*!**********************!*\
   !*** ./src/const.js ***!
   \**********************/
-/*! exports provided: INPUT, SELECT, MULTIPLE, CHECKLIST, NONE, ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY, HEADER_TAG, CELL_TAG, STRING, NUMBER, FORMATTED_NUMBER, DATE, IP_ADDRESS, AUTO_FILTER_DELAY, FEATURES */
+/*! exports provided: INPUT, SELECT, MULTIPLE, CHECKLIST, NONE, ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY, HEADER_TAG, CELL_TAG, STRING, NUMBER, FORMATTED_NUMBER, DATE, IP_ADDRESS, AUTO_FILTER_DELAY */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15646,23 +15646,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DATE", function() { return DATE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IP_ADDRESS", function() { return IP_ADDRESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTO_FILTER_DELAY", function() { return AUTO_FILTER_DELAY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FEATURES", function() { return FEATURES; });
-// import {DateType} from './modules/dateType';
-// import {Help} from './modules/help';
-// import {State} from './modules/state';
-// import {GridLayout} from './modules/gridLayout';
-// import {Loader} from './modules/loader';
-// import {HighlightKeyword} from './modules/highlightKeywords';
-// import {PopupFilter} from './modules/popupFilter';
-// import {MarkActiveColumns} from './modules/markActiveColumns';
-// import {RowsCounter} from './modules/rowsCounter';
-// import {StatusBar} from './modules/statusBar';
-// import {ClearButton} from './modules/clearButton';
-// import {AlternateRows} from './modules/alternateRows';
-// import {NoResults} from './modules/noResults';
-// import {Paging} from './modules/paging';
-// import {Toolbar} from './modules/toolbar';
-
 /**
  * Filter types
  */
@@ -15790,78 +15773,6 @@ var IP_ADDRESS = 'ipaddress';
  */
 
 var AUTO_FILTER_DELAY = 750;
-/**
- * TableFilter features definitions
- * @type {Array}
- */
-
-var FEATURES = []; // export const FEATURES = {
-//     dateType: {
-//         class: DateType,
-//         name: 'dateType'
-//     },
-//     help: {
-//         class: Help,
-//         name: 'help',
-//         enforce: true
-//     },
-//     state: {
-//         class: State,
-//         name: 'state'
-//     },
-//     markActiveColumns: {
-//         class: MarkActiveColumns,
-//         name: 'markActiveColumns'
-//     },
-//     gridLayout: {
-//         class: GridLayout,
-//         name: 'gridLayout'
-//     },
-//     loader: {
-//         class: Loader,
-//         name: 'loader'
-//     },
-//     highlightKeyword: {
-//         class: HighlightKeyword,
-//         name: 'highlightKeyword',
-//         property: 'highlightKeywords'
-//     },
-//     popupFilter: {
-//         class: PopupFilter,
-//         name: 'popupFilter',
-//         property: 'popupFilters'
-//     },
-//     rowsCounter: {
-//         class: RowsCounter,
-//         name: 'rowsCounter'
-//     },
-//     statusBar: {
-//         class: StatusBar,
-//         name: 'statusBar'
-//     },
-//     clearButton: {
-//         class: ClearButton,
-//         name: 'clearButton',
-//         property: 'btnReset'
-//     },
-//     alternateRows: {
-//         class: AlternateRows,
-//         name: 'alternateRows'
-//     },
-//     noResults: {
-//         class: NoResults,
-//         name: 'noResults'
-//     },
-//     paging: {
-//         class: Paging,
-//         name: 'paging'
-//     },
-//     toolbar: {
-//         class: Toolbar,
-//         name: 'toolbar',
-//         enforce: true
-//     }
-// };
 
 /***/ }),
 
@@ -16450,13 +16361,12 @@ function () {
 
     this.tf = tf;
     /**
-     * Feature name, retrieved from alternate class name if found or from
-     * camelised class name as per TableFilter convention
+     * Feature name is the camelised class name as per TableFilter's
+     * convention
      * @type {String}
      */
 
-    this.feature = Object(_settings__WEBPACK_IMPORTED_MODULE_0__["defaultsStr"])(cls.meta.altName, Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name));
-    cls.meta.name = this.feature;
+    this.feature = Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name);
     /**
      * TableFilter feature setting
      * @type {Boolean}
@@ -16480,7 +16390,9 @@ function () {
      * @type {Boolean}
      */
 
-    this.initialized = false;
+    this.initialized = false; // store resolved feature name
+
+    cls.meta.name = this.feature;
     /** Subscribe to destroy event */
 
     this.emitter.on(['destroy'], function () {
@@ -19660,6 +19572,7 @@ function () {
 }(); // TODO: remove as soon as feature name is fixed
 
 HighlightKeyword.meta = {
+  name: 'highlightKeyword',
   altName: 'highlightKeywords'
 };
 
@@ -24147,7 +24060,7 @@ function () {
      * @type {String}
      */
 
-    this.version = '0.6.77';
+    this.version = '0.6.78';
     /**
      * Current year
      * @type {Number}
@@ -25007,11 +24920,9 @@ function () {
      * @private
      */
 
-    this.ExtRegistry = {}; // conditionally instantiate required features
+    this.ExtRegistry = {}; // instantiate toolbar ui component as other components depend on it
 
-    this.instantiateFeatures( //     //Object.keys(FEATURES).map((item) => FEATURES[item])
-    //     //FEATURES
-    [_modules_toolbar__WEBPACK_IMPORTED_MODULE_24__["Toolbar"]]);
+    this.instantiateFeatures([_modules_toolbar__WEBPACK_IMPORTED_MODULE_24__["Toolbar"]]);
   }
   /**
    * Initialise features and layout
@@ -25032,20 +24943,9 @@ function () {
       var Mod = this.Mod;
       var inpclass; //loads theme
 
-      this.loadThemes(); // const { dateType, help, state, markActiveColumns, gridLayout, loader,
-      //   highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
-      //     alternateRows, noResults, paging, toolbar } = FEATURES;
-      //explicitly initialise features in given order
+      this.loadThemes(); //explicitly initialise features in given order
 
-      this.initFeatures([// dateType,
-      // help,
-      // state,
-      // markActiveColumns,
-      // gridLayout,
-      // loader,
-      // highlightKeyword,
-      // popupFilter
-      _modules_dateType__WEBPACK_IMPORTED_MODULE_10__["DateType"], _modules_help__WEBPACK_IMPORTED_MODULE_11__["Help"], _modules_state__WEBPACK_IMPORTED_MODULE_12__["State"], _modules_markActiveColumns__WEBPACK_IMPORTED_MODULE_17__["MarkActiveColumns"], _modules_gridLayout__WEBPACK_IMPORTED_MODULE_13__["GridLayout"], _modules_loader__WEBPACK_IMPORTED_MODULE_14__["Loader"], _modules_highlightKeywords__WEBPACK_IMPORTED_MODULE_15__["HighlightKeyword"], _modules_popupFilter__WEBPACK_IMPORTED_MODULE_16__["PopupFilter"]]); //filters grid is not generated
+      this.initFeatures([_modules_dateType__WEBPACK_IMPORTED_MODULE_10__["DateType"], _modules_help__WEBPACK_IMPORTED_MODULE_11__["Help"], _modules_state__WEBPACK_IMPORTED_MODULE_12__["State"], _modules_markActiveColumns__WEBPACK_IMPORTED_MODULE_17__["MarkActiveColumns"], _modules_gridLayout__WEBPACK_IMPORTED_MODULE_13__["GridLayout"], _modules_loader__WEBPACK_IMPORTED_MODULE_14__["Loader"], _modules_highlightKeywords__WEBPACK_IMPORTED_MODULE_15__["HighlightKeyword"], _modules_popupFilter__WEBPACK_IMPORTED_MODULE_16__["PopupFilter"]]); //filters grid is not generated
 
       if (!this.fltGrid) {
         this._initNoFilters();
@@ -25111,14 +25011,7 @@ function () {
         this.setExcludeRows();
       }
 
-      this.initFeatures([// rowsCounter,
-      // statusBar,
-      // clearButton,
-      // alternateRows,
-      // noResults,
-      // paging,
-      // toolbar
-      _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_18__["RowsCounter"], _modules_statusBar__WEBPACK_IMPORTED_MODULE_19__["StatusBar"], _modules_clearButton__WEBPACK_IMPORTED_MODULE_20__["ClearButton"], _modules_alternateRows__WEBPACK_IMPORTED_MODULE_21__["AlternateRows"], _modules_noResults__WEBPACK_IMPORTED_MODULE_22__["NoResults"], _modules_paging__WEBPACK_IMPORTED_MODULE_23__["Paging"], _modules_toolbar__WEBPACK_IMPORTED_MODULE_24__["Toolbar"]]);
+      this.initFeatures([_modules_rowsCounter__WEBPACK_IMPORTED_MODULE_18__["RowsCounter"], _modules_statusBar__WEBPACK_IMPORTED_MODULE_19__["StatusBar"], _modules_clearButton__WEBPACK_IMPORTED_MODULE_20__["ClearButton"], _modules_alternateRows__WEBPACK_IMPORTED_MODULE_21__["AlternateRows"], _modules_noResults__WEBPACK_IMPORTED_MODULE_22__["NoResults"], _modules_paging__WEBPACK_IMPORTED_MODULE_23__["Paging"], _modules_toolbar__WEBPACK_IMPORTED_MODULE_24__["Toolbar"]]);
       this.setColWidths(); //TF css class is added to table
 
       if (!this.gridLayout) {
@@ -25363,25 +25256,15 @@ function () {
       var _this5 = this;
 
       var features = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      // features.forEach((feature) => {
-      //     // TODO: remove the property field.
-      //     // Due to naming convention inconsistencies, a `property`
-      //     // field is added to allow a conditional instanciation based
-      //     // on that property on TableFilter, if supplied.
-      //     feature.property = feature.property || feature.name;
-      //     if (!this.hasConfig || this[feature.property] === true ||
-      //         feature.enforce === true) {
-      //         let {class: Cls, name} = feature;
-      //         this.Mod[name] = this.Mod[name] || new Cls(this);
-      //     }
-      // });
       features.forEach(function (featureCls) {
         var Cls = featureCls;
         var inst = new Cls(_this5);
         var meta = Cls.meta;
-        var name = meta.name;
+        var name = meta.name,
+            altName = meta.altName;
+        console.log(name, altName);
 
-        if (!_this5.hasConfig || _this5[name] === true || Boolean(meta.alwaysInstantiate)) {
+        if (!_this5.hasConfig || _this5[altName || name] === true || Boolean(meta.alwaysInstantiate)) {
           _this5.Mod[name] = _this5.Mod[name] || inst;
         }
       });
@@ -25398,13 +25281,6 @@ function () {
       var _this6 = this;
 
       var features = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      // features.forEach((feature) => {
-      //     let {property, name} = feature;
-      //     if (this[property] === true && this.Mod[name]) {
-      //         this.Mod[name].init();
-      //     }
-      // });
-      // this.instantiateFeatures(features);
       features.forEach(function (featureCls) {
         _this6.instantiateFeatures([featureCls]);
 

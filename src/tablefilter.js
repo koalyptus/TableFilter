@@ -36,8 +36,7 @@ import {Toolbar} from './modules/toolbar';
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
     ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
-    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER,
-    FEATURES
+    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER
 } from './const';
 
 let doc = root.document;
@@ -941,12 +940,8 @@ export class TableFilter {
          */
         this.ExtRegistry = {};
 
-        // conditionally instantiate required features
-        this.instantiateFeatures(
-        //     //Object.keys(FEATURES).map((item) => FEATURES[item])
-        //     //FEATURES
-            [Toolbar]
-        );
+        // instantiate toolbar ui component as other components depend on it
+        this.instantiateFeatures([Toolbar]);
     }
 
     /**
@@ -966,20 +961,8 @@ export class TableFilter {
         //loads theme
         this.loadThemes();
 
-        // const { dateType, help, state, markActiveColumns, gridLayout, loader,
-        //   highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
-        //     alternateRows, noResults, paging, toolbar } = FEATURES;
-
         //explicitly initialise features in given order
         this.initFeatures([
-            // dateType,
-            // help,
-            // state,
-            // markActiveColumns,
-            // gridLayout,
-            // loader,
-            // highlightKeyword,
-            // popupFilter
             DateType,
             Help,
             State,
@@ -1060,13 +1043,6 @@ export class TableFilter {
         }
 
         this.initFeatures([
-            // rowsCounter,
-            // statusBar,
-            // clearButton,
-            // alternateRows,
-            // noResults,
-            // paging,
-            // toolbar
             RowsCounter,
             StatusBar,
             ClearButton,
@@ -1290,27 +1266,14 @@ export class TableFilter {
      * @private
      */
     instantiateFeatures(features = []) {
-        // features.forEach((feature) => {
-        //     // TODO: remove the property field.
-        //     // Due to naming convention inconsistencies, a `property`
-        //     // field is added to allow a conditional instanciation based
-        //     // on that property on TableFilter, if supplied.
-        //     feature.property = feature.property || feature.name;
-        //     if (!this.hasConfig || this[feature.property] === true ||
-        //         feature.enforce === true) {
-        //         let {class: Cls, name} = feature;
-
-        //         this.Mod[name] = this.Mod[name] || new Cls(this);
-        //     }
-        // });
         features.forEach(featureCls => {
             let Cls = featureCls;
             let inst = new Cls(this);
 
             let {meta} = Cls;
-            let {name} = meta;
+            let {name, altName} = meta; console.log(name, altName);
 
-            if (!this.hasConfig || this[name] === true
+            if (!this.hasConfig || this[altName || name] === true
                 || Boolean(meta.alwaysInstantiate)) {
                 this.Mod[name] = this.Mod[name] || inst;
             }
@@ -1323,14 +1286,6 @@ export class TableFilter {
      * @private
      */
     initFeatures(features = []) {
-        // features.forEach((feature) => {
-        //     let {property, name} = feature;
-        //     if (this[property] === true && this.Mod[name]) {
-        //         this.Mod[name].init();
-        //     }
-        // });
-        // this.instantiateFeatures(features);
-
         features.forEach(featureCls => {
             this.instantiateFeatures([featureCls]);
 

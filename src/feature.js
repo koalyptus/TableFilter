@@ -22,13 +22,11 @@ export class Feature {
         this.tf = tf;
 
         /**
-         * Feature name, retrieved from alternate class name if found or from
-         * camelised class name as per TableFilter convention
+         * Feature name is the camelised class name as per TableFilter's
+         * convention
          * @type {String}
          */
-        this.feature = defaultsStr(cls.meta.altName, toCamelCase(cls.name));
-
-        cls.meta.name = this.feature;
+        this.feature = toCamelCase(cls.name);
 
         /**
          * TableFilter feature setting
@@ -53,6 +51,9 @@ export class Feature {
          * @type {Boolean}
          */
         this.initialized = false;
+
+        // store resolved feature name
+        cls.meta.name = this.feature;
 
         /** Subscribe to destroy event */
         this.emitter.on(['destroy'], () => this.destroy());
