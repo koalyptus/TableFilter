@@ -419,8 +419,7 @@ export class TableFilter {
          * Enable/disable single filter mode
          * @type {Boolean|Object}
          */
-        this.singleFlt = isObj(f.single_filter) ||
-            Boolean(f.single_filter);
+        this.singleFlt = isObj(f.single_filter) || Boolean(f.single_filter);
 
         /**
          * Specify columns to be excluded from single filter search, by default
@@ -1280,7 +1279,6 @@ export class TableFilter {
             Cls.meta.name = toCamelCase(Cls.name);
             let {name, altName, alwaysInstantiate} = Cls.meta;
             let prop = altName || name;
-            //console.log(name, altName, alwaysInstantiate);
 
             if (!this.hasConfig || this[prop] === true
                 || Boolean(alwaysInstantiate)) {
@@ -1296,11 +1294,10 @@ export class TableFilter {
      */
     initFeatures(features = []) {
         features.forEach(featureCls => {
-            // this.instantiateFeatures([featureCls]);
+            let {name, altName} = featureCls.meta;
+            let prop = altName || name;
 
-            let {name} = featureCls.meta;
-
-            if (this[name] === true && this.Mod[name]) {
+            if (this[prop] === true && this.Mod[name]) {
                 this.Mod[name].init();
             }
         });

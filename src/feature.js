@@ -27,9 +27,6 @@ export class Feature {
          */
         this.feature = cls.meta.altName || cls.meta.name
             || toCamelCase(cls.name);
-        console.log(cls.meta.altName, cls.meta.name, toCamelCase(cls.name),
-            this.feature);
-        /**/
 
         /**
          * TableFilter feature setting
@@ -54,9 +51,6 @@ export class Feature {
          * @type {Boolean}
          */
         this.initialized = false;
-
-        // store resolved feature name
-        //cls.meta.name = this.feature;
 
         /** Subscribe to destroy event */
         this.emitter.on(['destroy'], () => this.destroy());

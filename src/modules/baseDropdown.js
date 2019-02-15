@@ -18,8 +18,8 @@ export class BaseDropdown extends Feature {
      * Creates an instance of BaseDropdown
      * @param {TableFilter} tf
      */
-    constructor(tf) {
-        super(tf, BaseDropdown);
+    constructor(tf, cls) {
+        super(tf, cls);
 
         let f = this.config;
 

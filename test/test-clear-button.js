@@ -6,7 +6,7 @@ var tf = new TableFilter('demo', {
 tf.init();
 
 var clearButton = tf.feature('clearButton');
-console.log(clearButton)
+
 module('Sanity checks');
 test('Clear button component', function() {
     deepEqual(typeof clearButton, 'object', 'ClearButton instanciated');
@@ -175,8 +175,8 @@ test('Destroy and init in external container', function() {
         'container id');
 });
 
-// module('Tear-down');
-// test('can destroy TableFilter DOM elements', function() {
-//     tf.destroy();
-//     deepEqual(tf.isInitialized(), false, 'Filters removed');
-// });
+module('Tear-down');
+test('can destroy TableFilter DOM elements', function() {
+    tf.destroy();
+    deepEqual(tf.isInitialized(), false, 'Filters removed');
+});
