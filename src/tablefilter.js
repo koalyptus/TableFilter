@@ -2,7 +2,7 @@ import {addEvt, cancelEvt, stopEvt, targetEvt, isKeyPressed} from './event';
 import {
     addClass, createElm, elm, getText, getFirstTextNode, removeClass, tag
 } from './dom';
-import {contains, matchCase, rgxEsc, trim} from './string';
+import {contains, matchCase, rgxEsc, trim, toCamelCase} from './string';
 import {
     isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN,
     isBoolean
@@ -40,6 +40,12 @@ import {
 } from './const';
 
 let doc = root.document;
+
+const FEATURES = [
+    DateType, Help, State, MarkActiveColumns, GridLayout, Loader,
+    HighlightKeyword, PopupFilter, RowsCounter, StatusBar, ClearButton,
+    AlternateRows, NoResults, Paging, Toolbar
+];
 
 /**
  * Makes HTML tables filterable and a bit more :)
@@ -941,7 +947,7 @@ export class TableFilter {
         this.ExtRegistry = {};
 
         // instantiate toolbar ui component as other components depend on it
-        this.instantiateFeatures([Toolbar]);
+        this.instantiateFeatures(FEATURES);
     }
 
     /**
@@ -1268,14 +1274,17 @@ export class TableFilter {
     instantiateFeatures(features = []) {
         features.forEach(featureCls => {
             let Cls = featureCls;
-            let inst = new Cls(this);
 
-            let {meta} = Cls;
-            let {name, altName} = meta; console.log(name, altName);
+            // assign meta info if not present
+            Cls.meta = Cls.meta || {name: null, altName: null};
+            Cls.meta.name = toCamelCase(Cls.name);
+            let {name, altName, alwaysInstantiate} = Cls.meta;
+            let prop = altName || name;
+            //console.log(name, altName, alwaysInstantiate);
 
-            if (!this.hasConfig || this[altName || name] === true
-                || Boolean(meta.alwaysInstantiate)) {
-                this.Mod[name] = this.Mod[name] || inst;
+            if (!this.hasConfig || this[prop] === true
+                || Boolean(alwaysInstantiate)) {
+                this.Mod[name] = this.Mod[name] || new Cls(this);
             }
         });
     }
@@ -1287,7 +1296,7 @@ export class TableFilter {
      */
     initFeatures(features = []) {
         features.forEach(featureCls => {
-            this.instantiateFeatures([featureCls]);
+            // this.instantiateFeatures([featureCls]);
 
             let {name} = featureCls.meta;
 

@@ -102,7 +102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
-/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"d95430c357ebd060de71"}[chunkId] + ".js";
+/******/ 				script.src = __webpack_require__.p + "tf-" + ({}[chunkId]||chunkId) + "-" + {"0":"b3e31eacd257cbab2460"}[chunkId] + ".js";
 /******/ 				var timeout = setTimeout(function(){
 /******/ 					onScriptComplete({ type: 'timeout', target: script });
 /******/ 				}, 120000);
@@ -16325,14 +16325,12 @@ function bound(fn, scope) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Feature", function() { return Feature; });
-/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings */ "./src/settings.js");
-/* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./string */ "./src/string.js");
+/* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./string */ "./src/string.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 
 
 var NOT_IMPLEMENTED = 'Not implemented.';
@@ -16366,7 +16364,10 @@ function () {
      * @type {String}
      */
 
-    this.feature = Object(_string__WEBPACK_IMPORTED_MODULE_1__["toCamelCase"])(cls.name);
+    this.feature = cls.meta.altName || cls.meta.name || Object(_string__WEBPACK_IMPORTED_MODULE_0__["toCamelCase"])(cls.name);
+    console.log(cls.meta.altName, cls.meta.name, Object(_string__WEBPACK_IMPORTED_MODULE_0__["toCamelCase"])(cls.name), this.feature);
+    /**/
+
     /**
      * TableFilter feature setting
      * @type {Boolean}
@@ -16391,8 +16392,8 @@ function () {
      */
 
     this.initialized = false; // store resolved feature name
+    //cls.meta.name = this.feature;
 
-    cls.meta.name = this.feature;
     /** Subscribe to destroy event */
 
     this.emitter.on(['destroy'], function () {
@@ -24026,6 +24027,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 var doc = _root__WEBPACK_IMPORTED_MODULE_6__["root"].document;
+var FEATURES = [_modules_dateType__WEBPACK_IMPORTED_MODULE_10__["DateType"], _modules_help__WEBPACK_IMPORTED_MODULE_11__["Help"], _modules_state__WEBPACK_IMPORTED_MODULE_12__["State"], _modules_markActiveColumns__WEBPACK_IMPORTED_MODULE_17__["MarkActiveColumns"], _modules_gridLayout__WEBPACK_IMPORTED_MODULE_13__["GridLayout"], _modules_loader__WEBPACK_IMPORTED_MODULE_14__["Loader"], _modules_highlightKeywords__WEBPACK_IMPORTED_MODULE_15__["HighlightKeyword"], _modules_popupFilter__WEBPACK_IMPORTED_MODULE_16__["PopupFilter"], _modules_rowsCounter__WEBPACK_IMPORTED_MODULE_18__["RowsCounter"], _modules_statusBar__WEBPACK_IMPORTED_MODULE_19__["StatusBar"], _modules_clearButton__WEBPACK_IMPORTED_MODULE_20__["ClearButton"], _modules_alternateRows__WEBPACK_IMPORTED_MODULE_21__["AlternateRows"], _modules_noResults__WEBPACK_IMPORTED_MODULE_22__["NoResults"], _modules_paging__WEBPACK_IMPORTED_MODULE_23__["Paging"], _modules_toolbar__WEBPACK_IMPORTED_MODULE_24__["Toolbar"]];
 /**
  * Makes HTML tables filterable and a bit more :)
  *
@@ -24922,7 +24924,7 @@ function () {
 
     this.ExtRegistry = {}; // instantiate toolbar ui component as other components depend on it
 
-    this.instantiateFeatures([_modules_toolbar__WEBPACK_IMPORTED_MODULE_24__["Toolbar"]]);
+    this.instantiateFeatures(FEATURES);
   }
   /**
    * Initialise features and layout
@@ -25257,15 +25259,21 @@ function () {
 
       var features = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       features.forEach(function (featureCls) {
-        var Cls = featureCls;
-        var inst = new Cls(_this5);
-        var meta = Cls.meta;
-        var name = meta.name,
-            altName = meta.altName;
-        console.log(name, altName);
+        var Cls = featureCls; // assign meta info if not present
 
-        if (!_this5.hasConfig || _this5[altName || name] === true || Boolean(meta.alwaysInstantiate)) {
-          _this5.Mod[name] = _this5.Mod[name] || inst;
+        Cls.meta = Cls.meta || {
+          name: null,
+          altName: null
+        };
+        Cls.meta.name = Object(_string__WEBPACK_IMPORTED_MODULE_2__["toCamelCase"])(Cls.name);
+        var _Cls$meta = Cls.meta,
+            name = _Cls$meta.name,
+            altName = _Cls$meta.altName,
+            alwaysInstantiate = _Cls$meta.alwaysInstantiate;
+        var prop = altName || name; //console.log(name, altName, alwaysInstantiate);
+
+        if (!_this5.hasConfig || _this5[prop] === true || Boolean(alwaysInstantiate)) {
+          _this5.Mod[name] = _this5.Mod[name] || new Cls(_this5);
         }
       });
     }
@@ -25282,8 +25290,7 @@ function () {
 
       var features = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       features.forEach(function (featureCls) {
-        _this6.instantiateFeatures([featureCls]);
-
+        // this.instantiateFeatures([featureCls]);
         var name = featureCls.meta.name;
 
         if (_this6[name] === true && _this6.Mod[name]) {

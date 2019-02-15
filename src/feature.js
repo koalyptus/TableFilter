@@ -1,4 +1,3 @@
-import {defaultsStr} from './settings';
 import {toCamelCase} from './string';
 
 const NOT_IMPLEMENTED = 'Not implemented.';
@@ -26,7 +25,11 @@ export class Feature {
          * convention
          * @type {String}
          */
-        this.feature = toCamelCase(cls.name);
+        this.feature = cls.meta.altName || cls.meta.name
+            || toCamelCase(cls.name);
+        console.log(cls.meta.altName, cls.meta.name, toCamelCase(cls.name),
+            this.feature);
+        /**/
 
         /**
          * TableFilter feature setting
@@ -53,7 +56,7 @@ export class Feature {
         this.initialized = false;
 
         // store resolved feature name
-        cls.meta.name = this.feature;
+        //cls.meta.name = this.feature;
 
         /** Subscribe to destroy event */
         this.emitter.on(['destroy'], () => this.destroy());
