@@ -6,6 +6,7 @@ var tf = new TableFilter('demo', {
 tf.init();
 
 var clearButton = tf.feature('clearButton');
+
 module('Sanity checks');
 test('Clear button component', function() {
     deepEqual(typeof clearButton, 'object', 'ClearButton instanciated');

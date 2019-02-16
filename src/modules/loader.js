@@ -44,7 +44,7 @@ export class Loader extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'loader');
+        super(tf, Loader);
 
         let f = this.config.loader || {};
 

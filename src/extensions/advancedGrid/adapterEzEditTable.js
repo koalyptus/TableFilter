@@ -21,7 +21,7 @@ export default class AdapterEzEditTable extends Feature {
      * @param {Object} cfg Configuration options for ezEditTable library
      */
     constructor(tf, cfg) {
-        super(tf, cfg.name);
+        super(tf, AdapterEzEditTable);
 
         /**
          * Module description
@@ -505,3 +505,5 @@ export default class AdapterEzEditTable extends Feature {
         this.initialized = false;
     }
 }
+
+AdapterEzEditTable.meta = {altName: 'advancedGrid'};

@@ -16,7 +16,7 @@ export class MarkActiveColumns extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'markActiveColumns');
+        super(tf, MarkActiveColumns);
 
         let config = this.config.mark_active_columns || {};
 

@@ -22,7 +22,7 @@ export class CheckList extends BaseDropdown {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'checkList');
+        super(tf, CheckList);
 
         let f = this.config;
 

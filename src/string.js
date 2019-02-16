@@ -74,3 +74,18 @@ export const contains = (term, data, exactMatch = false, caseSensitive = false,
     }
     return regexp.test(data);
 };
+
+/**
+ * Camelize a string, cutting the string by multiple separators like
+ * hyphens, underscores and spaces.
+ * @param  {String} text text to camelize
+ * @return {String}      camelized text
+ */
+export const toCamelCase = (text = '') => {
+    return text.replace(/^([A-Z])|[\s-_]+(\w)/g, (match, p1, p2) => {
+        if (p2) {
+            return p2.toUpperCase();
+        }
+        return p1.toLowerCase();
+    });
+};

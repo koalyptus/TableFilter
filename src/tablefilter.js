@@ -2,7 +2,7 @@ import {addEvt, cancelEvt, stopEvt, targetEvt, isKeyPressed} from './event';
 import {
     addClass, createElm, elm, getText, getFirstTextNode, removeClass, tag
 } from './dom';
-import {contains, matchCase, rgxEsc, trim} from './string';
+import {contains, matchCase, rgxEsc, trim, toCamelCase} from './string';
 import {
     isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN,
     isBoolean
@@ -17,15 +17,35 @@ import {root} from './root';
 import {Emitter} from './emitter';
 import {Dropdown} from './modules/dropdown';
 import {CheckList} from './modules/checkList';
+import {DateType} from './modules/dateType';
+import {Help} from './modules/help';
+import {State} from './modules/state';
+import {GridLayout} from './modules/gridLayout';
+import {Loader} from './modules/loader';
+import {HighlightKeyword} from './modules/highlightKeywords';
+import {PopupFilter} from './modules/popupFilter';
+import {MarkActiveColumns} from './modules/markActiveColumns';
+import {RowsCounter} from './modules/rowsCounter';
+import {StatusBar} from './modules/statusBar';
+import {ClearButton} from './modules/clearButton';
+import {AlternateRows} from './modules/alternateRows';
+import {NoResults} from './modules/noResults';
+import {Paging} from './modules/paging';
+import {Toolbar} from './modules/toolbar';
 
 import {
     INPUT, SELECT, MULTIPLE, CHECKLIST, NONE,
     ENTER_KEY, TAB_KEY, ESC_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
-    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER,
-    FEATURES
+    CELL_TAG, AUTO_FILTER_DELAY, NUMBER, DATE, FORMATTED_NUMBER
 } from './const';
 
 let doc = root.document;
+
+const FEATURES = [
+    DateType, Help, State, MarkActiveColumns, GridLayout, Loader,
+    HighlightKeyword, PopupFilter, RowsCounter, StatusBar, ClearButton,
+    AlternateRows, NoResults, Paging, Toolbar
+];
 
 /**
  * Makes HTML tables filterable and a bit more :)
@@ -399,8 +419,7 @@ export class TableFilter {
          * Enable/disable single filter mode
          * @type {Boolean|Object}
          */
-        this.singleFlt = isObj(f.single_filter) ||
-            Boolean(f.single_filter);
+        this.singleFlt = isObj(f.single_filter) || Boolean(f.single_filter);
 
         /**
          * Specify columns to be excluded from single filter search, by default
@@ -926,10 +945,8 @@ export class TableFilter {
          */
         this.ExtRegistry = {};
 
-        // conditionally instantiate required features
-        this.instantiateFeatures(
-            Object.keys(FEATURES).map((item) => FEATURES[item])
-        );
+        // instantiate features if needed
+        this.instantiateFeatures(FEATURES);
     }
 
     /**
@@ -949,20 +966,16 @@ export class TableFilter {
         //loads theme
         this.loadThemes();
 
-        const { dateType, help, state, markActiveColumns, gridLayout, loader,
-            highlightKeyword, popupFilter, rowsCounter, statusBar, clearButton,
-            alternateRows, noResults, paging, toolbar } = FEATURES;
-
         //explicitly initialise features in given order
         this.initFeatures([
-            dateType,
-            help,
-            state,
-            markActiveColumns,
-            gridLayout,
-            loader,
-            highlightKeyword,
-            popupFilter
+            DateType,
+            Help,
+            State,
+            MarkActiveColumns,
+            GridLayout,
+            Loader,
+            HighlightKeyword,
+            PopupFilter
         ]);
 
         //filters grid is not generated
@@ -1035,13 +1048,13 @@ export class TableFilter {
         }
 
         this.initFeatures([
-            rowsCounter,
-            statusBar,
-            clearButton,
-            alternateRows,
-            noResults,
-            paging,
-            toolbar
+            RowsCounter,
+            StatusBar,
+            ClearButton,
+            AlternateRows,
+            NoResults,
+            Paging,
+            Toolbar
         ]);
 
         this.setColWidths();
@@ -1250,47 +1263,41 @@ export class TableFilter {
     }
 
     /**
-     * Istantiate the collection of features required by the
-     * configuration and add them to the features registry. A feature is
-     * described by a `class` and `name` fields and and optional `property`
-     * field:
-     * {
-     *   class: AClass,
-     *   name: 'aClass'
-     * }
+     * Conditionally istantiate each feature class in passed collection if
+     * required by configuration and add it to the features registry. A feature
+     * class meta information contains a `name` field and optional `altName` and
+     * `alwaysInstantiate` fields
      * @param {Array} [features=[]]
      * @private
      */
     instantiateFeatures(features = []) {
-        features.forEach((feature) => {
-            // TODO: remove the property field.
-            // Due to naming convention inconsistencies, a `property`
-            // field is added to allow a conditional instanciation based
-            // on that property on TableFilter, if supplied.
-            feature.property = feature.property || feature.name;
-            if (!this.hasConfig || this[feature.property] === true ||
-                feature.enforce === true) {
-                let {class: Cls, name} = feature;
+        features.forEach(featureCls => {
+            let Cls = featureCls;
 
+            // assign meta info if not present
+            Cls.meta = Cls.meta || {name: null, altName: null};
+            Cls.meta.name = toCamelCase(Cls.name);
+            let {name, altName, alwaysInstantiate} = Cls.meta;
+            let prop = altName || name;
+
+            if (!this.hasConfig || this[prop] === true
+                || Boolean(alwaysInstantiate)) {
                 this.Mod[name] = this.Mod[name] || new Cls(this);
             }
         });
     }
 
     /**
-     * Initialise the passed features collection. A feature is described by a
-     * `class` and `name` fields and and optional `property` field:
-     * {
-     *   class: AClass,
-     *   name: 'aClass'
-     * }
+     * Initialise each feature class in passed collection.
      * @param {Array} [features=[]]
      * @private
      */
     initFeatures(features = []) {
-        features.forEach((feature) => {
-            let {property, name} = feature;
-            if (this[property] === true && this.Mod[name]) {
+        features.forEach(featureCls => {
+            let {name, altName} = featureCls.meta;
+            let prop = altName || name;
+
+            if (this[prop] === true && this.Mod[name]) {
                 this.Mod[name].init();
             }
         });

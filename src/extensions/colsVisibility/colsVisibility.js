@@ -23,7 +23,7 @@ export default class ColsVisibility extends Feature {
      * @param {Object} Configuration object
      */
     constructor(tf, f) {
-        super(tf, f.name);
+        super(tf, ColsVisibility);
 
         // Configuration object
         let cfg = this.config;

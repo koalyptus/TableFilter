@@ -1,3 +1,4 @@
+import {toCamelCase} from './string';
 
 const NOT_IMPLEMENTED = 'Not implemented.';
 
@@ -8,9 +9,11 @@ export class Feature {
     /**
      * Creates an instance of Feature
      * @param {Object} tf TableFilter instance
-     * @param {String} feature Feature name known by TableFilter
+     * @param {Class} feature Feature class for TableFilter registration
      */
-    constructor(tf, feature) {
+    constructor(tf, cls) {
+        cls.meta = cls.meta || {};
+
         /**
          * TableFilter instance
          * @type {TableFilter}
@@ -18,16 +21,18 @@ export class Feature {
         this.tf = tf;
 
         /**
-         * Feature name
+         * Feature name is the camelised class name as per TableFilter's
+         * convention
          * @type {String}
          */
-        this.feature = feature;
+        this.feature = cls.meta.altName || cls.meta.name
+            || toCamelCase(cls.name);
 
         /**
          * TableFilter feature setting
          * @type {Boolean}
          */
-        this.enabled = tf[feature];
+        this.enabled = tf[this.feature];
 
         /**
          * TableFilter configuration

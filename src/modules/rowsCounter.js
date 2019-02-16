@@ -17,7 +17,7 @@ export class RowsCounter extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'rowsCounter');
+        super(tf, RowsCounter);
 
         // TableFilter configuration
         let f = this.config.rows_counter || {};

@@ -14,9 +14,10 @@ export class AlternateRows extends Feature {
      * @param {Object} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'alternateRows');
+        super(tf, AlternateRows);
 
         let config = this.config;
+
         /**
          * Css class for even rows (default: 'even')
          * @type {String}

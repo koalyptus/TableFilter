@@ -172,3 +172,9 @@ export class HighlightKeyword {
         this.highlight(cell, term, this.highlightCssClass);
     }
 }
+
+// TODO: remove as soon as feature name is fixed
+HighlightKeyword.meta = {
+    name: 'highlightKeyword',
+    altName: 'highlightKeywords'
+};

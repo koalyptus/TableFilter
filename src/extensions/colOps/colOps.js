@@ -33,7 +33,7 @@ export default class ColOps extends Feature {
      * @param {Object} opts Configuration object
      */
     constructor(tf, opts) {
-        super(tf, opts.name);
+        super(tf, ColOps);
 
         /**
          * Callback fired before columns operations start

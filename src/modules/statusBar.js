@@ -30,7 +30,7 @@ export class StatusBar extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'statusBar');
+        super(tf, StatusBar);
 
         // Configuration object
         let f = this.config.status_bar || {};

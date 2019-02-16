@@ -19,7 +19,7 @@ export class PopupFilter extends Feature {
      * @param {TableFilter} tf TableFilter instance
      */
     constructor(tf) {
-        super(tf, 'popupFilters');
+        super(tf, PopupFilter);
 
         // Configuration object
         let f = this.config.popup_filters || {};
@@ -456,3 +456,6 @@ export class PopupFilter extends Feature {
     }
 
 }
+
+// TODO: remove as soon as feature name is fixed
+PopupFilter.meta = {altName: 'popupFilters'};

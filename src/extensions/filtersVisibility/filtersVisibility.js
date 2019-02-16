@@ -18,7 +18,7 @@ export default class FiltersVisibility extends Feature {
      * @param {Object} Configuration object
      */
     constructor(tf, f) {
-        super(tf, f.name);
+        super(tf, FiltersVisibility);
 
         /**
          * Module name
