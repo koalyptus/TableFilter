@@ -945,7 +945,7 @@ export class TableFilter {
          */
         this.ExtRegistry = {};
 
-        // instantiate toolbar ui component as other components depend on it
+        // instantiate features if needed
         this.instantiateFeatures(FEATURES);
     }
 
