@@ -89,3 +89,24 @@ export const toCamelCase = (text = '') => {
         return p1.toLowerCase();
     });
 };
+
+/**
+ * Generate a string in the format of a UUID (Universally Unique IDentifier).
+ * NOTE: This format of 8 chars, followed by 3 groups of 4 chars, followed by 12
+ * chars is known as a UUID and is defined in RFC4122 and is a standard for
+ * generating unique IDs. This function DOES NOT implement this standard.
+ * It simply outputs a string that looks similar. The standard is found here:
+ * https://www.ietf.org/rfc/rfc4122.txt
+ * source: https://gist.github.com/gordonbrander/2230317
+ * @return {String}
+ */
+export const uuid = () => {
+    const chr4 = () => Math.random().toString(16).slice(-4);
+
+    return chr4() + chr4()
+        + '-' + chr4()
+        + '-' + chr4()
+        + '-' + chr4()
+        + '-' + chr4()
+        + chr4() + chr4();
+};
