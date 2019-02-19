@@ -2,7 +2,7 @@ import {addEvt, cancelEvt, stopEvt, targetEvt, isKeyPressed} from './event';
 import {
     addClass, createElm, elm, getText, getFirstTextNode, removeClass, tag
 } from './dom';
-import {contains, matchCase, rgxEsc, trim, toCamelCase} from './string';
+import {contains, matchCase, rgxEsc, trim, toCamelCase, uuid} from './string';
 import {
     isArray, isEmpty, isFn, isNumber, isObj, isString, isUndef, EMPTY_FN,
     isBoolean
@@ -142,7 +142,7 @@ export class TableFilter {
         args.forEach((arg) => {
             if (typeof arg === 'object' && arg.nodeName === 'TABLE') {
                 this.tbl = arg;
-                this.id = arg.id || `tf_${new Date().getTime()}_`;
+                this.id = arg.id || `tf_${uuid()}`;
                 this.tbl.id = this.id;
             } else if (isString(arg)) {
                 this.id = arg;
