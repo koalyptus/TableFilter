@@ -67,7 +67,9 @@ module.exports = {
         ]
     },
     plugins: [
-        new Clean(['dist']),
+        new Clean({
+            cleanOnceBeforeBuildPatterns: [path.join(process.cwd(), 'dist')]
+        }),
         new webpack.optimize.AggressiveMergingPlugin(),
         new StringReplacePlugin(),
         new webpack.optimize.MinChunkSizePlugin({

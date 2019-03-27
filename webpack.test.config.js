@@ -23,7 +23,9 @@ module.exports = {
     },
     devtool: 'source-map',
     plugins: [
-        new Clean(['dist']),
+        new Clean({
+            cleanOnceBeforeBuildPatterns: [path.join(process.cwd(), 'dist')]
+        }),
         new webpack.LoaderOptionsPlugin({
             debug: true,
             options: {
