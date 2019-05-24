@@ -182,6 +182,55 @@ test('Can select empty and non-empty options', function() {
         'Filter 3 options values attribute');
 });
 
+// issue 714, clear filter text
+module('Clear filter text');
+test('Can define clear filter text for each column', function() {
+    tf.clearFilters();
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        col_2: 'checklist',
+        col_3: 'checklist',
+        col_4: 'checklist',
+        clear_filter_text: [null, null, 'clear 2', 'clear 3', 'clear 4']
+    });
+    tf.init();
+
+    var flt2 = tf.getFilterElement(2).getElementsByTagName('li');
+    var flt3 = tf.getFilterElement(3).getElementsByTagName('li');
+    var flt4 = tf.getFilterElement(4).getElementsByTagName('li');
+
+    deepEqual(flt2[0].getElementsByTagName('label')[0].innerText,
+        'clear 2', 'clear text filter 2');
+    deepEqual(flt3[0].getElementsByTagName('label')[0].innerText,
+        'clear 3', 'clear text filter 3');
+    deepEqual(flt4[0].getElementsByTagName('label')[0].innerText,
+        'clear 4', 'clear text filter 4');
+});
+test('Can define clear filter text globally', function() {
+    tf.clearFilters();
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        col_2: 'checklist',
+        col_3: 'checklist',
+        col_4: 'checklist',
+        clear_filter_text: 'reset'
+    });
+    tf.init();
+
+    var flt2 = tf.getFilterElement(2).getElementsByTagName('li');
+    var flt3 = tf.getFilterElement(3).getElementsByTagName('li');
+    var flt4 = tf.getFilterElement(4).getElementsByTagName('li');
+
+    deepEqual(flt2[0].getElementsByTagName('label')[0].innerText,
+        'reset', 'clear text filter 2');
+    deepEqual(flt3[0].getElementsByTagName('label')[0].innerText,
+        'reset', 'clear text filter 3');
+    deepEqual(flt4[0].getElementsByTagName('label')[0].innerText,
+        'reset', 'clear text filter 4');
+});
+
 module('Tear down');
 test('TableFilter removed', function() {
     tf.destroy();
