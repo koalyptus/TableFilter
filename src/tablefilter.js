@@ -493,7 +493,9 @@ export class TableFilter {
          * Text for clear option in drop-down filter types (1st option)
          * @type {String|Array}
          */
-        this.clearFilterText = defaultsStr(f.clear_filter_text, 'Clear');
+        this.clearFilterText = isArray(f.clear_filter_text)
+            ? f.clear_filter_text
+            : defaultsStr(f.clear_filter_text, 'Clear');
 
         /**
          * Indicate whether empty option is enabled in drop-down filter types

@@ -183,6 +183,51 @@ test('Can sort numeric options in asc and desc manner', function() {
     deepEqual(flt4.options[7].value, '4.3', 'Last option value for column 4');
 });
 
+// issue 714, clear filter text
+module('Clear filter text');
+test('Can define clear filter text for each column', function() {
+    tf.clearFilters();
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        col_2: 'multiple',
+        col_3: 'select',
+        col_4: 'multiple',
+        clear_filter_text: [null, null, 'clear 2', 'clear 3', 'clear 4']
+    });
+    tf.init();
+
+    var flt2 = tf.getFilterElement(2);
+    var flt3 = tf.getFilterElement(3);
+    var flt4 = tf.getFilterElement(4);
+
+    deepEqual(flt2.options[0].innerHTML, 'clear 2', 'clear text filter 2');
+    deepEqual(flt3.options[0].innerHTML, 'clear 3', 'clear text filter 3');
+    deepEqual(flt4.options[0].innerHTML, 'clear 4', 'clear text filter 4');
+});
+test('Can define clear filter text globally', function() {
+    tf.clearFilters();
+    tf.destroy();
+    tf = new TableFilter('demo', {
+        base_path: '../dist/tablefilter/',
+        col_2: 'multiple',
+        col_3: 'select',
+        col_4: 'multiple',
+        clear_filter_text: 'reset'
+    });
+    tf.init();
+
+    var flt2 = tf.getFilterElement(2);
+    var flt3 = tf.getFilterElement(3);
+    var flt4 = tf.getFilterElement(4);
+
+    deepEqual(flt2.options[0].innerHTML, 'reset', 'clear text filter 2');
+    deepEqual(flt3.options[0].innerHTML, 'reset', 'clear text filter 3');
+    deepEqual(flt4.options[0].innerHTML, 'reset', 'clear text filter 4');
+});
+
+
+module('Tear down');
 test('TableFilter removed', function() {
     tf.destroy();
     deepEqual(id(tf.fltIds[3]), null, 'Filter is removed');
