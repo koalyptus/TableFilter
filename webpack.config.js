@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const Clean = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const fs = require('fs');
@@ -67,7 +67,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new Clean({
+        new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: [path.join(process.cwd(), 'dist')]
         }),
         new webpack.optimize.AggressiveMergingPlugin(),

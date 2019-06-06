@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config.js');
 const path = require('path');
-const Clean = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -23,7 +23,7 @@ module.exports = {
     },
     devtool: 'source-map',
     plugins: [
-        new Clean({
+        new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: [path.join(process.cwd(), 'dist')]
         }),
         new webpack.LoaderOptionsPlugin({
