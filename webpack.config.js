@@ -59,7 +59,7 @@ module.exports = {
                 sourceMap: true,
                 uglifyOptions: {
                     beautify: false,
-                    compress: {warnings: false},
+                    warnings: false,
                     comments: false,
                     keep_fnames: true
                 }
