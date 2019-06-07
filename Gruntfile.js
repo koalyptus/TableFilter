@@ -13,7 +13,7 @@ module.exports = function (grunt) {
                 coverage: {
                     disposeCollector: true,
                     src: ['dist/tablefilter/*.js'],
-                    instrumentedFiles: 'temp/',
+                    instrumentedFiles: 'report/temp/',
                     htmlReport: 'report/coverage',
                     coberturaReport: 'report/',
                     lcovReport: 'report/',

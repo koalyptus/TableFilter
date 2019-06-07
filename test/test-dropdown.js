@@ -157,24 +157,31 @@ test('Can enable options sorting on a column basis', function() {
     deepEqual(flt4.options[7].value, '40', 'Last option value for column 4');
 });
 
-test('Can sort numeric options in asc and desc manner', function() {
+test('Can sort options in asc and desc manner', function() {
     tf.clearFilters();
     tf.destroy();
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
+        col_0: 'select',
         col_2: 'multiple',
         col_3: 'select',
         col_4: 'multiple',
         col_types: ['string', 'string', 'number', 'number', 'number'],
-        sort_num_asc: [2, 3],
-        sort_num_desc: [4]
+        case_sensitive: true,
+        sort_filter_options_asc: [2, 3],
+        sort_filter_options_desc: [0, 4]
     });
     tf.init();
 
+    var flt0 = id(tf.fltIds[0]);
     var flt2 = id(tf.fltIds[2]);
     var flt3 = id(tf.fltIds[3]);
     var flt4 = id(tf.fltIds[4]);
 
+    deepEqual(flt0.options[1].value, 'Sydney',
+        'First option value for column 0');
+    deepEqual(flt0.options[2].value, 'Adelaide',
+        'Last option value for column 0');
     deepEqual(flt2.options[1].value, '286', 'First option value for column 2');
     deepEqual(flt2.options[7].value, '2781', 'Last option value for column 2');
     deepEqual(flt3.options[1].value, '.6', 'First option value for column 3');

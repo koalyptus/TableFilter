@@ -100,19 +100,43 @@ test('Can sort options', function() {
     tf.destroy();
     tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
+        col_0: 'checklist',
+        col_1: 'checklist',
         col_2: 'checklist',
         col_3: 'checklist',
         col_4: 'checklist',
         col_types: ['string', 'string', 'number', 'number', 'number'],
-        sort_num_asc: [2, 3],
-        sort_num_desc: [4]
+        sort_filter_options_asc: [0, 2, 3],
+        sort_filter_options_desc: [1, 4]
     });
     tf.init();
 
+    var flt0 = id(tf.fltIds[0]);
+    var flt1 = id(tf.fltIds[1]);
     var flt2 = id(tf.fltIds[2]);
     var flt3 = id(tf.fltIds[3]);
     var flt4 = id(tf.fltIds[4]);
 
+    deepEqual(
+        flt0.getElementsByTagName('li')[1].firstChild.firstChild.value,
+        'Adelaide',
+        'First option value for column 0'
+    );
+    deepEqual(
+        flt0.getElementsByTagName('li')[2].firstChild.firstChild.value,
+        'Sydney',
+        'Last option value for column 0'
+    );
+    deepEqual(
+        flt1.getElementsByTagName('li')[1].firstChild.firstChild.value,
+        'Perth',
+        'First option value for column 1'
+    );
+    deepEqual(
+        flt1.getElementsByTagName('li')[6].firstChild.firstChild.value,
+        'Adelaide',
+        'Last option value for column 1'
+    );
     deepEqual(
         flt2.getElementsByTagName('li')[1].firstChild.firstChild.value,
         '286',

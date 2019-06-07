@@ -1,7 +1,7 @@
 import {Feature} from '../feature';
 import {
     ignoreCase, numSortAsc, numSortDesc,
-    dateSortAsc, sortNumberStr, sortDateStr
+    dateSortAsc, dateSortDesc, sortNumberStr, sortDateStr
 } from '../sort';
 import {isArray, isObj, isEmpty} from '../types';
 import {NUMBER, FORMATTED_NUMBER, DATE} from '../const';
@@ -72,14 +72,15 @@ export class BaseDropdown extends Feature {
      * @private
      */
     sortOptions(colIndex, options = []) {
-        let tf = this.tf;
+        let {tf} = this;
 
         if (tf.isCustomOptions(colIndex) || !tf.sortSlc ||
             (isArray(tf.sortSlc) && tf.sortSlc.indexOf(colIndex) === -1)) {
             return options;
         }
 
-        let { caseSensitive, sortNumDesc } = tf;
+        let { caseSensitive, sortFilterOptionsDesc } = tf;
+        let isSortDesc = sortFilterOptionsDesc.indexOf(colIndex) !== -1;
         let compareFn;
 
         if (this.customSorter &&
@@ -89,18 +90,18 @@ export class BaseDropdown extends Feature {
         }
         else if (tf.hasType(colIndex, [NUMBER, FORMATTED_NUMBER])) {
             let decimal = tf.getDecimal(colIndex);
-            let comparer = numSortAsc;
-            if (sortNumDesc === true || sortNumDesc.indexOf(colIndex) !== -1) {
-                comparer = numSortDesc;
-            }
+            let comparer = isSortDesc ? numSortDesc : numSortAsc;
             compareFn = sortNumberStr(comparer, decimal);
         }
         else if (tf.hasType(colIndex, [DATE])) {
             let locale = tf.feature('dateType').getLocale(colIndex);
-            let comparer = dateSortAsc;
+            let comparer = isSortDesc ? dateSortDesc : dateSortAsc;
             compareFn = sortDateStr(comparer, locale);
         } else { // string
             compareFn = caseSensitive ? undefined : ignoreCase;
+            if (isSortDesc) {
+                return options.sort(compareFn).reverse();
+            }
         }
 
         return options.sort(compareFn);
