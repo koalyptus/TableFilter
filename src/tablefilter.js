@@ -337,7 +337,7 @@ export class TableFilter {
         this.onAfterFilter = defaultsFn(f.on_after_filter, EMPTY_FN);
 
         /**
-         * Enable/disable case sensitivity filtering
+         * Enable/disable case sensitivity for filtering, default false
          * @type {Boolean}
          */
         this.caseSensitive = Boolean(f.case_sensitive);
@@ -534,38 +534,24 @@ export class TableFilter {
          * by default globally or on a column basis
          * @type {Boolean|Array}
          */
-        this.sortSlc = isUndef(f.sort_select) ? true :
-            isArray(f.sort_select) ? f.sort_select : Boolean(f.sort_select);
+        this.sortSlc = isUndef(f.sort_select)
+            ? true
+            : defaultsArr(f.sort_select, Boolean(f.sort_select));
 
         /**
-         * Indicate whether options in drop-down filter types are sorted in a
-         * ascending numeric manner
-         * @type {Boolean}
-         * @private
-         */
-        this.isSortNumAsc = Boolean(f.sort_num_asc);
-
-        /**
-         * List of columns implementing options sorting in a ascending numeric
-         * manner
+         * List of columns implementing filter options sorting in ascending
+         * manner based on column data type
          * @type {Array}
          */
-        this.sortNumAsc = this.isSortNumAsc ? f.sort_num_asc : [];
+        this.sortFilterOptionsAsc = defaultsArr(f.sort_filter_options_asc, []);
 
         /**
-         * Indicate whether options in drop-down filter types are sorted in a
-         * descending numeric manner
-         * @type {Boolean}
-         * @private
-         */
-        this.isSortNumDesc = Boolean(f.sort_num_desc);
-
-        /**
-         * List of columns implementing options sorting in a descending numeric
-         * manner
+         * List of columns implementing filter options sorting in descending
+         * manner based on column data type
          * @type {Array}
          */
-        this.sortNumDesc = this.isSortNumDesc ? f.sort_num_desc : [];
+        this.sortFilterOptionsDesc =
+            defaultsArr(f.sort_filter_options_desc, []);
 
         /**
          * Indicate whether drop-down filter types are populated on demand at

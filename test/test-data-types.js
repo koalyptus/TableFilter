@@ -1,4 +1,6 @@
-(function(win, TableFilter){
+(function(TableFilter) {
+    var id = function (id) { return document.getElementById(id); };
+
     // TODO: add sort to test it with different column types
     var tf = new TableFilter('demo', {
         base_path: '../dist/tablefilter/',
@@ -17,7 +19,6 @@
         ]
     });
     tf.init();
-    window.tf = tf;
 
     module('Sanity checks');
     test('Data types', function() {
@@ -300,10 +301,92 @@
             deepEqual(result, '.', 'Decimal separator for given column');
         });
 
+    module('Data types filters options sorting');
+    test('Can sort date types', function () {
+        // setup
+        tf.clearFilters();
+        tf.destroy();
+        tf = new TableFilter('demo', {
+            base_path: '../dist/tablefilter/',
+            col_6: 'checklist',
+            col_7: 'multiple',
+            col_8: 'checklist',
+            col_10: 'select',
+            col_types: [
+                null, null, null,
+                {type: 'formatted-number', decimal: ',', thousands: ','},
+                'formatted-number', null,
+                {type: 'date', locale: 'fr',},
+                {type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy|yy}'},
+                {
+                    type: 'date', locale: 'en',
+                    format: ['{dd}-{months}-{yyyy|yy}']
+                },
+                'IpAddress',
+                {
+                    type: 'date', locale: 'en',
+                    format: ['{yyyy|yy}-{MM}-{dd} {HH}:{mm}:{ss}']
+                }
+            ],
+            sort_filter_options_asc: [6, 7],
+            sort_filter_options_desc: [8, 10]
+        });
+
+        // act
+        tf.init();
+
+        var flt6 = id(tf.fltIds[6]);
+        var flt7 = id(tf.fltIds[7]);
+        var flt8 = id(tf.fltIds[8]);
+        var flt10 = id(tf.fltIds[10]);
+
+        // assert
+        deepEqual(
+            flt6.getElementsByTagName('li')[1].firstChild.firstChild.value,
+            '19/1/1984',
+            'First option value for column 6'
+        );
+        deepEqual(
+            flt6.getElementsByTagName('li')[20].firstChild.firstChild.value,
+            '3/7/2002',
+            'Last option value for column 6'
+        );
+        deepEqual(
+            flt7.options[1].value,
+            '1/19/1984',
+            'First option value for column 7'
+        );
+        deepEqual(
+            flt7.options[20].value,
+            '7/3/2002',
+            'Last option value for column 7'
+        );
+        deepEqual(
+            flt8.getElementsByTagName('li')[1].firstChild.firstChild.value,
+            '3-Jul-2002',
+            'First option value for column 8'
+        );
+        deepEqual(
+            flt8.getElementsByTagName('li')[20].firstChild.firstChild.value,
+            '19-Jan-1984',
+            'Last option value for column 8'
+        );
+        deepEqual(
+            flt10.options[1].value,
+            '03-11-21 12:02:04',
+            'First option value for column 10'
+        );
+        deepEqual(
+            flt10.options[19].value,
+            '1899-11-27 02:02:04',
+            'Last option value for column 10'
+        );
+    });
+
     module('Tear-down');
     test('can destroy TableFilter DOM elements', function() {
         tf.destroy();
         deepEqual(tf.isInitialized(), false, 'Filters removed');
     });
 
-})(window, TableFilter);
+})(TableFilter);
