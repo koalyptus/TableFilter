@@ -513,6 +513,7 @@ AdapterSortableTable.meta = {altName: 'sort'};
 //Converters
 function ipAddress(value) {
     let vals = value.split('.');
+    // eslint-disable-next-line no-unused-vars
     for (let x in vals) {
         let val = vals[x];
         while (3 > val.length) {
