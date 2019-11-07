@@ -40,7 +40,7 @@
     "tag": "next"
   },
   "devDependencies": {
-    "@babel/core": "7.7.0",
+    "@babel/core": "7.7.2",
     "@babel/preset-env": "7.7.0",
     "babel-eslint": "10.0.2",
     "babel-loader": "^8.0.2",
