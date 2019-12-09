@@ -52,11 +52,11 @@ module.exports = {
             }
         ]
     },
-    devtool: 'source-map',
+    // devtool: 'source-map',
     optimization: {
         minimizer: [
             new UglifyJsPlugin({
-                sourceMap: true,
+                // sourceMap: true,
                 uglifyOptions: {
                     beautify: false,
                     warnings: false,
