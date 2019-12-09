@@ -24,7 +24,7 @@ users to filter and limit the data displayed within a long table. By default, th
 * Attach to an existing HTML table
 * Integration with any server-side technology as this is a pure client-side
 solution
-* Exhaustive documentation and poweful API
+* Exhaustive documentation and powerful API
 
 ## Getting started
 * Clone the repo using Git:
