@@ -36,7 +36,7 @@ export const getFirstTextNode = (node) => {
 
 /**
  * Creates an html element with given collection of attributes
- * @param  {String} tag a string of the html tag to create
+ * @param  {String} tag html tag name
  * @param  {Array} an undetermined number of arrays containing the with 2
  *                    items, the attribute name and its value ['id','myId']
  * @return {Object}     created element
