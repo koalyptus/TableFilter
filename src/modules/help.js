@@ -4,7 +4,7 @@ import {addEvt, targetEvt, removeEvt} from '../event';
 import {NONE} from '../const';
 import {root} from '../root';
 import {isEmpty, isNull} from '../types';
-import {defaultsStr} from '../settings';
+import {defaultsStr, defaultsNb} from '../settings';
 import {RIGHT} from './toolbar';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
@@ -91,6 +91,15 @@ export class Help extends Feature {
          * @type {DOMElement}
          */
         this.cont = null;
+
+        /**
+         * Adjust container left position when table's horizontal scroll is
+         * on, typically when `responsive` option is enabled.
+         * @type {Number}
+         * @defaultValue 25
+         */
+        this.contAdjustLeftPosition =
+            defaultsNb(f.container_adjust_left_position, 25);
 
         /**
          * Bound mouseup wrapper
@@ -214,9 +223,21 @@ export class Help extends Feature {
         let divDisplay = this.cont.style.display;
         if (divDisplay === '' || divDisplay === NONE) {
             this.cont.style.display = 'inline';
+
+            // if table element has an horizontal scrollbar adjust container
+            // left position accordingly
+            if (this.tf.dom().scrollLeft > 0) {
+                this.cont.style.left = `${
+                    this.btn.offsetLeft
+                    - this.tf.dom().scrollLeft
+                    + this.contAdjustLeftPosition
+                }px`;
+            }
+
             addEvt(root, 'mouseup', this.boundMouseup);
         } else {
             this.cont.style.display = NONE;
+            this.cont.style.left = '';
         }
     }
 
