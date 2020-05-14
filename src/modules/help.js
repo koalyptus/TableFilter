@@ -233,6 +233,7 @@ export class Help extends Feature {
                     + this.contAdjustLeftPosition
                 }px`;
             }
+
             addEvt(root, 'mouseup', this.boundMouseup);
         } else {
             this.cont.style.display = NONE;
