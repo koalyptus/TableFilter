@@ -1785,11 +1785,11 @@ export class TableFilter {
             }
             //empty
             else if (hasEM) {
-                occurence = !cell.hasChildNodes();
+                occurence = !cell.hasChildNodes() || isEmpty(cellValue);
             }
             //non-empty
             else if (hasNM) {
-                occurence = cell.hasChildNodes();
+                occurence = cell.hasChildNodes() && !isEmpty(cellValue);
             } else {
                 occurence = contains(term, cellValue,
                     this.isExactMatch(colIdx), this.caseSensitive);
@@ -1875,11 +1875,11 @@ export class TableFilter {
             }
             //empty
             else if (hasEM) {
-                occurence = !cell.hasChildNodes();
+                occurence = !cell.hasChildNodes() || isEmpty(cellValue);
             }
             //non-empty
             else if (hasNM) {
-                occurence = cell.hasChildNodes();
+                occurence = cell.hasChildNodes() && !isEmpty(cellValue);
             } else {
                 // If numeric type data, perform a strict equality test and
                 // fallback to unformatted number string comparison
