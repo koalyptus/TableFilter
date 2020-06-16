@@ -72,7 +72,14 @@
         tf.clearFilters();
         tf.setFilterValue(4, '[empty]');
         tf.filter();
-        deepEqual(tf.getValidRows().length, 0, 'No matches expected');
+        var filteredData = tf.getFilteredData();
+
+        deepEqual(tf.getValidRows().length, 1, 'Expected match');
+        deepEqual(
+            filteredData[0],
+            [6, ['Adelaide', 'Perth', '2781', '3.1', '']],
+            'Expected row data'
+        );
     });
 
     test('Non-empty operator - [nonempty]', function() {
@@ -96,7 +103,7 @@
         tf.setFilterValue(4, '[nonempty]');
         tf.filter();
 
-        deepEqual(tf.getValidRows().length, 7, 'Expected number of matches');
+        deepEqual(tf.getValidRows().length, 6, 'Expected number of matches');
     });
 
     test('Or operator - ||', function() {
