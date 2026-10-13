@@ -499,13 +499,15 @@ flowchart TD
 - All configuration options (e.g. `col_types`, `paging`, `auto_filter`, `state`, etc.) are recognized and supported.
 - All public methods (`tf.filter()`, `tf.getFilteredData()`) return identical data structures.
 
+### Backward Compatibility: `grid_layout` and `sticky_headers`
+- **Both `grid_layout` and `sticky_headers` are fully supported**: `grid_layout` is an established, widely used feature providing synchronized scrolling headers, fixed column widths, and scroll positions. For complete backward compatibility, `grid_layout` will **not** be ditched or deprecated; its full contract and functionality are preserved alongside `sticky_headers`.
+
 ### Deprecated Features & Recommended Upgrades
 | Deprecated Feature | Modern Alternative in v1.0.0 | Migration Action |
 | :--- | :--- | :--- |
-| `base_path` script loading | Native ES module imports or bundled Web Component | Remove `base_path` when using bundlers or CDN ESM. |
+| `base_path` script loading | Native ES module imports or bundled Web Component | Optional: `base_path` remains supported for asset resolution, but modern bundlers/CDNs can import ESM directly. |
 | External raster GIFs (`btn_first_page.gif`) | Built-in accessible SVGs | Automatic; custom image paths remain supported via props. |
 | Non-semantic `<span>` paging buttons | Semantic `<button>` elements with ARIA | Automatic upgrade; custom HTML templates supported. |
-| Direct table modification for grid layout | CSS sticky headers (`sticky_headers: true`) | Prefer `sticky_headers` over legacy `grid_layout` table splitting. |
 
 ---
 
