@@ -26,13 +26,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 8.9.4
+
       - name: Test
         run: npm test
-        env:
-          NODE_OPTIONS: --openssl-legacy-provider
 
       - name: Upload coverage
         run: npm run codecov
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Build deployment files
         run: npm run build:all
