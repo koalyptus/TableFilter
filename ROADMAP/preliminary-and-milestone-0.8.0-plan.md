@@ -97,7 +97,7 @@ export default defineConfig({
 
 ## 2. Preliminary Workstream B: Dependency Rationalization
 
-### 1. Eliminating `diacritics` (in [`src/string.js`](file:///C:/dev/projects/TableFilter/src/string.js))
+### 1. Eliminating `diacritics` (in [`src/string.js`](../src/string.js))
 *Current Code*:
 ```javascript
 import {remove as removeDiacritics} from 'diacritics';
@@ -119,7 +119,7 @@ export const removeDiacritics = (text) => {
 - Drops ~15 KB dependency.
 - Identical output across all European diacritical marks (e.g. `é` &rarr; `e`, `ç` &rarr; `c`, `ö` &rarr; `o`).
 
-### 2. Eliminating `format-number` (in [`src/extensions/colOps/colOps.js`](file:///C:/dev/projects/TableFilter/src/extensions/colOps/colOps.js))
+### 2. Eliminating `format-number` (in [`src/extensions/colOps/colOps.js`](../src/extensions/colOps/colOps.js))
 *Current Code*:
 ```javascript
 import formatNumber from 'format-number';
@@ -289,7 +289,7 @@ export class TfStatusElement extends HTMLElement {
 customElements.define('tf-status', TfStatusElement);
 ```
 
-### Updating [`StatusBar`](file:///C:/dev/projects/TableFilter/src/modules/statusBar.js#L26-L35) Feature Class
+### Updating [`StatusBar`](../src/modules/statusBar.js#L26-L35) Feature Class
 - Update `src/modules/statusBar.js` to create `<tf-status>` instead of raw `<div>` and `<span>` elements.
 - The feature class retains all public properties and methods (`statusBar.message(...)`), fulfilling 100% of the existing contract.
 

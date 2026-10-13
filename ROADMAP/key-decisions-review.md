@@ -69,7 +69,7 @@
 
 ### 2.1 Eliminating `diacritics` via `String.prototype.normalize('NFD')`
 
-#### Current Implementation in [`src/string.js`](file:///C:/dev/projects/TableFilter/src/string.js)
+#### Current Implementation in [`src/string.js`](../src/string.js)
 ```javascript
 import {remove as removeDiacritics} from 'diacritics';
 // Used in: contains(term, data, exactMatch, caseSensitive, ignoreDiacritics)
@@ -95,13 +95,13 @@ export const removeDiacritics = (text) => {
 #### Verification & Edge Cases
 - **Accents**: `jérô` &rarr; `jero`, `brün` &rarr; `brun`, `falò` &rarr; `falo`, `café` &rarr; `cafe`. All pass identical to the `diacritics` package.
 - **Browser Support**: `String.prototype.normalize()` is standard across Chrome 34+, Firefox 31+, Safari 10+, Edge 12+, Node 0.12+ (100% universal across all target browsers).
-- **Test Validation**: [`test/test-ignore-diacritics.js`](file:///C:/dev/projects/TableFilter/test/test-ignore-diacritics.js) passes 100% with zero regressions.
+- **Test Validation**: [`test/test-ignore-diacritics.js`](../test/test-ignore-diacritics.js) passes 100% with zero regressions.
 
 ---
 
 ### 2.2 Eliminating `format-number` via Native Formatter Utility
 
-#### Current Implementation in [`src/extensions/colOps/colOps.js`](file:///C:/dev/projects/TableFilter/src/extensions/colOps/colOps.js)
+#### Current Implementation in [`src/extensions/colOps/colOps.js`](../src/extensions/colOps/colOps.js)
 ```javascript
 import formatNumber from 'format-number';
 // Used in: writeResult(result, label, writeType, precision, format)
@@ -145,7 +145,7 @@ export const formatNumberValue = (value, options = {}) => {
 #### Verification & Edge Cases
 - **Custom Separators**: Correctly formats European formats (`1.234,56`), US formats (`1,234.56`), and space-separated formats (`1 234,56`).
 - **Precision**: Handles integer rounding (`precision: 0`) and currency precision (`precision: 2`).
-- **Test Validation**: [`test/test-col-ops.js`](file:///C:/dev/projects/TableFilter/test/test-col-ops.js) assertions pass 100%.
+- **Test Validation**: [`test/test-col-ops.js`](../test/test-col-ops.js) assertions pass 100%.
 
 ---
 
@@ -207,7 +207,7 @@ Rather than rewriting all 74 HTML test files from scratch, Playwright serves as 
 | **Test Runner Modernization** | Use **Playwright** to run existing QUnit HTML suites + **Axe-Core** automated audits. | Zero test rewrite risk, parallel execution, automated WCAG 2.2 verification. |
 
 ### Immediate Execution Order
-1. **Step 1**: Implement native diacritics removal in [`src/string.js`](file:///C:/dev/projects/TableFilter/src/string.js) & native number formatter in [`src/extensions/colOps/colOps.js`](file:///C:/dev/projects/TableFilter/src/extensions/colOps/colOps.js).
+1. **Step 1**: Implement native diacritics removal in [`src/string.js`](../src/string.js) & native number formatter in [`src/extensions/colOps/colOps.js`](../src/extensions/colOps/colOps.js).
 2. **Step 2**: Add `vite.config.js` and modernize `package.json` build scripts.
 3. **Step 3**: Configure Playwright QUnit test runner and verify baseline test passage.
 4. **Step 4**: Implement `<table-filter>` and `<tf-status>` Web Components.

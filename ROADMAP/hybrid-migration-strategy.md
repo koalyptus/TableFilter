@@ -7,7 +7,7 @@
 
 **Yes, absolutely.** An incremental, hybrid migration is not only possible—it is the **recommended, lowest-risk engineering strategy** for modernizing TableFilter.
 
-Because TableFilter's existing architecture is already modularized around an [`EventEmitter`](file:///C:/dev/projects/TableFilter/src/emitter.js) and a decoupled [`Feature`](file:///C:/dev/projects/TableFilter/src/feature.js) base class, native Web Components can be introduced module-by-module alongside the existing JavaScript implementation.
+Because TableFilter's existing architecture is already modularized around an [`EventEmitter`](../src/emitter.js) and a decoupled [`Feature`](../src/feature.js) base class, native Web Components can be introduced module-by-module alongside the existing JavaScript implementation.
 
 This strategy ensures that:
 1. **Existing tests pass continuously**: All 74 test suites (739 test cases) remain green at every step.
@@ -54,7 +54,7 @@ The hybrid architecture combines two complementary vectors:
 
 ### Vector 1: Outside-In (The Shell Web Component)
 - Introduce `<table-filter>` as an autonomous custom element immediately.
-- In its `connectedCallback()`, it identifies the target table (slotted or referenced via `for="table-id"`), normalizes HTML attributes into a TableFilter config object, and instantiates the existing [`TableFilter`](file:///C:/dev/projects/TableFilter/src/tablefilter.js#L56-L66) class.
+- In its `connectedCallback()`, it identifies the target table (slotted or referenced via `for="table-id"`), normalizes HTML attributes into a TableFilter config object, and instantiates the existing [`TableFilter`](../src/tablefilter.js#L56-L66) class.
 - All public methods (`filter()`, `clearFilters()`, etc.) are exposed directly on the custom element:
   ```javascript
   const el = document.querySelector('table-filter');
@@ -62,7 +62,7 @@ The hybrid architecture combines two complementary vectors:
   ```
 
 ### Vector 2: Inside-Out (Module-by-Module Component Replacement)
-- The existing [`Feature`](file:///C:/dev/projects/TableFilter/src/feature.js) base class allows individual features in `src/modules/` to be replaced with native Custom Elements one by one.
+- The existing [`Feature`](../src/feature.js) base class allows individual features in `src/modules/` to be replaced with native Custom Elements one by one.
 - The feature class acts as a **bridge/controller**:
   - It instantiates the Web Component (e.g. `document.createElement('tf-status')`).
   - It listens to `this.emitter` and pushes data down to the component via properties or methods.
