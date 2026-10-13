@@ -353,7 +353,7 @@ To ensure a solid v1.0.0 release, the build system and dependencies require comp
 | **Build Tooling** | Webpack 4 + Grunt + Babel 7.10 | Vite / Rollup + esbuild | Fast ESM builds, tree-shaking, standard module output (ESM, CJS, UMD). |
 | **Node.js Target** | Node 8 / 10 | Node 18 / 20 / 22 / 24+ LTS | Eliminates deprecated build dependencies and vulnerability alerts. |
 | **CSS Preprocessing**| Stylus (`.styl`) | CSS Custom Properties + PostCSS / Vanilla CSS | Native CSS features (nesting, variables, `:has()`, `:focus-visible`). |
-| **Type Definitions** | None (ESDoc HTML output only) | TypeScript declarations (`.d.ts`) | Full IDE autocomplete, type safety, and IntelliSense for consumers. |
+| **Language & Typings**| ES2015 with ESDoc comments | Modern Standard JS (ESM) with JSDoc | Stays pure JavaScript; no TypeScript migration overhead, zero compilation friction. |
 | **Icons & Media** | Raster GIF / PNG images (`btn_first_page.gif`, etc.) | Scalable Vector Graphics (SVG) + CSS | High-DPI crispness, theming via `currentColor`, WCAG contrast compliance. |
 | **Testing Engine** | Grunt QUnit + PhantomJS / connect | Vitest / Playwright + Web Test Runner | Real browser testing across Chromium, WebKit, and Firefox engines. |
 | **Automated A11y** | None | `@axe-core/playwright` / `axe-core` | Continuous integration checks against WCAG 2.2 rules on every commit. |
@@ -392,7 +392,7 @@ flowchart TD
 
     subgraph Phase6["Phase 6: Extensions Porting & Verification"]
         P6_1["Refactor Extensions (sort, colsVisibility, colOps, advGrid)"] --> P6_2["End-to-End Regression & A11y Verification"]
-        P6_2 --> P6_3["Generate .d.ts Type Definitions & Updated Documentation"]
+        P6_2 --> P6_3["Modernized Documentation & Migration Guides"]
     end
 
     Phase1 --> Phase2
@@ -486,9 +486,9 @@ flowchart TD
 2. **Automated Verification**:
    - Execute the complete 739 QUnit test suite against both the imperative API and declarative Web Components.
    - Execute Axe-core automated tests across all 50+ demo fixtures with zero accessibility violations.
-3. **TypeScript Definitions & Documentation**:
-   - Generate full TypeScript type definitions (`tablefilter.d.ts`).
+3. **Documentation & Release Preparation**:
    - Update documentation site with Web Component examples and migration guide.
+   - Maintain existing comprehensive JSDoc comments across all modules.
 
 ---
 
