@@ -21,10 +21,15 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
+
+      - name: Pin npm version
+        run: |
+          npm install --global npm@12.0.1
+          npm --version
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - uses: actions/setup-node@v4
         with:
@@ -38,7 +43,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Build deployment files
         run: npm run build:all
