@@ -1,0 +1,98 @@
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 8.9.4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test
+        run: npm test
+
+      - name: Upload coverage
+        run: npm run codecov
+
+      - name: Build deployment files
+        run: npm run build:all
+
+      - name: Upload deployment files
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-files
+          path: |
+            dist/
+            docs/
+          if-no-files-found: error
+          retention-days: 1
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: website-files
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_DEFAULT_REGION }}
+
+      - name: Publish version release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+          if ! git show-ref --verify --quiet "refs/tags/$version"; then
+            latest_tag="$(git describe --tags --abbrev=0 2>/dev/null || true)"
+            if [ "$latest_tag" != "$version" ]; then
+              git config user.name "koalyptus"
+              git config user.email "maxgug@hotmail.com"
+              git tag -a "$version" -m "Generated tag from GitHub Actions run $GITHUB_RUN_NUMBER"
+              git push origin "refs/tags/$version"
+            fi
+          fi
+
+          if ! gh release view "$version" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$version" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$version" \
+              --notes ""
+          fi
+
+      - name: Deploy distribution to S3
+        run: aws s3 sync dist/ "s3://www.tablefilter.com/"
+
+      - name: Deploy documentation to S3
+        run: aws s3 sync docs/ "s3://www.tablefilter.com/"

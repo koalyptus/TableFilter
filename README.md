@@ -155,13 +155,26 @@ Run this task to generate the documentation in the ``docs/docs`` directory:
 npm run esdoc
 ```
 
+## Continuous integration and deployment
+
+GitHub Actions runs tests and builds on pushes and pull requests targeting `master`.
+Successful pushes to `master` publish `dist/` and `docs/` to
+the `www.tablefilter.com` S3 bucket and create a GitHub release for the package
+version when one does not already exist.
+
+Configure these repository Actions settings for deployment:
+
+* Secrets: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+* Variable: `AWS_DEFAULT_REGION`
+
+The workflow uses the automatically provided `GITHUB_TOKEN` to create release
+tags and releases.
+
 ## Support
 * GitHub for [reporting bugs](https://github.com/koalyptus/TableFilter/blob/master/CONTRIBUTING.md#reporting-bugs) and [feature requests](https://github.com/koalyptus/TableFilter/blob/master/CONTRIBUTING.md#suggesting-enhancements-and-features).
 
 ## License
 [MIT](LICENSE)
-
-
 
 
 
