@@ -23,6 +23,11 @@ jobs:
         with:
           node-version: 24
 
+      - name: Pin npm version
+        run: |
+          npm install --global npm@12.0.1
+          npm --version
+
       - name: Normalize lockfile
         run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
 
