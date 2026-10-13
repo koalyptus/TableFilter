@@ -21,10 +21,14 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 8.9.4
+          node-version: 22
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 8.9.4
 
       - name: Test
         run: npm test
@@ -32,8 +36,14 @@ jobs:
       - name: Upload coverage
         run: npm run codecov
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Build deployment files
         run: npm run build:all
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
 
       - name: Upload deployment files
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
