@@ -6,7 +6,12 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 module.exports = {
     mode: 'development',
     cache: true,
-    entry: webpackConfig.entry,
+    entry: Object.assign({}, webpackConfig.entry, {
+        main: [
+            webpackConfig.entry.main,
+            path.join(__dirname, 'test/number-test-entry.js')
+        ]
+    }),
     output: webpackConfig.output,
     resolve: webpackConfig.resolve,
     module: {

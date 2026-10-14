@@ -4,8 +4,9 @@ import {isNumber} from './types';
  * Formats a numeric value with configurable separators and affixes.
  * @param {Number|String} value Numeric value
  * @param {Object} [options={}] Formatting options
- * @param {String} [options.decimal='.'] Decimal separator
- * @param {String} [options.integerSeparator=','] Thousands separator
+ * @param {String} [options.locale='en'] Intl locale
+ * @param {String} [options.decimal] Decimal separator override
+ * @param {String} [options.integerSeparator] Thousands separator override
  * @param {Number} [options.precision] Fixed number of fraction digits
  * @param {Number} [options.round] Maximum number of fraction digits
  * @param {String} [options.prefix=''] Value prefix
@@ -22,9 +23,7 @@ export const formatNumberValue = (value, options = {}) => {
         return '';
     }
 
-    const decimal = options.decimal || '.';
-    const integerSeparator = options.integerSeparator !== undefined ?
-        options.integerSeparator : ',';
+    const locale = options.locale || 'en';
     const prefix = options.prefix || '';
     const suffix = options.suffix || '';
     const numericText = typeof value === 'string' ?
@@ -40,18 +39,20 @@ export const formatNumberValue = (value, options = {}) => {
     const minimumPrecision = options.precision !== undefined ?
         Math.min(options.precision, maximumPrecision) :
         Math.min(inputPrecision, maximumPrecision);
-    const formatter = new Intl.NumberFormat('en-US', {
-        useGrouping: Boolean(integerSeparator),
+    const formatter = new Intl.NumberFormat(locale, {
+        useGrouping: options.integerSeparator === undefined ||
+            Boolean(options.integerSeparator),
         minimumFractionDigits: minimumPrecision,
         maximumFractionDigits: maximumPrecision
     });
     let sign = '';
     const formatted = formatter.formatToParts(num).map((part) => {
         if (part.type === 'group') {
-            return integerSeparator;
+            return options.integerSeparator === undefined ?
+                part.value : options.integerSeparator;
         }
         if (part.type === 'decimal') {
-            return decimal;
+            return options.decimal || part.value;
         }
         if (part.type === 'minusSign') {
             sign = part.value;
