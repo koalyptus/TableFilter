@@ -3,7 +3,7 @@ import {createText, elm} from '../../dom';
 import {isArray, isEmpty, EMPTY_FN} from '../../types';
 import {numSortAsc} from '../../sort';
 import {FORMATTED_NUMBER} from '../../const';
-import formatNumber from 'format-number';
+import {formatNumberValue} from '../../number';
 import {defaultsFn, defaultsArr} from '../../settings';
 import {bound} from '../../event';
 
@@ -80,9 +80,8 @@ export default class ColOps extends Feature {
         this.outputTypes = defaultsArr(opts.write_method, []);
 
         /**
-         * List of format objects used for formatting the result -
-         * refer to https://github.com/componitable/format-number to check
-         * configuration options
+         * List of format objects used for formatting the result - see
+         * formatNumberValue in number.js for the supported options
          * @type {Array}
          */
         this.formatResults = defaultsArr(opts.format_result, []);
@@ -419,12 +418,7 @@ export default class ColOps extends Feature {
             return;
         }
 
-        result = result.toFixed(precision);
-        if (isNaN(result) || !isFinite(result)) {
-            result = '';
-        } else {
-            result = formatNumber(format)(result);
-        }
+        result = formatNumberValue(result.toFixed(precision), format);
 
         switch (writeType.toLowerCase()) {
             case 'innerhtml':

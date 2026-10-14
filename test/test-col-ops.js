@@ -1,5 +1,19 @@
 
 var id = function (id){ return document.getElementById(id); };
+var labels = [];
+var addLabel = function(tag) {
+    var label = document.createElement(tag);
+    label.id = 'tmp-label-' + labels.length;
+    document.body.appendChild(label);
+    labels.push(label);
+    return label;
+};
+var removeLabels = function() {
+    labels.forEach(function(label) {
+        document.body.removeChild(label);
+    });
+    labels = [];
+};
 var table = id('demo');
 var totRowIndex = table.getElementsByTagName('tr').length;
 
@@ -193,6 +207,127 @@ test('Can configure result format for formatted number column', function() {
     deepEqual(format.decimal, ',', 'decimal separator');
     deepEqual(format.integerSeparator, '.', 'thousands separator');
     tf.colTypes[3] = undefined;
+});
+
+test('Can format results with default options', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    var label = addLabel('span');
+    var cases = [
+        [1234567.891, 2, {}, '1,234,567.89'],
+        [-1234567.891, 2, {}, '-1,234,567.89'],
+        [0, 2, {}, '0.00'],
+        [-0.004, 2, {}, '-0.00'],
+        [999.995, 2, {}, '1,000.00'],
+        [1234.5, 0, {}, '1,235'],
+        [1234.5, 3, {}, '1,234.500'],
+        [12, 0, {}, '12']
+    ];
+
+    cases.forEach(function(c) {
+        // act
+        colOps.writeResult(c[0], label.id, 'innerhtml', c[1], c[2]);
+
+        // assert
+        equal(label.innerHTML, c[3], 'Result ' + c[0] + ' => ' + c[3]);
+    });
+    removeLabels();
+});
+
+test('Can format results with custom separators', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    var label = addLabel('span');
+    var cases = [
+        [1234567.891, { decimal: ',', integerSeparator: '.' }, '1.234.567,89'],
+        [1234567.891, { decimal: '', integerSeparator: '' }, '1234567.89'],
+        [1234567.891, { decimal: ',', integerSeparator: ' ' }, '1 234 567,89'],
+        [-1234567.891, { decimal: ',', integerSeparator: '.' },
+            '-1.234.567,89'],
+        [123, { integerSeparator: '\'' }, '123.00']
+    ];
+
+    cases.forEach(function(c) {
+        // act
+        colOps.writeResult(c[0], label.id, 'innerhtml', 2, c[1]);
+
+        // assert
+        equal(label.innerHTML, c[2], 'Result ' + c[0] + ' => ' + c[2]);
+    });
+    removeLabels();
+});
+
+test('Can format results with prefix and suffix', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    var label = addLabel('span');
+    var cases = [
+        [-1234.5, 1, { prefix: '$', suffix: '/item' }, '-$1,234.5/item'],
+        [1234.5, 1, { prefix: '€ ' }, '€ 1,234.5'],
+        [12.3, 1, { suffix: ' Km' }, '12.3 Km'],
+        [1234.5, 2, { decimal: '', integerSeparator: '', prefix: '$' },
+            '$1234.50']
+    ];
+
+    cases.forEach(function(c) {
+        // act
+        colOps.writeResult(c[0], label.id, 'innerhtml', c[1], c[2]);
+
+        // assert
+        equal(label.innerHTML, c[3], 'Result ' + c[0] + ' => ' + c[3]);
+    });
+    removeLabels();
+});
+
+test('Can write formatted results with each write method', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    var format = { prefix: '$', decimal: ',', integerSeparator: '.' };
+    var span = addLabel('span');
+    var input = addLabel('input');
+    var textHolder = addLabel('span');
+    textHolder.appendChild(document.createTextNode('x'));
+
+    // act
+    colOps.writeResult(1234.5, span.id, 'innerHTML', 2, format);
+    colOps.writeResult(1234.5, input.id, 'setValue', 2, format);
+    colOps.writeResult(1234.5, textHolder.id, 'createTextNode', 2, format);
+
+    // assert
+    equal(span.innerHTML, '$1.234,50', 'innerhtml');
+    equal(input.value, '$1.234,50', 'setvalue');
+    equal(textHolder.firstChild.nodeValue, '$1.234,50', 'createtextnode');
+    removeLabels();
+});
+
+test('Does not write result when label does not exist', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+
+    // act & assert
+    colOps.writeResult(1, 'non-existent-label', 'innerhtml', 2, {});
+    ok(true, 'No exception thrown');
+});
+
+test('Can format results using format and column type options', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    var label = addLabel('span');
+    tf.colTypes = [null, null, null, null, null];
+    tf.colTypes[3] = { type: 'formatted-number', decimal: ',', thousands: '.' };
+
+    // act
+    var plain = colOps.configureFormat(2, { prefix: '$' });
+    colOps.writeResult(1234567.891, label.id, 'innerhtml', 2, plain);
+    var plainResult = label.innerHTML;
+    var typed = colOps.configureFormat(3, { prefix: '$' });
+    colOps.writeResult(1234567.891, label.id, 'innerhtml', 2, typed);
+
+    // assert
+    equal(plainResult, '$1234567.89', 'Plain number column');
+    equal(label.innerHTML, '$1.234.567,89', 'Formatted number column');
+    tf.colTypes[3] = undefined;
+    removeLabels();
 });
 
 module('Tear-down');
