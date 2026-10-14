@@ -3,7 +3,7 @@ import {createText, elm} from '../../dom';
 import {isArray, isEmpty, EMPTY_FN} from '../../types';
 import {numSortAsc} from '../../sort';
 import {FORMATTED_NUMBER} from '../../const';
-import {formatNumberValue} from '../../number';
+import formatNumber from 'format-number';
 import {defaultsFn, defaultsArr} from '../../settings';
 import {bound} from '../../event';
 
@@ -418,10 +418,12 @@ export default class ColOps extends Feature {
             return;
         }
 
-        let formatOptions = Object.assign({}, format, {
-            locale: format.locale || this.tf.locale
-        });
-        result = formatNumberValue(result.toFixed(precision), formatOptions);
+        result = result.toFixed(precision);
+        if (isNaN(result) || !isFinite(result)) {
+            result = '';
+        } else {
+            result = formatNumber(format)(result);
+        }
 
         switch (writeType.toLowerCase()) {
             case 'innerhtml':
@@ -448,7 +450,6 @@ export default class ColOps extends Feature {
      */
     configureFormat(colIndex, format = {}) {
         let tf = this.tf;
-        format.locale = format.locale || tf.locale;
         if (tf.hasType(colIndex, [FORMATTED_NUMBER])) {
             let colType = tf.colTypes[colIndex];
             if (colType.decimal && !format.decimal) {
