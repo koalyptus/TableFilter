@@ -11,7 +11,7 @@ export const removeDiacritics = (text) => {
     if (!text) {
         return '';
     }
-    return String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return String(text).normalize('NFD').replace(/\p{M}/gu, '');
 };
 
 /**
