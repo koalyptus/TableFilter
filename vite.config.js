@@ -20,11 +20,12 @@ const replacePlaceholders = () => ({
     }
 });
 
-// Demos and tests load '../dist/tablefilter/tablefilter.js', the webpack
-// output path. Copy the Vite UMD bundle there so the legacy path keeps
-// working; the directory's other assets (style/, chunks) are untouched.
-// TODO(#965): consumers still expect the webpack flat global, the Vite UMD
-// serves the window.TableFilter namespace until tests/demos migrate.
+// Stage the Vite UMD bundle next to the webpack output without overwriting
+// it: the published dist/tablefilter/tablefilter.js must stay the webpack
+// flat-global build until consumers migrate to the window.TableFilter
+// namespace. The directory's other assets (style/, chunks) are untouched.
+// TODO(#965): point this copy at tablefilter.js and drop the .vite.js
+// provisional name once tests/demos migrate.
 const copyLegacyDist = () => ({
     name: 'tablefilter-legacy-dist',
     writeBundle(options) {
@@ -36,7 +37,7 @@ const copyLegacyDist = () => ({
         fs.mkdirSync(legacyDir, {recursive: true});
         fs.copyFileSync(
             path.join(outDir, 'tablefilter.umd.js'),
-            path.join(legacyDir, 'tablefilter.js')
+            path.join(legacyDir, 'tablefilter.vite.js')
         );
     }
 });

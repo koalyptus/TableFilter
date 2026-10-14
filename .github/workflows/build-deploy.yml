@@ -51,9 +51,15 @@ jobs:
           NODE_OPTIONS: --openssl-legacy-provider
 
       # After the webpack build: its CleanWebpackPlugin wipes dist/, so the
-      # Vite outputs (esm/cjs/umd + legacy copy) would not survive otherwise.
+      # Vite outputs (esm/cjs/umd + staged legacy copy) would not survive
+      # otherwise.
       - name: Build Vite bundles
         run: npm run build:vite
+
+      # Guard: the published legacy bundle must stay the webpack flat-global
+      # build until #965 migrates consumers to the Vite namespace.
+      - name: Check legacy bundle is the webpack build
+        run: grep -q webpackUniversalModuleDefinition dist/tablefilter/tablefilter.js
 
       - name: Upload deployment files
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
