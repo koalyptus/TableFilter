@@ -58,7 +58,7 @@
         deepEqual(tf.getValidRows().length, 1, 'Þ');
 
         tf.clearFilters();
-        tf.setFilterValue(1, 'gudrun sigurdardottir');
+        tf.setFilterValue(1, 'gudhrun sigurdhardottir');
         tf.filter();
         deepEqual(tf.getValidRows().length, 1, 'Ð');
     });
