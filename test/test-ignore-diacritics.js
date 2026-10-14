@@ -36,6 +36,33 @@
         deepEqual(tf.getValidRows().length, 1, 'Expected match');
     });
 
+    test('Filter with non-decomposable letters', function() {
+        tf.clearFilters();
+        tf.setFilterValue(1, 'soren aeblegard');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 1, 'Ø and Æ');
+
+        tf.clearFilters();
+        tf.setFilterValue(0, 'smorrebrod');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 1, 'ø');
+
+        tf.clearFilters();
+        tf.setFilterValue(1, 'søren æblegård');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 1, 'Accented query');
+
+        tf.clearFilters();
+        tf.setFilterValue(0, 'thingvellir');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 1, 'Þ');
+
+        tf.clearFilters();
+        tf.setFilterValue(1, 'gudhrun sigurdhardottir');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 1, 'Ð');
+    });
+
     test('Ignore diacritcs default', function() {
         tf.destroy();
         tf = new TableFilter('demo', {

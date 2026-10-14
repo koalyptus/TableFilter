@@ -1,22 +1,4 @@
-// TODO(#881): remove this alias once contains() uses native helper
-import {remove as legacyRemoveDiacritics} from 'diacritics';
-
-// Basic combining diacritical marks block. TODO(#881): broaden to \p{M}
-// once the Babel 6 test toolchain can parse Unicode property escapes
-const COMBINING_MARKS = /[\u0300-\u036f]/g;
-
-/**
- * Remove diacritics using Unicode canonical decomposition (NFD) and
- * stripping combining marks
- * @param  {String} text
- * @return {String}
- */
-export const removeDiacritics = (text) => {
-    if (!text) {
-        return '';
-    }
-    return String(text).normalize('NFD').replace(COMBINING_MARKS, '');
-};
+import {remove as removeDiacritics} from 'diacritics';
 
 /**
  * String utilities
@@ -81,8 +63,8 @@ export const contains = (term, data, exactMatch = false, caseSensitive = false,
     let regexp;
     let modifier = caseSensitive ? 'g' : 'gi';
     if (ignoreDiacritics) {
-        term = legacyRemoveDiacritics(term);
-        data = legacyRemoveDiacritics(data);
+        term = removeDiacritics(term);
+        data = removeDiacritics(data);
     }
     if (exactMatch) {
         regexp = new RegExp('(^\\s*)' + rgxEsc(term) + '(\\s*$)',
