@@ -21,15 +21,14 @@ Never leave a bare `TODO` without an issue number.
 - Commit and open PRs as the agent bot (see the `agent-git-setup` and
   `agent-github-access` skills); work in a linked worktree, not the main checkout.
 - Reference the issue in the PR body. Use `Refs #n` when the issue needs a
-  follow-up, `Fixes #n` when the PR completes it.
+  follow-up, `Closes #n` when the PR completes it (this closes the issue and
+  moves it to Done on the board).
 
 ## Running tests locally
 
 The test toolchain (grunt-qunit, PhantomJS, Babel 6) is about ten years old and
 breaks on current Node. CI runs `npm test` on Node 8.9.4 and builds on Node 24
-with `NODE_OPTIONS=--openssl-legacy-provider`. Match that locally. Do not
-install or switch Node versions yourself (nvm is managed by the human); ask
-first.
+with `NODE_OPTIONS=--openssl-legacy-provider`. Match that locally.
 
 ## Versioning
 
