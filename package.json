@@ -28,6 +28,7 @@
     "build:css": "stylus -c static/style/tablefilter.styl -o dist/tablefilter/style && stylus -c static/style/extensions -o dist/tablefilter/style && stylus -c static/style/themes/default -o dist/tablefilter/style/themes/default && stylus -c static/style/themes/mytheme -o dist/tablefilter/style/themes/mytheme && stylus -c static/style/themes/skyblue -o dist/tablefilter/style/themes/skyblue  && stylus -c static/style/themes/transparent -o dist/tablefilter/style/themes/transparent",
     "build:demos": "grunt build-demos",
     "build:test": "webpack --colors --config webpack.test.config.js",
+    "build:vite": "vite build",
     "server": "webpack-dev-server --colors --hot --config ./webpack.dev.config.js",
     "test": "grunt test",
     "codecov": "./node_modules/.bin/codecov",
