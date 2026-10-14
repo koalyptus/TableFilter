@@ -1,4 +1,17 @@
-import {remove as removeDiacritics} from 'diacritics';
+import {remove as legacyRemoveDiacritics} from 'diacritics';
+
+/**
+ * Remove diacritics using Unicode canonical decomposition (NFD) and
+ * stripping combining marks
+ * @param  {String} text
+ * @return {String}
+ */
+export const removeDiacritics = (text) => {
+    if (!text) {
+        return '';
+    }
+    return String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+};
 
 /**
  * String utilities
@@ -63,8 +76,8 @@ export const contains = (term, data, exactMatch = false, caseSensitive = false,
     let regexp;
     let modifier = caseSensitive ? 'g' : 'gi';
     if (ignoreDiacritics) {
-        term = removeDiacritics(term);
-        data = removeDiacritics(data);
+        term = legacyRemoveDiacritics(term);
+        data = legacyRemoveDiacritics(data);
     }
     if (exactMatch) {
         regexp = new RegExp('(^\\s*)' + rgxEsc(term) + '(\\s*$)',
