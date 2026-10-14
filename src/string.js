@@ -1,5 +1,15 @@
-// TODO(#881): remove this alias once contains() uses the native removeDiacritics
+// TODO(#881): remove this alias once contains() uses native helper
 import {remove as legacyRemoveDiacritics} from 'diacritics';
+
+// Built at runtime so the legacy Babel 6 test toolchain does not try to parse
+// the \p{M} property escape; falls back to the basic combining marks block
+const COMBINING_MARKS = (() => {
+    try {
+        return new RegExp('\\p{M}', 'gu');
+    } catch (e) {
+        return /[\u0300-\u036f]/g;
+    }
+})();
 
 /**
  * Remove diacritics using Unicode canonical decomposition (NFD) and
@@ -11,7 +21,7 @@ export const removeDiacritics = (text) => {
     if (!text) {
         return '';
     }
-    return String(text).normalize('NFD').replace(/\p{M}/gu, '');
+    return String(text).normalize('NFD').replace(COMBINING_MARKS, '');
 };
 
 /**
