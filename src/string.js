@@ -1,3 +1,4 @@
+// TODO(#881): remove this alias once contains() uses the native removeDiacritics
 import {remove as legacyRemoveDiacritics} from 'diacritics';
 
 /**
