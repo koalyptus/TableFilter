@@ -23,6 +23,14 @@ Never leave a bare `TODO` without an issue number.
 - Reference the issue in the PR body. Use `Refs #n` when the issue needs a
   follow-up, `Fixes #n` when the PR completes it.
 
+## Running tests locally
+
+The test toolchain (grunt-qunit, PhantomJS, Babel 6) is about ten years old and
+breaks on current Node. CI runs `npm test` on Node 8.9.4 and builds on Node 24
+with `NODE_OPTIONS=--openssl-legacy-provider`. Match that locally. Do not
+install or switch Node versions yourself (nvm is managed by the human); ask
+first.
+
 ## Versioning
 
 Do not bump the `package.json` version in feature PRs. Versions change only in
