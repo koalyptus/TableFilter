@@ -6,13 +6,8 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 module.exports = {
     mode: 'development',
     cache: true,
-    entry: Object.assign({}, webpackConfig.entry, {
-        numberTests: path.join(__dirname, 'test/test-number.js')
-    }),
-    output: Object.assign({}, webpackConfig.output, {
-        filename: (pathData) => pathData.chunk.name === 'main' ?
-            webpackConfig.output.filename : 'test-number.js'
-    }),
+    entry: webpackConfig.entry,
+    output: webpackConfig.output,
     resolve: webpackConfig.resolve,
     module: {
         rules: [
