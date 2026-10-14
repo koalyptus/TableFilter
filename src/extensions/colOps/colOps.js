@@ -81,7 +81,8 @@ export default class ColOps extends Feature {
 
         /**
          * List of format objects used for formatting the result -
-         * Format options for calculation results
+         * refer to https://github.com/componitable/format-number to check
+         * configuration options
          * @type {Array}
          */
         this.formatResults = defaultsArr(opts.format_result, []);
