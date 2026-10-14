@@ -7,12 +7,12 @@ module.exports = {
     mode: 'development',
     cache: true,
     entry: Object.assign({}, webpackConfig.entry, {
-        main: [
-            webpackConfig.entry.main,
-            path.join(__dirname, 'test/number-test-entry.js')
-        ]
+        numberTests: path.join(__dirname, 'test/test-number.js')
     }),
-    output: webpackConfig.output,
+    output: Object.assign({}, webpackConfig.output, {
+        filename: (pathData) => pathData.chunk.name === 'main' ?
+            webpackConfig.output.filename : 'test-number.js'
+    }),
     resolve: webpackConfig.resolve,
     module: {
         rules: [
