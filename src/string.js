@@ -1,9 +1,13 @@
-// TODO(#881): remove this alias once contains() uses native helper
-import {remove as legacyRemoveDiacritics} from 'diacritics';
-
 // Basic combining diacritical marks block. TODO(#881): broaden to \p{M}
 // once the Babel 6 test toolchain can parse Unicode property escapes
 const COMBINING_MARKS = /[\u0300-\u036f]/g;
+
+// Letters that NFD does not decompose, mapped to their Latin equivalents
+const NON_DECOMPOSABLE = {
+    'Æ': 'AE', 'æ': 'ae', 'Œ': 'OE', 'œ': 'oe', 'Ø': 'O', 'ø': 'o',
+    'ß': 'ss', 'Đ': 'D', 'đ': 'd', 'Ð': 'D', 'ð': 'd', 'Ł': 'L', 'ł': 'l'
+};
+const NON_DECOMPOSABLE_RGX = /[ÆæŒœØøßĐđÐðŁł]/g;
 
 /**
  * Remove diacritics using Unicode canonical decomposition (NFD) and
@@ -15,7 +19,10 @@ export const removeDiacritics = (text) => {
     if (!text) {
         return '';
     }
-    return String(text).normalize('NFD').replace(COMBINING_MARKS, '');
+    return String(text)
+        .replace(NON_DECOMPOSABLE_RGX, (chr) => NON_DECOMPOSABLE[chr])
+        .normalize('NFD')
+        .replace(COMBINING_MARKS, '');
 };
 
 /**
@@ -81,8 +88,8 @@ export const contains = (term, data, exactMatch = false, caseSensitive = false,
     let regexp;
     let modifier = caseSensitive ? 'g' : 'gi';
     if (ignoreDiacritics) {
-        term = legacyRemoveDiacritics(term);
-        data = legacyRemoveDiacritics(data);
+        term = removeDiacritics(term);
+        data = removeDiacritics(data);
     }
     if (exactMatch) {
         regexp = new RegExp('(^\\s*)' + rgxEsc(term) + '(\\s*$)',
