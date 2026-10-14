@@ -1,13 +1,17 @@
-// Basic combining diacritical marks block. TODO(#881): broaden to \p{M}
+// Basic combining diacritical marks block. TODO(#955): broaden to \p{M}
 // once the Babel 6 test toolchain can parse Unicode property escapes
 const COMBINING_MARKS = /[\u0300-\u036f]/g;
 
-// Letters that NFD does not decompose, mapped to their Latin equivalents
+// Letters that NFD does not decompose, mapped to the same Latin equivalents as
+// the legacy `diacritics` package. Rarer IPA / Latin Extended-B letters the
+// legacy package also handled are intentionally left unmapped.
 const NON_DECOMPOSABLE = {
     'Æ': 'AE', 'æ': 'ae', 'Œ': 'OE', 'œ': 'oe', 'Ø': 'O', 'ø': 'o',
-    'ß': 'ss', 'Đ': 'D', 'đ': 'd', 'Ð': 'D', 'ð': 'd', 'Ł': 'L', 'ł': 'l'
+    'ß': 'ss', 'ẞ': 'S', 'Đ': 'D', 'đ': 'd', 'Ð': 'Dh', 'ð': 'dh',
+    'Þ': 'Th', 'þ': 'th', 'Ł': 'L', 'ł': 'l', 'Ħ': 'H', 'ħ': 'h',
+    'ı': 'i', 'Ŀ': 'L', 'ŀ': 'l', 'ŉ': 'n', 'Ŧ': 'T', 'ŧ': 't', 'ſ': 'l'
 };
-const NON_DECOMPOSABLE_RGX = /[ÆæŒœØøßĐđÐðŁł]/g;
+const NON_DECOMPOSABLE_RGX = /[ÆæŒœØøßẞĐđÐðÞþŁłĦħıĿŀŉŦŧſ]/g;
 
 /**
  * Remove diacritics using Unicode canonical decomposition (NFD) and

@@ -51,6 +51,16 @@
         tf.setFilterValue(1, 'søren æblegård');
         tf.filter();
         deepEqual(tf.getValidRows().length, 1, 'Accented query');
+
+        tf.clearFilters();
+        tf.setFilterValue(0, 'thingvellir');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 1, 'Þ');
+
+        tf.clearFilters();
+        tf.setFilterValue(1, 'gudrun sigurdardottir');
+        tf.filter();
+        deepEqual(tf.getValidRows().length, 1, 'Ð');
     });
 
     test('Ignore diacritcs default', function() {
