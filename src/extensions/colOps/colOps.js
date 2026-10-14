@@ -3,7 +3,7 @@ import {createText, elm} from '../../dom';
 import {isArray, isEmpty, EMPTY_FN} from '../../types';
 import {numSortAsc} from '../../sort';
 import {FORMATTED_NUMBER} from '../../const';
-import formatNumber from 'format-number';
+import {formatNumberValue} from '../../number';
 import {defaultsFn, defaultsArr} from '../../settings';
 import {bound} from '../../event';
 
@@ -81,8 +81,7 @@ export default class ColOps extends Feature {
 
         /**
          * List of format objects used for formatting the result -
-         * refer to https://github.com/componitable/format-number to check
-         * configuration options
+         * Format options for calculation results
          * @type {Array}
          */
         this.formatResults = defaultsArr(opts.format_result, []);
@@ -419,12 +418,10 @@ export default class ColOps extends Feature {
             return;
         }
 
-        result = result.toFixed(precision);
-        if (isNaN(result) || !isFinite(result)) {
-            result = '';
-        } else {
-            result = formatNumber(format)(result);
-        }
+        let formatOptions = Object.assign({}, format, {
+            locale: format.locale || this.tf.locale
+        });
+        result = formatNumberValue(result.toFixed(precision), formatOptions);
 
         switch (writeType.toLowerCase()) {
             case 'innerhtml':
@@ -451,6 +448,7 @@ export default class ColOps extends Feature {
      */
     configureFormat(colIndex, format = {}) {
         let tf = this.tf;
+        format.locale = format.locale || tf.locale;
         if (tf.hasType(colIndex, [FORMATTED_NUMBER])) {
             let colType = tf.colTypes[colIndex];
             if (colType.decimal && !format.decimal) {
