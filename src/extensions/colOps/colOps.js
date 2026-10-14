@@ -418,10 +418,7 @@ export default class ColOps extends Feature {
             return;
         }
 
-        let formatOptions = Object.assign({}, format, {
-            locale: format.locale || this.tf.locale
-        });
-        result = formatNumberValue(result.toFixed(precision), formatOptions);
+        result = formatNumberValue(result.toFixed(precision), format);
 
         switch (writeType.toLowerCase()) {
             case 'innerhtml':
@@ -448,7 +445,6 @@ export default class ColOps extends Feature {
      */
     configureFormat(colIndex, format = {}) {
         let tf = this.tf;
-        format.locale = format.locale || tf.locale;
         if (tf.hasType(colIndex, [FORMATTED_NUMBER])) {
             let colType = tf.colTypes[colIndex];
             if (colType.decimal && !format.decimal) {

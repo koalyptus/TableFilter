@@ -195,26 +195,6 @@ test('Can configure result format for formatted number column', function() {
     tf.colTypes[3] = undefined;
 });
 
-test('Can format calculation results using the configured locale', function() {
-    // setup
-    var colOps = tf.extension('colOps');
-    var originalLocale = tf.locale;
-    tf.locale = 'de-DE';
-
-    // act
-    colOps.writeResult(-12345.678, 'mean1', 'innerhtml', 2, {
-        prefix: '€',
-        suffix: '/item'
-    });
-
-    // assert
-    equal(id('mean1').innerHTML, '-€12.345,68/item', 'Locale formatting');
-
-    // teardown
-    tf.locale = originalLocale;
-    colOps.calcAll();
-});
-
 module('Tear-down');
 test('can destroy', function() {
     tf.destroy();
