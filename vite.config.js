@@ -1,6 +1,7 @@
 // Library outputs: ESM (#887), CJS (#888), UMD (#889); legacy layout
-// follows in #890.
+// (#890) copies the UMD bundle to the historic dist/tablefilter/ path.
 // CommonJS because package.json has no "type": "module".
+const fs = require('fs');
 const path = require('path');
 const pkg = require('./package.json');
 
@@ -19,8 +20,29 @@ const replacePlaceholders = () => ({
     }
 });
 
+// Demos and tests load '../dist/tablefilter/tablefilter.js', the webpack
+// output path. Copy the Vite UMD bundle there so the legacy path keeps
+// working; the directory's other assets (style/, chunks) are untouched.
+// TODO(#965): consumers still expect the webpack flat global, the Vite UMD
+// serves the window.TableFilter namespace until tests/demos migrate.
+const copyLegacyDist = () => ({
+    name: 'tablefilter-legacy-dist',
+    writeBundle(options) {
+        if (options.format !== 'umd') {
+            return;
+        }
+        const outDir = path.join(__dirname, 'dist');
+        const legacyDir = path.join(outDir, 'tablefilter');
+        fs.mkdirSync(legacyDir, {recursive: true});
+        fs.copyFileSync(
+            path.join(outDir, 'tablefilter.umd.js'),
+            path.join(legacyDir, 'tablefilter.js')
+        );
+    }
+});
+
 module.exports = {
-    plugins: [replacePlaceholders()],
+    plugins: [replacePlaceholders(), copyLegacyDist()],
     build: {
         lib: {
             entry: path.join(__dirname, 'src/tablefilter.js'),
