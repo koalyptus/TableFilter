@@ -1,5 +1,5 @@
-// Library outputs: ESM (#887), CJS (#888); UMD and legacy layout follow in
-// #889-#890.
+// Library outputs: ESM (#887), CJS (#888), UMD (#889); legacy layout
+// follows in #890.
 // CommonJS because package.json has no "type": "module".
 const path = require('path');
 const pkg = require('./package.json');
@@ -24,9 +24,12 @@ module.exports = {
     build: {
         lib: {
             entry: path.join(__dirname, 'src/tablefilter.js'),
-            formats: ['es', 'cjs'],
+            // name is required for the UMD build, it sets window.TableFilter
+            name: 'TableFilter',
+            formats: ['es', 'cjs', 'umd'],
             fileName: (format) => format === 'es' ?
-                'tablefilter.esm.js' : 'tablefilter.cjs.js'
+                'tablefilter.esm.js' : format === 'cjs' ?
+                    'tablefilter.cjs.js' : 'tablefilter.umd.js'
         },
         // dist/ also holds the webpack build output, do not wipe it
         emptyOutDir: false
