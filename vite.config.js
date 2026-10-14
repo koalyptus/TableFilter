@@ -27,9 +27,16 @@ module.exports = {
             // name is required for the UMD build, it sets window.TableFilter
             name: 'TableFilter',
             formats: ['es', 'cjs', 'umd'],
-            fileName: (format) => format === 'es' ?
-                'tablefilter.esm.js' : format === 'cjs' ?
-                    'tablefilter.cjs.js' : 'tablefilter.umd.js'
+            fileName: (format) => {
+                switch (format) {
+                    case 'es':
+                        return 'tablefilter.esm.js';
+                    case 'cjs':
+                        return 'tablefilter.cjs.js';
+                    default:
+                        return 'tablefilter.umd.js';
+                }
+            }
         },
         // dist/ also holds the webpack build output, do not wipe it
         emptyOutDir: false
