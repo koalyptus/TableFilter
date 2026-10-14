@@ -1,15 +1,9 @@
 // TODO(#881): remove this alias once contains() uses native helper
 import {remove as legacyRemoveDiacritics} from 'diacritics';
 
-// Built at runtime so the legacy Babel 6 test toolchain does not try to parse
-// the \p{M} property escape; falls back to the basic combining marks block
-const COMBINING_MARKS = (() => {
-    try {
-        return new RegExp('\\p{M}', 'gu');
-    } catch (e) {
-        return /[\u0300-\u036f]/g;
-    }
-})();
+// Basic combining diacritical marks block. TODO(#881): broaden to \p{M}
+// once the Babel 6 test toolchain can parse Unicode property escapes
+const COMBINING_MARKS = /[\u0300-\u036f]/g;
 
 /**
  * Remove diacritics using Unicode canonical decomposition (NFD) and
