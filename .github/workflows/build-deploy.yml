@@ -44,6 +44,11 @@ jobs:
       - name: Build test bundles
         run: npx grunt build-test
 
+      # Demos are build output (gitignored); the axe baseline spec
+      # scans demos/demo.html, so build them before Playwright runs.
+      - name: Build demo pages
+        run: npx grunt build-demos
+
       - name: Upload coverage
         run: npm run codecov
 
