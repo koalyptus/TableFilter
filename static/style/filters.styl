@@ -12,13 +12,13 @@
     background-color            $filter-row-bg-color
 
     td
-        border-bottom:          1px solid #CCC !important
-        border-top:             1px solid #f4f4f4
-        border-left             1px solid #CCC
-        border-right            1px solid #f4f4f4
+        border-bottom:          1px solid var(--tf-border, #CCC) !important
+        border-top:             1px solid var(--tf-border-light, #f4f4f4)
+        border-left             1px solid var(--tf-border, #CCC)
+        border-right            1px solid var(--tf-border-light, #f4f4f4)
         padding                 0.2em !important
         &:last-child
-            border-right        1px solid #CCC
+            border-right        1px solid var(--tf-border, #CCC)
 
 // button appearance
 .btnflt
@@ -57,7 +57,7 @@
     box-sizing                  border-box
 
     &:focus
-        border-color            #66AFE9
+        border-color            var(--tf-focus-ring, #66AFE9)
         outline                 0 none
         box-shadow              0 1px 1px rgba(0, 0, 0, 0.075) inset,
                                 0 0 8px rgba(102, 175, 233, 0.6)
@@ -96,8 +96,8 @@ select.flt_multi
 
 // pop-up filters elements
 div.popUpFilter
-    arrow(top, 10px white, 2px $th-bg-color)
-    box-shadow(3px 3px 2px #888)
+    arrow(top, 10px var(--tf-bg, #fff), 2px $th-bg-color)
+    box-shadow(3px 3px 2px var(--tf-shadow, #888))
     margin                      30px auto 0 0
     position                    absolute
     display                     none

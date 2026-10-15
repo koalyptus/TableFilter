@@ -4,26 +4,26 @@
 
 @import 'config'
 
-$editor-border-color = #AACCF6
+$editor-border-color = var(--tf-editor-border, #AACCF6)
 
 // selection
 .ezActiveRow
-    background-color            #2852A8 !important
-    color                       #fff
+    background-color            var(--tf-select-fill, #2852A8) !important
+    color                       var(--tf-text-on-accent, #fff)
 
 .ezSelectedRow
-    background-color            #316AC5 !important
-    color                       #fff
+    background-color            var(--tf-select-fill-alt, #316AC5) !important
+    color                       var(--tf-text-on-accent, #fff)
 
 .ezActiveCell
-    background-color            #D9E8FB !important
-    color                       #000 !important
+    background-color            var(--tf-selected-cell-bg, #D9E8FB) !important
+    color                       var(--tf-text-inverse, #000) !important
     font-weight                 bold
 
 .ezETSelectedCell
-    background-color            #FFDC61 !important
+    background-color            var(--tf-edit-cell-bg, #FFDC61) !important
     font-weight                 bold
-    color                       rgb(0,0,0) !important
+    color                       var(--tf-text-inverse, #000) !important
 
 .ezUnselectable
    -moz-user-select             -moz-none
@@ -64,13 +64,13 @@ select[multiple="multiple"].ezSelectEditor
         min-height              22px
         margin                  1px
         padding                 3px
-        border                  1px solid #ccc
-        background              #fff
+        border                  1px solid var(--tf-border, #ccc)
+        background              var(--tf-bg, #fff)
         border-radius           4px 4px 4px 4px
         -moz-border-radius      4px 4px 4px 4px
 
         &:hover
-            border              1px solid #999
+            border              1px solid var(--tf-border-dark, #999)
 
     img
         border                  0

@@ -24,14 +24,14 @@ div.grd_Cont
         width               100%
 
         :focus
-            border          1px solid #558DD9
+            border          1px solid var(--tf-grid-focus-border, #558DD9)
 
     // alternating background color
     .even
-        background-color    #fff
+        background-color    var(--tf-bg, #fff)
 
     .odd
-        background-color    #DFE8F6
+        background-color    var(--tf-grid-alt-bg, #DFE8F6)
 
     .no-results
         background-color    transparent
@@ -43,7 +43,7 @@ div.grd_Cont
 div.grd_tblCont
     height                  400px
     width                   800px
-    background              #fff
+    background              var(--tf-bg, #fff)
     overflow-x              auto
     overflow-y              scroll
 
@@ -69,7 +69,7 @@ div.grd_headTblCont table th
     height                      $th-height
     background-color            $grid-layout-bg-color
     padding                     0.1em 0.5em
-    color                       #333
+    color                       var(--tf-text, #333)
     border-right                1px solid $grid-layout-border-color !important
     overflow                    hidden
     text-overflow               ellipsis
@@ -96,7 +96,7 @@ div.grd_tblCont table td
 
     // link appearence
     a
-        color                   #333
+        color                   var(--tf-text, #333)
         text-decoration         none
         font-weight             bold
         &:hover
@@ -123,7 +123,7 @@ div.grd_tblCont table td
         height                  auto !important
         margin                  19px 0 !important
         font-size               12px
-        color                   #333
+        color                   var(--tf-text, #333)
         border                  0 !important
 
     div.tot
