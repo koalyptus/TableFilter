@@ -23,6 +23,7 @@
   ],
   "scripts": {
     "lint": "eslint src/**/*.js test/*.js *.js",
+    "lint:css-tokens": "node scripts/check-css-tokens.js",
     "dev": "webpack --colors --config webpack.dev.config.js",
     "build": "webpack --colors --config webpack.config.js",
     "build:css": "stylus -c static/style/tablefilter.styl -o dist/tablefilter/style && stylus -c static/style/extensions -o dist/tablefilter/style && stylus -c static/style/themes/default -o dist/tablefilter/style/themes/default && stylus -c static/style/themes/mytheme -o dist/tablefilter/style/themes/mytheme && stylus -c static/style/themes/skyblue -o dist/tablefilter/style/themes/skyblue  && stylus -c static/style/themes/transparent -o dist/tablefilter/style/themes/transparent",
