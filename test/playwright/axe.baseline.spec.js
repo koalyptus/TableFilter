@@ -16,7 +16,11 @@ test(`Axe baseline (report-only): ${DEMO_PAGE}`, async (
     await page.goto(`/${DEMO_PAGE}`);
     await page.waitForSelector('#demo');
     // fltrow: default flts_row_css_class (src/tablefilter.js)
+    // state: attached — the status bar is empty (zero height) until a
+    // message arrives, so a visibility wait would only resolve when
+    // the stylesheet happens to give the empty container height.
     await page.waitForSelector('#demo .fltrow, #demo .status', {
+        state: 'attached',
         timeout: 15000
     });
 

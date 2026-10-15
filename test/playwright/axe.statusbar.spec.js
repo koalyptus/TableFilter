@@ -8,14 +8,21 @@ const { scanAccessibility } = require('./axeScan');
 const DEMO_PAGE = 'demos/demo.html';
 const STATUS_SCOPE = '.status';
 
+// Page load plus the scan outlast the 30s default.
+test.setTimeout(60000);
+
 test(`Axe zero-violations: status bar on ${DEMO_PAGE}`, async (
     { page }, testInfo
 ) => {
     await page.goto(`/${DEMO_PAGE}`);
-    await page.waitForSelector(`${STATUS_SCOPE}`, { timeout: 15000 });
 
-    // Guard against a vacuous pass if the container class changes.
-    expect(await page.locator(STATUS_SCOPE).count()).toBeGreaterThan(0);
+    // The bar is empty until a message arrives, so it has no height
+    // (none at all without the stylesheet): assert attachment, not
+    // visibility. Auto-retries, and fails fast with a clear message
+    // if the container class ever changes.
+    const statusBar = page.locator(STATUS_SCOPE);
+    await expect(statusBar, 'status bar container is not attached')
+        .toBeAttached({ timeout: 15000 });
 
     const violations = await scanAccessibility(
         page, testInfo, `status bar on ${DEMO_PAGE}`,
