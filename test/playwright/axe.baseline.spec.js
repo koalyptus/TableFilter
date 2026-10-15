@@ -1,6 +1,7 @@
 // Accessibility baseline (#896, report-only): scan the flagship
-// demo page and attach violations without failing. Per-component
-// enforcement follows separately (e.g. #897 for the status bar).
+// demo page and attach violations without failing. The whole-page
+// findings (filter inputs/selects without labels) are tracked by
+// #948; per-component enforcement lives in axe.statusbar.spec.js.
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
 
@@ -23,6 +24,7 @@ test(`Axe baseline (report-only): ${DEMO_PAGE}`, async (
         await scanAccessibility(page, testInfo, DEMO_PAGE);
 
     // Report-only: the scan ran and produced a structured report.
-    // TODO(#897): assert zero violations once enforcement lands.
+    // TODO(#948): assert zero violations once the whole-page
+    // findings (unlabelled filter inputs/selects) are fixed.
     expect(Array.isArray(violations)).toBe(true);
 });

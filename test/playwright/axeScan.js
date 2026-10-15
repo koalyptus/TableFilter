@@ -1,7 +1,6 @@
-// Report-only accessibility scanner (#896): runs AxeBuilder against
-// a loaded page, logs a summary, and attaches the violation report
-// without failing. Per-component enforcement (zero violations)
-// arrives separately, e.g. #897 for the status bar.
+// Accessibility scanner (#896 report-only, #897 scoped enforcement):
+// runs AxeBuilder against a loaded page, logs a summary and attaches
+// the violation report. Callers decide whether to assert.
 const { AxeBuilder } = require('@axe-core/playwright');
 
 // Full WCAG 2.x A/AA tag set; the AA target needs the A levels too.
@@ -11,10 +10,14 @@ const WCAG_TAGS = [
     'wcag22a', 'wcag22aa'
 ];
 
-async function scanAccessibility(page, testInfo, label) {
-    const results = await new AxeBuilder({ page })
-        .withTags(WCAG_TAGS)
-        .analyze();
+// `include` narrows the audit to a CSS scope (per-component gates,
+// e.g. .status in #897); omit it to scan the whole page.
+async function scanAccessibility(page, testInfo, label, { include } = {}) {
+    const builder = new AxeBuilder({ page }).withTags(WCAG_TAGS);
+    if (include) {
+        builder.include(include);
+    }
+    const results = await builder.analyze();
     const summary = results.violations.map((violation) => ({
         id: violation.id,
         impact: violation.impact,
@@ -36,6 +39,4 @@ async function scanAccessibility(page, testInfo, label) {
     return results.violations;
 }
 
-// TODO(#897): the enforcement spec imports WCAG_TAGS for its
-// zero-violations assertions; drop the export with it if unused.
 module.exports = { WCAG_TAGS, scanAccessibility };
