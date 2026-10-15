@@ -1,6 +1,6 @@
-// Playwright config: single-file QUnit harness (issue #893).
-// Serves the repo root with the Vite dev server and runs one existing
-// QUnit HTML suite headlessly. Issue #894 expands this to all suites.
+// Playwright config: runs the existing QUnit HTML suites headlessly
+// in Chromium (#893 single-file harness, #894 all suites). Serves
+// the repo root with the Vite dev server.
 const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
@@ -13,7 +13,7 @@ module.exports = defineConfig({
         command: 'npx vite --port 8080 --strictPort',
         // Repo root has no index.html, so probe the suite page itself.
         url: 'http://localhost:8080/test/test-emitter.html',
-        reuseExistingServer: true,
+        reuseExistingServer: !process.env.CI,
         timeout: 60000
     },
     projects: [

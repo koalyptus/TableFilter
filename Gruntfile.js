@@ -3,9 +3,10 @@ module.exports = function (grunt) {
     var path = require('path');
     var testDir = 'test';
     var testHost = 'http://localhost:8000/';
-    // TODO(#894): drop PHANTOMJS_SKIP once Playwright runs these suites.
-    // PhantomJS provides no Intl global, so the native number formatter
-    // in src/number.js throws there. Chromium covers them meanwhile.
+    // TODO(#895): drop PHANTOMJS_SKIP once CI runs these suites under
+    // Playwright. PhantomJS provides no Intl global, so the native
+    // number formatter in src/number.js throws there. Chromium covers
+    // them meanwhile (see test/playwright/qunit.all.spec.js).
     // Declared up here: getTestFiles() runs during initConfig below.
     var PHANTOMJS_SKIP = [
         'test-col-ops.html',
