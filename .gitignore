@@ -2,6 +2,9 @@ demos
 docs
 node_modules
 report
+test-results
+playwright-report
+playwright/.cache
 .grunt
 
 npm-debug.log

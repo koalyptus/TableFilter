@@ -32,6 +32,7 @@
     "build:vite": "vite build",
     "server": "webpack-dev-server --colors --hot --config ./webpack.dev.config.js",
     "test": "grunt test",
+    "test:playwright": "playwright test",
     "codecov": "./node_modules/.bin/codecov",
     "esdoc": "esdoc",
     "dist": "grunt",
@@ -44,6 +45,7 @@
   "devDependencies": {
     "@babel/core": "7.10.0",
     "@babel/preset-env": "7.10.0",
+    "@playwright/test": "^1.53.2",
     "babel-eslint": "10.1.0",
     "babel-loader": "^8.0.2",
     "babel-preset-env": "1.7.0",
@@ -73,7 +75,6 @@
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.11"
   },
-  "dependencies": {},
   "bugs": {
     "url": "https://github.com/koalyptus/TableFilter/issues"
   },
