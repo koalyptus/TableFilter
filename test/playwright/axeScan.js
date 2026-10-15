@@ -4,7 +4,12 @@
 // arrives separately, e.g. #897 for the status bar.
 const { AxeBuilder } = require('@axe-core/playwright');
 
-const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'];
+// Full WCAG 2.x A/AA tag set; the AA target needs the A levels too.
+const WCAG_TAGS = [
+    'wcag2a', 'wcag2aa',
+    'wcag21a', 'wcag21aa',
+    'wcag22a', 'wcag22aa'
+];
 
 async function scanAccessibility(page, testInfo, label) {
     const results = await new AxeBuilder({ page })
@@ -31,4 +36,6 @@ async function scanAccessibility(page, testInfo, label) {
     return results.violations;
 }
 
+// TODO(#897): the enforcement spec imports WCAG_TAGS for its
+// zero-violations assertions; drop the export with it if unused.
 module.exports = { WCAG_TAGS, scanAccessibility };

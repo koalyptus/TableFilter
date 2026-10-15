@@ -14,7 +14,8 @@ test(`Axe baseline (report-only): ${DEMO_PAGE}`, async (
 ) => {
     await page.goto(`/${DEMO_PAGE}`);
     await page.waitForSelector('#demo');
-    await page.waitForSelector('#demo .fltsRow, #demo .status', {
+    // fltrow: default flts_row_css_class (src/tablefilter.js)
+    await page.waitForSelector('#demo .fltrow, #demo .status', {
         timeout: 15000
     });
 
@@ -22,5 +23,6 @@ test(`Axe baseline (report-only): ${DEMO_PAGE}`, async (
         await scanAccessibility(page, testInfo, DEMO_PAGE);
 
     // Report-only: the scan ran and produced a structured report.
+    // TODO(#897): assert zero violations once enforcement lands.
     expect(Array.isArray(violations)).toBe(true);
 });
