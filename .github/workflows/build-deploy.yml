@@ -40,6 +40,8 @@ jobs:
 
       - name: Test
         run: npm test
+        env:
+          OPENSSL_CONF: /dev/null
 
       - name: Upload coverage
         run: npm run codecov
