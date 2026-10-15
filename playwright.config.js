@@ -13,7 +13,7 @@ module.exports = defineConfig({
         command: 'npx vite --port 8080 --strictPort',
         // Repo root has no index.html, so probe the suite page itself.
         url: 'http://localhost:8080/test/test-emitter.html',
-        reuseExistingServer: true,
+        reuseExistingServer: !process.env.CI,
         timeout: 60000
     },
     projects: [

@@ -43,8 +43,7 @@ async function runQUnitSuite(page, expect, qunitFile) {
         return {
             text,
             total: count('total'),
-            failed: count('failed'),
-            passed: count('passed')
+            failed: count('failed')
         };
     });
 

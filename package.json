@@ -22,7 +22,7 @@
     "pagination"
   ],
   "scripts": {
-    "lint": "eslint src/**/*.js test/*.js *.js",
+    "lint": "eslint src/**/*.js test/*.js test/playwright/*.js *.js",
     "lint:css-tokens": "node scripts/check-css-tokens.js",
     "dev": "webpack --colors --config webpack.dev.config.js",
     "build": "webpack --colors --config webpack.config.js",
