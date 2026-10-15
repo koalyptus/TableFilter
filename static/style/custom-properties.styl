@@ -6,6 +6,11 @@
  * Class names and selector specificity are untouched, therefore the
  * theme stylesheets in themes/ keep overriding exactly as before.
  * Themes are ported to *set* these properties in a later milestone.
+ *
+ * The `table-filter` selector is forward-compat for the autonomous
+ * `<table-filter>` custom element (see #898): once it exists, tokens set
+ * on the element scope to its subtree. Until then it matches nothing and
+ * `:root` carries the defaults document-wide.
  */
 
 :root, table-filter
