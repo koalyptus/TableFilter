@@ -19,28 +19,28 @@
 
 // help container
 div.helpCont
-    arrow(top, 10px white, 2px #ccc)
-    box-shadow(3px 3px 2px #888)
+    arrow(top, 10px var(--tf-bg, #fff), 2px var(--tf-border, #ccc))
+    box-shadow(3px 3px 2px var(--tf-shadow, #888))
     position                absolute
     display                 none
     width                   300px
     padding                 10px
     margin                  45px 0 0 -150px
-    border                  1px solid #CCC
+    border                  1px solid var(--tf-border, #CCC)
     line-height             20px
     font-size               inherit
-    color                   #333
-    background              #fff
+    color                   var(--tf-text, #333)
+    background              var(--tf-bg, #fff)
     text-align              left
     z-index                 1000
 
     a
-        color               #cc0000
+        color               var(--tf-error, #cc0000)
         text-decoration     underline
         font-weight         normal
 
     a.close
-        color               #333 !important
+        color               var(--tf-text, #333) !important
         text-decoration     none !important
         font-weight         bold
 
@@ -48,10 +48,10 @@ div.helpCont
             text-decoration none
 
     hr
-        border              1px solid #ccc
+        border              1px solid var(--tf-border, #ccc)
 
 div.helpFooter
     margin                  10px 0 0 0
     h4
         margin              2px 2px 2px 2px
-        color               #333
+        color               var(--tf-text, #333)

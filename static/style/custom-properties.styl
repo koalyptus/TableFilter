@@ -1,0 +1,43 @@
+/**
+ * CSS custom properties (design tokens) for the base stylesheet.
+ *
+ * Every variable carries a fallback equal to the pre-variable computed
+ * value, so rendering is unchanged with or without author overrides.
+ * Class names and selector specificity are untouched, therefore the
+ * theme stylesheets in themes/ keep overriding exactly as before.
+ * Themes are ported to *set* these properties in a later milestone.
+ *
+ * The `table-filter` selector is forward-compat for the autonomous
+ * `<table-filter>` custom element (see #898): once it exists, tokens set
+ * on the element scope to its subtree. Until then it matches nothing and
+ * `:root` carries the defaults document-wide.
+ */
+
+:root, table-filter
+    --tf-bg                  #FFF
+    --tf-text                #333
+    --tf-text-secondary      #444
+    --tf-text-on-accent      #FFF
+    --tf-text-inverse        #000
+    --tf-border              #CCC
+    --tf-border-light        #F4F4F4
+    --tf-border-dark         #999
+    --tf-cell-border         #C6C6C6
+    --tf-header-bg           #EAEAEA
+    --tf-row-alt             #F9F9F9
+    --tf-shadow              #888
+    --tf-error               #cc0000
+    --tf-focus-ring          #66AFE9
+    --tf-active-col          #66AFE9
+    --tf-loader-bg           #A7A7A8
+    --tf-checklist-bg        #E5E5E5
+    --tf-checklist-item-bg   #335EA8
+    --tf-grid-bg             #C8E0FB
+    --tf-grid-alt-bg         #DFE8F6
+    --tf-grid-border         #99BBE8
+    --tf-grid-focus-border   #558DD9
+    --tf-editor-border       #AACCF6
+    --tf-select-fill         #2852A8
+    --tf-select-fill-alt     #316AC5
+    --tf-selected-cell-bg    #D9E8FB
+    --tf-edit-cell-bg        #FFDC61

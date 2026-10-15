@@ -4,8 +4,8 @@
 
 @import 'config'
 
-$item-bg-color = #335EA8
-$item-font-color = #fff
+$item-bg-color = var(--tf-checklist-item-bg, #335EA8)
+$item-font-color = var(--tf-text-on-accent, #fff)
 
 // div containing checklist
 .div_checklist
@@ -44,7 +44,7 @@ $item-font-color = #fff
 
 // disabled checklist item
 .flt_checklist_item_disabled
-    background-color   #E5E5E5
+    background-color   var(--tf-checklist-bg, #E5E5E5)
 
 // selected checklist item
 .flt_checklist_slc_item
