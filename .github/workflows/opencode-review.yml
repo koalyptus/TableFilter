@@ -7,10 +7,16 @@ name: opencode-review
 # model as opencode.yml.
 on:
   pull_request:
-    # Once, when the PR first appears — not on every push. Later pushes are
-    # covered by the local agent's own checks, and re-reviewing each one stacks
-    # duplicate comments.
-    types: [opened, reopened]
+    # When the PR first appears or becomes ready — not on every push. Later
+    # pushes are covered by the local agent's own checks, and re-reviewing
+    # each one stacks duplicate comments.
+    types: [opened, reopened, ready_for_review]
+  # Manual re-run for a failed review (no close/reopen dance required).
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'PR number to review'
+        required: true
 
 # One review per PR: a reopen cancels a superseded run instead of stacking
 # duplicate reviews.
@@ -20,12 +26,14 @@ concurrency:
 
 jobs:
   review:
-    # Drafts are skipped. Fork PRs are skipped too: secrets are not passed to
-    # the runner and GITHUB_TOKEN is forced read-only for them, so the review
-    # would only fail.
+    # Drafts are skipped (ready_for_review picks them up when marked ready).
+    # Fork PRs are skipped too: secrets are not passed to the runner and
+    # GITHUB_TOKEN is forced read-only for them, so the review would only fail.
+    # Manual dispatches always run (the clicker chose the PR explicitly).
     if: >-
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.draft == false &&
+        github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     permissions:
       # Read-only on purpose: the reviewer must not commit. The local agent
@@ -39,15 +47,25 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Checkout PR head (manual dispatch only)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          ref: ${{ format('refs/pull/{0}/head', github.event.inputs.pr) }}
+
       - name: Review with opencode CLI
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr }}
         run: |
-          npm install --global @opencode/cli
+          npm install --global @opencode/cli@2.0.30
           opencode run --standalone --model opencode/big-pickle \
             "Review this pull request against the repository conventions in
-            AGENTS.md and the plan in ROADMAP/.
+            AGENTS.md and the plan in ROADMAP/. Start by running 'gh pr diff
+            $PR_NUMBER --repo ${{ github.repository }}'
+            (GH_TOKEN is set); that output is the change under review.
 
             Report only findings you can substantiate from the diff or the
             surrounding code, each with file:line and a concrete fix. If the
@@ -69,5 +87,5 @@ jobs:
               and no package.json version bump in a feature PR.
             - Security: injection, hardcoded secrets, unsafe
               deserialization, eval/exec." > /tmp/review.md
-          gh pr comment "${{ github.event.pull_request.number }}" \
+          gh pr comment "$PR_NUMBER" \
             --repo "${{ github.repository }}" --body-file /tmp/review.md
