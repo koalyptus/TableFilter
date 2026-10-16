@@ -1,9 +1,12 @@
 name: opencode-review
 
-# Automatic pull-request review. Authenticates with this workflow's GITHUB_TOKEN
-# (passed as TOKEN, which the action also treats as its actor-gate bypass), so
-# no OIDC exchange and no OpenCode GitHub App install required. The review is
-# posted as github-actions[bot]. Same secret and model as opencode.yml.
+# Automatic pull-request review. Uses this workflow's GITHUB_TOKEN for API
+# calls (via the use_github_token input), so no OIDC exchange and no OpenCode
+# GitHub App install required. The review is posted as github-actions[bot].
+# Same secret and model as opencode.yml.
+#
+# Known limit: the action also requires the triggering actor to hold
+# admin/write, so bot-triggered runs fail and only human-triggered runs pass.
 on:
   pull_request:
     # Once, when the PR first appears — not on every push. Later pushes are
@@ -46,15 +49,12 @@ jobs:
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # The action reads TOKEN as its GitHub access token and skips its
-          # actor-write gate only when TOKEN is set. Same value as
-          # GITHUB_TOKEN, no new secret.
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: opencode/big-pickle
           # No `agent:` pin: the default build agent is used. Its git access is
           # bounded by the read-only permissions above, so it reviews and
           # replies rather than pushing fixes.
+          use_github_token: true
           prompt: |
             Review this pull request against the repository conventions in
             AGENTS.md and the plan in ROADMAP/.
