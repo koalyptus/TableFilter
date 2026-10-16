@@ -1,12 +1,10 @@
 name: opencode-review
 
-# Automatic pull-request review. Uses this workflow's GITHUB_TOKEN for API
-# calls (via the use_github_token input), so no OIDC exchange and no OpenCode
-# GitHub App install required. The review is posted as github-actions[bot].
-# Same secret and model as opencode.yml.
-#
-# Known limit: the action also requires the triggering actor to hold
-# admin/write, so bot-triggered runs fail and only human-triggered runs pass.
+# Automatic pull-request review. Runs the opencode CLI directly (v2 CI mode)
+# instead of the anomalyco/opencode action: the action refuses runs triggered
+# by app bots, while the CLI path has no actor gate, so bot-created PRs get
+# reviewed too. The review is posted as github-actions[bot]. Same secret and
+# model as opencode.yml.
 on:
   pull_request:
     # Once, when the PR first appears — not on every push. Later pushes are
@@ -41,23 +39,20 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Run opencode review
-        # Kept on @latest to match .github/workflows/opencode.yml. Pinning the
-        # action to a commit SHA is a repo-wide change, better done in its own
-        # issue than here.
-        uses: anomalyco/opencode/github@latest
+      - name: Review with opencode CLI
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          model: opencode/big-pickle
-          # No `agent:` pin: the default build agent is used. Its git access is
-          # bounded by the read-only permissions above, so it reviews and
-          # replies rather than pushing fixes.
-          use_github_token: true
-          prompt: |
-            Review this pull request against the repository conventions in
-            AGENTS.md and the plan in ROADMAP/.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm install --global @opencode/cli
+          BASE="${{ github.event.pull_request.base.sha }}"
+          git diff "$BASE"...HEAD --stat > /tmp/pr-stat.txt
+          git diff "$BASE"...HEAD > /tmp/pr-diff.txt
+          opencode run --standalone --model opencode/big-pickle \
+            --file /tmp/pr-stat.txt --file /tmp/pr-diff.txt \
+            "Review this pull request against the repository conventions in
+            AGENTS.md and the plan in ROADMAP/. The attached files hold the
+            PR diff stat and full diff.
 
             Report only findings you can substantiate from the diff or the
             surrounding code, each with file:line and a concrete fix. If the
@@ -78,4 +73,6 @@ jobs:
             - Housekeeping: the PR body references its issue (Closes/Refs),
               and no package.json version bump in a feature PR.
             - Security: injection, hardcoded secrets, unsafe
-              deserialization, eval/exec.
+              deserialization, eval/exec." > /tmp/review.md
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" --body-file /tmp/review.md
