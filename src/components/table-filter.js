@@ -6,8 +6,9 @@ import { TableFilter } from '../tablefilter.js';
  * "Component 1").
  *
  * Behaviour arrives incrementally: table discovery (#899), engine init
- * (#900), declarative configuration (#901) and teardown (#902) are
- * done; event bridging (#903) follows.
+ * (#900), declarative configuration (#901), teardown (#902) and event
+ * bridging (#903) are done; runtime attribute observation (#985)
+ * follows.
  *
  * Importing this module registers the element. It is deliberately not
  * imported by src/tablefilter.js yet: that entry feeds the legacy ES5
@@ -18,6 +19,11 @@ import { TableFilter } from '../tablefilter.js';
  * the declarative demo page (#904) and the namespace migration (#965).
  * The reverse direction used here (the element importing the engine)
  * does not pull the element into that bundle.
+ *
+ * Events: lifecycle events from the engine's `emitter` are re-dispatched
+ * as DOM `CustomEvent`s on this element (bridge). Listeners are removed
+ * on disconnect so nothing leaks (#902). TODO(#985): bridge events
+ * emitted by attributes / table changes observed after connect.
  */
 export class TableFilterElement extends HTMLElement {
     connectedCallback() {
@@ -56,6 +62,10 @@ export class TableFilterElement extends HTMLElement {
             new TableFilter(this.table) :
             new TableFilter(this.table, config);
         this.tf.init();
+
+        // Bridge engine lifecycle events as DOM CustomEvents on the
+        // element. Removed on disconnect so nothing leaks (#902).
+        this._bridgeEvents();
     }
 
     /**
@@ -68,7 +78,52 @@ export class TableFilterElement extends HTMLElement {
         if (this.tf && this.tf.isInitialized()) {
             this.tf.destroy();
         }
+        this._unbridgeEvents();
         this.tf = null;
+    }
+
+    /**
+     * Listen to engine `emitter` events and re-dispatch them as DOM
+     * `CustomEvent`s on this element. Event name and arg mapping:
+     * `initialized`, `destroy`, `filter-focus`, `filter-blur`,
+     * `filters-row-inserted`, `before-filtering`, `after-filtering`,
+     * `before-clearing-filters`, `after-clearing-filters`,
+     * `before-filter-init`, `after-filter-init`.
+     */
+    _bridgeEvents() {
+        const tf = this.tf;
+        const events = [
+            'initialized', 'destroy',
+            'filter-focus', 'filter-blur', 'filters-row-inserted',
+            'before-filtering', 'after-filtering',
+            'before-clearing-filters', 'after-clearing-filters',
+            'before-filter-init', 'after-filter-init'
+        ];
+        this._bridged = {};
+        events.forEach((name) => {
+            const handler = (...args) => {
+                this.dispatchEvent(new CustomEvent(name, {
+                    detail: args.slice(1)
+                }));
+            };
+            tf.emitter.on([name], handler);
+            this._bridged[name] = handler;
+        });
+    }
+
+    /**
+     * Remove all listeners registered by `_bridgeEvents()`. Safe when
+     * `_bridgeEvents()` was never run or was already unregistered.
+     */
+    _unbridgeEvents() {
+        const tf = this.tf;
+        if (!tf || !this._bridged) {
+            return;
+        }
+        Object.keys(this._bridged).forEach((name) => {
+            tf.emitter.off([name], this._bridged[name]);
+        });
+        this._bridged = null;
     }
 
     /**

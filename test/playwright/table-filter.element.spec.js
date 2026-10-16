@@ -224,6 +224,35 @@ test('disconnect with no engine is safe', async ({ page }) => {
     expect(errors).toEqual([]);
 });
 
+// Event bridging (#903): DOM events dispatched on init/destroy/filtering
+test('event bridging: bridge registered on connect', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const host = document.createElement('div');
+        host.innerHTML =
+            '<table-filter><table><tbody>' +
+            '<tr><th>City</th></tr>' +
+            '<tr><td>Sydney</td></tr>' +
+            '</tbody></table></table-filter>';
+        document.body.appendChild(host);
+        const el = host.querySelector('table-filter');
+        const expected = [
+            'initialized', 'destroy', 'filter-focus', 'filter-blur',
+            'filters-row-inserted', 'before-filtering', 'after-filtering',
+            'before-clearing-filters', 'after-clearing-filters',
+            'before-filter-init', 'after-filter-init'
+        ];
+        const missing = expected.filter((k) => !(k in (el._bridged || {})));
+        return {
+            missingCount: missing.length,
+            bridgedCount: Object.keys(el._bridged || {}).length
+        };
+    }, { component: COMPONENT });
+    expect(result.missingCount).toBe(0);
+    expect(result.bridgedCount).toBe(11);
+});
+
 test('engine inits on the table resolved through for', async ({
     page
 }) => {
