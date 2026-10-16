@@ -16,6 +16,16 @@
  * the declarative demo page (#904) and the namespace migration (#965).
  */
 export class TableFilterElement extends HTMLElement {
+    connectedCallback() {
+        // Slotted light-DOM table first, then an external table
+        // referenced by id through the `for` attribute. Null when
+        // neither is present; engine init (#900) decides what that
+        // means.
+        this.table = this.querySelector('table') ||
+            (this.hasAttribute('for') ?
+                document.getElementById(this.getAttribute('for')) :
+                null);
+    }
 }
 
 // Register once: loading this module twice (or on a page that already
