@@ -1,6 +1,7 @@
 // Component gate (#899): <table-filter> locates its table in
-// connectedCallback — slotted light-DOM child first, `for`-attribute
-// reference second, null when neither exists. Fails CI on regression.
+// connectedCallback — a descendant light-DOM table first, a
+// `for`-attribute reference second, null when neither exists. Fails CI
+// on regression.
 const { test, expect } = require('@playwright/test');
 
 const FIXTURE = '/test/test-emitter.html';
@@ -74,3 +75,31 @@ test('slotted table wins over the for attribute', async ({ page }) => {
     expect(result.tag).toBe('TABLE');
     expect(result.id).toBe('inner');
 });
+
+test('a for target that appears later is not resolved until reconnect',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        const result = await page.evaluate(async ({ component }) => {
+            await import(component);
+            // Connects before its `for` target exists.
+            const el = document.createElement('table-filter');
+            el.setAttribute('for', 'late');
+            document.body.appendChild(el);
+            const before = el.table;
+
+            // Target is parsed later; reconnect re-resolves it.
+            const table = document.createElement('table');
+            table.id = 'late';
+            document.body.appendChild(table);
+            document.body.removeChild(el);
+            document.body.appendChild(el);
+            const after = el.table;
+
+            el.remove();
+            table.remove();
+            return { before: before, after: after && after.id };
+        }, { component: COMPONENT });
+
+        expect(result.before).toBeNull();
+        expect(result.after).toBe('late');
+    });

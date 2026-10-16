@@ -17,10 +17,15 @@
  */
 export class TableFilterElement extends HTMLElement {
     connectedCallback() {
-        // Slotted light-DOM table first, then an external table
-        // referenced by id through the `for` attribute. Null when
-        // neither is present; engine init (#900) decides what that
-        // means.
+        // A descendant light-DOM <table> wins over an external table
+        // referenced by id through the `for` attribute; null when
+        // neither resolves. Engine init (#900) decides what null means.
+        //
+        // Resolution happens at connect time, so a `for` target that is
+        // parsed later in the document is not found yet. Re-connecting
+        // the element re-resolves it. Reacting to later DOM/attribute
+        // changes (MutationObserver, observedAttributes) is left to the
+        // attribute config (#901) and teardown (#902) work.
         this.table = this.querySelector('table') ||
             (this.hasAttribute('for') ?
                 document.getElementById(this.getAttribute('for')) :
