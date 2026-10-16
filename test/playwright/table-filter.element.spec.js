@@ -101,9 +101,12 @@ test('tf stays null for an empty table without stamping it', async ({
 });
 
 // Component gate (#902): disconnectedCallback destroys the engine —
-// the filter row is removed, hidden rows are restored and tf is nulled,
-// so a later re-connect starts a fresh engine and nothing leaks.
-// Fails CI on regression.
+// the filter row is removed and tf is nulled, so a later re-connect
+// starts a fresh engine and nothing leaks. Fails CI on regression.
+//
+// TODO(#987): also assert the table has no hidden rows after
+// disconnect. Blocked on the engine's validateAllRows() restoring
+// trailing filtered rows (see the issue).
 
 test('disconnect destroys the engine and clears tf', async ({ page }) => {
     await page.goto(FIXTURE);
