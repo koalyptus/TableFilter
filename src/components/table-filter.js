@@ -6,8 +6,8 @@ import { TableFilter } from '../tablefilter.js';
  * "Component 1").
  *
  * Behaviour arrives incrementally: table discovery (#899), engine init
- * (#900) and declarative configuration (#901) are done; teardown
- * (#902) and event bridging (#903) follow.
+ * (#900), declarative configuration (#901) and teardown (#902) are
+ * done; event bridging (#903) follows.
  *
  * Importing this module registers the element. It is deliberately not
  * imported by src/tablefilter.js yet: that entry feeds the legacy ES5
@@ -21,14 +21,6 @@ import { TableFilter } from '../tablefilter.js';
  */
 export class TableFilterElement extends HTMLElement {
     connectedCallback() {
-        // TODO(#902): remove this guard once disconnectedCallback
-        // owns destroy(). It runs before re-resolving this.table on
-        // purpose: re-resolving while an engine is live would point
-        // this.table at a table the engine does not filter.
-        if (this.tf && this.tf.isInitialized()) {
-            return;
-        }
-
         // A descendant light-DOM <table> wins over an external table
         // referenced by id through the `for` attribute; null when
         // neither resolves.
@@ -64,6 +56,19 @@ export class TableFilterElement extends HTMLElement {
             new TableFilter(this.table) :
             new TableFilter(this.table, config);
         this.tf.init();
+    }
+
+    /**
+     * Release the engine when the element leaves the document: the
+     * filter row is removed from the table and `tf` is nulled so a
+     * later re-connect starts a fresh engine. Safe to run with no live
+     * engine (empty or missing table).
+     */
+    disconnectedCallback() {
+        if (this.tf && this.tf.isInitialized()) {
+            this.tf.destroy();
+        }
+        this.tf = null;
     }
 
     /**

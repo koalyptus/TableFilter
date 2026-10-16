@@ -100,7 +100,78 @@ test('tf stays null for an empty table without stamping it', async ({
     expect(result.tableId).toBe('');
 });
 
-test('reconnect does not stack a second engine', async ({ page }) => {
+// Component gate (#902): disconnectedCallback destroys the engine —
+// the filter row is removed, hidden rows are restored and tf is nulled,
+// so a later re-connect starts a fresh engine and nothing leaks.
+// Fails CI on regression.
+
+test('disconnect destroys the engine and clears tf', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const host = document.createElement('div');
+        host.innerHTML =
+            '<table-filter><table><tbody>' +
+            '<tr><th>City</th></tr>' +
+            '<tr><td>Sydney</td></tr>' +
+            '<tr><td>Adelaide</td></tr>' +
+            '</tbody></table></table-filter>';
+        document.body.appendChild(host);
+        const el = host.querySelector('table-filter');
+        const first = el.tf;
+        const filterRowBefore =
+            el.table.querySelectorAll('.fltrow').length;
+
+        host.remove();
+
+        return {
+            wasInitialized: first.isInitialized(),
+            tfNulled: el.tf === null,
+            filterRowBefore,
+            filterRowsAfter: el.table.querySelectorAll('.fltrow').length
+        };
+    }, { component: COMPONENT });
+
+    // destroy() flips initialized off and removes the filter row.
+    expect(result.wasInitialized).toBe(false);
+    expect(result.tfNulled).toBe(true);
+    expect(result.filterRowBefore).toBe(1);
+    expect(result.filterRowsAfter).toBe(0);
+});
+
+test('disconnect clears engine filter state', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const host = document.createElement('div');
+        host.innerHTML =
+            '<table-filter><table><tbody>' +
+            '<tr><th>City</th></tr>' +
+            '<tr><td>Sydney</td></tr>' +
+            '<tr><td>Adelaide</td></tr>' +
+            '</tbody></table></table-filter>';
+        document.body.appendChild(host);
+        const el = host.querySelector('table-filter');
+        const first = el.tf;
+        const idsBefore = first.getFiltersId().length;
+
+        host.remove();
+
+        return {
+            idsBefore,
+            // destroy() resets the id registry; lingering ids would
+            // collide with a fresh engine on re-connect.
+            idsAfter: first.getFiltersId().length
+        };
+    }, { component: COMPONENT });
+
+    expect(result.idsBefore).toBe(1);
+    expect(result.idsAfter).toBe(0);
+});
+
+test('reconnect after teardown starts a fresh engine', async ({
+    page
+}) => {
     await page.goto(FIXTURE);
     const result = await page.evaluate(async ({ component }) => {
         await import(component);
@@ -114,19 +185,40 @@ test('reconnect does not stack a second engine', async ({ page }) => {
         const el = host.querySelector('table-filter');
         const first = el.tf;
 
-        // Disconnect then reconnect: the guard must keep the live
-        // instance instead of building a second one on the table.
+        // Teardown replaced the #900 idempotency guard: disconnect
+        // destroys, so re-connect builds a new engine on the table.
         host.remove();
         document.body.appendChild(host);
 
         return {
-            sameInstance: el.tf === first,
+            freshInstance: el.tf !== first,
+            initialized: el.tf.isInitialized(),
             filterRows: el.table.querySelectorAll('.fltrow').length
         };
     }, { component: COMPONENT });
 
-    expect(result.sameInstance).toBe(true);
+    expect(result.freshInstance).toBe(true);
+    expect(result.initialized).toBe(true);
     expect(result.filterRows).toBe(1);
+});
+
+test('disconnect with no engine is safe', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const errors = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+
+    const result = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const host = document.createElement('div');
+        host.innerHTML = '<table-filter><table></table></table-filter>';
+        document.body.appendChild(host);
+        const el = host.querySelector('table-filter');
+        host.remove();
+        return { tf: el.tf };
+    }, { component: COMPONENT });
+
+    expect(result.tf).toBeNull();
+    expect(errors).toEqual([]);
 });
 
 test('engine inits on the table resolved through for', async ({
