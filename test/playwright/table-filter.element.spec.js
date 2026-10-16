@@ -29,7 +29,8 @@ async function mount(page, wrapperHtml, externalHtml) {
                 hasTf: Boolean(el.tf),
                 initialized: Boolean(el.tf && el.tf.isInitialized()),
                 filterId: el.tf ? el.tf.getFilterId(0) : null,
-                filters: el.tf ? el.tf.getFiltersId().length : null
+                filters: el.tf ? el.tf.getFiltersId().length : null,
+                tableId: el.table ? el.table.id : null
             };
             return result;
         },
@@ -53,38 +54,93 @@ test('connectedCallback instantiates and inits TableFilter', async ({
 
 test('declarative table filters rows', async ({ page }) => {
     await page.goto(FIXTURE);
-    const validRows = await page.evaluate(async ({ component }) => {
+    const result = await mount(
+        page,
+        '<table-filter>' + VALID_TABLE + '</table-filter>'
+    );
+    expect(result.initialized).toBe(true);
+
+    // The mounted element stays in the document, so drive it from a
+    // second evaluate rather than re-declaring the fixture.
+    const validRows = await page.evaluate(() => {
+        const el = document.body.querySelector('table-filter');
+        el.tf.setFilterValue(0, 'Sydney');
+        el.tf.filter();
+        return el.tf.getValidRowsNb();
+    });
+    expect(validRows).toBe(1);
+});
+
+test('tf stays null without a table and nothing throws', async ({
+    page
+}) => {
+    await page.goto(FIXTURE);
+    // A missing guard throws inside connectedCallback; custom-element
+    // reaction exceptions surface as page errors, never as an evaluate
+    // rejection, so watch for them explicitly.
+    const errors = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+
+    const result = await mount(page, '<table-filter></table-filter>');
+    expect(result.hasTf).toBe(false);
+    expect(errors).toEqual([]);
+});
+
+test('tf stays null for an empty table without stamping it', async ({
+    page
+}) => {
+    await page.goto(FIXTURE);
+    const result = await mount(
+        page,
+        '<table-filter><table></table></table-filter>'
+    );
+    // Without the empty-table guard the constructor stamps the table
+    // with a generated id before it throws on the row count.
+    expect(result.hasTf).toBe(false);
+    expect(result.tableId).toBe('');
+});
+
+test('reconnect does not stack a second engine', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await page.evaluate(async ({ component }) => {
         await import(component);
         const host = document.createElement('div');
         host.innerHTML =
             '<table-filter><table><tbody>' +
             '<tr><th>City</th></tr>' +
             '<tr><td>Sydney</td></tr>' +
-            '<tr><td>Adelaide</td></tr>' +
             '</tbody></table></table-filter>';
         document.body.appendChild(host);
         const el = host.querySelector('table-filter');
-        el.tf.setFilterValue(0, 'Sydney');
-        el.tf.filter();
-        const count = el.tf.getValidRowsNb();
-        return count;
+        const first = el.tf;
+
+        // Disconnect then reconnect: the guard must keep the live
+        // instance instead of building a second one on the table.
+        host.remove();
+        document.body.appendChild(host);
+
+        return {
+            sameInstance: el.tf === first,
+            filterRows: el.table.querySelectorAll('.fltrow').length
+        };
     }, { component: COMPONENT });
-    expect(validRows).toBe(1);
+
+    expect(result.sameInstance).toBe(true);
+    expect(result.filterRows).toBe(1);
 });
 
-test('tf stays null without a table', async ({ page }) => {
-    await page.goto(FIXTURE);
-    const result = await mount(page, '<table-filter></table-filter>');
-    expect(result.hasTf).toBe(false);
-});
-
-test('tf stays null for an empty table', async ({ page }) => {
+test('engine inits on the table resolved through for', async ({
+    page
+}) => {
     await page.goto(FIXTURE);
     const result = await mount(
         page,
-        '<table-filter><table id="empty"></table></table-filter>'
+        '<table-filter for="outer"></table-filter>',
+        VALID_TABLE.replace('<table>', '<table id="outer">')
     );
-    expect(result.hasTf).toBe(false);
+    expect(result.tableId).toBe('outer');
+    expect(result.hasTf).toBe(true);
+    expect(result.initialized).toBe(true);
 });
 
 // Renders the given markup on a throwaway host, connects the

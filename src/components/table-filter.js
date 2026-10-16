@@ -21,6 +21,14 @@ import { TableFilter } from '../tablefilter.js';
  */
 export class TableFilterElement extends HTMLElement {
     connectedCallback() {
+        // TODO(#902): remove this guard once disconnectedCallback
+        // owns destroy(). It runs before re-resolving this.table on
+        // purpose: re-resolving while an engine is live would point
+        // this.table at a table the engine does not filter.
+        if (this.tf && this.tf.isInitialized()) {
+            return;
+        }
+
         // A descendant light-DOM <table> wins over an external table
         // referenced by id through the `for` attribute; null when
         // neither resolves.
@@ -40,17 +48,12 @@ export class TableFilterElement extends HTMLElement {
             return;
         }
         // An empty table cannot back a TableFilter instance (its
-        // constructor requires at least 1 row). Leave tf null instead
-        // of throwing out of the connect so declarative pages with
-        // placeholder tables still upgrade once rows arrive.
+        // constructor requires at least 1 row). Leave it uninitialised
+        // instead of throwing out of the connect; a later re-connect
+        // retries, and automatic retry belongs with the MutationObserver
+        // work in #901.
         if (this.table.rows.length === 0) {
             this.tf = null;
-            return;
-        }
-        // Re-connecting re-resolves the table above but must not stack
-        // a second engine on it. Teardown (#902) will own destroy();
-        // until then a live instance is idempotent.
-        if (this.tf && this.tf.isInitialized()) {
             return;
         }
         // Declarative config mapping arrives in #901; until then the
