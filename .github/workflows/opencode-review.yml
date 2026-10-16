@@ -1,8 +1,9 @@
 name: opencode-review
 
-# Automatic pull-request review. Mirrors .github/workflows/opencode.yml:
-# same OpenCode GitHub App (OIDC token exchange), secret and model, so no
-# extra secret is needed. The app posts the review as its own bot.
+# Automatic pull-request review. Runs in use_github_token mode: no OIDC token
+# exchange and no OpenCode GitHub App install required. The review is posted
+# with this workflow's GITHUB_TOKEN, i.e. as github-actions[bot]. Same secret
+# and model as the mention handler in opencode.yml.
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
@@ -15,12 +16,17 @@ concurrency:
 
 jobs:
   review:
-    # Drafts are skipped on open/synchronize and picked up by
-    # ready_for_review.
-    if: github.event.pull_request.draft == false
+    # Drafts are skipped on open/synchronize and picked up by ready_for_review.
+    # Fork PRs are skipped too: secrets are not passed to the runner and
+    # GITHUB_TOKEN is forced read-only for them, so the review would only fail.
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      # contents: write lets the reviewer commit small fixes to the PR branch;
+      # pull-requests/issues: write let it post the review and reply.
+      contents: write
       pull-requests: write
       issues: write
     steps:
@@ -30,6 +36,9 @@ jobs:
           persist-credentials: false
 
       - name: Run opencode review
+        # Kept on @latest to match .github/workflows/opencode.yml. Pinning the
+        # action to a commit SHA is a repo-wide change, better done in its own
+        # issue than here.
         uses: anomalyco/opencode/github@latest
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
@@ -37,7 +46,8 @@ jobs:
         with:
           model: opencode/big-pickle
           # No `agent:` pin: the default build agent is intentional so the
-          # reviewer can apply small fixes, not just comment.
+          # reviewer can apply small fixes, not just comment (contents: write
+          # above lets it push them to the PR branch).
           use_github_token: true
           prompt: |
             Review this pull request against the repository conventions in
