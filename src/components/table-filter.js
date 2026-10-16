@@ -35,8 +35,9 @@ export class TableFilterElement extends HTMLElement {
         //
         // Resolution happens at connect time, so a `for` target that is
         // parsed later in the document is not found yet. Re-connecting
-        // the element re-resolves it. Later attribute and DOM changes
-        // are not observed: config and table are read once per connect.
+        // the element re-resolves it.
+        // TODO(#985): observe table/attribute changes and re-init
+        // automatically instead of requiring a re-connect.
         this.table = this.querySelector('table') ||
             (this.hasAttribute('for') ?
                 document.getElementById(this.getAttribute('for')) :
@@ -49,8 +50,8 @@ export class TableFilterElement extends HTMLElement {
         // An empty table cannot back a TableFilter instance (its
         // constructor requires at least 1 row). Leave it uninitialised
         // instead of throwing out of the connect; a later re-connect
-        // retries. Automatic retry (MutationObserver) is not
-        // implemented.
+        // retries.
+        // TODO(#985): initialise automatically when rows arrive.
         if (this.table.rows.length === 0) {
             this.tf = null;
             return;
@@ -70,17 +71,58 @@ export class TableFilterElement extends HTMLElement {
      * optional `config` attribute (a JSON object) merged with every
      * other attribute, kebab-case names mapped onto the engine's
      * snake_case options, values parsed as JSON where possible
-     * (`col-types='["string","number"]'`, `case-sensitive="true"`)
-     * and kept as plain strings otherwise (`watermark="Search"`).
-     * Individual attributes win over the `config` blob; the `for`, `id`
-     * and `config` attributes are the element's own and never mapped.
-     * Read once per connect — runtime attribute changes are not
-     * observed.
+     * (`col-types='["string"]'`, `case-sensitive="true"`), boolean
+     * spellings the JSON parser rejects (`True`/`FALSE`) coerced, and
+     * anything else kept as a plain string (`watermark="Search"`).
+     * An empty value means presence, per the HTML boolean attribute
+     * convention: `<table-filter paging>` enables paging.
+     * Individual attributes win over the `config` blob.
+     *
+     * Attribute names are lowercased by the HTML parser, so options
+     * must be written in kebab-case (`case-sensitive`, not
+     * `caseSensitive`). Element-owned and HTML presentation attributes
+     * (`for`, `id`, `config`, `class`, `style`, `slot`, `hidden`,
+     * `title`, `lang`, `dir`, `role`, `tabindex`, `data-*`, `aria-*`)
+     * are never mapped: a stray `class` must not count as engine
+     * configuration. Config keys are read once per connect.
+     * TODO(#985): pick up runtime attribute changes.
      * @return {Object} TableFilter configuration object
      */
     _extractConfig() {
         let config = {};
-        const SKIPPED = ['for', 'id', 'config'];
+        const SKIPPED = ['for', 'id', 'config', 'class', 'style', 'slot',
+            'hidden', 'title', 'lang', 'dir', 'role', 'tabindex'];
+        // Names that would reach the config object's own prototype
+        // instead of defining an option.
+        const FORBIDDEN = ['__proto__', 'constructor', 'prototype'];
+
+        const isSkipped = (name) => SKIPPED.indexOf(name) !== -1 ||
+            name.indexOf('data-') === 0 ||
+            name.indexOf('aria-') === 0 ||
+            FORBIDDEN.indexOf(name) !== -1;
+
+        /**
+         * Parse an attribute value: JSON when it parses, otherwise the
+         * raw string, with the common boolean spellings coerced.
+         * @param {String} raw Attribute value
+         * @return {*} Parsed value
+         */
+        const parseValue = (raw) => {
+            if (raw === '') {
+                return true;
+            }
+            try {
+                return JSON.parse(raw);
+            } catch (e) {
+                if (/^true$/i.test(raw)) {
+                    return true;
+                }
+                if (/^false$/i.test(raw)) {
+                    return false;
+                }
+                return raw;
+            }
+        };
 
         const raw = this.getAttribute('config');
         if (raw !== null) {
@@ -101,17 +143,10 @@ export class TableFilterElement extends HTMLElement {
         }
 
         Array.prototype.forEach.call(this.attributes, (attr) => {
-            if (SKIPPED.indexOf(attr.name) !== -1) {
+            if (isSkipped(attr.name)) {
                 return;
             }
-            let value;
-            try {
-                value = JSON.parse(attr.value);
-            } catch (e) {
-                // Not JSON: a plain string option, e.g. watermark="Search"
-                value = attr.value;
-            }
-            config[attr.name.replace(/-/g, '_')] = value;
+            config[attr.name.replace(/-/g, '_')] = parseValue(attr.value);
         });
 
         return config;

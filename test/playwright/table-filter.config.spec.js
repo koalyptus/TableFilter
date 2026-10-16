@@ -1,7 +1,8 @@
 // Component gate (#901): declarative configuration — the `config`
 // JSON attribute merged with kebab-case attributes mapped onto the
-// engine's snake_case options, attributes winning over the blob.
-// Fails CI on regression.
+// engine's snake_case options, attributes winning over the blob,
+// valueless attributes enabling their flag, and HTML presentation
+// attributes staying out of the engine config. Fails CI on regression.
 
 const { test, expect } = require('@playwright/test');
 
@@ -34,8 +35,13 @@ async function mount(page, elementAttrs, body) {
                 watermark: tf && tf.watermark,
                 caseSensitive: tf && tf.caseSensitive,
                 onSlcChange: tf && tf.onSlcChange,
+                paging: tf && tf.paging,
                 colTypes: tf && tf.colTypes,
                 hasConfig: tf && tf.hasConfig,
+                modCount: tf ? Object.keys(tf.Mod).length : null,
+                protoIsPlain: tf ?
+                    Object.getPrototypeOf(tf.cfg) === Object.prototype :
+                    null,
                 cfgKeys: tf ? Object.keys(tf.cfg) : null,
                 validRows: null,
                 filterValue: null
@@ -98,6 +104,61 @@ test('for and id are never mapped into the config', async ({ page }) => {
     const result = await mount(page, ' for="demo" id="host-el"');
     expect(result.cfgKeys).not.toContain('for');
     expect(result.cfgKeys).not.toContain('id');
+});
+
+test('valueless attributes enable their flag (HTML convention)', async ({
+    page
+}) => {
+    await page.goto(FIXTURE);
+    // <table-filter paging> is the roadmap's primary declarative usage:
+    // presence must enable paging, not `Boolean('') === false`.
+    const result = await mount(page, ' paging');
+    expect(result.paging).toBe(true);
+    expect(result.initialized).toBe(true);
+});
+
+test('presentation attributes are not engine config', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await mount(
+        page,
+        ' class="card" style="color:red" data-x="1" aria-label="grid" ' +
+        'role="region" title="Cities"'
+    );
+    // A stray class/style/data/aria attribute must not count as
+    // configuration: it would flip hasConfig and cut constructed
+    // features down to the config-path subset.
+    expect(result.cfgKeys).toEqual([]);
+    expect(result.hasConfig).toBe(false);
+    expect(result.modCount).toBeGreaterThan(3);
+});
+
+test('boolean spellings the JSON parser rejects are coerced', async ({
+    page
+}) => {
+    await page.goto(FIXTURE);
+    const result = await mount(
+        page,
+        ' case-sensitive="False" on-change="FALSE"'
+    );
+    // Without coercion these stay strings and Boolean('False') is true.
+    expect(result.caseSensitive).toBe(false);
+    expect(result.onSlcChange).toBe(false);
+
+    const truthy = await mount(page, ' case-sensitive="True"');
+    expect(truthy.caseSensitive).toBe(true);
+});
+
+test('prototype-reaching attribute names are ignored', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await mount(
+        page,
+        ' __proto__=\'{"paging":true}\' constructor="x" prototype="y"'
+    );
+    // Assigning config['__proto__'] would invoke the Object.prototype
+    // setter and swap the config's prototype instead of setting paging.
+    expect(result.protoIsPlain).toBe(true);
+    expect(result.hasConfig).toBe(false);
+    expect(result.paging).toBe(false);
 });
 
 test('no config keeps engine defaults and hasConfig false', async ({
