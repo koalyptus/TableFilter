@@ -16,6 +16,21 @@
  * the declarative demo page (#904) and the namespace migration (#965).
  */
 export class TableFilterElement extends HTMLElement {
+    connectedCallback() {
+        // A descendant light-DOM <table> wins over an external table
+        // referenced by id through the `for` attribute; null when
+        // neither resolves. Engine init (#900) decides what null means.
+        //
+        // Resolution happens at connect time, so a `for` target that is
+        // parsed later in the document is not found yet. Re-connecting
+        // the element re-resolves it. Reacting to later DOM/attribute
+        // changes (MutationObserver, observedAttributes) is left to the
+        // attribute config (#901) and teardown (#902) work.
+        this.table = this.querySelector('table') ||
+            (this.hasAttribute('for') ?
+                document.getElementById(this.getAttribute('for')) :
+                null);
+    }
 }
 
 // Register once: loading this module twice (or on a page that already
