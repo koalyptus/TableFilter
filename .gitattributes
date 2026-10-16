@@ -1,0 +1,16 @@
+# Normalise line endings: LF in the repository and in working trees.
+# Working on Windows via /mnt/c let CRLF slip into tracked files, which
+# showed up as whole-file diffs with no content change.
+* text=auto eol=lf
+
+# Binary assets: never normalise, never diff as text.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.bmp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
