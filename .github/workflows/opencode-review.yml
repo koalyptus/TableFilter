@@ -1,0 +1,63 @@
+name: opencode-review
+
+# Automatic pull-request review. Mirrors .github/workflows/opencode.yml:
+# same OpenCode GitHub App (OIDC token exchange), secret and model, so no
+# extra secret is needed. The app posts the review as its own bot.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+# One review per PR: a new push cancels the superseded run instead of
+# stacking duplicate reviews.
+concurrency:
+  group: opencode-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    # Drafts are skipped on open/synchronize and picked up by
+    # ready_for_review.
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: read
+      issues: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Run opencode review
+        uses: anomalyco/opencode/github@latest
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+        with:
+          model: opencode/big-pickle
+          agent: plan
+          prompt: |
+            Review this pull request against the repository conventions in
+            AGENTS.md and the plan in ROADMAP/.
+
+            Report only findings you can substantiate from the diff or the
+            surrounding code, each with file:line and a concrete fix. If the
+            change is sound, say so plainly instead of inventing nits.
+
+            Check for:
+            - Correctness: bugs, edge cases, error handling, and
+              compatibility with the environments the code actually runs in
+              (browsers via the Playwright runner, Node 8 + PhantomJS for
+              the legacy QUnit path, Node 24 builds).
+            - Scope: one issue per small PR. Flag unrelated changes, dead
+              code, leftover debug output and duplicated logic.
+            - Temporary code: compat aliases and shims must carry a
+              TODO(#<issue>) comment naming the issue that removes them.
+            - Tests: new behaviour needs a gate that fails without the
+              change. State explicitly when verification evidence is missing
+              or when a test cannot fail.
+            - Housekeeping: the PR body references its issue (Closes/Refs),
+              and no package.json version bump in a feature PR.
+            - Security: injection, hardcoded secrets, unsafe
+              deserialization, eval/exec.
