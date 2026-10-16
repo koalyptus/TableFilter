@@ -38,9 +38,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           persist-credentials: false
-          # Full history: the review diffs base...HEAD, so the base commit
-          # must be present (default depth 1 only has the merge commit).
-          fetch-depth: 0
 
       - name: Review with opencode CLI
         env:
@@ -48,14 +45,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm install --global @opencode/cli
-          BASE="${{ github.event.pull_request.base.sha }}"
-          git diff "$BASE"...HEAD --stat > /tmp/pr-stat.txt
-          git diff "$BASE"...HEAD > /tmp/pr-diff.txt
           opencode run --standalone --model opencode/big-pickle \
-            --file /tmp/pr-stat.txt --file /tmp/pr-diff.txt \
             "Review this pull request against the repository conventions in
-            AGENTS.md and the plan in ROADMAP/. The attached files hold the
-            PR diff stat and full diff.
+            AGENTS.md and the plan in ROADMAP/.
 
             Report only findings you can substantiate from the diff or the
             surrounding code, each with file:line and a concrete fix. If the
