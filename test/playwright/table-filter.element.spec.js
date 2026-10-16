@@ -1,11 +1,91 @@
-// Component gate (#899): <table-filter> locates its table in
-// connectedCallback — a descendant light-DOM table first, a
-// `for`-attribute reference second, null when neither exists. Fails CI
-// on regression.
+// Component gates (#899 table discovery, #900 engine init):
+// connectedCallback locates the table, instantiates the legacy
+// TableFilter engine on it and init()s it, so a declarative
+// <table-filter> mounts and filters. Null/empty tables leave tf null
+// instead of throwing. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 
 const FIXTURE = '/test/test-emitter.html';
 const COMPONENT = '/src/components/table-filter.js';
+
+const VALID_TABLE =
+    '<table><tbody>' +
+    '<tr><th>City</th></tr>' +
+    '<tr><td>Sydney</td></tr>' +
+    '<tr><td>Adelaide</td></tr>' +
+    '</tbody></table>';
+
+// Mounts the markup, connects the <table-filter>, and reports the
+// engine state as primitives (DOM nodes cannot cross evaluate).
+async function mount(page, wrapperHtml, externalHtml) {
+    return page.evaluate(
+        async ({ wrapperHtml, externalHtml, component }) => {
+            await import(component);
+            const host = document.createElement('div');
+            host.innerHTML = (externalHtml || '') + wrapperHtml;
+            document.body.appendChild(host);
+            const el = host.querySelector('table-filter');
+            const result = {
+                hasTf: Boolean(el.tf),
+                initialized: Boolean(el.tf && el.tf.isInitialized()),
+                filterId: el.tf ? el.tf.getFilterId(0) : null,
+                filters: el.tf ? el.tf.getFiltersId().length : null
+            };
+            return result;
+        },
+        { wrapperHtml, externalHtml, component: COMPONENT }
+    );
+}
+
+test('connectedCallback instantiates and inits TableFilter', async ({
+    page
+}) => {
+    await page.goto(FIXTURE);
+    const result = await mount(
+        page,
+        '<table-filter>' + VALID_TABLE + '</table-filter>'
+    );
+    expect(result.hasTf).toBe(true);
+    expect(result.initialized).toBe(true);
+    expect(result.filters).toBe(1);
+    expect(typeof result.filterId).toBe('string');
+});
+
+test('declarative table filters rows', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const validRows = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const host = document.createElement('div');
+        host.innerHTML =
+            '<table-filter><table><tbody>' +
+            '<tr><th>City</th></tr>' +
+            '<tr><td>Sydney</td></tr>' +
+            '<tr><td>Adelaide</td></tr>' +
+            '</tbody></table></table-filter>';
+        document.body.appendChild(host);
+        const el = host.querySelector('table-filter');
+        el.tf.setFilterValue(0, 'Sydney');
+        el.tf.filter();
+        const count = el.tf.getValidRowsNb();
+        return count;
+    }, { component: COMPONENT });
+    expect(validRows).toBe(1);
+});
+
+test('tf stays null without a table', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await mount(page, '<table-filter></table-filter>');
+    expect(result.hasTf).toBe(false);
+});
+
+test('tf stays null for an empty table', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await mount(
+        page,
+        '<table-filter><table id="empty"></table></table-filter>'
+    );
+    expect(result.hasTf).toBe(false);
+});
 
 // Renders the given markup on a throwaway host, connects the
 // <table-filter>, and reports what connectedCallback found.
