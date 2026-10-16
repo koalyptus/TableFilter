@@ -27,9 +27,9 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
-      # Read-only on purpose: the reviewer must not commit. The local agent
-      # already pushed its edits, and a review-time push would fork history.
-      contents: read
+      # contents: write is required for the review action to run. The prompt
+      # still asks for review-only output, not branch edits.
+      contents: write
       pull-requests: write
       issues: write
     steps:
