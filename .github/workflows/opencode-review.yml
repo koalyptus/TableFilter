@@ -6,27 +6,30 @@ name: opencode-review
 # and model as the mention handler in opencode.yml.
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    # Once, when the PR first appears — not on every push. Later pushes are
+    # covered by the local agent's own checks, and re-reviewing each one stacks
+    # duplicate comments.
+    types: [opened, reopened]
 
-# One review per PR: a new push cancels the superseded run instead of
-# stacking duplicate reviews.
+# One review per PR: a reopen cancels a superseded run instead of stacking
+# duplicate reviews.
 concurrency:
   group: opencode-review-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   review:
-    # Drafts are skipped on open/synchronize and picked up by ready_for_review.
-    # Fork PRs are skipped too: secrets are not passed to the runner and
-    # GITHUB_TOKEN is forced read-only for them, so the review would only fail.
+    # Drafts are skipped. Fork PRs are skipped too: secrets are not passed to
+    # the runner and GITHUB_TOKEN is forced read-only for them, so the review
+    # would only fail.
     if: >-
       github.event.pull_request.draft == false &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
-      # contents: write lets the reviewer commit small fixes to the PR branch;
-      # pull-requests/issues: write let it post the review and reply.
-      contents: write
+      # Read-only on purpose: the reviewer must not commit. The local agent
+      # already pushed its edits, and a review-time push would fork history.
+      contents: read
       pull-requests: write
       issues: write
     steps:
@@ -45,9 +48,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: opencode/big-pickle
-          # No `agent:` pin: the default build agent is intentional so the
-          # reviewer can apply small fixes, not just comment (contents: write
-          # above lets it push them to the PR branch).
+          # No `agent:` pin: the default build agent is used. Its git access is
+          # bounded by the read-only permissions above, so it reviews and
+          # replies rather than pushing fixes.
           use_github_token: true
           prompt: |
             Review this pull request against the repository conventions in
