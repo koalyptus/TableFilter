@@ -32,6 +32,8 @@ import { TableFilter } from '../tablefilter.js';
 
 // Engine events re-dispatched as DOM CustomEvents. Keep in sync with the
 // `emitter.emit()` calls in src/tablefilter.js.
+// TODO(#989): use the shared event-name constants once the engine
+// exposes them, instead of duplicating the literals here.
 const BRIDGED_EVENTS = [
     'before-filter-init', 'after-filter-init', 'initialized',
     'filters-row-inserted', 'filter-focus', 'filter-blur',
