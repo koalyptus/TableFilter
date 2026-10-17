@@ -101,7 +101,7 @@ export class ClearButton extends Feature {
         // custom html (icon mode uses the legacy markup), use it;
         // otherwise fall back to the legacy span/input|a structure (#912).
         // TODO(#965): restore static import once namespace migration lands.
-        let cont, resetEl;
+        let cont, resetEl, targetEl;
 
         targetEl = !this.targetId ?
             tf.feature('toolbar').container(this.toolbarPosition) :
