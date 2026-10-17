@@ -1,12 +1,10 @@
 import {Feature} from '../feature';
 import {root} from '../root';
-import {elm, removeElm} from '../dom';
+import {createElm, createText, elm, removeElm} from '../dom';
 import {EMPTY_FN, isNull} from '../types';
 import {defaultsStr, defaultsFn} from '../settings';
 import {LEFT} from './toolbar';
-import '../components/tf-status'; // TODO(#965): provisional - pulls the
-// element into the legacy webpack bundle; move out once namespace
-// migration lands and remove this TODO.
+
 
 const EVENTS = [
     'after-filtering',
@@ -188,13 +186,28 @@ export class StatusBar extends Feature {
 
         emitter.emit('initializing-feature', this, !isNull(this.targetId));
 
-        // <tf-status> (scaffold #905, live region #906). The configurable
-        // status class goes on the host so the existing `.status` selectors
-        // (widened from `div.status`) carry into the new host.
-        const statusEl = document.createElement('tf-status');
-        statusEl.className = this.cssClass;
-        if (this.text) {
-            statusEl.setAttribute('text', this.text);
+        // Bridge to <tf-status> (scaffold #905, live region #906).
+        // If the custom element is registered (Vite / module load) use it;
+        // otherwise fall back to the legacy div/span structure (#908).
+        // TODO(#965): restore static import once namespace migration lands.
+        let statusEl, msgSpan, labelSpan, statusDiv;
+        if (typeof customElements !== 'undefined' &&
+            customElements.get('tf-status')) {
+            statusEl = document.createElement('tf-status');
+            statusEl.className = this.cssClass;
+            if (this.text) {
+                statusEl.setAttribute('text', this.text);
+            }
+        } else {
+            // Legacy fallback (#908) when <tf-status> isn't loaded
+            statusDiv = createElm('div');
+            statusDiv.className = this.cssClass;
+            msgSpan = createElm('span');
+            labelSpan = createElm('span');
+            labelSpan.appendChild(createText(this.text));
+            statusDiv.appendChild(labelSpan);
+            statusDiv.appendChild(msgSpan);
+            statusEl = statusDiv;
         }
 
         let targetEl = (!this.targetId) ?
@@ -202,12 +215,19 @@ export class StatusBar extends Feature {
             elm(this.targetId);
         targetEl.appendChild(statusEl);
 
-        // `container` keeps its original meaning: the status bar element
-        // itself (now the host `<tf-status>`), not the toolbar target.
         this.container = statusEl;
         this.statusEl = statusEl;
-        this.msgContainer = statusEl.shadowRoot.querySelector('[part=message]');
-        this.labelContainer = statusEl.shadowRoot.querySelector('[part=label]');
+        if (statusEl.shadowRoot) {
+            this.msgContainer = statusEl.shadowRoot
+                .querySelector('[part=message]');
+            this.labelContainer = statusEl.shadowRoot
+                .querySelector('[part=label]');
+        } else {
+            this.msgContainer = msgSpan ||
+                statusEl.querySelector('span');
+            this.labelContainer = labelSpan ||
+                statusEl.querySelector(':scope > span:first-child');
+        }
 
         // subscribe to events
         emitter.on(['before-filtering'], () => this.message(this.msgFilter));
@@ -252,7 +272,11 @@ export class StatusBar extends Feature {
             if (!this.initialized) {
                 return;
             }
-            this.statusEl.setMessage(t);
+            if (this.statusEl.setMessage) {
+                this.statusEl.setMessage(t);
+            } else {
+                this.msgContainer.innerHTML = t;
+            }
 
             this.onAfterShowMsg(this.tf, t);
         }, d);
