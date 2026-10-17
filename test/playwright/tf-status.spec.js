@@ -1,10 +1,10 @@
-// Component gates (#905): the <tf-status> scaffold registers an open
-// shadow root that exposes the `label`/`message` parts and renders the
-// `text`/`message` attributes statically. Per the theming model
-// (--tf-* custom properties + ::part()), the component ships structure
-// and hooks only: no invented classes and no baked-in presentational
-// CSS. The ARIA status/live-region behaviour (#906) and the StatusBar
-// bridge (#907) are separate tickets. Fails CI on regression.
+// Component gates (#905 scaffold, #906 live region): the <tf-status>
+// element registers an open shadow root exposing the `label`/`message`
+// parts and renders the `text`/`message` attributes statically, and its
+// host connects as a polite ARIA status region. Per the theming model
+// (--tf-* custom properties + ::part()), it ships structure and hooks
+// only: no invented classes and no baked-in presentational CSS. The
+// StatusBar bridge (#907) is a separate ticket. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 
 const FIXTURE = '/test/test-emitter.html';
@@ -134,3 +134,48 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
     expect(result.label).toBe('rgb(1, 2, 3)');
     expect(result.message).toBe('rgb(9, 8, 7)');
 });
+
+// #906: the host is the live region. `role="status"` implies polite and
+// atomic, so they are set (not defaulted) on connect and a consumer's
+// value is corrected; the shadow parts stay ARIA-free so a message
+// change is announced once, not twice.
+test('connects as a polite ARIA status live region', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-status');
+        // Enforcement, not a default: a wrong consumer value is fixed.
+        el.setAttribute('aria-live', 'off');
+        document.body.appendChild(el);
+        return {
+            role: el.getAttribute('role'),
+            live: el.getAttribute('aria-live'),
+            atomic: el.getAttribute('aria-atomic'),
+            nestedAria: el.shadowRoot.querySelectorAll(
+                '[role], [aria-live], [aria-atomic]'
+            ).length
+        };
+    }, COMPONENT);
+
+    expect(result.role).toBe('status');
+    expect(result.live).toBe('polite');
+    expect(result.atomic).toBe('true');
+    expect(result.nestedAria).toBe(0);
+});
+
+test('is exposed to assistive tech as a single status region',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-status');
+            el.setAttribute('text', 'Rows:');
+            el.setAttribute('message', '42');
+            document.body.appendChild(el);
+        }, COMPONENT);
+
+        await expect(page.locator('tf-status')).toHaveRole('status');
+        await expect(page.getByRole('status')).toHaveCount(1);
+    });

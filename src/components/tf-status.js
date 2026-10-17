@@ -4,8 +4,9 @@
  *
  * Scaffold (#905): an open shadow root exposing the `label` and
  * `message` parts, rendered statically from the `text` and `message`
- * attributes. The ARIA status / live-region behaviour (#906) and the
- * StatusBar bridge (#907) follow.
+ * attributes. The host is the live region (#906): connecting it enforces
+ * `role="status"` / `aria-live="polite"` / `aria-atomic="true"` so
+ * message changes are announced. The StatusBar bridge (#907) follows.
  *
  * Styling is deliberately not shipped here. TableFilter themes through
  * the `--tf-*` custom properties (#892/#945 — inherited into shadow
@@ -45,6 +46,15 @@ export class TfStatusElement extends HTMLElement {
     }
 
     connectedCallback() {
+        // Live-region contract (#906), enforced on connect so manually
+        // authored markup gets it too. `role="status"` already implies
+        // `aria-live="polite"` and `aria-atomic="true"`; setting them
+        // explicitly keeps the contract visible to consumers. The host
+        // is the region: the shadow parts carry no ARIA of their own, so
+        // a message change is announced once, as "label message".
+        this.setAttribute('role', 'status');
+        this.setAttribute('aria-live', 'polite');
+        this.setAttribute('aria-atomic', 'true');
         this._update();
     }
 
