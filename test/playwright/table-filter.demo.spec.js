@@ -28,7 +28,11 @@ test(`declarative <table-filter> mounts and filters: ${DEMO_PAGE}`, async ({
     const result = await page.evaluate(async () => {
         const el = document.querySelector('table-filter');
         const tf = el.tf;
-        const before = tf.getFilteredData().length;
+        // Cache-free baseline: getFilteredData() reads a validRowsIndex
+        // cache that init() only fills as a side effect of a feature
+        // such as alternate_rows, so deriving `before` from it made the
+        // gate depend on that styling option.
+        const before = tf.getFilterableRowsNb();
         // col-1="select" is applied from the declarative attribute.
         const isoTag = tf.getFilterElement(1).tagName;
 
