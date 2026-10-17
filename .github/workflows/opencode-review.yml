@@ -74,33 +74,17 @@ jobs:
           set -o pipefail
           npm install --global @opencode/cli@2.0.30
           opencode run --standalone --model opencode/big-pickle --format json \
-            "Review this pull request against the repository conventions in
-            AGENTS.md and the plan in ROADMAP/. Start by running 'gh pr diff
-            $PR_NUMBER --repo ${{ github.repository }}'
-            (GH_TOKEN is set); that output is the change under review.
+            "Review PR $PR_NUMBER in ${{ github.repository }} against
+            AGENTS.md. Run
+            'gh pr diff $PR_NUMBER --repo ${{ github.repository }}'
+            (GH_TOKEN is set) and review that diff only: do not read other
+            files or run tests.
 
-            Start your reply with the heading '## Review'.
-
-            Report only findings you can substantiate from the diff or the
-            surrounding code, each with file:line and a concrete fix. If the
-            change is sound, say so plainly instead of inventing nits.
-
-            Check for:
-            - Correctness: bugs, edge cases, error handling, and
-              compatibility with the environments the code actually runs in
-              (browsers via the Playwright runner, Node 8 + PhantomJS for
-              the legacy QUnit path, Node 24 builds).
-            - Scope: one issue per small PR. Flag unrelated changes, dead
-              code, leftover debug output and duplicated logic.
-            - Temporary code: compat aliases and shims must carry a
-              TODO(#<issue>) comment naming the issue that removes them.
-            - Tests: new behaviour needs a gate that fails without the
-              change. State explicitly when verification evidence is missing
-              or when a test cannot fail.
-            - Housekeeping: the PR body references its issue (Closes/Refs),
-              and no package.json version bump in a feature PR.
-            - Security: injection, hardcoded secrets, unsafe
-              deserialization, eval/exec." \
+            Start with '## Review'. Keep the whole reply under 150 words: a
+            one-line verdict, then only the findings that need action, each
+            with file:line and a concrete fix. If the change is sound, say so
+            in one sentence. No preamble, no narration, no restating the
+            diff." \
             | node -e '
             // JSONL events: post only reply text parts, never transcript
             // (tool/reasoning events). Fail on error events or empty output.
