@@ -77,14 +77,15 @@ jobs:
             "Review PR $PR_NUMBER in ${{ github.repository }} against
             AGENTS.md. Run
             'gh pr diff $PR_NUMBER --repo ${{ github.repository }}'
-            (GH_TOKEN is set) and review that diff only: do not read other
-            files or run tests.
+            (GH_TOKEN is set) and base the review on that diff; do not run
+            tests or go exploring.
 
             Start with '## Review'. Keep the whole reply under 150 words: a
             one-line verdict, then only the findings that need action, each
             with file:line and a concrete fix. If the change is sound, say so
-            in one sentence. No preamble, no narration, no restating the
-            diff." \
+            in one sentence. Flag TODO(#n) on shims, a PR body missing its
+            issue reference, a version bump, and dead code or debug output.
+            No preamble, no narration, no restating the diff." \
             | node -e '
             // JSONL events: post only reply text parts, never transcript
             // (tool/reasoning events). Fail on error events or empty output.
