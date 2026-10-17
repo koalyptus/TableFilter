@@ -86,6 +86,8 @@ jobs:
             in one sentence. Flag TODO(#n) on shims, a PR body missing its
             issue reference, a version bump, and dead code or debug output.
             No preamble, no narration, no restating the diff." > /tmp/review.md
+          # An empty reply would make the comment step fail obscurely.
+          [ -s /tmp/review.md ] || { echo "review empty: no stdout" >&2; exit 1; }
           gh pr comment "$PR_NUMBER" \
             --repo "${{ github.repository }}" --body-file /tmp/review.md
 
