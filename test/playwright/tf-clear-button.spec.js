@@ -110,3 +110,26 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
 
     expect(result).toBe('rgb(1, 2, 3)');
 });
+
+test('disabled attribute is reflected onto the button', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-clear-button');
+        document.body.appendChild(el);
+        const button = () => el.shadowRoot.querySelector('button');
+
+        const initial = button().hasAttribute('disabled');
+        el.setAttribute('disabled', '');
+        const set = button().hasAttribute('disabled');
+        el.removeAttribute('disabled');
+        const removed = button().hasAttribute('disabled');
+
+        return { initial, set, removed };
+    }, COMPONENT);
+
+    expect(result.initial).toBe(false);
+    expect(result.set).toBe(true);
+    expect(result.removed).toBe(false);
+});

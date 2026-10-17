@@ -44,10 +44,8 @@ export class TfClearButtonElement extends HTMLElement {
         this._update();
     }
 
-    attributeChangedCallback(name) {
-        if (name === 'label' || name === 'text' || name === 'disabled') {
-            this._update();
-        }
+    attributeChangedCallback() {
+        this._update();
     }
 
     /**
@@ -81,9 +79,7 @@ export class TfClearButtonElement extends HTMLElement {
         }
 
         const text = this.getAttribute('text');
-        if (text != null) {
-            this._button.textContent = text;
-        }
+        this._button.textContent = text || '';
 
         if (this.hasAttribute('disabled')) {
             this._button.setAttribute('disabled', '');
