@@ -102,31 +102,44 @@ export class RowsCounter extends Feature {
 
         let tf = this.tf;
 
-        //rows counter container
-        let countDiv = createElm('div');
-        countDiv.className = this.cssClass;
-        //rows counter label
-        let countSpan = createElm('span');
-        let countText = createElm('span');
-        countText.appendChild(createText(this.text));
+        // Bridge to <tf-rows-counter> (scaffold #909). If the custom
+        // element is registered (Vite / module load) use it; otherwise
+        // fall back to the legacy div/span structure (#910).
+        // TODO(#965): restore static import once namespace migration lands.
+        let countEl, countSpan, countText, countDiv;
+        if (typeof customElements !== 'undefined' &&
+            customElements.get('tf-rows-counter')) {
+            countEl = document.createElement('tf-rows-counter');
+            countEl.className = this.cssClass;
+            if (this.text) {
+                countEl.setAttribute('text', this.text);
+            }
+        } else {
+            // Legacy fallback (#910) when <tf-rows-counter> isn't loaded
+            countDiv = createElm('div');
+            countDiv.className = this.cssClass;
+            countText = createElm('span');
+            countText.appendChild(createText(this.text));
+            countSpan = createElm('span');
+            countDiv.appendChild(countText);
+            countDiv.appendChild(countSpan);
+            countEl = countDiv;
+        }
 
         // counter is added to defined element
         let targetEl = !this.targetId ?
             tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.targetId);
 
-        //default container: 'lDiv'
-        if (!this.targetId) {
-            countDiv.appendChild(countText);
-            countDiv.appendChild(countSpan);
-            targetEl.appendChild(countDiv);
+        targetEl.appendChild(countEl);
+
+        this.container = countEl;
+        if (countEl.shadowRoot) {
+            this.label = countEl.shadowRoot.querySelector('[part=count]');
         } else {
-            //custom container, no need to append statusDiv
-            targetEl.appendChild(countText);
-            targetEl.appendChild(countSpan);
+            this.label = countSpan ||
+                countEl.querySelector('span:last-child');
         }
-        this.container = countDiv;
-        this.label = countSpan;
 
         // subscribe to events
         this.emitter.on(['after-filtering', 'grouped-by-page'],
@@ -189,10 +202,8 @@ export class RowsCounter extends Feature {
             return;
         }
 
-        if (!this.targetId && this.container) {
+        if (this.container && this.container.parentNode) {
             removeElm(this.container);
-        } else {
-            elm(this.targetId).innerHTML = '';
         }
         this.label = null;
         this.container = null;
