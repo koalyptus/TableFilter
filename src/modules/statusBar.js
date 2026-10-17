@@ -5,6 +5,7 @@ import {EMPTY_FN, isNull} from '../types';
 import {defaultsStr, defaultsFn} from '../settings';
 import {LEFT} from './toolbar';
 
+
 const EVENTS = [
     'after-filtering',
     'after-populating-filter',
@@ -185,35 +186,48 @@ export class StatusBar extends Feature {
 
         emitter.emit('initializing-feature', this, !isNull(this.targetId));
 
-        // status bar container
-        let statusDiv = createElm('div');
-        statusDiv.className = this.cssClass;
+        // Bridge to <tf-status> (scaffold #905, live region #906).
+        // If the custom element is registered (Vite / module load) use it;
+        // otherwise fall back to the legacy div/span structure (#908).
+        // TODO(#965): restore static import once namespace migration lands.
+        let statusEl, msgSpan, labelSpan, statusDiv;
+        if (typeof customElements !== 'undefined' &&
+            customElements.get('tf-status')) {
+            statusEl = document.createElement('tf-status');
+            statusEl.className = this.cssClass;
+            if (this.text) {
+                statusEl.setAttribute('text', this.text);
+            }
+        } else {
+            // Legacy fallback (#908) when <tf-status> isn't loaded
+            statusDiv = createElm('div');
+            statusDiv.className = this.cssClass;
+            msgSpan = createElm('span');
+            labelSpan = createElm('span');
+            labelSpan.appendChild(createText(this.text));
+            statusDiv.appendChild(labelSpan);
+            statusDiv.appendChild(msgSpan);
+            statusEl = statusDiv;
+        }
 
-        // status bar label
-        let statusSpan = createElm('span');
-        // preceding text
-        let statusSpanText = createElm('span');
-        statusSpanText.appendChild(createText(this.text));
-
-        // target element container
         let targetEl = (!this.targetId) ?
             tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.targetId);
+        targetEl.appendChild(statusEl);
 
-        // default container
-        if (!this.targetId) {
-            statusDiv.appendChild(statusSpanText);
-            statusDiv.appendChild(statusSpan);
-            targetEl.appendChild(statusDiv);
+        this.container = statusEl;
+        this.statusEl = statusEl;
+        if (statusEl.shadowRoot) {
+            this.msgContainer = statusEl.shadowRoot
+                .querySelector('[part=message]');
+            this.labelContainer = statusEl.shadowRoot
+                .querySelector('[part=label]');
         } else {
-            // custom container, no need to append statusDiv
-            targetEl.appendChild(statusSpanText);
-            targetEl.appendChild(statusSpan);
+            this.msgContainer = msgSpan ||
+                statusEl.querySelector('span');
+            this.labelContainer = labelSpan ||
+                statusEl.querySelector(':scope > span:first-child');
         }
-
-        this.container = statusDiv;
-        this.msgContainer = statusSpan;
-        this.labelContainer = statusSpanText;
 
         // subscribe to events
         emitter.on(['before-filtering'], () => this.message(this.msgFilter));
@@ -258,7 +272,11 @@ export class StatusBar extends Feature {
             if (!this.initialized) {
                 return;
             }
-            this.msgContainer.innerHTML = t;
+            if (this.statusEl.setMessage) {
+                this.statusEl.setMessage(t);
+            } else {
+                this.msgContainer.innerHTML = t;
+            }
 
             this.onAfterShowMsg(this.tf, t);
         }, d);
@@ -274,12 +292,12 @@ export class StatusBar extends Feature {
 
         let emitter = this.emitter;
 
-        this.container.innerHTML = '';
-        if (!this.targetId) {
+        if (this.container && this.container.parentNode) {
             removeElm(this.container);
         }
-        this.labelContainer = null;
+        this.statusEl = null;
         this.msgContainer = null;
+        this.labelContainer = null;
         this.container = null;
 
         // Unsubscribe to events
