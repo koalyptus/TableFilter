@@ -44,7 +44,15 @@ async function mount(page, elementAttrs, body) {
                     null,
                 cfgKeys: tf ? Object.keys(tf.cfg) : null,
                 validRows: null,
-                filterValue: null
+                filterValue: null,
+                basePath: tf && tf.basePath,
+                themes: tf && tf.themes,
+                fltCssClass: tf && tf.fltCssClass,
+                fltsRowCssClass: tf && tf.fltsRowCssClass,
+                fltMultiCssClass: tf && tf.fltMultiCssClass,
+                fltSmallCssClass: tf && tf.fltSmallCssClass,
+                singleFltCssClass: tf && tf.singleFltCssClass,
+                btnCssClass: tf && tf.btnCssClass
             };
             if (body === 'filter-lowercase') {
                 tf.setFilterValue(0, 'sydney');
@@ -187,6 +195,44 @@ test('invalid config JSON warns and still inits on defaults', async ({
     expect(result.initialized).toBe(true);
     expect(result.watermark).toBe('');
     expect(warnings.join('\n')).toContain('<table-filter>');
+});
+
+// Styling configurability lives in the core engine, not only in the
+// features (#993): the loader keys (base_path, themes) and the core
+// filter class options must reach the engine through the declarative
+// surface. NOTE: the `style_path` / `stylesheet` / `themes_path`
+// overrides are currently ignored by the engine (#822), so asserting
+// them here would encode the bug; that is tracked separately.
+test('styling configuration reaches the engine', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await mount(
+        page,
+        ' base-path="/assets/tf/" flt-css-class="my-flt" ' +
+        'flts-row-css-class="my-fltrow" btn-css-class="my-btn" ' +
+        'single-filter=\'{"css_class":"my-single"}\' ' +
+        'config=\'{"themes":[{"name":"skyblue"}],' +
+        '"flt_multi_css_class":"my-multi"}\''
+    );
+    // Core stylesheet/theme loader key.
+    expect(result.basePath).toBe('/assets/tf/');
+    expect(result.themes).toContainEqual({ name: 'skyblue' });
+    // Core filter class options.
+    expect(result.fltsRowCssClass).toBe('my-fltrow');
+    expect(result.fltCssClass).toBe('my-flt');
+    expect(result.fltMultiCssClass).toBe('my-multi');
+    expect(result.singleFltCssClass).toBe('my-single');
+    expect(result.btnCssClass).toBe('my-btn');
+});
+
+test('core styling defaults are unchanged when unset', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await mount(page, '');
+    expect(result.basePath).toBe('tablefilter/');
+    expect(result.fltsRowCssClass).toBe('fltrow');
+    expect(result.fltCssClass).toBe('flt');
+    expect(result.fltMultiCssClass).toBe('flt_multi');
+    expect(result.fltSmallCssClass).toBe('flt_s');
+    expect(result.singleFltCssClass).toBe('single_flt');
 });
 
 test('mapped option drives filtering behaviour', async ({ page }) => {
