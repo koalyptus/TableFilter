@@ -155,7 +155,7 @@ test('connects as a polite ARIA status live region', async ({ page }) => {
     expect(result.nestedAria).toBe(0);
 });
 
-test('is exposed to assistive tech as a single status region', async ({ page }) => {
+test('is exposed to assistive tech as one status region', async ({ page }) => {
     await page.goto(FIXTURE);
 
     await page.evaluate(async (component) => {
@@ -167,5 +167,6 @@ test('is exposed to assistive tech as a single status region', async ({ page }) 
     }, COMPONENT);
 
     await expect(page.locator('tf-rows-counter')).toHaveRole('status');
-    await expect(page.getByRole('status')).toHaveCount(1);
+    const statusRegions = page.getByRole('status');
+    await expect(statusRegions).toHaveCount(1);
 });
