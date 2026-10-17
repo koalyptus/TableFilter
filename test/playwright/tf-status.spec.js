@@ -16,6 +16,10 @@ test('registers an open shadow root exposing the label/message parts',
             await import(component);
             const defined = Boolean(customElements.get('tf-status'));
             const el = document.createElement('tf-status');
+            // The container class is configurable (status_bar.css_class,
+            // default 'status') and supplied on the host by the bridge,
+            // never invented in the shadow (#907).
+            el.className = 'status';
             document.body.appendChild(el);
             const sr = el.shadowRoot;
             return {
@@ -24,7 +28,11 @@ test('registers an open shadow root exposing the label/message parts',
                 mode: sr && sr.mode,
                 parts: sr ? Array.from(sr.querySelectorAll('[part]'))
                     .map((n) => n.getAttribute('part')) : [],
-                leakedToLightDom: el.querySelector('.status-text') !== null
+                leakedToLightDom: el.querySelector('[part=label]') !== null,
+                shadowHasClass: sr ?
+                    Array.from(sr.querySelectorAll('*'))
+                        .some((n) => n.hasAttribute('class')) : true,
+                hostClass: el.className
             };
         }, COMPONENT);
 
@@ -33,6 +41,8 @@ test('registers an open shadow root exposing the label/message parts',
         expect(result.mode).toBe('open');
         expect(result.parts).toEqual(['label', 'message']);
         expect(result.leakedToLightDom).toBe(false);
+        expect(result.shadowHasClass).toBe(false);
+        expect(result.hostClass).toBe('status');
     });
 
 test('renders the text and message attributes into the shadow parts',

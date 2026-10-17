@@ -7,27 +7,34 @@
  * attributes. The ARIA status / live-region behaviour (#906) and the
  * StatusBar bridge (#907) follow.
  *
+ * The element hardcodes no CSS class. The status class is configurable
+ * in TableFilter (`status_bar.css_class`, default `status`), so the
+ * StatusBar feature applies it to this host (#907); `::part(label)` /
+ * `::part(message)` are the styling hooks, and internal nodes are
+ * addressed by `part` rather than by an invented class.
+ *
  * Importing this module registers the element. Like `<table-filter>` it
  * is deliberately not part of the legacy webpack bundle (PhantomJS
  * `_wrapNativeSuper`); consumers load it as a module, and shipping it
  * in a bundle belongs with #965.
  */
 
-// Cloned into every instance's shadow root. The `part` attributes are
-// the ::part() styling hooks (:host-level custom properties, e.g.
-// --tf-status-color, are inherited into the shadow tree).
+// Cloned into every instance's shadow root. No class names here: `part`
+// is the stable contract (and the ::part() hook), while the container
+// class comes from the TableFilter config via the host (#907). Custom
+// properties such as --tf-status-color inherit into the shadow tree.
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
     <style>
         :host { display: inline-block; }
-        .status-text { margin-right: 0.25rem; font-weight: normal; }
-        .status-msg {
+        [part='label'] { margin-right: 0.25rem; font-weight: normal; }
+        [part='message'] {
             font-weight: 600;
             color: var(--tf-status-color, inherit);
         }
     </style>
-    <span class="status-text" part="label"></span>
-    <span class="status-msg" part="message"></span>
+    <span part="label"></span>
+    <span part="message"></span>
 `;
 
 export class TfStatusElement extends HTMLElement {
@@ -35,8 +42,8 @@ export class TfStatusElement extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
-        this._labelEl = this.shadowRoot.querySelector('.status-text');
-        this._msgEl = this.shadowRoot.querySelector('.status-msg');
+        this._labelEl = this.shadowRoot.querySelector('[part="label"]');
+        this._msgEl = this.shadowRoot.querySelector('[part="message"]');
     }
 
     static get observedAttributes() {
@@ -62,7 +69,7 @@ export class TfStatusElement extends HTMLElement {
     }
 
     /**
-     * Render the `text` and `message` attributes into the shadow spans.
+     * Render the `text` and `message` attributes into the shadow parts.
      */
     _update() {
         if (this._labelEl) {
