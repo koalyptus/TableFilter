@@ -97,12 +97,18 @@ export class ClearButton extends Feature {
         this.emitter.emit('initializing-feature', this, !isNull(this.targetId));
 
         // Bridge to <tf-clear-button> (scaffold #911). If the custom
-        // element is registered (Vite / module load) use it; otherwise
-        // fall back to the legacy span/input|a structure (#912).
+        // element is registered (Vite / module load) and there is no
+        // custom html (icon mode uses the legacy markup), use it;
+        // otherwise fall back to the legacy span/input|a structure (#912).
         // TODO(#965): restore static import once namespace migration lands.
-        let cont, resetEl, targetEl;
+        let cont, resetEl;
+
+        targetEl = !this.targetId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.targetId);
+
         if (typeof customElements !== 'undefined' &&
-            customElements.get('tf-clear-button')) {
+            customElements.get('tf-clear-button') && !this.html) {
             cont = document.createElement('tf-clear-button');
             cont.className = this.cssClass;
             if (this.text) {
@@ -110,22 +116,15 @@ export class ClearButton extends Feature {
             }
             if (this.tooltip) {
                 cont.setAttribute('label', this.tooltip);
+                cont.setAttribute('title', this.tooltip);
             }
-            targetEl = !this.targetId ?
-                tf.feature('toolbar').container(this.toolbarPosition) :
-                elm(this.targetId);
             targetEl.appendChild(cont);
-            resetEl = cont.shadowRoot ?
-                cont.shadowRoot.querySelector('button') : cont;
+            resetEl = cont.shadowRoot.querySelector('button');
             addEvt(resetEl, 'click', () => this.onClick());
             this.element = resetEl;
             this.container = cont;
         } else {
             cont = createElm('span');
-
-            targetEl = !this.targetId ?
-                tf.feature('toolbar').container(this.toolbarPosition) :
-                elm(this.targetId);
             targetEl.appendChild(cont);
 
             if (!this.html) {
