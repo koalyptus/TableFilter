@@ -104,7 +104,7 @@ module('UI elements');
 test('Status bar  UI elements', function() {
     var container = statusBar.container,
         label = statusBar.msgContainer;
-    deepEqual(container.nodeName, 'DIV', 'Status bar container');
+    deepEqual(container.nodeName, 'TF-STATUS', 'Status bar element');
     deepEqual(label.nodeName, 'SPAN', 'Status bar label');
 });
 

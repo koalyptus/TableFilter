@@ -1,10 +1,12 @@
 import {Feature} from '../feature';
 import {root} from '../root';
-import {elm} from '../dom';
+import {elm, removeElm} from '../dom';
 import {EMPTY_FN, isNull} from '../types';
 import {defaultsStr, defaultsFn} from '../settings';
 import {LEFT} from './toolbar';
-import '../components/tf-status';
+import '../components/tf-status'; // TODO(#965): provisional - pulls the
+// element into the legacy webpack bundle; move out once namespace
+// migration lands and remove this TODO.
 
 const EVENTS = [
     'after-filtering',
@@ -187,8 +189,8 @@ export class StatusBar extends Feature {
         emitter.emit('initializing-feature', this, !isNull(this.targetId));
 
         // <tf-status> (scaffold #905, live region #906). The configurable
-        // status class goes on the host so the existing stylesheet/themes
-        // (`div.status` selectors) carry into the new host.
+        // status class goes on the host so the existing `.status` selectors
+        // (widened from `div.status`) carry into the new host.
         const statusEl = document.createElement('tf-status');
         statusEl.className = this.cssClass;
         if (this.text) {
@@ -200,12 +202,12 @@ export class StatusBar extends Feature {
             elm(this.targetId);
         targetEl.appendChild(statusEl);
 
-        this.container = targetEl;
+        // `container` keeps its original meaning: the status bar element
+        // itself (now the host `<tf-status>`), not the toolbar target.
+        this.container = statusEl;
         this.statusEl = statusEl;
-        this._msgEl = statusEl.shadowRoot.querySelector('[part=message]');
-        this._labelEl = statusEl.shadowRoot.querySelector('[part=label]');
-        this.msgContainer = this._msgEl;
-        this.labelContainer = this._labelEl;
+        this.msgContainer = statusEl.shadowRoot.querySelector('[part=message]');
+        this.labelContainer = statusEl.shadowRoot.querySelector('[part=label]');
 
         // subscribe to events
         emitter.on(['before-filtering'], () => this.message(this.msgFilter));
@@ -250,7 +252,7 @@ export class StatusBar extends Feature {
             if (!this.initialized) {
                 return;
             }
-            this.msgContainer.innerHTML = t;
+            this.statusEl.setMessage(t);
 
             this.onAfterShowMsg(this.tf, t);
         }, d);
@@ -266,12 +268,10 @@ export class StatusBar extends Feature {
 
         let emitter = this.emitter;
 
-        if (this.statusEl && this.statusEl.parentElement) {
-            this.statusEl.remove();
+        if (this.container && this.container.parentNode) {
+            removeElm(this.container);
         }
         this.statusEl = null;
-        this._msgEl = null;
-        this._labelEl = null;
         this.msgContainer = null;
         this.labelContainer = null;
         this.container = null;
