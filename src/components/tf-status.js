@@ -52,11 +52,13 @@ export class TfStatusElement extends HTMLElement {
     }
 
     /**
-     * Set the message text, rendered into the `message` part.
+     * Set the message text, rendered into the `message` part. Values are
+     * coerced to strings so a falsy non-string (e.g. 0) is displayed
+     * rather than silently dropped.
      * @param {String} msg Message text
      */
     setMessage(msg) {
-        this.setAttribute('message', msg || '');
+        this.setAttribute('message', msg == null ? '' : String(msg));
     }
 
     /**

@@ -84,13 +84,17 @@ test('setMessage() sets and clears the rendered message',
             const empty = msg();
             el.setMessage();
             const missing = msg();
+            // A falsy non-string must render, not be dropped.
+            el.setMessage(0);
+            const zero = msg();
 
-            return { set, empty, missing };
+            return { set, empty, missing, zero };
         }, COMPONENT);
 
         expect(result.set).toBe('Filtering...');
         expect(result.empty).toBe('');
         expect(result.missing).toBe('');
+        expect(result.zero).toBe('0');
     });
 
 test('exposes ::part() styling hooks', async ({ page }) => {
