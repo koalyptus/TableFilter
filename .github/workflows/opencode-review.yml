@@ -69,62 +69,25 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr }}
         run: |
-          # pipefail: a mid-stream CLI failure must fail the step even if the
-          # filter exits 0 on partial text parts.
-          set -o pipefail
+          # The CLI prints the reply on stdout and its progress/errors on
+          # stderr, so the redirect alone is the comment body; a non-zero exit
+          # fails the step and trips "Report review failure" below.
           npm install --global @opencode/cli@2.0.30
-          opencode run --standalone --model opencode/big-pickle --format json \
-            "Review this pull request against the repository conventions in
-            AGENTS.md and the plan in ROADMAP/. Start by running 'gh pr diff
-            $PR_NUMBER --repo ${{ github.repository }}'
-            (GH_TOKEN is set); that output is the change under review.
+          opencode run --standalone --model opencode/big-pickle \
+            "Review PR $PR_NUMBER in ${{ github.repository }} against
+            AGENTS.md. Run
+            'gh pr diff $PR_NUMBER --repo ${{ github.repository }}'
+            (GH_TOKEN is set) and base the review on that diff; do not run
+            tests or go exploring.
 
-            Start your reply with the heading '## Review'.
-
-            Report only findings you can substantiate from the diff or the
-            surrounding code, each with file:line and a concrete fix. If the
-            change is sound, say so plainly instead of inventing nits.
-
-            Check for:
-            - Correctness: bugs, edge cases, error handling, and
-              compatibility with the environments the code actually runs in
-              (browsers via the Playwright runner, Node 8 + PhantomJS for
-              the legacy QUnit path, Node 24 builds).
-            - Scope: one issue per small PR. Flag unrelated changes, dead
-              code, leftover debug output and duplicated logic.
-            - Temporary code: compat aliases and shims must carry a
-              TODO(#<issue>) comment naming the issue that removes them.
-            - Tests: new behaviour needs a gate that fails without the
-              change. State explicitly when verification evidence is missing
-              or when a test cannot fail.
-            - Housekeeping: the PR body references its issue (Closes/Refs),
-              and no package.json version bump in a feature PR.
-            - Security: injection, hardcoded secrets, unsafe
-              deserialization, eval/exec." \
-            | node -e '
-            // JSONL events: post only reply text parts, never transcript
-            // (tool/reasoning events). Fail on error events or empty output.
-            const fs = require("fs");
-            const texts = [];
-            for (const line of fs.readFileSync(0, "utf8").split("\n")) {
-              const s = line.trim();
-              if (!s) continue;
-              let ev;
-              try { ev = JSON.parse(s); } catch (e) { continue; }
-              if (ev && ev.type === "text") {
-                const t = ev.part && ev.part.text;
-                if (t && t.trim()) texts.push(t.trim());
-              } else if (ev && ev.type === "error") {
-                console.error("review error: " + ((ev.error && ev.error.message) || "unknown"));
-                process.exit(1);
-              }
-            }
-            let body = texts.join("\n\n").trim();
-            if (!body) { console.error("review empty: no text parts"); process.exit(1); }
-            const cap = 50000;
-            if (body.length > cap) body = body.slice(0, cap) + "\n\n...[truncated: review exceeded 50KB cap]...";
-            process.stdout.write(body);
-            ' > /tmp/review.md
+            Start with '## Review'. Keep the whole reply under 150 words: a
+            one-line verdict, then only the findings that need action, each
+            with file:line and a concrete fix. If the change is sound, say so
+            in one sentence. Flag TODO(#n) on shims, a PR body missing its
+            issue reference, a version bump, and dead code or debug output.
+            No preamble, no narration, no restating the diff." > /tmp/review.md
+          # An empty reply would make the comment step fail obscurely.
+          [ -s /tmp/review.md ] || { echo "review empty: no stdout" >&2; exit 1; }
           gh pr comment "$PR_NUMBER" \
             --repo "${{ github.repository }}" --body-file /tmp/review.md
 
