@@ -39,7 +39,8 @@
 
 ### 1.3 CSS Modernization Strategy
 - **Preserve CSS Selectors**: Keep all existing class names (`.flt`, `.fltsRow`, `.status`, `.pgSlc`, `.div_checklist`, `.rspg`) intact so third-party stylesheets continue working without changes.
-- **Introduce CSS Custom Properties (`--tf-*`)**:
+- **Preserve the core styling configuration**: Styling is not only per-feature. The engine (`src/tablefilter.js`) owns the stylesheet/theme **loader** (`base_path`, `style_path`, `stylesheet`, `themes`, `themes_path`, `enable_default_theme`) and the core class options (`flts_row_css_class`, `flt_css_class`, `flt_multi_css_class`, `flt_small_css_class`, `single_filter.css_class`, `btn_css_class`) plus the `TF` / `resp` / `sticky` classes applied to the table. Per-feature classes live in the modules and extensions. All of these must keep working when the components take over; porting the loader and core keys into `<table-filter>` is tracked by **#993**.
+- **Introduce CSS Custom Properties (`--tf-*`)** _(additive, not a replacement for the class + stylesheet + theme system)_:
   Replace hardcoded color definitions with CSS variables:
   ```css
   :root, table-filter {
@@ -53,14 +54,15 @@
       --tf-active-col: #ddf4ff;
   }
   ```
-- **Stylus Deprecation Path**:
+  **Status — additive and deferred.** The tokens are an inert scaffold introduced in #892: every use is `var(--tf-x, <previous value>)`, so rendering is unchanged and the theme stylesheets keep overriding exactly as before. The token *API* and its documentation (#945), the Stylus→CSS build (#944), SVG icons (#943) and dark mode / forced-colors (#969) are the **"Styling modernization (post-1.0)" milestone** — they run *after* the v1.0.0 parity launch, where modernization continues — not part of the parity milestone. Parity does not depend on them: shadow internals are themeable via the host class + `::part()` (custom properties are an ergonomic overlay for bulk/runtime/cross-boundary theming, and are colours only).
+- **Stylus Deprecation Path** _(post-parity, see above)_:
   - Phase 1: Output standard CSS directly alongside the existing theme stylesheets (`default`, `mytheme`, `skyblue`, `transparent`).
   - Phase 2: Deprecate `.styl` files and retain pure modern CSS with native CSS variables and nesting.
 
 ### 1.4 Trade-offs & Edge Cases
 | Consideration | Risk | Resolution |
 | :--- | :--- | :--- |
-| **Legacy `base_path` option** | Existing consumers configure `base_path: 'dist/tablefilter/'` to load CSS and extensions dynamically. | Preserve `tf.basePath` resolution in the UMD bundle while allowing ESM consumers to import styles directly (`import 'tablefilter/style'`). |
+| **Legacy `base_path` option** | Existing consumers configure `base_path: 'dist/tablefilter/'` to load CSS and extensions dynamically. | Preserve `tf.basePath` resolution in the UMD bundle while allowing ESM consumers to import styles directly (`import 'tablefilter/style'`). Note: the `style_path` / `stylesheet` / `themes_path` overrides are currently ignored (**#822**) and are restored as part of **#993**. |
 | **Extension Bundling** | Extensions (`sort`, `colOps`, etc.) are currently loaded via dynamic script tags. | Vite can output individual extension chunks (`dist/tablefilter/extensions/sort/sort.js`) matching the legacy file structure. |
 
 ---

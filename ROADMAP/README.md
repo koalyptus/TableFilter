@@ -19,7 +19,7 @@ This directory contains the complete technical specification, architectural inve
 
 3. [**Key Architectural Decisions Review**](./key-decisions-review.md)
    - In-depth evaluation of the three preliminary decisions:
-     - **Build Tooling Migration**: Vite multi-bundle output (ESM, CJS, UMD) and CSS Custom Properties.
+     - **Build Tooling Migration**: Vite multi-bundle output (ESM, CJS, UMD) and CSS Custom Properties. Keeps every class name and the core stylesheet/theme loader + class options (tracked by [#993](https://github.com/koalyptus/TableFilter/issues/993)); tokens and `::part()` are additive. Token/theme *modernization* is deferred to the "Styling modernization (post-1.0)" milestone, after the v1.0.0 launch.
      - **Dependency Rationalization**: Native browser replacements for `diacritics` and `format-number`.
      - **Test Runner Modernization**: Playwright headless execution of all 74 QUnit test suites with integrated Axe-Core audits.
 

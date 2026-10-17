@@ -79,8 +79,12 @@ export default defineConfig({
 ```
 
 ### Modern CSS & Custom Properties Transition
+
+> **Sequencing:** the token/theme *modernization* below belongs to the **"Styling modernization (post-1.0)" milestone**, after the v1.0.0 parity launch (see key-decisions 1.3). The parity-critical part is preserving the class names and the core styling configuration — not the tokens.
+
 - Retain existing CSS class names (`.flt`, `.fltsRow`, `.status`, `.pgSlc`, `.div_checklist`) to guarantee that consumer styling does not break.
-- Modernize styles by substituting hardcoded colors with **CSS Custom Properties**:
+- Preserve the **core** styling configuration, not just the per-feature classes: the stylesheet/theme loader (`base_path`, `style_path`, `stylesheet`, `themes`, `themes_path`, `enable_default_theme`) and the core class options (`flts_row_css_class`, `flt_css_class`, `flt_multi_css_class`, `flt_small_css_class`, `single_filter.css_class`, `btn_css_class`). Porting these into `<table-filter>` is tracked by **#993**.
+- Modernize styles by substituting hardcoded colors with **CSS Custom Properties** (additive — the class/stylesheet/theme system stays authoritative):
   ```css
   :root, table-filter {
       --tf-primary: #0969da;
@@ -244,18 +248,13 @@ customElements.define('table-filter', TableFilterElement);
 ```
 
 ### Component 2: `<tf-status>` Component (`src/components/tf-status.js`)
-An accessible status message component encapsulating Open Shadow DOM with CSS parts:
+An accessible status message component encapsulating Open Shadow DOM with `::part()` hooks. The element is **structure and behaviour only**: it ships no `<style>` and hardcodes no CSS class, so it does not invent a parallel styling surface. The configurable status class (`status_bar.css_class`, default `status`) is applied to the **host** by the bridge (see below), and the default look belongs to the stylesheet/themes as `.status` / `.status::part(label|message)`, with colours from the inherited `--tf-*` tokens. Porting the core stylesheet/theme loader and class options is tracked by **#993**.
 
 ```javascript
 const template = document.createElement('template');
 template.innerHTML = `
-  <style>
-    :host { display: inline-block; }
-    .status-text { margin-right: 0.25rem; font-weight: normal; }
-    .status-msg { font-weight: 600; color: var(--tf-status-color, inherit); }
-  </style>
-  <span class="status-text" part="label"></span>
-  <span class="status-msg" part="message"></span>
+  <span part="label"></span>
+  <span part="message"></span>
 `;
 
 export class TfStatusElement extends HTMLElement {
@@ -263,8 +262,8 @@ export class TfStatusElement extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
-        this._labelEl = this.shadowRoot.querySelector('.status-text');
-        this._msgEl = this.shadowRoot.querySelector('.status-msg');
+        this._labelEl = this.shadowRoot.querySelector('[part="label"]');
+        this._msgEl = this.shadowRoot.querySelector('[part="message"]');
     }
 
     connectedCallback() {
@@ -278,7 +277,7 @@ export class TfStatusElement extends HTMLElement {
     attributeChangedCallback() { this._update(); }
 
     setMessage(msg) {
-        this.setAttribute('message', msg || '');
+        this.setAttribute('message', msg == null ? '' : String(msg));
     }
 
     _update() {
