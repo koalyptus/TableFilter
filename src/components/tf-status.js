@@ -7,11 +7,13 @@
  * attributes. The ARIA status / live-region behaviour (#906) and the
  * StatusBar bridge (#907) follow.
  *
- * The element hardcodes no CSS class. The status class is configurable
- * in TableFilter (`status_bar.css_class`, default `status`), so the
- * StatusBar feature applies it to this host (#907); `::part(label)` /
- * `::part(message)` are the styling hooks, and internal nodes are
- * addressed by `part` rather than by an invented class.
+ * Styling is deliberately not shipped here. TableFilter themes through
+ * the `--tf-*` custom properties (#892/#945 — inherited into shadow
+ * trees) and `::part()` hooks, so the element exposes `part="label"` /
+ * `part="message"` and leaves the look to the stylesheet/theme. It also
+ * hardcodes no CSS class: the status class is configurable
+ * (`status_bar.css_class`, default `status`) and #907 applies it to
+ * this host.
  *
  * Importing this module registers the element. Like `<table-filter>` it
  * is deliberately not part of the legacy webpack bundle (PhantomJS
@@ -19,20 +21,12 @@
  * in a bundle belongs with #965.
  */
 
-// Cloned into every instance's shadow root. No class names here: `part`
-// is the stable contract (and the ::part() hook), while the container
-// class comes from the TableFilter config via the host (#907). Custom
-// properties such as --tf-status-color inherit into the shadow tree.
+// Cloned into every instance's shadow root. Structure and `part` hooks
+// only: `part` is the stable internal contract (selected by _update()
+// and themed via ::part()), and no class or presentational style is
+// baked in, so themes and consumers stay in control.
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
-    <style>
-        :host { display: inline-block; }
-        [part='label'] { margin-right: 0.25rem; font-weight: normal; }
-        [part='message'] {
-            font-weight: 600;
-            color: var(--tf-status-color, inherit);
-        }
-    </style>
     <span part="label"></span>
     <span part="message"></span>
 `;

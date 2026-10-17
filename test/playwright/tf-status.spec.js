@@ -1,8 +1,10 @@
 // Component gates (#905): the <tf-status> scaffold registers an open
 // shadow root that exposes the `label`/`message` parts and renders the
-// `text`/`message` attributes statically. The ARIA status/live-region
-// behaviour (#906) and the StatusBar bridge (#907) are separate
-// tickets. Fails CI on regression.
+// `text`/`message` attributes statically. Per the theming model
+// (--tf-* custom properties + ::part()), the component ships structure
+// and hooks only: no invented classes and no baked-in presentational
+// CSS. The ARIA status/live-region behaviour (#906) and the StatusBar
+// bridge (#907) are separate tickets. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 
 const FIXTURE = '/test/test-emitter.html';
@@ -16,12 +18,9 @@ test('registers an open shadow root exposing the label/message parts',
             await import(component);
             const defined = Boolean(customElements.get('tf-status'));
             const el = document.createElement('tf-status');
-            // The container class is configurable (status_bar.css_class,
-            // default 'status') and supplied on the host by the bridge,
-            // never invented in the shadow (#907).
-            el.className = 'status';
             document.body.appendChild(el);
             const sr = el.shadowRoot;
+            const nodes = sr ? Array.from(sr.querySelectorAll('*')) : [];
             return {
                 defined,
                 hasShadow: Boolean(sr),
@@ -29,10 +28,8 @@ test('registers an open shadow root exposing the label/message parts',
                 parts: sr ? Array.from(sr.querySelectorAll('[part]'))
                     .map((n) => n.getAttribute('part')) : [],
                 leakedToLightDom: el.querySelector('[part=label]') !== null,
-                shadowHasClass: sr ?
-                    Array.from(sr.querySelectorAll('*'))
-                        .some((n) => n.hasAttribute('class')) : true,
-                hostClass: el.className
+                classless: nodes.every((n) => !n.hasAttribute('class')),
+                styleless: nodes.every((n) => n.tagName !== 'STYLE')
             };
         }, COMPONENT);
 
@@ -41,8 +38,10 @@ test('registers an open shadow root exposing the label/message parts',
         expect(result.mode).toBe('open');
         expect(result.parts).toEqual(['label', 'message']);
         expect(result.leakedToLightDom).toBe(false);
-        expect(result.shadowHasClass).toBe(false);
-        expect(result.hostClass).toBe('status');
+        // The component ships no classes and no presentational styles;
+        // themes style the parts via --tf-* tokens and ::part().
+        expect(result.classless).toBe(true);
+        expect(result.styleless).toBe(true);
     });
 
 test('renders the text and message attributes into the shadow parts',
@@ -107,39 +106,31 @@ test('setMessage() sets and clears the rendered message',
         expect(result.zero).toBe('0');
     });
 
-test('exposes ::part() styling hooks', async ({ page }) => {
+test('exposes ::part() styling hooks for theming', async ({ page }) => {
     await page.goto(FIXTURE);
 
-    const color = await page.evaluate(async (component) => {
+    const result = await page.evaluate(async (component) => {
         await import(component);
         const el = document.createElement('tf-status');
         el.setAttribute('text', 'x');
+        el.setAttribute('message', 'y');
         document.body.appendChild(el);
 
         const style = document.createElement('style');
-        style.textContent =
-            'tf-status::part(label) { color: rgb(1, 2, 3); }';
+        style.textContent = `
+            tf-status::part(label) { color: rgb(1, 2, 3); }
+            tf-status::part(message) { color: rgb(9, 8, 7); }
+        `;
         document.head.appendChild(style);
 
         const label = el.shadowRoot.querySelector('[part=label]');
-        return getComputedStyle(label).color;
-    }, COMPONENT);
-
-    expect(color).toBe('rgb(1, 2, 3)');
-});
-
-test('honours the --tf-status-color custom property', async ({ page }) => {
-    await page.goto(FIXTURE);
-
-    const color = await page.evaluate(async (component) => {
-        await import(component);
-        document.body.style.setProperty('--tf-status-color', 'rgb(9, 8, 7)');
-        const el = document.createElement('tf-status');
-        el.setAttribute('message', 'x');
-        document.body.appendChild(el);
         const msg = el.shadowRoot.querySelector('[part=message]');
-        return getComputedStyle(msg).color;
+        return {
+            label: getComputedStyle(label).color,
+            message: getComputedStyle(msg).color
+        };
     }, COMPONENT);
 
-    expect(color).toBe('rgb(9, 8, 7)');
+    expect(result.label).toBe('rgb(1, 2, 3)');
+    expect(result.message).toBe('rgb(9, 8, 7)');
 });
