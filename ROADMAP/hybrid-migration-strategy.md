@@ -75,8 +75,24 @@ The hybrid architecture combines two complementary vectors:
 ### Concrete Example: Migrating `StatusBar` to `<tf-status>`
 
 #### Step 1: Define the Independent Custom Element (`src/components/tf-status.js`)
+The element is **structure and behaviour only**: open shadow root, `part="label"` /
+`part="message"`, and no class or `<style>` of its own. That keeps the element
+free of an invented, non-themeable styling surface and lets the existing
+stylesheet/theme system stay authoritative.
 ```javascript
+const template = document.createElement('template');
+template.innerHTML = `
+    <span part="label"></span>
+    <span part="message"></span>
+`;
+
 export class TfStatus extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.appendChild(template.content.cloneNode(true));
+    }
+
     static get observedAttributes() { return ['text', 'message']; }
 
     connectedCallback() {
@@ -88,14 +104,15 @@ export class TfStatus extends HTMLElement {
     }
 
     setMessage(msg) {
-        this.message = msg;
-        this.render();
+        this.setAttribute('message', msg == null ? '' : String(msg));
     }
 
     render() {
-        const text = this.getAttribute('text') || '';
-        const msg = this.message || this.getAttribute('message') || '';
-        this.innerHTML = `<span class="tf-status-label">${text}</span><span class="tf-status-msg">${msg}</span>`;
+        // Themed via ::part(label) / ::part(message) and inherited --tf-* tokens
+        this.shadowRoot.querySelector('[part="label"]').textContent =
+            this.getAttribute('text') || '';
+        this.shadowRoot.querySelector('[part="message"]').textContent =
+            this.getAttribute('message') || '';
     }
 }
 customElements.define('tf-status', TfStatus);
@@ -115,7 +132,10 @@ export class StatusBar extends Feature {
     init() {
         if (this.initialized) return;
 
-        // Create the native Web Component
+        // Create the native Web Component. The configurable class
+        // (status_bar.css_class, default 'status') goes on the host so the
+        // existing stylesheet/themes keep driving the look; the element
+        // itself stays class-free.
         const statusEl = document.createElement('tf-status');
         statusEl.className = this.f.css_class || 'status';
         if (this.f.text) statusEl.setAttribute('text', this.f.text);
@@ -176,9 +196,11 @@ A crucial challenge in hybrid Web Component systems is boundary traversal:
 - **Rule 1: Never place the table inside closed Shadow DOM during hybrid migration.**
   Legacy features and external extensions query table rows directly via `this.dom().rows[i]`. The table must remain in the **Light DOM** (projected through a `<slot>` into `<table-filter>`).
 - **Rule 2: Leaf UI components (`<tf-status>`, `<tf-rows-counter>`, `<tf-clear-button>`) can use Shadow DOM immediately.**
-  Because TableFilter communicates with them via their JS element references (`this.statusEl.setMessage(...)`), their internal template can be fully encapsulated in Shadow DOM.
+  Because TableFilter communicates with them via their JS element references (`this.statusEl.setMessage(...)`), their internal template can be fully encapsulated in Shadow DOM. Their styling stays configurable: the configurable class (`status_bar.css_class` and friends) is applied to the **host**, internals are reached through `::part()`, and colours come from the inherited `--tf-*` tokens, so the class + stylesheet + theme system is never bypassed.
 - **Rule 3: Slotted header controls use Light DOM or CSS Shadow Parts.**
   Filter inputs inserted into the table header row (`fltrow`) must remain accessible to the table accessibility tree and standard DOM queries (`tf.getFilterElement(colIndex)`).
+- **Rule 4: Preserve the core styling configuration.**
+  Styling config is not only per-feature: the engine (`src/tablefilter.js`) owns the stylesheet/theme loader (`base_path`, `style_path`, `stylesheet`, `themes`, `themes_path`, `enable_default_theme`) and the core class options (`flts_row_css_class`, `flt_css_class`, `flt_multi_css_class`, `flt_small_css_class`, `single_filter.css_class`, `btn_css_class`) plus the `TF` / `resp` / `sticky` table classes. All of these keep working unchanged; `--tf-*` tokens and `::part()` are additive. Porting them into `<table-filter>` is tracked by **#993**.
 
 ---
 

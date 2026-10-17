@@ -471,10 +471,12 @@ flowchart TD
      }
      ```
 2. **CSS Shadow Parts**:
-   - Expose `::part(toolbar)`, `::part(filter-input)`, `::part(pager)`, `::part(status)` for custom styling.
+   - Expose `::part(toolbar)`, `::part(filter-input)`, `::part(pager)`, `::part(status)` for custom styling. The configurable legacy class (`status_bar.css_class` and friends) stays on the host, so `.status::part(message)` keeps consumer/theme styling working across the shadow boundary.
 3. **Theme Ports**:
    - Port legacy themes (`default`, `mytheme`, `skyblue`, `transparent`) to clean CSS files setting the custom properties.
    - Replace raster `.gif`/`.png` icons with crisp, theme-aware inline SVGs.
+4. **Preserve the legacy styling configuration (additive, not a rewrite)**:
+   - Keep every configurable class name and the core stylesheet/theme **loader** (`base_path`, `style_path`, `stylesheet`, `themes`, `themes_path`, `enable_default_theme`) plus the core class options (`flts_row_css_class`, `flt_css_class`, `flt_multi_css_class`, `flt_small_css_class`, `single_filter.css_class`, `btn_css_class`). Tokens and `::part()` extend this surface; they do not replace it. Porting it into `<table-filter>` is tracked by **#993**.
 
 ### Phase 6: Extensions Porting & Backward Compatibility Verification
 1. **Extension Modernization**:

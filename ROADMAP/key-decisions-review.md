@@ -39,7 +39,8 @@
 
 ### 1.3 CSS Modernization Strategy
 - **Preserve CSS Selectors**: Keep all existing class names (`.flt`, `.fltsRow`, `.status`, `.pgSlc`, `.div_checklist`, `.rspg`) intact so third-party stylesheets continue working without changes.
-- **Introduce CSS Custom Properties (`--tf-*`)**:
+- **Preserve the core styling configuration**: Styling is not only per-feature. The engine (`src/tablefilter.js`) owns the stylesheet/theme **loader** (`base_path`, `style_path`, `stylesheet`, `themes`, `themes_path`, `enable_default_theme`) and the core class options (`flts_row_css_class`, `flt_css_class`, `flt_multi_css_class`, `flt_small_css_class`, `single_filter.css_class`, `btn_css_class`) plus the `TF` / `resp` / `sticky` classes applied to the table. Per-feature classes live in the modules and extensions. All of these must keep working when the components take over; porting the loader and core keys into `<table-filter>` is tracked by **#993**.
+- **Introduce CSS Custom Properties (`--tf-*`)** _(additive, not a replacement for the class + stylesheet + theme system)_:
   Replace hardcoded color definitions with CSS variables:
   ```css
   :root, table-filter {
