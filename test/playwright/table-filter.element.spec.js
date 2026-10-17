@@ -224,8 +224,74 @@ test('disconnect with no engine is safe', async ({ page }) => {
     expect(errors).toEqual([]);
 });
 
-// Event bridging (#903): DOM events dispatched on init/destroy/filtering
-test('event bridging: bridge registered on connect', async ({ page }) => {
+// Event bridging (#903): engine emitter events are re-dispatched as
+// bubbling DOM CustomEvents with detail { tf, args }. Fails CI on
+// regression — e.g. a bridge installed after init() misses
+// `initialized`.
+
+test('event bridging: initialized on connect', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const el = document.createElement('table-filter');
+        el.innerHTML = '<table><tbody>' +
+            '<tr><th>City</th></tr>' +
+            '<tr><td>Sydney</td></tr>' +
+            '</tbody></table>';
+        let onEl = null;
+        let onDoc = null;
+        // Subscribe before connect: `initialized` fires inside
+        // connectedCallback, so the listener must already be attached.
+        el.addEventListener('initialized', (e) => { onEl = e; });
+        document.addEventListener('initialized', (e) => { onDoc = e; });
+        document.body.appendChild(el);
+        return {
+            elCount: onEl ? 1 : 0,
+            docCount: onDoc ? 1 : 0,
+            hasTf: Boolean(onEl && onEl.detail && onEl.detail.tf),
+            argsIsArray:
+                Array.isArray(onEl && onEl.detail && onEl.detail.args)
+        };
+    }, { component: COMPONENT });
+    expect(result.elCount).toBe(1);
+    expect(result.docCount).toBe(1); // bubbles
+    expect(result.hasTf).toBe(true);
+    expect(result.argsIsArray).toBe(true);
+});
+
+test('event bridging: before/after-filtering detail', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const host = document.createElement('div');
+        host.innerHTML =
+            '<table-filter><table><tbody>' +
+            '<tr><th>City</th></tr>' +
+            '<tr><td>Sydney</td></tr>' +
+            '<tr><td>Adelaide</td></tr>' +
+            '</tbody></table></table-filter>';
+        document.body.appendChild(host);
+        const el = host.querySelector('table-filter');
+        let before = null;
+        let after = null;
+        el.addEventListener('before-filtering', (e) => { before = e.detail; });
+        el.addEventListener('after-filtering', (e) => { after = e.detail; });
+        el.tf.setFilterValue(0, 'Sydney');
+        el.tf.filter();
+        return {
+            beforeTf: Boolean(before && before.tf),
+            afterTf: Boolean(after && after.tf),
+            afterArgsIsArray: Array.isArray(after && after.args),
+            afterArgsLen: after && after.args && after.args.length
+        };
+    }, { component: COMPONENT });
+    expect(result.beforeTf).toBe(true);
+    expect(result.afterTf).toBe(true);
+    expect(result.afterArgsIsArray).toBe(true);
+    expect(result.afterArgsLen).toBe(1);
+});
+
+test('event bridging: destroy on disconnect', async ({ page }) => {
     await page.goto(FIXTURE);
     const result = await page.evaluate(async ({ component }) => {
         await import(component);
@@ -237,20 +303,66 @@ test('event bridging: bridge registered on connect', async ({ page }) => {
             '</tbody></table></table-filter>';
         document.body.appendChild(host);
         const el = host.querySelector('table-filter');
-        const expected = [
-            'initialized', 'destroy', 'filter-focus', 'filter-blur',
-            'filters-row-inserted', 'before-filtering', 'after-filtering',
-            'before-clearing-filters', 'after-clearing-filters',
-            'before-filter-init', 'after-filter-init'
-        ];
-        const missing = expected.filter((k) => !(k in (el._bridged || {})));
+        const tf = el.tf;
+        let detail = null;
+        el.addEventListener('destroy', (e) => { detail = e.detail; });
+        host.remove();
         return {
-            missingCount: missing.length,
-            bridgedCount: Object.keys(el._bridged || {}).length
+            fired: Boolean(detail),
+            sameTf: Boolean(detail && detail.tf === tf),
+            tfNulled: el.tf === null
         };
     }, { component: COMPONENT });
-    expect(result.missingCount).toBe(0);
-    expect(result.bridgedCount).toBe(11);
+    expect(result.fired).toBe(true);
+    expect(result.sameTf).toBe(true);
+    expect(result.tfNulled).toBe(true);
+});
+
+test('event bridging: filter-focus / filter-blur', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const host = document.createElement('div');
+        host.innerHTML =
+            '<table-filter><table><tbody>' +
+            '<tr><th>City</th></tr>' +
+            '<tr><td>Sydney</td></tr>' +
+            '</tbody></table></table-filter>';
+        document.body.appendChild(host);
+        const el = host.querySelector('table-filter');
+        const input = el.tf.getFilterElement(0);
+        let focused = false;
+        let blurred = false;
+        el.addEventListener('filter-focus', () => { focused = true; });
+        el.addEventListener('filter-blur', () => { blurred = true; });
+        input.focus();
+        input.blur();
+        return { focused, blurred };
+    }, { component: COMPONENT });
+    expect(result.focused).toBe(true);
+    expect(result.blurred).toBe(true);
+});
+
+test('event bridging: re-bridge does not duplicate', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const host = document.createElement('div');
+        host.innerHTML =
+            '<table-filter><table><tbody>' +
+            '<tr><th>City</th></tr>' +
+            '<tr><td>Sydney</td></tr>' +
+            '</tbody></table></table-filter>';
+        document.body.appendChild(host);
+        const el = host.querySelector('table-filter');
+        const name = 'before-filtering';
+        const before = el.tf.emitter.events[name].length;
+        el._bridgeEvents();
+        const after = el.tf.emitter.events[name].length;
+        return { before, after };
+    }, { component: COMPONENT });
+    expect(result.before).toBe(1);
+    expect(result.after).toBe(1);
 });
 
 test('engine inits on the table resolved through for', async ({

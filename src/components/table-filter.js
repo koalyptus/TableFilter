@@ -20,11 +20,25 @@ import { TableFilter } from '../tablefilter.js';
  * The reverse direction used here (the element importing the engine)
  * does not pull the element into that bundle.
  *
- * Events: lifecycle events from the engine's `emitter` are re-dispatched
- * as DOM `CustomEvent`s on this element (bridge). Listeners are removed
- * on disconnect so nothing leaks (#902). TODO(#985): bridge events
- * emitted by attributes / table changes observed after connect.
+ * Events: engine `emitter` events (see `BRIDGED_EVENTS`) are
+ * re-dispatched as bubbling DOM `CustomEvent`s on this element, one
+ * event per engine event, with `detail: { tf, args }` (`tf` is the
+ * engine instance, `args` the array of engine arguments after it).
+ * Listeners are registered before `init()` so init-time events are
+ * bridged too, and removed on disconnect so nothing leaks (#902).
+ * TODO(#985): bridge events emitted by attributes / table changes
+ * observed after connect.
  */
+
+// Engine events re-dispatched as DOM CustomEvents. Keep in sync with the
+// `emitter.emit()` calls in src/tablefilter.js.
+const BRIDGED_EVENTS = [
+    'before-filter-init', 'after-filter-init', 'initialized',
+    'filters-row-inserted', 'filter-focus', 'filter-blur',
+    'before-filtering', 'after-filtering',
+    'before-clearing-filters', 'after-clearing-filters', 'destroy'
+];
+
 export class TableFilterElement extends HTMLElement {
     connectedCallback() {
         // A descendant light-DOM <table> wins over an external table
@@ -61,11 +75,12 @@ export class TableFilterElement extends HTMLElement {
         this.tf = Object.keys(config).length === 0 ?
             new TableFilter(this.table) :
             new TableFilter(this.table, config);
-        this.tf.init();
 
-        // Bridge engine lifecycle events as DOM CustomEvents on the
-        // element. Removed on disconnect so nothing leaks (#902).
+        // Bridge before init(): `before-filter-init`, `after-filter-init`,
+        // `filters-row-inserted` and `initialized` are emitted during
+        // init(), so a bridge installed afterwards would miss them.
         this._bridgeEvents();
+        this.tf.init();
     }
 
     /**
@@ -83,27 +98,28 @@ export class TableFilterElement extends HTMLElement {
     }
 
     /**
-     * Listen to engine `emitter` events and re-dispatch them as DOM
-     * `CustomEvent`s on this element. Event name and arg mapping:
-     * `initialized`, `destroy`, `filter-focus`, `filter-blur`,
-     * `filters-row-inserted`, `before-filtering`, `after-filtering`,
-     * `before-clearing-filters`, `after-clearing-filters`,
-     * `before-filter-init`, `after-filter-init`.
+     * Listen to the engine events in `BRIDGED_EVENTS` and re-dispatch
+     * each as a bubbling DOM `CustomEvent` of the same name on this
+     * element, with `detail: { tf, args }`:
+     * - `tf` is the engine instance
+     * - `args` is an array of the engine's remaining arguments (the
+     *   engine emits `emit(name, this, ...)`, so this is usually `[]`
+     *   or a single payload such as the filter input for `filter-focus`
+     *   or the values array for `after-filtering`)
+     *
+     * Re-entrant: bridging an already-bridged element first removes the
+     * previous listeners, so a second call cannot orphan handlers.
      */
     _bridgeEvents() {
+        this._unbridgeEvents();
         const tf = this.tf;
-        const events = [
-            'initialized', 'destroy',
-            'filter-focus', 'filter-blur', 'filters-row-inserted',
-            'before-filtering', 'after-filtering',
-            'before-clearing-filters', 'after-clearing-filters',
-            'before-filter-init', 'after-filter-init'
-        ];
         this._bridged = {};
-        events.forEach((name) => {
+        this._bridgedTf = tf;
+        BRIDGED_EVENTS.forEach((name) => {
             const handler = (...args) => {
                 this.dispatchEvent(new CustomEvent(name, {
-                    detail: args.slice(1)
+                    detail: { tf, args: args.slice(1) },
+                    bubbles: true
                 }));
             };
             tf.emitter.on([name], handler);
@@ -114,9 +130,11 @@ export class TableFilterElement extends HTMLElement {
     /**
      * Remove all listeners registered by `_bridgeEvents()`. Safe when
      * `_bridgeEvents()` was never run or was already unregistered.
+     * Unsubscribes on the engine captured at bridge time, not on
+     * `this.tf`, so a handler cannot be left behind if `tf` changed.
      */
     _unbridgeEvents() {
-        const tf = this.tf;
+        const tf = this._bridgedTf;
         if (!tf || !this._bridged) {
             return;
         }
@@ -124,6 +142,7 @@ export class TableFilterElement extends HTMLElement {
             tf.emitter.off([name], this._bridged[name]);
         });
         this._bridged = null;
+        this._bridgedTf = null;
     }
 
     /**
