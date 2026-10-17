@@ -54,6 +54,7 @@
       --tf-active-col: #ddf4ff;
   }
   ```
+  **Why tokens, and why they are additive**: the class names, stylesheet and theme files remain the primary, *complete* customization surface — every token is consumed as `var(--tf-x, <previous value>)`, so with no overrides rendering is unchanged and theme stylesheets keep overriding exactly as before. The tokens add a **value** channel on top: runtime theming without CSS overrides, themes expressed as token sets instead of duplicated hex values, dark mode / forced-colors by swapping tokens (#969), and — because custom properties *inherit* into shadow trees — the one channel that reaches shadow internals (`<tf-status>`, ...) from the light DOM. They are colours only, so they complement rather than replace classes; `::part()` covers the structural side of shadow internals.
 - **Stylus Deprecation Path**:
   - Phase 1: Output standard CSS directly alongside the existing theme stylesheets (`default`, `mytheme`, `skyblue`, `transparent`).
   - Phase 2: Deprecate `.styl` files and retain pure modern CSS with native CSS variables and nesting.
@@ -61,7 +62,7 @@
 ### 1.4 Trade-offs & Edge Cases
 | Consideration | Risk | Resolution |
 | :--- | :--- | :--- |
-| **Legacy `base_path` option** | Existing consumers configure `base_path: 'dist/tablefilter/'` to load CSS and extensions dynamically. | Preserve `tf.basePath` resolution in the UMD bundle while allowing ESM consumers to import styles directly (`import 'tablefilter/style'`). |
+| **Legacy `base_path` option** | Existing consumers configure `base_path: 'dist/tablefilter/'` to load CSS and extensions dynamically. | Preserve `tf.basePath` resolution in the UMD bundle while allowing ESM consumers to import styles directly (`import 'tablefilter/style'`). Note: the `style_path` / `stylesheet` / `themes_path` overrides are currently ignored (**#822**) and are restored as part of **#993**. |
 | **Extension Bundling** | Extensions (`sort`, `colOps`, etc.) are currently loaded via dynamic script tags. | Vite can output individual extension chunks (`dist/tablefilter/extensions/sort/sort.js`) matching the legacy file structure. |
 
 ---
