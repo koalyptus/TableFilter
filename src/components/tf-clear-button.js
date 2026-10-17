@@ -1,6 +1,6 @@
 /**
  * `<tf-clear-button>` custom element: accessible clear button
- * (ROADMAP: preliminary-and-milestone-0.8.0-plan.md, "Component 4").
+ * (ROADMAP: preliminary-and-milestone-0.8.0-plan.md).
  *
  * Scaffold (#911): an open shadow root exposing a semantic `<button>`
  * via the `button` part, with an accessible name and native keyboard
@@ -44,8 +44,10 @@ export class TfClearButtonElement extends HTMLElement {
         this._update();
     }
 
-    attributeChangedCallback() {
-        this._update();
+    attributeChangedCallback(name) {
+        if (name === 'label' || name === 'text' || name === 'disabled') {
+            this._update();
+        }
     }
 
     /**
