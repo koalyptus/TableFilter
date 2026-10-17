@@ -204,6 +204,16 @@ test('invalid config JSON warns and still inits on defaults', async ({
 // overrides are currently ignored by the engine (#822), so asserting
 // them here would encode the bug; that is tracked separately.
 test('styling configuration reaches the engine', async ({ page }) => {
+    // base_path drives the stylesheet/theme the engine loads on init, and
+    // its loader throws from `file.onerror` when a file 404s. Serve the
+    // fake path so this test asserts config mapping, not asset
+    // availability (otherwise it emits unhandled load errors).
+    await page.route('**/assets/tf/**', (route) =>
+        route.fulfill({
+            status: 200,
+            contentType: 'text/css',
+            body: ''
+        }));
     await page.goto(FIXTURE);
     const result = await mount(
         page,
@@ -213,6 +223,7 @@ test('styling configuration reaches the engine', async ({ page }) => {
         'config=\'{"themes":[{"name":"skyblue"}],' +
         '"flt_multi_css_class":"my-multi"}\''
     );
+    expect(result.initialized).toBe(true);
     // Core stylesheet/theme loader key.
     expect(result.basePath).toBe('/assets/tf/');
     expect(result.themes).toContainEqual({ name: 'skyblue' });
