@@ -1,6 +1,6 @@
 /**
  * `<tf-rows-counter>` custom element: accessible rows counter
- * (ROADMAP: preliminary-and-milestone-0.8.0-plan.md, "Component 3").
+ * (ROADMAP: preliminary-and-milestone-0.8.0-plan.md).
  *
  * Scaffold (#909): an open shadow root exposing the `label` and `count`
  * parts, rendered statically from the `text` and `count` attributes.
@@ -42,8 +42,10 @@ export class TfRowsCounterElement extends HTMLElement {
         this._update();
     }
 
-    attributeChangedCallback() {
-        this._update();
+    attributeChangedCallback(name) {
+        if (name === 'text' || name === 'count') {
+            this._update();
+        }
     }
 
     /**
