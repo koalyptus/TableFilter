@@ -80,7 +80,7 @@ export default defineConfig({
 
 ### Modern CSS & Custom Properties Transition
 
-> **Sequencing:** the token/theme *modernization* below is **post-parity** (see key-decisions 1.3 and the "Styling modernization" project). The parity-critical part is preserving the class names and the core styling configuration — not the tokens.
+> **Sequencing:** the token/theme *modernization* below belongs to the **"Styling modernization (post-1.0)" milestone**, after the v1.0.0 parity launch (see key-decisions 1.3). The parity-critical part is preserving the class names and the core styling configuration — not the tokens.
 
 - Retain existing CSS class names (`.flt`, `.fltsRow`, `.status`, `.pgSlc`, `.div_checklist`) to guarantee that consumer styling does not break.
 - Preserve the **core** styling configuration, not just the per-feature classes: the stylesheet/theme loader (`base_path`, `style_path`, `stylesheet`, `themes`, `themes_path`, `enable_default_theme`) and the core class options (`flts_row_css_class`, `flt_css_class`, `flt_multi_css_class`, `flt_small_css_class`, `single_filter.css_class`, `btn_css_class`). Porting these into `<table-filter>` is tracked by **#993**.
