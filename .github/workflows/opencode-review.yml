@@ -77,7 +77,7 @@ jobs:
             "Review PR $PR_NUMBER in ${{ github.repository }}. Get the change
             with 'gh pr diff $PR_NUMBER --repo ${{ github.repository }}'
             (GH_TOKEN is set) and review the diff itself; do not run tests.
-            Start with 'Review: PR $PR_NUMBER — Verdict: Approve / Changes requested / Flagged'. Be thorough - check the diff rather than trusting its
+            Start with 'Review — Verdict: Approve / Changes requested / Flagged'. Be thorough - check the diff rather than trusting its
             description - and apply the conventions in AGENTS.md. Flag dead
             code or debug output left in the diff. Write only the findings,
             each with file:line and a concrete fix. Skip the narration, 
