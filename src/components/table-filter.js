@@ -6,8 +6,9 @@ import { TableFilter } from '../tablefilter.js';
  * "Component 1").
  *
  * Behaviour arrives incrementally: table discovery (#899), engine init
- * (#900), declarative configuration (#901) and teardown (#902) are
- * done; event bridging (#903) follows.
+ * (#900), declarative configuration (#901), teardown (#902) and event
+ * bridging (#903) are done; runtime attribute observation (#985)
+ * follows.
  *
  * Importing this module registers the element. It is deliberately not
  * imported by src/tablefilter.js yet: that entry feeds the legacy ES5
@@ -18,7 +19,28 @@ import { TableFilter } from '../tablefilter.js';
  * the declarative demo page (#904) and the namespace migration (#965).
  * The reverse direction used here (the element importing the engine)
  * does not pull the element into that bundle.
+ *
+ * Events: engine `emitter` events (see `BRIDGED_EVENTS`) are
+ * re-dispatched as bubbling DOM `CustomEvent`s on this element, one
+ * event per engine event, with `detail: { tf, args }` (`tf` is the
+ * engine instance, `args` the array of engine arguments after it).
+ * Listeners are registered before `init()` so init-time events are
+ * bridged too, and removed on disconnect so nothing leaks (#902).
+ * TODO(#985): bridge events emitted by attributes / table changes
+ * observed after connect.
  */
+
+// Engine events re-dispatched as DOM CustomEvents. Keep in sync with the
+// `emitter.emit()` calls in src/tablefilter.js.
+// TODO(#989): use the shared event-name constants once the engine
+// exposes them, instead of duplicating the literals here.
+const BRIDGED_EVENTS = [
+    'before-filter-init', 'after-filter-init', 'initialized',
+    'filters-row-inserted', 'filter-focus', 'filter-blur',
+    'before-filtering', 'after-filtering',
+    'before-clearing-filters', 'after-clearing-filters', 'destroy'
+];
+
 export class TableFilterElement extends HTMLElement {
     connectedCallback() {
         // A descendant light-DOM <table> wins over an external table
@@ -55,6 +77,11 @@ export class TableFilterElement extends HTMLElement {
         this.tf = Object.keys(config).length === 0 ?
             new TableFilter(this.table) :
             new TableFilter(this.table, config);
+
+        // Bridge before init(): `before-filter-init`, `after-filter-init`,
+        // `filters-row-inserted` and `initialized` are emitted during
+        // init(), so a bridge installed afterwards would miss them.
+        this._bridgeEvents();
         this.tf.init();
     }
 
@@ -68,7 +95,56 @@ export class TableFilterElement extends HTMLElement {
         if (this.tf && this.tf.isInitialized()) {
             this.tf.destroy();
         }
+        this._unbridgeEvents();
         this.tf = null;
+    }
+
+    /**
+     * Listen to the engine events in `BRIDGED_EVENTS` and re-dispatch
+     * each as a bubbling DOM `CustomEvent` of the same name on this
+     * element, with `detail: { tf, args }`:
+     * - `tf` is the engine instance
+     * - `args` is an array of the engine's remaining arguments (the
+     *   engine emits `emit(name, this, ...)`, so this is usually `[]`
+     *   or a single payload such as the filter input for `filter-focus`
+     *   or the values array for `after-filtering`)
+     *
+     * Re-entrant: bridging an already-bridged element first removes the
+     * previous listeners, so a second call cannot orphan handlers.
+     */
+    _bridgeEvents() {
+        this._unbridgeEvents();
+        const tf = this.tf;
+        this._bridged = {};
+        this._bridgedTf = tf;
+        BRIDGED_EVENTS.forEach((name) => {
+            const handler = (...args) => {
+                this.dispatchEvent(new CustomEvent(name, {
+                    detail: { tf, args: args.slice(1) },
+                    bubbles: true
+                }));
+            };
+            tf.emitter.on([name], handler);
+            this._bridged[name] = handler;
+        });
+    }
+
+    /**
+     * Remove all listeners registered by `_bridgeEvents()`. Safe when
+     * `_bridgeEvents()` was never run or was already unregistered.
+     * Unsubscribes on the engine captured at bridge time, not on
+     * `this.tf`, so a handler cannot be left behind if `tf` changed.
+     */
+    _unbridgeEvents() {
+        const tf = this._bridgedTf;
+        if (!tf || !this._bridged) {
+            return;
+        }
+        Object.keys(this._bridged).forEach((name) => {
+            tf.emitter.off([name], this._bridged[name]);
+        });
+        this._bridged = null;
+        this._bridgedTf = null;
     }
 
     /**
