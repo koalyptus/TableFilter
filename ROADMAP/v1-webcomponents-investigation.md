@@ -456,6 +456,9 @@ flowchart TD
    - Implement `<dialog>` or `role="dialog"` for help popovers, column visibility dropdowns, and popup filters with focus trapping and `Esc` dismissal.
 
 ### Phase 5: Modern Theming & Design System
+
+> **Sequencing:** items 1–3 below (token API + docs, Stylus→CSS, SVG icons, dark mode / forced-colors) are **deferred to the post-parity "Styling modernization" project**. Only item 4 — preserving the legacy styling configuration — stays on the v1.0.0 parity path.
+
 1. **CSS Custom Properties**:
    - Define token system:
      ```css

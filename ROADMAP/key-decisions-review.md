@@ -54,8 +54,8 @@
       --tf-active-col: #ddf4ff;
   }
   ```
-  **Why tokens, and why they are additive**: the class names, stylesheet and theme files remain the primary, *complete* customization surface — every token is consumed as `var(--tf-x, <previous value>)`, so with no overrides rendering is unchanged and theme stylesheets keep overriding exactly as before. The tokens add a **value** channel on top: runtime theming without CSS overrides, themes expressed as token sets instead of duplicated hex values, dark mode / forced-colors by swapping tokens (#969), and — because custom properties *inherit* into shadow trees — the one channel that reaches shadow internals (`<tf-status>`, ...) from the light DOM. They are colours only, so they complement rather than replace classes; `::part()` covers the structural side of shadow internals.
-- **Stylus Deprecation Path**:
+  **Status — additive and deferred.** The tokens are an inert scaffold introduced in #892: every use is `var(--tf-x, <previous value>)`, so rendering is unchanged and the theme stylesheets keep overriding exactly as before. The token *API* and its documentation (#945), the Stylus→CSS build (#944), SVG icons (#943) and dark mode / forced-colors (#969) are a **follow-on "Styling modernization" project after v1.0.0 parity**, not part of the parity milestone. Parity does not depend on them: shadow internals are themeable via the host class + `::part()` (custom properties are an ergonomic overlay for bulk/runtime/cross-boundary theming, and are colours only).
+- **Stylus Deprecation Path** _(post-parity, see above)_:
   - Phase 1: Output standard CSS directly alongside the existing theme stylesheets (`default`, `mytheme`, `skyblue`, `transparent`).
   - Phase 2: Deprecate `.styl` files and retain pure modern CSS with native CSS variables and nesting.
 
