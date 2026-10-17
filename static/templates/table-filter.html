@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{NAME} v{VERSION} - table-filter Demo</title>
+    <!-- @import partials/style.html -->
+</head>
+<body>
+<h1>{NAME} v{VERSION}</h1>
+<h2>Declarative <code>&lt;table-filter&gt;</code> demo</h2>
+<p>
+    Every option lives in an attribute on the
+    <code>&lt;table-filter&gt;</code> element, so there is no imperative
+    <code>new TableFilter(...)</code> call. The element wraps a light-DOM
+    <code>&lt;table&gt;</code> and instantiates the engine on connect.
+</p>
+
+<table-filter
+    base-path="../dist/tablefilter/"
+    col-0="checklist"
+    col-1="select"
+    col-2="select"
+    alternate-rows="true"
+    rows-counter="true"
+    btn-reset="true"
+    status-bar="true"
+    no-results-message="true"
+    col-widths='["150px","100px","100px","100px","100px","100px","100px","70px","60px"]'
+>
+    <!-- @import partials/countries-table.html -->
+</table-filter>
+
+<!--
+    The element is not part of the legacy bundle yet (see the module
+    header), so load the module source: the Vite dev server that serves
+    the demos (npm run server / grunt dev-demos) compiles it. Shipping
+    the element in a bundle is #965.
+-->
+<script type="module" src="/src/components/table-filter.js"></script>
+</body>
+</html>

@@ -14,11 +14,12 @@ import { TableFilter } from '../tablefilter.js';
  * imported by src/tablefilter.js yet: that entry feeds the legacy ES5
  * webpack bundle, where Babel rewrites `extends HTMLElement` through
  * `_wrapNativeSuper`, whose `Function.prototype.toString` probe throws
- * in PhantomJS (2.1.1) and aborts the whole bundle. Wiring the element
- * into a shipped entry therefore belongs with the bundling work behind
- * the declarative demo page (#904) and the namespace migration (#965).
- * The reverse direction used here (the element importing the engine)
- * does not pull the element into that bundle.
+ * in PhantomJS (2.1.1) and aborts the whole bundle. The declarative
+ * demo page (#904) therefore loads this module through the Vite dev
+ * server (`demos/table-filter.html`), and wiring the element into a
+ * shipped entry belongs with the namespace migration (#965). The
+ * reverse direction used here (the element importing the engine) does
+ * not pull the element into that bundle.
  *
  * Events: engine `emitter` events (see `BRIDGED_EVENTS`) are
  * re-dispatched as bubbling DOM `CustomEvent`s on this element, one
