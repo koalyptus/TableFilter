@@ -39,13 +39,18 @@ export class TfRowsCounterElement extends HTMLElement {
     }
 
     connectedCallback() {
+        // Live-region contract: the counter announces count changes.
+        // `role="status"` implies `aria-live="polite"` and
+        // `aria-atomic="true"`; set explicitly so the contract is visible
+        // to consumers and a wrong consumer value is corrected.
+        this.setAttribute('role', 'status');
+        this.setAttribute('aria-live', 'polite');
+        this.setAttribute('aria-atomic', 'true');
         this._update();
     }
 
-    attributeChangedCallback(name) {
-        if (name === 'text' || name === 'count') {
-            this._update();
-        }
+    attributeChangedCallback() {
+        this._update();
     }
 
     /**

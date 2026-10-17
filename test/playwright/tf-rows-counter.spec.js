@@ -129,3 +129,43 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
     expect(result.label).toBe('rgb(1, 2, 3)');
     expect(result.count).toBe('rgb(9, 8, 7)');
 });
+
+// Live region: the counter announces count changes (ROADMAP: live region).
+test('connects as a polite ARIA status live region', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-rows-counter');
+        el.setAttribute('aria-live', 'off');
+        document.body.appendChild(el);
+        return {
+            role: el.getAttribute('role'),
+            live: el.getAttribute('aria-live'),
+            atomic: el.getAttribute('aria-atomic'),
+            nestedAria: el.shadowRoot.querySelectorAll(
+                '[role], [aria-live], [aria-atomic]'
+            ).length
+        };
+    }, COMPONENT);
+
+    expect(result.role).toBe('status');
+    expect(result.live).toBe('polite');
+    expect(result.atomic).toBe('true');
+    expect(result.nestedAria).toBe(0);
+});
+
+test('is exposed to assistive tech as a single status region', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-rows-counter');
+        el.setAttribute('text', 'Rows:');
+        el.setAttribute('count', '42');
+        document.body.appendChild(el);
+    }, COMPONENT);
+
+    await expect(page.locator('tf-rows-counter')).toHaveRole('status');
+    await expect(page.getByRole('status')).toHaveCount(1);
+});
