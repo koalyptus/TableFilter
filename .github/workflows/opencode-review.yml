@@ -69,11 +69,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr }}
         run: |
-          # pipefail: a mid-stream CLI failure must fail the step even if the
-          # filter exits 0 on partial text parts.
-          set -o pipefail
+          # The CLI prints the reply on stdout and its progress/errors on
+          # stderr, so the redirect alone is the comment body; a non-zero exit
+          # fails the step and trips "Report review failure" below.
           npm install --global @opencode/cli@2.0.30
-          opencode run --standalone --model opencode/big-pickle --format json \
+          opencode run --standalone --model opencode/big-pickle \
             "Review PR $PR_NUMBER in ${{ github.repository }} against
             AGENTS.md. Run
             'gh pr diff $PR_NUMBER --repo ${{ github.repository }}'
@@ -85,31 +85,7 @@ jobs:
             with file:line and a concrete fix. If the change is sound, say so
             in one sentence. Flag TODO(#n) on shims, a PR body missing its
             issue reference, a version bump, and dead code or debug output.
-            No preamble, no narration, no restating the diff." \
-            | node -e '
-            // JSONL events: post only reply text parts, never transcript
-            // (tool/reasoning events). Fail on error events or empty output.
-            const fs = require("fs");
-            const texts = [];
-            for (const line of fs.readFileSync(0, "utf8").split("\n")) {
-              const s = line.trim();
-              if (!s) continue;
-              let ev;
-              try { ev = JSON.parse(s); } catch (e) { continue; }
-              if (ev && ev.type === "text") {
-                const t = ev.part && ev.part.text;
-                if (t && t.trim()) texts.push(t.trim());
-              } else if (ev && ev.type === "error") {
-                console.error("review error: " + ((ev.error && ev.error.message) || "unknown"));
-                process.exit(1);
-              }
-            }
-            let body = texts.join("\n\n").trim();
-            if (!body) { console.error("review empty: no text parts"); process.exit(1); }
-            const cap = 50000;
-            if (body.length > cap) body = body.slice(0, cap) + "\n\n...[truncated: review exceeded 50KB cap]...";
-            process.stdout.write(body);
-            ' > /tmp/review.md
+            No preamble, no narration, no restating the diff." > /tmp/review.md
           gh pr comment "$PR_NUMBER" \
             --repo "${{ github.repository }}" --body-file /tmp/review.md
 
