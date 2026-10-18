@@ -7,11 +7,90 @@ const pkg = require('./package.json');
 
 const srcDir = path.join(__dirname, 'src').replace(/\\/g, '/') + '/';
 
+// Inject static imports of all extensions into the Vite bundle so they
+// are available without a bundler-specific loader (#991/#965).
+// TODO(#965): remove once Vite lazy/chunked extension loading replaces this
+const injectExtImports = () => ({
+    name: 'inject-ext-imports',
+    enforce: 'pre',
+    transform(code, id) {
+        if (!id.endsWith('tablefilter.js')) {
+            return null;
+        }
+        const imports = [
+            'import __Sort from "./extensions/sort/sort";',
+            'import __ColsVisibility from ' +
+                '"./extensions/colsVisibility/colsVisibility";',
+            'import __ColOps from "./extensions/colOps/colOps";',
+            'import __AdvancedGrid from ' +
+                '"./extensions/advancedGrid/advancedGrid";',
+            'import __FiltersVisibility from ' +
+                '"./extensions/filtersVisibility/filtersVisibility";'
+        ].join('\n');
+        let registry = '\nconst EXTENSIONS = {';
+        registry += ' sort: __Sort, ';
+        registry += 'colsVisibility: __ColsVisibility, ';
+        registry += 'colOps: __ColOps, ';
+        registry += 'advancedGrid: __AdvancedGrid, ';
+        registry += 'filtersVisibility: __FiltersVisibility };';
+        return imports + registry + code;
+    }
+});
+
+// Flatten the UMD global so `window.TableFilter` is the class itself
+// (flat-global compat), not `{ TableFilter: [class] }` (#965).
+const flattenUmdGlobal = () => ({
+    name: 'flatten-umd-global',
+    generateBundle(options, bundle) {
+        if (options.format !== 'umd') {
+            return;
+        }
+        for (const fileName in bundle) {
+            const chunk = bundle[fileName];
+            if (chunk.type === 'chunk') {
+                chunk.code += '\\nif(typeof globalThis !== "undefined" ' +
+                    '&& globalThis.TableFilter ' +
+                    '&& globalThis.TableFilter.TableFilter) { ' +
+                    'globalThis.TableFilter = ' +
+                    'globalThis.TableFilter.TableFilter; }';
+            }
+        }
+    }
+});
+
+// Serve dist/ files as raw static assets (no Vite transform) during dev,
+// so the pre-built UMD bundle (which may contain import()) is not parsed
+// by Vite's dev server (#965).
+const serveDistRaw = () => ({
+    name: 'serve-dist-raw',
+    configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+            const url = req.url.split('?')[0];
+            if (url.startsWith('/dist/')) {
+                const filePath = path.join(__dirname, url);
+                if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+                    const ext = path.extname(filePath);
+                    if (ext === '.js') {
+                        res.setHeader('Content-Type', 'application/javascript');
+                    } else if (ext === '.css') {
+                        res.setHeader('Content-Type', 'text/css');
+                    } else if (ext === '.map') {
+                        res.setHeader('Content-Type', 'application/json');
+                    }
+                    fs.createReadStream(filePath).pipe(res);
+                    return;
+                }
+            }
+            next();
+        });
+    }
+});
+
 // Same {VERSION}/{AUTHOR} substitution as webpack.config.js
 const replacePlaceholders = () => ({
     name: 'tablefilter-placeholders',
     transform(code, id) {
-        if (!id.replace(/\\/g, '/').startsWith(srcDir)) {
+        if (!id.replace(/\\\\/g, '/').startsWith(srcDir)) {
             return null;
         }
         return code
@@ -20,12 +99,8 @@ const replacePlaceholders = () => ({
     }
 });
 
-// Stage the Vite UMD bundle next to the webpack output without overwriting
-// it: the published dist/tablefilter/tablefilter.js must stay the webpack
-// flat-global build until consumers migrate to the window.TableFilter
-// namespace. The directory's other assets (style/, chunks) are untouched.
-// TODO(#965): point this copy at tablefilter.js and drop the .vite.js
-// provisional name once tests/demos migrate.
+// Copy the Vite UMD bundle to the historic dist/tablefilter/tablefilter.js
+// path so consumers (tests, demos) load the Vite-built bundle.
 const copyLegacyDist = () => ({
     name: 'tablefilter-legacy-dist',
     writeBundle(options) {
@@ -37,17 +112,22 @@ const copyLegacyDist = () => ({
         fs.mkdirSync(legacyDir, {recursive: true});
         fs.copyFileSync(
             path.join(outDir, 'tablefilter.umd.js'),
-            path.join(legacyDir, 'tablefilter.vite.js')
+            path.join(legacyDir, 'tablefilter.js')
         );
     }
 });
 
 module.exports = {
-    plugins: [replacePlaceholders(), copyLegacyDist()],
+    plugins: [
+        replacePlaceholders(),
+        copyLegacyDist(),
+        flattenUmdGlobal(),
+        injectExtImports(),
+        serveDistRaw()
+    ],
     build: {
         lib: {
             entry: path.join(__dirname, 'src/tablefilter.js'),
-            // name is required for the UMD build, it sets window.TableFilter
             name: 'TableFilter',
             formats: ['es', 'cjs', 'umd'],
             fileName: (format) => {
@@ -61,7 +141,11 @@ module.exports = {
                 }
             }
         },
-        // dist/ also holds the webpack build output, do not wipe it
+        rollupOptions: {
+            output: {
+                exports: 'named'
+            }
+        },
         emptyOutDir: false
     },
     server: {

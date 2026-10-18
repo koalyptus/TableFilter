@@ -1351,6 +1351,15 @@ export class TableFilter {
         // loading outside webpack degrades gracefully (extensions simply
         // unavailable) instead of throwing synchronously before `initialized =
         // true` and leaving the instance half-initialised (#991).
+        if (typeof EXTENSIONS !== 'undefined' && EXTENSIONS[name]) {
+            /* eslint-disable */
+            let inst = new EXTENSIONS[name](this, ext);
+            /* eslint-enable */
+            inst.init();
+            this.ExtRegistry[name] = inst;
+            return;
+        }
+
         if (typeof require !== 'undefined') {
             try {
                 require(['./' + modulePath], (mod) => {
