@@ -119,8 +119,14 @@ export class ClearButton extends Feature {
                 cont.setAttribute('title', this.tooltip);
             }
             targetEl.appendChild(cont);
-            resetEl = cont.shadowRoot.querySelector('button');
-            addEvt(resetEl, 'click', () => this.onClick());
+            resetEl = cont.shadowRoot ?
+                cont.shadowRoot.querySelector('button') : null;
+            if (!resetEl) {
+                resetEl = cont;
+            }
+            if (resetEl) {
+                addEvt(resetEl, 'click', () => this.onClick());
+            }
             this.element = resetEl;
             this.container = cont;
         } else {
