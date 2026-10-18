@@ -34,6 +34,8 @@ test('Properties', function() {
 test('Can destroy', function() {
     rowsCounter.destroy();
     deepEqual(rowsCounter.initialized, false, 'not initialised');
+    deepEqual(rowsCounter.container, null, 'container removed');
+    deepEqual(rowsCounter.label, null, 'label removed');
 });
 test('Can reset', function() {
     rowsCounter.reset();

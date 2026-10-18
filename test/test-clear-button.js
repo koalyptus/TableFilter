@@ -127,6 +127,7 @@ test('Remove UI', function() {
     clearButton.destroy();
     var btnResetEl = tf.feature('clearButton').element;
     deepEqual(btnResetEl, null, 'Clear button is removed');
+    deepEqual(clearButton.container, null, 'container removed');
 });
 
 test('Re-set UI with no icons and text button', function() {
