@@ -107,7 +107,9 @@ from the `message` attribute, i.e. `this._msgEl.innerHTML = ...`, with the
 markup passed through `sanitizeHtml()` first (P7). The `label` part stays
 `textContent` — legacy also used a text node for `text`
 (`statusBar.js` `labelSpan.appendChild(createText(this.text))`), so it is
-already correct. Implemented in #1014, with HTML-message and sanitiser tests.
+already correct. Implemented in
+[#1014](https://github.com/koalyptus/TableFilter/issues/1014), with
+HTML-message and sanitiser tests.
 
 ## 5. Per-milestone execution
 
@@ -122,7 +124,7 @@ already correct. Implemented in #1014, with HTML-message and sanitiser tests.
 ### 0.8.x
 - [ ] Route every `*_html` injection below through `sanitizeHtml()` (P7).
 - [ ] `<tf-loader>`: `loader.html` → slot (P2); text fallback (P3).
-- [ ] `<tf-help>`: instructions (`html`/`text`) + button (`btn_html`/`btn_text`) → slot(s); fix the HTML default (#5).
+- [ ] `<tf-help>`: instructions (`html`/`text`) + button (`btn_html`/`btn_text`) → slot(s); fix the HTML default (inventory row 5).
 - [ ] `<tf-no-results>`: `content` → slot or part; decide text vs HTML for the default message.
 - [ ] `<tf-popup-filter>`: `image_html` → slotted icon (P2); the icon element owns its semantics (P4 route 2).
 
@@ -140,7 +142,9 @@ already correct. Implemented in #1014, with HTML-message and sanitiser tests.
   rule the components already follow.
 - **Render everything as `textContent`.** Rejected: silently breaks documented
   HTML config (Help default text, Loader, NoResults, Pager buttons).
-- **No sanitiser.** Rejected (review on #1014): raw `innerHTML` of config
+- **No sanitiser.** Rejected (review on
+  [#1014](https://github.com/koalyptus/TableFilter/issues/1014)): raw
+  `innerHTML` of config
   markup is an XSS sink waiting for one accidental untrusted value. Instead
   every injection goes through `sanitizeHtml()` (`src/sanitize.js`,
   **DOMPurify**), the project's first runtime dependency. It is a boundary, not
@@ -151,5 +155,6 @@ already correct. Implemented in #1014, with HTML-message and sanitiser tests.
 Each component bridge that handles a `*_html`/`*_text` option adds a Playwright
 test asserting (a) the configured content renders through the slot/part,
 (b) it is not dropped, and (c) for `*_html`, dangerous markup is stripped by
-`sanitizeHtml()` (see the `tf-status` sanitiser test in #1014). The existing
+`sanitizeHtml()` (see the `tf-status` sanitiser test in
+[#1014](https://github.com/koalyptus/TableFilter/issues/1014)). The existing
 `test/playwright/ce-bridge.spec.js` icon-mode case is the template.
