@@ -27,3 +27,8 @@ This directory contains the complete technical specification, architectural inve
    - Step-by-step technical blueprints for preliminary tooling and dependency rationalization.
    - Implementation specification for Milestone 0.8.0 components (`<table-filter>` and `<tf-status>`).
    - Concrete execution task checklist with verification gates.
+
+5. [**Content Projection Parity (custom HTML / slotted content)**](./content-projection-parity.md)
+   - Inventory of every legacy `innerHTML` config option (`btn_reset.html`, `loader.html`, `help_instructions.*`, `no_results_message.content`, pager button HTML, extension button HTML, colOps `write_method`).
+   - One mechanism for all: default `<slot>` + `part`s, with per-option mapping rules.
+   - Per-milestone execution plan and the `<tf-status>` HTML-message regression. Owned by [#1012](https://github.com/koalyptus/TableFilter/issues/1012).
