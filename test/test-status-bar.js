@@ -76,6 +76,9 @@ test('Properties', function() {
 test('Can destroy', function() {
     statusBar.destroy();
     deepEqual(statusBar.initialized, false, 'not initialised');
+    deepEqual(statusBar.container, null, 'container removed');
+    deepEqual(statusBar.msgContainer, null, 'message container removed');
+    deepEqual(statusBar.labelContainer, null, 'label container removed');
 });
 test('Can reset', function() {
     statusBar.reset();
