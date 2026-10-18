@@ -190,43 +190,17 @@ export class StatusBar extends Feature {
         // If the custom element is registered (Vite / module load) use it;
         // otherwise fall back to the legacy div/span structure (#908).
         // TODO(#965): restore static import once namespace migration lands.
-        let statusEl, msgSpan, labelSpan, statusDiv;
-        if (typeof customElements !== 'undefined' &&
-            customElements.get('tf-status')) {
-            statusEl = document.createElement('tf-status');
-            statusEl.className = this.cssClass;
-            if (this.text) {
-                statusEl.setAttribute('text', this.text);
-            }
-        } else {
-            // Legacy fallback (#908) when <tf-status> isn't loaded
-            statusDiv = createElm('div');
-            statusDiv.className = this.cssClass;
-            msgSpan = createElm('span');
-            labelSpan = createElm('span');
-            labelSpan.appendChild(createText(this.text));
-            statusDiv.appendChild(labelSpan);
-            statusDiv.appendChild(msgSpan);
-            statusEl = statusDiv;
-        }
-
-        let targetEl = (!this.targetId) ?
+        // init/initLegacy are split so the legacy path is a clean deletion
+        // boundary when #965 lands.
+        const targetEl = (!this.targetId) ?
             tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.targetId);
-        targetEl.appendChild(statusEl);
 
-        this.container = statusEl;
-        this.statusEl = statusEl;
-        if (statusEl.shadowRoot) {
-            this.msgContainer = statusEl.shadowRoot
-                .querySelector('[part=message]');
-            this.labelContainer = statusEl.shadowRoot
-                .querySelector('[part=label]');
+        if (typeof customElements !== 'undefined' &&
+            customElements.get('tf-status')) {
+            this.initCE(targetEl);
         } else {
-            this.msgContainer = msgSpan ||
-                statusEl.querySelector('span');
-            this.labelContainer = labelSpan ||
-                statusEl.querySelector(':scope > span:first-child');
+            this.initLegacy(targetEl);
         }
 
         // subscribe to events
@@ -254,6 +228,50 @@ export class StatusBar extends Feature {
         this.initialized = true;
 
         emitter.emit('feature-initialized', this);
+    }
+
+    /**
+     * Initialize using the <tf-status> custom element
+     * @param {DOMElement} targetEl Target container element
+     * @private
+     */
+    initCE(targetEl) {
+        const statusEl = document.createElement('tf-status');
+        statusEl.className = this.cssClass;
+        if (this.text) {
+            statusEl.setAttribute('text', this.text);
+        }
+        targetEl.appendChild(statusEl);
+
+        this.container = statusEl;
+        this.statusEl = statusEl;
+        this.msgContainer = statusEl.shadowRoot
+            .querySelector('[part=message]');
+        this.labelContainer = statusEl.shadowRoot
+            .querySelector('[part=label]');
+        this._ce = true;
+    }
+
+    /**
+     * Initialize using the legacy div/span structure
+     * @param {DOMElement} targetEl Target container element
+     * @private
+     */
+    initLegacy(targetEl) {
+        const statusDiv = createElm('div');
+        statusDiv.className = this.cssClass;
+        const msgSpan = createElm('span');
+        const labelSpan = createElm('span');
+        labelSpan.appendChild(createText(this.text));
+        statusDiv.appendChild(labelSpan);
+        statusDiv.appendChild(msgSpan);
+        targetEl.appendChild(statusDiv);
+
+        this.container = statusDiv;
+        this.statusEl = statusDiv;
+        this.msgContainer = msgSpan;
+        this.labelContainer = labelSpan;
+        this._ce = false;
     }
 
     /**
@@ -292,13 +310,20 @@ export class StatusBar extends Feature {
 
         let emitter = this.emitter;
 
-        if (this.container && this.container.parentNode) {
-            removeElm(this.container);
+        if (this._ce) {
+            if (this.container && this.container.parentNode) {
+                removeElm(this.container);
+            }
+        } else {
+            if (this.container && this.container.parentNode) {
+                removeElm(this.container);
+            }
         }
         this.statusEl = null;
         this.msgContainer = null;
         this.labelContainer = null;
         this.container = null;
+        this._ce = false;
 
         // Unsubscribe to events
         emitter.off(['before-filtering'], () => this.message(this.msgFilter));

@@ -106,39 +106,17 @@ export class RowsCounter extends Feature {
         // element is registered (Vite / module load) use it; otherwise
         // fall back to the legacy div/span structure (#910).
         // TODO(#965): restore static import once namespace migration lands.
-        let countEl, countSpan, countText, countDiv;
-        if (typeof customElements !== 'undefined' &&
-            customElements.get('tf-rows-counter')) {
-            countEl = document.createElement('tf-rows-counter');
-            countEl.className = this.cssClass;
-            if (this.text) {
-                countEl.setAttribute('text', this.text);
-            }
-        } else {
-            // Legacy fallback (#910) when <tf-rows-counter> isn't loaded
-            countDiv = createElm('div');
-            countDiv.className = this.cssClass;
-            countText = createElm('span');
-            countText.appendChild(createText(this.text));
-            countSpan = createElm('span');
-            countDiv.appendChild(countText);
-            countDiv.appendChild(countSpan);
-            countEl = countDiv;
-        }
-
-        // counter is added to defined element
-        let targetEl = !this.targetId ?
+        // initCE/initLegacy are split so the legacy path is a clean
+        // deletion boundary when #965 lands.
+        const targetEl = !this.targetId ?
             tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.targetId);
 
-        targetEl.appendChild(countEl);
-
-        this.container = countEl;
-        if (countEl.shadowRoot) {
-            this.label = countEl.shadowRoot.querySelector('[part=count]');
+        if (typeof customElements !== 'undefined' &&
+            customElements.get('tf-rows-counter')) {
+            this.initCE(targetEl);
         } else {
-            this.label = countSpan ||
-                countEl.querySelector('span:last-child');
+            this.initLegacy(targetEl);
         }
 
         // subscribe to events
@@ -151,6 +129,44 @@ export class RowsCounter extends Feature {
         this.refresh();
 
         this.emitter.emit('feature-initialized', this);
+    }
+
+    /**
+     * Initialize using the <tf-rows-counter> custom element
+     * @param {DOMElement} targetEl Target container element
+     * @private
+     */
+    initCE(targetEl) {
+        const countEl = document.createElement('tf-rows-counter');
+        countEl.className = this.cssClass;
+        if (this.text) {
+            countEl.setAttribute('text', this.text);
+        }
+        targetEl.appendChild(countEl);
+
+        this.container = countEl;
+        this.label = countEl.shadowRoot.querySelector('[part=count]');
+        this._ce = true;
+    }
+
+    /**
+     * Initialize using the legacy div/span structure
+     * @param {DOMElement} targetEl Target container element
+     * @private
+     */
+    initLegacy(targetEl) {
+        const countDiv = createElm('div');
+        countDiv.className = this.cssClass;
+        const countText = createElm('span');
+        countText.appendChild(createText(this.text));
+        const countSpan = createElm('span');
+        countDiv.appendChild(countText);
+        countDiv.appendChild(countSpan);
+        targetEl.appendChild(countDiv);
+
+        this.container = countDiv;
+        this.label = countSpan;
+        this._ce = false;
     }
 
     /**
@@ -207,6 +223,7 @@ export class RowsCounter extends Feature {
         }
         this.label = null;
         this.container = null;
+        this._ce = false;
 
         // unsubscribe to events
         this.emitter.off(['after-filtering', 'grouped-by-page'],
