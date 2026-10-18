@@ -20,9 +20,9 @@ one mechanism and one set of rules for all of them.
 
 | # | Feature | Config key(s) | Property | Injected at | Target element | Milestone |
 |---|---------|---------------|----------|-------------|----------------|-----------|
-| 1 | ClearButton | `btn_reset.html` (default `<input class="reset">`) | `this.html` | `clearButton.js:173` | `<tf-clear-button>` | 0.8.0 |
-| 2 | StatusBar | `status_bar.text`, `msg_*` | `this.text`, `this.msg*` | `statusBar.js:294` | `<tf-status>` | 0.8.0 |
-| 3 | RowsCounter | generated count text | `this.label` | `rowsCounter.js:207` | `<tf-rows-counter>` | 0.8.0 |
+| 1 | ClearButton | `btn_reset.html` (default `<input class="reset">`) | `this.html` | `clearButton.js:113` | `<tf-clear-button>` | 0.8.0 |
+| 2 | StatusBar | `status_bar.text`, `msg_*` | `this.text`, `this.msg*` | `statusBar.js:278` | `<tf-status>` | 0.8.0 |
+| 3 | RowsCounter | generated count text | `this.label` | `rowsCounter.js:193` | `<tf-rows-counter>` | 0.8.0 |
 | 4 | Loader | `loader.html` | `this.html` | `loader.js:125` | `<tf-loader>` | 0.8.x |
 | 5 | Help | `help_instructions.html`, `.text`, `.btn_html`, `.btn_text` | `this.instrHtml`, `this.instrText`, `this.btnHtml`, `this.btnText` | `help.js:181,188,194,199` | `<tf-help>` | 0.8.x |
 | 6 | NoResults | `no_results_message.content` ("accepts HTML") | `this.content` | `noResults.js:102` | `<tf-no-results>` | 0.8.x |
@@ -58,7 +58,7 @@ The bridge maps legacy options onto that surface with these rules.
 | **P4 No wrapper (route 2)** | button components (ClearButton, Help widget, Paging, filtersVisibility, colsVisibility) | The element renders the bare `<slot>`; a slotted control is the control; the host adds button semantics only for element-rendered content. No nested controls. |
 | **P5 Messages preserve HTML** | StatusBar, NoResults | The message node renders configured values as HTML (`innerHTML`), matching legacy `statusBar` (`msgContainer.innerHTML = t`). The label/`text` stays text (legacy used a text node). No silent escaping. |
 | **P6 Extensions off-shadow** | colOps, gridLayout | Content written into the light-DOM table is unaffected by Shadow DOM; keep as-is. |
-| **P7 Trust boundary** | all | Config HTML is integrator-trusted; the engine does not sanitise (unchanged from legacy). A migrated component must **not silently drop or escape** configured content. |
+| **P7 Sanitised boundary** | all | Config HTML is integrator-authored but always passed through `sanitizeHtml()` (DOMPurify) before `innerHTML`: ordinary markup is preserved, scripts / event handlers / `javascript:` URLs are stripped. The one shared helper is the trust boundary. |
 
 ### P4 in practice — route 2 (no wrapper)
 
@@ -99,20 +99,20 @@ not a single `<button>`.
 
 The merged `<tf-status>` bridge renders messages with `textContent`
 (`src/components/tf-status.js`), while legacy `statusBar` used `innerHTML`
-(`statusBar.js:294`). Consumers who put markup in `status_bar.text` / `msg_*`
+(`statusBar.js:278`). Consumers who put markup in `status_bar.text` / `msg_*`
 now see escaped text.
 
 **Decision (parity wins): fix.** Render the `message` part with `innerHTML`
-from the `message` attribute, i.e. `this._msgEl.innerHTML = ...`. The `label`
-part stays `textContent` — legacy also used a text node for `text`
+from the `message` attribute, i.e. `this._msgEl.innerHTML = ...`, with the
+markup passed through `sanitizeHtml()` first (P7). The `label` part stays
+`textContent` — legacy also used a text node for `text`
 (`statusBar.js` `labelSpan.appendChild(createText(this.text))`), so it is
-already correct. Config is integrator-trusted, so this is no less safe than
-legacy. Covered by an added HTML-message test.
+already correct. Implemented in #1014, with HTML-message and sanitiser tests.
 
 ## 5. Per-milestone execution
 
 ### 0.8.0 (parity of the shipped leaf components)
-- [ ] `<tf-status>`: render the message part as HTML (§4, decided); keep the label as text.
+- [ ] `<tf-status>`: render the message part as sanitised HTML (§4, decided); keep the label as text.
 - [ ] `<tf-clear-button>`: rework to route 2 (§3) — remove the wrapper
       `<button>`, keep the `<slot>`, stop `_update()` deleting it, and add host
       semantics only for element-rendered content. Then drop the `!this.html`
@@ -120,6 +120,7 @@ legacy. Covered by an added HTML-message test.
 - [ ] `<tf-rows-counter>`: no consumer markup; confirm label is text-only.
 
 ### 0.8.x
+- [ ] Route every `*_html` injection below through `sanitizeHtml()` (P7).
 - [ ] `<tf-loader>`: `loader.html` → slot (P2); text fallback (P3).
 - [ ] `<tf-help>`: instructions (`html`/`text`) + button (`btn_html`/`btn_text`) → slot(s); fix the HTML default (#5).
 - [ ] `<tf-no-results>`: `content` → slot or part; decide text vs HTML for the default message.
@@ -139,13 +140,16 @@ legacy. Covered by an added HTML-message test.
   rule the components already follow.
 - **Render everything as `textContent`.** Rejected: silently breaks documented
   HTML config (Help default text, Loader, NoResults, Pager buttons).
-- **Sanitise config HTML.** Out of scope: config is integrator-authored and
-  trusted; sanitising would change behaviour. Tracked as a separate question if
-  we ever accept untrusted content.
+- **No sanitiser.** Rejected (review on #1014): raw `innerHTML` of config
+  markup is an XSS sink waiting for one accidental untrusted value. Instead
+  every injection goes through `sanitizeHtml()` (`src/sanitize.js`,
+  **DOMPurify**), the project's first runtime dependency. It is a boundary, not
+  a behaviour change for benign config.
 
 ## 7. Verification
 
 Each component bridge that handles a `*_html`/`*_text` option adds a Playwright
-test asserting (a) the configured content renders through the slot/part, and
-(b) it is not dropped. The existing `test/playwright/ce-bridge.spec.js` icon-mode
-case is the template.
+test asserting (a) the configured content renders through the slot/part,
+(b) it is not dropped, and (c) for `*_html`, dangerous markup is stripped by
+`sanitizeHtml()` (see the `tf-status` sanitiser test in #1014). The existing
+`test/playwright/ce-bridge.spec.js` icon-mode case is the template.
