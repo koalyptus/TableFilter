@@ -55,30 +55,45 @@ The bridge maps legacy options onto that surface with these rules.
 | **P1 Slot-first** | all components | One mechanism: default slot + `part`s. No bespoke `innerHTML` API per component. |
 | **P2 `*_html` → light DOM** | `btn_reset.html`, `loader.html`, `help_instructions.html`, `btn_html`, `image_html`, `btn_*_page_html` | Bridge sets `host.innerHTML = cfg`; the slot renders it. Keeps integrator CSS classes working (content stays in light DOM). |
 | **P3 `*_text` → text** | `*_text`, `text`, `content`, `msg_*` | Rendered with `textContent`. Legacy defaults that embed markup/entities are split into plain text + a `*_html` path (fix the default, not the consumer). |
-| **P4 No nested controls** *(open)* | button components (ClearButton, Help widget, Paging, filtersVisibility, colsVisibility) | The element renders a `<button>`, so slotted `*_html` would nest controls. Route to be chosen below. |
+| **P4 No wrapper (route 2)** | button components (ClearButton, Help widget, Paging, filtersVisibility, colsVisibility) | The element renders the bare `<slot>`; a slotted control is the control; the host adds button semantics only for element-rendered content. No nested controls. |
 | **P5 Messages preserve HTML** | StatusBar, NoResults | The message node renders configured values as HTML (`innerHTML`), matching legacy `statusBar` (`msgContainer.innerHTML = t`). The label/`text` stays text (legacy used a text node). No silent escaping. |
 | **P6 Extensions off-shadow** | colOps, gridLayout | Content written into the light-DOM table is unaffected by Shadow DOM; keep as-is. |
 | **P7 Trust boundary** | all | Config HTML is integrator-trusted; the engine does not sanitise (unchanged from legacy). A migrated component must **not silently drop or escape** configured content. |
 
-### P4 in practice (open decision)
+### P4 in practice — route 2 (no wrapper)
 
 The element template is `<button part="button"><slot></slot></button>`, so a
 slotted `btn_reset.html` becomes a control inside a control
 (`<button><input type="button" class="reset"></button>` — invalid, two
 activatable elements). Legacy had no wrapper: the `<input class="reset">` /
-`<a class="reset">` was the control. Options:
+`<a class="reset">` was the control.
 
-1. **Element-as-control** — custom `html` must be presentational (icon/label);
-   the element owns the control; the default control markup (`<input
-   class="reset">`, pager `<input>`) stays on the legacy path until
-   `::part(button)` theming (post-1.0). Cleanest element, weakest parity.
-2. **No wrapper** — render the bare `<slot>`; a slotted control is the control,
-   the host takes button semantics only when it renders its own. Preserves
-   `btn_reset.html` verbatim (including the theme's `input.reset` icon).
-3. **Hybrid** — wrapper button only for non-interactive content, bare slot for
-   controls. Best parity, most heuristics.
+**Chosen route: 2 (no wrapper).** The element renders the bare `<slot>` and
+never wraps consumer content in a `<button>`. The contract:
 
-Chosen route: **TBD** (tracked by [#1012](https://github.com/koalyptus/TableFilter/issues/1012)).
+- **Consumer content** (`*_html`, or declarative light DOM) is projected
+  verbatim and owns its semantics. For `btn_reset.html` the `<input
+  class="reset">` / `<a class="reset">` stays the control. The host adds **no**
+  `role="button"`/`tabindex` (no double control) but still listens for the
+  bubbling `click` to fire the feature action.
+- **No consumer content**: the element renders its own control *and only then*
+  exposes button semantics (`role="button"`, `tabindex="0"`, Enter/Space),
+  themed via `::part(button)`.
+
+Consequences:
+
+- `btn_reset.html` works verbatim, including the default `<input class="reset">`
+  icon, so the theme's `input.reset` (`static/style/reset-button.styl`) keeps
+  painting it. The interim `!this.html` icon-mode fallback to the legacy path
+  can then be dropped.
+- `<tf-clear-button>` must change: remove the wrapper `<button>` and stop
+  `_update()` setting `button.textContent` (today that deletes the `<slot>`, so
+  slotted content is never projected).
+- Pager / filtersVisibility / colsVisibility / Help widget adopt the same
+  shape: bare slot; host semantics only for element-rendered content.
+
+Trade-off accepted: for consumer-supplied controls the element is a wrapper,
+not a single `<button>`.
 
 ## 4. Resolved regression: `<tf-status>` HTML messages
 
@@ -98,18 +113,20 @@ legacy. Covered by an added HTML-message test.
 
 ### 0.8.0 (parity of the shipped leaf components)
 - [ ] `<tf-status>`: render the message part as HTML (§4, decided); keep the label as text.
-- [ ] `<tf-clear-button>`: presentational-content slot documented + tested (done in #912 for text mode; add when `::part()` theming lands).
+- [ ] `<tf-clear-button>`: rework to route 2 (§3) — remove the wrapper
+      `<button>`, keep the `<slot>`, stop `_update()` deleting it, and add host
+      semantics only for element-rendered content. Then drop the `!this.html`
+      icon-mode fallback.
 - [ ] `<tf-rows-counter>`: no consumer markup; confirm label is text-only.
-- [ ] **Open decision (P4):** pick the button-component route (element-as-control / no-wrapper / hybrid) — see §3.
 
 ### 0.8.x
 - [ ] `<tf-loader>`: `loader.html` → slot (P2); text fallback (P3).
 - [ ] `<tf-help>`: instructions (`html`/`text`) + button (`btn_html`/`btn_text`) → slot(s); fix the HTML default (#5).
 - [ ] `<tf-no-results>`: `content` → slot or part; decide text vs HTML for the default message.
-- [ ] `<tf-popup-filter>`: `image_html` → slotted icon (P2), presentational only (P4).
+- [ ] `<tf-popup-filter>`: `image_html` → slotted icon (P2); the icon element owns its semantics (P4 route 2).
 
 ### 0.9.0
-- [ ] `<tf-pager>`: `btn_*_page_html` → slotted button content (P2/P4); `btn_*_page_text` → text (P3).
+- [ ] `<tf-pager>`: `btn_*_page_html` → slotted button content (P2/P4 route 2); `btn_*_page_text` → text (P3).
 
 ### post-1.0 (extensions)
 - [ ] filtersVisibility / colsVisibility: `*_html` → slots, `*_text` → text; fix entity defaults.
