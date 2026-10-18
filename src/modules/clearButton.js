@@ -147,6 +147,7 @@ export class ClearButton extends Feature {
         }
         this.element = resetEl;
         this.container = cont;
+        this._ce = true;
     }
 
     /**
@@ -171,6 +172,7 @@ export class ClearButton extends Feature {
         }
         this.element = cont.firstChild;
         this.container = cont;
+        this._ce = false;
     }
 
     /**
@@ -180,14 +182,37 @@ export class ClearButton extends Feature {
         if (!this.initialized) {
             return;
         }
+        if (this._ce) {
+            this.destroyCE();
+        } else {
+            this.destroyLegacy();
+        }
+        this.element = null;
+        this.container = null;
+        this._ce = false;
+        this.initialized = false;
+    }
+
+    /**
+     * Destroy the custom-element path
+     * @private
+     */
+    destroyCE() {
+        if (this.container && this.container.parentNode) {
+            removeElm(this.container);
+        }
+    }
+
+    /**
+     * Destroy the legacy path
+     * @private
+     */
+    destroyLegacy() {
         if (this.container && this.container.parentNode) {
             removeElm(this.container);
         } else if (this.element && this.element.parentNode) {
             removeElm(this.element);
         }
-        this.element = null;
-        this.container = null;
-        this.initialized = false;
     }
 }
 
