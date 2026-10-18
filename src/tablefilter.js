@@ -1309,8 +1309,12 @@ export class TableFilter {
             return;
         }
 
-        // Set config's publicPath dynamically for Webpack...
-        __webpack_public_path__ = this.basePath;
+        // `__webpack_public_path__` is a webpack-injected global. It is
+        // undefined outside a webpack bundle (Vite/ESM/UMD), so guard the
+        // assignment to avoid a ReferenceError in strict mode (#991).
+        if (typeof __webpack_public_path__ !== 'undefined') {
+            __webpack_public_path__ = this.basePath;
+        }
 
         this.emitter.emit('before-loading-extensions', this);
 
@@ -1339,14 +1343,34 @@ export class TableFilter {
             modulePath = 'extensions/{}/{}'.replace(/{}/g, name);
         }
 
-        // Require pattern for Webpack
-        require(['./' + modulePath], (mod) => {
-            /* eslint-disable */
-            let inst = new mod.default(this, ext);
-            /* eslint-enable */
-            inst.init();
-            this.ExtRegistry[name] = inst;
-        });
+        // Webpack async require context. `require` is webpack-specific: it is
+        // undefined in strict-mode ESM bundles, and present-but-incompatible
+        // (Node-style CJS) in Vite CJS/UMD bundles, where `require([...], cb)`
+        // is not valid. `typeof require !== 'undefined'` alone is not enough to
+        // distinguish the two, so the call is wrapped in try/catch: extension
+        // loading outside webpack degrades gracefully (extensions simply
+        // unavailable) instead of throwing synchronously before `initialized =
+        // true` and leaving the instance half-initialised (#991).
+        if (typeof require !== 'undefined') {
+            try {
+                require(['./' + modulePath], (mod) => {
+                    /* eslint-disable */
+                    let inst = new mod.default(this, ext);
+                    /* eslint-enable */
+                    inst.init();
+                    this.ExtRegistry[name] = inst;
+                });
+            } catch (e) {
+                // Non-webpack require (e.g. Vite CJS/UMD) cannot load async
+                // extensions via `require([...], cb)`. Swallow so init()
+                // completes; extensions remain unavailable until the Vite
+                // migration provides a bundler-agnostic loader (#991).
+                console.warn(
+                    'TableFilter: extension "' + name +
+                    '" could not be loaded outside a webpack bundle.'
+                );
+            }
+        }
     }
 
     /**
