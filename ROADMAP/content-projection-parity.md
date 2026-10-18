@@ -29,7 +29,7 @@ one mechanism and one set of rules for all of them.
 | 7 | PopupFilter | `popup_filters.image_html` | `this.iconHtml` | `popupFilter.js:256` | `<tf-popup-filter>` | 0.8.x |
 | 8 | Paging | `btn_{next,prev,first,last}_page_html` | `this.btn*PageHtml` | `paging.js:400,414,428,442` | `<tf-pager>` | 0.9.0 |
 | 9 | filtersVisibility | `btn_text`, `btn_html` (+ computed collapse/expand) | `this.btn*Html`, `this.btnText` | `filtersVisibility.js:234,237` | extension | post-1.0 |
-| 10 | colsVisibility | `btn_text` (`'Columns&#9660;'`), `btn_html`, `btn_close_text`, `btn_close_html`, `text` | `this.btn*Html`, `this.btn*Text`, `this.text` | `colsVisibility.js:429,437,524,528` | extension | post-1.0 |
+| 10 | colsVisibility | `btn_text` (`'Columns&#9660;'`), `btn_html`, `btn_close_text`, `btn_close_html`, `text` | `this.btn*Html`, `this.btn*Text`, `this.text` | `colsVisibility.js:429,437,465,524,528` | extension | post-1.0 |
 | 11 | colOps | `write_method: 'innerHTML'` | `this.outputTypes` | `colOps.js:425` | light-DOM cells | n/a |
 
 Two properties of this table drive the plan:
@@ -53,7 +53,7 @@ The bridge maps legacy options onto that surface with these rules.
 | Rule | Applies to | Behaviour |
 |------|-----------|-----------|
 | **P1 Slot-first** | all components | One mechanism: default slot + `part`s. No bespoke `innerHTML` API per component. |
-| **P2 `*_html` → light DOM** | `btn_reset.html`, `loader.html`, `help_instructions.html`, `btn_html`, `image_html`, `btn_*_page_html` | Bridge sets `host.innerHTML = cfg`; the slot renders it. Keeps integrator CSS classes working (content stays in light DOM). |
+| **P2 `*_html` → light DOM** | `btn_reset.html`, `loader.html`, `help_instructions.html`, `btn_html`, `image_html`, `btn_*_page_html` | Bridge sets `host.innerHTML = cfg` (sanitised per P7); the slot renders it. Keeps integrator CSS classes working (content stays in light DOM). |
 | **P3 `*_text` → text** | `*_text`, `text`, `content`, `msg_*` | Rendered with `textContent`. Legacy defaults that embed markup/entities are split into plain text + a `*_html` path (fix the default, not the consumer). |
 | **P4 No wrapper (route 2)** | button components (ClearButton, Help widget, Paging, filtersVisibility, colsVisibility) | The element renders the bare `<slot>`; a slotted control is the control; the host adds button semantics only for element-rendered content. No nested controls. |
 | **P5 Messages preserve HTML** | StatusBar, NoResults | The message node renders configured values as HTML (`innerHTML`), matching legacy `statusBar` (`msgContainer.innerHTML = t`). The label/`text` stays text (legacy used a text node). No silent escaping. |
@@ -114,7 +114,7 @@ HTML-message and sanitiser tests.
 ## 5. Per-milestone execution
 
 ### 0.8.0 (parity of the shipped leaf components)
-- [ ] `<tf-status>`: render the message part as sanitised HTML (§4, decided); keep the label as text.
+- [x] `<tf-status>`: render the message part as sanitised HTML (§4, decided); keep the label as text ([#1014](https://github.com/koalyptus/TableFilter/issues/1014)).
 - [ ] `<tf-clear-button>`: rework to route 2 (§3) — remove the wrapper
       `<button>`, keep the `<slot>`, stop `_update()` deleting it, and add host
       semantics only for element-rendered content. Then drop the `!this.html`
@@ -147,8 +147,9 @@ HTML-message and sanitiser tests.
   `innerHTML` of config
   markup is an XSS sink waiting for one accidental untrusted value. Instead
   every injection goes through `sanitizeHtml()` (`src/sanitize.js`,
-  **DOMPurify**), the project's first runtime dependency. It is a boundary, not
-  a behaviour change for benign config.
+  **DOMPurify**), the project's first runtime dependency — an accepted
+  trade-off, since a small, audited sanitiser beats a bespoke one. It is a
+  boundary, not a behaviour change for benign config.
 
 ## 7. Verification
 
@@ -156,5 +157,6 @@ Each component bridge that handles a `*_html`/`*_text` option adds a Playwright
 test asserting (a) the configured content renders through the slot/part,
 (b) it is not dropped, and (c) for `*_html`, dangerous markup is stripped by
 `sanitizeHtml()` (see the `tf-status` sanitiser test in
-[#1014](https://github.com/koalyptus/TableFilter/issues/1014)). The existing
-`test/playwright/ce-bridge.spec.js` icon-mode case is the template.
+[#1014](https://github.com/koalyptus/TableFilter/issues/1014)). The icon-mode
+case in the bridge suite `test/playwright/ce-bridge.spec.js`
+([#1011](https://github.com/koalyptus/TableFilter/issues/1011)) is the template.
