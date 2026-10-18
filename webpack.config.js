@@ -35,6 +35,18 @@ module.exports = {
                 },
                 loader: 'babel-loader'
             }, {
+                // DOMPurify (used by the leaf components via src/sanitize.js)
+                // ships ES6. webpack builds a context over all of src/ for the
+                // dynamic `require` in TableFilter.loadExtension(), which drags
+                // it into the legacy bundle, so it must be transpiled to ES5
+                // for UglifyJs.
+                test: /[\\/]node_modules[\\/]dompurify[\\/].*\.js$/,
+                loader: 'babel-loader',
+                options: {
+                    compact: false,
+                    presets: ['@babel/env']
+                }
+            }, {
                 test: path.join(__dirname, 'src'),
                 loader: StringReplacePlugin.replace({
                     replacements: [{
