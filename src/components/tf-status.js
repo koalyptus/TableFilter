@@ -8,6 +8,13 @@
  * `role="status"` / `aria-live="polite"` / `aria-atomic="true"` so
  * message changes are announced. The StatusBar bridge (#907) follows.
  *
+ * `text` is a plain label and is rendered as text. `message` is rendered
+ * as HTML, matching legacy `StatusBar` (`msgContainer.innerHTML = t`),
+ * so configured messages such as `status_bar.msg_filter` keep working
+ * unchanged (#1012). The markup is passed through `sanitizeHtml()`
+ * (DOMPurify) before injection: ordinary markup is preserved, scripts
+ * and event handlers are stripped.
+ *
  * Styling is deliberately not shipped here. TableFilter themes through
  * the `--tf-*` custom properties (#892/#945 — inherited into shadow
  * trees) and `::part()` hooks, so the element exposes `part="label"` /
@@ -21,6 +28,8 @@
  * `_wrapNativeSuper`); consumers load it as a module, and shipping it
  * in a bundle belongs with #965.
  */
+
+import {sanitizeHtml} from '../sanitize.js';
 
 // Cloned into every instance's shadow root. Structure and `part` hooks
 // only: `part` is the stable internal contract (selected by _update()
@@ -63,24 +72,28 @@ export class TfStatusElement extends HTMLElement {
     }
 
     /**
-     * Set the message text, rendered into the `message` part. Values are
-     * coerced to strings so a falsy non-string (e.g. 0) is displayed
-     * rather than silently dropped.
-     * @param {String} msg Message text
+     * Set the message, rendered as sanitised HTML into the `message` part.
+     * Values are coerced to strings so a falsy non-string (e.g. 0) is
+     * displayed rather than silently dropped. Markup is allowed to stay
+     * backward compatible with legacy `StatusBar` messages (#1012); it is
+     * sanitised with DOMPurify before injection.
+     * @param {String} msg Message text/HTML
      */
     setMessage(msg) {
         this.setAttribute('message', msg == null ? '' : String(msg));
     }
 
     /**
-     * Render the `text` and `message` attributes into the shadow parts.
+     * Render the `text` attribute as text and the `message` attribute as
+     * sanitised HTML into the shadow parts.
      */
     _update() {
         if (this._labelEl) {
             this._labelEl.textContent = this.getAttribute('text') || '';
         }
         if (this._msgEl) {
-            this._msgEl.textContent = this.getAttribute('message') || '';
+            this._msgEl.innerHTML =
+                sanitizeHtml(this.getAttribute('message') || '');
         }
     }
 }
