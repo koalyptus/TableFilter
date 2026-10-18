@@ -184,6 +184,13 @@ clean deletion boundary:
   `initLegacy()` (and the guard) are deleted wholesale and `init()` calls
   `initCE()` directly. No scattered `if/else` blocks survive.
 
+`destroy()` is *not* split. Teardown is identical on both paths — remove the
+container created by `init()` — and `destroy()` already returns unless a
+successful `init()` set that container, so there is nothing to branch on. A
+`destroyCE()`/`destroyLegacy()` pair (and a flag to choose between them) would
+just be two identical methods. The init split is where the divergence lives;
+teardown needs no legacy-specific code to delete.
+
 ---
 
 ## 3. Module Migration Priority & Risk Matrix

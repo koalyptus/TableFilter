@@ -146,7 +146,6 @@ export class RowsCounter extends Feature {
 
         this.container = countEl;
         this.label = countEl.shadowRoot.querySelector('[part=count]');
-        this._ce = true;
     }
 
     /**
@@ -166,7 +165,6 @@ export class RowsCounter extends Feature {
 
         this.container = countDiv;
         this.label = countSpan;
-        this._ce = false;
     }
 
     /**
@@ -218,12 +216,9 @@ export class RowsCounter extends Feature {
             return;
         }
 
-        if (this.container && this.container.parentNode) {
-            removeElm(this.container);
-        }
+        removeElm(this.container);
         this.label = null;
         this.container = null;
-        this._ce = false;
 
         // unsubscribe to events
         this.emitter.off(['after-filtering', 'grouped-by-page'],

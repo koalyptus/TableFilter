@@ -249,7 +249,6 @@ export class StatusBar extends Feature {
             .querySelector('[part=message]');
         this.labelContainer = statusEl.shadowRoot
             .querySelector('[part=label]');
-        this._ce = true;
     }
 
     /**
@@ -271,7 +270,6 @@ export class StatusBar extends Feature {
         this.statusEl = statusDiv;
         this.msgContainer = msgSpan;
         this.labelContainer = labelSpan;
-        this._ce = false;
     }
 
     /**
@@ -310,20 +308,11 @@ export class StatusBar extends Feature {
 
         let emitter = this.emitter;
 
-        if (this._ce) {
-            if (this.container && this.container.parentNode) {
-                removeElm(this.container);
-            }
-        } else {
-            if (this.container && this.container.parentNode) {
-                removeElm(this.container);
-            }
-        }
+        removeElm(this.container);
         this.statusEl = null;
         this.msgContainer = null;
         this.labelContainer = null;
         this.container = null;
-        this._ce = false;
 
         // Unsubscribe to events
         emitter.off(['before-filtering'], () => this.message(this.msgFilter));
