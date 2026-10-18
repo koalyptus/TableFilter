@@ -8,6 +8,13 @@
  * `role="status"` / `aria-live="polite"` / `aria-atomic="true"` so
  * message changes are announced. The StatusBar bridge (#907) follows.
  *
+ * `text` is a plain label and is rendered as text. `message` is rendered
+ * as HTML, matching legacy `StatusBar` (`msgContainer.innerHTML = t`),
+ * so configured messages such as `status_bar.msg_filter` keep working
+ * unchanged (#1012). The message value is integrator-authored config,
+ * not untrusted input, so it is trusted like every other TableFilter
+ * config string.
+ *
  * Styling is deliberately not shipped here. TableFilter themes through
  * the `--tf-*` custom properties (#892/#945 — inherited into shadow
  * trees) and `::part()` hooks, so the element exposes `part="label"` /
@@ -63,24 +70,26 @@ export class TfStatusElement extends HTMLElement {
     }
 
     /**
-     * Set the message text, rendered into the `message` part. Values are
-     * coerced to strings so a falsy non-string (e.g. 0) is displayed
-     * rather than silently dropped.
-     * @param {String} msg Message text
+     * Set the message, rendered as HTML into the `message` part. Values
+     * are coerced to strings so a falsy non-string (e.g. 0) is displayed
+     * rather than silently dropped. Markup is allowed to stay backward
+     * compatible with legacy `StatusBar` messages (#1012).
+     * @param {String} msg Message text/HTML
      */
     setMessage(msg) {
         this.setAttribute('message', msg == null ? '' : String(msg));
     }
 
     /**
-     * Render the `text` and `message` attributes into the shadow parts.
+     * Render the `text` attribute as text and the `message` attribute as
+     * HTML into the shadow parts.
      */
     _update() {
         if (this._labelEl) {
             this._labelEl.textContent = this.getAttribute('text') || '';
         }
         if (this._msgEl) {
-            this._msgEl.textContent = this.getAttribute('message') || '';
+            this._msgEl.innerHTML = this.getAttribute('message') || '';
         }
     }
 }

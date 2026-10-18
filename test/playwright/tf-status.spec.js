@@ -106,6 +106,41 @@ test('setMessage() sets and clears the rendered message',
         expect(result.zero).toBe('0');
     });
 
+// #1012: legacy StatusBar injected messages with innerHTML
+// (`msgContainer.innerHTML = t`), so configured messages may contain
+// markup. The message part must render it as HTML; the `text` label
+// stays text (legacy used a text node for `text`).
+test('renders the message attribute as HTML, but text as plain text',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-status');
+            el.setAttribute('text', '<i>Rows:</i>');
+            el.setAttribute('message', 'Filtering <b>data</b> &amp; more');
+            document.body.appendChild(el);
+
+            const sr = el.shadowRoot;
+            const label = sr.querySelector('[part=label]');
+            const msg = sr.querySelector('[part=message]');
+            return {
+                labelHasMarkup: label.querySelector('i') !== null,
+                labelText: label.textContent,
+                messageBold: msg.querySelector('b') &&
+                    msg.querySelector('b').textContent,
+                messageText: msg.textContent
+            };
+        }, COMPONENT);
+
+        // label: markup escaped, rendered as text.
+        expect(result.labelHasMarkup).toBe(false);
+        expect(result.labelText).toBe('<i>Rows:</i>');
+        // message: markup parsed, entities decoded.
+        expect(result.messageBold).toBe('data');
+        expect(result.messageText).toBe('Filtering data & more');
+    });
+
 test('exposes ::part() styling hooks for theming', async ({ page }) => {
     await page.goto(FIXTURE);
 
