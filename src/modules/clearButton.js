@@ -100,10 +100,15 @@ export class ClearButton extends Feature {
             tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.targetId);
 
-        // Bridge to <tf-clear-button> (scaffold #911). If the custom
-        // element is registered (Vite / module load) and there is no
-        // custom html (icon mode uses the legacy markup), use it;
-        // otherwise fall back to the legacy span/input|a structure (#912).
+        // Bridge to <tf-clear-button> (scaffold #911). Use the custom
+        // element only when the source registers it (Vite / module load)
+        // and `html` is unset. `!this.html` is load-bearing: when it is
+        // set it is either the default icon markup (`<input class="reset">`,
+        // the class the themes paint the eraser icon on) or user-supplied
+        // `btn_reset.html`. The element renders a bare `<button part="button">`
+        // that no theme selector targets yet, so sending these to it would
+        // lose the icon and drop custom markup. Both stay on the legacy
+        // span/input|a structure until #965 moves theming to `::part()`.
         // TODO(#965): restore static import once namespace migration lands.
         // initCE/initLegacy are split so the legacy path is a clean
         // deletion boundary when #965 lands.

@@ -55,6 +55,44 @@ test('clear button bridge uses tf-clear-button', async ({ page }) => {
     expect(result.removed).toBe(true);
 });
 
+test('icon markup stays on the legacy path when the element is loaded',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (tableHtml) => {
+            await import('/src/components/tf-clear-button.js');
+
+            const table = document.createElement('table');
+            table.id = 'ce-clear-icon';
+            table.innerHTML = tableHtml;
+            document.body.appendChild(table);
+
+            // Icons on (the default): this.html is <input class="reset">,
+            // the element the themes paint the eraser icon on. The element
+            // renders a bare <button>, so this must stay on the legacy path.
+            const tf = new TableFilter('ce-clear-icon', {
+                base_path: '/dist/tablefilter/',
+                btn_reset: true
+            });
+            tf.init();
+
+            const clearButton = tf.feature('clearButton');
+            const host = clearButton.container;
+            const icon = host ? host.querySelector('input.reset') : null;
+
+            clearButton.destroy();
+            return {
+                registered: Boolean(customElements.get('tf-clear-button')),
+                tag: host ? host.nodeName : null,
+                hasIcon: !!icon
+            };
+        }, TABLE_HTML);
+
+        expect(result.registered).toBe(true);
+        expect(result.tag).toBe('SPAN');
+        expect(result.hasIcon).toBe(true);
+    });
+
 test('status bar bridge uses tf-status', async ({ page }) => {
     await page.goto(FIXTURE);
 
