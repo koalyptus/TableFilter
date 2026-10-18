@@ -172,6 +172,18 @@ export class StatusBar extends Feature {
 3. The DOM element now carries `role="status"` and `aria-live="polite"` automatically.
 4. If a consumer prefers to write `<tf-status>` manually in their markup, TableFilter can bind to it via `target_id`.
 
+### Bridge init convention (temporary, until #965 namespace migration)
+Bridged features split `init()` into two focused methods so the legacy path is a
+clean deletion boundary:
+
+- `init()` resolves the target element, then delegates to `initCE(targetEl)` or
+  `initLegacy(targetEl)`.
+- `initCE(targetEl)` builds only the custom-element DOM.
+- `initLegacy(targetEl)` builds only the legacy DOM.
+- `TODO(#965)` marks both the static import and the guard. When #965 lands,
+  `initLegacy()` (and the guard) are deleted wholesale and `init()` calls
+  `initCE()` directly. No scattered `if/else` blocks survive.
+
 ---
 
 ## 3. Module Migration Priority & Risk Matrix
