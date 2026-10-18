@@ -55,41 +55,52 @@ The bridge maps legacy options onto that surface with these rules.
 | **P1 Slot-first** | all components | One mechanism: default slot + `part`s. No bespoke `innerHTML` API per component. |
 | **P2 `*_html` → light DOM** | `btn_reset.html`, `loader.html`, `help_instructions.html`, `btn_html`, `image_html`, `btn_*_page_html` | Bridge sets `host.innerHTML = cfg`; the slot renders it. Keeps integrator CSS classes working (content stays in light DOM). |
 | **P3 `*_text` → text** | `*_text`, `text`, `content`, `msg_*` | Rendered with `textContent`. Legacy defaults that embed markup/entities are split into plain text + a `*_html` path (fix the default, not the consumer). |
-| **P4 No nested controls** | button components (ClearButton, Help widget, Paging, filtersVisibility, colsVisibility) | The element *is* the button, so `*_html` must be presentational (icon/label). Default control defaults stay on the legacy path until `::part(button)` theming lands (post-1.0). |
-| **P5 Messages: text by default** | StatusBar, NoResults | Messages render as text; markup goes through an explicit HTML channel. |
+| **P4 No nested controls** *(open)* | button components (ClearButton, Help widget, Paging, filtersVisibility, colsVisibility) | The element renders a `<button>`, so slotted `*_html` would nest controls. Route to be chosen below. |
+| **P5 Messages preserve HTML** | StatusBar, NoResults | The message node renders configured values as HTML (`innerHTML`), matching legacy `statusBar` (`msgContainer.innerHTML = t`). The label/`text` stays text (legacy used a text node). No silent escaping. |
 | **P6 Extensions off-shadow** | colOps, gridLayout | Content written into the light-DOM table is unaffected by Shadow DOM; keep as-is. |
 | **P7 Trust boundary** | all | Config HTML is integrator-trusted; the engine does not sanitise (unchanged from legacy). A migrated component must **not silently drop or escape** configured content. |
 
-### P4 in practice
+### P4 in practice (open decision)
 
-In icon mode `btn_reset.html` is `<input class="reset">`, and the theme paints
-the eraser on `input.reset` (`static/style/reset-button.styl`). The element
-renders a bare `<button part="button">`, so today the ClearButton bridge routes
-`html` to the legacy path (`!this.html`, see #912). That is the correct interim
-rule and generalises: **for buttons, presentational `html` is slotted; control
-`html` waits for `::part()` theming.**
+The element template is `<button part="button"><slot></slot></button>`, so a
+slotted `btn_reset.html` becomes a control inside a control
+(`<button><input type="button" class="reset"></button>` — invalid, two
+activatable elements). Legacy had no wrapper: the `<input class="reset">` /
+`<a class="reset">` was the control. Options:
 
-## 4. Known regression (must resolve)
+1. **Element-as-control** — custom `html` must be presentational (icon/label);
+   the element owns the control; the default control markup (`<input
+   class="reset">`, pager `<input>`) stays on the legacy path until
+   `::part(button)` theming (post-1.0). Cleanest element, weakest parity.
+2. **No wrapper** — render the bare `<slot>`; a slotted control is the control,
+   the host takes button semantics only when it renders its own. Preserves
+   `btn_reset.html` verbatim (including the theme's `input.reset` icon).
+3. **Hybrid** — wrapper button only for non-interactive content, bare slot for
+   controls. Best parity, most heuristics.
+
+Chosen route: **TBD** (tracked by [#1012](https://github.com/koalyptus/TableFilter/issues/1012)).
+
+## 4. Resolved regression: `<tf-status>` HTML messages
 
 The merged `<tf-status>` bridge renders messages with `textContent`
 (`src/components/tf-status.js`), while legacy `statusBar` used `innerHTML`
 (`statusBar.js:294`). Consumers who put markup in `status_bar.text` / `msg_*`
-now see escaped text. Resolve before the milestone closes, by either:
+now see escaped text.
 
-- **Fix:** give `<tf-status>` an explicit message **part** the bridge may
-  populate with `innerHTML` when the configured value is markup-bearing
-  (preserves parity, matches P2/P3), or
-- **Document:** declare status messages text-only and record the change in #947.
-
-Recommendation: **fix** — parity is the stated contract, and the value is
-integrator-trusted config.
+**Decision (parity wins): fix.** Render the `message` part with `innerHTML`
+from the `message` attribute, i.e. `this._msgEl.innerHTML = ...`. The `label`
+part stays `textContent` — legacy also used a text node for `text`
+(`statusBar.js` `labelSpan.appendChild(createText(this.text))`), so it is
+already correct. Config is integrator-trusted, so this is no less safe than
+legacy. Covered by an added HTML-message test.
 
 ## 5. Per-milestone execution
 
 ### 0.8.0 (parity of the shipped leaf components)
-- [ ] `<tf-status>`: resolve §4 (fix or documented change).
+- [ ] `<tf-status>`: render the message part as HTML (§4, decided); keep the label as text.
 - [ ] `<tf-clear-button>`: presentational-content slot documented + tested (done in #912 for text mode; add when `::part()` theming lands).
 - [ ] `<tf-rows-counter>`: no consumer markup; confirm label is text-only.
+- [ ] **Open decision (P4):** pick the button-component route (element-as-control / no-wrapper / hybrid) — see §3.
 
 ### 0.8.x
 - [ ] `<tf-loader>`: `loader.html` → slot (P2); text fallback (P3).
