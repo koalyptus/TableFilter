@@ -79,5 +79,8 @@
   "bugs": {
     "url": "https://github.com/koalyptus/TableFilter/issues"
   },
-  "homepage": "https://www.tablefilter.com"
+  "homepage": "https://www.tablefilter.com",
+  "dependencies": {
+    "dompurify": "^3.4.17"
+  }
 }

@@ -109,8 +109,9 @@ test('setMessage() sets and clears the rendered message',
 // #1012: legacy StatusBar injected messages with innerHTML
 // (`msgContainer.innerHTML = t`), so configured messages may contain
 // markup. The message part must render it as HTML; the `text` label
-// stays text (legacy used a text node for `text`).
-test('renders the message attribute as HTML, but text as plain text',
+// stays text (legacy used a text node for `text`). Exercises the real
+// consumer entry point, `setMessage()`, not just the attribute.
+test('renders setMessage() as HTML, but text as plain text',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -118,7 +119,7 @@ test('renders the message attribute as HTML, but text as plain text',
             await import(component);
             const el = document.createElement('tf-status');
             el.setAttribute('text', '<i>Rows:</i>');
-            el.setAttribute('message', 'Filtering <b>data</b> &amp; more');
+            el.setMessage('Filtering <b>data</b> &amp; more');
             document.body.appendChild(el);
 
             const sr = el.shadowRoot;
@@ -140,6 +141,47 @@ test('renders the message attribute as HTML, but text as plain text',
         expect(result.messageBold).toBe('data');
         expect(result.messageText).toBe('Filtering data & more');
     });
+
+// #1014 review: `message` is injected as HTML, so the config-derived
+// markup is sanitised (DOMPurify) at the boundary. Ordinary markup
+// survives; scripts, event handlers and javascript: URLs do not.
+test('sanitises injected message HTML', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-status');
+        el.setMessage(
+            '<b>safe</b>' +
+            '<img src=x onerror="window.__xss=1">' +
+            '<script>window.__xss=2<\/script>' +
+            '<a href="javascript:window.__xss=3">link</a>'
+        );
+        document.body.appendChild(el);
+
+        const msg = el.shadowRoot.querySelector('[part=message]');
+        const img = msg.querySelector('img');
+        const link = msg.querySelector('a');
+        return {
+            xss: window.__xss,
+            bold: msg.querySelector('b') && msg.querySelector('b').textContent,
+            imgKept: img !== null,
+            imgHasHandler: img !== null && img.hasAttribute('onerror'),
+            scriptPresent: msg.querySelector('script') !== null,
+            linkHref: link && link.getAttribute('href')
+        };
+    }, COMPONENT);
+
+    expect(result.xss).toBeUndefined();
+    // Benign markup is preserved (BC).
+    expect(result.bold).toBe('safe');
+    expect(result.imgKept).toBe(true);
+    // Dangerous constructs are stripped.
+    expect(result.imgHasHandler).toBe(false);
+    expect(result.scriptPresent).toBe(false);
+    expect(result.linkHref == null ||
+        !result.linkHref.startsWith('javascript:')).toBe(true);
+});
 
 test('exposes ::part() styling hooks for theming', async ({ page }) => {
     await page.goto(FIXTURE);
