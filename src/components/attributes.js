@@ -13,7 +13,8 @@
 
 // HTML presentation attributes that are never component configuration.
 export const PRESENTATION_ATTRIBUTES = ['id', 'class', 'style', 'slot',
-    'hidden', 'title', 'lang', 'dir', 'role', 'tabindex'];
+    'hidden', 'title', 'lang', 'dir', 'role', 'tabindex', 'part',
+    'exportparts'];
 
 // Keys that would reach a config object's own prototype instead of
 // defining an option.

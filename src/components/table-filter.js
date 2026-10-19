@@ -1,4 +1,4 @@
-import { TableFilter } from '../tablefilter.js';
+import {TableFilter} from '../tablefilter.js';
 import {isSkippedAttribute} from './attributes.js';
 
 /**
@@ -55,6 +55,7 @@ export class TableFilterElement extends HTMLElement {
         this._emptyTableObserver = null;
         this._tableArrivalObserver = null;
         this._attrObserver = null;
+        this._hostObserver = null;
     }
 
     connectedCallback() {
@@ -173,12 +174,27 @@ export class TableFilterElement extends HTMLElement {
             childList: true,
             subtree: true
         });
+        // Frameworks may replace the table node (remove + append) rather
+        // than mutating its rows; observe the host so replacement is
+        // picked up even when the table node itself changes (#985).
+        this._hostObserver = new MutationObserver(() => {
+            if (!this._connected || (this.table && this.table.isConnected)) {
+                return;
+            }
+            this._unobserveEmptyTable();
+            this._init();
+        });
+        this._hostObserver.observe(this, { childList: true });
     }
 
     _unobserveEmptyTable() {
         if (this._emptyTableObserver) {
             this._emptyTableObserver.disconnect();
             this._emptyTableObserver = null;
+        }
+        if (this._hostObserver) {
+            this._hostObserver.disconnect();
+            this._hostObserver = null;
         }
     }
 
