@@ -448,7 +448,7 @@ test('slotted table wins over the for attribute', async ({ page }) => {
     expect(result.id).toBe('inner');
 });
 
-test('a for target that appears later is not resolved until reconnect',
+test('a for target that appears later is resolved automatically',
     async ({ page }) => {
         await page.goto(FIXTURE);
         const result = await page.evaluate(async ({ component }) => {
@@ -459,19 +459,24 @@ test('a for target that appears later is not resolved until reconnect',
             document.body.appendChild(el);
             const before = el.table;
 
-            // Target is parsed later; reconnect re-resolves it.
+            // Target is parsed later; the element resolves and inits on
+            // it without a manual re-connect (#985).
             const table = document.createElement('table');
             table.id = 'late';
+            table.innerHTML = '<tbody><tr><th>City</th></tr>' +
+                '<tr><td>Sydney</td></tr></tbody>';
             document.body.appendChild(table);
-            document.body.removeChild(el);
-            document.body.appendChild(el);
+            // The MutationObserver delivers on a microtask.
+            await new Promise((resolve) => setTimeout(resolve));
             const after = el.table;
+            const initialized = Boolean(el.tf && el.tf.isInitialized());
 
             el.remove();
             table.remove();
-            return { before: before, after: after && after.id };
+            return { before: before, after: after && after.id, initialized };
         }, { component: COMPONENT });
 
         expect(result.before).toBeNull();
         expect(result.after).toBe('late');
+        expect(result.initialized).toBe(true);
     });
