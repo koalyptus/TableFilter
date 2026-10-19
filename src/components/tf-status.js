@@ -5,8 +5,8 @@
  * Scaffold (#905): an open shadow root exposing the `label` and
  * `message` parts, rendered statically from the `text` and `message`
  * attributes. The host is the live region (#906): connecting it enforces
- * `role="status"` / `aria-live="polite"` / `aria-atomic="true"` so
- * message changes are announced. The StatusBar bridge (#907) follows.
+ * the shared live-region contract (`applyLiveRegion()`) so message
+ * changes are announced. The StatusBar bridge (#907) follows.
  *
  * `text` is a plain label and is rendered as text. `message` is rendered
  * as HTML, matching legacy `StatusBar` (`msgContainer.innerHTML = t`),
@@ -30,6 +30,7 @@
  */
 
 import {sanitizeHtml} from '../sanitize.js';
+import {applyLiveRegion} from './attributes.js';
 
 // Cloned into every instance's shadow root. Structure and `part` hooks
 // only: `part` is the stable internal contract (selected by _update()
@@ -55,15 +56,9 @@ export class TfStatusElement extends HTMLElement {
     }
 
     connectedCallback() {
-        // Live-region contract (#906), enforced on connect so manually
-        // authored markup gets it too. `role="status"` already implies
-        // `aria-live="polite"` and `aria-atomic="true"`; setting them
-        // explicitly keeps the contract visible to consumers. The host
-        // is the region: the shadow parts carry no ARIA of their own, so
-        // a message change is announced once, as "label message".
-        this.setAttribute('role', 'status');
-        this.setAttribute('aria-live', 'polite');
-        this.setAttribute('aria-atomic', 'true');
+        // Live-region contract (#906): the host is the region, so a
+        // message change is announced once, as "label message".
+        applyLiveRegion(this);
         this._update();
     }
 

@@ -1,4 +1,5 @@
 import { TableFilter } from '../tablefilter.js';
+import {isSkippedAttribute} from './attributes.js';
 
 /**
  * `<table-filter>` custom element: declarative shell around the legacy
@@ -42,28 +43,10 @@ const BRIDGED_EVENTS = [
     'before-clearing-filters', 'after-clearing-filters', 'destroy'
 ];
 
-// Element-owned and presentation attributes that are never mapped onto
-// engine options. Kept in one place so `_extractConfig()` and the
-// attribute observer agree on what counts as configuration.
-const SKIPPED_ATTRIBUTES = ['for', 'id', 'config', 'class', 'style', 'slot',
-    'hidden', 'title', 'lang', 'dir', 'role', 'tabindex'];
-// Keys that would reach the config object's own prototype instead of
-// defining an option.
-const FORBIDDEN_KEYS = ['__proto__', 'constructor', 'prototype'];
-
-/**
- * Whether a host attribute must be skipped as engine configuration: a
- * name in `SKIPPED_ATTRIBUTES`, the `data-*`/`aria-*` namespaces, or a
- * prototype-reaching key in `FORBIDDEN_KEYS`.
- * @param {String} name Attribute name
- * @return {Boolean} True when the attribute does not map to an option
- */
-function isSkippedAttribute(name) {
-    return SKIPPED_ATTRIBUTES.indexOf(name) !== -1 ||
-        name.indexOf('data-') === 0 ||
-        name.indexOf('aria-') === 0 ||
-        FORBIDDEN_KEYS.indexOf(name) !== -1;
-}
+// `<table-filter>`-owned attributes that name structure (the `for` table
+// reference and the `config` JSON blob) rather than an engine option, so
+// they never map to config keys.
+const STRUCTURAL_ATTRIBUTES = ['for', 'config'];
 
 export class TableFilterElement extends HTMLElement {
     constructor() {
@@ -276,14 +259,11 @@ export class TableFilterElement extends HTMLElement {
             if (!this._connected) {
                 return;
             }
-            // `config` and `for` are skipped for option mapping but are
-            // still structural: a new config blob or a new target must
-            // be picked up.
-            const relevant = records.some((record) => {
-                const name = record.attributeName;
-                return name === 'config' || name === 'for' ||
-                    !isSkippedAttribute(name);
-            });
+            // Anything that is not a presentation/noise attribute is a
+            // configuration change worth re-initialising for — including
+            // the structural `config` and `for` attributes.
+            const relevant = records.some((record) =>
+                !isSkippedAttribute(record.attributeName));
             if (relevant) {
                 this._init();
             }
@@ -404,7 +384,7 @@ export class TableFilterElement extends HTMLElement {
         }
 
         Array.prototype.forEach.call(this.attributes, (attr) => {
-            if (isSkippedAttribute(attr.name)) {
+            if (isSkippedAttribute(attr.name, STRUCTURAL_ATTRIBUTES)) {
                 return;
             }
             config[attr.name.replace(/-/g, '_')] = parseValue(attr.value);

@@ -19,6 +19,8 @@
  * in a bundle belongs with #965.
  */
 
+import {applyLiveRegion} from './attributes.js';
+
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
     <span part="label"></span>
@@ -40,12 +42,7 @@ export class TfRowsCounterElement extends HTMLElement {
 
     connectedCallback() {
         // Live-region contract: the counter announces count changes.
-        // `role="status"` implies `aria-live="polite"` and
-        // `aria-atomic="true"`; set explicitly so the contract is visible
-        // to consumers and a wrong consumer value is corrected.
-        this.setAttribute('role', 'status');
-        this.setAttribute('aria-live', 'polite');
-        this.setAttribute('aria-atomic', 'true');
+        applyLiveRegion(this);
         this._update();
     }
 
