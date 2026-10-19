@@ -54,8 +54,9 @@ const SKIPPED_ATTRIBUTES = ['for', 'id', 'config', 'class', 'style', 'slot',
 const FORBIDDEN_KEYS = ['__proto__', 'constructor', 'prototype'];
 
 /**
- * Whether a host attribute is engine configuration. `data-*`, `aria-*`
- * and prototype-reaching names are never configuration either.
+ * Whether a host attribute must be skipped as engine configuration: it
+ * is element-owned/HTML presentation, `data-*`/`aria-*`, or a
+ * prototype-reaching name.
  * @param {String} name Attribute name
  * @return {Boolean} True when the attribute does not map to an option
  */
@@ -71,7 +72,7 @@ export class TableFilterElement extends HTMLElement {
         super();
         this._connected = false;
         this._tableObserver = null;
-        this._forObserver = null;
+        this._tableArrivalObserver = null;
         this._attrObserver = null;
         this._dataRowCount = 0;
     }
@@ -102,7 +103,7 @@ export class TableFilterElement extends HTMLElement {
      * (Re)initialise the engine from the current markup: resolve the
      * table, map the configuration and init a fresh engine. Runs the
      * teardown first, so it is safe to call repeatedly — connect and
-     * every observed change (host attribute, table rows, a `for` target
+     * every observed change (host attribute, table rows, a table
      * appearing) funnel through here (#985).
      */
     _init() {
@@ -110,12 +111,10 @@ export class TableFilterElement extends HTMLElement {
         this.table = this._resolveTable();
 
         if (!this.table) {
-            // A `for` target may still be parsed later; watch for it so
-            // it resolves without a manual re-connect. Without a `for`
-            // there is nothing to wait for.
-            if (this.hasAttribute('for')) {
-                this._observeForTarget();
-            }
+            // Neither a descendant table nor a `for` target resolved yet.
+            // Either may still be parsed/appended later; watch the root
+            // so it is picked up without a manual re-connect.
+            this._observeTableArrival();
             return;
         }
 
@@ -168,7 +167,7 @@ export class TableFilterElement extends HTMLElement {
      */
     _teardown() {
         this._unobserveTable();
-        this._unobserveForTarget();
+        this._unobserveTableArrival();
         if (this.tf && this.tf.isInitialized()) {
             this.tf.destroy();
         }
@@ -191,7 +190,7 @@ export class TableFilterElement extends HTMLElement {
             (this.tf && this.tf.fltsRowCssClass) || 'fltrow';
         let count = 0;
         Array.prototype.forEach.call(this.table.rows, (row) => {
-            if (row.className.indexOf(fltsRowCssClass) === -1) {
+            if (!row.classList.contains(fltsRowCssClass)) {
                 count++;
             }
         });
@@ -230,37 +229,38 @@ export class TableFilterElement extends HTMLElement {
     }
 
     /**
-     * Watch the document (or the enclosing shadow root) for the `for`
-     * target that was not in the DOM yet at connect time, and resolve it
-     * as soon as it appears. Only active while the target is unresolved,
-     * so the document-wide observer is short-lived (#985).
+     * Watch the document (or the enclosing shadow root) for a table that
+     * was not resolvable at connect time — a descendant `<table>` or a
+     * `for` target — and re-init as soon as it appears. Only active while
+     * no table is resolved, so the document-wide observer is
+     * short-lived (#985).
      */
-    _observeForTarget() {
+    _observeTableArrival() {
         const root = this.getRootNode();
         if (!root || typeof MutationObserver === 'undefined') {
             return;
         }
-        this._forObserver = new MutationObserver(() => {
+        this._tableArrivalObserver = new MutationObserver(() => {
             if (!this._connected || !this._resolveTable()) {
                 return;
             }
-            this._unobserveForTarget();
+            this._unobserveTableArrival();
             this._init();
         });
-        this._forObserver.observe(root, {
+        this._tableArrivalObserver.observe(root, {
             childList: true,
             subtree: true
         });
     }
 
     /**
-     * Stop watching for the `for` target. Safe when no observer is
+     * Stop watching for a table to appear. Safe when no observer is
      * active.
      */
-    _unobserveForTarget() {
-        if (this._forObserver) {
-            this._forObserver.disconnect();
-            this._forObserver = null;
+    _unobserveTableArrival() {
+        if (this._tableArrivalObserver) {
+            this._tableArrivalObserver.disconnect();
+            this._tableArrivalObserver = null;
         }
     }
 
@@ -355,12 +355,12 @@ export class TableFilterElement extends HTMLElement {
      *
      * Attribute names are lowercased by the HTML parser, so options
      * must be written in kebab-case (`case-sensitive`, not
-     * `caseSensitive`). Element-owned and HTML presentation attributes
-     * (`for`, `id`, `config`, `class`, `style`, `slot`, `hidden`,
-     * `title`, `lang`, `dir`, `role`, `tabindex`, `data-*`, `aria-*`)
-     * are never mapped: a stray `class` must not count as engine
-     * configuration. Config is re-read on every re-init, including the
-     * runtime attribute changes observed by `_observeAttributes()`.
+     * `caseSensitive`). Attributes skipped by `isSkippedAttribute()`
+     * (element-owned/HTML presentation, `data-*`, `aria-*`,
+     * prototype-reaching names — see `SKIPPED_ATTRIBUTES`) are never
+     * mapped: a stray `class` must not count as engine configuration.
+     * Config is re-read on every re-init, including the runtime
+     * attribute changes observed by `_observeAttributes()`.
      * @return {Object} TableFilter configuration object
      */
     _extractConfig() {

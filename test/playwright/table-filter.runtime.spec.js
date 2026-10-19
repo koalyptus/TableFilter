@@ -68,6 +68,38 @@ test('empty table that gains rows initialises automatically', async ({
     expect(after.filters).toBe(1);
 });
 
+test('a table appended after connect is resolved automatically', async ({
+    page
+}) => {
+    await page.goto(FIXTURE);
+    const before = await page.evaluate(async ({ component }) => {
+        await import(component);
+        const el = document.createElement('table-filter');
+        document.body.appendChild(el);
+        window.__tfEl = el;
+        return { hasTf: Boolean(el.tf), table: el.table };
+    }, { component: COMPONENT });
+    expect(before.hasTf).toBe(false);
+    expect(before.table).toBeNull();
+
+    const after = await page.evaluate(async () => {
+        const el = window.__tfEl;
+        const table = document.createElement('table');
+        table.innerHTML = '<thead><tr><th>City</th></tr></thead>' +
+            '<tbody><tr><td>Sydney</td></tr></tbody>';
+        el.appendChild(table);
+        await new Promise((resolve) => setTimeout(resolve));
+        return {
+            hasTf: Boolean(el.tf),
+            initialized: Boolean(el.tf && el.tf.isInitialized()),
+            tag: el.table ? el.table.tagName : null
+        };
+    });
+    expect(after.hasTf).toBe(true);
+    expect(after.initialized).toBe(true);
+    expect(after.tag).toBe('TABLE');
+});
+
 test('runtime attribute change re-inits with the new config', async ({
     page
 }) => {
