@@ -167,11 +167,15 @@ export class TableFilterElement extends HTMLElement {
         if (!this.table) {
             return 0;
         }
-        const fltsRowCssClass =
-            (this.tf && this.tf.fltsRowCssClass) || 'fltrow';
+        // The engine owns the filter row's class (`flts_row_css_class`,
+        // default `fltrow`): read it off the instance rather than
+        // repeating the default here. It is absent only on the
+        // empty-table path, where there are no rows to count anyway.
+        const fltsRowCssClass = (this.tf && this.tf.fltsRowCssClass) || '';
         let count = 0;
         Array.prototype.forEach.call(this.table.rows, (row) => {
-            if (!row.classList.contains(fltsRowCssClass)) {
+            if (!fltsRowCssClass ||
+                !row.classList.contains(fltsRowCssClass)) {
                 count++;
             }
         });
