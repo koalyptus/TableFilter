@@ -78,6 +78,7 @@ const serveDistRaw = () => ({
                         res.setHeader('Content-Type', 'application/json');
                     }
                     fs.createReadStream(filePath).pipe(res);
+                    res.end();
                     return;
                 }
             }
