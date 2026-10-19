@@ -45,6 +45,7 @@ test(`declarative <table-filter> mounts and filters: ${DEMO_PAGE}`, async ({
 
         return {
             initialized: tf.isInitialized(),
+            hasSortExt: !!tf.extension('sort'),
             isoTag,
             before,
             filtered,
@@ -53,6 +54,7 @@ test(`declarative <table-filter> mounts and filters: ${DEMO_PAGE}`, async ({
     });
 
     expect(result.initialized).toBe(true);
+    expect(result.hasSortExt).toBe(true);
     expect(result.isoTag).toBe('SELECT');
     expect(result.filtered).toBeGreaterThan(0);
     expect(result.filtered).toBeLessThan(result.before);
