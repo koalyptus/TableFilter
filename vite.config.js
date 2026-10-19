@@ -98,7 +98,12 @@ const serveDistRaw = () => ({
                     } else if (ext === '.map') {
                         res.setHeader('Content-Type', 'application/json');
                     }
-                    fs.createReadStream(filePath).pipe(res);
+                    // Return the bytes directly instead of piping a read
+                    // stream: on CI the pipe completed with an empty body
+                    // (Content-Length: 0) even though the file on disk was
+                    // non-empty, so the bundle never reached the browser
+                    // (#965).
+                    res.end(fs.readFileSync(filePath));
                     return;
                 }
             }
