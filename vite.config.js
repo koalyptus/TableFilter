@@ -27,13 +27,53 @@ const injectExtImports = () => ({
             'import __FiltersVisibility from ' +
                 '"./extensions/filtersVisibility/filtersVisibility";'
         ].join('\n');
-        let registry = '\nconst EXTENSIONS = {';
-        registry += ' sort: __Sort, ';
-        registry += 'colsVisibility: __ColsVisibility, ';
-        registry += 'colOps: __ColOps, ';
-        registry += 'advancedGrid: __AdvancedGrid, ';
-        registry += 'filtersVisibility: __FiltersVisibility };';
+        // webpack loaded extensions through `require([...], cb)`, so an
+        // extension loaded by initExtensions() always ran its init() after the
+        // surrounding TableFilter had finished initialising (`initialized =
+        // true`) and the page script had built its DOM. Static imports load
+        // synchronously, which would run init() too early. Defer only that
+        // auto-load case by one microtask; explicit `ext.init()` calls stay
+        // synchronous so src/ behaviour is unchanged (#965).
+        const deferInit = [
+            'const __deferInit = (Ctor) => class extends Ctor {',
+            '    init() {',
+            '        const args = arguments;',
+            '        if (this.tf && this.tf.initialized) {',
+            '            return Ctor.prototype.init.apply(this, args);',
+            '        }',
+            '        Promise.resolve().then(',
+            '            () => Ctor.prototype.init.apply(this, args));',
+            '    }',
+            '};'
+        ].join('\n');
+        let registry = '\n' + deferInit + '\nconst EXTENSIONS = {';
+        registry += ' sort: __deferInit(__Sort), ';
+        registry += 'colsVisibility: __deferInit(__ColsVisibility), ';
+        registry += 'colOps: __deferInit(__ColOps), ';
+        registry += 'advancedGrid: __deferInit(__AdvancedGrid), ';
+        registry += 'filtersVisibility: __deferInit(__FiltersVisibility) };';
         return imports + registry + code;
+    }
+});
+
+// The sort extension relies on the vendored `SortableTable` script, which
+// webpack loaded globally through `script-loader!sortabletable`. That loader
+// is webpack-specific, so for the Vite bundle the legacy script is inlined as
+// raw text and evaluated in the global scope (#965).
+// TODO(#965): remove once the sort extension imports SortableTable directly.
+const injectSortableTable = () => ({
+    name: 'inject-sortabletable',
+    enforce: 'pre',
+    transform(code, id) {
+        if (!id.endsWith('/extensions/sort/sort.js')) {
+            return null;
+        }
+        const shim = 'import __sortableTableSrc from ' +
+            '"../../../libs/sortabletable.js?raw";\n' +
+            'if (typeof SortableTable === "undefined") {\n' +
+            '    (0, eval)(__sortableTableSrc);\n' +
+            '}\n';
+        return shim + code;
     }
 });
 
@@ -48,7 +88,7 @@ const flattenUmdGlobal = () => ({
         for (const fileName in bundle) {
             const chunk = bundle[fileName];
             if (chunk.type === 'chunk') {
-                chunk.code += '\\nif(typeof globalThis !== "undefined" ' +
+                chunk.code += '\nif(typeof globalThis !== "undefined" ' +
                     '&& globalThis.TableFilter ' +
                     '&& globalThis.TableFilter.TableFilter) { ' +
                     'globalThis.TableFilter = ' +
@@ -77,8 +117,12 @@ const serveDistRaw = () => ({
                     } else if (ext === '.map') {
                         res.setHeader('Content-Type', 'application/json');
                     }
-                    fs.createReadStream(filePath).pipe(res);
-                    res.end();
+                    // Return the bytes directly instead of piping a read
+                    // stream: on CI the pipe completed with an empty body
+                    // (Content-Length: 0) even though the file on disk was
+                    // non-empty, so the bundle never reached the browser
+                    // (#965).
+                    res.end(fs.readFileSync(filePath));
                     return;
                 }
             }
@@ -100,30 +144,38 @@ const replacePlaceholders = () => ({
     }
 });
 
-// Copy the Vite UMD bundle to the historic dist/tablefilter/tablefilter.js
-// path so consumers (tests, demos) load the Vite-built bundle.
-const copyLegacyDist = () => ({
+// Publish the Vite UMD bundle at the historic dist/tablefilter/tablefilter.js
+// path so consumers (tests, demos) load the Vite-built bundle. The copy is
+// emitted as a bundle asset (written by Vite) rather than copied from disk:
+// copying dist/tablefilter.umd.js in a build hook could observe the file
+// before Vite had flushed its contents, leaving a 0-byte legacy bundle on CI
+// (#965).
+const publishLegacyDist = () => ({
     name: 'tablefilter-legacy-dist',
-    writeBundle(options) {
+    generateBundle(options, bundle) {
         if (options.format !== 'umd') {
             return;
         }
-        const outDir = path.join(__dirname, 'dist');
-        const legacyDir = path.join(outDir, 'tablefilter');
-        fs.mkdirSync(legacyDir, {recursive: true});
-        fs.copyFileSync(
-            path.join(outDir, 'tablefilter.umd.js'),
-            path.join(legacyDir, 'tablefilter.js')
-        );
+        for (const fileName in bundle) {
+            const chunk = bundle[fileName];
+            if (chunk.type === 'chunk') {
+                this.emitFile({
+                    type: 'asset',
+                    fileName: 'tablefilter/tablefilter.js',
+                    source: chunk.code
+                });
+            }
+        }
     }
 });
 
 module.exports = {
     plugins: [
         replacePlaceholders(),
-        copyLegacyDist(),
         flattenUmdGlobal(),
+        publishLegacyDist(),
         injectExtImports(),
+        injectSortableTable(),
         serveDistRaw()
     ],
     build: {
@@ -147,6 +199,9 @@ module.exports = {
                 exports: 'named'
             }
         },
+        // Keep class names: the feature registry keys off `Class.name`
+        // (see instantiateFeatures), so mangling breaks every feature (#965).
+        minify: false,
         emptyOutDir: false
     },
     server: {
