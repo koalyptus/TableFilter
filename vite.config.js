@@ -27,12 +27,31 @@ const injectExtImports = () => ({
             'import __FiltersVisibility from ' +
                 '"./extensions/filtersVisibility/filtersVisibility";'
         ].join('\n');
-        let registry = '\nconst EXTENSIONS = {';
-        registry += ' sort: __Sort, ';
-        registry += 'colsVisibility: __ColsVisibility, ';
-        registry += 'colOps: __ColOps, ';
-        registry += 'advancedGrid: __AdvancedGrid, ';
-        registry += 'filtersVisibility: __FiltersVisibility };';
+        // webpack loaded extensions through `require([...], cb)`, so an
+        // extension loaded by initExtensions() always ran its init() after the
+        // surrounding TableFilter had finished initialising (`initialized =
+        // true`) and the page script had built its DOM. Static imports load
+        // synchronously, which would run init() too early. Defer only that
+        // auto-load case by one microtask; explicit `ext.init()` calls stay
+        // synchronous so src/ behaviour is unchanged (#965).
+        const deferInit = [
+            'const __deferInit = (Ctor) => class extends Ctor {',
+            '    init() {',
+            '        const args = arguments;',
+            '        if (this.tf && this.tf.initialized) {',
+            '            return Ctor.prototype.init.apply(this, args);',
+            '        }',
+            '        Promise.resolve().then(',
+            '            () => Ctor.prototype.init.apply(this, args));',
+            '    }',
+            '};'
+        ].join('\n');
+        let registry = '\n' + deferInit + '\nconst EXTENSIONS = {';
+        registry += ' sort: __deferInit(__Sort), ';
+        registry += 'colsVisibility: __deferInit(__ColsVisibility), ';
+        registry += 'colOps: __deferInit(__ColOps), ';
+        registry += 'advancedGrid: __deferInit(__AdvancedGrid), ';
+        registry += 'filtersVisibility: __deferInit(__FiltersVisibility) };';
         return imports + registry + code;
     }
 });

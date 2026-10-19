@@ -1355,13 +1355,8 @@ export class TableFilter {
             /* eslint-disable */
             let inst = new EXTENSIONS[name](this, ext);
             /* eslint-enable */
+            inst.init();
             this.ExtRegistry[name] = inst;
-            // Defer init() to the next microtask so extensions are wired up
-            // after this TableFilter has finished init() (`initialized = true`)
-            // and after the surrounding script finished building the DOM. This
-            // matches the asynchronous webpack `require([...], cb)` timing the
-            // extensions were originally written against (#965).
-            Promise.resolve().then(() => inst.init());
             return;
         }
 
