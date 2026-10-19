@@ -120,29 +120,36 @@ const replacePlaceholders = () => ({
     }
 });
 
-// Copy the Vite UMD bundle to the historic dist/tablefilter/tablefilter.js
-// path so consumers (tests, demos) load the Vite-built bundle.
-const copyLegacyDist = () => ({
+// Publish the Vite UMD bundle at the historic dist/tablefilter/tablefilter.js
+// path so consumers (tests, demos) load the Vite-built bundle. The copy is
+// emitted as a bundle asset (written by Vite) rather than copied from disk:
+// copying dist/tablefilter.umd.js in a build hook could observe the file
+// before Vite had flushed its contents, leaving a 0-byte legacy bundle on CI
+// (#965).
+const publishLegacyDist = () => ({
     name: 'tablefilter-legacy-dist',
-    writeBundle(options) {
+    generateBundle(options, bundle) {
         if (options.format !== 'umd') {
             return;
         }
-        const outDir = path.join(__dirname, 'dist');
-        const legacyDir = path.join(outDir, 'tablefilter');
-        fs.mkdirSync(legacyDir, {recursive: true});
-        fs.copyFileSync(
-            path.join(outDir, 'tablefilter.umd.js'),
-            path.join(legacyDir, 'tablefilter.js')
-        );
+        for (const fileName in bundle) {
+            const chunk = bundle[fileName];
+            if (chunk.type === 'chunk') {
+                this.emitFile({
+                    type: 'asset',
+                    fileName: 'tablefilter/tablefilter.js',
+                    source: chunk.code
+                });
+            }
+        }
     }
 });
 
 module.exports = {
     plugins: [
         replacePlaceholders(),
-        copyLegacyDist(),
         flattenUmdGlobal(),
+        publishLegacyDist(),
         injectExtImports(),
         injectSortableTable(),
         serveDistRaw()
