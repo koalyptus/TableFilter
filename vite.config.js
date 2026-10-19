@@ -37,6 +37,27 @@ const injectExtImports = () => ({
     }
 });
 
+// The sort extension relies on the vendored `SortableTable` script, which
+// webpack loaded globally through `script-loader!sortabletable`. That loader
+// is webpack-specific, so for the Vite bundle the legacy script is inlined as
+// raw text and evaluated in the global scope (#965).
+// TODO(#965): remove once the sort extension imports SortableTable directly.
+const injectSortableTable = () => ({
+    name: 'inject-sortabletable',
+    enforce: 'pre',
+    transform(code, id) {
+        if (!id.endsWith('/extensions/sort/sort.js')) {
+            return null;
+        }
+        const shim = 'import __sortableTableSrc from ' +
+            '"../../../libs/sortabletable.js?raw";\n' +
+            'if (typeof SortableTable === "undefined") {\n' +
+            '    (0, eval)(__sortableTableSrc);\n' +
+            '}\n';
+        return shim + code;
+    }
+});
+
 // Flatten the UMD global so `window.TableFilter` is the class itself
 // (flat-global compat), not `{ TableFilter: [class] }` (#965).
 const flattenUmdGlobal = () => ({
@@ -48,7 +69,7 @@ const flattenUmdGlobal = () => ({
         for (const fileName in bundle) {
             const chunk = bundle[fileName];
             if (chunk.type === 'chunk') {
-                chunk.code += '\\nif(typeof globalThis !== "undefined" ' +
+                chunk.code += '\nif(typeof globalThis !== "undefined" ' +
                     '&& globalThis.TableFilter ' +
                     '&& globalThis.TableFilter.TableFilter) { ' +
                     'globalThis.TableFilter = ' +
@@ -78,7 +99,6 @@ const serveDistRaw = () => ({
                         res.setHeader('Content-Type', 'application/json');
                     }
                     fs.createReadStream(filePath).pipe(res);
-                    res.end();
                     return;
                 }
             }
@@ -124,6 +144,7 @@ module.exports = {
         copyLegacyDist(),
         flattenUmdGlobal(),
         injectExtImports(),
+        injectSortableTable(),
         serveDistRaw()
     ],
     build: {
@@ -147,6 +168,9 @@ module.exports = {
                 exports: 'named'
             }
         },
+        // Keep class names: the feature registry keys off `Class.name`
+        // (see instantiateFeatures), so mangling breaks every feature (#965).
+        minify: false,
         emptyOutDir: false
     },
     server: {
