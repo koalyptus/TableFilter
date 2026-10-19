@@ -1,8 +1,8 @@
-// Component gate (#985): runtime re-init. The element observes its own
-// attributes and the resolved table, so configuration changes, table row
-// changes and a `for` target appearing later re-init the engine without a
-// manual re-connect. Presentation attributes and pure row reorders must
-// NOT rebuild the engine. Fails CI on regression.
+// Component gate (#985): runtime re-init (scoped to empty-table only).
+// The element observes host attributes and an empty backing table so
+// configuration changes, a `for` target appearing, and rows arriving
+// in an empty table re-init the engine. Once initialised, table row
+// mutations are not observed; presentation attributes must not rebuild.
 const { test, expect } = require('@playwright/test');
 
 const FIXTURE = '/test/test-emitter.html';
@@ -141,30 +141,6 @@ test('runtime config JSON change re-inits with the new config', async ({
     });
     expect(result.rebuilt).toBe(true);
     expect(result.watermark).toBe('Blob');
-});
-
-test('removing a data row re-inits on the reduced table', async ({ page }) => {
-    await page.goto(FIXTURE);
-    const mounted = await mount(page, '');
-    expect(mounted.hasTf).toBe(true);
-
-    const result = await page.evaluate(async () => {
-        const el = window.__tfEl;
-        const first = el.tf;
-        const tbody = el.table.tBodies[0];
-        tbody.deleteRow(tbody.rows.length - 1);
-        await new Promise((resolve) => setTimeout(resolve));
-        return {
-            rebuilt: el.tf !== first,
-            initialized: Boolean(el.tf && el.tf.isInitialized()),
-            filterRows: el.table.querySelectorAll('.fltrow').length
-        };
-    });
-    // The engine is rebuilt on the reduced table without leaving a
-    // duplicated filter row behind.
-    expect(result.rebuilt).toBe(true);
-    expect(result.initialized).toBe(true);
-    expect(result.filterRows).toBe(1);
 });
 
 test('presentation attribute change does not rebuild the engine', async ({

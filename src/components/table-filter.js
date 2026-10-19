@@ -52,10 +52,9 @@ export class TableFilterElement extends HTMLElement {
     constructor() {
         super();
         this._connected = false;
-        this._tableObserver = null;
+        this._emptyTableObserver = null;
         this._tableArrivalObserver = null;
         this._attrObserver = null;
-        this._dataRowCount = 0;
     }
 
     connectedCallback() {
@@ -83,9 +82,8 @@ export class TableFilterElement extends HTMLElement {
     /**
      * (Re)initialise the engine from the current markup: resolve the
      * table, map the configuration and init a fresh engine. Runs the
-     * teardown first, so it is safe to call repeatedly — connect and
-     * every observed change (host attribute, table rows, a table
-     * appearing) funnel through here (#985).
+     * teardown first, so it is safe to call repeatedly — connect, table
+     * arrival, and an empty table acquiring rows funnel through here.
      */
     _init() {
         this._teardown();
@@ -104,7 +102,7 @@ export class TableFilterElement extends HTMLElement {
         // and watch the table so rows arriving later initialise it.
         if (this.table.rows.length === 0) {
             this.tf = null;
-            this._observeTable();
+            this._observeEmptyTable();
             return;
         }
 
@@ -121,10 +119,6 @@ export class TableFilterElement extends HTMLElement {
         // init(), so a bridge installed afterwards would miss them.
         this._bridgeEvents();
         this.tf.init();
-        // Start observing only after init() so the filter row it inserts
-        // into the table is not mistaken for a data-row change, which
-        // would re-init in a loop.
-        this._observeTable();
     }
 
     /**
@@ -147,7 +141,7 @@ export class TableFilterElement extends HTMLElement {
      * (empty or missing table).
      */
     _teardown() {
-        this._unobserveTable();
+        this._unobserveEmptyTable();
         this._unobserveTableArrival();
         if (this.tf && this.tf.isInitialized()) {
             this.tf.destroy();
@@ -157,59 +151,34 @@ export class TableFilterElement extends HTMLElement {
     }
 
     /**
-     * Count the engine's data rows, i.e. every row except the filter row
-     * it inserts. Used to tell a real row addition/removal from the
-     * engine's own churn (say, reordering rows on sort), which must not
-     * trigger a re-init.
-     * @return {Number} Number of data rows
+     * Watch for rows arriving in an otherwise-empty backing table.
+     * Only runs when the table is resolved but has 0 rows; as soon as
+     * `rows.length > 0` we init and disconnect so engine churn is not
+     * observed (#985, scoped to the empty-table case).
      */
-    _countDataRows() {
-        if (!this.table) {
-            return 0;
+    _observeEmptyTable() {
+        if (!this.table || this.table.rows.length > 0) {
+            return;
         }
-        // The engine owns the filter row's class (`flts_row_css_class`,
-        // default `fltrow`): read it off the instance rather than
-        // repeating the default here. It is absent only on the
-        // empty-table path, where there are no rows to count anyway.
-        const fltsRowCssClass = (this.tf && this.tf.fltsRowCssClass) || '';
-        let count = 0;
-        Array.prototype.forEach.call(this.table.rows, (row) => {
-            if (!fltsRowCssClass ||
-                !row.classList.contains(fltsRowCssClass)) {
-                count++;
-            }
-        });
-        return count;
-    }
-
-    /**
-     * Watch the resolved table for data-row additions/removals and
-     * re-init when the row count changes, so rows appended to a
-     * placeholder table (or removed from a live one) are reflected
-     * without a manual re-connect (#985).
-     */
-    _observeTable() {
-        this._dataRowCount = this._countDataRows();
-        this._tableObserver = new MutationObserver(() => {
-            if (!this._connected ||
-                this._countDataRows() === this._dataRowCount) {
+        this._emptyTableObserver = new MutationObserver(() => {
+            if (!this._connected || !this.table) {
                 return;
             }
-            this._init();
+            if (this.table.rows.length > 0) {
+                this._unobserveEmptyTable();
+                this._init();
+            }
         });
-        this._tableObserver.observe(this.table, {
+        this._emptyTableObserver.observe(this.table, {
             childList: true,
             subtree: true
         });
     }
 
-    /**
-     * Stop watching the table. Safe when no observer is active.
-     */
-    _unobserveTable() {
-        if (this._tableObserver) {
-            this._tableObserver.disconnect();
-            this._tableObserver = null;
+    _unobserveEmptyTable() {
+        if (this._emptyTableObserver) {
+            this._emptyTableObserver.disconnect();
+            this._emptyTableObserver = null;
         }
     }
 
