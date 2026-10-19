@@ -1,4 +1,5 @@
-import { TableFilter } from '../tablefilter.js';
+import {TableFilter} from '../tablefilter.js';
+import {isSkippedAttribute} from './attributes.js';
 
 /**
  * `<table-filter>` custom element: declarative shell around the legacy
@@ -6,9 +7,9 @@ import { TableFilter } from '../tablefilter.js';
  * "Component 1").
  *
  * Behaviour arrives incrementally: table discovery (#899), engine init
- * (#900), declarative configuration (#901), teardown (#902) and event
- * bridging (#903) are done; runtime attribute observation (#985)
- * follows.
+ * (#900), declarative configuration (#901), teardown (#902), event
+ * bridging (#903) and runtime re-init on table/attribute changes (#985)
+ * are done.
  *
  * Importing this module registers the element. It is deliberately not
  * imported by src/tablefilter.js yet: that entry feeds the legacy ES5
@@ -27,8 +28,8 @@ import { TableFilter } from '../tablefilter.js';
  * engine instance, `args` the array of engine arguments after it).
  * Listeners are registered before `init()` so init-time events are
  * bridged too, and removed on disconnect so nothing leaks (#902).
- * TODO(#985): bridge events emitted by attributes / table changes
- * observed after connect.
+ * Re-initialising (#985) tears the old listeners down and bridges the
+ * fresh engine, so events keep flowing after an observed change.
  */
 
 // Engine events re-dispatched as DOM CustomEvents. Keep in sync with the
@@ -42,35 +43,70 @@ const BRIDGED_EVENTS = [
     'before-clearing-filters', 'after-clearing-filters', 'destroy'
 ];
 
+// `<table-filter>`-owned attributes that name structure (the `for` table
+// reference and the `config` JSON blob) rather than an engine option, so
+// they never map to config keys.
+const STRUCTURAL_ATTRIBUTES = ['for', 'config'];
+
 export class TableFilterElement extends HTMLElement {
+    constructor() {
+        super();
+        this._connected = false;
+        this._emptyTableObserver = null;
+        this._tableArrivalObserver = null;
+        this._attrObserver = null;
+        this._hostObserver = null;
+    }
+
     connectedCallback() {
-        // A descendant light-DOM <table> wins over an external table
-        // referenced by id through the `for` attribute; null when
-        // neither resolves.
-        //
-        // Resolution happens at connect time, so a `for` target that is
-        // parsed later in the document is not found yet. Re-connecting
-        // the element re-resolves it.
-        // TODO(#985): observe table/attribute changes and re-init
-        // automatically instead of requiring a re-connect.
-        this.table = this.querySelector('table') ||
-            (this.hasAttribute('for') ?
-                document.getElementById(this.getAttribute('for')) :
-                null);
+        this._connected = true;
+        // Observe the host's attributes so runtime configuration changes
+        // (`config`, `watermark`, `for`, …) are picked up (#985).
+        // `observedAttributes`/`attributeChangedCallback` only support a
+        // fixed list while the engine's option set is open-ended, so the
+        // whole attribute surface is watched and non-configuration
+        // attributes are filtered out. Started before `_init()` so a
+        // change made during init is not missed.
+        this._observeAttributes();
+        this._init();
+    }
+
+    disconnectedCallback() {
+        this._connected = false;
+        this._teardown();
+        if (this._attrObserver) {
+            this._attrObserver.disconnect();
+            this._attrObserver = null;
+        }
+    }
+
+    /**
+     * (Re)initialise the engine from the current markup: resolve the
+     * table, map the configuration and init a fresh engine. Runs the
+     * teardown first, so it is safe to call repeatedly — connect, table
+     * arrival, and an empty table acquiring rows funnel through here.
+     */
+    _init() {
+        this._teardown();
+        this.table = this._resolveTable();
 
         if (!this.table) {
-            this.tf = null;
+            // Neither a descendant table nor a `for` target resolved yet.
+            // Either may still be parsed/appended later; watch the root
+            // so it is picked up without a manual re-connect.
+            this._observeTableArrival();
             return;
         }
+
         // An empty table cannot back a TableFilter instance (its
         // constructor requires at least 1 row). Leave it uninitialised
-        // instead of throwing out of the connect; a later re-connect
-        // retries.
-        // TODO(#985): initialise automatically when rows arrive.
+        // and watch the table so rows arriving later initialise it.
         if (this.table.rows.length === 0) {
             this.tf = null;
+            this._observeEmptyTable();
             return;
         }
+
         const config = this._extractConfig();
         // An empty config must not reach the constructor: it flips the
         // engine's `hasConfig` flag and changes which features get
@@ -87,17 +123,141 @@ export class TableFilterElement extends HTMLElement {
     }
 
     /**
-     * Release the engine when the element leaves the document: the
-     * filter row is removed from the table and `tf` is nulled so a
-     * later re-connect starts a fresh engine. Safe to run with no live
-     * engine (empty or missing table).
+     * Resolve the table backing the engine. A descendant light-DOM
+     * `<table>` wins over an external table referenced by id through the
+     * `for` attribute; null when neither resolves.
+     * @return {HTMLTableElement} Resolved table or null
      */
-    disconnectedCallback() {
+    _resolveTable() {
+        return this.querySelector('table') ||
+            (this.hasAttribute('for') ?
+                document.getElementById(this.getAttribute('for')) :
+                null);
+    }
+
+    /**
+     * Release the current engine and its table/`for` observers. Owned by
+     * teardown (#902) so a re-init or a disconnect never leaves an
+     * observer watching a stale table. Safe to run with no live engine
+     * (empty or missing table).
+     */
+    _teardown() {
+        this._unobserveEmptyTable();
+        this._unobserveTableArrival();
         if (this.tf && this.tf.isInitialized()) {
             this.tf.destroy();
         }
         this._unbridgeEvents();
         this.tf = null;
+    }
+
+    /**
+     * Watch for rows arriving in an otherwise-empty backing table.
+     * Only runs when the table is resolved but has 0 rows; as soon as
+     * `rows.length > 0` we init and disconnect so engine churn is not
+     * observed (#985, scoped to the empty-table case).
+     */
+    _observeEmptyTable() {
+        if (!this.table || this.table.rows.length > 0) {
+            return;
+        }
+        this._emptyTableObserver = new MutationObserver(() => {
+            if (!this._connected || !this.table) {
+                return;
+            }
+            if (this.table.rows.length > 0) {
+                this._unobserveEmptyTable();
+                this._init();
+            }
+        });
+        this._emptyTableObserver.observe(this.table, {
+            childList: true,
+            subtree: true
+        });
+        // Frameworks may replace the table node (remove + append) rather
+        // than mutating its rows; observe the host so replacement is
+        // picked up even when the table node itself changes (#985).
+        this._hostObserver = new MutationObserver(() => {
+            if (!this._connected || (this.table && this.table.isConnected)) {
+                return;
+            }
+            this._unobserveEmptyTable();
+            this._init();
+        });
+        this._hostObserver.observe(this, { childList: true });
+    }
+
+    _unobserveEmptyTable() {
+        if (this._emptyTableObserver) {
+            this._emptyTableObserver.disconnect();
+            this._emptyTableObserver = null;
+        }
+        if (this._hostObserver) {
+            this._hostObserver.disconnect();
+            this._hostObserver = null;
+        }
+    }
+
+    /**
+     * Watch the document (or the enclosing shadow root) for a table that
+     * was not resolvable at connect time — a descendant `<table>` or a
+     * `for` target — and re-init as soon as it appears. Only active while
+     * no table is resolved, so the document-wide observer is
+     * short-lived (#985).
+     */
+    _observeTableArrival() {
+        const root = this.getRootNode();
+        if (!root || typeof MutationObserver === 'undefined') {
+            return;
+        }
+        this._tableArrivalObserver = new MutationObserver(() => {
+            if (!this._connected || !this._resolveTable()) {
+                return;
+            }
+            this._unobserveTableArrival();
+            this._init();
+        });
+        this._tableArrivalObserver.observe(root, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    /**
+     * Stop watching for a table to appear. Safe when no observer is
+     * active.
+     */
+    _unobserveTableArrival() {
+        if (this._tableArrivalObserver) {
+            this._tableArrivalObserver.disconnect();
+            this._tableArrivalObserver = null;
+        }
+    }
+
+    /**
+     * Watch the host's attributes and re-init on any configuration
+     * change (anything `isSkippedAttribute()` does not skip), so
+     * restyling the host with a presentation attribute does not rebuild
+     * the engine (#985).
+     */
+    _observeAttributes() {
+        if (this._attrObserver) {
+            this._attrObserver.disconnect();
+        }
+        this._attrObserver = new MutationObserver((records) => {
+            if (!this._connected) {
+                return;
+            }
+            // Anything that is not a presentation/noise attribute is a
+            // configuration change worth re-initialising for — including
+            // the structural `config` and `for` attributes.
+            const relevant = records.some((record) =>
+                !isSkippedAttribute(record.attributeName));
+            if (relevant) {
+                this._init();
+            }
+        });
+        this._attrObserver.observe(this, { attributes: true });
     }
 
     /**
@@ -162,26 +322,14 @@ export class TableFilterElement extends HTMLElement {
      *
      * Attribute names are lowercased by the HTML parser, so options
      * must be written in kebab-case (`case-sensitive`, not
-     * `caseSensitive`). Element-owned and HTML presentation attributes
-     * (`for`, `id`, `config`, `class`, `style`, `slot`, `hidden`,
-     * `title`, `lang`, `dir`, `role`, `tabindex`, `data-*`, `aria-*`)
-     * are never mapped: a stray `class` must not count as engine
-     * configuration. Config keys are read once per connect.
-     * TODO(#985): pick up runtime attribute changes.
+     * `caseSensitive`). Attributes skipped by `isSkippedAttribute()` are
+     * never mapped: a stray `class` must not count as engine
+     * configuration. Config is re-read on every re-init, including the
+     * runtime attribute changes observed by `_observeAttributes()`.
      * @return {Object} TableFilter configuration object
      */
     _extractConfig() {
         let config = {};
-        const SKIPPED = ['for', 'id', 'config', 'class', 'style', 'slot',
-            'hidden', 'title', 'lang', 'dir', 'role', 'tabindex'];
-        // Names that would reach the config object's own prototype
-        // instead of defining an option.
-        const FORBIDDEN = ['__proto__', 'constructor', 'prototype'];
-
-        const isSkipped = (name) => SKIPPED.indexOf(name) !== -1 ||
-            name.indexOf('data-') === 0 ||
-            name.indexOf('aria-') === 0 ||
-            FORBIDDEN.indexOf(name) !== -1;
 
         /**
          * Parse an attribute value: JSON when it parses, otherwise the
@@ -225,7 +373,7 @@ export class TableFilterElement extends HTMLElement {
         }
 
         Array.prototype.forEach.call(this.attributes, (attr) => {
-            if (isSkipped(attr.name)) {
+            if (isSkippedAttribute(attr.name, STRUCTURAL_ATTRIBUTES)) {
                 return;
             }
             config[attr.name.replace(/-/g, '_')] = parseValue(attr.value);
