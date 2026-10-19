@@ -42,21 +42,19 @@ const BRIDGED_EVENTS = [
     'before-clearing-filters', 'after-clearing-filters', 'destroy'
 ];
 
-// Host attributes that are never mapped onto engine options. Listed
-// once so `_extractConfig()` and the attribute observer agree on which
-// changes are configuration: element-owned and HTML presentation
-// attributes (`for`, `id`, `config`, `class`, `style`, `slot`, `hidden`,
-// `title`, `lang`, `dir`, `role`, `tabindex`) never count.
+// Element-owned and presentation attributes that are never mapped onto
+// engine options. Kept in one place so `_extractConfig()` and the
+// attribute observer agree on what counts as configuration.
 const SKIPPED_ATTRIBUTES = ['for', 'id', 'config', 'class', 'style', 'slot',
     'hidden', 'title', 'lang', 'dir', 'role', 'tabindex'];
-// Names that would reach the config object's own prototype instead of
+// Keys that would reach the config object's own prototype instead of
 // defining an option.
 const FORBIDDEN_KEYS = ['__proto__', 'constructor', 'prototype'];
 
 /**
- * Whether a host attribute must be skipped as engine configuration: it
- * is element-owned/HTML presentation, `data-*`/`aria-*`, or a
- * prototype-reaching name.
+ * Whether a host attribute must be skipped as engine configuration: a
+ * name in `SKIPPED_ATTRIBUTES`, the `data-*`/`aria-*` namespaces, or a
+ * prototype-reaching key in `FORBIDDEN_KEYS`.
  * @param {String} name Attribute name
  * @return {Boolean} True when the attribute does not map to an option
  */
@@ -266,8 +264,8 @@ export class TableFilterElement extends HTMLElement {
 
     /**
      * Watch the host's attributes and re-init on any configuration
-     * change. Presentation attributes (`class`, `style`, `data-*`,
-     * `aria-*`, …) are ignored so restyling the host does not rebuild
+     * change (anything `isSkippedAttribute()` does not skip), so
+     * restyling the host with a presentation attribute does not rebuild
      * the engine (#985).
      */
     _observeAttributes() {
@@ -355,12 +353,10 @@ export class TableFilterElement extends HTMLElement {
      *
      * Attribute names are lowercased by the HTML parser, so options
      * must be written in kebab-case (`case-sensitive`, not
-     * `caseSensitive`). Attributes skipped by `isSkippedAttribute()`
-     * (element-owned/HTML presentation, `data-*`, `aria-*`,
-     * prototype-reaching names — see `SKIPPED_ATTRIBUTES`) are never
-     * mapped: a stray `class` must not count as engine configuration.
-     * Config is re-read on every re-init, including the runtime
-     * attribute changes observed by `_observeAttributes()`.
+     * `caseSensitive`). Attributes skipped by `isSkippedAttribute()` are
+     * never mapped: a stray `class` must not count as engine
+     * configuration. Config is re-read on every re-init, including the
+     * runtime attribute changes observed by `_observeAttributes()`.
      * @return {Object} TableFilter configuration object
      */
     _extractConfig() {
