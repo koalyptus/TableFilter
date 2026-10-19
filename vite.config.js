@@ -73,7 +73,13 @@ const injectSortableTable = () => ({
             'if (typeof SortableTable === "undefined") {\n' +
             '    (0, eval)(__sortableTableSrc);\n' +
             '}\n';
-        return shim + code;
+        // The webpack-only `script-loader!` request is not resolvable in the
+        // Vite build, so it is stripped here; the shim above loads the
+        // vendored script instead.
+        const stripped = code.replace(
+            /require\(\s*['"]script-loader!sortabletable['"]\s*\)/g,
+            'undefined');
+        return shim + stripped;
     }
 });
 
@@ -144,12 +150,16 @@ const replacePlaceholders = () => ({
     }
 });
 
-// Publish the Vite UMD bundle at the historic dist/tablefilter/tablefilter.js
-// path so consumers (tests, demos) load the Vite-built bundle. The copy is
-// emitted as a bundle asset (written by Vite) rather than copied from disk:
-// copying dist/tablefilter.umd.js in a build hook could observe the file
-// before Vite had flushed its contents, leaving a 0-byte legacy bundle on CI
-// (#965).
+// Stage the Vite UMD bundle as dist/tablefilter/tablefilter.vite.js,
+// next to the legacy path. The published legacy bundle
+// (dist/tablefilter/tablefilter.js) stays the webpack flat-global build
+// until #965 retires the legacy webpack pipeline and migrates consumers
+// to the Vite namespace.
+// TODO(#965): point this copy at tablefilter.js and drop the .vite.js
+// The copy is emitted as a bundle asset (written by Vite) rather than
+// copied from disk: copying dist/tablefilter.umd.js in a build hook could
+// observe the file before Vite had flushed its contents, leaving a 0-byte
+// legacy bundle on CI (#965).
 const publishLegacyDist = () => ({
     name: 'tablefilter-legacy-dist',
     generateBundle(options, bundle) {
@@ -161,7 +171,7 @@ const publishLegacyDist = () => ({
             if (chunk.type === 'chunk') {
                 this.emitFile({
                     type: 'asset',
-                    fileName: 'tablefilter/tablefilter.js',
+                    fileName: 'tablefilter/tablefilter.vite.js',
                     source: chunk.code
                 });
             }

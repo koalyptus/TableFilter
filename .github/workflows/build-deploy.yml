@@ -56,18 +56,9 @@ jobs:
         with:
           node-version: 24
 
-      # #965: overwrite the webpack flat-global bundle with the Vite UMD
-      # bundle (which exposes window.TableFilter as the class) so the
-      # suites load the Vite-built bundle.
-      - name: Build Vite bundle for tests
-        run: npm run build:vite
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Playwright QUnit suites
-        run: npm run test:playwright
-
+      # The published legacy bundle is the webpack build, so build it before
+      # the suites run: the Playwright suites then validate the very artifact
+      # that gets uploaded and synced to S3.
       - name: Build deployment files
         run: npm run build:all
         env:
@@ -79,10 +70,16 @@ jobs:
       - name: Build Vite bundles
         run: npm run build:vite
 
-      # Guard: after #965, the published legacy bundle is the Vite UMD build
-      # (which exposes `window.TableFilter` as the class).
-      - name: Check legacy bundle is the Vite build
-        run: grep -q "globalThis.TableFilter" dist/tablefilter/tablefilter.js
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Playwright QUnit suites
+        run: npm run test:playwright
+
+      # Guard: the published legacy bundle must stay the webpack flat-global
+      # build until #965 migrates consumers to the Vite namespace.
+      - name: Check legacy bundle is the webpack build
+        run: grep -q webpackUniversalModuleDefinition dist/tablefilter/tablefilter.js
 
       - name: Upload deployment files
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
