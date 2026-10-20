@@ -40,6 +40,7 @@
     "server": "webpack-dev-server --colors --hot --config ./webpack.dev.config.js",
     "test": "grunt test",
     "test:playwright": "playwright test",
+    "test:node-require": "node scripts/check-node-require.js",
     "test:vite-smoke": "playwright test test/playwright/vite-smoke.spec.js",
     "codecov": "./node_modules/.bin/codecov",
     "esdoc": "esdoc",

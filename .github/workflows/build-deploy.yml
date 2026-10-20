@@ -85,6 +85,13 @@ jobs:
           grep -q 'globalThis\.TableFilter' "$bundle"
           npm run test:vite-smoke
 
+      # Guard the CommonJS entry (closes #1030 / #1033): the published
+      # package must load from Node with require(). Pack the tarball (same
+      # `files` whitelist the deploy job uses) and require it in a throwaway
+      # project so the entry-point resolution is exercised.
+      - name: Smoke-test Node require
+        run: npm run test:node-require
+
       - name: Playwright QUnit suites
         run: npm run test:playwright
 
