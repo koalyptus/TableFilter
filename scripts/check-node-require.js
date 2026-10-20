@@ -42,12 +42,32 @@ Object.keys(npmEnv).forEach((key) => {
     }
 });
 
-const run = (cmd, args, cwd) => execFileSync(cmd, args, {
-    cwd,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'inherit'],
-    env: npmEnv
-});
+const npmCli = (function () {
+    try {
+        return require.resolve('npm/bin/npm-cli.js');
+    } catch (_) {
+        return null;
+    }
+}());
+
+const run = (cmd, args, cwd) => {
+    const opts = {
+        cwd,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'inherit'],
+        env: npmEnv
+    };
+    if (cmd === 'npm') {
+        if (npmCli) {
+            return execFileSync(process.execPath, [npmCli, ...args], opts);
+        }
+        // Fallback for Windows where 'npm' is npm.cmd; allow shell there.
+        return execFileSync('npm', args, Object.assign({}, opts, {
+            shell: process.platform === 'win32'
+        }));
+    }
+    return execFileSync(cmd, args, opts);
+};
 
 const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tf-node-require-'));
 
