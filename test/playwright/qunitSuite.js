@@ -1,13 +1,18 @@
 // Shared QUnit page driver: loads one existing QUnit HTML suite in a
 // Playwright page and asserts zero failures. Used by the single-suite
 // spec (#893) and the all-suites spec (#894).
-const { readdirSync } = require('fs');
+const { readdirSync, readFileSync } = require('fs');
 const { join } = require('path');
 
-// All QUnit fixtures live directly in test/*.html.
+// QUnit fixtures live directly in test/*.html. Pages that do not load
+// QUnit are Playwright fixtures instead (e.g. the Vite smoke page,
+// #1023) and must not be driven as suites.
 function discoverSuites() {
-    return readdirSync(join(__dirname, '..'))
+    const testDir = join(__dirname, '..');
+    return readdirSync(testDir)
         .filter((file) => file.endsWith('.html'))
+        .filter((file) => /qunit/i.test(
+            readFileSync(join(testDir, file), 'utf8')))
         .sort()
         .map((file) => `test/${file}`);
 }
