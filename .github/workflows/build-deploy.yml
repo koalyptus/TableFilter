@@ -64,6 +64,13 @@ jobs:
         env:
           NODE_OPTIONS: --openssl-legacy-provider
 
+      # Guard the CommonJS entry (#1030): index.js requires the legacy
+      # webpack UMD bundle, so pack the package, install the tarball in a
+      # throwaway project and require() it in Node. A `window` global in the
+      # UMD wrapper throws there before module.exports is assigned.
+      - name: Smoke-test Node require
+        run: npm run test:node-require
+
       # After the webpack build: its CleanWebpackPlugin wipes dist/, so the
       # Vite outputs (esm/cjs/umd + staged legacy copy) would not survive
       # otherwise.

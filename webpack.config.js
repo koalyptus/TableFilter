@@ -16,7 +16,13 @@ module.exports = {
         path: path.join(__dirname, '/dist/tablefilter'),
         filename: 'tablefilter.js',
         chunkFilename: 'tf-[name]-[chunkhash].js',
-        libraryTarget: 'umd'
+        libraryTarget: 'umd',
+        // Default is 'window', which makes the UMD wrapper evaluate its
+        // global root argument before the CommonJS branch runs, so
+        // require('tablefilter') throws "window is not defined" in Node
+        // (#1030). `this` is `module.exports` there and `window` in a
+        // plain <script>.
+        globalObject: 'this'
     },
     resolve: {
         extensions: ['.js'],
