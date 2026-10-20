@@ -123,7 +123,8 @@ jobs:
       # sync: a failed publish must not leave the website ahead of npm.
       # The version only changes in the release issue, so the guard makes
       # every other master merge a no-op instead of a failed publish.
-      # Requires the NPM_TOKEN repository secret (npm automation token).
+      # Requires the NPM_TOKEN repository secret: a granular access token
+      # with read/write (publish) access to tablefilter.
       - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
