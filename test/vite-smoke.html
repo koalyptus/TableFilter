@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vite UMD smoke test (#1023)</title>
+</head>
+<body>
+<!--
+    Loads the staged Vite bundle rather than the webpack one. The inline
+    script records what the bundle exposed so the Playwright spec can
+    assert on it.
+    TODO(#965): retarget this page at dist/tablefilter/tablefilter.js once
+    the Vite bundle replaces the legacy webpack path.
+-->
+<table id="vite-smoke">
+    <thead>
+        <tr><th>Name</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>alpha</td><td>1</td></tr>
+    </tbody>
+</table>
+<script src="../dist/tablefilter/tablefilter.vite.js"></script>
+<script>
+(function() {
+    var smoke = window.__viteSmoke = {
+        ready: false,
+        loaded: false,
+        isClass: false,
+        flatGlobal: false,
+        instance: false,
+        version: null,
+        error: null
+    };
+
+    try {
+        smoke.loaded = typeof window.TableFilter !== 'undefined';
+        smoke.isClass = typeof window.TableFilter === 'function';
+        // The UMD wrapper would otherwise leave { TableFilter: class }.
+        smoke.flatGlobal = smoke.isClass &&
+            !Object.prototype.hasOwnProperty.call(
+                window.TableFilter, 'TableFilter');
+
+        if (smoke.isClass) {
+            var tf = new window.TableFilter('vite-smoke');
+            smoke.instance = tf instanceof window.TableFilter;
+            smoke.version = tf.version;
+        }
+    } catch (error) {
+        smoke.error = error.message;
+    }
+
+    smoke.ready = true;
+})();
+</script>
+</body>
+</html>
