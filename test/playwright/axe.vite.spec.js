@@ -4,6 +4,9 @@
 // shims, flat global, globalThis gating) fail CI instead of waiting
 // for the v1.0.0 pipeline retirement.
 //
+// TODO(#965): once Vite publishes at tablefilter.js, delete this spec
+// along with demos/vite.html (or promote the page to demo.html).
+//
 // Unlike the report-only baseline (#896/#948), this page labels its
 // generated filter controls, so it can gate at zero violations.
 const { test, expect } = require('@playwright/test');
