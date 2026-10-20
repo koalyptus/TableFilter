@@ -21,6 +21,13 @@
     "sort",
     "pagination"
   ],
+  "files": [
+    "dist/",
+    "libs/",
+    "src/",
+    "index.js",
+    "!dist/tablefilter/tablefilter.vite.js"
+  ],
   "scripts": {
     "lint": "eslint src/**/*.js test/*.js test/playwright/*.js *.js",
     "lint:css-tokens": "node scripts/check-css-tokens.js",
