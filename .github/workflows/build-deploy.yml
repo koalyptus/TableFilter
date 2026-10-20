@@ -130,10 +130,36 @@ jobs:
         run: |
           set -euo pipefail
           version=$(node -p "require('./package.json').version")
-          if npm view "tablefilter@$version" version >/dev/null 2>&1; then
+
+          # Only E404 means "not published yet". Any other failure (network,
+          # auth, registry outage) must abort rather than fall through to a
+          # publish attempt.
+          if view_out=$(npm view "tablefilter@$version" version 2>&1); then
             echo "tablefilter@$version is already published - skipping."
             exit 0
           fi
+          if ! grep -q 'E404' <<<"$view_out"; then
+            echo "::error::npm view failed for an unexpected reason:"
+            echo "$view_out"
+            exit 1
+          fi
+
+          # Fail closed: an unpublished version without a token must block
+          # the release instead of silently skipping the publish (#1020).
+          if [ -z "${NODE_AUTH_TOKEN:-}" ]; then
+            echo "::error::NPM_TOKEN is unset and tablefilter@$version is not on npm yet"
+            exit 1
+          fi
+
+          # Refuse to publish master's content under a version whose tag
+          # points somewhere else: that is how a merge made after a release
+          # would ship unreleased code as that release.
+          tag_commit=$(git rev-parse -q --verify "refs/tags/$version^{commit}" || true)
+          if [ -n "$tag_commit" ] && [ "$tag_commit" != "$(git rev-parse HEAD)" ]; then
+            echo "::error::tag $version points at $tag_commit, not HEAD - refusing to publish"
+            exit 1
+          fi
+
           npm publish --ignore-scripts --tag next
 
       - name: Configure AWS credentials
