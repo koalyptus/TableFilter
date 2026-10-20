@@ -14,6 +14,8 @@ const { scanAccessibility } = require('./axeScan');
 
 const DEMO_PAGE = 'demos/vite.html';
 const VITE_BUNDLE = 'tablefilter.vite.js';
+// Matches the legacy webpack path but not tablefilter.vite.js.
+const LEGACY_BUNDLE = /\/tablefilter\.js$/;
 
 // Page load plus the scan outlast the 30s default.
 test.setTimeout(120000);
@@ -35,6 +37,10 @@ test(`Axe zero-violations: Vite UMD demo ${DEMO_PAGE}`, async (
     );
     expect(scriptSrc.some((src) => src && src.endsWith(VITE_BUNDLE)))
         .toBe(true);
+    expect(
+        scriptSrc.filter((src) => src && LEGACY_BUNDLE.test(src)),
+        'the legacy webpack bundle must not be loaded'
+    ).toEqual([]);
 
     const violations = await scanAccessibility(
         page, testInfo, `Vite UMD demo ${DEMO_PAGE}`

@@ -67,6 +67,9 @@
         // The legacy engine generates filter controls without accessible
         // names (#948). Label them here so this page can gate at zero axe
         // violations instead of inheriting the report-only baseline.
+        // getHeadersText() and getFilterElement() both take a column index,
+        // and this demo filters every column, so the positions line up; the
+        // null guard covers a column without a filter.
         on_filters_loaded: function(tf){
             tf.getHeadersText().forEach(function(text, i){
                 var filter = tf.getFilterElement(i);
