@@ -107,6 +107,62 @@ jobs:
         with:
           name: website-files
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: Pin npm version
+        run: |
+          npm install --global npm@12.0.1
+          npm --version
+
+      # Publish the bundles built and validated by the `build` job (#1020).
+      # 0.7.4 and 0.7.5 were tagged, released and deployed but never
+      # published because this step did not exist. Keep it ahead of the S3
+      # sync: a failed publish must not leave the website ahead of npm.
+      # The version only changes in the release issue, so the guard makes
+      # every other master merge a no-op instead of a failed publish.
+      # Requires the NPM_TOKEN repository secret: a granular access token
+      # with read/write (publish) access to tablefilter.
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+
+          # Only E404 means "not published yet". Any other failure (network,
+          # auth, registry outage) must abort rather than fall through to a
+          # publish attempt.
+          if view_out=$(npm view "tablefilter@$version" version 2>&1); then
+            echo "tablefilter@$version is already published - skipping."
+            exit 0
+          fi
+          if ! grep -q 'E404' <<<"$view_out"; then
+            echo "::error::npm view failed for an unexpected reason:"
+            echo "$view_out"
+            exit 1
+          fi
+
+          # Fail closed: an unpublished version without a token must block
+          # the release instead of silently skipping the publish (#1020).
+          if [ -z "${NODE_AUTH_TOKEN:-}" ]; then
+            echo "::error::NPM_TOKEN is unset and tablefilter@$version is not on npm yet"
+            exit 1
+          fi
+
+          # Refuse to publish master's content under a version whose tag
+          # points somewhere else: that is how a merge made after a release
+          # would ship unreleased code as that release.
+          tag_commit=$(git rev-parse -q --verify "refs/tags/$version^{commit}" || true)
+          if [ -n "$tag_commit" ] && [ "$tag_commit" != "$(git rev-parse HEAD)" ]; then
+            echo "::error::tag $version points at $tag_commit, not HEAD - refusing to publish"
+            exit 1
+          fi
+
+          npm publish --ignore-scripts --tag next
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
