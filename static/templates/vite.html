@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!-- TODO(#965): once Vite publishes at tablefilter.js, delete this demo and
+     its axe spec (or promote this page to demo.html) and drop the
+     tablefilter-vite-script partial. -->
+<html lang="en">
+<head>
+    <title>{NAME} v{VERSION} - Vite UMD Demo</title>
+    <!-- @import partials/style.html -->
+</head>
+<body>
+<h1>{NAME} v{VERSION}</h1>
+<h2>Vite UMD bundle demo</h2>
+<p>
+    This page loads the Vite UMD build
+    (<code>dist/tablefilter/tablefilter.vite.js</code>) instead of the
+    webpack bundle used by the other demos, so the Vite-specific path
+    (extension shims, flat <code>window.TableFilter</code> global and
+    <code>globalThis</code> handling) is exercised by the accessibility
+    specs and by manual review. <code>npm run build:vite</code> produces
+    the bundle before the demos run.
+</p>
+
+<!-- @import partials/pre.html -->
+<!-- @import partials/countries-table.html -->
+
+<!-- @import partials/tablefilter-vite-script.html -->
+<script data-config>
+    var filtersConfig = {
+        base_path: '../dist/tablefilter/',
+        col_0: 'checklist',
+        col_1: 'select',
+        col_2: 'multiple',
+        col_3: 'select',
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: true,
+        loader: true,
+        status_bar: true,
+        mark_active_columns: {
+            highlight_column: true
+        },
+        no_results_message: true,
+        custom_options: {
+            cols:[3],
+            texts: [
+                [
+                    'na', '0 - 50', '50 - 500',
+                    '500 - 15 000', '15 000 - 25 000', '25 000 - 100 000',
+                    '100 000 - 1 500 000', 'not na'
+                ]
+            ],
+            values: [
+                [
+                    'na', '>0 && <=50', '>50 && <=500',
+                    '>500 && <=15000', '>15000 && <=25000',
+                    '>25000 && <=100000', '>100000 && <=1500000', '!na'
+                ]
+            ],
+            sorts: [false]
+        },
+        col_widths: [
+            '150px', '100px', '100px',
+            '90px', '90px', '90px',
+            '90px', '70px', '70px'
+        ],
+        extensions:[{ name: 'sort' }],
+        // The legacy engine generates filter controls without accessible
+        // names (#948). Label them here so this page can gate at zero axe
+        // violations instead of inheriting the report-only baseline.
+        // getHeadersText() and getFilterElement() both take a column index,
+        // and this demo filters every column, so the positions line up; the
+        // null guard covers a column without a filter.
+        on_filters_loaded: function(tf){
+            tf.getHeadersText().forEach(function(text, i){
+                var filter = tf.getFilterElement(i);
+                if (filter) {
+                    filter.setAttribute('aria-label', 'Filter by ' + text);
+                }
+            });
+        }
+    };
+
+    var tf = new TableFilter('demo', filtersConfig);
+    tf.init();
+
+</script>
+<!-- @import partials/pre-inline-script.html -->
+</body>
+</html>
