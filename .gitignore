@@ -9,8 +9,9 @@ playwright/.cache
 
 # Build output (#1020). The Vite bundles and the staged UMD copy are
 # rebuilt by CI before publishing, never committed. The legacy webpack
-# bundle at dist/tablefilter/tablefilter.js stays tracked so a clone
-# without a build still has a working `require('tablefilter')`.
+# bundle at dist/tablefilter/tablefilter.js stays tracked as the browser
+# <script> artifact; the CommonJS entry (index.js) resolves to the Vite CJS
+# bundle, which CI builds before publishing (#1033).
 dist/tablefilter.esm.js
 dist/tablefilter.cjs.js
 dist/tablefilter.umd.js
