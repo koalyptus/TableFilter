@@ -73,6 +73,18 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      # Guard the staged Vite UMD artifact (#1023) before the QUnit suites
+      # run: a build that silently emits an empty file or loses the
+      # flat-global shim must fail fast, and the artifact must actually
+      # load as window.TableFilter in a browser.
+      - name: Smoke-test Vite UMD bundle
+        run: |
+          set -euo pipefail
+          bundle=dist/tablefilter/tablefilter.vite.js
+          test -s "$bundle"
+          grep -q globalThis "$bundle"
+          npm run test:vite-smoke
+
       - name: Playwright QUnit suites
         run: npm run test:playwright
 
