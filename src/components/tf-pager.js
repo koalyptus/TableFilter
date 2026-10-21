@@ -26,14 +26,29 @@
  * - `btn_*_page_text` → set the `first-text`/`prev-text`/`next-text`/
  *   `last-text` attribute. Text defaults to empty so slotted markup is
  *   never doubled; the bridge (#926) maps the configured values.
+ * - `btns: false` → no buttons rendered by the legacy feature; the
+ *   scaffold instead exposes `disabled` (#926 decides whether to hide
+ *   or disable, and per-button disabled state arrives with #924).
+ *
+ * The `paging` config has 25 options; this scaffold owns only the nine
+ * that govern the four buttons (the four `btn_*_page_text`, the four
+ * `btn_*_page_html` and `btns`). The rest are explicitly deferred by the
+ * milestone's issue split and are not dropped: the page indicator
+ * (`page_text`, `of_text`, `page_selector_type`, `length`,
+ * `nb_pages_css_class`, `slc_css_class`, `inp_css_class`) is #924, the
+ * results-per-page select (`results_per_page`,
+ * `results_per_page_target_id`, `results_slc_css_class`,
+ * `results_span_css_class`) is #925, and placement and behaviour
+ * (`btn_css_class`, `target_id`, `toolbar_position`,
+ * `on_before_change_page`, `on_after_change_page`) are #926.
  *
  * Styling is deliberately not shipped here. TableFilter themes through
  * the `--tf-*` custom properties (#892/#945 — inherited into shadow
  * trees) and `::part()` hooks, so the element exposes `part="nav"` and
  * per-button parts and leaves the look to the stylesheet/theme. It also
- * hardcodes no CSS class: the pager class is configurable
- * (`paging.css_class`, default `defaultbtn`) and #926 applies it to this
- * host.
+ * hardcodes no CSS class: the paging button class is configurable
+ * (`paging.btn_css_class`, default `pgInp`, paging.js:33) and #926 maps
+ * it onto this host's parts.
  *
  * Importing this module registers the element. Like the other leaf
  * components it is deliberately not part of the legacy webpack bundle
