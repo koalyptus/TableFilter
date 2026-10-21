@@ -3,13 +3,23 @@
  *
  * An open shadow root exposing a `nav` landmark (`part="nav"`) with four
  * semantic `<button type="button">` elements in first/prev/next/last
- * order, each via its own `part`, a named slot and a text hook.
+ * order — each via its own `part`, a named slot and a text hook — plus a
+ * page indicator (`part="page-status"`) carrying `aria-current="page"`.
  *
  * Attributes:
  * - `label` — `aria-label` on the landmark.
  * - `first-label`, `prev-label`, `next-label`, `last-label` — `aria-label`
  *   on each button.
  * - `first-text`, `prev-text`, `next-text`, `last-text` — button text.
+ * - `page` — current page number, 1-based.
+ * - `row-count` — rows in the current result set.
+ * - `length` — rows per page, defaults to 10; with `row-count` it derives
+ *   the page count as `ceil(row-count / length)`.
+ * - `total-pages` — explicit page count, overriding that derivation.
+ * - `page-text`, `of-text` — text rendered either side of the selector.
+ * - `selector-type` — `select` (default) or `input`.
+ * - `selector-label` — `aria-label` on the page selector; defaults to
+ *   `Current page`, and an empty value opts out of the name.
  * - `disabled` — disables all four buttons.
  * No accessible name is rendered unless its attribute is set.
  *
@@ -29,8 +39,19 @@ const BUTTONS = [
     { part: 'last' }
 ];
 
+// Legacy `paging.length` default (src/modules/paging.js).
+const DEFAULT_LENGTH = 10;
+
+// ROADMAP: v1-webcomponents-investigation.md names the page control
+// "Current page". Legacy ships no name at all for it, so there is no
+// configured value this could shadow.
+const DEFAULT_SELECTOR_LABEL = 'Current page';
+
 // Cloned into every instance's shadow root. Structure and `part` hooks
-// only; no class or presentational style is baked in.
+// only; no class or presentational style is baked in. The indicator sits
+// between the prev and next buttons, mirroring the legacy markup order
+// (src/modules/paging.js: first, prev, page text, selector, of text,
+// total, next, last).
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
     <nav part="nav">
@@ -40,6 +61,12 @@ TEMPLATE.innerHTML = `
         <button type="button" part="prev">
             <slot name="prev"></slot><span part="prev-text"></span>
         </button>
+        <span part="page-status" aria-current="page">
+            <span part="page-text"></span>
+            <span part="page-selector"></span>
+            <span part="of-text"></span>
+            <span part="total-pages"></span>
+        </span>
         <button type="button" part="next">
             <slot name="next"></slot><span part="next-text"></span>
         </button>
@@ -60,10 +87,18 @@ export class TfPagerElement extends HTMLElement {
         this._texts = BUTTONS.map(
             (btn) =>
                 this.shadowRoot.querySelector(`[part="${btn.part}-text"]`));
+        this._pageText = this.shadowRoot.querySelector('[part="page-text"]');
+        this._pageSelector =
+            this.shadowRoot.querySelector('[part="page-selector"]');
+        this._ofText = this.shadowRoot.querySelector('[part="of-text"]');
+        this._totalPagesEl =
+            this.shadowRoot.querySelector('[part="total-pages"]');
     }
 
     static get observedAttributes() {
-        return ['label', 'disabled']
+        return ['label', 'disabled', 'page', 'row-count', 'length',
+            'total-pages', 'page-text', 'of-text', 'selector-type',
+            'selector-label']
             .concat(BUTTONS.map((btn) => `${btn.part}-label`))
             .concat(BUTTONS.map((btn) => `${btn.part}-text`));
     }
@@ -86,7 +121,26 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Render the landmark and button attributes into the shadow parts.
+     * Set the current page number.
+     * @param {*} page Page number, 1-based
+     */
+    setPage(page) {
+        this.setAttribute('page', page == null ? '' : String(page));
+    }
+
+    /**
+     * Set the row count of the current result set, used with `length` to
+     * derive the number of pages.
+     * @param {*} rowCount Row count
+     */
+    setRowCount(rowCount) {
+        this.setAttribute('row-count',
+            rowCount == null ? '' : String(rowCount));
+    }
+
+    /**
+     * Render the landmark, button attributes and page indicator into the
+     * shadow parts.
      */
     _update() {
         if (!this._nav) {
@@ -106,6 +160,121 @@ export class TfPagerElement extends HTMLElement {
                 this._buttons[idx].removeAttribute('disabled');
             }
         });
+
+        this._pageText.textContent = this.getAttribute('page-text') || '';
+        this._ofText.textContent = this.getAttribute('of-text') || '';
+        this._totalPagesEl.textContent = this._totalPages();
+
+        this._updateSelector(this._syncSelector());
+    }
+
+    /**
+     * Resolve the number of pages. An explicit `total-pages` wins; the
+     * derived value is `ceil(row-count / length)`, matching the legacy
+     * calculation (src/modules/paging.js:534). Empty when neither source
+     * is available, so no total is ever invented.
+     * @return {String} Total pages, or an empty string
+     */
+    _totalPages() {
+        const explicit = this.getAttribute('total-pages');
+        if (explicit !== null && explicit !== '') {
+            return explicit;
+        }
+
+        const rowCount = this.getAttribute('row-count');
+        if (rowCount === null || rowCount === '') {
+            return '';
+        }
+
+        return String(Math.ceil(Number(rowCount) / this._pageLength()));
+    }
+
+    /**
+     * Rows per page, falling back to the legacy `paging.length` default.
+     * @return {Number} Rows per page
+     */
+    _pageLength() {
+        const length = Number(this.getAttribute('length'));
+        return length > 0 ? length : DEFAULT_LENGTH;
+    }
+
+    /**
+     * Ensure the page selector matches `selector-type`, creating it on
+     * first use and replacing it when the type changes. Exactly one
+     * control exists at a time, so no presentational attribute is needed
+     * to hide the other.
+     * @return {Element} The page selector control
+     */
+    _syncSelector() {
+        const isInput = this.getAttribute('selector-type') === 'input';
+        const part = isInput ? 'page-input' : 'page-select';
+        const current = this._pageSelector.firstElementChild;
+
+        if (current && current.getAttribute('part') === part) {
+            return current;
+        }
+
+        this._pageSelector.textContent = '';
+        const el = document.createElement(isInput ? 'input' : 'select');
+        el.setAttribute('part', part);
+        if (isInput) {
+            el.setAttribute('type', 'number');
+            el.setAttribute('min', '1');
+        }
+        this._pageSelector.appendChild(el);
+        return el;
+    }
+
+    /**
+     * Render the current page, page count and accessible name into the
+     * selector control. The select mirrors the legacy option model —
+     * page number as the visible text, start row as the value — while the
+     * input holds the page number itself (src/modules/paging.js:377,547).
+     * @param {Element} el The selector control
+     */
+    _updateSelector(el) {
+        this._setSelectorLabel(el);
+
+        const page = this.getAttribute('page') || '';
+        const total = this._totalPages();
+        const isInput = el.getAttribute('part') === 'page-input';
+
+        if (isInput) {
+            el.value = page;
+            if (total !== '') {
+                el.setAttribute('max', total);
+            } else {
+                el.removeAttribute('max');
+            }
+            return;
+        }
+
+        const count = total === '' ? 0 : Number(total);
+        const length = this._pageLength();
+        el.textContent = '';
+        for (let i = 0; i < count; i++) {
+            const option = document.createElement('option');
+            option.value = String(i * length);
+            option.textContent = String(i + 1);
+            if (String(i + 1) === page) {
+                option.setAttribute('selected', 'true');
+            }
+            el.appendChild(option);
+        }
+    }
+
+    /**
+     * Name the page selector. Absent `selector-label` renders the
+     * ROADMAP default, a non-empty value overrides it, and an explicit
+     * empty value removes the name so it can be opted out of.
+     * @param {Element} el The selector control
+     */
+    _setSelectorLabel(el) {
+        if (!this.hasAttribute('selector-label')) {
+            el.setAttribute('aria-label', DEFAULT_SELECTOR_LABEL);
+            return;
+        }
+        this._setAriaLabel(el, 'selector-label');
     }
 
     /**

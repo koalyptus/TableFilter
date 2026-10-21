@@ -1,9 +1,10 @@
-// Component gate (#923): the <tf-pager> element registers an open
+// Component gate (#923/#924): the <tf-pager> element registers an open
 // shadow root exposing a `nav` landmark with four semantic buttons —
 // first, prev, next and last — each via its own part and each with an
-// accessible name. Per the theming model (--tf-* custom properties +
-// ::part()), it ships structure and hooks only: no invented classes and
-// no baked-in presentational CSS. Page-number state (#924), the
+// accessible name — plus a page indicator carrying `aria-current="page"`
+// and configurable page-number state. Per the theming model (--tf-*
+// custom properties + ::part()), it ships structure and hooks only: no
+// invented classes and no baked-in presentational CSS. The
 // results-per-page select (#925) and the Paging bridge (#926) are
 // separate tickets. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
@@ -11,10 +12,15 @@ const { test, expect } = require('@playwright/test');
 const FIXTURE = '/test/test-emitter.html';
 const COMPONENT = '/src/components/tf-pager.js';
 
+// Document order, matching the shadow template. The indicator sits
+// between prev and next (legacy markup order), and the default
+// `selector-type` contributes its `page-select` control.
 const PARTS = [
     'nav',
     'first', 'first-text',
     'prev', 'prev-text',
+    'page-status', 'page-text', 'page-selector', 'page-select',
+    'of-text', 'total-pages',
     'next', 'next-text',
     'last', 'last-text'
 ];
@@ -59,7 +65,9 @@ test('registers an open shadow root exposing the button parts',
 // Accessible names are configurable, never invented: the legacy Paging
 // titles come from config (btn_*_page_html/title, btn_*_page_text) and
 // the bridge (#926) maps them, so the scaffold ships no defaults and
-// only renders aria-label when the matching attribute is set.
+// only renders aria-label when the matching attribute is set. The page
+// selector is the one exception and is covered separately: legacy names
+// it nowhere, so the ROADMAP default is documented rather than invented.
 test('invents no accessible names by default', async ({ page }) => {
     await page.goto(FIXTURE);
 
@@ -271,3 +279,265 @@ test('disabled attribute is reflected onto every button',
         expect(result.set).toBe(true);
         expect(result.removed).toBe(false);
     });
+
+// Page-number state (#924): the indicator is the accessible home of the
+// current page, so it always carries `aria-current="page"`. Like the rest
+// of the element it ships parts and no CSS class — the legacy keys
+// (nb_pages_css_class, slc_css_class, inp_css_class) are themed through
+// ::part(), applied to the host by the bridge (#926).
+test('exposes the page indicator with aria-current="page"',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            const status = sr.querySelector('[part="page-status"]');
+            const nodes = Array.from(sr.querySelectorAll('*'));
+            return {
+                current: status.getAttribute('aria-current'),
+                text: sr.querySelector('[part="page-text"]').textContent,
+                of: sr.querySelector('[part="of-text"]').textContent,
+                total: sr.querySelector('[part="total-pages"]').textContent,
+                // Between prev and next, matching the legacy order.
+                index: Array.from(status.parentNode.children).indexOf(status),
+                classless: nodes.every((n) => !n.hasAttribute('class'))
+            };
+        }, COMPONENT);
+
+        expect(result.current).toBe('page');
+        // No text and no total are invented before they are configured.
+        expect(result.text).toBe('');
+        expect(result.of).toBe('');
+        expect(result.total).toBe('');
+        expect(result.index).toBe(2);
+        expect(result.classless).toBe(true);
+    });
+
+test('renders page state from the configured attributes',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('page', '2');
+            el.setAttribute('page-text', ' Page ');
+            el.setAttribute('of-text', ' of ');
+            el.setAttribute('total-pages', '7');
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            const text = sr.querySelector('[part="page-text"]').textContent;
+            const of = sr.querySelector('[part="of-text"]').textContent;
+            const total =
+                sr.querySelector('[part="total-pages"]').textContent;
+
+            el.removeAttribute('page-text');
+            return {
+                text, of, total,
+                cleared: sr.querySelector('[part="page-text"]').textContent
+            };
+        }, COMPONENT);
+
+        expect(result.text).toBe(' Page ');
+        expect(result.of).toBe(' of ');
+        expect(result.total).toBe('7');
+        expect(result.cleared).toBe('');
+    });
+
+test('derives the page count from row-count and length', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        el.setAttribute('row-count', '25');
+        el.setAttribute('length', '10');
+        document.body.appendChild(el);
+        const total = () => el.shadowRoot
+            .querySelector('[part="total-pages"]').textContent;
+
+        const derived = total();
+
+        // An explicit total-pages overrides the derivation.
+        el.setAttribute('total-pages', '4');
+        const explicit = total();
+        el.removeAttribute('total-pages');
+
+        // The legacy paging.length default (10) applies when unset.
+        el.removeAttribute('length');
+        const defaulted = total();
+
+        return { derived, explicit, defaulted };
+    }, COMPONENT);
+
+    expect(result.derived).toBe('3');
+    expect(result.explicit).toBe('4');
+    expect(result.defaulted).toBe('3');
+});
+
+test('renders the select selector with one option per page',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('row-count', '30');
+            el.setAttribute('length', '10');
+            el.setAttribute('page', '2');
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            const select = sr.querySelector('[part="page-select"]');
+            const options = Array.from(select.querySelectorAll('option'));
+            return {
+                tagName: select.tagName.toLowerCase(),
+                type: select.getAttribute('type'),
+                count: options.length,
+                // Legacy option model: page number as text, start row
+                // as value (paging.js:547).
+                texts: options.map((o) => o.textContent),
+                values: options.map((o) => o.value),
+                selectedIndex: select.selectedIndex
+            };
+        }, COMPONENT);
+
+        expect(result.tagName).toBe('select');
+        expect(result.type).toBeNull();
+        expect(result.count).toBe(3);
+        expect(result.texts).toEqual(['1', '2', '3']);
+        expect(result.values).toEqual(['0', '10', '20']);
+        expect(result.selectedIndex).toBe(1);
+    });
+
+test('swaps the selector to a bounded number input when configured',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('row-count', '25');
+            el.setAttribute('page', '3');
+            document.body.appendChild(el);
+            const host = el.shadowRoot.querySelector('[part="page-selector"]');
+            const before = host.firstElementChild.getAttribute('part');
+
+            el.setAttribute('selector-type', 'input');
+            const input = host.firstElementChild;
+            const after = {
+                part: input.getAttribute('part'),
+                type: input.getAttribute('type'),
+                min: input.getAttribute('min'),
+                max: input.getAttribute('max'),
+                value: input.value,
+                // Exactly one control exists, so nothing is hidden
+                // with a presentational attribute.
+                children: host.children.length
+            };
+
+            return { before, after };
+        }, COMPONENT);
+
+        expect(result.before).toBe('page-select');
+        expect(result.after.part).toBe('page-input');
+        expect(result.after.type).toBe('number');
+        expect(result.after.min).toBe('1');
+        expect(result.after.max).toBe('3');
+        expect(result.after.value).toBe('3');
+        expect(result.after.children).toBe(1);
+    });
+
+// The page selector is the one accessible name shipped with a default:
+// legacy names it nowhere, so the ROADMAP value is documented rather
+// than invented, and `selector-label` still overrides it.
+test('defaults the selector name and honours selector-label',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            document.body.appendChild(el);
+            const name = () => el.shadowRoot
+                .querySelector('[part="page-select"]')
+                .getAttribute('aria-label');
+
+            const initial = name();
+
+            el.setAttribute('selector-label', 'Go to page');
+            const overridden = name();
+
+            // Absent falls back to the default rather than losing the name.
+            el.removeAttribute('selector-label');
+            const reverted = name();
+
+            // An explicit empty value opts out entirely.
+            el.setAttribute('selector-label', '');
+            const optedOut = name();
+
+            return { initial, overridden, reverted, optedOut };
+        }, COMPONENT);
+
+        expect(result.initial).toBe('Current page');
+        expect(result.overridden).toBe('Go to page');
+        expect(result.reverted).toBe('Current page');
+        expect(result.optedOut).toBeNull();
+    });
+
+test('setPage() and setRowCount() update the indicator state',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            document.body.appendChild(el);
+            el.setRowCount(20);
+            el.setPage(2);
+            const sr = el.shadowRoot;
+            const select = sr.querySelector('[part="page-select"]');
+            return {
+                // Page 2 selected: visible text is the page number, the
+                // value is the start row, as in the legacy select.
+                selectedText:
+                    select.options[select.selectedIndex].textContent,
+                value: select.value,
+                total: sr.querySelector('[part="total-pages"]').textContent
+            };
+        }, COMPONENT);
+
+        expect(result.selectedText).toBe('2');
+        expect(result.value).toBe('10');
+        expect(result.total).toBe('2');
+    });
+
+test('exposes ::part() hooks for the page indicator', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        document.body.appendChild(el);
+
+        const style = document.createElement('style');
+        style.textContent = `
+            tf-pager::part(page-status) { display: flex; }
+            tf-pager::part(total-pages) { color: rgb(1, 2, 3); }
+        `;
+        document.head.appendChild(style);
+
+        const sr = el.shadowRoot;
+        return {
+            display: getComputedStyle(
+                sr.querySelector('[part="page-status"]')).display,
+            color: getComputedStyle(
+                sr.querySelector('[part="total-pages"]')).color
+        };
+    }, COMPONENT);
+
+    expect(result.display).toBe('flex');
+    expect(result.color).toBe('rgb(1, 2, 3)');
+});
