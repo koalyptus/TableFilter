@@ -4,11 +4,20 @@
  *
  * Scaffold (#923): an open shadow root exposing a `nav` landmark that
  * contains four semantic `<button type="button">` elements — first,
- * prev, next and last — each via its own `part` and each with an
- * accessible name. Page-number state and `aria-current` (#924), the
- * results-per-page select (#925) and the Paging bridge (#926) follow as
- * separate tickets; the button order (first, prev, next, last) leaves
- * room for the page indicator between prev and next.
+ * prev, next and last — each via its own `part` and each wrapping a
+ * named slot and a text hook. Page-number state and `aria-current`
+ * (#924), the results-per-page select (#925) and the Paging bridge
+ * (#926) follow as separate tickets; the button order (first, prev,
+ * next, last) leaves room for the page indicator between prev and next.
+ *
+ * No accessible name is invented here. The legacy `Paging` labels are
+ * configurable — `btn_*_page_html` carries a `title`, `btn_*_page_text`
+ * carries the button text (src/modules/paging.js) — and differ per
+ * rendering path, so there is no single default to bake in. The element
+ * renders `aria-label` only when the matching attribute is set
+ * (`first-label`, `prev-label`, `next-label`, `last-label` per button,
+ * `label` for the landmark) and removes it otherwise, mirroring
+ * `<tf-clear-button>`; the bridge (#926) maps the configured values.
  *
  * Content routes, mirroring the legacy `Paging` config
  * (ROADMAP: content-projection-parity.md §0.9.0):
@@ -17,13 +26,6 @@
  * - `btn_*_page_text` → set the `first-text`/`prev-text`/`next-text`/
  *   `last-text` attribute. Text defaults to empty so slotted markup is
  *   never doubled; the bridge (#926) maps the configured values.
- *
- * Accessible names default to the legacy button `title` strings ('First
- * page', 'Previous page', 'Next page', 'Last page'), so icon-only
- * buttons are named out of the box, and are overridden per button with
- * the `first-label`/`prev-label`/`next-label`/`last-label` attributes.
- * The landmark is named 'Table pagination' by default and is overridden
- * with the `label` attribute.
  *
  * Styling is deliberately not shipped here. TableFilter themes through
  * the `--tf-*` custom properties (#892/#945 — inherited into shadow
@@ -40,16 +42,15 @@
  */
 
 // Button contract: the `part` is the button's stable internal hook and
-// its default accessible name, matching the legacy `title` defaults in
-// paging.js.
+// the prefix for its `-label` (accessible name) and `-text` (button
+// text) attributes. No default label is baked in: the legacy titles come
+// from config (paging.js), so the bridge (#926) sets them.
 const BUTTONS = [
-    { part: 'first', label: 'First page' },
-    { part: 'prev', label: 'Previous page' },
-    { part: 'next', label: 'Next page' },
-    { part: 'last', label: 'Last page' }
+    { part: 'first' },
+    { part: 'prev' },
+    { part: 'next' },
+    { part: 'last' }
 ];
-
-const NAV_LABEL = 'Table pagination';
 
 // Cloned into every instance's shadow root. Structure and `part` hooks
 // only: each button wraps a named slot (for projected button markup) and
@@ -119,23 +120,36 @@ export class TfPagerElement extends HTMLElement {
             return;
         }
 
-        this._nav.setAttribute(
-            'aria-label', this.getAttribute('label') || NAV_LABEL);
+        this._setAriaLabel(this._nav, 'label');
 
         BUTTONS.forEach((btn, idx) => {
-            const button = this._buttons[idx];
-            button.setAttribute(
-                'aria-label',
-                this.getAttribute(`${btn.part}-label`) || btn.label);
+            this._setAriaLabel(this._buttons[idx], `${btn.part}-label`);
             this._texts[idx].textContent =
                 this.getAttribute(`${btn.part}-text`) || '';
 
             if (this.hasAttribute('disabled')) {
-                button.setAttribute('disabled', '');
+                this._buttons[idx].setAttribute('disabled', '');
             } else {
-                button.removeAttribute('disabled');
+                this._buttons[idx].removeAttribute('disabled');
             }
         });
+    }
+
+    /**
+     * Render an attribute as `aria-label` on a shadow element, or remove
+     * it when the attribute is absent. Accessible names are never
+     * invented: they are configurable in the legacy `Paging` feature and
+     * mapped by the bridge (#926), mirroring `<tf-clear-button>`.
+     * @param {Element} el Shadow element to name
+     * @param {String} attr Attribute holding the accessible name
+     */
+    _setAriaLabel(el, attr) {
+        const label = this.getAttribute(attr);
+        if (label) {
+            el.setAttribute('aria-label', label);
+        } else {
+            el.removeAttribute('aria-label');
+        }
     }
 }
 

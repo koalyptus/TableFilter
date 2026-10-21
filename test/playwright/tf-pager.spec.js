@@ -56,35 +56,38 @@ test('registers an open shadow root exposing the button parts',
         expect(result.styleless).toBe(true);
     });
 
-test('names the landmark and every button by default',
-    async ({ page }) => {
-        await page.goto(FIXTURE);
+// Accessible names are configurable, never invented: the legacy Paging
+// titles come from config (btn_*_page_html/title, btn_*_page_text) and
+// the bridge (#926) maps them, so the scaffold ships no defaults and
+// only renders aria-label when the matching attribute is set.
+test('invents no accessible names by default', async ({ page }) => {
+    await page.goto(FIXTURE);
 
-        const result = await page.evaluate(async (component) => {
-            await import(component);
-            const el = document.createElement('tf-pager');
-            document.body.appendChild(el);
-            const sr = el.shadowRoot;
-            const labelOf = (part) =>
-                sr.querySelector(`[part="${part}"]`)
-                    .getAttribute('aria-label');
-            return {
-                nav: labelOf('nav'),
-                first: labelOf('first'),
-                prev: labelOf('prev'),
-                next: labelOf('next'),
-                last: labelOf('last')
-            };
-        }, COMPONENT);
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        document.body.appendChild(el);
+        const sr = el.shadowRoot;
+        const hasLabel = (part) =>
+            sr.querySelector(`[part="${part}"]`)
+                .hasAttribute('aria-label');
+        return {
+            nav: hasLabel('nav'),
+            first: hasLabel('first'),
+            prev: hasLabel('prev'),
+            next: hasLabel('next'),
+            last: hasLabel('last')
+        };
+    }, COMPONENT);
 
-        expect(result.nav).toBe('Table pagination');
-        expect(result.first).toBe('First page');
-        expect(result.prev).toBe('Previous page');
-        expect(result.next).toBe('Next page');
-        expect(result.last).toBe('Last page');
-    });
+    expect(result.nav).toBe(false);
+    expect(result.first).toBe(false);
+    expect(result.prev).toBe(false);
+    expect(result.next).toBe(false);
+    expect(result.last).toBe(false);
+});
 
-test('accessible names are overridable from attributes',
+test('renders accessible names from attributes when set',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -102,13 +105,39 @@ test('accessible names are overridable from attributes',
             return {
                 nav: labelOf('nav'),
                 first: labelOf('first'),
-                next: labelOf('next')
+                next: labelOf('next'),
+                // Unset buttons stay unnamed rather than defaulted.
+                prev: labelOf('prev')
             };
         }, COMPONENT);
 
         expect(result.nav).toBe('Table pages');
         expect(result.first).toBe('Go to first page');
         expect(result.next).toBe('Go to next page');
+        expect(result.prev).toBeNull();
+    });
+
+test('removes the accessible name when the attribute is cleared',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('next-label', 'Go to next page');
+            document.body.appendChild(el);
+            const next = () => el.shadowRoot
+                .querySelector('[part="next"]');
+
+            const set = next().getAttribute('aria-label');
+            el.removeAttribute('next-label');
+            const removed = next().hasAttribute('aria-label');
+
+            return { set, removed };
+        }, COMPONENT);
+
+        expect(result.set).toBe('Go to next page');
+        expect(result.removed).toBe(false);
     });
 
 test('projects markup through the per-button named slots',
