@@ -13,7 +13,18 @@
  * - `results-text` — label text, rendered as text content.
  * - `page-length` — the selected page length. The matching option is
  *   selected, or the first option when the attribute is empty or matches
- *   none.
+ *   none, and the effective value is reflected back into the attribute,
+ *   so the attribute always reports what the select shows.
+ *
+ * The label text is what names the select. When `results-text` is absent
+ * or empty the select falls back to `aria-label` (`Rows per page`, the
+ * name ROADMAP gives the control at
+ * v1-webcomponents-investigation.md:313), so it is never unnamed.
+ *
+ * Events:
+ * - `page-length-change` — dispatched when the user picks a length, with
+ *   `detail: {pageLength}`. That value is the select's raw value, a
+ *   string; parsing it stays with the host (paging.js:778).
  *
  * The option list is never built here: `setPageLengths()` takes the page
  * lengths from the host, and each entry becomes an option whose value and
@@ -29,6 +40,9 @@
  * Importing this module registers the element. It is not part of the
  * legacy webpack bundle; consumers load it as a module.
  */
+
+// Name used when the host supplies no label text.
+const DEFAULT_RESULTS_LABEL = 'Rows per page';
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
@@ -50,8 +64,11 @@ export class TfResultsPerPageElement extends HTMLElement {
         this._lengths = [];
         // A change inside the shadow root does not reach the host: the
         // native `change` event is not composed, so it is relayed as a
-        // composed CustomEvent carrying the chosen value.
+        // composed CustomEvent carrying the chosen value. The pick is
+        // written back first so `page-length` reports what is shown and a
+        // later render does not discard it.
         this._select.addEventListener('change', () => {
+            this.setAttribute('page-length', this._select.value);
             this.dispatchEvent(new CustomEvent('page-length-change', {
                 detail: { pageLength: this._select.value },
                 bubbles: true,
@@ -100,11 +117,25 @@ export class TfResultsPerPageElement extends HTMLElement {
     }
 
     /**
-     * Render the label text and select the option matching `page-length`.
+     * Render the label text, name the select and select the option
+     * matching `page-length`.
      */
     _update() {
         this._textEl.textContent = this.getAttribute('results-text') || '';
+        this._setSelectName();
         this._selectOptions();
+    }
+
+    /**
+     * Name the select from the label text, falling back to the default
+     * when the host supplies no text so the control is never unnamed.
+     */
+    _setSelectName() {
+        if (this.getAttribute('results-text')) {
+            this._select.removeAttribute('aria-label');
+        } else {
+            this._select.setAttribute('aria-label', DEFAULT_RESULTS_LABEL);
+        }
     }
 
     /**
@@ -120,7 +151,8 @@ export class TfResultsPerPageElement extends HTMLElement {
 
     /**
      * Select the option whose value matches `page-length`, or the first
-     * option when the attribute is empty or matches none.
+     * option when the attribute is empty or matches none, and reflect the
+     * option that ended up selected back into the attribute.
      */
     _selectOptions() {
         const options = this._select.options;
@@ -135,7 +167,13 @@ export class TfResultsPerPageElement extends HTMLElement {
                 break;
             }
         }
-        options[index === -1 ? 0 : index].selected = true;
+        if (index === -1) {
+            index = 0;
+        }
+        options[index].selected = true;
+        if (options[index].value !== pageLength) {
+            this.setAttribute('page-length', options[index].value);
+        }
     }
 }
 

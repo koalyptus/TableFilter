@@ -136,6 +136,7 @@ HTML `<table>` semantics are strictly parsed by browser layout and accessibility
 | | <tf-toolbar part="toolbar-bottom">                    | | |
 | |   <slot name="bottom-toolbar">                        | | |
 | |     <tf-pager part="pager"></tf-pager>                | | |
+| |     <tf-results-per-page part="results-per-page">     | | |
 | |   </slot>                                             | | |
 | | </tf-toolbar>                                         | | |
 | +-------------------------------------------------------|-+ |
@@ -435,7 +436,7 @@ flowchart TD
      - `<slot name="bottom-toolbar"></slot>`
    - Attach `MutationObserver` on the slotted table to reactively observe row additions, deletions, or cell changes (`rows-changed`).
 2. **Implement Sub-Components**:
-   - Build `<tf-toolbar>`, `<tf-filter-input>`, `<tf-dropdown>`, `<tf-checklist>`, `<tf-pager>`, `<tf-status>`, `<tf-rows-counter>`, `<tf-clear-button>`, `<tf-dialog>`.
+   - Build `<tf-toolbar>`, `<tf-filter-input>`, `<tf-dropdown>`, `<tf-checklist>`, `<tf-pager>`, `<tf-results-per-page>`, `<tf-status>`, `<tf-rows-counter>`, `<tf-clear-button>`, `<tf-dialog>`.
 3. **Implement Imperative `TableFilter` Class Adapter**:
    - Preserve exact constructor signature: `new TableFilter(table, refRow, config)`.
    - Proxy calls (`tf.filter()`, `tf.clearFilters()`, etc.) directly to the Web Component controller.

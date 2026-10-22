@@ -8,6 +8,7 @@
 // CSS. The option list and all page-length arithmetic stay with the
 // host (#926). Fails CI on regression.
 const { test, expect } = require('@playwright/test');
+const { scanAccessibility } = require('./axeScan');
 
 const FIXTURE = '/test/test-emitter.html';
 const COMPONENT = '/src/components/tf-results-per-page.js';
@@ -62,6 +63,7 @@ test('names the select from the text its label renders',
             const el = document.createElement('tf-results-per-page');
             el.setAttribute('results-text', 'Records: ');
             document.body.appendChild(el);
+            el.setPageLengths([10, 25]);
 
             const sr = el.shadowRoot;
             const label = sr.querySelector('[part="results-label"]');
@@ -71,13 +73,17 @@ test('names the select from the text its label renders',
             // the control, which is what makes the text its accessible
             // name and makes the text focus it.
             label.click();
+            // Option text sits inside the select and contributes nothing
+            // to the name, so measure the label without that subtree.
+            const withoutSelect = label.cloneNode(true);
+            withoutSelect.querySelector('select').remove();
             return {
                 text: textEl.textContent,
-                // Anything in the label other than the text part would
-                // enter the accessible name.
-                stray: label.textContent.split(textEl.textContent).join(''),
+                stray: withoutSelect.textContent
+                    .split(textEl.textContent).join(''),
                 wraps: label.contains(select),
-                focused: sr.activeElement === select
+                focused: sr.activeElement === select,
+                ariaLabel: select.getAttribute('aria-label')
             };
         }, COMPONENT);
 
@@ -85,6 +91,37 @@ test('names the select from the text its label renders',
         expect(result.stray.trim()).toBe('');
         expect(result.wraps).toBe(true);
         expect(result.focused).toBe(true);
+        // The visible text is the name, so nothing overrides it.
+        expect(result.ariaLabel).toBeNull();
+    });
+
+test('falls back to the default name when no label text is set',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-results-per-page');
+            document.body.appendChild(el);
+            const select = el.shadowRoot.querySelector(
+                '[part="results-select"]');
+            const read = () => select.getAttribute('aria-label');
+
+            const unset = read();
+            el.setAttribute('results-text', '');
+            const empty = read();
+            el.setText('Records: ');
+            const text = read();
+            el.setAttribute('results-text', '');
+            const cleared = read();
+
+            return { unset, empty, text, cleared };
+        }, COMPONENT);
+
+        expect(result.unset).toBe('Rows per page');
+        expect(result.empty).toBe('Rows per page');
+        expect(result.text).toBeNull();
+        expect(result.cleared).toBe('Rows per page');
     });
 
 test('renders results-text as text content', async ({ page }) => {
@@ -136,22 +173,31 @@ test('builds the options from the host-supplied page lengths',
         expect(result.values).toEqual(['10', '25', '50']);
     });
 
-test('ignores a non-array passed to setPageLengths()', async ({ page }) => {
-    await page.goto(FIXTURE);
+test('clears the option list for a non-array passed to setPageLengths()',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
 
-    const result = await page.evaluate(async (component) => {
-        await import(component);
-        const el = document.createElement('tf-results-per-page');
-        document.body.appendChild(el);
-        el.setPageLengths([10, 25]);
-        el.setPageLengths('10,25');
-        el.setPageLengths(null);
-        const select = el.shadowRoot.querySelector('[part="results-select"]');
-        return { count: select.querySelectorAll('option').length };
-    }, COMPONENT);
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-results-per-page');
+            document.body.appendChild(el);
+            const count = () => el.shadowRoot
+                .querySelector('[part="results-select"]')
+                .querySelectorAll('option').length;
+            const counts = [];
+            el.setPageLengths([10, 25]);
+            counts.push(count());
+            el.setPageLengths('10,25');
+            counts.push(count());
+            el.setPageLengths(null);
+            counts.push(count());
+            return { counts };
+        }, COMPONENT);
 
-    expect(result.count).toBe(0);
-});
+        // A valid list renders, and each non-array call clears it rather
+        // than leaving a stale or half-built list behind.
+        expect(result.counts).toEqual([2, 0, 0]);
+    });
 
 test('selects the option matching page-length', async ({ page }) => {
     await page.goto(FIXTURE);
@@ -193,7 +239,8 @@ test('selects the first option when page-length is empty or unmatched',
                     '[part="results-select"]');
                 return {
                     selectedIndex: select.selectedIndex,
-                    value: select.value
+                    value: select.value,
+                    pageLength: el.getAttribute('page-length')
                 };
             };
             return { empty: read(empty), unmatched: read(unmatched) };
@@ -203,7 +250,47 @@ test('selects the first option when page-length is empty or unmatched',
         expect(result.empty.value).toBe('10');
         expect(result.unmatched.selectedIndex).toBe(0);
         expect(result.unmatched.value).toBe('10');
+        // The option that ended up selected is reflected back, so the
+        // attribute and the control cannot disagree.
+        expect(result.empty.pageLength).toBe('10');
+        expect(result.unmatched.pageLength).toBe('10');
     });
+
+test('keeps a picked length across a later render', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-results-per-page');
+        el.setAttribute('page-length', '10');
+        document.body.appendChild(el);
+        el.setPageLengths([10, 25, 50]);
+        const select = el.shadowRoot.querySelector('[part="results-select"]');
+
+        let picked = null;
+        el.addEventListener('page-length-change',
+            (e) => { picked = e.detail; });
+        select.value = '25';
+        select.dispatchEvent(new Event('change'));
+        const afterPick = {
+            pageLength: el.getAttribute('page-length'),
+            value: select.value
+        };
+
+        // Any later render must not discard the pick.
+        el.setAttribute('results-text', 'Records: ');
+        const afterRender = {
+            pageLength: el.getAttribute('page-length'),
+            value: select.value
+        };
+
+        return { picked, afterPick, afterRender };
+    }, COMPONENT);
+
+    expect(result.picked).toEqual({ pageLength: '25' });
+    expect(result.afterPick).toEqual({ pageLength: '25', value: '25' });
+    expect(result.afterRender).toEqual({ pageLength: '25', value: '25' });
+});
 
 test('setText() and setPageLength() update the element', async ({ page }) => {
     await page.goto(FIXTURE);
@@ -288,4 +375,38 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
 
     expect(result.display).toBe('flex');
     expect(result.color).toBe('rgb(1, 2, 3)');
+});
+
+// The element exists to name its select, so a scan over both name paths
+// (host-supplied text and the default) is what fails CI if a refactor
+// drops the label. Scoped to its own wrapper so unrelated page findings
+// do not mask a regression here.
+test('passes a scoped axe scan', async ({ page }, testInfo) => {
+    test.setTimeout(60000);
+    await page.goto(FIXTURE);
+
+    await page.evaluate(async (component) => {
+        await import(component);
+        const scope = document.createElement('div');
+        scope.id = 'tf-rpp-scope';
+        document.body.appendChild(scope);
+
+        const labelled = document.createElement('tf-results-per-page');
+        labelled.setAttribute('results-text', 'Records: ');
+        scope.appendChild(labelled);
+        labelled.setPageLengths([10, 25, 50]);
+
+        const unlabelled = document.createElement('tf-results-per-page');
+        scope.appendChild(unlabelled);
+        unlabelled.setPageLengths([10, 25, 50]);
+    }, COMPONENT);
+
+    const violations = await scanAccessibility(
+        page, testInfo, 'tf-results-per-page',
+        { include: '#tf-rpp-scope' }
+    );
+
+    expect(
+        violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)
+    ).toEqual([]);
 });
