@@ -253,10 +253,12 @@ test('paging bridge uses tf-pager with the legacy config',
         expect(result.state.visibleRows).toBe(5);
     });
 
-// With `enableIcons` on, legacy renders its icon input titled for the
-// button (paging.js:152-182) and ignores the caption text. The bridge
-// names the semantic button from that title and leaves the text empty.
-test('paging bridge names icon buttons from their legacy titles',
+// With `enable_icons` on, legacy renders an `<input>` whose
+// `.nextPage`/`.previousPage`/`.firstPage`/`.lastPage` classes the themes
+// paint the icon on (tablefilter.css, paging.js:152-182). Those classes
+// cannot reach the shadow button, so this configuration stays on the
+// legacy markup with its icon intact (clearButton.js:97-110).
+test('paging stays on the legacy path when enable_icons is on',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -270,33 +272,36 @@ test('paging bridge names icon buttons from their legacy titles',
 
             const tf = new TableFilter('ce-pager-icons', {
                 base_path: '/dist/tablefilter/',
-                paging: { length: 5, btn_next_page_text: 'Forward' }
+                enable_icons: true,
+                paging: { length: 5 }
             });
             tf.init();
 
             const paging = tf.feature('paging');
-            const sr = paging.pagerEl.shadowRoot;
             const state = {
-                nextLabel: sr.querySelector('[part="next"]')
-                    .getAttribute('aria-label'),
-                nextText: sr.querySelector('[part="next-text"]')
-                    .textContent,
-                nested: Array.from(sr.querySelectorAll('button'))
-                    .some((b) => b.querySelector('input, button, a'))
+                pagerEl: paging.pagerEl,
+                iconClass: paging.btnNextCont.firstElementChild.className,
+                hasTitle: Boolean(paging.btnNextCont.firstElementChild
+                    .getAttribute('title')),
+                // the icon input carries no caption text, so a blank
+                // button here means the icon was dropped
+                visible: paging.btnNextCont.firstElementChild.offsetWidth > 0
             };
 
             paging.destroy();
             return state;
         }, PAGER_TABLE_HTML);
 
-        expect(result.nextLabel).toBe('Next page');
-        expect(result.nextText).toBe('');
-        expect(result.nested).toBe(false);
+        expect(result.pagerEl).toBe(null);
+        expect(result.iconClass).toContain('nextPage');
+        expect(result.hasTitle).toBe(true);
+        expect(result.visible).toBe(true);
     });
 
-// A configured `btn_*_page_html` is projected into the button's named
-// slot, reproducing legacy's custom markup (paging.js:399-401).
-test('paging bridge projects configured button html into the slot',
+// A configured `btn_next_page_html` stays on the legacy markup, where the
+// custom HTML is injected into the button span (paging.js:399-401) and
+// the click is bound on that span.
+test('paging keeps configured button html on the legacy path',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -319,25 +324,27 @@ test('paging bridge projects configured button html into the slot',
             tf.init();
 
             const paging = tf.feature('paging');
-            const slotted = paging.pagerEl.querySelector('[slot="next"]');
+            const inner = paging.btnNextCont.firstElementChild;
             const before = paging.currentPageNb;
-            slotted.firstElementChild.click();
+            paging.btnNextCont.click();
 
             const state = {
-                tag: slotted.firstElementChild.tagName,
-                className: slotted.firstElementChild.className,
-                text: slotted.textContent,
-                reachedButton: paging.currentPageNb === before + 1
+                pagerEl: paging.pagerEl,
+                tag: inner.tagName,
+                className: inner.className,
+                text: paging.btnNextCont.textContent,
+                reachedFeature: paging.currentPageNb === before + 1
             };
 
             paging.destroy();
             return state;
         }, PAGER_TABLE_HTML);
 
+        expect(result.pagerEl).toBe(null);
         expect(result.tag).toBe('EM');
         expect(result.className).toBe('fwd');
         expect(result.text).toBe('Go');
-        expect(result.reachedButton).toBe(true);
+        expect(result.reachedFeature).toBe(true);
     });
 
 // A click on a <tf-pager> button reaches the legacy handlers, which hold
@@ -356,6 +363,7 @@ test('paging bridge forwards button clicks to the legacy feature',
 
             const tf = new TableFilter('ce-pager-click', {
                 base_path: '/dist/tablefilter/',
+                enable_icons: false,
                 paging: { length: 5 }
             });
             tf.init();
@@ -402,6 +410,7 @@ test('paging bridge forwards a page pick from the select',
 
             const tf = new TableFilter('ce-pager-slc', {
                 base_path: '/dist/tablefilter/',
+                enable_icons: false,
                 paging: { length: 5 }
             });
             tf.init();
@@ -426,6 +435,65 @@ test('paging bridge forwards a page pick from the select',
 
         expect(result.currentPage).toBe(3);
         expect(result.startRow).toBe('10');
+        expect(result.pageAttr).toBe('3');
+    });
+
+// With `page_selector_type: 'input'` the page control is a shadow
+// `<input>`, which has no `.options`. Changing results-per-page reads the
+// page position from `.value` instead (paging.js:955-956) and clamps it
+// to the last page before handing it to the element.
+test('changing results per page works with the input selector',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (tableHtml) => {
+            await import('/src/components/tf-pager.js');
+
+            const table = document.createElement('table');
+            table.id = 'ce-pager-input';
+            table.innerHTML = tableHtml;
+            document.body.appendChild(table);
+
+            const tf = new TableFilter('ce-pager-input', {
+                base_path: '/dist/tablefilter/',
+                enable_icons: false,
+                paging: {
+                    length: 5,
+                    page_selector_type: 'input',
+                    results_per_page: ['Rows: ', [5, 2]]
+                }
+            });
+            tf.init();
+
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+
+            // sit on the last page (12 rows / 5 = 3 pages), then shrink
+            // the page length to 2 (6 pages): the held page stays valid
+            paging.setPage(3);
+            let threw = null;
+            try {
+                paging.changeResultsPerPage('2');
+            } catch (e) {
+                threw = e.message;
+            }
+
+            const state = {
+                threw,
+                pageLength: paging.pageLength,
+                nbPages: paging.nbPages,
+                currentPage: paging.currentPageNb,
+                pageAttr: host.getAttribute('page')
+            };
+
+            paging.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.threw).toBe(null);
+        expect(result.pageLength).toBe(2);
+        expect(result.nbPages).toBe(6);
+        expect(result.currentPage).toBe(3);
         expect(result.pageAttr).toBe('3');
     });
 

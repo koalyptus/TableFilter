@@ -370,11 +370,19 @@ export class Paging extends Feature {
             tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.tgtId);
 
-        // Bridge to <tf-pager> (scaffold #923, page state #924). If the
-        // custom element is registered (Vite / module load) use it;
-        // otherwise fall back to the legacy spans and controls (#926).
+        // Render the paging controls with <tf-pager> when the source
+        // registers it (Vite / module load) and no button HTML is
+        // configured, otherwise with the legacy spans and controls
+        // (#926). `enableIcons` and `btn_*_page_html` keep the legacy
+        // path: the icon is painted by the `.nextPage`/`.previousPage`/
+        // `.firstPage`/`.lastPage` classes (tablefilter.css), and
+        // `btn_*_page_html` is user markup. Both render on the legacy
+        // button span only (paging.js:399-444).
+        // TODO(#965): route enableIcons and btn_*_page_html through the
+        // element once theming moves to `::part()`.
         if (typeof customElements !== 'undefined' &&
-            customElements.get('tf-pager')) {
+            customElements.get('tf-pager') && !tf.enableIcons &&
+            !this.hasBtnHtml()) {
             this.initCE(targetEl);
         } else {
             this.initLegacy(targetEl);
@@ -577,41 +585,31 @@ export class Paging extends Feature {
     }
 
     /**
-     * Render the paging button captions into <tf-pager>. A configured
-     * `btn_*_page_html` is projected into the button's named slot and
-     * the caption text is left empty, as legacy ignores
-     * `btn_*_page_text` when the HTML is set (paging.js:390-444). With
-     * `enableIcons` the legacy default is an icon input titled for the
-     * button (paging.js:152-182); the accessible name comes from that
-     * title and the text stays empty.
+     * Whether a `btn_*_page_html` value is set
+     * @return {Boolean} True when any button HTML is configured
+     * @private
+     */
+    hasBtnHtml() {
+        let cfg = this.config.paging || {};
+        return Boolean(cfg.btn_first_page_html || cfg.btn_prev_page_html ||
+            cfg.btn_next_page_html || cfg.btn_last_page_html);
+    }
+
+    /**
+     * Set the `btn_*_page_text` captions on the <tf-pager> buttons
+     * (paging.js:390-444).
      * @param {DOMElement} pagerEl <tf-pager> host
      * @private
      */
     setPagerButtons(pagerEl) {
-        let cfg = this.config.paging || {};
         let btns = [
-            { part: 'first', text: this.btnFirstPageText,
-                html: cfg.btn_first_page_html, title: 'First page' },
-            { part: 'prev', text: this.btnPrevPageText,
-                html: cfg.btn_prev_page_html, title: 'Previous page' },
-            { part: 'next', text: this.btnNextPageText,
-                html: cfg.btn_next_page_html, title: 'Next page' },
-            { part: 'last', text: this.btnLastPageText,
-                html: cfg.btn_last_page_html, title: 'Last page' }
+            { part: 'first', text: this.btnFirstPageText },
+            { part: 'prev', text: this.btnPrevPageText },
+            { part: 'next', text: this.btnNextPageText },
+            { part: 'last', text: this.btnLastPageText }
         ];
 
         btns.forEach((btn) => {
-            if (btn.html) {
-                let slot = createElm('span');
-                slot.setAttribute('slot', btn.part);
-                slot.innerHTML = btn.html;
-                pagerEl.appendChild(slot);
-                return;
-            }
-            if (this.tf.enableIcons) {
-                pagerEl.setAttribute(`${btn.part}-label`, btn.title);
-                return;
-            }
             pagerEl.setAttribute(`${btn.part}-text`, btn.text);
         });
     }
@@ -956,15 +954,14 @@ export class Paging extends Feature {
             }
             this.setPagingInfo();
 
-            if (this.pagerEl || pageSelectorType === SELECT) {
+            if (this.pagerEl) {
+                this.pagerEl.setPage(Math.min(slcPagesSelIndex,
+                    this.nbPages - 1) + 1);
+            } else if (pageSelectorType === SELECT) {
                 let slcIdx = (pageSlc.options.length - 1 <= slcPagesSelIndex) ?
                     (pageSlc.options.length - 1) :
                     slcPagesSelIndex;
-                if (this.pagerEl) {
-                    this.pagerEl.setPage(slcIdx + 1);
-                } else {
-                    pageSlc.options[slcIdx].selected = true;
-                }
+                pageSlc.options[slcIdx].selected = true;
             }
         }
 
