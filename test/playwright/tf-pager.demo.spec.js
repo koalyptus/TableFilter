@@ -1,16 +1,15 @@
-// Paging bridge gate (#926): the demo page mounts Paging on <tf-pager>
-// rather than the legacy spans and select. The page lives in
+// Paging bridge gate (#926): the demo page mounts Paging on <tf-pager>,
+// using the legacy spans and select nowhere. The page lives in
 // static/templates/ and is built into the gitignored demos/ by grunt
 // build-demos; the Vite dev server that serves the repo root compiles
 // the element module it imports.
 //
-// The gate conditions are all silent-failure paths, so each is asserted
-// rather than assumed: the element is absent from both published
-// bundles, so the page must import it; a `type="module"` script is
-// deferred, so a bare tf.init() races the registration and falls back to
-// legacy markup; and the bridge only uses the element when
-// `enable_icons` is off and no `btn_*_page_html` is configured
-// (src/modules/paging.js, TODO #965). Fails CI on regression.
+// The gate conditions are silent-failure paths: the element is absent
+// from both published bundles, so the page imports it; a
+// `type="module"` script is deferred, so a bare tf.init() races the
+// registration and falls back to legacy markup; and the bridge only uses
+// the element when `enable_icons` is off and no `btn_*_page_html` is
+// configured (src/modules/paging.js, TODO #965). Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 
 const DEMO_PAGE = 'demos/tf-pager.html';
