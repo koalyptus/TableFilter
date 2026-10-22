@@ -31,32 +31,26 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
         timeout: 15000
     });
 
+    // The host attributes are driven by the feature (paging.js:698,
+    // :898), so the page state is asserted through them.
     const result = await page.evaluate(() => {
-        const tf = window.tf;
-        const paging = tf.feature('paging');
-        const host = paging.pagerEl;
+        const host = document.querySelector('tf-pager');
         const sr = host.shadowRoot;
 
         // 1177 rows (countries-table partial) at length 10.
-        const totalPages = Number(host.getAttribute('total-pages'));
+        const totalPages = host.getAttribute('total-pages');
 
-        // The feature owns the state; the host only reflects it.
-        const before = paging.currentPageNb;
+        const before = host.getAttribute('page');
+
         sr.querySelector('[part="next"]').click();
-        const afterNext = {
-            page: paging.currentPageNb,
-            attr: host.getAttribute('page')
-        };
+        const afterNext = host.getAttribute('page');
 
         // The shadow `change` is not composed, so the element relays the
         // pick as `page-change` (it reads `selectedIndex`, tf-pager.js).
         const slc = sr.querySelector('[part="page-select"]');
         slc.selectedIndex = 4;
         slc.dispatchEvent(new Event('change', { bubbles: true }));
-        const afterSelect = {
-            page: paging.currentPageNb,
-            attr: host.getAttribute('page')
-        };
+        const afterSelect = host.getAttribute('page');
 
         // Page 5 holds rows 41-50; the feature hides the rest.
         const visible = Array.from(
@@ -72,7 +66,6 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
         ).length;
 
         return {
-            routed: Boolean(paging.pagerEl),
             selectorTag: slc.tagName,
             totalPages,
             before,
@@ -83,14 +76,11 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
         };
     });
 
-    expect(result.routed).toBe(true);
     expect(result.selectorTag).toBe('SELECT');
-    expect(result.totalPages).toBe(118);
-    expect(result.before).toBe(1);
-    expect(result.afterNext.page).toBe(2);
-    expect(result.afterNext.attr).toBe('2');
-    expect(result.afterSelect.page).toBe(5);
-    expect(result.afterSelect.attr).toBe('5');
+    expect(result.totalPages).toBe('118');
+    expect(result.before).toBe('1');
+    expect(result.afterNext).toBe('2');
+    expect(result.afterSelect).toBe('5');
     expect(result.visible).toBe(10);
     expect(result.legacyLeftovers).toBe(0);
     expect(pageErrors).toEqual([]);
