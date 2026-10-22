@@ -41,9 +41,6 @@ const BUTTONS = [
     { part: 'last' }
 ];
 
-// ROADMAP: v1-webcomponents-investigation.md names the page control
-// "Current page". Legacy ships no name at all for it, so there is no
-// configured value this could shadow.
 const DEFAULT_SELECTOR_LABEL = 'Current page';
 
 // Cloned into every instance's shadow root. Structure and `part` hooks
