@@ -553,3 +553,97 @@ test('exposes ::part() hooks for the page indicator', async ({ page }) => {
     expect(result.display).toBe('flex');
     expect(result.color).toBe('rgb(1, 2, 3)');
 });
+
+// Paging buttons (#926): legacy `btns: false` (paging.js:206, :388)
+// guards only button creation, leaving four empty spans in the markup
+// (:383-386, :451-452, :467-468). Here the attribute hides the buttons.
+test('buttons="false" hides the four buttons', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        document.body.appendChild(el);
+        const buttons = () => Array.from(
+            el.shadowRoot.querySelectorAll('button'));
+        const allHidden = () =>
+            buttons().every((b) => b.hasAttribute('hidden'));
+
+        const initial = allHidden();
+        el.setAttribute('buttons', 'false');
+        const set = allHidden();
+        el.setAttribute('buttons', 'true');
+        const restored = allHidden();
+
+        return { initial, set, restored, count: buttons().length };
+    }, COMPONENT);
+
+    expect(result.count).toBe(4);
+    expect(result.initial).toBe(false);
+    expect(result.set).toBe(true);
+    expect(result.restored).toBe(false);
+});
+
+// The `change` event of a shadow select is not composed, so the pick is
+// relayed as a composed `page-change` carrying the page number
+// (paging.js:363-366).
+test('dispatches page-change from the page select', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        el.setAttribute('total-pages', '3');
+        el.setPages([
+            { text: '1', value: '0' },
+            { text: '2', value: '10' },
+            { text: '3', value: '20' }
+        ]);
+        document.body.appendChild(el);
+
+        const seen = [];
+        const composed = [];
+        el.addEventListener('page-change', (event) => {
+            seen.push(event.detail.page);
+            composed.push(event.composed);
+        });
+
+        const select = el.shadowRoot.querySelector('[part="page-select"]');
+        select.selectedIndex = 2;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+
+        return { seen, composed };
+    }, COMPONENT);
+
+    expect(result.seen).toEqual(['3']);
+    expect(result.composed).toEqual([true]);
+});
+
+// The input variant relays Enter the same way (paging.js:319-328).
+test('dispatches page-change from the page input on Enter',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('total-pages', '5');
+            el.setAttribute('selector-type', 'input');
+            document.body.appendChild(el);
+
+            const seen = [];
+            el.addEventListener('page-change', (event) => {
+                seen.push(event.detail.page);
+            });
+
+            const input = el.shadowRoot.querySelector('[part="page-input"]');
+            input.value = '4';
+            input.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'Enter', bubbles: true, composed: true
+            }));
+
+            return { seen };
+        }, COMPONENT);
+
+        expect(result.seen).toEqual(['4']);
+    });

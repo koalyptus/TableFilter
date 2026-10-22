@@ -19,7 +19,14 @@
  * - `selector-label` — `aria-label` on the page selector; defaults to
  *   `Current page`, and an empty value opts out of the name.
  * - `disabled` — disables all four buttons.
+ * - `buttons` — `false` hides the four buttons, any other value renders
+ *   them.
  * No accessible name is rendered unless its attribute is set.
+ *
+ * Events:
+ * - `page-change` — dispatched when the user picks a page, with
+ *   `detail: {page}`, the page number as a string. Bubbles and crosses
+ *   the shadow boundary.
  *
  * The select is populated through `setPages()`, which takes `{text,
  * value}` entries from the host — the legacy option model, page number
@@ -94,7 +101,7 @@ export class TfPagerElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['label', 'disabled', 'page', 'total-pages',
+        return ['label', 'disabled', 'buttons', 'page', 'total-pages',
             'page-text', 'of-text', 'selector-type', 'selector-label']
             .concat(BUTTONS.map((btn) => `${btn.part}-label`))
             .concat(BUTTONS.map((btn) => `${btn.part}-text`));
@@ -146,6 +153,8 @@ export class TfPagerElement extends HTMLElement {
 
         this._setAriaLabel(this._nav, 'label');
 
+        const showButtons = this.getAttribute('buttons') !== 'false';
+
         BUTTONS.forEach((btn, idx) => {
             this._setAriaLabel(this._buttons[idx], `${btn.part}-label`);
             this._texts[idx].textContent =
@@ -155,6 +164,12 @@ export class TfPagerElement extends HTMLElement {
                 this._buttons[idx].setAttribute('disabled', '');
             } else {
                 this._buttons[idx].removeAttribute('disabled');
+            }
+
+            if (showButtons) {
+                this._buttons[idx].removeAttribute('hidden');
+            } else {
+                this._buttons[idx].setAttribute('hidden', '');
             }
         });
 
@@ -207,9 +222,32 @@ export class TfPagerElement extends HTMLElement {
         if (isInput) {
             el.setAttribute('type', 'number');
             el.setAttribute('min', '1');
+            el.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    this._dispatchPageChange(el.value);
+                }
+            });
+        } else {
+            el.addEventListener('change', () => {
+                const option = el.options[el.selectedIndex];
+                this._dispatchPageChange(option ? option.textContent : '');
+            });
         }
         this._pageSelector.appendChild(el);
         return el;
+    }
+
+    /**
+     * Dispatch `page-change` with the page number a user action resolved
+     * to.
+     * @param {String} page Page number
+     */
+    _dispatchPageChange(page) {
+        this.dispatchEvent(new CustomEvent('page-change', {
+            detail: { page: String(page) },
+            bubbles: true,
+            composed: true
+        }));
     }
 
     /**
