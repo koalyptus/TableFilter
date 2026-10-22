@@ -136,6 +136,7 @@ HTML `<table>` semantics are strictly parsed by browser layout and accessibility
 | | <tf-toolbar part="toolbar-bottom">                    | | |
 | |   <slot name="bottom-toolbar">                        | | |
 | |     <tf-pager part="pager"></tf-pager>                | | |
+| |     <tf-results-per-page part="results-per-page">     | | |
 | |   </slot>                                             | | |
 | | </tf-toolbar>                                         | | |
 | +-------------------------------------------------------|-+ |
@@ -165,11 +166,12 @@ v1.0.0 decomposes the monolithic script into focused custom elements:
 3. `<tf-filter-input>`: Accessible search input with integrated debounce, clear button, and operator help popover.
 4. `<tf-dropdown>`: Accessible native `<select>` wrapper with dynamic option collection.
 5. `<tf-checklist>`: Accessible ARIA Combobox/Listbox multi-select popup with search, select-all, and keyboard navigation.
-6. `<tf-pager>`: Accessible pagination component with WAI-ARIA buttons, page indicator, and results-per-page selector.
-7. `<tf-status>`: Accessible live status announcements (`role="status"`, `aria-live="polite"`).
-8. `<tf-rows-counter>`: Live region counter displaying total and filtered row counts.
-9. `<tf-clear-button>`: Accessible reset button dispatching filter reset actions.
-10. `<tf-dialog>`: Accessible modal/popover container for help instructions, column visibility manager, and popup filters.
+6. `<tf-pager>`: Accessible pagination component with WAI-ARIA buttons and page indicator.
+7. `<tf-results-per-page>`: Labelled results-per-page select, separate so the host can mount it in the toolbar or in an external container.
+8. `<tf-status>`: Accessible live status announcements (`role="status"`, `aria-live="polite"`).
+9. `<tf-rows-counter>`: Live region counter displaying total and filtered row counts.
+10. `<tf-clear-button>`: Accessible reset button dispatching filter reset actions.
+11. `<tf-dialog>`: Accessible modal/popover container for help instructions, column visibility manager, and popup filters.
 
 ### 2.4 Dual API Architecture (Declarative + Imperative Backward Compatibility)
 To guarantee 100% backward compatibility for existing codebases:
@@ -434,7 +436,7 @@ flowchart TD
      - `<slot name="bottom-toolbar"></slot>`
    - Attach `MutationObserver` on the slotted table to reactively observe row additions, deletions, or cell changes (`rows-changed`).
 2. **Implement Sub-Components**:
-   - Build `<tf-toolbar>`, `<tf-filter-input>`, `<tf-dropdown>`, `<tf-checklist>`, `<tf-pager>`, `<tf-status>`, `<tf-rows-counter>`, `<tf-clear-button>`, `<tf-dialog>`.
+   - Build `<tf-toolbar>`, `<tf-filter-input>`, `<tf-dropdown>`, `<tf-checklist>`, `<tf-pager>`, `<tf-results-per-page>`, `<tf-status>`, `<tf-rows-counter>`, `<tf-clear-button>`, `<tf-dialog>`.
 3. **Implement Imperative `TableFilter` Class Adapter**:
    - Preserve exact constructor signature: `new TableFilter(table, refRow, config)`.
    - Proxy calls (`tf.filter()`, `tf.clearFilters()`, etc.) directly to the Web Component controller.
