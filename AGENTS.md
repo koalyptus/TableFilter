@@ -16,6 +16,23 @@ logic that a later task removes):
 
 Never leave a bare `TODO` without an issue number.
 
+## Code comments
+
+Comments document behaviour, not the reasoning behind it. Never reference
+internal decisions, justifications or trade-offs: no decision narration
+("deliberately not derived", "never built here", "stays with the host"),
+no justifications ("so a later render does not discard it", "so the
+control is never unnamed"), no trade-offs ("rather than leaving a stale
+list behind"), and no purpose clauses that restate a decision.
+
+Write what the code does in the present tense and cite external sources —
+legacy line numbers (`paging.js:662-669`), ROADMAP sections, issue
+numbers. Platform facts a reader needs ("the native `change` event is not
+composed") and contracts a consumer can rely on are fine.
+
+If a comment needs a reason to make sense, the reason belongs in the
+issue, PR description or commit body.
+
 ## Commits and PRs
 
 - Commit and open PRs as the agent bot (see the `agent-git-setup` and
