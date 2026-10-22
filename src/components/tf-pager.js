@@ -12,11 +12,8 @@
  *   on each button.
  * - `first-text`, `prev-text`, `next-text`, `last-text` — button text.
  * - `page` — current page number, 1-based.
- * - `total-pages` — page count, rendered as supplied. This element never
- *   derives a count from row data: legacy resolves it from filtered and
- *   excluded rows plus the header offset, through two different formulas
- *   (paging.js:284 and :534). The host already owns those rules and passes
- *   the authoritative number.
+ * - `total-pages` — page count, rendered as supplied. The host resolves
+ *   it from the legacy Paging feature (paging.js:284, :534).
  * - `page-text`, `of-text` — text rendered either side of the selector.
  * - `selector-type` — `select` (default) or `input`.
  * - `selector-label` — `aria-label` on the page selector; defaults to
@@ -24,11 +21,9 @@
  * - `disabled` — disables all four buttons.
  * No accessible name is rendered unless its attribute is set.
  *
- * The select's options are never computed here. `setPages()` takes the
- * page list from the host as `{text, value}` entries: legacy derives them
- * from `pageLength` (`z + 1` and `z * this.pageLength`, paging.js:546),
- * which moves with `results_per_page` (paging.js:358,778), so that
- * arithmetic belongs to the host and not to this element.
+ * The select is populated through `setPages()`, which takes `{text,
+ * value}` entries from the host — the legacy option model, page number
+ * and start row derived from `pageLength` (paging.js:546).
  *
  * Content is projected through the slots (`slot="first"`, `slot="prev"`,
  * `slot="next"`, `slot="last"`). Styling is left to the theme via `--tf-*`
@@ -97,7 +92,7 @@ export class TfPagerElement extends HTMLElement {
         this._ofText = this.shadowRoot.querySelector('[part="of-text"]');
         this._totalPagesEl =
             this.shadowRoot.querySelector('[part="total-pages"]');
-        // Page entries supplied by the host; never computed here.
+        // Page entries supplied through setPages().
         this._pages = [];
     }
 
@@ -134,9 +129,8 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Set the page count supplied by the host. The host owns the
-     * row-counting rules (filtering, exclusions, header offset), so the
-     * element only renders what it is told.
+     * Set the page count, resolved by the host from the legacy Paging
+     * feature.
      * @param {*} totalPages Page count
      */
     setTotalPages(totalPages) {
@@ -175,13 +169,8 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Resolve the number of pages: the `total-pages` value the host
-     * supplied, or empty when it has not. Deliberately not derived — legacy
-     * computes the count from `validRowsIndex`/`refRow`/excluded rows
-     * (paging.js:534, and a second variant subtracting `startRow` at :284),
-     * while `pageLength` itself moves with the results-per-page feature
-     * (paging.js:358,778). Re-deriving that here would be a third, subtly
-     * wrong copy, so the host passes the authoritative count.
+     * The `total-pages` value supplied by the host, or empty when it has
+     * not been set.
      * @return {String} Total pages, or an empty string
      */
     _totalPages() {
@@ -191,9 +180,7 @@ export class TfPagerElement extends HTMLElement {
     /**
      * Supply the page list rendered into the select. Each entry is
      * `{text, value}` — the legacy option model, page number as visible
-     * text and start row as value (paging.js:546). The host computes
-     * both; this element only renders them, so no page arithmetic runs
-     * here.
+     * text and start row as value (paging.js:546).
      * @param {Array<Object>} pages Page entries
      */
     setPages(pages) {

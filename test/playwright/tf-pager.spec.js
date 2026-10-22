@@ -308,7 +308,7 @@ test('exposes the page indicator with aria-current="page"',
         }, COMPONENT);
 
         expect(result.current).toBe('page');
-        // No text and no total are invented before they are configured.
+        // Empty until page-text and total-pages are configured.
         expect(result.text).toBe('');
         expect(result.of).toBe('');
         expect(result.total).toBe('');
@@ -347,13 +347,10 @@ test('renders page state from the configured attributes',
         expect(result.cleared).toBe('');
     });
 
-// The element renders the count the host supplies and derives nothing from
-// row data. Legacy resolves the page count from filtered and excluded rows
-// plus the header offset, through two different formulas (paging.js:534 and
-// the startRow variant at :284), while `pageLength` itself moves with the
-// results-per-page feature (paging.js:358,778). Re-deriving that here would
-// be a third, subtly wrong copy.
-test('never derives a page count from row data', async ({ page }) => {
+// The page count comes from `total-pages` alone. Legacy resolves it from
+// `validRowsIndex` and `refRow` (paging.js:534, :284), so a `row-count`
+// attribute has no effect on it.
+test('renders the page count only from total-pages', async ({ page }) => {
     await page.goto(FIXTURE);
 
     const result = await page.evaluate(async (component) => {
@@ -395,9 +392,8 @@ test('renders the host-supplied page entries into the select',
             const el = document.createElement('tf-pager');
             el.setAttribute('page', '2');
             document.body.appendChild(el);
-            // The host computes the entries; the element only renders
-            // them (legacy derives z + 1 and z * pageLength at
-            // paging.js:546, which belongs to the host).
+            // Legacy option model: page number as text, start row as
+            // value (paging.js:546).
             el.setPages([
                 { text: '1', value: '0' },
                 { text: '2', value: '10' },
@@ -462,9 +458,9 @@ test('swaps the selector to a bounded number input when configured',
         expect(result.after.children).toBe(1);
     });
 
-// The page selector is the one accessible name shipped with a default:
-// legacy names it nowhere, so the ROADMAP value is documented rather
-// than invented, and `selector-label` still overrides it.
+// The page selector is the only accessible name that ships a default:
+// legacy names it nowhere, so the value comes from the ROADMAP, and
+// `selector-label` overrides it.
 test('defaults the selector name and honours selector-label',
     async ({ page }) => {
         await page.goto(FIXTURE);
