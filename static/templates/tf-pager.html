@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{NAME} v{VERSION} - Web Components Pager Demo</title>
+    <!-- @import partials/style.html -->
+    <style type="text/css">
+        /**
+         * Custom styles
+         */
+        .myLoader{
+            position:absolute; padding: 5px;
+            margin:100px 0 0 5%; width:auto;
+            z-index:1000; font-size:12px; font-weight:bold;
+            border:1px solid #666; background:#ffffcc;
+            vertical-align:middle;
+        }
+        .myStatus{
+            width:auto; display:block;
+        }
+        /**
+         * The component ships no presentational CSS: every control is
+         * reached through its `part` (#923). The legacy themes cannot
+         * reach inside the shadow root, so the icon path stays on the
+         * legacy markup and this page keeps `enable_icons` off. Note that
+         * a document rule matching a class the bridge applies to the
+         * host (`btn_css_class`, `slc_css_class`, `inp_css_class`,
+         * `nb_pages_css_class`) restyles the whole pager, not just that
+         * part; retarget one part with `tf-pager.pgInp::part(next)`.
+         */
+        tf-pager::part(nav){
+            display:block; margin:8px 0;
+        }
+        tf-pager::part(next),
+        tf-pager::part(prev),
+        tf-pager::part(first),
+        tf-pager::part(last){
+            min-width:3.5em; margin:0 2px;
+        }
+        tf-pager::part(page-select),
+        tf-pager::part(page-input){
+            margin:0 4px;
+        }
+    </style>
+</head>
+<body>
+<h1>{NAME} v{VERSION}</h1>
+<h2>Web components pager demo</h2>
+<p>
+    This page wires the Paging feature to the <code>&lt;tf-pager&gt;</code>
+    custom element (#926) instead of the legacy spans and select. The
+    element is not part of either published bundle, so the page imports it
+    from source and initialises the feature once that registration
+    settles. The bridge uses it only when it is registered before
+    <code>tf.init()</code> runs, and only when
+    <code>enable_icons</code> is off and no <code>btn_*_page_html</code> is
+    configured (<code>src/modules/paging.js</code>, TODO #965). Open the
+    page and page through the records: the buttons, the selector and the
+    <code>page</code> attribute all drive the same page state, which the
+    feature keeps.
+</p>
+
+<!-- @import partials/pre.html -->
+<!-- @import partials/countries-table.html -->
+
+<!-- @import partials/tablefilter-vite-script.html -->
+<!-- <tf-pager> registers itself when this module loads
+     (src/components/tf-pager.js). A `type="module"` script is deferred,
+     so it is attached after the inline config script below has run; the
+     bridge only uses the element if it is registered before
+     tf.init() (#926 gate). Await the registration instead. -->
+<script type="module" src="../src/components/tf-pager.js"></script>
+<script data-config>
+    var filtersConfig = {
+        base_path: '../dist/tablefilter/',
+        // The icon path renders on the legacy markup (see the style note
+        // above), so the bridge only uses <tf-pager> with icons off.
+        enable_icons: false,
+        paging: {
+            length: 10,
+            results_per_page: ['Records: ', [10, 25, 50, 100]],
+            page_text: 'Page ',
+            of_text: ' of '
+        },
+        responsive: true,
+        alternate_rows: true,
+        btn_reset: true,
+        rows_counter: true,
+        loader: {
+            html: '<div id="lblMsg"></div>',
+            css_class: 'myLoader'
+        },
+        status_bar: {
+            target_id: 'lblMsg',
+            css_class: 'myStatus'
+        },
+        no_results_message: true,
+        col_0: 'select',
+        col_1: 'select',
+        col_2: 'select'
+    };
+
+    // The module is deferred, so wait for its registration to complete
+    // before init() (#926 gate); the element's registration callback is
+    // enough to settle it.
+    customElements.whenDefined('tf-pager').then(function () {
+        var tf = new TableFilter('demo', filtersConfig);
+        tf.init();
+        // Expose the instance for the console and the demo's own checks.
+        window.tf = tf;
+
+        var host = tf.feature('paging').pagerEl;
+
+        // The feature owns the page state; the host is a view over it.
+        // `page-change` is composed, so it crosses the shadow boundary.
+        host.addEventListener('page-change', function (event) {
+            var pre = document.getElementsByTagName('pre')[0];
+            if (pre) {
+                pre.textContent += '\npage-change: ' + event.detail.page +
+                    ' (host page attribute: ' + host.getAttribute('page') +
+                    ')';
+            }
+        });
+    });
+</script>
+<!-- @import partials/pre-inline-script.html -->
+</body>
+</html>
