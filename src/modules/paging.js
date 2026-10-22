@@ -278,6 +278,13 @@ export class Paging extends Feature {
          */
         this.pgAfter = null;
 
+        /**
+         * <tf-pager> custom element host, when the bridge is active
+         * @type {DOMElement}
+         * @private
+         */
+        this.pagerEl = null;
+
         let startRow = tf.refRow;
         let nrows = tf.getRowsNb(true);
         //calculates page nb
@@ -328,6 +335,7 @@ export class Paging extends Feature {
                 }
             },
             slcPagesChange: null,
+            pagerPageChange: null,
             nextEvt: null,
             prevEvt: null,
             lastEvt: null,
@@ -339,9 +347,7 @@ export class Paging extends Feature {
      * Initialize DOM elements
      */
     init() {
-        let slcPages;
         let tf = this.tf;
-        let evt = this.evt;
 
         if (this.initialized) {
             return;
@@ -359,6 +365,92 @@ export class Paging extends Feature {
                 this.setResultsPerPage();
             }
         }
+
+        let targetEl = !this.tgtId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.tgtId);
+
+        // Bridge to <tf-pager> (scaffold #923, page state #924). If the
+        // custom element is registered (Vite / module load) use it;
+        // otherwise fall back to the legacy spans and controls (#926).
+        if (typeof customElements !== 'undefined' &&
+            customElements.get('tf-pager')) {
+            this.initCE(targetEl);
+        } else {
+            this.initLegacy(targetEl);
+        }
+
+        this.setPagingInfo();
+
+        if (!tf.fltGrid) {
+            tf.validateAllRows();
+            this.setPagingInfo(tf.validRowsIndex);
+        }
+
+        this.emitter.on(['after-filtering'], bound(this.resetPagingInfo, this));
+        this.emitter.on(['change-page'], bound(this.changePageHandler, this));
+        this.emitter.on(['change-page-results'],
+            bound(this.changePageResultsHandler, this));
+
+        /** @inherited */
+        this.initialized = true;
+
+        this.emitter.emit('feature-initialized', this);
+    }
+
+    /**
+     * Initialize using the <tf-pager> custom element
+     * @param {DOMElement} targetEl Target container element
+     * @private
+     */
+    initCE(targetEl) {
+        let evt = this.evt;
+        let tf = this.tf;
+
+        let pagerEl = document.createElement('tf-pager');
+        pagerEl.className = this.pgCssClass();
+        pagerEl.setAttribute('selector-type', this.pageSelectorType);
+        pagerEl.setAttribute('page-text', this.pageText);
+        pagerEl.setAttribute('of-text', this.ofText);
+
+        if (!this.hasBtns) {
+            pagerEl.setAttribute('buttons', 'false');
+        }
+
+        this.setPagerButtons(pagerEl);
+
+        targetEl.appendChild(pagerEl);
+        this.pagerEl = pagerEl;
+        this.pageSlc = pagerEl.shadowRoot.querySelector(
+            this.pageSelectorType === INPUT ?
+                '[part="page-input"]' : '[part="page-select"]');
+
+        this.bindPagerButton('first', evt.first);
+        this.bindPagerButton('prev', evt.prev);
+        this.bindPagerButton('next', evt.next);
+        this.bindPagerButton('last', evt.last);
+
+        evt.pagerPageChange = (event) => {
+            let page = parseInt(event.detail.page, 10);
+            if (isNaN(page)) {
+                return;
+            }
+            if (this.pageSelectorType === INPUT && tf.sorted) {
+                tf.filter();
+            }
+            this.changePage(page - 1);
+        };
+        addEvt(pagerEl, 'page-change', evt.pagerPageChange);
+    }
+
+    /**
+     * Initialize using the legacy spans, controls and select
+     * @param {DOMElement} targetEl Target container element
+     * @private
+     */
+    initLegacy(targetEl) {
+        let slcPages;
+        let evt = this.evt;
 
         evt.slcPagesChange = (event) => {
             let slc = event.target;
@@ -445,9 +537,6 @@ export class Paging extends Feature {
         }
 
         // paging elements (buttons+drop-down list) are added to defined element
-        let targetEl = !this.tgtId ?
-            tf.feature('toolbar').container(this.toolbarPosition) :
-            elm(this.tgtId);
         targetEl.appendChild(btnFirstSpan);
         targetEl.appendChild(btnPrevSpan);
 
@@ -475,23 +564,95 @@ export class Paging extends Feature {
         this.pgBefore = pgBeforeSpan;
         this.pgAfter = pgAfterSpan;
         this.pageSlc = slcPages;
+    }
 
-        this.setPagingInfo();
+    /**
+     * The legacy paging classes, applied to the <tf-pager> host
+     * @return {String} Space-separated class list
+     * @private
+     */
+    pgCssClass() {
+        return [this.btnCssClass, this.pgSlcCssClass, this.pgInpCssClass,
+            this.nbPgSpanCssClass].join(' ');
+    }
 
-        if (!tf.fltGrid) {
-            tf.validateAllRows();
-            this.setPagingInfo(tf.validRowsIndex);
+    /**
+     * Render the paging button captions into <tf-pager>. A configured
+     * `btn_*_page_html` is projected into the button's named slot and
+     * the caption text is left empty, as legacy ignores
+     * `btn_*_page_text` when the HTML is set (paging.js:390-444). With
+     * `enableIcons` the legacy default is an icon input titled for the
+     * button (paging.js:152-182); the accessible name comes from that
+     * title and the text stays empty.
+     * @param {DOMElement} pagerEl <tf-pager> host
+     * @private
+     */
+    setPagerButtons(pagerEl) {
+        let cfg = this.config.paging || {};
+        let btns = [
+            { part: 'first', text: this.btnFirstPageText,
+                html: cfg.btn_first_page_html, title: 'First page' },
+            { part: 'prev', text: this.btnPrevPageText,
+                html: cfg.btn_prev_page_html, title: 'Previous page' },
+            { part: 'next', text: this.btnNextPageText,
+                html: cfg.btn_next_page_html, title: 'Next page' },
+            { part: 'last', text: this.btnLastPageText,
+                html: cfg.btn_last_page_html, title: 'Last page' }
+        ];
+
+        btns.forEach((btn) => {
+            if (btn.html) {
+                let slot = createElm('span');
+                slot.setAttribute('slot', btn.part);
+                slot.innerHTML = btn.html;
+                pagerEl.appendChild(slot);
+                return;
+            }
+            if (this.tf.enableIcons) {
+                pagerEl.setAttribute(`${btn.part}-label`, btn.title);
+                return;
+            }
+            pagerEl.setAttribute(`${btn.part}-text`, btn.text);
+        });
+    }
+
+    /**
+     * Bind a paging handler to a <tf-pager> button
+     * @param {String} part Button part name
+     * @param {Function} handler Paging handler
+     * @private
+     */
+    bindPagerButton(part, handler) {
+        addEvt(this.pagerEl.shadowRoot.querySelector(`[part="${part}"]`),
+            'click', handler);
+    }
+
+    /**
+     * Remove a paging handler from a <tf-pager> button
+     * @param {String} part Button part name
+     * @param {Function} handler Paging handler
+     * @private
+     */
+    unbindPagerButton(part, handler) {
+        removeEvt(this.pagerEl.shadowRoot.querySelector(`[part="${part}"]`),
+            'click', handler);
+    }
+
+    /**
+     * The page list handed to <tf-pager>: page number as visible text,
+     * start row as value (paging.js:546)
+     * @return {Array<Object>} Page entries
+     * @private
+     */
+    pageEntries() {
+        let entries = [];
+        for (let z = 0; z < this.nbPages; z++) {
+            entries.push({
+                text: String(z + 1),
+                value: String(z * this.pageLength)
+            });
         }
-
-        this.emitter.on(['after-filtering'], bound(this.resetPagingInfo, this));
-        this.emitter.on(['change-page'], bound(this.changePageHandler, this));
-        this.emitter.on(['change-page-results'],
-            bound(this.changePageResultsHandler, this));
-
-        /** @inherited */
-        this.initialized = true;
-
-        this.emitter.emit('feature-initialized', this);
+        return entries;
     }
 
     /**
@@ -532,23 +693,32 @@ export class Paging extends Feature {
 
         //calculate nb of pages
         this.nbPages = Math.ceil(tf.validRowsIndex.length / this.pageLength);
-        //refresh page nb span
-        this.pgCont.innerHTML = this.nbPages;
-        //select clearing shortcut
-        if (this.pageSelectorType === SELECT) {
-            this.pageSlc.innerHTML = '';
+
+        if (this.pagerEl) {
+            this.pagerEl.setTotalPages(this.nbPages);
+            this.pagerEl.setPages(this.pageEntries());
+            this.pagerEl.setPage(this.currentPageNb);
+        } else {
+            //refresh page nb span
+            this.pgCont.innerHTML = this.nbPages;
+            //select clearing shortcut
+            if (this.pageSelectorType === SELECT) {
+                this.pageSlc.innerHTML = '';
+            }
         }
 
         if (this.nbPages > 0) {
             cont.style.visibility = 'visible';
-            if (this.pageSelectorType === SELECT) {
-                for (let z = 0; z < this.nbPages; z++) {
-                    let opt = createOpt(z + 1, z * this.pageLength, false);
-                    this.pageSlc.options[z] = opt;
+            if (!this.pagerEl) {
+                if (this.pageSelectorType === SELECT) {
+                    this.pageEntries().forEach((entry, z) => {
+                        this.pageSlc.options[z] =
+                            createOpt(entry.text, entry.value, false);
+                    });
+                } else {
+                    //input type
+                    this.pageSlc.value = this.currentPageNb;
                 }
-            } else {
-                //input type
-                this.pageSlc.value = this.currentPageNb;
             }
 
         } else {
@@ -726,7 +896,9 @@ export class Paging extends Feature {
             this.onBeforeChangePage(this, (index + 1));
 
             this.currentPageNb = parseInt(index, 10) + 1;
-            if (this.pageSelectorType === SELECT) {
+            if (this.pagerEl) {
+                this.pagerEl.setPage(this.currentPageNb);
+            } else if (this.pageSelectorType === SELECT) {
                 this.pageSlc.options[index].selected = true;
             } else {
                 this.pageSlc.value = this.currentPageNb;
@@ -784,11 +956,15 @@ export class Paging extends Feature {
             }
             this.setPagingInfo();
 
-            if (pageSelectorType === SELECT) {
+            if (this.pagerEl || pageSelectorType === SELECT) {
                 let slcIdx = (pageSlc.options.length - 1 <= slcPagesSelIndex) ?
                     (pageSlc.options.length - 1) :
                     slcPagesSelIndex;
-                pageSlc.options[slcIdx].selected = true;
+                if (this.pagerEl) {
+                    this.pagerEl.setPage(slcIdx + 1);
+                } else {
+                    pageSlc.options[slcIdx].selected = true;
+                }
             }
         }
 
@@ -849,53 +1025,63 @@ export class Paging extends Feature {
 
         let evt = this.evt;
 
-        if (this.pageSlc) {
-            if (this.pageSelectorType === SELECT) {
-                removeEvt(this.pageSlc, 'change', evt.slcPagesChange);
+        if (this.pagerEl) {
+            removeEvt(this.pagerEl, 'page-change', evt.pagerPageChange);
+            this.unbindPagerButton('first', evt.first);
+            this.unbindPagerButton('prev', evt.prev);
+            this.unbindPagerButton('next', evt.next);
+            this.unbindPagerButton('last', evt.last);
+            removeElm(this.pagerEl);
+            this.pagerEl = null;
+        } else {
+            if (this.pageSlc) {
+                if (this.pageSelectorType === SELECT) {
+                    removeEvt(this.pageSlc, 'change', evt.slcPagesChange);
+                }
+                else if (this.pageSelectorType === INPUT) {
+                    removeEvt(this.pageSlc, 'keypress', evt._detectKey);
+                }
+                removeElm(this.pageSlc);
             }
-            else if (this.pageSelectorType === INPUT) {
-                removeEvt(this.pageSlc, 'keypress', evt._detectKey);
+
+            if (this.btnNextCont) {
+                removeEvt(this.btnNextCont, 'click', evt.next);
+                removeElm(this.btnNextCont);
+                this.btnNextCont = null;
             }
-            removeElm(this.pageSlc);
-        }
 
-        if (this.btnNextCont) {
-            removeEvt(this.btnNextCont, 'click', evt.next);
-            removeElm(this.btnNextCont);
-            this.btnNextCont = null;
-        }
+            if (this.btnPrevCont) {
+                removeEvt(this.btnPrevCont, 'click', evt.prev);
+                removeElm(this.btnPrevCont);
+                this.btnPrevCont = null;
+            }
 
-        if (this.btnPrevCont) {
-            removeEvt(this.btnPrevCont, 'click', evt.prev);
-            removeElm(this.btnPrevCont);
-            this.btnPrevCont = null;
-        }
+            if (this.btnLastCont) {
+                removeEvt(this.btnLastCont, 'click', evt.last);
+                removeElm(this.btnLastCont);
+                this.btnLastCont = null;
+            }
 
-        if (this.btnLastCont) {
-            removeEvt(this.btnLastCont, 'click', evt.last);
-            removeElm(this.btnLastCont);
-            this.btnLastCont = null;
-        }
+            if (this.btnFirstCont) {
+                removeEvt(this.btnFirstCont, 'click', evt.first);
+                removeElm(this.btnFirstCont);
+                this.btnFirstCont = null;
+            }
 
-        if (this.btnFirstCont) {
-            removeEvt(this.btnFirstCont, 'click', evt.first);
-            removeElm(this.btnFirstCont);
-            this.btnFirstCont = null;
-        }
+            if (this.pgBefore) {
+                removeElm(this.pgBefore);
+                this.pgBefore = null;
+            }
 
-        if (this.pgBefore) {
-            removeElm(this.pgBefore);
-            this.pgBefore = null;
-        }
+            if (this.pgAfter) {
+                removeElm(this.pgAfter);
+                this.pgAfter = null;
+            }
 
-        if (this.pgAfter) {
-            removeElm(this.pgAfter);
-            this.pgAfter = null;
-        }
-
-        if (this.pgCont) {
-            removeElm(this.pgCont);
-            this.pgCont = null;
+            if (this.pgCont) {
+                removeElm(this.pgCont);
+                this.pgCont = null;
+            }
         }
 
         if (this.hasResultsPerPage) {
