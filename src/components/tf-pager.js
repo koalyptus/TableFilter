@@ -12,10 +12,13 @@
  *   on each button.
  * - `first-text`, `prev-text`, `next-text`, `last-text` — button text.
  * - `page` — current page number, 1-based.
- * - `row-count` — rows in the current result set.
- * - `length` — rows per page, defaults to 10; with `row-count` it derives
- *   the page count as `ceil(row-count / length)`.
- * - `total-pages` — explicit page count, overriding that derivation.
+ * - `total-pages` — page count, rendered as supplied. This element never
+ *   derives a count from row data: legacy resolves it from filtered and
+ *   excluded rows plus the header offset, through two different formulas
+ *   (paging.js:284 and :534). The host already owns those rules and passes
+ *   the authoritative number.
+ * - `length` — rows per page, defaults to 10; scales the select option
+ *   values into start rows (paging.js:546).
  * - `page-text`, `of-text` — text rendered either side of the selector.
  * - `selector-type` — `select` (default) or `input`.
  * - `selector-label` — `aria-label` on the page selector; defaults to
@@ -96,9 +99,8 @@ export class TfPagerElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['label', 'disabled', 'page', 'row-count', 'length',
-            'total-pages', 'page-text', 'of-text', 'selector-type',
-            'selector-label']
+        return ['label', 'disabled', 'page', 'length', 'total-pages',
+            'page-text', 'of-text', 'selector-type', 'selector-label']
             .concat(BUTTONS.map((btn) => `${btn.part}-label`))
             .concat(BUTTONS.map((btn) => `${btn.part}-text`));
     }
@@ -129,13 +131,14 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Set the row count of the current result set, used with `length` to
-     * derive the number of pages.
-     * @param {*} rowCount Row count
+     * Set the page count supplied by the host. The host owns the
+     * row-counting rules (filtering, exclusions, header offset), so the
+     * element only renders what it is told.
+     * @param {*} totalPages Page count
      */
-    setRowCount(rowCount) {
-        this.setAttribute('row-count',
-            rowCount == null ? '' : String(rowCount));
+    setTotalPages(totalPages) {
+        this.setAttribute('total-pages',
+            totalPages == null ? '' : String(totalPages));
     }
 
     /**
@@ -169,24 +172,17 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Resolve the number of pages. An explicit `total-pages` wins; the
-     * derived value is `ceil(row-count / length)`, matching the legacy
-     * calculation (src/modules/paging.js:534). Empty when neither source
-     * is available, so no total is ever invented.
+     * Resolve the number of pages: the `total-pages` value the host
+     * supplied, or empty when it has not. Deliberately not derived — legacy
+     * computes the count from `validRowsIndex`/`refRow`/excluded rows
+     * (paging.js:534, and a second variant subtracting `startRow` at :284),
+     * while `pageLength` itself moves with the results-per-page feature
+     * (paging.js:358,778). Re-deriving that here would be a third, subtly
+     * wrong copy, so the host passes the authoritative count.
      * @return {String} Total pages, or an empty string
      */
     _totalPages() {
-        const explicit = this.getAttribute('total-pages');
-        if (explicit !== null && explicit !== '') {
-            return explicit;
-        }
-
-        const rowCount = this.getAttribute('row-count');
-        if (rowCount === null || rowCount === '') {
-            return '';
-        }
-
-        return String(Math.ceil(Number(rowCount) / this._pageLength()));
+        return this.getAttribute('total-pages') || '';
     }
 
     /**

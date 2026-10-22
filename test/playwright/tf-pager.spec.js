@@ -347,7 +347,13 @@ test('renders page state from the configured attributes',
         expect(result.cleared).toBe('');
     });
 
-test('derives the page count from row-count and length', async ({ page }) => {
+// The element renders the count the host supplies and derives nothing from
+// row data. Legacy resolves the page count from filtered and excluded rows
+// plus the header offset, through two different formulas (paging.js:534 and
+// the startRow variant at :284), while `pageLength` itself moves with the
+// results-per-page feature (paging.js:358,778). Re-deriving that here would
+// be a third, subtly wrong copy.
+test('never derives a page count from row data', async ({ page }) => {
     await page.goto(FIXTURE);
 
     const result = await page.evaluate(async (component) => {
@@ -356,26 +362,29 @@ test('derives the page count from row-count and length', async ({ page }) => {
         el.setAttribute('row-count', '25');
         el.setAttribute('length', '10');
         document.body.appendChild(el);
-        const total = () => el.shadowRoot
-            .querySelector('[part="total-pages"]').textContent;
+        const sr = el.shadowRoot;
+        const total = () => sr.querySelector('[part="total-pages"]')
+            .textContent;
+        const options = () =>
+            sr.querySelectorAll('[part="page-select"] option').length;
 
-        const derived = total();
+        const fromRows = total();
+        const optionsFromRows = options();
 
-        // An explicit total-pages overrides the derivation.
+        // A count supplied by the host renders as-is.
         el.setAttribute('total-pages', '4');
-        const explicit = total();
+        const supplied = total();
+
         el.removeAttribute('total-pages');
+        const cleared = total();
 
-        // The legacy paging.length default (10) applies when unset.
-        el.removeAttribute('length');
-        const defaulted = total();
-
-        return { derived, explicit, defaulted };
+        return { fromRows, optionsFromRows, supplied, cleared };
     }, COMPONENT);
 
-    expect(result.derived).toBe('3');
-    expect(result.explicit).toBe('4');
-    expect(result.defaulted).toBe('3');
+    expect(result.fromRows).toBe('');
+    expect(result.optionsFromRows).toBe(0);
+    expect(result.supplied).toBe('4');
+    expect(result.cleared).toBe('');
 });
 
 test('renders the select selector with one option per page',
@@ -385,7 +394,7 @@ test('renders the select selector with one option per page',
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-pager');
-            el.setAttribute('row-count', '30');
+            el.setAttribute('total-pages', '3');
             el.setAttribute('length', '10');
             el.setAttribute('page', '2');
             document.body.appendChild(el);
@@ -419,7 +428,7 @@ test('swaps the selector to a bounded number input when configured',
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-pager');
-            el.setAttribute('row-count', '25');
+            el.setAttribute('total-pages', '3');
             el.setAttribute('page', '3');
             document.body.appendChild(el);
             const host = el.shadowRoot.querySelector('[part="page-selector"]');
@@ -487,7 +496,7 @@ test('defaults the selector name and honours selector-label',
         expect(result.optedOut).toBeNull();
     });
 
-test('setPage() and setRowCount() update the indicator state',
+test('setPage() and setTotalPages() update the indicator state',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -495,7 +504,7 @@ test('setPage() and setRowCount() update the indicator state',
             await import(component);
             const el = document.createElement('tf-pager');
             document.body.appendChild(el);
-            el.setRowCount(20);
+            el.setTotalPages(2);
             el.setPage(2);
             const sr = el.shadowRoot;
             const select = sr.querySelector('[part="page-select"]');
