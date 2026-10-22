@@ -360,7 +360,6 @@ test('never derives a page count from row data', async ({ page }) => {
         await import(component);
         const el = document.createElement('tf-pager');
         el.setAttribute('row-count', '25');
-        el.setAttribute('length', '10');
         document.body.appendChild(el);
         const sr = el.shadowRoot;
         const total = () => sr.querySelector('[part="total-pages"]')
@@ -387,17 +386,23 @@ test('never derives a page count from row data', async ({ page }) => {
     expect(result.cleared).toBe('');
 });
 
-test('renders the select selector with one option per page',
+test('renders the host-supplied page entries into the select',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-pager');
-            el.setAttribute('total-pages', '3');
-            el.setAttribute('length', '10');
             el.setAttribute('page', '2');
             document.body.appendChild(el);
+            // The host computes the entries; the element only renders
+            // them (legacy derives z + 1 and z * pageLength at
+            // paging.js:546, which belongs to the host).
+            el.setPages([
+                { text: '1', value: '0' },
+                { text: '2', value: '10' },
+                { text: '3', value: '20' }
+            ]);
             const sr = el.shadowRoot;
             const select = sr.querySelector('[part="page-select"]');
             const options = Array.from(select.querySelectorAll('option'));
@@ -405,8 +410,6 @@ test('renders the select selector with one option per page',
                 tagName: select.tagName.toLowerCase(),
                 type: select.getAttribute('type'),
                 count: options.length,
-                // Legacy option model: page number as text, start row
-                // as value (paging.js:547).
                 texts: options.map((o) => o.textContent),
                 values: options.map((o) => o.value),
                 selectedIndex: select.selectedIndex
@@ -504,6 +507,10 @@ test('setPage() and setTotalPages() update the indicator state',
             await import(component);
             const el = document.createElement('tf-pager');
             document.body.appendChild(el);
+            el.setPages([
+                { text: '1', value: '0' },
+                { text: '2', value: '10' }
+            ]);
             el.setTotalPages(2);
             el.setPage(2);
             const sr = el.shadowRoot;

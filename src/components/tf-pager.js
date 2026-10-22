@@ -17,14 +17,18 @@
  *   excluded rows plus the header offset, through two different formulas
  *   (paging.js:284 and :534). The host already owns those rules and passes
  *   the authoritative number.
- * - `length` — rows per page, defaults to 10; scales the select option
- *   values into start rows (paging.js:546).
  * - `page-text`, `of-text` — text rendered either side of the selector.
  * - `selector-type` — `select` (default) or `input`.
  * - `selector-label` — `aria-label` on the page selector; defaults to
  *   `Current page`, and an empty value opts out of the name.
  * - `disabled` — disables all four buttons.
  * No accessible name is rendered unless its attribute is set.
+ *
+ * The select's options are never computed here. `setPages()` takes the
+ * page list from the host as `{text, value}` entries: legacy derives them
+ * from `pageLength` (`z + 1` and `z * this.pageLength`, paging.js:546),
+ * which moves with `results_per_page` (paging.js:358,778), so that
+ * arithmetic belongs to the host and not to this element.
  *
  * Content is projected through the slots (`slot="first"`, `slot="prev"`,
  * `slot="next"`, `slot="last"`). Styling is left to the theme via `--tf-*`
@@ -41,9 +45,6 @@ const BUTTONS = [
     { part: 'next' },
     { part: 'last' }
 ];
-
-// Legacy `paging.length` default (src/modules/paging.js).
-const DEFAULT_LENGTH = 10;
 
 // ROADMAP: v1-webcomponents-investigation.md names the page control
 // "Current page". Legacy ships no name at all for it, so there is no
@@ -96,10 +97,12 @@ export class TfPagerElement extends HTMLElement {
         this._ofText = this.shadowRoot.querySelector('[part="of-text"]');
         this._totalPagesEl =
             this.shadowRoot.querySelector('[part="total-pages"]');
+        // Page entries supplied by the host; never computed here.
+        this._pages = [];
     }
 
     static get observedAttributes() {
-        return ['label', 'disabled', 'page', 'length', 'total-pages',
+        return ['label', 'disabled', 'page', 'total-pages',
             'page-text', 'of-text', 'selector-type', 'selector-label']
             .concat(BUTTONS.map((btn) => `${btn.part}-label`))
             .concat(BUTTONS.map((btn) => `${btn.part}-text`));
@@ -186,12 +189,16 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Rows per page, falling back to the legacy `paging.length` default.
-     * @return {Number} Rows per page
+     * Supply the page list rendered into the select. Each entry is
+     * `{text, value}` — the legacy option model, page number as visible
+     * text and start row as value (paging.js:546). The host computes
+     * both; this element only renders them, so no page arithmetic runs
+     * here.
+     * @param {Array<Object>} pages Page entries
      */
-    _pageLength() {
-        const length = Number(this.getAttribute('length'));
-        return length > 0 ? length : DEFAULT_LENGTH;
+    setPages(pages) {
+        this._pages = Array.isArray(pages) ? pages : [];
+        this._update();
     }
 
     /**
@@ -222,10 +229,9 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Render the current page, page count and accessible name into the
-     * selector control. The select mirrors the legacy option model —
-     * page number as the visible text, start row as the value — while the
-     * input holds the page number itself (src/modules/paging.js:377,547).
+     * Render the host-supplied page entries, page count and accessible
+     * name into the selector control; the input variant holds the page
+     * number itself (src/modules/paging.js:377,547).
      * @param {Element} el The selector control
      */
     _updateSelector(el) {
@@ -245,18 +251,16 @@ export class TfPagerElement extends HTMLElement {
             return;
         }
 
-        const count = total === '' ? 0 : Number(total);
-        const length = this._pageLength();
         el.textContent = '';
-        for (let i = 0; i < count; i++) {
+        this._pages.forEach((entry) => {
             const option = document.createElement('option');
-            option.value = String(i * length);
-            option.textContent = String(i + 1);
-            if (String(i + 1) === page) {
+            option.value = String(entry.value);
+            option.textContent = String(entry.text);
+            if (String(entry.text) === page) {
                 option.setAttribute('selected', 'true');
             }
             el.appendChild(option);
-        }
+        });
     }
 
     /**
