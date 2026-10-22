@@ -4,10 +4,10 @@
  *
  * An open shadow root exposing a `<label>` (`part="results-label"`)
  * wrapping the label text (`part="results-text"`) and a native `<select>`
- * (`part="results-select"`). Because the select is that label's control,
- * the rendered text is its accessible name and activating the text
- * focuses the select. Legacy keeps the text in a sibling `<span>` and
- * names the select nowhere (src/modules/paging.js:662-669).
+ * (`part="results-select"`). The select is the label's control: the
+ * rendered text is its accessible name, and activating the text focuses
+ * the select. Legacy keeps the text in a sibling `<span>` and names the
+ * select nowhere (src/modules/paging.js:662-669).
  *
  * Attributes:
  * - `results-text` — label text, rendered as text content.
@@ -16,21 +16,18 @@
  *   none, and the effective value is reflected back into the attribute,
  *   so the attribute always reports what the select shows.
  *
- * The label text is what names the select. When `results-text` is absent
- * or empty the select falls back to `aria-label` (`Rows per page`, the
- * name ROADMAP gives the control at
- * v1-webcomponents-investigation.md:313), so it is never unnamed.
+ * The label text names the select. When `results-text` is absent or
+ * empty, `aria-label` (`Rows per page`, from ROADMAP
+ * v1-webcomponents-investigation.md:313) names it instead.
  *
  * Events:
  * - `page-length-change` — dispatched when the user picks a length, with
  *   `detail: {pageLength}`. That value is the select's raw value, a
- *   string; parsing it stays with the host (paging.js:778).
+ *   string; the host parses it (paging.js:778).
  *
- * The option list is never built here: `setPageLengths()` takes the page
- * lengths from the host, and each entry becomes an option whose value and
- * text are both that entry (legacy `new Option(v, v)`, paging.js:681).
- * Paging arithmetic — resolving `pageLength`, the start row and the page
- * count — stays with the host (paging.js:762-796).
+ * `setPageLengths()` takes the page lengths from the host, and each
+ * entry becomes an option whose value and text are both that entry
+ * (legacy `new Option(v, v)`, paging.js:681).
  *
  * Styling is left to the theme via `--tf-*` custom properties and
  * `::part()`; the legacy `results_slc_css_class` and
@@ -65,8 +62,7 @@ export class TfResultsPerPageElement extends HTMLElement {
         // A change inside the shadow root does not reach the host: the
         // native `change` event is not composed, so it is relayed as a
         // composed CustomEvent carrying the chosen value. The pick is
-        // written back first so `page-length` reports what is shown and a
-        // later render does not discard it.
+        // written into `page-length` before the event is dispatched.
         this._select.addEventListener('change', () => {
             this.setAttribute('page-length', this._select.value);
             this.dispatchEvent(new CustomEvent('page-length-change', {
@@ -127,8 +123,8 @@ export class TfResultsPerPageElement extends HTMLElement {
     }
 
     /**
-     * Name the select from the label text, falling back to the default
-     * when the host supplies no text so the control is never unnamed.
+     * Name the select from the label text, or from the default when
+     * `results-text` is absent or empty.
      */
     _setSelectName() {
         if (this.getAttribute('results-text')) {

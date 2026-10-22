@@ -5,8 +5,7 @@
 // <span> and names the select nowhere (paging.js:662-669). Per the
 // theming model (--tf-* custom properties + ::part()), it ships structure
 // and hooks only: no invented classes and no baked-in presentational
-// CSS. The option list and all page-length arithmetic stay with the
-// host (#926). Fails CI on regression.
+// CSS. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
 
@@ -194,8 +193,7 @@ test('clears the option list for a non-array passed to setPageLengths()',
             return { counts };
         }, COMPONENT);
 
-        // A valid list renders, and each non-array call clears it rather
-        // than leaving a stale or half-built list behind.
+        // A valid list renders, and each non-array call clears it.
         expect(result.counts).toEqual([2, 0, 0]);
     });
 
@@ -277,7 +275,6 @@ test('keeps a picked length across a later render', async ({ page }) => {
             value: select.value
         };
 
-        // Any later render must not discard the pick.
         el.setAttribute('results-text', 'Records: ');
         const afterRender = {
             pageLength: el.getAttribute('page-length'),
