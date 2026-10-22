@@ -255,7 +255,8 @@ A crucial challenge in hybrid Web Component systems is boundary traversal:
 
 ### Milestone 0.9.0: Interactive Navigation & Form Widgets
 - **Components**:
-  - Implement `<tf-pager>` with semantic `<button>` elements and results-per-page selection.
+  - Implement `<tf-pager>` with semantic `<button>` elements and a page indicator.
+  - Implement `<tf-results-per-page>` as a labelled select, separate so the host can mount it in the toolbar or in an external container.
   - Implement `<tf-checklist>` adhering to WAI-ARIA APG Combobox with Multi-Select Listbox.
   - Implement `<tf-sort-header>` buttons with dynamic `aria-sort="ascending|descending"`.
 - **Verification**: Screen reader keyboard testing with NVDA/JAWS and VoiceOver.
