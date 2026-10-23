@@ -538,3 +538,622 @@ test('paging stays on the legacy path when the element is not loaded',
         expect(result.options).toBe(3);
         expect(result.btnContainers).toBe(true);
     });
+
+// Paging bridge behaviour matrix (#926): page selection through both
+// selector types, button wrap-around, host configuration, filtering,
+// results per page, lifecycle and multiple instances.
+const MOUNT = `
+window.shadow = function (host, part) {
+    return host.shadowRoot.querySelector('[part="' + part + '"]');
+};
+window.click = function (host, part) {
+    window.shadow(host, part).click();
+};
+window.enter = function (input, value) {
+    input.value = value;
+    input.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Enter', bubbles: true, composed: true
+    }));
+};
+window.selectPage = function (select, index) {
+    select.selectedIndex = index;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+};
+window.mountPager = async function (id, config, html) {
+    await import('/src/components/tf-pager.js');
+    const table = document.createElement('table');
+    table.id = id;
+    table.innerHTML = html;
+    document.body.appendChild(table);
+    const tf = new TableFilter(id, Object.assign({
+        base_path: '/dist/tablefilter/',
+        enable_icons: false
+    }, config));
+    tf.init();
+    window.tf = tf;
+    return tf;
+};
+`;
+
+test('paging bridge keeps each configured button html on the legacy path',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const keys = ['btn_first_page_html', 'btn_prev_page_html',
+                'btn_next_page_html', 'btn_last_page_html'];
+            const state = {};
+
+            for (const key of keys) {
+                const pagingConfig = { length: 5 };
+                pagingConfig[key] = '<em>x</em>';
+                const tf = await window.mountPager(`gate-${key}`,
+                    { paging: pagingConfig }, html);
+                const paging = tf.feature('paging');
+                state[key] = {
+                    ce: Boolean(paging.pagerEl),
+                    selector: paging.pageSlc ? paging.pageSlc.tagName : null
+                };
+                tf.destroy();
+            }
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        for (const key of Object.keys(result)) {
+            expect(result[key].ce, key).toBe(false);
+            expect(result[key].selector, key).toBe('SELECT');
+        }
+    });
+
+test('paging bridge moves to the page typed into the input',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-input',
+                { paging: { length: 5, page_selector_type: 'input' } },
+                html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            const events = [];
+            tf.emitter.on(['before-page-change'],
+                (inst, page) => events.push(page));
+
+            window.enter(window.shadow(host, 'page-input'), '3');
+
+            const state = {
+                page: paging.currentPageNb,
+                startRow: paging.startPagingRow,
+                attr: host.getAttribute('page'),
+                visible: Array.from(tf.dom().rows)
+                    .filter((r) => r.style.display !== 'none' &&
+                        /^City /.test(r.textContent)).length,
+                events
+            };
+            tf.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.page).toBe(3);
+        expect(result.startRow).toBe(10);
+        expect(result.attr).toBe('3');
+        expect(result.visible).toBe(2);
+        expect(result.events).toEqual([3]);
+    });
+
+test('paging bridge ignores an empty or malformed input value',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-input-empty',
+                { paging: { length: 5, page_selector_type: 'input' } },
+                html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            const input = window.shadow(host, 'page-input');
+            let changes = 0;
+            host.addEventListener('page-change', () => changes++);
+
+            window.enter(input, '');
+            window.enter(input, 'abc');
+
+            const state = {
+                page: paging.currentPageNb,
+                changes,
+                sanitised: input.value
+            };
+            tf.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.page).toBe(1);
+        expect(result.changes).toBe(0);
+        expect(result.sanitised).toBe('');
+    });
+
+test('paging bridge ignores out-of-range and non-positive input values',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-input-bounds',
+                { paging: { length: 5, page_selector_type: 'input' } },
+                html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            const input = window.shadow(host, 'page-input');
+            const pages = [];
+            let threw = null;
+
+            for (const value of ['99', '0', '-2']) {
+                try {
+                    window.enter(input, value);
+                    pages.push(paging.currentPageNb);
+                } catch (e) {
+                    threw = e.message;
+                }
+            }
+
+            tf.destroy();
+            return { pages, threw };
+        }, PAGER_TABLE_HTML);
+
+        expect(result.threw).toBe(null);
+        expect(result.pages).toEqual([1, 1, 1]);
+    });
+
+test('paging bridge moves through every page from the select',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-select-all',
+                { paging: { length: 5 } }, html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            const select = window.shadow(host, 'page-select');
+            const seen = [];
+
+            for (let i = 0; i < 3; i++) {
+                window.selectPage(select, i);
+                seen.push([paging.currentPageNb, paging.startPagingRow,
+                    host.getAttribute('page')]);
+            }
+            window.selectPage(select, 2);
+            seen.push([paging.currentPageNb, paging.startPagingRow,
+                host.getAttribute('page')]);
+
+            tf.destroy();
+            return seen;
+        }, PAGER_TABLE_HTML);
+
+        expect(result).toEqual([
+            [1, '0', '1'],
+            [2, '5', '2'],
+            [3, '10', '3'],
+            [3, '10', '3']
+        ]);
+    });
+
+test('paging bridge buttons wrap at the first and last page',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-buttons',
+                { paging: { length: 5 } }, html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            const seen = [];
+            const record = () => seen.push(paging.currentPageNb);
+
+            window.click(host, 'prev');
+            record();
+            window.click(host, 'next');
+            record();
+            window.click(host, 'next');
+            record();
+            window.click(host, 'next');
+            record();
+            window.click(host, 'last');
+            record();
+            window.click(host, 'first');
+            record();
+            window.click(host, 'prev');
+            record();
+            window.click(host, 'last');
+            record();
+
+            tf.destroy();
+            return seen;
+        }, PAGER_TABLE_HTML);
+
+        expect(result).toEqual([3, 1, 2, 3, 3, 1, 3, 3]);
+    });
+
+test('paging bridge renders into target_id and hides it when empty',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const target = document.createElement('div');
+            target.id = 'pager-target';
+            document.body.appendChild(target);
+
+            const tf = await window.mountPager('bridge-target',
+                { paging: { length: 5, target_id: 'pager-target' } }, html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+
+            const inTarget = host.parentElement === target;
+            const inCaption = Boolean(host.closest('caption'));
+
+            tf.setFilterValue(0, 'zzz');
+            tf.filter();
+            const hidden = target.style.visibility;
+
+            tf.clearFilters();
+            const visible = target.style.visibility;
+
+            tf.destroy();
+            return { inTarget, inCaption, hidden, visible };
+        }, PAGER_TABLE_HTML);
+
+        expect(result.inTarget).toBe(true);
+        expect(result.inCaption).toBe(false);
+        expect(result.hidden).toBe('hidden');
+        expect(result.visible).toBe('visible');
+    });
+
+test('paging bridge renders into the configured toolbar position',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-toolbar',
+                { paging: { length: 5, toolbar_position: 'left' } }, html);
+            const toolbar = tf.feature('toolbar');
+            const host = tf.feature('paging').pagerEl;
+
+            const state = {
+                inLeft: host.parentElement === toolbar.innerCont.left,
+                inCenter: Boolean(
+                    toolbar.innerCont.center.querySelector('tf-pager'))
+            };
+            tf.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.inLeft).toBe(true);
+        expect(result.inCenter).toBe(false);
+    });
+
+test('paging bridge resets and re-renders after filtering',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-filter',
+                { paging: { length: 5 } }, html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            const select = window.shadow(host, 'page-select');
+            const snapshot = () => ({
+                page: paging.currentPageNb,
+                total: host.getAttribute('total-pages'),
+                attr: host.getAttribute('page'),
+                selected: select.selectedIndex,
+                options: Array.from(select.options)
+                    .map((o) => `${o.textContent}:${o.value}`)
+            });
+
+            window.selectPage(select, 2);
+            const before = snapshot();
+
+            tf.setFilterValue(0, 'City 1');
+            tf.filter();
+            const filtered = snapshot();
+
+            tf.clearFilters();
+            const restored = snapshot();
+
+            tf.destroy();
+            return { before, filtered, restored };
+        }, PAGER_TABLE_HTML);
+
+        expect(result.before.page).toBe(3);
+        expect(result.filtered).toEqual({
+            page: 1,
+            total: '1',
+            attr: '1',
+            selected: 0,
+            options: ['1:0']
+        });
+        expect(result.restored).toEqual({
+            page: 1,
+            total: '3',
+            attr: '1',
+            selected: 0,
+            options: ['1:0', '2:5', '3:10']
+        });
+    });
+
+test('paging bridge hides the controls when no rows match',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-empty',
+                { paging: { length: 5 } }, html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            const visibility = () => host.parentElement.style.visibility;
+
+            tf.setFilterValue(0, 'zzz');
+            tf.filter();
+            const empty = {
+                nbPages: paging.nbPages,
+                total: host.getAttribute('total-pages'),
+                visibility: visibility()
+            };
+
+            tf.clearFilters();
+            const restored = {
+                nbPages: paging.nbPages,
+                visibility: visibility()
+            };
+
+            tf.destroy();
+            return { empty, restored };
+        }, PAGER_TABLE_HTML);
+
+        expect(result.empty).toEqual({
+            nbPages: 0,
+            total: '0',
+            visibility: 'hidden'
+        });
+        expect(result.restored).toEqual({ nbPages: 3, visibility: 'visible' });
+    });
+
+test('paging bridge re-renders the page list on results per page change',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-rspg',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]]
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            const select = window.shadow(host, 'page-select');
+
+            window.selectPage(select, 2);
+            paging.pageLengthSlc.selectedIndex = 1;
+            paging.pageLengthSlc.dispatchEvent(
+                new Event('change', { bubbles: true }));
+
+            const state = {
+                pageLength: paging.pageLength,
+                page: paging.currentPageNb,
+                total: host.getAttribute('total-pages'),
+                attr: host.getAttribute('page'),
+                options: Array.from(select.options).map((o) => o.value)
+            };
+            tf.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.pageLength).toBe(2);
+        expect(result.page).toBe(3);
+        expect(result.total).toBe('6');
+        expect(result.attr).toBe('3');
+        expect(result.options)
+            .toEqual(['0', '2', '4', '6', '8', '10']);
+    });
+
+test('paging bridge honours disable() and enable()', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountPager('bridge-disabled',
+            { paging: { length: 5 } }, html);
+        const paging = tf.feature('paging');
+        const host = paging.pagerEl;
+        const select = window.shadow(host, 'page-select');
+
+        paging.disable();
+        window.selectPage(select, 2);
+        window.click(host, 'next');
+        const disabled = paging.currentPageNb;
+
+        paging.enable();
+        window.selectPage(select, 1);
+        const enabled = paging.currentPageNb;
+
+        tf.destroy();
+        return { disabled, enabled };
+    }, PAGER_TABLE_HTML);
+
+    expect(result.disabled).toBe(1);
+    expect(result.enabled).toBe(2);
+});
+
+test('paging bridge destroy unbinds handlers and re-init mounts one pager',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            let tf = await window.mountPager('bridge-lifecycle',
+                { paging: { length: 5 } }, html);
+            let paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            window.click(host, 'next');
+            const beforeDestroy = paging.currentPageNb;
+
+            tf.destroy();
+            const removed = !host.isConnected;
+            window.click(host, 'next');
+            const afterDetachedClick = paging.currentPageNb;
+
+            let threw = null;
+            try {
+                tf.destroy();
+            } catch (e) {
+                threw = e.message;
+            }
+
+            tf.init();
+            paging = tf.feature('paging');
+            const remounted = paging.pagerEl;
+            window.click(remounted, 'next');
+            const afterReinit = paging.currentPageNb;
+            const pagerCount = remounted.parentElement
+                .querySelectorAll('tf-pager').length;
+
+            tf.destroy();
+            return {
+                beforeDestroy,
+                removed,
+                afterDetachedClick,
+                threw,
+                pagerCount,
+                afterReinit
+            };
+        }, PAGER_TABLE_HTML);
+
+        expect(result.beforeDestroy).toBe(2);
+        expect(result.removed).toBe(true);
+        expect(result.afterDetachedClick).toBe(2);
+        expect(result.threw).toBe(null);
+        expect(result.pagerCount).toBe(1);
+        expect(result.afterReinit).toBe(3);
+    });
+
+test('paging bridge instances are independent', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tfA = await window.mountPager('bridge-a',
+            { paging: { length: 5 } }, html);
+        const pagingA = tfA.feature('paging');
+        const hostA = pagingA.pagerEl;
+
+        const tfB = await window.mountPager('bridge-b',
+            { paging: { length: 5 } }, html);
+        const pagingB = tfB.feature('paging');
+        const hostB = pagingB.pagerEl;
+
+        window.click(hostA, 'next');
+        const moved = [pagingA.currentPageNb, pagingB.currentPageNb];
+        const distinct = hostA !== hostB;
+
+        tfA.destroy();
+        const afterDestroy = {
+            removedA: !hostA.isConnected,
+            aliveB: hostB.isConnected
+        };
+        window.click(hostB, 'next');
+        const movedB = pagingB.currentPageNb;
+
+        tfB.destroy();
+        return { moved, distinct, afterDestroy, movedB };
+    }, PAGER_TABLE_HTML);
+
+    expect(result.moved).toEqual([2, 1]);
+    expect(result.distinct).toBe(true);
+    expect(result.afterDestroy).toEqual({ removedA: true, aliveB: true });
+    expect(result.movedB).toBe(2);
+});
+
+test('paging bridge setPage() drives the element', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountPager('bridge-setpage',
+            { paging: { length: 5 } }, html);
+        const paging = tf.feature('paging');
+        const host = paging.pagerEl;
+        const seen = [];
+        const record = () => seen.push(
+            [paging.currentPageNb, host.getAttribute('page')]);
+
+        paging.setPage('last');
+        record();
+        paging.setPage(2);
+        record();
+        paging.setPage('previous');
+        record();
+        paging.setPage('first');
+        record();
+        paging.setPage('next');
+        record();
+        paging.setPage('unknown');
+        record();
+
+        tf.destroy();
+        return seen;
+    }, PAGER_TABLE_HTML);
+
+    expect(result).toEqual([
+        [3, '3'],
+        [2, '2'],
+        [1, '1'],
+        [1, '1'],
+        [2, '2'],
+        [3, '3']
+    ]);
+});
+
+test('paging bridge emits page-change and the legacy page events',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-events',
+                { paging: { length: 5 } }, html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+            const select = window.shadow(host, 'page-select');
+            const doc = [];
+            const before = [];
+            const after = [];
+
+            document.addEventListener('page-change',
+                (e) => doc.push(e.detail.page));
+            tf.emitter.on(['before-page-change'],
+                (inst, page) => before.push(page));
+            tf.emitter.on(['after-page-change'],
+                (inst, page) => after.push(page));
+
+            window.click(host, 'next');
+            window.selectPage(select, 2);
+
+            tf.destroy();
+            return { doc, before, after };
+        }, PAGER_TABLE_HTML);
+
+        expect(result.doc).toEqual(['3']);
+        expect(result.before).toEqual([2, 3]);
+        expect(result.after).toEqual([2, 3]);
+    });
