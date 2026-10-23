@@ -20,6 +20,7 @@
      the page imports it from source; `type="module"` is deferred, so
      init waits for the registration. Both go away once the bundle
      registers the element. -->
+<script type="module" src="../src/components/tf-clear-button.js"></script>
 <script type="module" src="../src/components/tf-pager.js"></script>
 <script data-config>
     var filtersConfig = {
@@ -27,6 +28,11 @@
         // The bridge only routes to <tf-pager> with icons off
         // (src/modules/paging.js, TODO #965).
         enable_icons: false,
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: { text: 'Clear' },
+        loader: true,
+        status_bar: true,
         paging: {
             length: 10
         }
