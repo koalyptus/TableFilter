@@ -1020,65 +1020,10 @@ export class Paging extends Feature {
             return;
         }
 
-        let evt = this.evt;
-
         if (this.pagerEl) {
-            removeEvt(this.pagerEl, 'page-change', evt.pagerPageChange);
-            this.unbindPagerButton('first', evt.first);
-            this.unbindPagerButton('prev', evt.prev);
-            this.unbindPagerButton('next', evt.next);
-            this.unbindPagerButton('last', evt.last);
-            removeElm(this.pagerEl);
-            this.pagerEl = null;
+            this.destroyCE();
         } else {
-            if (this.pageSlc) {
-                if (this.pageSelectorType === SELECT) {
-                    removeEvt(this.pageSlc, 'change', evt.slcPagesChange);
-                }
-                else if (this.pageSelectorType === INPUT) {
-                    removeEvt(this.pageSlc, 'keypress', evt._detectKey);
-                }
-                removeElm(this.pageSlc);
-            }
-
-            if (this.btnNextCont) {
-                removeEvt(this.btnNextCont, 'click', evt.next);
-                removeElm(this.btnNextCont);
-                this.btnNextCont = null;
-            }
-
-            if (this.btnPrevCont) {
-                removeEvt(this.btnPrevCont, 'click', evt.prev);
-                removeElm(this.btnPrevCont);
-                this.btnPrevCont = null;
-            }
-
-            if (this.btnLastCont) {
-                removeEvt(this.btnLastCont, 'click', evt.last);
-                removeElm(this.btnLastCont);
-                this.btnLastCont = null;
-            }
-
-            if (this.btnFirstCont) {
-                removeEvt(this.btnFirstCont, 'click', evt.first);
-                removeElm(this.btnFirstCont);
-                this.btnFirstCont = null;
-            }
-
-            if (this.pgBefore) {
-                removeElm(this.pgBefore);
-                this.pgBefore = null;
-            }
-
-            if (this.pgAfter) {
-                removeElm(this.pgAfter);
-                this.pgAfter = null;
-            }
-
-            if (this.pgCont) {
-                removeElm(this.pgCont);
-                this.pgCont = null;
-            }
+            this.destroyLegacy();
         }
 
         if (this.hasResultsPerPage) {
@@ -1095,5 +1040,78 @@ export class Paging extends Feature {
         this.nbPages = 0;
 
         this.initialized = false;
+    }
+
+    /**
+     * Remove the <tf-pager> element and the handlers bound to it
+     * @private
+     */
+    destroyCE() {
+        let evt = this.evt;
+
+        removeEvt(this.pagerEl, 'page-change', evt.pagerPageChange);
+        this.unbindPagerButton('first', evt.first);
+        this.unbindPagerButton('prev', evt.prev);
+        this.unbindPagerButton('next', evt.next);
+        this.unbindPagerButton('last', evt.last);
+        removeElm(this.pagerEl);
+        this.pagerEl = null;
+    }
+
+    /**
+     * Remove the legacy paging controls and the handlers bound to them
+     * @private
+     */
+    destroyLegacy() {
+        let evt = this.evt;
+
+        if (this.pageSlc) {
+            if (this.pageSelectorType === SELECT) {
+                removeEvt(this.pageSlc, 'change', evt.slcPagesChange);
+            }
+            else if (this.pageSelectorType === INPUT) {
+                removeEvt(this.pageSlc, 'keypress', evt._detectKey);
+            }
+            removeElm(this.pageSlc);
+        }
+
+        if (this.btnNextCont) {
+            removeEvt(this.btnNextCont, 'click', evt.next);
+            removeElm(this.btnNextCont);
+            this.btnNextCont = null;
+        }
+
+        if (this.btnPrevCont) {
+            removeEvt(this.btnPrevCont, 'click', evt.prev);
+            removeElm(this.btnPrevCont);
+            this.btnPrevCont = null;
+        }
+
+        if (this.btnLastCont) {
+            removeEvt(this.btnLastCont, 'click', evt.last);
+            removeElm(this.btnLastCont);
+            this.btnLastCont = null;
+        }
+
+        if (this.btnFirstCont) {
+            removeEvt(this.btnFirstCont, 'click', evt.first);
+            removeElm(this.btnFirstCont);
+            this.btnFirstCont = null;
+        }
+
+        if (this.pgBefore) {
+            removeElm(this.pgBefore);
+            this.pgBefore = null;
+        }
+
+        if (this.pgAfter) {
+            removeElm(this.pgAfter);
+            this.pgAfter = null;
+        }
+
+        if (this.pgCont) {
+            removeElm(this.pgCont);
+            this.pgCont = null;
+        }
     }
 }
