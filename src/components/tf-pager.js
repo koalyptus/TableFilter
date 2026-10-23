@@ -223,14 +223,16 @@ export class TfPagerElement extends HTMLElement {
             el.setAttribute('type', 'number');
             el.setAttribute('min', '1');
             el.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
+                if (event.key === 'Enter' && el.value !== '') {
                     this._dispatchPageChange(el.value);
                 }
             });
         } else {
             el.addEventListener('change', () => {
                 const option = el.options[el.selectedIndex];
-                this._dispatchPageChange(option ? option.textContent : '');
+                if (option) {
+                    this._dispatchPageChange(option.textContent);
+                }
             });
         }
         this._pageSelector.appendChild(el);

@@ -647,3 +647,37 @@ test('dispatches page-change from the page input on Enter',
 
         expect(result.seen).toEqual(['4']);
     });
+
+// A pick that resolves to no page dispatches nothing: `page-change`
+// carries a page number only.
+test('dispatches no page-change when the pick resolves to no page',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('total-pages', '3');
+            el.setAttribute('selector-type', 'input');
+            document.body.appendChild(el);
+
+            const seen = [];
+            el.addEventListener('page-change', (event) => {
+                seen.push(event.detail.page);
+            });
+
+            const input = el.shadowRoot.querySelector('[part="page-input"]');
+            input.value = '';
+            input.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'Enter', bubbles: true, composed: true
+            }));
+
+            el.setAttribute('selector-type', 'select');
+            const select = el.shadowRoot.querySelector('[part="page-select"]');
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+
+            return { seen };
+        }, COMPONENT);
+
+        expect(result.seen).toEqual([]);
+    });
