@@ -594,9 +594,8 @@ export class Paging extends Feature {
      * @private
      */
     hasBtnHtml() {
-        let cfg = this.config.paging || {};
-        return Boolean(cfg.btn_first_page_html || cfg.btn_prev_page_html ||
-            cfg.btn_next_page_html || cfg.btn_last_page_html);
+        return Boolean(this.btnFirstPageHtml || this.btnPrevPageHtml ||
+            this.btnNextPageHtml || this.btnLastPageHtml);
     }
 
     /**
