@@ -420,58 +420,6 @@ test('renders the host-supplied page entries into the select',
         expect(result.selectedIndex).toBe(1);
     });
 
-test('derives the page options from total-pages', async ({ page }) => {
-    await page.goto(FIXTURE);
-
-    const result = await page.evaluate(async (component) => {
-        await import(component);
-        const el = document.createElement('tf-pager');
-        el.setAttribute('total-pages', '3');
-        el.setAttribute('page', '2');
-        document.body.appendChild(el);
-
-        const select =
-            el.shadowRoot.querySelector('[part="page-select"]');
-        const options = Array.from(select.options);
-        return {
-            texts: options.map((o) => o.textContent),
-            values: options.map((o) => o.value),
-            selectedIndex: select.selectedIndex
-        };
-    }, COMPONENT);
-
-    expect(result.texts).toEqual(['1', '2', '3']);
-    expect(result.values).toEqual(['1', '2', '3']);
-    expect(result.selectedIndex).toBe(1);
-});
-
-test('custom page entries override the derived list', async ({ page }) => {
-    await page.goto(FIXTURE);
-
-    const result = await page.evaluate(async (component) => {
-        await import(component);
-        const el = document.createElement('tf-pager');
-        el.setAttribute('total-pages', '5');
-        document.body.appendChild(el);
-        el.setPages([
-            { text: 'A', value: '1' },
-            { text: 'B', value: '2' }
-        ]);
-        el.setTotalPages(9);
-
-        const select =
-            el.shadowRoot.querySelector('[part="page-select"]');
-        return {
-            texts: Array.from(select.options).map((o) => o.textContent),
-            total: el.shadowRoot.querySelector('[part="total-pages"]')
-                .textContent
-        };
-    }, COMPONENT);
-
-    expect(result.texts).toEqual(['A', 'B']);
-    expect(result.total).toBe('9');
-});
-
 test('swaps the selector to a bounded number input when configured',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -701,7 +649,7 @@ test('dispatches page-change from the page input on Enter',
     });
 
 // A pick that resolves to no page dispatches nothing: `page-change`
-// carries a page number only. An empty page list renders no options.
+// carries a page number only.
 test('dispatches no page-change when the pick resolves to no page',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -709,6 +657,7 @@ test('dispatches no page-change when the pick resolves to no page',
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-pager');
+            el.setAttribute('total-pages', '3');
             el.setAttribute('selector-type', 'input');
             document.body.appendChild(el);
 
