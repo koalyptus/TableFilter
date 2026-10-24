@@ -28,9 +28,8 @@
  *   `detail: {page}`, the page number as a string. Bubbles and crosses
  *   the shadow boundary.
  *
- * The select is populated through `setPages()`, which takes `{text,
- * value}` entries from the host — the legacy option model, page number
- * and start row derived from `pageLength` (paging.js:546).
+ * The select is populated from `total-pages`, one option per page.
+ * `setPages()` supplies a custom `{text, value}` list instead.
  *
  * Content is projected through the slots (`slot="first"`, `slot="prev"`,
  * `slot="next"`, `slot="last"`). Styling is left to the theme via `--tf-*`
@@ -96,8 +95,10 @@ export class TfPagerElement extends HTMLElement {
         this._ofText = this.shadowRoot.querySelector('[part="of-text"]');
         this._totalPagesEl =
             this.shadowRoot.querySelector('[part="total-pages"]');
-        // Page entries supplied through setPages().
+        // Page entries supplied through setPages(); derived from
+        // total-pages until a custom list is set.
         this._pages = [];
+        this._pagesSet = false;
     }
 
     static get observedAttributes() {
@@ -190,13 +191,13 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Supply the page list rendered into the select. Each entry is
-     * `{text, value}` — the legacy option model, page number as visible
-     * text and start row as value (paging.js:546).
+     * Supply a custom page list rendered into the select, overriding the
+     * list derived from `total-pages`. Each entry is `{text, value}`.
      * @param {Array<Object>} pages Page entries
      */
     setPages(pages) {
         this._pages = Array.isArray(pages) ? pages : [];
+        this._pagesSet = true;
         this._update();
     }
 
@@ -253,9 +254,9 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Render the host-supplied page entries, page count and accessible
-     * name into the selector control; the input variant holds the page
-     * number itself (src/modules/paging.js:377,547).
+     * Render the page entries, page count and accessible name into the
+     * selector control; the input variant holds the page number itself
+     * (src/modules/paging.js:377,547).
      * @param {Element} el The selector control
      */
     _updateSelector(el) {
@@ -275,8 +276,9 @@ export class TfPagerElement extends HTMLElement {
             return;
         }
 
+        const pages = this._pagesSet ? this._pages : this._defaultPages();
         el.textContent = '';
-        this._pages.forEach((entry) => {
+        pages.forEach((entry) => {
             const option = document.createElement('option');
             option.value = String(entry.value);
             option.textContent = String(entry.text);
@@ -285,6 +287,24 @@ export class TfPagerElement extends HTMLElement {
             }
             el.appendChild(option);
         });
+    }
+
+    /**
+     * The page options derived from `total-pages` when no custom list has
+     * been supplied.
+     * @return {Array<Object>} Page entries
+     * @private
+     */
+    _defaultPages() {
+        const total = parseInt(this._totalPages(), 10);
+        if (isNaN(total) || total <= 0) {
+            return [];
+        }
+        const pages = [];
+        for (let z = 1; z <= total; z++) {
+            pages.push({ text: String(z), value: String(z) });
+        }
+        return pages;
     }
 
     /**

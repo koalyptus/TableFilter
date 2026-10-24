@@ -248,7 +248,7 @@ test('paging bridge uses tf-pager with the legacy config',
         expect(result.state.pageText).toBe('Page #');
         expect(result.state.ofText).toBe(' total ');
         expect(result.state.totalPages).toBe('3');
-        expect(result.state.options).toEqual(['1:0', '2:5', '3:10']);
+        expect(result.state.options).toEqual(['1:1', '2:2', '3:3']);
         expect(result.state.hiddenButtons).toBe(true);
         expect(result.state.visibleRows).toBe(5);
     });
@@ -434,7 +434,7 @@ test('paging bridge forwards a page pick from the select',
         }, PAGER_TABLE_HTML);
 
         expect(result.currentPage).toBe(3);
-        expect(result.startRow).toBe('10');
+        expect(result.startRow).toBe(10);
         expect(result.pageAttr).toBe('3');
     });
 
@@ -734,10 +734,10 @@ test('paging bridge moves through every page from the select',
         }, PAGER_TABLE_HTML);
 
         expect(result).toEqual([
-            [1, '0', '1'],
-            [2, '5', '2'],
-            [3, '10', '3'],
-            [3, '10', '3']
+            [1, 0, '1'],
+            [2, 5, '2'],
+            [3, 10, '3'],
+            [3, 10, '3']
         ]);
     });
 
@@ -877,14 +877,14 @@ test('paging bridge resets and re-renders after filtering',
             total: '1',
             attr: '1',
             selected: 0,
-            options: ['1:0']
+            options: ['1:1']
         });
         expect(result.restored).toEqual({
             page: 1,
             total: '3',
             attr: '1',
             selected: 0,
-            options: ['1:0', '2:5', '3:10']
+            options: ['1:1', '2:2', '3:3']
         });
     });
 
@@ -964,7 +964,7 @@ test('paging bridge re-renders the page list on results per page change',
         expect(result.total).toBe('6');
         expect(result.attr).toBe('3');
         expect(result.options)
-            .toEqual(['0', '2', '4', '6', '8', '10']);
+            .toEqual(['1', '2', '3', '4', '5', '6']);
     });
 
 test('paging bridge honours disable() and enable()', async ({ page }) => {

@@ -641,23 +641,6 @@ export class Paging extends Feature {
     }
 
     /**
-     * The page list handed to <tf-pager>: page number as visible text,
-     * start row as value (paging.js:546)
-     * @return {Array<Object>} Page entries
-     * @private
-     */
-    pageEntries() {
-        let entries = [];
-        for (let z = 0; z < this.nbPages; z++) {
-            entries.push({
-                text: String(z + 1),
-                value: String(z * this.pageLength)
-            });
-        }
-        return entries;
-    }
-
-    /**
      * Reset paging when filters are already instantiated
      * @param {Boolean} filterTable Execute filtering once paging instanciated
      */
@@ -698,7 +681,6 @@ export class Paging extends Feature {
 
         if (this.pagerEl) {
             this.pagerEl.setTotalPages(this.nbPages);
-            this.pagerEl.setPages(this.pageEntries());
             this.pagerEl.setPage(this.currentPageNb);
         } else {
             //refresh page nb span
@@ -713,10 +695,10 @@ export class Paging extends Feature {
             cont.style.visibility = 'visible';
             if (!this.pagerEl) {
                 if (this.pageSelectorType === SELECT) {
-                    this.pageEntries().forEach((entry, z) => {
+                    for (let z = 0; z < this.nbPages; z++) {
                         this.pageSlc.options[z] =
-                            createOpt(entry.text, entry.value, false);
-                    });
+                            createOpt(z + 1, z * this.pageLength, false);
+                    }
                 } else {
                     //input type
                     this.pageSlc.value = this.currentPageNb;
@@ -906,8 +888,9 @@ export class Paging extends Feature {
                 this.pageSlc.value = this.currentPageNb;
             }
 
-            this.startPagingRow = (this.pageSelectorType === SELECT) ?
-                this.pageSlc.value : (index * this.pageLength);
+            this.startPagingRow = (this.pagerEl ||
+                this.pageSelectorType === INPUT) ?
+                (index * this.pageLength) : this.pageSlc.value;
 
             this.groupByPage();
 
