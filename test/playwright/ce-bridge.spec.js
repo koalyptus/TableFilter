@@ -977,23 +977,65 @@ test('paging bridge honours disable() and enable()', async ({ page }) => {
         const paging = tf.feature('paging');
         const host = paging.pagerEl;
         const select = window.shadow(host, 'page-select');
+        const buttons = () => Array.from(
+            host.shadowRoot.querySelectorAll('button'))
+            .map((b) => b.hasAttribute('disabled'));
 
         paging.disable();
+        const disabledAttr = host.hasAttribute('disabled');
+        const disabledButtons = buttons();
         window.selectPage(select, 2);
         window.click(host, 'next');
         const disabled = paging.currentPageNb;
 
         paging.enable();
+        const enabledAttr = host.hasAttribute('disabled');
+        const enabledButtons = buttons();
         window.selectPage(select, 1);
         const enabled = paging.currentPageNb;
 
         tf.destroy();
-        return { disabled, enabled };
+        return {
+            disabled, enabled, disabledAttr, disabledButtons,
+            enabledAttr, enabledButtons
+        };
     }, PAGER_TABLE_HTML);
 
+    expect(result.disabledAttr).toBe(true);
+    expect(result.disabledButtons).toEqual([true, true, true, true]);
     expect(result.disabled).toBe(1);
+    expect(result.enabledAttr).toBe(false);
+    expect(result.enabledButtons).toEqual([false, false, false, false]);
     expect(result.enabled).toBe(2);
 });
+
+test('paging bridge truncates fractional input like the legacy selector',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('bridge-fraction',
+                { paging: { length: 5, page_selector_type: 'input' } },
+                html);
+            const paging = tf.feature('paging');
+            const host = paging.pagerEl;
+
+            window.enter(window.shadow(host, 'page-input'), '2.5');
+
+            const state = {
+                page: paging.currentPageNb,
+                startRow: paging.startPagingRow,
+                attr: host.getAttribute('page')
+            };
+            tf.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.page).toBe(2);
+        expect(result.startRow).toBe(5);
+        expect(result.attr).toBe('2');
+    });
 
 test('paging bridge destroy unbinds handlers and re-init mounts one pager',
     async ({ page }) => {

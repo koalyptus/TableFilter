@@ -427,6 +427,10 @@ export class Paging extends Feature {
 
         this.setPagerButtons(pagerEl);
 
+        if (!this.isEnabled()) {
+            pagerEl.setAttribute('disabled', '');
+        }
+
         targetEl.appendChild(pagerEl);
         this.pagerEl = pagerEl;
         this.pageSlc = pagerEl.shadowRoot.querySelector(
@@ -1010,6 +1014,26 @@ export class Paging extends Feature {
     /** @private */
     changePageResultsHandler(tf, pageLength) {
         this.changeResultsPerPage(pageLength);
+    }
+
+    /**
+     * Disable paging and reflect the state on the pager element
+     */
+    disable() {
+        super.disable();
+        if (this.pagerEl) {
+            this.pagerEl.setAttribute('disabled', '');
+        }
+    }
+
+    /**
+     * Enable paging and reflect the state on the pager element
+     */
+    enable() {
+        super.enable();
+        if (this.pagerEl) {
+            this.pagerEl.removeAttribute('disabled');
+        }
     }
 
     /**
