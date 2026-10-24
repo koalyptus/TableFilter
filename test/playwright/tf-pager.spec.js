@@ -553,3 +553,518 @@ test('exposes ::part() hooks for the page indicator', async ({ page }) => {
     expect(result.display).toBe('flex');
     expect(result.color).toBe('rgb(1, 2, 3)');
 });
+
+// Paging buttons (#926): legacy `btns: false` (paging.js:206, :388)
+// guards only button creation, leaving four empty spans in the markup
+// (:383-386, :451-452, :467-468). Here the attribute hides the buttons.
+test('buttons="false" hides the four buttons', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        document.body.appendChild(el);
+        const buttons = () => Array.from(
+            el.shadowRoot.querySelectorAll('button'));
+        const allHidden = () =>
+            buttons().every((b) => b.hasAttribute('hidden'));
+
+        const initial = allHidden();
+        el.setAttribute('buttons', 'false');
+        const set = allHidden();
+        el.setAttribute('buttons', 'true');
+        const restored = allHidden();
+
+        return { initial, set, restored, count: buttons().length };
+    }, COMPONENT);
+
+    expect(result.count).toBe(4);
+    expect(result.initial).toBe(false);
+    expect(result.set).toBe(true);
+    expect(result.restored).toBe(false);
+});
+
+// The `change` event of a shadow select is not composed, so the pick is
+// relayed as a composed `page-change` carrying the page number
+// (paging.js:363-366).
+test('dispatches page-change from the page select', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        el.setAttribute('total-pages', '3');
+        el.setPages([
+            { text: '1', value: '0' },
+            { text: '2', value: '10' },
+            { text: '3', value: '20' }
+        ]);
+        document.body.appendChild(el);
+
+        const seen = [];
+        const composed = [];
+        el.addEventListener('page-change', (event) => {
+            seen.push(event.detail.page);
+            composed.push(event.composed);
+        });
+
+        const select = el.shadowRoot.querySelector('[part="page-select"]');
+        select.selectedIndex = 2;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+
+        return { seen, composed };
+    }, COMPONENT);
+
+    expect(result.seen).toEqual(['3']);
+    expect(result.composed).toEqual([true]);
+});
+
+// The input variant relays Enter the same way (paging.js:319-328).
+test('dispatches page-change from the page input on Enter',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('total-pages', '5');
+            el.setAttribute('selector-type', 'input');
+            document.body.appendChild(el);
+
+            const seen = [];
+            el.addEventListener('page-change', (event) => {
+                seen.push(event.detail.page);
+            });
+
+            const input = el.shadowRoot.querySelector('[part="page-input"]');
+            input.value = '4';
+            input.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'Enter', bubbles: true, composed: true
+            }));
+
+            return { seen };
+        }, COMPONENT);
+
+        expect(result.seen).toEqual(['4']);
+    });
+
+// A pick that resolves to no page dispatches nothing: `page-change`
+// carries a page number only.
+test('dispatches no page-change when the pick resolves to no page',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('total-pages', '3');
+            el.setAttribute('selector-type', 'input');
+            document.body.appendChild(el);
+
+            const seen = [];
+            el.addEventListener('page-change', (event) => {
+                seen.push(event.detail.page);
+            });
+
+            const input = el.shadowRoot.querySelector('[part="page-input"]');
+            input.value = '';
+            input.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'Enter', bubbles: true, composed: true
+            }));
+
+            el.setAttribute('selector-type', 'select');
+            const select = el.shadowRoot.querySelector('[part="page-select"]');
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+
+            return { seen };
+        }, COMPONENT);
+
+        expect(result.seen).toEqual([]);
+    });
+
+// Component edge cases (#926): attribute toggling, selector switching,
+// out-of-range page state and event propagation.
+test('buttons attribute toggles the hidden state', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        document.body.appendChild(el);
+        const hidden = () => Array.from(
+            el.shadowRoot.querySelectorAll('button'))
+            .map((b) => b.hasAttribute('hidden'));
+
+        el.setAttribute('buttons', 'false');
+        const off = hidden();
+        el.setAttribute('buttons', 'true');
+        const on = hidden();
+        el.removeAttribute('buttons');
+        const absent = hidden();
+        el.setAttribute('buttons', '');
+        const empty = hidden();
+
+        return { off, on, absent, empty };
+    }, COMPONENT);
+
+    expect(result.off).toEqual([true, true, true, true]);
+    expect(result.on).toEqual([false, false, false, false]);
+    expect(result.absent).toEqual([false, false, false, false]);
+    expect(result.empty).toEqual([false, false, false, false]);
+});
+
+test('switching selector-type keeps one control and the page state',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('total-pages', '5');
+            el.setAttribute('page', '3');
+            el.setPages([1, 2, 3, 4, 5].map((n) => ({
+                text: String(n), value: String((n - 1) * 5)
+            })));
+            document.body.appendChild(el);
+
+            const shadow = (part) =>
+                el.shadowRoot.querySelector(`[part="${part}"]`);
+            const selector = () => shadow('page-selector');
+
+            el.setAttribute('selector-type', 'input');
+            const input = shadow('page-input');
+            const first = {
+                value: input.value,
+                max: input.getAttribute('max'),
+                children: selector().children.length
+            };
+
+            el.setAttribute('selector-type', 'select');
+            const select = shadow('page-select');
+            const second = {
+                options: select.options.length,
+                selected: select.selectedIndex,
+                text: select.options[select.selectedIndex].textContent,
+                children: selector().children.length
+            };
+
+            el.setAttribute('selector-type', 'input');
+            const back = shadow('page-input');
+            const third = {
+                value: back.value,
+                children: selector().children.length
+            };
+
+            el.remove();
+            return { first, second, third };
+        }, COMPONENT);
+
+        expect(result.first).toEqual({
+            value: '3', max: '5', children: 1
+        });
+        expect(result.second).toEqual({
+            options: 5, selected: 2, text: '3', children: 1
+        });
+        expect(result.third).toEqual({ value: '3', children: 1 });
+    });
+
+test('setPage(null) and setTotalPages(null) clear the state',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('selector-type', 'input');
+            el.setAttribute('total-pages', '9');
+            el.setPage(4);
+            document.body.appendChild(el);
+
+            const input = () =>
+                el.shadowRoot.querySelector('[part="page-input"]');
+            const total = () =>
+                el.shadowRoot.querySelector('[part="total-pages"]');
+
+            const before = {
+                value: input().value,
+                max: input().getAttribute('max')
+            };
+
+            el.setPage(null);
+            const afterPage = {
+                value: input().value,
+                attr: el.getAttribute('page')
+            };
+
+            el.setTotalPages(null);
+            const afterTotal = {
+                max: input().hasAttribute('max'),
+                text: total().textContent,
+                attr: el.getAttribute('total-pages')
+            };
+
+            el.remove();
+            return { before, afterPage, afterTotal };
+        }, COMPONENT);
+
+        expect(result.before).toEqual({ value: '4', max: '9' });
+        expect(result.afterPage).toEqual({ value: '', attr: '' });
+        expect(result.afterTotal).toEqual({
+            max: false, text: '', attr: ''
+        });
+    });
+
+test('out-of-range page state is rendered without clamping',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('total-pages', '2');
+            el.setAttribute('page', '9');
+            el.setPages([
+                { text: '1', value: '0' },
+                { text: '2', value: '5' }
+            ]);
+            document.body.appendChild(el);
+
+            const shadow = (part) =>
+                el.shadowRoot.querySelector(`[part="${part}"]`);
+            const select = shadow('page-select');
+            const fromSelect = {
+                selected: select.selectedIndex,
+                text: select.options[select.selectedIndex].textContent
+            };
+
+            el.setAttribute('selector-type', 'input');
+            const input = shadow('page-input');
+            const fromInput = {
+                value: input.value,
+                max: input.getAttribute('max')
+            };
+
+            el.remove();
+            return { fromSelect, fromInput };
+        }, COMPONENT);
+
+        expect(result.fromSelect).toEqual({ selected: 0, text: '1' });
+        expect(result.fromInput).toEqual({ value: '9', max: '2' });
+    });
+
+test('setPages handles empty, single and non-contiguous entries',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('page', '2');
+            document.body.appendChild(el);
+            const select = () =>
+                el.shadowRoot.querySelector('[part="page-select"]');
+            const values = () => Array.from(select().options)
+                .map((o) => o.value);
+
+            el.setPages([]);
+            const empty = select().options.length;
+
+            el.setPages([{ text: '1', value: '0' }]);
+            const single = values();
+
+            el.setPages([
+                { text: '1', value: '0' },
+                { text: '2', value: '10' },
+                { text: '3', value: '20' }
+            ]);
+            const sparse = {
+                values: values(),
+                selected: select().selectedIndex
+            };
+
+            el.setPages(null);
+            const cleared = select().options.length;
+
+            el.remove();
+            return { empty, single, sparse, cleared };
+        }, COMPONENT);
+
+        expect(result.empty).toBe(0);
+        expect(result.single).toEqual(['0']);
+        expect(result.sparse).toEqual({
+            values: ['0', '10', '20'], selected: 1
+        });
+        expect(result.cleared).toBe(0);
+    });
+
+test('page-change bubbles out of the shadow root', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        el.setAttribute('total-pages', '3');
+        el.setPages([
+            { text: '1', value: '0' },
+            { text: '2', value: '5' },
+            { text: '3', value: '10' }
+        ]);
+        document.body.appendChild(el);
+
+        const seen = [];
+        document.addEventListener('page-change', (event) => seen.push({
+            page: event.detail.page,
+            bubbles: event.bubbles,
+            composed: event.composed
+        }));
+
+        const select =
+            el.shadowRoot.querySelector('[part="page-select"]');
+        select.selectedIndex = 1;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+
+        el.remove();
+        return seen;
+    }, COMPONENT);
+
+    expect(result).toEqual([
+        { page: '2', bubbles: true, composed: true }
+    ]);
+});
+
+test('Enter in the input dispatches the raw value', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        el.setAttribute('selector-type', 'input');
+        el.setAttribute('total-pages', '3');
+        document.body.appendChild(el);
+
+        const seen = [];
+        el.addEventListener('page-change',
+            (event) => seen.push(event.detail.page));
+
+        const input =
+            el.shadowRoot.querySelector('[part="page-input"]');
+        const press = (value) => {
+            input.value = value;
+            input.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'Enter', bubbles: true, composed: true
+            }));
+        };
+
+        press('0');
+        press('-1');
+        press('2.5');
+        press('abc');
+
+        const state = { seen, sanitised: input.value };
+        el.remove();
+        return state;
+    }, COMPONENT);
+
+    expect(result.seen).toEqual(['0', '-1', '2.5']);
+    expect(result.sanitised).toBe('');
+});
+
+test('selector-label defaults, overrides and opts out', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        document.body.appendChild(el);
+        const label = () => el.shadowRoot
+            .querySelector('[part="page-select"]')
+            .getAttribute('aria-label');
+
+        const initial = label();
+        el.setAttribute('selector-label', 'Pick a page');
+        const overridden = label();
+        el.setAttribute('selector-label', '');
+        const optedOut = label();
+        el.removeAttribute('selector-label');
+        const restored = label();
+
+        el.remove();
+        return { initial, overridden, optedOut, restored };
+    }, COMPONENT);
+
+    expect(result).toEqual({
+        initial: 'Current page',
+        overridden: 'Pick a page',
+        optedOut: null,
+        restored: 'Current page'
+    });
+});
+
+test('two elements keep independent state', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const a = document.createElement('tf-pager');
+        const b = document.createElement('tf-pager');
+        a.setAttribute('page', '1');
+        b.setAttribute('page', '1');
+        a.setPages([
+            { text: '1', value: '0' },
+            { text: '2', value: '5' },
+            { text: '3', value: '10' }
+        ]);
+        b.setPages([
+            { text: '1', value: '0' },
+            { text: '2', value: '5' }
+        ]);
+        document.body.appendChild(a);
+        document.body.appendChild(b);
+
+        const selectA =
+            a.shadowRoot.querySelector('[part="page-select"]');
+        selectA.selectedIndex = 2;
+        selectA.dispatchEvent(new Event('change', { bubbles: true }));
+
+        const selectB =
+            b.shadowRoot.querySelector('[part="page-select"]');
+        const state = {
+            a: selectA.selectedIndex,
+            b: selectB.selectedIndex,
+            bOptions: selectB.options.length,
+            distinct: selectA !== selectB
+        };
+
+        a.remove();
+        b.remove();
+        return state;
+    }, COMPONENT);
+
+    expect(result).toEqual({
+        a: 2, b: 0, bOptions: 2, distinct: true
+    });
+});
+
+test('disabled can be removed again', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-pager');
+        document.body.appendChild(el);
+        const disabled = () => Array.from(
+            el.shadowRoot.querySelectorAll('button'))
+            .filter((b) => b.hasAttribute('disabled')).length;
+
+        el.setAttribute('disabled', '');
+        const on = disabled();
+        el.removeAttribute('disabled');
+        const off = disabled();
+
+        el.remove();
+        return { on, off };
+    }, COMPONENT);
+
+    expect(result.on).toBe(4);
+    expect(result.off).toBe(0);
+});
