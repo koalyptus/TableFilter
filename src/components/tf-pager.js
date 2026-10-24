@@ -276,35 +276,25 @@ export class TfPagerElement extends HTMLElement {
             return;
         }
 
-        const pages = this._pagesSet ? this._pages : this._defaultPages();
-        el.textContent = '';
-        pages.forEach((entry) => {
+        const append = (text, value) => {
             const option = document.createElement('option');
-            option.value = String(entry.value);
-            option.textContent = String(entry.text);
-            if (String(entry.text) === page) {
+            option.value = String(value);
+            option.textContent = String(text);
+            if (String(text) === page) {
                 option.setAttribute('selected', 'true');
             }
             el.appendChild(option);
-        });
-    }
+        };
 
-    /**
-     * The page options derived from `total-pages` when no custom list has
-     * been supplied.
-     * @return {Array<Object>} Page entries
-     * @private
-     */
-    _defaultPages() {
-        const total = parseInt(this._totalPages(), 10);
-        if (isNaN(total) || total <= 0) {
-            return [];
+        el.textContent = '';
+        if (this._pagesSet) {
+            this._pages.forEach((entry) => append(entry.text, entry.value));
+        } else {
+            const totalPages = parseInt(total, 10) || 0;
+            for (let z = 1; z <= totalPages; z++) {
+                append(z, z);
+            }
         }
-        const pages = [];
-        for (let z = 1; z <= total; z++) {
-            pages.push({ text: String(z), value: String(z) });
-        }
-        return pages;
     }
 
     /**
