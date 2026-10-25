@@ -13,7 +13,7 @@
  * - `first-text`, `prev-text`, `next-text`, `last-text` — button text.
  * - `page` — current page number, 1-based.
  * - `total-pages` — page count, rendered as supplied. The host resolves
- *   it from the legacy Paging feature (paging.js:284, :534).
+ *   it from the legacy Paging feature.
  * - `page-text`, `of-text` — text rendered either side of the selector.
  * - `selector-type` — `select` (default) or `input`.
  * - `selector-label` — `aria-label` on the page selector; defaults to
@@ -29,8 +29,8 @@
  *   the shadow boundary.
  *
  * The select is populated through `setPages()`, which takes `{text,
- * value}` entries from the host — the legacy option model, page number
- * and start row derived from `pageLength` (paging.js:546).
+ * value}` entries from the host — the legacy option model: page number
+ * as text, start row as value.
  *
  * Content is projected through the slots (`slot="first"`, `slot="prev"`,
  * `slot="next"`, `slot="last"`). Styling is left to the theme via `--tf-*`
@@ -192,7 +192,7 @@ export class TfPagerElement extends HTMLElement {
     /**
      * Supply the page list rendered into the select. Each entry is
      * `{text, value}` — the legacy option model, page number as visible
-     * text and start row as value (paging.js:546).
+     * text and start row as value.
      * @param {Array<Object>} pages Page entries
      */
     setPages(pages) {
@@ -255,7 +255,7 @@ export class TfPagerElement extends HTMLElement {
     /**
      * Render the host-supplied page entries, page count and accessible
      * name into the selector control; the input variant holds the page
-     * number itself (src/modules/paging.js:377,547).
+     * number itself.
      * @param {Element} el The selector control
      */
     _updateSelector(el) {

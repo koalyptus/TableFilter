@@ -641,7 +641,7 @@ export class Paging extends Feature {
 
     /**
      * Paging entries shared by the legacy select and <tf-pager>: page
-     * number as visible text, start row as value (paging.js:546)
+     * number as visible text, start row as value
      * @return {Array<Object>} Page entries
      * @private
      */

@@ -733,6 +733,8 @@ test('paging bridge moves through every page from the select',
             return seen;
         }, PAGER_TABLE_HTML);
 
+        // Select pagers store the option's start-row value as a string;
+        // groupByPage() parses it for row grouping.
         expect(result).toEqual([
             [1, '0', '1'],
             [2, '5', '2'],

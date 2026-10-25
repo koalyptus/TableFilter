@@ -348,8 +348,8 @@ test('renders page state from the configured attributes',
     });
 
 // The page count comes from `total-pages` alone. Legacy resolves it from
-// `validRowsIndex` and `refRow` (paging.js:534, :284), so a `row-count`
-// attribute has no effect on it.
+// `validRowsIndex` and `refRow`, so a `row-count` attribute has no
+// effect on it.
 test('renders the page count only from total-pages', async ({ page }) => {
     await page.goto(FIXTURE);
 
@@ -393,7 +393,7 @@ test('renders the host-supplied page entries into the select',
             el.setAttribute('page', '2');
             document.body.appendChild(el);
             // Legacy option model: page number as text, start row as
-            // value (paging.js:546).
+            // value.
             el.setPages([
                 { text: '1', value: '0' },
                 { text: '2', value: '10' },
@@ -418,6 +418,24 @@ test('renders the host-supplied page entries into the select',
         expect(result.texts).toEqual(['1', '2', '3']);
         expect(result.values).toEqual(['0', '10', '20']);
         expect(result.selectedIndex).toBe(1);
+    });
+
+test('renders no page options until the host supplies a list',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const count = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-pager');
+            el.setAttribute('total-pages', '3');
+            el.setAttribute('page', '2');
+            document.body.appendChild(el);
+
+            return el.shadowRoot.querySelector('[part="page-select"]')
+                .options.length;
+        }, COMPONENT);
+
+        expect(count).toBe(0);
     });
 
 test('swaps the selector to a bounded number input when configured',
@@ -657,7 +675,6 @@ test('dispatches no page-change when the pick resolves to no page',
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-pager');
-            el.setAttribute('total-pages', '3');
             el.setAttribute('selector-type', 'input');
             document.body.appendChild(el);
 
