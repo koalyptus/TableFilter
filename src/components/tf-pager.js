@@ -13,17 +13,24 @@
  * - `first-text`, `prev-text`, `next-text`, `last-text` — button text.
  * - `page` — current page number, 1-based.
  * - `total-pages` — page count, rendered as supplied. The host resolves
- *   it from the legacy Paging feature (paging.js:284, :534).
+ *   it from the legacy Paging feature.
  * - `page-text`, `of-text` — text rendered either side of the selector.
  * - `selector-type` — `select` (default) or `input`.
  * - `selector-label` — `aria-label` on the page selector; defaults to
  *   `Current page`, and an empty value opts out of the name.
  * - `disabled` — disables all four buttons.
+ * - `buttons` — `false` hides the four buttons, any other value renders
+ *   them.
  * No accessible name is rendered unless its attribute is set.
  *
+ * Events:
+ * - `page-change` — dispatched when the user picks a page, with
+ *   `detail: {page}`, the page number as a string. Bubbles and crosses
+ *   the shadow boundary.
+ *
  * The select is populated through `setPages()`, which takes `{text,
- * value}` entries from the host — the legacy option model, page number
- * and start row derived from `pageLength` (paging.js:546).
+ * value}` entries from the host — the legacy option model: page number
+ * as text, start row as value.
  *
  * Content is projected through the slots (`slot="first"`, `slot="prev"`,
  * `slot="next"`, `slot="last"`). Styling is left to the theme via `--tf-*`
@@ -94,7 +101,7 @@ export class TfPagerElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['label', 'disabled', 'page', 'total-pages',
+        return ['label', 'disabled', 'buttons', 'page', 'total-pages',
             'page-text', 'of-text', 'selector-type', 'selector-label']
             .concat(BUTTONS.map((btn) => `${btn.part}-label`))
             .concat(BUTTONS.map((btn) => `${btn.part}-text`));
@@ -146,6 +153,8 @@ export class TfPagerElement extends HTMLElement {
 
         this._setAriaLabel(this._nav, 'label');
 
+        const showButtons = this.getAttribute('buttons') !== 'false';
+
         BUTTONS.forEach((btn, idx) => {
             this._setAriaLabel(this._buttons[idx], `${btn.part}-label`);
             this._texts[idx].textContent =
@@ -155,6 +164,12 @@ export class TfPagerElement extends HTMLElement {
                 this._buttons[idx].setAttribute('disabled', '');
             } else {
                 this._buttons[idx].removeAttribute('disabled');
+            }
+
+            if (showButtons) {
+                this._buttons[idx].removeAttribute('hidden');
+            } else {
+                this._buttons[idx].setAttribute('hidden', '');
             }
         });
 
@@ -177,7 +192,7 @@ export class TfPagerElement extends HTMLElement {
     /**
      * Supply the page list rendered into the select. Each entry is
      * `{text, value}` — the legacy option model, page number as visible
-     * text and start row as value (paging.js:546).
+     * text and start row as value.
      * @param {Array<Object>} pages Page entries
      */
     setPages(pages) {
@@ -207,15 +222,40 @@ export class TfPagerElement extends HTMLElement {
         if (isInput) {
             el.setAttribute('type', 'number');
             el.setAttribute('min', '1');
+            el.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' && el.value !== '') {
+                    this._dispatchPageChange(el.value);
+                }
+            });
+        } else {
+            el.addEventListener('change', () => {
+                const option = el.options[el.selectedIndex];
+                if (option) {
+                    this._dispatchPageChange(option.textContent);
+                }
+            });
         }
         this._pageSelector.appendChild(el);
         return el;
     }
 
     /**
+     * Dispatch `page-change` with the page number a user action resolved
+     * to.
+     * @param {String} page Page number
+     */
+    _dispatchPageChange(page) {
+        this.dispatchEvent(new CustomEvent('page-change', {
+            detail: { page: String(page) },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    /**
      * Render the host-supplied page entries, page count and accessible
      * name into the selector control; the input variant holds the page
-     * number itself (src/modules/paging.js:377,547).
+     * number itself.
      * @param {Element} el The selector control
      */
     _updateSelector(el) {

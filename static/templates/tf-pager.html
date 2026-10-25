@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{NAME} v{VERSION} - Web Components Pager Demo</title>
+    <!-- @import partials/style.html -->
+</head>
+<body>
+<h1>{NAME} v{VERSION}</h1>
+<h2>Web components pager demo</h2>
+<p>
+    Paging rendered through the <code>&lt;tf-pager&gt;</code> custom
+    element (#926) instead of the legacy spans and select.
+</p>
+
+<!-- @import partials/pre.html -->
+<!-- @import partials/countries-table.html -->
+
+<!-- @import partials/tablefilter-vite-script.html -->
+<!-- TODO(#965): the element is absent from both published bundles, so
+     the page imports it from source; `type="module"` is deferred, so
+     init waits for the registration. Both go away once the bundle
+     registers the element. -->
+<script type="module" src="../src/components/tf-clear-button.js"></script>
+<script type="module" src="../src/components/tf-pager.js"></script>
+<script data-config>
+    var filtersConfig = {
+        base_path: '../dist/tablefilter/',
+        // The bridge only routes to <tf-pager> with icons off
+        // (src/modules/paging.js, TODO #965).
+        enable_icons: false,
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: { text: 'Clear' },
+        loader: true,
+        status_bar: true,
+        paging: {
+            length: 10
+        }
+    };
+
+    customElements.whenDefined('tf-pager').then(function () {
+        var tf = new TableFilter('demo', filtersConfig);
+        tf.init();
+    });
+</script>
+<!-- @import partials/pre-inline-script.html -->
+</body>
+</html>
