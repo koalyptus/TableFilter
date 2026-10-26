@@ -279,6 +279,64 @@ test('Can format results with prefix and suffix', function() {
     removeLabels();
 });
 
+test('Can apply format_result precision and locale', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    colOps.formatResults[2] = { precision: 2 };
+    colOps.formatResults[6] = {
+        locale: 'de-DE',
+        decimal: ',',
+        integerSeparator: '.'
+    };
+
+    // act
+    colOps.calcAll();
+
+    // assert
+    equal(id('mean1').innerHTML, '1416.00', 'Precision from format object');
+    equal(id('max1').innerHTML, '2.781', 'Locale from format object');
+
+    colOps.formatResults[2] = undefined;
+    colOps.formatResults[6] = undefined;
+    colOps.calcAll();
+});
+
+test('Ignores unsupported format-number options', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    var label = addLabel('span');
+    var legacyOptions = {
+        truncate: 1,
+        padLeft: 8,
+        padRight: 8,
+        negativeType: 'brackets',
+        negativeLeftSymbol: '[',
+        negativeRightSymbol: ']',
+        negativeOut: true,
+        decimalsSeparator: ' ',
+        noUnits: true
+    };
+
+    // act
+    colOps.writeResult(1234.567, label.id, 'innerhtml', 2, {});
+    var expected = label.innerHTML;
+    colOps.writeResult(1234.567, label.id, 'innerhtml', 2, legacyOptions);
+    var formatted = label.innerHTML;
+    colOps.writeResult(-1234.567, label.id, 'innerhtml', 2, {
+        prefix: '$',
+        suffix: '/item',
+        truncate: 1,
+        padLeft: 8
+    });
+
+    // assert
+    equal(expected, '1,234.57', 'Baseline output');
+    equal(formatted, expected, 'Legacy options have no effect');
+    equal(label.innerHTML, '-$1,234.57/item',
+        'Sign and affixes with ignored legacy options');
+    removeLabels();
+});
+
 test('Can write formatted results with each write method', function() {
     // setup
     var colOps = tf.extension('colOps');

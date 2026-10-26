@@ -2,6 +2,17 @@ import {isNumber} from './types';
 
 /**
  * Formats a numeric value with configurable separators and affixes.
+ *
+ * Supported options: `locale`, `decimal`, `integerSeparator`, `precision`,
+ * `round`, `prefix` and `suffix`. The `format-number` options `truncate`,
+ * `padLeft`, `padRight`, `negativeType`, `negativeLeftSymbol`,
+ * `negativeRightSymbol`, `negativeOut`, `decimalsSeparator` and `noUnits`
+ * have no effect. `integerSeparator: null` disables grouping. Values of
+ * magnitude 1e21 and above are rendered in full instead of exponential
+ * notation.
+ *
+ * Requires `Intl.NumberFormat.prototype.formatToParts`, see "Browser support"
+ * in the README.
  * @param {Number|String} value Numeric value
  * @param {Object} [options={}] Formatting options
  * @param {String} [options.locale='en'] Intl locale
