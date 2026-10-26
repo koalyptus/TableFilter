@@ -155,7 +155,7 @@ Run this task to generate the documentation in the ``docs/docs`` directory:
 npm run esdoc
 ```
 
-### colOps result formatting
+## colOps result formatting
 
 `format_result` entries accept `locale`, `decimal`, `integerSeparator`,
 `precision`, `round`, `prefix` and `suffix`. The Intl-based formatter replaces
@@ -165,16 +165,17 @@ the `format-number` package, with these differences:
   `negativeRightSymbol`, `negativeOut`, `decimalsSeparator` and `noUnits` are
   ignored.
 * `integerSeparator: null` disables grouping. The previous formatter used `,`.
-* `precision` sets the displayed fraction digits. The previous formatter
-  ignored it.
+* `precision` sets the fraction digits, capped by `round`; `round` without
+  `precision` caps the input's own decimals. The previous formatter ignored
+  `precision`.
 * Values of magnitude `1e21` and above are rendered in full instead of
   exponential notation.
 
 ## Browser support
 
 colOps result formatting uses `Intl.NumberFormat.prototype.formatToParts`,
-available in Chrome/Edge 64+, Firefox 58+, Safari 11+ and Node 10+. Browsers
-without it, such as IE11, cannot render colOps results.
+available in Chrome 64+, Edge 79+, Firefox 58+, Safari 11+ and Node 10+.
+Browsers without it, such as IE11, cannot render colOps results.
 
 ## Support
 * GitHub for [reporting bugs](https://github.com/koalyptus/TableFilter/blob/master/CONTRIBUTING.md#reporting-bugs) and [feature requests](https://github.com/koalyptus/TableFilter/blob/master/CONTRIBUTING.md#suggesting-enhancements-and-features).

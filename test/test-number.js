@@ -43,6 +43,8 @@ test('Can override separators and disable grouping', function() {
             '1234567.891', 'Empty separators'],
         [1234567.891, { integerSeparator: null }, '1234567.891',
             'Null thousands separator disables grouping'],
+        [1234567.891, { integerSeparator: '\'' }, '1\'234\'567.891',
+            'Custom thousands separator'],
         [123, { integerSeparator: '\'' }, '123',
             'No grouping below four digits']
     ]);
