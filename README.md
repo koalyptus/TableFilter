@@ -164,7 +164,9 @@ the `format-number` package, with these differences:
 * `truncate`, `padLeft`, `padRight`, `negativeType`, `negativeLeftSymbol`,
   `negativeRightSymbol`, `negativeOut`, `decimalsSeparator` and `noUnits` are
   ignored.
-* `integerSeparator: null` disables grouping. The previous formatter used `,`.
+* `integerSeparator: null` disables grouping through `formatNumberValue`.
+  For `formatted-number` columns, `configureFormat` re-applies the column's
+  `thousands` type because it treats `null` and `''` the same (falsy).
 * `precision` sets the fraction digits, capped by `round`; `round` without
   `precision` caps the input's own decimals. The previous formatter ignored
   `precision`.

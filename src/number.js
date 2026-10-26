@@ -17,8 +17,8 @@ import {isNumber} from './types';
  * @param {Object} [options={}] Formatting options
  * @param {String} [options.locale='en'] Intl locale
  * @param {String} [options.decimal] Decimal separator override
- * @param {String|null} [options.integerSeparator] Thousands separator override,
- * null disables grouping
+ * @param {String|null} [options.integerSeparator] Thousands separator override:
+ * `undefined` uses locale default grouping, `null` or `''` disables grouping
  * @param {Number} [options.precision] Fixed number of fraction digits
  * @param {Number} [options.round] Maximum number of fraction digits
  * @param {String} [options.prefix=''] Value prefix
