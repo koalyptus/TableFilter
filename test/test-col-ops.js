@@ -297,6 +297,21 @@ test('Can apply format_result precision and locale', function() {
     colOps.calcAll();
 });
 
+test('Can cap format_result decimals with round', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    colOps.formatResults[2] = { precision: 2, round: 1 };
+
+    // act
+    colOps.calcAll();
+
+    // assert
+    equal(id('mean1').innerHTML, '1416.0', 'Round caps precision');
+
+    colOps.formatResults[2] = undefined;
+    colOps.calcAll();
+});
+
 test('Ignores unsupported format-number options', function() {
     // setup
     var colOps = tf.extension('colOps');

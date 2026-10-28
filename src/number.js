@@ -11,8 +11,8 @@ import {isNumber} from './types';
  * magnitude 1e21 and above are rendered in full instead of exponential
  * notation.
  *
- * Requires `Intl.NumberFormat.prototype.formatToParts`, see "Browser support"
- * in the README.
+ * Requires `Intl.NumberFormat.prototype.formatToParts` (Chrome 64+, Edge 79+,
+ * Firefox 58+, Safari 11+, Node 10+).
  * @param {Number|String} value Numeric value
  * @param {Object} [options={}] Formatting options
  * @param {String} [options.locale='en'] Intl locale
