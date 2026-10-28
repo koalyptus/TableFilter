@@ -353,6 +353,42 @@ test('two elements keep independent state and ids', async ({ page }) => {
     });
 });
 
+test('mounts in a custom container', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const host = document.createElement('div');
+        host.id = 'tf-checklist-host';
+        document.body.appendChild(host);
+
+        const el = document.createElement('tf-checklist');
+        el.setAttribute('trigger-text', 'Category');
+        host.appendChild(el);
+
+        const openChanges = [];
+        host.addEventListener('open-change', (e) => openChanges.push(e.detail));
+        el.shadowRoot.querySelector('[part="trigger"]').click();
+
+        return {
+            mounted: el.parentElement === host,
+            triggerText: el.shadowRoot
+                .querySelector('[part="trigger-text"]').textContent,
+            listbox: Boolean(el.shadowRoot.querySelector('[part="listbox"]')),
+            open: el.hasAttribute('open'),
+            openChanges
+        };
+    }, COMPONENT);
+
+    expect(result).toEqual({
+        mounted: true,
+        triggerText: 'Category',
+        listbox: true,
+        open: true,
+        openChanges: [{ open: true }]
+    });
+});
+
 test('renders trigger-text as text content', async ({ page }) => {
     await page.goto(FIXTURE);
 
