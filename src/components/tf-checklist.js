@@ -1,13 +1,9 @@
 /**
- * `<tf-checklist>` custom element: multi-select filter popup
- * (ROADMAP: hybrid-migration-strategy.md, Milestone 0.9.0).
+ * `<tf-checklist>` custom element: multi-select filter popup.
  *
- * Scaffold (#927): an open shadow root exposing a `<button type="button">`
- * trigger (`part="trigger"`) and a listbox popover (`part="listbox"`) per
- * the WAI-ARIA APG combobox pattern with a multi-select listbox
- * (ROADMAP v1-webcomponents-investigation.md:247-289). Option rendering and
- * selection (#928), keyboard navigation (#929) and the CheckList bridge
- * (#930) follow as separate tickets.
+ * An open shadow root exposing a `<button type="button">` trigger
+ * (`part="trigger"`) and a listbox popover (`part="listbox"`), following
+ * the WAI-ARIA APG combobox pattern with a multi-select listbox.
  *
  * Attributes:
  * - `trigger-text` — visible trigger text, rendered as text content.

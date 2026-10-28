@@ -1,13 +1,11 @@
-// Component gate (#927): the <tf-checklist> element registers an open
-// shadow root exposing a button trigger and a multi-select listbox per
-// the WAI-ARIA APG combobox pattern: the trigger carries
-// aria-haspopup/aria-expanded/aria-controls, the listbox carries
-// role/aria-multiselectable/aria-labelledby and the open attribute keeps
-// the two in sync. Option rendering (#928), keyboard navigation (#929)
-// and the CheckList bridge (#930) are separate tickets. Per the theming
-// model (--tf-* custom properties + ::part()), it ships structure and
-// hooks only: no invented classes and no baked-in presentational CSS.
-// Fails CI on regression.
+// Gate for <tf-checklist>: the element registers an open shadow root
+// exposing a button trigger and a multi-select listbox per the WAI-ARIA
+// APG combobox pattern. The trigger carries aria-haspopup, aria-expanded
+// and aria-controls; the listbox carries role, aria-multiselectable and
+// aria-labelledby; the open attribute keeps the two in sync. Per the
+// theming model (--tf-* custom properties + ::part()), it ships
+// structure and hooks only: no invented classes and no baked-in
+// presentational CSS. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
 
@@ -425,9 +423,9 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
     expect(result.color).toBe('rgb(1, 2, 3)');
 });
 
-// The open listbox has no option children until #928, so the open-state
-// element gets a representative option for the scan to reach the expanded
-// shell. The closed element covers the trigger's naming paths.
+// The open element carries a representative option so the scan reaches
+// the expanded listbox; the closed elements cover the trigger's naming
+// paths.
 test('passes a scoped axe scan', async ({ page }, testInfo) => {
     test.setTimeout(60000);
     await page.goto(FIXTURE);
