@@ -218,31 +218,107 @@ test('renders accessible names from attributes when set',
         expect(result.labelledby).toBeNull();
     });
 
-test('clears the names when the attributes are emptied', async ({ page }) => {
+test('setLabel() and setListboxLabel() set and clear the names',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-checklist');
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            const trigger = sr.querySelector('[part="trigger"]');
+            const listbox = sr.querySelector('[part="listbox"]');
+
+            el.setLabel('Category');
+            el.setListboxLabel('Category options');
+            const set = {
+                trigger: trigger.getAttribute('aria-label'),
+                listbox: listbox.getAttribute('aria-label'),
+                labelledby: listbox.getAttribute('aria-labelledby')
+            };
+
+            el.setLabel('');
+            el.setListboxLabel('');
+            const cleared = {
+                trigger: trigger.getAttribute('aria-label'),
+                listbox: listbox.getAttribute('aria-label'),
+                labelledby: listbox.getAttribute('aria-labelledby')
+            };
+
+            return { set, cleared };
+        }, COMPONENT);
+
+        expect(result.set).toEqual({
+            trigger: 'Category',
+            listbox: 'Category options',
+            labelledby: null
+        });
+        expect(result.cleared).toEqual({
+            trigger: null,
+            listbox: null,
+            labelledby: 'trigger'
+        });
+    });
+
+test('projects markup through the trigger slot', async ({ page }) => {
     await page.goto(FIXTURE);
 
     const result = await page.evaluate(async (component) => {
         await import(component);
         const el = document.createElement('tf-checklist');
-        el.setAttribute('label', 'Category');
-        el.setAttribute('listbox-label', 'Category options');
+        el.innerHTML = '<span data-icon="category"></span>';
+        el.querySelector('[data-icon=category]').slot = 'trigger';
         document.body.appendChild(el);
-        const sr = el.shadowRoot;
-        const trigger = sr.querySelector('[part="trigger"]');
-        const listbox = sr.querySelector('[part="listbox"]');
-
-        el.setLabel('');
-        el.setListboxLabel('');
-        return {
-            trigger: trigger.getAttribute('aria-label'),
-            listbox: listbox.getAttribute('aria-label'),
-            labelledby: listbox.getAttribute('aria-labelledby')
-        };
+        const slot = el.shadowRoot.querySelector('slot[name="trigger"]');
+        return slot.assignedNodes()
+            .filter((n) => n.nodeType === Node.ELEMENT_NODE)
+            .map((n) => n.getAttribute('data-icon'));
     }, COMPONENT);
 
-    expect(result.trigger).toBeNull();
-    expect(result.listbox).toBeNull();
-    expect(result.labelledby).toBe('trigger');
+    expect(result).toEqual(['category']);
+});
+
+test('two elements keep independent state and ids', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const first = document.createElement('tf-checklist');
+        const second = document.createElement('tf-checklist');
+        document.body.appendChild(first);
+        document.body.appendChild(second);
+
+        const read = (el) => {
+            const sr = el.shadowRoot;
+            const trigger = sr.querySelector('[part="trigger"]');
+            const listbox = sr.querySelector('[part="listbox"]');
+            return {
+                open: el.hasAttribute('open'),
+                expanded: trigger.getAttribute('aria-expanded'),
+                controlsResolve: sr.getElementById(
+                    trigger.getAttribute('aria-controls')) === listbox,
+                labelledbyResolve: sr.getElementById(
+                    listbox.getAttribute('aria-labelledby')) === trigger
+            };
+        };
+
+        first.shadowRoot.querySelector('[part="trigger"]').click();
+        return { first: read(first), second: read(second) };
+    }, COMPONENT);
+
+    expect(result.first).toEqual({
+        open: true,
+        expanded: 'true',
+        controlsResolve: true,
+        labelledbyResolve: true
+    });
+    expect(result.second).toEqual({
+        open: false,
+        expanded: 'false',
+        controlsResolve: true,
+        labelledbyResolve: true
+    });
 });
 
 test('renders trigger-text as text content', async ({ page }) => {
@@ -349,8 +425,9 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
     expect(result.color).toBe('rgb(1, 2, 3)');
 });
 
-// The closed shell is the state #927 ships: the open listbox gains its
-// required option children in #928, and that ticket extends this scan.
+// The open listbox has no option children until #928, so the open-state
+// element gets a representative option for the scan to reach the expanded
+// shell. The closed element covers the trigger's naming paths.
 test('passes a scoped axe scan', async ({ page }, testInfo) => {
     test.setTimeout(60000);
     await page.goto(FIXTURE);
@@ -370,6 +447,17 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
         const defaultNamed = document.createElement('tf-checklist');
         defaultNamed.setAttribute('trigger-text', 'Status');
         scope.appendChild(defaultNamed);
+
+        const expanded = document.createElement('tf-checklist');
+        expanded.setAttribute('trigger-text', 'Country');
+        expanded.setAttribute('open', '');
+        scope.appendChild(expanded);
+        const listbox = expanded.shadowRoot.querySelector('[part=listbox]');
+        const option = document.createElement('div');
+        option.setAttribute('role', 'option');
+        option.setAttribute('aria-selected', 'false');
+        option.textContent = 'Australia';
+        listbox.appendChild(option);
     }, COMPONENT);
 
     const violations = await scanAccessibility(

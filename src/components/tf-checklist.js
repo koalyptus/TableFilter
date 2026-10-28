@@ -20,8 +20,10 @@
  * - `disabled` — disables the trigger.
  *
  * Content is projected into the trigger through `slot="trigger"`.
- * Styling is left to the theme via `--tf-*` custom properties and
- * `::part()`; no CSS class or presentational style is shipped.
+ * `setText()`, `setLabel()`, `setListboxLabel()` and `setOpen()` reflect
+ * the matching attributes. Styling is left to the theme via `--tf-*`
+ * custom properties and `::part()`; no CSS class or presentational style
+ * is shipped.
  *
  * Importing this module registers the element. It is not part of the
  * legacy webpack bundle; consumers load it as a module.
