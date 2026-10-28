@@ -15,10 +15,29 @@
  *   it; `aria-expanded` and the listbox's `hidden` state follow.
  * - `disabled` — disables the trigger.
  *
+ * Options are supplied through `setOptions()`. Each entry is either a
+ * primitive value or an object with `value`, `text`, `disabled` and
+ * `selected`; `text` defaults to the value and `setOptions()` clears the
+ * previous selection. Every entry renders as a `role="option"` element
+ * (`part="option"`) with `aria-selected`, `aria-disabled` for disabled
+ * entries, and a decorative checkbox (`part="option-checkbox"`,
+ * `aria-hidden`, non-interactive) followed by its text
+ * (`part="option-text"`). The checkbox is a styling hook; selection state
+ * is exposed through `aria-selected`.
+ *
+ * `setSelectedValues()` selects the options matching the given values
+ * and `getSelectedValues()` returns the selected values in option order.
+ * Clicking an enabled option toggles it. Option text is rendered with
+ * `textContent`, so markup in a value is shown literally.
+ *
  * Events:
  * - `open-change` — dispatched when the trigger toggles the popover, with
  *   `detail: {open}`, the expanded state as a boolean. Bubbles and crosses
  *   the shadow boundary.
+ * - `selection-change` — dispatched when a click toggles an option, with
+ *   `detail: {values}`, the selected values in option order. Bubbles and
+ *   crosses the shadow boundary. `setOptions()` and
+ *   `setSelectedValues()` do not dispatch it.
  *
  * Content is projected into the trigger through `slot="trigger"`.
  * `setText()`, `setLabel()`, `setListboxLabel()` and `setOpen()` reflect
@@ -35,6 +54,8 @@
 const TRIGGER_ID = 'trigger';
 const LISTBOX_ID = 'listbox';
 
+const OPTION_SELECTOR = '[part~="option"]';
+
 // Cloned into every instance's shadow root. Structure and `part` hooks
 // only; no class or presentational style is baked in.
 const TEMPLATE = document.createElement('template');
@@ -49,6 +70,25 @@ TEMPLATE.innerHTML = `
         tabindex="-1" hidden></div>
 `;
 
+/**
+ * Normalize an option entry into `{value, text, disabled, selected}`.
+ * @param {*} entry Primitive value or `{value, text, disabled, selected}`
+ * @returns {Object} Normalized option
+ */
+function normalizeOption(entry) {
+    const isObject = entry !== null && typeof entry === 'object';
+    const raw = isObject ? entry.value : entry;
+    const value = raw == null ? '' : String(raw);
+    const text = isObject && entry.text != null ?
+        String(entry.text) : value;
+    return {
+        value,
+        text,
+        disabled: Boolean(isObject && entry.disabled),
+        selected: Boolean(isObject && entry.selected)
+    };
+}
+
 export class TfChecklistElement extends HTMLElement {
     constructor() {
         super();
@@ -58,11 +98,18 @@ export class TfChecklistElement extends HTMLElement {
         this._triggerText =
             this.shadowRoot.querySelector('[part="trigger-text"]');
         this._listbox = this.shadowRoot.querySelector('[part="listbox"]');
+        // Option entries supplied through setOptions(), in render order.
+        this._options = [];
+        // Rendered option elements, aligned with _options by index.
+        this._optionEls = [];
         this._trigger.addEventListener('click', () => this._toggle());
+        this._listbox.addEventListener('click', (evt) =>
+            this._onOptionClick(evt));
     }
 
     static get observedAttributes() {
-        return ['trigger-text', 'label', 'listbox-label', 'open', 'disabled'];
+        return ['trigger-text', 'label', 'listbox-label', 'open', 'disabled',
+            'col'];
     }
 
     connectedCallback() {
@@ -108,6 +155,139 @@ export class TfChecklistElement extends HTMLElement {
         } else {
             this.removeAttribute('open');
         }
+    }
+
+    /**
+     * Replace the option list. Entries are primitives or objects with
+     * `value`, `text`, `disabled` and `selected`. The previous selection
+     * is cleared.
+     * @param {Array<*>} options Option entries
+     */
+    setOptions(options) {
+        this._options = (Array.isArray(options) ? options : [])
+            .map(normalizeOption);
+        this._renderOptions();
+    }
+
+    /**
+     * Select the options whose value matches an entry in `values`, and
+     * clear the selection of the rest.
+     * @param {Array<*>} values Selected values
+     */
+    setSelectedValues(values) {
+        const selected = new Set(
+            (Array.isArray(values) ? values : []).map((v) => String(v)));
+        this._options.forEach((option, index) => {
+            this._applySelection(option, index, selected.has(option.value));
+        });
+    }
+
+    /**
+     * Get the values of the selected options, in option order.
+     * @returns {Array<String>} Selected values
+     */
+    getSelectedValues() {
+        return this._options
+            .filter((option) => option.selected)
+            .map((option) => option.value);
+    }
+
+    /**
+     * Toggle an option on click.
+     * @param {Event} evt Click event from inside the listbox
+     */
+    _onOptionClick(evt) {
+        const target = evt.target instanceof Element ? evt.target : null;
+        const el = target ? target.closest(OPTION_SELECTOR) : null;
+        if (!el) {
+            return;
+        }
+
+        const index = Number(el.getAttribute('data-index'));
+        const option = this._options[index];
+        if (!option || option.disabled) {
+            return;
+        }
+
+        this._applySelection(option, index, !option.selected);
+        this.dispatchEvent(new CustomEvent('selection-change', {
+            detail: { values: this.getSelectedValues() },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    /**
+     * Render every option entry into the listbox.
+     */
+    _renderOptions() {
+        this._listbox.textContent = '';
+        this._optionEls = this._options.map((option, index) => {
+            const el = this._createOption(option, index);
+            this._listbox.appendChild(el);
+            return el;
+        });
+    }
+
+    /**
+     * Build an option element for an entry.
+     * @param {Object} option Normalized option
+     * @param {Number} index Position in the option list
+     * @returns {Element} Option element
+     */
+    _createOption(option, index) {
+        const el = document.createElement('div');
+        const partName = option.selected ? 'option option-selected' : 'option';
+        el.setAttribute('part', partName);
+        el.setAttribute('role', 'option');
+        // TODO(#929): remove once aria-activedescendant uses option ids
+        el.id = `option-${index}`;
+        el.setAttribute('data-index', String(index));
+        el.setAttribute('tabindex', '-1');
+        el.setAttribute('aria-selected', option.selected ? 'true' : 'false');
+        if (option.disabled) {
+            el.setAttribute('part',
+                (option.selected ? 'option option-selected ' : 'option ') +
+                'option-disabled');
+            el.setAttribute('aria-disabled', 'true');
+        }
+
+
+        const checkbox = document.createElement('span');
+        checkbox.setAttribute('part', 'option-checkbox');
+        checkbox.setAttribute('aria-hidden', 'true');
+
+        const text = document.createElement('span');
+        text.setAttribute('part', 'option-text');
+        text.textContent = option.text;
+
+        el.appendChild(checkbox);
+        el.appendChild(text);
+
+        return el;
+    }
+
+    /**
+     * Set an option's selection state on the entry and its element.
+     * @param {Object} option Normalized option
+     * @param {Number} index Position in the option list
+     * @param {Boolean} selected Whether the option is selected
+     */
+    _applySelection(option, index, selected) {
+        option.selected = selected;
+        const el = this._optionEls[index];
+        if (!el) {
+            return;
+        }
+        el.setAttribute('aria-selected', selected ? 'true' : 'false');
+        const partNames = ['option'];
+        if (selected) {
+            partNames.push('option-selected');
+        }
+        if (option.disabled) {
+            partNames.push('option-disabled');
+        }
+        el.setAttribute('part', partNames.join(' '));
     }
 
     /**
