@@ -2,11 +2,23 @@ import {isNumber} from './types';
 
 /**
  * Formats a numeric value with configurable separators and affixes.
+ *
+ * Supported options: `locale`, `decimal`, `integerSeparator`, `precision`,
+ * `round`, `prefix` and `suffix`. The `format-number` options `truncate`,
+ * `padLeft`, `padRight`, `negativeType`, `negativeLeftSymbol`,
+ * `negativeRightSymbol`, `negativeOut`, `decimalsSeparator` and `noUnits`
+ * have no effect. `integerSeparator: null` disables grouping. Values of
+ * magnitude 1e21 and above are rendered in full instead of exponential
+ * notation.
+ *
+ * Requires `Intl.NumberFormat.prototype.formatToParts` (Chrome 64+, Edge 79+,
+ * Firefox 58+, Safari 11+, Node 10+).
  * @param {Number|String} value Numeric value
  * @param {Object} [options={}] Formatting options
  * @param {String} [options.locale='en'] Intl locale
  * @param {String} [options.decimal] Decimal separator override
- * @param {String} [options.integerSeparator] Thousands separator override
+ * @param {String|null} [options.integerSeparator] Thousands separator override:
+ * `undefined` uses locale default grouping, `null` or `''` disables grouping
  * @param {Number} [options.precision] Fixed number of fraction digits
  * @param {Number} [options.round] Maximum number of fraction digits
  * @param {String} [options.prefix=''] Value prefix

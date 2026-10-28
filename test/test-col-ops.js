@@ -279,6 +279,79 @@ test('Can format results with prefix and suffix', function() {
     removeLabels();
 });
 
+test('Can apply format_result precision and locale', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    colOps.formatResults[2] = { precision: 2 };
+    colOps.formatResults[7] = { locale: 'de-DE' };
+
+    // act
+    colOps.calcAll();
+
+    // assert
+    equal(id('mean1').innerHTML, '1416.00', 'Precision from format object');
+    equal(id('max2').innerHTML, '3,10', 'Locale from format object');
+
+    colOps.formatResults[2] = undefined;
+    colOps.formatResults[7] = undefined;
+    colOps.calcAll();
+});
+
+test('Can cap format_result decimals with round', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    colOps.formatResults[2] = { precision: 2, round: 1 };
+
+    // act
+    colOps.calcAll();
+
+    // assert
+    equal(id('mean1').innerHTML, '1416.0', 'Round caps precision');
+
+    colOps.formatResults[2] = undefined;
+    colOps.calcAll();
+});
+
+test('Ignores unsupported format-number options', function() {
+    // setup
+    var colOps = tf.extension('colOps');
+    var label = addLabel('span');
+    var legacyOptions = {
+        truncate: 1,
+        padLeft: 8,
+        padRight: 8,
+        negativeType: 'brackets',
+        negativeLeftSymbol: '[',
+        negativeRightSymbol: ']',
+        negativeOut: true,
+        decimalsSeparator: ' ',
+        noUnits: true
+    };
+
+    // act
+    colOps.writeResult(1234.567, label.id, 'innerhtml', 2, {});
+    var expected = label.innerHTML;
+    colOps.writeResult(1234.567, label.id, 'innerhtml', 2, legacyOptions);
+    var formatted = label.innerHTML;
+    colOps.writeResult(-1234.567, label.id, 'innerhtml', 2, {
+        prefix: '$',
+        suffix: '/item',
+        truncate: 1,
+        padLeft: 8
+    });
+    var negative = label.innerHTML;
+    var nullGrouping = colOps.configureFormat(2, { integerSeparator: null });
+    colOps.writeResult(1234567.891, label.id, 'innerhtml', 2, nullGrouping);
+
+    // assert
+    equal(expected, '1,234.57', 'Baseline output');
+    equal(formatted, expected, 'Legacy options have no effect');
+    equal(negative, '-$1,234.57/item',
+        'Sign and affixes with ignored legacy options');
+    equal(label.innerHTML, '1234567.89', 'Null separator disables grouping');
+    removeLabels();
+});
+
 test('Can write formatted results with each write method', function() {
     // setup
     var colOps = tf.extension('colOps');
